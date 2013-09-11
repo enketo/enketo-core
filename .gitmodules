@@ -1,3 +1,9 @@
 [submodule "lib/xpath"]
 	path = lib/xpath
 	url = https://github.com/MartijnR/xpathjs_javarosa.git
+[submodule "lib/bootstrap-datepicker"]
+	path = lib/bootstrap-datepicker
+	url = https://github.com/eternicode/bootstrap-datepicker.git
+[submodule "lib/bootstrap-timepicker"]
+	path = lib/bootstrap-timepicker
+	url = https://github.com/jdewit/bootstrap-timepicker.git
