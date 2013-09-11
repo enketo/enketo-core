@@ -1,0 +1,528 @@
+$groupline: #bbbbbb;
+$line: 3px solid $groupline;
+$input-height: 34px;
+$input-min-width: 0.2 * 720px;
+$input-max-width: 80%;
+
+@import "_timepicker";
+@import "_datepicker";
+@import "_mixins";
+
+/** BOOTSTRAP DATEPICKER Fix for month/year views **/
+.datepicker-months, .datepicker-years {
+	td, th {
+		width: 65px;} }
+
+/** BOOTSTRAP DATEPICKER Tweaks for Mobile **/
+.touch .datepicker {
+	.datepicker-days{
+		td, th {
+			font-size: 25px;
+	  		width: 35px;
+	  		height: 35px; } }
+  	.datepicker-months, .datepicker-years {
+		td, th { 
+			 width: 100px;} } }
+
+//additional icons
+.icon-crosshairs{
+  background-image: url($images-folder+"crosshairs.png");
+  background-position: -5px -5px;
+}
+
+.paper{
+	position: relative;}
+
+.form-header{
+	left: 0;
+	width: 100%;
+	margin: 1em 0;
+	padding: 0 0 0.6em 0;
+	.branding{
+		display: inline-block;
+		margin: 0 10px 0 16px;
+		img{
+			max-height: 30px;
+			max-width: 130px;
+			margin-left: 16px;
+			&:hover{
+				opacity: 0.8;} }
+		span{
+			display: inline-block;
+			color: #444444;
+			font-weight: bold;
+			font-size: 1.4em;
+			&:hover{
+				text-decoration: none;
+				opacity: 0.8;} } } }
+.load-error{
+	margin: 100px 0 60px 0;}
+.records{
+	$size: 20px;
+	display: inline-block;
+	vertical-align: bottom;
+	background-color: #c9c9c9;
+	border: 1px solid $groupline;
+	height: $size;
+	min-width: $size;
+	border-radius: $size/2; }
+.queue-length{
+	color: #ffffff;
+	text-align: center;
+	padding: 0 7px;
+	&.submitting{
+		color: #ce4f07; }
+	&:hover{
+		color: green; } }
+.print{
+	background: none;
+	border-radius: 0;
+	border: none;
+	width: 60px;
+	padding: 0.3em $baseFontSize;
+	float: right;
+	&:hover{
+	opacity: 0.7; } }
+.form-language-selector{
+	//border: 1px solid blue;
+	float: right;
+	padding: 0.2em $baseFontSize;
+	font-size: 0.8em;
+	border-right: 1px solid #999999;}
+#form-languages{
+	width: auto;
+	height: 30px;
+	background: none;
+	min-width: 11em;
+	margin: 0 0 0 1em;
+	font-size: 0.9em; } 
+#submit-form, #submit-form-single, #validate-form, #launch-form{
+	position: relative;
+	width: 150px;
+	left: 50%;
+	margin: 45px 10px 5px -75px; 
+	progress{
+		width: 100%;
+		margin: 1px auto 1px auto;} }
+.enketo-power{
+	position: relative;
+	left: 50%;
+	margin: 30px 0 0 -100px;
+	width: 200px;
+	font-size: 16px;
+	line-height: 23px;
+	text-align: center;
+	a{
+		font-style: italic;}
+	img{
+		float: none;
+		vertical-align: top;
+		width: 48px; } }
+
+.jr [lang]:not(.active), .jr-hint, .jr-option-translations, .jr-appearance-page-break, .jr-constraint-msg, .jr-required-msg {
+	display: none; }
+
+.tab-content #form-languages {
+	/*margin-top: -10px;*/ } 
+
+html.touch{
+	@include hints-visible;
+} 
+
+.jr .form-logo img {
+	position: relative;
+	float: none;
+	left: 50%;
+	max-height: 200px;
+	width: 120px;
+	margin: 30px 0 10px -60px; }
+h3{
+	padding: 5px 0 15px 0;
+	//font-weight: bolder;
+	word-wrap: break-word;}
+h4{
+	text-align: left;  }
+	.jr-repeat {
+	background-color: lighten($title, 55%);
+	margin: 0 0 3px 0;
+	padding: 10px 10px 10px 10px;
+.repeat-number {
+	height: 2em;
+	display: block;
+	float: right;
+	//margin: 8px 0 0 0;
+	color: $title;
+	+ .jr-group{
+		border-top: none; } } } 
+.jr-group{
+	border-top: $line; 
+	margin: 1.5em 0 0.4em 0;
+		.jr-group{
+			margin: 1.5em 0 0.5em 25px;} }
+#stats + .jr-group, #jr-preload-items + .jr-group, #form-languages + .jr-group{
+	border-top: none;}
+label, fieldset {
+	@include font-bold;
+	margin: 0 0 0.7em 0;
+	padding-top: 0.9em;}
+.restoring-sanity-to-legends{
+	fieldset{
+	padding: 0;
+	margin:0; } }
+legend {
+	position: relative;
+	line-height: 12px; //$baseLineHeight;
+	border: none;
+	margin-bottom: 0.6em; //works in Chrome
+	> span {
+		vertical-align: 12px; } //works in safari, some other webkit browsers 
+	~ label {
+		margin: 0;
+		padding: 5px 0 3px 0;
+		@include font-normal;
+		//font-weight: normal; 
+		&:not(.btn-radiocheck):hover{
+			background-color: lighten($title, 48%);}
+		.active{
+			display: block;
+			margin-left: 2.2em; } } }
+label, legend, .trigger {
+	font-size: 1em; }
+.jr {
+	img, audio, video{
+	float: right;
+	max-height: 300px;
+	max-width: 70%;} }
+
+input:not([type="radio"]):not([type="checkbox"]), textarea, select{
+	display: inline-block;
+	margin: 8px 0 0 0; }
+.touch{
+	input:not([type="radio"]):not([type="checkbox"]), textarea, select{
+		@include border-radius(2px);
+		margin: 10px 0 10px 0; 
+		color: #104b66;
+		background-color: #f5f2ed;
+		/*&:not([multiple]){
+			height: 34px;} */}
+ 	.input-append .add-on{
+ 		margin-top:10px;}
+	input:not([type="radio"]):not([type="checkbox"]), textarea{
+		border: 1px solid #ddd8ce;
+	}}
+
+input:not([type="radio"]):not([type="checkbox"]), textarea{
+	height: $input-height; }
+input{
+	&[type="text"],&[type="password"], &[type="url"], &[type="email"]{
+	width: $input-max-width } }
+input{
+	&[type=date], &[type=number]{
+	width: $input-min-width;} }
+input{
+	&[type=radio], &[type=checkbox] {
+		background: url($images-folder+'checkradio.png') no-repeat;
+		cursor: pointer;
+		-webkit-appearance: none;
+  		//-ms-appearance: none;
+		//-moz-appearance: none;
+		//appearance: none;
+		//because of the -moz-appearance: none; bug (https://bugzilla.mozilla.org/show_bug.cgi?id=605985) and 
+		//the fact that IE supports the background image but NOT the appearance:none rule => 
+		//trick hide the background-image to avoid showing native + alternative checkbox/radiobutton in IE10 and FF
+		-moz-background-position-x: -9999px -9999px !important;
+		-moz-background-position-y: -9999px -9999px !important;
+		-ms-background-position-x: -9999px !important;
+		-ms-background-position-y: -9999px !important;
+		float: left;
+		border: none;
+		width: 22px;
+		height: 22px;
+		margin: 0 10px 1px 10px;}}
+input[type=checkbox]{
+	background-position: 0 0;
+	&:checked{
+		background-position: -22px 0;} } 
+:disabled input[type=checkbox], input[type=checkbox]:disabled{
+	cursor: default;
+	background-position: -44px 0;
+	&:checked{
+		background-position: -66px 0;} }
+input[type=radio]{
+	background-position: -88px 0;
+	&:checked{
+		background-position: -110px 0;} } 
+:disabled input[type=radio], input[type=radio]:disabled{
+	cursor: default;
+	background-position: -132px 0;
+	&:checked{
+		background-position: -154px 0;} }
+.btn-radiocheck{
+	@include box-shadow-touch;
+	@include border-radius(2px);
+	//@include transition-background-color;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	width: 100%;
+	line-height: 40px;
+	text-align: left;
+	margin-bottom: .4em;
+	background-color: #f0f0f0;
+	&:focus, &:hover, &:active, &[data-checked]{
+		//@include transition-background-color;
+		background-color: lighten($title, 50%);
+		//text-shadow: 0 1px 1px rgba(45, 45, 45, 0.75);
+		/*color: #FFFFFF;*/}
+	input{ //to center new radio/checkbox images
+		&[type=radio], &[type=checkbox] {
+			margin-top: 9px;} } }
+
+textarea{
+	width: $input-max-width;
+	resize: vertical;
+	min-height: 9em;}
+fieldset {
+.one-more {
+	margin: 0 -34px -5px 10px; }
+.remove {
+	float: right;
+	margin-right: 0; } }
+.itemset-template, .itemset-labels{
+	display: none;}
+.input-append .add-on{
+	padding: ($input-height - 12)/2 5px;
+	margin-top: 8px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;}
+.alert{
+	margin-bottom: 4px;}
+.trigger {
+	@include font-normal;
+	padding: 7px 12px;
+	margin: 1em 0; }
+.required{
+	margin-left: 3px;
+	color: $title;}
+.required-subtle{
+	@include transition-slow;
+	font-size: 0.8em;
+	@media screen and (max-width: 500px){
+		font-size: 0.5em; }
+	float: right;
+
+	margin-top: 4px;
+	color: #e00e0e;
+&.focus{
+	@include transition-slow;
+	color: #333333; } };
+.disabled {
+	opacity: 0.5; }
+[class^="invalid"], [class*=" invalid"] {
+	@include transition-fast;
+	@include error-bg-border;
+	$pad: 10px;
+	margin-right: -$pad;
+	margin-left: -$pad;
+	padding-left: $pad;
+	padding-right: $pad;
+	padding-bottom: $pad;}
+.invalid-required{
+	.jr-required-msg.active{
+		@include error-text; } }
+.invalid-constraint{
+	.jr-constraint-msg.active{
+		@include error-text; } } 
+.jr-branch {
+	display: none;}
+.date, .bootstrap-timepicker {
+	input{
+		width: $input-min-width;} }
+.datetimepicker{}
+	//float: left;
+.bootstrap-timepicker{
+	display: inline-block; }
+.date{
+	display: inline-block;
+	margin-right: 10px; } 
+.btn-reset{
+  margin-left: 10px;
+	color: #ddd;
+	background: none;
+	border: none;
+	box-shadow: none;
+	opacity: 0.5;
+  &:hover{
+    opacity: 0.7;}
+  &[readonly]{
+    background: none;
+  }
+	i{
+		vertical-align: bottom;} }
+.mobileselect{
+	margin-left: 10px;}
+.geopoint{ 
+	$map-height: 275px;
+	$map-width: 65%;
+	$input-width: 27%;
+	$separator-width: 4%;
+	$detect-width: 40px;
+	$search-width: 85%;
+	margin-top: 25px;
+	.geo-inputs{
+		min-width: 160px;
+		width: $input-width;
+		margin: 0 $separator-width 0 0;
+		@media screen and (max-width: 700px){
+			width: 100%; } }
+	.map-canvas-wrapper, .search-bar{
+		width: $map-width;  
+		float: right;
+		padding-left: $separator-width;
+		border-left: solid 1px $groupline; 
+		@media screen and (max-width: 700px){
+		width: 100%;
+		float: none; 
+		padding-left: 0;
+		border-left: none; }
+		img{
+			width: 100%;
+			height: 100%; } }
+	.search-bar .input-append{
+		width: $search-width; }
+	button, .input-append .add-on{
+		height: 44px;
+		&[name="geodetect"]{
+			display: inline-block;
+			float: right;
+			margin: 8px 0 0 $separator-width;
+			width: $detect-width; } }
+	.no-search-input{
+		&.no-map{
+			border-left: none; }
+		button[name="geodetect"]{
+			float: none;
+			display: block;
+			margin: 15px auto 15px auto;
+			width: 50%; } }
+	label.geo{
+		@include font-normal;
+		display: block;
+		border: none;
+		padding: 0;
+		margin: 15px 0 0 0;
+		&:nth-of-type(1){
+	    	padding-top: 5px; } 
+		&:nth-of-type(2){
+	    	margin-bottom: 20px; };
+		&:nth-of-type(3){
+		border-top: solid 1px $groupline;
+		padding: 12px 0 0 0;
+		margin: 0 0 0 0;
+		@media screen and (max-width: 700px){
+			border-top: none; } }
+		&:nth-of-type(4){
+			padding: 0;
+			margin: 5px 0 0 0;}
+		&:nth-of-type(3), &:nth-of-type(4){
+	    	line-height: 50px;
+	    	font-size: 0.75 * $baseFontSize; } }
+	input{
+		&[name="lat"],&[name="long"]{
+			float: none;
+			@include border-box;
+			width: 100%;}
+		&[name="alt"], &[name="acc"]{
+			@include border-box;
+			display: block;
+			float: right;
+			width: 40%;
+			@media screen and (max-width: 700px){
+	 			width: 50%; } } }
+	.map-canvas{
+		width: 100%;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		margin-top: 10px;
+		height: $map-height;
+		img{
+		max-width: none; } } } 
+.bootstrap-select{
+	margin-top: 15px;
+	.dropdown-toggle{
+		line-height: $input-height;
+		min-width: $input-min-width - 14px;
+		//font-weight: normal;
+		@include font-normal;
+		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		text-align: left;
+		min-width: $input-min-width -14px;
+		a .filter-option{
+			padding-right: 10px;}
+		~ .dropdown-menu{
+			label{
+				//font-weight: normal;
+				@include font-normal;
+				padding-top: 0px;
+				padding-left: 0px; 
+				font-size: 1em;
+				input[type="checkbox"]{
+					margin: 5px 10px 1px 0; } } } } }
+.restoring-sanity-to-legends .jr-appearance-list-nolabel, .restoring-sanity-to-legends .jr-appearance-label{
+	margin: -0.9em 0 -0.7em 0;
+	legend{ 
+		float: left;
+		border: none;
+		line-height: 17px;
+		max-width: 40%;
+		//border: 1px solid red;
+		min-height: 1px;}
+	label{
+		float: left;
+		//border: 1px solid red;
+		display: block;
+		//width: 100px;
+		text-align: center;
+			.active{
+				margin: 0 auto;	} }
+	input{
+		text-align: center;} }
+.jr-appearance-list-nolabel{
+	label .active{
+		display: none !important;
+		float: none; } }
+.jr-appearance-label{
+	legend ~ label:hover{
+		background-color: transparent;}
+	input{
+		float: none;
+		display: none !important; } 
+	img{
+		display: inline-block;
+		float: none;} } 
+.with-media{
+	> input[type="radio"], > input[type="checkbox"]{ 
+		~ span.active:not(.jr-hint):not(.jr-constraint-msg){
+			display: block;
+			margin: -2px 0 0 40px;} } }
+.jr-appearance-compact, .jr-appearance-quickcompact{
+	legend{
+		border: none;
+		~ label{
+			float: left;
+			&:hover{
+				background: none;}
+			span.active:not(.jr-hint):not(.jr-constraint-msg){
+				margin-left: 0;
+				display: none; } } }
+	input{
+		display: none;
+		~ img.active{
+			margin-left: 0;
+			max-width: 150px;
+			max-height: 150px;
+			border: 2px solid transparent;}
+		~ img:hover{
+			border-color: lighten($title, 30%);}
+		&:checked ~ img, &:checked ~ img:hover{
+			border-color: $title; } } }
+.file-feedback {
+	@include font-normal;}
