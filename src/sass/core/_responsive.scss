@@ -16,7 +16,7 @@
     .preview-header {
 		  top: -5px; }
     .paper{
-    	@include border-radius(0px);}
+    	@include border-radius(0px); }
     .form-header{
       top: 0;
       border-bottom: 1px solid $groupline;

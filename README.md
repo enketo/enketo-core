@@ -18,4 +18,4 @@ Still deliberating whether to switch to Coffeescript
 
 
 ###Notes for CSS Developers
-The idea is for the core to be extended with different themes. Feel free to discuss whether your contribution should be a part of the core or be turned into a theme. 
+The core to be extended with different themes. See the default and the formhub themes included in /src/sass. Feel free to discuss whether your contribution should be a part of the core, the default them or be turned into a new theme. 
