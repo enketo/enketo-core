@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.3.1/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.3.1/jasmine.css">
+  <style>
+    .datepicker, .bootstrap-timepicker{display: none;}
+  </style>
+  <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine-html.js"></script>
+
+  <!-- include library files here... -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+  <script type="text/javascript" src="../lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.0.6-development-only.js"></script>
+  <script type="text/javascript" src="../lib/xpath/build/xpathjs_javarosa.min.js"></script>
+
+  <!-- include mock files here ... -->
+  <script type="text/javascript" src="mocks/gui.mock.js"></script>
+  <script type="text/javascript" src="mocks/form.mock.js"></script>
+  <script type="text/javascript" src="mocks/transforms.mock.js"></script>
+
+  <!-- include source files here... -->
+  <script type="text/javascript" src="../src/js/form.js"></script>
+  <script type="text/javascript" src="../src/js/widgets.js"></script>
+  <script type="text/javascript" src="../src/js/utils.js"></script>
+
+  <!-- include spec files here... -->
+  <script type="text/javascript" src="utils/test_utils.js"></script>
+  <script type="text/javascript" src="spec/form.spec.js"></script>
+  
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+</head>
+
+<body>
+</body>
+</html>
