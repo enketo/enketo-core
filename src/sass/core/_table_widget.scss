@@ -1,0 +1,39 @@
+.restoring-sanity-to-legends .jr-appearance-list-nolabel, .restoring-sanity-to-legends .jr-appearance-label{
+  margin: -0.9em 0 -0.7em 0;
+  legend{ 
+    float: left;
+    border: none;
+    line-height: 17px;
+    max-width: 40%;
+    //border: 1px solid red;
+    min-height: 1px;}
+  label{
+    float: left;
+    //border: 1px solid red;
+    display: block;
+    //width: 100px;
+    text-align: center;
+      .active{
+        margin: 0 auto; } }
+  input{
+    margin: 0 10px 0 10px;
+    text-align: center;} }
+.jr-appearance-list-nolabel{
+  label .active{
+    display: none !important;
+    float: none; } }
+.jr .jr-appearance-label{
+  legend ~ label:hover{
+    background-color: transparent;}
+  input{
+    float: none;
+    display: none !important; } 
+  img{
+    max-height: 30px;
+    max-width: 30px;
+    float: none;} } 
+.with-media{
+  > input[type="radio"], > input[type="checkbox"]{ 
+    ~ span.active:not(.jr-hint):not(.jr-constraint-msg){
+      display: block;
+      margin: -2px 0 0 40px;} } }

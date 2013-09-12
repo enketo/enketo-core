@@ -1,6 +1,12 @@
+$groupline: #bbbbbb;
+$line: 3px solid $groupline;
+$input-height: 34px;
+$input-min-width: 0.2 * 720px;
+$input-max-width: 80%;
 $baseFontSize: 15px;
-$title: #CE4F07;
-$images-folder: '../../images/';
+$baseLineHeight: 20px;
+$accent-color-1: #CE4F07;
+$images-path: '../../images/';
 
 @mixin font-bold {
   font-weight: bold; }
@@ -8,42 +14,4 @@ $images-folder: '../../images/';
 @mixin font-normal {
   font-weight: normal; }
 
-body{
-  @include font-normal;
-  background: #ccc no-repeat;
-  .main article{
-    padding: 3em;}
-  .form-header{
-    position:absolute;
-    top: -4.4em;
-    border: none; } }
-
-strong {
-  @include font-bold; }
-
-h2, h3, h4 {
-  @include font-bold;
-  text-align: center;}
-
-.paper{
-	background-color: #fff;
-	border-radius: 7px;
-	border: 7px solid #ddd;}
-
-.main {
-  margin: 100px auto 60px auto;
-  position: relative;
-  display: block;
-  text-align: left; 
-  max-width: 720px;
-  article {
-    min-height: 300px; }
-  ul.nav-tabs{
-      margin: 20px 0 0 0;
-      li{
-        margin: 0;
-        a{
-          background: none; } } } }
-
-//@import "_responsive";
-@import "_core";
+@import 'formhub/_theme-formhub';

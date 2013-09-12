@@ -1,0 +1,56 @@
+@mixin small-screen-paddings{
+  body{
+    padding: 0 !important;
+    header{
+      padding-left: 20px;
+      padding-right: 20px; }
+    #page .content{
+      margin: 1em; } } }
+
+@media screen and (max-width: 720px) {
+  @include small-screen-paddings;
+  body {
+    background: none;    
+    .main{ 
+      margin: 0; }
+    .preview-header {
+		  top: -5px; }
+    .paper{
+    	@include border-radius(0px);}
+    .form-header{
+      top: 0;
+      border-bottom: 1px solid $groupline;
+      .form-language-selector > span {
+        display: none; } }
+    h3{
+    	padding-top: 25px;}
+    #page .close{
+      font-size: 2em; } } }
+
+@media screen and (max-width: 600px) {
+  @include small-screen-paddings;
+  body {
+    background: none;
+    line-height: 1.05 * $baseLineHeight;
+    .main { 
+      margin: 0;
+      article{
+        padding: 3em 2em 2em 2em; } }
+    #page .close{
+      font-size: 3em; } } }
+
+@media screen and (max-width: 400px) {
+  @include small-screen-paddings;
+  body {
+    background: none;
+    line-height: 1.09 * $baseLineHeight;
+    .main{ 
+      margin: 0;
+      article {
+        padding: 3em 1em 1em 1em; } }
+    #page .close {
+      font-size: 4em; }
+    .form-header .form-language-selector{
+      border-right: none; }
+    button.print {
+      display: none; } } }

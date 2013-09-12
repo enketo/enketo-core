@@ -1,0 +1,21 @@
+.jr-appearance-compact, .jr-appearance-quickcompact{
+  legend{
+    border: none;
+    ~ label{
+      float: left;
+      &:hover{
+        background: none;}
+      span.active:not(.jr-hint):not(.jr-constraint-msg){
+        margin-left: 0;
+        display: none; } } }
+  input{
+    display: none;
+    ~ img.active{
+      margin-left: 0;
+      max-width: 150px;
+      max-height: 150px;
+      border: 2px solid transparent;}
+    ~ img:hover{
+      border-color: lighten($accent-color-1, 30%);}
+    &:checked ~ img, &:checked ~ img:hover{
+      border-color: $accent-color-1; } } }

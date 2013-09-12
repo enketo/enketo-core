@@ -1,0 +1,213 @@
+@import "core/_mixins";
+@import "core/_layout";
+@import "core/_responsive";
+@import "core/_timepicker";
+@import "core/_datepicker";
+@import 'core/_geopoint_widget';
+@import 'core/_select_widget';
+@import 'core/_select_mobile_widget';
+@import 'core/_table_widget';
+@import 'core/_grid_widget';
+@import 'core/_file_widget';
+
+h2, h3, h4 {
+  @include font-bold;
+  color: $accent-color-1;
+  text-align: center;}
+h3{
+  padding: 5px 0 15px 0;
+  word-wrap: break-word;}
+h4{
+  text-align: left;  }
+
+/** hide stuff **/
+.jr [lang]:not(.active), .jr-option-translations, .jr-appearance-page-break, .jr-constraint-msg, .jr-required-msg,
+.itemset-template, .itemset-labels {
+  display: none; }
+
+/** hints **/
+.jr-hint.active{
+  @include font-normal;
+  color: #888888;
+  display: block;
+  line-height: 1.5em;
+  font-weight: normal;
+  font-size: .7em;
+  font-style: italic;
+  ~ br{
+    display: none; } }
+label .jr-hint.active{
+  padding-top: .5em; } 
+legend .jr-hint.active{
+  padding-bottom: .6em; }
+
+.jr .form-logo img {
+  position: relative;
+  float: none;
+  left: 50%;
+  max-height: 200px;
+  width: 120px;
+  margin: 30px 0 10px -60px; }
+.jr-repeat {
+  background-color: lighten($accent-color-1, 55%);
+  margin: 0 0 3px 0;
+  padding: 10px 10px 10px 10px;
+  .repeat-number {
+    height: 2em;
+    display: block;
+    float: right;
+    color: $accent-color-1;
+    + .jr-group {
+      border-top: none; } } } 
+.jr-group {
+  border-top: $line; 
+  margin: 1.5em 0 0.4em 0;
+    .jr-group{
+      margin: 1.5em 0 0.5em 25px;} }
+#stats + .jr-group, #jr-preload-items + .jr-group, #form-languages + .jr-group{
+  border-top: none; }
+label, fieldset {
+  @include font-bold;
+  margin: 0 0 0.7em 0;
+  padding-top: 0.9em;}
+.restoring-sanity-to-legends{
+  fieldset{
+  padding: 0;
+  margin:0; } }
+legend {
+  position: relative;
+  line-height: 12px;
+  border: none;
+  margin-bottom: 0.6em; //works in Chrome
+  > span {
+    vertical-align: 12px; } //works in safari, some other webkit browsers 
+  ~ label {
+    margin: 0;
+    padding: 5px 0 3px 0;
+    @include font-normal;
+    &:not(.btn-radiocheck):hover{
+      background-color: lighten($accent-color-1, 48%);}
+    .active{
+      margin-left: 5px; } } }
+label, legend, .trigger {
+  font-size: 1em; }
+.jr {
+  img, audio, video {
+  float: right;
+  max-height: 300px;
+  max-width: 70%; } }
+input:not([type="radio"]):not([type="checkbox"]), textarea, select {
+  display: inline-block;
+  margin: 8px 0 0 0; }
+.touch{
+  input:not([type="radio"]):not([type="checkbox"]), textarea, select {
+    @include border-radius(2px);
+    margin: 10px 0 10px 0; 
+    color: #104b66;
+    background-color: #f5f2ed; }
+  .input-append .add-on {
+    margin-top:10px; }
+  input:not([type="radio"]):not([type="checkbox"]), textarea {
+    border: 1px solid #ddd8ce; } }
+input:not([type="radio"]):not([type="checkbox"]), textarea {
+  height: $input-height; }
+input{
+  &[type="text"],&[type="password"], &[type="url"], &[type="email"] {
+  width: $input-max-width } }
+input{
+  &[type=date], &[type=number] {
+  width: $input-min-width; } }
+input[type="radio"], input[type=checkbox] {
+  margin: -2px 8px 0px 7px; }
+
+//turns radio button/ checkbox into large button
+.btn-radiocheck {
+  @include box-shadow-touch;
+  @include border-radius(2px);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  width: 100%;
+  line-height: 40px;
+  text-align: left;
+  margin-bottom: .4em;
+  background-color: #f0f0f0;
+  input {
+    margin-left: 15px;}
+  &:focus, &:hover, &:active, &[data-checked] {
+    background-color: lighten($accent-color-1, 50%); } }
+
+textarea {
+  width: $input-max-width;
+  resize: vertical;
+  min-height: 9em;}
+fieldset {
+  .one-more {
+    margin: 0 -34px -5px 10px; }
+  .remove {
+    float: right;
+    margin-right: 0; } }
+
+.input-append .add-on {
+  padding: ($input-height - 12)/2 5px;
+  margin-top: 8px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;}
+.alert {
+  margin-bottom: 4px;}
+.trigger {
+  @include font-normal;
+  padding: 7px 12px;
+  margin: 1em 0; }
+.required{
+  margin-left: 3px;
+  color: $accent-color-1;}
+.required-subtle{
+  @include transition-slow;
+  float: right;
+  margin-top: 4px;
+  color: #e00e0e;
+  font-size: 0.8em;
+  @media screen and (max-width: 500px){
+    font-size: 0.5em; }
+    &.focus{
+      @include transition-slow;
+      color: #333333; } };
+.disabled {
+  opacity: 0.5; }
+[class^="invalid"], [class*=" invalid"] {
+  @include transition-fast;
+  @include error-bg-border;
+  $pad: 10px;
+  margin-right: -$pad;
+  margin-left: -$pad;
+  padding-left: $pad;
+  padding-right: $pad;
+  padding-bottom: $pad;}
+.invalid-required {
+  .jr-required-msg.active{
+    @include error-text; } }
+.invalid-constraint{
+  .jr-constraint-msg.active{
+    @include error-text; } } 
+.jr-branch {
+  display: none;}
+.date, .bootstrap-timepicker {
+  input {
+    width: $input-min-width;} }
+.bootstrap-timepicker {     //MOVE THIS
+  display: inline-block; } 
+.date {                     //MOVE THIS
+  display: inline-block;
+  margin-right: 10px; } 
+.btn-reset {
+  margin-left: 10px;
+  color: #ddd;
+  background: none;
+  border: none;
+  box-shadow: none;
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.7; }
+  &[readonly] {
+    background: none; }
+  i{
+    vertical-align: bottom;} }

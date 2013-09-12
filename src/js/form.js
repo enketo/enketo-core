@@ -1029,12 +1029,12 @@ function Form (formSelector, dataStr, dataStrToEdit){
 
 		//profiler = new Profiler('adding hint icons');
 		//add 'hint' icon, could be moved to XSLT, but is very fast even on super large forms - 31 msecs on bench6 form
-		if (!Modernizr.touch){
+		/*if (!Modernizr.touch){
 			$hint = '<span class="hint" ><i class="icon-question-sign"></i></span>';
 			$form.find('.jr-hint ~ input, .jr-hint ~ select, .jr-hint ~ textarea').before($hint);
 			$form.find('legend > .jr-hint').parent().find('span:last-child').after($hint);
 			$form.find('.trigger > .jr-hint').parent().find('span:last').after($hint);
-		}
+		}*/
 		//profiler.report();
 
 		//TODO: don't add to preload and calculated items

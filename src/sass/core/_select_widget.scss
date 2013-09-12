@@ -1,0 +1,21 @@
+.bootstrap-select{
+  margin-top: 15px;
+  .dropdown-toggle{
+    line-height: $input-height;
+    min-width: $input-min-width - 14px;
+    //font-weight: normal;
+    @include font-normal;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: left;
+    min-width: $input-min-width -14px;
+    a .filter-option{
+      padding-right: 10px;}
+    ~ .dropdown-menu{
+      label{
+        //font-weight: normal;
+        @include font-normal;
+        padding-top: 0px;
+        padding-left: 0px; 
+        font-size: 1em;
+        input[type="checkbox"]{
+          margin: 5px 10px 1px 0; } } } } }

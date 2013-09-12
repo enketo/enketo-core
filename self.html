@@ -18,6 +18,12 @@
 		<script type="text/javascript" src="src/js/form.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
+				//if querystring touch=true is added, override Modernizr
+				if (window.location.search.indexOf('touch=true') > 0) {
+					Modernizr.touch = true;
+					$('html').addClass('touch');
+				}
+				//initialize form
 				form = new Form('form.jr:eq(0)', dataStr);
 				loadErrors = form.init();
 				$('#validate-form').on('click',function(){
