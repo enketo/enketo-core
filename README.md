@@ -33,6 +33,6 @@ This repo is meant to use as a building block for your own enketo-powered applic
 
 ###Notes for CSS Developers
 
-The core to be extended with different themes. 
-See the default and the formhub themes included in /src/sass. 
-Would be happy to discuss whether your contribution should be a part of the core, the default them or be turned into a new theme. 
+The core can be fairly easily extended with alternative themes. 
+See the *default* and the *formhub* themes already included in /src/sass. 
+We would be happy to discuss whether your contribution should be a part of the core, the default them or be turned into a new theme. 
