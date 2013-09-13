@@ -13,5 +13,17 @@ $images-path: '../../images/';
 
 @mixin font-normal {
   font-weight: normal; }
-
-@import 'default/_theme-default';
+  
+@import "core/_mixins";
+@import "core/_layout";
+@import "core/_main";
+@import "core/_responsive";
+@import "core/_timepicker";
+@import "core/_datepicker";
+@import 'core/_geopoint_widget';
+@import 'core/_select_widget';
+@import 'core/_select_mobile_widget';
+@import 'core/_table_widget';
+@import 'core/_grid_widget';
+@import 'core/_file_widget';
+@import 'default/_theme';
