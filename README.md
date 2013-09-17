@@ -7,11 +7,12 @@ The engine that powers Enketo Smart Paper - Use it to develop your own Enketo-po
 
 ###Related Projects
 
-* [XPathJS_javarosa](https://github.com/MartijnR/xpathjs_javarosa)
+* [XPathJS_javarosa](https://github.com/MartijnR/xpathjs_javarosa) - used inside this repo
 * [enketo-xslt](https://github.com/MartijnR/enketo-xslt)
 * [enketo-xslt-transformer-php] - To follow
 * [enketo-xslt-transformer-node] - To follow
 * [enketo-dristhi](https://github.com/MartijnR/enketo-drishti)
+* [file-manager](https://github.com/MartijnR/file-manager)
 
 ###Notes for All Developers
 
