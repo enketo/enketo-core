@@ -21,10 +21,9 @@ This repo is meant to use as a building block for your own enketo-powered applic
 
 ###Notes for JavaScript Developers
 
-* Still deliberating whether to keep using Google Closure
+* Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
 * Still deliberating what JS Documentation system to use
-* Still deliberating whether to switch to Coffeescript
-* Still deliberating which style guide to use
+* JavaScript style guide: https://github.com/rwaldron/idiomatic.js/
 * Testing is done with Jasmine (in browser and headless)
 * install node and grunt
 * run `npm install` to install dependencies
@@ -36,3 +35,14 @@ This repo is meant to use as a building block for your own enketo-powered applic
 The core can be fairly easily extended with alternative themes. 
 See the *default* and the *formhub* themes already included in /src/sass. 
 We would be happy to discuss whether your contribution should be a part of the core, the default them or be turned into a new theme. 
+
+###Acknowledgements
+
+I would like to acknowledge and thank the indirect contribution by the creators of the following excellent works that were used in the project:
+
+* [XPathJS by Andrej Pavlovic](https://github.com/andrejpavlovic/xpathjs)
+* [JQuery](http://jquery.com)
+* [Modernizr](http://modernizr.com)
+* [Bootstrap](http://twitter.github.com/bootstrap/)
+* [Bootstrap Datepicker by eternicode](https://github.com/eternicode/bootstrap-datepicker)
+* [Bootstrap Timepicker by jdewit](http://jdewit.github.io/bootstrap-timepicker/)
