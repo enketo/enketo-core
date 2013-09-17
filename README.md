@@ -1,4 +1,4 @@
-enketo-js-engine [![Build Status](https://travis-ci.org/MartijnR/enketo-core.png)](https://travis-ci.org/MartijnR/enketo-core)
+enketo-core [![Build Status](https://travis-ci.org/MartijnR/enketo-core.png)](https://travis-ci.org/MartijnR/enketo-core)
 ================
 
 The engine that powers Enketo Smart Paper - Use it to develop your own Enketo-powered app!
