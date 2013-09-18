@@ -7,6 +7,8 @@ $baseFontSize: 15px;
 $baseLineHeight: 20px;
 $accent-color-1: #252525;
 $images-path: '../../images/';
+$iconSpritePath: url('/images/glyphicons-halflings.png'); 
+$iconWhiteSpritePath: url('/images/glyphicons-halflings-white.png');
 
 @mixin font-bold {
   font-weight: bold; }

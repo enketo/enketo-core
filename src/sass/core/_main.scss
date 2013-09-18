@@ -1,3 +1,9 @@
+body {
+  @include font-normal; }
+
+strong {
+  @include font-bold; }
+
 h2, h3, h4 {
   @include font-bold;
   color: $accent-color-1;

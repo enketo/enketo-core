@@ -1,18 +1,5 @@
-body {
-  @include font-normal;
-  .main article{
-    padding: 3em;}
-  .form-header{
-    position:absolute;
-    top: -4.4em;
-    border: none; } }
-
-strong {
-  @include font-bold; }
-
-h2, h3, h4 {
-  @include font-bold;
-  text-align: center;}
+.main article {
+  padding: 45px; }
 
 .paper {
   background-color: #fff;
@@ -38,8 +25,15 @@ h2, h3, h4 {
 .form-header {
   left: 0;
   width: 100%;
-  margin: 1em 0;
-  padding: 0 0 0.6em 0; }
+  margin: 16px 0;
+  //padding: 0 0 0.6em 0;
+  position:absolute;
+  //top: -66px;
+  border: none;
+  //left: 0;
+  //width: 100%;
+  margin: 16px 0px;
+  padding: 0; }
 .form-language-selector {
   float: right;
   padding: 0.2em $baseFontSize;
