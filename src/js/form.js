@@ -2011,11 +2011,11 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       $msg.after( '<span class="jr-required-msg active" lang="">This field is required</span>' );
     } );
 
-    if ( !Modernizr.touch ) {
-      $( '.form-header [title]' ).tooltip( {
-        placement: 'bottom'
-      } );
-    }
+    //if ( !Modernizr.touch ) {
+    //  $( '.form-header [title]' ).tooltip( {
+    //    placement: 'bottom'
+    //  } );
+    //}
   };
 
   /**
