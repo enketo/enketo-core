@@ -2977,13 +2977,19 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    * @return {boolean} whether the form contains any errors
    */
   FormHTML.prototype.validateAll = function( ) {
-    var that = this;
+    var that = this,
+      $firstError;
+
     //can't fire custom events on disabled elements therefore we set them all as valid
     $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, input:disabled, select:disabled, textarea:disabled' ).each( function( ) {
       that.setValid( $( this ) );
     } );
     $form.find( 'input, select, textarea' ).not( '.ignore' ).trigger( 'validate' );
-    return this.isValid( );
+    $firstError = $form.find( '.invalid-required, .invalid-constraint' ).eq( 0 );
+    if ( $firstError.length > 0 && window.scrollTo ) {
+      window.scrollTo( 0, $firstError.offset( ).top - 50 );
+    }
+    return $firstError.length > 0;
   };
 
   /**
