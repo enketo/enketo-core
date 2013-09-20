@@ -18,7 +18,7 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
 
-* build with your preferred Sass tool - Compass configuration already included (Grunt build will be added)
+* build with your preferred Sass tool - Compass configuration and Grunt build configuration already included
 * many of the outstanding issues for enketo-core are managed in the [modilabs repo](https://github.com/modilabs/enketo/issues?state=open)
 
 ###Notes for JavaScript Developers
@@ -26,9 +26,9 @@ This repo is meant to use as a building block for your own enketo-powered applic
 * The JS library will highly likely be transformed into a more modular architecture, using Require.js
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
 * Still deliberating what JS Documentation system to use
-* JavaScript style guide: https://github.com/rwaldron/idiomatic.js/
+* JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file
 * Testing is done with Jasmine (in browser and headless)
-* install node and grunt
+* install node.js and grunt-cli
 * run `npm install` to install dependencies
 * run `grunt` to test
 * When making a pull request, please add tests where relevant
@@ -37,7 +37,7 @@ This repo is meant to use as a building block for your own enketo-powered applic
 
 The core can be fairly easily extended with alternative themes. 
 See the *default* and the *formhub* themes already included in /src/sass. 
-We would be happy to discuss whether your contribution should be a part of the core, the default them or be turned into a new theme. 
+We would be happy to discuss whether your contribution should be a part of the core, the default theme or be turned into a new theme. 
 Once the JS modernization work is complete, themes can include/exclude JS widgets as well!
 
 ###Acknowledgements
