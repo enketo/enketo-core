@@ -12,11 +12,20 @@ var dataEditStr1 =
         "</meta>"+
         "<nodeA>2012-02-05T15:34:00.000-04</nodeA>"+
         "<nodeB>b</nodeB>"+
-        "<repeatGroup template=''>"+
-            "<nodeC>cdefault</nodeC>"+
+        "<repeatGroup>"+
+            "<nodeC>some data one</nodeC>"+
         "</repeatGroup>"+
         "<repeatGroup>"+
-            "<nodeC>some data</nodeC>"+
+            "<nodeC></nodeC>"+
+        "</repeatGroup>"+
+        "<repeatGroup>"+
+            "<nodeC></nodeC>"+
+        "</repeatGroup>"+
+        "<repeatGroup>"+
+            "<nodeC></nodeC>"+
+        "</repeatGroup>"+
+        "<repeatGroup>"+
+            "<nodeC>some data five</nodeC>"+
         "</repeatGroup>"+
         "<somenodes>"+
             "<A>two</A>"+

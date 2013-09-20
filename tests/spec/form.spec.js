@@ -603,7 +603,8 @@ describe( "Loading instance-to-edit functionality", function( ) {
 
 		it( "adds data from the instance-to-edit to the form instance", function( ) {
 			expect( form.getDataO( ).node( '/thedata/nodeA' ).getVal( )[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
-			expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data' );
+			expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data one' );
+			expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 4 ).getVal( )[ 0 ] ).toEqual( 'some data five' );
 		} );
 
 	} );
@@ -631,7 +632,7 @@ describe( "Loading instance-to-edit functionality", function( ) {
 
 		it( "adds data from the instance-to-edit to the form instance", function( ) {
 			expect( form.getDataO( ).node( '/thedata/nodeA' ).getVal( )[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
-			expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data' );
+			expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data one' );
 		} );
 	} );
 
@@ -640,7 +641,7 @@ describe( "Loading instance-to-edit functionality", function( ) {
 			var dataEditStr1a = dataEditStr1.replace( /thedata/g, 'thedata_updated' );
 			form = loadForm( 'thedata.xml', dataEditStr1a ); //new Form(formStr1, dataStr1, dataEditStr1a);
 			loadErrors = form.init( );
-			expect( loadErrors.length ).toEqual( 10 );
+			expect( loadErrors.length ).toEqual( 11 );
 		} );
 
 		it( 'when an instance-to-edit is provided with double instanceID nodes', function( ) {

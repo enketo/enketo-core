@@ -634,17 +634,21 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         target.setVal( value, null, xmlDataType );
       }
       //if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
-      //this use of node(,,).get() is a bit of a trick that is difficult to wrap one's head around
-      else if ( that.node( path, index, {
-        noTemplate: false
-      } ).get( ).length > 0 ) {
+      //this use of node(path,index,file).get() is a bit of a trick that is difficult to wrap one's head around
+      else if ( that.node( path, 0, {
+          noTemplate: false
+        } ).get( ).closest( '[template]' ).length > 0 ) {
         //clone the template node 
         //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub)
         $template = that.node( path, 0, {
           noTemplate: false
         } ).get( ).closest( '[template]' );
-        //TODO test this for nested repeats
-        that.cloneTemplate( form.generateName( $template ), index - 1 );
+        //TODO: test this for nested repeats
+        //if a preceding repeat with that path was empty this repeat may not have been created yet,
+        //so we need to make sure all preceding repeats are created
+        for (var p = 0; p < index; p++) {
+          that.cloneTemplate( form.generateName( $template ), p );
+        }
         //try setting the value again
         target = that.node( path, index );
         if ( target.get( ).length === 1 ) {
@@ -690,7 +694,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
 
   //index is the index of the node (defined in Nodeset), that the clone should be added immediately after
-  //if a node with that name and that index already exists the node will NOT be cloned
+  //if a node with that name and that index+1 already exists the node will NOT be cloned
   //almost same as clone() but adds targetIndex and removes template attributes and if no template node exists it will copy a normal node
   //nodeset (givein in node() should include filter noTemplate:false) so it will provide all nodes that that name
   DataXML.prototype.cloneTemplate = function( selector, index ) {
