@@ -19,6 +19,7 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
 
 * build with your preferred Sass tool - Compass configuration already included (Grunt build will be added)
+* many of the outstanding issues for enketo-core are managed in the [modilabs repo](https://github.com/modilabs/enketo/issues?state=open)
 
 ###Notes for JavaScript Developers
 
