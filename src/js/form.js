@@ -93,6 +93,11 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     if ( loadErrors.length > 0 ) {
       console.error( 'loadErrors: ', loadErrors );
     }
+
+    if ( window.scrollTo ) {
+      window.scrollTo( 0, 0 );
+    }
+
     return loadErrors;
   };
 
