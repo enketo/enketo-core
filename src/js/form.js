@@ -34,30 +34,30 @@
 function Form( formSelector, dataStr, dataStrToEdit ) {
   "use strict";
   var data, dataToEdit, form, $form, $formClone, repeatsPresent,
-    loadErrors = [];
+    loadErrors = [ ];
   //*** FOR DEBUGGING and UNIT TESTS ONLY ***
   this.ex = function( expr, type, selector, index ) {
     return data.evaluate( expr, type, selector, index );
   };
-  this.sfv = function() {
-    return form.setAllVals();
+  this.sfv = function( ) {
+    return form.setAllVals( );
   };
   this.Data = function( dataStr ) {
     return new DataXML( dataStr );
   };
-  this.getDataO = function() {
+  this.getDataO = function( ) {
     return data;
   };
-  this.getDataEditO = function() {
-    return dataToEdit.get();
+  this.getDataEditO = function( ) {
+    return dataToEdit.get( );
   };
-  this.getInstanceID = function() {
-    return data.getInstanceID();
+  this.getInstanceID = function( ) {
+    return data.getInstanceID( );
   };
   this.Form = function( selector ) {
     return new FormHTML( selector );
   };
-  this.getFormO = function() {
+  this.getFormO = function( ) {
     return form;
   };
   //***************************************
@@ -68,26 +68,26 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    * Initializes the Form instance (XML data and HTML form).
    *
    */
-  this.init = function() {
+  this.init = function( ) {
     //cloning children to keep any event handlers on 'form.jr' intact upon resetting
-    $formClone = $( formSelector ).clone().appendTo( '<original></original>' );
+    $formClone = $( formSelector ).clone( ).appendTo( '<original></original>' );
 
     data = new DataXML( dataStr );
     form = new FormHTML( formSelector );
 
     //var profiler = new Profiler('data.init()');
-    data.init();
+    data.init( );
     //profiler.report();
 
     if ( typeof dataStrToEdit !== 'undefined' && dataStrToEdit && dataStrToEdit.length > 0 ) {
       dataToEdit = new DataXML( dataStrToEdit );
-      dataToEdit.init();
+      dataToEdit.init( );
       data.load( dataToEdit );
     }
     repeatsPresent = ( $( formSelector ).find( '.jr-repeat' ).length > 0 );
 
     //profiler = new Profiler('html form.init()');
-    form.init();
+    form.init( );
     //profiler.report();
 
     if ( loadErrors.length > 0 ) {
@@ -107,8 +107,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
   /**
    *
    */
-  this.getRecordName = function() {
-    return form.recordName.get();
+  this.getRecordName = function( ) {
+    return form.recordName.get( );
   };
   /**
    * @param {string} name
@@ -116,8 +116,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
   this.setRecordName = function( name ) {
     return form.recordName.set( name );
   };
-  this.getRecordStatus = function() {
-    return form.recordStatus.get();
+  this.getRecordStatus = function( ) {
+    return form.recordStatus.get( );
   };
   /**
    * @param {(boolean|string)=} markedFinal
@@ -131,18 +131,18 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
   this.setEditStatus = function( status ) {
     return form.editStatus.set( status );
   };
-  this.getEditStatus = function() {
-    return form.editStatus.get();
+  this.getEditStatus = function( ) {
+    return form.editStatus.get( );
   };
-  this.getName = function() {
-    return $form.find( '#form-title' ).text();
+  this.getName = function( ) {
+    return $form.find( '#form-title' ).text( );
   };
 
   //restores html form to pre-initialized state
   //does not affect data instance!
-  this.resetHTML = function() {
+  this.resetHTML = function( ) {
     //form language selector was moved outside of <form> so has to be separately removed
-    $( '#form-languages' ).remove();
+    $( '#form-languages' ).remove( );
     $form.replaceWith( $formClone );
   };
 
@@ -150,15 +150,15 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    * Validates the whole form and returns true or false
    * @return {boolean}
    */
-  this.validateForm = function() {
-    return form.validateAll();
+  this.validateForm = function( ) {
+    return form.validateAll( );
   };
   /**
    * Returns wether form has validated as true or false. Needs to be called AFTER calling validate()!
    * @return {!boolean}
    */
-  this.isValid = function() {
-    return form.isValid();
+  this.isValid = function( ) {
+    return form.isValid( );
   };
 
 
@@ -186,7 +186,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     this.$ = $data;
 
     //replace browser-built-in-XPath Engine
-    XPathJS.bindDomLevel3XPath();
+    XPathJS.bindDomLevel3XPath( );
 
     /**
      * Function: node
@@ -238,7 +238,6 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         //to refer to non-first instance, the instance('id_literal')/path/to/node syntax can be used
         if ( this.selector !== defaultSelector && this.selector.indexOf( '/' ) !== 0 && that.instanceSelectRegEx.test( this.selector ) ) {
           this.selector = this.selector.replace( that.instanceSelectRegEx, "model > instance#$1" );
-          //console.debug('selector modified to: '+this.selector);
           return;
         }
         //default context is the first instance in the model            
@@ -253,7 +252,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
      *
      * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
      */
-    Nodeset.prototype.get = function() {
+    Nodeset.prototype.get = function( ) {
       var p, $nodes, val, context;
 
       // noTemplate is ignored if onlyTemplate === true
@@ -268,22 +267,18 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       }
       //noEmpty automatically excludes non-leaf nodes
       if ( this.filter.noEmpty === true ) {
-        $nodes = $nodes.filter( function() {
-          val = /** @type {string} */ $( this ).text();
-          //$this = $(this);
-          ////console.log ('children: '+$(this).children().length);
-          ////console.log ('text length: '+($.trim($this.text()).length));
-          return $( this ).children().length === 0 && $.trim( val ).length > 0; //$.trim($this.text()).length > 0;
+        $nodes = $nodes.filter( function( ) {
+          val = /** @type {string} */ $( this ).text( );
+          return $( this ).children( ).length === 0 && $.trim( val ).length > 0; //$.trim($this.text()).length > 0;
         } );
       }
       //this may still contain empty leaf nodes
       else if ( this.filter.onlyLeaf === true ) {
-        $nodes = $nodes.filter( function() {
-          return $( this ).children().length === 0;
+        $nodes = $nodes.filter( function( ) {
+          return $( this ).children( ).length === 0;
         } );
       }
       $nodes = ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
-      ////console.debug('node.get() returns');//console.debug($nodes);
       return $nodes;
     };
 
@@ -299,16 +294,16 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
       var $target, curVal, /**@type {string}*/ newVal, success;
 
-      curVal = this.getVal()[ 0 ];
+      curVal = this.getVal( )[ 0 ];
 
       if ( typeof newVals !== 'undefined' && newVals !== null ) {
-        newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
+        newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString( );
       } else newVal = '';
       newVal = this.convert( newVal, xmlDataType );
 
-      $target = this.get();
+      $target = this.get( );
 
-      if ( $target.length === 1 && $.trim( newVal.toString() ) !== $.trim( curVal.toString() ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
+      if ( $target.length === 1 && $.trim( newVal.toString( ) ) !== $.trim( curVal.toString( ) ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
         //first change the value so that it can be evaluated in XPath (validated)
         $target.text( newVal );
         //then return validation result
@@ -335,7 +330,6 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //always validate if the new value is not empty, even if value didn't change (see validateAll() function)
       //return (newVal.length > 0 && validateAll) ? this.validate(expr, xmlDataType) : true;
       return null;
-      ////console.debug('validation result: '+this.validate());
     };
 
     /**
@@ -352,10 +346,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
      *   returns [multiple OBSOLETE?] an array of values
      *
      */
-    Nodeset.prototype.getVal = function() {
-      var vals = [];
-      this.get().each( function() {
-        vals.push( $( this ).text() );
+    Nodeset.prototype.getVal = function( ) {
+      var vals = [ ];
+      this.get( ).each( function( ) {
+        vals.push( $( this ).text( ) );
       } );
       return vals;
     };
@@ -367,14 +361,14 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     Nodeset.prototype.clone = function( $precedingTargetNode ) {
       var $dataNode, allClonedNodeNames;
 
-      $dataNode = this.get();
+      $dataNode = this.get( );
       $precedingTargetNode = $precedingTargetNode || $dataNode;
 
       if ( $dataNode.length === 1 && $precedingTargetNode.length === 1 ) {
-        $dataNode.clone().insertAfter( $precedingTargetNode ).find( '*' ).addBack().removeAttr( 'template' );
+        $dataNode.clone( ).insertAfter( $precedingTargetNode ).find( '*' ).addBack( ).removeAttr( 'template' );
 
         allClonedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
-        $dataNode.find( '*' ).each( function() {
+        $dataNode.find( '*' ).each( function( ) {
           allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
         } );
 
@@ -387,11 +381,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     /**
      * Remove a node
      */
-    Nodeset.prototype.remove = function() {
-      var dataNode = this.get();
+    Nodeset.prototype.remove = function( ) {
+      var dataNode = this.get( );
       if ( dataNode.length > 0 ) {
-        //console.log('removing data node with name: '+this.get().prop('nodeName'));
-        dataNode.remove();
+        dataNode.remove( );
         $form.trigger( 'dataupdate', dataNode.prop( 'nodeName' ) );
       } else {
         console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );
@@ -405,13 +398,13 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
      * @return {string}             return string value of converted value
      */
     Nodeset.prototype.convert = function( x, xmlDataType ) {
-      if ( x.toString() === '' ) {
+      if ( x.toString( ) === '' ) {
         return x;
       }
       if ( typeof xmlDataType !== 'undefined' && xmlDataType !== null &&
-        typeof this.types[ xmlDataType.toLowerCase() ] !== 'undefined' &&
-        typeof this.types[ xmlDataType.toLowerCase() ].convert !== 'undefined' ) {
-        return this.types[ xmlDataType.toLowerCase() ].convert( x );
+        typeof this.types[ xmlDataType.toLowerCase( ) ] !== 'undefined' &&
+        typeof this.types[ xmlDataType.toLowerCase( ) ].convert !== 'undefined' ) {
+        return this.types[ xmlDataType.toLowerCase( ) ].convert( x );
       }
       return x;
     };
@@ -424,19 +417,18 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
      */
     Nodeset.prototype.validate = function( expr, xmlDataType ) {
       var typeValid, exprValid,
-        value = this.getVal()[ 0 ];
+        value = this.getVal( )[ 0 ];
 
-      if ( value.toString() === '' ) {
+      if ( value.toString( ) === '' ) {
         return true;
       }
 
-      if ( typeof xmlDataType == 'undefined' || xmlDataType === null || typeof this.types[ xmlDataType.toLowerCase() ] == 'undefined' ) {
+      if ( typeof xmlDataType == 'undefined' || xmlDataType === null || typeof this.types[ xmlDataType.toLowerCase( ) ] == 'undefined' ) {
         xmlDataType = 'string';
       }
-      typeValid = this.types[ xmlDataType.toLowerCase() ].validate( value );
+      typeValid = this.types[ xmlDataType.toLowerCase( ) ].validate( value );
 
       exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? that.evaluate( expr, 'boolean', this.originalSelector, this.index ) : true;
-      //console.debug('constraint valid: '+exprValid);
       return ( typeValid && exprValid );
     };
 
@@ -477,15 +469,13 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           var pattern = ( /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/ ),
             segments = pattern.exec( x );
 
-          //console.debug('datestring: '+x+ ' type: '+ typeof x + 'is valid? -> '+new Date(x.toString()).toString());
-          //return ( new Date(x).toString() !== 'Invalid Date' || new Date(x+'T00:00:00.000Z') !== 'Invalid Date');
-          return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString() !== 'Invalid Date' ) : false;
+          return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString( ) !== 'Invalid Date' ) : false;
         },
         convert: function( x ) {
           var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/,
             segments = pattern.exec( x ),
             date = new Date( x );
-          if ( new Date( x ).toString() == 'Invalid Date' ) {
+          if ( new Date( x ).toString( ) == 'Invalid Date' ) {
             //this code is really only meant for the Rhino and PhantomJS engines, in browsers it may never be reached
             if ( segments && Number( segments[ 1 ] ) > 0 && Number( segments[ 3 ] ) >= 0 && Number( segments[ 3 ] ) < 12 && Number( segments[ 5 ] ) < 32 ) {
               date = new Date( Number( segments[ 1 ] ), ( Number( segments[ 3 ] ) - 1 ), Number( segments[ 5 ] ) );
@@ -493,55 +483,49 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           }
           //date.setUTCHours(0,0,0,0);
           //return date.toUTCString();//.getUTCFullYear(), datetime.getUTCMonth(), datetime.getUTCDate());
-          return date.getUTCFullYear().toString().pad( 4 ) + '-' + ( date.getUTCMonth() + 1 ).toString().pad( 2 ) + '-' + date.getUTCDate().toString().pad( 2 );
+          return date.getUTCFullYear( ).toString( ).pad( 4 ) + '-' + ( date.getUTCMonth( ) + 1 ).toString( ).pad( 2 ) + '-' + date.getUTCDate( ).toString( ).pad( 2 );
         }
       },
       'datetime': {
         validate: function( x ) {
-          console.debug( 'datetime validation function received: ' + x + ' type:' + typeof x );
           //the second part builds in some tolerance for slightly-off dates provides as defaults (e.g.: 2013-05-31T07:00-02)
-          return ( new Date( x.toString() ).toString() !== 'Invalid Date' || new Date( this.convert( x.toString() ) ).toString() !== 'Invalid Date' );
+          return ( new Date( x.toString( ) ).toString( ) !== 'Invalid Date' || new Date( this.convert( x.toString( ) ) ).toString( ) !== 'Invalid Date' );
         },
         convert: function( x ) {
           var date, // timezone, segments, dateS, timeS,
             patternCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2}):([0-9]{2})$/,
             patternAlmostCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2})$/;
-          //console.debug('datetime conversion function received: '+x+' type:'+ typeof x);
           /* 
            * if the pattern is right, or almost right but needs a small correction for JavaScript to handle it,
            * do not risk changing the time zone by calling toISOLocalString()
            */
-          if ( new Date( x ).toString() !== 'Invalid Date' && patternCorrect.test( x ) ) {
+          if ( new Date( x ).toString( ) !== 'Invalid Date' && patternCorrect.test( x ) ) {
             return x;
           }
-          if ( new Date( x ).toString() == 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
+          if ( new Date( x ).toString( ) == 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
             return x + ':00';
           }
           date = new Date( x );
-          return ( date.toString() !== 'Invalid Date' ) ? date.toISOLocalString() : date.toString();
+          return ( date.toString( ) !== 'Invalid Date' ) ? date.toISOLocalString( ) : date.toString( );
         }
       },
       'time': {
         validate: function( x ) {
-          var date = new Date(),
-            segments = x.toString().split( ':' );
-          //console.debug('time value to validate: '+x);
-          //console.debug(segments);
+          var date = new Date( ),
+            segments = x.toString( ).split( ':' );
           if ( segments.length < 2 ) {
             return false;
           }
-          segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString().split( '.' )[ 0 ] ) : 0;
+          segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString( ).split( '.' )[ 0 ] ) : 0;
 
-          return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString() !== 'Invalid Date' );
+          return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString( ) !== 'Invalid Date' );
         },
         convert: function( x ) {
-          var segments = x.toString().split( ':' );
+          var segments = x.toString( ).split( ':' );
           $.each( segments, function( i, val ) {
-            segments[ i ] = val.toString().pad( 2 );
+            segments[ i ] = val.toString( ).pad( 2 );
           } );
           return segments.join( ':' );
-          //console.log('converting datetime to time');
-          //return datetime.getHours().toString().pad(2)+':'+datetime.getMinutes().toString().pad(2)+':'+datetime.getSeconds().toString().pad(2);
         }
       },
       'barcode': {
@@ -551,14 +535,14 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       },
       'geopoint': {
         validate: function( x ) {
-          var coords = x.toString().split( ' ' );
+          var coords = x.toString( ).split( ' ' );
           return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
             ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
             ( typeof coords[ 2 ] == 'undefined' || !isNaN( coords[ 2 ] ) ) &&
             ( typeof coords[ 3 ] == 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
         },
         convert: function( x ) {
-          return $.trim( x.toString() );
+          return $.trim( x.toString( ) );
         }
       },
       'binary': {
@@ -582,24 +566,24 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    *
    *   -
    */
-  DataXML.prototype.init = function() {
+  DataXML.prototype.init = function( ) {
     var val;
 
     //trimming values
     this.node( null, null, {
       noEmpty: true,
       noTemplate: false
-    } ).get().each( function() {
-      val = /** @type {string} */ $( this ).text();
+    } ).get( ).each( function( ) {
+      val = /** @type {string} */ $( this ).text( );
       $( this ).text( $.trim( val ) );
     } );
 
-    this.cloneAllTemplates();
+    this.cloneAllTemplates( );
     return;
   };
 
-  DataXML.prototype.getInstanceID = function() {
-    return this.node( ':first>meta>instanceID' ).getVal()[ 0 ];
+  DataXML.prototype.getInstanceID = function( ) {
+    return this.node( ':first>meta>instanceID' ).getVal( )[ 0 ];
   };
   /**
    * Function to load an (possibly incomplete) instance so that it can be edited.
@@ -615,31 +599,25 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         noEmpty: true
       };
 
-    nodesToLoad = instanceOfDataXML.node( null, null, filter ).get();
-    console.debug( 'nodes to load: ', nodesToLoad );
+    nodesToLoad = instanceOfDataXML.node( null, null, filter ).get( );
     //first empty all form data nodes, to clear any default values except those inside templates
-    this.node( null, null, filter ).get().each( function() {
+    this.node( null, null, filter ).get( ).each( function( ) {
       //something seems fishy about doing it this way instead of using node.setVal('');
       $( this ).text( '' );
     } );
 
-    nodesToLoad.each( function() {
+    nodesToLoad.each( function( ) {
       var name = $( this ).prop( 'nodeName' );
-      //console.debug(name);
       path = form.generateName( $( this ) );
-      //console.debug('path: '+path);
-      index = instanceOfDataXML.node( path ).get().index( $( this ) );
-      //console.debug('index: '+index);
-      value = $( this ).text();
-      //console.debug('value: '+value);
+      index = instanceOfDataXML.node( path ).get( ).index( $( this ) );
+      value = $( this ).text( );
 
       //input is not populated in this function, so we take index 0 to get the XML data type
       $input = $form.find( '[name="' + path + '"]' ).eq( 0 );
 
       xmlDataType = ( $input.length > 0 ) ? form.input.getXmlType( $input ) : 'string';
-      //console.debug('xml datatype: '+xmlDataType);
       target = that.node( path, index );
-      $target = target.get();
+      $target = target.get( );
 
       //if there are multiple nodes with that name and index (actually impossible)
       if ( $target.length > 1 ) {
@@ -654,17 +632,17 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //this use of node(,,).get() is a bit of a trick that is difficult to wrap one's head around
       else if ( that.node( path, index, {
         noTemplate: false
-      } ).get().length > 0 ) {
+      } ).get( ).length > 0 ) {
         //clone the template node 
         //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub)
         $template = that.node( path, 0, {
           noTemplate: false
-        } ).get().closest( '[template]' );
+        } ).get( ).closest( '[template]' );
         //TODO test this for nested repeats
         that.cloneTemplate( form.generateName( $template ), index - 1 );
         //try setting the value again
         target = that.node( path, index );
-        if ( target.get().length === 1 ) {
+        if ( target.get( ).length === 1 ) {
           target.setVal( value, null, xmlDataType );
         } else {
           error = 'Error occured trying to clone template node to set the repeat value of the instance to be edited.';
@@ -674,11 +652,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       }
       //as an exception, missing meta nodes will be quietly added if a meta node exists at that path
       //the latter requires e.g the root node to have the correct name
-      else if ( $( this ).parent( 'meta' ).length === 1 && that.node( form.generateName( $( this ).parent( 'meta' ) ), 0 ).get().length === 1 ) {
+      else if ( $( this ).parent( 'meta' ).length === 1 && that.node( form.generateName( $( this ).parent( 'meta' ) ), 0 ).get( ).length === 1 ) {
         //if there is no existing meta node with that node as child
-        if ( that.node( ':first > meta > ' + name, 0 ).get().length === 0 ) {
-          console.debug( 'cloning this direct child of <meta>' );
-          $( this ).clone().appendTo( that.node( ':first > meta' ).get() );
+        if ( that.node( ':first > meta > ' + name, 0 ).get( ).length === 0 ) {
+          $( this ).clone( ).appendTo( that.node( ':first > meta' ).get( ) );
         } else {
           error = 'Found duplicate meta node (' + name + ')!';
           console.error( error );
@@ -692,17 +669,17 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     } );
     //add deprecatedID node, copy instanceID value to deprecatedID and empty deprecatedID
     instanceID = this.node( '*>meta>instanceID' );
-    if ( instanceID.get().length !== 1 ) {
-      error = 'InstanceID node in default instance error (found ' + instanceID.get().length + ' instanceID nodes)';
+    if ( instanceID.get( ).length !== 1 ) {
+      error = 'InstanceID node in default instance error (found ' + instanceID.get( ).length + ' instanceID nodes)';
       console.error( error );
       loadErrors.push( error );
       return;
     }
-    if ( this.node( '*>meta>deprecatedID' ).get().length !== 1 ) {
+    if ( this.node( '*>meta>deprecatedID' ).get( ).length !== 1 ) {
       var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
-      $( deprecatedIDXMLNode ).appendTo( this.node( '*>meta' ).get() );
+      $( deprecatedIDXMLNode ).appendTo( this.node( '*>meta' ).get( ) );
     }
-    this.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
+    this.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal( )[ 0 ], null, 'string' );
     instanceID.setVal( '', null, 'string' );
   };
 
@@ -712,28 +689,22 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
   //almost same as clone() but adds targetIndex and removes template attributes and if no template node exists it will copy a normal node
   //nodeset (givein in node() should include filter noTemplate:false) so it will provide all nodes that that name
   DataXML.prototype.cloneTemplate = function( selector, index ) {
-    ////console.log('trying to locate data node with path: '+path+' to clone and insert after node with same xpath and index: '+index);
+    //console.log('trying to locate data node with path: '+path+' to clone and insert after node with same xpath and index: '+index);
     var $insertAfterNode, name,
       template = this.node( selector, 0, {
         onlyTemplate: true
-      } ); //eq(0) is actually obsolete
-    //console.debug('going to clone date template node with selector: '+selector+' and insert after index '+index);
+      } );
     //if form does not use jr:template="" but the node-to-clone does exist
-    template = ( template.get().length === 0 ) ? this.node( selector, 0 ) : template;
-    name = template.get().prop( 'nodeName' );
-    $insertAfterNode = this.node( selector, index ).get();
+    template = ( template.get( ).length === 0 ) ? this.node( selector, 0 ) : template;
+    name = template.get( ).prop( 'nodeName' );
+    $insertAfterNode = this.node( selector, index ).get( );
 
     //if templatenodes and insertafternode(s) have been identified AND the node following insertafternode doesn't already exist(! important for nested repeats!)
-    if ( template.get().length === 1 && $insertAfterNode.length === 1 && $insertAfterNode.next().prop( 'nodeName' ) !== name ) { //this.node(selector, index+1).get().length === 0){
-      //console.log('found data repeat node with template attribute');
-      //cloneDataNode(templateNode, insertAfterNode);
-
+    if ( template.get( ).length === 1 && $insertAfterNode.length === 1 && $insertAfterNode.next( ).prop( 'nodeName' ) !== name ) { //this.node(selector, index+1).get().length === 0){
       template.clone( $insertAfterNode );
-      //console.debug('cloning done');
-      //templateNode.clone().insertAfter(templateNode.parent().children(templateNode.prop('nodeName')).last()).removeAttr('template');
     } else {
       //console.error ('Could locate node: '+path+' with index '+index+' in data instance.There could be multiple template node (a BUG) or none.');
-      if ( $insertAfterNode.next().prop( 'nodeName' ) !== name ) {
+      if ( $insertAfterNode.next( ).prop( 'nodeName' ) !== name ) {
         console.error( 'Could not find template node and/or node to insert the clone after' );
       }
     }
@@ -752,22 +723,20 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    */
   DataXML.prototype.cloneAllTemplates = function( startNode ) {
     var _this = this;
-    ////console.log('cloning all templates once');
     if ( typeof startNode == 'undefined' || startNode.length === 0 ) {
       startNode = this.$.find( ':first' );
     }
     //clone data nodes with template (jr:template=) attribute if it doesn't have any siblings of the same name already
     //strictly speaking this is not "according to the spec" as the user should be asked whether it has any data for this question
     //but I think it is almost always better to assume at least one 'repeat' (= 1 question)
-    startNode.children( '[template]' ).each( function() {
-      ////console.log('found data point with template attribute, name:'+$(this).prop('nodeName'));
-      if ( typeof $( this ).parent().attr( 'template' ) == 'undefined' && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
+    startNode.children( '[template]' ).each( function( ) {
+      if ( typeof $( this ).parent( ).attr( 'template' ) == 'undefined' && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
         //console.log('going to clone template data node with name: ' + $(this).prop('nodeName'));
-        $( this ).clone().insertAfter( $( this ) ).find( '*' ).addBack().removeAttr( 'template' );
+        $( this ).clone( ).insertAfter( $( this ) ).find( '*' ).addBack( ).removeAttr( 'template' );
         //cloneDataNode($(this));
       }
     } );
-    startNode.children().not( '[template]' ).each( function() {
+    startNode.children( ).not( '[template]' ).each( function( ) {
       _this.cloneAllTemplates( $( this ) );
     } );
     return;
@@ -789,7 +758,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    *    <nodes.get()>, which is always (?) preferred except for debugging.
    *
    */
-  DataXML.prototype.get = function() {
+  DataXML.prototype.get = function( ) {
     return this.$ || null;
   };
 
@@ -802,7 +771,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    *
    *   data xml object
    */
-  DataXML.prototype.getXML = function() {
+  DataXML.prototype.getXML = function( ) {
     return this.xml || null;
   };
 
@@ -815,15 +784,15 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    */
   DataXML.prototype.getStr = function( incTempl, incNs, all ) {
     var $docRoot, $dataClone, dataStr;
-    dataStr = ( new XMLSerializer() ).serializeToString( this.getInstanceClone( incTempl, incNs, all )[ 0 ] );
+    dataStr = ( new XMLSerializer( ) ).serializeToString( this.getInstanceClone( incTempl, incNs, all )[ 0 ] );
     //remove tabs
     dataStr = dataStr.replace( /\t/g, '' );
     return dataStr;
   };
 
   DataXML.prototype.getInstanceClone = function( incTempl, incNs, all ) {
-    var $clone = ( all ) ? this.$.find( ':first' ).clone() : this.node( '> *:first' ).get().clone();
-    return ( incTempl ) ? $clone : $clone.find( '[template]' ).remove().end();
+    var $clone = ( all ) ? this.$.find( ':first' ).clone( ) : this.node( '> *:first' ).get( ).clone( );
+    return ( incTempl ) ? $clone : $clone.find( '[template]' ).remove( ).end( );
   };
 
   /**
@@ -848,10 +817,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    */
   DataXML.prototype.makeBugCompliant = function( expr, selector, index ) {
     var i, parentSelector, parentIndex, $target, $node, nodeName, $siblings, $parents;
-    $target = this.node( selector, index ).get();
+    $target = this.node( selector, index ).get( );
     //console.debug('selector: '+selector+', target: ', $target);
     //add() sorts the resulting collection in document order
-    $parents = $target.parents().add( $target );
+    $parents = $target.parents( ).add( $target );
     //console.debug('makeBugCompliant() received expression: '+expr+' inside repeat: '+selector+' context parents are: ', $parents);
     //traverse collection in reverse document order
     for ( i = $parents.length - 1; i >= 0; i-- ) {
@@ -859,7 +828,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       nodeName = $node.prop( 'nodeName' );
       $siblings = $node.siblings( nodeName + ':not([template])' );
       //if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
-      if ( nodeName.toLowerCase() !== 'instance' && nodeName.toLowerCase() !== 'model' && $siblings.length > 0 ) {
+      if ( nodeName.toLowerCase( ) !== 'instance' && nodeName.toLowerCase( ) !== 'model' && $siblings.length > 0 ) {
         parentSelector = form.generateName( $node );
         parentIndex = $siblings.add( $node ).index( $node );
         //console.log('calculated repeat 0-based index: '+parentIndex+' for repeat node with path: '+parentSelector);
@@ -887,12 +856,12 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     var i, j, error, context, contextDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
       $collection, $contextWrapNodes, $repParents;
 
-    console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
-      index + ' and result type: ' + resTypeStr );
+    //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
+    //  index + ' and result type: ' + resTypeStr );
     resTypeStr = resTypeStr || 'any';
     index = index || 0;
 
-    expr = expr.trim();
+    expr = expr.trim( );
 
     /* 
 			creating a context doc is necessary for 3 reasons:
@@ -916,7 +885,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       for ( i = 0; i < instances.length; i++ ) {
         id = instances[ i ].match( /[\'|\"]([^\'']+)[\'|\"]/ )[ 1 ];
         expr = expr.replace( instances[ i ], '/node()/instance[@id="' + id + '"]' );
-        this.$.find( ':first>instance#' + id ).clone().appendTo( contextDoc.$.find( ':first' ) );
+        this.$.find( ':first>instance#' + id ).clone( ).appendTo( contextDoc.$.find( ':first' ) );
       }
     }
 
@@ -925,13 +894,13 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       /**
        * If the context for the expression is a node that is inside a repeat.... see makeBugCompliant()
        */
-      $collection = this.node( selector ).get();
+      $collection = this.node( selector ).get( );
       if ( $collection.length > 1 ) {
         //console.log('going to inject position into: '+expr+' for context: '+selector+' and index: '+index);
         expr = this.makeBugCompliant( expr, selector, index );
       }
     } else {
-      context = contextDoc.getXML();
+      context = contextDoc.getXML( );
     }
 
     resultTypes = {
@@ -981,10 +950,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
         //console.debug(result);
       } else if ( resTypeNum === 7 ) {
-        $result = $();
-        //console.log('raw result', result);
+        $result = $( );
         for ( j = 0; j < result.snapshotLength; j++ ) {
-          //console.debug(result.snapshotItem(j));
           $result = $result.add( result.snapshotItem( j ) );
         }
         //console.debug('evaluation returned nodes: ', $result);
@@ -995,7 +962,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         //xpathEvalTimePure += xTime;
         return $result;
       }
-      console.debug( 'evaluated ' + expr + ' to: ' + result[ resultTypes[ resTypeNum ][ 2 ] ] );
+      //console.debug( 'evaluated ' + expr + ' to: ' + result[ resultTypes[ resTypeNum ][ 2 ] ] );
       //totTime = new Date().getTime() - timeStart;
       //xTime = new Date().getTime() - timeLap;
       //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
@@ -1028,7 +995,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     this.branch = new this.Branch( this );
   }
 
-  FormHTML.prototype.init = function() {
+  FormHTML.prototype.init = function( ) {
     var name, $required, $hint;
     //this.checkForErrors();
     if ( typeof data == 'undefined' || !( data instanceof DataXML ) ) {
@@ -1039,10 +1006,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     this.preloads.init( this ); //before widgets.init (as instanceID used in offlineFileWidget)
     //profiler.report();
 
-    this.grosslyViolateStandardComplianceByIgnoringCertainCalcs(); //before calcUpdate!
+    this.grosslyViolateStandardComplianceByIgnoringCertainCalcs( ); //before calcUpdate!
 
     //profiler = new Profiler('calcupdate');
-    this.calcUpdate(); //before repeat.init as repeat count may use a calculated item
+    this.calcUpdate( ); //before repeat.init as repeat count may use a calculated item
     //profiler.report();
 
     //profiler = new Profiler('adding hint icons');
@@ -1069,13 +1036,13 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 			different name attribute.
 			TODO: move to XSLT
 		 */
-    $form.find( 'input[type="radio"]' ).each( function() {
+    $form.find( 'input[type="radio"]' ).each( function( ) {
       name = /**@type {string} */ $( this ).attr( 'name' );
       $( this ).attr( 'data-name', name );
     } );
 
     //profiler = new Profiler('setLangs()');
-    this.langs.init(); //test: before itemsetUpdate
+    this.langs.init( ); //test: before itemsetUpdate
     //profiler.report();
 
     //profiler = new Profiler('repeat.init()');
@@ -1085,34 +1052,34 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     //$form.find('h2').first().append('<span/>');//what's this for then?
 
     //profiler = new Profiler('itemsets initialization');
-    this.itemsetUpdate();
+    this.itemsetUpdate( );
     //profiler.report();
 
     //profiler = new Profiler('setting default values in form inputs');
-    this.setAllVals();
+    this.setAllVals( );
     //profiler.report();
 
     //profiler = new Profiler('widgets initialization');
-    this.widgets.init(); //after setAllVals()
+    this.widgets.init( ); //after setAllVals()
     //profiler.report();
 
     //profiler = new Profiler('bootstrapify');
-    this.bootstrapify();
+    this.bootstrapify( );
     //profiler.report();
 
     //profiler = new Profiler('branch.init()');
-    this.branch.init();
+    this.branch.init( );
     //profiler.report();
 
     //profiler = new Profiler('outputUpdate initial');
-    this.outputUpdate();
+    this.outputUpdate( );
     //profiler.report();
 
     //profiler = new Profiler('setHints()');
-    this.setHints();
+    this.setHints( );
     //profiler.report();
 
-    this.setEventHandlers(); //after widgets init to make sure widget handlers are called before
+    this.setEventHandlers( ); //after widgets init to make sure widget handlers are called before
     this.editStatus.set( false );
     //profiler.report('time taken across all functions to evaluate '+xpathEvalNum+' XPath expressions: '+xpathEvalTime);
   };
@@ -1121,22 +1088,22 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    * Checks for general transformation or xml form errors by comparing stats. It is helpful,
    * though an error is not always important
    */
-  FormHTML.prototype.checkForErrors = function() {
+  FormHTML.prototype.checkForErrors = function( ) {
     var i,
-      paths = [],
+      paths = [ ],
       total = {},
       $stats = $form.find( '#stats' );
 
     if ( $stats.length > 0 ) {
-      total.jrItem = parseInt( $stats.find( '[id="jrItem"]' ).text(), 10 );
-      total.jrInput = parseInt( $stats.find( '[id="jrInput"]' ).text(), 10 );
-      total.jrItemset = parseInt( $stats.find( '[id="jrItemset"]' ).text(), 10 );
-      total.jrUpload = parseInt( $stats.find( '[id="jrUpload"]' ).text(), 10 );
-      total.jrTrigger = parseInt( $stats.find( '[id="jrTrigger"]' ).text(), 10 );
-      total.jrConstraint = parseInt( $stats.find( '[id="jrConstraint"]' ).text(), 10 );
-      total.jrRelevant = parseInt( $stats.find( '[id="jrRelevant"]' ).text(), 10 );
-      total.jrCalculate = parseInt( $stats.find( '[id="jrCalculate"]' ).text(), 10 );
-      total.jrPreload = parseInt( $stats.find( '[id="jrPreload"]' ).text(), 10 );
+      total.jrItem = parseInt( $stats.find( '[id="jrItem"]' ).text( ), 10 );
+      total.jrInput = parseInt( $stats.find( '[id="jrInput"]' ).text( ), 10 );
+      total.jrItemset = parseInt( $stats.find( '[id="jrItemset"]' ).text( ), 10 );
+      total.jrUpload = parseInt( $stats.find( '[id="jrUpload"]' ).text( ), 10 );
+      total.jrTrigger = parseInt( $stats.find( '[id="jrTrigger"]' ).text( ), 10 );
+      total.jrConstraint = parseInt( $stats.find( '[id="jrConstraint"]' ).text( ), 10 );
+      total.jrRelevant = parseInt( $stats.find( '[id="jrRelevant"]' ).text( ), 10 );
+      total.jrCalculate = parseInt( $stats.find( '[id="jrCalculate"]' ).text( ), 10 );
+      total.jrPreload = parseInt( $stats.find( '[id="jrPreload"]' ).text( ), 10 );
 
       /** @type {number} */
       total.hRadio = $form.find( 'input[type="radio"]' ).length;
@@ -1147,9 +1114,9 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       total.hInputNotRadioCheck = $form.find( 'textarea, input:not([type="radio"],[type="checkbox"])' ).length;
       total.hTrigger = $form.find( '.trigger' ).length;
       total.hRelevantNotRadioCheck = $form.find( '[data-relevant]:not([type="radio"],[type="checkbox"])' ).length;
-      total.hRelevantRadioCheck = $form.find( 'input[data-relevant][type="radio"],input[data-relevant][type="checkbox"]' ).parent().parent( 'fieldset' ).length;
+      total.hRelevantRadioCheck = $form.find( 'input[data-relevant][type="radio"],input[data-relevant][type="checkbox"]' ).parent( ).parent( 'fieldset' ).length;
       total.hConstraintNotRadioCheck = $form.find( '[data-constraint]:not([type="radio"],[type="checkbox"])' ).length;
-      total.hConstraintRadioCheck = $form.find( 'input[data-constraint][type="radio"],input[data-constraint][type="checkbox"]' ).parent().parent( 'fieldset' ).length;
+      total.hConstraintRadioCheck = $form.find( 'input[data-constraint][type="radio"],input[data-constraint][type="checkbox"]' ).parent( ).parent( 'fieldset' ).length;
       total.hCalculate = $form.find( '[data-calculate]' ).length;
       total.hPreload = $form.find( '#jr-preload-items input' ).length;
 
@@ -1181,15 +1148,14 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       }
       //probably resource intensive: check if all nodes mentioned in name attributes exist in $data
 
-      $form.find( '[name]' ).each( function() {
+      $form.find( '[name]' ).each( function( ) {
         if ( $.inArray( $( this ).attr( 'name' ), paths ) ) {
           paths.push( $( this ).attr( 'name' ) );
         }
       } );
-      //s//console.debug(paths);
+
       for ( i = 0; i < paths.length; i++ ) {
-        ////console.debug('checking: '+paths[i]);
-        if ( data.node( paths[ i ] ).get().length < 1 ) {
+        if ( data.node( paths[ i ] ).get( ).length < 1 ) {
           console.error( 'Found name attribute: ' + paths[ i ] + ' that does not have a corresponding data node. Transformation error or XML form error (relative nodesets perhaps?' );
         }
       }
@@ -1228,10 +1194,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       if ( $node.length !== 1 ) {
         return ''; //console.error('getInputType(): no input node provided or multiple');
       }
-      nodeName = $node.prop( 'nodeName' ).toLowerCase();
+      nodeName = $node.prop( 'nodeName' ).toLowerCase( );
       if ( nodeName == 'input' ) {
         if ( $node.attr( 'type' ).length > 0 ) {
-          return $node.attr( 'type' ).toLowerCase();
+          return $node.attr( 'type' ).toLowerCase( );
         } else return console.error( '<input> node has no type' );
       } else if ( nodeName == 'select' ) {
         return 'select';
@@ -1299,7 +1265,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       return !( $node.prop( 'disabled' ) || $node.parents( 'fieldset:disabled' ).length > 0 );
     },
     getVal: function( $node ) {
-      var inputType, values = [],
+      var inputType, values = [ ],
         name;
       if ( $node.length !== 1 ) {
         return console.error( 'getVal(): no inputNode provided or multiple' );
@@ -1308,16 +1274,16 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       name = this.getName( $node );
 
       if ( inputType == 'radio' ) {
-        return this.getWrapNodes( $node ).find( 'input:checked' ).val() || '';
+        return this.getWrapNodes( $node ).find( 'input:checked' ).val( ) || '';
       }
       //checkbox values bug in jQuery as (node.val() should work)
       if ( inputType == 'checkbox' ) {
-        this.getWrapNodes( $node ).find( 'input[name="' + name + '"]:checked' ).each( function() {
-          values.push( $( this ).val() );
+        this.getWrapNodes( $node ).find( 'input[name="' + name + '"]:checked' ).each( function( ) {
+          values.push( $( this ).val( ) );
         } );
         return values;
       }
-      return ( !$node.val() ) ? '' : ( $.isArray( $node.val() ) ) ? $node.val().join( ' ' ).trim() : $node.val().trim();
+      return ( !$node.val( ) ) ? '' : ( $.isArray( $node.val( ) ) ) ? $node.val( ).join( ' ' ).trim( ) : $node.val( ).trim( );
     },
     setVal: function( name, index, value ) {
       var $inputNodes, type, date, $target; //, 
@@ -1345,9 +1311,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         if ( type === 'date' || type === 'datetime' ) {
           //convert current value (loaded from instance) to a value that a native datepicker understands
           //TODO test for IE, FF, Safari when those browsers start including native datepickers
-          value = data.node().convert( value, type );
-
-          console.debug( 'converting date before setting input field to: ' + value );
+          value = data.node( ).convert( value, type );
         }
       }
 
@@ -1366,17 +1330,16 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    *  Since not all data nodes with a value have a corresponding input element, it could be considered to turn this
    *  around and cycle through the HTML form elements and check for each form element whether data is available.
    */
-  FormHTML.prototype.setAllVals = function() {
+  FormHTML.prototype.setAllVals = function( ) {
     var index, name, value,
       that = this;
     data.node( null, null, {
       noEmpty: true
-    } ).get().each( function() {
+    } ).get( ).each( function( ) {
       try {
-        value = $( this ).text();
+        value = $( this ).text( );
         name = that.generateName( $( this ) );
-        index = data.node( name ).get().index( $( this ) );
-        console.debug( 'calling input.setVal with name: ' + name + ', index: ' + index + ', value: ' + value );
+        index = data.node( name ).get( ).index( $( this ) );
         that.input.setVal( name, index, value );
       } catch ( e ) {
         loadErrors.push( 'Could not load input field value with name: ' + name + ' and value: ' + value );
@@ -1386,29 +1349,27 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
   };
 
   FormHTML.prototype.langs = {
-    init: function() {
+    init: function( ) {
       var lang,
         that = this,
         setOptionLangs,
         defaultLang = $form.find( '#form-languages' ).attr( 'data-default-lang' ),
         $langSelector = $( '.form-language-selector' );
 
-      $( '#form-languages' ).detach().appendTo( $langSelector ); //insertBefore($('form.jr').parent());
+      $( '#form-languages' ).detach( ).appendTo( $langSelector ); //insertBefore($('form.jr').parent());
 
       if ( !defaultLang || defaultLang === '' ) {
         defaultLang = $( '#form-languages option:eq(0)' ).attr( 'value' );
       }
-      console.debug( 'default language is: ' + defaultLang );
       $( '#form-languages' ).val( defaultLang );
 
       if ( $( '#form-languages option' ).length < 2 ) {
-        $langSelector.hide();
+        $langSelector.hide( );
         return;
       }
       $( '#form-languages' ).change( function( event ) {
-        lang = $( this ).val();
-        console.debug( 'form-language change event detected!' );
-        event.preventDefault();
+        lang = $( this ).val( );
+        event.preventDefault( );
         that.setAll( lang );
       } );
     },
@@ -1419,12 +1380,12 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
       $form.find( '[lang]' ).removeClass( 'active' ).filter( '[lang="' + lang + '"], [lang=""]' ).addClass( 'active' );
 
-      $form.find( 'select' ).each( function() {
+      $form.find( 'select' ).each( function( ) {
         that.setSelect( $( this ) );
       } );
       //quickfix for labels and legends that do not contain a span.active without other class
-      $form.find( 'legend span.active:not(.jr-hint, .jr-constraint-msg), label span.active:not(.jr-hint, .jr-constraint-msg)' ).each( function() {
-        if ( $( this ).text().trim().length === 0 ) {
+      $form.find( 'legend span.active:not(.jr-hint, .jr-constraint-msg), label span.active:not(.jr-hint, .jr-constraint-msg)' ).each( function( ) {
+        if ( $( this ).text( ).trim( ).length === 0 ) {
           $( this ).text( '[MISSING TRANSLATION]' );
         }
       } );
@@ -1434,12 +1395,11 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     //swap language of <select> <option>s
     setSelect: function( $select ) {
       var value, /** @type {string} */ curLabel, /** @type {string} */ newLabel;
-      console.debug( 'setting select labels' );
-      $select.children( 'option' ).not( '[value=""]' ).each( function() {
-        curLabel = /** @type {string} */ $( this ).text();
+      $select.children( 'option' ).not( '[value=""]' ).each( function( ) {
+        curLabel = /** @type {string} */ $( this ).text( );
         value = $( this ).attr( 'value' );
         newLabel = $( this ).parent( 'select' ).siblings( '.jr-option-translations' )
-          .children( '.active[data-option-value="' + value + '"]' ).text().trim();
+          .children( '.active[data-option-value="' + value + '"]' ).text( ).trim( );
         newLabel = ( typeof newLabel !== 'undefined' && newLabel.length > 0 ) ? newLabel : curLabel;
         $( this ).text( newLabel );
       } );
@@ -1457,17 +1417,17 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
       outputsOnly = ( options && options.outputsOnly ) ? options.outputsOnly : false;
 
-      $hints = ( outputsOnly ) ? $form.find( '*>.jr-hint>.jr-output' ).parent() : $form.find( '*>.jr-hint' );
+      $hints = ( outputsOnly ) ? $form.find( '*>.jr-hint>.jr-output' ).parent( ) : $form.find( '*>.jr-hint' );
 
-      $hints.parent().each( function() {
-        if ( $( this ).prop( 'nodeName' ).toLowerCase() !== 'label' && $( this ).prop( 'nodeName' ).toLowerCase() !== 'fieldset' ) {
+      $hints.parent( ).each( function( ) {
+        if ( $( this ).prop( 'nodeName' ).toLowerCase( ) !== 'label' && $( this ).prop( 'nodeName' ).toLowerCase( ) !== 'fieldset' ) {
           $wrapNode = $( this ).parent( 'fieldset' );
         } else {
           $wrapNode = $( this );
         }
         $hint = $wrapNode.find( '.hint' );
 
-        hint = $( this ).find( '.jr-hint.active' ).text().trim();
+        hint = $( this ).find( '.jr-hint.active' ).text( ).trim( );
 
         if ( hint.length > 0 ) {
           $hint.attr( 'title', hint );
@@ -1487,7 +1447,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       $form.attr( 'data-edited', Boolean( status ) ); //.toString());
       $form.trigger( 'edit', status );
     },
-    get: function() {
+    get: function( ) {
       return ( $form.attr( 'data-edited' ) === 'true' ) ? true : false;
     }
   };
@@ -1498,10 +1458,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //$('#record-name').text(key);
       $form.find( 'h2 span' ).text( key );
     },
-    get: function() {
+    get: function( ) {
       return $form.attr( 'data-stored-with-key' ) || null;
     },
-    reset: function() {
+    reset: function( ) {
       $form.removeAttr( 'data-stored-with-key' );
     }
   };
@@ -1509,12 +1469,12 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
   FormHTML.prototype.recordStatus = {
     set: function( markedFinal ) {
-      $form.attr( 'data-stored-final', markedFinal.toString() );
+      $form.attr( 'data-stored-final', markedFinal.toString( ) );
     },
-    get: function() {
+    get: function( ) {
       return ( $form.attr( 'data-stored-final' ) === 'true' ) ? true : false;
     },
-    reset: function() {
+    reset: function( ) {
       $form.removeAttr( 'data-stored-final' );
     }
   };
@@ -1528,8 +1488,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     /**
      * Initializes branches, sets delegated event handlers
      */
-    this.init = function() {
-      this.update();
+    this.init = function( ) {
+      this.update( );
     };
     /**
      * Updates branches based on changed input fields
@@ -1540,14 +1500,14 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     this.update = function( changedNodeNames ) {
       var i, p, $branchNode, result, namesArr, cleverSelector, insideRepeat, insideRepeatClone, cacheIndex,
         relevantCache = {},
-        alreadyCovered = [],
+        alreadyCovered = [ ],
         that = this,
         evaluations = 0,
         clonedRepeatsPresent;
 
       //var profiler = new Profiler('branch update');
-      namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
-      cleverSelector = ( namesArr.length > 0 ) ? [] : [ '[data-relevant]' ];
+      namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [ ];
+      cleverSelector = ( namesArr.length > 0 ) ? [ ] : [ '[data-relevant]' ];
 
       for ( i = 0; i < namesArr.length; i++ ) {
         cleverSelector.push( '[data-relevant*="' + namesArr[ i ] + '"]' );
@@ -1555,7 +1515,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
       clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
-      $form.find( cleverSelector.join() ).each( function() {
+      $form.find( cleverSelector.join( ) ).each( function( ) {
         //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
         if ( $.inArray( $( this ).attr( 'name' ), alreadyCovered ) !== -1 ) {
           return;
@@ -1620,8 +1580,6 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
         that.process( $branchNode, result );
       } );
-      //console.debug('already covered: ', alreadyCovered);
-      //console.debug('relevant expression results cached:', relevantCache);
       //profiler.report();
       return true;
     };
@@ -1645,10 +1603,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //for mysterious reasons '===' operator fails after Advanced Compilation even though result has value true 
       //and type boolean
       if ( result === true ) {
-        console.log( 'going to enable ', $branchNode );
         this.enable( $branchNode );
       } else {
-        console.log( 'going to disable ', $branchNode );
         this.disable( $branchNode );
       }
     };
@@ -1677,16 +1633,16 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       var type,
         that = this;
       if ( !this.selfRelevant( $branchNode ) ) {
-        console.debug( 'enabling branch with name: ' + $branchNode.attr( 'name' ) );
+        //console.debug( 'enabling branch with name: ' + $branchNode.attr( 'name' ) );
 
-        $branchNode.removeClass( 'disabled pre-init' ).show( 250, function() {
+        $branchNode.removeClass( 'disabled pre-init' ).show( 250, function( ) {
           //to recalculate table column widths
           if ( that.ancestorRelevant( $branchNode ) ) {
             parent.widgets.tableWidget( $branchNode );
           }
         } );
 
-        type = $branchNode.prop( 'nodeName' ).toLowerCase();
+        type = $branchNode.prop( 'nodeName' ).toLowerCase( );
 
         if ( type == 'label' ) {
           $branchNode.children( 'input:not(.force-disabled), select, textarea' ).prop( 'disabled', false );
@@ -1709,10 +1665,9 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
      * @param  {jQuery} $branchNode The jQuery object to hide and disable
      */
     this.disable = function( $branchNode ) {
-      var type = $branchNode.prop( 'nodeName' ).toLowerCase(),
+      var type = $branchNode.prop( 'nodeName' ).toLowerCase( ),
         virgin = $branchNode.hasClass( 'pre-init' );
       if ( this.selfRelevant( $branchNode ) || virgin ) {
-        console.debug( 'disabling branch' );
         $branchNode.addClass( 'disabled' ); //;
 
         if ( typeof settings !== 'undefined' && typeof settings.showBranch !== 'undefined' && !settings.showBranch ) {
@@ -1724,7 +1679,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           $branchNode.clearInputs( 'change' );
 
           //all remaining fields marked as invalid can now be marked as valid
-          $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
+          $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function( ) {
             parent.setValid( $( this ) );
           } );
         } else {
@@ -1748,11 +1703,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    * @param  {string=} changedDataNodeNames node names that were recently changed, separated by commas
    */
   FormHTML.prototype.itemsetUpdate = function( changedDataNodeNames ) {
-    console.log( 'checking if itemsets need updating because values of following nodes changed: ' + changedDataNodeNames );
     //TODO: test with very large itemset
     var clonedRepeatsPresent, insideRepeat, insideRepeatClone,
       that = this,
-      cleverSelector = [],
+      cleverSelector = [ ],
       needToUpdateLangs = false,
       itemsCache = {};
 
@@ -1767,12 +1721,12 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     cleverSelector = cleverSelector.join( ',' );
     clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
-    $form.find( cleverSelector ).each( function() {
+    $form.find( cleverSelector ).each( function( ) {
       var $htmlItem, $htmlItemLabels, value, $instanceItems, index, context,
         $template = $( this ),
         newItems = {},
-        prevItems = $template.data(),
-        templateNodeName = $( this ).prop( 'nodeName' ).toLowerCase(),
+        prevItems = $template.data( ),
+        templateNodeName = $( this ).prop( 'nodeName' ).toLowerCase( ),
         $input = ( templateNodeName === 'label' ) ? $( this ).children( 'input' ).eq( 0 ) : $( this ).parent( 'select' ),
         $labels = $template.closest( 'label, select' ).siblings( '.itemset-labels' ),
         itemsXpath = $template.attr( 'data-items-path' ),
@@ -1792,9 +1746,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
       if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
         $instanceItems = itemsCache[ itemsXpath ];
-        console.debug( 'using cached itemset items result for ' + itemsXpath ); //, $instanceItems);
       } else {
-        console.debug( 'no cache for ' + itemsXpath + ', need to evaluate XPath' );
         $instanceItems = data.evaluate( itemsXpath, 'nodes', context, index );
         if ( !insideRepeat ) {
           itemsCache[ itemsXpath ] = $instanceItems;
@@ -1804,13 +1756,9 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       // this property allows for more efficient 'itemschanged' detection
       newItems.length = $instanceItems.length;
       //this may cause problems for large itemsets. Use md5 instead?
-      newItems.text = $instanceItems.text();
-
-      //console.debug('previous items: ', prevItems);
-      //console.debug('new items: ', newItems);
+      newItems.text = $instanceItems.text( );
 
       if ( newItems.length === prevItems.length && newItems.text === prevItems.text ) {
-        console.debug( 'itemset unchanged' );
         return;
       }
 
@@ -1818,24 +1766,24 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
       //clear data values through inputs. Note: if a value exists, 
       //this will trigger a dataupdate event which may call this update function again
-      $( this ).closest( 'label > select, fieldset > label' ).parent()
+      $( this ).closest( 'label > select, fieldset > label' ).parent( )
         .clearInputs( 'change' )
-        .find( templateNodeName ).not( $template ).remove();
-      $( this ).parent( 'select' ).siblings( '.jr-option-translations' ).empty();
+        .find( templateNodeName ).not( $template ).remove( );
+      $( this ).parent( 'select' ).siblings( '.jr-option-translations' ).empty( );
 
-      $instanceItems.each( function() {
+      $instanceItems.each( function( ) {
         $htmlItem = $( '<root/>' );
         $template
-          .clone().appendTo( $htmlItem )
+          .clone( ).appendTo( $htmlItem )
           .removeClass( 'itemset-template' )
           .addClass( 'itemset' )
           .removeAttr( 'data-items-path' );
 
         $htmlItemLabels = ( labelType === 'itext' ) ?
-          $labels.find( '[data-itext-id="' + $( this ).children( labelRef ).text() + '"]' ).clone() :
-          $( '<span class="active" lang="">' + $( this ).children( labelRef ).text() + '</span>' );
+          $labels.find( '[data-itext-id="' + $( this ).children( labelRef ).text( ) + '"]' ).clone( ) :
+          $( '<span class="active" lang="">' + $( this ).children( labelRef ).text( ) + '</span>' );
 
-        value = /**@type {string}*/ $( this ).children( valueRef ).text();
+        value = /**@type {string}*/ $( this ).children( valueRef ).text( );
         $htmlItem.find( '[value]' ).attr( 'value', value );
 
         if ( templateNodeName === 'label' ) {
@@ -1844,23 +1792,22 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           $labels.before( $htmlItem.find( ':first' ) );
         } else if ( templateNodeName === 'option' ) {
           if ( $htmlItemLabels.length === 1 ) {
-            $htmlItem.find( 'option' ).text( $htmlItemLabels.text() );
+            $htmlItem.find( 'option' ).text( $htmlItemLabels.text( ) );
           }
           $htmlItemLabels
             .attr( 'data-option-value', value )
             .attr( 'data-itext-id', '' )
             .appendTo( $labels.siblings( '.jr-option-translations' ) );
-          $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
+          $template.siblings( ).addBack( ).last( ).after( $htmlItem.find( ':first' ) );
         }
       } );
-      if ( $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
+      if ( $input.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
         //populate labels (with current language)
         that.langs.setSelect( $input );
         //update widget
         $input.trigger( 'changeoption' );
       }
     } );
-    console.log( 'itemset update finished' );
   };
 
   /**
@@ -1875,14 +1822,14 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       val = '',
       that = this;
 
-    namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
-    cleverSelector = ( namesArr.length > 0 ) ? [] : [ '.jr-output[data-value]' ];
+    namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [ ];
+    cleverSelector = ( namesArr.length > 0 ) ? [ ] : [ '.jr-output[data-value]' ];
     for ( i = 0; i < namesArr.length; i++ ) {
       cleverSelector.push( '.jr-output[data-value*="' + namesArr[ i ] + '"]' );
     }
     clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
-    $form.find( ':not(:disabled) span.active' ).find( cleverSelector.join() ).each( function() {
+    $form.find( ':not(:disabled) span.active' ).find( cleverSelector.join( ) ).each( function( ) {
       expr = $( this ).attr( 'data-value' );
       //context = that.input.getName($(this).closest('fieldset'));
 
@@ -1894,9 +1841,9 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 				or the whole doc
 			*/
       $context = ( $( this ).parent( 'span' ).parent( 'label' ).find( '[name]' ).eq( 0 ).length === 1 ) ?
-        $( this ).parent().parent().find( '[name]:eq(0)' ) :
+        $( this ).parent( ).parent( ).find( '[name]:eq(0)' ) :
         $( this ).parent( 'span' ).parent( 'legend' ).parent( 'fieldset' ).find( '[name]' ).eq( 0 ).length === 1 ?
-        $( this ).parent().parent().parent().find( '[name]:eq(0)' ) : $( this ).closest( '[name]' );
+        $( this ).parent( ).parent( ).parent( ).find( '[name]:eq(0)' ) : $( this ).closest( '[name]' );
       context = that.input.getName( $context );
       insideRepeat = ( clonedRepeatsPresent && $( this ).closest( '.jr-repeat' ).length > 0 );
       insideRepeatClone = ( clonedRepeatsPresent && $( this ).closest( '.jr-repeat.clone' ).length > 0 );
@@ -1935,10 +1882,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
    * 3. Formhub has re-generated all stored XML forms from the stored XLS forms with the updated pyxforms
    *
    */
-  FormHTML.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function() {
+  FormHTML.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function( ) {
     var $culprit = $form.find( '[name$="/meta/instanceID"][data-calculate]' );
     if ( $culprit.length > 0 ) {
-      console.debug( "Found meta/instanceID with binding that has a calculate attribute and removed this calculation. It ain't right!" );
+      console.log( "Found meta/instanceID with binding that has a calculate attribute and removed this calculation. It ain't right!" );
       $culprit.removeAttr( 'data-calculate' );
     }
   };
@@ -1950,44 +1897,39 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
   FormHTML.prototype.calcUpdate = function( changedNodeNames ) {
     var i, index, name, expr, dataType, relevant, relevantExpr, result, constraint, namesArr, valid, cleverSelector, $dataNodes;
 
-    //console.log('updating calculated items with expressions that contain: '+changedNodeNames);
-    namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
-    cleverSelector = ( namesArr.length > 0 ) ? [] : [ 'input[data-calculate]' ];
+    namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [ ];
+    cleverSelector = ( namesArr.length > 0 ) ? [ ] : [ 'input[data-calculate]' ];
     for ( i = 0; i < namesArr.length; i++ ) {
       cleverSelector.push( 'input[data-calculate*="' + namesArr[ i ] + '"], input[data-relevant*="' + namesArr[ i ] + '"]' );
     }
 
-    $form.find( '#jr-calculated-items' ).find( cleverSelector.join() ).each( function() {
+    $form.find( '#jr-calculated-items' ).find( cleverSelector.join( ) ).each( function( ) {
       name = $( this ).attr( 'name' );
       expr = $( this ).attr( 'data-calculate' );
       dataType = $( this ).attr( 'data-type-xml' );
       constraint = $( this ).attr( 'data-constraint' ); //obsolete?
       relevantExpr = $( this ).attr( 'data-relevant' );
       relevant = ( relevantExpr ) ? data.evaluate( relevantExpr, 'boolean', name ) : true;
-      $dataNodes = data.node( name ).get();
+      $dataNodes = data.node( name ).get( );
       $dataNodes.each( function( index ) {
         //not sure if using 'string' is always correct
         result = ( relevant ) ? data.evaluate( expr, 'string', name, index ) : '';
-        //console.debug('evaluated calculation: '+expr+' with result: '+result);
         valid = data.node( name, index ).setVal( result, constraint, dataType );
-        //if(valid !== 'undefined' && valid === false){
-        //console.log('Calculated item with name: '+name+' value was set but is not valid!');
-        //}
       } );
 
     } );
   };
 
-  FormHTML.prototype.bootstrapify = function() {
+  FormHTML.prototype.bootstrapify = function( ) {
     //if no constraintmessage use a default
     //TODO: move to XSLT
     $form.addClass( 'clearfix' )
-      .find( 'label, legend' ).each( function() {
+      .find( 'label, legend' ).each( function( ) {
         var $label = $( this );
         if ( $label.siblings( 'legend' ).length === 0 &&
           $label.parent( '#jr-calculated-items, #jr-preload-items' ).length === 0 &&
           $label.find( '.jr-constraint-msg' ).length === 0 &&
-          ( $label.prop( 'nodeName' ).toLowerCase() == 'legend' ||
+          ( $label.prop( 'nodeName' ).toLowerCase( ) == 'legend' ||
             $label.children( 'input.ignore' ).length !== $label.children( 'input' ).length ||
             $label.children( 'select.ignore' ).length !== $label.children( 'select' ).length ||
             $label.children( 'textarea.ignore' ).length !== $label.children( 'textarea' ).length ) ) {
@@ -2004,8 +1946,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
     //move constraint message to bottom of question and add message for required (could also be done in XSLT)
     //TODO: move to XSLT
-    $form.find( '.jr-constraint-msg' ).parent().each( function() {
-      var $msg = $( this ).find( '.jr-constraint-msg' ).detach(),
+    $form.find( '.jr-constraint-msg' ).parent( ).each( function( ) {
+      var $msg = $( this ).find( '.jr-constraint-msg' ).detach( ),
         $wrapper = $( this ).closest( 'label, fieldset' );
       $wrapper.append( $msg );
       $msg.after( '<span class="jr-required-msg active" lang="">This field is required</span>' );
@@ -2051,8 +1993,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 			*/
       this.repeat = ( $group ) ? true : false;
       this.$group = $group || $form;
-      this.readonlyWidget(); //call before other widgets
-      this.pageBreakWidget();
+      this.readonlyWidget( ); //call before other widgets
+      this.pageBreakWidget( );
 
       /*
 				Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field
@@ -2065,56 +2007,37 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30"
       var badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
       if ( !Modernizr.touch || !Modernizr.inputtypes.date || badSamsung.test( navigator.userAgent ) ) {
-        this.dateWidget();
+        this.dateWidget( );
       }
       if ( !Modernizr.touch || !Modernizr.inputtypes.time ) {
-        this.timeWidget();
+        this.timeWidget( );
       }
       if ( !Modernizr.touch || !Modernizr.inputtypes.datetime ) {
-        this.dateTimeWidget();
+        this.dateTimeWidget( );
       }
       if ( !Modernizr.touch ) {
-        this.selectWidget();
+        this.selectWidget( );
       } else {
-        this.mobileSelectWidget();
-        this.touchRadioCheckWidget();
+        this.mobileSelectWidget( );
+        this.touchRadioCheckWidget( );
       }
-      this.geopointWidget();
-      this.tableWidget();
-      this.spinnerWidget();
-      this.sliderWidget();
-      this.barcodeWidget();
-      this.offlineFileWidget();
-      this.mediaLabelWidget();
-      this.radioEventsWidget();
-      this.radioCheckWidget();
-      this.radioUnselectWidget();
-    },
-    //for debugging
-    radioEventsWidget: function() {
-      $form.on( 'click', 'label', function() {
-        console.log( 'click label' );
-      } );
-      $form.on( 'focus', 'label', function() {
-        console.log( 'focus label' );
-      } );
-      $form.on( 'click', 'input[type="radio"], input[type="checkbox"]', function() {
-        console.log( 'click input, checked:' + $( this ).is( ':checked' ) );
-      } );
-      $form.on( 'focus', 'input[type="radio"], input[type="checkbox"]', function() {
-        console.log( 'focus input, checked:' + $( this ).is( ':checked' ) );
-      } );
-      $form.on( 'change', 'input[type="radio"], input[type="checkbox"]', function() {
-        console.log( 'change input, checked:' + $( this ).is( ':checked' ) );
-      } );
+      this.geopointWidget( );
+      this.tableWidget( );
+      this.spinnerWidget( );
+      this.sliderWidget( );
+      this.barcodeWidget( );
+      this.offlineFileWidget( );
+      this.mediaLabelWidget( );
+      this.radioCheckWidget( );
+      this.radioUnselectWidget( );
     },
     //applies a data-checked attribute to the parent label of a checked checkbox and radio button
     //used in radioUnselect widget and touch screen styling
-    radioCheckWidget: function() {
+    radioCheckWidget: function( ) {
       if ( !this.repeat ) {
         var $label;
         $form.on( 'click', 'input[type="radio"]:checked', function( event ) {
-          $( this ).parent( 'label' ).siblings().removeAttr( 'data-checked' ).end().attr( 'data-checked', 'true' );
+          $( this ).parent( 'label' ).siblings( ).removeAttr( 'data-checked' ).end( ).attr( 'data-checked', 'true' );
         } );
         $form.on( 'click', 'input[type="checkbox"]', function( event ) {
           $label = $( this ).parent( 'label' );
@@ -2126,17 +2049,15 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
       }
     },
-    radioUnselectWidget: function() {
+    radioUnselectWidget: function( ) {
       if ( !this.repeat ) {
-        console.debug( 'initializing radio unselect widget' );
         $form.on( 'click', '[data-checked]>input[type="radio"]', function( event ) {
-          console.debug( 'registered click event on label with data-checked attribute' );
-          $( this ).prop( 'checked', false ).trigger( 'change' ).parent().removeAttr( 'data-checked' );
+          $( this ).prop( 'checked', false ).trigger( 'change' ).parent( ).removeAttr( 'data-checked' );
         } );
       }
     },
     //TODO: check performance difference if this is done in pure CSS instead of with the help of javascript.
-    touchRadioCheckWidget: function() {
+    touchRadioCheckWidget: function( ) {
       if ( !this.repeat ) {
         $form.find( 'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact, .jr-appearance-label, .jr-appearance-list-nolabel )' )
           .children( 'label' )
@@ -2145,8 +2066,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           .addClass( 'btn-radiocheck' );
       }
     },
-    dateWidget: function() {
-      this.$group.find( 'input[type="date"]' ).each( function() {
+    dateWidget: function( ) {
+      this.$group.find( 'input[type="date"]' ).each( function( ) {
         var $dateI = $( this ),
           $p = $( this ).parent( 'label' ),
           startView = ( $p.hasClass( 'jr-appearance-month-year' ) ) ? 'year' :
@@ -2155,24 +2076,23 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
             ( $p.hasClass( 'jr-appearance-year' ) ) ? 'changeYear' : 'changeDate',
           format = ( startView === 'year' ) ? 'yyyy-mm' :
             ( startView === 'decade' ) ? 'yyyy' : 'yyyy-mm-dd',
-          $fakeDate = $( '<div class="widget date"><input class="ignore input-small" readonly="readonly" type="text" value="' + $( this ).val() + '" placeholder="' + format + '" />' +
+          $fakeDate = $( '<div class="widget date"><input class="ignore input-small" readonly="readonly" type="text" value="' + $( this ).val( ) + '" placeholder="' + format + '" />' +
             '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
           $fakeDateReset = $fakeDate.find( '.btn-reset' ),
           $fakeDateI = $fakeDate.find( 'input' );
-        $dateI.next( '.widget.date' ).remove();
-        $dateI.hide().after( $fakeDate );
+        $dateI.next( '.widget.date' ).remove( );
+        $dateI.hide( ).after( $fakeDate );
 
         //copy manual changes to original date input field
-        $fakeDateI.on( 'change', function() {
-          console.debug( 'fakedate input field change detected. new value: ' + $( this ).val() );
+        $fakeDateI.on( 'change', function( ) {
           var date,
-            value = $( this ).val();
+            value = $( this ).val( );
           if ( value.length > 0 ) {
             value = ( format === 'yyyy-mm' ) ? value + '-01' : ( format === 'yyyy' ) ? value + '-01-01' : value;
-            value = data.node().convert( value, 'date' );
+            value = data.node( ).convert( value, 'date' );
           }
-          if ( $dateI.val() !== value ) {
-            $dateI.val( value ).trigger( 'change' ).blur();
+          if ( $dateI.val( ) !== value ) {
+            $dateI.val( value ).trigger( 'change' ).blur( );
           }
           return false;
         } );
@@ -2196,24 +2116,24 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         } )
         // copy changes made by datepicker to original input field
         .on( 'changeDate', function( e ) {
-          var value = $( this ).val();
-          $dateI.val( value ).trigger( 'change' ).blur();
+          var value = $( this ).val( );
+          $dateI.val( value ).trigger( 'change' ).blur( );
         } );
       } );
     },
-    timeWidget: function() {
-      this.$group.find( 'input[type="time"]' ).each( function() {
+    timeWidget: function( ) {
+      this.$group.find( 'input[type="time"]' ).each( function( ) {
         var $timeI = $( this ),
           $p = $( this ).parent( 'label' ),
-          timeVal = $( this ).val(),
+          timeVal = $( this ).val( ),
           $fakeTime = $( '<div class="widget bootstrap-timepicker">' +
             '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
             '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
           $fakeTimeReset = $fakeTime.find( '.btn-reset' ),
           $fakeTimeI = $fakeTime.find( 'input' );
 
-        $timeI.next( '.widget.bootstrap-timepicker-component' ).remove();
-        $timeI.hide().after( $fakeTime );
+        $timeI.next( '.widget.bootstrap-timepicker-component' ).remove( );
+        $timeI.hide( ).after( $fakeTime );
         $fakeTimeI.timepicker( {
           defaultTime: ( timeVal.length > 0 ) ? timeVal : 'current',
           showMeridian: false
@@ -2222,8 +2142,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         //the time picker itself has input elements
         $fakeTime.find( 'input' ).addClass( 'ignore' );
 
-        $fakeTimeI.on( 'change', function() {
-          $timeI.val( $( this ).val() ).trigger( 'change' ).blur();
+        $fakeTimeI.on( 'change', function( ) {
+          $timeI.val( $( this ).val( ) ).trigger( 'change' ).blur( );
           return false;
         } );
 
@@ -2238,8 +2158,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       } );
     },
     //Note: this widget doesn't offer a way to reset a datetime value in the instance to empty
-    dateTimeWidget: function() {
-      this.$group.find( 'input[type="datetime"]' ).each( function() {
+    dateTimeWidget: function( ) {
+      this.$group.find( 'input[type="datetime"]' ).each( function( ) {
         var $dateTimeI = $( this ),
           /*
 						Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
@@ -2247,7 +2167,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 						original entry may have been done in a different time zone than the edit). However, 
 						values shown in the widget should reflect the local time representation of that value.
 					 */
-          val = ( $( this ).val().length > 0 ) ? new Date( $( this ).val() ).toISOLocalString() : '',
+          val = ( $( this ).val( ).length > 0 ) ? new Date( $( this ).val( ) ).toISOLocalString( ) : '',
           vals = val.split( 'T' ),
           dateVal = vals[ 0 ],
           timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '',
@@ -2261,8 +2181,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           $fakeDateI = $fakeDate.find( 'input' ),
           $fakeTimeI = $fakeTime.find( 'input' );
 
-        $dateTimeI.next( '.widget.datetimepicker' ).remove();
-        $dateTimeI.hide().after( '<div class="datetimepicker widget" />' );
+        $dateTimeI.next( '.widget.datetimepicker' ).remove( );
+        $dateTimeI.hide( ).after( '<div class="datetimepicker widget" />' );
         $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDate ).append( $fakeTime );
         $fakeDateI.datepicker( {
           format: 'yyyy-mm-dd',
@@ -2277,12 +2197,12 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         //the time picker itself has input elements
         $fakeTime.find( 'input' ).addClass( 'ignore' );
 
-        $fakeDateI.on( 'change changeDate', function() {
-          changeVal();
+        $fakeDateI.on( 'change changeDate', function( ) {
+          changeVal( );
           return false;
         } );
-        $fakeTimeI.on( 'change', function() {
-          changeVal();
+        $fakeTimeI.on( 'change', function( ) {
+          changeVal( );
           return false;
         } );
         $fakeDateI.add( $fakeTimeI ).on( 'focus blur', function( event ) {
@@ -2294,78 +2214,76 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           $fakeTimeI.val( '' ).trigger( 'change' );
         } );
 
-        function changeVal() {
-          if ( $fakeDateI.val().length > 0 && $fakeTimeI.val().length > 0 ) {
-            var d = $fakeDateI.val().split( '-' ),
-              t = $fakeTimeI.val().split( ':' );
-            console.log( 'changing datetime' );
-            $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' ).blur();
+        function changeVal( ) {
+          if ( $fakeDateI.val( ).length > 0 && $fakeTimeI.val( ).length > 0 ) {
+            var d = $fakeDateI.val( ).split( '-' ),
+              t = $fakeTimeI.val( ).split( ':' );
+            $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString( ) ).trigger( 'change' ).blur( );
           } else {
-            $dateTimeI.val( '' ).trigger( 'change' ).blur();
+            $dateTimeI.val( '' ).trigger( 'change' ).blur( );
           }
         }
       } );
     },
-    selectWidget: function() {
+    selectWidget: function( ) {
       //$form.find('select option[value=""]').remove(); issue with init value empty
-      this.$group.find( 'select' ).not( '#form-languages' ).selectpicker();
+      this.$group.find( 'select' ).not( '#form-languages' ).selectpicker( );
       if ( !this.repeat ) {
-        $form.on( 'changelanguage', function() {
+        $form.on( 'changelanguage', function( ) {
           //update all pickers in form
           $form.find( 'select' ).selectpicker( 'update' );
         } );
-        $form.on( 'changeoption', 'select', function() {
+        $form.on( 'changeoption', 'select', function( ) {
           //onsole.debug('option change detected, going to update select widget', $(this));
           //update (itemselect) picker on which event was triggered because the options changed
           $( this ).selectpicker( 'update' );
         } );
       }
     },
-    mobileSelectWidget: function() {
+    mobileSelectWidget: function( ) {
       var showSelectedValues = function( $select ) {
-        var values = ( $.isArray( $select.val() ) ) ? $select.val() : [ $select.val() ],
-          valueText = [];
-        console.log( 'mobileSelectWidget change event detected, values selected: ', values );
+        var values = ( $.isArray( $select.val( ) ) ) ? $select.val( ) : [ $select.val( ) ],
+          valueText = [ ];
         for ( var i = 0; i < values.length; i++ ) {
-          valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text() );
+          valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text( ) );
         }
-        $select.siblings( '.widget.mobileselect' ).remove();
+        $select.siblings( '.widget.mobileselect' ).remove( );
         $select.after( '<span class="widget mobileselect">' + values.join( ', ' ) + '</span>' );
       };
-      $form.on( 'change', 'select[multiple]', function() {
+      $form.on( 'change', 'select[multiple]', function( ) {
         showSelectedValues( $( this ) );
         return true;
       } );
       //show defaults
-      $form.find( 'select[multiple]' ).each( function() {
+      $form.find( 'select[multiple]' ).each( function( ) {
         showSelectedValues( $( this ) );
       } );
     },
     //transforms triggers to page-break elements //REMOVE WHEN NIGERIA FORMS NO LONGER USE THIS
-    pageBreakWidget: function() {
+    pageBreakWidget: function( ) {
       if ( !this.repeat ) {
-        $form.find( '.jr-appearance-page-break input[readonly]' ).parent( 'label' ).each( function() {
+        $form.find( '.jr-appearance-page-break input[readonly]' ).parent( 'label' ).each( function( ) {
           var name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"';
           $( '<hr class="manual page-break" ' + name + '></hr>' ) //ui-corner-all
-          .insertBefore( $( this ) ).find( 'input' ).remove();
-          $( this ).remove();
+          .insertBefore( $( this ) ).find( 'input' ).remove( );
+          $( this ).remove( );
         } );
       }
     },
     //transforms readonly inputs into triggers
-    readonlyWidget: function() {
+    readonlyWidget: function( ) {
       if ( !this.repeat ) {
-        $form.find( 'input[readonly]:not([data-type-xml="geopoint"])' ).parent( 'label' ).each( function() {
+        $form.find( 'input[readonly]:not([data-type-xml="geopoint"])' ).parent( 'label' ).each( function( ) {
           //var $spans = $(this).find('span').not('.question-icons span').detach(); 
           var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
             branch = ( relevant ) ? ' jr-branch pre-init' : '',
             name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
             attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
-            value = $( this ).find( 'input, select, textarea' ).val(),
-            html = $( this ).markdownToHtml().html();
+            value = $( this ).find( 'input, select, textarea' ).val( ),
+            html = $( this ).markdownToHtml( ).html( );
           $( '<fieldset class="trigger' + branch + '" ' + attributes + '></fieldset>' )
-            .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove();
-          $( this ).remove();
+            .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove( );
+          $( this ).remove( );
         } );
       }
     },
@@ -2373,35 +2291,34 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       var $g = $group || $form;
       //when loading a form dynamically the DOM elements don't have a width yet (width = 0), so we call
       //this with a bit of a delay..
-      setTimeout( function() {
-        console.debug( 'setting table column widths' );
-        $g.parent().find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
-          .parent().parent( '.jr-appearance-field-list' ).each( function() {
-            $( this ).find( '.jr-appearance-label label>img' ).parent().css( 'width', 'auto' ).toSmallestWidth();
-            $( this ).find( 'label' ).css( 'width', 'auto' ).toLargestWidth();
+      setTimeout( function( ) {
+        $g.parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
+          .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
+            $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
+            $( this ).find( 'label' ).css( 'width', 'auto' ).toLargestWidth( );
             $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
           } );
       }, 50 );
     },
-    spinnerWidget: function() {
+    spinnerWidget: function( ) {
       //$form.find('input[type="number"]').spinner();
     },
-    sliderWidget: function() {
+    sliderWidget: function( ) {
       //detect max and min with algorithm that evaluates expressions multiple times
       //algortithm could guess likely border values by using a regular expression search...
     },
-    geopointWidget: function() {
+    geopointWidget: function( ) {
       this.$group.find( 'input[data-type-xml="geopoint"]' ).geopointWidget( {
         touch: Modernizr.touch
       } );
     },
-    autoCompleteWidget: function() {
+    autoCompleteWidget: function( ) {
 
     },
-    barcodeWidget: function() {
+    barcodeWidget: function( ) {
       //$form.find('input[data-type-xml="barcode"]').attr('placeholder', 'not supported in browser data entry').attr('disabled', 'disabled');
     },
-    offlineFileWidget: function() {
+    offlineFileWidget: function( ) {
       if ( this.repeat ) {
         return;
       }
@@ -2419,7 +2336,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       if ( typeof fileManager == 'undefined' ) {
         feedbackClass = 'warning';
         feedbackMsg = "File uploads not supported."; //" in previews and iframed views.";
-      } else if ( !fileManager.isSupported() ) {
+      } else if ( !fileManager.isSupported( ) ) {
         feedbackClass = 'warning';
         feedbackMsg = "File uploads not supported by your browser";
       } else {
@@ -2432,7 +2349,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         .after( '<div class="file-feedback text-' + feedbackClass + '">' + feedbackMsg + '</div>' );
 
       if ( !allClear ) {
-        $fileInputs.hide();
+        $fileInputs.hide( );
         return;
       }
 
@@ -2444,10 +2361,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 				The easiest way to achieve this is to always add it but only let it do something if permission is granted to use FS.
 			 */
       $form.on( 'change.passthrough', 'input[type="file"]', function( event ) {
-        if ( fileManager.getCurrentQuota() ) {
+        if ( fileManager.getCurrentQuota( ) ) {
           var prevFileName, file, mediaType, $preview,
             $input = $( this );
-          console.debug( 'namespace: ' + event.namespace );
+          //console.debug( 'namespace: ' + event.namespace );
           if ( event.namespace === 'passthrough' ) {
             //console.debug('returning true');
             $input.trigger( 'change.file' );
@@ -2463,11 +2380,11 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
             fileManager.deleteFile( prevFileName );
           }
 
-          $input.siblings( '.file-feedback, .file-preview, .file-loaded' ).remove();
+          $input.siblings( '.file-feedback, .file-preview, .file-loaded' ).remove( );
 
           console.debug( 'file: ', file );
-          if ( file && file.size > 0 && file.size <= connection.maxSubmissionSize() ) {
-            console.debug( 'going to save it in filesystem' );
+          if ( file && file.size > 0 && file.size <= connection.maxSubmissionSize( ) ) {
+            //console.debug( 'going to save it in filesystem' );
             fileManager.saveFile(
               file, {
                 success: function( fsURL ) {
@@ -2486,10 +2403,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           }
           //clear instance value by letting it bubble up to normal change handler
           else {
-            if ( file.size > connection.maxSubmissionSize() ) {
+            if ( file.size > connection.maxSubmissionSize( ) ) {
               $input.after( '<div class="file-feedback text-error">' +
                 'File too large (max ' +
-                ( Math.round( ( connection.maxSubmissionSize() * 100 ) / ( 1024 * 1024 ) ) / 100 ) +
+                ( Math.round( ( connection.maxSubmissionSize( ) * 100 ) / ( 1024 * 1024 ) ) / 100 ) +
                 ' Mb)</div>' );
             }
             return true;
@@ -2498,25 +2415,24 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       } );
 
       var callbacks = {
-        success: function() {
+        success: function( ) {
           console.log( 'Whoheee, we have permission to use the file system' );
-          //permissionGranted = true;
           $fileInputs.removeClass( 'ignore force-disabled' )
             .prop( 'disabled', false )
-            .siblings( '.file-feedback' ).remove()
-            .end()
+            .siblings( '.file-feedback' ).remove( )
+            .end( )
             .after( '<div class="file-feedback text-info">' +
               'File inputs are experimental. Use only for testing.' );
         },
-        error: function() {
-          $fileInputs.siblings( '.file-feedback' ).remove();
+        error: function( ) {
+          $fileInputs.siblings( '.file-feedback' ).remove( );
           $fileInputs.after( '<div class="file-feedback text-warning">' +
             'No permission given to store local data (or an error occurred).</div>' );
 
         }
       };
 
-      $fileInputs.each( function() {
+      $fileInputs.each( function( ) {
         var $input = $( this ),
           existingFileName = $input.attr( 'data-loaded-file-name' );
         if ( existingFileName ) {
@@ -2526,9 +2442,9 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         //fileName = ($input[0].files.length > 0) ? $input[0].files[0].name : '';
         //is this required at all?
         //$input.attr('data-previous-file-name', fileName);
-      } ).parent().addClass( 'with-media clearfix' );
+      } ).parent( ).addClass( 'with-media clearfix' );
 
-      fileManager.init( data.getInstanceID(), callbacks );
+      fileManager.init( data.getInstanceID( ), callbacks );
       /*
 			Some cool code to use for image previews:
 			$fileinput = $(this);
@@ -2545,12 +2461,12 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 			http://html5-demos.appspot.com/static/filesystem/generatingResourceURIs.html
 		 */
     },
-    mediaLabelWidget: function() {
+    mediaLabelWidget: function( ) {
       //improve looks when images, video or audio is used as label
       if ( !this.repeat ) {
         $( 'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact)>label, ' +
           'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact)>legend' )
-          .children( 'img,video,audio' ).parent().addClass( 'with-media clearfix' );
+          .children( 'img,video,audio' ).parent( ).addClass( 'with-media clearfix' );
       }
     }
   };
@@ -2564,16 +2480,15 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     init: function( parentO ) {
       var item, param, name, curVal, newVal, meta, dataNode, props, xmlType,
         that = this;
-      //console.log('initializing preloads');
       //these initialize actual preload items
-      $form.find( '#jr-preload-items input' ).each( function() {
+      $form.find( '#jr-preload-items input' ).each( function( ) {
         props = parentO.input.getProps( $( this ) );
-        item = $( this ).attr( 'data-preload' ).toLowerCase();
-        param = $( this ).attr( 'data-preload-params' ).toLowerCase();
+        item = $( this ).attr( 'data-preload' ).toLowerCase( );
+        param = $( this ).attr( 'data-preload-params' ).toLowerCase( );
 
         if ( typeof that[ item ] !== 'undefined' ) {
           dataNode = data.node( props.path, props.index );
-          curVal = dataNode.getVal()[ 0 ];
+          curVal = dataNode.getVal( )[ 0 ];
           newVal = that[ item ]( {
             param: param,
             curVal: curVal,
@@ -2587,13 +2502,11 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //in addition the presence of certain meta data in the instance may automatically trigger a preload function
       //even if the binding is not present. Note, that this actually does not deal with HTML elements at all.
       meta = data.node( '*>meta>*' );
-      meta.get().each( function() {
+      meta.get( ).each( function( ) {
         item = null;
         name = $( this ).prop( 'nodeName' );
-        //console.debug('meta data item found: '+name);
-        //console.debug($(this));
         dataNode = data.node( '*>meta>' + name );
-        curVal = dataNode.getVal()[ 0 ];
+        curVal = dataNode.getVal( )[ 0 ];
         //first check if there isn't a binding with a preloader that already took care of this
         if ( $form.find( '#jr-preload-items input[name$="/meta/' + name + '"][data-preload]' ).length === 0 ) {
           switch ( name ) {
@@ -2632,7 +2545,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       }
       if ( o.param == 'end' ) {
         //set event handler for each save event (needs to be triggered!)
-        $form.on( 'beforesave', function() {
+        $form.on( 'beforesave', function( ) {
           value = data.evaluate( 'now()', 'string' );
           o.dataNode.setVal( value, null, 'datetime' );
         } );
@@ -2642,12 +2555,12 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     },
     'date': function( o ) {
       var today, year, month, day;
-      //console.debug('date preloader called with current val: '+o.curVal);
+
       if ( o.curVal.length === 0 ) {
         today = new Date( data.evaluate( 'today()', 'string' ) );
-        year = today.getFullYear().toString().pad( 4 );
-        month = ( today.getMonth() + 1 ).toString().pad( 2 );
-        day = today.getDate().toString().pad( 2 );
+        year = today.getFullYear( ).toString( ).pad( 4 );
+        month = ( today.getMonth( ) + 1 ).toString( ).pad( 2 );
+        day = today.getDate( ).toString( ).pad( 2 );
 
         return year + '-' + month + '-' + day;
       }
@@ -2692,7 +2605,6 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       return o.curVal;
     },
     'browser': function( o ) {
-      //console.debug('evaluation browser preload');
       /*if (o.curVal.length === 0){
 				if (o.param == 'name'){ 
 					var a = ($.browser.webkit) ? 'webkit' : ($.browser.mozilla) ? 'mozilla' : ($.browser.opera) ? 'opera' : ($.browser.msie) ? 'msie' : 'unknown';
@@ -2736,7 +2648,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     init: function( formO ) {
       var i, numRepsInCount, repCountPath, numRepsInInstance, numRepsDefault, cloneDefaultReps, repLevel, $dataRepeat, index,
         that = this;
-      //console.debug('initializing repeats');
+
       this.formO = formO;
       $form.find( 'fieldset.jr-repeat' ).prepend( '<span class="repeat-number"></span>' );
       $form.find( 'fieldset.jr-repeat:not([data-repeat-fixed])' )
@@ -2744,13 +2656,13 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
           '<button type="button" disabled class="btn remove"><i class="icon-minus"></i></button>' );
 
       //delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
-      $form.on( 'click', 'button.repeat:enabled', function() {
+      $form.on( 'click', 'button.repeat:enabled', function( ) {
         //create a clone
         that.clone( $( this ).parent( 'fieldset.jr-repeat' ) );
         //prevent default
         return false;
       } );
-      $form.on( 'click', 'button.remove:enabled', function() {
+      $form.on( 'click', 'button.remove:enabled', function( ) {
         //remove clone
         that.remove( $( this ).parent( 'fieldset.jr-repeat.clone' ) );
         //prevent default
@@ -2760,22 +2672,22 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       cloneDefaultReps = function( $repeat ) {
         repLevel++;
         repCountPath = $repeat.attr( 'data-repeat-count' ) || "";
-        numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( data.node( repCountPath ).getVal()[ 0 ], 10 ) : 0;
+        numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( data.node( repCountPath ).getVal( )[ 0 ], 10 ) : 0;
         //console.debug('number of reps in count attribute: ' +numRepsInCount);
         index = $form.find( '.jr-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
-        $dataRepeat = data.node( $repeat.attr( 'name' ), index ).get();
-        numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) + ':not([template])' ).addBack().length;
+        $dataRepeat = data.node( $repeat.attr( 'name' ), index ).get( );
+        numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) + ':not([template])' ).addBack( ).length;
         numRepsDefault = ( numRepsInCount > numRepsInInstance ) ? numRepsInCount : numRepsInInstance;
         //console.debug('default number of repeats for '+$repeat.attr('name')+' is '+numRepsDefault);
         //first rep is already included (by XSLT transformation)
         for ( i = 1; i < numRepsDefault; i++ ) {
-          that.clone( $repeat.siblings().addBack().last(), false );
+          that.clone( $repeat.siblings( ).addBack( ).last( ), false );
         }
         //now check the defaults of all the descendants of this repeat and its new siblings, level-by-level
-        $repeat.siblings( '.jr-repeat' ).addBack().find( '.jr-repeat' )
+        $repeat.siblings( '.jr-repeat' ).addBack( ).find( '.jr-repeat' )
           .filter( function( i ) {
             return $( this ).parents( '.jr-repeat' ).length === repLevel;
-          } ).each( function() {
+          } ).each( function( ) {
             cloneDefaultReps( $( this ) );
           } );
       };
@@ -2784,7 +2696,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //NOTE THIS ASSUMES THE DEFAULT NUMBER IS STATIC, NOT DYNAMIC
       $form.find( '.jr-repeat' ).filter( function( i ) {
         return $( this ).parents( '.jr-repeat' ).length === 0;
-      } ).each( function() {
+      } ).each( function( ) {
         repLevel = 0;
         cloneDefaultReps( $( this ) );
       } );
@@ -2811,15 +2723,15 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //add clone class 
       //remove any clones inside this clone.. (cloned repeats within repeats..), also remove all widgets 
       //NOTE: widget removal doesn't work atm (jQuery bug?), it is covered by the date/time/datetime widgets though)
-      $clone.addClass( 'clone' ).find( '.clone, .widget' ).remove();
+      $clone.addClass( 'clone' ).find( '.clone, .widget' ).remove( );
 
       //mark all cloned fields as valid
-      $clone.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
+      $clone.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function( ) {
         that.formO.setValid( $( this ) );
       } );
 
       $clone.insertAfter( $node )
-        .parent( '.jr-group' ).numberRepeats();
+        .parent( '.jr-group' ).numberRepeats( );
 
       //if not done asynchronously, this code causes a "style undefined" exception in Jasmine unit tests with jQuery 1.9 and 2.0
       //but this breaks loading of default values inside repeats
@@ -2837,33 +2749,31 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       index = $form.find( 'fieldset.jr-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
       //parentIndex = $form.find('[name="'+$master.attr('name')+'"]').parent().index($parent);
       //add ____x to names of radio buttons where x is the index
-      radioNames = [];
+      radioNames = [ ];
 
-      $clone.find( 'input[type="radio"]' ).each( function() {
+      $clone.find( 'input[type="radio"]' ).each( function( ) {
         if ( $.inArray( $( this ).attr( 'data-name' ), radioNames ) === -1 ) {
           radioNames.push( $( this ).attr( 'data-name' ) );
         }
       } );
-      console.debug( 'different radioNames in clone: ' + radioNames.join() );
+
       for ( i = 0; i < radioNames.length; i++ ) {
         //amazingly, this executes so fast when compiled that the timestamp in milliseconds is
         //not sufficient guarantee of uniqueness (??)
-        timestamp = new Date().getTime().toString() + '_' + Math.floor( ( Math.random() * 10000 ) + 1 );
+        timestamp = new Date( ).getTime( ).toString( ) + '_' + Math.floor( ( Math.random( ) * 10000 ) + 1 );
         $clone.find( 'input[type="radio"][data-name="' + radioNames[ i ] + '"]' ).attr( 'name', timestamp );
       }
 
-      this.toggleButtons( $master.parent() );
+      this.toggleButtons( $master.parent( ) );
 
       //create a new data point in <instance> by cloning the template node
       path = $master.attr( 'name' );
 
       //0-based index of node in a jquery resultset when using a selector with that name attribute
-      console.log( 'index of form node to clone: ' + index );
       /*
        * clone data node if it doesn't already exist
        */
-      if ( path.length > 0 && index >= 0 ) { //&& data.node(path, index+1).get().length === 0){
-        ////console.debug('calling data.cloneTemplate');
+      if ( path.length > 0 && index >= 0 ) {
         data.cloneTemplate( path, index );
       }
 
@@ -2878,19 +2788,17 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         repeatIndex = $form.find( 'fieldset.jr-repeat[name="' + repeatPath + '"]' ).index( node ),
         parentGroup = node.parent( 'fieldset.jr-group' );
 
-      node.hide( delay, function() {
-        node.remove();
-        parentGroup.numberRepeats();
+      node.hide( delay, function( ) {
+        node.remove( );
+        parentGroup.numberRepeats( );
 
         that.toggleButtons( parentGroup );
         $form.trigger( 'changerepeat' );
         //now remove the data node
-        data.node( repeatPath, repeatIndex ).remove();
+        data.node( repeatPath, repeatIndex ).remove( );
       } );
     },
     toggleButtons: function( $node ) {
-      //var constraint;
-      console.debug( 'toggling repeat buttons' );
       $node = ( typeof $node == 'undefined' || $node.length === 0 || !$node ) ? $node = $form : $node;
 
       //first switch everything off and remove hover state
@@ -2902,7 +2810,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     }
   };
 
-  FormHTML.prototype.setEventHandlers = function() {
+  FormHTML.prototype.setEventHandlers = function( ) {
     var that = this;
 
     //first prevent default submission, e.g. when text field is filled in and Enter key is pressed
@@ -2924,9 +2832,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       var validCons, validReq,
         n = that.input.getProps( $( this ) );
 
-      event.stopImmediatePropagation();
-
-      //console.debug( 'event: ' + event.type, 'node props: ', n, $(this) );
+      event.stopImmediatePropagation( );
 
       //set file input values to the actual name of file (without c://fakepath or anything like that)
       if ( n.val.length > 0 && n.inputType === 'file' && $( this )[ 0 ].files[ 0 ] && $( this )[ 0 ].files[ 0 ].size > 0 ) {
@@ -2944,9 +2850,6 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
 
       //validate 'required'
       validReq = ( n.enabled && n.inputType !== 'hidden' && n.required && n.val.length < 1 ) ? false : true;
-
-      //console.debug('validation for '+n.path+' required: '+validReq);
-      //console.debug('validation for '+n.path+' constraint + datatype: '+validCons);
 
       if ( validReq === false ) {
         that.setValid( $( this ), 'constraint' );
@@ -2970,13 +2873,13 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         loudErrorShown = ( $( this ).parents( '.invalid-required, .invalid-constraint' ).length > 0 ),
         $reqSubtle = $( this ).next( '.required-subtle' ),
         reqSubtle = $( '<span class="required-subtle focus" style="color: transparent;">Required</span>' );
-      console.debug( 'event: ', event );
+
       if ( event.type === 'focusin' ) {
         if ( $reqSubtle.length === 0 ) {
           $reqSubtle = $( reqSubtle );
           $reqSubtle.insertAfter( this );
           if ( !loudErrorShown ) {
-            $reqSubtle.show( function() {
+            $reqSubtle.show( function( ) {
               $( this ).removeAttr( 'style' );
             } );
           }
@@ -2985,7 +2888,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         }
       } else if ( event.type === 'focusout' ) {
         if ( props.val.length > 0 ) {
-          $reqSubtle.remove();
+          $reqSubtle.remove( );
         } else {
           $reqSubtle.removeClass( 'focus' );
           if ( !loudErrorShown ) {
@@ -3008,40 +2911,34 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
     //edit is fired when the form changes due to user input or repeats added/removed
     //branch update doesn't require detection as it always happens as a result of an event that triggers change or changerepeat.
     $form.on( 'change changerepeat', function( event ) {
-      //console.debug('detected event to trigger editstatus: ');
-      //console.debug(event);
       that.editStatus.set( true );
     } );
 
     $form.on( 'changerepeat', function( event ) {
       //set defaults of added repeats, setAllVals does not trigger change event
       //TODO: only do this for the repeat that trigger it
-      that.setAllVals();
+      that.setAllVals( );
       //the cloned fields may have been marked as invalid, so after setting thee default values, validate the invalid ones
       //that.validateInvalids();
     } );
 
-    //      $form.on('beforesave', function(event){
-    //          console.debug('beforesave event detected');
-    //          that.validateAll();
-    //      });
+    //$form.on('beforesave', function( event ) {
+    //  that.validateAll();
+    //});
 
-    $form.on( 'changelanguage', function() {
-      //console.debug('language change handler started');
-      that.outputUpdate();
-      that.setHints();
+    $form.on( 'changelanguage', function( ) {
+      that.outputUpdate( );
+      that.setHints( );
     } );
   };
 
   FormHTML.prototype.setValid = function( $node, type ) {
     var classes = ( type ) ? 'invalid-' + type : 'invalid-constraint invalid-required';
-    //console.debug('removing classes: '+classes);
     this.input.getWrapNodes( $node ).removeClass( classes );
   };
 
   FormHTML.prototype.setInvalid = function( $node, type ) {
     type = type || 'constraint';
-    //console.debug('adding invalid-'+type+' class');
     this.input.getWrapNodes( $node ).addClass( 'invalid-' + type ).find( '.required-subtle' ).attr( 'style', 'color: transparent;' );
   };
 
@@ -3062,40 +2959,40 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
   FormHTML.prototype.generateName = function( dataNode ) {
     //other nodes may have the same XPath but because this function is used to determine the corresponding input name of a data node, index is not included 
     var steps = [ dataNode.prop( 'nodeName' ) ],
-      parent = dataNode.parent();
+      parent = dataNode.parent( );
     while ( parent.length == 1 && parent.prop( 'nodeName' ) !== 'instance' && parent.prop( 'nodeName' ) !== '#document' ) {
       steps.push( parent.prop( "nodeName" ) );
-      parent = parent.parent();
+      parent = parent.parent( );
     }
-    return '/' + steps.reverse().join( '/' );
+    return '/' + steps.reverse( ).join( '/' );
   };
 
   /**
    * Validates all enabled input fields after first resetting everything as valid.
    * @return {boolean} whether the form contains any errors
    */
-  FormHTML.prototype.validateAll = function() {
+  FormHTML.prototype.validateAll = function( ) {
     var that = this;
     //can't fire custom events on disabled elements therefore we set them all as valid
-    $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, input:disabled, select:disabled, textarea:disabled' ).each( function() {
+    $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, input:disabled, select:disabled, textarea:disabled' ).each( function( ) {
       that.setValid( $( this ) );
     } );
     $form.find( 'input, select, textarea' ).not( '.ignore' ).trigger( 'validate' );
-    return this.isValid();
+    return this.isValid( );
   };
 
   /**
    * Returns true is form is valid and false if not. Needs to be called AFTER (or by) validateAll()
    * @return {!boolean} whether the form is valid
    */
-  FormHTML.prototype.isValid = function() {
+  FormHTML.prototype.isValid = function( ) {
     return ( $form.find( '.invalid-required, .invalid-constraint' ).length > 0 ) ? false : true;
   };
 
   /**
    * Adds <hr class="page-break"> to prevent cutting off questions with page-breaks
    */
-  FormHTML.prototype.addPageBreaks = function() {
+  FormHTML.prototype.addPageBreaks = function( ) {
 
   };
 }
@@ -3105,54 +3002,49 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
  * used in JavaRosa, so it replaces the Z in the ISOstring with a local offset
  * @return {string} a datetime string formatted according to RC3339 with local offset
  */
-Date.prototype.toISOLocalString = function() {
+Date.prototype.toISOLocalString = function( ) {
   //2012-09-05T12:57:00.000-04:00 (ODK)
   var offset = {}, plus,
     pad2 = function( x ) {
       return ( x < 10 ) ? '0' + x : x;
     };
 
-  if ( this.toString() == 'Invalid Date' ) {
-    return this.toString();
+  if ( this.toString( ) == 'Invalid Date' ) {
+    return this.toString( );
   }
 
-  offset.minstotal = this.getTimezoneOffset();
+  offset.minstotal = this.getTimezoneOffset( );
   offset.direction = ( offset.minstotal < 0 ) ? '+' : '-';
   offset.hrspart = pad2( Math.abs( Math.floor( offset.minstotal / 60 ) ) );
   offset.minspart = pad2( Math.abs( Math.floor( offset.minstotal % 60 ) ) );
 
-  return new Date( this.getTime() - ( offset.minstotal * 60 * 1000 ) ).toISOString()
+  return new Date( this.getTime( ) - ( offset.minstotal * 60 * 1000 ) ).toISOString( )
     .replace( 'Z', offset.direction + offset.hrspart + ':' + offset.minspart );
 };
 
 ( function( $ ) {
   "use strict";
   // plugin to update number of repeated elements (with class jr-repeat)
-  $.fn.numberRepeats = function() {
+  $.fn.numberRepeats = function( ) {
 
-    return this.each( function() {
+    return this.each( function( ) {
 
-      $( this ).find( 'fieldset.jr-repeat' ).each( function() {
+      $( this ).find( 'fieldset.jr-repeat' ).each( function( ) {
         var repSiblings, qtyRepeats, i;
-        ////console.log('found '+$(this).find('fieldset.jr-group > fieldset.jr-repeat').length +' items');
         // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
         if ( $( this ).prev( 'fieldset.jr-repeat' ).length === 0 ) {
           repSiblings = $( this ).siblings( 'fieldset.jr-repeat' );
           qtyRepeats = repSiblings.length + 1;
-          ////console.log('number of repeats of '+$(this).attr('name')+' is '+qtyRepeats);
           if ( qtyRepeats > 1 ) {
             $( this ).find( 'span.repeat-number' ).text( '1' );
             i = 2;
-            repSiblings.each( function() {
-              ////console.log('numbering a repeat');
+            repSiblings.each( function( ) {
               $( this ).find( 'span.repeat-number' ).text( i );
               i++;
             } );
           } else {
-            $( this ).find( 'span.repeat-number' ).empty();
+            $( this ).find( 'span.repeat-number' ).empty( );
           }
-        } else {
-          ////console.log('not first of type');
         }
       } );
     } );
@@ -3177,19 +3069,18 @@ Date.prototype.toISOLocalString = function() {
    */
   $.fn.clearInputs = function( ev ) {
     ev = ev || 'edit';
-    return this.each( function() {
+    return this.each( function( ) {
       //remove media previews
-      $( this ).find( '.file-preview' ).remove();
+      $( this ).find( '.file-preview' ).remove( );
       //remove input values
-      $( this ).find( 'input, select, textarea' ).each( function() {
+      $( this ).find( 'input, select, textarea' ).each( function( ) {
         var type = $( this ).attr( 'type' );
-        if ( $( this ).prop( 'nodeName' ).toUpperCase() === 'SELECT' ) {
+        if ( $( this ).prop( 'nodeName' ).toUpperCase( ) === 'SELECT' ) {
           type = 'select';
         }
-        if ( $( this ).prop( 'nodeName' ).toUpperCase() === 'TEXTAREA' ) {
+        if ( $( this ).prop( 'nodeName' ).toUpperCase( ) === 'TEXTAREA' ) {
           type = 'textarea';
         }
-        ////console.log('type to reset: '+type);
         switch ( type ) {
           case 'date':
           case 'datetime':
@@ -3207,20 +3098,18 @@ Date.prototype.toISOLocalString = function() {
             break;
           case 'hidden':
           case 'textarea':
-            if ( $( this ).val() !== '' ) {
+            if ( $( this ).val( ) !== '' ) {
               $( this ).val( '' ).trigger( ev );
             }
             break;
           case 'radio':
           case 'checkbox':
             if ( $( this ).prop( 'checked' ) ) {
-              //console.log('found checked value, going to reset it');
               $( this ).prop( 'checked', false );
               $( this ).trigger( ev );
             }
             break;
           case 'select':
-            // TEST THIS!
             if ( $( this )[ 0 ].selectedIndex >= 0 ) {
               $( this )[ 0 ].selectedIndex = -1;
               $( this ).trigger( ev );
@@ -3262,7 +3151,6 @@ Date.prototype.toISOLocalString = function() {
    */
   $.fn.xfind = function( selector ) {
     var parts, cur, i;
-    //console.debug('xfind plugin received selector: '+selector);
 
     // Convert the root / into a different context
     //if ( !selector.indexOf("/") ) {
@@ -3296,28 +3184,26 @@ Date.prototype.toISOLocalString = function() {
       cur = jQuery( parts[ 0 ], this );
       for ( i = 1; i < parts.length; i++ )
         cur = cur.parent( parts[ i ] );
-      return cur.get();
+      return cur.get( );
     }
 
     // any remaining dots inside node names need to be escaped (added by Martijn)
     selector = selector.replace( /\./gi, '\\.' );
 
-    //selector += ':not([template], [template] *)';
-    //console.debug('xfind plugin going to return jQuery object with selector: '+selector);
     //if performance becomes an issue, it's worthwhile implementing this with native XPath instead.
     return this.find( selector );
   };
 
-  $.fn.markdownToHtml = function() {
-    return this.each( function() {
+  $.fn.markdownToHtml = function( ) {
+    return this.each( function( ) {
       var html,
         $childStore = $( '<div/>' );
-      $( this ).children().each( function( index ) {
+      $( this ).children( ).each( function( index ) {
         var name = '$$$' + index;
-        $( this ).clone().markdownToHtml().appendTo( $childStore );
+        $( this ).clone( ).markdownToHtml( ).appendTo( $childStore );
         $( this ).replaceWith( name );
       } );
-      html = $( this ).html();
+      html = $( this ).html( );
       html = html.replace( /__([^\s][^_]*[^\s])__/gm, "<strong>$1</strong>" );
       html = html.replace( /\*\*([^\s][^\*]*[^\s])\*\*/gm, "<strong>$1</strong>" );
       html = html.replace( /_([^\s][^_]*[^\s])_/gm, '<em>$1</em>' );
@@ -3325,7 +3211,7 @@ Date.prototype.toISOLocalString = function() {
       //only replaces if url is valid (worthwhile feature?)
       html = html.replace( /\[(.*)\]\(((https?:\/\/)(([\da-z\.\-]+)\.([a-z\.]{2,6})|(([0-9]{1,3}\.){3}[0-9]{1,3}))([\/\w \.\-]*)*\/?[\/\w \.\-\=\&\?]*)\)/gm, '<a href="$2">$1</a>' );
       html = html.replace( /\n/gm, '<br />' );
-      $childStore.children().each( function( i ) {
+      $childStore.children( ).each( function( i ) {
         var regex = new RegExp( '\\$\\$\\$' + i );
         html = html.replace( regex, $( this )[ 0 ].outerHTML );
       } );
