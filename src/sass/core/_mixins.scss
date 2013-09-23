@@ -1,8 +1,8 @@
-@mixin transition-slow {
-  -webkit-transition: all 1s ease-out;
-  -moz-transition: all 1s ease-out;
-  -o-transition: all 1s ease-out;
-  transition: all 1s ease-out; }
+@mixin transition-slow ($prop: all, $duration: 1s) {
+  -webkit-transition: $prop $duration ease-out;
+  -moz-transition: $prop $duration ease-out;
+  -o-transition: $prop $duration ease-out;
+  transition: $prop $duration ease-out; }
 
 @mixin transition-fast {
   -webkit-transition: all 0.6s ease-out;
