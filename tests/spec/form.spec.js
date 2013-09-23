@@ -1211,3 +1211,21 @@ describe( 'output data functionality', function( ) {
 	} );
 
 } );
+
+
+describe( 'clearing inputs' , function( ) {
+	$fieldset =  $('<fieldset><input type="number" value="23" /><input type="text" value="abc" /><textarea>abcdef</textarea></fieldset>"');
+
+	it ('works!', function(){
+		expect($fieldset.find('[type="number"]').val()).toEqual("23");
+		expect($fieldset.find('[type="text"]').val()).toEqual("abc");
+		expect($fieldset.find('textarea').val()).toEqual("abcdef");
+
+    $fieldset.clearInputs();
+
+    expect($fieldset.find('[type="number"]').val()).toEqual("");
+    expect($fieldset.find('[type="text"]').val()).toEqual("");
+    expect($fieldset.find('textarea').val()).toEqual("");
+
+	});
+});

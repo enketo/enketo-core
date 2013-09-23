@@ -3110,7 +3110,7 @@ Date.prototype.toISOLocalString = function( ) {
           case 'text':
           case 'file':
             $( this ).removeAttr( 'data-previous-file-name data-loaded-file-name' );
-            break;
+            /* falls through */
           case 'hidden':
           case 'textarea':
             if ( $( this ).val( ) !== '' ) {
