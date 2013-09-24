@@ -636,8 +636,8 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       //if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
       //this use of node(path,index,file).get() is a bit of a trick that is difficult to wrap one's head around
       else if ( that.node( path, 0, {
-          noTemplate: false
-        } ).get( ).closest( '[template]' ).length > 0 ) {
+        noTemplate: false
+      } ).get( ).closest( '[template]' ).length > 0 ) {
         //clone the template node 
         //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub)
         $template = that.node( path, 0, {
@@ -646,7 +646,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         //TODO: test this for nested repeats
         //if a preceding repeat with that path was empty this repeat may not have been created yet,
         //so we need to make sure all preceding repeats are created
-        for (var p = 0; p < index; p++) {
+        for ( var p = 0; p < index; p++ ) {
           that.cloneTemplate( form.generateName( $template ), p );
         }
         //try setting the value again
@@ -2453,7 +2453,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
         //$input.attr('data-previous-file-name', fileName);
       } ).parent( ).addClass( 'with-media clearfix' );
 
-      fileManager.init( data.getInstanceID( ), callbacks );
+      fileManager.setDir( data.getInstanceID( ), callbacks );
       /*
 			Some cool code to use for image previews:
 			$fileinput = $(this);
