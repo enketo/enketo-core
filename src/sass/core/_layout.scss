@@ -25,15 +25,10 @@
 .form-header {
   left: 0;
   width: 100%;
-  margin: 16px 0;
-  //padding: 0 0 0.6em 0;
   position:absolute;
   top: -66px;
   border: none;
-  //left: 0;
-  //width: 100%;
-  margin: 16px 0px;
-  padding: 0; }
+  padding: 16px; }
 .form-language-selector {
   float: right;
   padding: 0.2em $baseFontSize;
@@ -42,7 +37,7 @@
   }
 #form-languages {
   width: auto;
-  height: 30px;
+  height: 36px;
   background: none;
   min-width: 11em;
   margin: 0 0 0 1em;
