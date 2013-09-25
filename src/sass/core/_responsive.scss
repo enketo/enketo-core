@@ -17,6 +17,8 @@
   	@include border-radius(0px); }
   .form-header{
     top: 0;
+    padding-left: 16px;
+    padding-right: 16px;
     border-bottom: 1px solid $groupline;
     .form-language-selector > span {
       display: none; } }
@@ -44,7 +46,5 @@
       padding: 70px 15px 15px 15px; } }
   .form-header {
     margin: 5px 0; 
-    .form-header .form-language-selector{
-      border-right: none; } 
-    .print {
-      display: none; } } } 
+    .form-language-selector{
+      border-right: none; } } } 

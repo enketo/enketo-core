@@ -23,24 +23,24 @@
           background: none; } } } }
 
 .form-header {
+  @include border-box;
   left: 0;
   width: 100%;
   position:absolute;
-  top: -66px;
+  top: -75px;
   border: none;
-  padding: 16px; }
+  padding: 16px 0; }
 .form-language-selector {
   float: right;
-  padding: 0.2em $baseFontSize;
-  font-size: 0.8em;
-  //border-right: 1px solid #999999;
-  }
+  padding: 3px 0;
+  margin-left: 10px;
+  font-size: 0.8em; }
 #form-languages {
   width: auto;
   height: 36px;
   background: none;
   min-width: 11em;
-  margin: 0 0 0 1em;
+  margin: 0 0 0 16px;
   font-size: 0.9em; } 
 #submit-form, #submit-form-single, #validate-form, #launch-form {
   position: relative;
