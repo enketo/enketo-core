@@ -1373,7 +1373,7 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
       $( '#form-languages' ).val( defaultLang );
 
       if ( $( '#form-languages option' ).length < 2 ) {
-        $langSelector.hide( );
+        $langSelector.addClass( 'hide' );
         return;
       }
       $( '#form-languages' ).change( function( event ) {
