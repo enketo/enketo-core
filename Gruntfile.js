@@ -22,7 +22,7 @@ module.exports = function( grunt ) {
           template: require('grunt-template-jasmine-requirejs'),
           templateOptions: {
             requireConfig: {
-              baseUrl: './lib/',
+              baseUrl: 'lib',
               paths: {
                 app:   '../src/js/' //fails without trailing slash
               },
