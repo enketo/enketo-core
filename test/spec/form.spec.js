@@ -1,3 +1,18 @@
+if (typeof define !== 'function') { var define = require('amdefine')(module) }
+
+define(["app/Form"], function(Form) {
+
+	var loadForm = function(filename, editStr){
+		var strings = mockForms1[filename];
+		return new Form(strings.html_form, strings.xml_model, editStr); 
+	};
+
+	var getFormDataO = function(filename){
+		var form = new Form('<form></form>', mockForms1[filename].xml_model);
+		form.init();
+		return form.getDataO();
+	};
+
 describe( "Data node getter", function( ) {
 	var i, t =
 			[
@@ -299,10 +314,7 @@ describe( "XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for compreh
 			[ 'weighted-checklist(3, 3, /thedata/somenodes/A, /thedata/someweights/w2)', 'boolean', null, 0, true ],
 			[ 'weighted-checklist(9, 9, /thedata/somenodes/*, /thedata/someweights/*)', 'boolean', null, 0, true ]
 		],
-		form = loadForm( 'thedata.xml' ), //new Form(formStr1, dataStr1),
-		data;
-	form.init( );
-	data = form.getDataO( );
+    data = getFormDataO('thedata.xml')
 
 	function test( expr, resultType, contextSelector, index, result ) {
 		it( "evaluates XPath: " + expr, function( ) {
@@ -317,9 +329,9 @@ describe( "XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for compreh
 	// this tests the makeBugCompliant() workaround that injects a position into an absolute path
 	// for the issue described here: https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations
 	it( "evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())", function( ) {
-		form = loadForm( 'thedata.xml' ); //new Form(formStr1, dataStr1);
-		form.init( );
-		expect( form.getDataO( ).evaluate( "/thedata/repeatGroup/nodeC", "string", "/thedata/repeatGroup/nodeC", 2 ) ).toEqual( "c3" );
+		//data = getFormDataO( 'thedata.xml' ); //new Form(formStr1, dataStr1);
+
+		expect( data.evaluate( "/thedata/repeatGroup/nodeC", "string", "/thedata/repeatGroup/nodeC", 2 ) ).toEqual( "c3" );
 	} );
 } );
 
@@ -641,6 +653,7 @@ describe( "Loading instance-to-edit functionality", function( ) {
 			var dataEditStr1a = dataEditStr1.replace( /thedata/g, 'thedata_updated' );
 			form = loadForm( 'thedata.xml', dataEditStr1a ); //new Form(formStr1, dataStr1, dataEditStr1a);
 			loadErrors = form.init( );
+      console.log('loadErrors: ', loadErrors);
 			expect( loadErrors.length ).toEqual( 11 );
 		} );
 
@@ -1228,4 +1241,6 @@ describe( 'clearing inputs' , function( ) {
     expect($fieldset.find('textarea').val()).toEqual("");
 
 	});
+});
+
 });

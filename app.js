@@ -1,7 +1,7 @@
 requirejs.config( {
-  baseUrl: 'lib',
+  baseUrl: 'lib/',
   paths: {
-    app: '../src/js'
+    app: '../src/js/'
   },
   shim: {
     'xpath/build/xpathjs_javarosa': {
@@ -14,27 +14,15 @@ requirejs.config( {
     'bootstrap-timepicker/js/bootstrap-timepicker': {
       deps: [ 'jquery' ],
       exports: 'jQuery.fn.timepicker'
-    },
-    'app/widgets/geopointpicker': {
-      deps: [ 'jquery' ],
-      exports: 'jQuery.fn.geopointWidget'
-    },
-    'app/widgets/offline-filepicker': {
-      deps: [ 'jquery' ],
-      exports: 'jQuery.fn.offlineFilepicker'
-    },
-    'app/widgets/selectpicker': {
-      deps: [ 'jquery' ],
-      exports: 'jQuery.selectpicker'
     }
   }
 } );
 
 define('modernizr', [], Modernizr);
 
-requirejs( [ 'jquery', 'modernizr', 'app/form' ],
-  function( $, modernizr, form ) {
-    var loadErrors;
+requirejs( [ 'jquery', 'modernizr', 'app/Form' ],
+  function( $, modernizr, Form ) {
+    var loadErrors, form;
 
     //if querystring touch=true is added, override Modernizr
     if ( window.location.search.indexOf( 'touch=true' ) > 0 ) {
@@ -42,8 +30,10 @@ requirejs( [ 'jquery', 'modernizr', 'app/form' ],
       $( 'html' ).addClass( 'touch' );
     }
 
+    form = new Form('form.jr:eq(0)', dataStr );
+
     //initialize form and check for load errors
-    loadErrors = form.init( 'form.jr:eq(0)', dataStr );
+    loadErrors = form.init();
     if ( loadErrors.length > 0 ) {
       alert( 'loadErrors: ', loadErrors.toString( ) );
     }

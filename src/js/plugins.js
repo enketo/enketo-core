@@ -367,4 +367,4 @@ define(['jquery'], function ($) {
   };
 
   */
-})
+});

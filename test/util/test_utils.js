@@ -10,7 +10,7 @@ var loadDrishtiForm = function(filename, editStr){
 
 var getFormDataO = function(filename){
 	//$('body').append('<form></form>');
-	var form = new Form('<form></form>', mockForms1[filename].xml_model);
-	form.init();
+	var form = new Form();
+	form.init('<form></form>', mockForms1[filename].xml_model);
 	return form.getDataO();
 };

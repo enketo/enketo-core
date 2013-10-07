@@ -17,16 +17,30 @@ module.exports = function( grunt ) {
       test: {
         src: 'src/**/*.js',
         options: {
-          specs: 'tests/spec/*.js',
-          helpers: [ 'tests/utils/*.js', 'tests/mocks/*.js' ],
-          vendor: [
-            'lib/jquery.min.js',
-            'lib/bootstrap.min.js',
-            'lib/modernizr.min.js',
-            'lib/xpath/build/xpathjs_javarosa.min.js',
-            'lib/bootstrap-datepicker/js/bootstrap-datepicker.js',
-            'lib/bootstrap-timepicker/js/bootstrap-timepicker.js'
-          ]
+          specs: 'test/spec/*.js',
+          helpers: [ 'test/util/*.js', 'test/mock/*.js' ],
+          template: require('grunt-template-jasmine-requirejs'),
+          templateOptions: {
+            requireConfig: {
+              baseUrl: 'lib/',
+              paths: {
+                app:   '../src/js/' //fails without trailing slash
+              },
+              shim: {
+                'xpath/build/xpathjs_javarosa': {
+                  exports: 'XPathJS'
+                },
+                'bootstrap-datepicker/js/bootstrap-datepicker': {
+                  deps: [ 'jquery' ],
+                  exports: 'jQuery.fn.datepicker'
+                },
+                'bootstrap-timepicker/js/bootstrap-timepicker': {
+                  deps: [ 'jquery' ],
+                  exports: 'jQuery.fn.timepicker'
+                }
+              }
+            }
+          }
         },
       }
     },

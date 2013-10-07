@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.3.1/jasmine.css">
+  <style>
+    .datepicker, .bootstrap-timepicker{display: none;}
+  </style>
+  <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine-html.js"></script>
+
+  <script type="text/javascript" src="../lib/require.js"></script>
+  
+  <script type="text/javascript">
+    requirejs.config({
+      baseUrl: '../lib/',
+      paths: {
+        app:   '../src/js/',
+        spec:  '../test/spec/',
+        util:  '../test/util/',
+        mock:  '../test/mock/'
+      },
+      shim: {
+        'xpath/build/xpathjs_javarosa': {
+          exports: 'XPathJS'
+        },
+        'bootstrap-datepicker/js/bootstrap-datepicker': {
+          deps: [ 'jquery' ],
+          exports: 'jQuery.fn.datepicker'
+        },
+        'bootstrap-timepicker/js/bootstrap-timepicker': {
+          deps: [ 'jquery' ],
+          exports: 'jQuery.fn.timepicker'
+        }
+      }
+    });
+
+    requirejs([
+      'mock/form.mock', 'mock/transforms.mock', 'mock/modernizr.mock',
+      'spec/form.spec'
+    ], function() {
+    
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      jasmineEnv.execute();
+    });
+  </script>
+</head>
+
+<body>
+</body>
+</html>

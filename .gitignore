@@ -3,3 +3,5 @@ build/*
 .sass-cache/*
 ._*
 .grunt/*
+*.sublime-project
+*.sublime-workspace

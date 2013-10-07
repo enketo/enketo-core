@@ -2,7 +2,15 @@
  * Geopoint widget(s)
  */
 
-( function( $ ) {
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
   "use strict";
   /**
    * Geopoint widget Class
@@ -335,4 +343,4 @@
 
   $.fn.geopointWidget.Constructor = GeopointWidget;
 
-} )( window.jQuery );
+} ));

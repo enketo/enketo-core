@@ -1,0 +1,1 @@
+define('modernizr', [], {touch: false, inputTypes: {date: true, time: true}});
