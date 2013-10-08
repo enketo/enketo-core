@@ -24,7 +24,7 @@ module.exports = function( grunt ) {
             requireConfig: {
               baseUrl: 'lib',
               paths: {
-                app:   '../src/js/' //fails without trailing slash
+                app:   '../src/js' //now works wouthout trailing slash
               },
               shim: {
                 'xpath/build/xpathjs_javarosa': {
@@ -37,6 +37,11 @@ module.exports = function( grunt ) {
                 'bootstrap-timepicker/js/bootstrap-timepicker': {
                   deps: [ 'jquery' ],
                   exports: 'jQuery.fn.timepicker'
+                }
+              },
+              map: {
+                '*': {
+                  'app': '../src/js'
                 }
               }
             }
