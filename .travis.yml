@@ -2,6 +2,6 @@ before_install:
   - git submodule update --init --recursive
 language: node_js
 node_js:
-  - "0.10"
+  - "0.10.20"
 before_script:
   - npm install -g grunt-cli
