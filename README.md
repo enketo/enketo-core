@@ -14,6 +14,27 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 * [enketo-dristhi](https://github.com/MartijnR/enketo-dristhi)
 * [file-manager](https://github.com/MartijnR/file-manager)
 
+###How to Use
+
+
+
+###How to extend widgets elements
+Each widget needs to follow the following:
+* be an AMD-compliant jQuery plugin 
+* if hiding original input element, it needs to load the default value from that input element into the widget
+* if hiding original input element, it needs to keep it up-to-date and trigger a change event on it whenever it updates
+* it needs to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
+* new input/select/textarea elements inside widgets need to get the `ignore` class
+* it requires the following methods:
+	* `destroy()` (to totally destroy widgets in repeat groups/questions when these groups/questions are cloned)
+	* `disable()` (if it doesn't get disabled automatically when a parent fieldset element is disabled)
+* respond appropriately to the changelanguage event on the `<form class="jr">` element by changing the language
+* disable when an ancestor (`<fieldset>`) is disabled (also when disabled upon initialization!)
+* enable when its disabled ancestor is enabled
+* allow setting an empty value (that empties node in instance)
+* [to check] send a focus event to the original input when the widget gets focus
+* for extra robustness: if the widget already exists, destroy it first
+
 ###Notes for All Developers
 
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)

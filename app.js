@@ -1,7 +1,8 @@
 requirejs.config( {
   baseUrl: 'lib/',
   paths: {
-    app: '../src/js/'
+    app: '../src/js',
+    root: '../'
   },
   shim: {
     'xpath/build/xpathjs_javarosa': {
@@ -18,7 +19,7 @@ requirejs.config( {
   }
 } );
 
-define('modernizr', [], Modernizr);
+define( 'modernizr', [ ], Modernizr );
 
 requirejs( [ 'jquery', 'modernizr', 'app/Form' ],
   function( $, modernizr, Form ) {
@@ -30,10 +31,10 @@ requirejs( [ 'jquery', 'modernizr', 'app/Form' ],
       $( 'html' ).addClass( 'touch' );
     }
 
-    form = new Form('form.jr:eq(0)', dataStr );
+    form = new Form( 'form.jr:eq(0)', dataStr );
 
     //initialize form and check for load errors
-    loadErrors = form.init();
+    loadErrors = form.init( );
     if ( loadErrors.length > 0 ) {
       alert( 'loadErrors: ', loadErrors.toString( ) );
     }

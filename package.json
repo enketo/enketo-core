@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/martijnr/enketo-core"
+    "url": "https://github.com/MartijnR/enketo-core"
   },
   "contributors": [
     "Martijn van de Rijdt"

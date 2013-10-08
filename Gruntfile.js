@@ -24,7 +24,7 @@ module.exports = function( grunt ) {
             requireConfig: {
               baseUrl: 'lib',
               paths: {
-                app:   '../src/js' //now works wouthout trailing slash
+                app:   '../src/js'
               },
               shim: {
                 'xpath/build/xpathjs_javarosa': {
