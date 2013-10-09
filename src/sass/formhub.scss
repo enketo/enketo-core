@@ -113,16 +113,9 @@ $iconWhiteSpritePath: url('/images/glyphicons-halflings-white.png');
 // From 979px and below, show a button to toggle navbar contents
 @import "../../lib/bootstrap-sass/bootstrap/responsive-navbar";
 
-@import "core/_mixins";
-@import "core/_layout";
-@import "core/_responsive";
-@import "core/_main";
-@import "core/_timepicker";
-@import "core/_datepicker";
-@import 'core/_geopoint_widget';
-@import 'core/_select_widget';
-@import 'core/_select_mobile_widget';
-@import 'core/_table_widget';
-@import 'core/_grid_widget';
-@import 'core/_file_widget';
-@import 'formhub/_theme';
+@import "core/mixins";
+@import "core/layout";
+@import "core/responsive";
+@import "core/main";
+@import "widgets";
+@import 'formhub/theme';
