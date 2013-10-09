@@ -1,32 +1,42 @@
-var widgets = [ "bootstrap-datepicker/js/bootstrap-datepicker",
-  "bootstrap-timepicker/js/bootstrap-timepicker",
-  "app/geopoint/geopointpicker",
-  "app/offline-file/offline-filepicker",
-  "app/select/selectpicker",
-  "jquery"
-];
-
 //instead of using a separate config file, this could also be placed inside requirejs.config in app.js 
 //and then use below: define(['module'], function( module){ var widgets = module.config().widgets });
-define( [ 'root/config', 'modernizr', 'jquery' ], function( config, modernizr, $ ) {
+define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $ ) {
   "use strict";
 
   var $form = $( 'form.jr' ),
-    loaded = false;
+    loaded = false,
+    globalConfig = JSON.parse( config ),
+    widgetConfig = [ ];
+
+
+  /**
+   * load the widget modules (asynchronously)
+   * @param  {Function} callback
+   */
 
   function load( callback ) {
-    //load the widget modules (asynchronously)
-    require( config.widgets, function( ) {
-      for ( var i = 0; i < config.widgets.length; i++ ) {
+    require( globalConfig.widgets, function( ) {
+      var id, widgetConfigFiles = [ ];
 
+      console.log( 'widget modules loaded', arguments );
+      //add widget configuration to config object
+      for ( var i = 0; i < globalConfig.widgets.length; i++ ) {
+        id = 'text!' + globalConfig.widgets[ i ].substr( 0, globalConfig.widgets[ i ].lastIndexOf( '/' ) + 1 ) + 'config.json';
+        widgetConfigFiles.push( id );
       }
-      loaded = true;
-      console.log( config.widgets, 'modules loaded' );
-      callback( );
+      require( widgetConfigFiles, function( ) {
+        for ( var i = 0; i < arguments.length; i++ ) {
+          widgetConfig.push( JSON.parse( arguments[ i ] ) );
+        }
+        console.log( 'widget config files loaded', widgetConfig[ 0 ] );
+        loaded = true;
+        callback( );
+      } );
     } );
   }
 
   function init( $group ) {
+    $group = $group || $form;
     console.log( 'init called with loaded: ', loaded );
     if ( !loaded ) {
       load( function( ) {
@@ -38,18 +48,50 @@ define( [ 'root/config', 'modernizr', 'jquery' ], function( config, modernizr, $
   }
 
   function destroy( $group ) {
-
+    $group = $group || $form;
   }
 
   function create( $group ) {
-    var obj = {
-      init: function( ) {
-        /**
-         * Initializes widgets.
-         * (Important:  Widgets should be initalized after instance values have been loaded in $data as well as in input fields)
-         * @param  {jQuery=} $group optionally only initialize widgets inside a group (default is inside whole form)
-         */
+    var widget,
+      repeat = $group.hasClass( 'jr-repeat' );
 
+    for ( var i = 0; i < widgetConfig.length; i++ ) {
+      var $els;
+      widget = widgetConfig[ i ];
+      widget.options = widget.options || {};
+      if ( !widget.name || !widget.selector ) {
+        return console.error( 'widget configuration has no name and/or selector property', widget );
+      }
+      $els = $group.find( widget.selector );
+      $els[ widget.name ]( widget.options );
+
+      //call update for all widgets when language changes 
+      $form.on( 'changelanguage', function( ) {
+        console.debug( 'change language event detected, going to update', widget.name )
+        //update all pickers in form
+        $els[ widget.name ]( 'update' );
+      } );
+
+      //call update for select widgets if options change
+      if ( $els.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
+        $form.on( 'changeoption', 'select', function( ) {
+          console.debug( 'option change detected, going to update', widget.name, 'for', $( this ) );
+          //update (itemselect) picker on which event was triggered because the options changed
+          $( this )[ widget.name ]( 'update' );
+        } );
+      }
+    }
+
+    return;
+    /******************************************************************************/
+    //ALL THE CODE BELOW SHOULD BE MOVED TO THEIR RESPECTIVE WIDGET MODULES
+    var obj = {
+      /**
+       * Initializes widgets.
+       * (Important:  Widgets should be initalized after instance values have been loaded in $data as well as in input fields)
+       * @param  {jQuery=} $group optionally only initialize widgets inside a group (default is inside whole form)
+       */
+      init: function( ) {
         /* 
           For the sake of convenience it is assumed that the $group parameter is only provided when initiating
           widgets inside newly cloned repeats and that this function has been called before for the whole form.
@@ -287,21 +329,6 @@ define( [ 'root/config', 'modernizr', 'jquery' ], function( config, modernizr, $
             }
           }
         } );
-      },
-      selectWidget: function( ) {
-        //$form.find('select option[value=""]').remove(); issue with init value empty
-        this.$group.find( 'select' ).not( '#form-languages' ).selectpicker( );
-        if ( !this.repeat ) {
-          $form.on( 'changelanguage', function( ) {
-            //update all pickers in form
-            $form.find( 'select' ).selectpicker( 'update' );
-          } );
-          $form.on( 'changeoption', 'select', function( ) {
-            //onsole.debug('option change detected, going to update select widget', $(this));
-            //update (itemselect) picker on which event was triggered because the options changed
-            $( this ).selectpicker( 'update' );
-          } );
-        }
       },
       mobileSelectWidget: function( ) {
         var showSelectedValues = function( $select ) {

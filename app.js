@@ -1,11 +1,14 @@
 requirejs.config( {
   baseUrl: 'lib/',
   paths: {
-    app: '../src/js',
-    root: '../'
+    js: '../src/js',
+    widget: '../src/widget',
+    text: 'text/text',
+    xpath: 'xpath/build/xpathjs_javarosa',
+    config: '../config.json'
   },
   shim: {
-    'xpath/build/xpathjs_javarosa': {
+    'xpath': {
       exports: 'XPathJS'
     },
     'bootstrap-datepicker/js/bootstrap-datepicker': {
@@ -21,7 +24,7 @@ requirejs.config( {
 
 define( 'modernizr', [ ], Modernizr );
 
-requirejs( [ 'jquery', 'modernizr', 'app/Form' ],
+requirejs( [ 'jquery', 'modernizr', 'js/Form' ],
   function( $, modernizr, Form ) {
     var loadErrors, form;
 

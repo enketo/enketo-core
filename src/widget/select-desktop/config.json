@@ -1,0 +1,6 @@
+{
+	"name": "selectpicker",
+	"stylesheet": "selectpicker.scss",
+	"selector": "select:not(#form-languages)",
+	"options": {}
+}

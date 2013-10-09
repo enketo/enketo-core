@@ -29,7 +29,7 @@
  */
 
 define(
-  [ 'xpath/build/xpathjs_javarosa', 'modernizr', 'app/widgets', 'jquery', 'app/plugins', 'app/extend', ],
+  [ 'xpath', 'modernizr', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', ],
 
   function( XPathJS, modernizr, widgets, $ ) {
     "use strict";

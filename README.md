@@ -20,7 +20,9 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 
 ###How to extend widgets elements
 Each widget needs to follow the following:
+
 * be an AMD-compliant jQuery plugin 
+* use JSDoc style documentation for the purpose of passing the Google Closure Compiler without warnings and errors
 * if hiding original input element, it needs to load the default value from that input element into the widget
 * if hiding original input element, it needs to keep it up-to-date and trigger a change event on it whenever it updates
 * it needs to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
@@ -28,9 +30,10 @@ Each widget needs to follow the following:
 * it requires the following methods:
 	* `destroy()` (to totally destroy widgets in repeat groups/questions when these groups/questions are cloned)
 	* `disable()` (if it doesn't get disabled automatically when a parent fieldset element is disabled)
-* respond appropriately to the changelanguage event on the `<form class="jr">` element by changing the language
+	* `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest form this could simply call destroy() and then re-initialize the widget.
 * disable when an ancestor (`<fieldset>`) is disabled (also when disabled upon initialization!)
 * enable when its disabled ancestor is enabled
+* if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in (by e.g. checking modernizr.touch). If your widget supports both, you could create an all-in-one widget or create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow setting an empty value (that empties node in instance)
 * [to check] send a focus event to the original input when the widget gets focus
 * for extra robustness: if the widget already exists, destroy it first
@@ -39,8 +42,9 @@ Each widget needs to follow the following:
 
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
 
-* build with your preferred Sass tool - Compass configuration and Grunt build configuration already included
-* many of the outstanding issues for enketo-core are managed in the [modilabs repo](https://github.com/modilabs/enketo/issues?state=open)
+* build with Grunt (using Compass is also possible as long as config.json does not change)
+* requires webserver (just to enable loading of config.json in widgets.js over http - if you have a clever idea to keep using config.json but serve a form as file://..../myform.html please let me know!)
+* many of the outstanding issues for enketo-core are still managed in the [modilabs repo](https://github.com/modilabs/enketo/issues?state=open)
 
 ###Notes for JavaScript Developers
 

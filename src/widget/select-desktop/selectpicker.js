@@ -1,5 +1,5 @@
 /**
- * @preserve Copyright 2012 Martijn van de Rijdt & Modilabs
+ * @preserve Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,18 @@
 
 /**
  * Bootstrap Select picker that supports single and multiple selects
+ * A port of https://github.com/silviomoreto/bootstrap-select
  */
 
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-}(function ($) {
+( function( factory ) {
+  if ( typeof define === 'function' && define.amd ) {
+    // AMD. Register as an anonymous module.
+    define( [ 'jquery' ], factory );
+  } else {
+    // Browser globals
+    factory( jQuery );
+  }
+}( function( $ ) {
 
   "use strict";
   /**
@@ -38,8 +39,8 @@
    */
   var Selectpicker = function( element, options, e ) {
     if ( e ) {
-      e.stopPropagation();
-      e.preventDefault();
+      e.stopPropagation( );
+      e.preventDefault( );
     }
     this.$element = $( element );
     this.$newElement = null;
@@ -47,25 +48,25 @@
     this.noneSelectedText = options.noneSelectedText || 'none selected';
     this.lengthmax = options.maxlength || 20;
     this.multiple = ( typeof this.$element.attr( 'multiple' ) !== 'undefined' && this.$element.attr( 'multiple' ) !== false );
-    this.init();
+    this.init( );
   };
 
   Selectpicker.prototype = {
 
     constructor: Selectpicker,
 
-    init: function() {
-      var $template = this.getTemplate();
+    init: function( ) {
+      var $template = this.getTemplate( );
       this.$element.css( 'display', 'none' );
       $template = this.createLi( $template );
       this.$element.after( $template );
       this.$newElement = this.$element.next( '.bootstrap-select' );
       this.$newElement.find( '> a' ).addClass( this.selectClass );
-      this.clickListener();
+      this.clickListener( );
       //this.focusListener();
     },
 
-    getTemplate: function() {
+    getTemplate: function( ) {
       var template =
         "<div class='btn-group bootstrap-select widget'>" +
         "<a class='btn dropdown-toggle clearfix' data-toggle='dropdown' href='#''>" +
@@ -82,23 +83,23 @@
 
     createLi: function( template ) {
 
-      var li = [];
+      var li = [ ];
       var liHtml = '';
-      var inputAttr = ( this.multiple ) ? "type='checkbox'" : "type='radio' style='display: none;' name='" + Math.random() * 100000 + "'";
+      var inputAttr = ( this.multiple ) ? "type='checkbox'" : "type='radio' style='display: none;' name='" + Math.random( ) * 100000 + "'";
       var _this = this;
       var checkedInputAttr,
         checkedLiAttr;
 
-      this.$element.find( 'option' ).each( function() {
+      this.$element.find( 'option' ).each( function( ) {
         li.push( {
-          label: $( this ).text(),
+          label: $( this ).text( ),
           selected: $( this ).is( ':selected' ),
           value: $( this ).attr( 'value' )
         } );
       } );
 
       if ( li.length > 0 ) {
-        template = template.replace( '__SELECTED_OPTIONS', this.createSelectedStr() );
+        template = template.replace( '__SELECTED_OPTIONS', this.createSelectedStr( ) );
         for ( var i = 0; i < li.length; i++ ) {
           if ( li[ i ].value ) {
             checkedInputAttr = ( li[ i ].selected ) ? " checked='checked'" : '';
@@ -120,11 +121,11 @@
      */
     createSelectedStr: function( $select ) {
       var textToShow,
-        selectedLabels = [];
+        selectedLabels = [ ];
       $select = $select || this.$element;
-      $select.find( 'option:selected' ).each( function() {
+      $select.find( 'option:selected' ).each( function( ) {
         if ( $( this ).attr( 'value' ).length > 0 ) {
-          selectedLabels.push( $( this ).text() );
+          selectedLabels.push( $( this ).text( ) );
         }
       } );
 
@@ -135,16 +136,16 @@
       return ( textToShow.length > this.lengthmax ) ? selectedLabels.length + ' selected' : textToShow;
     },
 
-    clickListener: function() {
+    clickListener: function( ) {
       var _this = this;
 
       this.$newElement.find( 'li' ).on( 'click', function( e ) {
-        e.preventDefault();
+        e.preventDefault( );
         var $li = $( this ),
           $input = $li.find( 'input' ),
           $picker = $li.parents( '.bootstrap-select' ),
           $select = $picker.prev( 'select' ),
-          $option = $select.find( 'option[value="' + $input.val() + '"]' ),
+          $option = $select.find( 'option[value="' + $input.val( ) + '"]' ),
           selectedBefore = $option.is( ':selected' );
 
         if ( !_this.multiple ) {
@@ -172,25 +173,25 @@
     },
     //this listener for fake focus and blur events has a bug and actually breaks the widget!
     //TODO: when bootstrap 3.0 has launched, used the dropdown open and close events to do this.
-    focusListener: function() {
+    focusListener: function( ) {
       var _this = this;
 
       _this.$newElement.find( '.dropdown-toggle' ).hover(
-        function() {
+        function( ) {
           console.debug( 'focus...' );
           _this.$element.trigger( 'focus' );
           return true;
         },
-        function() {
+        function( ) {
           console.debug( 'blur...' );
           _this.$element.trigger( 'blur' );
           return true;
         }
       );
     },
-    update: function() {
-      this.$newElement.remove();
-      this.init();
+    update: function( ) {
+      this.$newElement.remove( );
+      this.init( );
     }
   };
 
@@ -200,7 +201,7 @@
    * @param {*=} event       [description]
    */
   $.fn.selectpicker = function( option, event ) {
-    return this.each( function() {
+    return this.each( function( ) {
       var $this = $( this ),
         data = $this.data( 'selectpicker' ),
         options = typeof option == 'object' && option;
@@ -209,11 +210,11 @@
         $this.data( 'selectpicker', ( data = new Selectpicker( this, options, event ) ) );
       }
       if ( typeof option == 'string' ) {
-        data[ option ]();
+        data[ option ]( );
       }
     } );
   };
 
   $.fn.selectpicker.Constructor = Selectpicker;
 
-} ));
+} ) );
