@@ -2263,7 +2263,7 @@ define(
           //setTimeout(function(){
           $clone.clearInputs( '' ); //.show(duration, function(){
           //re-initiate widgets in clone
-          that.formO.widgets.init( $clone );
+          widgets.init( $clone );
           //});
           //}, 0);
 

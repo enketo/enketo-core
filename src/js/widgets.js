@@ -70,7 +70,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
       } );
 
       //call update for select widgets if options change
-      if ( $els.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
+      if ( $els.length > 0 && $els.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
         $form.on( 'changeoption', 'select', function( ) {
           console.debug( 'option change detected, going to update', widget.name, 'for', $( this ) );
           //update (itemselect) picker on which event was triggered because the options changed

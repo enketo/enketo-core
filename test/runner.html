@@ -17,13 +17,17 @@
     requirejs.config({
       baseUrl: '../lib/',
       paths: {
-        app:   '../src/js/',
+        js: '../src/js',
+        widget: '../src/widget',
+        text: 'text/text',
+        xpath: 'xpath/build/xpathjs_javarosa',
+        config: '../config.json',
         spec:  '../test/spec/',
         util:  '../test/util/',
         mock:  '../test/mock/'
       },
       shim: {
-        'xpath/build/xpathjs_javarosa': {
+        'xpath': {
           exports: 'XPathJS'
         },
         'bootstrap-datepicker/js/bootstrap-datepicker': {
