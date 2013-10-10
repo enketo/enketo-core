@@ -1,0 +1,6 @@
+{
+	"name": "geopointpicker",
+	"stylesheet": "geopointpicker.scss",
+	"selector": "input[data-type-xml=\"geopoint\"]",
+	"options": {}
+}

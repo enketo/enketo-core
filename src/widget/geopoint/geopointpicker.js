@@ -2,15 +2,15 @@
  * Geopoint widget(s)
  */
 
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-}(function ($) {
+( function( factory ) {
+  if ( typeof define === 'function' && define.amd ) {
+    // AMD. Register as an anonymous module.
+    define( [ 'jquery' ], factory );
+  } else {
+    // Browser globals
+    factory( jQuery );
+  }
+}( function( $ ) {
   "use strict";
   /**
    * Geopoint widget Class
@@ -18,7 +18,7 @@
    * @param {[type]} element [description]
    * @param {[type]} options [description]
    */
-  var GeopointWidget = function( element, options ) {
+  var Geopointpicker = function( element, options ) {
     var detect =
       '<button name="geodetect" type="button" class="btn" title="detect current location" data-placement="top">' +
       '<i class="icon-crosshairs"></i></button>',
@@ -62,32 +62,32 @@
     this.$alt = this.$widget.find( '[name="alt"]' );
     this.$acc = this.$widget.find( '[name="acc"]' );
 
-    this.$inputOrigin.hide().after( this.$widget );
+    this.$inputOrigin.hide( ).after( this.$widget );
     this.updateMapFn = "updateDynamicMap";
     this.touch = options.touch || false;
-    this.init();
+    this.init( );
   };
 
-  GeopointWidget.prototype = {
+  Geopointpicker.prototype = {
 
-    constructor: GeopointWidget,
+    constructor: Geopointpicker,
 
     //TODO: this is where the Maps API script load function should be called
-    init: function() {
+    init: function( ) {
       var that = this,
-        inputVals = this.$inputOrigin.val().split( ' ' );
+        inputVals = this.$inputOrigin.val( ).split( ' ' );
 
-      this.$inputOrigin.parent().addClass( 'clearfix' );
+      this.$inputOrigin.parent( ).addClass( 'clearfix' );
 
       this.$widget.find( 'input:not([name="search"])' ).on( 'change change.bymap change.bysearch', function( event ) {
         //console.debug('change event detected');
-        var lat = ( that.$lat.val() !== '' ) ? that.$lat.val() : 0.0,
-          lng = ( that.$lng.val() !== '' ) ? that.$lng.val() : 0.0,
-          alt = ( that.$alt.val() !== '' ) ? that.$alt.val() : 0.0,
-          acc = that.$acc.val(),
+        var lat = ( that.$lat.val( ) !== '' ) ? that.$lat.val( ) : 0.0,
+          lng = ( that.$lng.val( ) !== '' ) ? that.$lng.val( ) : 0.0,
+          alt = ( that.$alt.val( ) !== '' ) ? that.$alt.val( ) : 0.0,
+          acc = that.$acc.val( ),
           value = ( lat === 0 && lng === 0 ) ? '' : lat + ' ' + lng + ' ' + alt + ' ' + acc;
 
-        event.stopImmediatePropagation();
+        event.stopImmediatePropagation( );
 
         that.$inputOrigin.val( value ).trigger( 'change' );
 
@@ -110,22 +110,22 @@
       if ( inputVals[ 0 ].length > 0 ) this.$lat.val( inputVals[ 0 ] ).trigger( 'change' );
 
       if ( this.$detect ) {
-        this.enableDetection();
+        this.enableDetection( );
       }
 
       if ( !this.touch ) {
-        if ( that.dynamicMapAvailable() ) {
+        if ( that.dynamicMapAvailable( ) ) {
           that.updateMap( 0, 0, 1 );
           if ( that.$search ) {
-            that.enableSearch();
+            that.enableSearch( );
           }
         } else {
-          this.$form.on( 'googlemapsscriptloaded', function() {
-            if ( that.dynamicMapAvailable() ) {
+          this.$form.on( 'googlemapsscriptloaded', function( ) {
+            if ( that.dynamicMapAvailable( ) ) {
               //default map view
               that.updateMap( 0, 0, 1 );
               if ( that.$search ) {
-                that.enableSearch();
+                that.enableSearch( );
               }
             }
           } );
@@ -133,16 +133,16 @@
       } else if ( this.$map ) {
         this.updateMapFn = "updateStaticMap";
         this.updateMap( 0, 0, 1 );
-        $( window ).on( 'resize', function() {
+        $( window ).on( 'resize', function( ) {
           var resizeCount = $( window ).data( 'resizecount' ) || 0;
           resizeCount++;
           $( window ).data( 'resizecount', resizeCount );
-          window.setTimeout( function() {
+          window.setTimeout( function( ) {
             if ( resizeCount == $( window ).data( 'resizecount' ) ) {
               $( window ).data( 'resizecount', 0 );
               //do the things
               console.debug( 'resizing stopped' );
-              that.updateMap();
+              that.updateMap( );
             }
           }, 500 );
         } );
@@ -151,10 +151,10 @@
     /**
      * Enables geo detection using the built-in browser geoLocation functionality
      */
-    enableDetection: function() {
+    enableDetection: function( ) {
       var that = this;
       this.$detect.click( function( event ) {
-        event.preventDefault();
+        event.preventDefault( );
         navigator.geolocation.getCurrentPosition( function( position ) {
           that.updateMap( position.coords.latitude, position.coords.longitude );
           that.updateInputs( position.coords.latitude, position.coords.longitude, position.coords.altitude, position.coords.accuracy );
@@ -165,26 +165,26 @@
     /**
      * Enables search functionality using the Google Maps API v3
      */
-    enableSearch: function() {
-      var geocoder = new google.maps.Geocoder(),
+    enableSearch: function( ) {
+      var geocoder = new google.maps.Geocoder( ),
         that = this;
       this.$search.prop( 'disabled', false );
       this.$search.on( 'change', function( event ) {
-        event.stopImmediatePropagation();
+        event.stopImmediatePropagation( );
         //console.debug('search field click event');
-        var address = $( this ).val();
+        var address = $( this ).val( );
         if ( typeof geocoder !== 'undefined' ) {
           geocoder.geocode( {
               'address': address,
-              'bounds': that.map.getBounds()
+              'bounds': that.map.getBounds( )
             },
             function( results, status ) {
               if ( status == google.maps.GeocoderStatus.OK ) {
                 that.$search.attr( 'placeholder', 'search' );
                 var loc = results[ 0 ].geometry.location;
                 //console.log(loc);
-                that.updateMap( loc.lat(), loc.lng() );
-                that.updateInputs( loc.lat(), loc.lng(), null, null, 'change.bysearch' );
+                that.updateMap( loc.lat( ), loc.lng( ) );
+                that.updateInputs( loc.lat( ), loc.lng( ), null, null, 'change.bysearch' );
               } else {
                 that.$search.val( '' );
                 that.$search.attr( 'placeholder', address + ' not found, try something else.' );
@@ -198,7 +198,7 @@
     /**
      * Whether google maps are available (whether scripts have loaded).
      */
-    dynamicMapAvailable: function() {
+    dynamicMapAvailable: function( ) {
       return ( this.$map && typeof google !== 'undefined' && typeof google.maps !== 'undefined' );
     },
     /**
@@ -211,8 +211,8 @@
       if ( !this.$map ) {
         return;
       }
-      lat = lat || Number( this.$lat.val() );
-      lng = lng || Number( this.$lng.val() );
+      lat = lat || Number( this.$lat.val( ) );
+      lng = lng || Number( this.$lng.val( ) );
       zoom = zoom || 15;
       if ( lat === 0 && lng === 0 ) zoom = 1;
       return this[ this.updateMapFn ]( lat, lng, zoom );
@@ -225,12 +225,12 @@
      */
     updateStaticMap: function( lat, lng, zoom ) {
       var params,
-        width = this.$map.width(),
-        height = this.$map.height(),
+        width = this.$map.width( ),
+        height = this.$map.height( ),
         mapsAPIKey = settings[ 'mapsStaticAPIKey' ] || '';
 
       params = "center=" + lat + "," + lng + "&size=" + width + "x" + height + "&zoom=" + zoom + "&sensor=false&key=" + mapsAPIKey;
-      this.$map.empty().append( '<img src="http://maps.googleapis.com/maps/api/staticmap?' + params + '"/>' );
+      this.$map.empty( ).append( '<img src="http://maps.googleapis.com/maps/api/staticmap?' + params + '"/>' );
     },
     /**
      * Updates the dynamic (Maps API v3) map to show the provided coordinates (in the center), with the provided zoom level
@@ -242,7 +242,7 @@
       var $map = this.$map,
         that = this;
 
-      if ( this.dynamicMapAvailable() && typeof google.maps.LatLng !== 'undefined' ) {
+      if ( this.dynamicMapAvailable( ) && typeof google.maps.LatLng !== 'undefined' ) {
         var mapOptions = {
           zoom: zoom,
           center: new google.maps.LatLng( lat, lng ),
@@ -250,10 +250,10 @@
           streetViewControl: false
         };
         this.map = new google.maps.Map( this.$map[ 0 ], mapOptions );
-        this.placeMarker();
+        this.placeMarker( );
         // place marker where user clicks
         google.maps.event.addListener( this.map, 'click', function( event ) {
-          that.updateInputs( event.latLng.lat(), event.latLng.lng(), '', '', 'change.bymap' );
+          that.updateInputs( event.latLng.lat( ), event.latLng.lng( ), '', '', 'change.bymap' );
           that.placeMarker( event.latLng );
         } );
       }
@@ -264,7 +264,7 @@
      */
     placeMarker: function( latLng ) {
       var that;
-      latLng = latLng || this.map.getCenter();
+      latLng = latLng || this.map.getCenter( );
       if ( typeof this.marker !== 'undefined' ) {
         this.marker.setMap( null );
       }
@@ -276,9 +276,9 @@
       that = this;
       // dragging markers for non-touch screens
       if ( !this.touch ) {
-        google.maps.event.addListener( this.marker, 'dragend', function() {
-          that.updateInputs( that.marker.getPosition().lat(), that.marker.getPosition().lng(), '', '', 'change.bymap' );
-          that.centralizeWithDelay();
+        google.maps.event.addListener( this.marker, 'dragend', function( ) {
+          that.updateInputs( that.marker.getPosition( ).lat( ), that.marker.getPosition( ).lng( ), '', '', 'change.bymap' );
+          that.centralizeWithDelay( );
         } );
         this.centralizeWithDelay( 5000 );
       }
@@ -289,8 +289,8 @@
      */
     centralizeWithDelay: function( delay ) {
       var that = this;
-      window.setTimeout( function() {
-        that.map.panTo( that.marker.getPosition() );
+      window.setTimeout( function( ) {
+        that.map.panTo( that.marker.getPosition( ) );
       }, delay );
     },
     /**
@@ -313,34 +313,34 @@
     /**
      * In enketo the loading of the GMaps resources is dealt with in the Connection class.
      */
-    loadMapsScript: function() {}
+    loadMapsScript: function( ) {}
   };
 
-  $.fn.geopointWidget = function( option ) {
+  $.fn.geopointpicker = function( option ) {
     var loadStarted = false;
 
-    return this.each( function() {
+    return this.each( function( ) {
       var $this = $( this ),
         data = $( this ).data( 'geopointwidget' ),
         options = typeof option == 'object' && option;
-      //for some reason, calling this inside the GeopointWidget class does not work properly
+      //for some reason, calling this inside the Geopointpicker class does not work properly
       if ( !loadStarted && ( typeof connection !== 'undefined' ) && ( typeof google == 'undefined' || typeof google.maps == 'undefined' ) && !option.touch ) {
         loadStarted = true;
         console.debug( 'loading maps script asynchronously' );
-        connection.loadGoogleMaps( function() {
+        connection.loadGoogleMaps( function( ) {
           $( 'form.jr' ).trigger( 'googlemapsscriptloaded' );
         } );
       }
 
       if ( !data ) {
-        $this.data( 'geopointwidget', ( data = new GeopointWidget( this, options ) ) );
+        $this.data( 'geopointwidget', ( data = new Geopointpicker( this, options ) ) );
       }
       if ( typeof option == 'string' ) {
-        data[ option ]();
+        data[ option ]( );
       }
     } );
   };
 
-  $.fn.geopointWidget.Constructor = GeopointWidget;
+  $.fn.geopointpicker.Constructor = Geopointpicker;
 
-} ));
+} ) );

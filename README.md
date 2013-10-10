@@ -33,7 +33,7 @@ Each widget needs to follow the following:
 	* `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest form this could simply call destroy() and then re-initialize the widget.
 * disable when an ancestor (`<fieldset>`) is disabled (also when disabled upon initialization!)
 * enable when its disabled ancestor is enabled
-* if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in (by e.g. checking modernizr.touch). If your widget supports both, you could create an all-in-one widget or create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
+* if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option { touch: [boolean] } is passed to the plugin by default. If your widget supports both, you could create an all-in-one widget or create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow setting an empty value (that empties node in instance)
 * [to check] send a focus event to the original input when the widget gets focus
 * for extra robustness: if the widget already exists, destroy it first

@@ -296,11 +296,6 @@ var obj = {
     //detect max and min with algorithm that evaluates expressions multiple times
     //algortithm could guess likely border values by using a regular expression search...
   },
-  geopointWidget: function( ) {
-    this.$group.find( 'input[data-type-xml="geopoint"]' ).geopointWidget( {
-      touch: modernizr.touch
-    } );
-  },
   autoCompleteWidget: function( ) {},
   barcodeWidget: function( ) {
     //$form.find('input[data-type-xml="barcode"]').attr('placeholder', 'not supported in browser data entry').attr('disabled', 'disabled');

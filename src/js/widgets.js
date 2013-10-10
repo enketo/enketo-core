@@ -56,6 +56,8 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
       var $els;
       widget = widgetConfig[ i ];
       widget.options = widget.options || {};
+      widget.options.touch = modernizr.touch;
+
       if ( !widget.name || !widget.selector ) {
         return console.error( 'widget configuration has no name and/or selector property', widget );
       }
