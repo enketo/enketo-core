@@ -18,10 +18,12 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 
 
 
-###How to extend widgets elements
+###How to create or extend widgets elements
 Each widget needs to follow the following:
 
-* be an AMD-compliant jQuery plugin 
+* be an AMD-compliant jQuery plugin
+* be in its own folder with a config.json file
+* be responsive up to a window width of 320px
 * use JSDoc style documentation for the purpose of passing the Google Closure Compiler without warnings and errors
 * if hiding original input element, it needs to load the default value from that input element into the widget
 * if hiding original input element, it needs to keep it up-to-date and trigger a change event on it whenever it updates
