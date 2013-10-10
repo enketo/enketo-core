@@ -276,30 +276,6 @@ var obj = {
       } );
     }
   },
-  tableWidget: function( $group ) {
-    var $g = $group || $form;
-    //when loading a form dynamically the DOM elements don't have a width yet (width = 0), so we call
-    //this with a bit of a delay..
-    setTimeout( function( ) {
-      $g.parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
-        .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
-          $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
-          $( this ).find( 'label' ).css( 'width', 'auto' ).toLargestWidth( );
-          $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
-        } );
-    }, 50 );
-  },
-  spinnerWidget: function( ) {
-    //$form.find('input[type="number"]').spinner();
-  },
-  sliderWidget: function( ) {
-    //detect max and min with algorithm that evaluates expressions multiple times
-    //algortithm could guess likely border values by using a regular expression search...
-  },
-  autoCompleteWidget: function( ) {},
-  barcodeWidget: function( ) {
-    //$form.find('input[data-type-xml="barcode"]').attr('placeholder', 'not supported in browser data entry').attr('disabled', 'disabled');
-  },
   offlineFileWidget: function( ) {
     if ( this.repeat ) {
       return;
