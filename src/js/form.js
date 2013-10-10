@@ -46,7 +46,7 @@ define(
       //},
       this.Data = function( dataStr ) {
         return new DataXML( dataStr );
-      },
+      };
       this.getDataO = function( ) {
         return data;
       };
@@ -875,22 +875,22 @@ define(
         expr = expr.trim( );
 
         /* 
-  			creating a context doc is necessary for 3 reasons:
-  			- the primary instance needs to be the root (and it isn't as the root is <model> and there can be multiple <instance>s)
-  			- the templates need to be removed (though this could be worked around by adding the templates as data)
-  			- the hack described below with multiple instances.
-  		*/
+        creating a context doc is necessary for 3 reasons:
+        - the primary instance needs to be the root (and it isn't as the root is <model> and there can be multiple <instance>s)
+        - the templates need to be removed (though this could be worked around by adding the templates as data)
+        - the hack described below with multiple instances.
+        */
         contextDoc = new DataXML( this.getStr( false, false ) );
         /* 
-  		   If the expression contains the instance('id') syntax, a different context instance is required.
-  		   However, the same expression may also contain absolute reference to the main data instance, 
-  		   which means 2 different contexts would have to be supplied to the XPath Evaluator which is not
-  		   possible. Alternatively, the XPath Evaluator becomes able to use a default instance and direct 
-  		   the instance(id) references to a sibling instance context. The latter proved to be too hard for 
-  		   this developer, so as a workaround, the following is used instead:
-  		   The instance referred to in instance(id) is detached and appended to the main instance. The 
-  		   instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
-  		 */
+        If the expression contains the instance('id') syntax, a different context instance is required.
+        However, the same expression may also contain absolute reference to the main data instance, 
+        which means 2 different contexts would have to be supplied to the XPath Evaluator which is not
+        possible. Alternatively, the XPath Evaluator becomes able to use a default instance and direct 
+        the instance(id) references to a sibling instance context. The latter proved to be too hard for 
+        this developer, so as a workaround, the following is used instead:
+        The instance referred to in instance(id) is detached and appended to the main instance. The 
+        instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
+        */
         if ( this.instanceSelectRegEx.test( expr ) ) {
           instances = expr.match( this.instanceSelectRegEx );
           for ( i = 0; i < instances.length; i++ ) {
@@ -1026,11 +1026,11 @@ define(
         //profiler = new Profiler('adding hint icons');
         //add 'hint' icon, could be moved to XSLT, but is very fast even on super large forms - 31 msecs on bench6 form
         /*if (!modernizr.touch){
-  			$hint = '<span class="hint" ><i class="icon-question-sign"></i></span>';
-  			$form.find('.jr-hint ~ input, .jr-hint ~ select, .jr-hint ~ textarea').before($hint);
-  			$form.find('legend > .jr-hint').parent().find('span:last-child').after($hint);
-  			$form.find('.trigger > .jr-hint').parent().find('span:last').after($hint);
-  		}*/
+        $hint = '<span class="hint" ><i class="icon-question-sign"></i></span>';
+        $form.find('.jr-hint ~ input, .jr-hint ~ select, .jr-hint ~ textarea').before($hint);
+        $form.find('legend > .jr-hint').parent().find('span:last-child').after($hint);
+        $form.find('.trigger > .jr-hint').parent().find('span:last').after($hint);
+        }*/
         //profiler.report();
 
         //TODO: don't add to preload and calculated items
@@ -1041,12 +1041,12 @@ define(
         //profiler.report();
 
         /*
-  			Groups of radiobuttons need to have the same name. The name refers to the path of the instance node.
-  			Repeated radiobuttons would all have the same name which means they wouldn't work right.
-  			Therefore, radiobuttons store their path in data-name instead and cloned repeats will add a 
-  			different name attribute.
-  			TODO: move to XSLT
-  		 */
+        Groups of radiobuttons need to have the same name. The name refers to the path of the instance node.
+        Repeated radiobuttons would all have the same name which means they wouldn't work right.
+        Therefore, radiobuttons store their path in data-name instead and cloned repeats will add a 
+        different name attribute.
+        TODO: move to XSLT
+        */
         $form.find( 'input[type="radio"]' ).each( function( ) {
           name = /**@type {string} */ $( this ).attr( 'name' );
           $( this ).attr( 'data-name', name );
@@ -1232,16 +1232,16 @@ define(
           name = $node.attr( 'data-name' ) || $node.attr( 'name' );
           return name || console.error( 'input node has no name' );
           /*
-  			if (this.getInputType($node) == 'radio'){
-  				//indexSuffix = $node.attr('name').lastIndexOf('____');
-  				//if (indexSuffix > 0){
-  					return $node.attr('data-name');//.substr(0, indexSuffix);
-  				//}
-  			}
-  			if ($node.attr('name') && $node.attr('name').length > 0){
-  				return $node.attr('name');
-  			}
-  			else return console.error('input node has no name');*/
+          if (this.getInputType($node) == 'radio'){
+          //indexSuffix = $node.attr('name').lastIndexOf('____');
+          //if (indexSuffix > 0){
+          return $node.attr('data-name');//.substr(0, indexSuffix);
+          //}
+          }
+          if ($node.attr('name') && $node.attr('name').length > 0){
+          return $node.attr('name');
+          }
+          else return console.error('input node has no name');*/
         },
         //the index that can be used to find the node in $data
         //NOTE: this function should be used sparingly, as it is CPU intensive!
@@ -1548,28 +1548,28 @@ define(
               return;
             }
             /* 
-  					Determining ancestry is expensive. Using the knowledge most forms don't use repeats and 
-  					if they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
-  					The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
-  					(6-7 seconds of loading time on the bench6 form)
-  				*/
+            Determining ancestry is expensive. Using the knowledge most forms don't use repeats and 
+            if they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
+            The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
+            (6-7 seconds of loading time on the bench6 form)
+            */
             insideRepeat = ( clonedRepeatsPresent && $branchNode.closest( '.jr-repeat' ).length > 0 ) ? true : false;
             insideRepeatClone = ( clonedRepeatsPresent && $branchNode.closest( '.jr-repeat.clone' ).length > 0 ) ? true : false;
             /*
-  					Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
-  					It can be safely set to 0 for other branches.
-  				 */
+            Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
+            It can be safely set to 0 for other branches.
+            */
             p.ind = ( insideRepeatClone ) ? parent.input.getIndex( $( this ) ) : 0;
             /*
-  					Caching is only possible for expressions that do not contain relative paths to nodes.
-  					So, first do a *very* aggresive check to see if the expression contains a relative path. 
-  					This check assumes that child nodes (e.g. "mychild = 'bob'") are NEVER used in a relevant
-  					expression, which may prove to be incorrect.
-  				 */
+            Caching is only possible for expressions that do not contain relative paths to nodes.
+            So, first do a *very* aggresive check to see if the expression contains a relative path. 
+            This check assumes that child nodes (e.g. "mychild = 'bob'") are NEVER used in a relevant
+            expression, which may prove to be incorrect.
+            */
             if ( p.relevant.indexOf( '..' ) === -1 ) {
               /*
-  						For now, let's just not cache relevants inside a repeat. 
-  					 */
+              For now, let's just not cache relevants inside a repeat. 
+              */
               //if ($branchNode.parents('.jr-repeat').length === 0){
               if ( !insideRepeat ) {
                 cacheIndex = p.relevant;
@@ -1661,10 +1661,10 @@ define(
               $branchNode.prop( 'disabled', false );
 
               /*
-  					A temporary workaround for a Chrome bug described in https://github.com/modilabs/enketo/issues/503 
-  					where the file inputs end up in a weird partially enabled state. 
-  					Refresh the state by disabling and enabling the file inputs again.
-  					*/
+              A temporary workaround for a Chrome bug described in https://github.com/modilabs/enketo/issues/503 
+              where the file inputs end up in a weird partially enabled state. 
+              Refresh the state by disabling and enabling the file inputs again.
+              */
               $branchNode.find( '*:not(.jr-branch) input[type="file"]:not(.force-disabled, [data-relevant])' )
                 .prop( 'disabled', true ).prop( 'disabled', false );
             }
@@ -1747,9 +1747,9 @@ define(
 
           context = that.input.getName( $input );
           /*
-  				Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
-  				It can be safely set to 0 for other branches.
-  			*/
+          Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
+          It can be safely set to 0 for other branches.
+          */
           insideRepeat = ( clonedRepeatsPresent && $input.closest( '.jr-repeat' ).length > 0 ) ? true : false;
           insideRepeatClone = ( clonedRepeatsPresent && $input.closest( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
@@ -1845,12 +1845,12 @@ define(
           //context = that.input.getName($(this).closest('fieldset'));
 
           /*
-  				Note that in XForms input is the parent of label and in HTML the other way around so an output inside a label
-  				should look at the HTML input to determine the context. 
-  				So, context is either the input name attribute (if output is inside input label),
-  				or the parent with a name attribute
-  				or the whole doc
-  			*/
+          Note that in XForms input is the parent of label and in HTML the other way around so an output inside a label
+          should look at the HTML input to determine the context. 
+          So, context is either the input name attribute (if output is inside input label),
+          or the parent with a name attribute
+          or the whole doc
+          */
           $context = ( $( this ).parent( 'span' ).parent( 'label' ).find( '[name]' ).eq( 0 ).length === 1 ) ?
             $( this ).parent( ).parent( ).find( '[name]:eq(0)' ) :
             $( this ).parent( 'span' ).parent( 'legend' ).parent( 'fieldset' ).find( '[name]' ).eq( 0 ).length === 1 ?
@@ -1951,9 +1951,9 @@ define(
         $form.find( '.trigger' ).addClass( 'alert alert-block' );
         //$form.find('label:not(.geo), fieldset').addClass('clearfix');
         /*$form.find(':checkbox, :radio').each(function(){
-  			var $p = $(this).parent('label'); 
-  			$(this).detach().prependTo($p);
-  		});*/
+        var $p = $(this).parent('label'); 
+        $(this).detach().prependTo($p);
+        });*/
 
         //move constraint message to bottom of question and add message for required (could also be done in XSLT)
         //TODO: move to XSLT
@@ -2130,17 +2130,17 @@ define(
         },
         'browser': function( o ) {
           /*if (o.curVal.length === 0){
-  				if (o.param == 'name'){ 
-  					var a = ($.browser.webkit) ? 'webkit' : ($.browser.mozilla) ? 'mozilla' : ($.browser.opera) ? 'opera' : ($.browser.msie) ? 'msie' : 'unknown';
-  					//console.debug(a);
-  					return a;
-  				}
-  				if (o.param == 'version'){
-  					return $.browser.version;
-  				}
-  				return o.param+' not supported in enketo';
-  			}
-  			return o.curVal;*/
+          if (o.param == 'name'){ 
+          var a = ($.browser.webkit) ? 'webkit' : ($.browser.mozilla) ? 'mozilla' : ($.browser.opera) ? 'opera' : ($.browser.msie) ? 'msie' : 'unknown';
+          //console.debug(a);
+          return a;
+          }
+          if (o.param == 'version'){
+          return $.browser.version;
+          }
+          return o.param+' not supported in enketo';
+          }
+          return o.curVal;*/
         },
         'os': function( o ) {
           if ( o.curVal.length === 0 ) {
@@ -2341,11 +2341,11 @@ define(
         $( 'form.jr' ).attr( 'onsubmit', 'return false;' );
 
         /* 
-  			workaround for Chrome to clear invalid values right away 
-  			issue: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178437)
-  			a workaround was chosen instead of replacing the change event listener to a blur event listener
-  			because I'm guessing that Google will bring back the old behaviour.
-  		*/
+        workaround for Chrome to clear invalid values right away 
+        issue: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178437)
+        a workaround was chosen instead of replacing the change event listener to a blur event listener
+        because I'm guessing that Google will bring back the old behaviour.
+        */
         $form.on( 'blur', 'input:not([type="text"], [type="radio"], [type="checkbox"])', function( event ) {
           if ( typeof $( this ).prop( 'validity' ).badInput !== 'undefined' && $( this ).prop( 'validity' ).badInput ) {
             $( this ).val( '' );
