@@ -7,3 +7,6 @@
 [submodule "lib/bootstrap-timepicker"]
 	path = lib/bootstrap-timepicker
 	url = https://github.com/jdewit/bootstrap-timepicker.git
+[submodule "lib/text"]
+	path = lib/text
+	url = https://github.com/requirejs/text.git
