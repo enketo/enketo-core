@@ -21,16 +21,17 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 ###How to create or extend widgets elements
 
 The form [dev.html](dev.html) is a useful form to test widgets. This [plugin template](https://gist.github.com/MartijnR/6943281) may also be useful for new widgets. 
+The options {touch: boolean, repeat: boolean}, are added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
 
 Each widget needs to follow the following:
 
 * be an AMD-compliant jQuery plugin
 * be in its own folder with a config.json file
-* be responsive up to a window width of 320px
+* be responsive up to a minimum window width of 320px
 * use JSDoc style documentation for the purpose of passing the Google Closure Compiler without warnings and errors
 * if hiding original input element, it needs to load the default value from that input element into the widget
 * if hiding original input element, it needs to keep it up-to-date and trigger a change event on it whenever it updates
-* it needs to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
+* [to check: it needs to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)]
 * new input/select/textarea elements inside widgets need to get the `ignore` class
 * it requires the following methods:
 	* `destroy()` to totally destroy widgets in repeat groups/questions when these groups/questions are cloned This may be an empty function if:
@@ -42,8 +43,7 @@ Each widget needs to follow the following:
 * instantiate as disabled when an ancestor (`<fieldset>`) is disabled
 * if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option { touch: [boolean] } is passed to the plugin by default. If your widget supports both, you could create an all-in-one widget or create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow setting an empty value (that empties node in instance)
-* [to check] send a focus event to the original input when the widget gets focus
-* .....option {repeat: [boolean]}
+* [to check: send a focus event to the original input when the widget gets focus]
 * for extra robustness where applicable: if the widget already exists, destroy it first
 
 ###Notes for All Developers
