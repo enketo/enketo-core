@@ -45,7 +45,7 @@ Each widget needs to follow the following:
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
 
 * build with Grunt (using Compass is also possible as long as config.json does not change)
-* requires webserver (just to enable loading of config.json in widgets.js over http - if you have a clever idea to keep using config.json but serve a form as file://..../myform.html please let me know!)
+* requires webserver (to enable loading of config.json files over http, and for loading Google Maps script)
 * many of the outstanding issues for enketo-core are still managed in the [modilabs repo](https://github.com/modilabs/enketo/issues?state=open)
 
 ###Notes for JavaScript Developers
