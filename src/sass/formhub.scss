@@ -11,12 +11,12 @@ $iconSpritePath: url('/images/glyphicons-halflings.png');
 $iconWhiteSpritePath: url('/images/glyphicons-halflings-white.png');
 
 @mixin font-bold {
-  font-family: 'OpenSansBold', Arial, sans-serif;;
-  font-weight: normal;
+  font-family: 'OpenSans', Arial, sans-serif;;
+  font-weight: bold;
   font-style: normal; }
 
 @mixin font-normal {
-  font-family: 'OpenSansRegular', Arial, sans-serif;
+  font-family: 'OpenSans', Arial, sans-serif;
   font-weight: normal;
   font-style: normal; }
 

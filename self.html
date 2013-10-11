@@ -2,39 +2,14 @@
 <html lang="en"  class="no-js">
 	<head>
 		<link type="text/css" href="build/css/default.css" media="all" rel="stylesheet" />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600&subset=latin,cyrillic-ext,cyrillic,greek-ext,greek,vietnamese,latin-ext' rel='stylesheet' type='text/css'>
 
-		<script type="text/javascript" src="lib/jquery.min.js"></script>
-		<script type="text/javascript" src="lib/modernizr.min.js"></script>
-		<script type="text/javascript" src="lib/bootstrap.min.js"></script>
-		<script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript" src="lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-		<script type="text/javascript" src="lib/xpath/build/xpathjs_javarosa.min.js"></script>
+		<script type="text/javascript" src="lib/modernizr.js"></script>
 
-		<script type="text/javascript" src="src/js/settings.js"></script>
-		<script type="text/javascript" src="src/js/utils.js"></script>
-		<script type="text/javascript" src="src/js/widgets.js"></script>
-		<script type="text/javascript" src="src/js/form.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-				//if querystring touch=true is added, override Modernizr
-				if (window.location.search.indexOf('touch=true') > 0) {
-					Modernizr.touch = true;
-					$('html').addClass('touch');
-				}
-				//initialize form
-				form = new Form('form.jr:eq(0)', dataStr);
-				loadErrors = form.init();
-				$('#validate-form').on('click',function(){
-					form.validateForm();
-					if (!form.isValid()) {
-						alert('Form contains errors. Please see fields marked in red.');
-					}
-				});
-			});
-		</script>
   		<script type="text/javascript">
 			var dataStr = "<model><instance xmlns=\"http:\/\/www.w3.org\/2002\/xforms\"><term id=\"term\"><formhub><uuid\/><\/formhub><imei\/><survey_start\/><survey_end\/><survey_day\/><deviceid\/><sim_serial_number\/><phone_number\/><uuid\/><consent_ok\/><section_a><q_1\/><q_2>.&lt;=today()<\/q_2><\/section_a><section_b><q_5\/><subsection_b1><q_6\/><q_7\/><q_7s\/><q_8\/><q_8s\/><q_9\/><q_9s\/><q_10\/><q_10s\/><q_11\/><q_11s\/><q_12\/><q_12s\/><q_13\/><q_14\/><q_14s\/><\/subsection_b1><\/section_b><section_c><q_15\/><q_16\/><q_17\/><q_18\/><\/section_c><section_d><n_19\/><q_19\/><q_20\/><q_21\/><q_22\/><termination_nb\/><\/section_d><part_1><section_e><n_23\/><term_loop template=\"\"><q_23\/><q_24\/><date_assault><note_assault\/><assault_yyyy\/><assault_mmm\/><assault_dd\/><\/date_assault><q_26\/><q_26s\/><q_27\/><q_28\/><n_29\/><q_29\/><q_30\/><q_30s\/><q_31\/><q_32\/><q_32s\/><q_32s_name\/><q_33\/><q_33s\/><q_34\/><q_34s\/><q_35\/><q_35s\/><q_36\/><q_36_price\/><q_36s\/><q_37\/><q_37s\/><q_38\/><q_39\/><q_39s\/><q_40\/><q_41\/><q_41s\/><q_42\/><q_42s\/><\/term_loop><\/section_e><\/part_1><part_2><section_stigma><n_43\/><sample_question\/><q_43\/><q_44\/><q_45\/><q_45s\/><q_46\/><q_47\/><q_48\/><q_49\/><q_50\/><q_51\/><q_52\/><q_53\/><q_54\/><\/section_stigma><section_depression><n_55\/><q_55\/><q_56\/><\/section_depression><section_suicide><q_57\/><n_57\/><q_58\/><n_58\/><\/section_suicide><section_anxiety><n_59\/><q_59\/><q_60\/><\/section_anxiety><section_ptsd><n_61\/><q_61\/><q_62\/><q_63\/><q_64\/><q_65\/><q_66\/><q_67\/><q_68\/><q_69\/><q_70\/><q_71\/><q_72\/><q_73\/><q_74\/><q_75\/><q_76\/><q_77\/><\/section_ptsd><section_support><n_78\/><q_78\/><q_79\/><\/section_support><\/part_2><section_post><q_3\/><q_4\/><q_4s\/><notations\/><\/section_post><meta><instanceID\/><\/meta><\/term><\/instance><\/model>";;
 		</script>
+		<script type="text/javascript" data-main="app.js" src="lib/require.js"></script>
 	</head>
 	<body>
 		<div class="main">
