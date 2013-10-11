@@ -259,23 +259,7 @@ var obj = {
       } );
     }
   },
-  //transforms readonly inputs into triggers
-  readonlyWidget: function( ) {
-    if ( !this.repeat ) {
-      $form.find( 'input[readonly]:not([data-type-xml="geopoint"])' ).parent( 'label' ).each( function( ) {
-        //var $spans = $(this).find('span').not('.question-icons span').detach(); 
-        var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
-          branch = ( relevant ) ? ' jr-branch pre-init' : '',
-          name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
-          attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
-          value = $( this ).find( 'input, select, textarea' ).val( ),
-          html = $( this ).markdownToHtml( ).html( );
-        $( '<fieldset class="trigger' + branch + '" ' + attributes + '></fieldset>' )
-          .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove( );
-        $( this ).remove( );
-      } );
-    }
-  },
+
   offlineFileWidget: function( ) {
     if ( this.repeat ) {
       return;

@@ -1,0 +1,6 @@
+{
+	"name": "notewidget",
+	"stylesheet": "note.scss",
+	"selector": "input[readonly]:not([data-type-xml=\"geopoint\"])",
+	"options": {}
+}

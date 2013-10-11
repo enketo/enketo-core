@@ -49,8 +49,8 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
   }
 
   function create( $group ) {
-    var widget,
-      repeat = $group.hasClass( 'jr-repeat' );
+    var widget; //,
+    //repeat = $group.hasClass( 'jr-repeat' );
 
     for ( var i = 0; i < widgetConfig.length; i++ ) {
       var $els;

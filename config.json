@@ -2,6 +2,7 @@
 	"widgets": [
 		"widget/select-desktop/selectpicker",
 		"widget/geopoint/geopointpicker",
-		"widget/table/tablewidget"
+		"widget/table/tablewidget",
+		"widget/note/notewidget"
 	]
 }
