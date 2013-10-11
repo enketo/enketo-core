@@ -26,10 +26,10 @@
             // remove the odd input element that XLSForm adds for the 'easier method'
             // see https://github.com/modilabs/pyxform/issues/72
             console.log( 'removing weird readonly input', $( this ).find( 'input[readonly]' ) );
-            //$( this ).find( 'input[readonly]' ).remove( );
+            $( this ).find( 'input[readonly]' ).remove( );
             // fix the column widths
             $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
-            $( this ).find( 'label' ).css( 'width', 'auto' ).toLargestWidth( );
+            $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth( );
             $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
           } );
       }, 50 );
