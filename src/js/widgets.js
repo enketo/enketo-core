@@ -32,6 +32,11 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     } );
   }
 
+  /**
+   * Initializes widgets
+   * @param  {jQuery} $group The element inside which the widgets have to be initialized.
+   */
+
   function init( $group ) {
     $group = $group || $form;
     console.log( 'init called with loaded: ', loaded );
@@ -44,19 +49,78 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     }
   }
 
-  function destroy( $group ) {
-    $group = $group || $form;
-  }
+  /**
+   * Enables widgets if they weren't enabled already when the branch was enabled by the controller.
+   * In most widgets, this function will do nothing because the disabled attribute was automatically removed from all
+   * fieldsets, inputs, textareas and selects inside the branch element provided as parameter.
+   * @param  {[type]} $group [description]
+   * @return {[type]}        [description]
+   */
 
-  function create( $group ) {
-    var widget; //,
-    //repeat = $group.hasClass( 'jr-repeat' );
+  function enable( $group ) {
+    var widget, $els;
+
+    console.debug( 'enabling widgets in ', $group );
 
     for ( var i = 0; i < widgetConfig.length; i++ ) {
-      var $els;
+      widget = widgetConfig[ i ];
+      $els = $group.find( widget.selector );
+      $els[ widget.name ]( 'enable' );
+    }
+  }
+
+  /**
+   * Disables  widgets, if they aren't disabled already when the branch was disabled by the controller.
+   * In most widgets, this function will do nothing because all fieldsets, inputs, textareas and selects will get
+   * the disabled attribute automatically when the branch element provided as parameter becomes irrelevant.
+   * @param  { jQuery } $group The element inside which all widgets need to be disabled.
+   */
+
+  function disable( $group ) {
+    var widget, $els;
+
+    console.debug( 'disabling widgets in ', $group );
+
+    for ( var i = 0; i < widgetConfig.length; i++ ) {
+      widget = widgetConfig[ i ];
+      $els = $group.find( widget.selector );
+      $els[ widget.name ]( 'disable' );
+    }
+  }
+
+  /**
+   * Destroys widgets, if necessary. This function is only called with the repeat clone as a parameter.
+   * Many eventhandlers inside widgets get messed up when they are cloned. If so the widget's destroy or init
+   * will have to handle this. In most widgets the destroy method will do nothing.
+   * @param  {jQuery} $group The element inside which all widgets need to be 'destroyed'
+   */
+
+  function destroy( $group ) {
+    var widget, $els;
+
+    console.debug( 'destroying widgets, where necessary in ', $group );
+
+    for ( var i = 0; i < widgetConfig.length; i++ ) {
+      widget = widgetConfig[ i ];
+      $els = $group.find( widget.selector );
+      $els[ widget.name ]( 'destroy' );
+    }
+  }
+
+  /**
+   * Creates widgets upon initialization of the form or on a cloned element after having called 'destroy' first
+   * @param  {jQuery} $group The elements inside which widgets need to be created.
+   */
+
+  function create( $group ) {
+    var widget, $els,
+      repeat = $group.hasClass( 'jr-repeat' );
+
+    for ( var i = 0; i < widgetConfig.length; i++ ) {
       widget = widgetConfig[ i ];
       widget.options = widget.options || {};
       widget.options.touch = modernizr.touch;
+      widget.options.repeat = repeat;
 
       if ( !widget.name || !widget.selector ) {
         return console.error( 'widget configuration has no name and/or selector property', widget );
@@ -64,26 +128,51 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
       $els = $group.find( widget.selector );
       $els[ widget.name ]( widget.options );
 
-      //call update for all widgets when language changes 
+      setLangChangeHandler( widget, $els );
+      setOptionChangeHandler( widget, $els );
+    }
+  }
+
+  /**
+   * Calls widget('update') when the language changes. This function is called upon initialization,
+   * and whenever a new repeat is created. In the latter case, since the widget('update') is called upon
+   * the elements of the repeat, there should be no duplicate eventhandlers.
+   * @param {{name: string}} widget The widget configuration object
+   * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
+   */
+
+  function setLangChangeHandler( widget, $els ) {
+    //call update for all widgets when language changes 
+    if ( $els.length > 0 ) {
       $form.on( 'changelanguage', function( ) {
-        console.debug( 'change language event detected, going to update', widget.name )
-        //update all pickers in form
+        console.debug( 'change language event detected, going to update', widget.name );
         $els[ widget.name ]( 'update' );
       } );
+    }
+  }
 
-      //call update for select widgets if options change
-      if ( $els.length > 0 && $els.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
-        $form.on( 'changeoption', 'select', function( ) {
-          console.debug( 'option change detected, going to update', widget.name, 'for', $( this ) );
-          //update (itemselect) picker on which event was triggered because the options changed
-          $( this )[ widget.name ]( 'update' );
-        } );
-      }
+  /**
+   * Calls widget('update') on select-type widgets when the options change.This function is called upon initialization,
+   * and whenever a new repeat is created. In the latter case, since the widget('update') is called upon
+   * the elements of the repeat, there should be no duplicate eventhandlers.
+   * @param {{name: string}} widget The widget configuration object
+   * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
+   */
+
+  function setOptionChangeHandler( widget, $els ) {
+    if ( $els.length > 0 && $els.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
+      $form.on( 'changeoption', 'select', function( ) {
+        console.debug( 'option change detected, going to update', widget.name, 'for', $( this ) );
+        //update (itemselect) picker on which event was triggered because the options changed
+        $( this )[ widget.name ]( 'update' );
+      } );
     }
   }
 
   return {
     init: init,
+    enable: enable,
+    disable: disable,
     destroy: destroy
   };
 

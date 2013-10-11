@@ -28,8 +28,10 @@
     factory( jQuery );
   }
 }( function( $ ) {
-
   "use strict";
+
+  var pluginName = 'selectpicker';
+
   /**
    * Select picker Class
    * @constructor
@@ -37,7 +39,8 @@
    * @param {(boolean|{btnStyle: string, noneSelectedText: string, maxlength:number})} options options
    * @param {*=} e     event
    */
-  var Selectpicker = function( element, options, e ) {
+
+  function Selectpicker( element, options, e ) {
     if ( e ) {
       e.stopPropagation( );
       e.preventDefault( );
@@ -189,7 +192,17 @@
         }
       );
     },
+    destroy: function( ) {
+      console.debug( 'selectpicker destroy called' );
+    },
+    enable: function( ) {
+      console.debug( 'selectpicker enable called' );
+    },
+    disable: function( ) {
+      console.debug( 'selectpicker disable called' );
+    },
     update: function( ) {
+      console.debug( 'selectpicker update called' );
       this.$newElement.remove( );
       this.init( );
     }
@@ -200,14 +213,14 @@
    * @param {({btnStyle: string, noneSelectedText: string, maxlength:number}|string)=} option options
    * @param {*=} event       [description]
    */
-  $.fn.selectpicker = function( option, event ) {
+  $.fn[ pluginName ] = function( option, event ) {
     return this.each( function( ) {
       var $this = $( this ),
-        data = $this.data( 'selectpicker' ),
+        data = $this.data( pluginName ),
         options = typeof option == 'object' && option;
 
       if ( !data ) {
-        $this.data( 'selectpicker', ( data = new Selectpicker( this, options, event ) ) );
+        $this.data( pluginName, ( data = new Selectpicker( this, options, event ) ) );
       }
       if ( typeof option == 'string' ) {
         data[ option ]( );
@@ -215,6 +228,6 @@
     } );
   };
 
-  $.fn.selectpicker.Constructor = Selectpicker;
+  $.fn[ pluginName ].Constructor = Selectpicker;
 
 } ) );

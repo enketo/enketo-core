@@ -1648,9 +1648,10 @@ define(
 
             $branchNode.removeClass( 'disabled pre-init' ).show( 250, function( ) {
               //to recalculate table column widths
-              if ( that.ancestorRelevant( $branchNode ) ) {
-                parent.widgets.tableWidget( $branchNode );
-              }
+              //if ( that.ancestorRelevant( $branchNode ) ) {
+              //  parent.widgets.tableWidget( $branchNode );
+              //}
+              widgets.enable( $branchNode );
             } );
 
             type = $branchNode.prop( 'nodeName' ).toLowerCase( );
@@ -1688,7 +1689,7 @@ define(
             //if the branch was previously enabled
             if ( !virgin ) {
               $branchNode.clearInputs( 'change' );
-
+              widgets.enable( $branchNode );
               //all remaining fields marked as invalid can now be marked as valid
               $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function( ) {
                 parent.setValid( $( this ) );
@@ -2247,7 +2248,7 @@ define(
           //add clone class 
           //remove any clones inside this clone.. (cloned repeats within repeats..), also remove all widgets 
           //NOTE: widget removal doesn't work atm (jQuery bug?), it is covered by the date/time/datetime widgets though)
-          $clone.addClass( 'clone' ).find( '.clone, .widget' ).remove( );
+          $clone.addClass( 'clone' ).find( '.clone' ).remove( );
 
           //mark all cloned fields as valid
           $clone.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function( ) {
@@ -2263,6 +2264,7 @@ define(
           //setTimeout(function(){
           $clone.clearInputs( '' ); //.show(duration, function(){
           //re-initiate widgets in clone
+          widgets.destroy( $clone );
           widgets.init( $clone );
           //});
           //}, 0);

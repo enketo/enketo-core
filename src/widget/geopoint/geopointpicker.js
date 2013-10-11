@@ -12,11 +12,15 @@
   }
 }( function( $ ) {
   "use strict";
+
+  var pluginName = 'geopointpicker';
+
   /**
    * Geopoint widget Class
    * @constructor
-   * @param {[type]} element [description]
-   * @param {[type]} options [description]
+   * @param {Element} element [description]
+   * @param {(boolean|{touch: boolean, repeat: boolean})} options options
+   * @param {*=} e     event
    */
   var Geopointpicker = function( element, options ) {
     var detect =
@@ -310,18 +314,35 @@
       this.$alt.val( Math.round( alt * 10 ) / 10 );
       this.$acc.val( Math.round( acc * 10 ) / 10 ).trigger( ev );
     },
+    destroy: function( ) {
+      console.debug( pluginName, 'destroy called' );
+    },
+
+    enable: function( ) {
+      console.debug( pluginName, 'enable called' );
+    },
+
+    disable: function( ) {
+      console.debug( pluginame, 'disable called' );
+    },
+
+    update: function( ) {
+      console.debug( pluginName, 'update called' );
+    },
     /**
      * In enketo the loading of the GMaps resources is dealt with in the Connection class.
      */
-    loadMapsScript: function( ) {}
+    loadMapsScript: function( ) {
+
+    }
   };
 
-  $.fn.geopointpicker = function( option ) {
+  $.fn[ pluginName ] = function( option ) {
     var loadStarted = false;
 
     return this.each( function( ) {
       var $this = $( this ),
-        data = $( this ).data( 'geopointwidget' ),
+        data = $( this ).data( pluginName ),
         options = typeof option == 'object' && option;
       //for some reason, calling this inside the Geopointpicker class does not work properly
       if ( !loadStarted && ( typeof google == 'undefined' || typeof google.maps == 'undefined' ) && !option.touch ) {
@@ -337,7 +358,7 @@
         document.body.appendChild( script );
       }
       if ( !data ) {
-        $this.data( 'geopointwidget', ( data = new Geopointpicker( this, options ) ) );
+        $this.data( pluginName, ( data = new Geopointpicker( this, options ) ) );
       }
       if ( typeof option == 'string' ) {
         data[ option ]( );
@@ -345,6 +366,6 @@
     } );
   };
 
-  $.fn.geopointpicker.Constructor = Geopointpicker;
+  $.fn[ pluginName ].Constructor = Geopointpicker;
 
 } ) );
