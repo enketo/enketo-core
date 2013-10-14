@@ -11,6 +11,10 @@ requirejs.config( {
     'xpath': {
       exports: 'XPathJS'
     },
+    'bootstrap': {
+      deps: [ 'jquery' ],
+      exports: 'jQuery.fn.bootstrap'
+    },
     'bootstrap-datepicker/js/bootstrap-datepicker': {
       deps: [ 'jquery' ],
       exports: 'jQuery.fn.datepicker'

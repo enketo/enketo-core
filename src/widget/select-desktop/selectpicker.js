@@ -159,7 +159,7 @@
 
         if ( selectedBefore ) {
           $li.removeClass( 'active' );
-          $input.prop( 'checked', false ); //.removeAttr('checked');
+          $input.prop( 'checked', false );
           $option.prop( 'selected', false );
         } else {
           if ( !_this.multiple ) {
