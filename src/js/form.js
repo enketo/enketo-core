@@ -1079,7 +1079,7 @@ define(
         //profiler.report();
 
         //profiler = new Profiler('branch.init()');
-        this.branch.init( );
+        this.branch.init( ); //after widgets.init()
         //profiler.report();
 
         //profiler = new Profiler('outputUpdate initial');
@@ -1682,9 +1682,10 @@ define(
           if ( this.selfRelevant( $branchNode ) || virgin ) {
             $branchNode.addClass( 'disabled' ); //;
 
-            if ( typeof settings !== 'undefined' && typeof settings.showBranch !== 'undefined' && !settings.showBranch ) {
-              $branchNode.hide( 250 );
-            }
+            //if ( typeof settings !== 'undefined' && typeof settings.showBranch !== 'undefined' && !settings.showBranch ) {
+            console.log( 'hiding branch', $branchNode );
+            $branchNode.hide( 250 );
+            //}
 
             //if the branch was previously enabled
             if ( !virgin ) {
@@ -1948,13 +1949,8 @@ define(
               $label.prepend( '<span class="jr-constraint-msg active" lang="">Value not allowed</span>' );
             }
           } );
-
+        //TODO: move to XSLT
         $form.find( '.trigger' ).addClass( 'alert alert-block' );
-        //$form.find('label:not(.geo), fieldset').addClass('clearfix');
-        /*$form.find(':checkbox, :radio').each(function(){
-        var $p = $(this).parent('label'); 
-        $(this).detach().prependTo($p);
-        });*/
 
         //move constraint message to bottom of question and add message for required (could also be done in XSLT)
         //TODO: move to XSLT
@@ -1964,35 +1960,6 @@ define(
           $wrapper.append( $msg );
           $msg.after( '<span class="jr-required-msg active" lang="">This field is required</span>' );
         } );
-
-        //if ( !modernizr.touch ) {
-        //  $( '.form-header [title]' ).tooltip( {
-        //    placement: 'bottom'
-        //  } );
-        //}
-      };
-
-      /**
-       * Enhancements to the basic built-in html behaviour of form controls
-       *
-       * In the future it would probably be wise to standardize this. E.g. each form control widget needs to:
-       * - have a widget class attribute
-       * - load default values from the original input element
-       * - have a 'swap language' function responding to a 'changelanguage' event
-       * - disable when its parent branch is hidden (also when hidden upon initialization)
-       * - enable when its parent branch is revealed
-       * - allow setting an empty value (that empties node in instance)
-       * - input elements inside widgets need to get the ignore class
-       * - send a focus event to the original input when the widget gets focus
-       * - for extra robustness: if the widget already exists, destroy it first
-       *
-       * Considering the ever-increasing code size of the widgets and their dependence on the UI library being used,
-       * it would be good to move them to a separate javascript file.
-       * (If typeof widgets === undefined, widgets are not loaded)
-       *
-       * @type {Object}
-       */
-      FormHTML.prototype.widgets = {
 
       };
 
