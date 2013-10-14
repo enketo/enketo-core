@@ -199,6 +199,10 @@
       console.debug( 'selectpicker enable called' );
     },
     disable: function( ) {
+      //disables the default link behaviour in disabled state
+      this.$newElement.find( 'a.dropdown-toggle' ).on( 'click', function( event ) {
+        event.preventDefault( );
+      } );
       console.debug( 'selectpicker disable called' );
     },
     update: function( ) {

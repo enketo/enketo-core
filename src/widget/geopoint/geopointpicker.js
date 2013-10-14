@@ -310,7 +310,7 @@ define( [ 'jquery', 'gmapsDone' ], function( $, gmapsDone ) {
       //TODO: enable eventhandler for map
     },
     disable: function( element ) {
-      console.debug( pluginame, 'disable called' );
+      console.debug( pluginName, 'disable called' );
       //TODO: disable eventhandler for map
     },
     update: function( element ) {

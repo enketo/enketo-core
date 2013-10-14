@@ -51,7 +51,7 @@
     },
 
     disable: function( ) {
-      console.debug( pluginame, 'disable called' );
+      console.debug( pluginName, 'disable called' );
     },
 
     update: function( ) {

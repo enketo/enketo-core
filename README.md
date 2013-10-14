@@ -13,6 +13,7 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 * [enketo-xslt-transformer-node] - To follow
 * [enketo-dristhi](https://github.com/MartijnR/enketo-dristhi)
 * [file-manager](https://github.com/MartijnR/file-manager)
+* [openrosa-forms](https://github.com/MartijnR/openrosa-forms) - bunch of test forms, for development
 
 ###How to Use
 
@@ -21,7 +22,7 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 ###How to create or extend widgets elements
 
 The form [dev.html](dev.html) is a useful form to test widgets. This [plugin template](https://gist.github.com/MartijnR/6943281) may also be useful for new widgets. 
-The options {touch: boolean, repeat: boolean}, are added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
+The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
 
 Each widget needs to follow the following:
 
@@ -35,7 +36,7 @@ Each widget needs to follow the following:
 * new input/select/textarea elements inside widgets need to get the `ignore` class
 * it requires the following methods:
 	* `destroy()` to totally destroy widgets in repeat groups/questions when these groups/questions are cloned This may be an empty function if:
-		* the option { repeat: [boolean] } is used in such a way that issues with cloned eventhandlers are resolved, or:
+		* a deep `$.clone(true, true)` of the widget (incl data and eventhandlers) works without problems (problems are likely!)
 		* the widget simply changes the DOM and doesn't have issues when the question is cloned.
 	* `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
 	* `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when a branch becomes irrelevant.

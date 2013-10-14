@@ -1690,7 +1690,7 @@ define(
             //if the branch was previously enabled
             if ( !virgin ) {
               $branchNode.clearInputs( 'change' );
-              widgets.enable( $branchNode );
+              widgets.disable( $branchNode );
               //all remaining fields marked as invalid can now be marked as valid
               $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function( ) {
                 parent.setValid( $( this ) );
