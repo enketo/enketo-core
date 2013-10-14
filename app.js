@@ -5,7 +5,8 @@ requirejs.config( {
     widget: '../src/widget',
     text: 'text/text',
     xpath: 'xpath/build/xpathjs_javarosa',
-    config: '../config.json'
+    config: '../config.json',
+    gmaps: 'http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded'
   },
   shim: {
     'xpath': {

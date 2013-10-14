@@ -2,15 +2,7 @@
  * Geopoint widget(s)
  */
 
-( function( factory ) {
-  if ( typeof define === 'function' && define.amd ) {
-    // AMD. Register as an anonymous module.
-    define( [ 'jquery' ], factory );
-  } else {
-    // Browser globals
-    factory( jQuery );
-  }
-}( function( $ ) {
+define( [ 'jquery', 'gmapsDone' ], function( $, gmapsDone ) {
   "use strict";
 
   var pluginName = 'geopointpicker';
@@ -119,22 +111,14 @@
       }
 
       if ( !this.touch ) {
-        if ( that.dynamicMapAvailable( ) ) {
-          that.updateMap( 0, 0, 1 );
-          if ( that.$search ) {
-            that.enableSearch( );
-          }
-        } else {
-          this.$form.on( 'googlemapsscriptloaded', function( ) {
-            if ( that.dynamicMapAvailable( ) ) {
-              //default map view
-              that.updateMap( 0, 0, 1 );
-              if ( that.$search ) {
-                that.enableSearch( );
-              }
+        gmapsDone( function( ) {
+          if ( that.dynamicMapAvailable( ) ) {
+            that.updateMap( 0, 0, 1 );
+            if ( that.$search ) {
+              that.enableSearch( );
             }
-          } );
-        }
+          }
+        } );
       } else if ( this.$map ) {
         this.updateMapFn = "updateStaticMap";
         this.updateMap( 0, 0, 1 );
@@ -347,19 +331,6 @@
         data = $( this ).data( pluginName ),
         options = options || {};
 
-      //for some reason, calling this inside the Geopointpicker class does not work properly
-      if ( !loadStarted && ( typeof google == 'undefined' || typeof google.maps == 'undefined' ) && !options.touch ) {
-        loadStarted = true;
-        var apiKey = options.apiKey || '',
-          script = document.createElement( "script" );
-        window.googleMapsInit = function( ) {
-          $( 'form.jr' ).trigger( 'googlemapsscriptloaded' );
-        };
-        script.type = "text/javascript";
-        script.src = "https://maps.googleapis.com/maps/api/js?v=3.exp&key=" + apiKey +
-          "&sensor=false&libraries=places&callback=googleMapsInit";
-        document.body.appendChild( script );
-      }
       if ( !data ) {
         $this.data( pluginName, ( data = new Geopointpicker( this, options ) ) );
       }
@@ -371,4 +342,4 @@
 
   $.fn[ pluginName ].Constructor = Geopointpicker;
 
-} ) );
+} );
