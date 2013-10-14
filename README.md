@@ -3,7 +3,7 @@ enketo-core [![Build Status](https://travis-ci.org/MartijnR/enketo-core.png)](ht
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to develop your own Enketo-powered app! Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
-##Currently undergoing major modernization work!
+##Currently undergoing massive modernization work! See the [requirejs branch](https://github.com/martijnr/enketo-core/tree/requirejs) to see where it is headed.
 
 ###Related Projects
 
