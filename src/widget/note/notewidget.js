@@ -67,8 +67,9 @@
   $.fn[ pluginName ] = function( options, event ) {
     return this.each( function( ) {
       var $this = $( this ),
-        data = $this.data( pluginName ),
-        options = options || {};
+        data = $this.data( pluginName );
+
+      options = options || {};
 
       if ( !data ) {
         $this.data( pluginName, ( data = new Notewidget( this, options, event ) ) );

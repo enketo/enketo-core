@@ -2210,7 +2210,7 @@ define(
           }
           $parent = $node.parent( 'fieldset.jr-group' );
           $master = $parent.children( 'fieldset.jr-repeat:not(.clone)' ).eq( 0 );
-          $clone = $master.clone( false ); //deep cloning with button events causes problems
+          $clone = $master.clone( true, true );
 
           //add clone class 
           //remove any clones inside this clone.. (cloned repeats within repeats..), also remove all widgets 

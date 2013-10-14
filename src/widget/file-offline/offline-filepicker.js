@@ -1,17 +1,18 @@
 /**
  * Offline-file picker widget
  */
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-}(function ($) {
-
+( function( factory ) {
+  if ( typeof define === 'function' && define.amd ) {
+    // AMD. Register as an anonymous module.
+    define( [ 'jquery' ], factory );
+  } else {
+    // Browser globals
+    factory( jQuery );
+  }
+}( function( $ ) {
   "use strict";
+
+  var pluginName = 'geopointpicker';
   /**
    * File picker Class
    * @constructor
@@ -21,35 +22,35 @@
    */
   var OfflineFilepicker = function( element, options, e ) {
     if ( e ) {
-      e.stopPropagation();
-      e.preventDefault();
+      e.stopPropagation( );
+      e.preventDefault( );
     }
     this.$fileInput = $( element );
     this.nameAttr = this.$fileInput.attr( 'name' );
     this.$fileNameInput = null;
-    this.init();
+    this.init( );
   };
 
   OfflineFilepicker.prototype = {
 
     constructor: OfflineFilepicker,
 
-    init: function() {
+    init: function( ) {
       this.$fileInput.addClass( 'ignore' );
       this.$fileNameInput = $( '<input type="hidden" />' ).attr( 'name', this.nameAttr ).after( this.$fileInput );
-      this.changeListener();
+      this.changeListener( );
     },
 
-    changeListener: function() {
+    changeListener: function( ) {
       var that = this;
 
       this.$fileInput.on( 'change', function( e ) {
-        e.stopImmediatePropagation();
+        e.stopImmediatePropagation( );
 
       } );
     },
 
-    getPersistentName: function() {
+    getPersistentName: function( ) {
 
     }
   };
@@ -59,21 +60,21 @@
    * @param {({btnStyle: string, noneSelectedText: string, maxlength:number}|string)=} option options
    * @param {*=} event       [description]
    */
-  $.fn.offlineFilepicker = function( option, event ) {
-    return this.each( function() {
+  $.fn[ pluginName ] = function( option, event ) {
+
+    return this.each( function( ) {
       var $this = $( this ),
-        data = $this.data( 'offlinefilepicker' ),
-        options = typeof option == 'object' && option;
+        data = $this.data( pluginName );
+
+      options = options || {};
 
       if ( !data ) {
-        $this.data( 'offlinefilepicker', ( data = new OfflineFilepicker( this, options, event ) ) );
+        $this.data( pluginName, ( data = new OfflineFilepicker( this, options, event ) ) );
       }
-      if ( typeof option == 'string' ) {
-        data[ option ]();
+      if ( typeof options == 'string' ) {
+        data[ options ]( );
       }
     } );
   };
 
-  $.fn.offlineFilepicker.Constructor = OfflineFilepicker;
-
-} ));
+} ) );

@@ -59,7 +59,7 @@ define( [ 'jquery', 'gmapsDone' ], function( $, gmapsDone ) {
     this.$alt = this.$widget.find( '[name="alt"]' );
     this.$acc = this.$widget.find( '[name="acc"]' );
 
-    this.$inputOrigin.hide( ).after( this.$widget );
+    this.$inputOrigin.hide( ).after( this.$widget ).parent( ).addClass( 'clearfix' );
     this.updateMapFn = "updateDynamicMap";
     this.touch = options.touch || false;
     this.init( );
@@ -69,15 +69,11 @@ define( [ 'jquery', 'gmapsDone' ], function( $, gmapsDone ) {
 
     constructor: Geopointpicker,
 
-    //TODO: this is where the Maps API script load function should be called
     init: function( ) {
       var that = this,
         inputVals = this.$inputOrigin.val( ).split( ' ' );
 
-      this.$inputOrigin.parent( ).addClass( 'clearfix' );
-
       this.$widget.find( 'input:not([name="search"])' ).on( 'change change.bymap change.bysearch', function( event ) {
-        //console.debug('change event detected');
         var lat = ( that.$lat.val( ) !== '' ) ? that.$lat.val( ) : 0.0,
           lng = ( that.$lng.val( ) !== '' ) ? that.$lng.val( ) : 0.0,
           alt = ( that.$alt.val( ) !== '' ) ? that.$alt.val( ) : 0.0,
@@ -215,9 +211,9 @@ define( [ 'jquery', 'gmapsDone' ], function( $, gmapsDone ) {
       var params,
         width = this.$map.width( ),
         height = this.$map.height( ),
-        mapsAPIKey = settings[ 'mapsStaticAPIKey' ] || '';
+        mapsAPIKeyStr = ( typeof settings !== 'undefined' && settings[ 'mapsStaticAPIKey' ] ) ? '&key=' + settings[ 'mapsStaticAPIKey' ] : '';
 
-      params = "center=" + lat + "," + lng + "&size=" + width + "x" + height + "&zoom=" + zoom + "&sensor=false&key=" + mapsAPIKey;
+      params = "center=" + lat + "," + lng + "&size=" + width + "x" + height + "&zoom=" + zoom + "&sensor=false" + mapsAPIKeyStr;
       this.$map.empty( ).append( '<img src="http://maps.googleapis.com/maps/api/staticmap?' + params + '"/>' );
     },
     /**
@@ -298,48 +294,48 @@ define( [ 'jquery', 'gmapsDone' ], function( $, gmapsDone ) {
       this.$alt.val( Math.round( alt * 10 ) / 10 );
       this.$acc.val( Math.round( acc * 10 ) / 10 ).trigger( ev );
     },
-    destroy: function( ) {
+    /**
+     * Destroys the widget and returns it to its original state
+     * @param  {Element} element The element on which to destroy the widget. NOTE: this.$widget of a cloned widget returns the original!
+     */
+    destroy: function( element ) {
+      $( element )
+        .removeData( )
+        .show( )
+        .next( '.geopoint.widget' ).remove( );
       console.debug( pluginName, 'destroy called' );
     },
-
-    enable: function( ) {
+    enable: function( element ) {
       console.debug( pluginName, 'enable called' );
       //TODO: enable eventhandler for map
     },
-
-    disable: function( ) {
+    disable: function( element ) {
       console.debug( pluginame, 'disable called' );
       //TODO: disable eventhandler for map
     },
-
-    update: function( ) {
+    update: function( element ) {
       console.debug( pluginName, 'update called' );
-    },
-    /**
-     * In enketo the loading of the GMaps resources is dealt with in the Connection class.
-     */
-    loadMapsScript: function( ) {
-
     }
   };
 
-  $.fn[ pluginName ] = function( options ) {
+  $.fn[ pluginName ] = function( options, event ) {
     var loadStarted = false;
 
     return this.each( function( ) {
       var $this = $( this ),
-        data = $( this ).data( pluginName ),
-        options = options || {};
+        data = $( this ).data( pluginName );
+
+      options = options || {};
 
       if ( !data ) {
-        $this.data( pluginName, ( data = new Geopointpicker( this, options ) ) );
+        $this.data( pluginName, ( data = new Geopointpicker( this, options, event ) ) );
       }
+
       if ( typeof options == 'string' ) {
-        data[ options ]( );
+        //pass the context, used for destroy() as this method is called on a cloned widget
+        data[ options ]( this );
       }
     } );
   };
-
-  $.fn[ pluginName ].Constructor = Geopointpicker;
 
 } );

@@ -101,8 +101,6 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
   function destroy( $group ) {
     var widget, $els;
 
-    console.debug( 'destroying widgets, where necessary in ', $group );
-
     for ( var i = 0; i < widgetConfig.length; i++ ) {
       widget = widgetConfig[ i ];
       $els = $group.find( widget.selector );
@@ -116,14 +114,12 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
    */
 
   function create( $group ) {
-    var widget, $els,
-      repeat = $group.hasClass( 'jr-repeat' );
+    var widget, $els;
 
     for ( var i = 0; i < widgetConfig.length; i++ ) {
       widget = widgetConfig[ i ];
       widget.options = widget.options || {};
       widget.options.touch = modernizr.touch;
-      widget.options.repeat = repeat;
 
       if ( !widget.name || !widget.selector ) {
         return console.error( 'widget configuration has no name and/or selector property', widget );
