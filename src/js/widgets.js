@@ -53,6 +53,9 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
    * Enables widgets if they weren't enabled already when the branch was enabled by the controller.
    * In most widgets, this function will do nothing because the disabled attribute was automatically removed from all
    * fieldsets, inputs, textareas and selects inside the branch element provided as parameter.
+   * Note that this function can be called before the widgets have been initialized and will in that case do nothing. This is
+   * actually preferable than waiting for create() to complete, because enable() will never do anything that isn't
+   * done during create().
    * @param  {[type]} $group [description]
    * @return {[type]}        [description]
    */

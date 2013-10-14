@@ -26,20 +26,19 @@
 
     init: function( ) {
       var that = this;
-      setTimeout( function( ) {
-        // When loading a form dynamically the DOM elements don't have a width yet (width = 0), 
-        // so we call this with a bit of a delay.
-        $( this.element ).parent( ).parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
-          .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
-            // remove the odd input element that XLSForm adds for the 'easier method'
-            // see https://github.com/modilabs/pyxform/issues/72
-            $( this ).find( 'input[readonly]' ).remove( );
-            // fix the column widths
+      $( this.element ).parent( ).parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
+        .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
+          // remove the odd input element that XLSForm adds for the 'easier table method'
+          // see https://github.com/modilabs/pyxform/issues/72
+          $( this ).find( 'input[readonly]' ).remove( );
+          // fix the column widths, after any ongoing animations have finished
+          $( this ).promise( ).done( function( ) {
             $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
             $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth( );
             $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
+
           } );
-      }, 50 );
+        } );
     },
 
     destroy: function( ) {
@@ -48,6 +47,7 @@
 
     enable: function( ) {
       console.debug( pluginName, 'enable called' );
+      this.init( );
     },
 
     disable: function( ) {
