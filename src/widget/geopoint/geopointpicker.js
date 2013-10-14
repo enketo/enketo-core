@@ -32,6 +32,7 @@
         '<button type="button" class="btn add-on"><i class="icon-search"></i>' +
         '</div>',
       map = '<div class="map-canvas-wrapper"><div class="map-canvas"></div></div>';
+    this.options = options;
     this.$inputOrigin = $( element );
     this.$form = this.$inputOrigin.closest( 'form' );
     this.$widget = $(
@@ -144,8 +145,7 @@
           window.setTimeout( function( ) {
             if ( resizeCount == $( window ).data( 'resizecount' ) ) {
               $( window ).data( 'resizecount', 0 );
-              //do the things
-              console.debug( 'resizing stopped' );
+              //do all the things when resizing stops
               that.updateMap( );
             }
           }, 500 );
@@ -320,10 +320,12 @@
 
     enable: function( ) {
       console.debug( pluginName, 'enable called' );
+      //TODO: enable eventhandler for map
     },
 
     disable: function( ) {
       console.debug( pluginame, 'disable called' );
+      //TODO: disable eventhandler for map
     },
 
     update: function( ) {
@@ -337,17 +339,18 @@
     }
   };
 
-  $.fn[ pluginName ] = function( option ) {
+  $.fn[ pluginName ] = function( options ) {
     var loadStarted = false;
 
     return this.each( function( ) {
       var $this = $( this ),
         data = $( this ).data( pluginName ),
-        options = typeof option == 'object' && option;
+        options = options || {};
+
       //for some reason, calling this inside the Geopointpicker class does not work properly
-      if ( !loadStarted && ( typeof google == 'undefined' || typeof google.maps == 'undefined' ) && !option.touch ) {
+      if ( !loadStarted && ( typeof google == 'undefined' || typeof google.maps == 'undefined' ) && !options.touch ) {
         loadStarted = true;
-        var apiKey = option.apiKey || '',
+        var apiKey = options.apiKey || '',
           script = document.createElement( "script" );
         window.googleMapsInit = function( ) {
           $( 'form.jr' ).trigger( 'googlemapsscriptloaded' );
@@ -360,8 +363,8 @@
       if ( !data ) {
         $this.data( pluginName, ( data = new Geopointpicker( this, options ) ) );
       }
-      if ( typeof option == 'string' ) {
-        data[ option ]( );
+      if ( typeof options == 'string' ) {
+        data[ options ]( );
       }
     } );
   };

@@ -52,7 +52,7 @@
     this.lengthmax = options.maxlength || 20;
     this.multiple = ( typeof this.$element.attr( 'multiple' ) !== 'undefined' && this.$element.attr( 'multiple' ) !== false );
     this.init( );
-  };
+  }
 
   Selectpicker.prototype = {
 
@@ -213,17 +213,17 @@
    * @param {({btnStyle: string, noneSelectedText: string, maxlength:number}|string)=} option options
    * @param {*=} event       [description]
    */
-  $.fn[ pluginName ] = function( option, event ) {
+  $.fn[ pluginName ] = function( options, event ) {
     return this.each( function( ) {
       var $this = $( this ),
         data = $this.data( pluginName ),
-        options = typeof option == 'object' && option;
+        options = options || {};
 
       if ( !data ) {
         $this.data( pluginName, ( data = new Selectpicker( this, options, event ) ) );
       }
-      if ( typeof option == 'string' ) {
-        data[ option ]( );
+      if ( typeof options == 'string' ) {
+        data[ options ]( );
       }
     } );
   };

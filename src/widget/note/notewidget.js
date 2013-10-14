@@ -64,17 +64,17 @@
     }
   };
 
-  $.fn[ pluginName ] = function( option, event ) {
+  $.fn[ pluginName ] = function( options, event ) {
     return this.each( function( ) {
       var $this = $( this ),
         data = $this.data( pluginName ),
-        options = typeof option == 'object' && option;
+        options = options || {};
 
       if ( !data ) {
         $this.data( pluginName, ( data = new Notewidget( this, options, event ) ) );
       }
-      if ( typeof option == 'string' ) {
-        data[ option ]( );
+      if ( typeof options == 'string' ) {
+        data[ options ]( );
       }
     } );
   };
