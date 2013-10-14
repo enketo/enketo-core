@@ -29,7 +29,7 @@
  */
 
 define(
-  [ 'xpath', 'modernizr', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', ],
+  [ 'xpath', 'modernizr', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', 'bootstrap' ],
 
   function( XPathJS, modernizr, widgets, $ ) {
     "use strict";
