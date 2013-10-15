@@ -1,0 +1,6 @@
+{
+	"name": "radiopicker",
+	"stylesheet": "radiopicker.scss",
+	"selector": null,
+	"options": {}
+}

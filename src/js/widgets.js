@@ -15,21 +15,34 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     require( globalConfig.widgets, function( ) {
       var id, widgetConfigFiles = [ ];
 
-      console.log( 'widget modules loaded', arguments );
+      console.log( 'widget modules loaded', arguments.length );
+
       //add widget configuration to config object
       for ( var i = 0; i < globalConfig.widgets.length; i++ ) {
         id = 'text!' + globalConfig.widgets[ i ].substr( 0, globalConfig.widgets[ i ].lastIndexOf( '/' ) + 1 ) + 'config.json';
         widgetConfigFiles.push( id );
       }
+
       require( widgetConfigFiles, function( ) {
         for ( var i = 0; i < arguments.length; i++ ) {
           widgetConfig.push( JSON.parse( arguments[ i ] ) );
         }
-        console.log( 'widget config files loaded', widgetConfig[ 0 ] );
+        console.log( 'widget config files loaded', widgetConfig );
         loaded = true;
         callback( );
       } );
     } );
+  }
+
+  /**
+   * Returns the elements on which to apply the widget
+   * @param  {jQuery} $group   a jQuery-wrapped element
+   * @param  {string} selector if the selector is null, the form element will be returned
+   * @return {jQuery}          a jQuery collection
+   */
+
+  function getElements( $group, selector ) {
+    return ( selector ) ? $group.find( selector ) : $form;
   }
 
   /**
@@ -67,7 +80,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
 
     for ( var i = 0; i < widgetConfig.length; i++ ) {
       widget = widgetConfig[ i ];
-      $els = $group.find( widget.selector );
+      $els = getElements( $group, widget.selector );
       $els[ widget.name ]( 'enable' );
     }
   }
@@ -86,7 +99,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
 
     for ( var i = 0; i < widgetConfig.length; i++ ) {
       widget = widgetConfig[ i ];
-      $els = $group.find( widget.selector );
+      $els = getElements( $group, widget.selector );
       $els[ widget.name ]( 'disable' );
     }
   }
@@ -103,7 +116,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
 
     for ( var i = 0; i < widgetConfig.length; i++ ) {
       widget = widgetConfig[ i ];
-      $els = $group.find( widget.selector );
+      $els = getElements( $group, widget.selector );
       $els[ widget.name ]( 'destroy' );
     }
   }
@@ -121,10 +134,10 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
       widget.options = widget.options || {};
       widget.options.touch = modernizr.touch;
 
-      if ( !widget.name || !widget.selector ) {
+      if ( !widget.name || ( !widget.selector && !widget.selector === null ) ) {
         return console.error( 'widget configuration has no name and/or selector property', widget );
       }
-      $els = $group.find( widget.selector );
+      $els = getElements( $group, widget.selector );
       $els[ widget.name ]( widget.options );
 
       setLangChangeHandler( widget, $els );

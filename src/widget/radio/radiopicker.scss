@@ -1,0 +1,14 @@
+//turns radio button/ checkbox into large button
+.btn-radiocheck {
+  @include box-shadow-touch;
+  @include border-radius(2px);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  width: 100%;
+  line-height: 40px;
+  text-align: left;
+  margin-bottom: .4em;
+  background-color: #f0f0f0;
+  input {
+    margin-left: 15px;}
+  &:focus, &:hover, &:active, &[data-checked] {
+    background-color: lighten($accent-color-1, 50%); } }

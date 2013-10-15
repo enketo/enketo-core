@@ -48,40 +48,7 @@ var obj = {
     this.radioCheckWidget( );
     this.radioUnselectWidget( );
   },
-  //applies a data-checked attribute to the parent label of a checked checkbox and radio button
-  //used in radioUnselect widget and touch screen styling
-  radioCheckWidget: function( ) {
-    if ( !this.repeat ) {
-      var $label;
-      $form.on( 'click', 'input[type="radio"]:checked', function( event ) {
-        $( this ).parent( 'label' ).siblings( ).removeAttr( 'data-checked' ).end( ).attr( 'data-checked', 'true' );
-      } );
-      $form.on( 'click', 'input[type="checkbox"]', function( event ) {
-        $label = $( this ).parent( 'label' );
-        if ( $( this ).is( ':checked' ) ) $label.attr( 'data-checked', 'true' );
-        else $label.removeAttr( 'data-checked' );
-      } );
-      //defaults
-      $form.find( 'input[type="radio"]:checked, input[type="checkbox"]:checked' ).parent( 'label' ).attr( 'data-checked', 'true' );
-    }
-  },
-  radioUnselectWidget: function( ) {
-    if ( !this.repeat ) {
-      $form.on( 'click', '[data-checked]>input[type="radio"]', function( event ) {
-        $( this ).prop( 'checked', false ).trigger( 'change' ).parent( ).removeAttr( 'data-checked' );
-      } );
-    }
-  },
-  //TODO: check performance difference if this is done in pure CSS instead of with the help of javascript.
-  touchRadioCheckWidget: function( ) {
-    if ( !this.repeat ) {
-      $form.find( 'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact, .jr-appearance-label, .jr-appearance-list-nolabel )' )
-        .children( 'label' )
-        .children( 'input[type="radio"], input[type="checkbox"]' )
-        .parent( 'label' )
-        .addClass( 'btn-radiocheck' );
-    }
-  },
+
   dateWidget: function( ) {
     this.$group.find( 'input[type="date"]' ).each( function( ) {
       var $dateI = $( this ),

@@ -3,6 +3,7 @@
 		"widget/select-desktop/selectpicker",
 		"widget/geopoint/geopointpicker",
 		"widget/table/tablewidget",
-		"widget/note/notewidget"
+		"widget/note/notewidget",
+		"widget/radio/radiopicker"
 	]
 }
