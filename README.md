@@ -35,17 +35,16 @@ Each widget needs to follow the following:
 * [to check: it needs to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)]
 * new input/select/textarea elements inside widgets need to get the `ignore` class
 * it requires the following methods:
-	* `destroy()` to totally destroy widgets in repeat groups/questions when these groups/questions are cloned This may be an empty function if:
+	* `destroy()` to totally destroy widgets in *repeat* groups/questions when these groups/questions are cloned This may be an empty function if:
 		* a deep `$.clone(true, true)` of the widget (incl data and eventhandlers) works without problems (problems are likely!)
 		* the widget simply changes the DOM and doesn't have issues when the question is cloned.
 	* `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
 	* `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when a branch becomes irrelevant.
 	* `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest forms this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
-* instantiate as disabled when an ancestor (`<fieldset>`) is disabled
-* if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option { touch: [boolean] } is passed to the plugin by default. If your widget supports both, you could create an all-in-one widget or create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
-* allow setting an empty value (that empties node in instance)
+* if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option { touch: [boolean] } is passed to the plugin by default. If your widget requires tweak for mobile, you could create an all-in-one widget using the options.touch check or create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
+* allow clearing of the original input (setting value to '')
 * [to check: send a focus event to the original input when the widget gets focus]
-* for extra robustness where applicable: if the widget already exists, destroy it first
+* [for extra robustness where applicable: if the widget already exists, destroy it first]
 
 ###Notes for All Developers
 
