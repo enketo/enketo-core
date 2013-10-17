@@ -1,6 +1,7 @@
 {
 	"widgets": [
 		"widget/select-desktop/selectpicker",
+		"widget/select-mobile/selectpicker",
 		"widget/geopoint/geopointpicker",
 		"widget/table/tablewidget",
 		"widget/note/notewidget",

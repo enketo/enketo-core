@@ -196,25 +196,7 @@ var obj = {
       }
     } );
   },
-  mobileSelectWidget: function( ) {
-    var showSelectedValues = function( $select ) {
-      var values = ( $.isArray( $select.val( ) ) ) ? $select.val( ) : [ $select.val( ) ],
-        valueText = [ ];
-      for ( var i = 0; i < values.length; i++ ) {
-        valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text( ) );
-      }
-      $select.siblings( '.widget.mobileselect' ).remove( );
-      $select.after( '<span class="widget mobileselect">' + values.join( ', ' ) + '</span>' );
-    };
-    $form.on( 'change', 'select[multiple]', function( ) {
-      showSelectedValues( $( this ) );
-      return true;
-    } );
-    //show defaults
-    $form.find( 'select[multiple]' ).each( function( ) {
-      showSelectedValues( $( this ) );
-    } );
-  },
+
   //transforms triggers to page-break elements //REMOVE WHEN NIGERIA FORMS NO LONGER USE THIS
   pageBreakWidget: function( ) {
     if ( !this.repeat ) {
