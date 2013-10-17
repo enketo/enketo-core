@@ -1,4 +1,4 @@
-//extend native objects..... really I see no harm!
+//extend native objects, aka monkey patching ..... really I see no harm!
 
 define( function( window ) {
 	/**

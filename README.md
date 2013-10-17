@@ -3,7 +3,7 @@ enketo-core [![Build Status](https://travis-ci.org/MartijnR/enketo-core.png)](ht
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to develop your own Enketo-powered app! Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
-##Currently undergoing massive modernization work! See the [requirejs branch](https://github.com/martijnr/enketo-core/tree/requirejs) to see where it is headed.
+##Under Active Reorganization!.
 
 ###Related Projects
 
@@ -21,26 +21,31 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to deve
 
 ###How to create or extend widgets elements
 
-The form [dev.html](dev.html) is a useful form to test widgets. This [plugin template](https://gist.github.com/MartijnR/6943281) may also be useful for new widgets. 
+The form [dev.html](dev.html) is a useful form to test widgets. This [plugin template](https://gist.github.com/MartijnR/6943281) may also be useful for new widgets. It is recommended to use this template.
 The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
 
 Each widget needs to follow the following:
 
 * be an AMD-compliant jQuery plugin
-* be in its own folder with a config.json file
+* be in its own folder with a config.json file, including
+	* `name: ` the name of the widget used to instantiate it
+	* `selector: ` the selector of the elements to instantiate the widget on, or `null` if it needs to be applied globally
+	* `options: ` any default options to pass
+	* `stylesheet: ` path to stylesheet scss file relative to the widget's own folder
 * be responsive up to a minimum window width of 320px
 * use JSDoc style documentation for the purpose of passing the Google Closure Compiler without warnings and errors
 * if hiding original input element, it needs to load the default value from that input element into the widget
 * if hiding original input element, it needs to keep it up-to-date and trigger a change event on it whenever it updates
-* [to check: it needs to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)]
+* it is recommended to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
 * new input/select/textarea elements inside widgets need to get the `ignore` class
-* it requires the following methods:
-	* `destroy()` to totally destroy widgets in *repeat* groups/questions when these groups/questions are cloned This may be an empty function if:
+* it requires the following methods (which can be automatically obtained by extending the Widget base class as demonstrated in the [plugin template](https://gist.github.com/MartijnR/6943281)
+	* `destroy(element)` to totally destroy widgets in *repeat* groups/questions when these groups/questions are cloned This may be an empty function if:
 		* a deep `$.clone(true, true)` of the widget (incl data and eventhandlers) works without problems (problems are likely!)
 		* the widget simply changes the DOM and doesn't have issues when the question is cloned.
 	* `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
 	* `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when a branch becomes irrelevant.
 	* `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest forms this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
+* any eventhandlers added to the original input should be namespaced (if extending thew Widget base class, this can be obtained as this.namespace)
 * if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option { touch: [boolean] } is passed to the plugin by default. If your widget requires tweak for mobile, you could create an all-in-one widget using the options.touch check or create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow clearing of the original input (setting value to '')
 * [to check: send a focus event to the original input when the widget gets focus]
