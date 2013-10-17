@@ -1,22 +1,27 @@
 /**
- * Note widget (turns notes into triggers)
+ * @preserve Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-( function( factory ) {
-  if ( typeof define === 'function' && define.amd ) {
-    // AMD. Register as an anonymous module.
-    define( [ 'jquery', 'js/plugins' ], factory );
-  } else {
-    // Browser globals
-    factory( jQuery );
-  }
-}( function( $ ) {
+define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
   "use strict";
 
   var pluginName = 'notewidget';
 
   /**
-   * [Notewidget description]
+   * Enhances notes
+   *
    * @constructor
    * @param {Element} element [description]
    * @param {(boolean|{touch: boolean, repeat: boolean})} options options
@@ -24,44 +29,29 @@
    */
 
   function Notewidget( element, options ) {
-    this.element = element;
-    this.options = options;
-    this.name = pluginName;
-    this.init( );
+    Widget.call( this, element, options );
+    this._init( );
   }
 
-  Notewidget.prototype = {
+  //copy the prototype functions from the Widget super class
+  Notewidget.prototype = Object.create( Widget.prototype );
 
-    init: function( ) {
-      $( this.element ).parent( 'label' ).each( function( ) {
-        console.log( 'converting readonly to trigger', $( this ) );
-        var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
-          branch = ( relevant ) ? ' jr-branch pre-init' : '',
-          name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
-          attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
-          value = $( this ).find( 'input, select, textarea' ).val( ),
-          html = $( this ).markdownToHtml( ).html( );
-        $( '<fieldset class="trigger alert alert-block' + branch + '" ' + attributes + '></fieldset>' )
-          .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove( );
-        $( this ).remove( );
-      } );
-    },
+  //ensure the constructor is the new one
+  Notewidget.prototype.constructor = Notewidget;
 
-    destroy: function( ) {
-      console.debug( pluginName, 'destroy called' );
-    },
-
-    enable: function( ) {
-      console.debug( pluginName, 'enable called' );
-    },
-
-    disable: function( ) {
-      console.debug( pluginame, 'disable called' );
-    },
-
-    update: function( ) {
-      console.debug( pluginName, 'update called' );
-    }
+  Notewidget.prototype._init = function( ) {
+    $( this.element ).parent( 'label' ).each( function( ) {
+      console.log( 'converting readonly to trigger', $( this ) );
+      var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
+        branch = ( relevant ) ? ' jr-branch pre-init' : '',
+        name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
+        attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
+        value = $( this ).find( 'input, select, textarea' ).val( ),
+        html = $( this ).markdownToHtml( ).html( );
+      $( '<fieldset class="trigger alert alert-block' + branch + '" ' + attributes + '></fieldset>' )
+        .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove( );
+      $( this ).remove( );
+    } );
   };
 
   $.fn[ pluginName ] = function( options, event ) {
@@ -71,15 +61,12 @@
 
       options = options || {};
 
-      if ( !data ) {
+      if ( !data && typeof options === 'object' ) {
         $this.data( pluginName, ( data = new Notewidget( this, options, event ) ) );
-      }
-      if ( typeof options == 'string' ) {
-        data[ options ]( );
+      } else if ( data && typeof options == 'string' ) {
+        data[ options ]( this );
       }
     } );
   };
 
-  $.fn[ pluginName ].Constructor = Notewidget;
-
-} ) );
+} );
