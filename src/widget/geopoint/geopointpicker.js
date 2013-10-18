@@ -1,5 +1,5 @@
 /**
- * @preserve Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
+ * @preserve Copyright 2012 Martijn van de Rijdt & Modilabs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
