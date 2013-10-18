@@ -56,7 +56,7 @@ Each widget needs to follow the following:
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
 
 * build with Grunt (using Compass is also possible as long as config.json does not change)
-* requires webserver - one is included in this repo and can be started up with `node .` or `node server`
+* requires webserver - one is included in this repo and can be started up with `grunt server`
 * many of the outstanding issues for enketo-core are still managed in the [modilabs repo](https://github.com/modilabs/enketo/issues?state=open)
 
 ###Notes for JavaScript Developers

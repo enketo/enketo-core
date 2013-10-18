@@ -141,7 +141,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
       widget.options = widget.options || {};
       widget.options.touch = modernizr.touch;
 
-      if ( !widget.name || ( !widget.selector && !widget.selector === null ) ) {
+      if ( !widget.name || ( !widget.selector && widget.selector !== null ) ) {
         return console.error( 'widget configuration has no name and/or selector property', widget );
       }
 

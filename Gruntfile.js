@@ -7,6 +7,18 @@ module.exports = function( grunt ) {
   // Project configuration.
   grunt.initConfig( {
     pkg: grunt.file.readJSON( 'package.json' ),
+    connect: {
+      server: {
+        options: {
+          port: 8888
+        }
+      },
+      test: {
+        options: {
+          port: 8000
+        }
+      }
+    },
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -19,6 +31,7 @@ module.exports = function( grunt ) {
         options: {
           specs: 'test/spec/*.js',
           helpers: [ 'test/util/*.js', 'test/mock/*.js' ],
+          host: 'http://127.0.0.1:8000/',
           template: require( 'grunt-template-jasmine-requirejs' ),
           templateOptions: {
             requireConfig: {
@@ -82,6 +95,7 @@ module.exports = function( grunt ) {
   grunt.loadNpmTasks( 'grunt-contrib-jasmine' );
   grunt.loadNpmTasks( 'grunt-contrib-jshint' );
   grunt.loadNpmTasks( 'grunt-contrib-sass' );
+  grunt.loadNpmTasks( 'grunt-contrib-connect' );
 
   grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function( ) {
     var widgetConfig, widgetFolderPath, widgetSassPath, widgetConfigPath,
@@ -111,8 +125,8 @@ module.exports = function( grunt ) {
     grunt.file.write( config.writePath, content );
 
   } );
-
-  grunt.registerTask( 'test', [ 'jasmine' ] );
+  grunt.registerTask( 'test', [ 'connect:test', 'jasmine' ] );
   grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
+  grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
   grunt.registerTask( 'default', [ 'jshint', 'prepWidgetSass', 'sass', 'test' ] );
 };
