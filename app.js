@@ -16,11 +16,11 @@ requirejs.config( {
       deps: [ 'jquery' ],
       exports: 'jQuery.fn.bootstrap'
     },
-    'bootstrap-datepicker/js/bootstrap-datepicker': {
+    'widget/date/bootstrap-datepicker/js/bootstrap-datepicker': {
       deps: [ 'jquery' ],
       exports: 'jQuery.fn.datepicker'
     },
-    'bootstrap-timepicker/js/bootstrap-timepicker': {
+    'widget/time/bootstrap-timepicker/js/bootstrap-timepicker': {
       deps: [ 'jquery' ],
       exports: 'jQuery.fn.timepicker'
     }
@@ -40,7 +40,8 @@ requirejs( [ 'jquery', 'modernizr', 'js/Form' ],
     }
 
     form = new Form( 'form.jr:eq(0)', dataStr );
-
+    //for debugging
+    //window.form = form;
     //initialize form and check for load errors
     loadErrors = form.init( );
     if ( loadErrors.length > 0 ) {
