@@ -13,22 +13,7 @@ var obj = {
     this.$group = $group || $form;
     this.readonlyWidget( ); //call before other widgets
     this.pageBreakWidget( );
-    /*
-      Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field
-      already has a value and is edited. The new value YYYY-MM-DD prepends old or replaces the year of the old value and first hyphen. E.g.
-      existing: 2010-01-01, new value entered: 2012-12-12 => input field shows: 2012-12-1201-01.
-      This doesn't seem to effect the actual value of the input, just the way it is displayed. But if the incorrectly displayed date is then 
-      attempted to be edited again, it does get the incorrect value and it's impossible to clear this and create a valid date.
-    */
-    //browser: "Mozilla/5.0 (Linux; U; Android 4.1.1; en-us; GT-P3113 Build/JRO03C) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30";
-    //webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30"
-    var badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
-    if ( !modernizr.touch || !modernizr.inputtypes.date || badSamsung.test( navigator.userAgent ) ) {
-      this.dateWidget( );
-    }
-    if ( !modernizr.touch || !modernizr.inputtypes.time ) {
-      this.timeWidget( );
-    }
+
     if ( !modernizr.touch || !modernizr.inputtypes.datetime ) {
       this.dateTimeWidget( );
     }
@@ -49,88 +34,6 @@ var obj = {
     this.radioUnselectWidget( );
   },
 
-  dateWidget: function( ) {
-    this.$group.find( 'input[type="date"]' ).each( function( ) {
-      var $dateI = $( this ),
-        $p = $( this ).parent( 'label' ),
-        startView = ( $p.hasClass( 'jr-appearance-month-year' ) ) ? 'year' :
-          ( $p.hasClass( 'jr-appearance-year' ) ) ? 'decade' : 'month',
-        targetEvent = ( $p.hasClass( 'jr-appearance-month-year' ) ) ? 'changeMonth' :
-          ( $p.hasClass( 'jr-appearance-year' ) ) ? 'changeYear' : 'changeDate',
-        format = ( startView === 'year' ) ? 'yyyy-mm' :
-          ( startView === 'decade' ) ? 'yyyy' : 'yyyy-mm-dd',
-        $fakeDate = $( '<div class="widget date"><input class="ignore input-small" readonly="readonly" type="text" value="' + $( this ).val( ) + '" placeholder="' + format + '" />' +
-          '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
-        $fakeDateReset = $fakeDate.find( '.btn-reset' ),
-        $fakeDateI = $fakeDate.find( 'input' );
-      $dateI.next( '.widget.date' ).remove( );
-      $dateI.hide( ).after( $fakeDate );
-      //copy manual changes to original date input field
-      $fakeDateI.on( 'change', function( ) {
-        var date,
-          value = $( this ).val( );
-        if ( value.length > 0 ) {
-          value = ( format === 'yyyy-mm' ) ? value + '-01' : ( format === 'yyyy' ) ? value + '-01-01' : value;
-          value = data.node( ).convert( value, 'date' );
-        }
-        if ( $dateI.val( ) !== value ) {
-          $dateI.val( value ).trigger( 'change' ).blur( );
-        }
-        return false;
-      } );
-      //focus and blur events are used to check whether to display the 'required' message 
-      $fakeDateI.on( 'focus blur', function( event ) {
-        $dateI.trigger( event.type );
-      } );
-      //reset button
-      $fakeDateReset.on( 'click', function( event ) {
-        $fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
-      } );
-      $fakeDateI.datepicker( {
-        format: format,
-        autoclose: true,
-        todayHighlight: true,
-        startView: startView,
-        orientation: 'top'
-      } )
-      // copy changes made by datepicker to original input field
-      .on( 'changeDate', function( e ) {
-        var value = $( this ).val( );
-        $dateI.val( value ).trigger( 'change' ).blur( );
-      } );
-    } );
-  },
-  timeWidget: function( ) {
-    this.$group.find( 'input[type="time"]' ).each( function( ) {
-      var $timeI = $( this ),
-        $p = $( this ).parent( 'label' ),
-        timeVal = $( this ).val( ),
-        $fakeTime = $( '<div class="widget bootstrap-timepicker">' +
-          '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
-          '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
-        $fakeTimeReset = $fakeTime.find( '.btn-reset' ),
-        $fakeTimeI = $fakeTime.find( 'input' );
-      $timeI.next( '.widget.bootstrap-timepicker-component' ).remove( );
-      $timeI.hide( ).after( $fakeTime );
-      $fakeTimeI.timepicker( {
-        defaultTime: ( timeVal.length > 0 ) ? timeVal : 'current',
-        showMeridian: false
-      } ).val( timeVal );
-      //the time picker itself has input elements
-      $fakeTime.find( 'input' ).addClass( 'ignore' );
-      $fakeTimeI.on( 'change', function( ) {
-        $timeI.val( $( this ).val( ) ).trigger( 'change' ).blur( );
-        return false;
-      } );
-      //reset button
-      $fakeTimeReset.on( 'click', function( event ) {
-        $fakeTimeI.val( '' ).trigger( 'change' );
-      } );
-      $fakeTimeI.on( 'focus blur', function( event ) {
-        $timeI.trigger( event.type );
-      } );
-    } );
-  },
   //Note: this widget doesn't offer a way to reset a datetime value in the instance to empty
   dateTimeWidget: function( ) {
     this.$group.find( 'input[type="datetime"]' ).each( function( ) {

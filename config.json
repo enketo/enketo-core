@@ -5,6 +5,8 @@
 		"widget/geopoint/geopointpicker",
 		"widget/table/tablewidget",
 		"widget/note/notewidget",
-		"widget/radio/radiopicker"
+		"widget/radio/radiopicker",
+		"widget/time/timepicker-extended",
+		"widget/date/datepicker-extended"
 	]
 }
