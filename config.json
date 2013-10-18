@@ -7,6 +7,7 @@
 		"widget/table/tablewidget",
 		"widget/radio/radiopicker",
 		"widget/time/timepicker-extended",
-		"widget/date/datepicker-extended"
+		"widget/date/datepicker-extended",
+		"widget/datetime/datetimepicker-extended"
 	]
 }

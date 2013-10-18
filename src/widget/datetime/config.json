@@ -1,0 +1,6 @@
+{
+	"name": "datetimepickerExtended",
+	"stylesheet": "datetimepicker-extended.scss",
+	"selector": "input[type=\"datetime\"]",
+	"options": {}
+}

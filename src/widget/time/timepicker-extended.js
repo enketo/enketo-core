@@ -18,12 +18,11 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/
   function( Widget, modernizr, $ ) {
     "use strict";
 
-    //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
     var pluginName = 'timepickerExtended';
 
     /**
      * Extends jdewit's bootstrap-timepicker without changing the original
-     *
+     * https://github.com/jdewit/bootstrap-timepicker
      * TODO: I'd like to find a replacement for jdewit's widget during the move to bootstrap 3.
      *
      * @constructor

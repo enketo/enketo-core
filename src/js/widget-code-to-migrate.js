@@ -14,15 +14,8 @@ var obj = {
     this.readonlyWidget( ); //call before other widgets
     this.pageBreakWidget( );
 
-    if ( !modernizr.touch || !modernizr.inputtypes.datetime ) {
-      this.dateTimeWidget( );
-    }
-    if ( !modernizr.touch ) {
-      this.selectWidget( );
-    } else {
-      this.mobileSelectWidget( );
-      this.touchRadioCheckWidget( );
-    }
+    this.touchRadioCheckWidget( );
+
     this.geopointWidget( );
     this.tableWidget( );
     this.spinnerWidget( );
@@ -37,66 +30,7 @@ var obj = {
   //Note: this widget doesn't offer a way to reset a datetime value in the instance to empty
   dateTimeWidget: function( ) {
     this.$group.find( 'input[type="datetime"]' ).each( function( ) {
-      var $dateTimeI = $( this ),
-        /*
-          Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
-          the timezone information (especially for instances-to-edit) if the values are not edited (the
-          original entry may have been done in a different time zone than the edit). However, 
-          values shown in the widget should reflect the local time representation of that value.
-         */
-        val = ( $( this ).val( ).length > 0 ) ? new Date( $( this ).val( ) ).toISOLocalString( ) : '',
-        vals = val.split( 'T' ),
-        dateVal = vals[ 0 ],
-        timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '',
-        $fakeDate = $( '<div class="date" >' +
-          '<input class="ignore input-small" type="text" readonly="readonly" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
-          '</div>' ),
-        $fakeTime = $( '<div class="bootstrap-timepicker">' +
-          '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' + timeVal + '" placeholder="hh:mm"/>' +
-          '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
-        $fakeDateTimeReset = $fakeTime.find( '.btn-reset' ),
-        $fakeDateI = $fakeDate.find( 'input' ),
-        $fakeTimeI = $fakeTime.find( 'input' );
-      $dateTimeI.next( '.widget.datetimepicker' ).remove( );
-      $dateTimeI.hide( ).after( '<div class="datetimepicker widget" />' );
-      $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDate ).append( $fakeTime );
-      $fakeDateI.datepicker( {
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayHighlight: true
-      } );
-      $fakeTimeI.timepicker( {
-        defaultTime: ( timeVal.length > 0 ) ? 'value' : 'current',
-        showMeridian: false
-      } ).val( timeVal );
-      //the time picker itself has input elements
-      $fakeTime.find( 'input' ).addClass( 'ignore' );
-      $fakeDateI.on( 'change changeDate', function( ) {
-        changeVal( );
-        return false;
-      } );
-      $fakeTimeI.on( 'change', function( ) {
-        changeVal( );
-        return false;
-      } );
-      $fakeDateI.add( $fakeTimeI ).on( 'focus blur', function( event ) {
-        $dateTimeI.trigger( event.type );
-      } );
-      //reset button
-      $fakeDateTimeReset.on( 'click', function( event ) {
-        $fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
-        $fakeTimeI.val( '' ).trigger( 'change' );
-      } );
 
-      function changeVal( ) {
-        if ( $fakeDateI.val( ).length > 0 && $fakeTimeI.val( ).length > 0 ) {
-          var d = $fakeDateI.val( ).split( '-' ),
-            t = $fakeTimeI.val( ).split( ':' );
-          $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString( ) ).trigger( 'change' ).blur( );
-        } else {
-          $dateTimeI.val( '' ).trigger( 'change' ).blur( );
-        }
-      }
     } );
   },
 
