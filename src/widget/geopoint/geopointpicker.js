@@ -72,10 +72,18 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
       that.$inputOrigin.trigger( event.type );
     } );
 
-    if ( inputVals[ 3 ] ) this.$acc.val( inputVals[ 3 ] );
-    if ( inputVals[ 2 ] ) this.$alt.val( inputVals[ 2 ] );
-    if ( inputVals[ 1 ] ) this.$lng.val( inputVals[ 1 ] );
-    if ( inputVals[ 0 ].length > 0 ) this.$lat.val( inputVals[ 0 ] ).trigger( 'change' );
+    if ( inputVals[ 3 ] ) {
+      this.$acc.val( inputVals[ 3 ] );
+    }
+    if ( inputVals[ 2 ] ) {
+      this.$alt.val( inputVals[ 2 ] );
+    }
+    if ( inputVals[ 1 ] ) {
+      this.$lng.val( inputVals[ 1 ] );
+    }
+    if ( inputVals[ 0 ].length > 0 ) {
+      this.$lat.val( inputVals[ 0 ] ).trigger( 'change' );
+    }
 
     if ( this.$detect ) {
       this._enableDetection( );
@@ -284,15 +292,18 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
   Geopointpicker.prototype._placeMarker = function( latLng ) {
     var that;
     latLng = latLng || this.map.getCenter( );
+
     if ( typeof this.marker !== 'undefined' ) {
       this.marker.setMap( null );
     }
+
     this.marker = new google.maps.Marker( {
       position: latLng,
       map: this.map,
       draggable: true
     } );
     that = this;
+
     // dragging markers for non-touch screens
     if ( !this.options.touch ) {
       google.maps.event.addListener( this.marker, 'dragend', function( ) {
@@ -301,6 +312,7 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
       } );
       this._centralizeWithDelay( 5000 );
     }
+
     this._centralizeWithDelay( 0 );
   };
 
