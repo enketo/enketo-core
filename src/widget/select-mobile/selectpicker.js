@@ -1,5 +1,5 @@
 /**
- * @preserve Copyright 2012 Martijn van de Rijdt & Modilabs
+ * @preserve Copyright 2013 Martijn van de Rijdt & Modi Labs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,18 +41,16 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
   MobileSelectpicker.prototype.constructor = MobileSelectpicker;
 
   /**
-   * initalize
-   * @return {[type]} [description]
+   * initialize
    */
   MobileSelectpicker.prototype._init = function( ) {
     var that = this;
+
     //show values on change
-    if ( $( this.element ).is( '[multiple]' ) ) {
-      $( this.element ).on( 'change.' + pluginName, function( ) {
-        that._showSelectedValues( );
-        return true;
-      } );
-    }
+    $( this.element ).on( 'change.' + pluginName, function( ) {
+      that._showSelectedValues( );
+      return true;
+    } );
 
     //show defaults
     this._showSelectedValues( );
@@ -70,7 +68,6 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
       valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text( ) );
     }
 
-    $select.siblings( '.widget.mobileselect' ).remove( );
     $select.after( '<span class="widget mobileselect">' + values.join( ', ' ) + '</span>' );
   };
 
@@ -91,5 +88,4 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
       }
     } );
   };
-
 } );

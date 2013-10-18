@@ -1,6 +1,6 @@
 {
 	"name": "mobileSelectpicker",
 	"stylesheet": "selectpicker.scss",
-	"selector": "select:not(#form-languages)",
+	"selector": "select[multiple]",
 	"options": {}
 }
