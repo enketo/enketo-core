@@ -8,6 +8,8 @@
 		"widget/radio/radiopicker",
 		"widget/time/timepicker-extended",
 		"widget/date/datepicker-extended",
-		"widget/datetime/datetimepicker-extended"
+		"widget/datetime/datetimepicker-extended",
+		"widget/mediagrid/mediagridpicker",
+		"widget/medialabel/medialabelwidget"
 	]
 }

@@ -22,9 +22,6 @@ var obj = {
     this.sliderWidget( );
     this.barcodeWidget( );
     this.offlineFileWidget( );
-    this.mediaLabelWidget( );
-    this.radioCheckWidget( );
-    this.radioUnselectWidget( );
   },
 
   //Note: this widget doesn't offer a way to reset a datetime value in the instance to empty
@@ -176,14 +173,7 @@ var obj = {
     http://html5-demos.appspot.com/static/filesystem/generatingResourceURIs.html
    */
   },
-  mediaLabelWidget: function( ) {
-    //improve looks when images, video or audio is used as label
-    if ( !this.repeat ) {
-      $( 'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact)>label, ' +
-        'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact)>legend' )
-        .children( 'img,video,audio' ).parent( ).addClass( 'with-media clearfix' );
-    }
-  },
+
   destroy: function( $group ) {
     console.log( 'destroy everything' );
   }

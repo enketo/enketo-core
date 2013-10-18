@@ -31,9 +31,4 @@
   img{
     max-height: 30px;
     max-width: 30px;
-    float: none;} } 
-.with-media{
-  > input[type="radio"], > input[type="checkbox"]{ 
-    ~ span.active:not(.jr-hint):not(.jr-constraint-msg){
-      display: block;
-      margin: -2px 0 0 40px;} } }
+    float: none;} }
