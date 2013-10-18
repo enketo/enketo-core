@@ -1,81 +1,85 @@
 /**
- * Table widget
+ * @preserve Copyright 2012 Martijn van de Rijdt & Modi Labs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-( function( factory ) {
-  if ( typeof define === 'function' && define.amd ) {
-    // AMD. Register as an anonymous module.
-    define( [ 'jquery', 'js/plugins' ], factory );
-  } else {
-    // Browser globals
-    factory( jQuery );
-  }
-}( function( $ ) {
+define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
   "use strict";
 
   var pluginName = 'tablewidget';
 
-  function Tablewidget( element, options ) {
-    this.element = element;
-    this.options = options;
-    this.name = pluginName;
+  /**
+   * Takes care of programmatically setting widths of table columns
+   *
+   * @constructor
+   * @param {Element} element Element to apply widget to.
+   * @param {(boolean|{touch: boolean})} options options
+   * @param {*=} event     event
+   */
+
+  function Tablewidget( element, options, event ) {
+    Widget.call( this, element, options );
     this.init( );
   }
 
-  Tablewidget.prototype = {
+  //copy the prototype functions from the Widget super class
+  Tablewidget.prototype = Object.create( Widget.prototype );
 
-    init: function( ) {
-      var that = this;
-      $( this.element ).parent( ).parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
-        .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
-          // remove the odd input element that XLSForm adds for the 'easier table method'
-          // see https://github.com/modilabs/pyxform/issues/72
-          $( this ).find( 'input[readonly]' ).remove( );
-          // fix the column widths, after any ongoing animations have finished
-          $( this ).promise( ).done( function( ) {
-            $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
-            $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth( );
-            $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
+  //ensure the constructor is the new one
+  Tablewidget.prototype.constructor = Tablewidget;
 
-          } );
+  Tablewidget.prototype.init = function( ) {
+    var that = this;
+    $( this.element ).parent( ).parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
+      .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
+        // remove the odd input element that XLSForm adds for the 'easier table method'
+        // see https://github.com/modilabs/pyxform/issues/72
+        $( this ).find( 'input[readonly]' ).remove( );
+        // fix the column widths, after any ongoing animations have finished
+        $( this ).promise( ).done( function( ) {
+          $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
+          $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth( );
+          $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
+
         } );
-    },
-
-    destroy: function( ) {
-      console.debug( pluginName, 'destroy called' );
-    },
-
-    enable: function( ) {
-      console.debug( pluginName, 'enable called' );
-      this.init( );
-    },
-
-    disable: function( ) {
-      console.debug( pluginName, 'disable called' );
-    },
-
-    update: function( ) {
-      console.debug( pluginName, 'update called' );
-    }
+      } );
   };
 
+  /**
+   * Override default destroy method to do nothing
+   *
+   * @param  {Element} element The element (not) to destroy the widget on ;)
+   */
+  Tablewidget.prototype.destroy = function( element ) {
+    //nothing to do
+    console.debug( pluginName, 'destroy called' );
+  };
 
   $.fn[ pluginName ] = function( options, event ) {
+
+    options = options || {};
+
     return this.each( function( ) {
       var $this = $( this ),
         data = $this.data( pluginName );
 
-      options = options || {};
-
-      if ( !data ) {
+      if ( !data && typeof options === 'object' ) {
         $this.data( pluginName, ( data = new Tablewidget( this, options, event ) ) );
-      }
-      if ( typeof options == 'string' ) {
-        data[ options ]( );
+      } else if ( data && typeof options == 'string' ) {
+        data[ options ]( this );
       }
     } );
   };
 
-  $.fn[ pluginName ].Constructor = Tablewidget;
-
-} ) );
+} );
