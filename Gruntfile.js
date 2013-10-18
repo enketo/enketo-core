@@ -49,7 +49,8 @@ module.exports = function( grunt ) {
               },
               map: {
                 '*': {
-                  'js': '../src/js'
+                  'js': '../src/js',
+                  'widget': '../src/widget'
                 }
               }
             }
