@@ -15,7 +15,7 @@ module.exports = function( grunt ) {
     },
     jasmine: {
       test: {
-        src: 'src/**/*.js',
+        src: 'src/js/**/*.js',
         options: {
           specs: 'test/spec/*.js',
           helpers: [ 'test/util/*.js', 'test/mock/*.js' ],
@@ -34,11 +34,15 @@ module.exports = function( grunt ) {
                 'xpath': {
                   exports: 'XPathJS'
                 },
-                'bootstrap-datepicker/js/bootstrap-datepicker': {
+                'bootstrap': {
+                  deps: [ 'jquery' ],
+                  exports: 'jQuery.fn.bootstrap'
+                },
+                'widget/date/bootstrap-datepicker/js/bootstrap-datepicker': {
                   deps: [ 'jquery' ],
                   exports: 'jQuery.fn.datepicker'
                 },
-                'bootstrap-timepicker/js/bootstrap-timepicker': {
+                'widget/time/bootstrap-timepicker/js/bootstrap-timepicker': {
                   deps: [ 'jquery' ],
                   exports: 'jQuery.fn.timepicker'
                 }

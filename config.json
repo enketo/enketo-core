@@ -1,10 +1,10 @@
 {
 	"widgets": [
+		"widget/note/notewidget",
 		"widget/select-desktop/selectpicker",
 		"widget/select-mobile/selectpicker",
 		"widget/geopoint/geopointpicker",
 		"widget/table/tablewidget",
-		"widget/note/notewidget",
 		"widget/radio/radiopicker",
 		"widget/time/timepicker-extended",
 		"widget/date/datepicker-extended"

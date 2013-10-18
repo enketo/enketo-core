@@ -30,11 +30,15 @@
         'xpath': {
           exports: 'XPathJS'
         },
-        'bootstrap-datepicker/js/bootstrap-datepicker': {
+        'bootstrap': {
+          deps: [ 'jquery' ],
+          exports: 'jQuery.fn.bootstrap'
+        },
+        'widget/date/bootstrap-datepicker/js/bootstrap-datepicker': {
           deps: [ 'jquery' ],
           exports: 'jQuery.fn.datepicker'
         },
-        'bootstrap-timepicker/js/bootstrap-timepicker': {
+        'widget/time/bootstrap-timepicker/js/bootstrap-timepicker': {
           deps: [ 'jquery' ],
           exports: 'jQuery.fn.timepicker'
         }
