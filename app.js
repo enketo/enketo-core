@@ -6,7 +6,8 @@ requirejs.config( {
     text: 'text/text',
     xpath: 'xpath/build/xpathjs_javarosa',
     config: '../config.json',
-    gmaps: 'http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded'
+    gmaps: 'http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded',
+    "file-manager": "file-manager/src/file-manager"
   },
   shim: {
     'xpath': {
@@ -41,7 +42,7 @@ requirejs( [ 'jquery', 'modernizr', 'js/Form' ],
 
     form = new Form( 'form.jr:eq(0)', dataStr );
     //for debugging
-    //window.form = form;
+    window.form = form;
     //initialize form and check for load errors
     loadErrors = form.init( );
     if ( loadErrors.length > 0 ) {
@@ -53,6 +54,9 @@ requirejs( [ 'jquery', 'modernizr', 'js/Form' ],
       form.validateForm( );
       if ( !form.isValid( ) ) {
         alert( 'Form contains errors. Please see fields marked in red.' );
+      } else {
+        alert( 'Form is valid! (see XML record in the console)' );
+        console.log( 'record:', form.getDataStr( ) );
       }
     } );
   } );

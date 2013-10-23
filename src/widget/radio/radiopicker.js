@@ -55,7 +55,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
   Radiopicker.prototype._setDelegatedHandlers = function( ) {
     var $label,
       $form = $( this.element );
-    console.log( 'form', $form );
+
     //applies a data-checked attribute to the parent label of a checked checkbox and radio button
     $form.on( 'click', 'input[type="radio"]:checked', function( event ) {
       $( this ).parent( 'label' ).siblings( ).removeAttr( 'data-checked' ).end( ).attr( 'data-checked', 'true' );
