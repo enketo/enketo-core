@@ -77,16 +77,17 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
         todayHighlight: true
       } );
 
-      $fakeTimeI.timepicker( {
-        defaultTime: ( timeVal.length > 0 ) ? 'value' : 'current',
-        showMeridian: false
-      } ).val( timeVal );
+      $fakeTimeI
+        .timepicker( {
+          defaultTime: ( timeVal.length > 0 ) ? 'value' : 'current',
+          showMeridian: false
+        } )
+        .val( timeVal )
+      //the time picker itself has input elements
+      .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
       this._setManualHandler( $fakeDateI );
       this._setFocusHandler( $fakeDateI.add( $fakeTimeI ) );
-
-      //the time picker itself has input elements
-      $fakeTimeI.closest( '.time' ).find( 'input' ).addClass( 'ignore' );
 
       $fakeDateI.on( 'change changeDate', function( ) {
         changeVal( );

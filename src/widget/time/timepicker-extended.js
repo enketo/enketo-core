@@ -62,10 +62,9 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/
       $fakeTimeI.timepicker( {
         defaultTime: ( timeVal.length > 0 ) ? timeVal : 'current',
         showMeridian: false
-      } ).val( timeVal );
-
+      } ).val( timeVal )
       //the time picker itself has input elements
-      $fakeTime.find( 'input' ).addClass( 'ignore' );
+      .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
       $fakeTimeI.on( 'change', function( ) {
         $timeI.val( $( this ).val( ) ).trigger( 'change' ).blur( );
