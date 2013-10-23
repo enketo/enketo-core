@@ -1014,7 +1014,7 @@ define(
         }
 
         //var profiler = new Profiler('preloads.init()');
-        this.preloads.init( this ); //before widgets.init (as instanceID used in offlineFileWidget)
+        this.preloads.init( this ); //before widgets.init (as instanceID used in offlineFilepicker widget)
         //profiler.report();
 
         this.grosslyViolateStandardComplianceByIgnoringCertainCalcs( ); //before calcUpdate!
@@ -2118,7 +2118,12 @@ define(
         },
         //Not according to spec yet, this will be added to spec but name may change
         'instance': function( o ) {
-          return ( o.curVal.length > 0 ) ? o.curVal : data.evaluate( "concat('uuid:', uuid())", 'string' );
+          var id = ( o.curVal.length > 0 ) ? o.curVal : data.evaluate( "concat('uuid:', uuid())", 'string' );
+          //store the current instanceID as data on the form element so it can be easily accessed by e.g. widgets
+          $form.data( {
+            instanceID: id
+          } );
+          return id;
         }
       };
 
@@ -2330,7 +2335,6 @@ define(
           //set file input values to the actual name of file (without c://fakepath or anything like that)
           if ( n.val.length > 0 && n.inputType === 'file' && $( this )[ 0 ].files[ 0 ] && $( this )[ 0 ].files[ 0 ].size > 0 ) {
             n.val = $( this )[ 0 ].files[ 0 ].name;
-            $( this ).attr( 'data-previous-file-name', n.val );
           }
 
           if ( event.type === 'validate' ) {

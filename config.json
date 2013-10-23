@@ -10,6 +10,7 @@
 		"widget/date/datepicker-extended",
 		"widget/datetime/datetimepicker-extended",
 		"widget/mediagrid/mediagridpicker",
-		"widget/medialabel/medialabelwidget"
+		"widget/medialabel/medialabelwidget",
+		"widget/file-offline/offline-filepicker"
 	]
 }
