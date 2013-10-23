@@ -1,8 +1,11 @@
 {
 	"indent_with_tabs": false,
+	"indent_size": 2,
+	"indent_level": 0,
 	"preserve_newlines": true,
 	"max_preserve_newlines": 4,
 	"space_in_paren": true,
+	"space_before_conditional": true,
 	"jslint_happy": false,
 	"brace_style": "collapse",
 	"keep_array_indentation": false,

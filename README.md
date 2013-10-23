@@ -61,14 +61,14 @@ This repo is meant to use as a building block for your own enketo-powered applic
 
 ###Notes for JavaScript Developers
 
-* The JS library will highly likely be transformed into a more modular architecture, using Require.js
+* The JS library uses Require.js
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
 * Still deliberating what JS Documentation system to use
-* JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file
-* Testing is done with Jasmine (in browser and headless)
+* JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues (Note, I had to add `"ensure_newline_at_eof_on_save": true` to the Sublime Text 2 user settings to make grunt jsbeautifier happy with the style produced by the ST2 JsFormat plugin.)
+* Testing is done with Jasmine (in browser and headless with phantomjs `grunt test`)
 * install node.js and grunt-cli
 * run `npm install` to install dependencies
-* run `grunt` to test
+* run `grunt` to build and test
 * When making a pull request, please add tests where relevant
 
 ###Notes for CSS Developers

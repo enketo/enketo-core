@@ -2289,7 +2289,6 @@ define(
           node.hide( delay, function( ) {
             node.remove( );
             parentGroup.numberRepeats( );
-
             that.toggleButtons( parentGroup );
             $form.trigger( 'changerepeat' );
             //now remove the data node

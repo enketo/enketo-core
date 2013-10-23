@@ -1,4 +1,4 @@
-var profilerRecords = [];
+var profilerRecords = [ ];
 var xpathEvalNum = 0,
   xpathEvalTime = 0,
   xpathEvalTimePure = 0;
@@ -10,28 +10,27 @@ var xpathEvalNum = 0,
  */
 
 function Profiler( taskName ) {
-  var start = new Date().getTime();
+  var start = new Date( ).getTime( );
   /**
    * @param  {string=} message [description]
    */
   this.report = function( message ) {
-    message = message || 'time taken for ' + taskName + ' to execute in milliseconds: ' + ( new Date().getTime() - start );
+    message = message || 'time taken for ' + taskName + ' to execute in milliseconds: ' + ( new Date( ).getTime( ) - start );
     //console.error(message);
     profilerRecords.push( message );
   };
 }
 
-var helper = new Helper();
+var helper = new Helper( );
 /**
  * @constructor
  */
 
-function Helper() {
+function Helper( ) {
   "use strict";
-  this.setSettings = function() {
+  this.setSettings = function( ) {
     var i, queryParam,
-      settingsMap =
-        [ {
+      settingsMap = [ {
         q: 'return',
         s: 'returnURL'
       }, {
@@ -70,15 +69,15 @@ function Helper() {
     }
   };
   this.getQueryParam = function( param ) {
-    var allParams = this.getAllQueryParams();
+    var allParams = this.getAllQueryParams( );
     for ( var paramName in allParams ) {
-      if ( paramName.toLowerCase() === param.toLowerCase() ) {
+      if ( paramName.toLowerCase( ) === param.toLowerCase( ) ) {
         return allParams[ paramName ];
       }
     }
     return null;
   };
-  this.getAllQueryParams = function() {
+  this.getAllQueryParams = function( ) {
     var val, processedVal,
       query = window.location.search.substring( 1 ),
       vars = query.split( "&" ),
@@ -95,18 +94,18 @@ function Helper() {
   };
 }
 
-window.onload = function() {
-  setTimeout( function() {
+window.onload = function( ) {
+  setTimeout( function( ) {
     var loadLog, t, loadingTime, exLog, timingO = {};
     if ( window.performance ) {
       t = window.performance.timing;
       loadingTime = t.loadEventEnd - t.responseEnd;
       if ( typeof settings !== 'undefined' && settings.debug ) {
         exLog = /**@type {string} */ window.localStorage.getItem( '__loadLog' );
-        loadLog = ( exLog ) ? JSON.parse( exLog ) : [];
+        loadLog = ( exLog ) ? JSON.parse( exLog ) : [ ];
         loadLog.push( loadingTime );
         if ( loadLog.length > 10 ) {
-          loadLog.shift();
+          loadLog.shift( );
         }
         window.localStorage.setItem( '__loadLog', JSON.stringify( loadLog ) );
       }

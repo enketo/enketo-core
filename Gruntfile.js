@@ -19,6 +19,21 @@ module.exports = function( grunt ) {
         }
       }
     },
+    jsbeautifier: {
+      test: {
+        src: [ "src/js/*.js", "src/widget/*/*.js" ],
+        options: {
+          config: "./.jsbeautifyrc",
+          mode: "VERIFY_ONLY"
+        }
+      },
+      fix: {
+        src: [ "src/js/*.js", "src/widget/*/*.js" ],
+        options: {
+          config: "./.jsbeautifyrc"
+        }
+      }
+    },
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -91,7 +106,7 @@ module.exports = function( grunt ) {
     }
   } );
 
-
+  grunt.loadNpmTasks( 'grunt-jsbeautifier' );
   grunt.loadNpmTasks( 'grunt-contrib-jasmine' );
   grunt.loadNpmTasks( 'grunt-contrib-jshint' );
   grunt.loadNpmTasks( 'grunt-contrib-sass' );
@@ -125,7 +140,7 @@ module.exports = function( grunt ) {
     grunt.file.write( config.writePath, content );
 
   } );
-  grunt.registerTask( 'test', [ 'connect:test', 'jasmine' ] );
+  grunt.registerTask( 'test', [ 'jsbeautifier:test', 'connect:test', 'jasmine' ] );
   grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
   grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
   grunt.registerTask( 'default', [ 'jshint', 'prepWidgetSass', 'sass', 'test' ] );

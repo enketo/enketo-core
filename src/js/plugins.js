@@ -1,6 +1,6 @@
-define(['jquery'], function ($) {
+define( [ 'jquery' ], function( $ ) {
 
-    // plugin to update number of repeated elements (with class jr-repeat)
+  // plugin to update number of repeated elements (with class jr-repeat)
   $.fn.numberRepeats = function( ) {
 
     return this.each( function( ) {
@@ -193,13 +193,13 @@ define(['jquery'], function ($) {
     } );
   };
 
-	$.fn.toSmallestWidth = function() {
+  $.fn.toSmallestWidth = function( ) {
     var smallestWidth = 2000;
-    return this.each( function() {
-      if ( $( this ).width() < smallestWidth ) {
-        smallestWidth = $( this ).width();
+    return this.each( function( ) {
+      if ( $( this ).width( ) < smallestWidth ) {
+        smallestWidth = $( this ).width( );
       }
-    } ).each( function() {
+    } ).each( function( ) {
       $( this ).width( smallestWidth );
     } );
   };
@@ -208,11 +208,11 @@ define(['jquery'], function ($) {
   $.fn.toLargestWidth = function( plus ) {
     var largestWidth = 0;
     plus = plus || 0;
-    return this.each( function() {
-      if ( $( this ).width() > largestWidth ) {
-        largestWidth = $( this ).width();
+    return this.each( function( ) {
+      if ( $( this ).width( ) > largestWidth ) {
+        largestWidth = $( this ).width( );
       }
-    } ).each( function() {
+    } ).each( function( ) {
       $( this ).width( largestWidth + plus );
     } );
   };
@@ -225,11 +225,11 @@ define(['jquery'], function ($) {
   $.fn.getXPath = function( rootNodeName ) {
     //other nodes may have the same XPath but because this function is used to determine the corresponding input name of a data node, index is not included 
     var position,
-      $node = this.first(),
+      $node = this.first( ),
       nodeName = $node.prop( 'nodeName' ),
       //$sibSameNameAndSelf = $node.siblings(nodeName).addBack(),
       steps = [ nodeName ],
-      $parent = $node.parent(),
+      $parent = $node.parent( ),
       parentName = $parent.prop( 'nodeName' );
 
     //position = ($sibSameNameAndSelf.length > 1) ? '['+($sibSameNameAndSelf.index($node)+1)+']' : '';
@@ -240,15 +240,15 @@ define(['jquery'], function ($) {
       //position = ($sibSameNameAndSelf.length > 1) ? '['+($sibSameNameAndSelf.index($parent)+1)+']' : '';
       //steps.push(parentName+position);
       steps.push( parentName );
-      $parent = $parent.parent();
+      $parent = $parent.parent( );
       parentName = $parent.prop( 'nodeName' );
     }
-    return '/' + steps.reverse().join( '/' );
+    return '/' + steps.reverse( ).join( '/' );
   };
 
 
   //reverse jQuery collection
-  $.fn.reverse = [].reverse;
+  $.fn.reverse = [ ].reverse;
 
 
   /** MOVE THESE PLUGINS TO PHP WRAPPER, THEY ARE NOT USED IN CORE 
@@ -367,4 +367,4 @@ define(['jquery'], function ($) {
   };
 
   */
-});
+} );
