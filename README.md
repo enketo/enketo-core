@@ -1,23 +1,43 @@
 enketo-core [![Build Status](https://travis-ci.org/MartijnR/enketo-core.png)](https://travis-ci.org/MartijnR/enketo-core)
 ================
 
-The engine that powers [Enketo Smart Paper](https://enketo.org) - Use it to develop your own Enketo-powered app! Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
+The engine that powers [Enketo Smart Paper](https://enketo.org).
 
-##Under Active Reorganization!.
+This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
+
+Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
+
+
+##Under Active Reorganization!
 
 ###Related Projects
 
 * [XPathJS_javarosa](https://github.com/MartijnR/xpathjs_javarosa) - used inside this repo
 * [enketo-xslt](https://github.com/MartijnR/enketo-xslt)
-* [enketo-xslt-transformer-php] - To follow
+* [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) - a minimalimistic example in PHP of an XSLT transformer
 * [enketo-xslt-transformer-node] - To follow
 * [enketo-dristhi](https://github.com/MartijnR/enketo-dristhi)
 * [file-manager](https://github.com/MartijnR/file-manager)
 * [openrosa-forms](https://github.com/MartijnR/openrosa-forms) - bunch of test forms, for development
 
-###How to Use
+###How to run it
+
+1. install node, npm
+2. clone repo
+3. install dependencies from project root with `npm install`
+4. build with `grunt`
+5. start built-in server with `grunt server` or use an alternative
+6. browse to e.g. 'http://localhost:8080/forms/dev.html`
 
 
+###Recommended usage as a library
+
+1. Develop a way to perform an XSLT Transformations on the OpenRosa-flavoured XForm inside your app. This will output an XML instance and a HTML form. See [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) for an example. For development purposes you may also use this free (and slow, not robust) API provided by Enketo LLC: [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/) 
+2. Fork enketo-core so you can extend it and easily send pull requests back to this repository.
+3. Add your fork as a git submodule to your app (e.g. in /lib). This provides an easy way to pull updates to enketo-core into your application.
+4. Ignore (or copy) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead (in your App's root)
+5. If you make changes to enketo-core, send a pull request to the [https://github.com/MartijnR/enketo-core]! As an added advantage, when your pull request gets accepted it will be much easier to keep your app up-to-date with the latest enketo-core updates.
+6. ....to follow: examples for instantiating a form, validating, getting the instance out, editing an existing instance, etc....
 
 ###How to create or extend widgets elements
 
@@ -53,11 +73,8 @@ Each widget needs to follow the following:
 
 ###Notes for All Developers
 
-This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
-
 * build with Grunt (using Compass is also possible as long as config.json does not change)
 * requires webserver - one is included in this repo and can be started up with `grunt server`
-* many of the outstanding issues for enketo-core are still managed in the [modilabs repo](https://github.com/modilabs/enketo/issues?state=open)
 
 ###Notes for JavaScript Developers
 
