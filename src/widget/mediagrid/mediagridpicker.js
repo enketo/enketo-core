@@ -15,13 +15,11 @@
  */
 
 define( [ 'jquery' ], function( $ ) {
-  "use strict";
+    "use strict";
 
-  var pluginName = 'mediagridpicker';
+    var pluginName = 'mediagridpicker';
 
-  $.fn[ pluginName ] = function( options, event ) {
-
-    return this;
-  };
-
+    $.fn[ pluginName ] = function( options, event ) {
+        return this;
+    };
 } );

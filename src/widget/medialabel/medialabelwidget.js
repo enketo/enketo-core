@@ -15,64 +15,64 @@
  */
 
 define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
-  "use strict";
+    "use strict";
 
-  var pluginName = 'medialabelwidget';
+    var pluginName = 'medialabelwidget';
 
-  /**
-   * Shows media labels in a grid without underlying radiobuttons.
-   *
-   * @constructor
-   * @param {Element}                       element   Element to apply widget to.
-   * @param {(boolean|{touch: boolean})}    options   options
-   * @param {*=}                            event     event
-   */
+    /**
+     * Shows media labels in a grid without underlying radiobuttons.
+     *
+     * @constructor
+     * @param {Element}                       element   Element to apply widget to.
+     * @param {(boolean|{touch: boolean})}    options   options
+     * @param {*=}                            event     event
+     */
 
-  function Medialabelwidget( element, options, event ) {
-    //call the Super constructor
-    Widget.call( this, element, options );
-    this._init( );
-  }
+    function Medialabelwidget( element, options, event ) {
+        //call the Super constructor
+        Widget.call( this, element, options );
+        this._init( );
+    }
 
-  //copy the prototype functions from the Widget super class
-  Medialabelwidget.prototype = Object.create( Widget.prototype );
+    //copy the prototype functions from the Widget super class
+    Medialabelwidget.prototype = Object.create( Widget.prototype );
 
-  //ensure the constructor is the new one
-  Medialabelwidget.prototype.constructor = Medialabelwidget;
+    //ensure the constructor is the new one
+    Medialabelwidget.prototype.constructor = Medialabelwidget;
 
-  /**
-   * Initialize
-   *
-   */
-  Medialabelwidget.prototype._init = function( ) {
-    $( this.element ).children( 'img,video,audio' ).parent( ).addClass( 'with-media clearfix' );
-  };
+    /**
+     * Initialize
+     *
+     */
+    Medialabelwidget.prototype._init = function( ) {
+        $( this.element ).children( 'img,video,audio' ).parent( ).addClass( 'with-media clearfix' );
+    };
 
-  /**
-   * override the super's destroy method to do nothing instead
-   *
-   * @param  {Element} element The element the widget is applied on
-   */
-  Medialabelwidget.prototype.destroy = function( element ) {};
+    /**
+     * override the super's destroy method to do nothing instead
+     *
+     * @param  {Element} element The element the widget is applied on
+     */
+    Medialabelwidget.prototype.destroy = function( element ) {};
 
-  $.fn[ pluginName ] = function( options, event ) {
+    $.fn[ pluginName ] = function( options, event ) {
 
-    options = options || {};
+        options = options || {};
 
-    return this.each( function( ) {
-      var $this = $( this ),
-        data = $this.data( pluginName );
+        return this.each( function( ) {
+            var $this = $( this ),
+                data = $this.data( pluginName );
 
-      //only instantiate if options is an object (i.e. not a string) and if it doesn't exist already
-      if ( !data && typeof options === 'object' ) {
-        $this.data( pluginName, ( data = new Medialabelwidget( this, options, event ) ) );
-      }
-      //only call method if widget was instantiated before
-      else if ( data && typeof options == 'string' ) {
-        //pass the element as a parameter as this is used in fix()
-        data[ options ]( this );
-      }
-    } );
-  };
+            //only instantiate if options is an object (i.e. not a string) and if it doesn't exist already
+            if ( !data && typeof options === 'object' ) {
+                $this.data( pluginName, ( data = new Medialabelwidget( this, options, event ) ) );
+            }
+            //only call method if widget was instantiated before
+            else if ( data && typeof options == 'string' ) {
+                //pass the element as a parameter as this is used in fix()
+                data[ options ]( this );
+            }
+        } );
+    };
 
 } );

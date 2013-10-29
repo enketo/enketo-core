@@ -15,71 +15,71 @@
  */
 
 define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
-  "use strict";
+    "use strict";
 
-  var pluginName = 'tablewidget';
+    var pluginName = 'tablewidget';
 
-  /**
-   * Takes care of programmatically setting widths of table columns
-   *
-   * @constructor
-   * @param {Element} element Element to apply widget to.
-   * @param {(boolean|{touch: boolean})} options options
-   * @param {*=} event     event
-   */
+    /**
+     * Takes care of programmatically setting widths of table columns
+     *
+     * @constructor
+     * @param {Element} element Element to apply widget to.
+     * @param {(boolean|{touch: boolean})} options options
+     * @param {*=} event     event
+     */
 
-  function Tablewidget( element, options, event ) {
-    Widget.call( this, element, options );
-    this.init( );
-  }
+    function Tablewidget( element, options, event ) {
+        Widget.call( this, element, options );
+        this.init( );
+    }
 
-  //copy the prototype functions from the Widget super class
-  Tablewidget.prototype = Object.create( Widget.prototype );
+    //copy the prototype functions from the Widget super class
+    Tablewidget.prototype = Object.create( Widget.prototype );
 
-  //ensure the constructor is the new one
-  Tablewidget.prototype.constructor = Tablewidget;
+    //ensure the constructor is the new one
+    Tablewidget.prototype.constructor = Tablewidget;
 
-  Tablewidget.prototype.init = function( ) {
-    var that = this;
-    $( this.element ).parent( ).parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
-      .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
-        // remove the odd input element that XLSForm adds for the 'easier table method'
-        // see https://github.com/modilabs/pyxform/issues/72
-        $( this ).find( 'input[readonly]' ).remove( );
-        // fix the column widths, after any ongoing animations have finished
-        $( this ).promise( ).done( function( ) {
-          $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
-          $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth( );
-          $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
+    Tablewidget.prototype.init = function( ) {
+        var that = this;
+        $( this.element ).parent( ).parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
+            .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
+                // remove the odd input element that XLSForm adds for the 'easier table method'
+                // see https://github.com/modilabs/pyxform/issues/72
+                $( this ).find( 'input[readonly]' ).remove( );
+                // fix the column widths, after any ongoing animations have finished
+                $( this ).promise( ).done( function( ) {
+                    $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
+                    $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth( );
+                    $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
 
+                } );
+            } );
+    };
+
+    /**
+     * Override default destroy method to do nothing
+     *
+     * @param  {Element} element The element (not) to destroy the widget on ;)
+     */
+    Tablewidget.prototype.destroy = function( element ) {
+        //nothing to do
+        console.debug( pluginName, 'destroy called' );
+    };
+
+    $.fn[ pluginName ] = function( options, event ) {
+
+        options = options || {};
+
+        return this.each( function( ) {
+            var $this = $( this ),
+                data = $this.data( pluginName );
+
+            if ( !data && typeof options === 'object' ) {
+                $this.data( pluginName, ( data = new Tablewidget( this, options, event ) ) );
+            } else if ( data && typeof options == 'string' ) {
+                data[ options ]( this );
+            }
         } );
-      } );
-  };
-
-  /**
-   * Override default destroy method to do nothing
-   *
-   * @param  {Element} element The element (not) to destroy the widget on ;)
-   */
-  Tablewidget.prototype.destroy = function( element ) {
-    //nothing to do
-    console.debug( pluginName, 'destroy called' );
-  };
-
-  $.fn[ pluginName ] = function( options, event ) {
-
-    options = options || {};
-
-    return this.each( function( ) {
-      var $this = $( this ),
-        data = $this.data( pluginName );
-
-      if ( !data && typeof options === 'object' ) {
-        $this.data( pluginName, ( data = new Tablewidget( this, options, event ) ) );
-      } else if ( data && typeof options == 'string' ) {
-        data[ options ]( this );
-      }
-    } );
-  };
+    };
 
 } );

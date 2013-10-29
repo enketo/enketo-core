@@ -15,171 +15,171 @@
  */
 
 define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
-    'widget/date/bootstrap-datepicker/js/bootstrap-datepicker',
-    'widget/time/bootstrap-timepicker/js/bootstrap-timepicker'
-  ],
-  function( Widget, modernizr, $ ) {
-    "use strict";
+        'widget/date/bootstrap-datepicker/js/bootstrap-datepicker',
+        'widget/time/bootstrap-timepicker/js/bootstrap-timepicker'
+    ],
+    function( Widget, modernizr, $ ) {
+        "use strict";
 
-    var pluginName = 'datetimepickerExtended';
+        var pluginName = 'datetimepickerExtended';
 
-    /**
-     * This thing is hacked together with little love, because nobody used datetime inputs. Needs to be rewritten.
-     *
-     * Extends eternicode's bootstrap-datepicker without changing the original.
-     * https://github.com/eternicode/bootstrap-datepicker
-     *
-     * Extends jdewit's bootstrap-timepicker without changing the original
-     * https://github.com/jdewit/bootstrap-timepicker
-     *
-     * @constructor
-     * @param {Element}                       element   Element to apply widget to.
-     * @param {(boolean|{touch: boolean})}    options   options
-     * @param {*=}                            event     event
-     */
+        /**
+         * This thing is hacked together with little love, because nobody used datetime inputs. Needs to be rewritten.
+         *
+         * Extends eternicode's bootstrap-datepicker without changing the original.
+         * https://github.com/eternicode/bootstrap-datepicker
+         *
+         * Extends jdewit's bootstrap-timepicker without changing the original
+         * https://github.com/jdewit/bootstrap-timepicker
+         *
+         * @constructor
+         * @param {Element}                       element   Element to apply widget to.
+         * @param {(boolean|{touch: boolean})}    options   options
+         * @param {*=}                            event     event
+         */
 
-    function DatetimepickerExtended( element, options, event ) {
-      //call the Super constructor
-      Widget.call( this, element, options );
-      this._init( );
-    }
+        function DatetimepickerExtended( element, options, event ) {
+            //call the Super constructor
+            Widget.call( this, element, options );
+            this._init( );
+        }
 
-    //copy the prototype functions from the Widget super class
-    DatetimepickerExtended.prototype = Object.create( Widget.prototype );
+        //copy the prototype functions from the Widget super class
+        DatetimepickerExtended.prototype = Object.create( Widget.prototype );
 
-    //ensure the constructor is the new one
-    DatetimepickerExtended.prototype.constructor = DatetimepickerExtended;
+        //ensure the constructor is the new one
+        DatetimepickerExtended.prototype.constructor = DatetimepickerExtended;
 
-    /**
-     * Initialize timepicker widget
-     */
-    DatetimepickerExtended.prototype._init = function( ) {
-      var $dateTimeI = $( this.element ),
-        /*
+        /**
+         * Initialize timepicker widget
+         */
+        DatetimepickerExtended.prototype._init = function( ) {
+            var $dateTimeI = $( this.element ),
+                /*
           Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
           the timezone information (especially for instances-to-edit) if the values are not edited (the
           original entry may have been done in a different time zone than the edit). However, 
           values shown in the widget should reflect the local time representation of that value.
          */
-        val = ( $dateTimeI.val( ).length > 0 ) ? new Date( $dateTimeI.val( ) ).toISOLocalString( ) : '',
-        vals = val.split( 'T' ),
-        dateVal = vals[ 0 ],
-        timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '',
-        $fakeDateI = this._createFakeDateInput( dateVal ),
-        $fakeTimeI = this._createFakeTimeInput( timeVal );
+                val = ( $dateTimeI.val( ).length > 0 ) ? new Date( $dateTimeI.val( ) ).toISOLocalString( ) : '',
+                vals = val.split( 'T' ),
+                dateVal = vals[ 0 ],
+                timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '',
+                $fakeDateI = this._createFakeDateInput( dateVal ),
+                $fakeTimeI = this._createFakeTimeInput( timeVal );
 
-      $dateTimeI.hide( ).after( '<div class="datetimepicker widget" />' );
-      $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDateI.closest( '.date' ) ).append( $fakeTimeI.closest( '.bootstrap-timepicker' ) );
+            $dateTimeI.hide( ).after( '<div class="datetimepicker widget" />' );
+            $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDateI.closest( '.date' ) ).append( $fakeTimeI.closest( '.bootstrap-timepicker' ) );
 
-      $fakeDateI.datepicker( {
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayHighlight: true
-      } );
+            $fakeDateI.datepicker( {
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true
+            } );
 
-      $fakeTimeI
-        .timepicker( {
-          defaultTime: ( timeVal.length > 0 ) ? 'value' : 'current',
-          showMeridian: false
-        } )
-        .val( timeVal )
-      //the time picker itself has input elements
-      .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
+            $fakeTimeI
+                .timepicker( {
+                    defaultTime: ( timeVal.length > 0 ) ? 'value' : 'current',
+                    showMeridian: false
+                } )
+                .val( timeVal )
+            //the time picker itself has input elements
+            .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
-      this._setManualHandler( $fakeDateI );
-      this._setFocusHandler( $fakeDateI.add( $fakeTimeI ) );
+            this._setManualHandler( $fakeDateI );
+            this._setFocusHandler( $fakeDateI.add( $fakeTimeI ) );
 
-      $fakeDateI.on( 'change changeDate', function( ) {
-        changeVal( );
-        return false;
-      } );
+            $fakeDateI.on( 'change changeDate', function( ) {
+                changeVal( );
+                return false;
+            } );
 
-      $fakeTimeI.on( 'change', function( ) {
-        changeVal( );
-        return false;
-      } );
+            $fakeTimeI.on( 'change', function( ) {
+                changeVal( );
+                return false;
+            } );
 
-      //reset button
-      $fakeTimeI.next( '.btn-reset' ).on( 'click', function( event ) {
-        $fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
-        $fakeTimeI.val( '' ).trigger( 'change' );
-      } );
+            //reset button
+            $fakeTimeI.next( '.btn-reset' ).on( 'click', function( event ) {
+                $fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
+                $fakeTimeI.val( '' ).trigger( 'change' );
+            } );
 
-      function changeVal( ) {
-        if ( $fakeDateI.val( ).length > 0 && $fakeTimeI.val( ).length > 0 ) {
-          var d = $fakeDateI.val( ).split( '-' ),
-            t = $fakeTimeI.val( ).split( ':' );
-          $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString( ) ).trigger( 'change' ).blur( );
-        } else {
-          $dateTimeI.val( '' ).trigger( 'change' ).blur( );
-        }
-      }
-    };
+            function changeVal( ) {
+                if ( $fakeDateI.val( ).length > 0 && $fakeTimeI.val( ).length > 0 ) {
+                    var d = $fakeDateI.val( ).split( '-' ),
+                        t = $fakeTimeI.val( ).split( ':' );
+                    $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString( ) ).trigger( 'change' ).blur( );
+                } else {
+                    $dateTimeI.val( '' ).trigger( 'change' ).blur( );
+                }
+            }
+        };
 
-    /**
-     * Creates fake date input elements
-     * @param  {string} format the date format
-     * @return {jQuery}        the jQuery-wrapped fake date input element
-     */
-    DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
-      var $datetimeI = $( this.element ),
-        $fakeDate = $(
-          '<div class="date">' +
-          '<input class="ignore input-small" type="text" readonly="readonly" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
-          '</div>' ),
-        $fakeDateI = $fakeDate.find( 'input' );
+        /**
+         * Creates fake date input elements
+         * @param  {string} format the date format
+         * @return {jQuery}        the jQuery-wrapped fake date input element
+         */
+        DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
+            var $datetimeI = $( this.element ),
+                $fakeDate = $(
+                    '<div class="date">' +
+                    '<input class="ignore input-small" type="text" readonly="readonly" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
+                    '</div>' ),
+                $fakeDateI = $fakeDate.find( 'input' );
 
-      return $fakeDateI;
-    };
+            return $fakeDateI;
+        };
 
-    /**
-     * Creates fake time input elements
-     * @param  {string} format the date format
-     * @return {jQuery}        the jQuery-wrapped fake date input element
-     */
-    DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
-      var $datetimeI = $( this.element ),
-        $fakeTime = $(
-          '<div class="bootstrap-timepicker">' +
-          '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' +
-          timeVal + '" placeholder="hh:mm"/>' +
-          '<button class="btn-reset"><i class="icon icon-trash"></i></button>' +
-          '</div>' ),
-        $fakeTimeI = $fakeTime.find( 'input' );
+        /**
+         * Creates fake time input elements
+         * @param  {string} format the date format
+         * @return {jQuery}        the jQuery-wrapped fake date input element
+         */
+        DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
+            var $datetimeI = $( this.element ),
+                $fakeTime = $(
+                    '<div class="bootstrap-timepicker">' +
+                    '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' +
+                    timeVal + '" placeholder="hh:mm"/>' +
+                    '<button class="btn-reset"><i class="icon icon-trash"></i></button>' +
+                    '</div>' ),
+                $fakeTimeI = $fakeTime.find( 'input' );
 
-      return $fakeTimeI;
-    };
+            return $fakeTimeI;
+        };
 
-    /**
-     * copy manual changes to original date input field
-     *
-     * @param { jQuery } $fakeDateI Fake date input element
-     */
-    DatetimepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {};
+        /**
+         * copy manual changes to original date input field
+         *
+         * @param { jQuery } $fakeDateI Fake date input element
+         */
+        DatetimepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {};
 
-    /**
-     * Handler for focus and blur events.
-     * These events on the original input are used to check whether to display the 'required' message
-     *
-     * @param { jQuery } $fakeDateI Fake date input element
-     */
-    DatetimepickerExtended.prototype._setFocusHandler = function( $els ) {
-      var that = this;
-      $els.on( 'focus blur', function( event ) {
-        $( that.element ).trigger( event.type );
-      } );
-    };
+        /**
+         * Handler for focus and blur events.
+         * These events on the original input are used to check whether to display the 'required' message
+         *
+         * @param { jQuery } $fakeDateI Fake date input element
+         */
+        DatetimepickerExtended.prototype._setFocusHandler = function( $els ) {
+            var that = this;
+            $els.on( 'focus blur', function( event ) {
+                $( that.element ).trigger( event.type );
+            } );
+        };
 
-    $.fn[ pluginName ] = function( options, event ) {
+        $.fn[ pluginName ] = function( options, event ) {
 
-      options = options || {};
+            options = options || {};
 
-      return this.each( function( ) {
-        var $this = $( this ),
-          data = $this.data( pluginName ),
-          badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
+            return this.each( function( ) {
+                var $this = $( this ),
+                    data = $this.data( pluginName ),
+                    badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
 
-        /*
+                /*
         Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field
         already has a value and is edited. The new value YYYY-MM-DD prepends old or replaces the year of the old value and first hyphen. E.g.
         existing: 2010-01-01, new value entered: 2012-12-12 => input field shows: 2012-12-1201-01.
@@ -189,15 +189,15 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
         browser: "Mozilla/5.0 (Linux; U; Android 4.1.1; en-us; GT-P3113 Build/JRO03C) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30";
         webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30" 
         */
-        if ( !data && typeof options === 'object' && ( !options.touch || !modernizr.inputtypes.datetime || badSamsung.test( navigator.userAgent ) ) ) {
-          $this.data( pluginName, ( data = new DatetimepickerExtended( this, options, event ) ) );
-        }
-        //only call method if widget was instantiated before
-        else if ( data && typeof options == 'string' ) {
-          //pass the element as a parameter as this is used in fix()
-          data[ options ]( this );
-        }
-      } );
-    };
+                if ( !data && typeof options === 'object' && ( !options.touch || !modernizr.inputtypes.datetime || badSamsung.test( navigator.userAgent ) ) ) {
+                    $this.data( pluginName, ( data = new DatetimepickerExtended( this, options, event ) ) );
+                }
+                //only call method if widget was instantiated before
+                else if ( data && typeof options == 'string' ) {
+                    //pass the element as a parameter as this is used in fix()
+                    data[ options ]( this );
+                }
+            } );
+        };
 
-  } );
+    } );

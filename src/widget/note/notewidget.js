@@ -15,58 +15,58 @@
  */
 
 define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
-  "use strict";
+    "use strict";
 
-  var pluginName = 'notewidget';
+    var pluginName = 'notewidget';
 
-  /**
-   * Enhances notes
-   *
-   * @constructor
-   * @param {Element} element [description]
-   * @param {(boolean|{touch: boolean, repeat: boolean})} options options
-   * @param {*=} e     event
-   */
+    /**
+     * Enhances notes
+     *
+     * @constructor
+     * @param {Element} element [description]
+     * @param {(boolean|{touch: boolean, repeat: boolean})} options options
+     * @param {*=} e     event
+     */
 
-  function Notewidget( element, options ) {
-    Widget.call( this, element, options );
-    this._init( );
-  }
+    function Notewidget( element, options ) {
+        Widget.call( this, element, options );
+        this._init( );
+    }
 
-  //copy the prototype functions from the Widget super class
-  Notewidget.prototype = Object.create( Widget.prototype );
+    //copy the prototype functions from the Widget super class
+    Notewidget.prototype = Object.create( Widget.prototype );
 
-  //ensure the constructor is the new one
-  Notewidget.prototype.constructor = Notewidget;
+    //ensure the constructor is the new one
+    Notewidget.prototype.constructor = Notewidget;
 
-  Notewidget.prototype._init = function( ) {
-    $( this.element ).parent( 'label' ).each( function( ) {
-      console.log( 'converting readonly to trigger', $( this ) );
-      var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
-        branch = ( relevant ) ? ' jr-branch pre-init' : '',
-        name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
-        attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
-        value = $( this ).find( 'input, select, textarea' ).val( ),
-        html = $( this ).markdownToHtml( ).html( );
-      $( '<fieldset class="trigger alert alert-block' + branch + '" ' + attributes + '></fieldset>' )
-        .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove( );
-      $( this ).remove( );
-    } );
-  };
+    Notewidget.prototype._init = function( ) {
+        $( this.element ).parent( 'label' ).each( function( ) {
+            console.log( 'converting readonly to trigger', $( this ) );
+            var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
+                branch = ( relevant ) ? ' jr-branch pre-init' : '',
+                name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
+                attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
+                value = $( this ).find( 'input, select, textarea' ).val( ),
+                html = $( this ).markdownToHtml( ).html( );
+            $( '<fieldset class="trigger alert alert-block' + branch + '" ' + attributes + '></fieldset>' )
+                .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove( );
+            $( this ).remove( );
+        } );
+    };
 
-  $.fn[ pluginName ] = function( options, event ) {
-    return this.each( function( ) {
-      var $this = $( this ),
-        data = $this.data( pluginName );
+    $.fn[ pluginName ] = function( options, event ) {
+        return this.each( function( ) {
+            var $this = $( this ),
+                data = $this.data( pluginName );
 
-      options = options || {};
+            options = options || {};
 
-      if ( !data && typeof options === 'object' ) {
-        $this.data( pluginName, ( data = new Notewidget( this, options, event ) ) );
-      } else if ( data && typeof options == 'string' ) {
-        data[ options ]( this );
-      }
-    } );
-  };
+            if ( !data && typeof options === 'object' ) {
+                $this.data( pluginName, ( data = new Notewidget( this, options, event ) ) );
+            } else if ( data && typeof options == 'string' ) {
+                data[ options ]( this );
+            }
+        } );
+    };
 
 } );
