@@ -103,14 +103,35 @@ module.exports = function( grunt ) {
                     ext: '.css'
                 } ]
             }
+        },
+        // this compiles all javascript to a single file, it is only used to prepare for 
+        // testing closure compiler build warnings and errors
+        requirejs: {
+            combine: {
+                options: {
+                    name: '../app',
+                    baseUrl: 'lib',
+                    mainConfigFile: "app.js",
+                    findNestedDependencies: true,
+                    include: [ 'require.js', 'js/Widget' ].concat( grunt.file.readJSON( 'config.json' ).widgets ),
+                    out: "build/js/optimized.js" //,
+                    //optimize: "closure",
+                    //closure: {
+                    //    CompilerOptions: {},
+                    //    CompilationLEvel: 'SIMPLE_OPTIMIZATIONS',
+                    //    loggingLevel: 'WARNING'
+                    //}
+                }
+            }
         }
     } );
 
+    grunt.loadNpmTasks( 'grunt-contrib-connect' );
     grunt.loadNpmTasks( 'grunt-jsbeautifier' );
     grunt.loadNpmTasks( 'grunt-contrib-jasmine' );
     grunt.loadNpmTasks( 'grunt-contrib-jshint' );
     grunt.loadNpmTasks( 'grunt-contrib-sass' );
-    grunt.loadNpmTasks( 'grunt-contrib-connect' );
+    grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
 
     grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function( ) {
         var widgetConfig, widgetFolderPath, widgetSassPath, widgetConfigPath,
