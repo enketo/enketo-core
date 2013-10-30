@@ -688,6 +688,7 @@ define(
                 }
                 if ( this.node( '*>meta>deprecatedID' ).get( ).length !== 1 ) {
                     var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
+                    document.adoptNode( deprecatedIDXMLNode );
                     $( deprecatedIDXMLNode ).appendTo( this.node( '*>meta' ).get( ) );
                 }
                 this.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal( )[ 0 ], null, 'string' );
