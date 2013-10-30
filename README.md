@@ -10,6 +10,8 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 
 ##Under Active Reorganization!
 
+It will be considered stable when [this milestone](https://github.com/MartijnR/enketo-core/issues?milestone=1&state=open) is reached, after which the requirejs branch will be merged with master.
+
 ###Related Projects
 
 * [XPathJS_javarosa](https://github.com/MartijnR/xpathjs_javarosa) - used inside this repo
