@@ -28,18 +28,16 @@
  * @constructor
  */
 
-define(
-    [ 'xpath', 'modernizr', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', 'bootstrap' ],
-
-    function( XPathJS, modernizr, widgets, $ ) {
+define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', 'bootstrap' ],
+    function( modernizr, DataXML, widgets, $ ) {
         "use strict";
 
         function Form( formSelector, dataStr, dataStrToEdit ) {
-            var data, dataToEdit, form, $form, $formClone, repeatsPresent,
+            var model, dataToEdit, form, $form, $formClone, repeatsPresent,
                 loadErrors = [ ];
             //*** FOR DEBUGGING and UNIT TESTS ONLY ***
             this.ex = function( expr, type, selector, index ) {
-                return data.evaluate( expr, type, selector, index );
+                return model.evaluate( expr, type, selector, index );
             };
             //sfv = function( ) {
             //  return form.setAllVals( );
@@ -48,13 +46,13 @@ define(
                 return new DataXML( dataStr );
             };
             this.getDataO = function( ) {
-                return data;
+                return model;
             };
             //this.getDataEditO = function( ) {
             //  return dataToEdit.get( );
             //},
             this.getInstanceID = function( ) {
-                return data.getInstanceID( );
+                return model.getInstanceID( );
             };
             //Form = function( selector ) {
             //  return new FormHTML( selector );
@@ -74,17 +72,17 @@ define(
                 //cloning children to keep any event handlers on 'form.jr' intact upon resetting
                 $formClone = $( formSelector ).clone( ).appendTo( '<original></original>' );
 
-                data = new DataXML( dataStr );
+                model = new DataXML( dataStr );
                 form = new FormHTML( formSelector );
 
-                //var profiler = new Profiler('data.init()');
-                data.init( );
+                //var profiler = new Profiler('model.init()');
+                model.init( );
                 //profiler.report();
 
                 if ( typeof dataStrToEdit !== 'undefined' && dataStrToEdit && dataStrToEdit.length > 0 ) {
                     dataToEdit = new DataXML( dataStrToEdit );
                     dataToEdit.init( );
-                    data.load( dataToEdit );
+                    this.load( dataToEdit );
                 }
                 repeatsPresent = ( $( formSelector ).find( '.jr-repeat' ).length > 0 );
 
@@ -109,11 +107,9 @@ define(
              * @param {boolean=} all
              */
             this.getDataStr = function( incTempl, incNs, all ) {
-                return data.getStr( incTempl, incNs, all );
+                return model.getStr( incTempl, incNs, all );
             };
-            /**
-             *
-             */
+
             this.getRecordName = function( ) {
                 return form.recordName.get( );
             };
@@ -168,439 +164,14 @@ define(
                 return form.isValid( );
             };
 
-
-            /**
-             * Inner Class dealing with the XML Instance (data) of a form
-             * @constructor
-             * @extends Form
-             * @param {string} dataStr String of the default XML instance
-             */
-
-            function DataXML( dataStr ) {
-                var $data,
-                    that = this;
-
-                this.instanceSelectRegEx = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
-
-                //TEMPORARY DUE TO FIREFOX ISSUE, REMOVE ALL NAMESPACES FROM STRING, 
-                //BETTER TO LEARN HOW TO DEAL WITH DEFAULT NAMESPACES
-                dataStr = dataStr.replace( /xmlns\=\"[a-zA-Z0-9\:\/\.]*\"/g, '' );
-
-                this.xml = $.parseXML( dataStr );
-
-                $data = $( this.xml );
-
-                this.$ = $data;
-
-                //replace browser-built-in-XPath Engine
-                XPathJS.bindDomLevel3XPath( );
-
-                /**
-                 * Function: node
-                 *
-                 * description
-                 *
-                 * Parameters:
-                 *
-                 *   @param {(string|null)=} selector - [type/description]
-                 *   @param {(string|number|null)=} index    - [type/description]
-                 *   @param {(Object|null)=} filter   - [type/description]
-                 *   @param filter.onlyTemplate
-                 *   @param filter.noTemplate
-                 *   @param filter.onlyLeaf
-                 *   @param filter.noEmpty
-                 *   @returns {Nodeset}
-                 */
-                this.node = function( selector, index, filter ) {
-                    return new Nodeset( selector, index, filter );
-                };
-
-                /**
-                 *  Inner Class dealing with nodes and nodesets of the XML instance
-                 *
-                 *   @param {(string|null)=} selector simpleXPath or jQuery selector
-                 *   @param {(string|number|null)=} index the index of the target node with that selector
-                 *   @param {(Object|null)=} filter filter object for the result nodeset
-                 *   @param {boolean=} filter.onlyTemplate only select template nodes (of repeats)
-                 *   @param {boolean=} filter.noTemplate exclude template nodes (of repeats)
-                 *   @param {boolean=} filter.onlyLeaf only include leaf nodes
-                 *   @param {boolean=} filter.noEmpty exclude empty nodes (and therefore only returns leaf nodes)
-                 *   @constructor
-                 *   @extends DataXML
-                 */
-
-                function Nodeset( selector, index, filter ) {
-                    var defaultSelector = '*';
-                    this.originalSelector = selector;
-                    this.selector = ( typeof selector === 'string' && selector.length > 0 ) ? selector : defaultSelector;
-                    filter = ( typeof filter !== 'undefined' && filter !== null ) ? filter : {};
-                    this.filter = filter;
-                    this.filter.noTemplate = ( typeof filter.noTemplate !== 'undefined' ) ? filter.noTemplate : true;
-                    this.filter.onlyLeaf = ( typeof filter.onlyLeaf !== 'undefined' ) ? filter.onlyLeaf : false;
-                    this.filter.onlyTemplate = ( typeof filter.onlyTemplate !== 'undefined' ) ? filter.onlyTemplate : false;
-                    this.filter.noEmpty = ( typeof filter.noEmpty !== 'undefined' ) ? filter.noEmpty : false;
-                    this.index = index;
-
-                    if ( $data.find( 'model>instance' ).length > 0 ) {
-                        //to refer to non-first instance, the instance('id_literal')/path/to/node syntax can be used
-                        if ( this.selector !== defaultSelector && this.selector.indexOf( '/' ) !== 0 && that.instanceSelectRegEx.test( this.selector ) ) {
-                            this.selector = this.selector.replace( that.instanceSelectRegEx, "model > instance#$1" );
-                            return;
-                        }
-                        //default context is the first instance in the model            
-                        this.selector = "model > instance:eq(0) " + this.selector;
-                    }
-                }
-
-                /**
-                 * Privileged method to find data nodes filtered by a jQuery or XPath selector and additional filter properties
-                 * Without parameters it returns a collection of all data nodes excluding template nodes and their children. Therefore, most
-                 * queries will not require filter properties. This function handles all (?) data queries in the application.
-                 *
-                 * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
-                 */
-                Nodeset.prototype.get = function( ) {
-                    var p, $nodes, val, context;
-
-                    // noTemplate is ignored if onlyTemplate === true
-                    if ( this.filter.onlyTemplate === true ) {
-                        $nodes = $data.xfind( this.selector ).filter( '[template]' );
-                    }
-                    // default
-                    else if ( this.filter.noTemplate === true ) {
-                        $nodes = $data.xfind( this.selector ).not( '[template], [template] *' );
-                    } else {
-                        $nodes = $data.xfind( this.selector );
-                    }
-                    //noEmpty automatically excludes non-leaf nodes
-                    if ( this.filter.noEmpty === true ) {
-                        $nodes = $nodes.filter( function( ) {
-                            val = /** @type {string} */ $( this ).text( );
-                            return $( this ).children( ).length === 0 && $.trim( val ).length > 0; //$.trim($this.text()).length > 0;
-                        } );
-                    }
-                    //this may still contain empty leaf nodes
-                    else if ( this.filter.onlyLeaf === true ) {
-                        $nodes = $nodes.filter( function( ) {
-                            return $( this ).children( ).length === 0;
-                        } );
-                    }
-                    $nodes = ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
-                    return $nodes;
-                };
-
-                /**
-                 * Sets data node values.
-                 *
-                 * @param {(string|Array.<string>)=} newVals    The new value of the node.
-                 * @param {?string=} expr  XPath expression to validate the node.
-                 * @param {?string=} xmlDataType XML data type of the node
-                 *
-                 * @returns {?boolean} null is returned when the node is not found or multiple nodes were selected
-                 */
-                Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
-                    var $target, curVal, /**@type {string}*/ newVal, success;
-
-                    curVal = this.getVal( )[ 0 ];
-
-                    if ( typeof newVals !== 'undefined' && newVals !== null ) {
-                        newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString( );
-                    } else newVal = '';
-                    newVal = this.convert( newVal, xmlDataType );
-
-                    $target = this.get( );
-
-                    if ( $target.length === 1 && $.trim( newVal.toString( ) ) !== $.trim( curVal.toString( ) ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
-                        //first change the value so that it can be evaluated in XPath (validated)
-                        $target.text( newVal );
-                        //then return validation result
-                        success = this.validate( expr, xmlDataType );
-                        $form.trigger( 'dataupdate', $target.prop( 'nodeName' ) );
-                        //add type="file" attribute for file references
-                        if ( xmlDataType === 'binary' ) {
-                            if ( newVal.length > 0 ) {
-                                $target.attr( 'type', 'file' );
-                            } else {
-                                $target.removeAttr( 'type' );
-                            }
-                        }
-                        return success;
-                    }
-                    if ( $target.length > 1 ) {
-                        console.error( 'nodeset.setVal expected nodeset with one node, but received multiple' );
-                        return null;
-                    }
-                    if ( $target.length === 0 ) {
-                        console.error( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found!' );
-                        return null;
-                    }
-                    //always validate if the new value is not empty, even if value didn't change (see validateAll() function)
-                    //return (newVal.length > 0 && validateAll) ? this.validate(expr, xmlDataType) : true;
-                    return null;
-                };
-
-                /**
-                 * Function: getVal
-                 *
-                 * Obtains the data value if a JQuery or XPath selector for a single node is provided.
-                 *
-                 * Parameters:
-                 *
-                 *   selector - String of JQuery or XPath selector
-                 *
-                 * Returns:
-                 *
-                 *   returns [multiple OBSOLETE?] an array of values
-                 *
-                 */
-                Nodeset.prototype.getVal = function( ) {
-                    var vals = [ ];
-                    this.get( ).each( function( ) {
-                        vals.push( $( this ).text( ) );
-                    } );
-                    return vals;
-                };
-
-                /**
-                 * clone data node after all templates have been cloned (after initialization)
-                 * @param  {jQuery} $precedingTargetNode the node after which to append the clone
-                 */
-                Nodeset.prototype.clone = function( $precedingTargetNode ) {
-                    var $dataNode, allClonedNodeNames;
-
-                    $dataNode = this.get( );
-                    $precedingTargetNode = $precedingTargetNode || $dataNode;
-
-                    if ( $dataNode.length === 1 && $precedingTargetNode.length === 1 ) {
-                        $dataNode.clone( ).insertAfter( $precedingTargetNode ).find( '*' ).addBack( ).removeAttr( 'template' );
-
-                        allClonedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
-                        $dataNode.find( '*' ).each( function( ) {
-                            allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
-                        } );
-
-                        $form.trigger( 'dataupdate', allClonedNodeNames.join( ',' ) );
-                    } else {
-                        console.error( 'node.clone() function did not receive origin and target nodes' );
-                    }
-                };
-
-                /**
-                 * Remove a node
-                 */
-                Nodeset.prototype.remove = function( ) {
-                    var dataNode = this.get( );
-                    if ( dataNode.length > 0 ) {
-                        dataNode.remove( );
-                        $form.trigger( 'dataupdate', dataNode.prop( 'nodeName' ) );
-                    } else {
-                        console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );
-                    }
-                };
-
-                /**
-                 * Convert a value to a specified data type (though always stringified)
-                 * @param  {string} x  value to convert
-                 * @param  {?string=} xmlDataType name of xmlDataType
-                 * @return {string}             return string value of converted value
-                 */
-                Nodeset.prototype.convert = function( x, xmlDataType ) {
-                    if ( x.toString( ) === '' ) {
-                        return x;
-                    }
-                    if ( typeof xmlDataType !== 'undefined' && xmlDataType !== null &&
-                        typeof this.types[ xmlDataType.toLowerCase( ) ] !== 'undefined' &&
-                        typeof this.types[ xmlDataType.toLowerCase( ) ].convert !== 'undefined' ) {
-                        return this.types[ xmlDataType.toLowerCase( ) ].convert( x );
-                    }
-                    return x;
-                };
-
-                /**
-                 * Validate a value with an XPath Expression and/or xml data type
-                 * @param  {?string=} expr        XPath expression
-                 * @param  {?string=} xmlDataType name of xml data type
-                 * @return {boolean}            returns true if both validations are true
-                 */
-                Nodeset.prototype.validate = function( expr, xmlDataType ) {
-                    var typeValid, exprValid,
-                        value = this.getVal( )[ 0 ];
-
-                    if ( value.toString( ) === '' ) {
-                        return true;
-                    }
-
-                    if ( typeof xmlDataType == 'undefined' || xmlDataType === null || typeof this.types[ xmlDataType.toLowerCase( ) ] == 'undefined' ) {
-                        xmlDataType = 'string';
-                    }
-                    typeValid = this.types[ xmlDataType.toLowerCase( ) ].validate( value );
-
-                    exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? that.evaluate( expr, 'boolean', this.originalSelector, this.index ) : true;
-                    return ( typeValid && exprValid );
-                };
-
-                /**
-                 * xml data types
-                 * @namespace  types
-                 * @type {Object}
-                 */
-                Nodeset.prototype.types = {
-                    'string': {
-                        //max length of type string is 255 chars. Convert (truncate) silently?
-                        validate: function( x ) {
-                            return true;
-                        }
-                    },
-                    'select': {
-                        validate: function( x ) {
-                            return true;
-                        }
-                    },
-                    'select1': {
-                        validate: function( x ) {
-                            return true;
-                        }
-                    },
-                    'decimal': {
-                        validate: function( x ) {
-                            return ( !isNaN( x - 0 ) && x !== null ) ? true : false;
-                        }
-                    },
-                    'int': {
-                        validate: function( x ) {
-                            return ( !isNaN( x - 0 ) && x !== null && Math.round( x ) == x ) ? true : false; //x.toString() == parseInt(x, 10).toString();
-                        }
-                    },
-                    'date': {
-                        validate: function( x ) {
-                            var pattern = ( /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/ ),
-                                segments = pattern.exec( x );
-
-                            return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString( ) !== 'Invalid Date' ) : false;
-                        },
-                        convert: function( x ) {
-                            var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/,
-                                segments = pattern.exec( x ),
-                                date = new Date( x );
-                            if ( new Date( x ).toString( ) == 'Invalid Date' ) {
-                                //this code is really only meant for the Rhino and PhantomJS engines, in browsers it may never be reached
-                                if ( segments && Number( segments[ 1 ] ) > 0 && Number( segments[ 3 ] ) >= 0 && Number( segments[ 3 ] ) < 12 && Number( segments[ 5 ] ) < 32 ) {
-                                    date = new Date( Number( segments[ 1 ] ), ( Number( segments[ 3 ] ) - 1 ), Number( segments[ 5 ] ) );
-                                }
-                            }
-                            //date.setUTCHours(0,0,0,0);
-                            //return date.toUTCString();//.getUTCFullYear(), datetime.getUTCMonth(), datetime.getUTCDate());
-                            return date.getUTCFullYear( ).toString( ).pad( 4 ) + '-' + ( date.getUTCMonth( ) + 1 ).toString( ).pad( 2 ) + '-' + date.getUTCDate( ).toString( ).pad( 2 );
-                        }
-                    },
-                    'datetime': {
-                        validate: function( x ) {
-                            //the second part builds in some tolerance for slightly-off dates provides as defaults (e.g.: 2013-05-31T07:00-02)
-                            return ( new Date( x.toString( ) ).toString( ) !== 'Invalid Date' || new Date( this.convert( x.toString( ) ) ).toString( ) !== 'Invalid Date' );
-                        },
-                        convert: function( x ) {
-                            var date, // timezone, segments, dateS, timeS,
-                                patternCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2}):([0-9]{2})$/,
-                                patternAlmostCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2})$/;
-                            /* 
-                             * if the pattern is right, or almost right but needs a small correction for JavaScript to handle it,
-                             * do not risk changing the time zone by calling toISOLocalString()
-                             */
-                            if ( new Date( x ).toString( ) !== 'Invalid Date' && patternCorrect.test( x ) ) {
-                                return x;
-                            }
-                            if ( new Date( x ).toString( ) == 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
-                                return x + ':00';
-                            }
-                            date = new Date( x );
-                            return ( date.toString( ) !== 'Invalid Date' ) ? date.toISOLocalString( ) : date.toString( );
-                        }
-                    },
-                    'time': {
-                        validate: function( x ) {
-                            var date = new Date( ),
-                                segments = x.toString( ).split( ':' );
-                            if ( segments.length < 2 ) {
-                                return false;
-                            }
-                            segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString( ).split( '.' )[ 0 ] ) : 0;
-
-                            return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString( ) !== 'Invalid Date' );
-                        },
-                        convert: function( x ) {
-                            var segments = x.toString( ).split( ':' );
-                            $.each( segments, function( i, val ) {
-                                segments[ i ] = val.toString( ).pad( 2 );
-                            } );
-                            return segments.join( ':' );
-                        }
-                    },
-                    'barcode': {
-                        validate: function( x ) {
-                            return true;
-                        }
-                    },
-                    'geopoint': {
-                        validate: function( x ) {
-                            var coords = x.toString( ).split( ' ' );
-                            return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
-                                ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
-                                ( typeof coords[ 2 ] == 'undefined' || !isNaN( coords[ 2 ] ) ) &&
-                                ( typeof coords[ 3 ] == 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
-                        },
-                        convert: function( x ) {
-                            return $.trim( x.toString( ) );
-                        }
-                    },
-                    'binary': {
-                        validate: function( x ) {
-                            return true;
-                        }
-                    }
-                };
-            }
-
-            /**
-             * Function: DataXML.init
-             *
-             * Sets up the $data object.
-             *
-             * Parameters:
-             *
-             *   dataStr - xml data as a string
-             *
-             * Returns:
-             *
-             *   -
-             */
-            DataXML.prototype.init = function( ) {
-                var val;
-
-                //trimming values
-                this.node( null, null, {
-                    noEmpty: true,
-                    noTemplate: false
-                } ).get( ).each( function( ) {
-                    val = /** @type {string} */ $( this ).text( );
-                    $( this ).text( $.trim( val ) );
-                } );
-
-                this.cloneAllTemplates( );
-                return;
-            };
-
-            DataXML.prototype.getInstanceID = function( ) {
-                return this.node( ':first>meta>instanceID' ).getVal( )[ 0 ];
-            };
             /**
              * Function to load an (possibly incomplete) instance so that it can be edited.
              *
              * @param  {Object} instanceOfDataXML [description]
              *
              */
-            DataXML.prototype.load = function( instanceOfDataXML ) {
+            this.load = function( instanceOfDataXML ) {
                 var nodesToLoad, index, xmlDataType, path, value, target, $input, $target, $template, instanceID, error,
-                    that = this,
                     filter = {
                         noTemplate: true,
                         noEmpty: true
@@ -608,14 +179,14 @@ define(
 
                 nodesToLoad = instanceOfDataXML.node( null, null, filter ).get( );
                 //first empty all form data nodes, to clear any default values except those inside templates
-                this.node( null, null, filter ).get( ).each( function( ) {
+                model.node( null, null, filter ).get( ).each( function( ) {
                     //something seems fishy about doing it this way instead of using node.setVal('');
                     $( this ).text( '' );
                 } );
 
                 nodesToLoad.each( function( ) {
                     var name = $( this ).prop( 'nodeName' );
-                    path = form.generateName( $( this ) );
+                    path = $( this ).getXPath( 'instance' );
                     index = instanceOfDataXML.node( path ).get( ).index( $( this ) );
                     value = $( this ).text( );
 
@@ -623,7 +194,7 @@ define(
                     $input = $form.find( '[name="' + path + '"]' ).eq( 0 );
 
                     xmlDataType = ( $input.length > 0 ) ? form.input.getXmlType( $input ) : 'string';
-                    target = that.node( path, index );
+                    target = model.node( path, index );
                     $target = target.get( );
 
                     //if there are multiple nodes with that name and index (actually impossible)
@@ -637,22 +208,22 @@ define(
                     }
                     //if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
                     //this use of node(path,index,file).get() is a bit of a trick that is difficult to wrap one's head around
-                    else if ( that.node( path, 0, {
+                    else if ( model.node( path, 0, {
                         noTemplate: false
                     } ).get( ).closest( '[template]' ).length > 0 ) {
                         //clone the template node 
                         //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub)
-                        $template = that.node( path, 0, {
+                        $template = model.node( path, 0, {
                             noTemplate: false
                         } ).get( ).closest( '[template]' );
                         //TODO: test this for nested repeats
                         //if a preceding repeat with that path was empty this repeat may not have been created yet,
                         //so we need to make sure all preceding repeats are created
                         for ( var p = 0; p < index; p++ ) {
-                            that.cloneTemplate( form.generateName( $template ), p );
+                            model.cloneTemplate( $template.getXPath( 'instance' ), p );
                         }
                         //try setting the value again
-                        target = that.node( path, index );
+                        target = model.node( path, index );
                         if ( target.get( ).length === 1 ) {
                             target.setVal( value, null, xmlDataType );
                         } else {
@@ -663,334 +234,38 @@ define(
                     }
                     //as an exception, missing meta nodes will be quietly added if a meta node exists at that path
                     //the latter requires e.g the root node to have the correct name
-                    else if ( $( this ).parent( 'meta' ).length === 1 && that.node( form.generateName( $( this ).parent( 'meta' ) ), 0 ).get( ).length === 1 ) {
+                    else if ( $( this ).parent( 'meta' ).length === 1 && model.node( $( this ).parent( 'meta' ).getXPath( 'instance' ), 0 ).get( ).length === 1 ) {
                         //if there is no existing meta node with that node as child
-                        if ( that.node( ':first > meta > ' + name, 0 ).get( ).length === 0 ) {
-                            $( this ).clone( ).appendTo( that.node( ':first > meta' ).get( ) );
+                        if ( model.node( ':first > meta > ' + name, 0 ).get( ).length === 0 ) {
+                            $( this ).clone( ).appendTo( model.node( ':first > meta' ).get( ) );
                         } else {
                             error = 'Found duplicate meta node (' + name + ')!';
                             console.error( error );
                             loadErrors.push( error );
                         }
                     } else {
-                        error = 'Did not find form node with path: ' + path + ' and index: ' + index + ' so failed to load data.';
+                        error = 'Did not find form node with path: ' + path + ' and index: ' + index + ' so failed to load model.';
                         console.error( error );
                         loadErrors.push( error );
                     }
                 } );
                 //add deprecatedID node, copy instanceID value to deprecatedID and empty deprecatedID
-                instanceID = this.node( '*>meta>instanceID' );
+                instanceID = model.node( '*>meta>instanceID' );
                 if ( instanceID.get( ).length !== 1 ) {
                     error = 'InstanceID node in default instance error (found ' + instanceID.get( ).length + ' instanceID nodes)';
                     console.error( error );
                     loadErrors.push( error );
                     return;
                 }
-                if ( this.node( '*>meta>deprecatedID' ).get( ).length !== 1 ) {
+                if ( model.node( '*>meta>deprecatedID' ).get( ).length !== 1 ) {
                     var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
                     document.adoptNode( deprecatedIDXMLNode );
-                    $( deprecatedIDXMLNode ).appendTo( this.node( '*>meta' ).get( ) );
+                    $( deprecatedIDXMLNode ).appendTo( model.node( '*>meta' ).get( ) );
                 }
-                this.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal( )[ 0 ], null, 'string' );
+                model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal( )[ 0 ], null, 'string' );
                 instanceID.setVal( '', null, 'string' );
             };
 
-
-            //index is the index of the node (defined in Nodeset), that the clone should be added immediately after
-            //if a node with that name and that index+1 already exists the node will NOT be cloned
-            //almost same as clone() but adds targetIndex and removes template attributes and if no template node exists it will copy a normal node
-            //nodeset (givein in node() should include filter noTemplate:false) so it will provide all nodes that that name
-            DataXML.prototype.cloneTemplate = function( selector, index ) {
-                //console.log('trying to locate data node with path: '+path+' to clone and insert after node with same xpath and index: '+index);
-                var $insertAfterNode, name,
-                    template = this.node( selector, 0, {
-                        onlyTemplate: true
-                    } );
-                //if form does not use jr:template="" but the node-to-clone does exist
-                template = ( template.get( ).length === 0 ) ? this.node( selector, 0 ) : template;
-                name = template.get( ).prop( 'nodeName' );
-                $insertAfterNode = this.node( selector, index ).get( );
-
-                //if templatenodes and insertafternode(s) have been identified AND the node following insertafternode doesn't already exist(! important for nested repeats!)
-                if ( template.get( ).length === 1 && $insertAfterNode.length === 1 && $insertAfterNode.next( ).prop( 'nodeName' ) !== name ) { //this.node(selector, index+1).get().length === 0){
-                    template.clone( $insertAfterNode );
-                } else {
-                    //console.error ('Could locate node: '+path+' with index '+index+' in data instance.There could be multiple template node (a BUG) or none.');
-                    if ( $insertAfterNode.next( ).prop( 'nodeName' ) !== name ) {
-                        console.error( 'Could not find template node and/or node to insert the clone after' );
-                    }
-                }
-            };
-
-            /**
-             * Function: cloneAllTemplates
-             *
-             * Initialization function that creates <repeat>able data nodes with the defaults from the template if no repeats have been created yet.
-             * Strictly speaking this is not "according to the spec" as the user should be asked first whether it has any data for this question
-             * but seems usually always better to assume at least one 'repeat' (= 1 question). It doesn't make use of the Nodeset subclass (CHANGE?)
-             *
-             * See also: In JavaRosa, the documentation on the jr:template attribute.
-             *
-             * @param {jQuery=} startNode Provides the scope (default is the whole data object) from which to start cloning.
-             */
-            DataXML.prototype.cloneAllTemplates = function( startNode ) {
-                var _this = this;
-                if ( typeof startNode == 'undefined' || startNode.length === 0 ) {
-                    startNode = this.$.find( ':first' );
-                }
-                //clone data nodes with template (jr:template=) attribute if it doesn't have any siblings of the same name already
-                //strictly speaking this is not "according to the spec" as the user should be asked whether it has any data for this question
-                //but I think it is almost always better to assume at least one 'repeat' (= 1 question)
-                startNode.children( '[template]' ).each( function( ) {
-                    if ( typeof $( this ).parent( ).attr( 'template' ) == 'undefined' && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
-                        //console.log('going to clone template data node with name: ' + $(this).prop('nodeName'));
-                        $( this ).clone( ).insertAfter( $( this ) ).find( '*' ).addBack( ).removeAttr( 'template' );
-                        //cloneDataNode($(this));
-                    }
-                } );
-                startNode.children( ).not( '[template]' ).each( function( ) {
-                    _this.cloneAllTemplates( $( this ) );
-                } );
-                return;
-            };
-
-            /**
-             * Function: get
-             *
-             * Returns jQuery Data Object (obsolete?)
-             *
-             * Parameters:
-             *
-             * Returns:
-             *
-             *   JQuery Data Object
-             *
-             * See Also:
-             *
-             *    <nodes.get()>, which is always (?) preferred except for debugging.
-             *
-             */
-            DataXML.prototype.get = function( ) {
-                return this.$ || null;
-            };
-
-            /**
-             * Function: getXML
-             *
-             * Getter for data xml object. REMOVE <INSTANCE>?
-             *
-             * Returns:
-             *
-             *   data xml object
-             */
-            DataXML.prototype.getXML = function( ) {
-                return this.xml || null;
-            };
-
-            /**
-             * Obtains a cleaned up string of the data instance(s)
-             * @param  {boolean=} incTempl indicates whether repeat templates should be included in the return value (default: false)
-             * @param  {boolean=} incNs    indicates whether namespaces should be included in return value (default: true)
-             * @param  {boolean=} all     indicates whether all instances should be included in the return value (default: false)
-             * @return {string}           XML string
-             */
-            DataXML.prototype.getStr = function( incTempl, incNs, all ) {
-                var $docRoot, $dataClone, dataStr;
-                dataStr = ( new XMLSerializer( ) ).serializeToString( this.getInstanceClone( incTempl, incNs, all )[ 0 ] );
-                //remove tabs
-                dataStr = dataStr.replace( /\t/g, '' );
-                return dataStr;
-            };
-
-            DataXML.prototype.getInstanceClone = function( incTempl, incNs, all ) {
-                var $clone = ( all ) ? this.$.find( ':first' ).clone( ) : this.node( '> *:first' ).get( ).clone( );
-                return ( incTempl ) ? $clone : $clone.find( '[template]' ).remove( ).end( );
-            };
-
-            /**
-             * There is a bug in JavaRosa that has resulted in the usage of incorrect formulae on nodes inside repeat nodes.
-             * Those formulae use absolute paths when relative paths should have been used. See more here:
-             * https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations (point 3).
-             * Tools such as pyxform also build forms in this incorrect manner. See https://github.com/modilabs/pyxform/issues/91
-             * It will take time to correct this so makeBugCompliant() aims to mimic the incorrect
-             * behaviour by injecting the 1-based [position] of repeats into the XPath expressions. The resulting expression
-             * will then be evaluated in a way users expect (as if the paths were relative) without having to mess up
-             * the XPath Evaluator.
-             * E.g. '/data/rep_a/node_a' could become '/data/rep_a[2]/node_a' if the context is inside
-             * the second rep_a repeat.
-             *
-             * This function should be removed as soon as JavaRosa (or maybe just pyxform) fixes the way those formulae
-             * are created (or evaluated).
-             *
-             * @param  {string} expr        the XPath expression
-             * @param  {string} selector    of the (context) node on which expression is evaluated
-             * @param  {number} index       of the instance node with that selector
-             * @return {string} modified    expression with injected positions (1-based!)
-             */
-            DataXML.prototype.makeBugCompliant = function( expr, selector, index ) {
-                var i, parentSelector, parentIndex, $target, $node, nodeName, $siblings, $parents;
-                $target = this.node( selector, index ).get( );
-                //console.debug('selector: '+selector+', target: ', $target);
-                //add() sorts the resulting collection in document order
-                $parents = $target.parents( ).add( $target );
-                //console.debug('makeBugCompliant() received expression: '+expr+' inside repeat: '+selector+' context parents are: ', $parents);
-                //traverse collection in reverse document order
-                for ( i = $parents.length - 1; i >= 0; i-- ) {
-                    $node = $parents.eq( i );
-                    nodeName = $node.prop( 'nodeName' );
-                    $siblings = $node.siblings( nodeName + ':not([template])' );
-                    //if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
-                    if ( nodeName.toLowerCase( ) !== 'instance' && nodeName.toLowerCase( ) !== 'model' && $siblings.length > 0 ) {
-                        parentSelector = form.generateName( $node );
-                        parentIndex = $siblings.add( $node ).index( $node );
-                        //console.log('calculated repeat 0-based index: '+parentIndex+' for repeat node with path: '+parentSelector);
-                        expr = expr.replace( new RegExp( parentSelector, 'g' ), parentSelector + '[' + ( parentIndex + 1 ) + ']' );
-                        //console.log('new expression: '+expr);
-                    }
-                }
-                return expr;
-            };
-
-            /**
-             * Evaluates an XPath Expression using XPathJS_javarosa (not native XPath 1.0 evaluator)
-             *
-             * THIS FUNCTION DOESN'T SEEM TO WORK PROPERLY FOR NODE RESULTTYPES! otherwise:
-             * muliple nodes can be accessed by returned node.snapshotItem(i)(.textContent)
-             * a single node can be accessed by returned node(.textContent)
-             *
-             * @param  {string} expr       [description]
-             * @param  {string=} resTypeStr boolean, string, number, nodes (best to always supply this)
-             * @param  {string=} selector   jQuery selector which will be use to provide the context to the evaluator
-             * @param  {number=} index      index of selector in document
-             * @return {?(number|string|boolean|jQuery)}            [description]
-             */
-            DataXML.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
-                var i, j, error, context, contextDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
-                    $collection, $contextWrapNodes, $repParents;
-
-                //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
-                //  index + ' and result type: ' + resTypeStr );
-                resTypeStr = resTypeStr || 'any';
-                index = index || 0;
-
-                expr = expr.trim( );
-
-                /* 
-        creating a context doc is necessary for 3 reasons:
-        - the primary instance needs to be the root (and it isn't as the root is <model> and there can be multiple <instance>s)
-        - the templates need to be removed (though this could be worked around by adding the templates as data)
-        - the hack described below with multiple instances.
-        */
-                contextDoc = new DataXML( this.getStr( false, false ) );
-                /* 
-        If the expression contains the instance('id') syntax, a different context instance is required.
-        However, the same expression may also contain absolute reference to the main data instance, 
-        which means 2 different contexts would have to be supplied to the XPath Evaluator which is not
-        possible. Alternatively, the XPath Evaluator becomes able to use a default instance and direct 
-        the instance(id) references to a sibling instance context. The latter proved to be too hard for 
-        this developer, so as a workaround, the following is used instead:
-        The instance referred to in instance(id) is detached and appended to the main instance. The 
-        instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
-        */
-                if ( this.instanceSelectRegEx.test( expr ) ) {
-                    instances = expr.match( this.instanceSelectRegEx );
-                    for ( i = 0; i < instances.length; i++ ) {
-                        id = instances[ i ].match( /[\'|\"]([^\'']+)[\'|\"]/ )[ 1 ];
-                        expr = expr.replace( instances[ i ], '/node()/instance[@id="' + id + '"]' );
-                        this.$.find( ':first>instance#' + id ).clone( ).appendTo( contextDoc.$.find( ':first' ) );
-                    }
-                }
-
-                if ( typeof selector !== 'undefined' && selector !== null ) {
-                    context = contextDoc.$.xfind( selector ).eq( index )[ 0 ];
-                    /**
-                     * If the context for the expression is a node that is inside a repeat.... see makeBugCompliant()
-                     */
-                    $collection = this.node( selector ).get( );
-                    if ( $collection.length > 1 ) {
-                        //console.log('going to inject position into: '+expr+' for context: '+selector+' and index: '+index);
-                        expr = this.makeBugCompliant( expr, selector, index );
-                    }
-                } else {
-                    context = contextDoc.getXML( );
-                }
-
-                resultTypes = {
-                    0: [ 'any', 'ANY_TYPE' ],
-                    1: [ 'number', 'NUMBER_TYPE', 'numberValue' ],
-                    2: [ 'string', 'STRING_TYPE', 'stringValue' ],
-                    3: [ 'boolean', 'BOOLEAN_TYPE', 'booleanValue' ],
-                    7: [ 'nodes', 'ORDERED_NODE_SNAPSHOT_TYPE' ],
-                    9: [ 'node', 'FIRST_ORDERED_NODE_TYPE' ]
-                    //'node': ['FIRST_ORDERED_NODE_TYPE','singleNodeValue'], // does NOT work, just take first result of previous
-                };
-
-                //translate typeStr to number according to DOM level 3 XPath constants
-                for ( resTypeNum in resultTypes ) {
-
-                    resTypeNum = Number( resTypeNum );
-
-                    if ( resultTypes[ resTypeNum ][ 0 ] == resTypeStr ) {
-                        break;
-                    } else {
-                        resTypeNum = 0;
-                    }
-                }
-
-                expr = expr.replace( /&lt;/g, '<' );
-                expr = expr.replace( /&gt;/g, '>' );
-                expr = expr.replace( /&quot;/g, '"' );
-
-                //var timeLap = new Date().getTime();
-                //console.log('expr to test: '+expr+' with result type number: '+resTypeNum);
-                try {
-                    result = document.evaluate( expr, context, null, resTypeNum, null );
-                    if ( resTypeNum === 0 ) {
-                        for ( resTypeNum in resultTypes ) {
-                            resTypeNum = Number( resTypeNum );
-                            if ( resTypeNum == Number( result.resultType ) ) {
-                                result = ( resTypeNum > 0 && resTypeNum < 4 ) ? result[ resultTypes[ resTypeNum ][ 2 ] ] : result;
-                                console.debug( 'evaluated ' + expr + ' to: ', result );
-                                //totTime = new Date().getTime() - timeStart;
-                                //xTime = new Date().getTime() - timeLap;
-                                //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-                                //xpathEvalTime += totTime;
-                                //xpathEvalTimePure += xTime;
-                                return result;
-                            }
-                        }
-                        console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
-                        //console.debug(result);
-                    } else if ( resTypeNum === 7 ) {
-                        $result = $( );
-                        for ( j = 0; j < result.snapshotLength; j++ ) {
-                            $result = $result.add( result.snapshotItem( j ) );
-                        }
-                        //console.debug('evaluation returned nodes: ', $result);
-                        //totTime = new Date().getTime() - timeStart;
-                        //xTime = new Date().getTime() - timeLap;
-                        //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-                        //xpathEvalTime += totTime;
-                        //xpathEvalTimePure += xTime;
-                        return $result;
-                    }
-                    //console.debug( 'evaluated ' + expr + ' to: ' + result[ resultTypes[ resTypeNum ][ 2 ] ] );
-                    //totTime = new Date().getTime() - timeStart;
-                    //xTime = new Date().getTime() - timeLap;
-                    //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-                    //xpathEvalTime += totTime;
-                    //xpathEvalTimePure += xTime;
-                    return result[ resultTypes[ resTypeNum ][ 2 ] ];
-                } catch ( e ) {
-                    error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
-                    console.error( error );
-                    $( document ).trigger( 'xpatherror', error );
-                    loadErrors.push( error );
-                    //xpathEvalTime += new Date().getTime() - timeStart;
-                    //xpathEvalTimePure += new Date().getTime() - timeLap;s
-                    return null;
-                }
-            };
 
             /**
              * Inner Class dealing with the HTML Form
@@ -1010,7 +285,7 @@ define(
             FormHTML.prototype.init = function( ) {
                 var name, $required, $hint;
                 //this.checkForErrors();
-                if ( typeof data == 'undefined' || !( data instanceof DataXML ) ) {
+                if ( typeof model == 'undefined' || !( model instanceof DataXML ) ) {
                     return console.error( 'variable data needs to be defined as instance of DataXML' );
                 }
 
@@ -1027,11 +302,11 @@ define(
                 //profiler = new Profiler('adding hint icons');
                 //add 'hint' icon, could be moved to XSLT, but is very fast even on super large forms - 31 msecs on bench6 form
                 /*if (!modernizr.touch){
-        $hint = '<span class="hint" ><i class="icon-question-sign"></i></span>';
-        $form.find('.jr-hint ~ input, .jr-hint ~ select, .jr-hint ~ textarea').before($hint);
-        $form.find('legend > .jr-hint').parent().find('span:last-child').after($hint);
-        $form.find('.trigger > .jr-hint').parent().find('span:last').after($hint);
-        }*/
+                $hint = '<span class="hint" ><i class="icon-question-sign"></i></span>';
+                $form.find('.jr-hint ~ input, .jr-hint ~ select, .jr-hint ~ textarea').before($hint);
+                $form.find('legend > .jr-hint').parent().find('span:last-child').after($hint);
+                $form.find('.trigger > .jr-hint').parent().find('span:last').after($hint);
+                }*/
                 //profiler.report();
 
                 //TODO: don't add to preload and calculated items
@@ -1042,12 +317,12 @@ define(
                 //profiler.report();
 
                 /*
-        Groups of radiobuttons need to have the same name. The name refers to the path of the instance node.
-        Repeated radiobuttons would all have the same name which means they wouldn't work right.
-        Therefore, radiobuttons store their path in data-name instead and cloned repeats will add a 
-        different name attribute.
-        TODO: move to XSLT
-        */
+                Groups of radiobuttons need to have the same name. The name refers to the path of the instance node.
+                Repeated radiobuttons would all have the same name which means they wouldn't work right.
+                Therefore, radiobuttons store their path in data-name instead and cloned repeats will add a 
+                different name attribute.
+                TODO: move to XSLT
+                */
                 $form.find( 'input[type="radio"]' ).each( function( ) {
                     name = /**@type {string} */ $( this ).attr( 'name' );
                     $( this ).attr( 'data-name', name );
@@ -1167,14 +442,14 @@ define(
                     } );
 
                     for ( i = 0; i < paths.length; i++ ) {
-                        if ( data.node( paths[ i ] ).get( ).length < 1 ) {
+                        if ( model.node( paths[ i ] ).get( ).length < 1 ) {
                             console.error( 'Found name attribute: ' + paths[ i ] + ' that does not have a corresponding data node. Transformation error or XML form error (relative nodesets perhaps?' );
                         }
                     }
                 }
             };
 
-            //this may not be the most efficient. Could also be implemented like Data.Nodeset;
+            //this may not be the most efficient. Could also be implemented like model.Nodeset;
             //also use for fieldset nodes (to evaluate branch logic) and also used to get and set form data of the app settings
             FormHTML.prototype.input = {
                 //multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
@@ -1233,16 +508,16 @@ define(
                     name = $node.attr( 'data-name' ) || $node.attr( 'name' );
                     return name || console.error( 'input node has no name' );
                     /*
-          if (this.getInputType($node) == 'radio'){
-          //indexSuffix = $node.attr('name').lastIndexOf('____');
-          //if (indexSuffix > 0){
-          return $node.attr('data-name');//.substr(0, indexSuffix);
-          //}
-          }
-          if ($node.attr('name') && $node.attr('name').length > 0){
-          return $node.attr('name');
-          }
-          else return console.error('input node has no name');*/
+                    if (this.getInputType($node) == 'radio'){
+                    //indexSuffix = $node.attr('name').lastIndexOf('____');
+                    //if (indexSuffix > 0){
+                    return $node.attr('data-name');//.substr(0, indexSuffix);
+                    //}
+                    }
+                    if ($node.attr('name') && $node.attr('name').length > 0){
+                    return $node.attr('name');
+                    }
+                    else return console.error('input node has no name');*/
                 },
                 //the index that can be used to find the node in $data
                 //NOTE: this function should be used sparingly, as it is CPU intensive!
@@ -1323,7 +598,7 @@ define(
                         if ( type === 'date' || type === 'datetime' ) {
                             //convert current value (loaded from instance) to a value that a native datepicker understands
                             //TODO test for IE, FF, Safari when those browsers start including native datepickers
-                            value = data.node( ).convert( value, type );
+                            value = model.node( ).convert( value, type );
                         }
                     }
 
@@ -1345,13 +620,13 @@ define(
             FormHTML.prototype.setAllVals = function( ) {
                 var index, name, value,
                     that = this;
-                data.node( null, null, {
+                model.node( null, null, {
                     noEmpty: true
                 } ).get( ).each( function( ) {
                     try {
                         value = $( this ).text( );
-                        name = that.generateName( $( this ) );
-                        index = data.node( name ).get( ).index( $( this ) );
+                        name = $( this ).getXPath( 'instance' );
+                        index = model.node( name ).get( ).index( $( this ) );
                         that.input.setVal( name, index, value );
                     } catch ( e ) {
                         loadErrors.push( 'Could not load input field value with name: ' + name + ' and value: ' + value );
@@ -1549,28 +824,28 @@ define(
                             return;
                         }
                         /* 
-            Determining ancestry is expensive. Using the knowledge most forms don't use repeats and 
-            if they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
-            The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
-            (6-7 seconds of loading time on the bench6 form)
-            */
+                        Determining ancestry is expensive. Using the knowledge most forms don't use repeats and 
+                        if they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
+                        The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
+                        (6-7 seconds of loading time on the bench6 form)
+                        */
                         insideRepeat = ( clonedRepeatsPresent && $branchNode.closest( '.jr-repeat' ).length > 0 ) ? true : false;
                         insideRepeatClone = ( clonedRepeatsPresent && $branchNode.closest( '.jr-repeat.clone' ).length > 0 ) ? true : false;
                         /*
-            Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
-            It can be safely set to 0 for other branches.
-            */
+                        Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
+                        It can be safely set to 0 for other branches.
+                        */
                         p.ind = ( insideRepeatClone ) ? parent.input.getIndex( $( this ) ) : 0;
                         /*
-            Caching is only possible for expressions that do not contain relative paths to nodes.
-            So, first do a *very* aggresive check to see if the expression contains a relative path. 
-            This check assumes that child nodes (e.g. "mychild = 'bob'") are NEVER used in a relevant
-            expression, which may prove to be incorrect.
-            */
+                        Caching is only possible for expressions that do not contain relative paths to nodes.
+                        So, first do a *very* aggresive check to see if the expression contains a relative path. 
+                        This check assumes that child nodes (e.g. "mychild = 'bob'") are NEVER used in a relevant
+                        expression, which may prove to be incorrect.
+                        */
                         if ( p.relevant.indexOf( '..' ) === -1 ) {
                             /*
-              For now, let's just not cache relevants inside a repeat. 
-              */
+                            For now, let's just not cache relevants inside a repeat. 
+                            */
                             //if ($branchNode.parents('.jr-repeat').length === 0){
                             if ( !insideRepeat ) {
                                 cacheIndex = p.relevant;
@@ -1603,7 +878,7 @@ define(
                  * @return {boolean}             [description]
                  */
                 this.evaluate = function( expr, contextPath, index ) {
-                    var result = data.evaluate( expr, 'boolean', contextPath, index );
+                    var result = model.evaluate( expr, 'boolean', contextPath, index );
                     return result;
                 };
                 /**
@@ -1661,12 +936,11 @@ define(
                             $branchNode.children( 'input:not(.force-disabled), select, textarea' ).prop( 'disabled', false );
                         } else {
                             $branchNode.prop( 'disabled', false );
-
                             /*
-              A temporary workaround for a Chrome bug described in https://github.com/modilabs/enketo/issues/503 
-              where the file inputs end up in a weird partially enabled state. 
-              Refresh the state by disabling and enabling the file inputs again.
-              */
+                            A temporary workaround for a Chrome bug described in https://github.com/modilabs/enketo/issues/503 
+                            where the file inputs end up in a weird partially enabled state. 
+                            Refresh the state by disabling and enabling the file inputs again.
+                            */
                             $branchNode.find( '*:not(.jr-branch) input[type="file"]:not(.force-disabled, [data-relevant])' )
                                 .prop( 'disabled', true ).prop( 'disabled', false );
                         }
@@ -1749,19 +1023,22 @@ define(
                         valueRef = $labels.attr( 'data-value-ref' );
 
                     context = that.input.getName( $input );
+
                     /*
-          Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
-          It can be safely set to 0 for other branches.
-          */
+                    Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
+                    It can be safely set to 0 for other branches.
+                    */
                     insideRepeat = ( clonedRepeatsPresent && $input.closest( '.jr-repeat' ).length > 0 ) ? true : false;
                     insideRepeatClone = ( clonedRepeatsPresent && $input.closest( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
                     index = ( insideRepeatClone ) ? that.input.getIndex( $input ) : 0;
 
+                    console.log( 'inside clone?', insideRepeatClone );
+
                     if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                         $instanceItems = itemsCache[ itemsXpath ];
                     } else {
-                        $instanceItems = data.evaluate( itemsXpath, 'nodes', context, index );
+                        $instanceItems = model.evaluate( itemsXpath, 'nodes', context, index );
                         if ( !insideRepeat ) {
                             itemsCache[ itemsXpath ] = $instanceItems;
                         }
@@ -1848,12 +1125,12 @@ define(
                     //context = that.input.getName($(this).closest('fieldset'));
 
                     /*
-          Note that in XForms input is the parent of label and in HTML the other way around so an output inside a label
-          should look at the HTML input to determine the context. 
-          So, context is either the input name attribute (if output is inside input label),
-          or the parent with a name attribute
-          or the whole doc
-          */
+                    Note that in XForms input is the parent of label and in HTML the other way around so an output inside a label
+                    should look at the HTML input to determine the context. 
+                    So, context is either the input name attribute (if output is inside input label),
+                    or the parent with a name attribute
+                    or the whole doc
+                    */
                     $context = ( $( this ).parent( 'span' ).parent( 'label' ).find( '[name]' ).eq( 0 ).length === 1 ) ?
                         $( this ).parent( ).parent( ).find( '[name]:eq(0)' ) :
                         $( this ).parent( 'span' ).parent( 'legend' ).parent( 'fieldset' ).find( '[name]' ).eq( 0 ).length === 1 ?
@@ -1866,7 +1143,7 @@ define(
                     if ( typeof outputCache[ expr ] !== 'undefined' ) {
                         val = outputCache[ expr ];
                     } else {
-                        val = data.evaluate( expr, 'string', context, index );
+                        val = model.evaluate( expr, 'string', context, index );
                         if ( !insideRepeat ) {
                             outputCache[ expr ] = val;
                         }
@@ -1923,12 +1200,12 @@ define(
                     dataType = $( this ).attr( 'data-type-xml' );
                     constraint = $( this ).attr( 'data-constraint' ); //obsolete?
                     relevantExpr = $( this ).attr( 'data-relevant' );
-                    relevant = ( relevantExpr ) ? data.evaluate( relevantExpr, 'boolean', name ) : true;
-                    $dataNodes = data.node( name ).get( );
+                    relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
+                    $dataNodes = model.node( name ).get( );
                     $dataNodes.each( function( index ) {
                         //not sure if using 'string' is always correct
-                        result = ( relevant ) ? data.evaluate( expr, 'string', name, index ) : '';
-                        valid = data.node( name, index ).setVal( result, constraint, dataType );
+                        result = ( relevant ) ? model.evaluate( expr, 'string', name, index ) : '';
+                        valid = model.node( name, index ).setVal( result, constraint, dataType );
                     } );
 
                 } );
@@ -1980,7 +1257,7 @@ define(
                         param = $( this ).attr( 'data-preload-params' ).toLowerCase( );
 
                         if ( typeof that[ item ] !== 'undefined' ) {
-                            dataNode = data.node( props.path, props.index );
+                            dataNode = model.node( props.path, props.index );
                             curVal = dataNode.getVal( )[ 0 ];
                             newVal = that[ item ]( {
                                 param: param,
@@ -1994,11 +1271,11 @@ define(
                     } );
                     //in addition the presence of certain meta data in the instance may automatically trigger a preload function
                     //even if the binding is not present. Note, that this actually does not deal with HTML elements at all.
-                    meta = data.node( '*>meta>*' );
+                    meta = model.node( '*>meta>*' );
                     meta.get( ).each( function( ) {
                         item = null;
                         name = $( this ).prop( 'nodeName' );
-                        dataNode = data.node( '*>meta>' + name );
+                        dataNode = model.node( '*>meta>' + name );
                         curVal = dataNode.getVal( )[ 0 ];
                         //first check if there isn't a binding with a preloader that already took care of this
                         if ( $form.find( '#jr-preload-items input[name$="/meta/' + name + '"][data-preload]' ).length === 0 ) {
@@ -2034,15 +1311,15 @@ define(
                         that = this;
                     // when is 'start' or 'end'
                     if ( o.param == 'start' ) {
-                        return ( o.curVal.length > 0 ) ? o.curVal : data.evaluate( 'now()', 'string' );
+                        return ( o.curVal.length > 0 ) ? o.curVal : model.evaluate( 'now()', 'string' );
                     }
                     if ( o.param == 'end' ) {
                         //set event handler for each save event (needs to be triggered!)
                         $form.on( 'beforesave', function( ) {
-                            value = data.evaluate( 'now()', 'string' );
+                            value = model.evaluate( 'now()', 'string' );
                             o.dataNode.setVal( value, null, 'datetime' );
                         } );
-                        return data.evaluate( 'now()', 'string' );
+                        return model.evaluate( 'now()', 'string' );
                     }
                     return 'error - unknown timestamp parameter';
                 },
@@ -2050,7 +1327,7 @@ define(
                     var today, year, month, day;
 
                     if ( o.curVal.length === 0 ) {
-                        today = new Date( data.evaluate( 'today()', 'string' ) );
+                        today = new Date( model.evaluate( 'today()', 'string' ) );
                         year = today.getFullYear( ).toString( ).pad( 4 );
                         month = ( today.getMonth( ) + 1 ).toString( ).pad( 2 );
                         day = today.getDate( ).toString( ).pad( 2 );
@@ -2083,7 +1360,7 @@ define(
                 'user': function( o ) {
                     //uuid, user_id, user_type
                     //if (o.param == 'uuid'){
-                    //  return (o.curVal.length > 1) ? o.curVal : data.evaluate('uuid()', 'string');
+                    //  return (o.curVal.length > 1) ? o.curVal : model.evaluate('uuid()', 'string');
                     //}
                     if ( o.curVal.length === 0 ) {
                         return 'user preload item not supported in enketo yet';
@@ -2099,17 +1376,17 @@ define(
                 },
                 'browser': function( o ) {
                     /*if (o.curVal.length === 0){
-          if (o.param == 'name'){ 
-          var a = ($.browser.webkit) ? 'webkit' : ($.browser.mozilla) ? 'mozilla' : ($.browser.opera) ? 'opera' : ($.browser.msie) ? 'msie' : 'unknown';
-          //console.debug(a);
-          return a;
-          }
-          if (o.param == 'version'){
-          return $.browser.version;
-          }
-          return o.param+' not supported in enketo';
-          }
-          return o.curVal;*/
+                    if (o.param == 'name'){ 
+                    var a = ($.browser.webkit) ? 'webkit' : ($.browser.mozilla) ? 'mozilla' : ($.browser.opera) ? 'opera' : ($.browser.msie) ? 'msie' : 'unknown';
+                    //console.debug(a);
+                    return a;
+                    }
+                    if (o.param == 'version'){
+                    return $.browser.version;
+                    }
+                    return o.param+' not supported in enketo';
+                    }
+                    return o.curVal;*/
                 },
                 'os': function( o ) {
                     if ( o.curVal.length === 0 ) {
@@ -2119,7 +1396,7 @@ define(
                 },
                 //Not according to spec yet, this will be added to spec but name may change
                 'instance': function( o ) {
-                    var id = ( o.curVal.length > 0 ) ? o.curVal : data.evaluate( "concat('uuid:', uuid())", 'string' );
+                    var id = ( o.curVal.length > 0 ) ? o.curVal : model.evaluate( "concat('uuid:', uuid())", 'string' );
                     //store the current instanceID as data on the form element so it can be easily accessed by e.g. widgets
                     $form.data( {
                         instanceID: id
@@ -2133,8 +1410,8 @@ define(
              *
              * This can perhaps be simplified and improved by:
              * - adding a function repeat.update() that looks at the instance whether to add repeat form fields
-             * - calling update from init() (data.init() is called before form.init() so the initial repeats have been added already)
-             * - when button is clicked data.node().clone() or data.node().remove() is called first and then repeat.update()
+             * - calling update from init() (model.init() is called before form.init() so the initial repeats have been added already)
+             * - when button is clicked model.node().clone() or model.node().remove() is called first and then repeat.update()
              * - watch out though when repeats in the middle are removed... or just disable that possibility
              *
              */
@@ -2170,10 +1447,10 @@ define(
                     cloneDefaultReps = function( $repeat ) {
                         repLevel++;
                         repCountPath = $repeat.attr( 'data-repeat-count' ) || "";
-                        numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( data.node( repCountPath ).getVal( )[ 0 ], 10 ) : 0;
+                        numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal( )[ 0 ], 10 ) : 0;
                         //console.debug('number of reps in count attribute: ' +numRepsInCount);
                         index = $form.find( '.jr-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
-                        $dataRepeat = data.node( $repeat.attr( 'name' ), index ).get( );
+                        $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get( );
                         numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) + ':not([template])' ).addBack( ).length;
                         numRepsDefault = ( numRepsInCount > numRepsInInstance ) ? numRepsInCount : numRepsInInstance;
                         //console.debug('default number of repeats for '+$repeat.attr('name')+' is '+numRepsDefault);
@@ -2218,9 +1495,7 @@ define(
                     $master = $parent.children( 'fieldset.jr-repeat:not(.clone)' ).eq( 0 );
                     $clone = $master.clone( true, true );
 
-                    //add clone class 
-                    //remove any clones inside this clone.. (cloned repeats within repeats..), also remove all widgets 
-                    //NOTE: widget removal doesn't work atm (jQuery bug?), it is covered by the date/time/datetime widgets though)
+                    //add clone class and remove any child clones.. (cloned repeats within repeats..)
                     $clone.addClass( 'clone' ).find( '.clone' ).remove( );
 
                     //mark all cloned fields as valid
@@ -2273,7 +1548,7 @@ define(
                      * clone data node if it doesn't already exist
                      */
                     if ( path.length > 0 && index >= 0 ) {
-                        data.cloneTemplate( path, index );
+                        model.cloneTemplate( path, index );
                     }
 
                     $form.trigger( 'changerepeat' );
@@ -2293,7 +1568,7 @@ define(
                         that.toggleButtons( parentGroup );
                         $form.trigger( 'changerepeat' );
                         //now remove the data node
-                        data.node( repeatPath, repeatIndex ).remove( );
+                        model.node( repeatPath, repeatIndex ).remove( );
                     } );
                 },
                 toggleButtons: function( $node ) {
@@ -2315,11 +1590,11 @@ define(
                 $( 'form.jr' ).attr( 'onsubmit', 'return false;' );
 
                 /* 
-        workaround for Chrome to clear invalid values right away 
-        issue: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178437)
-        a workaround was chosen instead of replacing the change event listener to a blur event listener
-        because I'm guessing that Google will bring back the old behaviour.
-        */
+                workaround for Chrome to clear invalid values right away 
+                issue: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178437)
+                a workaround was chosen instead of replacing the change event listener to a blur event listener
+                because I'm guessing that Google will bring back the old behaviour.
+                */
                 $form.on( 'blur', 'input:not([type="text"], [type="radio"], [type="checkbox"])', function( event ) {
                     if ( typeof $( this ).prop( 'validity' ).badInput !== 'undefined' && $( this ).prop( 'validity' ).badInput ) {
                         $( this ).val( '' );
@@ -2340,9 +1615,9 @@ define(
                     if ( event.type === 'validate' ) {
                         //the enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not
                         //if an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid)
-                        validCons = ( n.enabled && n.inputType !== 'hidden' ) ? data.node( n.path, n.ind ).validate( n.constraint, n.xmlType ) : true;
+                        validCons = ( n.enabled && n.inputType !== 'hidden' ) ? model.node( n.path, n.ind ).validate( n.constraint, n.xmlType ) : true;
                     } else {
-                        validCons = data.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
+                        validCons = model.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
                     }
 
                     //validate 'required'
@@ -2397,7 +1672,7 @@ define(
                 } );
 
                 //nodeNames is comma-separated list as a string
-                $form.on( 'dataupdate', function( event, nodeNames ) {
+                model.$.on( 'dataupdate', function( event, nodeNames ) {
                     that.calcUpdate( nodeNames ); //EACH CALCUPDATE THAT CHANGES A VALUE TRIGGERS ANOTHER CALCUPDATE => INEFFICIENT
                     that.branch.update( nodeNames );
                     that.outputUpdate( nodeNames );
@@ -2441,31 +1716,6 @@ define(
             };
 
             /**
-             * Function: generateName
-             *
-             * Function to generate the name of a form element (= simple path to data node) corresponding to the provided data node. Omits instance node.
-             *
-             * Parameters:
-             *
-             *   node - A data node of which to determine the corresponding form field name.
-             *
-             * Returns:
-             *
-             *   String that looks like an XPath
-             *
-             */
-            FormHTML.prototype.generateName = function( dataNode ) {
-                //other nodes may have the same XPath but because this function is used to determine the corresponding input name of a data node, index is not included 
-                var steps = [ dataNode.prop( 'nodeName' ) ],
-                    parent = dataNode.parent( );
-                while ( parent.length == 1 && parent.prop( 'nodeName' ) !== 'instance' && parent.prop( 'nodeName' ) !== '#document' ) {
-                    steps.push( parent.prop( "nodeName" ) );
-                    parent = parent.parent( );
-                }
-                return '/' + steps.reverse( ).join( '/' );
-            };
-
-            /**
              * Validates all enabled input fields after first resetting everything as valid.
              * @return {boolean} whether the form contains any errors
              */
@@ -2502,5 +1752,4 @@ define(
         }
 
         return Form;
-    }
-);
+    } );

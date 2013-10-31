@@ -218,7 +218,7 @@ define( [ 'jquery' ], function( $ ) {
     };
 
     /**
-     * Creates an XPath from a node (currently not used inside this Class (instead FormHTML.prototype.generateName is used) but will be in future);
+     * Creates an XPath from a node
      * @param  {string=} rootNodeName   if absent the root is #document
      * @return {string}                 XPath
      */
