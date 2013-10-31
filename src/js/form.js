@@ -2886,10 +2886,10 @@ function Form( formSelector, dataStr, dataStrToEdit ) {
                 reqSubtle = '<span class="required-subtle focus" style="color: transparent;">Required</span>';
 
             if ( event.type === 'focusin' ) {
-                if ( $reqSubtle.length === 0 ) {
+                if ( $reqSubtle.length === 0 && !insideTable ) {
                     $reqSubtle = $( reqSubtle );
                     $reqSubtle.insertAfter( this );
-                    if ( !loudErrorShown && !insideTable ) {
+                    if ( !loudErrorShown ) {
                         $reqSubtle.show( function( ) {
                             $( this ).removeAttr( 'style' );
                         } );
