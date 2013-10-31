@@ -2368,11 +2368,12 @@ define(
                 $form.on( 'focus blur', '[required]', function( event ) {
                     var props = that.input.getProps( $( this ) ),
                         loudErrorShown = ( $( this ).parents( '.invalid-required, .invalid-constraint' ).length > 0 ),
+                        insideTable = ( $( this ).parents( '.jr-appearance-list-nolabel' ).length > 0 ),
                         $reqSubtle = $( this ).next( '.required-subtle' ),
                         reqSubtle = $( '<span class="required-subtle focus" style="color: transparent;">Required</span>' );
 
                     if ( event.type === 'focusin' ) {
-                        if ( $reqSubtle.length === 0 ) {
+                        if ( $reqSubtle.length === 0 && !insideTable ) {
                             $reqSubtle = $( reqSubtle );
                             $reqSubtle.insertAfter( this );
                             if ( !loudErrorShown ) {

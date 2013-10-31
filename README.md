@@ -8,9 +8,10 @@ This repo is meant to use as a building block for your own enketo-powered applic
 Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
 
-##Under Active Reorganization!
+##Enketo-core 2.0 is Under Active Construction!
 
-It will be considered stable when [this milestone](https://github.com/MartijnR/enketo-core/issues?milestone=1&state=open) is reached, after which the requirejs branch will be merged with master.
+It will be considered stable when [this milestone](https://github.com/MartijnR/enketo-core/issues?milestone=1&state=open) is reached.
+
 
 ###Related Projects
 
@@ -107,4 +108,3 @@ I would like to acknowledge and thank the indirect contribution by the creators 
 * [Bootstrap](http://twitter.github.com/bootstrap/)
 * [Bootstrap Datepicker by eternicode](https://github.com/eternicode/bootstrap-datepicker)
 * [Bootstrap Timepicker by jdewit](http://jdewit.github.io/bootstrap-timepicker/)
-
