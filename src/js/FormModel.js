@@ -469,33 +469,19 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
     };
 
     /**
-     * Function: get
-     *
-     * Returns jQuery Data Object (obsolete?)
-     *
-     * Parameters:
-     *
-     * Returns:
-     *
-     *   JQuery Data Object
-     *
      * See Also:
+     * Returns jQuery Data Object (obsolete?)
+     * See also: <nodes.get()>, which is always (?) preferred except for debugging.
      *
-     *    <nodes.get()>, which is always (?) preferred except for debugging.
-     *
+     * @return {jQuery} JQuery Data Object
      */
     DataXML.prototype.get = function( ) {
         return this.$ || null;
     };
 
     /**
-     * Function: getXML
      *
-     * Getter for data xml object. REMOVE <INSTANCE>?
-     *
-     * Returns:
-     *
-     *   data xml object
+     * @return {Element} data XML object (not sure if type is element actually)
      */
     DataXML.prototype.getXML = function( ) {
         return this.xml || null;
@@ -503,6 +489,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
 
     /**
      * Obtains a cleaned up string of the data instance(s)
+     *
      * @param  {boolean=} incTempl indicates whether repeat templates should be included in the return value (default: false)
      * @param  {boolean=} incNs    indicates whether namespaces should be included in return value (default: true)
      * @param  {boolean=} all     indicates whether all instances should be included in the return value (default: false)

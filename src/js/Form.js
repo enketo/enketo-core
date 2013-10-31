@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-/**
- * Class: Form
- *
- * This class provides the JavaRosa form functionality by manipulating the survey form DOM object and
- * continuously updating the data XML Document. All methods are placed inside the constructor (so privileged
- * or private) because only one instance will be created at a time.
- *
- * @param {string} formSelector  jquery selector for the form
- * @param {string} dataStr       <instance> as XML string
- * @param {?string=} dataStrToEdit <instance> as XML string that is to be edit. This may not be a complete instance (empty nodes could be missing) and may have additional nodes.
- *
- * @constructor
- */
-
 define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', 'bootstrap' ],
     function( modernizr, DataXML, widgets, $ ) {
         "use strict";
+
+        /**
+         * Class: Form
+         *
+         * This class provides the JavaRosa form functionality by manipulating the survey form DOM object and
+         * continuously updating the data XML Document. All methods are placed inside the constructor (so privileged
+         * or private) because only one instance will be created at a time.
+         *
+         * @param {string} formSelector  jquery selector for the form
+         * @param {string} dataStr       <instance> as XML string
+         * @param {?string=} dataStrToEdit <instance> as XML string that is to be edit. This may not be a complete instance (empty nodes could be missing) and may have additional nodes.
+         *
+         * @constructor
+         */
 
         function Form( formSelector, dataStr, dataStrToEdit ) {
             var model, dataToEdit, form, $form, $formClone, repeatsPresent,
