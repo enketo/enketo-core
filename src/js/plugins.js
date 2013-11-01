@@ -1,6 +1,10 @@
 define( [ 'jquery' ], function( $ ) {
 
-    // plugin to update number of repeated elements (with class jr-repeat)
+    /**
+     * Update number of repeated elements (with class jr-repeat)
+     *
+     * @return {jQuery} [description]
+     */
     $.fn.numberRepeats = function( ) {
 
         return this.each( function( ) {
@@ -27,19 +31,12 @@ define( [ 'jquery' ], function( $ ) {
     };
 
     /**
-     * Function: clearInputs
-     *
      * Clears form input fields and triggers events when doing this. If formelement is cloned but not yet added to DOM
      * (and not synchronized with data object), the desired event is probably 'edit' (default). If it is already added
      * to the DOM (and synchronized with data object) a regular change event should be fired
      *
-     * Parameters:
-     *
-     *   ev - event to be triggered
-     *
-     * Returns:
-     *
-     *   jQuery this object
+     * @param  {string=} ev event to be triggered when a value is cleared
+     * @return { jQuery} [description]
      */
     $.fn.clearInputs = function( ev ) {
         ev = ev || 'edit';
@@ -97,29 +94,14 @@ define( [ 'jquery' ], function( $ ) {
         } );
     };
 
-    /**
-     * Function: xfind
-     *
-     *
-     *
-     * Parameters:
-     *
-     *   selector - String containing a JQuery selector or an XPath/
-     *
-     * Returns:
-     *
-     *   Nodes matching the selector.
-     *
-     * See Also:
-     *
-     *
-     */
+
     /**
      * Simple XPath Compatibility Plugin for jQuery 1.1
      * By John Resig
      * Dual licensed under MIT and GPL.
      * Original plugin code here: http://code.google.com/p/jqueryjs/source/browse/trunk/plugins/xpath/jquery.xpath.js?spec=svn3167&r=3167
      * some changes made by Martijn van de Rijdt (not replacing $.find(), removed context, dot escaping)
+     *
      * @param  {string} selector [description]
      * @return {?(Array.<(Element|null)>|Element)}          [description]
      */
@@ -168,6 +150,12 @@ define( [ 'jquery' ], function( $ ) {
         return this.find( selector );
     };
 
+    /**
+     * Supports a small subset of MarkDown and converts this to HTML: _, __, *, **, []()
+     * Also converts newline characters
+     *
+     * Not supported: escaping and other MarkDown syntax
+     */
     $.fn.markdownToHtml = function( ) {
         return this.each( function( ) {
             var html,
@@ -193,6 +181,11 @@ define( [ 'jquery' ], function( $ ) {
         } );
     };
 
+    /**
+     * Gives a set of elements the same (shortest) width
+     *
+     * @return {jQuery} [description]
+     */
     $.fn.toSmallestWidth = function( ) {
         var smallestWidth = 2000;
         return this.each( function( ) {
@@ -204,7 +197,12 @@ define( [ 'jquery' ], function( $ ) {
         } );
     };
 
-    // give a set of elements the same (longest) width
+
+    /**
+     * give a set of elements the same (longest) width
+     * @param  {number=} plus optional additional pixels to add to width
+     * @return {jQuery}       [description]
+     */
     $.fn.toLargestWidth = function( plus ) {
         var largestWidth = 0;
         plus = plus || 0;
@@ -247,7 +245,10 @@ define( [ 'jquery' ], function( $ ) {
     };
 
 
-    //reverse jQuery collection
+    /**
+     * Reverses a jQuery collection
+     * @type {Array}
+     */
     $.fn.reverse = [ ].reverse;
 
 

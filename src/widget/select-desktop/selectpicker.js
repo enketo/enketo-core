@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
+define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
     "use strict";
 
     var pluginName = 'desktopSelectpicker';

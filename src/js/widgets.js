@@ -1,10 +1,9 @@
 define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $ ) {
     "use strict";
 
-    var $form,
+    var $form, widgetConfig,
         loaded = false,
-        globalConfig = JSON.parse( config ),
-        widgetConfig = [ ];
+        globalConfig = JSON.parse( config );
 
     /**
      * Initializes widgets
@@ -15,6 +14,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     function init( $group ) {
         $form = $( 'form.jr' );
         $group = $group || $form;
+        widgetConfig = [ ];
 
         if ( !loaded ) {
             load( function( ) {
@@ -33,7 +33,8 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
 
     function load( callback ) {
         require( globalConfig.widgets, function( ) {
-            var id, widgetConfigFiles = [ ];
+            var id,
+                widgetConfigFiles = [ ];
 
             console.log( 'widget modules loaded', arguments.length );
 
@@ -48,7 +49,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
                 for ( var i = 0; i < arguments.length; i++ ) {
                     widgetConfig.push( JSON.parse( arguments[ i ] ) );
                 }
-                console.log( 'widget config files loaded', widgetConfig );
+                console.log( 'widget config files loaded', widgetConfig.length );
                 loaded = true;
                 callback( );
             } );

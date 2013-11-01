@@ -44,12 +44,15 @@ requirejs( [ 'jquery', 'modernizr', 'js/Form' ],
         if ( getURLParameter( 'xform' ) !== 'null' ) {
             $( '.guidance' ).remove( );
             $.get( 'http://xslt-dev.enketo.org/?xform=' + getURLParameter( 'xform' ), function( data ) {
-                var $data = $( data );
+                var $data;
+                //this replacement should move to XSLT after which the GET can just return 'xml' and $data = $(data)
+                data = data.replace( /jr\:template=/gi, 'template=' );
+                $data = $( $.parseXML( data ) );
                 formStr = ( new XMLSerializer( ) ).serializeToString( $data.find( 'form:eq(0)' )[ 0 ] );
                 modelStr = ( new XMLSerializer( ) ).serializeToString( $data.find( 'model:eq(0)' )[ 0 ] );
                 $( '#validate-form' ).before( formStr );
                 initializeForm( );
-            }, 'xml' );
+            }, 'text' );
         } else if ( $( 'form.jr' ).length > 0 ) {
             $( '.guidance' ).remove( );
             initializeForm( );
@@ -64,7 +67,6 @@ requirejs( [ 'jquery', 'modernizr', 'js/Form' ],
                 alert( 'Form is valid! (see XML record in the console)' );
                 console.log( 'record:', form.getDataStr( ) );
             }
-            $
         } );
 
         //initialize the form

@@ -1,3 +1,7 @@
+if ( typeof define !== 'function' ) {
+    var define = require( 'amdefine' )( module );
+}
+
 define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ ) {
     "use strict";
 
@@ -422,10 +426,13 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             template = this.node( selector, 0, {
                 onlyTemplate: true
             } );
+        console.log( 'cloning model template' );
         //if form does not use jr:template="" but the node-to-clone does exist
         template = ( template.get( ).length === 0 ) ? this.node( selector, 0 ) : template;
         name = template.get( ).prop( 'nodeName' );
+        console.log( 'going to find node to insert after', selector, index );
         $insertAfterNode = this.node( selector, index ).get( );
+        console.log( 'found it', $insertAfterNode.length );
 
         //if templatenodes and insertafternode(s) have been identified AND the node following insertafternode doesn't already exist(! important for nested repeats!)
         if ( template.get( ).length === 1 && $insertAfterNode.length === 1 && $insertAfterNode.next( ).prop( 'nodeName' ) !== name ) { //this.node(selector, index+1).get().length === 0){
@@ -570,29 +577,30 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             $collection, $contextWrapNodes, $repParents;
 
         //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
-        //  index + ' and result type: ' + resTypeStr );
+        //    index + ' and result type: ' + resTypeStr );
+
         resTypeStr = resTypeStr || 'any';
         index = index || 0;
 
         expr = expr.trim( );
 
         /* 
-        creating a context doc is necessary for 3 reasons:
-        - the primary instance needs to be the root (and it isn't as the root is <model> and there can be multiple <instance>s)
-        - the templates need to be removed (though this could be worked around by adding the templates as data)
-        - the hack described below with multiple instances.
-        */
+            creating a context doc is necessary for 3 reasons:
+            - the primary instance needs to be the root (and it isn't as the root is <model> and there can be multiple <instance>s)
+            - the templates need to be removed (though this could be worked around by adding the templates as data)
+            - the hack described below with multiple instances.
+            */
         contextDoc = new DataXML( this.getStr( false, false ) );
         /* 
-        If the expression contains the instance('id') syntax, a different context instance is required.
-        However, the same expression may also contain absolute reference to the main data instance, 
-        which means 2 different contexts would have to be supplied to the XPath Evaluator which is not
-        possible. Alternatively, the XPath Evaluator becomes able to use a default instance and direct 
-        the instance(id) references to a sibling instance context. The latter proved to be too hard for 
-        this developer, so as a workaround, the following is used instead:
-        The instance referred to in instance(id) is detached and appended to the main instance. The 
-        instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
-        */
+            If the expression contains the instance('id') syntax, a different context instance is required.
+            However, the same expression may also contain absolute reference to the main data instance, 
+            which means 2 different contexts would have to be supplied to the XPath Evaluator which is not
+            possible. Alternatively, the XPath Evaluator becomes able to use a default instance and direct 
+            the instance(id) references to a sibling instance context. The latter proved to be too hard for 
+            this developer, so as a workaround, the following is used instead:
+            The instance referred to in instance(id) is detached and appended to the main instance. The 
+            instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
+            */
         if ( this.instanceSelectRegEx.test( expr ) ) {
             instances = expr.match( this.instanceSelectRegEx );
             for ( i = 0; i < instances.length; i++ ) {

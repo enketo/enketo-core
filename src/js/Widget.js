@@ -23,7 +23,7 @@ define( [ 'jquery' ], function( $ ) {
      * @constructor
      * @param {Element} element The DOM element the widget is applied on
      * @param {(boolean|{touch: boolean})} options Options passed to the widget during instantiation
-     * @param {[type]} event Not sure, this may not be necessary but the desktopSelectpicker does something with it
+     * @param {string} event Not sure, this may not be necessary but the desktopSelectpicker does something with it
      */
     var Widget = function( element, options, event ) {
         var name = this.constructor.toString( ).match( /function (\w*)/ )[ 1 ];
