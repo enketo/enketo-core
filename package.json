@@ -11,7 +11,7 @@
         "Martijn van de Rijdt"
     ],
     "scripts": {
-        "test": "grunt test --force"
+        "test": "grunt test"
     },
     "devDependencies": {
         "grunt-contrib-uglify": "~0.2.2",
@@ -21,7 +21,7 @@
         "grunt-contrib-jshint": "~0.6.4",
         "grunt-template-jasmine-requirejs": "~0.1.7",
         "grunt-contrib-connect": "~0.5.0",
-        "grunt-jsbeautifier": "~0.2.2",
+        "grunt-jsbeautifier": "~0.2.3",
         "grunt-contrib-requirejs": "~0.4.1",
         "grunt-closure-compiler": "0.0.21"
     }

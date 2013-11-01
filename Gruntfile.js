@@ -171,7 +171,7 @@ module.exports = function( grunt ) {
 
     } );
     grunt.registerTask( 'compile', [ 'requirejs:combine', 'closure-compiler:compile' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'connect:test', 'jasmine' ] );
+    grunt.registerTask( 'test', [ /**'jsbeautifier:test',*/ 'connect:test', 'jasmine' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'default', [ 'jshint', 'prepWidgetSass', 'sass', 'test' ] );
