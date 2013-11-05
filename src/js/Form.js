@@ -276,7 +276,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
             FormView.prototype.init = function() {
                 var name, $required, $hint;
-                //this.checkForErrors();
+
                 if ( typeof model == 'undefined' || !( model instanceof FormModel ) ) {
                     return console.error( 'variable data needs to be defined as instance of FormModel' );
                 }
@@ -290,25 +290,6 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 //profiler = new Profiler('calcupdate');
                 this.calcUpdate(); //before repeat.init as repeat count may use a calculated item
                 //profiler.report();
-
-                //TODO: don't add to preload and calculated items
-                //TODO: move to XSLT
-                //profiler = new Profiler('brs');
-                $form.find( 'select, input, textarea' )
-                    .not( '[type="checkbox"], [type="radio"], [readonly], #form-languages' ).before( $( '<br/>' ) );
-                //profiler.report();
-
-                /*
-                Groups of radiobuttons need to have the same name. The name refers to the path of the instance node.
-                Repeated radiobuttons would all have the same name which means they wouldn't work right.
-                Therefore, radiobuttons store their path in data-name instead and cloned repeats will add a 
-                different name attribute.
-                TODO: move to XSLT
-                */
-                $form.find( 'input[type="radio"]' ).each( function() {
-                    name = /**@type {string} */ $( this ).attr( 'name' );
-                    $( this ).attr( 'data-name', name );
-                } );
 
                 //profiler = new Profiler('setLangs()');
                 this.langs.init(); //test: before itemsetUpdate
@@ -343,6 +324,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 //profiler.report();
 
                 this.setEventHandlers(); //after widgets init to make sure widget handlers are called before
+
                 this.editStatus.set( false );
                 //profiler.report('time taken across all functions to evaluate '+xpathEvalNum+' XPath expressions: '+xpathEvalTime);
             };
@@ -1613,5 +1595,5 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
             };
         }
 
-        return Form;
+    return Form;
     } );
