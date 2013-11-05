@@ -49,10 +49,10 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
         DatepickerExtended.prototype._init = function() {
             var that = this,
                 $p = $( this.element ).parent( 'label' ),
-                startView = ( $p.hasClass( 'jr-appearance-month-year' ) ) ? 'year' :
-                    ( $p.hasClass( 'jr-appearance-year' ) ) ? 'decade' : 'month',
-                targetEvent = ( $p.hasClass( 'jr-appearance-month-year' ) ) ? 'changeMonth' :
-                    ( $p.hasClass( 'jr-appearance-year' ) ) ? 'changeYear' : 'changeDate',
+                startView = ( $p.hasClass( 'or-appearance-month-year' ) ) ? 'year' :
+                    ( $p.hasClass( 'or-appearance-year' ) ) ? 'decade' : 'month',
+                targetEvent = ( $p.hasClass( 'or-appearance-month-year' ) ) ? 'changeMonth' :
+                    ( $p.hasClass( 'or-appearance-year' ) ) ? 'changeYear' : 'changeDate',
                 format = ( startView === 'year' ) ? 'yyyy-mm' :
                     ( startView === 'decade' ) ? 'yyyy' : 'yyyy-mm-dd',
                 $fakeDateI = this._createFakeDateInput( format );

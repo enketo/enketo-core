@@ -85,7 +85,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
     Radiopicker.prototype._setMobileClass = function() {
         var $form = $( this.element );
 
-        $form.find( 'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact, .jr-appearance-label, .jr-appearance-list-nolabel )' )
+        $form.find( 'fieldset:not(.or-appearance-compact, .or-appearance-quickcompact, .or-appearance-label, .or-appearance-list-nolabel )' )
             .children( 'label' )
             .children( 'input[type="radio"], input[type="checkbox"]' )
             .parent( 'label' )

@@ -1,11 +1,11 @@
-.jr-appearance-compact, .jr-appearance-quickcompact{
+.or-appearance-compact, .or-appearance-quickcompact{
   legend{
     border: none;
     ~ label{
       float: left;
       &:hover{
         background: none;}
-      span.active:not(.jr-hint):not(.jr-constraint-msg){
+      span.active:not(.or-hint):not(.or-constraint-msg){
         margin-left: 0;
         display: none; } } }
   input{

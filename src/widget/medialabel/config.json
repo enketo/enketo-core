@@ -1,6 +1,6 @@
 {
-	"name": "medialabelwidget",
-	"stylesheet": "medialabelwidget.scss",
-	"selector": "fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact)>label, fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact)>legend",
-	"options": {}
+    "name": "medialabelwidget",
+    "stylesheet": "medialabelwidget.scss",
+    "selector": "fieldset:not(.or-appearance-compact, .or-appearance-quickcompact)>label, fieldset:not(.or-appearance-compact, .or-appearance-quickcompact)>legend",
+    "options": {}
 }

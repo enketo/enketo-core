@@ -41,15 +41,15 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
 
     Tablewidget.prototype.init = function() {
         var that = this;
-        $( this.element ).parent().parent().find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
-            .parent().parent( '.jr-appearance-field-list' ).each( function() {
+        $( this.element ).parent().parent().find( '.or-appearance-field-list .or-appearance-list-nolabel, .or-appearance-field-list .or-appearance-label' )
+            .parent().parent( '.or-appearance-field-list' ).each( function() {
                 // remove the odd input element that XLSForm adds for the 'easier table method'
                 // see https://github.com/modilabs/pyxform/issues/72
                 $( this ).find( 'input[readonly]' ).remove();
                 // fix the column widths, after any ongoing animations have finished
                 $( this ).promise().done( function() {
-                    $( this ).find( '.jr-appearance-label label>img' ).parent().css( 'width', 'auto' ).toSmallestWidth();
-                    $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth();
+                    $( this ).find( '.or-appearance-label label>img' ).parent().css( 'width', 'auto' ).toSmallestWidth();
+                    $( this ).find( '.or-appearance-label label, .or-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth();
                     $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
 
                 } );

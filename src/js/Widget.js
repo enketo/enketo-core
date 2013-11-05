@@ -59,7 +59,7 @@ define( [ 'jquery' ], function( $ ) {
         /**
          * Do whatever necessary to ensure that the widget does not allow user input if its parent branch is disabled.
          * Most of the times this branch can remain empty.
-         * Check with $('.jr-branch').show() whether input is disabled in a disabled branch.
+         * Check with $('.or-branch').show() whether input is disabled in a disabled branch.
          */
         disable: function() {
             console.debug( this.namespace, 'disable' );

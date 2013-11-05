@@ -152,7 +152,7 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
             this.$search = this.$widget.find( '[name="search"]' );
         }
         //if not on a mobile device or specifically requested, add the map canvas
-        if ( this.options.touch !== true || ( this.options.touch === true && this.$inputOrigin.parents( '.jr-appearance-maps' ).length > 0 ) ) {
+        if ( this.options.touch !== true || ( this.options.touch === true && this.$inputOrigin.parents( '.or-appearance-maps' ).length > 0 ) ) {
             this.$widget.find( '.search-bar' ).removeClass( 'no-map' ).after( map );
             this.$map = this.$widget.find( '.map-canvas' );
         }

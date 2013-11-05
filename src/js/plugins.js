@@ -1,7 +1,7 @@
 define( [ 'jquery' ], function( $ ) {
 
     /**
-     * Update number of repeated elements (with class jr-repeat)
+     * Update number of repeated elements (with class or-repeat)
      *
      * @return {jQuery} [description]
      */
@@ -9,11 +9,11 @@ define( [ 'jquery' ], function( $ ) {
 
         return this.each( function() {
 
-            $( this ).find( 'fieldset.jr-repeat' ).each( function() {
+            $( this ).find( 'fieldset.or-repeat' ).each( function() {
                 var repSiblings, qtyRepeats, i;
                 // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
-                if ( $( this ).prev( 'fieldset.jr-repeat' ).length === 0 ) {
-                    repSiblings = $( this ).siblings( 'fieldset.jr-repeat' );
+                if ( $( this ).prev( 'fieldset.or-repeat' ).length === 0 ) {
+                    repSiblings = $( this ).siblings( 'fieldset.or-repeat' );
                     qtyRepeats = repSiblings.length + 1;
                     if ( qtyRepeats > 1 ) {
                         $( this ).find( 'span.repeat-number' ).text( '1' );

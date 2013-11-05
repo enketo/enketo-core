@@ -1,4 +1,4 @@
-.restoring-sanity-to-legends .jr-appearance-list-nolabel, .restoring-sanity-to-legends .jr-appearance-label{
+.restoring-sanity-to-legends .or-appearance-list-nolabel, .restoring-sanity-to-legends .or-appearance-label{
   margin: -0.9em 0 -0.7em 0;
   legend{ 
     float: left;
@@ -18,11 +18,11 @@
   input{
     margin: 0 10px 0 10px;
     text-align: center;} }
-.jr-appearance-list-nolabel{
+.or-appearance-list-nolabel{
   label .active{
     display: none !important;
     float: none; } }
-.jr .jr-appearance-label{
+.or .or-appearance-label{
   legend ~ label:hover{
     background-color: transparent;}
   input{

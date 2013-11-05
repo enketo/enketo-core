@@ -43,7 +43,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
         $( this.element ).parent( 'label' ).each( function() {
             console.log( 'converting readonly to trigger', $( this ) );
             var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
-                branch = ( relevant ) ? ' jr-branch pre-init' : '',
+                branch = ( relevant ) ? ' or-branch pre-init' : '',
                 name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
                 attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
                 value = $( this ).find( 'input, select, textarea' ).val(),
