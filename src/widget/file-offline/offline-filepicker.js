@@ -155,7 +155,7 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
     };
 
     OfflineFilepicker.prototype._getInstanceID = function() {
-        var id = $( 'form.jr' ).data( 'instanceID' );
+        var id = $( 'form.or' ).data( 'instanceID' );
         if ( !id ) {
             console.error( 'Filepicker widget could not find instanceID. Files will not be saved correctly!' );
         }

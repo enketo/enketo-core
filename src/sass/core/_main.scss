@@ -15,12 +15,12 @@ h4{
   text-align: left;  }
 
 /** hide stuff **/
-.jr [lang]:not(.active), .jr-option-translations, .jr-appearance-page-break, .jr-constraint-msg, .jr-required-msg,
+.or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,
 .itemset-template, .itemset-labels {
   display: none; }
 
 /** hints **/
-.jr-hint.active{
+.or-hint.active{
   @include font-normal;
   color: #888888;
   display: block;
@@ -30,19 +30,19 @@ h4{
   font-style: italic;
   ~ br{
     display: none; } }
-label .jr-hint.active{
+label .or-hint.active{
   padding-top: .5em; } 
-legend .jr-hint.active{
+legend .or-hint.active{
   padding-bottom: .6em; }
 
-.jr .form-logo img {
+.or .form-logo img {
   position: relative;
   float: none;
   left: 50%;
   max-height: 200px;
   width: 120px;
   margin: 30px 0 10px -60px; }
-.jr-repeat {
+.or-repeat {
   background-color: lighten($accent-color-1, 55%);
   margin: 0 0 3px 0;
   padding: 10px 10px 10px 10px;
@@ -51,14 +51,14 @@ legend .jr-hint.active{
     display: block;
     float: right;
     color: $accent-color-1;
-    + .jr-group {
+    + .or-group {
       border-top: none; } } } 
-.jr-group {
+.or-group {
   border-top: $line; 
   margin: 1.5em 0 0.4em 0;
-    .jr-group{
+    .or-group{
       margin: 1.5em 0 0.5em 25px;} }
-#stats + .jr-group, #jr-preload-items + .jr-group, #form-languages + .jr-group{
+#stats + .or-group, #jr-preload-items + .or-group, #form-languages + .or-group{
   border-top: none; }
 label, fieldset {
   @include font-bold;
@@ -85,7 +85,7 @@ legend {
       margin-left: 5px; } } }
 label, legend, .trigger {
   font-size: 1em; }
-.jr {
+.or {
   img, audio, video {
   float: right;
   max-height: 300px;
@@ -162,12 +162,12 @@ fieldset {
   padding-right: $pad;
   padding-bottom: $pad;}
 .invalid-required {
-  .jr-required-msg.active{
+  .or-required-msg.active{
     @include error-text; } }
 .invalid-constraint{
-  .jr-constraint-msg.active{
+  .or-constraint-msg.active{
     @include error-text; } } 
-.jr-branch {
+.or-branch {
   display: none;}
 .date, .bootstrap-timepicker {
   input {

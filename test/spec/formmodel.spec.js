@@ -8,7 +8,7 @@ define( [ "js/FormModel" ], function( Model ) {
         return new Model( mockForms1[ filename ].xml_model );
     };
 
-    describe( "Data node getter", function( ) {
+    describe( "Data node getter", function() {
         var i, t =
                 [
                 [ "", null, null, 20 ],
@@ -118,8 +118,8 @@ define( [ "js/FormModel" ], function( Model ) {
             data = getModel( 'thedata.xml' ); //form.Data(dataStr1);
 
         function test( node ) {
-            it( "obtains nodes (selector: " + node.selector + ", index: " + node.index + ", filter: " + JSON.stringify( node.filter ) + ")", function( ) {
-                expect( data.node( node.selector, node.index, node.filter ).get( ).length ).toEqual( node.result );
+            it( "obtains nodes (selector: " + node.selector + ", index: " + node.index + ", filter: " + JSON.stringify( node.filter ) + ")", function() {
+                expect( data.node( node.selector, node.index, node.filter ).get().length ).toEqual( node.result );
             } );
         }
         for ( i = 0; i < t.length; i++ ) {
@@ -133,28 +133,28 @@ define( [ "js/FormModel" ], function( Model ) {
 
     } );
 
-    describe( 'Date node (&) value getter', function( ) {
+    describe( 'Date node (&) value getter', function() {
         var //form = new Form('',''),
         data = getModel( 'thedata.xml' ); //dataStr1);
 
-        it( 'returns an array of one node value', function( ) {
-            expect( data.node( "/thedata/nodeB" ).getVal( ) ).toEqual( [ 'b' ] );
+        it( 'returns an array of one node value', function() {
+            expect( data.node( "/thedata/nodeB" ).getVal() ).toEqual( [ 'b' ] );
         } );
 
-        it( 'returns an array of multiple node values', function( ) {
-            expect( data.node( "/thedata/repeatGroup/nodeC" ).getVal( ) ).toEqual( [ '', 'c2', 'c3' ] );
+        it( 'returns an array of multiple node values', function() {
+            expect( data.node( "/thedata/repeatGroup/nodeC" ).getVal() ).toEqual( [ '', 'c2', 'c3' ] );
         } );
 
-        it( 'returns an empty array', function( ) {
-            expect( data.node( "/thedata/nodeX" ).getVal( ) ).toEqual( [ ] );
+        it( 'returns an empty array', function() {
+            expect( data.node( "/thedata/nodeX" ).getVal() ).toEqual( [] );
         } );
 
-        it( 'obtains a node value of a node with a . in the name', function( ) {
-            expect( data.node( "/thedata/someweights/w.3" ).getVal( ) ).toEqual( [ '5' ] );
+        it( 'obtains a node value of a node with a . in the name', function() {
+            expect( data.node( "/thedata/someweights/w.3" ).getVal() ).toEqual( [ '5' ] );
         } );
     } );
 
-    describe( 'Data node XML data type conversion & validation', function( ) {
+    describe( 'Data node XML data type conversion & validation', function() {
         var i, data,
             t = [
                 [ "/thedata/nodeA", null, null, 'val1', null, true ],
@@ -228,7 +228,7 @@ define( [ "js/FormModel" ], function( Model ) {
             ];
 
         function test( n ) {
-            it( "converts and validates xml-type " + n.type + " with value: " + n.value, function( ) {
+            it( "converts and validates xml-type " + n.type + " with value: " + n.value, function() {
                 data = getModel( 'thedata.xml' ); //dataStr1);
                 expect( data.node( n.selector, n.index, n.filter ).setVal( n.value, null, n.type ) ).toEqual( n.result );
             } );
@@ -245,58 +245,58 @@ define( [ "js/FormModel" ], function( Model ) {
             } );
         }
 
-        it( 'sets a non-empty value to empty', function( ) {
+        it( 'sets a non-empty value to empty', function() {
             var node = data.node( '/thedata/nodeA', null, null );
             data = getModel( 'thedata.xml' ); //dataStr1);
             node.setVal( 'value', null, 'string' );
             expect( node.setVal( '' ) ).toBe( true );
         } );
 
-        it( 'adds a file attribute to data nodes with a value and with xml-type: binary', function( ) {
+        it( 'adds a file attribute to data nodes with a value and with xml-type: binary', function() {
             node = data.node( '/thedata/nodeA', null, null );
-            expect( node.get( ).attr( 'type' ) ).toBe( undefined );
+            expect( node.get().attr( 'type' ) ).toBe( undefined );
             node.setVal( 'this.jpg', null, 'binary' );
-            expect( node.get( ).attr( 'type' ) ).toBe( 'file' );
+            expect( node.get().attr( 'type' ) ).toBe( 'file' );
         } );
 
-        it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', function( ) {
+        it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', function() {
             node = data.node( '/thedata/nodeA', null, null );
             node.setVal( 'this.jpg', null, 'binary' );
-            expect( node.get( ).attr( 'type' ) ).toBe( 'file' );
+            expect( node.get().attr( 'type' ) ).toBe( 'file' );
             node.setVal( '', null, 'binary' );
-            expect( node.get( ).attr( 'type' ) ).toBe( undefined );
+            expect( node.get().attr( 'type' ) ).toBe( undefined );
         } );
 
     } );
 
-    describe( "Data node cloner", function( ) {
-        it( "has cloned a data node", function( ) {
+    describe( "Data node cloner", function() {
+        it( "has cloned a data node", function() {
             var //form = new Form('', ''),
             data = getModel( 'thedata.xml' ), //dataStr1),
                 node = data.node( "/thedata/nodeA" ),
-                $precedingTarget = data.node( "/thedata/repeatGroup/nodeC", 0 ).get( );
+                $precedingTarget = data.node( "/thedata/repeatGroup/nodeC", 0 ).get();
             //form.Form('form');
 
-            expect( data.node( '/thedata/repeatGroup/nodeA', 0 ).get( ).length ).toEqual( 0 );
+            expect( data.node( '/thedata/repeatGroup/nodeA', 0 ).get().length ).toEqual( 0 );
             node.clone( $precedingTarget );
-            expect( data.node( '/thedata/repeatGroup/nodeA', 0 ).get( ).length ).toEqual( 1 );
+            expect( data.node( '/thedata/repeatGroup/nodeA', 0 ).get().length ).toEqual( 1 );
         } );
     } );
 
-    describe( "Data node remover", function( ) {
-        it( "has removed a data node", function( ) {
+    describe( "Data node remover", function() {
+        it( "has removed a data node", function() {
             var //form = new Form('', ''),
             data = getModel( 'thedata.xml' ), //dataStr1),
                 node = data.node( "/thedata/nodeA" );
             //form.Form('form');
 
-            expect( node.get( ).length ).toEqual( 1 );
-            data.node( "/thedata/nodeA" ).remove( );
-            expect( node.get( ).length ).toEqual( 0 );
+            expect( node.get().length ).toEqual( 1 );
+            data.node( "/thedata/nodeA" ).remove();
+            expect( node.get().length ).toEqual( 0 );
         } );
     } );
 
-    describe( "XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)", function( ) {
+    describe( "XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)", function() {
         var i, t = [
                 [ "/thedata/nodeB", "string", null, 0, "b" ],
                 [ "../nodeB", "string", "/thedata/nodeA", 0, "b" ],
@@ -312,7 +312,7 @@ define( [ "js/FormModel" ], function( Model ) {
             data = getModel( 'thedata.xml' );
 
         function test( expr, resultType, contextSelector, index, result ) {
-            it( "evaluates XPath: " + expr, function( ) {
+            it( "evaluates XPath: " + expr, function() {
                 expect( data.evaluate( expr, resultType, contextSelector, index ) ).toEqual( result );
             } );
         }
@@ -323,13 +323,13 @@ define( [ "js/FormModel" ], function( Model ) {
 
         // this tests the makeBugCompliant() workaround that injects a position into an absolute path
         // for the issue described here: https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations
-        it( "evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())", function( ) {
+        it( "evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())", function() {
             //data = getModel( 'thedata.xml' ); //new Form(formStr1, dataStr1);
 
             expect( data.evaluate( "/thedata/repeatGroup/nodeC", "string", "/thedata/repeatGroup/nodeC", 2 ) ).toEqual( "c3" );
         } );
 
-        it( 'is able to address a secondary instance by id with the instance(id)/path/to/node syntax', function( ) {
+        it( 'is able to address a secondary instance by id with the instance(id)/path/to/node syntax', function() {
             var dataO = getModel( 'new_cascading_selections.xml' );
             expect( dataO.evaluate( "instance('cities')/root/item/name", "string" ) ).toEqual( 'ams' );
             expect( dataO.evaluate( "instance('cities')/root/item[country=/new_cascading_selections/group4/country4]/name", "string" ) ).toEqual( 'den' );
@@ -339,13 +339,13 @@ define( [ "js/FormModel" ], function( Model ) {
     } );
 
 
-    describe( 'functionality to obtain string of the XML instance (DataXML.getStr() for storage or uploads)', function( ) {
+    describe( 'functionality to obtain string of the XML instance (DataXML.getStr() for storage or uploads)', function() {
         var str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12,
             modelA = getModel( 'new_cascading_selections.xml' ),
             modelB = getModel( 'thedata.xml' );
-        modelA.init( );
-        modelB.init( );
-        str1 = modelA.getStr( );
+        modelA.init();
+        modelB.init();
+        str1 = modelA.getStr();
         str2 = modelA.getStr( null, null );
         str3 = modelA.getStr( false, false );
         str4 = modelA.getStr( true, false );
@@ -355,7 +355,7 @@ define( [ "js/FormModel" ], function( Model ) {
         str8 = modelA.getStr( null, null, true );
         str9 = modelA.getStr( true, true, true );
 
-        str10 = modelB.getStr( );
+        str10 = modelB.getStr();
         str11 = modelB.getStr( true );
         str12 = modelB.getStr( false, false, true );
 
@@ -380,7 +380,7 @@ define( [ "js/FormModel" ], function( Model ) {
             return typeof $xml === 'object';
         };
 
-        it( 'returns a string of the primary instance only when called without 3rd parameter: true', function( ) {
+        it( 'returns a string of the primary instance only when called without 3rd parameter: true', function() {
             expect( testModelPresent( str1 ) ).toBe( false );
             expect( testInstancePresent( str1 ) ).toBe( false );
             expect( testModelPresent( str2 ) ).toBe( false );
@@ -397,7 +397,7 @@ define( [ "js/FormModel" ], function( Model ) {
             expect( testInstancePresent( str7 ) ).toBe( false );
         } );
 
-        it( 'returns a string of the model and all instances when called with 3rd parameter: true', function( ) {
+        it( 'returns a string of the model and all instances when called with 3rd parameter: true', function() {
             expect( testModelPresent( str8 ) ).toBe( true );
             expect( testInstancePresent( str8 ) ).toBe( true );
             expect( testInstanceNumber( str8 ) ).toBe( 4 );
@@ -408,26 +408,26 @@ define( [ "js/FormModel" ], function( Model ) {
             expect( testInstanceNumber( str12 ) ).toBe( 1 );
         } );
 
-        it( 'returns a string with repeat templates included when called with 1st parameter: true', function( ) {
+        it( 'returns a string with repeat templates included when called with 1st parameter: true', function() {
             expect( testTemplatePresent( str10 ) ).toBe( false );
             expect( testTemplatePresent( str11 ) ).toBe( true );
         } );
 
     } );
 
-    describe( 'output data functionality', function( ) {
+    describe( 'output data functionality', function() {
         var model;
 
-        it( 'outputs a clone of the primary instance first child as a jQuery object if the object is wrapped inside <instance> and <model>', function( ) {
+        it( 'outputs a clone of the primary instance first child as a jQuery object if the object is wrapped inside <instance> and <model>', function() {
             model = new Model( '<model><instance><node/></instance><instance id="secondary"><secondary/></instance></model>' );
-            expect( model.getInstanceClone( ).length ).toEqual( 1 );
-            expect( model.getInstanceClone( ).prop( 'nodeName' ) ).toEqual( 'node' );
+            expect( model.getInstanceClone().length ).toEqual( 1 );
+            expect( model.getInstanceClone().prop( 'nodeName' ) ).toEqual( 'node' );
         } );
 
-        it( 'outputs a clone of the first node as a jQuery object if the object is NOT wrapped inside <instance> and <model>', function( ) {
+        it( 'outputs a clone of the first node as a jQuery object if the object is NOT wrapped inside <instance> and <model>', function() {
             model = new Model( '<node/>' );
-            expect( model.getInstanceClone( ).length ).toEqual( 1 );
-            expect( model.getInstanceClone( ).prop( 'nodeName' ) ).toEqual( 'node' );
+            expect( model.getInstanceClone().length ).toEqual( 1 );
+            expect( model.getInstanceClone().prop( 'nodeName' ) ).toEqual( 'node' );
         } );
 
     } );

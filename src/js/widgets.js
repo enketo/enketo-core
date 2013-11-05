@@ -12,7 +12,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
      */
 
     function init( $group ) {
-        $form = $( 'form.jr' );
+        $form = $( 'form.or' );
         $group = $group || $form;
         widgetConfig = [];
 

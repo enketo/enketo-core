@@ -43,7 +43,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              *
              */
             this.init = function() {
-                //cloning children to keep any event handlers on 'form.jr' intact upon resetting
+                //cloning children to keep any event handlers on 'form.or' intact upon resetting
                 $formClone = $( formSelector ).clone().appendTo( '<original></original>' );
 
                 model = new FormModel( dataStr );
@@ -58,7 +58,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     dataToEdit.init();
                     this.load( dataToEdit );
                 }
-                repeatsPresent = ( $( formSelector ).find( '.jr-repeat' ).length > 0 );
+                repeatsPresent = ( $( formSelector ).find( '.or-repeat' ).length > 0 );
 
                 //profiler = new Profiler('html form.init()');
                 form.init();
@@ -369,7 +369,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         constraint: $node.attr( 'data-constraint' ),
                         relevant: $node.attr( 'data-relevant' ),
                         val: this.getVal( $node ),
-                        required: ( $node.attr( 'required' ) !== undefined && $node.parents( '.jr-appearance-label' ).length === 0 ) ? true : false,
+                        required: ( $node.attr( 'required' ) !== undefined && $node.parents( '.or-appearance-label' ).length === 0 ) ? true : false,
                         enabled: this.isEnabled( $node ),
                         multiple: this.isMultiple( $node )
                     };
@@ -432,11 +432,11 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     if ( inputType === 'radio' && name !== $node.attr( 'name' ) ) {
                         $wrapNodesSameName = this.getWrapNodes( $form.find( '[data-name="' + name + '"]' ) );
                     }
-                    //fieldset.jr-group wraps fieldset.jr-repeat and can have same name attribute!)
-                    else if ( inputType === 'fieldset' && $node.hasClass( 'jr-repeat' ) ) {
-                        $wrapNodesSameName = this.getWrapNodes( $form.find( '.jr-repeat[name="' + name + '"]' ) );
-                    } else if ( inputType === 'fieldset' && $node.hasClass( 'jr-group' ) ) {
-                        $wrapNodesSameName = this.getWrapNodes( $form.find( '.jr-group[name="' + name + '"]' ) );
+                    //fieldset.or-group wraps fieldset.or-repeat and can have same name attribute!)
+                    else if ( inputType === 'fieldset' && $node.hasClass( 'or-repeat' ) ) {
+                        $wrapNodesSameName = this.getWrapNodes( $form.find( '.or-repeat[name="' + name + '"]' ) );
+                    } else if ( inputType === 'fieldset' && $node.hasClass( 'or-group' ) ) {
+                        $wrapNodesSameName = this.getWrapNodes( $form.find( '.or-group[name="' + name + '"]' ) );
                     } else {
                         $wrapNodesSameName = this.getWrapNodes( $form.find( '[name="' + name + '"]' ) );
                     }
@@ -569,7 +569,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         that.setSelect( $( this ) );
                     } );
                     //quickfix for labels and legends that do not contain a span.active without other class
-                    $form.find( 'legend span.active:not(.jr-hint, .jr-constraint-msg), label span.active:not(.jr-hint, .jr-constraint-msg)' ).each( function() {
+                    $form.find( 'legend span.active:not(.or-hint, .or-constraint-msg), label span.active:not(.or-hint, .or-constraint-msg)' ).each( function() {
                         if ( $( this ).text().trim().length === 0 ) {
                             $( this ).text( '[MISSING TRANSLATION]' );
                         }
@@ -583,7 +583,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     $select.children( 'option' ).not( '[value=""]' ).each( function() {
                         curLabel = /** @type {string} */ $( this ).text();
                         value = $( this ).attr( 'value' );
-                        newLabel = $( this ).parent( 'select' ).siblings( '.jr-option-translations' )
+                        newLabel = $( this ).parent( 'select' ).siblings( '.or-option-translations' )
                             .children( '.active[data-option-value="' + value + '"]' ).text().trim();
                         newLabel = ( typeof newLabel !== 'undefined' && newLabel.length > 0 ) ? newLabel : curLabel;
                         $( this ).text( newLabel );
@@ -662,7 +662,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         cleverSelector.push( '[data-relevant*="' + namesArr[ i ] + '"]' );
                     }
 
-                    clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
+                    clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                     $form.find( cleverSelector.join() ).each( function() {
                         //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
@@ -677,10 +677,10 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                         //p = parent.input.getProps($(this));
                         //$branchNode = parent.input.getWrapNodes($(this));
-                        $branchNode = $( this ).closest( '.jr-branch' );
+                        $branchNode = $( this ).closest( '.or-branch' );
 
                         if ( $branchNode.length !== 1 ) {
-                            if ( $( this ).parents( '#jr-calculated-items' ).length === 0 ) {
+                            if ( $( this ).parents( '#or-calculated-items' ).length === 0 ) {
                                 console.error( 'could not find branch node for ', $( this ) );
                             }
                             return;
@@ -691,8 +691,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
                         (6-7 seconds of loading time on the bench6 form)
                         */
-                        insideRepeat = ( clonedRepeatsPresent && $branchNode.closest( '.jr-repeat' ).length > 0 ) ? true : false;
-                        insideRepeatClone = ( clonedRepeatsPresent && $branchNode.closest( '.jr-repeat.clone' ).length > 0 ) ? true : false;
+                        insideRepeat = ( clonedRepeatsPresent && $branchNode.closest( '.or-repeat' ).length > 0 ) ? true : false;
+                        insideRepeatClone = ( clonedRepeatsPresent && $branchNode.closest( '.or-repeat.clone' ).length > 0 ) ? true : false;
                         /*
                         Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
                         It can be safely set to 0 for other branches.
@@ -708,7 +708,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             /*
                             For now, let's just not cache relevants inside a repeat. 
                             */
-                            //if ($branchNode.parents('.jr-repeat').length === 0){
+                            //if ($branchNode.parents('.or-repeat').length === 0){
                             if ( !insideRepeat ) {
                                 cacheIndex = p.relevant;
                             } else {
@@ -803,7 +803,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             where the file inputs end up in a weird partially enabled state. 
                             Refresh the state by disabling and enabling the file inputs again.
                             */
-                            $branchNode.find( '*:not(.jr-branch) input[type="file"]:not(.force-disabled, [data-relevant])' )
+                            $branchNode.find( '*:not(.or-branch) input[type="file"]:not(.force-disabled, [data-relevant])' )
                                 .prop( 'disabled', true ).prop( 'disabled', false );
                         }
                     }
@@ -869,7 +869,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 }
 
                 cleverSelector = cleverSelector.join( ',' );
-                clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
+                clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                 $form.find( cleverSelector ).each( function() {
                     var $htmlItem, $htmlItemLabels, value, $instanceItems, index, context,
@@ -890,8 +890,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
                     It can be safely set to 0 for other branches.
                     */
-                    insideRepeat = ( clonedRepeatsPresent && $input.closest( '.jr-repeat' ).length > 0 ) ? true : false;
-                    insideRepeatClone = ( clonedRepeatsPresent && $input.closest( '.jr-repeat.clone' ).length > 0 ) ? true : false;
+                    insideRepeat = ( clonedRepeatsPresent && $input.closest( '.or-repeat' ).length > 0 ) ? true : false;
+                    insideRepeatClone = ( clonedRepeatsPresent && $input.closest( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                     index = ( insideRepeatClone ) ? that.input.getIndex( $input ) : 0;
 
@@ -922,7 +922,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     $( this ).closest( 'label > select, fieldset > label' ).parent()
                         .clearInputs( 'change' )
                         .find( templateNodeName ).not( $template ).remove();
-                    $( this ).parent( 'select' ).siblings( '.jr-option-translations' ).empty();
+                    $( this ).parent( 'select' ).siblings( '.or-option-translations' ).empty();
 
                     $instanceItems.each( function() {
                         $htmlItem = $( '<root/>' );
@@ -950,7 +950,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             $htmlItemLabels
                                 .attr( 'data-option-value', value )
                                 .attr( 'data-itext-id', '' )
-                                .appendTo( $labels.siblings( '.jr-option-translations' ) );
+                                .appendTo( $labels.siblings( '.or-option-translations' ) );
                             $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
                         }
                     } );
@@ -976,11 +976,11 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     that = this;
 
                 namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
-                cleverSelector = ( namesArr.length > 0 ) ? [] : [ '.jr-output[data-value]' ];
+                cleverSelector = ( namesArr.length > 0 ) ? [] : [ '.or-output[data-value]' ];
                 for ( i = 0; i < namesArr.length; i++ ) {
-                    cleverSelector.push( '.jr-output[data-value*="' + namesArr[ i ] + '"]' );
+                    cleverSelector.push( '.or-output[data-value*="' + namesArr[ i ] + '"]' );
                 }
-                clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
+                clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                 $form.find( ':not(:disabled) span.active' ).find( cleverSelector.join() ).each( function() {
                     expr = $( this ).attr( 'data-value' );
@@ -998,8 +998,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         $( this ).parent( 'span' ).parent( 'legend' ).parent( 'fieldset' ).find( '[name]' ).eq( 0 ).length === 1 ?
                         $( this ).parent().parent().parent().find( '[name]:eq(0)' ) : $( this ).closest( '[name]' );
                     context = that.input.getName( $context );
-                    insideRepeat = ( clonedRepeatsPresent && $( this ).closest( '.jr-repeat' ).length > 0 );
-                    insideRepeatClone = ( clonedRepeatsPresent && $( this ).closest( '.jr-repeat.clone' ).length > 0 );
+                    insideRepeat = ( clonedRepeatsPresent && $( this ).closest( '.or-repeat' ).length > 0 );
+                    insideRepeatClone = ( clonedRepeatsPresent && $( this ).closest( '.or-repeat.clone' ).length > 0 );
                     index = ( insideRepeatClone ) ? that.input.getIndex( $context ) : 0;
 
                     if ( typeof outputCache[ expr ] !== 'undefined' ) {
@@ -1056,7 +1056,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     cleverSelector.push( 'input[data-calculate*="' + namesArr[ i ] + '"], input[data-relevant*="' + namesArr[ i ] + '"]' );
                 }
 
-                $form.find( '#jr-calculated-items' ).find( cleverSelector.join() ).each( function() {
+                $form.find( '#or-calculated-items' ).find( cleverSelector.join() ).each( function() {
                     name = $( this ).attr( 'name' );
                     expr = $( this ).attr( 'data-calculate' );
                     dataType = $( this ).attr( 'data-type-xml' );
@@ -1080,13 +1080,13 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     .find( 'label, legend' ).each( function() {
                         var $label = $( this );
                         if ( $label.siblings( 'legend' ).length === 0 &&
-                            $label.parent( '#jr-calculated-items, #jr-preload-items' ).length === 0 &&
-                            $label.find( '.jr-constraint-msg' ).length === 0 &&
+                            $label.parent( '#or-calculated-items, #or-preload-items' ).length === 0 &&
+                            $label.find( '.or-constraint-msg' ).length === 0 &&
                             ( $label.prop( 'nodeName' ).toLowerCase() == 'legend' ||
                                 $label.children( 'input.ignore' ).length !== $label.children( 'input' ).length ||
                                 $label.children( 'select.ignore' ).length !== $label.children( 'select' ).length ||
                                 $label.children( 'textarea.ignore' ).length !== $label.children( 'textarea' ).length ) ) {
-                            $label.prepend( '<span class="jr-constraint-msg active" lang="">Value not allowed</span>' );
+                            $label.prepend( '<span class="or-constraint-msg active" lang="">Value not allowed</span>' );
                         }
                     } );
                 //TODO: move to XSLT
@@ -1094,11 +1094,11 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                 //move constraint message to bottom of question and add message for required (could also be done in XSLT)
                 //TODO: move to XSLT
-                $form.find( '.jr-constraint-msg' ).parent().each( function() {
-                    var $msg = $( this ).find( '.jr-constraint-msg' ).detach(),
+                $form.find( '.or-constraint-msg' ).parent().each( function() {
+                    var $msg = $( this ).find( '.or-constraint-msg' ).detach(),
                         $wrapper = $( this ).closest( 'label, fieldset' );
                     $wrapper.append( $msg );
-                    $msg.after( '<span class="jr-required-msg active" lang="">This field is required</span>' );
+                    $msg.after( '<span class="or-required-msg active" lang="">This field is required</span>' );
                 } );
 
             };
@@ -1113,7 +1113,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     var item, param, name, curVal, newVal, meta, dataNode, props, xmlType,
                         that = this;
                     //these initialize actual preload items
-                    $form.find( '#jr-preload-items input' ).each( function() {
+                    $form.find( '#or-preload-items input' ).each( function() {
                         props = parentO.input.getProps( $( this ) );
                         item = $( this ).attr( 'data-preload' ).toLowerCase();
                         param = $( this ).attr( 'data-preload-params' ).toLowerCase();
@@ -1140,7 +1140,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         dataNode = model.node( '*>meta>' + name );
                         curVal = dataNode.getVal()[ 0 ];
                         //first check if there isn't a binding with a preloader that already took care of this
-                        if ( $form.find( '#jr-preload-items input[name$="/meta/' + name + '"][data-preload]' ).length === 0 ) {
+                        if ( $form.find( '#or-preload-items input[name$="/meta/' + name + '"][data-preload]' ).length === 0 ) {
                             switch ( name ) {
                                 case 'instanceID':
                                     item = 'instance';
@@ -1287,21 +1287,21 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         that = this;
 
                     this.formO = formO;
-                    $form.find( 'fieldset.jr-repeat' ).prepend( '<span class="repeat-number"></span>' );
-                    $form.find( 'fieldset.jr-repeat:not([data-repeat-fixed])' )
+                    $form.find( 'fieldset.or-repeat' ).prepend( '<span class="repeat-number"></span>' );
+                    $form.find( 'fieldset.or-repeat:not([data-repeat-fixed])' )
                         .append( '<button type="button" class="btn repeat"><i class="icon-plus"></i></button>' +
                             '<button type="button" disabled class="btn remove"><i class="icon-minus"></i></button>' );
 
                     //delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
                     $form.on( 'click', 'button.repeat:enabled', function() {
                         //create a clone
-                        that.clone( $( this ).parent( 'fieldset.jr-repeat' ) );
+                        that.clone( $( this ).parent( 'fieldset.or-repeat' ) );
                         //prevent default
                         return false;
                     } );
                     $form.on( 'click', 'button.remove:enabled', function() {
                         //remove clone
-                        that.remove( $( this ).parent( 'fieldset.jr-repeat.clone' ) );
+                        that.remove( $( this ).parent( 'fieldset.or-repeat.clone' ) );
                         //prevent default
                         return false;
                     } );
@@ -1311,7 +1311,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         repCountPath = $repeat.attr( 'data-repeat-count' ) || "";
                         numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal()[ 0 ], 10 ) : 0;
                         //console.debug('number of reps in count attribute: ' +numRepsInCount);
-                        index = $form.find( '.jr-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
+                        index = $form.find( '.or-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
                         $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get();
                         numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) + ':not([template])' ).addBack().length;
                         numRepsDefault = ( numRepsInCount > numRepsInInstance ) ? numRepsInCount : numRepsInInstance;
@@ -1321,9 +1321,9 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             that.clone( $repeat.siblings().addBack().last(), false );
                         }
                         //now check the defaults of all the descendants of this repeat and its new siblings, level-by-level
-                        $repeat.siblings( '.jr-repeat' ).addBack().find( '.jr-repeat' )
+                        $repeat.siblings( '.or-repeat' ).addBack().find( '.or-repeat' )
                             .filter( function( i ) {
-                                return $( this ).parents( '.jr-repeat' ).length === repLevel;
+                                return $( this ).parents( '.or-repeat' ).length === repLevel;
                             } ).each( function() {
                                 cloneDefaultReps( $( this ) );
                             } );
@@ -1331,8 +1331,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                     //clone form fields to create the default number 
                     //NOTE THIS ASSUMES THE DEFAULT NUMBER IS STATIC, NOT DYNAMIC
-                    $form.find( '.jr-repeat' ).filter( function( i ) {
-                        return $( this ).parents( '.jr-repeat' ).length === 0;
+                    $form.find( '.or-repeat' ).filter( function( i ) {
+                        return $( this ).parents( '.or-repeat' ).length === 0;
                     } ).each( function() {
                         repLevel = 0;
                         cloneDefaultReps( $( this ) );
@@ -1353,8 +1353,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         console.error( 'Nothing to clone' );
                         return false;
                     }
-                    $parent = $node.parent( 'fieldset.jr-group' );
-                    $master = $parent.children( 'fieldset.jr-repeat:not(.clone)' ).eq( 0 );
+                    $parent = $node.parent( 'fieldset.or-group' );
+                    $master = $parent.children( 'fieldset.or-repeat:not(.clone)' ).eq( 0 );
                     $clone = $master.clone( true, true );
 
                     //add clone class and remove any child clones.. (cloned repeats within repeats..)
@@ -1366,7 +1366,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     } );
 
                     $clone.insertAfter( $node )
-                        .parent( '.jr-group' ).numberRepeats();
+                        .parent( '.or-group' ).numberRepeats();
 
                     //if not done asynchronously, this code causes a "style undefined" exception in Jasmine unit tests with jQuery 1.9 and 2.0
                     //but this breaks loading of default values inside repeats
@@ -1381,8 +1381,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                     //note: in http://formhub.org/formhub_u/forms/hh_polio_survey_cloned/form.xml a parent group of a repeat
                     //has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining 
-                    //the proper index if .jr-repeat was not included in the selector
-                    index = $form.find( 'fieldset.jr-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
+                    //the proper index if .or-repeat was not included in the selector
+                    index = $form.find( 'fieldset.or-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
                     //parentIndex = $form.find('[name="'+$master.attr('name')+'"]').parent().index($parent);
                     //add ____x to names of radio buttons where x is the index
                     radioNames = [];
@@ -1421,8 +1421,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     var delay = 600, // dataNode,
                         that = this,
                         repeatPath = node.attr( 'name' ),
-                        repeatIndex = $form.find( 'fieldset.jr-repeat[name="' + repeatPath + '"]' ).index( node ),
-                        parentGroup = node.parent( 'fieldset.jr-group' );
+                        repeatIndex = $form.find( 'fieldset.or-repeat[name="' + repeatPath + '"]' ).index( node ),
+                        parentGroup = node.parent( 'fieldset.or-group' );
 
                     node.hide( delay, function() {
                         node.remove();
@@ -1440,7 +1440,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     $node.find( 'button.repeat, button.remove' ).prop( 'disabled', true ); //button('disable').removeClass('ui-state-hover');
 
                     //then enable the appropriate ones
-                    $node.find( 'fieldset.jr-repeat:last-child > button.repeat' ).prop( 'disabled', false ); //.button('enable');
+                    $node.find( 'fieldset.or-repeat:last-child > button.repeat' ).prop( 'disabled', false ); //.button('enable');
                     $node.find( 'button.remove:not(:eq(0))' ).prop( 'disabled', false );
                 }
             };
@@ -1449,7 +1449,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 var that = this;
 
                 //first prevent default submission, e.g. when text field is filled in and Enter key is pressed
-                $( 'form.jr' ).attr( 'onsubmit', 'return false;' );
+                $form.attr( 'onsubmit', 'return false;' );
 
                 /* 
                 workaround for Chrome to clear invalid values right away 
@@ -1505,7 +1505,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 $form.on( 'focus blur', '[required]', function( event ) {
                     var props = that.input.getProps( $( this ) ),
                         loudErrorShown = ( $( this ).parents( '.invalid-required, .invalid-constraint' ).length > 0 ),
-                        insideTable = ( $( this ).parents( '.jr-appearance-list-nolabel' ).length > 0 ),
+                        insideTable = ( $( this ).parents( '.or-appearance-list-nolabel' ).length > 0 ),
                         $reqSubtle = $( this ).next( '.required-subtle' ),
                         reqSubtle = $( '<span class="required-subtle focus" style="color: transparent;">Required</span>' );
 
