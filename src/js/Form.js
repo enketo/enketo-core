@@ -1595,5 +1595,5 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
             };
         }
 
-    return Form;
+        return Form;
     } );
