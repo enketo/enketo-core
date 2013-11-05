@@ -21,7 +21,7 @@ module.exports = function( grunt ) {
         },
         jsbeautifier: {
             test: {
-                src: [ "src/js/*.js", "src/widget/*/*.js" ],
+                src: [ "*.js", "src/js/*.js", "src/widget/*/*.js" ],
                 options: {
                     config: "./.jsbeautifyrc",
                     mode: "VERIFY_ONLY"
@@ -38,7 +38,7 @@ module.exports = function( grunt ) {
             options: {
                 jshintrc: '.jshintrc'
             },
-            all: [ 'Gruntfile.js', 'src/js/**/*.js', '!src/js/extern.js' ]
+            all: [ '*.js', 'src/js/**/*.js', '!src/js/extern.js' ]
         },
         jasmine: {
             test: {
