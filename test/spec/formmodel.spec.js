@@ -414,4 +414,22 @@ define( [ "js/FormModel" ], function( Model ) {
         } );
 
     } );
+
+    describe( 'output data functionality', function( ) {
+        var model;
+
+        it( 'outputs a clone of the primary instance first child as a jQuery object if the object is wrapped inside <instance> and <model>', function( ) {
+            model = new Model( '<model><instance><node/></instance><instance id="secondary"><secondary/></instance></model>' );
+            expect( model.getInstanceClone( ).length ).toEqual( 1 );
+            expect( model.getInstanceClone( ).prop( 'nodeName' ) ).toEqual( 'node' );
+        } );
+
+        it( 'outputs a clone of the first node as a jQuery object if the object is NOT wrapped inside <instance> and <model>', function( ) {
+            model = new Model( '<node/>' );
+            expect( model.getInstanceClone( ).length ).toEqual( 1 );
+            expect( model.getInstanceClone( ).prop( 'nodeName' ) ).toEqual( 'node' );
+        } );
+
+    } );
+
 } );

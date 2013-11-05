@@ -6,7 +6,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
     "use strict";
 
     //replace browser-built-in-XPath Engine
-    XPathJS.bindDomLevel3XPath( );
+    XPathJS.bindDomLevel3XPath();
 
     /**
      * Class dealing with the XML Instance (the data) of a form
@@ -15,7 +15,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      * @param {string} dataStr String of the default XML instance
      */
 
-    function DataXML( dataStr ) {
+    function FormModel( dataStr ) {
         var $data,
             that = this,
             $form = $( 'form.jr:eq(0)' );
@@ -33,22 +33,22 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
         this.$ = $data;
 
         /**
-         * Initializes DataXML
+         * Initializes FormModel
          *
          */
-        DataXML.prototype.init = function( ) {
+        FormModel.prototype.init = function() {
             var val;
 
             //trimming values
             this.node( null, null, {
                 noEmpty: true,
                 noTemplate: false
-            } ).get( ).each( function( ) {
-                val = /** @type {string} */ $( this ).text( );
+            } ).get().each( function() {
+                val = /** @type {string} */ $( this ).text();
                 $( this ).text( $.trim( val ) );
             } );
 
-            this.cloneAllTemplates( );
+            this.cloneAllTemplates();
             return;
         };
 
@@ -107,7 +107,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
          *
          * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
          */
-        Nodeset.prototype.get = function( ) {
+        Nodeset.prototype.get = function() {
             var p, $nodes, val, context;
 
             // noTemplate is ignored if onlyTemplate === true
@@ -122,15 +122,15 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             }
             //noEmpty automatically excludes non-leaf nodes
             if ( this.filter.noEmpty === true ) {
-                $nodes = $nodes.filter( function( ) {
-                    val = /** @type {string} */ $( this ).text( );
-                    return $( this ).children( ).length === 0 && $.trim( val ).length > 0; //$.trim($this.text()).length > 0;
+                $nodes = $nodes.filter( function() {
+                    val = /** @type {string} */ $( this ).text();
+                    return $( this ).children().length === 0 && $.trim( val ).length > 0; //$.trim($this.text()).length > 0;
                 } );
             }
             //this may still contain empty leaf nodes
             else if ( this.filter.onlyLeaf === true ) {
-                $nodes = $nodes.filter( function( ) {
-                    return $( this ).children( ).length === 0;
+                $nodes = $nodes.filter( function() {
+                    return $( this ).children().length === 0;
                 } );
             }
             $nodes = ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
@@ -149,16 +149,16 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
         Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
             var $target, curVal, /**@type {string}*/ newVal, success;
 
-            curVal = this.getVal( )[ 0 ];
+            curVal = this.getVal()[ 0 ];
 
             if ( typeof newVals !== 'undefined' && newVals !== null ) {
-                newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString( );
+                newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
             } else newVal = '';
             newVal = this.convert( newVal, xmlDataType );
 
-            $target = this.get( );
+            $target = this.get();
 
-            if ( $target.length === 1 && $.trim( newVal.toString( ) ) !== $.trim( curVal.toString( ) ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
+            if ( $target.length === 1 && $.trim( newVal.toString() ) !== $.trim( curVal.toString() ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
                 //first change the value so that it can be evaluated in XPath (validated)
                 $target.text( newVal );
                 //then return validation result
@@ -194,10 +194,10 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
          *
          * @return {Array<string|number|boolean>} [description]
          */
-        Nodeset.prototype.getVal = function( ) {
-            var vals = [ ];
-            this.get( ).each( function( ) {
-                vals.push( $( this ).text( ) );
+        Nodeset.prototype.getVal = function() {
+            var vals = [];
+            this.get().each( function() {
+                vals.push( $( this ).text() );
             } );
             return vals;
         };
@@ -210,14 +210,14 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
         Nodeset.prototype.clone = function( $precedingTargetNode ) {
             var $dataNode, allClonedNodeNames;
 
-            $dataNode = this.get( );
+            $dataNode = this.get();
             $precedingTargetNode = $precedingTargetNode || $dataNode;
 
             if ( $dataNode.length === 1 && $precedingTargetNode.length === 1 ) {
-                $dataNode.clone( ).insertAfter( $precedingTargetNode ).find( '*' ).addBack( ).removeAttr( 'template' );
+                $dataNode.clone().insertAfter( $precedingTargetNode ).find( '*' ).addBack().removeAttr( 'template' );
 
                 allClonedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
-                $dataNode.find( '*' ).each( function( ) {
+                $dataNode.find( '*' ).each( function() {
                     allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
                 } );
 
@@ -230,10 +230,10 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
         /**
          * Remove a node
          */
-        Nodeset.prototype.remove = function( ) {
-            var dataNode = this.get( );
+        Nodeset.prototype.remove = function() {
+            var dataNode = this.get();
             if ( dataNode.length > 0 ) {
-                dataNode.remove( );
+                dataNode.remove();
                 $data.trigger( 'dataupdate', dataNode.prop( 'nodeName' ) );
             } else {
                 console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );
@@ -248,13 +248,13 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
          * @return {string}             return string value of converted value
          */
         Nodeset.prototype.convert = function( x, xmlDataType ) {
-            if ( x.toString( ) === '' ) {
+            if ( x.toString() === '' ) {
                 return x;
             }
             if ( typeof xmlDataType !== 'undefined' && xmlDataType !== null &&
-                typeof this.types[ xmlDataType.toLowerCase( ) ] !== 'undefined' &&
-                typeof this.types[ xmlDataType.toLowerCase( ) ].convert !== 'undefined' ) {
-                return this.types[ xmlDataType.toLowerCase( ) ].convert( x );
+                typeof this.types[ xmlDataType.toLowerCase() ] !== 'undefined' &&
+                typeof this.types[ xmlDataType.toLowerCase() ].convert !== 'undefined' ) {
+                return this.types[ xmlDataType.toLowerCase() ].convert( x );
             }
             return x;
         };
@@ -268,16 +268,16 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
          */
         Nodeset.prototype.validate = function( expr, xmlDataType ) {
             var typeValid, exprValid,
-                value = this.getVal( )[ 0 ];
+                value = this.getVal()[ 0 ];
 
-            if ( value.toString( ) === '' ) {
+            if ( value.toString() === '' ) {
                 return true;
             }
 
-            if ( typeof xmlDataType == 'undefined' || xmlDataType === null || typeof this.types[ xmlDataType.toLowerCase( ) ] == 'undefined' ) {
+            if ( typeof xmlDataType == 'undefined' || xmlDataType === null || typeof this.types[ xmlDataType.toLowerCase() ] == 'undefined' ) {
                 xmlDataType = 'string';
             }
-            typeValid = this.types[ xmlDataType.toLowerCase( ) ].validate( value );
+            typeValid = this.types[ xmlDataType.toLowerCase() ].validate( value );
 
             exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? that.evaluate( expr, 'boolean', this.originalSelector, this.index ) : true;
             return ( typeValid && exprValid );
@@ -321,13 +321,13 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
                     var pattern = ( /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/ ),
                         segments = pattern.exec( x );
 
-                    return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString( ) !== 'Invalid Date' ) : false;
+                    return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString() !== 'Invalid Date' ) : false;
                 },
                 convert: function( x ) {
                     var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/,
                         segments = pattern.exec( x ),
                         date = new Date( x );
-                    if ( new Date( x ).toString( ) == 'Invalid Date' ) {
+                    if ( new Date( x ).toString() == 'Invalid Date' ) {
                         //this code is really only meant for the Rhino and PhantomJS engines, in browsers it may never be reached
                         if ( segments && Number( segments[ 1 ] ) > 0 && Number( segments[ 3 ] ) >= 0 && Number( segments[ 3 ] ) < 12 && Number( segments[ 5 ] ) < 32 ) {
                             date = new Date( Number( segments[ 1 ] ), ( Number( segments[ 3 ] ) - 1 ), Number( segments[ 5 ] ) );
@@ -335,13 +335,13 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
                     }
                     //date.setUTCHours(0,0,0,0);
                     //return date.toUTCString();//.getUTCFullYear(), datetime.getUTCMonth(), datetime.getUTCDate());
-                    return date.getUTCFullYear( ).toString( ).pad( 4 ) + '-' + ( date.getUTCMonth( ) + 1 ).toString( ).pad( 2 ) + '-' + date.getUTCDate( ).toString( ).pad( 2 );
+                    return date.getUTCFullYear().toString().pad( 4 ) + '-' + ( date.getUTCMonth() + 1 ).toString().pad( 2 ) + '-' + date.getUTCDate().toString().pad( 2 );
                 }
             },
             'datetime': {
                 validate: function( x ) {
                     //the second part builds in some tolerance for slightly-off dates provides as defaults (e.g.: 2013-05-31T07:00-02)
-                    return ( new Date( x.toString( ) ).toString( ) !== 'Invalid Date' || new Date( this.convert( x.toString( ) ) ).toString( ) !== 'Invalid Date' );
+                    return ( new Date( x.toString() ).toString() !== 'Invalid Date' || new Date( this.convert( x.toString() ) ).toString() !== 'Invalid Date' );
                 },
                 convert: function( x ) {
                     var date, // timezone, segments, dateS, timeS,
@@ -351,31 +351,31 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
                      * if the pattern is right, or almost right but needs a small correction for JavaScript to handle it,
                      * do not risk changing the time zone by calling toISOLocalString()
                      */
-                    if ( new Date( x ).toString( ) !== 'Invalid Date' && patternCorrect.test( x ) ) {
+                    if ( new Date( x ).toString() !== 'Invalid Date' && patternCorrect.test( x ) ) {
                         return x;
                     }
-                    if ( new Date( x ).toString( ) == 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
+                    if ( new Date( x ).toString() == 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
                         return x + ':00';
                     }
                     date = new Date( x );
-                    return ( date.toString( ) !== 'Invalid Date' ) ? date.toISOLocalString( ) : date.toString( );
+                    return ( date.toString() !== 'Invalid Date' ) ? date.toISOLocalString() : date.toString();
                 }
             },
             'time': {
                 validate: function( x ) {
-                    var date = new Date( ),
-                        segments = x.toString( ).split( ':' );
+                    var date = new Date(),
+                        segments = x.toString().split( ':' );
                     if ( segments.length < 2 ) {
                         return false;
                     }
-                    segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString( ).split( '.' )[ 0 ] ) : 0;
+                    segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString().split( '.' )[ 0 ] ) : 0;
 
-                    return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString( ) !== 'Invalid Date' );
+                    return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString() !== 'Invalid Date' );
                 },
                 convert: function( x ) {
-                    var segments = x.toString( ).split( ':' );
+                    var segments = x.toString().split( ':' );
                     $.each( segments, function( i, val ) {
-                        segments[ i ] = val.toString( ).pad( 2 );
+                        segments[ i ] = val.toString().pad( 2 );
                     } );
                     return segments.join( ':' );
                 }
@@ -387,14 +387,14 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             },
             'geopoint': {
                 validate: function( x ) {
-                    var coords = x.toString( ).split( ' ' );
+                    var coords = x.toString().split( ' ' );
                     return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
                         ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
                         ( typeof coords[ 2 ] == 'undefined' || !isNaN( coords[ 2 ] ) ) &&
                         ( typeof coords[ 3 ] == 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
                 },
                 convert: function( x ) {
-                    return $.trim( x.toString( ) );
+                    return $.trim( x.toString() );
                 }
             },
             'binary': {
@@ -411,8 +411,8 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      *
      * @return {string} instanceID
      */
-    DataXML.prototype.getInstanceID = function( ) {
-        return this.node( ':first>meta>instanceID' ).getVal( )[ 0 ];
+    FormModel.prototype.getInstanceID = function() {
+        return this.node( ':first>meta>instanceID' ).getVal()[ 0 ];
     };
 
 
@@ -420,7 +420,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
     //if a node with that name and that index+1 already exists the node will NOT be cloned
     //almost same as clone() but adds targetIndex and removes template attributes and if no template node exists it will copy a normal node
     //nodeset (givein in node() should include filter noTemplate:false) so it will provide all nodes that that name
-    DataXML.prototype.cloneTemplate = function( selector, index ) {
+    FormModel.prototype.cloneTemplate = function( selector, index ) {
         //console.log('trying to locate data node with path: '+path+' to clone and insert after node with same xpath and index: '+index);
         var $insertAfterNode, name,
             template = this.node( selector, 0, {
@@ -428,18 +428,18 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             } );
         console.log( 'cloning model template' );
         //if form does not use jr:template="" but the node-to-clone does exist
-        template = ( template.get( ).length === 0 ) ? this.node( selector, 0 ) : template;
-        name = template.get( ).prop( 'nodeName' );
+        template = ( template.get().length === 0 ) ? this.node( selector, 0 ) : template;
+        name = template.get().prop( 'nodeName' );
         console.log( 'going to find node to insert after', selector, index );
-        $insertAfterNode = this.node( selector, index ).get( );
+        $insertAfterNode = this.node( selector, index ).get();
         console.log( 'found it', $insertAfterNode.length );
 
         //if templatenodes and insertafternode(s) have been identified AND the node following insertafternode doesn't already exist(! important for nested repeats!)
-        if ( template.get( ).length === 1 && $insertAfterNode.length === 1 && $insertAfterNode.next( ).prop( 'nodeName' ) !== name ) { //this.node(selector, index+1).get().length === 0){
+        if ( template.get().length === 1 && $insertAfterNode.length === 1 && $insertAfterNode.next().prop( 'nodeName' ) !== name ) { //this.node(selector, index+1).get().length === 0){
             template.clone( $insertAfterNode );
         } else {
             //console.error ('Could locate node: '+path+' with index '+index+' in data instance.There could be multiple template node (a BUG) or none.');
-            if ( $insertAfterNode.next( ).prop( 'nodeName' ) !== name ) {
+            if ( $insertAfterNode.next().prop( 'nodeName' ) !== name ) {
                 console.error( 'Could not find template node and/or node to insert the clone after' );
             }
         }
@@ -454,7 +454,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      *
      * @param {jQuery=} startNode Provides the scope (default is the whole data object) from which to start cloning.
      */
-    DataXML.prototype.cloneAllTemplates = function( startNode ) {
+    FormModel.prototype.cloneAllTemplates = function( startNode ) {
         var _this = this;
         if ( typeof startNode == 'undefined' || startNode.length === 0 ) {
             startNode = this.$.find( ':first' );
@@ -462,14 +462,14 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
         //clone data nodes with template (jr:template=) attribute if it doesn't have any siblings of the same name already
         //strictly speaking this is not "according to the spec" as the user should be asked whether it has any data for this question
         //but I think it is almost always better to assume at least one 'repeat' (= 1 question)
-        startNode.children( '[template]' ).each( function( ) {
-            if ( typeof $( this ).parent( ).attr( 'template' ) == 'undefined' && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
+        startNode.children( '[template]' ).each( function() {
+            if ( typeof $( this ).parent().attr( 'template' ) == 'undefined' && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
                 //console.log('going to clone template data node with name: ' + $(this).prop('nodeName'));
-                $( this ).clone( ).insertAfter( $( this ) ).find( '*' ).addBack( ).removeAttr( 'template' );
+                $( this ).clone().insertAfter( $( this ) ).find( '*' ).addBack().removeAttr( 'template' );
                 //cloneDataNode($(this));
             }
         } );
-        startNode.children( ).not( '[template]' ).each( function( ) {
+        startNode.children().not( '[template]' ).each( function() {
             _this.cloneAllTemplates( $( this ) );
         } );
         return;
@@ -482,7 +482,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      *
      * @return {jQuery} JQuery Data Object
      */
-    DataXML.prototype.get = function( ) {
+    FormModel.prototype.get = function() {
         return this.$ || null;
     };
 
@@ -490,7 +490,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      *
      * @return {Element} data XML object (not sure if type is element actually)
      */
-    DataXML.prototype.getXML = function( ) {
+    FormModel.prototype.getXML = function() {
         return this.xml || null;
     };
 
@@ -502,17 +502,17 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      * @param  {boolean=} all     indicates whether all instances should be included in the return value (default: false)
      * @return {string}           XML string
      */
-    DataXML.prototype.getStr = function( incTempl, incNs, all ) {
+    FormModel.prototype.getStr = function( incTempl, incNs, all ) {
         var $docRoot, $dataClone, dataStr;
-        dataStr = ( new XMLSerializer( ) ).serializeToString( this.getInstanceClone( incTempl, incNs, all )[ 0 ] );
+        dataStr = ( new XMLSerializer() ).serializeToString( this.getInstanceClone( incTempl, incNs, all )[ 0 ] );
         //remove tabs
         dataStr = dataStr.replace( /\t/g, '' );
         return dataStr;
     };
 
-    DataXML.prototype.getInstanceClone = function( incTempl, incNs, all ) {
-        var $clone = ( all ) ? this.$.find( ':first' ).clone( ) : this.node( '> *:first' ).get( ).clone( );
-        return ( incTempl ) ? $clone : $clone.find( '[template]' ).remove( ).end( );
+    FormModel.prototype.getInstanceClone = function( incTempl, incNs, all ) {
+        var $clone = ( all ) ? this.$.find( ':first' ).clone() : this.node( '> *:first' ).get().clone();
+        return ( incTempl ) ? $clone : $clone.find( '[template]' ).remove().end();
     };
 
     /**
@@ -535,12 +535,12 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      * @param  {number} index       of the instance node with that selector
      * @return {string} modified    expression with injected positions (1-based!)
      */
-    DataXML.prototype.makeBugCompliant = function( expr, selector, index ) {
+    FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
         var i, parentSelector, parentIndex, $target, $node, nodeName, $siblings, $parents;
-        $target = this.node( selector, index ).get( );
+        $target = this.node( selector, index ).get();
         //console.debug('selector: '+selector+', target: ', $target);
         //add() sorts the resulting collection in document order
-        $parents = $target.parents( ).add( $target );
+        $parents = $target.parents().add( $target );
         //console.debug('makeBugCompliant() received expression: '+expr+' inside repeat: '+selector+' context parents are: ', $parents);
         //traverse collection in reverse document order
         for ( i = $parents.length - 1; i >= 0; i-- ) {
@@ -548,7 +548,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             nodeName = $node.prop( 'nodeName' );
             $siblings = $node.siblings( nodeName + ':not([template])' );
             //if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
-            if ( nodeName.toLowerCase( ) !== 'instance' && nodeName.toLowerCase( ) !== 'model' && $siblings.length > 0 ) {
+            if ( nodeName.toLowerCase() !== 'instance' && nodeName.toLowerCase() !== 'model' && $siblings.length > 0 ) {
                 parentSelector = $node.getXPath( 'instance' );
                 parentIndex = $siblings.add( $node ).index( $node );
                 //console.log('calculated repeat 0-based index: '+parentIndex+' for repeat node with path: '+parentSelector);
@@ -572,7 +572,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
      * @param  {number=} index      index of selector in document
      * @return {?(number|string|boolean|jQuery)} the result
      */
-    DataXML.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
+    FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
         var i, j, error, context, contextDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
             $collection, $contextWrapNodes, $repParents;
 
@@ -582,7 +582,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
         resTypeStr = resTypeStr || 'any';
         index = index || 0;
 
-        expr = expr.trim( );
+        expr = expr.trim();
 
         /* 
             creating a context doc is necessary for 3 reasons:
@@ -590,7 +590,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             - the templates need to be removed (though this could be worked around by adding the templates as data)
             - the hack described below with multiple instances.
             */
-        contextDoc = new DataXML( this.getStr( false, false ) );
+        contextDoc = new FormModel( this.getStr( false, false ) );
         /* 
             If the expression contains the instance('id') syntax, a different context instance is required.
             However, the same expression may also contain absolute reference to the main data instance, 
@@ -606,7 +606,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             for ( i = 0; i < instances.length; i++ ) {
                 id = instances[ i ].match( /[\'|\"]([^\'']+)[\'|\"]/ )[ 1 ];
                 expr = expr.replace( instances[ i ], '/node()/instance[@id="' + id + '"]' );
-                this.$.find( ':first>instance#' + id ).clone( ).appendTo( contextDoc.$.find( ':first' ) );
+                this.$.find( ':first>instance#' + id ).clone().appendTo( contextDoc.$.find( ':first' ) );
             }
         }
 
@@ -615,13 +615,13 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             /*
              * If the context for the expression is a node that is inside a repeat.... see makeBugCompliant()
              */
-            $collection = this.node( selector ).get( );
+            $collection = this.node( selector ).get();
             if ( $collection.length > 1 ) {
                 //console.log('going to inject position into: '+expr+' for context: '+selector+' and index: '+index);
                 expr = this.makeBugCompliant( expr, selector, index );
             }
         } else {
-            context = contextDoc.getXML( );
+            context = contextDoc.getXML();
         }
 
         resultTypes = {
@@ -671,7 +671,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
                 console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
                 //console.debug(result);
             } else if ( resTypeNum === 7 ) {
-                $result = $( );
+                $result = $();
                 for ( j = 0; j < result.snapshotLength; j++ ) {
                     $result = $result.add( result.snapshotItem( j ) );
                 }
@@ -702,5 +702,5 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
 
     };
 
-    return DataXML;
+    return FormModel;
 } );

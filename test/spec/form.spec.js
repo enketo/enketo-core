@@ -19,11 +19,11 @@ define( [ "js/Form" ], function( Form ) {
         form.init( );
 
         it( "tested upon initialization: node random__", function( ) {
-            expect( form.getFormO( ).$.find( '[data-value="/random/random__"]' ).text( ).length ).toEqual( 17 );
+            expect( form.getView( ).$.find( '[data-value="/random/random__"]' ).text( ).length ).toEqual( 17 );
         } );
 
         it( "tested upon initialization: node uuid__", function( ) {
-            expect( form.getFormO( ).$.find( '[data-value="/random/uuid__"]' ).text( ).length ).toEqual( 36 );
+            expect( form.getView( ).$.find( '[data-value="/random/uuid__"]' ).text( ).length ).toEqual( 36 );
         } );
     } );
 
@@ -31,16 +31,16 @@ define( [ "js/Form" ], function( Form ) {
         var $o = [ ],
             form = loadForm( 'outputs_in_repeats.xml' );
         form.init( );
-        form.getFormO( ).$.find( 'button.repeat' ).click( );
+        form.getView( ).$.find( 'button.repeat' ).click( );
 
         for ( var i = 0; i < 8; i++ ) {
-            $o.push( form.getFormO( ).$.find( '.jr-output' ).eq( i ) );
+            $o.push( form.getView( ).$.find( '.jr-output' ).eq( i ) );
         }
 
-        form.getFormO( ).$.find( '[name="/outputs_in_repeats/rep/name"]' ).eq( 0 ).val( 'Martijn' ).trigger( 'change' );
-        form.getFormO( ).$.find( '[name="/outputs_in_repeats/rep/name"]' ).eq( 1 ).val( 'Beth' ).trigger( 'change' );
-        form.getFormO( ).$.find( '[data-name="/outputs_in_repeats/rep/animal"][value="elephant"]' ).eq( 0 ).prop( 'checked', true ).trigger( 'change' );
-        form.getFormO( ).$.find( '[data-name="/outputs_in_repeats/rep/animal"][value="rabbit"]' ).eq( 1 ).prop( 'checked', true ).trigger( 'change' );
+        form.getView( ).$.find( '[name="/outputs_in_repeats/rep/name"]' ).eq( 0 ).val( 'Martijn' ).trigger( 'change' );
+        form.getView( ).$.find( '[name="/outputs_in_repeats/rep/name"]' ).eq( 1 ).val( 'Beth' ).trigger( 'change' );
+        form.getView( ).$.find( '[data-name="/outputs_in_repeats/rep/animal"][value="elephant"]' ).eq( 0 ).prop( 'checked', true ).trigger( 'change' );
+        form.getView( ).$.find( '[data-name="/outputs_in_repeats/rep/animal"][value="rabbit"]' ).eq( 1 ).prop( 'checked', true ).trigger( 'change' );
 
         it( 'shows correct value when referring to repeated node', function( ) {
             expect( $o[ 0 ].text( ) ).toEqual( 'Martijn' );
@@ -60,38 +60,38 @@ define( [ "js/Form" ], function( Form ) {
         it( "ignores a calculate binding on [ROOT]/meta/instanceID", function( ) {
             form = new Form( formStr2, dataStr2 );
             form.init( );
-            expect( form.getDataO( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
+            expect( form.getModel( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
         } );
 
         it( "generates an instanceID on meta/instanceID WITHOUT preload binding", function( ) {
             form = new Form( formStr2, dataStr2 );
             form.init( );
-            form.getFormO( ).$.find( 'fieldset#jr-preload-items' ).remove( );
-            expect( form.getFormO( ).$.find( 'fieldset#jr-preload-items' ).length ).toEqual( 0 );
-            expect( form.getDataO( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
+            form.getView( ).$.find( 'fieldset#jr-preload-items' ).remove( );
+            expect( form.getView( ).$.find( 'fieldset#jr-preload-items' ).length ).toEqual( 0 );
+            expect( form.getModel( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
         } );
 
         it( "generates an instanceID WITH preload binding", function( ) {
             form = new Form( formStr3, dataStr2 );
             form.init( );
-            expect( form.getFormO( ).$
+            expect( form.getView( ).$
                 .find( 'fieldset#jr-preload-items input[name="/random/meta/instanceID"][data-preload="instance"]' ).length )
                 .toEqual( 1 );
-            expect( form.getDataO( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
+            expect( form.getModel( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
         } );
 
         it( "does not generate a new instanceID if one is already present", function( ) {
             form = new Form( formStr3, dataStr3 );
             form.init( );
-            expect( form.getDataO( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ] ).toEqual( 'c13fe058-3349-4736-9645-8723d2806c8b' );
+            expect( form.getModel( ).node( '/random/meta/instanceID' ).getVal( )[ 0 ] ).toEqual( 'c13fe058-3349-4736-9645-8723d2806c8b' );
         } );
 
         it( "generates a timeStart on meta/timeStart WITHOUT preload binding", function( ) {
             form = new Form( formStr2, dataStr2 );
             form.init( );
-            form.getFormO( ).$.find( 'fieldset#jr-preload-items' ).remove( );
-            expect( form.getFormO( ).$.find( 'fieldset#jr-preload-items' ).length ).toEqual( 0 );
-            expect( form.getDataO( ).node( '/random/meta/timeStart' ).getVal( )[ 0 ].length > 10 ).toBe( true );
+            form.getView( ).$.find( 'fieldset#jr-preload-items' ).remove( );
+            expect( form.getView( ).$.find( 'fieldset#jr-preload-items' ).length ).toEqual( 0 );
+            expect( form.getModel( ).node( '/random/meta/timeStart' ).getVal( )[ 0 ].length > 10 ).toBe( true );
         } );
 
         it( "generates a timeEnd on init and updates this after a beforesave event WITHOUT preload binding", function( ) {
@@ -99,13 +99,13 @@ define( [ "js/Form" ], function( Form ) {
             //jasmine.Clock.useMock();
             form = new Form( formStr2, dataStr2 );
             form.init( );
-            form.getFormO( ).$.find( 'fieldset#jr-preload-items' ).remove( );
-            expect( form.getFormO( ).$.find( 'fieldset#jr-preload-items' ).length ).toEqual( 0 );
-            timeEnd = form.getDataO( ).node( '/random/meta/timeEnd' ).getVal( )[ 0 ];
+            form.getView( ).$.find( 'fieldset#jr-preload-items' ).remove( );
+            expect( form.getView( ).$.find( 'fieldset#jr-preload-items' ).length ).toEqual( 0 );
+            timeEnd = form.getModel( ).node( '/random/meta/timeEnd' ).getVal( )[ 0 ];
             expect( timeEnd.length > 10 ).toBe( true );
             //setTimeout(function(){
-            form.getFormO( ).$.trigger( 'beforesave' );
-            timeEndNew = form.getDataO( ).node( '/random/meta/timeEnd' ).getVal( )[ 0 ];
+            form.getView( ).$.trigger( 'beforesave' );
+            timeEndNew = form.getModel( ).node( '/random/meta/timeEnd' ).getVal( )[ 0 ];
             timeEnd = new Date( timeEnd );
             timeEndNew = new Date( timeEndNew );
             //for some reason the setTimeout function doesn't work
@@ -119,7 +119,7 @@ define( [ "js/Form" ], function( Form ) {
             it( "obtains unchanged preload value of item (WITH preload binding): " + node.selector + "", function( ) {
                 form = new Form( formStr5, dataStr5a );
                 form.init( );
-                expect( form.getDataO( ).node( node.selector ).getVal( )[ 0 ] ).toEqual( node.result );
+                expect( form.getModel( ).node( node.selector ).getVal( )[ 0 ] ).toEqual( node.result );
             } );
         }
 
@@ -127,7 +127,7 @@ define( [ "js/Form" ], function( Form ) {
             it( "has populated previously empty preload item (WITH preload binding): " + node.selector + "", function( ) {
                 form = new Form( formStr5, dataStr5b );
                 form.init( );
-                expect( form.getDataO( ).node( node.selector ).getVal( )[ 0 ].length > 0 ).toBe( true );
+                expect( form.getModel( ).node( node.selector ).getVal( )[ 0 ].length > 0 ).toBe( true );
             } );
         }
 
@@ -173,15 +173,15 @@ define( [ "js/Form" ], function( Form ) {
         it( 'correctly populates input fields of non-repeat node names in the instance', function( ) {
             form = loadForm( 'thedata.xml' ); //new Form(formStr1, dataStr1);
             form.init( );
-            expect( form.getFormO( ).$.find( '[name="/thedata/nodeB"]' ).val( ) ).toEqual( 'b' );
-            expect( form.getFormO( ).$.find( '[name="/thedata/repeatGroup/nodeC"]' ).eq( 2 ).val( ) ).toEqual( 'c3' );
-            expect( form.getFormO( ).$.find( '[name="/thedata/nodeX"]' ).val( ) ).toEqual( undefined );
+            expect( form.getView( ).$.find( '[name="/thedata/nodeB"]' ).val( ) ).toEqual( 'b' );
+            expect( form.getView( ).$.find( '[name="/thedata/repeatGroup/nodeC"]' ).eq( 2 ).val( ) ).toEqual( 'c3' );
+            expect( form.getView( ).$.find( '[name="/thedata/nodeX"]' ).val( ) ).toEqual( undefined );
         } );
 
         it( 'correctly populates input field even if the instance node name is not unique and occurs at multiple levels', function( ) {
             form = new Form( formStr4, dataStr4 );
             form.init( );
-            expect( form.getFormO( ).$.find( '[name="/nodename_bug/hh/hh"]' ).val( ) ).toEqual( 'hi' );
+            expect( form.getView( ).$.find( '[name="/nodename_bug/hh/hh"]' ).val( ) ).toEqual( 'hi' );
         } );
 
     } );
@@ -194,27 +194,27 @@ define( [ "js/Form" ], function( Form ) {
             form.init( );
 
             it( "adds a deprecatedID node", function( ) {
-                expect( form.getDataO( ).node( '* > meta > deprecatedID' ).get( ).length ).toEqual( 1 );
+                expect( form.getModel( ).node( '* > meta > deprecatedID' ).get( ).length ).toEqual( 1 );
             } );
 
             //this is an important test even though it may not seem to be...
             it( "includes the deprecatedID in the string to be submitted", function( ) {
-                expect( form.getDataO( ).getStr( ).indexOf( '<deprecatedID>' ) ).not.toEqual( -1 );
+                expect( form.getModel( ).getStr( ).indexOf( '<deprecatedID>' ) ).not.toEqual( -1 );
             } );
 
             it( "gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit", function( ) {
-                expect( form.getDataO( ).node( '*>meta>deprecatedID' ).getVal( )[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel( ).node( '*>meta>deprecatedID' ).getVal( )[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "gives the instanceID node a new value", function( ) {
-                expect( form.getDataO( ).node( '*>meta>instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
-                expect( form.getDataO( ).node( '*>meta>instanceID' ).getVal( )[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel( ).node( '*>meta>instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
+                expect( form.getModel( ).node( '*>meta>instanceID' ).getVal( )[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "adds data from the instance-to-edit to the form instance", function( ) {
-                expect( form.getDataO( ).node( '/thedata/nodeA' ).getVal( )[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
-                expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data one' );
-                expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 4 ).getVal( )[ 0 ] ).toEqual( 'some data five' );
+                expect( form.getModel( ).node( '/thedata/nodeA' ).getVal( )[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
+                expect( form.getModel( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data one' );
+                expect( form.getModel( ).node( '/thedata/repeatGroup/nodeC', 4 ).getVal( )[ 0 ] ).toEqual( 'some data five' );
             } );
 
         } );
@@ -224,25 +224,25 @@ define( [ "js/Form" ], function( Form ) {
             form.init( );
 
             it( "does not NOT add another instanceID node", function( ) {
-                expect( form.getDataO( ).node( '*>meta>instanceID' ).get( ).length ).toEqual( 1 );
+                expect( form.getModel( ).node( '*>meta>instanceID' ).get( ).length ).toEqual( 1 );
             } );
 
             it( "does not NOT add another deprecatedID node", function( ) {
-                expect( form.getDataO( ).node( '*>meta>deprecatedID' ).get( ).length ).toEqual( 1 );
+                expect( form.getModel( ).node( '*>meta>deprecatedID' ).get( ).length ).toEqual( 1 );
             } );
 
             it( "gives the deprecatedID node the old value of the instanceID node of the instance-to-edit", function( ) {
-                expect( form.getDataO( ).node( '*>meta>deprecatedID' ).getVal( )[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel( ).node( '*>meta>deprecatedID' ).getVal( )[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "gives the instanceID node a new value", function( ) {
-                expect( form.getDataO( ).node( '*>meta>instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
-                expect( form.getDataO( ).node( '*>meta>instanceID' ).getVal( )[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel( ).node( '*>meta>instanceID' ).getVal( )[ 0 ].length ).toEqual( 41 );
+                expect( form.getModel( ).node( '*>meta>instanceID' ).getVal( )[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "adds data from the instance-to-edit to the form instance", function( ) {
-                expect( form.getDataO( ).node( '/thedata/nodeA' ).getVal( )[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
-                expect( form.getDataO( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data one' );
+                expect( form.getModel( ).node( '/thedata/nodeA' ).getVal( )[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
+                expect( form.getModel( ).node( '/thedata/repeatGroup/nodeC', 0 ).getVal( )[ 0 ] ).toEqual( 'some data one' );
             } );
         } );
 
@@ -286,8 +286,8 @@ define( [ "js/Form" ], function( Form ) {
                 var repeatSelector = '.jr-repeat[name="/thedata/repeatGroup"]',
                     nodePath = '/thedata/repeatGroup/nodeC',
                     nodeSelector = 'input[name="' + nodePath + '"]',
-                    formH = form.getFormO( ),
-                    data = form.getDataO( ),
+                    formH = form.getView( ),
+                    data = form.getModel( ),
                     index = 2;
 
                 expect( formH.$.find( repeatSelector ).eq( index ).length ).toEqual( 1 );
@@ -307,7 +307,7 @@ define( [ "js/Form" ], function( Form ) {
             it( "marks cloned invalid fields as valid", function( ) {
                 var repeatSelector = '.jr-repeat[name="/thedata/repeatGroup"]',
                     nodeSelector = 'input[name="/thedata/repeatGroup/nodeC"]',
-                    formH = form.getFormO( ),
+                    formH = form.getView( ),
                     $node3 = formH.$.find( nodeSelector ).eq( 2 ),
                     $node4;
 
@@ -331,8 +331,8 @@ define( [ "js/Form" ], function( Form ) {
             //note that this form contains multiple repeats in the instance
             form = loadForm( 'nested_repeats.xml' );
             form.init( );
-            var formH = form.getFormO( ),
-                model = form.getDataO( ),
+            var formH = form.getView( ),
+                model = form.getModel( ),
                 $1stLevelTargetRepeat = formH.$.find( '.jr-repeat[name="/nested_repeats/kids/kids_details"]' ).eq( 1 ),
                 $2ndLevelTargetRepeats = $1stLevelTargetRepeat.find( '.jr-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]' );
 
@@ -344,8 +344,8 @@ define( [ "js/Form" ], function( Form ) {
         xit( "doesn't duplicate date widgets in a cloned repeat", function( ) {
             form = loadForm( 'nested_repeats.xml' );
             form.init( );
-            var formH = form.getFormO( ),
-                model = form.getDataO( ),
+            var formH = form.getView( ),
+                model = form.getModel( ),
                 $dates = formH.$.find( '[name="/nested_repeats/kids/kids_details/immunization_info/date"]' );
 
             expect( $dates.length ).toEqual( 5 );
@@ -357,8 +357,8 @@ define( [ "js/Form" ], function( Form ) {
         var formH, dataO, input1, input2,
             form = loadForm( 'calcs_in_repeats.xml' );
         form.init( );
-        formH = form.getFormO( );
-        dataO = form.getDataO( );
+        formH = form.getView( );
+        dataO = form.getModel( );
         it( 'also work inside repeats', function( ) {
             formH.$.find( 'button.repeat' ).click( );
             formH.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(0)' ).val( '10' ).trigger( 'change' );
@@ -380,30 +380,30 @@ define( [ "js/Form" ], function( Form ) {
         it( "hides irrelevant branches upon initialization", function( ) {
             form = new Form( formStr6, dataStr6 );
             form.init( );
-            expect( form.getFormO( ).$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
-            expect( form.getFormO( ).$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 1 );
+            expect( form.getView( ).$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
+            expect( form.getView( ).$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 1 );
         } );
 
         it( "reveals a group branch when the relevant condition is met", function( ) {
             form = new Form( formStr6, dataStr6 );
             form.init( );
             //first check incorrect value that does not meet relevant condition
-            form.getFormO( ).$.find( '[name="/data/nodeA"]' ).val( 'no' ).trigger( 'change' );
-            expect( form.getFormO( ).$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
+            form.getView( ).$.find( '[name="/data/nodeA"]' ).val( 'no' ).trigger( 'change' );
+            expect( form.getView( ).$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
             //then check value that does meet relevant condition
-            form.getFormO( ).$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
-            expect( form.getFormO( ).$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( false );
+            form.getView( ).$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
+            expect( form.getView( ).$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( false );
         } );
 
         it( "reveals a question when the relevant condition is met", function( ) {
             form = new Form( formStr6, dataStr6 );
             form.init( );
             //first check incorrect value that does not meet relevant condition
-            form.getFormO( ).$.find( '[name="/data/group/nodeB"]' ).val( 3 ).trigger( 'change' );
-            expect( form.getFormO( ).$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 1 );
+            form.getView( ).$.find( '[name="/data/group/nodeB"]' ).val( 3 ).trigger( 'change' );
+            expect( form.getView( ).$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 1 );
             //then check value that does meet relevant condition
-            form.getFormO( ).$.find( '[name="/data/group/nodeB"]' ).val( 2 ).trigger( 'change' );
-            expect( form.getFormO( ).$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 0 );
+            form.getView( ).$.find( '[name="/data/group/nodeB"]' ).val( 2 ).trigger( 'change' );
+            expect( form.getView( ).$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 0 );
         } );
 
         /*
@@ -417,18 +417,18 @@ define( [ "js/Form" ], function( Form ) {
             form = loadForm( 'issue208.xml' );
             form.init( );
 
-            form.getFormO( ).$.find( repeatSelector ).eq( 0 ).find( 'button.repeat' ).click( );
-            expect( form.getFormO( ).$.find( repeatSelector ).length ).toEqual( 2 );
+            form.getView( ).$.find( repeatSelector ).eq( 0 ).find( 'button.repeat' ).click( );
+            expect( form.getView( ).$.find( repeatSelector ).length ).toEqual( 2 );
             //check if initial state of 2nd question in 2nd repeat is disabled
-            expect( form.getFormO( ).$.find( repeatSelector ).eq( 1 )
+            expect( form.getView( ).$.find( repeatSelector ).eq( 1 )
                 .find( '[data-name="/issue208/rep/nodeB"]' ).closest( '.restoring-sanity-to-legends' )
                 .hasClass( 'disabled' ) ).toBe( true );
             //select 'yes' in first question of 2nd repeat
-            form.getDataO( ).node( '/issue208/rep/nodeA', 1 ).setVal( 'yes', null, 'string' );
+            form.getModel( ).node( '/issue208/rep/nodeA', 1 ).setVal( 'yes', null, 'string' );
             //doublecheck if new value was set
-            expect( form.getDataO( ).node( '/issue208/rep/nodeA', 1 ).getVal( )[ 0 ] ).toEqual( 'yes' );
+            expect( form.getModel( ).node( '/issue208/rep/nodeA', 1 ).getVal( )[ 0 ] ).toEqual( 'yes' );
             //check if 2nd question in 2nd repeat is now enabled
-            expect( form.getFormO( ).$.find( repeatSelector ).eq( 1 )
+            expect( form.getView( ).$.find( repeatSelector ).eq( 1 )
                 .find( '[data-name="/issue208/rep/nodeB"]' ).closest( '.restoring-sanity-to-legends' ).hasClass( 'disabled' ) ).toBe( false );
 
         } );
@@ -436,8 +436,8 @@ define( [ "js/Form" ], function( Form ) {
         describe( 'when used with calculated items', function( ) {
             form = loadForm( 'calcs.xml' );
             form.init( );
-            var $node = form.getFormO( ).$.find( '[name="/calcs/cond1"]' );
-            var dataO = form.getDataO( );
+            var $node = form.getView( ).$.find( '[name="/calcs/cond1"]' );
+            var dataO = form.getModel( );
 
             it( 'evaluates a calculated item only when it becomes relevant', function( ) {
                 //node without relevant attribute:
@@ -462,7 +462,7 @@ define( [ "js/Form" ], function( Form ) {
         xdescribe( 'inside repeats when multiple repeats are present upon loading (issue #507)', function( ) {
             form = loadForm( 'multiple_repeats_relevant.xml' );
             form.init( );
-            var $relNodes = form.getFormO( ).$.find( '[name="/multiple_repeats_relevant/rep/skipq"]' ).parent( '.jr-branch' );
+            var $relNodes = form.getView( ).$.find( '[name="/multiple_repeats_relevant/rep/skipq"]' ).parent( '.jr-branch' );
             it( 'correctly evaluates the relevant logic of each question inside all repeats', function( ) {
                 expect( $relNodes.length ).toEqual( 2 );
                 //check if both questions with 'relevant' attributes in the 2 repeats are disabled
@@ -479,8 +479,8 @@ define( [ "js/Form" ], function( Form ) {
             jQuery.fx.off = true; //turn jQuery animations off
             form = new Form( formStr6, dataStr6 );
             form.init( );
-            $numberInput = form.getFormO( ).$.find( '[name="/data/group/nodeB"]' );
-            $numberLabel = form.getFormO( ).input.getWrapNodes( $numberInput );
+            $numberInput = form.getView( ).$.find( '[name="/data/group/nodeB"]' );
+            $numberLabel = form.getView( ).input.getWrapNodes( $numberInput );
         } );
 
         //this fails in phantomJS...
@@ -494,7 +494,7 @@ define( [ "js/Form" ], function( Form ) {
 
         //see issue #144
         it( "validates an enabled and required number field with value 0 and 1", function( ) {
-            form.getFormO( ).$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
+            form.getView( ).$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
             expect( $numberLabel.length ).toEqual( 1 );
             $numberInput.val( 0 ).trigger( 'change' ).trigger( 'validate' );
             expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
@@ -503,7 +503,7 @@ define( [ "js/Form" ], function( Form ) {
         } );
 
         it( "invalidates an enabled and required number field without a value", function( ) {
-            form.getFormO( ).$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
+            form.getView( ).$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
             $numberInput.val( '' ).trigger( 'change' ).trigger( 'validate' );
             expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( true );
         } );
@@ -511,7 +511,7 @@ define( [ "js/Form" ], function( Form ) {
         it( "invalidates an enabled and required textarea that contains only a newline character or other whitespace characters", function( ) {
             form = loadForm( 'thedata.xml' ); //new Form(formStr1, dataStr1);
             form.init( );
-            var $textarea = form.getFormO( ).$.find( '[name="/thedata/nodeF"]' );
+            var $textarea = form.getView( ).$.find( '[name="/thedata/nodeF"]' );
             $textarea.val( '\n' ).trigger( 'change' ).trigger( 'validate' );
             expect( $textarea.length ).toEqual( 1 );
             expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
@@ -525,7 +525,7 @@ define( [ "js/Form" ], function( Form ) {
         it( 'preserve their default value', function( ) {
             var form = loadForm( 'readonly.xml' );
             form.init( );
-            expect( form.getFormO( ).$.find( '[name="/readonly/a"] .note-value' ).text( ) ).toEqual( 'martijn' );
+            expect( form.getView( ).$.find( '[name="/readonly/a"] .note-value' ).text( ) ).toEqual( 'martijn' );
         } );
     } );
 
@@ -546,26 +546,26 @@ define( [ "js/Form" ], function( Form ) {
                 form = loadForm( 'new_cascading_selections.xml' );
                 form.init( );
 
-                formHTMLO = form.getFormO( );
+                formHTMLO = form.getView( );
                 spyOn( formHTMLO, 'itemsetUpdate' ).andCallThrough( );
 
                 $items1Radio = function( ) {
-                    return form.getFormO( ).$.find( sel1Radio );
+                    return form.getView( ).$.find( sel1Radio );
                 };
                 $items2Radio = function( ) {
-                    return form.getFormO( ).$.find( sel2Radio );
+                    return form.getView( ).$.find( sel2Radio );
                 };
                 $items3Radio = function( ) {
-                    return form.getFormO( ).$.find( sel3Radio );
+                    return form.getView( ).$.find( sel3Radio );
                 };
                 $items1Select = function( ) {
-                    return form.getFormO( ).$.find( sel1Select + ' > option:not(.itemset-template)' );
+                    return form.getView( ).$.find( sel1Select + ' > option:not(.itemset-template)' );
                 };
                 $items2Select = function( ) {
-                    return form.getFormO( ).$.find( sel2Select + ' > option:not(.itemset-template)' );
+                    return form.getView( ).$.find( sel2Select + ' > option:not(.itemset-template)' );
                 };
                 $items3Select = function( ) {
-                    return form.getFormO( ).$.find( sel3Select + ' > option:not(.itemset-template)' );
+                    return form.getView( ).$.find( sel3Select + ' > option:not(.itemset-template)' );
                 };
             } );
 
@@ -579,7 +579,7 @@ define( [ "js/Form" ], function( Form ) {
             it( 'level 2: with <input type="radio"> elements has the expected amount of options', function( ) {
                 //select first option in cascade
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel1Radio + '[value="nl"]' ).prop( 'checked', true ).trigger( 'change' );
+                    form.getView( ).$.find( sel1Radio + '[value="nl"]' ).prop( 'checked', true ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -597,7 +597,7 @@ define( [ "js/Form" ], function( Form ) {
             it( 'level 3: with <input type="radio"> elements has the expected amount of options', function( ) {
                 //select first option
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', true ).trigger( 'change' );
+                    form.getView( ).$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', true ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -606,7 +606,7 @@ define( [ "js/Form" ], function( Form ) {
 
                 //select second option
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel2Radio + '[value="ams"]' ).attr( 'checked', true ).trigger( 'change' );
+                    form.getView( ).$.find( sel2Radio + '[value="ams"]' ).attr( 'checked', true ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -622,8 +622,8 @@ define( [ "js/Form" ], function( Form ) {
 
                 //select other first option to change itemset
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', false );
-                    form.getFormO( ).$.find( sel1Radio + '[value="usa"]' ).attr( 'checked', true ).trigger( 'change' );
+                    form.getView( ).$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', false );
+                    form.getView( ).$.find( sel1Radio + '[value="usa"]' ).attr( 'checked', true ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -648,7 +648,7 @@ define( [ "js/Form" ], function( Form ) {
             it( 'level 2: with <select> <option> elements has the expected amount of options', function( ) {
                 //select first option in cascade
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel1Select ).val( "nl" ).trigger( 'change' );
+                    form.getView( ).$.find( sel1Select ).val( "nl" ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -667,7 +667,7 @@ define( [ "js/Form" ], function( Form ) {
             it( 'level 3: with <select> <option> elements has the expected amount of options', function( ) {
                 //select first option in cascade
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel1Select ).val( "nl" ).trigger( 'change' );
+                    form.getView( ).$.find( sel1Select ).val( "nl" ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -676,7 +676,7 @@ define( [ "js/Form" ], function( Form ) {
 
                 //select second option
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel2Select ).val( "ams" ).trigger( 'change' );
+                    form.getView( ).$.find( sel2Select ).val( "ams" ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -693,7 +693,7 @@ define( [ "js/Form" ], function( Form ) {
 
                 //select other first option to change itemset
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel1Select ).val( "usa" ).trigger( 'change' );
+                    form.getView( ).$.find( sel1Select ).val( "usa" ).trigger( 'change' );
                 } );
 
                 waitsFor( function( ) {
@@ -721,24 +721,24 @@ define( [ "js/Form" ], function( Form ) {
                 form = loadForm( 'cascading_mixture_itext_noitext.xml' );
                 form.init( );
 
-                formHTMLO = form.getFormO( );
+                formHTMLO = form.getView( );
                 spyOn( formHTMLO, 'itemsetUpdate' ).andCallThrough( );
 
                 $items1Radio = function( ) {
-                    return form.getFormO( ).$.find( sel1Radio );
+                    return form.getView( ).$.find( sel1Radio );
                 };
                 $items2Radio = function( ) {
-                    return form.getFormO( ).$.find( sel2Radio );
+                    return form.getView( ).$.find( sel2Radio );
                 };
                 $items3Radio = function( ) {
-                    return form.getFormO( ).$.find( sel3Radio );
+                    return form.getView( ).$.find( sel3Radio );
                 };
             } );
 
             it( 'level 3: with <input type="radio"> elements using direct references to instance labels without itext has the expected amount of options', function( ) {
                 //select first option
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel1Radio + '[value="washington"]' )
+                    form.getView( ).$.find( sel1Radio + '[value="washington"]' )
                         .attr( 'checked', true ).trigger( 'change' );
                 } );
 
@@ -748,7 +748,7 @@ define( [ "js/Form" ], function( Form ) {
 
                 //select second option
                 runs( function( ) {
-                    form.getFormO( ).$.find( sel2Radio + '[value="king"]' )
+                    form.getView( ).$.find( sel2Radio + '[value="king"]' )
                         .attr( 'checked', true ).trigger( 'change' );
                 } );
 
@@ -773,12 +773,12 @@ define( [ "js/Form" ], function( Form ) {
             beforeEach( function( ) {
                 form = loadForm( 'new_cascading_selections_inside_repeats.xml' );
                 form.init( );
-                $masterRepeat = form.getFormO( ).$.find( '.jr-repeat' );
+                $masterRepeat = form.getView( ).$.find( '.jr-repeat' );
                 //select usa in master repeat
                 $masterRepeat.find( countrySelector + '[value="usa"]' ).prop( 'checked', true ).trigger( 'change' );
                 //add repeat
                 $masterRepeat.find( 'button.repeat' ).click( );
-                $clonedRepeat = form.getFormO( ).$.find( '.jr-repeat.clone' );
+                $clonedRepeat = form.getView( ).$.find( '.jr-repeat.clone' );
             } );
 
             it( 'the itemset of the cloned repeat is correct (and not a cloned copy of the master repeat)', function( ) {
@@ -795,24 +795,6 @@ define( [ "js/Form" ], function( Form ) {
                 expect( $clonedRepeat.find( citySelector ).eq( 0 ).attr( 'value' ) ).toEqual( 'ams' );
             } );
         } );
-    } );
-
-    describe( 'output data functionality', function( ) {
-        var dataO,
-            form = new Form( '', '' );
-
-        it( 'outputs a clone of the primary instance first child as a jQuery object if the object is wrapped inside <instance> and <model>', function( ) {
-            dataO = form.Data( '<model><instance><node/></instance><instance id="secondary"><secondary/></instance></model>' );
-            expect( dataO.getInstanceClone( ).length ).toEqual( 1 );
-            expect( dataO.getInstanceClone( ).prop( 'nodeName' ) ).toEqual( 'node' );
-        } );
-
-        it( 'outputs a clone of the first node as a jQuery object if the object is NOT wrapped inside <instance> and <model>', function( ) {
-            dataO = form.Data( '<node/>' );
-            expect( dataO.getInstanceClone( ).length ).toEqual( 1 );
-            expect( dataO.getInstanceClone( ).prop( 'nodeName' ) ).toEqual( 'node' );
-        } );
-
     } );
 
 

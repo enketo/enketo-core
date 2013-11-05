@@ -15,7 +15,7 @@
  */
 
 define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', 'bootstrap' ],
-    function( modernizr, DataXML, widgets, $ ) {
+    function( modernizr, FormModel, widgets, $ ) {
         "use strict";
 
         /**
@@ -34,60 +34,34 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
         function Form( formSelector, dataStr, dataStrToEdit ) {
             var model, dataToEdit, form, $form, $formClone, repeatsPresent,
-                loadErrors = [ ];
-            //*** FOR DEBUGGING and UNIT TESTS ONLY ***
-            this.ex = function( expr, type, selector, index ) {
-                return model.evaluate( expr, type, selector, index );
-            };
-            //sfv = function( ) {
-            //  return form.setAllVals( );
-            //},
-            this.Data = function( dataStr ) {
-                return new DataXML( dataStr );
-            };
-            this.getDataO = function( ) {
-                return model;
-            };
-            //this.getDataEditO = function( ) {
-            //  return dataToEdit.get( );
-            //},
-            this.getInstanceID = function( ) {
-                return model.getInstanceID( );
-            };
-            //Form = function( selector ) {
-            //  return new FormHTML( selector );
-            //},
-            this.getFormO = function( ) {
-                return form;
-            };
-            //***************************************
+                loadErrors = [];
 
             /**
              * Function: init
              *
-             * Initializes the Form instance (XML data and HTML form).
+             * Initializes the Form instance (XML Model and HTML View).
              *
              */
-            this.init = function( ) {
+            this.init = function() {
                 //cloning children to keep any event handlers on 'form.jr' intact upon resetting
-                $formClone = $( formSelector ).clone( ).appendTo( '<original></original>' );
+                $formClone = $( formSelector ).clone().appendTo( '<original></original>' );
 
-                model = new DataXML( dataStr );
-                form = new FormHTML( formSelector );
+                model = new FormModel( dataStr );
+                form = new FormView( formSelector );
 
                 //var profiler = new Profiler('model.init()');
-                model.init( );
+                model.init();
                 //profiler.report();
 
                 if ( typeof dataStrToEdit !== 'undefined' && dataStrToEdit && dataStrToEdit.length > 0 ) {
-                    dataToEdit = new DataXML( dataStrToEdit );
-                    dataToEdit.init( );
+                    dataToEdit = new FormModel( dataStrToEdit );
+                    dataToEdit.init();
                     this.load( dataToEdit );
                 }
                 repeatsPresent = ( $( formSelector ).find( '.jr-repeat' ).length > 0 );
 
                 //profiler = new Profiler('html form.init()');
-                form.init( );
+                form.init();
                 //profiler.report();
 
                 if ( loadErrors.length > 0 ) {
@@ -101,6 +75,19 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 return loadErrors;
             };
 
+            this.ex = function( expr, type, selector, index ) {
+                return model.evaluate( expr, type, selector, index );
+            };
+            this.getModel = function() {
+                return model;
+            };
+            this.getInstanceID = function() {
+                return model.getInstanceID();
+            };
+            this.getView = function() {
+                return form;
+            };
+
             /**
              * @param {boolean=} incTempl
              * @param {boolean=} incNs
@@ -110,8 +97,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 return model.getStr( incTempl, incNs, all );
             };
 
-            this.getRecordName = function( ) {
-                return form.recordName.get( );
+            this.getRecordName = function() {
+                return form.recordName.get();
             };
             /**
              * @param {string} name
@@ -119,8 +106,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
             this.setRecordName = function( name ) {
                 return form.recordName.set( name );
             };
-            this.getRecordStatus = function( ) {
-                return form.recordStatus.get( );
+            this.getRecordStatus = function() {
+                return form.recordStatus.get();
             };
             /**
              * @param {(boolean|string)=} markedFinal
@@ -134,68 +121,73 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
             this.setEditStatus = function( status ) {
                 return form.editStatus.set( status );
             };
-            this.getEditStatus = function( ) {
-                return form.editStatus.get( );
+            this.getEditStatus = function() {
+                return form.editStatus.get();
             };
-            this.getName = function( ) {
-                return $form.find( '#form-title' ).text( );
+            this.getName = function() {
+                return $form.find( '#form-title' ).text();
             };
 
             //restores html form to pre-initialized state
             //does not affect data instance!
-            this.resetHTML = function( ) {
+            this.resetView = function() {
                 //form language selector was moved outside of <form> so has to be separately removed
-                $( '#form-languages' ).remove( );
+                $( '#form-languages' ).remove();
                 $form.replaceWith( $formClone );
             };
+            /**
+             * @deprecated
+             * @type {Function}
+             */
+            this.resetHTML = this.resetView;
 
             /**
              * Validates the whole form and returns true or false
              * @return {boolean}
              */
-            this.validateForm = function( ) {
-                return form.validateAll( );
+            this.validateForm = function() {
+                return form.validateAll();
             };
             /**
              * Returns wether form has validated as true or false. Needs to be called AFTER calling validate()!
              * @return {!boolean}
              */
-            this.isValid = function( ) {
-                return form.isValid( );
+            this.isValid = function() {
+                return form.isValid();
             };
 
             /**
              * Function to load an (possibly incomplete) instance so that it can be edited.
              *
-             * @param  {Object} instanceOfDataXML [description]
+             * @param  {Object} instanceOfFormModel [description]
              *
              */
-            this.load = function( instanceOfDataXML ) {
+            this.load = function( instanceOfFormModel ) {
                 var nodesToLoad, index, xmlDataType, path, value, target, $input, $target, $template, instanceID, error,
                     filter = {
                         noTemplate: true,
                         noEmpty: true
                     };
 
-                nodesToLoad = instanceOfDataXML.node( null, null, filter ).get( );
+                nodesToLoad = instanceOfFormModel.node( null, null, filter ).get();
                 //first empty all form data nodes, to clear any default values except those inside templates
-                model.node( null, null, filter ).get( ).each( function( ) {
+                model.node( null, null, filter ).get().each( function() {
                     //something seems fishy about doing it this way instead of using node.setVal('');
                     $( this ).text( '' );
                 } );
 
-                nodesToLoad.each( function( ) {
+                nodesToLoad.each( function() {
                     var name = $( this ).prop( 'nodeName' );
                     path = $( this ).getXPath( 'instance' );
-                    index = instanceOfDataXML.node( path ).get( ).index( $( this ) );
-                    value = $( this ).text( );
+                    index = instanceOfFormModel.node( path ).get().index( $( this ) );
+                    value = $( this ).text();
 
                     //input is not populated in this function, so we take index 0 to get the XML data type
                     $input = $form.find( '[name="' + path + '"]' ).eq( 0 );
 
                     xmlDataType = ( $input.length > 0 ) ? form.input.getXmlType( $input ) : 'string';
                     target = model.node( path, index );
-                    $target = target.get( );
+                    $target = target.get();
 
                     //if there are multiple nodes with that name and index (actually impossible)
                     if ( $target.length > 1 ) {
@@ -210,12 +202,12 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     //this use of node(path,index,file).get() is a bit of a trick that is difficult to wrap one's head around
                     else if ( model.node( path, 0, {
                         noTemplate: false
-                    } ).get( ).closest( '[template]' ).length > 0 ) {
+                    } ).get().closest( '[template]' ).length > 0 ) {
                         //clone the template node 
                         //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub)
                         $template = model.node( path, 0, {
                             noTemplate: false
-                        } ).get( ).closest( '[template]' );
+                        } ).get().closest( '[template]' );
                         //TODO: test this for nested repeats
                         //if a preceding repeat with that path was empty this repeat may not have been created yet,
                         //so we need to make sure all preceding repeats are created
@@ -224,7 +216,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         }
                         //try setting the value again
                         target = model.node( path, index );
-                        if ( target.get( ).length === 1 ) {
+                        if ( target.get().length === 1 ) {
                             target.setVal( value, null, xmlDataType );
                         } else {
                             error = 'Error occured trying to clone template node to set the repeat value of the instance to be edited.';
@@ -234,10 +226,10 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     }
                     //as an exception, missing meta nodes will be quietly added if a meta node exists at that path
                     //the latter requires e.g the root node to have the correct name
-                    else if ( $( this ).parent( 'meta' ).length === 1 && model.node( $( this ).parent( 'meta' ).getXPath( 'instance' ), 0 ).get( ).length === 1 ) {
+                    else if ( $( this ).parent( 'meta' ).length === 1 && model.node( $( this ).parent( 'meta' ).getXPath( 'instance' ), 0 ).get().length === 1 ) {
                         //if there is no existing meta node with that node as child
-                        if ( model.node( ':first > meta > ' + name, 0 ).get( ).length === 0 ) {
-                            $( this ).clone( ).appendTo( model.node( ':first > meta' ).get( ) );
+                        if ( model.node( ':first > meta > ' + name, 0 ).get().length === 0 ) {
+                            $( this ).clone().appendTo( model.node( ':first > meta' ).get() );
                         } else {
                             error = 'Found duplicate meta node (' + name + ')!';
                             console.error( error );
@@ -251,18 +243,18 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 } );
                 //add deprecatedID node, copy instanceID value to deprecatedID and empty deprecatedID
                 instanceID = model.node( '*>meta>instanceID' );
-                if ( instanceID.get( ).length !== 1 ) {
-                    error = 'InstanceID node in default instance error (found ' + instanceID.get( ).length + ' instanceID nodes)';
+                if ( instanceID.get().length !== 1 ) {
+                    error = 'InstanceID node in default instance error (found ' + instanceID.get().length + ' instanceID nodes)';
                     console.error( error );
                     loadErrors.push( error );
                     return;
                 }
-                if ( model.node( '*>meta>deprecatedID' ).get( ).length !== 1 ) {
+                if ( model.node( '*>meta>deprecatedID' ).get().length !== 1 ) {
                     var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
                     document.adoptNode( deprecatedIDXMLNode );
-                    $( deprecatedIDXMLNode ).appendTo( model.node( '*>meta' ).get( ) );
+                    $( deprecatedIDXMLNode ).appendTo( model.node( '*>meta' ).get() );
                 }
-                model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal( )[ 0 ], null, 'string' );
+                model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
                 instanceID.setVal( '', null, 'string' );
             };
 
@@ -274,39 +266,29 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              * @extends Form
              */
 
-            function FormHTML( selector ) {
-                //there will be only one instance of FormHTML
+            function FormView( selector ) {
+                //there will be only one instance of FormView
                 $form = $( selector );
                 //used for testing
                 this.$ = $form;
                 this.branch = new this.Branch( this );
             }
 
-            FormHTML.prototype.init = function( ) {
+            FormView.prototype.init = function() {
                 var name, $required, $hint;
                 //this.checkForErrors();
-                if ( typeof model == 'undefined' || !( model instanceof DataXML ) ) {
-                    return console.error( 'variable data needs to be defined as instance of DataXML' );
+                if ( typeof model == 'undefined' || !( model instanceof FormModel ) ) {
+                    return console.error( 'variable data needs to be defined as instance of FormModel' );
                 }
 
                 //var profiler = new Profiler('preloads.init()');
                 this.preloads.init( this ); //before widgets.init (as instanceID used in offlineFilepicker widget)
                 //profiler.report();
 
-                this.grosslyViolateStandardComplianceByIgnoringCertainCalcs( ); //before calcUpdate!
+                this.grosslyViolateStandardComplianceByIgnoringCertainCalcs(); //before calcUpdate!
 
                 //profiler = new Profiler('calcupdate');
-                this.calcUpdate( ); //before repeat.init as repeat count may use a calculated item
-                //profiler.report();
-
-                //profiler = new Profiler('adding hint icons');
-                //add 'hint' icon, could be moved to XSLT, but is very fast even on super large forms - 31 msecs on bench6 form
-                /*if (!modernizr.touch){
-                $hint = '<span class="hint" ><i class="icon-question-sign"></i></span>';
-                $form.find('.jr-hint ~ input, .jr-hint ~ select, .jr-hint ~ textarea').before($hint);
-                $form.find('legend > .jr-hint').parent().find('span:last-child').after($hint);
-                $form.find('.trigger > .jr-hint').parent().find('span:last').after($hint);
-                }*/
+                this.calcUpdate(); //before repeat.init as repeat count may use a calculated item
                 //profiler.report();
 
                 //TODO: don't add to preload and calculated items
@@ -323,135 +305,51 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 different name attribute.
                 TODO: move to XSLT
                 */
-                $form.find( 'input[type="radio"]' ).each( function( ) {
+                $form.find( 'input[type="radio"]' ).each( function() {
                     name = /**@type {string} */ $( this ).attr( 'name' );
                     $( this ).attr( 'data-name', name );
                 } );
 
                 //profiler = new Profiler('setLangs()');
-                this.langs.init( ); //test: before itemsetUpdate
+                this.langs.init(); //test: before itemsetUpdate
                 //profiler.report();
 
                 //profiler = new Profiler('repeat.init()');
                 this.repeat.init( this ); //after radio button data-name setting
                 //profiler.report();
 
-                //$form.find('h2').first().append('<span/>');//what's this for then?
-
                 //profiler = new Profiler('itemsets initialization');
-                this.itemsetUpdate( );
+                this.itemsetUpdate();
                 //profiler.report();
 
                 //profiler = new Profiler('setting default values in form inputs');
-                this.setAllVals( );
+                this.setAllVals();
                 //profiler.report();
 
                 //profiler = new Profiler('widgets initialization');
-                widgets.init( ); //after setAllVals()
+                widgets.init(); //after setAllVals()
                 //profiler.report();
 
                 //profiler = new Profiler('bootstrapify');
-                this.bootstrapify( );
+                this.bootstrapify();
                 //profiler.report();
 
                 //profiler = new Profiler('branch.init()');
-                this.branch.init( ); //after widgets.init()
+                this.branch.init(); //after widgets.init()
                 //profiler.report();
 
                 //profiler = new Profiler('outputUpdate initial');
-                this.outputUpdate( );
+                this.outputUpdate();
                 //profiler.report();
 
-                //profiler = new Profiler('setHints()');
-                this.setHints( );
-                //profiler.report();
-
-                this.setEventHandlers( ); //after widgets init to make sure widget handlers are called before
+                this.setEventHandlers(); //after widgets init to make sure widget handlers are called before
                 this.editStatus.set( false );
                 //profiler.report('time taken across all functions to evaluate '+xpathEvalNum+' XPath expressions: '+xpathEvalTime);
             };
 
-            /**
-             * Checks for general transformation or xml form errors by comparing stats. It is helpful,
-             * though an error is not always important
-             */
-            FormHTML.prototype.checkForErrors = function( ) {
-                var i,
-                    paths = [ ],
-                    total = {},
-                    $stats = $form.find( '#stats' );
-
-                if ( $stats.length > 0 ) {
-                    total.jrItem = parseInt( $stats.find( '[id="jrItem"]' ).text( ), 10 );
-                    total.jrInput = parseInt( $stats.find( '[id="jrInput"]' ).text( ), 10 );
-                    total.jrItemset = parseInt( $stats.find( '[id="jrItemset"]' ).text( ), 10 );
-                    total.jrUpload = parseInt( $stats.find( '[id="jrUpload"]' ).text( ), 10 );
-                    total.jrTrigger = parseInt( $stats.find( '[id="jrTrigger"]' ).text( ), 10 );
-                    total.jrConstraint = parseInt( $stats.find( '[id="jrConstraint"]' ).text( ), 10 );
-                    total.jrRelevant = parseInt( $stats.find( '[id="jrRelevant"]' ).text( ), 10 );
-                    total.jrCalculate = parseInt( $stats.find( '[id="jrCalculate"]' ).text( ), 10 );
-                    total.jrPreload = parseInt( $stats.find( '[id="jrPreload"]' ).text( ), 10 );
-
-                    /** @type {number} */
-                    total.hRadio = $form.find( 'input[type="radio"]' ).length;
-                    total.hCheck = $form.find( 'input[type="checkbox"]' ).length;
-                    total.hSelect = $form.find( 'select:not(#form-languages)' ).length;
-                    total.hItemset = $form.find( '.itemset-template' ).length;
-                    total.hOption = $form.find( 'select:not(#form-languages) > option[value!=""]' ).length;
-                    total.hInputNotRadioCheck = $form.find( 'textarea, input:not([type="radio"],[type="checkbox"])' ).length;
-                    total.hTrigger = $form.find( '.trigger' ).length;
-                    total.hRelevantNotRadioCheck = $form.find( '[data-relevant]:not([type="radio"],[type="checkbox"])' ).length;
-                    total.hRelevantRadioCheck = $form.find( 'input[data-relevant][type="radio"],input[data-relevant][type="checkbox"]' ).parent( ).parent( 'fieldset' ).length;
-                    total.hConstraintNotRadioCheck = $form.find( '[data-constraint]:not([type="radio"],[type="checkbox"])' ).length;
-                    total.hConstraintRadioCheck = $form.find( 'input[data-constraint][type="radio"],input[data-constraint][type="checkbox"]' ).parent( ).parent( 'fieldset' ).length;
-                    total.hCalculate = $form.find( '[data-calculate]' ).length;
-                    total.hPreload = $form.find( '#jr-preload-items input' ).length;
-
-                    if ( total.jrItemset === 0 && ( total.jrItem !== ( total.hOption + total.hRadio + total.hCheck ) ) ) {
-                        console.error( ' total number of option fields differs between XML form and HTML form' );
-                    }
-                    if ( total.jrItemset !== total.hItemset ) {
-                        console.error( ' total number of itemset fields differs between XML form (' + total.jrItemset + ') and HTML form (' + total.hItemset + ')' );
-                    }
-                    if ( ( total.jrInput + total.jrUpload ) !== ( total.hInputNotRadioCheck - total.hCalculate - total.hPreload ) ) {
-                        console.error( ' total number of input/upload fields differs between XML form and HTML form' );
-                    }
-                    if ( total.jrTrigger != total.hTrigger ) {
-                        console.error( ' total number of triggers differs between XML form and HTML form' );
-                    }
-                    if ( total.jrRelevant != ( total.hRelevantNotRadioCheck + total.hRelevantRadioCheck ) ) {
-                        console.error( ' total number of branches differs between XML form and HTML form (not a problem if caused by obsolete bindings in xml form)' );
-                    }
-                    if ( total.jrConstraint != ( total.hConstraintNotRadioCheck + total.hConstraintRadioCheck ) ) {
-                        console.error( ' total number of constraints differs between XML form (' + total.jrConstraint + ') and HTML form (' +
-                            ( total.hConstraintNotRadioCheck + total.hConstraintRadioCheck ) + ')(not a problem if caused by obsolete bindings in xml form).' +
-                            ' Note that constraints on &lt;trigger&gt; elements are ignored in the transformation and could cause this error too.' );
-                    }
-                    if ( total.jrCalculate != total.hCalculate ) {
-                        console.error( ' total number of calculated items differs between XML form and HTML form' );
-                    }
-                    if ( total.jrPreload != total.hPreload ) {
-                        console.error( ' total number of preload items differs between XML form and HTML form' );
-                    }
-                    //probably resource intensive: check if all nodes mentioned in name attributes exist in $data
-
-                    $form.find( '[name]' ).each( function( ) {
-                        if ( $.inArray( $( this ).attr( 'name' ), paths ) ) {
-                            paths.push( $( this ).attr( 'name' ) );
-                        }
-                    } );
-
-                    for ( i = 0; i < paths.length; i++ ) {
-                        if ( model.node( paths[ i ] ).get( ).length < 1 ) {
-                            console.error( 'Found name attribute: ' + paths[ i ] + ' that does not have a corresponding data node. Transformation error or XML form error (relative nodesets perhaps?' );
-                        }
-                    }
-                }
-            };
-
             //this may not be the most efficient. Could also be implemented like model.Nodeset;
             //also use for fieldset nodes (to evaluate branch logic) and also used to get and set form data of the app settings
-            FormHTML.prototype.input = {
+            FormView.prototype.input = {
                 //multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
                 getWrapNodes: function( $inputNodes ) {
                     var type = this.getInputType( $inputNodes.eq( 0 ) );
@@ -481,10 +379,10 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     if ( $node.length !== 1 ) {
                         return ''; //console.error('getInputType(): no input node provided or multiple');
                     }
-                    nodeName = $node.prop( 'nodeName' ).toLowerCase( );
+                    nodeName = $node.prop( 'nodeName' ).toLowerCase();
                     if ( nodeName == 'input' ) {
                         if ( $node.attr( 'type' ).length > 0 ) {
-                            return $node.attr( 'type' ).toLowerCase( );
+                            return $node.attr( 'type' ).toLowerCase();
                         } else return console.error( '<input> node has no type' );
                     } else if ( nodeName == 'select' ) {
                         return 'select';
@@ -552,7 +450,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     return !( $node.prop( 'disabled' ) || $node.parents( 'fieldset:disabled' ).length > 0 );
                 },
                 getVal: function( $node ) {
-                    var inputType, values = [ ],
+                    var inputType, values = [],
                         name;
                     if ( $node.length !== 1 ) {
                         return console.error( 'getVal(): no inputNode provided or multiple' );
@@ -561,16 +459,16 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     name = this.getName( $node );
 
                     if ( inputType == 'radio' ) {
-                        return this.getWrapNodes( $node ).find( 'input:checked' ).val( ) || '';
+                        return this.getWrapNodes( $node ).find( 'input:checked' ).val() || '';
                     }
                     //checkbox values bug in jQuery as (node.val() should work)
                     if ( inputType == 'checkbox' ) {
-                        this.getWrapNodes( $node ).find( 'input[name="' + name + '"]:checked' ).each( function( ) {
-                            values.push( $( this ).val( ) );
+                        this.getWrapNodes( $node ).find( 'input[name="' + name + '"]:checked' ).each( function() {
+                            values.push( $( this ).val() );
                         } );
                         return values;
                     }
-                    return ( !$node.val( ) ) ? '' : ( $.isArray( $node.val( ) ) ) ? $node.val( ).join( ' ' ).trim( ) : $node.val( ).trim( );
+                    return ( !$node.val() ) ? '' : ( $.isArray( $node.val() ) ) ? $node.val().join( ' ' ).trim() : $node.val().trim();
                 },
                 setVal: function( name, index, value ) {
                     var $inputNodes, type, date, $target; //, 
@@ -598,7 +496,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         if ( type === 'date' || type === 'datetime' ) {
                             //convert current value (loaded from instance) to a value that a native datepicker understands
                             //TODO test for IE, FF, Safari when those browsers start including native datepickers
-                            value = model.node( ).convert( value, type );
+                            value = model.node().convert( value, type );
                         }
                     }
 
@@ -617,16 +515,16 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              *  Since not all data nodes with a value have a corresponding input element, it could be considered to turn this
              *  around and cycle through the HTML form elements and check for each form element whether data is available.
              */
-            FormHTML.prototype.setAllVals = function( ) {
+            FormView.prototype.setAllVals = function() {
                 var index, name, value,
                     that = this;
                 model.node( null, null, {
                     noEmpty: true
-                } ).get( ).each( function( ) {
+                } ).get().each( function() {
                     try {
-                        value = $( this ).text( );
+                        value = $( this ).text();
                         name = $( this ).getXPath( 'instance' );
-                        index = model.node( name ).get( ).index( $( this ) );
+                        index = model.node( name ).get().index( $( this ) );
                         that.input.setVal( name, index, value );
                     } catch ( e ) {
                         loadErrors.push( 'Could not load input field value with name: ' + name + ' and value: ' + value );
@@ -635,15 +533,15 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 return;
             };
 
-            FormHTML.prototype.langs = {
-                init: function( ) {
+            FormView.prototype.langs = {
+                init: function() {
                     var lang,
                         that = this,
                         setOptionLangs,
                         defaultLang = $form.find( '#form-languages' ).attr( 'data-default-lang' ),
                         $langSelector = $( '.form-language-selector' );
 
-                    $( '#form-languages' ).detach( ).appendTo( $langSelector ); //insertBefore($('form.jr').parent());
+                    $( '#form-languages' ).detach().appendTo( $langSelector ); //insertBefore($('form.jr').parent());
 
                     if ( !defaultLang || defaultLang === '' ) {
                         defaultLang = $( '#form-languages option:eq(0)' ).attr( 'value' );
@@ -655,8 +553,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         return;
                     }
                     $( '#form-languages' ).change( function( event ) {
-                        lang = $( this ).val( );
-                        event.preventDefault( );
+                        lang = $( this ).val();
+                        event.preventDefault();
                         that.setAll( lang );
                     } );
                 },
@@ -667,12 +565,12 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                     $form.find( '[lang]' ).removeClass( 'active' ).filter( '[lang="' + lang + '"], [lang=""]' ).addClass( 'active' );
 
-                    $form.find( 'select' ).each( function( ) {
+                    $form.find( 'select' ).each( function() {
                         that.setSelect( $( this ) );
                     } );
                     //quickfix for labels and legends that do not contain a span.active without other class
-                    $form.find( 'legend span.active:not(.jr-hint, .jr-constraint-msg), label span.active:not(.jr-hint, .jr-constraint-msg)' ).each( function( ) {
-                        if ( $( this ).text( ).trim( ).length === 0 ) {
+                    $form.find( 'legend span.active:not(.jr-hint, .jr-constraint-msg), label span.active:not(.jr-hint, .jr-constraint-msg)' ).each( function() {
+                        if ( $( this ).text().trim().length === 0 ) {
                             $( this ).text( '[MISSING TRANSLATION]' );
                         }
                     } );
@@ -682,101 +580,65 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 //swap language of <select> <option>s
                 setSelect: function( $select ) {
                     var value, /** @type {string} */ curLabel, /** @type {string} */ newLabel;
-                    $select.children( 'option' ).not( '[value=""]' ).each( function( ) {
-                        curLabel = /** @type {string} */ $( this ).text( );
+                    $select.children( 'option' ).not( '[value=""]' ).each( function() {
+                        curLabel = /** @type {string} */ $( this ).text();
                         value = $( this ).attr( 'value' );
                         newLabel = $( this ).parent( 'select' ).siblings( '.jr-option-translations' )
-                            .children( '.active[data-option-value="' + value + '"]' ).text( ).trim( );
+                            .children( '.active[data-option-value="' + value + '"]' ).text().trim();
                         newLabel = ( typeof newLabel !== 'undefined' && newLabel.length > 0 ) ? newLabel : curLabel;
                         $( this ).text( newLabel );
                     } );
                 }
             };
 
-            /**
-             * setHints updates the hints. It is called whenever the language or output value is changed.
-             * @param { {outputsOnly: boolean}=} options options
-             */
-            FormHTML.prototype.setHints = function( options ) {
-                //var profiler = new Profiler('setting hints');
-                if ( !modernizr.touch ) {
-                    var hint, $hint, $hints, $wrapNode, outputsOnly;
 
-                    outputsOnly = ( options && options.outputsOnly ) ? options.outputsOnly : false;
-
-                    $hints = ( outputsOnly ) ? $form.find( '*>.jr-hint>.jr-output' ).parent( ) : $form.find( '*>.jr-hint' );
-
-                    $hints.parent( ).each( function( ) {
-                        if ( $( this ).prop( 'nodeName' ).toLowerCase( ) !== 'label' && $( this ).prop( 'nodeName' ).toLowerCase( ) !== 'fieldset' ) {
-                            $wrapNode = $( this ).parent( 'fieldset' );
-                        } else {
-                            $wrapNode = $( this );
-                        }
-                        $hint = $wrapNode.find( '.hint' );
-
-                        hint = $( this ).find( '.jr-hint.active' ).text( ).trim( );
-
-                        if ( hint.length > 0 ) {
-                            $hint.attr( 'title', hint );
-                        } else {
-                            $hint.removeAttr( 'title' );
-                        }
-                        //$hint.tooltip( 'fixTitle' ).tooltip( {
-                        //  placement: 'right'
-                        //} );
-                    } );
-                }
-                //profiler.report();
-            };
-
-            FormHTML.prototype.editStatus = {
+            FormView.prototype.editStatus = {
                 set: function( status ) {
                     $form.attr( 'data-edited', Boolean( status ) ); //.toString());
                     $form.trigger( 'edit', status );
                 },
-                get: function( ) {
+                get: function() {
                     return ( $form.attr( 'data-edited' ) === 'true' ) ? true : false;
                 }
             };
 
-            FormHTML.prototype.recordName = {
+            FormView.prototype.recordName = {
                 set: function( key ) {
                     $form.attr( 'data-stored-with-key', key );
                     //$('#record-name').text(key);
                     $form.find( 'h2 span' ).text( key );
                 },
-                get: function( ) {
+                get: function() {
                     return $form.attr( 'data-stored-with-key' ) || null;
                 },
-                reset: function( ) {
+                reset: function() {
                     $form.removeAttr( 'data-stored-with-key' );
                 }
             };
 
-
-            FormHTML.prototype.recordStatus = {
+            FormView.prototype.recordStatus = {
                 set: function( markedFinal ) {
-                    $form.attr( 'data-stored-final', markedFinal.toString( ) );
+                    $form.attr( 'data-stored-final', markedFinal.toString() );
                 },
-                get: function( ) {
+                get: function() {
                     return ( $form.attr( 'data-stored-final' ) === 'true' ) ? true : false;
                 },
-                reset: function( ) {
+                reset: function() {
                     $form.removeAttr( 'data-stored-final' );
                 }
             };
 
             /**
-             * Branch Class (inherits properties of FormHTML Class) is used to manage skip logic
+             * Branch Class (inherits properties of FormView Class) is used to manage skip logic
              *
              * @constructor
              */
-            FormHTML.prototype.Branch = function( parent ) {
+            FormView.prototype.Branch = function( parent ) {
                 /**
                  * Initializes branches, sets delegated event handlers
                  */
-                this.init = function( ) {
-                    this.update( );
+                this.init = function() {
+                    this.update();
                 };
                 /**
                  * Updates branches based on changed input fields
@@ -787,14 +649,14 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 this.update = function( changedNodeNames ) {
                     var i, p, $branchNode, result, namesArr, cleverSelector, insideRepeat, insideRepeatClone, cacheIndex,
                         relevantCache = {},
-                        alreadyCovered = [ ],
+                        alreadyCovered = [],
                         that = this,
                         evaluations = 0,
                         clonedRepeatsPresent;
 
                     //var profiler = new Profiler('branch update');
-                    namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [ ];
-                    cleverSelector = ( namesArr.length > 0 ) ? [ ] : [ '[data-relevant]' ];
+                    namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
+                    cleverSelector = ( namesArr.length > 0 ) ? [] : [ '[data-relevant]' ];
 
                     for ( i = 0; i < namesArr.length; i++ ) {
                         cleverSelector.push( '[data-relevant*="' + namesArr[ i ] + '"]' );
@@ -802,7 +664,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                     clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
-                    $form.find( cleverSelector.join( ) ).each( function( ) {
+                    $form.find( cleverSelector.join() ).each( function() {
                         //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
                         if ( $.inArray( $( this ).attr( 'name' ), alreadyCovered ) !== -1 ) {
                             return;
@@ -922,7 +784,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     if ( !this.selfRelevant( $branchNode ) ) {
                         //console.debug( 'enabling branch with name: ' + $branchNode.attr( 'name' ) );
 
-                        $branchNode.removeClass( 'disabled pre-init' ).show( 250, function( ) {
+                        $branchNode.removeClass( 'disabled pre-init' ).show( 250, function() {
                             //to recalculate table column widths
                             //if ( that.ancestorRelevant( $branchNode ) ) {
                             //  parent.widgets.tableWidget( $branchNode );
@@ -930,7 +792,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             widgets.enable( $branchNode );
                         } );
 
-                        type = $branchNode.prop( 'nodeName' ).toLowerCase( );
+                        type = $branchNode.prop( 'nodeName' ).toLowerCase();
 
                         if ( type == 'label' ) {
                             $branchNode.children( 'input:not(.force-disabled), select, textarea' ).prop( 'disabled', false );
@@ -952,7 +814,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                  * @param  {jQuery} $branchNode The jQuery object to hide and disable
                  */
                 this.disable = function( $branchNode ) {
-                    var type = $branchNode.prop( 'nodeName' ).toLowerCase( ),
+                    var type = $branchNode.prop( 'nodeName' ).toLowerCase(),
                         virgin = $branchNode.hasClass( 'pre-init' );
                     if ( this.selfRelevant( $branchNode ) || virgin ) {
                         $branchNode.addClass( 'disabled' ); //;
@@ -967,7 +829,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             $branchNode.clearInputs( 'change' );
                             widgets.disable( $branchNode );
                             //all remaining fields marked as invalid can now be marked as valid
-                            $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function( ) {
+                            $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
                                 parent.setValid( $( this ) );
                             } );
                         } else {
@@ -983,18 +845,18 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 };
             };
 
-            //$.extend(FormHTML.prototype.Branch.prototype, FormHTML.prototype);
+            //$.extend(FormView.prototype.Branch.prototype, FormView.prototype);
 
 
             /**
              * Updates itemsets
              * @param  {string=} changedDataNodeNames node names that were recently changed, separated by commas
              */
-            FormHTML.prototype.itemsetUpdate = function( changedDataNodeNames ) {
+            FormView.prototype.itemsetUpdate = function( changedDataNodeNames ) {
                 //TODO: test with very large itemset
                 var clonedRepeatsPresent, insideRepeat, insideRepeatClone,
                     that = this,
-                    cleverSelector = [ ],
+                    cleverSelector = [],
                     needToUpdateLangs = false,
                     itemsCache = {};
 
@@ -1009,12 +871,12 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 cleverSelector = cleverSelector.join( ',' );
                 clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
-                $form.find( cleverSelector ).each( function( ) {
+                $form.find( cleverSelector ).each( function() {
                     var $htmlItem, $htmlItemLabels, value, $instanceItems, index, context,
                         $template = $( this ),
                         newItems = {},
-                        prevItems = $template.data( ),
-                        templateNodeName = $( this ).prop( 'nodeName' ).toLowerCase( ),
+                        prevItems = $template.data(),
+                        templateNodeName = $( this ).prop( 'nodeName' ).toLowerCase(),
                         $input = ( templateNodeName === 'label' ) ? $( this ).children( 'input' ).eq( 0 ) : $( this ).parent( 'select' ),
                         $labels = $template.closest( 'label, select' ).siblings( '.itemset-labels' ),
                         itemsXpath = $template.attr( 'data-items-path' ),
@@ -1047,7 +909,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     // this property allows for more efficient 'itemschanged' detection
                     newItems.length = $instanceItems.length;
                     //this may cause problems for large itemsets. Use md5 instead?
-                    newItems.text = $instanceItems.text( );
+                    newItems.text = $instanceItems.text();
 
                     if ( newItems.length === prevItems.length && newItems.text === prevItems.text ) {
                         return;
@@ -1057,24 +919,24 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                     //clear data values through inputs. Note: if a value exists, 
                     //this will trigger a dataupdate event which may call this update function again
-                    $( this ).closest( 'label > select, fieldset > label' ).parent( )
+                    $( this ).closest( 'label > select, fieldset > label' ).parent()
                         .clearInputs( 'change' )
-                        .find( templateNodeName ).not( $template ).remove( );
-                    $( this ).parent( 'select' ).siblings( '.jr-option-translations' ).empty( );
+                        .find( templateNodeName ).not( $template ).remove();
+                    $( this ).parent( 'select' ).siblings( '.jr-option-translations' ).empty();
 
-                    $instanceItems.each( function( ) {
+                    $instanceItems.each( function() {
                         $htmlItem = $( '<root/>' );
                         $template
-                            .clone( ).appendTo( $htmlItem )
+                            .clone().appendTo( $htmlItem )
                             .removeClass( 'itemset-template' )
                             .addClass( 'itemset' )
                             .removeAttr( 'data-items-path' );
 
                         $htmlItemLabels = ( labelType === 'itext' ) ?
-                            $labels.find( '[data-itext-id="' + $( this ).children( labelRef ).text( ) + '"]' ).clone( ) :
-                            $( '<span class="active" lang="">' + $( this ).children( labelRef ).text( ) + '</span>' );
+                            $labels.find( '[data-itext-id="' + $( this ).children( labelRef ).text() + '"]' ).clone() :
+                            $( '<span class="active" lang="">' + $( this ).children( labelRef ).text() + '</span>' );
 
-                        value = /**@type {string}*/ $( this ).children( valueRef ).text( );
+                        value = /**@type {string}*/ $( this ).children( valueRef ).text();
                         $htmlItem.find( '[value]' ).attr( 'value', value );
 
                         if ( templateNodeName === 'label' ) {
@@ -1083,16 +945,16 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             $labels.before( $htmlItem.find( ':first' ) );
                         } else if ( templateNodeName === 'option' ) {
                             if ( $htmlItemLabels.length === 1 ) {
-                                $htmlItem.find( 'option' ).text( $htmlItemLabels.text( ) );
+                                $htmlItem.find( 'option' ).text( $htmlItemLabels.text() );
                             }
                             $htmlItemLabels
                                 .attr( 'data-option-value', value )
                                 .attr( 'data-itext-id', '' )
                                 .appendTo( $labels.siblings( '.jr-option-translations' ) );
-                            $template.siblings( ).addBack( ).last( ).after( $htmlItem.find( ':first' ) );
+                            $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
                         }
                     } );
-                    if ( $input.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
+                    if ( $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
                         //populate labels (with current language)
                         that.langs.setSelect( $input );
                         //update widget
@@ -1106,21 +968,21 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              *
              * @param  {string=} changedNodeNames Comma-separated node names that may have changed
              */
-            FormHTML.prototype.outputUpdate = function( changedNodeNames ) {
+            FormView.prototype.outputUpdate = function( changedNodeNames ) {
                 var i, expr, namesArr, cleverSelector, clonedRepeatsPresent, insideRepeat, insideRepeatClone, $context, context, index,
                     outputChanged = false,
                     outputCache = {},
                     val = '',
                     that = this;
 
-                namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [ ];
-                cleverSelector = ( namesArr.length > 0 ) ? [ ] : [ '.jr-output[data-value]' ];
+                namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
+                cleverSelector = ( namesArr.length > 0 ) ? [] : [ '.jr-output[data-value]' ];
                 for ( i = 0; i < namesArr.length; i++ ) {
                     cleverSelector.push( '.jr-output[data-value*="' + namesArr[ i ] + '"]' );
                 }
                 clonedRepeatsPresent = ( repeatsPresent && $form.find( '.jr-repeat.clone' ).length > 0 ) ? true : false;
 
-                $form.find( ':not(:disabled) span.active' ).find( cleverSelector.join( ) ).each( function( ) {
+                $form.find( ':not(:disabled) span.active' ).find( cleverSelector.join() ).each( function() {
                     expr = $( this ).attr( 'data-value' );
                     //context = that.input.getName($(this).closest('fieldset'));
 
@@ -1132,9 +994,9 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     or the whole doc
                     */
                     $context = ( $( this ).parent( 'span' ).parent( 'label' ).find( '[name]' ).eq( 0 ).length === 1 ) ?
-                        $( this ).parent( ).parent( ).find( '[name]:eq(0)' ) :
+                        $( this ).parent().parent().find( '[name]:eq(0)' ) :
                         $( this ).parent( 'span' ).parent( 'legend' ).parent( 'fieldset' ).find( '[name]' ).eq( 0 ).length === 1 ?
-                        $( this ).parent( ).parent( ).parent( ).find( '[name]:eq(0)' ) : $( this ).closest( '[name]' );
+                        $( this ).parent().parent().parent().find( '[name]:eq(0)' ) : $( this ).closest( '[name]' );
                     context = that.input.getName( $context );
                     insideRepeat = ( clonedRepeatsPresent && $( this ).closest( '.jr-repeat' ).length > 0 );
                     insideRepeatClone = ( clonedRepeatsPresent && $( this ).closest( '.jr-repeat.clone' ).length > 0 );
@@ -1156,9 +1018,9 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                 //hints may have changed too
                 if ( outputChanged ) {
-                    this.setHints( {
-                        outputsOnly: true
-                    } );
+                    //this.setHints( {
+                    //    outputsOnly: true
+                    //} );
                 }
             };
 
@@ -1173,7 +1035,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              * 3. Formhub has re-generated all stored XML forms from the stored XLS forms with the updated pyxforms
              *
              */
-            FormHTML.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function( ) {
+            FormView.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function() {
                 var $culprit = $form.find( '[name$="/meta/instanceID"][data-calculate]' );
                 if ( $culprit.length > 0 ) {
                     console.log( "Found meta/instanceID with binding that has a calculate attribute and removed this calculation. It ain't right!" );
@@ -1185,23 +1047,23 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              * Updates calculated items
              * @param {string=} changedNodeNames - [type/description]
              */
-            FormHTML.prototype.calcUpdate = function( changedNodeNames ) {
+            FormView.prototype.calcUpdate = function( changedNodeNames ) {
                 var i, index, name, expr, dataType, relevant, relevantExpr, result, constraint, namesArr, valid, cleverSelector, $dataNodes;
 
-                namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [ ];
-                cleverSelector = ( namesArr.length > 0 ) ? [ ] : [ 'input[data-calculate]' ];
+                namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
+                cleverSelector = ( namesArr.length > 0 ) ? [] : [ 'input[data-calculate]' ];
                 for ( i = 0; i < namesArr.length; i++ ) {
                     cleverSelector.push( 'input[data-calculate*="' + namesArr[ i ] + '"], input[data-relevant*="' + namesArr[ i ] + '"]' );
                 }
 
-                $form.find( '#jr-calculated-items' ).find( cleverSelector.join( ) ).each( function( ) {
+                $form.find( '#jr-calculated-items' ).find( cleverSelector.join() ).each( function() {
                     name = $( this ).attr( 'name' );
                     expr = $( this ).attr( 'data-calculate' );
                     dataType = $( this ).attr( 'data-type-xml' );
                     constraint = $( this ).attr( 'data-constraint' ); //obsolete?
                     relevantExpr = $( this ).attr( 'data-relevant' );
                     relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
-                    $dataNodes = model.node( name ).get( );
+                    $dataNodes = model.node( name ).get();
                     $dataNodes.each( function( index ) {
                         //not sure if using 'string' is always correct
                         result = ( relevant ) ? model.evaluate( expr, 'string', name, index ) : '';
@@ -1211,16 +1073,16 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 } );
             };
 
-            FormHTML.prototype.bootstrapify = function( ) {
+            FormView.prototype.bootstrapify = function() {
                 //if no constraintmessage use a default
                 //TODO: move to XSLT
                 $form.addClass( 'clearfix' )
-                    .find( 'label, legend' ).each( function( ) {
+                    .find( 'label, legend' ).each( function() {
                         var $label = $( this );
                         if ( $label.siblings( 'legend' ).length === 0 &&
                             $label.parent( '#jr-calculated-items, #jr-preload-items' ).length === 0 &&
                             $label.find( '.jr-constraint-msg' ).length === 0 &&
-                            ( $label.prop( 'nodeName' ).toLowerCase( ) == 'legend' ||
+                            ( $label.prop( 'nodeName' ).toLowerCase() == 'legend' ||
                                 $label.children( 'input.ignore' ).length !== $label.children( 'input' ).length ||
                                 $label.children( 'select.ignore' ).length !== $label.children( 'select' ).length ||
                                 $label.children( 'textarea.ignore' ).length !== $label.children( 'textarea' ).length ) ) {
@@ -1232,8 +1094,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                 //move constraint message to bottom of question and add message for required (could also be done in XSLT)
                 //TODO: move to XSLT
-                $form.find( '.jr-constraint-msg' ).parent( ).each( function( ) {
-                    var $msg = $( this ).find( '.jr-constraint-msg' ).detach( ),
+                $form.find( '.jr-constraint-msg' ).parent().each( function() {
+                    var $msg = $( this ).find( '.jr-constraint-msg' ).detach(),
                         $wrapper = $( this ).closest( 'label, fieldset' );
                     $wrapper.append( $msg );
                     $msg.after( '<span class="jr-required-msg active" lang="">This field is required</span>' );
@@ -1243,22 +1105,22 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
             /*
              * Note that preloaders may be deprecated in the future and be handled as metadata without bindings at all, in which
-             * case all this stuff should perhaps move to DataXML
+             * case all this stuff should perhaps move to FormModel
              */
             //functions are designed to fail silently if unknown preloaders are called
-            FormHTML.prototype.preloads = {
+            FormView.prototype.preloads = {
                 init: function( parentO ) {
                     var item, param, name, curVal, newVal, meta, dataNode, props, xmlType,
                         that = this;
                     //these initialize actual preload items
-                    $form.find( '#jr-preload-items input' ).each( function( ) {
+                    $form.find( '#jr-preload-items input' ).each( function() {
                         props = parentO.input.getProps( $( this ) );
-                        item = $( this ).attr( 'data-preload' ).toLowerCase( );
-                        param = $( this ).attr( 'data-preload-params' ).toLowerCase( );
+                        item = $( this ).attr( 'data-preload' ).toLowerCase();
+                        param = $( this ).attr( 'data-preload-params' ).toLowerCase();
 
                         if ( typeof that[ item ] !== 'undefined' ) {
                             dataNode = model.node( props.path, props.index );
-                            curVal = dataNode.getVal( )[ 0 ];
+                            curVal = dataNode.getVal()[ 0 ];
                             newVal = that[ item ]( {
                                 param: param,
                                 curVal: curVal,
@@ -1272,11 +1134,11 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     //in addition the presence of certain meta data in the instance may automatically trigger a preload function
                     //even if the binding is not present. Note, that this actually does not deal with HTML elements at all.
                     meta = model.node( '*>meta>*' );
-                    meta.get( ).each( function( ) {
+                    meta.get().each( function() {
                         item = null;
                         name = $( this ).prop( 'nodeName' );
                         dataNode = model.node( '*>meta>' + name );
-                        curVal = dataNode.getVal( )[ 0 ];
+                        curVal = dataNode.getVal()[ 0 ];
                         //first check if there isn't a binding with a preloader that already took care of this
                         if ( $form.find( '#jr-preload-items input[name$="/meta/' + name + '"][data-preload]' ).length === 0 ) {
                             switch ( name ) {
@@ -1315,7 +1177,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     }
                     if ( o.param == 'end' ) {
                         //set event handler for each save event (needs to be triggered!)
-                        $form.on( 'beforesave', function( ) {
+                        $form.on( 'beforesave', function() {
                             value = model.evaluate( 'now()', 'string' );
                             o.dataNode.setVal( value, null, 'datetime' );
                         } );
@@ -1328,9 +1190,9 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                     if ( o.curVal.length === 0 ) {
                         today = new Date( model.evaluate( 'today()', 'string' ) );
-                        year = today.getFullYear( ).toString( ).pad( 4 );
-                        month = ( today.getMonth( ) + 1 ).toString( ).pad( 2 );
-                        day = today.getDate( ).toString( ).pad( 2 );
+                        year = today.getFullYear().toString().pad( 4 );
+                        month = ( today.getMonth() + 1 ).toString().pad( 2 );
+                        day = today.getDate().toString().pad( 2 );
 
                         return year + '-' + month + '-' + day;
                     }
@@ -1415,10 +1277,10 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              * - watch out though when repeats in the middle are removed... or just disable that possibility
              *
              */
-            FormHTML.prototype.repeat = {
+            FormView.prototype.repeat = {
                 /**
                  * Initializes all Repeat Groups in form (only called once).
-                 * @param  {FormHTML} formO the parent form object
+                 * @param  {FormView} formO the parent form object
                  */
                 init: function( formO ) {
                     var i, numRepsInCount, repCountPath, numRepsInInstance, numRepsDefault, cloneDefaultReps, repLevel, $dataRepeat, index,
@@ -1431,13 +1293,13 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             '<button type="button" disabled class="btn remove"><i class="icon-minus"></i></button>' );
 
                     //delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
-                    $form.on( 'click', 'button.repeat:enabled', function( ) {
+                    $form.on( 'click', 'button.repeat:enabled', function() {
                         //create a clone
                         that.clone( $( this ).parent( 'fieldset.jr-repeat' ) );
                         //prevent default
                         return false;
                     } );
-                    $form.on( 'click', 'button.remove:enabled', function( ) {
+                    $form.on( 'click', 'button.remove:enabled', function() {
                         //remove clone
                         that.remove( $( this ).parent( 'fieldset.jr-repeat.clone' ) );
                         //prevent default
@@ -1447,22 +1309,22 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     cloneDefaultReps = function( $repeat ) {
                         repLevel++;
                         repCountPath = $repeat.attr( 'data-repeat-count' ) || "";
-                        numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal( )[ 0 ], 10 ) : 0;
+                        numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal()[ 0 ], 10 ) : 0;
                         //console.debug('number of reps in count attribute: ' +numRepsInCount);
                         index = $form.find( '.jr-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
-                        $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get( );
-                        numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) + ':not([template])' ).addBack( ).length;
+                        $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get();
+                        numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) + ':not([template])' ).addBack().length;
                         numRepsDefault = ( numRepsInCount > numRepsInInstance ) ? numRepsInCount : numRepsInInstance;
                         //console.debug('default number of repeats for '+$repeat.attr('name')+' is '+numRepsDefault);
                         //first rep is already included (by XSLT transformation)
                         for ( i = 1; i < numRepsDefault; i++ ) {
-                            that.clone( $repeat.siblings( ).addBack( ).last( ), false );
+                            that.clone( $repeat.siblings().addBack().last(), false );
                         }
                         //now check the defaults of all the descendants of this repeat and its new siblings, level-by-level
-                        $repeat.siblings( '.jr-repeat' ).addBack( ).find( '.jr-repeat' )
+                        $repeat.siblings( '.jr-repeat' ).addBack().find( '.jr-repeat' )
                             .filter( function( i ) {
                                 return $( this ).parents( '.jr-repeat' ).length === repLevel;
-                            } ).each( function( ) {
+                            } ).each( function() {
                                 cloneDefaultReps( $( this ) );
                             } );
                     };
@@ -1471,7 +1333,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     //NOTE THIS ASSUMES THE DEFAULT NUMBER IS STATIC, NOT DYNAMIC
                     $form.find( '.jr-repeat' ).filter( function( i ) {
                         return $( this ).parents( '.jr-repeat' ).length === 0;
-                    } ).each( function( ) {
+                    } ).each( function() {
                         repLevel = 0;
                         cloneDefaultReps( $( this ) );
                     } );
@@ -1496,15 +1358,15 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     $clone = $master.clone( true, true );
 
                     //add clone class and remove any child clones.. (cloned repeats within repeats..)
-                    $clone.addClass( 'clone' ).find( '.clone' ).remove( );
+                    $clone.addClass( 'clone' ).find( '.clone' ).remove();
 
                     //mark all cloned fields as valid
-                    $clone.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function( ) {
+                    $clone.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
                         that.formO.setValid( $( this ) );
                     } );
 
                     $clone.insertAfter( $node )
-                        .parent( '.jr-group' ).numberRepeats( );
+                        .parent( '.jr-group' ).numberRepeats();
 
                     //if not done asynchronously, this code causes a "style undefined" exception in Jasmine unit tests with jQuery 1.9 and 2.0
                     //but this breaks loading of default values inside repeats
@@ -1523,9 +1385,9 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     index = $form.find( 'fieldset.jr-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
                     //parentIndex = $form.find('[name="'+$master.attr('name')+'"]').parent().index($parent);
                     //add ____x to names of radio buttons where x is the index
-                    radioNames = [ ];
+                    radioNames = [];
 
-                    $clone.find( 'input[type="radio"]' ).each( function( ) {
+                    $clone.find( 'input[type="radio"]' ).each( function() {
                         if ( $.inArray( $( this ).attr( 'data-name' ), radioNames ) === -1 ) {
                             radioNames.push( $( this ).attr( 'data-name' ) );
                         }
@@ -1534,11 +1396,11 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     for ( i = 0; i < radioNames.length; i++ ) {
                         //amazingly, this executes so fast when compiled that the timestamp in milliseconds is
                         //not sufficient guarantee of uniqueness (??)
-                        timestamp = new Date( ).getTime( ).toString( ) + '_' + Math.floor( ( Math.random( ) * 10000 ) + 1 );
+                        timestamp = new Date().getTime().toString() + '_' + Math.floor( ( Math.random() * 10000 ) + 1 );
                         $clone.find( 'input[type="radio"][data-name="' + radioNames[ i ] + '"]' ).attr( 'name', timestamp );
                     }
 
-                    this.toggleButtons( $master.parent( ) );
+                    this.toggleButtons( $master.parent() );
 
                     //create a new data point in <instance> by cloning the template node
                     path = $master.attr( 'name' );
@@ -1562,13 +1424,13 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         repeatIndex = $form.find( 'fieldset.jr-repeat[name="' + repeatPath + '"]' ).index( node ),
                         parentGroup = node.parent( 'fieldset.jr-group' );
 
-                    node.hide( delay, function( ) {
-                        node.remove( );
-                        parentGroup.numberRepeats( );
+                    node.hide( delay, function() {
+                        node.remove();
+                        parentGroup.numberRepeats();
                         that.toggleButtons( parentGroup );
                         $form.trigger( 'changerepeat' );
                         //now remove the data node
-                        model.node( repeatPath, repeatIndex ).remove( );
+                        model.node( repeatPath, repeatIndex ).remove();
                     } );
                 },
                 toggleButtons: function( $node ) {
@@ -1583,7 +1445,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 }
             };
 
-            FormHTML.prototype.setEventHandlers = function( ) {
+            FormView.prototype.setEventHandlers = function() {
                 var that = this;
 
                 //first prevent default submission, e.g. when text field is filled in and Enter key is pressed
@@ -1605,7 +1467,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     var validCons, validReq,
                         n = that.input.getProps( $( this ) );
 
-                    event.stopImmediatePropagation( );
+                    event.stopImmediatePropagation();
 
                     //set file input values to the actual name of file (without c://fakepath or anything like that)
                     if ( n.val.length > 0 && n.inputType === 'file' && $( this )[ 0 ].files[ 0 ] && $( this )[ 0 ].files[ 0 ].size > 0 ) {
@@ -1652,7 +1514,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             $reqSubtle = $( reqSubtle );
                             $reqSubtle.insertAfter( this );
                             if ( !loudErrorShown ) {
-                                $reqSubtle.show( function( ) {
+                                $reqSubtle.show( function() {
                                     $( this ).removeAttr( 'style' );
                                 } );
                             }
@@ -1661,7 +1523,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         }
                     } else if ( event.type === 'focusout' ) {
                         if ( props.val.length > 0 ) {
-                            $reqSubtle.remove( );
+                            $reqSubtle.remove();
                         } else {
                             $reqSubtle.removeClass( 'focus' );
                             if ( !loudErrorShown ) {
@@ -1690,7 +1552,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 $form.on( 'changerepeat', function( event ) {
                     //set defaults of added repeats, setAllVals does not trigger change event
                     //TODO: only do this for the repeat that trigger it
-                    that.setAllVals( );
+                    that.setAllVals();
                     //the cloned fields may have been marked as invalid, so after setting thee default values, validate the invalid ones
                     //that.validateInvalids();
                 } );
@@ -1699,18 +1561,18 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 //  that.validateAll();
                 //});
 
-                $form.on( 'changelanguage', function( ) {
-                    that.outputUpdate( );
-                    that.setHints( );
+                $form.on( 'changelanguage', function() {
+                    that.outputUpdate();
+                    //that.setHints( );
                 } );
             };
 
-            FormHTML.prototype.setValid = function( $node, type ) {
+            FormView.prototype.setValid = function( $node, type ) {
                 var classes = ( type ) ? 'invalid-' + type : 'invalid-constraint invalid-required';
                 this.input.getWrapNodes( $node ).removeClass( classes );
             };
 
-            FormHTML.prototype.setInvalid = function( $node, type ) {
+            FormView.prototype.setInvalid = function( $node, type ) {
                 type = type || 'constraint';
                 this.input.getWrapNodes( $node ).addClass( 'invalid-' + type ).find( '.required-subtle' ).attr( 'style', 'color: transparent;' );
             };
@@ -1719,18 +1581,18 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              * Validates all enabled input fields after first resetting everything as valid.
              * @return {boolean} whether the form contains any errors
              */
-            FormHTML.prototype.validateAll = function( ) {
+            FormView.prototype.validateAll = function() {
                 var that = this,
                     $firstError;
 
                 //can't fire custom events on disabled elements therefore we set them all as valid
-                $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, input:disabled, select:disabled, textarea:disabled' ).each( function( ) {
+                $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, input:disabled, select:disabled, textarea:disabled' ).each( function() {
                     that.setValid( $( this ) );
                 } );
                 $form.find( 'input, select, textarea' ).not( '.ignore' ).trigger( 'validate' );
                 $firstError = $form.find( '.invalid-required, .invalid-constraint' ).eq( 0 );
                 if ( $firstError.length > 0 && window.scrollTo ) {
-                    window.scrollTo( 0, $firstError.offset( ).top - 50 );
+                    window.scrollTo( 0, $firstError.offset().top - 50 );
                 }
                 return $firstError.length > 0;
             };
@@ -1739,14 +1601,14 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
              * Returns true is form is valid and false if not. Needs to be called AFTER (or by) validateAll()
              * @return {!boolean} whether the form is valid
              */
-            FormHTML.prototype.isValid = function( ) {
+            FormView.prototype.isValid = function() {
                 return ( $form.find( '.invalid-required, .invalid-constraint' ).length > 0 ) ? false : true;
             };
 
             /**
              * Adds <hr class="page-break"> to prevent cutting off questions with page-breaks
              */
-            FormHTML.prototype.addPageBreaks = function( ) {
+            FormView.prototype.addPageBreaks = function() {
 
             };
         }
