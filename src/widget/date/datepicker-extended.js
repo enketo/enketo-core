@@ -34,7 +34,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
         function DatepickerExtended( element, options, event ) {
             //call the Super constructor
             Widget.call( this, element, options );
-            this._init( );
+            this._init();
         }
 
         //copy the prototype functions from the Widget super class
@@ -46,7 +46,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
         /**
          * Initialize timepicker widget
          */
-        DatepickerExtended.prototype._init = function( ) {
+        DatepickerExtended.prototype._init = function() {
             var that = this,
                 $p = $( this.element ).parent( 'label' ),
                 startView = ( $p.hasClass( 'jr-appearance-month-year' ) ) ? 'year' :
@@ -69,9 +69,9 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
                 orientation: 'top'
             } ).on( 'changeDate', function( e ) {
                 // copy changes made by datepicker to original input field
-                var value = $( this ).val( );
+                var value = $( this ).val();
                 console.log( 'datepicker date changed to', value );
-                $( that.element ).val( value ).trigger( 'change' ).blur( );
+                $( that.element ).val( value ).trigger( 'change' ).blur();
             } );
         };
 
@@ -84,13 +84,13 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
             var $dateI = $( this.element ),
                 $fakeDate = $(
                     '<div class="widget date"><input class="ignore input-small" readonly="readonly" type="text" value="' +
-                    $dateI.val( ) + '" placeholder="' + format + '" />' +
+                    $dateI.val() + '" placeholder="' + format + '" />' +
                     '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
                 //$fakeDateReset = $fakeDate.find( '.btn-reset' ),
                 $fakeDateI = $fakeDate.find( 'input' );
 
             //$dateI.next( '.widget.date' ).remove( );
-            $dateI.hide( ).after( $fakeDate );
+            $dateI.hide().after( $fakeDate );
 
             return $fakeDateI;
         };
@@ -143,7 +143,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
 
             options = options || {};
 
-            return this.each( function( ) {
+            return this.each( function() {
                 var $this = $( this ),
                     data = $this.data( pluginName ),
                     badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;

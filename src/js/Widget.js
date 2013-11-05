@@ -26,12 +26,12 @@ define( [ 'jquery' ], function( $ ) {
      * @param {string} event Not sure, this may not be necessary but the desktopSelectpicker does something with it
      */
     var Widget = function( element, options, event ) {
-        var name = this.constructor.toString( ).match( /function (\w*)/ )[ 1 ];
+        var name = this.constructor.toString().match( /function (\w*)/ )[ 1 ];
         this.element = element;
         this.options = options || {};
         this.options.touch = ( typeof this.options.touch !== 'undefined' ) ? this.options.touch : false;
         this.event = event || null;
-        this.namespace = name.charAt( 0 ).toLowerCase( ) + name.substring( 1 );
+        this.namespace = name.charAt( 0 ).toLowerCase() + name.substring( 1 );
     };
 
     Widget.prototype = {
@@ -51,9 +51,9 @@ define( [ 'jquery' ], function( $ ) {
             //remove all the event handlers that used this.namespace as the namespace
             .off( '.' + this.namespace )
             //show the original element
-            .show( )
+            .show()
             //remove elements after the target that have the widget class
-            .next( '.widget' ).remove( );
+            .next( '.widget' ).remove();
             console.debug( this.namespace, 'destroyed data and handlers with namespace: ' + this.namespace );
         },
         /**
@@ -61,21 +61,21 @@ define( [ 'jquery' ], function( $ ) {
          * Most of the times this branch can remain empty.
          * Check with $('.jr-branch').show() whether input is disabled in a disabled branch.
          */
-        disable: function( ) {
+        disable: function() {
             console.debug( this.namespace, 'disable' );
         },
         /**
          * Does whatever necessary to enable the widget if its parent branch is enabled.
          * Most of the times this function can remain empty.
          */
-        enable: function( ) {
+        enable: function() {
             console.debug( this.namespace, 'enable' );
         },
         /**
          * Updates languages and <option>s (cascading selects.
          * Most of the times this function can remain empty
          */
-        update: function( ) {
+        update: function() {
             console.debug( this.namespace, 'update' );
         }
 

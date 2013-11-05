@@ -31,7 +31,7 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
 
     function MobileSelectpicker( element, options, e ) {
         Widget.call( this, element, options );
-        this._init( );
+        this._init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -43,29 +43,29 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
     /**
      * initialize
      */
-    MobileSelectpicker.prototype._init = function( ) {
+    MobileSelectpicker.prototype._init = function() {
         var that = this;
 
         //show values on change
-        $( this.element ).on( 'change.' + pluginName, function( ) {
-            that._showSelectedValues( );
+        $( this.element ).on( 'change.' + pluginName, function() {
+            that._showSelectedValues();
             return true;
         } );
 
         //show defaults
-        this._showSelectedValues( );
+        this._showSelectedValues();
     };
 
     /**
      * display the selected values
      */
-    MobileSelectpicker.prototype._showSelectedValues = function( ) {
-        var i, valueText = [ ],
+    MobileSelectpicker.prototype._showSelectedValues = function() {
+        var i, valueText = [],
             $select = $( this.element ),
-            values = ( $.isArray( $select.val( ) ) ) ? $select.val( ) : [ $select.val( ) ];
+            values = ( $.isArray( $select.val() ) ) ? $select.val() : [ $select.val() ];
 
         for ( i = 0; i < values.length; i++ ) {
-            valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text( ) );
+            valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text() );
         }
 
         $select.after( '<span class="widget mobileselect">' + values.join( ', ' ) + '</span>' );
@@ -75,7 +75,7 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
 
         options = options || {};
 
-        return this.each( function( ) {
+        return this.each( function() {
             var $this = $( this ),
                 data = $this.data( pluginName );
 

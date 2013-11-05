@@ -5,11 +5,11 @@ define( [ 'jquery' ], function( $ ) {
      *
      * @return {jQuery} [description]
      */
-    $.fn.numberRepeats = function( ) {
+    $.fn.numberRepeats = function() {
 
-        return this.each( function( ) {
+        return this.each( function() {
 
-            $( this ).find( 'fieldset.jr-repeat' ).each( function( ) {
+            $( this ).find( 'fieldset.jr-repeat' ).each( function() {
                 var repSiblings, qtyRepeats, i;
                 // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
                 if ( $( this ).prev( 'fieldset.jr-repeat' ).length === 0 ) {
@@ -18,12 +18,12 @@ define( [ 'jquery' ], function( $ ) {
                     if ( qtyRepeats > 1 ) {
                         $( this ).find( 'span.repeat-number' ).text( '1' );
                         i = 2;
-                        repSiblings.each( function( ) {
+                        repSiblings.each( function() {
                             $( this ).find( 'span.repeat-number' ).text( i );
                             i++;
                         } );
                     } else {
-                        $( this ).find( 'span.repeat-number' ).empty( );
+                        $( this ).find( 'span.repeat-number' ).empty();
                     }
                 }
             } );
@@ -40,16 +40,16 @@ define( [ 'jquery' ], function( $ ) {
      */
     $.fn.clearInputs = function( ev ) {
         ev = ev || 'edit';
-        return this.each( function( ) {
+        return this.each( function() {
             //remove media previews
-            $( this ).find( '.file-preview' ).remove( );
+            $( this ).find( '.file-preview' ).remove();
             //remove input values
-            $( this ).find( 'input, select, textarea' ).each( function( ) {
+            $( this ).find( 'input, select, textarea' ).each( function() {
                 var type = $( this ).attr( 'type' );
-                if ( $( this ).prop( 'nodeName' ).toUpperCase( ) === 'SELECT' ) {
+                if ( $( this ).prop( 'nodeName' ).toUpperCase() === 'SELECT' ) {
                     type = 'select';
                 }
-                if ( $( this ).prop( 'nodeName' ).toUpperCase( ) === 'TEXTAREA' ) {
+                if ( $( this ).prop( 'nodeName' ).toUpperCase() === 'TEXTAREA' ) {
                     type = 'textarea';
                 }
                 switch ( type ) {
@@ -69,7 +69,7 @@ define( [ 'jquery' ], function( $ ) {
                         /* falls through */
                     case 'hidden':
                     case 'textarea':
-                        if ( $( this ).val( ) !== '' ) {
+                        if ( $( this ).val() !== '' ) {
                             $( this ).val( '' ).trigger( ev );
                         }
                         break;
@@ -140,7 +140,7 @@ define( [ 'jquery' ], function( $ ) {
             cur = jQuery( parts[ 0 ], this );
             for ( i = 1; i < parts.length; i++ )
                 cur = cur.parent( parts[ i ] );
-            return cur.get( );
+            return cur.get();
         }
 
         // any remaining dots inside node names need to be escaped (added by Martijn)
@@ -156,16 +156,16 @@ define( [ 'jquery' ], function( $ ) {
      *
      * Not supported: escaping and other MarkDown syntax
      */
-    $.fn.markdownToHtml = function( ) {
-        return this.each( function( ) {
+    $.fn.markdownToHtml = function() {
+        return this.each( function() {
             var html,
                 $childStore = $( '<div/>' );
-            $( this ).children( ).each( function( index ) {
+            $( this ).children().each( function( index ) {
                 var name = '$$$' + index;
-                $( this ).clone( ).markdownToHtml( ).appendTo( $childStore );
+                $( this ).clone().markdownToHtml().appendTo( $childStore );
                 $( this ).replaceWith( name );
             } );
-            html = $( this ).html( );
+            html = $( this ).html();
             html = html.replace( /__([^\s][^_]*[^\s])__/gm, "<strong>$1</strong>" );
             html = html.replace( /\*\*([^\s][^\*]*[^\s])\*\*/gm, "<strong>$1</strong>" );
             html = html.replace( /_([^\s][^_]*[^\s])_/gm, '<em>$1</em>' );
@@ -173,7 +173,7 @@ define( [ 'jquery' ], function( $ ) {
             //only replaces if url is valid (worthwhile feature?)
             html = html.replace( /\[(.*)\]\(((https?:\/\/)(([\da-z\.\-]+)\.([a-z\.]{2,6})|(([0-9]{1,3}\.){3}[0-9]{1,3}))([\/\w \.\-]*)*\/?[\/\w \.\-\=\&\?]*)\)/gm, '<a href="$2">$1</a>' );
             html = html.replace( /\n/gm, '<br />' );
-            $childStore.children( ).each( function( i ) {
+            $childStore.children().each( function( i ) {
                 var regex = new RegExp( '\\$\\$\\$' + i );
                 html = html.replace( regex, $( this )[ 0 ].outerHTML );
             } );
@@ -186,13 +186,13 @@ define( [ 'jquery' ], function( $ ) {
      *
      * @return {jQuery} [description]
      */
-    $.fn.toSmallestWidth = function( ) {
+    $.fn.toSmallestWidth = function() {
         var smallestWidth = 2000;
-        return this.each( function( ) {
-            if ( $( this ).width( ) < smallestWidth ) {
-                smallestWidth = $( this ).width( );
+        return this.each( function() {
+            if ( $( this ).width() < smallestWidth ) {
+                smallestWidth = $( this ).width();
             }
-        } ).each( function( ) {
+        } ).each( function() {
             $( this ).width( smallestWidth );
         } );
     };
@@ -206,11 +206,11 @@ define( [ 'jquery' ], function( $ ) {
     $.fn.toLargestWidth = function( plus ) {
         var largestWidth = 0;
         plus = plus || 0;
-        return this.each( function( ) {
-            if ( $( this ).width( ) > largestWidth ) {
-                largestWidth = $( this ).width( );
+        return this.each( function() {
+            if ( $( this ).width() > largestWidth ) {
+                largestWidth = $( this ).width();
             }
-        } ).each( function( ) {
+        } ).each( function() {
             $( this ).width( largestWidth + plus );
         } );
     };
@@ -223,11 +223,11 @@ define( [ 'jquery' ], function( $ ) {
     $.fn.getXPath = function( rootNodeName ) {
         //other nodes may have the same XPath but because this function is used to determine the corresponding input name of a data node, index is not included 
         var position,
-            $node = this.first( ),
+            $node = this.first(),
             nodeName = $node.prop( 'nodeName' ),
             //$sibSameNameAndSelf = $node.siblings(nodeName).addBack(),
             steps = [ nodeName ],
-            $parent = $node.parent( ),
+            $parent = $node.parent(),
             parentName = $parent.prop( 'nodeName' );
 
         //position = ($sibSameNameAndSelf.length > 1) ? '['+($sibSameNameAndSelf.index($node)+1)+']' : '';
@@ -238,10 +238,10 @@ define( [ 'jquery' ], function( $ ) {
             //position = ($sibSameNameAndSelf.length > 1) ? '['+($sibSameNameAndSelf.index($parent)+1)+']' : '';
             //steps.push(parentName+position);
             steps.push( parentName );
-            $parent = $parent.parent( );
+            $parent = $parent.parent();
             parentName = $parent.prop( 'nodeName' );
         }
-        return '/' + steps.reverse( ).join( '/' );
+        return '/' + steps.reverse().join( '/' );
     };
 
 
@@ -249,7 +249,7 @@ define( [ 'jquery' ], function( $ ) {
      * Reverses a jQuery collection
      * @type {Array}
      */
-    $.fn.reverse = [ ].reverse;
+    $.fn.reverse = [].reverse;
 
 
     /** MOVE THESE PLUGINS TO PHP WRAPPER, THEY ARE NOT USED IN CORE 

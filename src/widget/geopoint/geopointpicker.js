@@ -30,7 +30,7 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
     function Geopointpicker( element, options ) {
         //call the super class constructor
         Widget.call( this, element, options );
-        this._init( );
+        this._init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -39,23 +39,23 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
     //ensure the constructor is the new one
     Geopointpicker.prototype.constructor = Geopointpicker;
 
-    Geopointpicker.prototype._init = function( ) {
+    Geopointpicker.prototype._init = function() {
         var that = this,
             inputVals;
 
-        this._addDomElements( );
+        this._addDomElements();
 
-        inputVals = this.$inputOrigin.val( ).split( ' ' );
+        inputVals = this.$inputOrigin.val().split( ' ' );
         this.updateMapFn = "_updateDynamicMap";
 
         this.$widget.find( 'input:not([name="search"])' ).on( 'change change.bymap change.bysearch', function( event ) {
-            var lat = ( that.$lat.val( ) !== '' ) ? that.$lat.val( ) : 0.0,
-                lng = ( that.$lng.val( ) !== '' ) ? that.$lng.val( ) : 0.0,
-                alt = ( that.$alt.val( ) !== '' ) ? that.$alt.val( ) : 0.0,
-                acc = that.$acc.val( ),
+            var lat = ( that.$lat.val() !== '' ) ? that.$lat.val() : 0.0,
+                lng = ( that.$lng.val() !== '' ) ? that.$lng.val() : 0.0,
+                alt = ( that.$alt.val() !== '' ) ? that.$alt.val() : 0.0,
+                acc = that.$acc.val(),
                 value = ( lat === 0 && lng === 0 ) ? '' : lat + ' ' + lng + ' ' + alt + ' ' + acc;
 
-            event.stopImmediatePropagation( );
+            event.stopImmediatePropagation();
 
             that.$inputOrigin.val( value ).trigger( 'change' );
 
@@ -86,37 +86,37 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
         }
 
         if ( this.$detect ) {
-            this._enableDetection( );
+            this._enableDetection();
         }
 
         if ( !this.options.touch ) {
-            gmapsDone( function( ) {
-                if ( that._dynamicMapAvailable( ) ) {
+            gmapsDone( function() {
+                if ( that._dynamicMapAvailable() ) {
                     that._updateMap( 0, 0, 1 );
                     if ( that.$search ) {
-                        that._enableSearch( );
+                        that._enableSearch();
                     }
                 }
             } );
         } else if ( this.$map ) {
             this._updateMapFn = "_updateStaticMap";
             this._updateMap( 0, 0, 1 );
-            $( window ).on( 'resize', function( ) {
+            $( window ).on( 'resize', function() {
                 var resizeCount = $( window ).data( 'resizecount' ) || 0;
                 resizeCount++;
                 $( window ).data( 'resizecount', resizeCount );
-                window.setTimeout( function( ) {
+                window.setTimeout( function() {
                     if ( resizeCount == $( window ).data( 'resizecount' ) ) {
                         $( window ).data( 'resizecount', 0 );
                         //do all the things when resizing stops
-                        that._updateMap( );
+                        that._updateMap();
                     }
                 }, 500 );
             } );
         }
     };
 
-    Geopointpicker.prototype._addDomElements = function( ) {
+    Geopointpicker.prototype._addDomElements = function() {
         var detect =
             '<button name="geodetect" type="button" class="btn" title="detect current location" data-placement="top">' +
             '<i class="icon-crosshairs"></i></button>',
@@ -162,16 +162,16 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
         this.$alt = this.$widget.find( '[name="alt"]' );
         this.$acc = this.$widget.find( '[name="acc"]' );
 
-        this.$inputOrigin.hide( ).after( this.$widget ).parent( ).addClass( 'clearfix' );
+        this.$inputOrigin.hide().after( this.$widget ).parent().addClass( 'clearfix' );
     };
 
     /**
      * Enables geo detection using the built-in browser geoLocation functionality
      */
-    Geopointpicker.prototype._enableDetection = function( ) {
+    Geopointpicker.prototype._enableDetection = function() {
         var that = this;
         this.$detect.click( function( event ) {
-            event.preventDefault( );
+            event.preventDefault();
             navigator.geolocation.getCurrentPosition( function( position ) {
                 that._updateMap( position.coords.latitude, position.coords.longitude );
                 that._updateInputs( position.coords.latitude, position.coords.longitude, position.coords.altitude, position.coords.accuracy );
@@ -183,26 +183,26 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
     /**
      * Enables search functionality using the Google Maps API v3
      */
-    Geopointpicker.prototype._enableSearch = function( ) {
-        var geocoder = new google.maps.Geocoder( ),
+    Geopointpicker.prototype._enableSearch = function() {
+        var geocoder = new google.maps.Geocoder(),
             that = this;
         this.$search.prop( 'disabled', false );
         this.$search.on( 'change', function( event ) {
-            event.stopImmediatePropagation( );
+            event.stopImmediatePropagation();
             //console.debug('search field click event');
-            var address = $( this ).val( );
+            var address = $( this ).val();
             if ( typeof geocoder !== 'undefined' ) {
                 geocoder.geocode( {
                         'address': address,
-                        'bounds': that.map.getBounds( )
+                        'bounds': that.map.getBounds()
                     },
                     function( results, status ) {
                         if ( status == google.maps.GeocoderStatus.OK ) {
                             that.$search.attr( 'placeholder', 'search' );
                             var loc = results[ 0 ].geometry.location;
                             //console.log(loc);
-                            that._updateMap( loc.lat( ), loc.lng( ) );
-                            that._updateInputs( loc.lat( ), loc.lng( ), null, null, 'change.bysearch' );
+                            that._updateMap( loc.lat(), loc.lng() );
+                            that._updateInputs( loc.lat(), loc.lng(), null, null, 'change.bysearch' );
                         } else {
                             that.$search.val( '' );
                             that.$search.attr( 'placeholder', address + ' not found, try something else.' );
@@ -217,7 +217,7 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
     /**
      * Whether google maps are available (whether scripts have loaded).
      */
-    Geopointpicker.prototype._dynamicMapAvailable = function( ) {
+    Geopointpicker.prototype._dynamicMapAvailable = function() {
         return ( this.$map && typeof google !== 'undefined' && typeof google.maps !== 'undefined' );
     };
 
@@ -232,8 +232,8 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
         if ( !this.$map ) {
             return;
         }
-        lat = lat || Number( this.$lat.val( ) );
-        lng = lng || Number( this.$lng.val( ) );
+        lat = lat || Number( this.$lat.val() );
+        lng = lng || Number( this.$lng.val() );
         zoom = zoom || 15;
         if ( lat === 0 && lng === 0 ) zoom = 1;
         return this[ this.updateMapFn ]( lat, lng, zoom );
@@ -248,12 +248,12 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
      */
     Geopointpicker.prototype._updateStaticMap = function( lat, lng, zoom ) {
         var params,
-            width = this.$map.width( ),
-            height = this.$map.height( ),
+            width = this.$map.width(),
+            height = this.$map.height(),
             mapsAPIKeyStr = ( typeof settings !== 'undefined' && settings[ 'mapsStaticAPIKey' ] ) ? '&key=' + settings[ 'mapsStaticAPIKey' ] : '';
 
         params = "center=" + lat + "," + lng + "&size=" + width + "x" + height + "&zoom=" + zoom + "&sensor=false" + mapsAPIKeyStr;
-        this.$map.empty( ).append( '<img src="http://maps.googleapis.com/maps/api/staticmap?' + params + '"/>' );
+        this.$map.empty().append( '<img src="http://maps.googleapis.com/maps/api/staticmap?' + params + '"/>' );
     };
 
     /**
@@ -267,7 +267,7 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
         var $map = this.$map,
             that = this;
 
-        if ( this._dynamicMapAvailable( ) && typeof google.maps.LatLng !== 'undefined' ) {
+        if ( this._dynamicMapAvailable() && typeof google.maps.LatLng !== 'undefined' ) {
             var mapOptions = {
                 zoom: zoom,
                 center: new google.maps.LatLng( lat, lng ),
@@ -275,10 +275,10 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
                 streetViewControl: false
             };
             this.map = new google.maps.Map( this.$map[ 0 ], mapOptions );
-            this._placeMarker( );
+            this._placeMarker();
             // place marker where user clicks
             google.maps.event.addListener( this.map, 'click', function( event ) {
-                that._updateInputs( event.latLng.lat( ), event.latLng.lng( ), '', '', 'change.bymap' );
+                that._updateInputs( event.latLng.lat(), event.latLng.lng(), '', '', 'change.bymap' );
                 that._placeMarker( event.latLng );
             } );
         }
@@ -291,7 +291,7 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
      */
     Geopointpicker.prototype._placeMarker = function( latLng ) {
         var that;
-        latLng = latLng || this.map.getCenter( );
+        latLng = latLng || this.map.getCenter();
 
         if ( typeof this.marker !== 'undefined' ) {
             this.marker.setMap( null );
@@ -306,9 +306,9 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
 
         // dragging markers for non-touch screens
         if ( !this.options.touch ) {
-            google.maps.event.addListener( this.marker, 'dragend', function( ) {
-                that._updateInputs( that.marker.getPosition( ).lat( ), that.marker.getPosition( ).lng( ), '', '', 'change.bymap' );
-                that._centralizeWithDelay( );
+            google.maps.event.addListener( this.marker, 'dragend', function() {
+                that._updateInputs( that.marker.getPosition().lat(), that.marker.getPosition().lng(), '', '', 'change.bymap' );
+                that._centralizeWithDelay();
             } );
             this._centralizeWithDelay( 5000 );
         }
@@ -321,8 +321,8 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
      */
     Geopointpicker.prototype._centralizeWithDelay = function( delay ) {
         var that = this;
-        window.setTimeout( function( ) {
-            that.map.panTo( that.marker.getPosition( ) );
+        window.setTimeout( function() {
+            that.map.panTo( that.marker.getPosition() );
         }, delay );
     };
 
@@ -348,7 +348,7 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
     $.fn[ pluginName ] = function( options, event ) {
         var loadStarted = false;
 
-        return this.each( function( ) {
+        return this.each( function() {
             var $this = $( this ),
                 data = $( this ).data( pluginName );
 

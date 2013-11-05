@@ -34,7 +34,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/
         function TimepickerExtended( element, options, event ) {
             //call the Super constructor
             Widget.call( this, element, options );
-            this._init( );
+            this._init();
         }
 
         //copy the prototype functions from the Widget super class
@@ -46,18 +46,18 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/
         /**
          * Initialize timepicker widget
          */
-        TimepickerExtended.prototype._init = function( ) {
+        TimepickerExtended.prototype._init = function() {
             var $timeI = $( this.element ),
                 $p = $( this ).parent( 'label' ),
-                timeVal = $( this.element ).val( ),
+                timeVal = $( this.element ).val(),
                 $fakeTime = $( '<div class="widget bootstrap-timepicker">' +
                     '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
                     '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
                 $fakeTimeReset = $fakeTime.find( '.btn-reset' ),
                 $fakeTimeI = $fakeTime.find( 'input' );
 
-            $timeI.next( '.widget.bootstrap-timepicker-component' ).remove( );
-            $timeI.hide( ).after( $fakeTime );
+            $timeI.next( '.widget.bootstrap-timepicker-component' ).remove();
+            $timeI.hide().after( $fakeTime );
 
             $fakeTimeI.timepicker( {
                 defaultTime: ( timeVal.length > 0 ) ? timeVal : 'current',
@@ -66,8 +66,8 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/
             //the time picker itself has input elements
             .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
-            $fakeTimeI.on( 'change', function( ) {
-                $timeI.val( $( this ).val( ) ).trigger( 'change' ).blur( );
+            $fakeTimeI.on( 'change', function() {
+                $timeI.val( $( this ).val() ).trigger( 'change' ).blur();
                 return false;
             } );
 
@@ -85,7 +85,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/
 
             options = options || {};
 
-            return this.each( function( ) {
+            return this.each( function() {
                 var $this = $( this ),
                     data = $this.data( pluginName );
 

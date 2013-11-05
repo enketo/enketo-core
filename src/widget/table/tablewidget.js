@@ -30,7 +30,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
 
     function Tablewidget( element, options, event ) {
         Widget.call( this, element, options );
-        this.init( );
+        this.init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -39,17 +39,17 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
     //ensure the constructor is the new one
     Tablewidget.prototype.constructor = Tablewidget;
 
-    Tablewidget.prototype.init = function( ) {
+    Tablewidget.prototype.init = function() {
         var that = this;
-        $( this.element ).parent( ).parent( ).find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
-            .parent( ).parent( '.jr-appearance-field-list' ).each( function( ) {
+        $( this.element ).parent().parent().find( '.jr-appearance-field-list .jr-appearance-list-nolabel, .jr-appearance-field-list .jr-appearance-label' )
+            .parent().parent( '.jr-appearance-field-list' ).each( function() {
                 // remove the odd input element that XLSForm adds for the 'easier table method'
                 // see https://github.com/modilabs/pyxform/issues/72
-                $( this ).find( 'input[readonly]' ).remove( );
+                $( this ).find( 'input[readonly]' ).remove();
                 // fix the column widths, after any ongoing animations have finished
-                $( this ).promise( ).done( function( ) {
-                    $( this ).find( '.jr-appearance-label label>img' ).parent( ).css( 'width', 'auto' ).toSmallestWidth( );
-                    $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth( );
+                $( this ).promise().done( function() {
+                    $( this ).find( '.jr-appearance-label label>img' ).parent().css( 'width', 'auto' ).toSmallestWidth();
+                    $( this ).find( '.jr-appearance-label label, .jr-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth();
                     $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
 
                 } );
@@ -70,7 +70,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
 
         options = options || {};
 
-        return this.each( function( ) {
+        return this.each( function() {
             var $this = $( this ),
                 data = $this.data( pluginName );
 

@@ -32,8 +32,8 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
     function DesktopSelectpicker( element, options, e ) {
         Widget.call( this, element, options );
         if ( e ) {
-            e.stopPropagation( );
-            e.preventDefault( );
+            e.stopPropagation();
+            e.preventDefault();
         }
 
         this.$widget = null;
@@ -41,7 +41,7 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
         this.noneSelectedText = options.noneSelectedText || 'none selected';
         this.lengthmax = options.maxlength || 20;
         this.multiple = ( typeof $( element ).attr( 'multiple' ) !== 'undefined' && $( element ).attr( 'multiple' ) !== false );
-        this._init( );
+        this._init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -50,19 +50,19 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
     //ensure the constructor is the new one
     DesktopSelectpicker.prototype.constructor = DesktopSelectpicker;
 
-    DesktopSelectpicker.prototype._init = function( ) {
-        var $template = this._getTemplate( ),
+    DesktopSelectpicker.prototype._init = function() {
+        var $template = this._getTemplate(),
             $element = $( this.element );
         $element.css( 'display', 'none' );
         $template = this._createLi( $template );
         $element.after( $template );
         this.$widget = $element.next( '.bootstrap-select' );
         this.$widget.find( '> a' ).addClass( this.selectClass );
-        this._clickListener( );
+        this._clickListener();
         //this._focusListener(  );
     };
 
-    DesktopSelectpicker.prototype._getTemplate = function( ) {
+    DesktopSelectpicker.prototype._getTemplate = function() {
         var template =
             "<div class='btn-group bootstrap-select widget'>" +
             "<a class='btn dropdown-toggle clearfix' data-toggle='dropdown' href='#''>" +
@@ -79,23 +79,23 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
 
     DesktopSelectpicker.prototype._createLi = function( template ) {
 
-        var li = [ ];
+        var li = [];
         var liHtml = '';
-        var inputAttr = ( this.multiple ) ? "type='checkbox'" : "type='radio' style='display: none;' name='" + Math.random( ) * 100000 + "'";
+        var inputAttr = ( this.multiple ) ? "type='checkbox'" : "type='radio' style='display: none;' name='" + Math.random() * 100000 + "'";
         var _this = this;
         var checkedInputAttr,
             checkedLiAttr;
 
-        $( this.element ).find( 'option' ).each( function( ) {
+        $( this.element ).find( 'option' ).each( function() {
             li.push( {
-                label: $( this ).text( ),
+                label: $( this ).text(),
                 selected: $( this ).is( ':selected' ),
                 value: $( this ).attr( 'value' )
             } );
         } );
 
         if ( li.length > 0 ) {
-            template = template.replace( '__SELECTED_OPTIONS', this._createSelectedStr( ) );
+            template = template.replace( '__SELECTED_OPTIONS', this._createSelectedStr() );
             for ( var i = 0; i < li.length; i++ ) {
                 if ( li[ i ].value ) {
                     checkedInputAttr = ( li[ i ].selected ) ? " checked='checked'" : '';
@@ -132,11 +132,11 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
      */
     DesktopSelectpicker.prototype._createSelectedStr = function( $select ) {
         var textToShow,
-            selectedLabels = [ ];
+            selectedLabels = [];
         $select = $select || $( this.element );
-        $select.find( 'option:selected' ).each( function( ) {
+        $select.find( 'option:selected' ).each( function() {
             if ( $( this ).attr( 'value' ).length > 0 ) {
-                selectedLabels.push( $( this ).text( ) );
+                selectedLabels.push( $( this ).text() );
             }
         } );
 
@@ -147,16 +147,16 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
         return ( textToShow.length > this.lengthmax ) ? selectedLabels.length + ' selected' : textToShow;
     };
 
-    DesktopSelectpicker.prototype._clickListener = function( ) {
+    DesktopSelectpicker.prototype._clickListener = function() {
         var _this = this;
 
         this.$widget.find( 'li' ).on( 'click', function( e ) {
-            e.preventDefault( );
+            e.preventDefault();
             var $li = $( this ),
                 $input = $li.find( 'input' ),
                 $picker = $li.parents( '.bootstrap-select' ),
                 $select = $picker.prev( 'select' ),
-                $option = $select.find( 'option[value="' + $input.val( ) + '"]' ),
+                $option = $select.find( 'option[value="' + $input.val() + '"]' ),
                 selectedBefore = $option.is( ':selected' );
 
             if ( !_this.multiple ) {
@@ -185,15 +185,15 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
 
     //this listener for fake focus and blur events has a bug and actually breaks the widget!
     //TODO: when bootstrap 3.0 has launched, used the dropdown open and close events to do this.
-    DesktopSelectpicker.prototype._focusListener = function( ) {
+    DesktopSelectpicker.prototype._focusListener = function() {
 
         this.$widget.find( '.dropdown-toggle' ).hover(
-            function( ) {
+            function() {
                 console.debug( 'focus...' );
                 this.$widget.trigger( 'focus' );
                 return true;
             },
-            function( ) {
+            function() {
                 console.debug( 'blur...' );
                 this.$widget.trigger( 'blur' );
                 return true;
@@ -202,19 +202,19 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
     };
 
     //override super method
-    DesktopSelectpicker.prototype.disable = function( ) {
+    DesktopSelectpicker.prototype.disable = function() {
         //disables the default link behaviour in disabled state
         this.$widget.find( 'a.dropdown-toggle' ).on( 'click', function( event ) {
-            event.preventDefault( );
+            event.preventDefault();
         } );
         console.debug( pluginName, 'disable called' );
     };
 
     //override super method
-    DesktopSelectpicker.prototype.update = function( ) {
+    DesktopSelectpicker.prototype.update = function() {
         console.debug( pluginName, 'update called' );
-        this.$widget.remove( );
-        this._init( );
+        this.$widget.remove();
+        this._init();
     };
 
     /**
@@ -226,7 +226,7 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
 
         options = options || {};
 
-        return this.each( function( ) {
+        return this.each( function() {
 
             var $this = $( this ),
                 data = $this.data( pluginName );
@@ -235,7 +235,7 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
             if ( !data && typeof options == 'object' && !options.touch ) {
                 $this.data( pluginName, ( data = new DesktopSelectpicker( this, options, event ) ) );
             } else if ( data && typeof options == 'string' ) {
-                data[ options ]( );
+                data[ options ]();
             }
         } );
     };

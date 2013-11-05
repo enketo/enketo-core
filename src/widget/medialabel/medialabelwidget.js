@@ -31,7 +31,7 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
     function Medialabelwidget( element, options, event ) {
         //call the Super constructor
         Widget.call( this, element, options );
-        this._init( );
+        this._init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -44,8 +44,8 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
      * Initialize
      *
      */
-    Medialabelwidget.prototype._init = function( ) {
-        $( this.element ).children( 'img,video,audio' ).parent( ).addClass( 'with-media clearfix' );
+    Medialabelwidget.prototype._init = function() {
+        $( this.element ).children( 'img,video,audio' ).parent().addClass( 'with-media clearfix' );
     };
 
     /**
@@ -59,7 +59,7 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
 
         options = options || {};
 
-        return this.each( function( ) {
+        return this.each( function() {
             var $this = $( this ),
                 data = $this.data( pluginName );
 

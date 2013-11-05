@@ -30,7 +30,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
 
     function Radiopicker( element, options, event ) {
         Widget.call( this, element, options );
-        this._init( );
+        this._init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -42,23 +42,23 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
     /**
      * Initialize
      */
-    Radiopicker.prototype._init = function( ) {
-        this._setDelegatedHandlers( );
+    Radiopicker.prototype._init = function() {
+        this._setDelegatedHandlers();
         if ( this.options.touch ) {
-            this._setMobileClass( );
+            this._setMobileClass();
         }
     };
 
     /**
      * Set delegated event handlers
      */
-    Radiopicker.prototype._setDelegatedHandlers = function( ) {
+    Radiopicker.prototype._setDelegatedHandlers = function() {
         var $label,
             $form = $( this.element );
 
         //applies a data-checked attribute to the parent label of a checked checkbox and radio button
         $form.on( 'click', 'input[type="radio"]:checked', function( event ) {
-            $( this ).parent( 'label' ).siblings( ).removeAttr( 'data-checked' ).end( ).attr( 'data-checked', 'true' );
+            $( this ).parent( 'label' ).siblings().removeAttr( 'data-checked' ).end().attr( 'data-checked', 'true' );
         } );
 
         $form.on( 'click', 'input[type="checkbox"]', function( event ) {
@@ -72,7 +72,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
 
         //add unselect functionality
         $form.on( 'click', '[data-checked]>input[type="radio"]', function( event ) {
-            $( this ).prop( 'checked', false ).trigger( 'change' ).parent( ).removeAttr( 'data-checked' );
+            $( this ).prop( 'checked', false ).trigger( 'change' ).parent().removeAttr( 'data-checked' );
         } );
     };
 
@@ -82,7 +82,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
      * TODO: check performance difference if this is done in pure CSS instead of with the help of javascript
      *
      */
-    Radiopicker.prototype._setMobileClass = function( ) {
+    Radiopicker.prototype._setMobileClass = function() {
         var $form = $( this.element );
 
         $form.find( 'fieldset:not(.jr-appearance-compact, .jr-appearance-quickcompact, .jr-appearance-label, .jr-appearance-list-nolabel )' )

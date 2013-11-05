@@ -36,11 +36,11 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
 
     function OfflineFilepicker( element, options, e ) {
         if ( e ) {
-            e.stopPropagation( );
-            e.preventDefault( );
+            e.stopPropagation();
+            e.preventDefault();
         }
         Widget.call( this, element, options );
-        this._init( );
+        this._init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -53,7 +53,7 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
      * initialize
      *
      */
-    OfflineFilepicker.prototype._init = function( ) {
+    OfflineFilepicker.prototype._init = function() {
         var existingFileName,
             $input = $( this.element ),
             feedbackMsg = "Awaiting user permission to store local data (files)",
@@ -64,7 +64,7 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
         if ( typeof fileManager == "undefined" || !fileManager ) {
             feedbackClass = "warning";
             feedbackMsg = "File uploads not supported."; //" in previews and iframed views.";
-        } else if ( !fileManager.isSupported( ) ) {
+        } else if ( !fileManager.isSupported() ) {
             feedbackClass = "warning";
             feedbackMsg = "File uploads not supported by your browser";
         } else {
@@ -77,12 +77,12 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
             .after( '<div class="file-feedback text-' + feedbackClass + '">' + feedbackMsg + '</div>' );
 
         if ( !allClear ) {
-            $( this.element ).hide( );
+            $( this.element ).hide();
             return;
         }
 
-        this._changeListener( );
-        this._createDirectory( );
+        this._changeListener();
+        this._createDirectory();
 
         //this attribute is added by the Form instance when loading data to edit
         existingFileName = $input.attr( 'data-loaded-file-name' );
@@ -90,11 +90,11 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
             $input.after( '<div class="file-loaded text-warning">This form was loaded with "' +
                 existingFileName + '". To preserve this file, do not change this input.</div>' );
         }
-        $input.parent( ).addClass( 'with-media clearfix' );
+        $input.parent().addClass( 'with-media clearfix' );
 
     };
 
-    OfflineFilepicker.prototype._changeListener = function( ) {
+    OfflineFilepicker.prototype._changeListener = function() {
         /*
       This delegated eventhander should actually be added asynchronously (or not at all if no FS support/permission). However, it
       needs to start *before* the regular input change event handler for 2 reasons:
@@ -104,7 +104,7 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
      */
         var $input = $( this.element );
         $input.on( 'change.passthrough.' + this.namespace, function( event ) {
-            if ( fileManager.getCurrentQuota( ) ) {
+            if ( fileManager.getCurrentQuota() ) {
                 var prevFileName, file, mediaType, $preview;
                 //console.debug( 'namespace: ' + event.namespace );
                 if ( event.namespace === 'passthrough' ) {
@@ -120,7 +120,7 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
                 if ( prevFileName && ( !file || prevFileName !== file.name ) ) {
                     fileManager.deleteFile( prevFileName );
                 }
-                $input.siblings( '.file-feedback, .file-preview, .file-loaded' ).remove( );
+                $input.siblings( '.file-feedback, .file-preview, .file-loaded' ).remove();
                 console.debug( 'file: ', file );
                 if ( file && file.size > 0 && file.size <= maxSubmissionSize ) {
                     //save it in filesystem
@@ -154,7 +154,7 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
         } );
     };
 
-    OfflineFilepicker.prototype._getInstanceID = function( ) {
+    OfflineFilepicker.prototype._getInstanceID = function() {
         var id = $( 'form.jr' ).data( 'instanceID' );
         if ( !id ) {
             console.error( 'Filepicker widget could not find instanceID. Files will not be saved correctly!' );
@@ -162,26 +162,26 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
         return id;
     };
 
-    OfflineFilepicker.prototype._createDirectory = function( ) {
+    OfflineFilepicker.prototype._createDirectory = function() {
         var $input = $( this.element ),
             callbacks = {
-                success: function( ) {
+                success: function() {
                     console.log( 'Whoheee, we have permission to use the file system' );
                     $input.removeClass( 'ignore force-disabled' )
                         .prop( 'disabled', false )
-                        .siblings( '.file-feedback' ).remove( )
-                        .end( )
+                        .siblings( '.file-feedback' ).remove()
+                        .end()
                         .after( '<div class="file-feedback text-info">' +
                             'File inputs are experimental. Use only for testing.' );
                 },
-                error: function( ) {
-                    $input.siblings( '.file-feedback' ).remove( );
+                error: function() {
+                    $input.siblings( '.file-feedback' ).remove();
                     $input.after( '<div class="file-feedback text-warning">' +
                         'No permission given to store local data (or an error occurred).</div>' );
                 }
             };
 
-        fileManager.setDir( this._getInstanceID( ), callbacks );
+        fileManager.setDir( this._getInstanceID(), callbacks );
     };
 
     /**
@@ -191,7 +191,7 @@ define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileMana
 
         options = options || {};
 
-        return this.each( function( ) {
+        return this.each( function() {
             var $this = $( this ),
                 data = $this.data( pluginName );
 

@@ -14,10 +14,10 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     function init( $group ) {
         $form = $( 'form.jr' );
         $group = $group || $form;
-        widgetConfig = [ ];
+        widgetConfig = [];
 
         if ( !loaded ) {
-            load( function( ) {
+            load( function() {
                 create( $group );
             } );
         } else {
@@ -32,9 +32,9 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
      */
 
     function load( callback ) {
-        require( globalConfig.widgets, function( ) {
+        require( globalConfig.widgets, function() {
             var id,
-                widgetConfigFiles = [ ];
+                widgetConfigFiles = [];
 
             console.log( 'widget modules loaded', arguments.length );
 
@@ -45,13 +45,13 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
             }
 
             //load widget config files
-            require( widgetConfigFiles, function( ) {
+            require( widgetConfigFiles, function() {
                 for ( var i = 0; i < arguments.length; i++ ) {
                     widgetConfig.push( JSON.parse( arguments[ i ] ) );
                 }
                 console.log( 'widget config files loaded', widgetConfig.length );
                 loaded = true;
-                callback( );
+                callback();
             } );
         } );
     }
@@ -167,7 +167,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     function setLangChangeHandler( widget, $els ) {
         //call update for all widgets when language changes 
         if ( $els.length > 0 ) {
-            $form.on( 'changelanguage', function( ) {
+            $form.on( 'changelanguage', function() {
                 console.debug( 'change language event detected, going to update', widget.name );
                 $els[ widget.name ]( 'update' );
             } );
@@ -184,8 +184,8 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
      */
 
     function setOptionChangeHandler( widget, $els ) {
-        if ( $els.length > 0 && $els.prop( 'nodeName' ).toLowerCase( ) === 'select' ) {
-            $form.on( 'changeoption', 'select', function( ) {
+        if ( $els.length > 0 && $els.prop( 'nodeName' ).toLowerCase() === 'select' ) {
+            $form.on( 'changeoption', 'select', function() {
                 console.debug( 'option change detected, going to update', widget.name, 'for', $( this ) );
                 //update (itemselect) picker on which event was triggered because the options changed
                 $( this )[ widget.name ]( 'update' );

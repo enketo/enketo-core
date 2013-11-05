@@ -30,7 +30,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
 
     function Notewidget( element, options ) {
         Widget.call( this, element, options );
-        this._init( );
+        this._init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -39,23 +39,23 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
     //ensure the constructor is the new one
     Notewidget.prototype.constructor = Notewidget;
 
-    Notewidget.prototype._init = function( ) {
-        $( this.element ).parent( 'label' ).each( function( ) {
+    Notewidget.prototype._init = function() {
+        $( this.element ).parent( 'label' ).each( function() {
             console.log( 'converting readonly to trigger', $( this ) );
             var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
                 branch = ( relevant ) ? ' jr-branch pre-init' : '',
                 name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
                 attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
-                value = $( this ).find( 'input, select, textarea' ).val( ),
-                html = $( this ).markdownToHtml( ).html( );
+                value = $( this ).find( 'input, select, textarea' ).val(),
+                html = $( this ).markdownToHtml().html();
             $( '<fieldset class="trigger alert alert-block' + branch + '" ' + attributes + '></fieldset>' )
-                .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove( );
-            $( this ).remove( );
+                .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove();
+            $( this ).remove();
         } );
     };
 
     $.fn[ pluginName ] = function( options, event ) {
-        return this.each( function( ) {
+        return this.each( function() {
             var $this = $( this ),
                 data = $this.data( pluginName );
 

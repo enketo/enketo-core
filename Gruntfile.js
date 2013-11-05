@@ -142,7 +142,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
     grunt.loadNpmTasks( 'grunt-closure-compiler' );
 
-    grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function( ) {
+    grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function() {
         var widgetConfig, widgetFolderPath, widgetSassPath, widgetConfigPath,
             config = grunt.config( 'prepWidgetSass' ),
             widgets = grunt.file.readJSON( config.widgetConfigPath ).widgets,
@@ -171,7 +171,7 @@ module.exports = function( grunt ) {
 
     } );
     grunt.registerTask( 'compile', [ 'requirejs:combine', 'closure-compiler:compile' ] );
-    grunt.registerTask( 'test', [ /**'jsbeautifier:test',*/ 'connect:test', 'jasmine' ] );
+    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'connect:test', 'jasmine' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'default', [ 'jshint', 'prepWidgetSass', 'sass', 'test' ] );

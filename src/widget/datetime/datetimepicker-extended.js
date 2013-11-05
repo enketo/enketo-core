@@ -41,7 +41,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
         function DatetimepickerExtended( element, options, event ) {
             //call the Super constructor
             Widget.call( this, element, options );
-            this._init( );
+            this._init();
         }
 
         //copy the prototype functions from the Widget super class
@@ -53,7 +53,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
         /**
          * Initialize timepicker widget
          */
-        DatetimepickerExtended.prototype._init = function( ) {
+        DatetimepickerExtended.prototype._init = function() {
             var $dateTimeI = $( this.element ),
                 /*
           Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
@@ -61,14 +61,14 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
           original entry may have been done in a different time zone than the edit). However, 
           values shown in the widget should reflect the local time representation of that value.
          */
-                val = ( $dateTimeI.val( ).length > 0 ) ? new Date( $dateTimeI.val( ) ).toISOLocalString( ) : '',
+                val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '',
                 vals = val.split( 'T' ),
                 dateVal = vals[ 0 ],
                 timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '',
                 $fakeDateI = this._createFakeDateInput( dateVal ),
                 $fakeTimeI = this._createFakeTimeInput( timeVal );
 
-            $dateTimeI.hide( ).after( '<div class="datetimepicker widget" />' );
+            $dateTimeI.hide().after( '<div class="datetimepicker widget" />' );
             $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDateI.closest( '.date' ) ).append( $fakeTimeI.closest( '.bootstrap-timepicker' ) );
 
             $fakeDateI.datepicker( {
@@ -89,13 +89,13 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
             this._setManualHandler( $fakeDateI );
             this._setFocusHandler( $fakeDateI.add( $fakeTimeI ) );
 
-            $fakeDateI.on( 'change changeDate', function( ) {
-                changeVal( );
+            $fakeDateI.on( 'change changeDate', function() {
+                changeVal();
                 return false;
             } );
 
-            $fakeTimeI.on( 'change', function( ) {
-                changeVal( );
+            $fakeTimeI.on( 'change', function() {
+                changeVal();
                 return false;
             } );
 
@@ -105,13 +105,13 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
                 $fakeTimeI.val( '' ).trigger( 'change' );
             } );
 
-            function changeVal( ) {
-                if ( $fakeDateI.val( ).length > 0 && $fakeTimeI.val( ).length > 0 ) {
-                    var d = $fakeDateI.val( ).split( '-' ),
-                        t = $fakeTimeI.val( ).split( ':' );
-                    $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString( ) ).trigger( 'change' ).blur( );
+            function changeVal() {
+                if ( $fakeDateI.val().length > 0 && $fakeTimeI.val().length > 0 ) {
+                    var d = $fakeDateI.val().split( '-' ),
+                        t = $fakeTimeI.val().split( ':' );
+                    $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' ).blur();
                 } else {
-                    $dateTimeI.val( '' ).trigger( 'change' ).blur( );
+                    $dateTimeI.val( '' ).trigger( 'change' ).blur();
                 }
             }
         };
@@ -174,7 +174,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
 
             options = options || {};
 
-            return this.each( function( ) {
+            return this.each( function() {
                 var $this = $( this ),
                     data = $this.data( pluginName ),
                     badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
