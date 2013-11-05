@@ -7,8 +7,7 @@ $baseFontSize: 15px;
 $baseLineHeight: 20px;
 $accent-color-1: #CE4F07;
 $images-path: '../../images/';
-$iconSpritePath: url('/images/glyphicons-halflings.png'); 
-$iconWhiteSpritePath: url('/images/glyphicons-halflings-white.png');
+$icon-font-path: '/lib/bootstrap-sass/fonts/';
 
 @mixin font-bold {
   font-family: 'OpenSans', Arial, sans-serif;;
@@ -20,98 +19,57 @@ $iconWhiteSpritePath: url('/images/glyphicons-halflings-white.png');
   font-weight: normal;
   font-style: normal; }
 
-// Bootstrap v2.1.1
-//
-// Copyright 2012 Twitter, Inc
-// Licensed under the Apache License v2.0
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Designed and built with all the love in the world @twitter by @mdo and @fat.
-// Converted to Sass by @thomasmcdonald_, and distributed as bootstrap-sass
+//Bootstrap-sass from: https://github.com/thomas-mcdonald/bootstrap-sass
 
 // Core variables and mixins
-@import "../../lib/bootstrap-sass/bootstrap/variables"; // Modify this for custom colors, font-sizes, etc
+@import "../../lib/bootstrap-sass/bootstrap/variables";
 @import "../../lib/bootstrap-sass/bootstrap/mixins";
 
-// CSS Reset
-@import "../../lib/bootstrap-sass/bootstrap/reset";
+// Reset
+@import "../../lib/bootstrap-sass/bootstrap/normalize";
+@import "../../lib/bootstrap-sass/bootstrap/print";
 
-// Grid system and page structure
+// Core CSS
 @import "../../lib/bootstrap-sass/bootstrap/scaffolding";
-@import "../../lib/bootstrap-sass/bootstrap/grid";
-@import "../../lib/bootstrap-sass/bootstrap/layouts";
-
-// Base CSS
 @import "../../lib/bootstrap-sass/bootstrap/type";
 @import "../../lib/bootstrap-sass/bootstrap/code";
-@import "../../lib/bootstrap-sass/bootstrap/forms";
+@import "../../lib/bootstrap-sass/bootstrap/grid";
 @import "../../lib/bootstrap-sass/bootstrap/tables";
-
-// Components: common
-@import "../../lib/bootstrap-sass/bootstrap/sprites";
-@import "../../lib/bootstrap-sass/bootstrap/dropdowns";
-@import "../../lib/bootstrap-sass/bootstrap/wells";
-@import "../../lib/bootstrap-sass/bootstrap/component-animations";
-@import "../../lib/bootstrap-sass/bootstrap/close";
-
-// Components: Buttons & Alerts
+@import "../../lib/bootstrap-sass/bootstrap/forms";
 @import "../../lib/bootstrap-sass/bootstrap/buttons";
-@import "../../lib/bootstrap-sass/bootstrap/button-groups";
-@import "../../lib/bootstrap-sass/bootstrap/alerts"; // Note: alerts share common CSS with buttons and thus have styles in _buttons.scss
 
-// Components: Nav
+// Components
+@import "../../lib/bootstrap-sass/bootstrap/component-animations";
+@import "../../lib/bootstrap-sass/bootstrap/glyphicons";
+@import "../../lib/bootstrap-sass/bootstrap/dropdowns";
+@import "../../lib/bootstrap-sass/bootstrap/button-groups";
+@import "../../lib/bootstrap-sass/bootstrap/input-groups";
 @import "../../lib/bootstrap-sass/bootstrap/navs";
 @import "../../lib/bootstrap-sass/bootstrap/navbar";
 @import "../../lib/bootstrap-sass/bootstrap/breadcrumbs";
 @import "../../lib/bootstrap-sass/bootstrap/pagination";
 @import "../../lib/bootstrap-sass/bootstrap/pager";
+@import "../../lib/bootstrap-sass/bootstrap/labels";
+@import "../../lib/bootstrap-sass/bootstrap/badges";
+@import "../../lib/bootstrap-sass/bootstrap/jumbotron";
+@import "../../lib/bootstrap-sass/bootstrap/thumbnails";
+@import "../../lib/bootstrap-sass/bootstrap/alerts";
+@import "../../lib/bootstrap-sass/bootstrap/progress-bars";
+@import "../../lib/bootstrap-sass/bootstrap/media";
+@import "../../lib/bootstrap-sass/bootstrap/list-group";
+@import "../../lib/bootstrap-sass/bootstrap/panels";
+@import "../../lib/bootstrap-sass/bootstrap/wells";
+@import "../../lib/bootstrap-sass/bootstrap/close";
 
-// Components: Popovers
+// Components w/ JavaScript
 @import "../../lib/bootstrap-sass/bootstrap/modals";
 @import "../../lib/bootstrap-sass/bootstrap/tooltip";
 @import "../../lib/bootstrap-sass/bootstrap/popovers";
-
-// Components: Misc
-@import "../../lib/bootstrap-sass/bootstrap/thumbnails";
-@import "../../lib/bootstrap-sass/bootstrap/labels-badges";
-@import "../../lib/bootstrap-sass/bootstrap/progress-bars";
-@import "../../lib/bootstrap-sass/bootstrap/accordion";
 @import "../../lib/bootstrap-sass/bootstrap/carousel";
-@import "../../lib/bootstrap-sass/bootstrap/hero-unit";
 
 // Utility classes
-@import "../../lib/bootstrap-sass/bootstrap/utilities"; // Has to be last to override when necessary
-
-// REPEAT VARIABLES & MIXINS
-// -------------------------
-// Required since we compile the responsive stuff separately
-
-@import "../../lib/bootstrap-sass/bootstrap/variables"; // Modify this for custom colors, font-sizes, etc
-@import "../../lib/bootstrap-sass/bootstrap/mixins";
-
-// RESPONSIVE CLASSES
-// ------------------
-
+@import "../../lib/bootstrap-sass/bootstrap/utilities";
 @import "../../lib/bootstrap-sass/bootstrap/responsive-utilities";
-
-// MEDIA QUERIES
-// ------------------
-
-// Large desktops
-@import "../../lib/bootstrap-sass/bootstrap/responsive-1200px-min";
-
-// Tablets to regular desktops
-@import "../../lib/bootstrap-sass/bootstrap/responsive-768px-979px";
-
-// Phones to portrait tablets and narrow desktops
-@import "../../lib/bootstrap-sass/bootstrap/responsive-767px-max";
-
-
-// RESPONSIVE NAVBAR
-// ------------------
-
-// From 979px and below, show a button to toggle navbar contents
-@import "../../lib/bootstrap-sass/bootstrap/responsive-navbar";
 
 @import "core/mixins";
 @import "core/layout";
