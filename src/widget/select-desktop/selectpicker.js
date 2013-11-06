@@ -36,10 +36,9 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
             e.preventDefault();
         }
 
-        this.$widget = null;
-        this.selectClass = options.btnStyle || '';
+        this.$picker = null;
         this.noneSelectedText = options.noneSelectedText || 'none selected';
-        this.lengthmax = options.maxlength || 20;
+        this.lengthmax = options.maxlength || 15;
         this.multiple = ( typeof $( element ).attr( 'multiple' ) !== 'undefined' && $( element ).attr( 'multiple' ) !== false );
         this._init();
     }
@@ -52,27 +51,25 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
 
     DesktopSelectpicker.prototype._init = function() {
         var $template = this._getTemplate(),
-            $element = $( this.element );
-        $element.css( 'display', 'none' );
+            $select = $( this.element );
+        $select.css( 'display', 'none' );
         $template = this._createLi( $template );
-        $element.after( $template );
-        this.$widget = $element.next( '.bootstrap-select' );
-        this.$widget.find( '> a' ).addClass( this.selectClass );
+        this.$picker = $template.insertAfter( $select );
+        this.$picker.find( '> a' ).addClass( this.selectClass );
         this._clickListener();
-        //this._focusListener(  );
+        this._focusListener();
     };
 
     DesktopSelectpicker.prototype._getTemplate = function() {
         var template =
-            "<div class='btn-group bootstrap-select widget'>" +
-            "<a class='btn dropdown-toggle clearfix' data-toggle='dropdown' href='#''>" +
-            "<span class='filter-option pull-left'>__SELECTED_OPTIONS</span>" +
-            "<span class='caret pull-right'></span>" +
-            "</a>" +
-            "<ul class='dropdown-menu' role='menu'>" +
-            "__ADD_LI" +
-            "</ul>" +
-            "</div>";
+            '<div class="btn-group bootstrap-select widget">' +
+            '<button type="button" class="btn btn-default dropdown-toggle clearfix" data-toggle="dropdown">' +
+            '<span class="selected">__SELECTED_OPTIONS</span><span class="caret pull-right"></span>' +
+            '</button>' +
+            '<ul class="dropdown-menu" role="menu">' +
+            '__ADD_LI' +
+            '</ul>' +
+            '</div>';
 
         return template;
     };
@@ -100,13 +97,16 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
                 if ( li[ i ].value ) {
                     checkedInputAttr = ( li[ i ].selected ) ? " checked='checked'" : '';
                     checkedLiAttr = ( li[ i ].selected && !_this.multiple ) ? "class='active'" : '';
-                    //e.g. <li checked="checked">
-                    //        <a tabindex="-1" href="#">
-                    //          <label>
-                    //            <input class="ignore" type="checkbox" checked="checked" value="a"/>
-                    //          </label>
-                    //        </a>
-                    //     </li>
+                    /**
+                     * e.g.:
+                     * <li checked="checked">
+                     *   <a tabindex="-1" href="#">
+                     *         <label>
+                     *           <input class="ignore" type="checkbox" checked="checked" value="a"/>
+                     *         </label>
+                     *       </a>
+                     *    </li>
+                     */
                     liHtml +=
                         "<li " + checkedLiAttr + ">" +
                         "<a tabindex='-1' href='#'>" +
@@ -121,7 +121,7 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
 
         template = template.replace( '__ADD_LI', liHtml );
 
-        return template;
+        return $( template );
     };
 
 
@@ -130,10 +130,10 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
      * @param  {jQuery=} $select  jQuery-wrapped select element
      * @return {string}
      */
-    DesktopSelectpicker.prototype._createSelectedStr = function( $select ) {
+    DesktopSelectpicker.prototype._createSelectedStr = function() {
         var textToShow,
-            selectedLabels = [];
-        $select = $select || $( this.element );
+            selectedLabels = [],
+            $select = $( this.element );
         $select.find( 'option:selected' ).each( function() {
             if ( $( this ).attr( 'value' ).length > 0 ) {
                 selectedLabels.push( $( this ).text() );
@@ -150,19 +150,23 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
     DesktopSelectpicker.prototype._clickListener = function() {
         var _this = this;
 
-        this.$widget.find( 'li' ).on( 'click', function( e ) {
+        this.$picker.find( 'li' ).on( 'click', function( e ) {
             e.preventDefault();
             var $li = $( this ),
                 $input = $li.find( 'input' ),
-                $picker = $li.parents( '.bootstrap-select' ),
-                $select = $picker.prev( 'select' ),
+                $select = $( _this.element ),
                 $option = $select.find( 'option[value="' + $input.val() + '"]' ),
                 selectedBefore = $option.is( ':selected' );
 
+            console.log( 'li', $li, 'select', $select, 'option', $option );
+
             if ( !_this.multiple ) {
-                $picker.find( 'li' ).removeClass( 'active' );
+                _this.$picker.find( 'li' ).removeClass( 'active' );
                 $option.siblings( 'option' ).prop( 'selected', false );
-                $picker.find( 'input' ).prop( 'checked', false );
+                _this.$picker.find( 'input' ).prop( 'checked', false );
+            } else {
+                //don't close dropdown for multiple select
+                e.stopPropagation();
             }
 
             if ( selectedBefore ) {
@@ -177,34 +181,30 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
                 $option.prop( 'selected', true );
             }
 
-            $picker.find( '.filter-option' ).html( _this._createSelectedStr( $select ) );
+            _this.$picker.find( '.selected' ).html( _this._createSelectedStr() );
 
             $select.trigger( 'change' );
         } );
     };
 
-    //this listener for fake focus and blur events has a bug and actually breaks the widget!
-    //TODO: when bootstrap 3.0 has launched, used the dropdown open and close events to do this.
     DesktopSelectpicker.prototype._focusListener = function() {
+        var _this = this;
 
-        this.$widget.find( '.dropdown-toggle' ).hover(
-            function() {
-                console.debug( 'focus...' );
-                this.$widget.trigger( 'focus' );
-                return true;
-            },
-            function() {
-                console.debug( 'blur...' );
-                this.$widget.trigger( 'blur' );
-                return true;
-            }
-        );
+        this.$picker.on( 'shown.bs.dropdown', function() {
+            console.debug( 'focus...' );
+            $( _this.element ).trigger( 'fakefocus' );
+            return true;
+        } ).on( 'hidden.bs.dropdown', function() {
+            console.debug( 'blur...' );
+            $( _this.element ).trigger( 'fakeblur' );
+            return true;
+        } );
     };
 
     //override super method
     DesktopSelectpicker.prototype.disable = function() {
         //disables the default link behaviour in disabled state
-        this.$widget.find( 'a.dropdown-toggle' ).on( 'click', function( event ) {
+        this.$picker.find( 'a.dropdown-toggle' ).on( 'click', function( event ) {
             event.preventDefault();
         } );
         console.debug( pluginName, 'disable called' );
@@ -213,7 +213,7 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
     //override super method
     DesktopSelectpicker.prototype.update = function() {
         console.debug( pluginName, 'update called' );
-        this.$widget.remove();
+        this.$picker.remove();
         this._init();
     };
 
@@ -233,9 +233,10 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
 
             //only instantiate if options is an object AND if options.touch is falsy
             if ( !data && typeof options == 'object' && !options.touch ) {
+                console.log( 'initializing desktopselect widget' );
                 $this.data( pluginName, ( data = new DesktopSelectpicker( this, options, event ) ) );
             } else if ( data && typeof options == 'string' ) {
-                data[ options ]();
+                data[ options ]( this );
             }
         } );
     };

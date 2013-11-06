@@ -1,15 +1,17 @@
 .bootstrap-select{
   margin-top: 15px;
   .dropdown-toggle{
-    line-height: $input-height;
+    //line-height: $input-height;
     min-width: $input-min-width - 14px;
     //font-weight: normal;
     @include font-normal;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-align: left;
-    min-width: $input-min-width -14px;
-    a .filter-option{
-      padding-right: 10px;}
+    //a .filter-option{
+    //  padding-right: 10px;}
+    .caret {
+      margin-left:10px;
+      margin-top: 7px;}
     ~ .dropdown-menu{
       label{
         //font-weight: normal;

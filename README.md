@@ -7,6 +7,7 @@ This repo is meant to use as a building block for your own enketo-powered applic
 
 Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
+__If you think this repo is mildly useful, consider hitting the star button...__
 
 ##Enketo-core 2.0 is Under Active Construction!
 
@@ -71,8 +72,8 @@ Each widget needs to fulfill following requires:
 * any eventhandlers added to the original input should be namespaced (if extending thew Widget base class, the namespace is available as `this.namespace`)
 * if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option `{ touch: [boolean] }` is passed to the plugin by default. If your widget requires tweaks for mobile, you could create an all-in-one widget using the `options.touch` check or you could create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow clearing of the original input (i.e. setting value to '')
-* [to check: send a focus event to the original input when the widget gets focus]
-* [for extra robustness where applicable: if the widget already exists, destroy it first]
+* send a `fakefocus` and `fakeblur` event to the original input when the widget gets focus or looses it (see desktopSelectpicker)
+
 
 ###Notes for All Developers
 

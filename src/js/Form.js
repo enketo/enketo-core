@@ -1484,15 +1484,16 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     }
                 } );
 
-                $form.on( 'focus blur', '[required]', function( event ) {
+                //using fakefocus because hidden (by widget) elements won't get focus
+                $form.on( 'focus blur fakefocus fakeblur', '[required]', function( event ) {
                     var props = that.input.getProps( $( this ) ),
                         loudErrorShown = ( $( this ).parents( '.invalid-required, .invalid-constraint' ).length > 0 ),
                         insideTable = ( $( this ).parents( '.or-appearance-list-nolabel' ).length > 0 ),
                         $reqSubtle = $( this ).next( '.required-subtle' ),
                         reqSubtle = $( '<span class="required-subtle focus" style="color: transparent;">Required</span>' );
-
-                    if ( event.type === 'focusin' ) {
+                    if ( event.type === 'focusin' || event.type === "fakefocus" ) {
                         if ( $reqSubtle.length === 0 && !insideTable ) {
+                            console.log( 'add required mess' );
                             $reqSubtle = $( reqSubtle );
                             $reqSubtle.insertAfter( this );
                             if ( !loudErrorShown ) {
@@ -1503,7 +1504,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         } else if ( !loudErrorShown ) {
                             $reqSubtle.addClass( 'focus' );
                         }
-                    } else if ( event.type === 'focusout' ) {
+                    } else if ( event.type === 'focusout' || event.type === 'fakeblur' ) {
+                        console.log( 'remove required mess' );
                         if ( props.val.length > 0 ) {
                             $reqSubtle.remove();
                         } else {
