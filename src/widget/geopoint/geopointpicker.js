@@ -118,12 +118,12 @@ define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget )
 
     Geopointpicker.prototype._addDomElements = function() {
         var detect =
-            '<button name="geodetect" type="button" class="btn" title="detect current location" data-placement="top">' +
-            '<i class="icon-crosshairs"></i></button>',
+            '<button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top">' +
+            '<i class="glyphicon glyphicon-screenshot"> </i></button>',
             search =
-                '<div class="input-append">' +
-                '<input class="geo ignore" name="search" type="text" placeholder="search for place or address" disabled="disabled"/>' +
-                '<button type="button" class="btn add-on"><i class="icon-search"></i>' +
+                '<div class="input-group">' +
+                '<input class="geo ignore form-control" name="search" type="text" placeholder="search for place or address" disabled="disabled"/>' +
+                '<span class="input-group-btn"><button class="btn btn-default"><i class="glyphicon glyphicon-search"> </i></button></span>' +
                 '</div>',
             map = '<div class="map-canvas-wrapper"><div class="map-canvas"></div></div>';
 

@@ -2,14 +2,12 @@
   background-image: url($images-path+"crosshairs.png");
   background-position: -5px -5px;
 }
-
 .geopoint { 
   $map-height: 275px;
   $map-width: 65%;
   $input-width: 27%;
   $separator-width: 4%;
   $detect-width: 40px;
-  $search-width: 85%;
   margin-top: 25px;
   .geo-inputs {
     min-width: 160px;
@@ -30,14 +28,16 @@
     img{
       width: 100%;
       height: 100%; } }
-  .search-bar .input-append {
-    width: $search-width; }
-  button, .input-append .add-on {
-    height: 44px;
+  .search-bar .form-control { 
+    margin-top: 0;}
+  button {
+    height: 34px;
     &[name="geodetect"] {
       display: inline-block;
       float: right;
-      margin: 8px 0 0 $separator-width;
+      padding-bottom: 1px;
+      font-size: 16px;
+      margin: 0 0 0 $separator-width;
       width: $detect-width; } }
   .no-search-input{
     &.no-map{
