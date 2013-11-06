@@ -40,6 +40,15 @@ module.exports = function( grunt ) {
             },
             all: [ '*.js', 'src/js/**/*.js', '!src/js/extern.js' ]
         },
+        watch: {
+            sass: {
+                files: [ 'config.json', 'src/**/*.scss' ],
+                tasks: [ 'style' ],
+                options: {
+                    spawn: false
+                }
+            }
+        },
         jasmine: {
             test: {
                 src: 'src/js/**/*.js',
@@ -93,7 +102,8 @@ module.exports = function( grunt ) {
         sass: {
             dist: {
                 options: {
-                    style: 'compressed'
+                    style: 'compressed',
+                    noCache: true
                 },
                 files: [ {
                     expand: true,
@@ -137,6 +147,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-connect' );
     grunt.loadNpmTasks( 'grunt-jsbeautifier' );
     grunt.loadNpmTasks( 'grunt-contrib-jasmine' );
+    grunt.loadNpmTasks( 'grunt-contrib-watch' );
     grunt.loadNpmTasks( 'grunt-contrib-jshint' );
     grunt.loadNpmTasks( 'grunt-contrib-sass' );
     grunt.loadNpmTasks( 'grunt-contrib-requirejs' );

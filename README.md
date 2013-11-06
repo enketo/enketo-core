@@ -76,7 +76,8 @@ Each widget needs to fulfill following requires:
 
 ###Notes for All Developers
 
-* build with Grunt (using Compass is also possible as long as config.json does not change)
+* build with Grunt (using Compass for sass is also possible as long as config.json does not change)
+* use `grunt watch` to automatically compile (sass) when a source file changes
 * requires webserver - one is included in this repo and can be fired up with `grunt server`
 
 ###Notes for JavaScript Developers
