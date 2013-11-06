@@ -1493,7 +1493,6 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         reqSubtle = $( '<span class="required-subtle focus" style="color: transparent;">Required</span>' );
                     if ( event.type === 'focusin' || event.type === "fakefocus" ) {
                         if ( $reqSubtle.length === 0 && !insideTable ) {
-                            console.log( 'add required mess' );
                             $reqSubtle = $( reqSubtle );
                             $reqSubtle.insertAfter( this );
                             if ( !loudErrorShown ) {
@@ -1505,7 +1504,6 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             $reqSubtle.addClass( 'focus' );
                         }
                     } else if ( event.type === 'focusout' || event.type === 'fakeblur' ) {
-                        console.log( 'remove required mess' );
                         if ( props.val.length > 0 ) {
                             $reqSubtle.remove();
                         } else {

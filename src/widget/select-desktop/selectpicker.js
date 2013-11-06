@@ -191,11 +191,9 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
         var _this = this;
 
         this.$picker.on( 'shown.bs.dropdown', function() {
-            console.debug( 'focus...' );
             $( _this.element ).trigger( 'fakefocus' );
             return true;
         } ).on( 'hidden.bs.dropdown', function() {
-            console.debug( 'blur...' );
             $( _this.element ).trigger( 'fakeblur' );
             return true;
         } );
