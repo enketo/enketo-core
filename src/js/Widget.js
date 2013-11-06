@@ -42,7 +42,7 @@ define( [ 'jquery' ], function( $ ) {
          * This is what the repeat controller does. It calls $input.mywidget('destroy') and $input.mywidget({}) in succession.
          * In some rare cases, this may simply be an empty function (e.g. see note widget).
          *
-         * @param  {Element} element The element the widget is applied on
+         * @param  {Element} element The element the widget is applied on. Note that if element was clone this.element applies to the origin.
          */
         destroy: function( element ) {
             $( element )
@@ -52,9 +52,9 @@ define( [ 'jquery' ], function( $ ) {
             .off( '.' + this.namespace )
             //show the original element
             .show()
-            //remove elements after the target that have the widget class
+            //remove elements immediately after the target that have the widget class
             .next( '.widget' ).remove();
-            console.debug( this.namespace, 'destroyed data and handlers with namespace: ' + this.namespace );
+            console.debug( this.namespace, 'destroy' );
         },
         /**
          * Do whatever necessary to ensure that the widget does not allow user input if its parent branch is disabled.

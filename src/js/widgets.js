@@ -1,7 +1,8 @@
 define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $ ) {
     "use strict";
 
-    var $form, widgetConfig,
+    var $form,
+        widgetConfig = [],
         loaded = false,
         globalConfig = JSON.parse( config );
 
@@ -14,7 +15,6 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     function init( $group ) {
         $form = $( 'form.or' );
         $group = $group || $form;
-        widgetConfig = [];
 
         if ( !loaded ) {
             load( function() {
@@ -114,7 +114,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     /**
      * Fixes deeply cloned widgets, if necessary. This function is only called with the repeat clone as a parameter.
      * Many eventhandlers inside widgets get messed up when they are cloned. If so this function will have to fix
-     * that. In most widgets the destroy method will simple replace this.element with the cloned element.
+     * that. The init function is called programmatically immediately afterwards.
      *
      * @param  {jQuery} $group The element inside which all widgets need to be fixed.
      */
