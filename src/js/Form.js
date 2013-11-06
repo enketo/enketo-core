@@ -1072,7 +1072,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         }
                     } );
                 //TODO: move to XSLT
-                $form.find( '.trigger' ).addClass( 'alert alert-block' );
+                $form.find( '.trigger' ).addClass( 'alert alert-warning' );
 
                 //move constraint message to bottom of question and add message for required (could also be done in XSLT)
                 //TODO: move to XSLT
@@ -1271,8 +1271,8 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     this.formO = formO;
                     $form.find( 'fieldset.or-repeat' ).prepend( '<span class="repeat-number"></span>' );
                     $form.find( 'fieldset.or-repeat:not([data-repeat-fixed])' )
-                        .append( '<button type="button" class="btn repeat"><i class="icon-plus"></i></button>' +
-                            '<button type="button" disabled class="btn remove"><i class="icon-minus"></i></button>' );
+                        .append( '<button type="button" class="btn btn-default repeat"><i class="glyphicon glyphicon-plus"> </i></button>' +
+                            '<button type="button" disabled class="btn btn-default remove"><i class="glyphicon glyphicon-minus"> </i></button>' );
 
                     //delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
                     $form.on( 'click', 'button.repeat:enabled', function() {

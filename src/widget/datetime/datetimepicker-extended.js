@@ -143,7 +143,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
                     '<div class="bootstrap-timepicker">' +
                     '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' +
                     timeVal + '" placeholder="hh:mm"/>' +
-                    '<button class="btn-reset"><i class="icon icon-trash"></i></button>' +
+                    '<button class="btn-reset"><i class="glyphicon glyphicon-trash"> </i></button>' +
                     '</div>' ),
                 $fakeTimeI = $fakeTime.find( 'input' );
 

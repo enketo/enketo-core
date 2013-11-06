@@ -48,7 +48,7 @@ define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
                 attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
                 value = $( this ).find( 'input, select, textarea' ).val(),
                 html = $( this ).markdownToHtml().html();
-            $( '<fieldset class="trigger alert alert-block' + branch + '" ' + attributes + '></fieldset>' )
+            $( '<fieldset class="trigger alert alert-warning' + branch + '" ' + attributes + '></fieldset>' )
                 .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove();
             $( this ).remove();
         } );

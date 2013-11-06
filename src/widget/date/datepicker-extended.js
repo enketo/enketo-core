@@ -85,7 +85,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
                 $fakeDate = $(
                     '<div class="widget date"><input class="ignore input-small" readonly="readonly" type="text" value="' +
                     $dateI.val() + '" placeholder="' + format + '" />' +
-                    '<button class="btn-reset"><i class="icon icon-trash"></i></button></div>' ),
+                    '<button class="btn-reset"><i class="glyphicon glyphicon-trash"> </i></button></div>' ),
                 //$fakeDateReset = $fakeDate.find( '.btn-reset' ),
                 $fakeDateI = $fakeDate.find( 'input' );
 
