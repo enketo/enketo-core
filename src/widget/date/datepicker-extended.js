@@ -135,7 +135,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
         DatepickerExtended.prototype._setFocusHandler = function( $fakeDateI ) {
             var that = this;
             $fakeDateI.on( 'focus blur', function( event ) {
-                $( that.element ).trigger( event.type );
+                $( that.element ).trigger( 'fake' + event.type );
             } );
         };
 

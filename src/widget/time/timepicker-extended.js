@@ -77,7 +77,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/
             } );
 
             $fakeTimeI.on( 'focus blur', function( event ) {
-                $timeI.trigger( event.type );
+                $timeI.trigger( 'fake' + event.type );
             } );
         };
 

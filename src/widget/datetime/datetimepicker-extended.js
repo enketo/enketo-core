@@ -166,7 +166,7 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
         DatetimepickerExtended.prototype._setFocusHandler = function( $els ) {
             var that = this;
             $els.on( 'focus blur', function( event ) {
-                $( that.element ).trigger( event.type );
+                $( that.element ).trigger( 'fake' + event.type );
             } );
         };
 
