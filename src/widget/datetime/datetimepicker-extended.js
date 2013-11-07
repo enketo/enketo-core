@@ -16,7 +16,7 @@
 
 define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
         'widget/date/bootstrap-datepicker/js/bootstrap-datepicker',
-        'widget/time/bootstrap-timepicker/js/bootstrap-timepicker'
+        'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker'
     ],
     function( Widget, modernizr, $ ) {
         "use strict";

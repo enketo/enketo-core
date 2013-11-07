@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap-timepicker/js/bootstrap-timepicker' ],
+define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker' ],
     function( Widget, modernizr, $ ) {
         "use strict";
 

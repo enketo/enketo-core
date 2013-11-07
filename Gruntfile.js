@@ -79,7 +79,7 @@ module.exports = function( grunt ) {
                                     deps: [ 'jquery' ],
                                     exports: 'jQuery.fn.datepicker'
                                 },
-                                'widget/time/bootstrap-timepicker/js/bootstrap-timepicker': {
+                                'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker': {
                                     deps: [ 'jquery' ],
                                     exports: 'jQuery.fn.timepicker'
                                 }
