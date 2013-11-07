@@ -10,3 +10,6 @@
 [submodule "src/widget/date/bootstrap-datepicker"]
 	path = src/widget/date/bootstrap-datepicker
 	url = https://github.com/eternicode/bootstrap-datepicker.git
+[submodule "src/widget/time/bootstrap-timepicker"]
+	path = src/widget/time/bootstrap-timepicker
+	url = https://github.com/m3wolf/bootstrap3-timepicker.git
