@@ -62,7 +62,7 @@ define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
 
     DesktopSelectpicker.prototype._getTemplate = function() {
         var template =
-            '<div class="btn-group bootstrap-select widget">' +
+            '<div class="btn-group bootstrap-select widget clearfix">' +
             '<button type="button" class="btn btn-default dropdown-toggle clearfix" data-toggle="dropdown">' +
             '<span class="selected">__SELECTED_OPTIONS</span><span class="caret pull-right"></span>' +
             '</button>' +

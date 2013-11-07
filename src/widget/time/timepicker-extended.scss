@@ -174,6 +174,11 @@
 
 /** added by Martijn **/
 
-.bootstrap-timepicker .glyphicon-trash{
-  color: #000;
-}
+.bootstrap-timepicker{
+    input[type="text"] {
+        display: inline-block;
+        width: $input-min-width;} }
+.bootstrap-timepicker-widget {
+    &.dropdown-menu {
+        input{
+            margin: 0 auto; } } }

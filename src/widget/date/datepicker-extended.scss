@@ -482,9 +482,10 @@
 
 /** fixes by martijn **/
 
-.date .glyphicon-trash{
-  color: #000;
-}
+.date {
+  input[type="text"] {
+    display:inline-block;
+    width: $input-min-width;} }
 
 /** BOOTSTRAP DATEPICKER Fix for month/year views **/
 //.datepicker-months, .datepicker-years {

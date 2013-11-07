@@ -61,14 +61,16 @@ define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
      */
     MobileSelectpicker.prototype._showSelectedValues = function() {
         var i, valueText = [],
+            template = '<span class="widget mobileselect"></span>',
             $select = $( this.element ),
+            $widget = ( $select.next( '.widget' ).length > 0 ) ? $select.next( '.widget' ) : $( template ).insertAfter( $select ),
             values = ( $.isArray( $select.val() ) ) ? $select.val() : [ $select.val() ];
 
         for ( i = 0; i < values.length; i++ ) {
             valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text() );
         }
 
-        $select.after( '<span class="widget mobileselect">' + values.join( ', ' ) + '</span>' );
+        $widget.text( values.join( ', ' ) );
     };
 
     $.fn[ pluginName ] = function( options, event ) {

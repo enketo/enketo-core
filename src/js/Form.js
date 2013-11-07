@@ -1489,12 +1489,12 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                     var props = that.input.getProps( $( this ) ),
                         loudErrorShown = ( $( this ).parents( '.invalid-required, .invalid-constraint' ).length > 0 ),
                         insideTable = ( $( this ).parents( '.or-appearance-list-nolabel' ).length > 0 ),
-                        $reqSubtle = $( this ).next( '.required-subtle' ),
+                        $reqSubtle = $( this ).prev( '.required-subtle' ),
                         reqSubtle = $( '<span class="required-subtle focus" style="color: transparent;">Required</span>' );
                     if ( event.type === 'focusin' || event.type === "fakefocus" ) {
                         if ( $reqSubtle.length === 0 && !insideTable ) {
                             $reqSubtle = $( reqSubtle );
-                            $reqSubtle.insertAfter( this );
+                            $reqSubtle.insertBefore( this );
                             if ( !loudErrorShown ) {
                                 $reqSubtle.show( function() {
                                     $( this ).removeAttr( 'style' );

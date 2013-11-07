@@ -40,6 +40,12 @@
   body {
     background: none;
     line-height: 1.09 * $baseLineHeight; }
+  input{
+    &[type="text"],&[type="password"], &[type="url"], &[type="email"],
+    &[type="date"], &[type="number"], &[type="time"], &[type="datetime"], &[type="file"]{
+      width: 100%; } }
+  select, textarea {
+    width: 100%; }
   .main{ 
     margin: 0;
     article {

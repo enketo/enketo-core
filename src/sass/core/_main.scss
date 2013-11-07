@@ -126,8 +126,8 @@ label, legend, .trigger {
   float: right;
   max-height: 300px;
   max-width: 70%; } }
-input:not([type="radio"]):not([type="checkbox"]), textarea, select {
-  display: inline-block;
+input:not([type="radio"]):not([type="checkbox"]), textarea, select, .widget {
+  display: block;
   margin: 8px 0 0 0; }
 .touch{
   input:not([type="radio"]):not([type="checkbox"]), textarea, select {
@@ -142,10 +142,10 @@ input:not([type="radio"]):not([type="checkbox"]), textarea, select {
 input:not([type="radio"]):not([type="checkbox"]), textarea {
   height: $input-height; }
 input{
-  &[type="text"],&[type="password"], &[type="url"], &[type="email"] {
+  &[type="text"],&[type="password"], &[type="url"], &[type="email"], &[type="file"] {
   width: $input-max-width } }
 input{
-  &[type=date], &[type=number] {
+  &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
   width: $input-min-width; } }
 input[type="radio"], input[type=checkbox] {
   margin: -2px 8px 0px 7px; }
@@ -205,17 +205,8 @@ fieldset {
     @include error-text; } } 
 .or-branch {
   display: none;}
-.date, .bootstrap-timepicker {
-  input {
-    width: $input-min-width;} }
-.bootstrap-timepicker {     //MOVE THIS
-  display: inline-block; } 
-.date {                     //MOVE THIS
-  display: inline-block;
-  margin-right: 10px; } 
 .btn-reset {
   margin-left: 10px;
-  color: #ddd;
   background: none;
   border: none;
   box-shadow: none;
@@ -225,4 +216,5 @@ fieldset {
   &[readonly] {
     background: none; }
   i{
+    color: #000;
     vertical-align: bottom;} }
