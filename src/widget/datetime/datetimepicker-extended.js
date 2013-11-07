@@ -15,7 +15,7 @@
  */
 
 define( [ 'js/Widget', 'modernizr', 'jquery', 'js/extend',
-        'widget/date/bootstrap-datepicker/js/bootstrap-datepicker',
+        'widget/date/bootstrap3-datepicker/js/bootstrap-datepicker',
         'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker'
     ],
     function( Widget, modernizr, $ ) {

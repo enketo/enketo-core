@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/js/bootstrap-datepicker' ],
+define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
     function( Widget, modernizr, $ ) {
         "use strict";
 
@@ -70,6 +70,11 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
             } ).on( 'changeDate', function( e ) {
                 // copy changes made by datepicker to original input field
                 var value = $( this ).val();
+                if ( startView === 'decade' && value.length === 4 ) {
+                    value += '-01-01';
+                } else if ( startView === 'year' && value.length < 8 ) {
+                    value += '-01';
+                }
                 console.log( 'datepicker date changed to', value );
                 $( that.element ).val( value ).trigger( 'change' ).blur();
             } );
@@ -149,15 +154,15 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap-datepicker/
                     badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
 
                 /*
-        Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field
-        already has a value and is edited. The new value YYYY-MM-DD prepends old or replaces the year of the old value and first hyphen. E.g.
-        existing: 2010-01-01, new value entered: 2012-12-12 => input field shows: 2012-12-1201-01.
-        This doesn't seem to effect the actual value of the input, just the way it is displayed. But if the incorrectly displayed date is then 
-        attempted to be edited again, it does get the incorrect value and it's impossible to clear this and create a valid date.
-      
-        browser: "Mozilla/5.0 (Linux; U; Android 4.1.1; en-us; GT-P3113 Build/JRO03C) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30";
-        webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30" 
-        */
+                Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field
+                already has a value and is edited. The new value YYYY-MM-DD prepends old or replaces the year of the old value and first hyphen. E.g.
+                existing: 2010-01-01, new value entered: 2012-12-12 => input field shows: 2012-12-1201-01.
+                This doesn't seem to effect the actual value of the input, just the way it is displayed. But if the incorrectly displayed date is then 
+                attempted to be edited again, it does get the incorrect value and it's impossible to clear this and create a valid date.
+              
+                browser: "Mozilla/5.0 (Linux; U; Android 4.1.1; en-us; GT-P3113 Build/JRO03C) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30";
+                webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30" 
+                */
 
                 if ( !data && typeof options === 'object' && ( !options.touch || !modernizr.inputtypes.date || badSamsung.test( navigator.userAgent ) ) ) {
                     $this.data( pluginName, ( data = new DatepickerExtended( this, options, event ) ) );
