@@ -49,30 +49,41 @@ define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap3-datepicker
         DatepickerExtended.prototype._init = function() {
             var that = this,
                 $p = $( this.element ).parent( 'label' ),
-                startView = ( $p.hasClass( 'or-appearance-month-year' ) ) ? 'year' :
-                    ( $p.hasClass( 'or-appearance-year' ) ) ? 'decade' : 'month',
-                targetEvent = ( $p.hasClass( 'or-appearance-month-year' ) ) ? 'changeMonth' :
-                    ( $p.hasClass( 'or-appearance-year' ) ) ? 'changeYear' : 'changeDate',
-                format = ( startView === 'year' ) ? 'yyyy-mm' :
-                    ( startView === 'decade' ) ? 'yyyy' : 'yyyy-mm-dd',
-                $fakeDateI = this._createFakeDateInput( format );
+                settings = ( $p.hasClass( 'or-appearance-year' ) ) ? {
+                    format: 'yyyy',
+                    startView: 'decade',
+                    minViewMode: 'years'
+                } : ( $p.hasClass( 'or-appearance-month-year' ) ) ? {
+                    format: 'yyyy-mm',
+                    startView: 'year',
+                    minViewMode: 'months'
+                } : {
+                    format: 'yyyy-mm-dd',
+                    startView: 'month',
+                    minViewMode: 'day'
+                },
+                $fakeDateI = this._createFakeDateInput( settings.format );
 
             this._setManualHandler( $fakeDateI );
             this._setFocusHandler( $fakeDateI );
             this._setResetHandler( $fakeDateI );
 
+            console.log( 'setting picker with settings:', settings );
+
             $fakeDateI.datepicker( {
-                format: format,
+                format: settings.format,
                 autoclose: true,
                 todayHighlight: true,
-                startView: startView,
+                startView: settings.startView,
+                minViewMode: settings.minViewMode,
                 orientation: 'top'
             } ).on( 'changeDate', function( e ) {
                 // copy changes made by datepicker to original input field
                 var value = $( this ).val();
-                if ( startView === 'decade' && value.length === 4 ) {
+                console.log( 'unchanged value', value );
+                if ( settings.startView === 'decade' && value.length === 4 ) {
                     value += '-01-01';
-                } else if ( startView === 'year' && value.length < 8 ) {
+                } else if ( settings.startView === 'year' && value.length < 8 ) {
                     value += '-01';
                 }
                 console.log( 'datepicker date changed to', value );
