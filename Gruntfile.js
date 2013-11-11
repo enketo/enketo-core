@@ -1,3 +1,8 @@
+/**
+ * When using enketo-core in your own app, you'd want to replace
+ * this build file with one of your own in your project root.
+ */
+
 /*jshint node:true*/
 "use strict";
 
@@ -114,31 +119,17 @@ module.exports = function( grunt ) {
                 } ]
             }
         },
-        // this compiles all javascript to a single file, it is only used to prepare for 
-        // testing closure compiler build warnings and errors
+        // this compiles all javascript to a single minified file
         requirejs: {
-            combine: {
+            compile: {
                 options: {
                     name: '../app',
                     baseUrl: 'lib',
                     mainConfigFile: "app.js",
                     findNestedDependencies: true,
                     include: [ 'require.js', 'js/Widget' ].concat( grunt.file.readJSON( 'config.json' ).widgets ),
-                    out: "build/js/combined.js",
-                    optimize: "none"
-                }
-            }
-        },
-        //closurePath may be different. I installed with brew closure-compiler on Mac
-        'closure-compiler': {
-            compile: {
-                closurePath: '/usr/local/opt/closure-compiler/libexec/',
-                js: 'build/js/combined.js',
-                jsOutputFile: 'build/js/combined.min.js',
-                maxBuffer: 500,
-                options: {
-                    compilation_level: 'ADVANCED_OPTIMIZATIONS',
-                    language_in: 'ECMASCRIPT5_STRICT'
+                    out: "build/js/combined.min.js",
+                    optimize: "uglify2"
                 }
             }
         }
@@ -151,7 +142,6 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-jshint' );
     grunt.loadNpmTasks( 'grunt-contrib-sass' );
     grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
-    grunt.loadNpmTasks( 'grunt-closure-compiler' );
 
     grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function() {
         var widgetConfig, widgetFolderPath, widgetSassPath, widgetConfigPath,

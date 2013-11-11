@@ -37,14 +37,14 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
          *
          */
         FormModel.prototype.init = function() {
-            var val;
+            var /** @type {string} */ val;
 
             //trimming values
             this.node( null, null, {
                 noEmpty: true,
                 noTemplate: false
             } ).get().each( function() {
-                val = /** @type {string} */ $( this ).text();
+                val = $( this ).text();
                 $( this ).text( $.trim( val ) );
             } );
 
@@ -108,7 +108,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
          * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
          */
         Nodeset.prototype.get = function() {
-            var p, $nodes, val, context;
+            var p, $nodes, /** @type {string} */ val, context;
 
             // noTemplate is ignored if onlyTemplate === true
             if ( this.filter.onlyTemplate === true ) {
@@ -123,7 +123,7 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             //noEmpty automatically excludes non-leaf nodes
             if ( this.filter.noEmpty === true ) {
                 $nodes = $nodes.filter( function() {
-                    val = /** @type {string} */ $( this ).text();
+                    val = $( this ).text();
                     return $( this ).children().length === 0 && $.trim( val ).length > 0; //$.trim($this.text()).length > 0;
                 } );
             }

@@ -563,7 +563,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 setSelect: function( $select ) {
                     var value, /** @type {string} */ curLabel, /** @type {string} */ newLabel;
                     $select.children( 'option' ).not( '[value=""]' ).each( function() {
-                        curLabel = /** @type {string} */ $( this ).text();
+                        curLabel = $( this ).text();
                         value = $( this ).attr( 'value' );
                         newLabel = $( this ).parent( 'select' ).siblings( '.or-option-translations' )
                             .children( '.active[data-option-value="' + value + '"]' ).text().trim();
@@ -854,7 +854,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                 $form.find( cleverSelector ).each( function() {
-                    var $htmlItem, $htmlItemLabels, value, $instanceItems, index, context,
+                    var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, $instanceItems, index, context,
                         $template = $( this ),
                         newItems = {},
                         prevItems = $template.data(),
@@ -918,7 +918,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                             $labels.find( '[data-itext-id="' + $( this ).children( labelRef ).text() + '"]' ).clone() :
                             $( '<span class="active" lang="">' + $( this ).children( labelRef ).text() + '</span>' );
 
-                        value = /**@type {string}*/ $( this ).children( valueRef ).text();
+                        value = $( this ).children( valueRef ).text();
                         $htmlItem.find( '[value]' ).attr( 'value', value );
 
                         if ( templateNodeName === 'label' ) {
@@ -999,11 +999,11 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                 } );
 
                 //hints may have changed too
-                if ( outputChanged ) {
-                    //this.setHints( {
-                    //    outputsOnly: true
-                    //} );
-                }
+                //if ( outputChanged ) {
+                //this.setHints( {
+                //    outputsOnly: true
+                //} );
+                //}
             };
 
             /**
