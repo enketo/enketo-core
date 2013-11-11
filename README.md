@@ -10,17 +10,6 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 __If you think this repo is mildly useful, consider hitting the star button...__
 
 
-###Related Projects
-
-* [XPathJS_javarosa](https://github.com/MartijnR/xpathjs_javarosa) - used inside this repo
-* [enketo-xslt](https://github.com/MartijnR/enketo-xslt) - the XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
-* [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) - a minimalistic example in PHP of an XSLT transformer
-* [enketo-xslt-transformer-node] - To follow
-* [enketo-dristhi](https://github.com/MartijnR/enketo-dristhi)
-* [file-manager](https://github.com/MartijnR/file-manager)
-* [openrosa-forms](https://github.com/MartijnR/openrosa-forms) - bunch of test forms, for development
-* [enketo-api-docs](https://github.com/MartijnR/enketo-api-docs) - recommended API to support with your app
-
 ###How to run it
 
 1. install node, npm, grunt-cli
@@ -45,13 +34,15 @@ __Add 'js/Form' as a dependency to your main/app.js:__
 
 requirejs(['js/Form'], function (Form){
 
-	// the XSL transformation result contains a HTML Form and XML instance. These can be obtained dynamically, or at the server.
-	// in this example we assume the HTML was injected at the server and modelStr was injected as a global variable inside a <script> tag.
+	// The XSL transformation result contains a HTML Form and XML instance.
+	// These can be obtained dynamically on the client, or at the server/
+	// In this example we assume the HTML was injected at the server and modelStr 
+	// was injected as a global variable inside a <script> tag.
 
-	// string of the jquery selector of the HTML Form element, e.g. `form.or:eq(0)' (output result of XSL Transformation)
-	var formSelector = `form.or:eq(0)';
+	// string of the jquery selector of the HTML Form DOM element
+	var formSelector = 'form.or:eq(0)';
 
-	// string of the default instance defined in the XForm (output result of the XSL Transformation)
+	// string of the default instance defined in the XForm
 	var modelStr = globalXMLInstance;
 
 	// string of an existing instance to be edited
@@ -115,7 +106,6 @@ Each widget needs to fulfill following requires:
 * allow clearing of the original input (i.e. setting value to '')
 * send a `fakefocus` and `fakeblur` event to the original input when the widget gets focus or looses it (see desktopSelectpicker)
 
-
 ###Notes for All Developers
 
 * build with Grunt (using Compass for sass is also possible as long as config.json does not change)
@@ -147,3 +137,14 @@ I would like to acknowledge and thank the indirect contribution by the creators 
 * [Bootstrap](http://twitter.github.com/bootstrap/)
 * [Bootstrap Datepicker by eternicode](https://github.com/eternicode/bootstrap-datepicker)
 * [Bootstrap Timepicker by jdewit](http://jdewit.github.io/bootstrap-timepicker/)
+
+###Related Projects
+
+* [XPathJS_javarosa](https://github.com/MartijnR/xpathjs_javarosa) - used inside this repo
+* [enketo-xslt](https://github.com/MartijnR/enketo-xslt) - the XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
+* [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) - a minimalistic example in PHP of an XSLT transformer
+* [enketo-xslt-transformer-node] - To follow
+* [enketo-dristhi](https://github.com/MartijnR/enketo-dristhi)
+* [file-manager](https://github.com/MartijnR/file-manager)
+* [openrosa-forms](https://github.com/MartijnR/openrosa-forms) - bunch of test forms, for development
+* [enketo-api-docs](https://github.com/MartijnR/enketo-api-docs) - recommended API to support with your app
