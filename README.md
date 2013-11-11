@@ -27,9 +27,8 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 3. Add your fork as a git submodule to your app (e.g. in /lib). This provides an easy way to pull updates to enketo-core into your application.
 4. Ignore (or copy parts of) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead (in your App's root)
 5. If you make changes to enketo-core, send a pull request to the [https://github.com/MartijnR/enketo-core]! As an added advantage, when your pull request gets accepted it will be much easier to keep your app up-to-date with the latest enketo-core updates without merge conflicts.
-6. Main methods:
+6. Main methods illustrated in code below:
 
-__Add 'js/Form' as a dependency to your main/app.js:__
 ```javascript 
 
 requirejs(['js/Form'], function (Form){
