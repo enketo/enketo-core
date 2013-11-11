@@ -426,13 +426,13 @@ define( [ 'xpath', 'jquery', 'js/plugins', 'js/extend' ], function( XPathJS, $ )
             template = this.node( selector, 0, {
                 onlyTemplate: true
             } );
-        console.log( 'cloning model template' );
+        //console.log( 'cloning model template' );
         //if form does not use jr:template="" but the node-to-clone does exist
         template = ( template.get().length === 0 ) ? this.node( selector, 0 ) : template;
         name = template.get().prop( 'nodeName' );
-        console.log( 'going to find node to insert after', selector, index );
+        //console.log( 'going to find node to insert after', selector, index );
         $insertAfterNode = this.node( selector, index ).get();
-        console.log( 'found it', $insertAfterNode.length );
+        //console.log( 'found it', $insertAfterNode.length );
 
         //if templatenodes and insertafternode(s) have been identified AND the node following insertafternode doesn't already exist(! important for nested repeats!)
         if ( template.get().length === 1 && $insertAfterNode.length === 1 && $insertAfterNode.next().prop( 'nodeName' ) !== name ) { //this.node(selector, index+1).get().length === 0){

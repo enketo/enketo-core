@@ -36,7 +36,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
             var id,
                 widgetConfigFiles = [];
 
-            console.log( 'widget modules loaded', arguments.length );
+            //console.log( 'widget modules loaded', arguments.length );
 
             //add widget configuration to config object
             for ( var i = 0; i < globalConfig.widgets.length; i++ ) {
@@ -49,7 +49,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
                 for ( var i = 0; i < arguments.length; i++ ) {
                     widgetConfig.push( JSON.parse( arguments[ i ] ) );
                 }
-                console.log( 'widget config files loaded', widgetConfig.length );
+                //console.log( 'widget config files loaded', widgetConfig.length );
                 loaded = true;
                 callback();
             } );
@@ -82,7 +82,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     function enable( $group ) {
         var widget, $els;
 
-        console.debug( 'enabling widgets in ', $group );
+        //console.debug( 'enabling widgets in ', $group );
 
         for ( var i = 0; i < widgetConfig.length; i++ ) {
             widget = widgetConfig[ i ];
@@ -102,7 +102,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     function disable( $group ) {
         var widget, $els;
 
-        console.debug( 'disabling widgets in ', $group );
+        //console.debug( 'disabling widgets in ', $group );
 
         for ( var i = 0; i < widgetConfig.length; i++ ) {
             widget = widgetConfig[ i ];
@@ -168,7 +168,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
         //call update for all widgets when language changes 
         if ( $els.length > 0 ) {
             $form.on( 'changelanguage', function() {
-                console.debug( 'change language event detected, going to update', widget.name );
+                //console.debug( 'change language event detected, going to update', widget.name );
                 $els[ widget.name ]( 'update' );
             } );
         }
@@ -186,7 +186,7 @@ define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $
     function setOptionChangeHandler( widget, $els ) {
         if ( $els.length > 0 && $els.prop( 'nodeName' ).toLowerCase() === 'select' ) {
             $form.on( 'changeoption', 'select', function() {
-                console.debug( 'option change detected, going to update', widget.name, 'for', $( this ) );
+                //console.debug( 'option change detected, going to update', widget.name, 'for', $( this ) );
                 //update (itemselect) picker on which event was triggered because the options changed
                 $( this )[ widget.name ]( 'update' );
             } );

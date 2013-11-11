@@ -802,7 +802,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
                         $branchNode.addClass( 'disabled' ); //;
 
                         //if ( typeof settings !== 'undefined' && typeof settings.showBranch !== 'undefined' && !settings.showBranch ) {
-                        console.log( 'hiding branch', $branchNode );
+                        //console.log( 'hiding branch', $branchNode );
                         $branchNode.hide( 250 );
                         //}
 
@@ -877,7 +877,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
 
                     index = ( insideRepeatClone ) ? that.input.getIndex( $input ) : 0;
 
-                    console.log( 'inside clone?', insideRepeatClone );
+                    //console.log( 'inside clone?', insideRepeatClone );
 
                     if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                         $instanceItems = itemsCache[ itemsXpath ];
@@ -1020,7 +1020,7 @@ define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js
             FormView.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function() {
                 var $culprit = $form.find( '[name$="/meta/instanceID"][data-calculate]' );
                 if ( $culprit.length > 0 ) {
-                    console.log( "Found meta/instanceID with binding that has a calculate attribute and removed this calculation. It ain't right!" );
+                    //console.log( "Found meta/instanceID with binding that has a calculate attribute and removed this calculation. It ain't right!" );
                     $culprit.removeAttr( 'data-calculate' );
                 }
             };

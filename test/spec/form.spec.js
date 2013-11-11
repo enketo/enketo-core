@@ -251,7 +251,7 @@ define( [ "js/Form" ], function( Form ) {
                 var dataEditStr1a = dataEditStr1.replace( /thedata/g, 'thedata_updated' );
                 form = loadForm( 'thedata.xml', dataEditStr1a ); //new Form(formStr1, dataStr1, dataEditStr1a);
                 loadErrors = form.init();
-                console.log( 'loadErrors: ', loadErrors );
+                //console.log( 'loadErrors: ', loadErrors );
                 expect( loadErrors.length ).toEqual( 11 );
             } );
 

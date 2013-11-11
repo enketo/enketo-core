@@ -54,7 +54,7 @@ define( [ 'jquery' ], function( $ ) {
             .show()
             //remove elements immediately after the target that have the widget class
             .next( '.widget' ).remove();
-            console.debug( this.namespace, 'destroy' );
+            //console.debug( this.namespace, 'destroy' );
         },
         /**
          * Do whatever necessary to ensure that the widget does not allow user input if its parent branch is disabled.
@@ -62,21 +62,21 @@ define( [ 'jquery' ], function( $ ) {
          * Check with $('.or-branch').show() whether input is disabled in a disabled branch.
          */
         disable: function() {
-            console.debug( this.namespace, 'disable' );
+            //console.debug( this.namespace, 'disable' );
         },
         /**
          * Does whatever necessary to enable the widget if its parent branch is enabled.
          * Most of the times this function can remain empty.
          */
         enable: function() {
-            console.debug( this.namespace, 'enable' );
+            //console.debug( this.namespace, 'enable' );
         },
         /**
          * Updates languages and <option>s (cascading selects.
          * Most of the times this function can remain empty
          */
         update: function() {
-            console.debug( this.namespace, 'update' );
+            //console.debug( this.namespace, 'update' );
         }
 
     };
