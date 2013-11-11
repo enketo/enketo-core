@@ -9,10 +9,6 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 
 __If you think this repo is mildly useful, consider hitting the star button...__
 
-##Enketo-core 2.0 is Under Active Construction!
-
-It will be considered stable when [this milestone](https://github.com/MartijnR/enketo-core/issues?milestone=1&state=open) is reached.
-
 
 ###Related Projects
 
@@ -23,6 +19,7 @@ It will be considered stable when [this milestone](https://github.com/MartijnR/e
 * [enketo-dristhi](https://github.com/MartijnR/enketo-dristhi)
 * [file-manager](https://github.com/MartijnR/file-manager)
 * [openrosa-forms](https://github.com/MartijnR/openrosa-forms) - bunch of test forms, for development
+* [enketo-api-docs](https://github.com/MartijnR/enketo-api-docs) - recommended API to support with your app
 
 ###How to run it
 
@@ -41,7 +38,51 @@ It will be considered stable when [this milestone](https://github.com/MartijnR/e
 3. Add your fork as a git submodule to your app (e.g. in /lib). This provides an easy way to pull updates to enketo-core into your application.
 4. Ignore (or copy parts of) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead (in your App's root)
 5. If you make changes to enketo-core, send a pull request to the [https://github.com/MartijnR/enketo-core]! As an added advantage, when your pull request gets accepted it will be much easier to keep your app up-to-date with the latest enketo-core updates without merge conflicts.
-6. ....to follow: examples for instantiating a form, validating, getting the instance out, editing an existing instance, etc....
+6. Main methods:
+
+__Add 'js/Form' as a dependency to your main/app.js:__
+```javascript 
+
+requirejs(['js/Form'], function (Form){
+
+	// the XSL transformation result contains a HTML Form and XML instance. These can be obtained dynamically, or at the server.
+	// in this example we assume the HTML was injected at the server and modelStr was injected as a global variable inside a <script> tag.
+
+	// string of the jquery selector of the HTML Form element, e.g. `form.or:eq(0)' (output result of XSL Transformation)
+	var formSelector = `form.or:eq(0)';
+
+	// string of the default instance defined in the XForm (output result of the XSL Transformation)
+	var modelStr = globalXMLInstance;
+
+	// string of an existing instance to be edited
+	var modelToEditStr = null;
+
+	// instantiate a form, with 2 (or 3) parameters
+	var form = new Form( formSelector, modelStr, modelToEditStr);
+
+	//initialize the form and capture any load errors
+	var loadErrors = form.init();
+
+	//submit button handler for validate button
+    $( '#submit' ).on( 'click', function() {
+        form.validateForm();
+        if ( !form.isValid() ) {
+            alert( 'Form contains errors. Please see fields marked in red.' );
+        } else {
+            // Record is valid! 
+            var record = form.getDataStr();
+
+            // reset the form view
+            form.resetView();
+
+            // reinstantiate a new form with the default model 
+            form = new Form( 'form.or:eq(0)', modelStr);
+
+            // do what you want with the record
+        }
+    } );
+});
+```
 
 ###How to create or extend widgets
 
