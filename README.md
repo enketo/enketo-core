@@ -16,8 +16,8 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 2. clone repo
 3. install dependencies from project root with `npm install`
 4. build and test with `grunt`
-5. start built-in server with `grunt server` or use an alternative
-6. browse to e.g. 'http://localhost:8080/forms/dev.html`
+5. start built-in server with `grunt server` or use an alternative server
+6. browse to http://localhost:8080/forms/dev.html (static form) or http://localhost:8080/forms/index.html (AJAX form loader)
 
 
 ###Recommended usage as a library
