@@ -1,16 +1,16 @@
 {
-	"widgets": [
-		"widget/note/notewidget",
-		"widget/select-desktop/selectpicker",
-		"widget/select-mobile/selectpicker",
-		"widget/geopoint/geopointpicker",
-		"widget/table/tablewidget",
-		"widget/radio/radiopicker",
-		"widget/time/timepicker-extended",
-		"widget/date/datepicker-extended",
-		"widget/datetime/datetimepicker-extended",
-		"widget/mediagrid/mediagridpicker",
-		"widget/medialabel/medialabelwidget",
-		"widget/file-offline/offline-filepicker"
-	]
+    "widgets": [
+        "enketo-widget/note/notewidget",
+        "enketo-widget/select-desktop/selectpicker",
+        "enketo-widget/select-mobile/selectpicker",
+        "enketo-widget/geopoint/geopointpicker",
+        "enketo-widget/table/tablewidget",
+        "enketo-widget/radio/radiopicker",
+        "enketo-widget/time/timepicker-extended",
+        "enketo-widget/date/datepicker-extended",
+        "enketo-widget/datetime/datetimepicker-extended",
+        "enketo-widget/mediagrid/mediagridpicker",
+        "enketo-widget/medialabel/medialabelwidget",
+        "enketo-widget/file-offline/offline-filepicker"
+    ]
 }

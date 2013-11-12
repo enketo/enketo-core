@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'js/Widget', 'file-manager' ], function( $, Widget, fileManager ) {
+define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, fileManager ) {
     "use strict";
 
     var pluginName = 'offlineFilepicker',

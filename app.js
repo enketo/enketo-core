@@ -1,11 +1,11 @@
 requirejs.config( {
     baseUrl: '../lib/',
     paths: {
-        js: '../src/js',
-        widget: '../src/widget',
+        'enketo-js': '../src/js',
+        'enketo-widget': '../src/widget',
+        'enketo-config': '../config.json',
         text: 'text/text',
         xpath: 'xpath/build/xpathjs_javarosa',
-        config: '../config.json',
         gmaps: 'http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded',
         "file-manager": "file-manager/src/file-manager"
     },
@@ -30,7 +30,7 @@ requirejs.config( {
 
 define( 'modernizr', [], Modernizr );
 
-requirejs( [ 'jquery', 'modernizr', 'js/Form' ],
+requirejs( [ 'jquery', 'modernizr', 'enketo-js/Form' ],
     function( $, modernizr, Form ) {
         var loadErrors, form;
 

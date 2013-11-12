@@ -1,4 +1,4 @@
-define( [ 'text!config', 'modernizr', 'jquery' ], function( config, modernizr, $ ) {
+define( [ 'text!enketo-config', 'modernizr', 'jquery' ], function( config, modernizr, $ ) {
     "use strict";
 
     var $form,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'modernizr', 'js/FormModel', 'js/widgets', 'jquery', 'js/plugins', 'js/extend', 'bootstrap' ],
+define( [ 'modernizr', 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'bootstrap' ],
     function( modernizr, FormModel, widgets, $ ) {
         "use strict";
 

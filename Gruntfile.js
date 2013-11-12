@@ -66,11 +66,11 @@ module.exports = function( grunt ) {
                         requireConfig: {
                             baseUrl: 'lib',
                             paths: {
-                                js: '../src/js',
-                                widget: '../src/widget',
+                                'enketo-js': '../src/js',
+                                'enketo-widget': '../src/widget',
+                                'enketo-config': '../config.json',
                                 text: 'text/text',
-                                xpath: 'xpath/build/xpathjs_javarosa',
-                                config: '../config.json'
+                                xpath: 'xpath/build/xpathjs_javarosa'
                             },
                             shim: {
                                 'xpath': {
@@ -91,8 +91,8 @@ module.exports = function( grunt ) {
                             },
                             map: {
                                 '*': {
-                                    'js': '../src/js',
-                                    'widget': '../src/widget'
+                                    'enketo-js': '../src/js',
+                                    'enketo-widget': '../src/widget'
                                 }
                             }
                         }
@@ -127,7 +127,7 @@ module.exports = function( grunt ) {
                     baseUrl: 'lib',
                     mainConfigFile: "app.js",
                     findNestedDependencies: true,
-                    include: [ 'require.js', 'js/Widget' ].concat( grunt.file.readJSON( 'config.json' ).widgets ),
+                    include: [ 'require.js', 'enketo-js/Widget' ].concat( grunt.file.readJSON( 'config.json' ).widgets ),
                     out: "build/js/combined.min.js",
                     optimize: "uglify2"
                 }
@@ -171,8 +171,8 @@ module.exports = function( grunt ) {
         grunt.file.write( config.writePath, content );
 
     } );
-    grunt.registerTask( 'compile', [ 'requirejs:combine', 'closure-compiler:compile' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'connect:test', 'jasmine' ] );
+    grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
+    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'connect:test', 'compile', 'jasmine' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'default', [ 'jshint', 'prepWidgetSass', 'sass', 'test' ] );

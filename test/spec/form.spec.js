@@ -2,7 +2,7 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ "js/Form" ], function( Form ) {
+define( [ "enketo-js/Form" ], function( Form ) {
 
     var loadForm = function( filename, editStr ) {
         var strings = mockForms1[ filename ];

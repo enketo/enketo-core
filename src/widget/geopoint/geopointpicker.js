@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'gmapsDone', 'js/Widget' ], function( $, gmapsDone, Widget ) {
+define( [ 'jquery', 'gmapsDone', 'enketo-js/Widget' ], function( $, gmapsDone, Widget ) {
     "use strict";
 
     var pluginName = 'geopointpicker';

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'js/Widget', 'modernizr', 'jquery', 'widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
+define( [ 'enketo-js/Widget', 'modernizr', 'jquery', 'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
     function( Widget, modernizr, $ ) {
         "use strict";
 

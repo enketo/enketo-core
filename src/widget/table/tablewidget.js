@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'js/Widget', 'jquery', 'js/plugins' ], function( Widget, $ ) {
+define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget, $ ) {
     "use strict";
 
     var pluginName = 'tablewidget';

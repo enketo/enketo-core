@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'js/Widget', 'bootstrap' ], function( $, Widget ) {
+define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
     "use strict";
 
     var pluginName = 'desktopSelectpicker';

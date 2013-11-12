@@ -2,7 +2,7 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ "js/FormModel" ], function( Model ) {
+define( [ "enketo-js/FormModel" ], function( Model ) {
 
     var getModel = function( filename ) {
         return new Model( mockForms1[ filename ].xml_model );

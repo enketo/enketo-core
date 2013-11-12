@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'js/Widget' ], function( $, Widget ) {
+define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
     "use strict";
 
     var pluginName = 'mobileSelectpicker';
