@@ -2,7 +2,7 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend' ], function( XPathJS, $ ) {
+define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.getXPath' ], function( XPathJS, $ ) {
     "use strict";
 
     //replace browser-built-in-XPath Engine

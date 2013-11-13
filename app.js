@@ -7,7 +7,8 @@ requirejs.config( {
         text: 'text/text',
         xpath: 'xpath/build/xpathjs_javarosa',
         gmaps: 'http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded',
-        "file-manager": "file-manager/src/file-manager"
+        'file-manager': 'file-manager/src/file-manager',
+        'jquery.getXPath': 'jquery-xpath/jquery.getXPath'
     },
     shim: {
         'xpath': {
@@ -78,7 +79,7 @@ requirejs( [ 'jquery', 'modernizr', 'enketo-js/Form' ],
             //initialize form and check for load errors
             loadErrors = form.init();
             if ( loadErrors.length > 0 ) {
-                alert( 'loadErrors: ', loadErrors.toString() );
+                alert( 'loadErrors: ' + loadErrors.join( ', ' ) );
             }
         }
 

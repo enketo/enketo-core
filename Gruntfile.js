@@ -70,7 +70,8 @@ module.exports = function( grunt ) {
                                 'enketo-widget': '../src/widget',
                                 'enketo-config': '../config.json',
                                 text: 'text/text',
-                                xpath: 'xpath/build/xpathjs_javarosa'
+                                xpath: 'xpath/build/xpathjs_javarosa',
+                                'jquery.getXPath': 'jquery-xpath/jquery.getXPath'
                             },
                             shim: {
                                 'xpath': {
@@ -151,13 +152,13 @@ module.exports = function( grunt ) {
                 '// based on the content of config.json\r\n\r\n';
 
         widgets.forEach( function( widget ) {
-            if ( widget.indexOf( 'widget/' ) === 0 ) {
+            if ( widget.indexOf( 'enketo-widget/' ) === 0 ) {
                 //strip require.js module name
                 widgetFolderPath = widget.substr( 0, widget.lastIndexOf( '/' ) + 1 );
                 //replace widget require.js path shortcut with proper path relative to src/js
-                widgetSassPath = widgetFolderPath.replace( /^widget\//, '../widget/' );
+                widgetSassPath = widgetFolderPath.replace( /^enketo-widget\//, '../widget/' );
                 //create path to widget config file
-                widgetConfigPath = widgetFolderPath.replace( /^widget\//, 'src/widget/' ) + 'config.json';
+                widgetConfigPath = widgetFolderPath.replace( /^enketo-widget\//, 'src/widget/' ) + 'config.json';
                 grunt.log.writeln( 'widget config path: ' + widgetConfigPath );
                 //create path to widget stylesheet file
                 widgetSassPath += grunt.file.readJSON( widgetConfigPath ).stylesheet;
