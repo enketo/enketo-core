@@ -13,11 +13,11 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 ###How to run it
 
 1. install [node](http://nodejs.org/) (and [npm](https://npmjs.org/)), [grunt-cli](http://gruntjs.com/getting-started)
-2. clone the repo (if you're going to develop, you'd probably want to fork it first)
-3. install dependencies from the project root with `npm install`
+2. clone the repo
+3. install dependencies with `npm install`
 4. build and test with `grunt`
-5. start built-in server with `grunt server` or use an alternative server
-6. browse to http://localhost:8080/forms/dev.html (static form) or http://localhost:8080/forms/index.html (AJAX form loader)
+5. start built-in server with `grunt server` 
+6. browse to http://localhost:8080/forms/dev.html (static form) or http://localhost:8080/forms/index.html (dynamic AJAX form loader)
 
 
 ###Recommended usage as a library
@@ -76,7 +76,7 @@ requirejs(['js/Form'], function (Form){
 
 ###How to create or extend widgets
 
-The form [forms/dev.html](dev.html) is a useful form to test widgets. This [plugin template](https://gist.github.com/MartijnR/6943281) may also be useful for new widgets. It is recommended to use this template.
+The form [dev.html](forms/dev.html) is a useful form to test widgets. This [plugin template](https://gist.github.com/MartijnR/6943281) may also be useful for new widgets. It is recommended to use this template.
 The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
 
 Each widget needs to fulfill following requires:
