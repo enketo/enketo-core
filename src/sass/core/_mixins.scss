@@ -64,11 +64,3 @@
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none; }
-
-@mixin btn-info-extension-flat {
-  background-image: -moz-linear-gradient(top, #5bc0de, #2f96b4);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5bc0de), to(#2f96b4));
-  background-image: -webkit-linear-gradient(top, #5bc0de, #2f96b4);
-  background-image: -o-linear-gradient(top, #5bc0de, #2f96b4);
-  background-image: linear-gradient(to bottom, #3ca5d6, #3696c2);
-  border: 1px solid #3186ad; }
