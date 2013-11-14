@@ -52,6 +52,13 @@ module.exports = function( grunt ) {
                 options: {
                     spawn: false
                 }
+            },
+            js: {
+                files: [ '*.js', 'src/**/*.js', 'build/**/*.css' ],
+                tasks: [ 'modernizr' ],
+                options: {
+                    spawn: false
+                }
             }
         },
         jasmine: {
@@ -133,6 +140,19 @@ module.exports = function( grunt ) {
                     optimize: "uglify2"
                 }
             }
+        },
+        modernizr: {
+            "devFile": "remote",
+            "outputFile": "lib/modernizr.js",
+            "extra": {
+                "shiv": false,
+                "printshiv": true,
+                "load": false,
+                "mq": false,
+                "cssclasses": true
+            },
+            "uglify": false,
+            "parseFiles": true
         }
     } );
 
@@ -143,7 +163,9 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-jshint' );
     grunt.loadNpmTasks( 'grunt-contrib-sass' );
     grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
+    grunt.loadNpmTasks( "grunt-modernizr" );
 
+    //maybe this can be turned into a npm module?
     grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function() {
         var widgetConfig, widgetFolderPath, widgetSassPath, widgetConfigPath,
             config = grunt.config( 'prepWidgetSass' ),
@@ -172,6 +194,7 @@ module.exports = function( grunt ) {
         grunt.file.write( config.writePath, content );
 
     } );
+
     grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
     grunt.registerTask( 'test', [ 'jsbeautifier:test', 'connect:test', 'compile', 'jasmine' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
