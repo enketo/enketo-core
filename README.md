@@ -12,8 +12,8 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 
 ###How to run it
 
-1. install node, npm, grunt-cli
-2. clone repo
+1. install [node](http://nodejs.org/), [npm](https://npmjs.org/)(if not already bundled with node), [grunt-cli](http://gruntjs.com/getting-started)
+2. clone the repo (if you're going to develop, you'd probably want to fork it first)
 3. install dependencies from project root with `npm install`
 4. build and test with `grunt`
 5. start built-in server with `grunt server` or use an alternative server
@@ -22,9 +22,9 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 
 ###Recommended usage as a library
 
-1. Develop a way to perform an XSLT Transformations on the OpenRosa-flavoured XForm inside your app. The transformation will output an XML instance and a HTML form. See [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) for an example. For development purposes you may also use this free (and slow, not robust) API provided by Enketo LLC: [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/) 
+1. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) for an example. For development purposes you may also use this free (and slow, not robust at all) API provided by Enketo LLC: [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/).
 2. Fork enketo-core so you can extend it and easily send pull requests back to this repository.
-3. Add your fork as a git submodule to your app (e.g. in /lib). This provides an easy way to pull updates to enketo-core into your application.
+3. Add your enketo-core fork as a git submodule to your app (e.g. in /lib). This provides an easy way to pull updates to enketo-core into your application.
 4. Ignore (or copy parts of) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead (in your App's root)
 5. If you make changes to enketo-core, send a pull request to the [https://github.com/MartijnR/enketo-core]! As an added advantage, when your pull request gets accepted it will be much easier to keep your app up-to-date with the latest enketo-core updates without merge conflicts.
 6. Main methods illustrated in code below:

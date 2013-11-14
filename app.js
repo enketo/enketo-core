@@ -1,5 +1,5 @@
 requirejs.config( {
-    baseUrl: '../lib/',
+    baseUrl: '../lib',
     paths: {
         'enketo-js': '../src/js',
         'enketo-widget': '../src/widget',
