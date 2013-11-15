@@ -15,38 +15,39 @@
   
   <script type="text/javascript">
     requirejs.config({
-      baseUrl: '../lib/',
+      baseUrl: "../lib/",
       paths: {
-        'enketo-js': '../src/js',
-        'enketo-widget': '../src/widget',
-        'enketo-config': '../config.json',
-        text: 'text/text',
-        xpath: 'xpath/build/xpathjs_javarosa',
-        spec:  '../test/spec/',
-        util:  '../test/util/',
-        mock:  '../test/mock/'
+        "enketo-js": "../src/js",
+        "enketo-widget": "../src/widget",
+        "enketo-config": "../config.json",
+        "text": "text/text",
+        "xpath": "xpath/build/xpathjs_javarosa",
+        "spec":  "../test/spec/",
+        "util":  "../test/util/",
+        "mock":  "../test/mock/",
+        "jquery.getXPath": "jquery-xpath/jquery.getXPath"
       },
       shim: {
-        'xpath': {
-          exports: 'XPathJS'
+        "xpath": {
+          exports: "XPathJS"
         },
-        'bootstrap': {
-          deps: [ 'jquery' ],
-          exports: 'jQuery.fn.bootstrap'
+        "bootstrap": {
+          deps: [ "jquery" ],
+          exports: "jQuery.fn.bootstrap"
         },
-        'widget/date/bootstrap3-datepicker/js/bootstrap-datepicker': {
-          deps: [ 'jquery' ],
-          exports: 'jQuery.fn.datepicker'
+        "widget/date/bootstrap3-datepicker/js/bootstrap-datepicker": {
+          deps: [ "jquery" ],
+          exports: "jQuery.fn.datepicker"
         },
-        'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker': {
-          deps: [ 'jquery' ],
-          exports: 'jQuery.fn.timepicker'
+        "widget/time/bootstrap3-timepicker/js/bootstrap-timepicker": {
+          deps: [ "jquery" ],
+          exports: "jQuery.fn.timepicker"
         }
       }
     });
 
     requirejs([
-      'mock/form.mock', 'mock/transforms.mock', 'mock/modernizr.mock', 'mock/gmaps.mock', 'mock/file-manager.mock',
+      'mock/form.mock', 'mock/transforms.mock', 'mock/Modernizr.mock', 'mock/gmaps.mock', 'mock/file-manager.mock',
       'spec/form.spec', 'spec/formmodel.spec'
     ], function() {
     
