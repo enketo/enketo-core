@@ -1,43 +1,44 @@
 requirejs.config( {
-    baseUrl: '../lib',
+    baseUrl: "../lib",
     paths: {
-        'enketo-js': '../src/js',
-        'enketo-widget': '../src/widget',
-        'enketo-config': '../config.json',
-        text: 'text/text',
-        xpath: 'xpath/build/xpathjs_javarosa',
-        gmaps: 'http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded',
-        'file-manager': 'file-manager/src/file-manager',
-        'jquery.getXPath': 'jquery-xpath/jquery.getXPath'
+        "enketo-js": "../src/js",
+        "enketo-widget": "../src/widget",
+        "enketo-config": "../config.json",
+        "text": "text/text",
+        "xpath": "xpath/build/xpathjs_javarosa",
+        "gmaps": "http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded",
+        "file-manager": "file-manager/src/file-manager",
+        "jquery.getXPath": "jquery-xpath/jquery.getXPath"
     },
     shim: {
-        'xpath': {
-            exports: 'XPathJS'
+        "xpath": {
+            exports: "XPathJS"
         },
-        'bootstrap': {
-            deps: [ 'jquery' ],
-            exports: 'jQuery.fn.bootstrap'
+        "bootstrap": {
+            deps: [ "jquery" ],
+            exports: "jQuery.fn.bootstrap"
         },
-        'widget/date/bootstrap3-datepicker/js/bootstrap-datepicker': {
-            deps: [ 'jquery' ],
-            exports: 'jQuery.fn.datepicker'
+        "widget/date/bootstrap3-datepicker/js/bootstrap-datepicker": {
+            deps: [ "jquery" ],
+            exports: "jQuery.fn.datepicker"
         },
-        'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker': {
-            deps: [ 'jquery' ],
-            exports: 'jQuery.fn.timepicker'
+        "widget/time/bootstrap3-timepicker/js/bootstrap-timepicker": {
+            deps: [ "jquery" ],
+            exports: "jQuery.fn.timepicker"
+        },
+        "Modernizr": {
+            exports: "Modernizr"
         }
     }
 } );
 
-define( 'modernizr', [], Modernizr );
-
-requirejs( [ 'jquery', 'modernizr', 'enketo-js/Form' ],
-    function( $, modernizr, Form ) {
+requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form' ],
+    function( $, Modernizr, Form ) {
         var loadErrors, form;
 
         //if querystring touch=true is added, override Modernizr
         if ( getURLParameter( 'touch' ) === 'true' ) {
-            modernizr.touch = true;
+            Modernizr.touch = true;
             $( 'html' ).addClass( 'touch' );
         }
 

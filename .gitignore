@@ -6,3 +6,4 @@ build/*
 *.sublime-project
 *.sublime-workspace
 _site
+lib/Modernizr.js

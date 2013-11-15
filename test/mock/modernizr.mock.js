@@ -1,1 +1,7 @@
-define('modernizr', [], {touch: false, inputTypes: {date: true, time: true}});
+define( 'Modernizr', [], {
+    touch: false,
+    inputTypes: {
+        date: true,
+        time: true
+    }
+} );

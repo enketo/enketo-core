@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'modernizr', 'jquery', 'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker' ],
-    function( Widget, modernizr, $ ) {
+define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker' ],
+    function( Widget, Modernizr, $ ) {
         "use strict";
 
         var pluginName = 'timepickerExtended';
@@ -89,7 +89,7 @@ define( [ 'enketo-js/Widget', 'modernizr', 'jquery', 'enketo-widget/time/bootstr
                 var $this = $( this ),
                     data = $this.data( pluginName );
 
-                if ( !data && typeof options === 'object' && ( !options.touch || !modernizr.inputtypes.time ) ) {
+                if ( !data && typeof options === 'object' && ( !options.touch || !Modernizr.inputtypes.time ) ) {
                     $this.data( pluginName, ( data = new TimepickerExtended( this, options, event ) ) );
                 }
                 //only call method if widget was instantiated before

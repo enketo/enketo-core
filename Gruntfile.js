@@ -143,7 +143,7 @@ module.exports = function( grunt ) {
         },
         modernizr: {
             "devFile": "remote",
-            "outputFile": "lib/modernizr.js",
+            "outputFile": "lib/Modernizr.js",
             "extra": {
                 "shiv": false,
                 "printshiv": true,

@@ -1,4 +1,4 @@
-define( [ 'text!enketo-config', 'modernizr', 'jquery' ], function( config, modernizr, $ ) {
+define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( config, Modernizr, $ ) {
     "use strict";
 
     var $form,
@@ -141,7 +141,7 @@ define( [ 'text!enketo-config', 'modernizr', 'jquery' ], function( config, moder
         for ( var i = 0; i < widgetConfig.length; i++ ) {
             widget = widgetConfig[ i ];
             widget.options = widget.options || {};
-            widget.options.touch = modernizr.touch;
+            widget.options.touch = Modernizr.touch;
 
             if ( !widget.name || ( !widget.selector && widget.selector !== null ) ) {
                 return console.error( 'widget configuration has no name and/or selector property', widget );
