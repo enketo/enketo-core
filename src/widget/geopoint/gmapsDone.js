@@ -18,13 +18,15 @@
  * @return {Function} function to wrap a callback
  * function for when google maps finishes loading
  */
-window._mapsLoaded = $.Deferred( );
-window.gmapsLoaded = function( ) {
-	delete window.gmapsLoaded;
-	_mapsLoaded.resolve( );
+window._mapsLoaded = $.Deferred();
+window.gmapsLoaded = function() {
+    delete window.gmapsLoaded;
+    _mapsLoaded.resolve();
 };
 
-define( [ 'gmaps' ], function( gmaps ) {
-	"use strict";
-	return window._mapsLoaded.done;
+var gmapsUrl = ( !Modernizr.touch ) ? 'gmaps' : '';
+
+define( [ gmapsUrl ], function( gmaps ) {
+    "use strict";
+    return window._mapsLoaded.done;
 } );

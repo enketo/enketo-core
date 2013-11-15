@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'gmapsDone', 'enketo-js/Widget' ], function( $, gmapsDone, Widget ) {
+define( [ 'jquery', 'enketo-widget/geopoint/gmapsDone', 'enketo-js/Widget' ], function( $, gmapsDone, Widget ) {
     "use strict";
 
     var pluginName = 'geopointpicker';
@@ -46,7 +46,7 @@ define( [ 'jquery', 'gmapsDone', 'enketo-js/Widget' ], function( $, gmapsDone, W
         this._addDomElements();
 
         inputVals = this.$inputOrigin.val().split( ' ' );
-        this.updateMapFn = "_updateDynamicMap";
+        this._updateMapFn = "_updateDynamicMap";
 
         this.$widget.find( 'input:not([name="search"])' ).on( 'change change.bymap change.bysearch', function( event ) {
             var lat = ( that.$lat.val() !== '' ) ? that.$lat.val() : 0.0,
@@ -236,7 +236,7 @@ define( [ 'jquery', 'gmapsDone', 'enketo-js/Widget' ], function( $, gmapsDone, W
         lng = lng || Number( this.$lng.val() );
         zoom = zoom || 15;
         if ( lat === 0 && lng === 0 ) zoom = 1;
-        return this[ this.updateMapFn ]( lat, lng, zoom );
+        return this[ this._updateMapFn ]( lat, lng, zoom );
     };
 
     /**
@@ -250,6 +250,7 @@ define( [ 'jquery', 'gmapsDone', 'enketo-js/Widget' ], function( $, gmapsDone, W
         var params,
             width = this.$map.width(),
             height = this.$map.height(),
+            //TODO: load key inside a settings module?
             mapsAPIKeyStr = ( typeof settings !== 'undefined' && settings[ 'mapsStaticAPIKey' ] ) ? '&key=' + settings[ 'mapsStaticAPIKey' ] : '';
 
         params = "center=" + lat + "," + lng + "&size=" + width + "x" + height + "&zoom=" + zoom + "&sensor=false" + mapsAPIKeyStr;

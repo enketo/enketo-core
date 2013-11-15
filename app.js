@@ -6,7 +6,7 @@ requirejs.config( {
         "enketo-config": "../config.json",
         "text": "text/text",
         "xpath": "xpath/build/xpathjs_javarosa",
-        "gmaps": "http://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded",
+        "gmaps": "https://maps.google.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=gmapsLoaded",
         "file-manager": "file-manager/src/file-manager",
         "jquery.getXPath": "jquery-xpath/jquery.getXPath"
     },
