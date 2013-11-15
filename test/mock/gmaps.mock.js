@@ -1,1 +1,1 @@
-define( 'gmaps', [ ], {} );
+define( 'gmaps', [], {} );

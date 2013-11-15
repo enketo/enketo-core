@@ -24,7 +24,8 @@ window.gmapsLoaded = function() {
     _mapsLoaded.resolve();
 };
 
-var gmapsUrl = ( !Modernizr.touch ) ? 'gmaps' : '';
+//TODO cannot use global Modernizr object here
+var gmapsUrl = ( typeof Modernizr !== 'undefined' && !Modernizr.touch ) ? 'gmaps' : '';
 
 define( [ gmapsUrl ], function( gmaps ) {
     "use strict";
