@@ -24,10 +24,18 @@ window.gmapsLoaded = function() {
     _mapsLoaded.resolve();
 };
 
-//TODO cannot use global Modernizr object here
-var gmapsUrl = ( typeof Modernizr !== 'undefined' && !Modernizr.touch ) ? 'gmaps' : '';
-
-define( [ gmapsUrl ], function( gmaps ) {
+define( [ 'Modernizr', 'text!enketo-config' ], function( Modernizr, configStr ) {
     "use strict";
+    var apiKey, config,
+        loadUrl = '';
+
+    if ( !Modernizr.touch ) {
+        config = JSON.parse( configStr );
+        console.log( 'config', config );
+        apiKey = ( config.gmapsDynamicApiKey ) ? "&key=" + config.gmapsDynamicApiKey : "";
+        loadUrl = "https://maps.google.com/maps/api/js?v=3.exp" + apiKey + "&sensor=false&libraries=places&callback=gmapsLoaded";
+
+        require( [ loadUrl ] );
+    }
     return window._mapsLoaded.done;
 } );

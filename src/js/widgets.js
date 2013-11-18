@@ -1,10 +1,10 @@
-define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( config, Modernizr, $ ) {
+define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( configStr, Modernizr, $ ) {
     "use strict";
 
     var $form,
         widgetConfig = [],
         loaded = false,
-        globalConfig = JSON.parse( config );
+        globalConfig = JSON.parse( configStr );
 
     /**
      * Initializes widgets

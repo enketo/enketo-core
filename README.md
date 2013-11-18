@@ -14,13 +14,11 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 
 1. install [node](http://nodejs.org/) (and [npm](https://npmjs.org/)), [grunt-cli](http://gruntjs.com/getting-started)
 2. clone the repo
-3. install dependencies with `npm install` *
+3. install dependencies with `npm install`
 4. build and test with `grunt`
 5. start built-in server with `grunt server` 
 6. browse to [http://localhost:8080/forms/dev.html](http://localhost:8080/forms/dev.html) (static form) or 
 7. browse to [http://localhost:8080/forms/index.html](http://localhost:8080/forms/index.html) (dynamic AJAX form loader)
-
-* weird npm issues can often be resolved by deleting the node_modules folder and running `npm install` again
 
 
 ###Recommended usage as a library

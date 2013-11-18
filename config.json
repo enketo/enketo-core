@@ -12,5 +12,7 @@
         "enketo-widget/mediagrid/mediagridpicker",
         "enketo-widget/medialabel/medialabelwidget",
         "enketo-widget/file-offline/offline-filepicker"
-    ]
+    ],
+    "gmapsStaticApiKey": "",
+    "gmapsDynamicApiKey": ""
 }
