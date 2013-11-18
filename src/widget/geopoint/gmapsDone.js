@@ -31,7 +31,6 @@ define( [ 'Modernizr', 'text!enketo-config' ], function( Modernizr, configStr ) 
 
     if ( !Modernizr.touch ) {
         config = JSON.parse( configStr );
-        console.log( 'config', config );
         apiKey = ( config.gmapsDynamicApiKey ) ? "&key=" + config.gmapsDynamicApiKey : "";
         loadUrl = "https://maps.google.com/maps/api/js?v=3.exp" + apiKey + "&sensor=false&libraries=places&callback=gmapsLoaded";
 

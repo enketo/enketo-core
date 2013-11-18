@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'enketo-widget/geopoint/gmapsDone', 'enketo-js/Widget', 'text!enketo-config' ],
-    function( $, gmapsDone, Widget, configStr ) {
+define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
+    function( $, Widget, configStr ) {
         "use strict";
 
-        var pluginName = 'geopointpicker',
+        var gmapsDone,
+            deferred = $.Deferred(),
+            gmapsLoadStarted = false,
+            pluginName = 'geopointpicker',
             config = JSON.parse( configStr );
 
         /**
@@ -30,9 +33,26 @@ define( [ 'jquery', 'enketo-widget/geopoint/gmapsDone', 'enketo-js/Widget', 'tex
          */
 
         function Geopointpicker( element, options ) {
-            //call the super class constructor
+            var that = this;
+            // call the super class constructor
             Widget.call( this, element, options );
-            this._init();
+
+            // Only load the gmaps script if the widget is instantiated for the first time
+            // So if the form does not have a geopoint input the script will never be loaded.
+            if ( !gmapsDone ) {
+                deferred.done( function() {
+                    that._init();
+                } );
+                if ( !gmapsLoadStarted ) {
+                    require( [ 'enketo-widget/geopoint/gmapsDone' ], function( gDone ) {
+                        gmapsDone = gDone;
+                        deferred.resolve();
+                    } );
+                    gmapsLoadStarted = true;
+                }
+            } else {
+                this._init();
+            }
         }
 
         //copy the prototype functions from the Widget super class
@@ -44,7 +64,7 @@ define( [ 'jquery', 'enketo-widget/geopoint/gmapsDone', 'enketo-js/Widget', 'tex
         Geopointpicker.prototype._init = function() {
             var that = this,
                 inputVals;
-
+            console.log( 'this', this );
             this._addDomElements();
 
             inputVals = this.$inputOrigin.val().split( ' ' );
@@ -348,7 +368,6 @@ define( [ 'jquery', 'enketo-widget/geopoint/gmapsDone', 'enketo-js/Widget', 'tex
         };
 
         $.fn[ pluginName ] = function( options, event ) {
-            var loadStarted = false;
 
             return this.each( function() {
                 var $this = $( this ),
