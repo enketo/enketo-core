@@ -14,6 +14,7 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 
 1. install [node](http://nodejs.org/) (and [npm](https://npmjs.org/)), [grunt-cli](http://gruntjs.com/getting-started)
 2. clone the repo
+3. get the submodules with `git submodule update --init --recursive` (run this again after pulling updates!)
 3. install dependencies with `npm install`
 4. build and test with `grunt`
 5. start built-in server with `grunt server` 
