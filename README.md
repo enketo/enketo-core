@@ -12,10 +12,11 @@ __If you think this repo is mildly useful, consider hitting the star button...__
 
 ###How to run it
 
-1. install [node](http://nodejs.org/) (and [npm](https://npmjs.org/)), [grunt-cli](http://gruntjs.com/getting-started)
+1. install [node](http://nodejs.org/) (and [npm](https://npmjs.org/)), [grunt-cli](http://gruntjs.com/getting-started) and [ruby](https://www.ruby-lang.org/en/downloads/)
 2. clone the repo
 3. get the submodules with `git submodule update --init --recursive` (run this again after pulling updates!)
-3. install dependencies with `npm install`
+3. install most dependencies with `npm install`
+4. install sass with `gem install sass` or `gem update sass` if already installed
 4. build and test with `grunt`
 5. start built-in server with `grunt server` 
 6. browse to [http://localhost:8080/forms/dev.html](http://localhost:8080/forms/dev.html) (static form) or 
