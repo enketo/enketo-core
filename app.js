@@ -7,7 +7,7 @@ requirejs.config( {
         "text": "text/text",
         "xpath": "xpath/build/xpathjs_javarosa",
         "file-manager": "file-manager/src/file-manager",
-        "jquery.getXPath": "jquery-xpath/jquery.getXPath"
+        "jquery.xpath": "jquery-xpath/jquery.xpath"
     },
     shim: {
         "xpath": {

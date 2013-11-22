@@ -65,6 +65,7 @@ module.exports = function( grunt ) {
             test: {
                 src: 'src/js/**/*.js',
                 options: {
+                    keepRunner: true,
                     specs: 'test/spec/*.js',
                     helpers: [ 'test/util/*.js', 'test/mock/*.js' ],
                     host: 'http://127.0.0.1:8000/',
@@ -78,7 +79,7 @@ module.exports = function( grunt ) {
                                 'enketo-config': '../config.json',
                                 text: 'text/text',
                                 xpath: 'xpath/build/xpathjs_javarosa',
-                                'jquery.getXPath': 'jquery-xpath/jquery.getXPath'
+                                'jquery.xpath': 'jquery-xpath/jquery.xpath'
                             },
                             shim: {
                                 'xpath': {
@@ -196,7 +197,7 @@ module.exports = function( grunt ) {
     } );
 
     grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'connect:test', 'compile', 'jasmine' ] );
+    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'connect:test', 'compile', 'jasmine' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'default', [ 'jshint', 'prepWidgetSass', 'sass', 'test' ] );

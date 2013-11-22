@@ -6,3 +6,4 @@ build/*
 *.sublime-project
 *.sublime-workspace
 _site
+_SpecRunner.html
