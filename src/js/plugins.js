@@ -164,5 +164,5 @@ define( [ 'jquery' ], function( $ ) {
      * @type {Array}
      */
     $.fn.reverse = [].reverse;
-  
+
 } );
