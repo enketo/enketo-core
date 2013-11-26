@@ -145,7 +145,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              * Validates the whole form and returns true or false
              * @return {boolean}
              */
-            this.validateForm = function() {
+            this.validate = function() {
                 return form.validateAll();
             };
             /**

@@ -61,7 +61,7 @@ requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form' ],
 
         //validate handler for validate button
         $( '#validate-form' ).on( 'click', function() {
-            form.validateForm();
+            form.validate();
             if ( !form.isValid() ) {
                 alert( 'Form contains errors. Please see fields marked in red.' );
             } else {
