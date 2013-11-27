@@ -17,6 +17,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
     function FormModel( dataStr ) {
         var $data,
+            loadErrors = [],
             that = this,
             $form = $( 'form.jr:eq(0)' );
 
@@ -26,7 +27,12 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         //BETTER TO LEARN HOW TO DEAL WITH DEFAULT NAMESPACES THOUGH
         dataStr = dataStr.replace( /xmlns\=\"[a-zA-Z0-9\:\/\.]*\"/g, '' );
 
-        this.xml = $.parseXML( dataStr );
+        try {
+            this.xml = $.parseXML( dataStr );
+        } catch ( e ) {
+            console.error( e );
+            loadErrors.push( 'Error trying to parse XML model/instance.' )
+        }
 
         $data = $( this.xml );
 
@@ -49,7 +55,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             } );
 
             this.cloneAllTemplates();
-            return;
+            return loadErrors;
         };
 
         /**

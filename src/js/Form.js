@@ -50,12 +50,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 form = new FormView( formSelector );
 
                 //var profiler = new Profiler('model.init()');
-                model.init();
+                loadErrors = loadErrors.concat( model.init() );
+
                 //profiler.report();
 
                 if ( typeof dataStrToEdit !== 'undefined' && dataStrToEdit && dataStrToEdit.length > 0 ) {
                     dataToEdit = new FormModel( dataStrToEdit );
-                    dataToEdit.init();
+                    loadErrors = loadErrors.concat( dataToEdit.init() );
                     this.load( dataToEdit );
                 }
                 repeatsPresent = ( $( formSelector ).find( '.or-repeat' ).length > 0 );
