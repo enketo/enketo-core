@@ -524,7 +524,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         defaultLang = $form.find( '#form-languages' ).attr( 'data-default-lang' ),
                         $langSelector = $( '.form-language-selector' );
 
-                    $( '#form-languages' ).detach().appendTo( $langSelector ); //insertBefore($('form.jr').parent());
+                    $( '#form-languages' ).detach().appendTo( $langSelector );
 
                     if ( !defaultLang || defaultLang === '' ) {
                         defaultLang = $( '#form-languages option:eq(0)' ).attr( 'value' );
