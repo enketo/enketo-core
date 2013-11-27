@@ -31,7 +31,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             this.xml = $.parseXML( dataStr );
         } catch ( e ) {
             console.error( e );
-            loadErrors.push( 'Error trying to parse XML model/instance.' )
+            loadErrors.push( 'Error trying to parse XML model/instance.' );
         }
 
         $data = $( this.xml );
