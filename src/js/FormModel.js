@@ -169,7 +169,6 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 $target.text( newVal );
                 //then return validation result
                 success = this.validate( expr, xmlDataType );
-
                 $data.trigger( 'dataupdate', $target.prop( 'nodeName' ) );
                 //add type="file" attribute for file references
                 if ( xmlDataType === 'binary' ) {

@@ -510,6 +510,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         index = model.node( name ).get().index( $( this ) );
                         that.input.setVal( name, index, value );
                     } catch ( e ) {
+                        console.error( e );
                         loadErrors.push( 'Could not load input field value with name: ' + name + ' and value: ' + value );
                     }
                 } );
