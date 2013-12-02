@@ -142,7 +142,7 @@ module.exports = function( grunt ) {
                         widgets.forEach( function( widget, index, arr ) {
                             arr.push( 'text!' + widget.substr( 0, widget.lastIndexOf( '/' ) + 1 ) + 'config.json' );
                         } );
-                        return [ 'require.js', 'enketo-js/Widget' ].concat( widgets );
+                        return [ 'require.js' ].concat( widgets );
                     } )(),
                     out: "build/js/combined.min.js",
                     optimize: "uglify2"
