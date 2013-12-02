@@ -15,7 +15,7 @@ requirejs.config( {
         },
         "bootstrap": {
             deps: [ "jquery" ],
-            exports: "jQuery.fn.bootstrap"
+            exports: "jQuery.fn.popover"
         },
         "widget/date/bootstrap3-datepicker/js/bootstrap-datepicker": {
             deps: [ "jquery" ],
