@@ -17,10 +17,10 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
     function FormModel( dataStr ) {
         var $data,
-            loadErrors = [],
             that = this,
             $form = $( 'form.jr:eq(0)' );
 
+        this.loadErrors = [];
         this.instanceSelectRegEx = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
 
         //TEMPORARY DUE TO FIREFOX ISSUE, REMOVE ALL NAMESPACES FROM STRING, 
@@ -31,7 +31,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             this.xml = $.parseXML( dataStr );
         } catch ( e ) {
             console.error( e );
-            loadErrors.push( 'Error trying to parse XML model/instance.' );
+            this.loadErrors.push( 'Error trying to parse XML model/instance.' );
         }
 
         $data = $( this.xml );
@@ -55,7 +55,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             } );
 
             this.cloneAllTemplates();
-            return loadErrors;
+            return this.loadErrors;
         };
 
         /**
@@ -699,7 +699,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
             console.error( error );
             $( document ).trigger( 'xpatherror', error );
-            loadErrors.push( error );
+            this.loadErrors.push( error );
             //xpathEvalTime += new Date().getTime() - timeStart;
             //xpathEvalTimePure += new Date().getTime() - timeLap;s
             return null;
