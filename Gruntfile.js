@@ -47,7 +47,7 @@ module.exports = function( grunt ) {
         },
         watch: {
             sass: {
-                files: [ 'config.json', 'src/**/*.scss' ],
+                files: [ 'config.json', 'grid/sass/**/*.scss', 'src/sass/**/*.scss' ],
                 tasks: [ 'style' ],
                 options: {
                     spawn: false
@@ -122,6 +122,19 @@ module.exports = function( grunt ) {
                 files: [ {
                     expand: true,
                     cwd: 'src/sass',
+                    src: [ '**/*.scss', '!**/_*.scss' ],
+                    dest: 'build/css',
+                    ext: '.css'
+                } ]
+            },
+            grid: {
+                options: {
+                    style: 'expanded',
+                    noCache: true
+                },
+                files: [ {
+                    expand: true,
+                    cwd: 'grid/sass',
                     src: [ '**/*.scss', '!**/_*.scss' ],
                     dest: 'build/css',
                     ext: '.css'
