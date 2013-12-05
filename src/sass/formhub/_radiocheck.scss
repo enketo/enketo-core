@@ -1,0 +1,45 @@
+/* fancy radio buttons / checkboxes */
+legend ~ label .active{
+  margin-left: 0; }
+input{
+  &[type=radio], &[type=checkbox] {
+    background: url($images-path+'checkradio.png') no-repeat;
+    cursor: pointer;
+    -webkit-appearance: none;
+      //-ms-appearance: none;
+    //-moz-appearance: none;
+    //appearance: none;
+    //because of the -moz-appearance: none; bug (https://bugzilla.mozilla.org/show_bug.cgi?id=605985) and 
+    //the fact that IE supports the background image but NOT the appearance:none rule => 
+    //trick hide the background-image to avoid showing native + alternative checkbox/radiobutton in IE10 and FF
+    -moz-background-position-x: -9999px -9999px !important;
+    -moz-background-position-y: -9999px -9999px !important;
+    -ms-background-position-x: -9999px !important;
+    -ms-background-position-y: -9999px !important;
+    float: left;
+    border: none;
+    width: 22px;
+    height: 22px;
+    margin: 0 10px 1px 10px; } }
+input[type=checkbox]{
+  background-position: 0 0;
+  &:checked{
+    background-position: -22px 0; } } 
+:disabled input[type=checkbox], input[type=checkbox]:disabled{
+  cursor: default;
+  background-position: -44px 0;
+  &:checked{
+    background-position: -66px 0; } }
+input[type=radio]{
+  background-position: -88px 0;
+  &:checked{
+    background-position: -110px 0; } } 
+:disabled input[type=radio], input[type=radio]:disabled{
+  cursor: default;
+  background-position: -132px 0;
+  &:checked{
+    background-position: -154px 0; } }
+.btn-radiocheck {
+  input{ //to center new radio/checkbox images
+    &[type=radio], &[type=checkbox] {
+      margin-top: 9px;} } }
