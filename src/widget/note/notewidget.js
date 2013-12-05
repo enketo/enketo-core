@@ -43,12 +43,13 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         $( this.element ).parent( 'label' ).each( function() {
             console.log( 'converting readonly to trigger', $( this ) );
             var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
+                classes = $( this ).attr( 'class' ) ? ' ' + $( this ).attr( 'class' ) : '',
                 branch = ( relevant ) ? ' or-branch pre-init' : '',
                 name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
                 attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
                 value = $( this ).find( 'input, select, textarea' ).val(),
                 html = $( this ).markdownToHtml().html();
-            $( '<fieldset class="trigger alert alert-warning' + branch + '" ' + attributes + '></fieldset>' )
+            $( '<fieldset class="note' + classes + branch + '" ' + attributes + '></fieldset>' )
                 .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove();
             $( this ).remove();
         } );

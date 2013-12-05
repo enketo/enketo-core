@@ -1,1 +1,5 @@
 @import "radiocheck";
+
+.note, .trigger {
+	@extend .alert;
+	@extend .alert-warning;}

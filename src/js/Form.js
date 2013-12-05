@@ -336,7 +336,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
                 getWrapNodes: function( $inputNodes ) {
                     var type = this.getInputType( $inputNodes.eq( 0 ) );
-                    return ( type == 'radio' || type == 'checkbox' ) ? $inputNodes.closest( '.restoring-sanity-to-legends' ) :
+                    return ( type == 'radio' || type == 'checkbox' ) ? $inputNodes.closest( '.question' ) :
                         ( type == 'fieldset' ) ? $inputNodes : $inputNodes.parent( 'label' );
                 },
                 /** very inefficient, should actually not be used **/
@@ -579,7 +579,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             FormView.prototype.editStatus = {
                 set: function( status ) {
                     $form.attr( 'data-edited', Boolean( status ) ); //.toString());
-                    $form.trigger( 'edit', status );
+                $form.trigger( 'edit', status );
                 },
                 get: function() {
                     return ( $form.attr( 'data-edited' ) === 'true' ) ? true : false;
@@ -1074,7 +1074,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         }
                     } );
                 //TODO: move to XSLT
-                $form.find( '.trigger' ).addClass( 'alert alert-warning' );
+                //$form.find( '.trigger' ).addClass( 'alert alert-warning' );
 
                 //move constraint message to bottom of question and add message for required (could also be done in XSLT)
                 //TODO: move to XSLT
