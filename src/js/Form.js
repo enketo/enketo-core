@@ -336,8 +336,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
                 getWrapNodes: function( $inputNodes ) {
                     var type = this.getInputType( $inputNodes.eq( 0 ) );
-                    return ( type == 'radio' || type == 'checkbox' ) ? $inputNodes.closest( '.question' ) :
-                        ( type == 'fieldset' ) ? $inputNodes : $inputNodes.parent( 'label' );
+                    return ( type == 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question' );
                 },
                 /** very inefficient, should actually not be used **/
                 getProps: function( $node ) {
@@ -366,12 +365,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( nodeName == 'input' ) {
                         if ( $node.attr( 'type' ).length > 0 ) {
                             return $node.attr( 'type' ).toLowerCase();
-                        } else return console.error( '<input> node has no type' );
+                        } else {
+                            return console.error( '<input> node has no type' );
+                        }
                     } else if ( nodeName == 'select' ) {
                         return 'select';
                     } else if ( nodeName == 'textarea' ) {
                         return 'textarea';
-                    } else if ( nodeName == 'fieldset' ) {
+                    } else if ( nodeName == 'fieldset' || nodeName == 'section' ) {
                         return 'fieldset';
                     } else return console.error( 'unexpected input node type provided' );
                 },
@@ -430,7 +431,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return ( this.getInputType( $node ) == 'checkbox' || $node.attr( 'multiple' ) !== undefined ) ? true : false;
                 },
                 isEnabled: function( $node ) {
-                    return !( $node.prop( 'disabled' ) || $node.parents( 'fieldset:disabled' ).length > 0 );
+                    return !( $node.prop( 'disabled' ) || $node.parents( '.disabled' ).length > 0 );
                 },
                 getVal: function( $node ) {
                     var inputType, values = [],
@@ -1080,7 +1081,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //TODO: move to XSLT
                 $form.find( '.or-constraint-msg' ).parent().each( function() {
                     var $msg = $( this ).find( '.or-constraint-msg' ).detach(),
-                        $wrapper = $( this ).closest( 'label, fieldset' );
+                        $wrapper = $( this ).closest( '.question' );
                     $wrapper.append( $msg );
                     $msg.after( '<span class="or-required-msg active" lang="">This field is required</span>' );
                 } );
@@ -1271,21 +1272,21 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         that = this;
 
                     this.formO = formO;
-                    $form.find( 'fieldset.or-repeat' ).prepend( '<span class="repeat-number"></span>' );
-                    $form.find( 'fieldset.or-repeat:not([data-repeat-fixed])' )
+                    $form.find( '.or-repeat' ).prepend( '<span class="repeat-number"></span>' );
+                    $form.find( '.or-repeat:not([data-repeat-fixed])' )
                         .append( '<button type="button" class="btn btn-default repeat"><i class="glyphicon glyphicon-plus"> </i></button>' +
                             '<button type="button" disabled class="btn btn-default remove"><i class="glyphicon glyphicon-minus"> </i></button>' );
 
                     //delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
                     $form.on( 'click', 'button.repeat:enabled', function() {
                         //create a clone
-                        that.clone( $( this ).parent( 'fieldset.or-repeat' ) );
+                        that.clone( $( this ).parent( '.or-repeat' ) );
                         //prevent default
                         return false;
                     } );
                     $form.on( 'click', 'button.remove:enabled', function() {
                         //remove clone
-                        that.remove( $( this ).parent( 'fieldset.or-repeat.clone' ) );
+                        that.remove( $( this ).parent( '.or-repeat.clone' ) );
                         //prevent default
                         return false;
                     } );
@@ -1337,8 +1338,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         console.error( 'Nothing to clone' );
                         return false;
                     }
-                    $parent = $node.parent( 'fieldset.or-group' );
-                    $master = $parent.children( 'fieldset.or-repeat:not(.clone)' ).eq( 0 );
+                    $parent = $node.parent( '.or-group' );
+                    $master = $parent.children( '.or-repeat:not(.clone)' ).eq( 0 );
                     $clone = $master.clone( true, true );
 
                     //add clone class and remove any child clones.. (cloned repeats within repeats..)
@@ -1366,7 +1367,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     //note: in http://formhub.org/formhub_u/forms/hh_polio_survey_cloned/form.xml a parent group of a repeat
                     //has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining 
                     //the proper index if .or-repeat was not included in the selector
-                    index = $form.find( 'fieldset.or-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
+                    index = $form.find( '.or-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
                     //parentIndex = $form.find('[name="'+$master.attr('name')+'"]').parent().index($parent);
                     //add ____x to names of radio buttons where x is the index
                     radioNames = [];
@@ -1405,8 +1406,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var delay = 600, // dataNode,
                         that = this,
                         repeatPath = node.attr( 'name' ),
-                        repeatIndex = $form.find( 'fieldset.or-repeat[name="' + repeatPath + '"]' ).index( node ),
-                        parentGroup = node.parent( 'fieldset.or-group' );
+                        repeatIndex = $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( node ),
+                        parentGroup = node.parent( '.or-group' );
 
                     node.hide( delay, function() {
                         node.remove();
@@ -1424,7 +1425,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $node.find( 'button.repeat, button.remove' ).prop( 'disabled', true ); //button('disable').removeClass('ui-state-hover');
 
                     //then enable the appropriate ones
-                    $node.find( 'fieldset.or-repeat:last-child > button.repeat' ).prop( 'disabled', false ); //.button('enable');
+                    $node.find( '.or-repeat:last-child > button.repeat' ).prop( 'disabled', false ); //.button('enable');
                     $node.find( 'button.remove:not(:eq(0))' ).prop( 'disabled', false );
                 }
             };
@@ -1487,14 +1488,17 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 } );
 
                 //using fakefocus because hidden (by widget) elements won't get focus
-                $form.on( 'focus blur fakefocus fakeblur', '[required]', function( event ) {
+                $form.on( 'focus blur fakefocus fakeblur', 'input, select, textarea', function( event ) {
                     var props = that.input.getProps( $( this ) ),
-                        loudErrorShown = ( $( this ).parents( '.invalid-required, .invalid-constraint' ).length > 0 ),
-                        insideTable = ( $( this ).parents( '.or-appearance-list-nolabel' ).length > 0 ),
-                        $reqSubtle = $( this ).prev( '.required-subtle' ),
-                        reqSubtle = $( '<span class="required-subtle focus" style="color: transparent;">Required</span>' );
+                        required = $( this ).attr( 'required' ),
+                        $question = $( this ).closest( '.question' ),
+                        loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' ),
+                        insideTable = ( $( this ).closest( '.or-appearance-list-nolabel' ).length > 0 ),
+                        $reqSubtle = $question.find( '.required-subtle' ),
+                        reqSubtle = $( '<span class="required-subtle" style="color: transparent;">Required</span>' );
                     if ( event.type === 'focusin' || event.type === "fakefocus" ) {
-                        if ( $reqSubtle.length === 0 && !insideTable ) {
+                        $question.addClass( 'focus' );
+                        if ( required && $reqSubtle.length === 0 && !insideTable ) {
                             $reqSubtle = $( reqSubtle );
                             $reqSubtle.insertBefore( this );
                             if ( !loudErrorShown ) {
@@ -1503,16 +1507,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                                 } );
                             }
                         } else if ( !loudErrorShown ) {
-                            $reqSubtle.addClass( 'focus' );
+                            //$question.addClass( 'focus' );
                         }
                     } else if ( event.type === 'focusout' || event.type === 'fakeblur' ) {
-                        if ( props.val.length > 0 ) {
+                        $question.removeClass( 'focus' );
+                        if ( required && props.val.length > 0 ) {
                             $reqSubtle.remove();
-                        } else {
-                            $reqSubtle.removeClass( 'focus' );
-                            if ( !loudErrorShown ) {
-                                $reqSubtle.removeAttr( 'style' );
-                            }
+                        } else if ( !loudErrorShown ) {
+                            $reqSubtle.removeAttr( 'style' );
                         }
                     }
                 } );
@@ -1570,7 +1572,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $firstError;
 
                 //can't fire custom events on disabled elements therefore we set them all as valid
-                $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, input:disabled, select:disabled, textarea:disabled' ).each( function() {
+                $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +
+                    'input:disabled, select:disabled, textarea:disabled' ).each( function() {
                     that.setValid( $( this ) );
                 } );
                 $form.find( 'input, select, textarea' ).not( '.ignore' ).trigger( 'validate' );
