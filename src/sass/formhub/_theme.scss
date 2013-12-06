@@ -1,5 +1,9 @@
 @import "radiocheck";
 
+/** apply bootstrap .form-control class by default **/
+input:not([type=radio]):not([type=checkbox]), select, textarea {
+	@extend .form-control; }
+
 .note, .trigger {
 	@extend .alert;
 	@extend .alert-warning;}

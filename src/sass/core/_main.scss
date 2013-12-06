@@ -19,12 +19,6 @@ h4{
 .itemset-template, .itemset-labels {
   display: none; }
 
-/** apply bootstrap .form-control class by default **/
-input:not([type="radio"], [type="checkbox"]), select, textarea {
-  @extend .form-control;
-}
-
-
 /** hints **/
 .or-hint.active{
   @include font-normal;
