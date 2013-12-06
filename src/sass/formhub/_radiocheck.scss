@@ -39,6 +39,7 @@ input[type=radio]{
   background-position: -132px 0;
   &:checked{
     background-position: -154px 0; } }
+    
 .btn-radiocheck {
   input{ //to center new radio/checkbox images
     &[type=radio], &[type=checkbox] {

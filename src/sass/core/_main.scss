@@ -73,7 +73,7 @@ legend {
   position: relative;
   line-height: 12px;
   border: none;
-  margin-bottom: 0.6em; //works in Chrome
+  //margin-bottom: 0.6em; //works in Chrome
   > span {
     vertical-align: 12px; } //works in safari, some other webkit browsers 
   ~ label {
@@ -106,54 +106,54 @@ input:not([type="radio"]):not([type="checkbox"]), textarea, select, .widget {
     border: 1px solid #ddd8ce; } }
 input:not([type="radio"]):not([type="checkbox"]), textarea {
   height: $input-height; }
-input{
-  &[type="text"],&[type="password"], &[type="url"], &[type="email"], &[type="file"] {
-  width: $input-max-width } }
-input{
-  &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
-  width: $input-min-width; } }
-input[type="radio"], input[type=checkbox] {
-  margin: -2px 8px 0px 7px; }
 
-textarea {
+.question input {
+  &[type="text"],&[type="password"], &[type="url"], &[type="email"], &[type="file"] {
+    width: $input-max-width } 
+  &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
+    width: $input-min-width; } 
+  &[type="radio"], &[type=checkbox] {
+    margin: -2px 8px 0px 7px; } }
+.question textarea {
   width: $input-max-width;
   resize: vertical;
   min-height: 9em;}
 fieldset {
-  .one-more {
-    margin: 0 -34px -5px 10px; }
+  .repeat {
+    //margin: 0 -34px -5px 10px;
+  }
   .remove {
     float: right;
     margin-right: 0; } }
 
-.input-append .add-on {
-  padding: ($input-height - 12)/2 5px;
-  margin-top: 8px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;}
+//.input-append .add-on {
+//  padding: ($input-height - 12)/2 5px;
+//  margin-top: 8px;
+//  border-top-right-radius: 3px;
+//  border-bottom-right-radius: 3px;}
 .alert {
-  margin-bottom: 4px;}
+  margin-bottom: 4px; }
 .trigger, .note {
   @include font-normal;
   padding: 7px 12px;
   margin: 1em 0; }
 .required{
   margin-left: 3px;
-  color: $accent-color-1;}
+  color: $accent-color-1; }
 .required-subtle{
   @include transition-slow;
   float: right;
   margin-top: 4px;
   color: #e00e0e;
   font-size: 0.8em;
-  @media screen and (max-width: 500px){
-    font-size: 0.5em; }
-    &.focus{
-      @include transition-slow;
-      color: #333333; } };
+  @media screen and (max-width: 500px) {
+    font-size: 0.5em; } }
+.focus .required-subtle{
+  @include transition-slow;
+  color: #333333; };
 .disabled {
   opacity: 0.5; }
-[class^="invalid"], [class*=" invalid"] {
+.invalid-constraint, .invalid-required {
   @include transition-fast;
   @include error-bg-border;
   $pad: 10px;
@@ -163,13 +163,13 @@ fieldset {
   padding-right: $pad;
   padding-bottom: $pad;}
 .invalid-required {
-  .or-required-msg.active{
+  .or-required-msg.active {
     @include error-text; } }
 .invalid-constraint{
   .or-constraint-msg.active{
     @include error-text; } } 
 .or-branch {
-  display: none;}
+  display: none; }
 .btn-reset {
   margin-left: 10px;
   background: none;
