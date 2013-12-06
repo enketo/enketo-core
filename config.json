@@ -6,9 +6,6 @@
         "enketo-widget/geopoint/geopointpicker",
         "enketo-widget/table/tablewidget",
         "enketo-widget/radio/radiopicker",
-        "enketo-widget/time/timepicker-extended",
-        "enketo-widget/date/datepicker-extended",
-        "enketo-widget/datetime/datetimepicker-extended",
         "enketo-widget/mediagrid/mediagridpicker",
         "enketo-widget/medialabel/medialabelwidget",
         "enketo-widget/file-offline/offline-filepicker"
