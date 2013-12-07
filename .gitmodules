@@ -16,6 +16,3 @@
 [submodule "lib/jquery-xpath"]
 	path = lib/jquery-xpath
 	url = https://github.com/MartijnR/jquery-xpath.git
-[submodule "grid"]
-	path = grid
-	url = https://github.com/MartijnR/enketo-grid-theme.git
