@@ -42,7 +42,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Tablewidget.prototype.init = function() {
         var that = this;
         $( this.element ).parent().parent().find( '.or-appearance-field-list .or-appearance-list-nolabel, .or-appearance-field-list .or-appearance-label' )
-            .parent().parent( '.or-appearance-field-list' ).each( function() {
+            .closest( '.or-appearance-field-list' ).each( function() {
                 // remove the odd input element that XLSForm adds for the 'easier table method'
                 // see https://github.com/modilabs/pyxform/issues/72
                 $( this ).find( 'input[readonly]' ).remove();
