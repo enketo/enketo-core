@@ -60,12 +60,11 @@ legend .or-hint.active{
       margin: 1.5em 0 0.5em 25px;} }
 #stats + .or-group, #or-preload-items + .or-group, #form-languages + .or-group{
   border-top: none; }
-label, fieldset {
+.question {
   @include font-bold;
   display: block;
   margin: 0 0 0.7em 0;
-  padding-top: 0.9em;}
-.question{
+  padding-top: 0.9em;
   > fieldset{
     padding: 0;
     margin:0; } }
@@ -77,9 +76,12 @@ legend {
   > span {
     vertical-align: 12px; } //works in safari, some other webkit browsers 
   ~ label {
+    @include font-normal;
+    display: block;
     margin: 0;
     padding: 5px 0 3px 0;
-    @include font-normal;
+    &.with-media {
+      padding: 0; }
     &:not(.btn-radiocheck):hover{
       background-color: lighten($accent-color-1, 48%);}
     .active{

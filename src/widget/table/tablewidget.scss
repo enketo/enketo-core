@@ -18,11 +18,15 @@
   input{
     margin: 0 10px 0 10px;
     text-align: center;} }
-.or-appearance-list-nolabel{
+.question.or-appearance-list-nolabel {
+  border-top: none;
+  &:not(:last-of-type) {
+    border-bottom: none; }
   label .active{
     display: none !important;
     float: none; } }
-.or .or-appearance-label{
+.question.or-appearance-label{
+  border-bottom: none;
   legend ~ label:hover{
     background-color: transparent;}
   input{
