@@ -1,0 +1,41 @@
+body{
+  background: none; 
+  .main{
+    margin: 0;
+    article{
+      padding: 3px; } }
+  .paper{
+    border: none;
+    margin: 0; } }
+
+.drawer, 
+#feedback-bar,
+#dialog-alert,
+#dialog-confirm,
+#dialog-save,
+#form-languages,
+.form-header,
+.enketo-power,
+.or-appearance-no-print,
+button,
+.paper #submit-form{
+  display: none !important;}
+
+.or{
+  .hint,
+  .or-appearance-no-print,
+  .map-canvas-wrapper,
+  .geopoint .search-bar,
+  .or-constraint-msg,
+  .required-subtle,
+  .add-on,
+  button,
+  .invalid .or-constraint-msg.active.alert-error{
+    display: none !important;} }
+
+.page-break{
+  display: block; 
+  //border: 1px dashed blue;
+  color: transparent;
+  border-bottom: none;
+  page-break-before: always !important;}

@@ -17,38 +17,7 @@ $medium: #888888;
 $light: #aaaaaa;
 $very_light: #cccccc;
 
-body{
-  background: none; 
-  .main{
-    margin: 0;
-    article{
-      padding: 3px; } }
-  .paper{
-    border: none;
-    margin: 0; } }
-
-.drawer, 
-#feedback-bar,
-#dialog-alert,
-#dialog-confirm,
-#dialog-save,
-#form-languages,
-.form-header,
-.enketo-power,
-button,
-.paper #submit-form{
-  display: none !important;}
-
-.or{
-  .hint,
-  .map-canvas-wrapper,
-  .geopoint .search-bar,
-  .or-constraint-msg,
-  .required-subtle,
-  .add-on,
-  button,
-  .invalid .or-constraint-msg.active.alert-error{
-    display: none !important;}
+.or {
   h2, h3, h4, .required{
     color: black;}
   legend span {
@@ -136,10 +105,3 @@ button,
       border-top:none; } }
   .or-appearance-maps .map-canvas-wrapper{
       display: block;} } 
-
-.page-break{
-  display: block; 
-  //border: 1px dashed blue;
-  color: transparent;
-  border-bottom: none;
-  page-break-before: always !important;}
