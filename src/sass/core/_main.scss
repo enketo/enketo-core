@@ -118,7 +118,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
   width: $input-max-width;
   resize: vertical;
   min-height: 9em;}
-fieldset {
+.or-repeat {
   .repeat {
     //margin: 0 -34px -5px 10px;
   }
