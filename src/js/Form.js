@@ -459,15 +459,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     //values = value.split(' ');
                     index = index || 0;
 
-                    if ( this.getInputType( $form.find( '[data-name="' + name + '"]' ).eq( 0 ) ) == 'radio' ) {
+                    if ( this.getInputType( $form.find( '[data-name="' + name + '"]:eq(0)' ) ) == 'radio' ) {
                         $target = this.getWrapNodes( $form.find( '[data-name="' + name + '"]' ) ).eq( index ).find( 'input[value="' + value + '"]' );
                         //why not use this.getIndex?
                         $target.prop( 'checked', true );
                         return;
                     } else {
                         //why not use this.getIndex?
-                        $inputNodes = this.getWrapNodes( $form.find( '[name="' + name + '"]' ) ).eq( index ).find( 'input, select, textarea' );
-
+                        $inputNodes = this.getWrapNodes( $form.find( '[name="' + name + '"]:eq(' + index + ')' ) ).find( 'input, select, textarea' );
+                        console.log( 'input nodes with', name, $form.find( '[name="' + name + '"]' ) );
                         type = this.getInputType( $inputNodes.eq( 0 ) );
 
                         if ( type === 'file' ) {
@@ -509,6 +509,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         value = $( this ).text();
                         name = $( this ).getXPath( 'instance' );
                         index = model.node( name ).get().index( $( this ) );
+                        if ( value == 'hi' ) console.log( 'going to set hi', name, index, value );
                         that.input.setVal( name, index, value );
                     } catch ( e ) {
                         console.error( e );
@@ -845,6 +846,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     needToUpdateLangs = false,
                     itemsCache = {};
 
+                console.log( 'itemset update was called', changedDataNodeNames );
+
                 if ( typeof changedDataNodeNames == 'undefined' ) {
                     cleverSelector = [ '.itemset-template' ];
                 } else {
@@ -902,9 +905,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     $template.data( newItems );
 
+                    console.log( 'template node name:', templateNodeName, '$templat', $template );
                     //clear data values through inputs. Note: if a value exists, 
                     //this will trigger a dataupdate event which may call this update function again
-                    $( this ).closest( 'label > select, fieldset > label' ).parent()
+                    $( this ).closest( '.question' )
                         .clearInputs( 'change' )
                         .find( templateNodeName ).not( $template ).remove();
                     $( this ).parent( 'select' ).siblings( '.or-option-translations' ).empty();

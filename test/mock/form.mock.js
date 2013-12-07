@@ -74,7 +74,7 @@ var formStr2 =
     '<span id="jrCalculate">4</span>' +
     '<span id="jrPreload">0</span>' +
     '</div>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/meta/instanceID" type="hidden" data-calculate="(1+1)" />' + /*******/
     '</label>' +
     '<fieldset class="trigger ui-state-highlight" name="/random/note_random">' +
@@ -92,13 +92,13 @@ var formStr2 =
     '</span>' +
     '</fieldset>' +
     '<fieldset id="or-calculated-items" style="display:none;">' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/formhub/uuid" type="hidden" data-calculate="uuid()" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/random__" type="hidden" data-calculate="random()" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/uuid__" type="hidden" data-calculate="uuid()" data-type-xml="string"/>' +
     '</label>' +
     '</fieldset>' +
@@ -133,7 +133,7 @@ var formStr3 =
     '<span id="jrPreload">1</span>' +
     '</div>' +
     '<fieldset id="or-preload-items" style="display:none;">' + /*****/
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/meta/instanceID" type="hidden" data-preload="instance" data-preload-params="id" data-type-xml="string" />' +
     '</label>' +
     '</fieldset>' + /*****/
@@ -152,13 +152,13 @@ var formStr3 =
     '</span>' +
     '</fieldset>' +
     '<fieldset id="or-calculated-items" style="display:none;">' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/formhub/uuid" type="hidden" data-calculate="uuid()" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/random__" type="hidden" data-calculate="random()" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/random/uuid__" type="hidden" data-calculate="uuid()" data-type-xml="string"/>' +
     '</label>' +
     '</fieldset>' +
@@ -180,19 +180,10 @@ var formStr4 =
     '<form class="or" id="nodename_bug">' +
     '<section class="form-logo"> </section>' +
     '<h2 id="form-title">Node Name bug (issue 169)</h2>' +
-    '<div id="stats" style="display: none;">' +
-    '<span id="jrSelect">0</span><span id="jrSelect1">0</span>' +
-    '<span id="jrItem">0</span><span id="jrInput">1</span>' +
-    '<span id="jrItemset">0</span>' +
-    '<span id="jrUpload">0</span><span id="jrTrigger">0</span>' +
-    '<span id="jrRepeat">0</span><span id="jrRelevant">0</span>' +
-    '<span id="jrConstraint">0</span><span id="jrCalculate">1</span>' +
-    '<span id="jrPreload">0</span>' +
-    '</div>' +
-    '+<fieldset class="" name="/nodename_bug/hh"><label>' +
+    '<fieldset class="question" name="/nodename_bug/hh"><label class="question">' +
     '<span lang="" class="">Enter text</span><input name="/nodename_bug/hh/hh" type="text" data-type-xml="string"/>' +
     '</label></fieldset>' +
-    '<fieldset id="or-calculated-items" style="display:none;"><label>' +
+    '<fieldset id="or-calculated-items" style="display:none;"><label class="question">' +
     '<input name="/nodename_bug/formhub/uuid" type="hidden" data-calculate="uuid()" data-type-xml="string"/>' +
     '</label></fieldset>' +
     '</form>';
@@ -256,69 +247,57 @@ var formStr5 =
     '<section class="form-logo"></section>' +
     '<h2 id="form-title">Test: Preloads JavaRosa</h2>' +
     '<div id="stats" style="display: none;">' +
-    '<span id="jrSelect">0</span>' +
-    '<span id="jrSelect1">0</span>' +
-    '<span id="jrItem">0</span>' +
-    '<span id="jrItemset">0</span>' +
-    '<span id="jrInput">0</span>' +
-    '<span id="jrUpload">0</span>' +
-    '<span id="jrTrigger">0</span>' +
-    '<span id="jrRepeat">0</span>' +
-    '<span id="jrRelevant">0</span>' +
-    '<span id="jrConstraint">0</span>' +
-    '<span id="jrCalculate">0</span>' +
-    '<span id="jrPreload">17</span>' +
     '</div>' +
     '<fieldset id="or-preload-items" style="display:none;">' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/start_time" type="hidden" data-preload="timestamp" data-preload-params="start" data-type-xml="dateTime"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/end_time" type="hidden" data-preload="timestamp" data-preload-params="end" data-type-xml="dateTime"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/date_today" type="hidden" data-preload="date" data-preload-params="today" data-type-xml="date"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/deviceid" type="hidden" data-preload="property" data-preload-params="deviceid" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/subscriberid" type="hidden" data-preload="property" data-preload-params="subscriberid" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/my_simid" type="hidden" data-preload="property" data-preload-params="simserial" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/my_phonenumber" type="hidden" data-preload="property" data-preload-params="phonenumber" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/application" type="hidden" data-preload="context" data-preload-params="application" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/patient" type="hidden" data-preload="patient" data-preload-params="" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/user" type="hidden" data-preload="user" data-preload-params="user_id" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/uid" type="hidden" data-preload="uid" data-preload-params="" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/browser_name" type="hidden" data-preload="browser" data-preload-params="name" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/browser_version" type="hidden" data-preload="browser" data-preload-params="version" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/os_name" type="hidden" data-preload="os" data-preload-params="name" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/os_version" type="hidden" data-preload="os" data-preload-params="version" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/unknown" type="hidden" data-preload="unknown" data-preload-params="nothing" data-type-xml="string"/>' +
     '</label>' +
-    '<label>' +
+    '<label class="question">' +
     '<input name="/widgets/meta/instanceID" type="hidden" data-preload="instance" data-preload-params="" data-type-xml="string"/>' +
     '</label>' +
     '</fieldset>' +
@@ -345,19 +324,19 @@ var formStr6 =
     '</a>' +
     '</div>' +
     '<fieldset class="">' +
-    '<label>' +
+    '<label class="question">' +
     '<span lang="en">Enter yes to reveal group</span>' +
     '<input name="/data/nodeA" type="text" data-type-xml="string"/>' +
     '</label>' +
     '</fieldset>' +
     '<fieldset class="or-group or-branch pre-init" name="/data/group" data-relevant="/data/nodeA = &quot;yes&quot">' +
     '<h4><span lang="en">Group with relevant binding</span></h4>' +
-    '<label>' +
+    '<label class="question">' +
     '<span lang="en">Enter 2 to reveal select1</span>' +
     '<input name="/data/group/nodeB" type="number" data-type-xml="int" required="required"/>' +
     '</label>' +
     '</fieldset>' +
-    '<label class="or-branch pre-init or-appearance-minimal">' +
+    '<label class="question or-branch pre-init or-appearance-minimal">' +
     '<span lang="en">Select 1 option</span>' +
     '<select name="/data/nodeC" data-relevant="/data/group/nodeB = 2">' +
     '<option value="">...</option>' +

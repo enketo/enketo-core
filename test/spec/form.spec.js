@@ -412,7 +412,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
 		2. position[i] wasn't properly injected in makeBugCompiant() if the context node was a radio button or checkbox
 	 */
         it( 'a) evaluates relevant logic on a repeated radio-button-question and b) injects the position correctly (issue 208)', function() {
-            var repeatSelector = 'fieldset.or-repeat[name="/issue208/rep"]';
+            var repeatSelector = '.or-repeat[name="/issue208/rep"]';
             //form = new Form(formStr7, dataStr7);
             form = loadForm( 'issue208.xml' );
             form.init();
@@ -421,7 +421,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getView().$.find( repeatSelector ).length ).toEqual( 2 );
             //check if initial state of 2nd question in 2nd repeat is disabled
             expect( form.getView().$.find( repeatSelector ).eq( 1 )
-                .find( '[data-name="/issue208/rep/nodeB"]' ).closest( '.restoring-sanity-to-legends' )
+                .find( '[data-name="/issue208/rep/nodeB"]' ).closest( '.question' )
                 .hasClass( 'disabled' ) ).toBe( true );
             //select 'yes' in first question of 2nd repeat
             form.getModel().node( '/issue208/rep/nodeA', 1 ).setVal( 'yes', null, 'string' );
@@ -429,7 +429,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getModel().node( '/issue208/rep/nodeA', 1 ).getVal()[ 0 ] ).toEqual( 'yes' );
             //check if 2nd question in 2nd repeat is now enabled
             expect( form.getView().$.find( repeatSelector ).eq( 1 )
-                .find( '[data-name="/issue208/rep/nodeB"]' ).closest( '.restoring-sanity-to-legends' ).hasClass( 'disabled' ) ).toBe( false );
+                .find( '[data-name="/issue208/rep/nodeB"]' ).closest( '.question' ).hasClass( 'disabled' ) ).toBe( false );
 
         } );
 
@@ -672,7 +672,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
                 waitsFor( function() {
                     return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'country2';
-                }, 'itemsetUpdate not called!', 1000 );
+                }, 'itemsetUpdate not called for country2!', 1000 );
 
                 //select second option
                 runs( function() {
@@ -681,7 +681,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
                 waitsFor( function() {
                     return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'city2';
-                }, 'itemsetUpdate not called!', 1000 );
+                }, 'itemsetUpdate not called for city2 [1]!', 1000 );
 
                 runs( function() {
                     expect( $items1Select().length ).toEqual( 2 );
@@ -698,7 +698,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
                 waitsFor( function() {
                     return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'city2';
-                }, 'itemsetUpdate not called!', 1000 );
+                }, 'itemsetUpdate not called for city2 [2]!', 1000 );
 
                 runs( function() {
                     expect( $items1Select().length ).toEqual( 2 );
