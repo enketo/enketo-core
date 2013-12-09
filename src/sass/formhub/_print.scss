@@ -41,7 +41,7 @@ $very_light: #cccccc;
     background: none; }
 	.or-branch.disabled{
   	/*.or-branch+label.disabled{*/
-   		opacity: 1;
+   	opacity: 1;
 		display: block !important; }
 	input:not([type="radio"]):not([type="checkbox"]), select, textarea{
     	@include border-radius(0px);
@@ -77,31 +77,11 @@ $very_light: #cccccc;
     -webkit-print-color-adjust: exact;
     background-image: url('/images/line.png');
     background-repeat: repeat; }
-  .bootstrap-select {
-    @include clearfix;
-    .dropdown-toggle{
-      display: none; }
-    ul{
-      position: static;
-      display: block;
-      border: none;
-      box-shadow: none;
-      list-style-type: circle;
-      li, li.active{
-        display: inline-block;
-        border: 1px solid $dark;
-        margin-right: 20px; }
-        a{
-          background: none;
-          color: black; }
-        input{
-          display: none; } } }
+
   .geopoint{
     height: 280px;
     .map-canvas{
       bottom: 0;
       width: 450px; }
     label.geo:nth-of-type(3){
-      border-top:none; } }
-  .or-appearance-maps .map-canvas-wrapper{
-      display: block;} } 
+      border-top:none; } } } 

@@ -34,9 +34,30 @@ button,
   .invalid-constraint .or-constraint-msg.active{
     display: none !important;} }
 
+.bootstrap-select {
+    @include clearfix;
+    .dropdown-toggle{
+      display: none; }
+    ul{
+      position: static;
+      display: block;
+      border: none;
+      box-shadow: none;
+      list-style-type: circle;
+      li, li.active{
+        display: inline-block;
+        border: 1px solid #000000;
+        margin-right: 20px; }
+        a{
+          background: none;
+          color: black; }
+        input{
+          display: none; } } }
+
 .page-break{
   display: block; 
   //border: 1px dashed blue;
   color: transparent;
   border-bottom: none;
   page-break-before: always !important;}
+
