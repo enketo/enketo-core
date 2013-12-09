@@ -184,6 +184,20 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         fileManager.setDir( this._getInstanceID(), callbacks );
     };
 
+    OfflineFilepicker.prototype.destroy = function( element ) {
+        $( element )
+        //data is not used elsewhere by enketo
+        .removeData( this.namespace )
+        //remove all the event handlers that used this.namespace as the namespace
+        .off( '.' + this.namespace )
+        //show the original element
+        .show()
+        //remove elements immediately after the target that have the widget class
+        .next( '.widget' ).remove().end()
+        //console.debug( this.namespace, 'destroy' );
+        .siblings( '.file-feedback, .file-preview, .file-loaded' ).remove();
+    }
+
     /**
      *
      */
