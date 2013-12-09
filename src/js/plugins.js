@@ -9,21 +9,21 @@ define( [ 'jquery' ], function( $ ) {
 
         return this.each( function() {
 
-            $( this ).find( 'fieldset.or-repeat' ).each( function() {
+            $( this ).find( '.or-repeat' ).each( function() {
                 var repSiblings, qtyRepeats, i;
                 // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
-                if ( $( this ).prev( 'fieldset.or-repeat' ).length === 0 ) {
-                    repSiblings = $( this ).siblings( 'fieldset.or-repeat' );
+                if ( $( this ).prev( '.or-repeat' ).length === 0 ) {
+                    repSiblings = $( this ).siblings( '.or-repeat' );
                     qtyRepeats = repSiblings.length + 1;
                     if ( qtyRepeats > 1 ) {
-                        $( this ).find( 'span.repeat-number' ).text( '1' );
+                        $( this ).find( '.repeat-number' ).text( '1' );
                         i = 2;
                         repSiblings.each( function() {
-                            $( this ).find( 'span.repeat-number' ).text( i );
+                            $( this ).find( '.repeat-number' ).text( i );
                             i++;
                         } );
                     } else {
-                        $( this ).find( 'span.repeat-number' ).empty();
+                        $( this ).find( '.repeat-number' ).empty();
                     }
                 }
             } );

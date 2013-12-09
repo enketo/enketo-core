@@ -1278,19 +1278,19 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.formO = formO;
                     $form.find( '.or-repeat' ).prepend( '<span class="repeat-number"></span>' );
                     $form.find( '.or-repeat:not([data-repeat-fixed])' )
-                        .append( '<button type="button" class="btn btn-default repeat"><i class="glyphicon glyphicon-plus"> </i></button>' +
-                            '<button type="button" disabled class="btn btn-default remove"><i class="glyphicon glyphicon-minus"> </i></button>' );
+                        .append( '<div class="repeat-buttons"><button type="button" class="btn btn-default repeat"><i class="glyphicon glyphicon-plus"> </i></button>' +
+                            '<button type="button" disabled class="btn btn-default remove"><i class="glyphicon glyphicon-minus"> </i></button></div>' );
 
                     //delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
                     $form.on( 'click', 'button.repeat:enabled', function() {
                         //create a clone
-                        that.clone( $( this ).parent( '.or-repeat' ) );
+                        that.clone( $( this ).closest( '.or-repeat' ) );
                         //prevent default
                         return false;
                     } );
                     $form.on( 'click', 'button.remove:enabled', function() {
                         //remove clone
-                        that.remove( $( this ).parent( '.or-repeat.clone' ) );
+                        that.remove( $( this ).closest( '.or-repeat.clone' ) );
                         //prevent default
                         return false;
                     } );
@@ -1429,7 +1429,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $node.find( 'button.repeat, button.remove' ).prop( 'disabled', true ); //button('disable').removeClass('ui-state-hover');
 
                     //then enable the appropriate ones
-                    $node.find( '.or-repeat:last-child > button.repeat' ).prop( 'disabled', false ); //.button('enable');
+                    $node.find( '.or-repeat:last-child > .repeat-buttons button.repeat' ).prop( 'disabled', false ); //.button('enable');
                     $node.find( 'button.remove:not(:eq(0))' ).prop( 'disabled', false );
                 }
             };
