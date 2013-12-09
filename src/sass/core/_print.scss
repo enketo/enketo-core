@@ -24,13 +24,14 @@ button,
 .or{
   .hint,
   .or-appearance-no-print,
-  .map-canvas-wrapper,
+  .question:not(.or-appearance-maps) .map-canvas-wrapper,
   .geopoint .search-bar,
   .or-constraint-msg,
   .required-subtle,
   .add-on,
   button,
-  .invalid .or-constraint-msg.active.alert-error{
+  .invalid-required .or-required-msg.active,
+  .invalid-constraint .or-constraint-msg.active{
     display: none !important;} }
 
 .page-break{
