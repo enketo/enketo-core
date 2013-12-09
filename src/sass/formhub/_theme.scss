@@ -7,3 +7,7 @@ input:not([type=radio]):not([type=checkbox]), select, textarea {
 .note, .trigger {
 	@extend .alert;
 	@extend .alert-warning;}
+
+.btn-reset {
+  .glyphicon-trash{
+    vertical-align: bottom;} }

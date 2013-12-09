@@ -64,7 +64,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
         var template =
             '<div class="btn-group bootstrap-select widget clearfix">' +
             '<button type="button" class="btn btn-default dropdown-toggle clearfix" data-toggle="dropdown">' +
-            '<span class="selected">__SELECTED_OPTIONS</span><span class="caret pull-right"></span>' +
+            '<span class="selected">__SELECTED_OPTIONS</span><span class="caret"></span>' +
             '</button>' +
             '<ul class="dropdown-menu" role="menu">' +
             '__ADD_LI' +
