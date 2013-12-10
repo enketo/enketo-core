@@ -170,7 +170,8 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
 .invalid-constraint{
   .or-constraint-msg.active{
     @include error-text; } } 
-.or-branch {
+// this may have a very significant positive impact on performance
+.or-branch.disabled, .or-branch.pre-init {
   display: none; }
 .btn-reset {
   margin-left: 10px;
