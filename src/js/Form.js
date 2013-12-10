@@ -1492,7 +1492,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 } );
 
                 //using fakefocus because hidden (by widget) elements won't get focus
-                $form.on( 'focus blur fakefocus fakeblur', 'input, select, textarea', function( event ) {
+                $form.on( 'focus blur fakefocus fakeblur', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
                     var props = that.input.getProps( $( this ) ),
                         required = $( this ).attr( 'required' ),
                         $question = $( this ).closest( '.question' ),
