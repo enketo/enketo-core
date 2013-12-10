@@ -39,10 +39,6 @@ $very_light: #cccccc;
     float: right;}
   .or-repeat{
     background: none; }
-	.or-branch.disabled{
-  	/*.or-branch+label.disabled{*/
-   	opacity: 1;
-		display: block !important; }
 	input:not([type="radio"]):not([type="checkbox"]), select, textarea{
     	@include border-radius(0px);
     	@include box-shadow-none;

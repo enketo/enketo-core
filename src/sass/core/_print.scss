@@ -1,8 +1,8 @@
-body{
+body {
   background: none; 
   .main{
     margin: 0;
-    article{
+    article {
       padding: 3px; } }
   .paper{
     border: none;
@@ -18,10 +18,10 @@ body{
 .enketo-power,
 .or-appearance-no-print,
 button,
-.paper #submit-form{
-  display: none !important;}
+.paper #submit-form {
+  display: none !important ;}
 
-.or{
+.or {
   .hint,
   .or-appearance-no-print,
   .question:not(.or-appearance-maps) .map-canvas-wrapper,
@@ -32,7 +32,28 @@ button,
   button,
   .invalid-required .or-required-msg.active,
   .invalid-constraint .or-constraint-msg.active{
-    display: none !important;} }
+    display: none !important; }
+  .or-branch.disabled{
+    opacity: 1;
+    display: block !important; } }
+
+.geopoint.widget {
+  margin-top: 0;
+  max-height: 60px;
+  .geo-inputs {
+  width: 100%;
+  label.geo {
+    display: inline-block;
+    width: 25%;
+    margin: 0 !important;
+    &:nth-of-type(3), &:nth-of-type(4) {
+      margin-top: 0;
+      padding-top: 0;
+      font-size: inherit;
+      border-top: none;
+      font-size: auto; }
+    input {
+      display: none; } } } }
 
 .bootstrap-select {
     @include clearfix;
