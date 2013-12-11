@@ -43,7 +43,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         $( this.element ).parent( 'label' ).each( function() {
             console.log( 'converting readonly to trigger', $( this ) );
             var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
-                classes = $( this ).attr( 'class' ) ? ' ' + $( this ).attr( 'class' ) : '',
+                classes = $( this ).removeClass( 'question' ).attr( 'class' ) ? ' ' + $( this ).attr( 'class' ) : '',
                 branch = ( relevant ) ? ' or-branch pre-init' : '',
                 name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
                 attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
