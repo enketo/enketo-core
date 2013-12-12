@@ -35,7 +35,11 @@ button,
     display: none !important; }
   .or-branch.disabled{
     opacity: 1;
-    display: block !important; } }
+    display: block !important /* override inline style */; } }
+
+.or-hint.active {
+  margin-top: 0;
+  line-height: 1em; }
 
 .geopoint.widget {
   margin-top: 0;

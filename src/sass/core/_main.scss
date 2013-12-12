@@ -24,16 +24,13 @@ h4{
   @include font-normal;
   color: #888888;
   display: block;
-  line-height: 1.5em;
+  line-height: 16px;
   font-weight: normal;
-  font-size: .7em;
+  font-size: 11px;
   font-style: italic;
+  padding-top: 5px;
   ~ br{
     display: none; } }
-label .or-hint.active{
-  padding-top: .5em; } 
-legend .or-hint.active{
-  padding-bottom: .6em; }
 
 .or .form-logo img {
   position: relative;
