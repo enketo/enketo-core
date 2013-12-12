@@ -81,7 +81,7 @@ legend {
       padding: 0; }
     &:not(.btn-radiocheck):hover{
       background-color: lighten($accent-color-1, 48%);}
-    .active{
+    .active {
       margin-left: 5px; } } }
 label, legend, .trigger, .note {
   font-size: 1em; }
@@ -112,7 +112,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
   &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
     width: $input-min-width; } 
   &[type="radio"], &[type=checkbox] {
-    margin: -2px 8px 0px 7px; } }
+    margin: -2px 0 0px 7px; } }
 .question textarea {
   width: $input-max-width;
   resize: vertical;

@@ -41,6 +41,11 @@ button,
   margin-top: 0;
   line-height: 1em; }
 
+legend {
+  & ~ label {
+    padding: 0; }
+  margin-bottom: 5px;}
+
 .geopoint.widget {
   margin-top: 0;
   max-height: 60px;
