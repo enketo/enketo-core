@@ -1,129 +1,185 @@
 body {
-  @include font-normal; }
+    @include font-normal;
+}
 
 strong {
-  @include font-bold; }
+    @include font-bold;
+}
 
 h2, h3, h4 {
-  @include font-bold;
-  color: $accent-color-1;
-  text-align: center;}
-h3{
-  padding: 5px 0 15px 0;
-  word-wrap: break-word;}
-h4{
-  text-align: left;  }
+    @include font-bold;
+    color: $accent-color-1;
+    text-align: center;
+}
+
+h3 {
+    padding: 5px 0 15px 0;
+    word-wrap: break-word;
+}
+
+h4 {
+    text-align: left;
+}
 
 /** hide stuff **/
+
 .or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,
 .itemset-template, .itemset-labels {
-  display: none; }
+    display: none;
+}
 
 /** hints **/
-.or-hint.active{
-  @include font-normal;
-  color: #888888;
-  display: block;
-  line-height: 16px;
-  font-weight: normal;
-  font-size: 11px;
-  font-style: italic;
-  padding-top: 5px;
-  ~ br{
-    display: none; } }
+.or-hint.active {
+    @include font-normal;
+    color: #888888;
+    display: block;
+    line-height: 16px;
+    font-weight: normal;
+    font-size: 11px;
+    font-style: italic;
+    padding-top: 5px;
+    ~ br {
+        display: none;
+    }
+}
 
 .or .form-logo img {
-  position: relative;
-  float: none;
-  left: 50%;
-  max-height: 200px;
-  width: 120px;
-  margin: 30px 0 10px -60px; }
+    position: relative;
+    float: none;
+    left: 50%;
+    max-height: 200px;
+    width: 120px;
+    margin: 30px 0 10px -60px;
+}
+
 .or-repeat {
-  background-color: lighten($accent-color-1, 55%);
-  margin: 0 0 3px 0;
-  padding: 10px 10px 10px 10px;
-  .repeat-number {
-    height: 2em;
-    display: block;
-    float: right;
-    color: $accent-color-1;
-    + .or-group {
-      border-top: none; } } } 
+    background-color: lighten($accent-color-1, 55%);
+    margin: 0 0 3px 0;
+    padding: 10px 10px 10px 10px;
+    .repeat-number {
+        height: 2em;
+        display: block;
+        float: right;
+        color: $accent-color-1;
+        + .or-group {
+            border-top: none;
+        }
+    }
+}
+
 .or-group {
-  border-top: $line; 
-  margin: 1.5em 0 0.4em 0;
-    .or-group{
-      margin: 1.5em 0 0.5em 25px;} }
-#stats + .or-group, #or-preload-items + .or-group, #form-languages + .or-group{
-  border-top: none; }
+    border-top: $line;
+    margin: 1.5em 0 0.4em 0;
+    .or-group {
+        margin: 1.5em 0 0.5em 25px;
+    }
+}
+
+#stats + .or-group, #or-preload-items + .or-group, #form-languages + .or-group {
+    border-top: none;
+}
+
 .question {
-  @include font-bold;
-  display: block;
-  margin: 0 0 0.7em 0;
-  padding-top: 0.9em;
-  > fieldset{
-    padding: 0;
-    margin:0; } }
-legend {
-  position: relative;
-  line-height: 12px;
-  border: none;
-  //margin-bottom: 0.6em; //works in Chrome
-  > span {
-    vertical-align: 12px; } //works in safari, some other webkit browsers 
-  ~ label {
-    @include font-normal;
+    @include font-bold;
     display: block;
-    margin: 0;
-    padding: 5px 0 3px 0;
-    &.with-media {
-      padding: 0; }
-    &:not(.btn-radiocheck):hover{
-      background-color: lighten($accent-color-1, 48%);}
-    .active {
-      margin-left: 5px; } } }
+    margin: 0 0 0.7em 0;
+    padding-top: 0.9em;
+    > fieldset {
+        padding: 0;
+        margin: 0;
+    }
+}
+
+legend {
+    position: relative;
+    line-height: 12px;
+    border: none;
+    //margin-bottom: 0.6em; //works in Chrome
+    > span {
+        vertical-align: 12px;
+    }
+    //works in safari, some other webkit browsers
+    ~ label {
+        @include font-normal;
+        display: block;
+        margin: 0;
+        padding: 5px 0 3px 0;
+        &.with-media {
+            padding: 0;
+        }
+        &:not(.btn-radiocheck):hover {
+            background-color: lighten($accent-color-1, 48%);
+        }
+        .active {
+            margin-left: 5px;
+        }
+    }
+}
+
 label, legend, .trigger, .note {
-  font-size: 1em; }
+    font-size: 1em;
+}
+
 .or {
-  img, audio, video {
-  float: right;
-  max-height: 300px;
-  max-width: 70%; } }
+    img, audio, video {
+        float: right;
+        max-height: 300px;
+        max-width: 70%;
+    }
+}
+
 input:not([type="radio"]):not([type="checkbox"]), textarea, select, .widget {
-  display: block;
-  margin: 8px 0 0 0; }
-.touch{
-  input:not([type="radio"]):not([type="checkbox"]), textarea, select {
-    @include border-radius(2px);
-    margin: 10px 0 10px 0; 
-    color: #104b66;
-    background-color: #f5f2ed; }
-  .input-append .add-on {
-    margin-top:10px; }
-  input:not([type="radio"]):not([type="checkbox"]), textarea {
-    border: 1px solid #ddd8ce; } }
+    display: block;
+    margin: 8px 0 0 0;
+}
+
+.touch {
+    input:not([type="radio"]):not([type="checkbox"]), textarea, select {
+        @include border-radius(2px);
+        margin: 10px 0 10px 0;
+        color: #104b66;
+        background-color: #f5f2ed;
+    }
+    .input-append .add-on {
+        margin-top: 10px;
+    }
+    input:not([type="radio"]):not([type="checkbox"]), textarea {
+        border: 1px solid #ddd8ce;
+    }
+}
+
 input:not([type="radio"]):not([type="checkbox"]), textarea {
-  height: $input-height; }
+    height: $input-height;
+}
 
 .question input {
-  &[type="text"],&[type="password"], &[type="url"], &[type="email"], &[type="file"] {
-    width: $input-max-width } 
-  &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
-    width: $input-min-width; } 
-  &[type="radio"], &[type=checkbox] {
-    margin: -2px 0 0px 7px; } }
+    &[type="text"],&[type="password"], &[type="url"], &[type="email"], &[type="file"] {
+        width: $input-max-width;
+    }
+    &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
+        width: $input-min-width;
+    }
+    &[type="radio"], &[type=checkbox] {
+        margin: -2px 0 0px 7px;
+    }
+}
+
 .question textarea {
-  width: $input-max-width;
-  resize: vertical;
-  min-height: 9em;}
+    width: $input-max-width;
+    resize: vertical;
+    min-height: 9em;
+}
+
 .or-repeat {
-  .repeat {
-    //margin: 0 -34px -5px 10px;
-  }
-  .remove {
-    float: right;
-    margin-right: 0; } }
+    .repeat {
+        //margin: 0 -34px -5px 10px;
+   
+    }
+    .remove {
+        float: right;
+        margin-right: 0;
+    }
+}
 
 //.input-append .add-on {
 //  padding: ($input-height - 12)/2 5px;
@@ -131,55 +187,82 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
 //  border-top-right-radius: 3px;
 //  border-bottom-right-radius: 3px;}
 .alert {
-  margin-bottom: 4px; }
+    margin-bottom: 4px;
+}
+
 .trigger, .note {
-  @include font-normal;
-  padding: 7px 12px;
-  margin: 1em 0; }
-.required{
-  margin-left: 3px;
-  color: $accent-color-1; }
-.required-subtle{
-  @include transition-slow;
-  float: right;
-  margin-top: 4px;
-  color: #e00e0e;
-  font-size: 0.8em;
-  @media screen and (max-width: 500px) {
-    font-size: 0.5em; } }
-.focus .required-subtle{
-  @include transition-slow;
-  color: #333333; };
+    @include font-normal;
+    padding: 7px 12px;
+    margin: 1em 0;
+}
+
+.required {
+    margin-left: 3px;
+    color: $accent-color-1;
+}
+
+.required-subtle {
+    @include transition-slow;
+    float: right;
+    margin-top: 4px;
+    color: #e00e0e;
+    font-size: 0.8em;
+    @media screen and (max-width: 500px) {
+        font-size: 0.5em;
+    }
+}
+
+.focus .required-subtle {
+    @include transition-slow;
+    color: #333333;
+}
+
 .disabled {
-  opacity: 0.5; }
+    opacity: 0.5;
+}
+
 .invalid-constraint, .invalid-required {
-  @include transition-fast;
-  @include error-bg-border;
-  $pad: 10px;
-  margin-right: -$pad;
-  margin-left: -$pad;
-  padding-left: $pad;
-  padding-right: $pad;
-  padding-bottom: $pad;}
+    @include transition-fast;
+    @include error-bg-border;
+    $pad: 10px;
+    margin-right: -$pad;
+    margin-left: -$pad;
+    padding-left: $pad;
+    padding-right: $pad;
+    padding-bottom: $pad;
+}
+
 .invalid-required {
-  .or-required-msg.active {
-    @include error-text; } }
-.invalid-constraint{
-  .or-constraint-msg.active{
-    @include error-text; } } 
+    .or-required-msg.active {
+        @include error-text;
+    }
+}
+
+.invalid-constraint {
+    .or-constraint-msg.active {
+        @include error-text;
+    }
+}
+
 // this may have a very significant positive impact on performance
 .or-branch.disabled, .or-branch.pre-init {
-  display: none; }
+    display: none;
+}
+
 .btn-reset {
-  margin-left: 10px;
-  background: none;
-  border: none;
-  box-shadow: none;
-  opacity: 0.5;
-  &:hover {
-    opacity: 0.7; }
-  &[readonly] {
-    background: none; }
-  .glyphicon-trash{
-    color: #000;
-    vertical-align: middle;} }
+    margin-left: 10px;
+    background: none;
+    border: none;
+    box-shadow: none;
+    opacity: 0.5;
+    &:hover {
+        opacity: 0.7;
+    }
+    &[readonly] {
+        background: none;
+    }
+    .glyphicon-trash {
+        color: #000;
+        vertical-align: middle;
+    }
+}

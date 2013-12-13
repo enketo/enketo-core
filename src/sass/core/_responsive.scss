@@ -1,56 +1,80 @@
-@mixin small-screen-paddings{
-  body{
-    padding: 0 !important;
-  header{
-    padding-left: 20px;
-    padding-right: 20px; } } }
+@mixin small-screen-paddings {
+    body {
+        padding: 0 !important;
+        header {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+}
 
 @media screen and (max-width: 720px) {
-  @include small-screen-paddings;
-  body {
-    background: none; }
-  .main{ 
-    margin: 0; }
-  .preview-header {
-	  top: -5px; }
-  .paper{
-  	@include border-radius(0px); }
-  .form-header{
-    top: 0;
-    padding-left: 16px;
-    padding-right: 16px;
-    border-bottom: 1px solid $groupline;
-    .form-language-selector > span {
-      display: none; } }
-  h3{
-  	padding-top: 25px;} }
+    @include small-screen-paddings;
+    body {
+        background: none;
+    }
+    .main {
+        margin: 0;
+    }
+    .preview-header {
+        top: -5px;
+    }
+    .paper {
+        @include border-radius(0px);
+    }
+    .form-header {
+        top: 0;
+        padding-left: 16px;
+        padding-right: 16px;
+        border-bottom: 1px solid $groupline;
+        .form-language-selector > span {
+            display: none;
+        }
+    }
+    h3 {
+        padding-top: 25px;
+    }
+}
 
 @media screen and (max-width: 600px) {
-  @include small-screen-paddings;
-  body {
-    background: none;
-    line-height: 1.05 * $baseLineHeight; }
-  .main { 
-    margin: 0;
-    article{
-      padding: 70px 30px 30px 30px; } } } 
+    @include small-screen-paddings;
+    body {
+        background: none;
+        line-height: 1.05 * $baseLineHeight;
+    }
+    .main {
+        margin: 0;
+        article {
+            padding: 70px 30px 30px 30px;
+        }
+    }
+}
 
 @media screen and (max-width: 400px) {
-  @include small-screen-paddings;
-  body {
-    background: none;
-    line-height: 1.09 * $baseLineHeight; }
-  input{
-    &[type="text"],&[type="password"], &[type="url"], &[type="email"],
-    &[type="date"], &[type="number"], &[type="time"], &[type="datetime"], &[type="file"]{
-      width: 100%; } }
-  select, textarea {
-    width: 100%; }
-  .main{ 
-    margin: 0;
-    article {
-      padding: 70px 20px 20px 20px; } }
-  .form-header {
-    margin: 5px 0; 
-    .form-language-selector{
-      border-right: none; } } } 
+    @include small-screen-paddings;
+    body {
+        background: none;
+        line-height: 1.09 * $baseLineHeight;
+    }
+    input {
+        &[type="text"],&[type="password"], &[type="url"], &[type="email"],
+        &[type="date"], &[type="number"], &[type="time"], &[type="datetime"], &[type="file"] {
+            width: 100%;
+        }
+    }
+    select, textarea {
+        width: 100%;
+    }
+    .main {
+        margin: 0;
+        article {
+            padding: 70px 20px 20px 20px;
+        }
+    }
+    .form-header {
+        margin: 5px 0;
+        .form-language-selector {
+            border-right: none;
+        }
+    }
+}

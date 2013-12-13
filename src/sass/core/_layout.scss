@@ -1,66 +1,85 @@
 .main article {
-  padding: 45px; }
+    padding: 45px;
+}
 
 .paper {
-  background-color: #fff;
-  border-radius: 7px;
-  border: 7px solid #ddd;
-  position: relative; }
+    background-color: #fff;
+    border-radius: 7px;
+    border: 7px solid #ddd;
+    position: relative;
+}
 
 .main {
-  margin: 100px auto 60px auto;
-  position: relative;
-  display: block;
-  text-align: left; 
-  max-width: 720px;
-  article {
-    min-height: 300px; }
-  ul.nav-tabs{
-      margin: 20px 0 0 0;
-      li{
-        margin: 0;
-        a{
-          background: none; } } } }
+    margin: 100px auto 60px auto;
+    position: relative;
+    display: block;
+    text-align: left;
+    max-width: 720px;
+    article {
+        min-height: 300px;
+    }
+    ul.nav-tabs {
+        margin: 20px 0 0 0;
+        li {
+            margin: 0;
+            a {
+                background: none;
+            }
+        }
+    }
+}
 
 .form-header {
-  @include border-box;
-  left: 0;
-  width: 100%;
-  position:absolute;
-  top: -75px;
-  border: none;
-  padding: 16px 0; }
-.form-language-selector {
-  float: right;
-  padding: 3px 0;
-  margin-left: 10px;
-  font-size: 0.8em; }
-#form-languages {
-  width: auto;
-  height: 36px;
-  background: none;
-  min-width: 11em;
-  margin: 0 0 0 16px;
-  font-size: 0.9em; } 
-#submit-form, #submit-form-single, #validate-form, #launch-form {
-  position: relative;
-  width: 150px;
-  left: 50%;
-  margin: 45px 10px 5px -75px; 
-  progress {
+    @include border-box;
+    left: 0;
     width: 100%;
-    margin: 1px auto 1px auto; } }
+    position: absolute;
+    top: -75px;
+    border: none;
+    padding: 16px 0;
+}
+
+.form-language-selector {
+    float: right;
+    padding: 3px 0;
+    margin-left: 10px;
+    font-size: 0.8em;
+}
+
+#form-languages {
+    width: auto;
+    height: 36px;
+    background: none;
+    min-width: 11em;
+    margin: 0 0 0 16px;
+    font-size: 0.9em;
+}
+
+#submit-form, #submit-form-single, #validate-form, #launch-form {
+    position: relative;
+    width: 150px;
+    left: 50%;
+    margin: 45px 10px 5px -75px;
+    progress {
+        width: 100%;
+        margin: 1px auto 1px auto;
+    }
+}
+
 .enketo-power {
-  position: relative;
-  left: 50%;
-  margin: 30px 0 0 -100px;
-  width: 200px;
-  font-size: 16px;
-  line-height: 23px;
-  text-align: center;
-  a {
-    font-style: italic; }
-  img {
-    float: none;
-    vertical-align: top;
-    width: 48px; } }
+    position: relative;
+    left: 50%;
+    margin: 30px 0 0 -100px;
+    width: 200px;
+    font-size: 16px;
+    line-height: 23px;
+    text-align: center;
+    a {
+        font-style: italic;
+    }
+    img {
+        float: none;
+        vertical-align: top;
+        width: 48px;
+    }
+}

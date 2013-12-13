@@ -2,12 +2,16 @@
 
 /** apply bootstrap .form-control class by default **/
 input:not([type=radio]):not([type=checkbox]), select, textarea {
-	@extend .form-control; }
+    @extend .form-control;
+}
 
 .note, .trigger {
-	@extend .alert;
-	@extend .alert-warning;}
+    @extend .alert;
+    @extend .alert-warning;
+}
 
 .btn-reset {
-  .glyphicon-trash{
-    vertical-align: bottom;} }
+    .glyphicon-trash {
+        vertical-align: bottom;
+    }
+}

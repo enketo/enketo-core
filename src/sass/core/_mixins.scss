@@ -1,66 +1,89 @@
-@mixin transition-slow ($prop: all, $duration: 1s) {
-  -webkit-transition: $prop $duration ease-out;
-  //-moz-transition: $prop $duration ease-out;
-  //-o-transition: $prop $duration ease-out;
-  transition: $prop $duration ease-out; }
+@mixin transition-slow($prop: all, $duration: 1s) {
+    -webkit-transition: $prop $duration ease-out;
+    //-moz-transition: $prop $duration ease-out;
+    //-o-transition: $prop $duration ease-out;
+    transition: $prop $duration ease-out;
+}
 
 @mixin transition-fast {
-  -webkit-transition: all 0.6s ease-out;
-  //-moz-transition: all 0.6s ease-out;
-  //-o-transition: all 0.6s ease-out;
-  transition: all 0.6s ease-out; }
+    -webkit-transition: all 0.6s ease-out;
+    //-moz-transition: all 0.6s ease-out;
+    //-o-transition: all 0.6s ease-out;
+    transition: all 0.6s ease-out;
+}
 
 @mixin transition-background-color {
-  -webkit-transition: background-color 0.2s linear;
-  //-moz-transition: background-color 0.2s linear;
-  //-o-transition: background-color 0.2s linear;
-  transition: background-color 0.2s linear;}
+    -webkit-transition: background-color 0.2s linear;
+    //-moz-transition: background-color 0.2s linear;
+    //-o-transition: background-color 0.2s linear;
+    transition: background-color 0.2s linear;
+}
 
 @mixin font-sizes($base, $factor) {
-  font-size: $factor * $base;
-  h1 { font-size: $factor * $base * 2.75; } 
-  h2 { font-size: $factor * $base * 2.25; } 
-  h3 { font-size: $factor * $base * 1.75; } 
-  h4 { font-size: $factor * $base * 1.25; } 
-  h5 { font-size: $factor * $base; }
-  h6 { font-size: $factor * $base * 0.85; } }
+    font-size: $factor * $base;
+    h1 {
+        font-size: $factor * $base * 2.75;
+    }
+    h2 {
+        font-size: $factor * $base * 2.25;
+    }
+    h3 {
+        font-size: $factor * $base * 1.75;
+    }
+    h4 {
+        font-size: $factor * $base * 1.25;
+    }
+    h5 {
+        font-size: $factor * $base;
+    }
+    h6 {
+        font-size: $factor * $base * 0.85;
+    }
+}
 
 @mixin border-box {
-  -moz-box-sizing: border-box;
-  //-webkit-box-sizing: border-box;
-  //-ms-box-sizing: border-box;
-  box-sizing: border-box; }
+    -moz-box-sizing: border-box;
+    //-webkit-box-sizing: border-box;
+    //-ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
 
 @mixin box-shadow-none {
-  //-moz-box-shadow: none;
-  //-webkit-box-shadow: none;
-  box-shadow: none; }
+    //-moz-box-shadow: none;
+    //-webkit-box-shadow: none;
+    box-shadow: none;
+}
 
 @mixin box-shadow-touch {
-  //-webkit-box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
-  //-moz-box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);}
+    //-webkit-box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+    //-moz-box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
 
 @mixin border-radius($radius) {
-  //-moz-border-radius: $radius;
-  //-webkit-border-radius: $radius;
-  border-radius: $radius;}
+    //-moz-border-radius: $radius;
+    //-webkit-border-radius: $radius;
+    border-radius: $radius;
+}
 
 @mixin error-bg-border {
-  background-color: #F2DEDE;
-  border-color: #EED3D7;
-  //-webkit-border-radius: 4px;
-  //-moz-border-radius: 4px;
-  border-radius: 4px; }
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+    //-webkit-border-radius: 4px;
+    //-moz-border-radius: 4px;
+    border-radius: 4px;
+}
 
 @mixin error-text {
-  display: block;
-  padding-top: 5px;
-  font-size: 0.85em;
-  font-weight: bold;
-  color: #B94A48; }
+    display: block;
+    padding-top: 5px;
+    font-size: 0.85em;
+    font-weight: bold;
+    color: #B94A48;
+}
 
 @mixin appearance-none {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none; }
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
