@@ -17,8 +17,7 @@
 define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, fileManager ) {
     "use strict";
 
-    var pluginName = 'offlineFilepicker',
-        maxSubmissionSize = $( document ).data( 'maxSubmissionSize' ) || 5 * 1024 * 1024;
+    var pluginName = 'offlineFilepicker';
 
     /**
      * File picker meant for offline-enabled form views
@@ -94,6 +93,11 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
 
     };
 
+    OfflineFilepicker.prototype._getMaxSubmissionSize = function() {
+        var maxSize = $( document ).data( 'maxSubmissionSize' );
+        return maxSize || 5 * 1024 * 1024;
+    };
+
     OfflineFilepicker.prototype._changeListener = function() {
         /*
       This delegated eventhander should actually be added asynchronously (or not at all if no FS support/permission). However, it
@@ -102,10 +106,12 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
       2. The regular eventhandler has event.stopImmediatePropagation which would mean this handler is never called.
       The easiest way to achieve this is to always add it but only let it do something if permission is granted to use FS.
      */
-        var $input = $( this.element );
+        var that = this,
+            $input = $( this.element );
         $input.on( 'change.passthrough.' + this.namespace, function( event ) {
             if ( fileManager.getCurrentQuota() ) {
-                var prevFileName, file, mediaType, $preview;
+                var prevFileName, file, mediaType, $preview,
+                    maxSubmissionSize = that._getMaxSubmissionSize();
                 //console.debug( 'namespace: ' + event.namespace );
                 if ( event.namespace === 'passthrough' ) {
                     //console.debug('returning true');
@@ -196,7 +202,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         .next( '.widget' ).remove().end()
         //console.debug( this.namespace, 'destroy' );
         .siblings( '.file-feedback, .file-preview, .file-loaded' ).remove();
-    }
+    };
 
     /**
      *
