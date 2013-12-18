@@ -815,4 +815,15 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
     } );
 
+    describe( 'form status', function() {
+        var form = loadForm( 'thedata.xml' );
+        form.init();
+
+        it( 'correctly maintains edit status', function() {
+            expect( form.getEditStatus() ).toBe( false );
+            form.getView().$.find( 'input[name="/thedata/nodeA"]' ).val( 'this' ).trigger( 'change' );
+            expect( form.getEditStatus() ).toBe( true );
+        } );
+    } );
+
 } );

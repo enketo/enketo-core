@@ -129,13 +129,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 return $form.find( '#form-title' ).text();
             };
 
-            //restores html form to pre-initialized state
-            //does not affect data instance!
+            /**
+             * Restores HTML form to pre-initialized state. It is meant to be called before re-initializing with
+             * new Form ( .....) and form.init()
+             * For this reason, it does not fix event handler, $form, formView.$ etc.!
+             * It also does not affect the XML instance!
+             */
             this.resetView = function() {
                 //form language selector was moved outside of <form> so has to be separately removed
                 $( '#form-languages' ).remove();
                 $form.replaceWith( $formClone );
-                console.log( 'view has been reset', $form );
             };
             /**
              * @deprecated
@@ -585,6 +588,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $form.trigger( 'edit', status );
                 },
                 get: function() {
+                    console.log( 'form element', $form );
                     return ( $form.attr( 'data-edited' ) === 'true' ) ? true : false;
                 }
             };
