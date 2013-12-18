@@ -107,15 +107,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             this.setRecordName = function( name ) {
                 return form.recordName.set( name );
             };
-            this.getRecordStatus = function() {
-                return form.recordStatus.get();
-            };
-            /**
-             * @param {(boolean|string)=} markedFinal
-             */
-            this.setRecordStatus = function( markedFinal ) {
-                return form.recordStatus.set( markedFinal );
-            };
+            //            this.getRecordStatus = function() {
+            //                return form.recordStatus.get();
+            //            };
+            //            /**
+            //             * @param {(boolean|string)=} markedFinal
+            //             */
+            //            this.setRecordStatus = function( markedFinal ) {
+            //                return form.recordStatus.set( markedFinal );
+            //            };
             /**
              * @param { boolean } status [description]
              */
@@ -125,7 +125,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             this.getEditStatus = function() {
                 return form.editStatus.get();
             };
-            this.getName = function() {
+            this.getSurveyName = function() {
                 return $form.find( '#form-title' ).text();
             };
 
@@ -135,6 +135,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //form language selector was moved outside of <form> so has to be separately removed
                 $( '#form-languages' ).remove();
                 $form.replaceWith( $formClone );
+                console.log( 'view has been reset', $form );
             };
             /**
              * @deprecated
@@ -589,22 +590,21 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             };
 
             FormView.prototype.recordName = {
-                set: function( key ) {
-                    $form.attr( 'data-stored-with-key', key );
-                    //$('#record-name').text(key);
-                    $form.find( 'h2 span' ).text( key );
+                set: function( name ) {
+                    $form.attr( 'name', key );
                 },
                 get: function() {
-                    return $form.attr( 'data-stored-with-key' ) || null;
-                },
-                reset: function() {
-                    $form.removeAttr( 'data-stored-with-key' );
+                    return $form.attr( 'name' );
                 }
+                /*,
+                reset: function() {
+                    $form.removeAttr( 'name' );
+                }*/
             };
 
-            FormView.prototype.recordStatus = {
-                set: function( markedFinal ) {
-                    $form.attr( 'data-stored-final', markedFinal.toString() );
+            /*FormView.prototype.recordStatus = {
+                set: function( draft ) {
+                    $form.attr( 'data-stored-final', markedFinal );
                 },
                 get: function() {
                     return ( $form.attr( 'data-stored-final' ) === 'true' ) ? true : false;
@@ -612,7 +612,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 reset: function() {
                     $form.removeAttr( 'data-stored-final' );
                 }
-            };
+            };*/
 
             /**
              * Branch Class (inherits properties of FormView Class) is used to manage skip logic
@@ -1452,11 +1452,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
                 } );
 
+                // why is the file namespace added
                 $form.on( 'change.file validate', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
                     var validCons, validReq,
                         n = that.input.getProps( $( this ) );
 
-                    event.stopImmediatePropagation();
+                    //why is this called? add explanation when figured out that it is necessary!
+                    //event.stopImmediatePropagation();
 
                     //set file input values to the actual name of file (without c://fakepath or anything like that)
                     if ( n.val.length > 0 && n.inputType === 'file' && $( this )[ 0 ].files[ 0 ] && $( this )[ 0 ].files[ 0 ].size > 0 ) {
@@ -1536,6 +1538,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //edit is fired when the form changes due to user input or repeats added/removed
                 //branch update doesn't require detection as it always happens as a result of an event that triggers change or changerepeat.
                 $form.on( 'change changerepeat', function( event ) {
+                    console.log( 'updating edit status' );
                     that.editStatus.set( true );
                 } );
 
