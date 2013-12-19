@@ -595,7 +595,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
             FormView.prototype.recordName = {
                 set: function( name ) {
-                    $form.attr( 'name', key );
+                    $form.attr( 'name', name );
                 },
                 get: function() {
                     return $form.attr( 'name' );
