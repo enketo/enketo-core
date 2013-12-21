@@ -1576,7 +1576,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 if ( $firstError.length > 0 && window.scrollTo ) {
                     window.scrollTo( 0, $firstError.offset().top - 50 );
                 }
-                return $firstError.length > 0;
+                return $firstError.length === 0;
             };
 
             /**
