@@ -600,23 +600,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 get: function() {
                     return $form.attr( 'name' );
                 }
-                /*,
-                reset: function() {
-                    $form.removeAttr( 'name' );
-                }*/
             };
-
-            /*FormView.prototype.recordStatus = {
-                set: function( draft ) {
-                    $form.attr( 'data-stored-final', markedFinal );
-                },
-                get: function() {
-                    return ( $form.attr( 'data-stored-final' ) === 'true' ) ? true : false;
-                },
-                reset: function() {
-                    $form.removeAttr( 'data-stored-final' );
-                }
-            };*/
 
             /**
              * Branch Class (inherits properties of FormView Class) is used to manage skip logic
