@@ -1,23 +1,8 @@
-$groupline: #bbbbbb;
-$line: 3px solid $groupline;
-$input-height: 34px;
-$input-min-width: 0.2 * 720px;
-$input-max-width: 80%;
-$baseFontSize: 15px;
-$baseLineHeight: 20px;
-$accent-color-1: #CE4F07;
-$images-path: '../../images/';
-$icon-font-path: '/lib/bootstrap-sass/fonts/';
-
-@mixin font-bold {
-  font-family: 'OpenSans', Arial, sans-serif;;
-  font-weight: bold;
-  font-style: normal; }
-
-@mixin font-normal {
-  font-family: 'OpenSans', Arial, sans-serif;
-  font-weight: normal;
-  font-style: normal; }
+//variables and mixins
+@import "core/variables";
+@import "formhub/variables";
+@import "core/mixins";
+@import "formhub/mixins";
 
 @import "bootstrap";
 @import "core/mixins";

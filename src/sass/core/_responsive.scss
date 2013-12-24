@@ -8,7 +8,7 @@
     }
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: $main-breakpoint) {
     @include small-screen-paddings;
     body {
         background: none;
@@ -37,13 +37,13 @@
 }
 
 @media screen and (max-width: 600px) {
-    @include small-screen-paddings;
+    //@include small-screen-paddings;
     body {
-        background: none;
+        //background: none;
         line-height: 1.05 * $baseLineHeight;
     }
     .main {
-        margin: 0;
+        //margin: 0;
         article {
             padding: 70px 30px 30px 30px;
         }
@@ -51,9 +51,9 @@
 }
 
 @media screen and (max-width: 400px) {
-    @include small-screen-paddings;
+    //@include small-screen-paddings;
     body {
-        background: none;
+        //background: none;
         line-height: 1.09 * $baseLineHeight;
     }
     input {
@@ -66,7 +66,7 @@
         width: 100%;
     }
     .main {
-        margin: 0;
+        //margin: 0;
         article {
             padding: 70px 20px 20px 20px;
         }

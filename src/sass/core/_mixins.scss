@@ -1,3 +1,9 @@
+@mixin font-bold {
+  font-weight: bold; }
+
+@mixin font-normal {
+  font-weight: normal; }
+
 @mixin transition-slow($prop: all, $duration: 1s) {
     -webkit-transition: $prop $duration ease-out;
     //-moz-transition: $prop $duration ease-out;

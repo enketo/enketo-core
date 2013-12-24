@@ -1,0 +1,21 @@
+// fonts
+$baseFontSize: 16px;
+$baseLineHeight: 20px;
+
+// borders
+$groupline: #bbbbbb;
+$line: 3px solid $groupline;
+
+// inputs
+$input-height: 34px;
+$input-min-width: 0.2 * 720px;
+$input-max-width: 80%;
+
+// colors, icons
+$accent-color-1: #252525;
+$images-path: '../../images/';
+$icon-font-path: '/lib/bootstrap-sass/fonts/';
+
+// layout
+$max-content-width: 720px;
+$main-breakpoint: $max-content-width;
