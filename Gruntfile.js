@@ -33,7 +33,7 @@ module.exports = function( grunt ) {
                 }
             },
             fix: {
-                src: [ "src/js/*.js", "src/widget/*/*.js" ],
+                src: [ "*.js", "src/js/*.js", "src/widget/*/*.js" ],
                 options: {
                     config: "./.jsbeautifyrc"
                 }
@@ -122,19 +122,6 @@ module.exports = function( grunt ) {
                 files: [ {
                     expand: true,
                     cwd: 'src/sass',
-                    src: [ '**/*.scss', '!**/_*.scss' ],
-                    dest: 'build/css',
-                    ext: '.css'
-                } ]
-            },
-            grid: {
-                options: {
-                    style: 'expanded',
-                    noCache: true
-                },
-                files: [ {
-                    expand: true,
-                    cwd: 'grid/sass',
                     src: [ '**/*.scss', '!**/_*.scss' ],
                     dest: 'build/css',
                     ext: '.css'
