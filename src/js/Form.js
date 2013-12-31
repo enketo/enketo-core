@@ -340,7 +340,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
                 getWrapNodes: function( $inputNodes ) {
                     var type = this.getInputType( $inputNodes.eq( 0 ) );
-                    return ( type == 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question' );
+                    return ( type == 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question, .note' );
                 },
                 /** very inefficient, should actually not be used **/
                 getProps: function( $node ) {
@@ -490,6 +490,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     if ( this.isMultiple( $inputNodes.eq( 0 ) ) === true ) {
                         value = value.split( ' ' );
+                    }
+
+                    // the empty class enables hiding empty readonly inputs for prettier notes
+                    if ( $inputNodes.is( '[readonly]' ) ) {
+                        $inputNodes.toggleClass( 'has-value', value );
                     }
 
                     $inputNodes.val( value );

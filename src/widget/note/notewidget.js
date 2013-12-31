@@ -40,19 +40,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Notewidget.prototype.constructor = Notewidget;
 
     Notewidget.prototype._init = function() {
-        $( this.element ).parent( 'label' ).each( function() {
-            console.log( 'converting readonly to trigger', $( this ) );
-            var relevant = $( this ).find( 'input' ).attr( 'data-relevant' ),
-                classes = $( this ).removeClass( 'question' ).attr( 'class' ) ? ' ' + $( this ).attr( 'class' ) : '',
-                branch = ( relevant ) ? ' or-branch pre-init' : '',
-                name = 'name="' + $( this ).find( 'input' ).attr( 'name' ) + '"',
-                attributes = ( typeof relevant !== 'undefined' ) ? 'data-relevant="' + relevant + '" ' + name : name,
-                value = $( this ).find( 'input, select, textarea' ).val(),
-                html = $( this ).markdownToHtml().html();
-            $( '<fieldset class="note' + classes + branch + '" ' + attributes + '></fieldset>' )
-                .insertBefore( $( this ) ).append( html ).append( '<div class="note-value">' + value + '</div>' ).find( 'input' ).remove();
-            $( this ).remove();
-        } );
+        $( this.element ).find( '.question-label' ).markdownToHtml();
     };
 
     $.fn[ pluginName ] = function( options, event ) {

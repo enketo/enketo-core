@@ -104,7 +104,7 @@ define( [ 'jquery' ], function( $ ) {
         return this.each( function() {
             var html,
                 $childStore = $( '<div/>' );
-            $( this ).children().each( function( index ) {
+            $( this ).children( ':not(input, select, textarea)' ).each( function( index ) {
                 var name = '$$$' + index;
                 $( this ).clone().markdownToHtml().appendTo( $childStore );
                 $( this ).replaceWith( name );
