@@ -44,9 +44,6 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      */
     Radiopicker.prototype._init = function() {
         this._setDelegatedHandlers();
-        if ( this.options.touch ) {
-            this._setMobileClass();
-        }
     };
 
     /**
@@ -74,22 +71,6 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         $form.on( 'click', '[data-checked]>input[type="radio"]', function( event ) {
             $( this ).prop( 'checked', false ).trigger( 'change' ).parent().removeAttr( 'data-checked' );
         } );
-    };
-
-    /**
-     * Set a button class on radio buttons.
-     *
-     * TODO: check performance difference if this is done in pure CSS instead of with the help of javascript
-     *
-     */
-    Radiopicker.prototype._setMobileClass = function() {
-        var $form = $( this.element );
-
-        $form.find( 'fieldset:not(.or-appearance-compact, .or-appearance-quickcompact, .or-appearance-label, .or-appearance-list-nolabel )' )
-            .children( 'label' )
-            .children( 'input[type="radio"], input[type="checkbox"]' )
-            .parent( 'label' )
-            .addClass( 'btn-radiocheck' );
     };
 
     /**
