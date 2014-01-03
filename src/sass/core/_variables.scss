@@ -1,3 +1,6 @@
+//bootstrap icon font gets messed up if helper is used
+$bootstrap-sass-asset-helper: false;
+
 // fonts
 $baseFontSize: 16px;
 $baseLineHeight: 20px;
