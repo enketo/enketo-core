@@ -106,7 +106,7 @@ legend {
         @include font-normal;
         display: block;
         margin: 0;
-        padding: 5px 0 3px 0;
+        padding: 0;
         &.with-media {
             padding: 0;
         }
@@ -141,7 +141,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea, select, .widget {
         @include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
-        background-color: #f5f2ed;
+        //background-color: #f5f2ed;
     }
     .input-append .add-on {
         margin-top: 10px;
