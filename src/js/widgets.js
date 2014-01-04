@@ -143,8 +143,14 @@ define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( configStr, Mo
             widget.options = widget.options || {};
             widget.options.touch = Modernizr.touch;
 
-            if ( !widget.name || ( !widget.selector && widget.selector !== null ) ) {
-                return console.error( 'widget configuration has no name and/or selector property', widget );
+            // if the widget is a css-only widget
+            if ( !widget.name ) {
+                return;
+            }
+
+            // check for config errors
+            if ( !widget.selector && widget.selector !== null ) {
+                return console.error( 'widget configuration has no acceptable selector property', widget );
             }
 
             $els = getElements( $group, widget.selector );

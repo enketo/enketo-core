@@ -131,6 +131,16 @@ legend {
     }
 }
 
+.or-appearance-horizontal {
+    label {
+        padding-right: 10px;
+        float: left;
+    }
+    [type="radio"], [type="checkbox"] {
+        width: auto;
+    }
+}
+
 .touch {
     .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel) {
         // touch radio buttons and checkboxes

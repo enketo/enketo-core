@@ -1,0 +1,51 @@
+@mixin likert-filler {
+	content: '';
+	display: block;
+	position: absolute;
+	top: -5px;
+    width: calc(50% - 10px);
+    background-color: white;
+    height: 10px;
+}
+
+.or-appearance-likert {
+    > * {
+        @include display-flex;
+        @include flex-wrap(nowrap);
+        @include flex-direction(row);
+    }
+    label {
+        @include flex(1);
+        @include display-flex;
+        @include flex-wrap(nowrap);
+        @include flex-direction(column);
+        input[type=radio], input[type=checkbox] {
+            position: relative;
+            left: 50%;
+            margin-left: -10px;
+            background-color: white;
+            z-index: 10;
+        }
+        &:first-of-type .option-label::after {
+            @include likert-filler;
+            left: 0;
+        }
+        &:last-of-type .option-label::after {
+            @include likert-filler;
+            right: 0;
+        }
+        .option-label {
+        	position: relative;
+            flex: 1;
+            text-align: center;
+            margin-top: -13px;
+            padding-top: 15px;
+            border-top: 3px solid #ccc;
+            font-size: 12px;
+            @include font-normal;
+        }
+    }
+    [type="radio"], [type="checkbox"] {
+        width: auto;
+    }
+}
