@@ -24,7 +24,7 @@ h4 {
 /** hide stuff **/
 
 .or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,
-.itemset-template, .itemset-labels {
+.option-wrapper .itemset-template, .itemset-labels {
     display: none;
 }
 
@@ -113,21 +113,23 @@ legend {
     > span {
         vertical-align: 12px;
     }
-    //works in safari, some other webkit browsers
-    ~ label {
-        @include font-normal;
-        display: block;
-        margin: 0;
-        padding: 4px 0 0 0;
-        &.with-media {
-            padding: 0;
-        }
-        &:hover {
-            background-color: lighten($accent-color-1, 48%);
-        }
-        .active {
-            margin-left: 5px;
-        }
+}
+
+//works in safari, some other webkit browsers
+.option-wrapper > label {
+    @include font-normal;
+    display: block;
+    margin: 0;
+    padding: 4px 0 4px 0;
+    &.with-media {
+        padding: 0;
+    }
+    // TODO: remove hover rule for tables (in likert already done)
+    &:hover {
+        background-color: lighten($accent-color-1, 48%);
+    }
+    .active {
+        margin-left: 5px;
     }
 }
 
@@ -144,7 +146,7 @@ legend {
 .touch {
     .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel) {
         // touch radio buttons and checkboxes
-        legend ~ label {
+        .option-wrapper > label {
             background-color: transparent;
             border: 1px solid #ccc;
             @include border-radius(4px);
