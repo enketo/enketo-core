@@ -144,7 +144,7 @@ legend {
 }
 
 .touch {
-    .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel) {
+    .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
         // touch radio buttons and checkboxes
         .option-wrapper > label {
             background-color: transparent;
