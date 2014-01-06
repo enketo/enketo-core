@@ -1,20 +1,18 @@
 @mixin likert-filler {
-	content: '';
-	display: block;
-	position: absolute;
-	top: -5px;
+    content: '';
+    display: block;
+    position: absolute;
+    top: -5px;
     width: calc(50% - 10px);
     background-color: white;
     height: 10px;
 }
 
-.or-appearance-likert {
-    > * {
-        @include display-flex;
-        @include flex-wrap(nowrap);
-        @include flex-direction(row);
-    }
-    label {
+.or-appearance-likert .option-wrapper {
+    @include display-flex;
+    @include flex-wrap(nowrap);
+    @include flex-direction(row);
+    > label {
         @include flex(1);
         @include display-flex;
         @include flex-wrap(nowrap);
@@ -22,9 +20,23 @@
         input[type=radio], input[type=checkbox] {
             position: relative;
             left: 50%;
+            padding: 0;
             margin-left: -10px;
             background-color: white;
             z-index: 10;
+        }
+        .active {
+            margin: 0;
+        }
+        .option-label {
+            position: relative;
+            flex: 1;
+            text-align: center;
+            margin-top: -13px;
+            padding-top: 15px;
+            border-top: 3px solid #ccc;
+            font-size: 12px;
+            @include font-normal;
         }
         &:first-of-type .option-label::after {
             @include likert-filler;
@@ -34,18 +46,8 @@
             @include likert-filler;
             right: 0;
         }
-        .option-label {
-        	position: relative;
-            flex: 1;
-            text-align: center;
-            margin-top: -13px;
-            padding-top: 15px;
-            border-top: 3px solid #ccc;
-            font-size: 12px;
-            @include font-normal;
+        &:hover {
+            background-color: transparent;
         }
-    }
-    [type="radio"], [type="checkbox"] {
-        width: auto;
     }
 }
