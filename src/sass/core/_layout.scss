@@ -1,4 +1,8 @@
-html, body, .main{
+html {
+    height: 100%;
+}
+
+body {
     min-height: 100%;
 }
 
@@ -14,7 +18,8 @@ html, body, .main{
 }
 
 .main {
-    margin: 100px auto 60px auto;
+    margin: 0 auto;
+    padding: 100px 0 70px 0;
     position: relative;
     display: block;
     text-align: left;
