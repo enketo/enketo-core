@@ -1,6 +1,6 @@
 {
-	"name": "mediagridpicker",
-	"stylesheet": "mediagridpicker.scss",
-	"selector": null,
-	"options": {}
+    "name": null,
+    "stylesheet": "mediagridpicker.scss",
+    "selector": null,
+    "options": {}
 }
