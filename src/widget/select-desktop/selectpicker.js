@@ -100,7 +100,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
                     /**
                      * e.g.:
                      * <li checked="checked">
-                     *   <a tabindex="-1" href="#">
+                     *   <a class="option-wrapper" tabindex="-1" href="#">
                      *         <label>
                      *           <input class="ignore" type="checkbox" checked="checked" value="a"/>
                      *         </label>
@@ -109,7 +109,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
                      */
                     liHtml +=
                         "<li " + checkedLiAttr + ">" +
-                        "<a tabindex='-1' href='#'>" +
+                        "<a class='option-wrapper' tabindex='-1' href='#'>" +
                         "<label class='checkbox inline'>" +
                         "<input class='ignore' " + inputAttr + checkedInputAttr + "value='" + li[ i ].value + "' />" +
                         li[ i ].label + "</label>" +

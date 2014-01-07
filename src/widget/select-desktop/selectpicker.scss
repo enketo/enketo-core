@@ -1,17 +1,28 @@
 .bootstrap-select {
-  margin-top: 15px;
-  .dropdown-toggle{
-    min-width: $input-min-width - 14px;
-    @include font-normal;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    text-align: left;
-    .caret {
-      margin-left:10px; }
-    ~ .dropdown-menu{
-      label{
+    margin-top: 15px;
+    .dropdown-toggle {
+        min-width: $input-min-width - 14px;
         @include font-normal;
-        padding-top: 0px;
-        padding-left: 0px; 
-        font-size: $baseFontSize;
-        input[type="checkbox"] {
-          margin: 0 10px 1px 0; } } } } }
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        text-align: left;
+        .caret {
+            margin-left: 10px;
+        }
+        ~ .dropdown-menu {
+            .option-wrapper {
+                label {
+                    @include font-normal;
+                    padding-top: 0px;
+                    padding-left: 0px;
+                    font-size: $baseFontSize;
+                    input[type="checkbox"] {
+                        margin: 0 10px 1px 0;
+                    }
+                    &:hover {
+                        background: transparent;
+                    }
+                }
+            }
+        }
+    }
+}
