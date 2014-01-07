@@ -227,6 +227,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
 
 .trigger, .note {
     @include font-normal;
+    display: block;
     padding: 7px 12px;
     margin: 1em 0;
     input[readonly]:not([type=radio]):not([type=checkbox]) {
