@@ -54,3 +54,12 @@
         }
     }
 }
+
+// fix colors when background is not default inside repeats
+.or-repeat .or-appearance-likert .option-wrapper > label {
+    &:first-of-type .option-label::after,
+    &:last-of-type .option-label::after,
+    input[type=radio], input[type=checkbox],  {
+        background-color: $repeat-bg;
+    }
+}

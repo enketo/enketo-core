@@ -18,6 +18,7 @@ $input-max-width: 80%;
 $accent-color-1: #252525;
 $images-path: '../../images/';
 $icon-font-path: '/lib/bootstrap-sass/fonts/';
+$repeat-bg: lighten($accent-color-1, 55%);
 
 // layout
 $max-content-width: 720px;
