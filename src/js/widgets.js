@@ -86,8 +86,10 @@ define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( configStr, Mo
 
         for ( var i = 0; i < widgetConfig.length; i++ ) {
             widget = widgetConfig[ i ];
-            $els = getElements( $group, widget.selector );
-            $els[ widget.name ]( 'enable' );
+            if ( widget.name ) {
+                $els = getElements( $group, widget.selector );
+                $els[ widget.name ]( 'enable' );
+            }
         }
     }
 
@@ -105,9 +107,13 @@ define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( configStr, Mo
         //console.debug( 'disabling widgets in ', $group );
 
         for ( var i = 0; i < widgetConfig.length; i++ ) {
+
             widget = widgetConfig[ i ];
-            $els = getElements( $group, widget.selector );
-            $els[ widget.name ]( 'disable' );
+            if ( widget.name ) {
+                $els = getElements( $group, widget.selector );
+                $els[ widget.name ]( 'disable' );
+            }
+
         }
     }
 
@@ -124,8 +130,10 @@ define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( configStr, Mo
 
         for ( var i = 0; i < widgetConfig.length; i++ ) {
             widget = widgetConfig[ i ];
-            $els = getElements( $group, widget.selector );
-            $els[ widget.name ]( 'destroy' );
+            if ( widget.name ) {
+                $els = getElements( $group, widget.selector );
+                $els[ widget.name ]( 'destroy' );
+            }
         }
     }
 
@@ -138,20 +146,25 @@ define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( configStr, Mo
     function create( $group ) {
         var widget, $els;
 
+        console.log( 'widgets', widgetConfig );
         for ( var i = 0; i < widgetConfig.length; i++ ) {
             widget = widgetConfig[ i ];
             widget.options = widget.options || {};
             widget.options.touch = Modernizr.touch;
 
-            if ( !widget.name || ( !widget.selector && widget.selector !== null ) ) {
-                return console.error( 'widget configuration has no name and/or selector property', widget );
+            // if the widget is a css-only widget
+            if ( !widget.name ) {
+                //console.log( 'CSS-only widget', widgetConfig[ i ] );
+            } else if ( !widget.selector && widget.selector !== null ) {
+                console.error( 'widget configuration has no acceptable selector property', widget );
+            } else {
+                $els = getElements( $group, widget.selector );
+
+                $els[ widget.name ]( widget.options );
+
+                setLangChangeHandler( widget, $els );
+                setOptionChangeHandler( widget, $els );
             }
-
-            $els = getElements( $group, widget.selector );
-            $els[ widget.name ]( widget.options );
-
-            setLangChangeHandler( widget, $els );
-            setOptionChangeHandler( widget, $els );
         }
     }
 

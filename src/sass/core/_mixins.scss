@@ -93,3 +93,39 @@
     -webkit-appearance: none;
     appearance: none;
 }
+
+@mixin display-flex{
+    display: -ms-flexbox; /*IE10*/
+    display: -webkit-flex;
+    display: flex; }
+
+@mixin display-flex-important{
+    display: -ms-flexbox !important; /*IE10*/
+    display: -webkit-flex !important;
+    display: flex !important;}
+
+@mixin flex ($value, $total:null) {
+    $flex: 100%;
+    @if not $total {
+        $flex: $value;
+    } @else if $total >= $value {
+        $flex: ($value / $total) * 100%;
+    }
+    -webkit-flex: $flex;
+    -ms-flex: $flex;
+    flex: $flex;
+}
+
+@mixin flex-wrap ($wrap:wrap) {
+    -webkit-flex-wrap: $wrap;
+    -ms-flex-wrap: $wrap;
+    -moz-flex-wrap: $wrap;
+    flex-wrap: $wrap;
+}
+
+@mixin flex-direction ($dir:row){
+    -webkit-flex-direction: $dir;
+    -ms-flex-direction: $dir;
+    -moz-flex-direction: $dir;
+    flex-direction: $dir;
+}

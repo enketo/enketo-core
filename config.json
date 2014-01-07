@@ -11,7 +11,8 @@
         "enketo-widget/datetime/datetimepicker-extended",
         "enketo-widget/mediagrid/mediagridpicker",
         "enketo-widget/medialabel/medialabelwidget",
-        "enketo-widget/file-offline/offline-filepicker"
+        "enketo-widget/file-offline/offline-filepicker",
+        "enketo-widget/select-likert/likertitem"
     ],
     "gmapsStaticApiKey": "",
     "gmapsDynamicApiKey": ""
