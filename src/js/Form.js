@@ -1491,6 +1491,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var props = that.input.getProps( $( this ) ),
                         required = $( this ).attr( 'required' ),
                         $question = $( this ).closest( '.question' ),
+                        $legend = $question.find( 'legend:eq(0)' ),
                         loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' ),
                         insideTable = ( $( this ).closest( '.or-appearance-list-nolabel' ).length > 0 ),
                         $reqSubtle = $question.find( '.required-subtle' ),
@@ -1499,7 +1500,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         $question.addClass( 'focus' );
                         if ( required && $reqSubtle.length === 0 && !insideTable ) {
                             $reqSubtle = $( reqSubtle );
-                            $reqSubtle.insertBefore( this );
+
+                            if ( $legend.length > 0 ) {
+                                $legend.append( $reqSubtle );
+                            } else {
+                                $reqSubtle.insertBefore( this );
+                            }
+
                             if ( !loudErrorShown ) {
                                 $reqSubtle.show( function() {
                                     $( this ).removeAttr( 'style' );
