@@ -1,26 +1,43 @@
-.or-appearance-list-nolabel, .or-appearance-label {
+.question.or-appearance-list-nolabel, .question.or-appearance-label {
     margin: -0.9em 0 -0.7em 0;
     legend {
         float: left;
         border: none;
         line-height: 17px;
-        max-width: 40%;
+        width: 40%;
+        //max-width: 40%;
         //border: 1px solid red;
         min-height: 1px;
     }
-    .option-wrapper > label {
-        float: left;
-        //border: 1px solid red;
-        display: block;
-        //width: 100px;
-        text-align: center;
-        .active {
-            margin: 0 auto;
+    .option-wrapper {
+        @include display-flex;
+        @include flex-direction(row);
+        @include flex-wrap(nowrap);
+        > label {
+            @include flex(1);
+            //float: left;
+            //border: 1px solid red;
+            display: block;
+            //width: 100px;
+            text-align: center;
+            .active {
+                margin: 0 auto;
+            }
         }
     }
-    input {
-        margin: 0 10px 0 10px;
+    .option-label.active {
         text-align: center;
+    }
+    input[type=radio], input[type=checkbox] {
+        position: relative;
+        left: 50%;
+        margin-left: -10px;
+        //margin: 0 10px 0 10px;
+        //text-align: center;
+    }
+    ~ .note {
+        background-color: transparent;
+        @extend h4;
     }
 }
 

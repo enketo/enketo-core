@@ -30,7 +30,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
 
     function Tablewidget( element, options, event ) {
         Widget.call( this, element, options );
-        this.init();
+        //this.init();
     }
 
     //copy the prototype functions from the Widget super class
