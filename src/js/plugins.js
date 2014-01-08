@@ -127,40 +127,6 @@ define( [ 'jquery' ], function( $ ) {
     };
 
     /**
-     * Gives a set of elements the same (shortest) width
-     *
-     * @return {jQuery} [description]
-     */
-    $.fn.toSmallestWidth = function() {
-        var smallestWidth = 2000;
-        return this.each( function() {
-            if ( $( this ).width() < smallestWidth ) {
-                smallestWidth = $( this ).width();
-            }
-        } ).each( function() {
-            $( this ).width( smallestWidth );
-        } );
-    };
-
-
-    /**
-     * give a set of elements the same (longest) width
-     * @param  {number=} plus optional additional pixels to add to width
-     * @return {jQuery}       [description]
-     */
-    $.fn.toLargestWidth = function( plus ) {
-        var largestWidth = 0;
-        plus = plus || 0;
-        return this.each( function() {
-            if ( $( this ).width() > largestWidth ) {
-                largestWidth = $( this ).width();
-            }
-        } ).each( function() {
-            $( this ).width( largestWidth + plus );
-        } );
-    };
-
-    /**
      * Reverses a jQuery collection
      * @type {Array}
      */

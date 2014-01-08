@@ -5,8 +5,6 @@
         border: none;
         line-height: 17px;
         width: 40%;
-        //max-width: 40%;
-        //border: 1px solid red;
         min-height: 1px;
     }
     .option-wrapper {
@@ -15,10 +13,8 @@
         @include flex-wrap(nowrap);
         > label {
             @include flex(1);
-            //float: left;
-            //border: 1px solid red;
+            max-width: 100px;
             display: block;
-            //width: 100px;
             text-align: center;
             .active {
                 margin: 0 auto;
@@ -32,8 +28,6 @@
         position: relative;
         left: 50%;
         margin-left: -10px;
-        //margin: 0 10px 0 10px;
-        //text-align: center;
     }
     ~ .note {
         background-color: transparent;
@@ -42,10 +36,6 @@
 }
 
 .question.or-appearance-list-nolabel {
-    border-top: none;
-    &:not(:last-of-type) {
-        border-bottom: none;
-    }
     label .active {
         display: none !important;
         float: none;
@@ -53,7 +43,6 @@
 }
 
 .question.or-appearance-label {
-    border-bottom: none;
     legend ~ .option-wrapper > label {
         margin-bottom: 6px;
         &:hover {

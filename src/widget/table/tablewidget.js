@@ -20,7 +20,10 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     var pluginName = 'tablewidget';
 
     /**
-     * Takes care of programmatically setting widths of table columns
+     * Takes care of fixing awkward header XML produced with PYXForm appearance="table-list"
+     * This js file can hopefully be removed in the future.
+     *
+     * See https://github.com/SEL-Columbia/pyxform/issues/72
      *
      * @constructor
      * @param {Element} element Element to apply widget to.
@@ -30,7 +33,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
 
     function Tablewidget( element, options, event ) {
         Widget.call( this, element, options );
-        //this.init();
+        this.init();
     }
 
     //copy the prototype functions from the Widget super class
@@ -40,19 +43,20 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Tablewidget.prototype.constructor = Tablewidget;
 
     Tablewidget.prototype.init = function() {
-        var that = this;
-        $( this.element ).parent().parent().find( '.or-appearance-field-list .or-appearance-list-nolabel, .or-appearance-field-list .or-appearance-label' )
-            .closest( '.or-appearance-field-list' ).each( function() {
-                // remove the odd input element that XLSForm adds for the 'easier table method'
-                // see https://github.com/modilabs/pyxform/issues/72
-                $( this ).find( 'input[readonly]' ).remove();
-                // fix the column widths, after any ongoing animations have finished
-                $( this ).promise().done( function() {
-                    $( this ).find( '.or-appearance-label label>img' ).parent().css( 'width', 'auto' ).toSmallestWidth();
-                    $( this ).find( '.or-appearance-label label, .or-appearance-list-nolabel label' ).css( 'width', 'auto' ).toLargestWidth();
-                    $( this ).find( 'legend' ).css( 'width', 'auto' ).toLargestWidth( 35 );
+        var $labels, $hints, $note, $h4,
+            that = this;
+        console.log( 'init table' );
+        $( this.element ).parent().parent()
+            .find( '.or-appearance-field-list .or-appearance-label' )
+            .prev( '.note' ).each( function() {
+                $note = $( this );
+                $labels = $note.find( '.question-label' );
+                $hints = $note.find( '.or-hint' );
+                // add a proper h4 element and append the labels and hints
+                $( '<h4></h4>' ).insertAfter( $note ).append( $labels ).append( $hints );
 
-                } );
+                // remove the original note
+                $note.remove();;
             } );
     };
 
