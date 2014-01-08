@@ -150,10 +150,11 @@ legend {
             background-color: transparent;
             border: 1px solid #ccc;
             @include border-radius(4px);
-            width: 100%;
+            width: auto;
+            margin-right: 20px;
+            margin-bottom: 6.4px;
             line-height: 40px;
             text-align: left;
-            margin-bottom: .4em;
             input[type="radio"], input[type="checkbox"] {
                 margin-top: 10px;
                 margin-left: 15px;
