@@ -40,7 +40,8 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Notewidget.prototype.constructor = Notewidget;
 
     Notewidget.prototype._init = function() {
-        $( this.element ).find( '.question-label' ).markdownToHtml();
+        $( this.element ).find( '.question-label' ).markdownToHtml()
+            .end().find( '[readonly]' ).addClass( 'ignore' );
     };
 
     $.fn[ pluginName ] = function( options, event ) {
