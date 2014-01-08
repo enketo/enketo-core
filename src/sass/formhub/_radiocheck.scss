@@ -1,6 +1,7 @@
 /* fancy radio buttons / checkboxes */
 legend ~ .option-wrapper > label .active {
-    margin-left: 0;
+    margin-left: 45px;
+    display: block;
 }
 
 .option-wrapper input {
