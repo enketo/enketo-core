@@ -1061,7 +1061,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $form.addClass( 'clearfix' )
                     .find( 'label, legend' ).each( function() {
                         var $label = $( this );
-                        if ( $label.siblings( 'legend' ).length === 0 &&
+                        if ( $label.parent( '.option-wrapper' ).length === 0 &&
                             $label.parent( '#or-calculated-items, #or-preload-items' ).length === 0 &&
                             $label.find( '.or-constraint-msg' ).length === 0 &&
                             ( $label.prop( 'nodeName' ).toLowerCase() == 'legend' ||
@@ -1071,14 +1071,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             $label.prepend( '<span class="or-constraint-msg active" lang="">Value not allowed</span>' );
                         }
                     } );
-                //TODO: move to XSLT
-                //$form.find( '.trigger' ).addClass( 'alert alert-warning' );
 
                 //move constraint message to bottom of question and add message for required (could also be done in XSLT)
                 //TODO: move to XSLT
                 $form.find( '.or-constraint-msg' ).parent().each( function() {
                     var $msg = $( this ).find( '.or-constraint-msg' ).detach(),
-                        $wrapper = $( this ).closest( '.question' );
+                        $wrapper = $( this ).closest( '.question:not(.or-appearance-label)' );
                     $wrapper.append( $msg );
                     $msg.after( '<span class="or-required-msg active" lang="">This field is required</span>' );
                 } );
