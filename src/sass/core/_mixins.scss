@@ -11,11 +11,11 @@
     transition: $prop $duration ease-out;
 }
 
-@mixin transition-fast {
-    -webkit-transition: all 0.6s ease-out;
+@mixin transition-fast($prop: all) {
+    -webkit-transition: $prop 0.6s ease-out;
     //-moz-transition: all 0.6s ease-out;
     //-o-transition: all 0.6s ease-out;
-    transition: all 0.6s ease-out;
+    transition: $prop 0.6s ease-out;
 }
 
 @mixin transition-background-color {
