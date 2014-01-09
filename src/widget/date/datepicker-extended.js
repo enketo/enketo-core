@@ -138,7 +138,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstr
          */
         DatepickerExtended.prototype._setResetHandler = function( $fakeDateI ) {
             $fakeDateI.next( '.btn-reset' ).on( 'click', function( event ) {
-                $fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
+                $fakeDateI.val( '' ).trigger( 'changeDate' ).datepicker( 'update' );
             } );
         };
 
