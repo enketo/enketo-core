@@ -1,6 +1,6 @@
 {
-	"name": "datepickerExtended",
-	"stylesheet": "datepicker-extended.scss",
-	"selector": "input[type=\"date\"]",
-	"options": {}
+    "name": "datepickerExtended",
+    "stylesheet": "datepicker-extended.scss",
+    "selector": "input[type=\"date\"]:not([readonly])",
+    "options": {}
 }

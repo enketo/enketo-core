@@ -188,7 +188,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
     height: $input-height;
 }
 
-.question input {
+.question input, .note input {
     &[type="text"],&[type="password"], &[type="url"], &[type="email"], &[type="file"] {
         width: $input-max-width;
     }

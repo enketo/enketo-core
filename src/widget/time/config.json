@@ -1,6 +1,6 @@
 {
-	"name": "timepickerExtended",
-	"stylesheet": "timepicker-extended.scss",
-	"selector": "input[type=\"time\"]",
-	"options": {}
+    "name": "timepickerExtended",
+    "stylesheet": "timepicker-extended.scss",
+    "selector": "input[type=\"time\"]:not([readonly])",
+    "options": {}
 }
