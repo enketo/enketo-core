@@ -56,6 +56,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 if ( typeof dataStrToEdit !== 'undefined' && dataStrToEdit && dataStrToEdit.length > 0 ) {
                     dataToEdit = new FormModel( dataStrToEdit );
+                    // due a past bug, it is possible for nodes in dataToEdit to contain type="file" attributes
+                    // these should be removed, and will be re-added if a new file is input to replace the existing input
+                    // because if the input remains unchanged Enketo will attempt to retrieve this file from
+                    // the fileSystem (but it won't be there)
+                    dataToEdit.$.find( '[type="file"]' ).removeAttr( 'type' );
                     loadErrors = loadErrors.concat( dataToEdit.init() );
                     this.load( dataToEdit );
                 }
