@@ -1034,26 +1034,34 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              * @param {string=} changedNodeNames - [type/description]
              */
             FormView.prototype.calcUpdate = function( changedNodeNames ) {
-                var i, index, name, expr, dataType, relevant, relevantExpr, result, constraint, namesArr, valid, cleverSelector, $dataNodes;
+                var i, index, name, expr, dataType, relevant, relevantExpr, result, constraint, namesArr, valid, cleverSelector, $this, $dataNodes,
+                    that = this;
+
 
                 namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
                 cleverSelector = ( namesArr.length > 0 ) ? [] : [ 'input[data-calculate]' ];
                 for ( i = 0; i < namesArr.length; i++ ) {
                     cleverSelector.push( 'input[data-calculate*="' + namesArr[ i ] + '"], input[data-relevant*="' + namesArr[ i ] + '"]' );
                 }
+                console.log( 'cleverSelector:', cleverSelector );
 
-                $form.find( '#or-calculated-items' ).find( cleverSelector.join() ).each( function() {
-                    name = $( this ).attr( 'name' );
-                    expr = $( this ).attr( 'data-calculate' );
-                    dataType = $( this ).attr( 'data-type-xml' );
-                    constraint = $( this ).attr( 'data-constraint' ); //obsolete?
-                    relevantExpr = $( this ).attr( 'data-relevant' );
+                $form.find( cleverSelector.join() ).each( function() {
+                    $this = $( this );
+                    name = $this.attr( 'name' );
+                    expr = $this.attr( 'data-calculate' );
+                    dataType = $this.attr( 'data-type-xml' );
+                    constraint = $this.attr( 'data-constraint' ); //obsolete?
+                    relevantExpr = $this.attr( 'data-relevant' );
                     relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
                     $dataNodes = model.node( name ).get();
                     $dataNodes.each( function( index ) {
                         //not sure if using 'string' is always correct
                         result = ( relevant ) ? model.evaluate( expr, 'string', name, index ) : '';
                         valid = model.node( name, index ).setVal( result, constraint, dataType );
+
+                        // not the most efficient to use input.setVal here as it will do another lookup
+                        // of the node, that we already have... 
+                        that.input.setVal( name, index, result );
                     } );
 
                 } );
