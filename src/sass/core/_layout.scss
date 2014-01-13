@@ -3,15 +3,11 @@ html {
 }
 
 body {
+    @include display-flex;
+    @include flex-direction(column);
+    @include flex-wrap(nowrap);
     position: relative;
-    height: 100%;
-    overflow: auto;
-}
-
-.main article {
-    padding: 45px;
-    position: relative;
-    height: 100%;
+    min-height: 100%;
     overflow: auto;
 }
 
@@ -20,20 +16,24 @@ body {
     border-radius: 7px;
     border: 7px solid #ddd;
     position: relative;
+    min-height: 100%;
 }
 
 .main {
+    @include display-flex;
+    @include flex(1);
     margin: 0 auto;
     padding: 100px 0 70px 0;
     position: relative;
-    display: block;
     text-align: left;
     width: 100%;
-    height: 100%;
-    overflow: auto;
+    min-height: 100%;
     max-width: $max-content-width;
     article {
-        min-height: 300px;
+        padding: 45px;
+        position: relative;
+        min-height: 100%;
+        @include flex(1);
     }
     ul.nav-tabs {
         margin: 20px 0 0 0;
