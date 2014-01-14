@@ -1,0 +1,31 @@
+.pages.or {
+    > .note,
+    > .question,
+    > .trigger,
+    > .or-appearance-field-list {
+        //just to reduce browser re-painting before js starts kicking in and sets role="page"
+        display: none;
+    }
+    [role="page"] {
+        display: none;
+        &.current {
+            display: block;
+        }
+    }
+    ~ .btn.previous-page, 
+    ~ .btn.next-page {
+        position: absolute;
+        bottom: 0;
+        border-radius: 0;
+        width: 50%;
+        border-bottom: none;
+        border-left: none;
+    }
+    ~ .btn.previous-page {
+        left: 0;
+    }
+    ~ .btn.next-page {
+        left: 50%;
+        border-right: none;
+    }
+}

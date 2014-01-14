@@ -328,6 +328,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 this.branch.init(); //after widgets.init()
                 //profiler.report();
 
+                this.pages.init(); // after branch.init();
+
                 //profiler = new Profiler('outputUpdate initial');
                 this.outputUpdate();
                 //profiler.report();
@@ -336,6 +338,100 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 this.editStatus.set( false );
                 //profiler.report('time taken across all functions to evaluate '+xpathEvalNum+' XPath expressions: '+xpathEvalTime);
+            };
+
+            FormView.prototype.pages = {
+                init: function() {
+                    var $pagenav = $( '<div></div>' );
+
+                    if ( $form.hasClass( 'pages' ) ) {
+                        this.$current = $( '.or > .note, .or > .question, .or > .trigger, .or > .or-appearance-field-list' )
+                            .attr( 'role', 'page' ).first( ':not(.disabled)' ).addClass( 'current' );
+
+                        this.$btnprev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
+                        this.$btnnext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
+                        $( '.paper' ).append( this.$btnprev, this.$btnnext );
+
+                        this.toggleButtons();
+                        this.setButtonHandlers();
+                        //this.setSwipeEvents();
+                        //this.setSwipeHandlers(); //not sure if this will work well enough in browser
+                        // a swipeleft may very well move to another tab 
+                        this.active = true;
+
+                    } else {
+                        this.active = false;
+                    }
+
+
+                },
+                setButtonHandlers: function() {
+                    var that = this;
+                    this.$btnprev.click( function() {
+                        that.prev();
+                    } );
+                    this.$btnnext.click( function() {
+                        that.next();
+                    } );
+                },
+                setSwipeHandlers: function() {
+                    var that = this;
+                    $( document ).on( 'swipeleft', function( event ) {
+                        if ( event.handled !== true ) {
+                            that.next();
+                            event.handled = true;
+                        }
+                        return false;
+                    } ).on( 'swiperight', function( event ) {
+                        if ( event.handled !== true ) {
+                            that.prev();
+                            event.handled = true;
+                        }
+                        return false;
+                    } );
+                },
+                getCurrent: function() {
+                    return this.$current;
+                },
+                //$prev cannot be cached because it may vary from question to question when a subsequent page
+                //becomes relevant or irrelevant
+                getPrev: function() {
+                    return this.$current.prevAll( '[role="page"]:not(.disabled):first' );
+                },
+                //$next cannot be cached because it may vary from question to question when a subsequent page
+                //becomes relevant or irrelevant
+                getNext: function() {
+                    return this.$current.nextAll( '[role="page"]:not(.disabled):first' );
+                },
+                next: function() {
+                    var $next = this.getNext();
+                    if ( $next.length === 1 ) {
+                        this.$current.removeClass( 'current' );
+                        this.$current = $next.addClass( 'current' );
+                        this.toggleButtons();
+                    }
+                },
+                prev: function() {
+                    var $prev = this.getPrev();
+                    if ( $prev.length === 1 ) {
+                        this.$current.removeClass( 'current' );
+                        this.$current = $prev.addClass( 'current' );
+                        this.toggleButtons();
+                    }
+                },
+                // switches to the page provided as parameter or the page containing 
+                // the element provided as parameter
+                switchTo: function( $e ) {
+                    var $page = ( $e.is[ 'role="page"' ] ) ? $e : $e.closest( '[role="page"]' );
+                    this.$current.removeClass( 'current' );
+                    this.$current = $page.addClass( 'current' );
+                    this.toggleButtons();
+                },
+                toggleButtons: function() {
+                    console.log( 'toggling buttons' );
+                    this.$btnnext.toggleClass( 'disabled', this.getNext().length === 0 );
+                    this.$btnprev.toggleClass( 'disabled', this.getPrev().length === 0 );
+                }
             };
 
             //this may not be the most efficient. Could also be implemented like model.Nodeset;
@@ -1548,6 +1644,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $form.on( 'change changerepeat', function( event ) {
                     console.log( 'updating edit status' );
                     that.editStatus.set( true );
+                    that.pages.toggleButtons();
                 } );
 
                 $form.on( 'changerepeat', function( event ) {
@@ -1594,6 +1691,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $form.find( 'input, select, textarea' ).not( '.ignore' ).trigger( 'validate' );
                 $firstError = $form.find( '.invalid-required, .invalid-constraint' ).eq( 0 );
                 if ( $firstError.length > 0 && window.scrollTo ) {
+                    if ( this.pages.active ) {
+                        // move to the first page with an error
+                        this.pages.switchTo( $firstError );
+                    }
                     window.scrollTo( 0, $firstError.offset().top - 50 );
                 }
                 return $firstError.length === 0;

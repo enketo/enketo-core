@@ -21,6 +21,7 @@ body {
 
 .main {
     @include display-flex;
+    @include flex-direction(column);
     @include flex(1);
     margin: 0 auto;
     padding: 100px 0 70px 0;
@@ -30,10 +31,13 @@ body {
     min-height: 100%;
     max-width: $max-content-width;
     article {
+        @include flex(1);
+        @include display-flex;
+        @include flex-direction(column);
+        @include flex-wrap(nowrap);
         padding: 45px;
         position: relative;
         min-height: 100%;
-        @include flex(1);
     }
     ul.nav-tabs {
         margin: 20px 0 0 0;
