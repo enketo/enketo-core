@@ -341,37 +341,49 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             };
 
             FormView.prototype.pages = {
+                active: false,
+                $current: [],
+                $activePages: [],
                 init: function() {
-                    var $pagenav = $( '<div></div>' );
+                    var $pagenav = $( '<nav class="pages-nav"></nav>' );
 
                     if ( $form.hasClass( 'pages' ) ) {
-                        this.$current = $( '.or > .note, .or > .question, .or > .trigger, .or > .or-appearance-field-list' )
-                            .attr( 'role', 'page' ).first( ':not(.disabled)' ).addClass( 'current' );
+                        var $allPages = $form.find( '.note, .question, .trigger, .or-appearance-field-list' )
+                            .filter( function() {
+                                // something tells me there is a more efficient way to doing this
+                                // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
+                                return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
+                            } );
 
-                        this.$btnprev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
-                        this.$btnnext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
-                        $( '.paper' ).append( this.$btnprev, this.$btnnext );
+                        this.$current = $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ).addClass( 'current' );
 
-                        this.toggleButtons();
-                        this.setButtonHandlers();
-                        //this.setSwipeEvents();
-                        //this.setSwipeHandlers(); //not sure if this will work well enough in browser
-                        // a swipeleft may very well move to another tab 
-                        this.active = true;
+                        console.log( 'all pages', $allPages );
 
-                    } else {
-                        this.active = false;
+                        if ( $allPages.length > 1 /* TODO || only page is a repeat group */ ) {
+                            this.$btnprev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
+                            this.$btnnext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
+                            $pagenav.append( this.$btnprev, this.$btnnext ).insertAfter( $( '.form-footer' ) );
+
+                            this.setAllActive( $allPages );
+                            this.toggleButtons();
+                            this.setButtonHandlers();
+                            //this.setSwipeEvents();
+                            //this.setSwipeHandlers(); //not sure if this will work well enough in browser
+                            // a swipeleft may very well move to another tab 
+                            this.active = true;
+                        }
+                        $form.show();
                     }
-
-
                 },
                 setButtonHandlers: function() {
                     var that = this;
                     this.$btnprev.click( function() {
                         that.prev();
+                        return false;
                     } );
                     this.$btnnext.click( function() {
                         that.next();
+                        return false;
                     } );
                 },
                 setSwipeHandlers: function() {
@@ -393,44 +405,64 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 getCurrent: function() {
                     return this.$current;
                 },
-                //$prev cannot be cached because it may vary from question to question when a subsequent page
-                //becomes relevant or irrelevant
-                getPrev: function() {
-                    return this.$current.prevAll( '[role="page"]:not(.disabled):first' );
+                setAllActive: function( $all ) {
+                    console.log( 'refreshing collection of active pages' );
+                    this.$activePages = ( !$all ) ? $( '.or [role="page"]:not(.disabled)' ) : $all.filter( function() {
+                        return $( this ).is( '[role="page"]:not(.disabled)' );
+                    } );
                 },
-                //$next cannot be cached because it may vary from question to question when a subsequent page
-                //becomes relevant or irrelevant
+                getAllActive: function() {
+                    return this.$activePages;
+                },
+                // $prev cannot be cached because it may vary from question to question when a subsequent page
+                // becomes relevant or irrelevant
+                getPrev: function() {
+                    var index = this.$activePages.index( this.$current );
+                    return this.$activePages[ index - 1 ];
+                },
+                // $next cannot be cached because it may vary from question to question when a subsequent page
+                // becomes relevant or irrelevant
                 getNext: function() {
-                    return this.$current.nextAll( '[role="page"]:not(.disabled):first' );
+                    var index = this.$activePages.index( this.$current );
+                    return this.$activePages[ index + 1 ];
                 },
                 next: function() {
-                    var $next = this.getNext();
-                    if ( $next.length === 1 ) {
-                        this.$current.removeClass( 'current' );
-                        this.$current = $next.addClass( 'current' );
-                        this.toggleButtons();
+                    var next;
+                    this.setAllActive();
+                    next = this.getNext();
+                    if ( next ) {
+                        this.flipTo( next );
+                    } else {
+                        console.error( 'no page present to flip forward to' );
                     }
                 },
                 prev: function() {
-                    var $prev = this.getPrev();
-                    if ( $prev.length === 1 ) {
-                        this.$current.removeClass( 'current' );
-                        this.$current = $prev.addClass( 'current' );
-                        this.toggleButtons();
+                    var prev;
+                    this.setAllActive();
+                    prev = this.getPrev();
+                    if ( prev ) {
+                        this.flipTo( prev );
+                    } else {
+                        console.error( 'no page present to flip backward to' );
                     }
                 },
-                // switches to the page provided as parameter or the page containing 
-                // the element provided as parameter
-                switchTo: function( $e ) {
-                    var $page = ( $e.is[ 'role="page"' ] ) ? $e : $e.closest( '[role="page"]' );
-                    this.$current.removeClass( 'current' );
-                    this.$current = $page.addClass( 'current' );
+                // TO DO: optimize performance further by optionally passing the current index as param
+                // and forwarding this to toggleButton, so index only has to be determined once
+                flipTo: function( pageEl ) {
+                    console.log( 'flipping to', pageEl );
+                    this.$current.removeClass( 'current' ).parentsUntil( '.or', '.or-group, .or-group-data' ).removeClass( 'contains-current' );
+                    this.$current = $( pageEl ).addClass( 'current' ).parentsUntil( '.or', '.or-group, .or-group-data' ).addClass( 'contains-current' ).end();
                     this.toggleButtons();
+                },
+                // switches to the page provided as jqueried parameter or the page containing 
+                // the jqueried element provided as parameter
+                flipToPageContaining: function( $e ) {
+                    this.flipTo( $e.closest( '[role="page"]' )[ 0 ] );
                 },
                 toggleButtons: function() {
                     console.log( 'toggling buttons' );
-                    this.$btnnext.toggleClass( 'disabled', this.getNext().length === 0 );
-                    this.$btnprev.toggleClass( 'disabled', this.getPrev().length === 0 );
+                    this.$btnnext.toggleClass( 'disabled', !this.getNext() );
+                    this.$btnprev.toggleClass( 'disabled', !this.getPrev() );
                 }
             };
 
@@ -1693,7 +1725,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 if ( $firstError.length > 0 && window.scrollTo ) {
                     if ( this.pages.active ) {
                         // move to the first page with an error
-                        this.pages.switchTo( $firstError );
+                        this.pages.flipToPageContaining( $firstError );
                     }
                     window.scrollTo( 0, $firstError.offset().top - 50 );
                 }
