@@ -1,31 +1,53 @@
 .pages.or {
-    > .note,
-    > .question,
-    > .trigger,
-    > .or-appearance-field-list {
-        //just to reduce browser re-painting before js starts kicking in and sets role="page"
+    // to reduce browser re-painting before js starts kicking in and sets role="page"
+    display: none;
+    .or-group, .or-group-data {
+        // to hide group border and title if no or-appearance-pages class is set
         display: none;
-    }
-    [role="page"] {
-        display: none;
-        &.current {
+        &.contains-current {
             display: block;
         }
     }
-    ~ .btn.previous-page, 
-    ~ .btn.next-page {
+    [role="page"] {
+        display: none;
+        //border: 1px solid red;
+        
+        &.current {
+            display: block;
+        }
+        &.move-to-left-animated {
+            @include transition-fast;
+            @include translate(-100%, 0);
+        }
+        &.move-to-left-now {
+            @include translate(-100%, 0);
+        }
+        &.move-to-right-animated {
+            @include transition-fast;
+            @include translate(100%, 0);
+        }
+        &.move-to-right-now {
+            @include translate(100%, 0);
+        }
+    } 
+    ~ .pages-nav {
         position: absolute;
         bottom: 0;
-        border-radius: 0;
-        width: 50%;
-        border-bottom: none;
-        border-left: none;
-    }
-    ~ .btn.previous-page {
         left: 0;
-    }
-    ~ .btn.next-page {
-        left: 50%;
-        border-right: none;
+        width: 100%;
+        .btn.previous-page,
+        .btn.next-page {
+            border-radius: 0;
+            width: 50%;
+            border-bottom: none;
+            border-left: none;
+        }
+        .btn.previous-page {
+            //left: 0;
+        }
+        .btn.next-page {
+            //left: 50%;
+            border-right: none;
+        }
     }
 }
