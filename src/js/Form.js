@@ -1040,7 +1040,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
                 cleverSelector = ( namesArr.length > 0 ) ? [] : [ 'input[data-calculate]' ];
                 for ( i = 0; i < namesArr.length; i++ ) {
-                    cleverSelector.push( 'input[data-calculate*="' + namesArr[ i ] + '"], input[data-relevant*="' + namesArr[ i ] + '"]' );
+                    cleverSelector.push( 'input[data-calculate*="' + namesArr[ i ] + '"]' );
                 }
 
                 $form.find( cleverSelector.join() ).each( function() {
