@@ -343,7 +343,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             FormView.prototype.pages = {
                 active: false,
                 $current: [],
-                $activePages: [],
+                $activePages: $(),
                 init: function() {
                     var $pagenav = $( '<nav class="pages-nav"></nav>' );
 
@@ -1678,7 +1678,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $form.on( 'change changerepeat', function( event ) {
                     console.log( 'updating edit status' );
                     that.editStatus.set( true );
-                    that.pages.toggleButtons();
+                    if ( that.pages.active ) {
+                        that.pages.toggleButtons();
+                    }
                 } );
 
                 $form.on( 'changerepeat', function( event ) {
