@@ -200,7 +200,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
     }
 }
 
-.question textarea {
+.question textarea, .note textarea {
     width: $input-max-width;
     resize: vertical;
     min-height: 9em;
