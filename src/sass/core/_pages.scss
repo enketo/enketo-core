@@ -11,25 +11,33 @@
     [role="page"] {
         display: none;
         //border: 1px solid red;
-        
         &.current {
             display: block;
+            .or-group, .or-group-data {
+                display: block;
+            }
+            //@include transition-fast;
         }
-        &.move-to-left-animated {
+        &.hidden {
+            opacity: 0;
+        }
+        &.fade-in {
+            opacity: 1;
             @include transition-fast;
-            @include translate(-100%, 0);
         }
-        &.move-to-left-now {
-            @include translate(-100%, 0);
-        }
-        &.move-to-right-animated {
+        &.fade-out { 
+            opacity: 0;
             @include transition-fast;
+        }
+        /*&.move-from-next {
+            @include transition-none;
             @include translate(100%, 0);
         }
-        &.move-to-right-now {
-            @include translate(100%, 0);
-        }
-    } 
+        &.move-from-prev {
+            @include transition-none;
+            @include translate(-100%, 0);
+        }*/
+    }
     ~ .pages-nav {
         position: absolute;
         bottom: 0;
@@ -44,6 +52,7 @@
         }
         .btn.previous-page {
             //left: 0;
+       
         }
         .btn.next-page {
             //left: 50%;

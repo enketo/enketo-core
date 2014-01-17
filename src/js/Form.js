@@ -367,6 +367,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.setAllActive( $allPages );
                             this.toggleButtons();
                             this.setButtonHandlers();
+                            this.setRepeatHandlers();
                             //this.setSwipeEvents();
                             //this.setSwipeHandlers(); //not sure if this will work well enough in browser
                             // a swipeleft may very well move to another tab 
@@ -402,6 +403,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         return false;
                     } );
                 },
+                setRepeatHandlers: function() {
+                    var that = this;
+                    // TODO: trigger changerepeat (or addrepeat) event on added repeat and then just remove current class?
+                    $form.on( 'changerepeat', function() {
+                        that.setAllActive();
+                        console.log( 'handling repeat in page object', that.$current );
+                        that.$current.closest( '.or-repeat' ).next().removeClass( 'current' ).find( '.current' ).removeClass( 'current' );
+                    } );
+                },
                 getCurrent: function() {
                     return this.$current;
                 },
@@ -431,7 +441,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.setAllActive();
                     next = this.getNext();
                     if ( next ) {
-                        this.flipTo( next );
+                        this.flipTo( next, 'next' );
                     } else {
                         console.error( 'no page present to flip forward to' );
                     }
@@ -441,7 +451,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.setAllActive();
                     prev = this.getPrev();
                     if ( prev ) {
-                        this.flipTo( prev );
+                        this.flipTo( prev, 'prev' );
                     } else {
                         console.error( 'no page present to flip backward to' );
                     }
@@ -449,15 +459,26 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // TO DO: optimize performance further by optionally passing the current index as param
                 // and forwarding this to toggleButton, so index only has to be determined once
                 flipTo: function( pageEl ) {
-                    console.log( 'flipping to', pageEl );
-                    this.$current.removeClass( 'current' ).parentsUntil( '.or', '.or-group, .or-group-data' ).removeClass( 'contains-current' );
-                    this.$current = $( pageEl ).addClass( 'current' ).parentsUntil( '.or', '.or-group, .or-group-data' ).addClass( 'contains-current' ).end();
-                    this.toggleButtons();
+                    var that = this,
+                        $n = $( pageEl );
+
+                    $n.addClass( 'current hidden' );
+                    this.$current.addClass( 'fade-out' )
+                        .one( 'transitionend', function() {
+                            console.log( 'transition ended' );
+                            that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data' ).removeClass( 'contains-current' );;
+                            that.$current = $n.addClass( 'fade-in' ).removeClass( 'hidden' )
+                                .one( 'transitionend', function() {
+                                    $n.removeClass( 'fade-in' );
+                                } )
+                                .parentsUntil( '.or', '.or-group, .or-group-data' ).addClass( 'contains-current' ).end();
+                            that.toggleButtons();
+                        } );
                 },
                 // switches to the page provided as jqueried parameter or the page containing 
                 // the jqueried element provided as parameter
                 flipToPageContaining: function( $e ) {
-                    this.flipTo( $e.closest( '[role="page"]' )[ 0 ] );
+                    this.flipTo( $e.closest( '[role="page"]' )[ 0 ], 'prev' );
                 },
                 toggleButtons: function() {
                     console.log( 'toggling buttons' );

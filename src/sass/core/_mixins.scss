@@ -18,6 +18,13 @@
     transition: $prop 0.6s ease-out;
 }
 
+@mixin transition-none($prop: all) {
+     -webkit-transition: all 0.001s ease-out;
+    //-moz-transition: all 0.01s ease-out;
+    //-o-transition: all 0.01s ease-out;
+    transition: all 0.001s ease-out;
+}
+
 @mixin transition-background-color {
     -webkit-transition: background-color 0.2s linear;
     //-moz-transition: background-color 0.2s linear;
