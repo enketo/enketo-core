@@ -466,7 +466,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.$current.addClass( 'fade-out' )
                         .one( 'transitionend', function() {
                             console.log( 'transition ended' );
-                            that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data' ).removeClass( 'contains-current' );;
+                            that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data' ).removeClass( 'contains-current' );
                             that.$current = $n.addClass( 'fade-in' ).removeClass( 'hidden' )
                                 .one( 'transitionend', function() {
                                     $n.removeClass( 'fade-in' );
