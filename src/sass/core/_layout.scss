@@ -19,6 +19,10 @@ body {
     min-height: 100%;
 }
 
+.or {
+    margin-bottom: 20px;
+}
+
 .main {
     @include display-flex;
     @include flex-direction(column);

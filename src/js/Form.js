@@ -360,9 +360,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         console.log( 'all pages', $allPages );
 
                         if ( $allPages.length > 1 /* TODO || only page is a repeat group */ ) {
+                            this.$formFooter = $( '.form-footer' );
                             this.$btnprev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
                             this.$btnnext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
-                            $pagenav.append( this.$btnprev, this.$btnnext ).insertAfter( $( '.form-footer' ) );
+                            $pagenav.append( this.$btnprev, this.$btnnext ).insertAfter( this.$formFooter );
 
                             this.setAllActive( $allPages );
                             this.toggleButtons();
@@ -467,7 +468,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         .one( 'transitionend', function() {
                             console.log( 'transition ended' );
                             that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data' ).removeClass( 'contains-current' );
-                            that.$current = $n.addClass( 'fade-in' ).removeClass( 'hidden' )
+                            that.$current = $n.removeClass( 'hidden' ).addClass( 'fade-in' )
                                 .one( 'transitionend', function() {
                                     $n.removeClass( 'fade-in' );
                                 } )
@@ -482,8 +483,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 toggleButtons: function() {
                     console.log( 'toggling buttons' );
-                    this.$btnnext.toggleClass( 'disabled', !this.getNext() );
-                    this.$btnprev.toggleClass( 'disabled', !this.getPrev() );
+                    var next = this.getNext(),
+                        prev = this.getPrev();
+                    this.$btnnext.toggleClass( 'disabled', !next );
+                    this.$btnprev.toggleClass( 'disabled', !prev );
+                    this.$formFooter.toggleClass( 'hide', !! next );
                 }
             };
 
