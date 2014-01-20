@@ -1,11 +1,12 @@
 .pages.or {
     // to reduce browser re-painting before js starts kicking in and sets role="page"
     display: none;
-    .or-group, .or-group-data {
+    .or-group, .or-group-data, .or-repeat {
         // to hide group border and title if no or-appearance-pages class is set
         display: none;
         &.contains-current {
             display: block;
+
         }
     }
     [role="page"] {
@@ -13,7 +14,7 @@
         //border: 1px solid red;
         &.current {
             display: block;
-            .or-group, .or-group-data {
+            .or-group, .or-group-data, .or-repeat {
                 display: block;
             }
             //@include transition-fast;

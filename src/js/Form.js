@@ -356,7 +356,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             } );
 
                         this.$current = $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ).addClass( 'current' )
-                            .parents( '.or, .or-group, .or-group-data' ).addClass( 'contains-current' ).end();
+                            .parents( '.or, .or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
 
                         console.log( 'all pages', $allPages );
 
@@ -412,7 +412,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $form.on( 'changerepeat', function() {
                         that.setAllActive();
                         console.log( 'handling repeat in page object', that.$current );
-                        that.$current.closest( '.or-repeat' ).next().removeClass( 'current' ).find( '.current' ).removeClass( 'current' );
+                        that.$current.closest( '.or-repeat' ).next().removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
                         that.toggleButtons( that.getCurrentIndex() );
                     } );
                 },
@@ -474,12 +474,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.$current.addClass( 'fade-out' )
                         .one( 'transitionend', function() {
                             console.log( 'transition ended' );
-                            that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data' ).removeClass( 'contains-current' );
+                            that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
                             that.$current = $n.removeClass( 'hidden' ).addClass( 'fade-in' )
                                 .one( 'transitionend', function() {
                                     $n.removeClass( 'fade-in' );
                                 } )
-                                .parentsUntil( '.or', '.or-group, .or-group-data' ).addClass( 'contains-current' ).end();
+                                .parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
                             that.toggleButtons( newIndex );
                         } );
                 },
