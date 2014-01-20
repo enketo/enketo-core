@@ -355,18 +355,19 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                                 return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
                             } );
 
-                        this.$current = $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ).addClass( 'current' );
+                        this.$current = $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ).addClass( 'current' )
+                            .parents( '.or, .or-group, .or-group-data' ).addClass( 'contains-current' ).end();
 
                         console.log( 'all pages', $allPages );
 
-                        if ( $allPages.length > 1 /* TODO || only page is a repeat group */ ) {
+                        if ( $allPages.length > 1 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
                             this.$formFooter = $( '.form-footer' );
-                            this.$btnprev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
-                            this.$btnnext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
-                            $pagenav.append( this.$btnprev, this.$btnnext ).insertAfter( this.$formFooter );
+                            this.$btnPrev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
+                            this.$btnNext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
+                            $pagenav.append( this.$btnPrev, this.$btnNext ).insertAfter( this.$formFooter );
 
                             this.setAllActive( $allPages );
-                            this.toggleButtons();
+                            this.toggleButtons( 0 );
                             this.setButtonHandlers();
                             this.setRepeatHandlers();
                             //this.setSwipeEvents();
@@ -374,16 +375,17 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             // a swipeleft may very well move to another tab 
                             this.active = true;
                         }
+
                         $form.show();
                     }
                 },
                 setButtonHandlers: function() {
                     var that = this;
-                    this.$btnprev.click( function() {
+                    this.$btnPrev.click( function() {
                         that.prev();
                         return false;
                     } );
-                    this.$btnnext.click( function() {
+                    this.$btnNext.click( function() {
                         that.next();
                         return false;
                     } );
@@ -411,6 +413,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         that.setAllActive();
                         console.log( 'handling repeat in page object', that.$current );
                         that.$current.closest( '.or-repeat' ).next().removeClass( 'current' ).find( '.current' ).removeClass( 'current' );
+                        that.toggleButtons( that.getCurrentIndex() );
                     } );
                 },
                 getCurrent: function() {
@@ -427,42 +430,46 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 // $prev cannot be cached because it may vary from question to question when a subsequent page
                 // becomes relevant or irrelevant
-                getPrev: function() {
-                    var index = this.$activePages.index( this.$current );
-                    return this.$activePages[ index - 1 ];
+                getPrev: function( currentIndex ) {
+                    return this.$activePages[ currentIndex - 1 ];
                 },
                 // $next cannot be cached because it may vary from question to question when a subsequent page
                 // becomes relevant or irrelevant
-                getNext: function() {
-                    var index = this.$activePages.index( this.$current );
-                    return this.$activePages[ index + 1 ];
+                getNext: function( currentIndex ) {
+                    return this.$activePages[ currentIndex + 1 ];
+                },
+                getCurrentIndex: function() {
+                    return this.$activePages.index( this.$current );
                 },
                 next: function() {
-                    var next;
+                    var next, currentIndex;
                     this.setAllActive();
-                    next = this.getNext();
+                    currentIndex = this.getCurrentIndex();
+                    next = this.getNext( currentIndex );
+
                     if ( next ) {
-                        this.flipTo( next, 'next' );
+                        this.flipTo( next, currentIndex + 1 );
                     } else {
                         console.error( 'no page present to flip forward to' );
                     }
                 },
                 prev: function() {
-                    var prev;
+                    var prev, currentIndex;
                     this.setAllActive();
-                    prev = this.getPrev();
+                    currentIndex = this.getCurrentIndex();
+                    prev = this.getPrev( currentIndex );
+
                     if ( prev ) {
-                        this.flipTo( prev, 'prev' );
+                        this.flipTo( prev, currentIndex - 1 );
                     } else {
                         console.error( 'no page present to flip backward to' );
                     }
                 },
-                // TO DO: optimize performance further by optionally passing the current index as param
                 // and forwarding this to toggleButton, so index only has to be determined once
-                flipTo: function( pageEl ) {
+                flipTo: function( pageEl, newIndex ) {
                     var that = this,
                         $n = $( pageEl );
-
+                    console.log( 'flipping to', pageEl, 'index', newIndex );
                     $n.addClass( 'current hidden' );
                     this.$current.addClass( 'fade-out' )
                         .one( 'transitionend', function() {
@@ -473,7 +480,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                                     $n.removeClass( 'fade-in' );
                                 } )
                                 .parentsUntil( '.or', '.or-group, .or-group-data' ).addClass( 'contains-current' ).end();
-                            that.toggleButtons();
+                            that.toggleButtons( newIndex );
                         } );
                 },
                 // switches to the page provided as jqueried parameter or the page containing 
@@ -481,12 +488,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 flipToPageContaining: function( $e ) {
                     this.flipTo( $e.closest( '[role="page"]' )[ 0 ], 'prev' );
                 },
-                toggleButtons: function() {
-                    console.log( 'toggling buttons' );
-                    var next = this.getNext(),
-                        prev = this.getPrev();
-                    this.$btnnext.toggleClass( 'disabled', !next );
-                    this.$btnprev.toggleClass( 'disabled', !prev );
+                toggleButtons: function( index ) {
+                    console.log( 'toggling buttons, current index is', index );
+                    var next = this.getNext( index ),
+                        prev = this.getPrev( index );
+                    this.$btnNext.toggleClass( 'disabled', !next );
+                    this.$btnPrev.toggleClass( 'disabled', !prev );
                     this.$formFooter.toggleClass( 'hide', !! next );
                 }
             };
@@ -1703,9 +1710,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $form.on( 'change changerepeat', function( event ) {
                     console.log( 'updating edit status' );
                     that.editStatus.set( true );
-                    if ( that.pages.active ) {
-                        that.pages.toggleButtons();
-                    }
                 } );
 
                 $form.on( 'changerepeat', function( event ) {
