@@ -17,27 +17,14 @@
             .or-group, .or-group-data, .or-repeat {
                 display: block;
             }
-            //@include transition-fast;
         }
         &.hidden {
             opacity: 0;
-        }
-        &.fade-in {
-            opacity: 1;
-            @include transition-fast;
         }
         &.fade-out { 
             opacity: 0;
             @include transition-fast;
         }
-        /*&.move-from-next {
-            @include transition-none;
-            @include translate(100%, 0);
-        }
-        &.move-from-prev {
-            @include transition-none;
-            @include translate(-100%, 0);
-        }*/
     }
     ~ .pages-nav {
         position: absolute;

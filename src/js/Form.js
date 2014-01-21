@@ -355,10 +355,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                                 return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
                             } );
 
-                        this.$current = $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ).addClass( 'current' )
-                            .parents( '.or, .or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
+                        this.setToCurrent( $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ) );
 
-                        console.log( 'all pages', $allPages );
+                        //console.log( 'all pages', $allPages );
 
                         if ( $allPages.length > 1 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
                             this.$formFooter = $( '.form-footer' );
@@ -366,7 +365,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.$btnNext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
                             $pagenav.append( this.$btnPrev, this.$btnNext ).insertAfter( this.$formFooter );
 
-                            this.setAllActive( $allPages );
+                            this.updateAllActive( $allPages );
                             this.toggleButtons( 0 );
                             this.setButtonHandlers();
                             this.setRepeatHandlers();
@@ -408,19 +407,29 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 setRepeatHandlers: function() {
                     var that = this;
-                    // TODO: trigger changerepeat (or addrepeat) event on added repeat and then just remove current class?
-                    $form.on( 'changerepeat', function() {
-                        that.setAllActive();
-                        console.log( 'handling repeat in page object', that.$current );
-                        that.$current.closest( '.or-repeat' ).next().removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
-                        that.toggleButtons( that.getCurrentIndex() );
+                    $form.on( 'addrepeat', function( event ) {
+                        that.updateAllActive();
+                        console.log( 'handling repeat clone in page object', event.target );
+                        //removing the class in effect avoids the animation
+                        $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
+                        that.flipToPageContaining( $( event.target ) );
+                    } );
+                    $form.on( 'removerepeat', function( event ) {
+                        console.log( 'handling repeat removal in page object', event.target );
+                        // if the current page is removed
+                        // note that that.$current will have length 1 even if it was removed from DOM!!
+                        if ( that.$current.closest( 'html' ).length === 0 ) {
+                            that.updateAllActive();
+                            // is it best to go to previous page always? 
+                            that.flipToPageContaining( $( event.target ) );
+                        }
                     } );
                 },
                 getCurrent: function() {
                     return this.$current;
                 },
-                setAllActive: function( $all ) {
-                    console.log( 'refreshing collection of active pages' );
+                updateAllActive: function( $all ) {
+                    //console.log( 'refreshing collection of active pages' );
                     this.$activePages = ( !$all ) ? $( '.or [role="page"]:not(.disabled)' ) : $all.filter( function() {
                         return $( this ).is( '[role="page"]:not(.disabled)' );
                     } );
@@ -428,13 +437,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 getAllActive: function() {
                     return this.$activePages;
                 },
-                // $prev cannot be cached because it may vary from question to question when a subsequent page
-                // becomes relevant or irrelevant
                 getPrev: function( currentIndex ) {
                     return this.$activePages[ currentIndex - 1 ];
                 },
-                // $next cannot be cached because it may vary from question to question when a subsequent page
-                // becomes relevant or irrelevant
                 getNext: function( currentIndex ) {
                     return this.$activePages[ currentIndex + 1 ];
                 },
@@ -443,7 +448,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 next: function() {
                     var next, currentIndex;
-                    this.setAllActive();
+                    this.updateAllActive();
                     currentIndex = this.getCurrentIndex();
                     next = this.getNext( currentIndex );
 
@@ -455,7 +460,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 prev: function() {
                     var prev, currentIndex;
-                    this.setAllActive();
+                    this.updateAllActive();
                     currentIndex = this.getCurrentIndex();
                     prev = this.getPrev( currentIndex );
 
@@ -465,33 +470,58 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         console.error( 'no page present to flip backward to' );
                     }
                 },
-                // and forwarding this to toggleButton, so index only has to be determined once
-                flipTo: function( pageEl, newIndex ) {
-                    var that = this,
-                        $n = $( pageEl );
-                    console.log( 'flipping to', pageEl, 'index', newIndex );
+                setToCurrent: function( pageEl ) {
+                    var $n = $( pageEl );
                     $n.addClass( 'current hidden' );
-                    this.$current.addClass( 'fade-out' )
-                        .one( 'transitionend', function() {
-                            console.log( 'transition ended' );
-                            that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
-                            that.$current = $n.removeClass( 'hidden' ).addClass( 'fade-in' )
-                                .one( 'transitionend', function() {
-                                    $n.removeClass( 'fade-in' );
-                                } )
-                                .parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
-                            that.toggleButtons( newIndex );
-                        } );
+                    this.$current = $n.removeClass( 'hidden' )
+                        .parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
                 },
-                // switches to the page provided as jqueried parameter or the page containing 
-                // the jqueried element provided as parameter
+                flipTo: function( pageEl, newIndex ) {
+                    var that = this;
+
+                    console.log( 'flipping to', pageEl, 'index', newIndex );
+
+                    // if there is a current page
+                    if ( this.$current.length > 0 && this.$current.closest( 'html' ).length === 1 ) {
+                        // if current page is not same as pageEl
+                        if ( this.$current[ 0 ] !== pageEl ) {
+                            this.$current.addClass( 'fade-out' )
+                                .one( 'transitionend', function() {
+                                    console.log( 'transition ended' );
+                                    that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
+                                    that.setToCurrent( pageEl );
+                                    that.toggleButtons( newIndex );
+                                } );
+                        }
+                    } else {
+                        this.setToCurrent( pageEl );
+                        this.toggleButtons( newIndex );
+                    }
+                },
+                flipToFirst: function() {
+                    this.updateAllActive();
+                    this.flipTo( this.$activePages[ 0 ] );
+                },
+                flipToLast: function() {
+                    this.updateAllActive();
+                    this.flipTo( this.$activePages.last()[ 0 ] );
+                },
+                // flips to the page provided as jQueried parameter or the page containing 
+                // the jQueried element provided as parameter
+                // alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
+                // it flips to the page contained with the jQueried parameter;
                 flipToPageContaining: function( $e ) {
-                    this.flipTo( $e.closest( '[role="page"]' )[ 0 ], 'prev' );
+                    var $closest;
+                    $closest = $e.closest( '[role="page"]' );
+                    $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
+
+                    this.updateAllActive();
+                    this.flipTo( $closest[ 0 ] );
                 },
                 toggleButtons: function( index ) {
-                    console.log( 'toggling buttons, current index is', index );
-                    var next = this.getNext( index ),
-                        prev = this.getPrev( index );
+                    var i = index || this.getCurrentIndex(),
+                        next = this.getNext( i ),
+                        prev = this.getPrev( i );
                     this.$btnNext.toggleClass( 'disabled', !next );
                     this.$btnPrev.toggleClass( 'disabled', !prev );
                     this.$formFooter.toggleClass( 'hide', !! next );
@@ -1565,22 +1595,25 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         model.cloneTemplate( path, index );
                     }
 
-                    $form.trigger( 'changerepeat' );
+                    $clone.trigger( 'addrepeat' );
                     //p.report();
                     return true;
                 },
-                remove: function( node ) {
+                remove: function( $repeat ) {
                     var delay = 600, // dataNode,
                         that = this,
-                        repeatPath = node.attr( 'name' ),
-                        repeatIndex = $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( node ),
-                        parentGroup = node.parent( '.or-group' );
+                        $prev = $repeat.prev( '.or-repeat' ),
+                        repeatPath = $repeat.attr( 'name' ),
+                        repeatIndex = $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $repeat ),
+                        $parentGroup = $repeat.parent( '.or-group' );
 
-                    node.hide( delay, function() {
-                        node.remove();
-                        parentGroup.numberRepeats();
-                        that.toggleButtons( parentGroup );
-                        $form.trigger( 'changerepeat' );
+                    $repeat.hide( delay, function() {
+                        $repeat.remove();
+                        $parentGroup.numberRepeats();
+                        that.toggleButtons( $parentGroup );
+                        // trigger the removerepeat on the previous repeat (always present)
+                        // so that removerepeat handlers know where the repeat was removed
+                        $prev.trigger( 'removerepeat' );
                         //now remove the data node
                         model.node( repeatPath, repeatIndex ).remove();
                     } );
@@ -1707,12 +1740,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 //edit is fired when the form changes due to user input or repeats added/removed
                 //branch update doesn't require detection as it always happens as a result of an event that triggers change or changerepeat.
-                $form.on( 'change changerepeat', function( event ) {
+                $form.on( 'change addrepeat removerepeat', function( event ) {
                     console.log( 'updating edit status' );
                     that.editStatus.set( true );
                 } );
 
-                $form.on( 'changerepeat', function( event ) {
+                $form.on( 'addrepeat', function( event ) {
                     //set defaults of added repeats, setAllVals does not trigger change event
                     //TODO: only do this for the repeat that trigger it
                     that.setAllVals();
