@@ -121,7 +121,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                 prevFileName = $input.attr( 'data-previous-file-name' );
                 file = $input[ 0 ].files[ 0 ];
                 mediaType = $input.attr( 'accept' );
-                $preview = ( mediaType && mediaType === 'image/*' ) ? $( '<img />' ) : ( mediaType === 'audio/*' ) ? $( '<audio controls="controls"/>' ) : ( mediaType === 'video/*' ) ? $( '<video controls="controls"/>' ) : $( '<span>No preview (unknown mediatype)</span>' );
+                $preview = ( mediaType && mediaType === 'image/*' ) ? $( '<img />' ) : ( mediaType === 'audio/*' ) ? $( '<audio controls="controls"/>' ) : ( mediaType === 'video/*' ) ? $( '<video controls="controls"/>' ) : $( '<span>No preview for this mediatype</span>' );
                 $preview.addClass( 'file-preview' );
                 if ( prevFileName && ( !file || prevFileName !== file.name ) ) {
                     fileManager.deleteFile( prevFileName );
