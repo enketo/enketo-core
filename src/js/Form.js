@@ -635,7 +635,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     } else {
                         //why not use this.getIndex?
                         $inputNodes = this.getWrapNodes( $form.find( '[name="' + name + '"]:eq(' + index + ')' ) ).find( 'input, select, textarea' );
-                        console.log( 'input nodes with', name, $form.find( '[name="' + name + '"]' ) );
+                        //console.log( 'input nodes with', name, $form.find( '[name="' + name + '"]' ) );
                         type = this.getInputType( $inputNodes.eq( 0 ) );
 
                         if ( type === 'file' ) {
