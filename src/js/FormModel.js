@@ -543,22 +543,23 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
     FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
         var i, parentSelector, parentIndex, $target, $node, nodeName, $siblings, $parents;
         $target = this.node( selector, index ).get();
-        //console.debug('selector: '+selector+', target: ', $target);
-        //add() sorts the resulting collection in document order
+        // console.debug('selector: '+selector+', target: ', $target);
+        // add() sorts the resulting collection in document order
         $parents = $target.parents().add( $target );
-        //console.debug('makeBugCompliant() received expression: '+expr+' inside repeat: '+selector+' context parents are: ', $parents);
-        //traverse collection in reverse document order
+        // console.debug( 'makeBugCompliant() received expression: ' + expr + ' inside repeat: ' + selector + ' context parents are: ', $parents );
+        // traverse collection in reverse document order
         for ( i = $parents.length - 1; i >= 0; i-- ) {
             $node = $parents.eq( i );
-            nodeName = $node.prop( 'nodeName' );
-            $siblings = $node.siblings( nodeName + ':not([template])' );
-            //if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
+            // escape any dots in the node name
+            nodeName = $node.prop( 'nodeName' ).replace( /\./g, '\\.' );
+            $siblings = $node.siblings( nodeName ).not( '[template]' );
+            // if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
             if ( nodeName.toLowerCase() !== 'instance' && nodeName.toLowerCase() !== 'model' && $siblings.length > 0 ) {
                 parentSelector = $node.getXPath( 'instance' );
                 parentIndex = $siblings.add( $node ).index( $node );
-                //console.log('calculated repeat 0-based index: '+parentIndex+' for repeat node with path: '+parentSelector);
+                // console.log('calculated repeat 0-based index: '+parentIndex+' for repeat node with path: '+parentSelector);
                 expr = expr.replace( new RegExp( parentSelector, 'g' ), parentSelector + '[' + ( parentIndex + 1 ) + ']' );
-                //console.log('new expression: '+expr);
+                // console.log( 'new expression: ' + expr );
             }
         }
         return expr;
@@ -581,7 +582,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         var i, j, error, context, contextDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
             $collection, $contextWrapNodes, $repParents;
 
-        //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
+        // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
         //    index + ' and result type: ' + resTypeStr );
 
         resTypeStr = resTypeStr || 'any';
@@ -664,7 +665,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                     resTypeNum = Number( resTypeNum );
                     if ( resTypeNum == Number( result.resultType ) ) {
                         result = ( resTypeNum > 0 && resTypeNum < 4 ) ? result[ resultTypes[ resTypeNum ][ 2 ] ] : result;
-                        console.debug( 'evaluated ' + expr + ' to: ', result );
+                        //console.debug( 'evaluated ' + expr + ' to: ', result );
                         //totTime = new Date().getTime() - timeStart;
                         //xTime = new Date().getTime() - timeLap;
                         //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
