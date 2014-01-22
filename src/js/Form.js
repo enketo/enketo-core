@@ -1689,6 +1689,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
                 } );
 
+                // doing this on the focus event may have little effect on performance, because nothing else is happening :)
+                $form.on( 'focus fakefocus', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
+                    // update the form progress status
+                    that.progress.update( event.target );
+                } );
+
                 //using fakefocus because hidden (by widget) elements won't get focus
                 $form.on( 'focus blur fakefocus fakeblur', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
                     var props = that.input.getProps( $( this ) ),
@@ -1796,6 +1802,33 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     window.scrollTo( 0, $firstError.offset().top - 50 );
                 }
                 return $firstError.length === 0;
+            };
+
+            /**
+             * Maintains progress state of user traversing through form, using
+             * currently focused input || last changed input as current location.
+             */
+            FormView.prototype.progress = {
+                status: 0,
+                lastChanged: null,
+                // updates rounded % value of progress and triggers event if changed
+                update: function( el ) {
+                    var status,
+                        $all = $form.find( '.question' ).not( '.disabled' ).filter( function() {
+                            return $( this ).closest( '.disabled' ).length === 0;
+                        } );
+                    this.lastChanged = el || this.lastChanged;
+                    status = Math.round( ( ( $all.index( $( this.lastChanged ).closest( '.question' ) ) + 1 ) * 100 ) / $all.length );
+
+                    if ( status !== this.status ) {
+                        this.status = status;
+                        $form.trigger( 'progressupdate' );
+                        console.log( 'new progress status in %:', status );
+                    }
+                },
+                get: function() {
+                    return this.status;
+                }
             };
 
             /**
