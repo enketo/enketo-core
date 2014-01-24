@@ -7,7 +7,8 @@ requirejs.config( {
         "text": "text/text",
         "xpath": "xpath/build/xpathjs_javarosa",
         "file-manager": "file-manager/src/file-manager",
-        "jquery.xpath": "jquery-xpath/jquery.xpath"
+        "jquery.xpath": "jquery-xpath/jquery.xpath",
+        "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe"
     },
     shim: {
         "xpath": {

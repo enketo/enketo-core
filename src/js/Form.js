@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'bootstrap' ],
+define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'bootstrap', 'jquery.touchswipe' ],
     function( FormModel, widgets, $ ) {
         "use strict";
 
@@ -371,9 +371,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.toggleButtons( 0 );
                             this.setButtonHandlers();
                             this.setRepeatHandlers();
-                            //this.setSwipeEvents();
-                            //this.setSwipeHandlers(); //not sure if this will work well enough in browser
-                            // a swipeleft may very well move to another tab 
+                            this.setSwipeHandlers();
                             this.active = true;
                         }
 
@@ -401,18 +399,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 setSwipeHandlers: function() {
                     var that = this;
-                    $( document ).on( 'swipeleft', function( event ) {
-                        if ( event.handled !== true ) {
-                            that.next();
-                            event.handled = true;
-                        }
-                        return false;
-                    } ).on( 'swiperight', function( event ) {
-                        if ( event.handled !== true ) {
+                    $( document ).swipe( {
+                        allowPageScroll: "vertical",
+                        swipeLeft: function( ev ) {
+                            console.log( 'swipe event!' );
                             that.prev();
-                            event.handled = true;
+                        },
+                        swipeRight: function( ev ) {
+                            console.log( 'swipe left!' );
+                            that.next();
                         }
-                        return false;
                     } );
                 },
                 setRepeatHandlers: function() {
