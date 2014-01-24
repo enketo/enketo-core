@@ -79,7 +79,8 @@ module.exports = function( grunt ) {
                                 'enketo-config': '../config.json',
                                 text: 'text/text',
                                 xpath: 'xpath/build/xpathjs_javarosa',
-                                'jquery.xpath': 'jquery-xpath/jquery.xpath'
+                                'jquery.xpath': 'jquery-xpath/jquery.xpath',
+                                'jquery.touchswipe': 'jquery-touchswipe/jquery.touchSwipe'
                             },
                             shim: {
                                 'xpath': {
