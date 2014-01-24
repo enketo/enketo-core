@@ -461,7 +461,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( next ) {
                         this.flipTo( next, currentIndex + 1 );
                     } else {
-                        console.error( 'no page present to flip forward to' );
+                        console.log( 'no page present to flip forward to!' );
                     }
                 },
                 prev: function() {
@@ -473,7 +473,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( prev ) {
                         this.flipTo( prev, currentIndex - 1 );
                     } else {
-                        console.error( 'no page present to flip backward to' );
+                        console.log( 'no page present to flip backward to' );
                     }
                 },
                 setToCurrent: function( pageEl ) {
