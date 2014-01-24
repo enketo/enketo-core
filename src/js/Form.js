@@ -401,13 +401,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var that = this;
                     $( document ).swipe( {
                         allowPageScroll: "vertical",
+                        threshold: 50,
                         swipeLeft: function( ev ) {
-                            console.log( 'swipe event!' );
-                            that.prev();
+                            that.next();
                         },
                         swipeRight: function( ev ) {
                             console.log( 'swipe left!' );
-                            that.next();
+                            that.prev();
                         }
                     } );
                 },
