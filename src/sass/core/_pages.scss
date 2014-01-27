@@ -14,7 +14,7 @@
         //border: 1px solid red;
         &.current {
             display: block;
-            .or-group, .or-group-data, .or-repeat {
+            .or-group:not(.disabled), .or-group-data:not(.disabled), .or-repeat:not(.disabled) {
                 display: block;
             }
         }
@@ -35,6 +35,7 @@
         width: 100%;
         .btn {
             border-radius: 0;
+            color: #4E4D4D;
         }
         .previous-page, .next-page {
             @include flex(1);

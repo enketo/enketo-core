@@ -353,9 +353,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                                 // something tells me there is a more efficient way to doing this
                                 // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
                                 return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
-                            } );
+                            } )
+                            .attr( 'role', 'page' );
 
-                        this.setToCurrent( $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ) );
+                        this.setToCurrent( $allPages.first( ':not(.disabled)' ) );
 
                         //console.log( 'all pages', $allPages );
 
@@ -445,8 +446,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 updateAllActive: function( $all ) {
                     //console.log( 'refreshing collection of active pages' );
-                    this.$activePages = ( !$all ) ? $( '.or [role="page"]:not(.disabled)' ) : $all.filter( function() {
-                        return $( this ).is( '[role="page"]:not(.disabled)' );
+                    $all = $all || $( '.or [role="page"]' );
+                    this.$activePages = $all.filter( function() {
+                        return $( this ).closest( '.disabled' ).length === 0;
                     } );
                 },
                 getAllActive: function() {
