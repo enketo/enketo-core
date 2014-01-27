@@ -289,8 +289,10 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
 }
 
 // this may have a very significant positive impact on performance
-.or-branch.disabled, .or-branch.pre-init {
-    display: none;
+.or-branch {
+    &.disabled, &.or-branch.pre-init {
+        display: none;
+    }
 }
 
 .btn-reset {

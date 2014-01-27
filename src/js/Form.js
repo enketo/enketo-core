@@ -371,6 +371,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.toggleButtons( 0 );
                             this.setButtonHandlers();
                             this.setRepeatHandlers();
+                            this.setBranchHandlers();
                             this.setSwipeHandlers();
                             this.active = true;
                         }
@@ -413,9 +414,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 setRepeatHandlers: function() {
                     var that = this;
+                    // TODO: can be optimized by smartly updating the active pages
                     $form.on( 'addrepeat', function( event ) {
                         that.updateAllActive();
-                        console.log( 'handling repeat clone in page object', event.target );
                         //removing the class in effect avoids the animation
                         $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
                         that.flipToPageContaining( $( event.target ) );
@@ -429,6 +430,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             // is it best to go to previous page always? 
                             that.flipToPageContaining( $( event.target ) );
                         }
+                    } );
+                },
+                setBranchHandlers: function() {
+                    var that = this;
+                    // TODO: can be optimized by smartly updating the active pages
+                    $form.on( 'showbranch hidebranch', function( event ) {
+                        that.updateAllActive();
+                        that.toggleButtons();
                     } );
                 },
                 getCurrent: function() {
@@ -521,7 +530,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $closest = $e.closest( '[role="page"]' );
                     $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
 
-                    this.updateAllActive();
+                    //this.updateAllActive();
                     this.flipTo( $closest[ 0 ] );
                 },
                 toggleButtons: function( index ) {
@@ -963,13 +972,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( !this.selfRelevant( $branchNode ) ) {
                         //console.debug( 'enabling branch with name: ' + $branchNode.attr( 'name' ) );
 
-                        $branchNode.removeClass( 'disabled pre-init' ).show( 250, function() {
-                            //to recalculate table column widths
-                            //if ( that.ancestorRelevant( $branchNode ) ) {
-                            //  parent.widgets.tableWidget( $branchNode );
-                            //}
-                            widgets.enable( $branchNode );
-                        } );
+                        $branchNode.removeClass( 'disabled pre-init' ).trigger( 'showbranch' );
+                        widgets.enable( $branchNode );
 
                         type = $branchNode.prop( 'nodeName' ).toLowerCase();
 
@@ -996,11 +1000,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var type = $branchNode.prop( 'nodeName' ).toLowerCase(),
                         virgin = $branchNode.hasClass( 'pre-init' );
                     if ( this.selfRelevant( $branchNode ) || virgin ) {
-                        $branchNode.addClass( 'disabled' ); //;
+                        $branchNode.addClass( 'disabled' ).trigger( 'hidebranch' ); //;
 
                         //if ( typeof settings !== 'undefined' && typeof settings.showBranch !== 'undefined' && !settings.showBranch ) {
                         //console.log( 'hiding branch', $branchNode );
-                        $branchNode.hide( 250 );
+                        //$branchNode.hide( 250 );
                         //}
 
                         //if the branch was previously enabled
