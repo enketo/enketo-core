@@ -54,7 +54,7 @@ module.exports = function( grunt ) {
                 }
             },
             js: {
-                files: [ '*.js', 'src/**/*.js', 'build/**/*.css' ],
+                files: [ '*.js', 'src/**/*.js' ],
                 tasks: [ 'modernizr' ],
                 options: {
                     spawn: false
