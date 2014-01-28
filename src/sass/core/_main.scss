@@ -156,6 +156,9 @@ legend {
             line-height: 40px;
             text-align: left;
             padding: 4px 4px 4px 0;
+            .active {
+                margin-right: 10px;
+            }
             input[type="radio"], input[type="checkbox"] {
                 margin-top: 10px;
                 margin-left: 15px;
