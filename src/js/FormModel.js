@@ -5,9 +5,6 @@ if ( typeof define !== 'function' ) {
 define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, $ ) {
     "use strict";
 
-    //replace browser-built-in-XPath Engine on XMLDocument prototype
-    XPathJS.bindDomLevel3XPath(XMLDocument.prototype);
-
     /**
      * Class dealing with the XML Instance (the data) of a form
      *
@@ -566,7 +563,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
         var i, j, error, context, $instanceDoc, instanceDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
-            $collection, $contextWrapNodes, $repParents;
+            $collection, $contextWrapNodes, $repParents, response;
 
         //console.time( 'eval in Model' );
         //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
@@ -584,7 +581,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             - the hack described below with multiple instances.
         */
         $instanceDoc = new FormModel( this.getStr( false, false ) ).$;
-        instanceDoc = $instanceDoc[0];
+        instanceDoc = $instanceDoc[ 0 ];
 
         /* 
             If the expression contains the instance('id') syntax, a different context instance is required.
@@ -596,7 +593,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             The instance referred to in instance(id) is detached and appended to the main instance. The 
             instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
         */
-        
+
         if ( this.instanceSelectRegEx.test( expr ) ) {
             instances = expr.match( this.instanceSelectRegEx );
             for ( i = 0; i < instances.length; i++ ) {
@@ -646,35 +643,57 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.replace( /&gt;/g, '>' );
         expr = expr.replace( /&quot;/g, '"' );
 
-        try {
-            result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
+        // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
+        if ( typeof instanceDoc.evaluate !== 'undefined' ) {
+            try {
+                console.log( 'first trying native Evaluator' );
+                result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
+            } catch ( e ) {
+                console.log( '%cWell native XPath evaluation that did not work... No worries, worth the try, the expression probably ' +
+                    'contained custom OpenRosa functions:', 'color:orange', expr );
+            }
+        }
+
+        // if that didn't work, try the slow XPathJS evaluator 
+        if ( !result ) {
+            try {
+                console.log( 'trying the super slow XPathJS_javarosa evaluator instead' );
+                // bind the replacement evaluator to the instance of XMLDocument
+                XPathJS.bindDomLevel3XPath( instanceDoc );
+                result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
+            } catch ( e ) {
+                error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
+                console.error( error );
+                $( document ).trigger( 'xpatherror', error );
+                this.loadErrors.push( error );
+                //console.timeEnd( 'eval in Model' );
+                return null;
+            }
+        }
+
+        // get desired value from result object
+        if ( result ) {
+            // for type = any, see if a valid string, number or boolean is returned
             if ( resTypeNum === 0 ) {
                 for ( resTypeNum in resultTypes ) {
                     resTypeNum = Number( resTypeNum );
-                    if ( resTypeNum == Number( result.resultType ) ) {
-                        result = ( resTypeNum > 0 && resTypeNum < 4 ) ? result[ resultTypes[ resTypeNum ][ 2 ] ] : result;
-                        // console.timeEnd( 'eval in Model' );
-                        return result;
+                    if ( resTypeNum == Number( result.resultType ) && resTypeNum > 0 && resTypeNum < 4 ) {
+                        response = result[ resultTypes[ resTypeNum ][ 2 ] ];
+                        break;
                     }
                 }
                 console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
             } else if ( resTypeNum === 7 ) {
-                $result = $();
+                // TODO: this should return elements... (not a jQuery collection)
+                response = $();
                 for ( j = 0; j < result.snapshotLength; j++ ) {
-                    $result = $result.add( result.snapshotItem( j ) );
+                    response = response.add( result.snapshotItem( j ) );
                 }
-                //console.timeEnd( 'eval in Model' );
-                return $result;
+            } else {
+                response = result[ resultTypes[ resTypeNum ][ 2 ] ];
             }
             //console.timeEnd( 'eval in Model' );
-            return result[ resultTypes[ resTypeNum ][ 2 ] ];
-        } catch ( e ) {
-            error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
-            console.error( error );
-            $( document ).trigger( 'xpatherror', error );
-            this.loadErrors.push( error );
-            //console.timeEnd( 'eval in Model' );
-            return null;
+            return response;
         }
     };
 
