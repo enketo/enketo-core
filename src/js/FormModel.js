@@ -5,8 +5,8 @@ if ( typeof define !== 'function' ) {
 define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, $ ) {
     "use strict";
 
-    //replace browser-built-in-XPath Engine
-    XPathJS.bindDomLevel3XPath();
+    //replace browser-built-in-XPath Engine on XMLDocument prototype
+    XPathJS.bindDomLevel3XPath(XMLDocument.prototype);
 
     /**
      * Class dealing with the XML Instance (the data) of a form
@@ -565,10 +565,11 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * @return {?(number|string|boolean|jQuery)} the result
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
-        var i, j, error, context, contextDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
+        var i, j, error, context, $instanceDoc, instanceDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
             $collection, $contextWrapNodes, $repParents;
 
-        // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
+        //console.time( 'eval in Model' );
+        //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
         //    index + ' and result type: ' + resTypeStr );
 
         resTypeStr = resTypeStr || 'any';
@@ -577,12 +578,14 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.trim();
 
         /* 
-            creating a context doc is necessary for 3 reasons:
+            creating a new instanceDoc is necessary for 3 reasons:
             - the primary instance needs to be the root (and it isn't as the root is <model> and there can be multiple <instance>s)
             - the templates need to be removed (though this could be worked around by adding the templates as data)
             - the hack described below with multiple instances.
-            */
-        contextDoc = new FormModel( this.getStr( false, false ) );
+        */
+        $instanceDoc = new FormModel( this.getStr( false, false ) ).$;
+        instanceDoc = $instanceDoc[0];
+
         /* 
             If the expression contains the instance('id') syntax, a different context instance is required.
             However, the same expression may also contain absolute reference to the main data instance, 
@@ -592,18 +595,19 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             this developer, so as a workaround, the following is used instead:
             The instance referred to in instance(id) is detached and appended to the main instance. The 
             instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
-            */
+        */
+        
         if ( this.instanceSelectRegEx.test( expr ) ) {
             instances = expr.match( this.instanceSelectRegEx );
             for ( i = 0; i < instances.length; i++ ) {
                 id = instances[ i ].match( /[\'|\"]([^\'']+)[\'|\"]/ )[ 1 ];
                 expr = expr.replace( instances[ i ], '/node()/instance[@id="' + id + '"]' );
-                this.$.find( ':first>instance#' + id ).clone().appendTo( contextDoc.$.find( ':first' ) );
+                this.$.find( ':first>instance#' + id ).clone().appendTo( $instanceDoc.find( ':first' ) );
             }
         }
 
         if ( typeof selector !== 'undefined' && selector !== null ) {
-            context = contextDoc.$.xfind( selector ).eq( index )[ 0 ];
+            context = $instanceDoc.xfind( selector ).eq( index )[ 0 ];
             /*
              * If the context for the expression is a node that is inside a repeat.... see makeBugCompliant()
              */
@@ -613,7 +617,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 expr = this.makeBugCompliant( expr, selector, index );
             }
         } else {
-            context = contextDoc.getXML();
+            context = instanceDoc;
         }
 
         resultTypes = {
@@ -626,7 +630,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             //'node': ['FIRST_ORDERED_NODE_TYPE','singleNodeValue'], // does NOT work, just take first result of previous
         };
 
-        //translate typeStr to number according to DOM level 3 XPath constants
+        // translate typeStr to number according to DOM level 3 XPath constants
         for ( resTypeNum in resultTypes ) {
 
             resTypeNum = Number( resTypeNum );
@@ -642,56 +646,36 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.replace( /&gt;/g, '>' );
         expr = expr.replace( /&quot;/g, '"' );
 
-        //var timeLap = new Date().getTime();
-        //console.log('expr to test: '+expr+' with result type number: '+resTypeNum);
         try {
-            result = document.evaluate( expr, context, null, resTypeNum, null );
+            result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
             if ( resTypeNum === 0 ) {
                 for ( resTypeNum in resultTypes ) {
                     resTypeNum = Number( resTypeNum );
                     if ( resTypeNum == Number( result.resultType ) ) {
                         result = ( resTypeNum > 0 && resTypeNum < 4 ) ? result[ resultTypes[ resTypeNum ][ 2 ] ] : result;
-                        //console.debug( 'evaluated ' + expr + ' to: ', result );
-                        //totTime = new Date().getTime() - timeStart;
-                        //xTime = new Date().getTime() - timeLap;
-                        //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-                        //xpathEvalTime += totTime;
-                        //xpathEvalTimePure += xTime;
+                        // console.timeEnd( 'eval in Model' );
                         return result;
                     }
                 }
                 console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
-                //console.debug(result);
             } else if ( resTypeNum === 7 ) {
                 $result = $();
                 for ( j = 0; j < result.snapshotLength; j++ ) {
                     $result = $result.add( result.snapshotItem( j ) );
                 }
-                //console.debug('evaluation returned nodes: ', $result);
-                //totTime = new Date().getTime() - timeStart;
-                //xTime = new Date().getTime() - timeLap;
-                //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-                //xpathEvalTime += totTime;
-                //xpathEvalTimePure += xTime;
+                //console.timeEnd( 'eval in Model' );
                 return $result;
             }
-            //console.debug( 'evaluated ' + expr + ' to: ' + result[ resultTypes[ resTypeNum ][ 2 ] ] );
-            //totTime = new Date().getTime() - timeStart;
-            //xTime = new Date().getTime() - timeLap;
-            //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-            //xpathEvalTime += totTime;
-            //xpathEvalTimePure += xTime;
+            //console.timeEnd( 'eval in Model' );
             return result[ resultTypes[ resTypeNum ][ 2 ] ];
         } catch ( e ) {
             error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
             console.error( error );
             $( document ).trigger( 'xpatherror', error );
             this.loadErrors.push( error );
-            //xpathEvalTime += new Date().getTime() - timeStart;
-            //xpathEvalTimePure += new Date().getTime() - timeLap;s
+            //console.timeEnd( 'eval in Model' );
             return null;
         }
-
     };
 
     return FormModel;
