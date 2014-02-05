@@ -17,8 +17,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
     function FormModel( dataStr ) {
         var $data,
-            that = this,
-            $form = $( 'form.jr:eq(0)' );
+            that = this;
 
         this.loadErrors = [];
         this.instanceSelectRegEx = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
@@ -45,7 +44,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         FormModel.prototype.init = function() {
             var /** @type {string} */ val;
 
-            //trimming values
+            // trimming values
             this.node( null, null, {
                 noEmpty: true,
                 noTemplate: false
@@ -457,27 +456,14 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      *
      * See also: In JavaRosa, the documentation on the jr:template attribute.
      *
-     * @param {jQuery=} startNode Provides the scope (default is the whole data object) from which to start cloning.
      */
-    FormModel.prototype.cloneAllTemplates = function( startNode ) {
-        var _this = this;
-        if ( typeof startNode == 'undefined' || startNode.length === 0 ) {
-            startNode = this.$.find( ':first' );
-        }
-        //clone data nodes with template (jr:template=) attribute if it doesn't have any siblings of the same name already
-        //strictly speaking this is not "according to the spec" as the user should be asked whether it has any data for this question
-        //but I think it is almost always better to assume at least one 'repeat' (= 1 question)
-        startNode.children( '[template]' ).each( function() {
-            if ( typeof $( this ).parent().attr( 'template' ) == 'undefined' && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
-                //console.log('going to clone template data node with name: ' + $(this).prop('nodeName'));
+    FormModel.prototype.cloneAllTemplates = function() {
+        // in reverse document order to properly deal with nested repeat templates
+        this.$.find( 'model > instance:eq(0) [template]' ).reverse().each( function() {
+            if ( !$( this ).parent().attr( 'template' ) && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
                 $( this ).clone().insertAfter( $( this ) ).find( '*' ).addBack().removeAttr( 'template' );
-                //cloneDataNode($(this));
             }
         } );
-        startNode.children().not( '[template]' ).each( function() {
-            _this.cloneAllTemplates( $( this ) );
-        } );
-        return;
     };
 
     /**
