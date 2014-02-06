@@ -1096,7 +1096,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                         $instanceItems = itemsCache[ itemsXpath ];
                     } else {
-                        $instanceItems = model.evaluate( itemsXpath, 'nodes', context, index );
+                        $instanceItems = $( model.evaluate( itemsXpath, 'nodes', context, index ) );
                         if ( !insideRepeat ) {
                             itemsCache[ itemsXpath ] = $instanceItems;
                         }

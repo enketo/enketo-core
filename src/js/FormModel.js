@@ -560,7 +560,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * @param  {string=} resTypeStr boolean, string, number, nodes (best to always supply this)
      * @param  {string=} selector   jQuery selector which will be use to provide the context to the evaluator
      * @param  {number=} index      index of selector in document
-     * @return {?(number|string|boolean|jQuery)} the result
+     * @return {?(number|string|boolean|Array<element>)} the result
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
         var i, j, error, context, $instanceDoc, instanceDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
@@ -625,7 +625,6 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             3: [ 'boolean', 'BOOLEAN_TYPE', 'booleanValue' ],
             7: [ 'nodes', 'ORDERED_NODE_SNAPSHOT_TYPE' ],
             9: [ 'node', 'FIRST_ORDERED_NODE_TYPE' ]
-            //'node': ['FIRST_ORDERED_NODE_TYPE','singleNodeValue'], // does NOT work, just take first result of previous
         };
 
         // translate typeStr to number according to DOM level 3 XPath constants
@@ -685,10 +684,10 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 }
                 console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
             } else if ( resTypeNum === 7 ) {
-                // TODO: this should return elements... (not a jQuery collection)
-                response = $();
+                // response is an array of Elements
+                response = [];
                 for ( j = 0; j < result.snapshotLength; j++ ) {
-                    response = response.add( result.snapshotItem( j ) );
+                    response.push( result.snapshotItem( j ) );
                 }
             } else {
                 response = result[ resultTypes[ resTypeNum ][ 2 ] ];
