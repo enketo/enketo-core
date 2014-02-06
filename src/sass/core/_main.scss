@@ -146,7 +146,7 @@ label, legend, .trigger, .note {
     video {
         max-width: 100%;
     }
-    @each $medium in image, video, audio {
+    /*@each $medium in image, video, audio {
         $tag: $medium;
         @if $medium == image {
             $tag: img;
@@ -164,7 +164,7 @@ label, legend, .trigger, .note {
             display: block;
             float: none;
         }
-    }
+    }*/
 }
 
 legend {

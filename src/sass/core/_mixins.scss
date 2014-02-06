@@ -111,6 +111,7 @@
     display: -webkit-flex !important;
     display: flex !important;}
 
+// the 0 auto should be default but this isn't set properly in Opera, IE10 and IE11
 @mixin flex ($value, $total:null) {
     $flex: 100%;
     @if not $total {
@@ -118,9 +119,9 @@
     } @else if $total >= $value {
         $flex: ($value / $total) * 100%;
     }
-    -webkit-flex: $flex;
-    -ms-flex: $flex;
-    flex: $flex;
+    -webkit-flex: $flex 0 auto;
+    -ms-flex: $flex 0 auto;
+    flex: $flex 0 auto;
 }
 
 @mixin flex-wrap ($wrap:wrap) {
