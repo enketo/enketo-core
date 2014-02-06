@@ -5,9 +5,6 @@ if ( typeof define !== 'function' ) {
 define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, $ ) {
     "use strict";
 
-    //replace browser-built-in-XPath Engine
-    XPathJS.bindDomLevel3XPath();
-
     /**
      * Class dealing with the XML Instance (the data) of a form
      *
@@ -17,11 +14,11 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
     function FormModel( dataStr ) {
         var $data,
-            that = this,
-            $form = $( 'form.jr:eq(0)' );
+            that = this;
 
         this.loadErrors = [];
-        this.instanceSelectRegEx = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
+        this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
+        this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\()/;
 
         //TEMPORARY DUE TO FIREFOX ISSUE, REMOVE ALL NAMESPACES FROM STRING, 
         //BETTER TO LEARN HOW TO DEAL WITH DEFAULT NAMESPACES THOUGH
@@ -45,7 +42,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         FormModel.prototype.init = function() {
             var /** @type {string} */ val;
 
-            //trimming values
+            // trimming values
             this.node( null, null, {
                 noEmpty: true,
                 noTemplate: false
@@ -97,8 +94,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
             if ( $data.find( 'model>instance' ).length > 0 ) {
                 //to refer to non-first instance, the instance('id_literal')/path/to/node syntax can be used
-                if ( this.selector !== defaultSelector && this.selector.indexOf( '/' ) !== 0 && that.instanceSelectRegEx.test( this.selector ) ) {
-                    this.selector = this.selector.replace( that.instanceSelectRegEx, "model > instance#$1" );
+                if ( this.selector !== defaultSelector && this.selector.indexOf( '/' ) !== 0 && that.INSTANCE.test( this.selector ) ) {
+                    this.selector = this.selector.replace( that.INSTANCE, "model > instance#$1" );
                     return;
                 }
                 //default context is the first instance in the model            
@@ -457,27 +454,14 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      *
      * See also: In JavaRosa, the documentation on the jr:template attribute.
      *
-     * @param {jQuery=} startNode Provides the scope (default is the whole data object) from which to start cloning.
      */
-    FormModel.prototype.cloneAllTemplates = function( startNode ) {
-        var _this = this;
-        if ( typeof startNode == 'undefined' || startNode.length === 0 ) {
-            startNode = this.$.find( ':first' );
-        }
-        //clone data nodes with template (jr:template=) attribute if it doesn't have any siblings of the same name already
-        //strictly speaking this is not "according to the spec" as the user should be asked whether it has any data for this question
-        //but I think it is almost always better to assume at least one 'repeat' (= 1 question)
-        startNode.children( '[template]' ).each( function() {
-            if ( typeof $( this ).parent().attr( 'template' ) == 'undefined' && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
-                //console.log('going to clone template data node with name: ' + $(this).prop('nodeName'));
+    FormModel.prototype.cloneAllTemplates = function() {
+        // in reverse document order to properly deal with nested repeat templates
+        this.$.find( 'model > instance:eq(0) [template]' ).reverse().each( function() {
+            if ( !$( this ).parent().attr( 'template' ) && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
                 $( this ).clone().insertAfter( $( this ) ).find( '*' ).addBack().removeAttr( 'template' );
-                //cloneDataNode($(this));
             }
         } );
-        startNode.children().not( '[template]' ).each( function() {
-            _this.cloneAllTemplates( $( this ) );
-        } );
-        return;
     };
 
     /**
@@ -576,13 +560,14 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * @param  {string=} resTypeStr boolean, string, number, nodes (best to always supply this)
      * @param  {string=} selector   jQuery selector which will be use to provide the context to the evaluator
      * @param  {number=} index      index of selector in document
-     * @return {?(number|string|boolean|jQuery)} the result
+     * @return {?(number|string|boolean|Array<element>)} the result
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
-        var i, j, error, context, contextDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
-            $collection, $contextWrapNodes, $repParents;
+        var i, j, error, context, $instanceDoc, instanceDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
+            $collection, $contextWrapNodes, $repParents, response, openrosa;
 
-        // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
+        //console.time( 'eval in Model' );
+        //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
         //    index + ' and result type: ' + resTypeStr );
 
         resTypeStr = resTypeStr || 'any';
@@ -591,12 +576,14 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.trim();
 
         /* 
-            creating a context doc is necessary for 3 reasons:
+            creating a new instanceDoc is necessary for 3 reasons:
             - the primary instance needs to be the root (and it isn't as the root is <model> and there can be multiple <instance>s)
             - the templates need to be removed (though this could be worked around by adding the templates as data)
             - the hack described below with multiple instances.
-            */
-        contextDoc = new FormModel( this.getStr( false, false ) );
+        */
+        $instanceDoc = new FormModel( this.getStr( false, false ) ).$;
+        instanceDoc = $instanceDoc[ 0 ];
+
         /* 
             If the expression contains the instance('id') syntax, a different context instance is required.
             However, the same expression may also contain absolute reference to the main data instance, 
@@ -606,18 +593,19 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             this developer, so as a workaround, the following is used instead:
             The instance referred to in instance(id) is detached and appended to the main instance. The 
             instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
-            */
-        if ( this.instanceSelectRegEx.test( expr ) ) {
-            instances = expr.match( this.instanceSelectRegEx );
+        */
+
+        if ( this.INSTANCE.test( expr ) ) {
+            instances = expr.match( this.INSTANCE );
             for ( i = 0; i < instances.length; i++ ) {
                 id = instances[ i ].match( /[\'|\"]([^\'']+)[\'|\"]/ )[ 1 ];
                 expr = expr.replace( instances[ i ], '/node()/instance[@id="' + id + '"]' );
-                this.$.find( ':first>instance#' + id ).clone().appendTo( contextDoc.$.find( ':first' ) );
+                this.$.find( ':first>instance#' + id ).clone().appendTo( $instanceDoc.find( ':first' ) );
             }
         }
 
         if ( typeof selector !== 'undefined' && selector !== null ) {
-            context = contextDoc.$.xfind( selector ).eq( index )[ 0 ];
+            context = $instanceDoc.xfind( selector ).eq( index )[ 0 ];
             /*
              * If the context for the expression is a node that is inside a repeat.... see makeBugCompliant()
              */
@@ -627,7 +615,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 expr = this.makeBugCompliant( expr, selector, index );
             }
         } else {
-            context = contextDoc.getXML();
+            context = instanceDoc;
         }
 
         resultTypes = {
@@ -637,10 +625,9 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             3: [ 'boolean', 'BOOLEAN_TYPE', 'booleanValue' ],
             7: [ 'nodes', 'ORDERED_NODE_SNAPSHOT_TYPE' ],
             9: [ 'node', 'FIRST_ORDERED_NODE_TYPE' ]
-            //'node': ['FIRST_ORDERED_NODE_TYPE','singleNodeValue'], // does NOT work, just take first result of previous
         };
 
-        //translate typeStr to number according to DOM level 3 XPath constants
+        // translate typeStr to number according to DOM level 3 XPath constants
         for ( resTypeNum in resultTypes ) {
 
             resTypeNum = Number( resTypeNum );
@@ -656,56 +643,58 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.replace( /&gt;/g, '>' );
         expr = expr.replace( /&quot;/g, '"' );
 
-        //var timeLap = new Date().getTime();
-        //console.log('expr to test: '+expr+' with result type number: '+resTypeNum);
-        try {
-            result = document.evaluate( expr, context, null, resTypeNum, null );
+        // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
+        if ( typeof instanceDoc.evaluate !== 'undefined' && !this.OPENROSA.test( expr ) ) {
+            try {
+                console.log( 'trying the blazing fast native XPath Evaluator' );
+                result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
+            } catch ( e ) {
+                console.log( '%cWell native XPath evaluation that did not work... No worries, worth a shot, the expression probably ' +
+                    'contained unknown OpenRosa functions or errors:', 'color:orange', expr );
+            }
+        }
+
+        // if that didn't work, try the slow XPathJS evaluator 
+        if ( !result ) {
+            try {
+                console.log( 'trying the super slow XPathJS_javarosa evaluator' );
+                // bind the replacement evaluator to the instance of XMLDocument
+                XPathJS.bindDomLevel3XPath( instanceDoc );
+                result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
+            } catch ( e ) {
+                error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
+                console.error( error );
+                $( document ).trigger( 'xpatherror', error );
+                this.loadErrors.push( error );
+                //console.timeEnd( 'eval in Model' );
+                return null;
+            }
+        }
+
+        // get desired value from result object
+        if ( result ) {
+            // for type = any, see if a valid string, number or boolean is returned
             if ( resTypeNum === 0 ) {
                 for ( resTypeNum in resultTypes ) {
                     resTypeNum = Number( resTypeNum );
-                    if ( resTypeNum == Number( result.resultType ) ) {
-                        result = ( resTypeNum > 0 && resTypeNum < 4 ) ? result[ resultTypes[ resTypeNum ][ 2 ] ] : result;
-                        //console.debug( 'evaluated ' + expr + ' to: ', result );
-                        //totTime = new Date().getTime() - timeStart;
-                        //xTime = new Date().getTime() - timeLap;
-                        //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-                        //xpathEvalTime += totTime;
-                        //xpathEvalTimePure += xTime;
-                        return result;
+                    if ( resTypeNum == Number( result.resultType ) && resTypeNum > 0 && resTypeNum < 4 ) {
+                        response = result[ resultTypes[ resTypeNum ][ 2 ] ];
+                        break;
                     }
                 }
                 console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
-                //console.debug(result);
             } else if ( resTypeNum === 7 ) {
-                $result = $();
+                // response is an array of Elements
+                response = [];
                 for ( j = 0; j < result.snapshotLength; j++ ) {
-                    $result = $result.add( result.snapshotItem( j ) );
+                    response.push( result.snapshotItem( j ) );
                 }
-                //console.debug('evaluation returned nodes: ', $result);
-                //totTime = new Date().getTime() - timeStart;
-                //xTime = new Date().getTime() - timeLap;
-                //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-                //xpathEvalTime += totTime;
-                //xpathEvalTimePure += xTime;
-                return $result;
+            } else {
+                response = result[ resultTypes[ resTypeNum ][ 2 ] ];
             }
-            //console.debug( 'evaluated ' + expr + ' to: ' + result[ resultTypes[ resTypeNum ][ 2 ] ] );
-            //totTime = new Date().getTime() - timeStart;
-            //xTime = new Date().getTime() - timeLap;
-            //console.debug('took '+totTime+' millseconds (XPath lib only: '+ Math.round((xTime / totTime) * 100 )+'%)');
-            //xpathEvalTime += totTime;
-            //xpathEvalTimePure += xTime;
-            return result[ resultTypes[ resTypeNum ][ 2 ] ];
-        } catch ( e ) {
-            error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
-            console.error( error );
-            $( document ).trigger( 'xpatherror', error );
-            this.loadErrors.push( error );
-            //xpathEvalTime += new Date().getTime() - timeStart;
-            //xpathEvalTimePure += new Date().getTime() - timeLap;s
-            return null;
+            //console.timeEnd( 'eval in Model' );
+            return response;
         }
-
     };
 
     return FormModel;

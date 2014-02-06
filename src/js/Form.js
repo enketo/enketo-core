@@ -1045,13 +1045,22 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     needToUpdateLangs = false,
                     itemsCache = {};
 
+                // console.time( 'itemsetUpdate' );
                 console.log( 'itemset update was called', changedDataNodeNames );
 
                 if ( typeof changedDataNodeNames == 'undefined' ) {
                     cleverSelector = [ '.itemset-template' ];
                 } else {
                     $.each( changedDataNodeNames.split( ',' ), function( index, value ) {
-                        cleverSelector.push( '.itemset-template[data-items-path*="' + value + '"]' );
+                        // Note the space after value (#1), and ] after value (#2) to only look at the node name as leaf value
+                        // If this is safe, it could mean a gigantic performance improvement for some forms (like bench8)
+                        // where there are multiple cascades with names such as country, country1, country2
+                        // TODO: using a forward slash before value would be safe for XLSForm produced forms and mean 
+                        // further improvements
+                        /*#1*/
+                        cleverSelector.push( '.itemset-template[data-items-path*="' + value + ' "]' );
+                        /*#2*/
+                        cleverSelector.push( '.itemset-template[data-items-path*="' + value + ']"]' );
                     } );
                 }
 
@@ -1081,13 +1090,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     insideRepeatClone = ( clonedRepeatsPresent && $input.closest( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                     index = ( insideRepeatClone ) ? that.input.getIndex( $input ) : 0;
-
                     //console.log( 'inside clone?', insideRepeatClone );
 
+                    // console.log( 'xpath', itemsXpath, 'inside repeat', insideRepeat );
                     if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                         $instanceItems = itemsCache[ itemsXpath ];
                     } else {
-                        $instanceItems = model.evaluate( itemsXpath, 'nodes', context, index );
+                        $instanceItems = $( model.evaluate( itemsXpath, 'nodes', context, index ) );
                         if ( !insideRepeat ) {
                             itemsCache[ itemsXpath ] = $instanceItems;
                         }
@@ -1104,9 +1113,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     $template.data( newItems );
 
-                    console.log( 'template node name:', templateNodeName, '$templat', $template );
-                    //clear data values through inputs. Note: if a value exists, 
-                    //this will trigger a dataupdate event which may call this update function again
+                    // console.log( 'template node name:', templateNodeName, '$template', $template );
+
+                    // clear data values through inputs. Note: if a value exists, 
+                    // this will trigger a dataupdate event which may call this update function again
                     $( this ).closest( '.question' )
                         .clearInputs( 'change' )
                         .find( templateNodeName ).not( $template ).remove();
@@ -1142,13 +1152,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
                         }
                     } );
+
                     if ( $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
                         //populate labels (with current language)
                         that.langs.setSelect( $input );
                         //update widget
                         $input.trigger( 'changeoption' );
                     }
+
                 } );
+                // console.timeEnd( 'itemsetUpdate' );
             };
 
             /**
