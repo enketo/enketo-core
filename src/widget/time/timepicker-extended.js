@@ -67,7 +67,13 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstr
             .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
             $fakeTimeI.on( 'change', function() {
-                $timeI.val( $( this ).val() ).trigger( 'change' ).blur();
+                var $this = $( this ),
+                    // the following line can be removed if https://github.com/jdewit/bootstrap-timepicker/issues/202 gets approved
+                    val = ( /^[0-9]:/.test( $this.val() ) ) ? '0' + $this.val() : $this.val();
+                // add 00 minutes if they are missing (probably a bug in bootstrap timepicker)
+                val = ( /^[0-9]{2}:$/.test( val ) ) ? val + '00' : val;
+                console.debug( 'time val to be entered: ', val );
+                $timeI.val( val ).trigger( 'change' ).blur();
                 return false;
             } );
 

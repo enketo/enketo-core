@@ -40,8 +40,13 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Notewidget.prototype.constructor = Notewidget;
 
     Notewidget.prototype._init = function() {
-        $( this.element ).find( '.question-label' ).markdownToHtml()
+        var $el = $( this.element );
+        $el.find( '.question-label' ).markdownToHtml()
             .end().find( '[readonly]' ).addClass( 'ignore' );
+
+        if ( $el.is( '.note' ) && !$el.next().is( '.note' ) ) {
+            $el.addClass( 'last-of-class' );
+        }
     };
 
     $.fn[ pluginName ] = function( options, event ) {

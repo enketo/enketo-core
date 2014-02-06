@@ -14,7 +14,7 @@
         //border: 1px solid red;
         &.current {
             display: block;
-            .or-group, .or-group-data, .or-repeat {
+            .or-group:not(.disabled), .or-group-data:not(.disabled), .or-repeat:not(.disabled) {
                 display: block;
             }
         }
@@ -27,24 +27,22 @@
         }
     }
     ~ .pages-nav {
+        @include display-flex;
+        @include flex-direction(row);
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
-        .btn.previous-page,
-        .btn.next-page {
+        .btn {
             border-radius: 0;
+            color: #4D4D4D;
+        }
+        .previous-page, .next-page {
+            @include flex(1);
             width: 50%;
-            border-bottom: none;
-            border-left: none;
         }
-        .btn.previous-page {
-            //left: 0;
-       
-        }
-        .btn.next-page {
-            //left: 50%;
-            border-right: none;
+        .first-page, .last-page{
+            width: 60px;
         }
     }
 }

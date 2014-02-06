@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'bootstrap' ],
+define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'bootstrap', 'jquery.touchswipe' ],
     function( FormModel, widgets, $ ) {
         "use strict";
 
@@ -345,7 +345,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $current: [],
                 $activePages: $(),
                 init: function() {
-                    var $pagenav = $( '<nav class="pages-nav"></nav>' );
+                    var $pagenav = $( '<nav class="pages-nav btn-group"></nav>' );
 
                     if ( $form.hasClass( 'pages' ) ) {
                         var $allPages = $form.find( '.note, .question, .trigger, .or-appearance-field-list' )
@@ -353,25 +353,27 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                                 // something tells me there is a more efficient way to doing this
                                 // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
                                 return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
-                            } );
+                            } )
+                            .attr( 'role', 'page' );
 
-                        this.setToCurrent( $allPages.attr( 'role', 'page' ).first( ':not(.disabled)' ) );
+                        this.setToCurrent( $allPages.first( ':not(.disabled)' ) );
 
                         //console.log( 'all pages', $allPages );
 
                         if ( $allPages.length > 1 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
                             this.$formFooter = $( '.form-footer' );
+                            this.$btnFirst = $( '<a class="btn btn-default disabled first-page" href="#"><span class="glyphicon glyphicon-backward"></span></a>' );
                             this.$btnPrev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
                             this.$btnNext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
-                            $pagenav.append( this.$btnPrev, this.$btnNext ).insertAfter( this.$formFooter );
+                            this.$btnLast = $( '<a class="btn btn-default disabled last-page" href="#"><span class="glyphicon glyphicon-forward"></span></a>' );
+                            $pagenav.append( this.$btnFirst, this.$btnPrev, this.$btnNext, this.$btnLast ).insertAfter( this.$formFooter );
 
                             this.updateAllActive( $allPages );
                             this.toggleButtons( 0 );
                             this.setButtonHandlers();
                             this.setRepeatHandlers();
-                            //this.setSwipeEvents();
-                            //this.setSwipeHandlers(); //not sure if this will work well enough in browser
-                            // a swipeleft may very well move to another tab 
+                            this.setBranchHandlers();
+                            this.setSwipeHandlers();
                             this.active = true;
                         }
 
@@ -380,6 +382,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 setButtonHandlers: function() {
                     var that = this;
+                    this.$btnFirst.click( function() {
+                        that.flipToFirst();
+                        return false;
+                    } );
                     this.$btnPrev.click( function() {
                         that.prev();
                         return false;
@@ -388,28 +394,30 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         that.next();
                         return false;
                     } );
+                    this.$btnLast.click( function() {
+                        that.flipToLast();
+                        return false;
+                    } );
                 },
                 setSwipeHandlers: function() {
                     var that = this;
-                    $( document ).on( 'swipeleft', function( event ) {
-                        if ( event.handled !== true ) {
+                    $( document ).swipe( {
+                        allowPageScroll: "vertical",
+                        threshold: 50,
+                        swipeLeft: function( ev ) {
                             that.next();
-                            event.handled = true;
-                        }
-                        return false;
-                    } ).on( 'swiperight', function( event ) {
-                        if ( event.handled !== true ) {
+                        },
+                        swipeRight: function( ev ) {
+                            console.log( 'swipe left!' );
                             that.prev();
-                            event.handled = true;
                         }
-                        return false;
                     } );
                 },
                 setRepeatHandlers: function() {
                     var that = this;
+                    // TODO: can be optimized by smartly updating the active pages
                     $form.on( 'addrepeat', function( event ) {
                         that.updateAllActive();
-                        console.log( 'handling repeat clone in page object', event.target );
                         //removing the class in effect avoids the animation
                         $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
                         that.flipToPageContaining( $( event.target ) );
@@ -425,13 +433,22 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         }
                     } );
                 },
+                setBranchHandlers: function() {
+                    var that = this;
+                    // TODO: can be optimized by smartly updating the active pages
+                    $form.on( 'showbranch hidebranch', function( event ) {
+                        that.updateAllActive();
+                        that.toggleButtons();
+                    } );
+                },
                 getCurrent: function() {
                     return this.$current;
                 },
                 updateAllActive: function( $all ) {
                     //console.log( 'refreshing collection of active pages' );
-                    this.$activePages = ( !$all ) ? $( '.or [role="page"]:not(.disabled)' ) : $all.filter( function() {
-                        return $( this ).is( '[role="page"]:not(.disabled)' );
+                    $all = $all || $( '.or [role="page"]' );
+                    this.$activePages = $all.filter( function() {
+                        return $( this ).closest( '.disabled' ).length === 0;
                     } );
                 },
                 getAllActive: function() {
@@ -455,7 +472,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( next ) {
                         this.flipTo( next, currentIndex + 1 );
                     } else {
-                        console.error( 'no page present to flip forward to' );
+                        console.log( 'no page present to flip forward to!' );
                     }
                 },
                 prev: function() {
@@ -467,7 +484,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( prev ) {
                         this.flipTo( prev, currentIndex - 1 );
                     } else {
-                        console.error( 'no page present to flip backward to' );
+                        console.log( 'no page present to flip backward to' );
                     }
                 },
                 setToCurrent: function( pageEl ) {
@@ -497,6 +514,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         this.setToCurrent( pageEl );
                         this.toggleButtons( newIndex );
                     }
+
+
+                    if ( window.scrollTo ) {
+                        window.scrollTo( 0, 0 );
+                    }
                 },
                 flipToFirst: function() {
                     this.updateAllActive();
@@ -515,15 +537,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $closest = $e.closest( '[role="page"]' );
                     $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
 
-                    this.updateAllActive();
+                    //this.updateAllActive();
                     this.flipTo( $closest[ 0 ] );
                 },
                 toggleButtons: function( index ) {
                     var i = index || this.getCurrentIndex(),
                         next = this.getNext( i ),
                         prev = this.getPrev( i );
-                    this.$btnNext.toggleClass( 'disabled', !next );
-                    this.$btnPrev.toggleClass( 'disabled', !prev );
+                    this.$btnNext.add( this.$btnLast ).toggleClass( 'disabled', !next );
+                    this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
                     this.$formFooter.toggleClass( 'hide', !! next );
                 }
             };
@@ -957,13 +979,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( !this.selfRelevant( $branchNode ) ) {
                         //console.debug( 'enabling branch with name: ' + $branchNode.attr( 'name' ) );
 
-                        $branchNode.removeClass( 'disabled pre-init' ).show( 250, function() {
-                            //to recalculate table column widths
-                            //if ( that.ancestorRelevant( $branchNode ) ) {
-                            //  parent.widgets.tableWidget( $branchNode );
-                            //}
-                            widgets.enable( $branchNode );
-                        } );
+                        $branchNode.removeClass( 'disabled pre-init' ).trigger( 'showbranch' );
+                        widgets.enable( $branchNode );
 
                         type = $branchNode.prop( 'nodeName' ).toLowerCase();
 
@@ -990,11 +1007,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var type = $branchNode.prop( 'nodeName' ).toLowerCase(),
                         virgin = $branchNode.hasClass( 'pre-init' );
                     if ( this.selfRelevant( $branchNode ) || virgin ) {
-                        $branchNode.addClass( 'disabled' ); //;
+                        $branchNode.addClass( 'disabled' ).trigger( 'hidebranch' ); //;
 
                         //if ( typeof settings !== 'undefined' && typeof settings.showBranch !== 'undefined' && !settings.showBranch ) {
                         //console.log( 'hiding branch', $branchNode );
-                        $branchNode.hide( 250 );
+                        //$branchNode.hide( 250 );
                         //}
 
                         //if the branch was previously enabled
@@ -1033,13 +1050,22 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     needToUpdateLangs = false,
                     itemsCache = {};
 
+                // console.time( 'itemsetUpdate' );
                 console.log( 'itemset update was called', changedDataNodeNames );
 
                 if ( typeof changedDataNodeNames == 'undefined' ) {
                     cleverSelector = [ '.itemset-template' ];
                 } else {
                     $.each( changedDataNodeNames.split( ',' ), function( index, value ) {
-                        cleverSelector.push( '.itemset-template[data-items-path*="' + value + '"]' );
+                        // Note the space after value (#1), and ] after value (#2) to only look at the node name as leaf value
+                        // If this is safe, it could mean a gigantic performance improvement for some forms (like bench8)
+                        // where there are multiple cascades with names such as country, country1, country2
+                        // TODO: using a forward slash before value would be safe for XLSForm produced forms and mean 
+                        // further improvements
+                        /*#1*/
+                        cleverSelector.push( '.itemset-template[data-items-path*="' + value + ' "]' );
+                        /*#2*/
+                        cleverSelector.push( '.itemset-template[data-items-path*="' + value + ']"]' );
                     } );
                 }
 
@@ -1069,13 +1095,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     insideRepeatClone = ( clonedRepeatsPresent && $input.closest( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                     index = ( insideRepeatClone ) ? that.input.getIndex( $input ) : 0;
-
                     //console.log( 'inside clone?', insideRepeatClone );
 
+                    // console.log( 'xpath', itemsXpath, 'inside repeat', insideRepeat );
                     if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                         $instanceItems = itemsCache[ itemsXpath ];
                     } else {
-                        $instanceItems = model.evaluate( itemsXpath, 'nodes', context, index );
+                        $instanceItems = $( model.evaluate( itemsXpath, 'nodes', context, index ) );
                         if ( !insideRepeat ) {
                             itemsCache[ itemsXpath ] = $instanceItems;
                         }
@@ -1092,9 +1118,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     $template.data( newItems );
 
-                    console.log( 'template node name:', templateNodeName, '$templat', $template );
-                    //clear data values through inputs. Note: if a value exists, 
-                    //this will trigger a dataupdate event which may call this update function again
+                    // console.log( 'template node name:', templateNodeName, '$template', $template );
+
+                    // clear data values through inputs. Note: if a value exists, 
+                    // this will trigger a dataupdate event which may call this update function again
                     $( this ).closest( '.question' )
                         .clearInputs( 'change' )
                         .find( templateNodeName ).not( $template ).remove();
@@ -1130,13 +1157,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
                         }
                     } );
+
                     if ( $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
                         //populate labels (with current language)
                         that.langs.setSelect( $input );
                         //update widget
                         $input.trigger( 'changeoption' );
                     }
+
                 } );
+                // console.timeEnd( 'itemsetUpdate' );
             };
 
             /**

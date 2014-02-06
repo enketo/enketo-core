@@ -5,9 +5,14 @@ input:not([type=radio]):not([type=checkbox]), select, textarea {
     @extend .form-control;
 }
 
+.or-group {
+	border-top: none;
+}
+
 .note, .trigger {
-    @extend .alert;
-    @extend .alert-warning;
+	border-left: none;
+	border-right: none;
+    padding: 15px 0;
 }
 
 .btn-reset {
