@@ -132,7 +132,7 @@ h4 {
 }
 
 label, legend, .trigger, .note {
-    // font-size: 1em; // is this wise/useful?
+    font-size: $baseFontSize;
 }
 
 .or {
