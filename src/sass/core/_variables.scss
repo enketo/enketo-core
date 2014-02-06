@@ -19,6 +19,10 @@ $accent-color-1: #252525;
 $images-path: '../../images/';
 $icon-font-path: '/lib/bootstrap-sass/fonts/';
 $repeat-bg: lighten($accent-color-1, 55%);
+$note-bg: #eeeeee;
+$note-color: black;
+$note-border: 1px solid #aaaaaa;
+$note-border-radius: 4px;
 
 // layout
 $max-content-width: 720px;

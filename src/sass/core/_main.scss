@@ -85,23 +85,85 @@ h4 {
 .question {
     @include font-bold;
     display: block;
-    margin: 0 0 0.7em 0;
-    padding-top: 0.9em;
+    margin: 0 0 9px 0;
+    padding-top: 15px;
     > fieldset {
         padding: 0;
         margin: 0;
     }
 }
 
+// to make sure media doesn't break outside the box
+.question, .trigger, .note {
+    @include clearfix;
+}
+
+.trigger, .note {
+    @include font-normal;
+    color: $note-color;
+    background: $note-bg;
+    border: $note-border;
+    border-radius: $note-border-radius;
+    display: block;
+    padding: 7px 12px;
+    margin: 15px 0;
+    input[readonly]:not([type=radio]):not([type=checkbox]) {
+        display: none;
+        &.has-value {
+            display: block;
+        }
+    }
+}
+
+.note + .note {
+    border-top: none;
+    border-bottom: none;
+    @include border-radius(0);
+    margin-top: -18px;
+    margin-bottom: 0;
+    & + .note {
+        margin-top: 0;
+    }
+    &.last-of-class {
+        border-bottom: $note-border;
+        border-bottom-left-radius: $note-border-radius;
+        border-bottom-right-radius: $note-border-radius;
+    }
+}
+
 label, legend, .trigger, .note {
-    font-size: 1em;
+    // font-size: 1em; // is this wise/useful?
 }
 
 .or {
+    $media-margin: 10px;
     img, audio, video {
         float: right;
+        margin-left: $media-margin 0 $media-margin $media-margin;
         max-height: 300px;
         max-width: 70%;
+    }
+    video {
+        max-width: 100%;
+    }
+    @each $medium in image, video, audio {
+        $tag: $medium;
+        @if $medium == image {
+            $tag: img;
+        }
+        .or-appearance-#{$medium}-left #{$tag} {
+            float: left;
+            margin: $media-margin $media-margin $media-margin 0;
+        }
+        .or-appearance-#{$medium}-right #{$tag} {
+            float: right;
+            margin-left: $media-margin 0 $media-margin $media-margin;
+        }
+        .or-appearance-#{$medium}-center #{$tag} {
+            margin: $media-margin auto;
+            display: block;
+            float: none;
+        }
     }
 }
 
@@ -228,19 +290,6 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
 //  border-bottom-right-radius: 3px;}
 .alert {
     margin-bottom: 4px;
-}
-
-.trigger, .note {
-    @include font-normal;
-    display: block;
-    padding: 7px 12px;
-    margin: 1em 0;
-    input[readonly]:not([type=radio]):not([type=checkbox]) {
-        display: none;
-        &.has-value {
-            display: block;
-        }
-    }
 }
 
 .required {
