@@ -563,7 +563,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
         var i, j, error, context, $instanceDoc, instanceDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
-            $collection, $contextWrapNodes, $repParents, response;
+            $collection, $contextWrapNodes, $repParents, response, openrosa;
 
         //console.time( 'eval in Model' );
         //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
@@ -644,7 +644,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.replace( /&quot;/g, '"' );
 
         // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
-        if ( typeof instanceDoc.evaluate !== 'undefined' ) {
+        openrosa = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\()/;
+        if ( typeof instanceDoc.evaluate !== 'undefined' && !openrosa.test( expr ) ) {
             try {
                 console.log( 'first trying native Evaluator' );
                 result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
