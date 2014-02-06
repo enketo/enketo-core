@@ -17,7 +17,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             that = this;
 
         this.loadErrors = [];
-        this.instanceSelectRegEx = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
+        this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
+        this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\()/;
 
         //TEMPORARY DUE TO FIREFOX ISSUE, REMOVE ALL NAMESPACES FROM STRING, 
         //BETTER TO LEARN HOW TO DEAL WITH DEFAULT NAMESPACES THOUGH
@@ -93,8 +94,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
             if ( $data.find( 'model>instance' ).length > 0 ) {
                 //to refer to non-first instance, the instance('id_literal')/path/to/node syntax can be used
-                if ( this.selector !== defaultSelector && this.selector.indexOf( '/' ) !== 0 && that.instanceSelectRegEx.test( this.selector ) ) {
-                    this.selector = this.selector.replace( that.instanceSelectRegEx, "model > instance#$1" );
+                if ( this.selector !== defaultSelector && this.selector.indexOf( '/' ) !== 0 && that.INSTANCE.test( this.selector ) ) {
+                    this.selector = this.selector.replace( that.INSTANCE, "model > instance#$1" );
                     return;
                 }
                 //default context is the first instance in the model            
@@ -594,8 +595,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             instance(id) syntax is subsequently converted to /node()/instance[@id=id] XPath syntax.
         */
 
-        if ( this.instanceSelectRegEx.test( expr ) ) {
-            instances = expr.match( this.instanceSelectRegEx );
+        if ( this.INSTANCE.test( expr ) ) {
+            instances = expr.match( this.INSTANCE );
             for ( i = 0; i < instances.length; i++ ) {
                 id = instances[ i ].match( /[\'|\"]([^\'']+)[\'|\"]/ )[ 1 ];
                 expr = expr.replace( instances[ i ], '/node()/instance[@id="' + id + '"]' );
@@ -644,21 +645,20 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.replace( /&quot;/g, '"' );
 
         // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
-        openrosa = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\()/;
-        if ( typeof instanceDoc.evaluate !== 'undefined' && !openrosa.test( expr ) ) {
+        if ( typeof instanceDoc.evaluate !== 'undefined' && !this.OPENROSA.test( expr ) ) {
             try {
-                console.log( 'first trying native Evaluator' );
+                console.log( 'trying the blazing fast native XPath Evaluator' );
                 result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
             } catch ( e ) {
-                console.log( '%cWell native XPath evaluation that did not work... No worries, worth the try, the expression probably ' +
-                    'contained custom OpenRosa functions:', 'color:orange', expr );
+                console.log( '%cWell native XPath evaluation that did not work... No worries, worth a shot, the expression probably ' +
+                    'contained unknown OpenRosa functions or errors:', 'color:orange', expr );
             }
         }
 
         // if that didn't work, try the slow XPathJS evaluator 
         if ( !result ) {
             try {
-                console.log( 'trying the super slow XPathJS_javarosa evaluator instead' );
+                console.log( 'trying the super slow XPathJS_javarosa evaluator' );
                 // bind the replacement evaluator to the instance of XMLDocument
                 XPathJS.bindDomLevel3XPath( instanceDoc );
                 result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
