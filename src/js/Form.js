@@ -514,6 +514,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         this.setToCurrent( pageEl );
                         this.toggleButtons( newIndex );
                     }
+
+
+                    if ( window.scrollTo ) {
+                        window.scrollTo( 0, 0 );
+                    }
                 },
                 flipToFirst: function() {
                     this.updateAllActive();
