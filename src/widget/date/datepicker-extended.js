@@ -101,7 +101,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstr
                 $fakeDate = $(
                     '<div class="widget date"><input class="ignore input-small" readonly="readonly" type="text" value="' +
                     $dateI.val() + '" placeholder="' + format + '" />' +
-                    '<button class="btn-reset"><i class="glyphicon glyphicon-trash"> </i></button></div>' ),
+                    '<button class="btn-reset"><i class="glyphicon glyphicon-refresh"> </i></button></div>' ),
                 //$fakeDateReset = $fakeDate.find( '.btn-reset' ),
                 $fakeDateI = $fakeDate.find( 'input' );
 
