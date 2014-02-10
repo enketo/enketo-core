@@ -32,6 +32,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstr
          */
 
         function TimepickerExtended( element, options, event ) {
+            this.namespace = pluginName;
             //call the Super constructor
             Widget.call( this, element, options );
             this._init();

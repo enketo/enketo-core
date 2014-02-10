@@ -34,6 +34,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
 
         function Geopointpicker( element, options ) {
             var that = this;
+            this.namespace = pluginName;
             // call the super class constructor
             Widget.call( this, element, options );
 

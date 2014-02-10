@@ -29,6 +29,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
      */
 
     function Medialabelwidget( element, options, event ) {
+        this.namespace = pluginName;
         //call the Super constructor
         Widget.call( this, element, options );
         this._init();

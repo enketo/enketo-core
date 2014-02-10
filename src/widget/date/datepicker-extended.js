@@ -32,6 +32,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstr
          */
 
         function DatepickerExtended( element, options, event ) {
+            this.namespace = pluginName;
             //call the Super constructor
             Widget.call( this, element, options );
             this._init();

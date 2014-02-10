@@ -38,6 +38,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
             e.stopPropagation();
             e.preventDefault();
         }
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         this._init();
     }

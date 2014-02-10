@@ -29,6 +29,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      */
 
     function Radiopicker( element, options, event ) {
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         this._init();
     }

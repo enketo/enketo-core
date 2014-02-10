@@ -32,6 +32,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      */
 
     function Tablewidget( element, options, event ) {
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         this.init();
     }

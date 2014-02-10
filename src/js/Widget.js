@@ -26,12 +26,13 @@ define( [ 'jquery' ], function( $ ) {
      * @param {string} event Not sure, this may not be necessary but the desktopSelectpicker does something with it
      */
     var Widget = function( element, options, event ) {
-        var name = this.constructor.toString().match( /function (\w*)/ )[ 1 ];
         this.element = element;
         this.options = options || {};
+        // Determining the namespace automatically from the name of the constructor will not work 
+        // in conjunction with function renaming by uglify2
+        this.namespace = this.namespace || 'somewidget';
         this.options.touch = ( typeof this.options.touch !== 'undefined' ) ? this.options.touch : false;
         this.event = event || null;
-        this.namespace = name.charAt( 0 ).toLowerCase() + name.substring( 1 );
     };
 
     Widget.prototype = {

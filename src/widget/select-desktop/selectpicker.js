@@ -30,6 +30,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
      */
 
     function DesktopSelectpicker( element, options, e ) {
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         if ( e ) {
             e.stopPropagation();

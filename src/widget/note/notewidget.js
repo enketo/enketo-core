@@ -29,6 +29,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      */
 
     function Notewidget( element, options ) {
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         this._init();
     }
