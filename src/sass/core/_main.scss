@@ -146,25 +146,6 @@ label, legend, .trigger, .note {
     video {
         max-width: 100%;
     }
-    /*@each $medium in image, video, audio {
-        $tag: $medium;
-        @if $medium == image {
-            $tag: img;
-        }
-        .or-appearance-#{$medium}-left #{$tag} {
-            float: left;
-            margin: $media-margin $media-margin $media-margin 0;
-        }
-        .or-appearance-#{$medium}-right #{$tag} {
-            float: right;
-            margin-left: $media-margin 0 $media-margin $media-margin;
-        }
-        .or-appearance-#{$medium}-center #{$tag} {
-            margin: $media-margin auto;
-            display: block;
-            float: none;
-        }
-    }*/
 }
 
 legend {
@@ -188,7 +169,7 @@ legend {
     }
     // TODO: remove hover rule for tables (in likert already done)
     &:hover {
-        background-color: lighten($accent-color-1, 48%);
+        background-color: $accent-color-2;
     }
     .active {
         margin-left: 5px;
@@ -226,7 +207,7 @@ legend {
                 margin-left: 15px;
             }
             &:focus, &:hover, &:active, &[data-checked] {
-                background-color: lighten($accent-color-1, 50%);
+                background-color: $accent-color-2;
             }
         }
     }

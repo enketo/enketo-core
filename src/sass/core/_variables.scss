@@ -16,6 +16,7 @@ $input-max-width: 80%;
 
 // colors, icons
 $accent-color-1: #252525;
+$accent-color-2: lighten($accent-color-1, 50%);
 $images-path: '../../images/';
 $icon-font-path: '/lib/bootstrap-sass/fonts/';
 $repeat-bg: lighten($accent-color-1, 55%);
