@@ -282,6 +282,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             typeValid = this.types[ xmlDataType.toLowerCase() ].validate( value );
 
             exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? that.evaluate( expr, 'boolean', this.originalSelector, this.index ) : true;
+
             return ( typeValid && exprValid );
         };
 
@@ -556,20 +557,22 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * muliple nodes can be accessed by returned node.snapshotItem(i)(.textContent)
      * a single node can be accessed by returned node(.textContent)
      *
-     * @param  {string} expr       [description]
-     * @param  {string=} resTypeStr boolean, string, number, nodes (best to always supply this)
-     * @param  {string=} selector   jQuery selector which will be use to provide the context to the evaluator
-     * @param  {number=} index      index of selector in document
-     * @return {?(number|string|boolean|Array<element>)} the result
+     * @param  { string }     expr        the expression to evaluate
+     * @param  { string= }    resTypeStr  boolean, string, number, nodes (best to always supply this)
+     * @param  { string= }    selector    jQuery selector which will be use to provide the context to the evaluator
+     * @param  { number= }    index       index of selector in document
+     * @param  { boolean= }   tryNative   whether an attempt to try the Native Evaluator is safe (ie. whether it is
+     *                                    certain that there are no date comparisons)
+     * @return { ?(number|string|boolean|Array<element>) } the result
      */
-    FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index ) {
+    FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
         var i, j, error, context, $instanceDoc, instanceDoc, instances, id, resTypeNum, resultTypes, result, $result, attr,
             $collection, $contextWrapNodes, $repParents, response, openrosa;
 
         //console.time( 'eval in Model' );
         //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
         //    index + ' and result type: ' + resTypeStr );
-
+        tryNative = tryNative || false;
         resTypeStr = resTypeStr || 'any';
         index = index || 0;
 
@@ -644,7 +647,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         expr = expr.replace( /&quot;/g, '"' );
 
         // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
-        if ( typeof instanceDoc.evaluate !== 'undefined' && !this.OPENROSA.test( expr ) ) {
+        if ( tryNative && typeof instanceDoc.evaluate !== 'undefined' && !this.OPENROSA.test( expr ) ) {
             try {
                 console.log( 'trying the blazing fast native XPath Evaluator' );
                 result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );

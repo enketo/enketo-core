@@ -1101,7 +1101,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                         $instanceItems = itemsCache[ itemsXpath ];
                     } else {
-                        $instanceItems = $( model.evaluate( itemsXpath, 'nodes', context, index ) );
+                        var safeToTryNative = true; // temporary until WGXP
+                        $instanceItems = $( model.evaluate( itemsXpath, 'nodes', context, index, safeToTryNative ) );
                         if ( !insideRepeat ) {
                             itemsCache[ itemsXpath ] = $instanceItems;
                         }
