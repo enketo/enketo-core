@@ -1,5 +1,5 @@
 /* fancy radio buttons / checkboxes */
-legend ~ .option-wrapper > label .active {
+legend ~ .option-wrapper > label .active:not(img):not(video):not(audio) {
     margin-left: 45px;
     display: block;
 }

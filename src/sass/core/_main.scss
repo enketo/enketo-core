@@ -139,7 +139,7 @@ label, legend, .trigger, .note {
     $media-margin: 10px;
     img, audio, video {
         float: right;
-        margin-left: $media-margin 0 $media-margin $media-margin;
+        margin: $media-margin 0 $media-margin $media-margin;
         max-height: 300px;
         max-width: 70%;
     }
@@ -171,9 +171,10 @@ legend {
     &:hover {
         background-color: $accent-color-2;
     }
-    .active {
+    :not(img):not(video):not(audio).active {
         margin-left: 5px;
     }
+
 }
 
 .or-appearance-horizontal {
