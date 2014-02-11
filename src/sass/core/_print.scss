@@ -19,7 +19,7 @@ body {
 #dialog-save,
 #form-languages,
 .form-header,
-.enketo-power,
+.form-footer,
 .or-appearance-no-print,
 button,
 .paper #submit-form {
@@ -33,7 +33,10 @@ button,
     .geopoint .search-bar,
     .or-constraint-msg,
     .required-subtle,
-    .add-on,
+    .add-on, 
+    .file-feedback,
+    video, 
+    audio,
     button,
     .invalid-required .or-required-msg.active,
     .invalid-constraint .or-constraint-msg.active {
@@ -42,6 +45,10 @@ button,
     .or-branch.disabled {
         opacity: 1;
         display: block !important;
+    }
+    input[type="file"] {
+        // still let it take up space
+        visibility: hidden;
     }
 }
 
