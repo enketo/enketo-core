@@ -1259,11 +1259,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     that = this;
 
                 namesArr = ( typeof changedNodeNames !== 'undefined' ) ? changedNodeNames.split( ',' ) : [];
-                cleverSelector = ( namesArr.length > 0 ) ? [] : [ 'input[data-calculate]' ];
+                cleverSelector = ( namesArr.length > 0 ) ? [] : [ '[data-calculate]' ];
                 for ( i = 0; i < namesArr.length; i++ ) {
                     // select the calculated items that include the changed node PLUS
-                    // the calculated items that have relevant logic that inluce the changed node
-                    cleverSelector.push( 'input[data-calculate*="' + namesArr[ i ] + '"], input[data-relevant*="' + namesArr[ i ] + '"][data-calculate]' );
+                    // the calculated items that have relevant logic that include the changed node
+                    // selects both inputs and textareas
+                    cleverSelector.push( '[data-calculate*="' + namesArr[ i ] + '"], [data-relevant*="' + namesArr[ i ] + '"][data-calculate]' );
                 }
 
                 $form.find( cleverSelector.join() ).each( function() {
