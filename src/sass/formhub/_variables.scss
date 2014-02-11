@@ -1,5 +1,5 @@
 // these override the default variables if they exist already
-$baseFontSize: 15px;
+$font-size-base: 15px;
 $accent-color-1: #CE4F07;
 $accent-color-2: lighten($accent-color-1, 50%);
 $repeat-bg: lighten($accent-color-1, 55%);

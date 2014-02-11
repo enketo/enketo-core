@@ -1,5 +1,5 @@
-$baseFontSize: 15px;
-$baseLineHeight: 20px;
+$font-size-base: 15px;
+$line-height-base: 20;
 
 @mixin font-normal {
     font-family: courier, times, serif;
