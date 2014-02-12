@@ -1308,11 +1308,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 //move constraint message to bottom of question and add message for required (could also be done in XSLT)
                 //TODO: move to XSLT
-                $form.find( '.or-constraint-msg' ).parent().each( function() {
-                    var $msg = $( this ).find( '.or-constraint-msg' ).detach(),
-                        $wrapper = $( this ).closest( '.question:not(.or-appearance-label)' );
-                    $wrapper.append( $msg );
-                    $msg.after( '<span class="or-required-msg active" lang="">This field is required</span>' );
+                $form.find( '.or-constraint-msg' ).each( function() {
+                    var $question = $( this ).closest( '.question' ).not( '.or-appearance-label' ),
+                        $constraintMsg = $( this ).detach(),
+                        hasRequiredMsg = $question.find( '.or-required-msg' ).length > 0;
+
+                    $question.append( $constraintMsg );
+                    if ( !hasRequiredMsg ) {
+                        $constraintMsg.after( '<span class="or-required-msg active" lang="">This field is required</span>' );
+                    }
                 } );
 
             };
