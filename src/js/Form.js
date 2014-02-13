@@ -90,7 +90,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             };
             this.getEncryptionKey = function() {
                 return form.$.data( 'base64rsapublickey' );
-            }
+            };
 
             /**
              * @param {boolean=} incTempl
