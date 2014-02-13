@@ -182,7 +182,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 } );
 
                 nodesToLoad.each( function() {
-                    var name = $( this ).prop( 'nodeName' );
+                    var errMsg,
+                        name = $( this ).prop( 'nodeName' );
                     path = $( this ).getXPath( 'instance' );
                     index = instanceOfFormModel.node( path ).get().index( $( this ) );
                     value = $( this ).text();
@@ -196,7 +197,23 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     xmlDataType = ( xmlDataType === 'binary' ) ? 'string' : xmlDataType;
 
                     target = model.node( path, index );
-                    $target = target.get();
+
+                    /*
+                        Proper error handling on xfind with .error(function(){}) doesn't seem to work
+                        this catch block is created to catch namespace prefix errors. 
+                        When we have WGXP, it would be better to remove this and 
+                        replace xfind with the proper XPath evaluator and pass a namespace handler
+                        currently namespace prefix errors show up as 'unsupported psuedo selector' in JQuery 
+                        Note that this is just additional security because known namespaces will be removed in PHP.
+                     */
+                    try {
+                        $target = target.get();
+                    } catch ( error ) {
+                        console.error( error );
+                        errMsg = error.message || 'unknown error';
+                        loadErrors.push( errMsg + ' when retrieving ' + path );
+                        return;
+                    }
 
                     //if there are multiple nodes with that name and index (actually impossible)
                     if ( $target.length > 1 ) {
