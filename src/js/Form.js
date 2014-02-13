@@ -88,6 +88,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             this.getView = function() {
                 return form;
             };
+            this.getEncryptionKey = function() {
+                return form.$.data( 'base64rsapublickey' );
+            }
 
             /**
              * @param {boolean=} incTempl
@@ -262,7 +265,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             loadErrors.push( error );
                         }
                     } else {
-                        error = 'Did not find form node with path: ' + path + ' and index: ' + index + ' so failed to load model.';
+                        error = 'Did not find form element with path: ' + path + ' and index: ' + index + ' so failed to load model.';
                         console.error( error );
                         loadErrors.push( error );
                     }
