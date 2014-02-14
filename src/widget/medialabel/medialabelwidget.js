@@ -46,7 +46,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
      *
      */
     Medialabelwidget.prototype._init = function() {
-        $( this.element ).children( 'img,video,audio' ).parent().addClass( 'with-media clearfix' );
+        $( this.element ).children( 'img,video,audio' ).parent().addClass( 'with-media' );
     };
 
     /**

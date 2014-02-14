@@ -18,9 +18,11 @@
         @include display-flex;
         @include flex-wrap(nowrap);
         @include flex-direction(column);
+        margin: 0;
         float: none; // to eliminate a problem when mixing horizontal and likert appearances
+        padding-left: 0 !important;
         padding-right: 0; // to eliminate a problem when mixing horizontal and likert appearances
-        input[type=radio], input[type=checkbox] {
+        input[type=radio], input[type=checkbox], &::before {
             position: relative;
             left: 50%;
             padding: 0;
@@ -35,7 +37,7 @@
             position: relative;
             flex: 1;
             text-align: center;
-            margin-top: -13px;
+            margin-top: -11.5px;
             padding-top: 15px;
             border-top: 3px solid #ccc;
             font-size: 12px;

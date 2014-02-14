@@ -1,8 +1,23 @@
 @mixin font-bold {
-  font-weight: bold; }
+    font-weight: bold;
+}
 
 @mixin font-normal {
-  font-weight: normal; }
+    font-weight: normal;
+}
+
+@mixin enketo-icon {
+    font-family: 'enketo-icons';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 
 @mixin transition-slow($prop: all, $duration: 1s) {
     -webkit-transition: $prop $duration ease-out;
@@ -19,7 +34,7 @@
 }
 
 @mixin transition-none($prop: all) {
-     -webkit-transition: all 0.001s ease-out;
+    -webkit-transition: all 0.001s ease-out;
     //-moz-transition: all 0.01s ease-out;
     //-o-transition: all 0.01s ease-out;
     transition: all 0.001s ease-out;
@@ -101,38 +116,68 @@
     appearance: none;
 }
 
-@mixin display-flex{
-    display: -ms-flexbox; /*IE10*/
+@mixin display-flex {
+    display: -ms-flexbox;
+    /*IE10*/
     display: -webkit-flex;
-    display: flex; }
+    display: flex;
+}
 
-@mixin display-flex-important{
-    display: -ms-flexbox !important; /*IE10*/
+@mixin display-flex-important {
+    display: -ms-flexbox !important;
+    /*IE10*/
     display: -webkit-flex !important;
-    display: flex !important;}
+    display: flex !important;
+}
 
-@mixin flex ($value, $total:null) {
+@mixin flex($value, $total: null) {
     $flex: 100%;
     @if not $total {
         $flex: $value;
-    } @else if $total >= $value {
-        $flex: ($value / $total) * 100%;
+    }
+    @else if $total >= $value {
+        $flex: $value / $total * 100%;
     }
     -webkit-flex: $flex;
     -ms-flex: $flex;
     flex: $flex;
 }
 
-@mixin flex-wrap ($wrap:wrap) {
+@mixin flex-wrap($wrap: wrap) {
     -webkit-flex-wrap: $wrap;
     -ms-flex-wrap: $wrap;
     -moz-flex-wrap: $wrap;
     flex-wrap: $wrap;
 }
 
-@mixin flex-direction ($dir:row){
+@mixin flex-direction($dir: row) {
     -webkit-flex-direction: $dir;
     -ms-flex-direction: $dir;
     -moz-flex-direction: $dir;
     flex-direction: $dir;
+}
+
+// !important is added to make sure a clearfix doesn't override it
+@mixin checkbox-unchecked-icon {
+    @include enketo-icon;
+    content: '\e601' !important;
+    color: $radiocheck-unchecked-color;
+}
+
+@mixin checkbox-checked-icon {
+    @include enketo-icon;
+    content: '\e600' !important;
+    color: $radiocheck-checked-color;
+}
+
+@mixin radio-unchecked-icon {
+    @include enketo-icon;
+    content: '\e60f' !important;
+    color: $radiocheck-unchecked-color;
+}
+
+@mixin radio-checked-icon {
+    @include enketo-icon;
+    content: '\e603' !important;
+    color: $radiocheck-checked-color;
 }

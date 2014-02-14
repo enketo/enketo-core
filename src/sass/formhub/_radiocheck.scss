@@ -1,33 +1,61 @@
 /* fancy radio buttons / checkboxes */
 legend ~ .option-wrapper > label .active:not(img):not(video):not(audio) {
-    margin-left: 45px;
-    display: block;
+    //margin-left: 45px;
+    //display: block;
 }
 
-.option-wrapper input {
-    &[type=radio], &[type=checkbox] {
-        background: url($images-path + "checkradio.png") no-repeat;
-        cursor: pointer;
-        -webkit-appearance: none;
-        //-ms-appearance: none;
-        //-moz-appearance: none;
-        //appearance: none;
-        //because of the -moz-appearance: none; bug (https://bugzilla.mozilla.org/show_bug.cgi?id=605985) and 
-        //the fact that IE supports the background image but NOT the appearance:none rule => 
-        //trick hide the background-image to avoid showing native + alternative checkbox/radiobutton in IE10 and FF
-        -moz-background-position-x: -9999px -9999px !important;
-        -moz-background-position-y: -9999px -9999px !important;
-        -ms-background-position-x: -9999px !important;
-        -ms-background-position-y: -9999px !important;
-        float: left;
-        border: none;
-        width: 20px;
-        height: 20px;
-        margin: 0 10px 1px 10px;
-        outline: 0; // outlining expertise provided by Mr. Alex Dorey
+.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
+    .option-wrapper label {
+        $line-h: 20px;
+        
+        line-height: $line-h;
+        outline: 0;
+        padding-left: 5px;
+        &::before {
+            @include enketo-icon;
+            display: block;
+            float: left;
+            font-size: $line-h;
+            width: $line-h;
+        }
+        &.select1 {
+            &::before {
+                @include radio-unchecked-icon;
+            }
+            &[data-checked="true"]::before {
+                @include radio-checked-icon;
+            }
+        }
+        &.select {
+            &::before {
+                @include checkbox-unchecked-icon;
+            }
+            &[data-checked="true"]::before {
+                @include checkbox-checked-icon;
+            }
+        }
+        input {
+            display: none;
+        }
+        .option-label {
+       
+        }
     }
 }
 
+//tables
+.question.or-appearance-list-nolabel, .question.or-appearance-label {
+    label::before {
+    margin-left: -10px;
+    }
+}
+
+
+
+
+
+
+/*
 .option-wrapper input[type=checkbox] {
     background-position: 0 0;
     &:checked {
@@ -57,3 +85,4 @@ legend ~ .option-wrapper > label .active:not(img):not(video):not(audio) {
         background-position: -154px 0;
     }
 }
+*/
