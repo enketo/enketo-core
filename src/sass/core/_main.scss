@@ -160,6 +160,7 @@ legend {
 
 //works in safari, some other webkit browsers
 .option-wrapper > label {
+
     @include font-normal;
     display: block;
     margin: 0;
@@ -174,6 +175,14 @@ legend {
         margin-left: 30px;
         // input is floated to deal with multi-line labels
         display: block; 
+    }
+    // clearfix with small adjustments to not mess up radio buttons.
+    &:before, &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
     }
 }
 

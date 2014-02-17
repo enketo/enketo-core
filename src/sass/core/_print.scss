@@ -113,6 +113,33 @@ legend {
     }
 }
 
+//radiobuttons
+.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
+    .option-wrapper >  label {
+        &.select1 {
+            &::before {
+                content: '\e607' !important;
+                color: black;
+            }
+            &[data-checked="true"]::before {
+                content: '\e60c' !important;
+                color: black;
+            }
+        }
+        &.select {
+            &::before {
+                content: '\e60b' !important;
+                color: black;
+            }
+            &[data-checked="true"]::before {
+                content: '\e60c' !important;
+                color: black;
+            }
+        }
+    }
+}
+
+
 .page-break {
     display: block;
     //border: 1px dashed blue;

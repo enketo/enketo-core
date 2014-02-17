@@ -1,88 +1,81 @@
 /* fancy radio buttons / checkboxes */
-legend ~ .option-wrapper > label .active:not(img):not(video):not(audio) {
-    //margin-left: 45px;
-    //display: block;
-}
-
 .question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
-    .option-wrapper label {
+    .option-wrapper > label {
         $line-h: 20px;
-        
         line-height: $line-h;
         outline: 0;
         padding-left: 5px;
-        &::before {
+        :not(img):not(video):not(audio).active {
+            margin-left: 0;
+        }
+        .option-label::before {
             @include enketo-icon;
             display: block;
             float: left;
             font-size: $line-h;
             width: $line-h;
+            margin-right: 10px;
         }
-        &.select1 {
-            &::before {
+        input[type=radio] {
+            display: none;
+            ~ .option-label::before {
                 @include radio-unchecked-icon;
             }
-            &[data-checked="true"]::before {
+            &:checked ~ .option-label::before {
                 @include radio-checked-icon;
             }
         }
-        &.select {
-            &::before {
+        input[type=checkbox] {
+            display: none;
+            ~ .option-label::before {
                 @include checkbox-unchecked-icon;
             }
-            &[data-checked="true"]::before {
+            &:checked ~ .option-label::before {
                 @include checkbox-checked-icon;
             }
         }
-        input {
-            display: none;
-        }
-        .option-label {
-       
-        }
     }
 }
 
-//tables
+// tables
 .question.or-appearance-list-nolabel, .question.or-appearance-label {
     label::before {
-    margin-left: -10px;
+        margin-left: -10px;
+    }
+}
+.question.or-appearance-list-nolabel label {
+    .option-label.active {
+        visibility: visible;
+        color: transparent;
     }
 }
 
-
-
-
-
-
-/*
-.option-wrapper input[type=checkbox] {
-    background-position: 0 0;
-    &:checked {
-        background-position: -22px 0;
+// likert widget
+.or-appearance-likert .option-wrapper {
+    padding-top: 20px;
+    > label {
+        input[type=radio] ~ .option-label::before,
+        input[type=checkbox] ~ .option-label::before {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            padding: 0;
+            margin-left: -10px;
+            background-color: white;
+            z-index: 10;
+        }
+        .option-label {
+            margin-top: -11.5px;
+        }
     }
 }
 
-.question:disabled .option-wrapper input[type=checkbox], .option-wrapper input[type=checkbox]:disabled {
-    cursor: default;
-    background-position: -44px 0;
-    &:checked {
-        background-position: -66px 0;
+.disabled .option-wrapper {
+    input[type=radio],
+    input[type=checkbox] {
+        &.option-wrapper::before {
+            cursor: default;
+            opacity: 0.5;
+        }
     }
 }
-
-.option-wrapper input[type=radio] {
-    background-position: -88px 0;
-    &:checked {
-        background-position: -110px 0;
-    }
-}
-
-.question:disabled input[type=radio], .option-wrapper input[type=radio]:disabled {
-    cursor: default;
-    background-position: -132px 0;
-    &:checked {
-        background-position: -154px 0;
-    }
-}
-*/
