@@ -44,9 +44,14 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Tablewidget.prototype.constructor = Tablewidget;
 
     Tablewidget.prototype.init = function() {
+        console.log( 'init table' );
+        this.fixXlsFormShortcutMarkup();
+        this.fixMediaNoText();
+    };
+
+    Tablewidget.prototype.fixXlsFormShortcutMarkup = function() {
         var $labels, $hints, $note, $h4,
             that = this;
-        console.log( 'init table' );
         $( this.element ).parent().parent()
             .find( '.or-appearance-field-list .or-appearance-label' )
             .prev( '.note' ).each( function() {
@@ -57,8 +62,22 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
                 $( '<h4></h4>' ).insertAfter( $note ).append( $labels ).append( $hints );
 
                 // remove the original note
-                $note.remove();;
+                $note.remove();
             } );
+    };
+
+    // adds empty span element before labels that only contain images but no text
+    Tablewidget.prototype.fixMediaNoText = function() {
+        var $img;
+        $( this.element ).parent().parent()
+            .find( '.or-appearance-list-nolabel .option-wrapper img' ).each( function() {
+                $img = $( this );
+                console.error( 'img', $img );
+                if ( $img.siblings( '.option-label' ).length === 0 ) {
+                    $img.before( '<span class="option-label"></span>' );
+                }
+            } );
+
     };
 
     /**

@@ -95,7 +95,7 @@ h4 {
 
 // to make sure media doesn't break outside the box
 .question, .trigger, .note {
-    @include clearfix;
+    @include clearfix();
 }
 
 .trigger, .note {
@@ -160,21 +160,30 @@ legend {
 
 //works in safari, some other webkit browsers
 .option-wrapper > label {
+
     @include font-normal;
     display: block;
     margin: 0;
+    cursor: pointer;
     padding: 4px 0 4px 0;
-    &.with-media {
-        padding: 0;
-    }
+    margin: 0 10px 1px 10px;
     // TODO: remove hover rule for tables (in likert already done)
     &:hover {
         background-color: $accent-color-2;
     }
     :not(img):not(video):not(audio).active {
-        margin-left: 5px;
+        margin-left: 30px;
+        // input is floated to deal with multi-line labels
+        display: block; 
     }
-
+    // clearfix with small adjustments to not mess up radio buttons.
+    &:before, &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
 }
 
 .or-appearance-horizontal {
@@ -195,17 +204,16 @@ legend {
             border: 1px solid #ccc;
             @include border-radius(4px);
             width: auto;
-            margin-right: 20px;
-            margin-bottom: 6.4px;
+            margin: 0 20px 6.4px 0;
+            padding: 0 10px 0 10px;
             line-height: 40px;
             text-align: left;
-            padding: 4px 4px 4px 0;
             .active {
                 margin-right: 10px;
             }
             input[type="radio"], input[type="checkbox"] {
-                margin-top: 10px;
-                margin-left: 15px;
+                margin-top: 14px;
+                margin-left: 5px;
             }
             &:focus, &:hover, &:active, &[data-checked] {
                 background-color: $accent-color-2;
@@ -244,7 +252,10 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
         width: $input-min-width;
     }
     &[type="radio"], &[type=checkbox] {
-        margin: -2px 0 0px 7px;
+        // input is floated to deal with multi-line labels
+        float: left;
+        display: block;
+        //margin: -2px 0 0px 7px;
     }
 }
 
