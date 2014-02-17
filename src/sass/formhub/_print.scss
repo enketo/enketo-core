@@ -84,9 +84,10 @@ $very_light: #cccccc;
     } }*/
     textarea {
         //border-bottom: none;
-        -webkit-print-color-adjust: exact;
-        background-image: url("/images/line.png");
-        background-repeat: repeat;
+        //-webkit-print-color-adjust: exact;
+        //background-image: url("/images/line.png");
+        //background-repeat: repeat;
+        border-bottom: 1px solid black;
     }
     .geopoint {
         height: 280px;
