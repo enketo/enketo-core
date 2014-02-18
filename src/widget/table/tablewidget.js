@@ -46,7 +46,6 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Tablewidget.prototype.init = function() {
         console.log( 'init table' );
         this.fixXlsFormShortcutMarkup();
-        this.fixMediaNoText();
     };
 
     Tablewidget.prototype.fixXlsFormShortcutMarkup = function() {
@@ -64,19 +63,6 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
                 // remove the original note
                 $note.remove();
             } );
-    };
-
-    // adds empty span element before labels that only contain images but no text
-    Tablewidget.prototype.fixMediaNoText = function() {
-        var $img;
-        $( this.element ).parent().parent()
-            .find( '.or-appearance-list-nolabel .option-wrapper img' ).each( function() {
-                $img = $( this );
-                if ( $img.siblings( '.option-label' ).length === 0 ) {
-                    $img.before( '<span class="option-label"></span>' );
-                }
-            } );
-
     };
 
     /**
