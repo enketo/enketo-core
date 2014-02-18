@@ -72,7 +72,6 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         $( this.element ).parent().parent()
             .find( '.or-appearance-list-nolabel .option-wrapper img' ).each( function() {
                 $img = $( this );
-                console.error( 'img', $img );
                 if ( $img.siblings( '.option-label' ).length === 0 ) {
                     $img.before( '<span class="option-label"></span>' );
                 }
