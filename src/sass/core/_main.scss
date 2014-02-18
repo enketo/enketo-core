@@ -205,14 +205,13 @@ legend {
             @include border-radius(4px);
             width: auto;
             margin: 0 20px 6.4px 0;
-            padding: 0 10px 0 10px;
-            line-height: 40px;
+            padding: 10px 10px 10px 10px;
             text-align: left;
             .active {
                 margin-right: 10px;
             }
             input[type="radio"], input[type="checkbox"] {
-                margin-top: 14px;
+                margin-top: 4px; //slight variation between grid and fh theme for default radio/checkbox
                 margin-left: 5px;
             }
             &:focus, &:hover, &:active, &[data-checked] {
@@ -224,12 +223,7 @@ legend {
         @include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
-        //background-color: #f5f2ed;
-   
     }
-    //.input-append .add-on {
-    //    margin-top: 10px;
-    //}
     input:not([type="radio"]):not([type="checkbox"]), textarea {
         border: 1px solid #ddd8ce;
     }
