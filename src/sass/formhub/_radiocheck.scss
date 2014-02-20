@@ -62,7 +62,14 @@
 .question.or-appearance-list-nolabel label {
     .option-label.active {
         visibility: visible;
-        color: transparent;
+        // if important is not added below, the text shows up in prints in Chrome
+        color: transparent !important;
+        // IE11 requires further hacks for the actual prints
+        -ms-overflow-x: hidden !important;
+        -ms-overflow-y: hidden !important;
+        width: 22px;
+        height: 22px;
+        display: inline-block;
     }
 }
 
