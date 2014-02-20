@@ -1,6 +1,6 @@
 /* fancy radio buttons / checkboxes */
 .question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
-    .option-wrapper > label {
+    label {
         $line-h: 20px;
         line-height: $line-h;
         outline: 0;

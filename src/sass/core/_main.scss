@@ -21,6 +21,10 @@ h4 {
     text-align: left;
 }
 
+input, select, textarea {
+    @include font-normal;
+}
+
 /** hide stuff **/
 
 .or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,

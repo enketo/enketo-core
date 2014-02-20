@@ -1,12 +1,22 @@
+/** CORE **/
+
+* {
+    float: none;
+}
+
 body {
+    overflow: visible;
     background: none;
     .main {
+        overflow: visible;
         margin: 0;
+        padding: 0;
         article {
             padding: 3px;
         }
     }
     .paper {
+        overflow: visible;
         border: none;
         margin: 0;
     }
@@ -19,6 +29,7 @@ body {
 #dialog-save,
 #form-languages,
 .form-header,
+.form-logo,
 .form-footer,
 .or-appearance-no-print,
 button,
@@ -33,9 +44,9 @@ button,
     .geopoint .search-bar,
     .or-constraint-msg,
     .required-subtle,
-    .add-on, 
+    .add-on,
     .file-feedback,
-    video, 
+    video,
     audio,
     button,
     .invalid-required .or-required-msg.active,
@@ -57,31 +68,79 @@ button,
     line-height: 1em;
 }
 
-legend {
-    & ~ label {
-        padding: 0;
+.or {
+    h2, h3, h4, .required {
+        color: black;
     }
-    margin-bottom: 5px;
+    legend {
+        margin-bottom: 5px;
+        ~ label {
+            padding: 0;
+        }
+        span:not(.or-output) {
+            display: block;
+        }
+    }
+    .trigger {
+        font-weight: normal;
+        background: none;
+        color: black;
+    }
+    label {
+        > span.or-hint.active {
+            color: black;
+            display: block;
+        }
+    }
+    .required {
+        float: right;
+    }
+    .or-repeat {
+        background: none;
+    }
+    input:not([type="radio"]):not([type="checkbox"]), select, textarea {
+        @include border-radius(0px);
+        @include box-shadow-none;
+        @include appearance-none;
+        border: none;
+        background: none;
+        border-bottom: 1px solid black;
+    }
+    input[type="file"] {
+        display: none !important;
+    }
+    textarea {
+        border-bottom: 1px solid black;
+    }
+}
+
+
+.invalid-constraint, .invalid-required {
+    background: none;
+    border: 1px solid red;
 }
 
 .geopoint.widget {
-    margin-top: 0;
-    max-height: 60px;
+    margin-top: 10px;
     .geo-inputs {
         width: 100%;
         label.geo {
             display: inline-block;
             width: 25%;
-            margin: 0 !important;
+            padding: 0 !important;
+            margin: 7px 0 0 0 !important;
             &:nth-of-type(3), &:nth-of-type(4) {
+                vertical-align: top;
                 margin-top: 0;
-                padding-top: 0;
+                padding-top: 12px;
                 font-size: inherit;
                 border-top: none;
                 font-size: auto;
             }
             input {
-                display: none;
+                width: 100% !important;
+                margin-top: 8px !important;
+                padding-top: 0px !important;
             }
         }
     }
@@ -100,7 +159,7 @@ legend {
         list-style-type: circle;
         li, li.active {
             display: inline-block;
-            border: 1px solid #000000;
+            //border: 1px solid #000000;
             margin-right: 20px;
         }
         a {
@@ -113,37 +172,21 @@ legend {
     }
 }
 
-//radiobuttons
-.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
-    .option-wrapper >  label {
-        &.select1 {
-            &::before {
-                content: '\e607' !important;
-                color: black;
-            }
-            &[data-checked="true"]::before {
-                content: '\e60c' !important;
-                color: black;
-            }
-        }
-        &.select {
-            &::before {
-                content: '\e60b' !important;
-                color: black;
-            }
-            &[data-checked="true"]::before {
-                content: '\e60c' !important;
-                color: black;
-            }
-        }
-    }
+.or-appearance-likert .option-wrapper > label .option-label {
+    border-top: 1.5px solid black;
 }
 
+.question.or-appearance-compact input:checked ~ img,
+.question.or-appearance-quickcompact input:checked ~ img {
+    border-color: black;
+}
 
 .page-break {
     display: block;
     //border: 1px dashed blue;
+    width: 100%;
+    margin: 0;
     color: transparent;
     border-bottom: none;
-    page-break-before: always !important;
+    page-break-after: always !important;
 }

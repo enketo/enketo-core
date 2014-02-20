@@ -44,7 +44,7 @@
             text-align: center;
             margin-top: -8.5px;
             padding-top: 15px;
-            border-top: 3px solid #ccc;
+            border-top: 3px solid $radiocheck-unchecked-color;
             font-size: 12px;
             @include font-normal;
         }
