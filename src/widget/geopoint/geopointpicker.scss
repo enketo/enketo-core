@@ -34,10 +34,10 @@
     }
     button {
         height: 34px;
+        padding-bottom: 4px;
         &[name="geodetect"] {
             display: inline-block;
             float: right;
-            padding-bottom: 1px;
             font-size: 16px;
             margin: 0 0 0 $separator-width;
             width: $detect-width;
