@@ -214,7 +214,7 @@ label, legend, .trigger, .note {
 }
 
 // the below rules do not have an affect in Chrome and Opera
-// it works fine in IE11, Safari
+// it works fine in IE10, IE11 and Safari
 h3, h4 {
     page-break-after: avoid;
     + .trigger, + .question, + .note {
