@@ -1,5 +1,7 @@
 /** CORE **/
 
+$printBaseFontSize: 12px;
+
 * {
     float: none;
 }
@@ -63,14 +65,37 @@ button,
     }
 }
 
-.or-hint.active {
-    margin-top: 0;
-    line-height: 1em;
+
+// font sizes  & line heights
+h3 {
+    font-size: 1.6 * $printBaseFontSize;
 }
+h4 {
+    font-size: 1.3 * $printBaseFontSize;
+}
+label, legend, .trigger, .note {
+    font-size: $printBaseFontSize;
+}
+.question-label, .option-label, label.geo {
+    font-size: $printBaseFontSize !important;
+}
+.question input:not([type=radio]):not([type=checkbox]) {
+    font-size: $printBaseFontSize;
+}
+
 
 .or {
     h2, h3, h4, .required {
         color: black;
+    }
+    h3, h4 {
+        margin: 0;
+    }
+    h3 {
+
+    }
+    .question {
+        margin-bottom: 0;
     }
     legend {
         margin-bottom: 5px;
@@ -81,10 +106,11 @@ button,
             display: block;
         }
     }
-    .trigger {
+    .note, .trigger {
         font-weight: normal;
         background: none;
         color: black;
+        padding: 5px 0;
     }
     label {
         > span.or-hint.active {
@@ -109,11 +135,12 @@ button,
     input[type="file"] {
         display: none !important;
     }
-    textarea {
-        border-bottom: 1px solid black;
+    .or-hint.active {
+        padding-top: 5px;
+        margin-top: 0;
+        line-height: 1em;
     }
 }
-
 
 .invalid-constraint, .invalid-required {
     background: none;
@@ -181,7 +208,21 @@ button,
     border-color: black;
 }
 
-.page-break {
+// pagebreak management
+*:not(.or-appearance-field-list) .question, .note, .trigger, .or-appearance-field-list {
+    page-break-inside: avoid;
+}
+
+// the below rules do not have an affect in Chrome and Opera
+// it works fine in IE11, Safari
+h3, h4 {
+    page-break-after: avoid;
+    + .trigger, + .question, + .note {
+        page-break-before: avoid;
+    }
+}
+
+/*.page-break {
     display: block;
     //border: 1px dashed blue;
     width: 100%;
@@ -189,4 +230,4 @@ button,
     color: transparent;
     border-bottom: none;
     page-break-after: always !important;
-}
+}*/
