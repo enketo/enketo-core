@@ -780,9 +780,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $( '#form-languages' ).val( defaultLang );
 
                     if ( $( '#form-languages option' ).length < 2 ) {
-                        $langSelector.addClass( 'hide' );
                         return;
                     }
+
+                    $langSelector.removeClass( 'hide' );
+
                     $( '#form-languages' ).change( function( event ) {
                         lang = $( this ).val();
                         event.preventDefault();
