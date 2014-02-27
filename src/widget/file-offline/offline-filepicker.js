@@ -101,12 +101,14 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
 
     OfflineFilepicker.prototype._changeListener = function() {
         /*
-      This delegated eventhander should actually be added asynchronously (or not at all if no FS support/permission). However, it
-      needs to start *before* the regular input change event handler for 2 reasons:
-      1. If saving the file in the browser's file system fails, the instance should not be updated
-      2. The regular eventhandler has event.stopImmediatePropagation which would mean this handler is never called.
-      The easiest way to achieve this is to always add it but only let it do something if permission is granted to use FS.
-     */
+         * This delegated eventhander should actually be added asynchronously( or not at all
+         * if no FS support / permission ).However, it
+         * needs to start * before * the regular input change event handler
+         * for 2 reasons:
+         * 1.If saving the file in the browser 's file system fails, the instance should not be updated
+         * 2. The regular eventhandler has event.stopImmediatePropagation which would mean this handler is never called.
+         * The easiest way to achieve this is to always add it but only let it do something if permission is granted to use FS.
+         */
         var that = this,
             $input = $( this.element );
         $input.on( 'change.passthrough.' + this.namespace, function( event ) {

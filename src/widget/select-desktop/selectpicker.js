@@ -232,7 +232,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
 
             //only instantiate if options is an object AND if options.touch is falsy
             if ( !data && typeof options == 'object' && !options.touch ) {
-                console.log( 'initializing desktopselect widget' );
                 $this.data( pluginName, ( data = new DesktopSelectpicker( this, options, event ) ) );
             } else if ( data && typeof options == 'string' ) {
                 data[ options ]( this );

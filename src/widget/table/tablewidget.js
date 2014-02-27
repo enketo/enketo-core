@@ -44,7 +44,6 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Tablewidget.prototype.constructor = Tablewidget;
 
     Tablewidget.prototype.init = function() {
-        console.log( 'init table' );
         this.fixXlsFormShortcutMarkup();
     };
 

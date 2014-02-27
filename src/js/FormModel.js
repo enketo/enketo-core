@@ -150,7 +150,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
          * @return {?boolean} null is returned when the node is not found or multiple nodes were selected
          */
         Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
-            var $target, curVal, /**@type {string}*/ newVal, success;
+            var $target, curVal, /**@type {string}*/ newVal, success, updated;
 
             curVal = this.getVal()[ 0 ];
 
@@ -166,7 +166,9 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 $target.text( newVal );
                 //then return validation result
                 success = this.validate( expr, xmlDataType );
-                $data.trigger( 'dataupdate', $target.prop( 'nodeName' ) );
+                updated = this.getClosestRepeat();
+                updated.nodes = [ $target.prop( 'nodeName' ) ];
+                $data.trigger( 'dataupdate', updated );
                 //add type="file" attribute for file references
                 if ( xmlDataType === 'binary' ) {
                     if ( newVal.length > 0 ) {
@@ -204,50 +206,115 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             return vals;
         };
 
+        Nodeset.prototype.getIndex = function( $node ) {
+            var nodeName, path, $this, $family;
+
+            $node = $node || this.get();
+
+            if ( $node.length === 1 ) {
+                nodeName = $node.prop( 'nodeName' );
+                path = $node.getXPath( 'instance' );
+                $family = $data.find( nodeName ).filter( function() {
+                    $this = $( this );
+                    return !$this.is( '[template]' ) && $this.find( 'template' ).length === 0 && path === $this.getXPath( 'instance' );
+                } );
+                return ( $family.length === 1 ) ? null : $family.index( $node );
+            } else {
+                console.error( 'no node, or multiple nodes, provided to nodeset.getIndex' );
+                return -1;
+            }
+        };
+
+        // if repeats have not been cloned yet, they are not considered a repeat by this function
+        Nodeset.prototype.getClosestRepeat = function() {
+            var $node = this.get(),
+                nodeName = $node.prop( 'nodeName' );
+
+            while ( $node.siblings( nodeName + ':not([template])' ).length === 0 && nodeName !== 'instance' ) {
+                $node = $node.parent();
+                nodeName = $node.prop( 'nodeName' );
+            }
+
+            return ( nodeName === 'instance' ) ? {} : {
+                repeatPath: $node.getXPath( 'instance' ),
+                repeatIndex: this.getIndex( $node )
+            };
+        };
+
         /**
-         * Clone data node after all templates have been cloned (after initialization)
+         * Clone repeat node after all templates have been cloned (after initialization)
          *
          * @param  {jQuery} $precedingTargetNode the node after which to append the clone
          */
         Nodeset.prototype.clone = function( $precedingTargetNode ) {
-            var $dataNode, allClonedNodeNames;
+            var $dataNode, allClonedNodeNames, $this, $clone;
 
             $dataNode = this.get();
             $precedingTargetNode = $precedingTargetNode || $dataNode;
 
             if ( $dataNode.length === 1 && $precedingTargetNode.length === 1 ) {
-                $dataNode.clone().insertAfter( $precedingTargetNode ).find( '*' ).addBack().removeAttr( 'template' );
+                $clone = $dataNode.clone();
+
+                $clone.insertAfter( $precedingTargetNode )
+                    .find( '[template]' )
+                    .addBack()
+                    .removeAttr( 'template' );
 
                 allClonedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
+
                 $dataNode.find( '*' ).each( function() {
-                    allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
+                    $this = $( this );
+                    allClonedNodeNames.push( $this.prop( 'nodeName' ) );
                 } );
 
-                $data.trigger( 'dataupdate', allClonedNodeNames.join( ',' ) );
+                $data.trigger( 'dataupdate', {
+                    nodes: allClonedNodeNames,
+                    repeatPath: $dataNode.getXPath( 'instance' ),
+                    repeatIndex: this.getIndex( $clone )
+                } );
+
             } else {
                 console.error( 'node.clone() function did not receive origin and target nodes' );
             }
         };
 
         /**
-         * Remove a node
+         * Remove a repeat node
          */
         Nodeset.prototype.remove = function() {
-            var dataNode = this.get();
-            if ( dataNode.length > 0 ) {
-                dataNode.remove();
-                $data.trigger( 'dataupdate', dataNode.prop( 'nodeName' ) );
+            var $dataNode, allRemovedNodeNames, $this, repeatPath, repeatIndex;
+
+            $dataNode = this.get();
+
+            if ( $dataNode.length > 0 ) {
+
+                allRemovedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
+
+                $dataNode.find( '*' ).each( function() {
+                    $this = $( this );
+                    allRemovedNodeNames.push( $this.prop( 'nodeName' ) );
+                } );
+
+                repeatPath = $dataNode.getXPath( 'instance' );
+                repeatIndex = this.getIndex( $dataNode );
+
+                $dataNode.remove();
+
+                $data.trigger( 'dataupdate', {
+                    updatedNodes: allRemovedNodeNames,
+                    repeatPath: repeatPath,
+                    repeatIndex: repeatIndex
+                } );
             } else {
                 console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );
             }
         };
 
         /**
-         * Convert a value to a specified data type (though always stringified)
-         *
-         * @param  {string} x  value to convert
-         * @param  {?string=} xmlDataType name of xmlDataType
-         * @return {string}             return string value of converted value
+         * Convert a value to a specified data type( though always stringified )
+         * @param  {?string=} x           value to convert
+         * @param  {?string=} xmlDataType XML data type
+         * @return {string}               string representation of converted value
          */
         Nodeset.prototype.convert = function( x, xmlDataType ) {
             if ( x.toString() === '' ) {
@@ -262,11 +329,10 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         };
 
         /**
-         * Validate a value with an XPath Expression and/or xml data type
-         *
+         * Validate a value with an XPath Expression and /or xml data type
          * @param  {?string=} expr        XPath expression
-         * @param  {?string=} xmlDataType name of xml data type
-         * @return {boolean}            returns true if both validations are true
+         * @param  {?string=} xmlDataType XML datatype
+         * @return {boolean}
          */
         Nodeset.prototype.validate = function( expr, xmlDataType ) {
             var typeValid, exprValid,
@@ -287,14 +353,12 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         };
 
         /**
-         * XML data types
-         *
-         * @namespace  types
+         * @namespace types
          * @type {Object}
          */
         Nodeset.prototype.types = {
             'string': {
-                //max length of type string is 255 chars. Convert (truncate) silently?
+                //max length of type string is 255 chars.Convert( truncate ) silently ?
                 validate: function( x ) {
                     return true;
                 }
@@ -649,7 +713,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
         if ( tryNative && typeof instanceDoc.evaluate !== 'undefined' && !this.OPENROSA.test( expr ) ) {
             try {
-                console.log( 'trying the blazing fast native XPath Evaluator' );
+                // console.log( 'trying the blazing fast native XPath Evaluator for', expr, index );
                 result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );
             } catch ( e ) {
                 console.log( '%cWell native XPath evaluation that did not work... No worries, worth a shot, the expression probably ' +
@@ -660,7 +724,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         // if that didn't work, try the slow XPathJS evaluator 
         if ( !result ) {
             try {
-                console.log( 'trying the super slow XPathJS_javarosa evaluator' );
+                // console.log( 'trying the super slow XPathJS_javarosa evaluator for', expr, index );
                 // bind the replacement evaluator to the instance of XMLDocument
                 XPathJS.bindDomLevel3XPath( instanceDoc );
                 result = instanceDoc.evaluate( expr, context, null, resTypeNum, null );

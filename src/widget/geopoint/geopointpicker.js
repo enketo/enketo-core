@@ -65,7 +65,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
         Geopointpicker.prototype._init = function() {
             var that = this,
                 inputVals;
-            console.log( 'this', this );
+
             this._addDomElements();
 
             inputVals = this.$inputOrigin.val().split( ' ' );
