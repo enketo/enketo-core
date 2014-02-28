@@ -117,15 +117,15 @@
 }
 
 @mixin display-flex {
-    display: -ms-flexbox;
     /*IE10*/
+    display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
 }
 
 @mixin display-flex-important {
-    display: -ms-flexbox !important;
     /*IE10*/
+    display: -ms-flexbox !important;
     display: -webkit-flex !important;
     display: flex !important;
 }
@@ -141,6 +141,30 @@
     -webkit-flex: $flex;
     -ms-flex: $flex;
     flex: $flex;
+}
+
+@mixin flex_IEhack($value, $total: null) {
+    $flex: 100%;
+    @if not $total {
+        $flex: $value;
+    }
+    @else if $total >= $value {
+        $flex: $value / $total * 100%;
+    }
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 1;
+    flex-shrink: 1;
+    // Internet Explorer 10 and 11 have a box-sizing box with multiline flexboxes
+    // box-sizing: border-box is ignored
+    // 2 x 6px padding + 1 border = 13px adjustment
+    -webkit-flex-basis: calc(#{$flex} - 13px);
+    // IE10:
+    -ms-flex-preferred-size: calc(#{$flex} - 13px);
+    -ms-flex-positive: 1;
+    -ms-flex-negative: 1;
+    // unprefixed
+    flex-basis: calc(#{$flex} - 13px);
 }
 
 @mixin flex-wrap($wrap: wrap) {
