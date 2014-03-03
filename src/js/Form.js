@@ -851,7 +851,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 updated = updated || {};
                 filter = filter || '';
 
-                // The collection of non-repeat 'inputs' is cached (unchangeable)
+                // The collection of non-repeat inputs is cached (unchangeable)
                 if ( !this.$nonRepeats[ attr ] ) {
                     this.$nonRepeats[ attr ] = $form.find( filter + '[' + attr + ']' )
                         .closest( '.calculation, .question, .note, .trigger' ).filter( function( index ) {
@@ -1285,6 +1285,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      */
                     $dataNodes = model.node( name ).get();
 
+
                     if ( $dataNodes.length > 1 && updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
                         $dataNode = model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
                         index = $dataNodes.index( $dataNode );
@@ -1642,7 +1643,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         model.cloneTemplate( path, index );
                     }
 
-                    $clone.trigger( 'addrepeat' );
+                    $clone.trigger( 'addrepeat', index );
                     //p.report();
                     return true;
                 },
@@ -1790,10 +1791,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     that.editStatus.set( true );
                 } );
 
-                $form.on( 'addrepeat', function( event ) {
+                $form.on( 'addrepeat', function( event, index ) {
                     var $clone = $( event.target );
                     // Set defaults of added repeats in FormView, setAllVals does not trigger change event
                     that.setAllVals( $clone );
+                    // for a NEW repeat ALL calculations inside that repeat have to be initialized
+                    that.calcUpdate({ 
+                        repeatPath: $clone.attr('name'),
+                        repeatIndex: index
+                    });
                 } );
 
                 $form.on( 'changelanguage', function() {
