@@ -891,7 +891,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             /**
              * Updates branches
              *
-             * @param {Array<string>=} updatedNodes Array of updated nodes
+             * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
              */
             FormView.prototype.branchUpdate = function( updated ) {
                 var p, $branchNode, result, insideRepeat, insideRepeatClone, cacheIndex, $nodes,
@@ -1071,7 +1071,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             /**
              * Updates itemsets
              *
-             * @param {Array<string>=} updatedNodes Array of updated nodes
+             * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
              */
             FormView.prototype.itemsetUpdate = function( updated ) {
                 var clonedRepeatsPresent, insideRepeat, insideRepeatClone, $repeat, $nodes,
@@ -1184,7 +1184,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             /**
              * Updates output values, optionally filtered by those values that contain a changed node name
              *
-             * @param {Array<string>=} updatedNodes Array of updated nodes
+             * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
              */
             FormView.prototype.outputUpdate = function( updated ) {
                 var expr, clonedRepeatsPresent, insideRepeat, insideRepeatClone, $context, context, index, $nodes,
@@ -1252,6 +1252,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             /**
              * Updates calculated items
              *
+             * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
              * @param { jQuery=}         $repeat        The repeat that triggered the update
              * @param {Array<string>=}  updatedNodes    Array of updated nodes
              */
@@ -1264,8 +1265,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // console.log( 'calcUpdate', updated );
 
                 $nodes = this.getNodesToUpdate( 'data-calculate', '', updated );
+
                 // add relevant items that have a (any) calculation
-                $nodes = $nodes.add( this.getNodesToUpdate( 'data-relevant', '[data-calculate]' ) );
+                $nodes = $nodes.add( this.getNodesToUpdate( 'data-relevant', '[data-calculate]', updated ) );
 
                 $nodes.each( function() {
                     var result, valid, $dataNodes, $dataNode, index,
@@ -1285,14 +1287,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      */
                     $dataNodes = model.node( name ).get();
 
-
                     if ( $dataNodes.length > 1 && updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
                         $dataNode = model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
                         index = $dataNodes.index( $dataNode );
                     } else if ( $dataNodes.length === 1 ) {
                         index = 0;
                     } else {
-                        console.error( 'Multiple data nodes with same path found. Sorry I cannot deal with this. ' );
+                        console.error( 'Potential issue: Multiple data nodes with same path found. Cannot deal with this and will just ignore them. ', $dataNodes );
                         return;
                     }
 
