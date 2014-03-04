@@ -1643,7 +1643,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         model.cloneTemplate( path, index );
                     }
 
-                    $clone.trigger( 'addrepeat', index );
+                    $clone.trigger( 'addrepeat', index + 1 );
                     //p.report();
                     return true;
                 },
@@ -1796,10 +1796,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // Set defaults of added repeats in FormView, setAllVals does not trigger change event
                     that.setAllVals( $clone );
                     // for a NEW repeat ALL calculations inside that repeat have to be initialized
-                    that.calcUpdate({ 
-                        repeatPath: $clone.attr('name'),
+                    that.calcUpdate( {
+                        repeatPath: $clone.attr( 'name' ),
                         repeatIndex: index
-                    });
+                    } );
                 } );
 
                 $form.on( 'changelanguage', function() {
