@@ -33,7 +33,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          */
 
         function Form( formSelector, dataStr, dataStrToEdit ) {
-            var model, dataToEdit, form, $form, $formClone, repeatsPresent,
+            var model, dataToEdit, form, $form, $formClone, repeatsPresent, fixExpr,
                 loadErrors = [];
 
             /**
@@ -278,6 +278,28 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 }
                 model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
                 instanceID.setVal( '', null, 'string' );
+            };
+
+            //implements jr:choice-name
+            fixExpr = function( expr, resTypeStr, selector, index, tryNative ) {
+                var value, name, $input, label = '',
+                    matches = expr.match( /jr:choice-name\(([^,]+),\s?'(.*?)'\)/ );
+
+                if ( matches ) {
+                    value = model.evaluate( matches[ 1 ], resTypeStr, selector, index, tryNative );
+                    name = matches[ 2 ].trim();
+                    $input = $form.find( '[name="' + name + '"]' );
+
+                    if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
+                        label = $input.find( '[value="' + value + '"]' ).text();
+                    } else if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'input' ) {
+                        label = $input.filter( function() {
+                            return $( this ).attr( 'value' ) === value;
+                        } ).siblings( '.option-label.active' ).text();
+                    }
+                    return expr.replace( matches[ 0 ], "'" + label + "'" );
+                }
+                return expr;
             };
 
 
@@ -1298,7 +1320,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
 
                     //not sure if using 'string' is always correct
-                    result = ( relevant ) ? model.evaluate( expr, 'string', name, index ) : '';
+                    expr = fixExpr( expr, 'string', name, index );
+
+                    // it is possible that the fixed expr is '' which causes an error in XPath
+                    result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index ) : '';
                     valid = model.node( name, index ).setVal( result, constraint, dataType );
 
                     // not the most efficient to use input.setVal here as it will do another lookup
