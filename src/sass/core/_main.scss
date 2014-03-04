@@ -74,6 +74,15 @@ input, select, textarea {
             border-top: none;
         }
     }
+    .or-repeat {
+        background-color: $question-bg;
+        .or-repeat {
+            background-color: $repeat-bg;
+            .or-repeat {
+                background-color: $question-bg;
+            }
+        }
+    }
 }
 
 .or-group {
@@ -81,6 +90,27 @@ input, select, textarea {
     margin: 1.5em 0 0.4em 0;
     .or-group {
         margin: 1.5em 0 0.5em 0;
+        h4 .active {
+            &::before {
+                content: "\00BB  ";
+            }
+            font-size: 90%;
+        }
+        .or-group {
+            h4 .active {
+                &::before {
+                    content: "\00BB  \00BB  ";
+                }
+                font-size: 80%;
+            }
+            .or-group {
+                h4 .active {
+                    &::before {
+                        content: "\00BB  \00BB  \00BB  ";
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -101,7 +131,7 @@ input, select, textarea {
 
 // to make sure media doesn't break outside the box
 .question, .trigger, .note {
-    @include clearfix();
+    @include clearfix;
 }
 
 .trigger, .note {
@@ -166,7 +196,6 @@ legend {
 
 //works in safari, some other webkit browsers
 .option-wrapper > label {
-
     @include font-normal;
     display: block;
     margin: 0;
@@ -180,7 +209,7 @@ legend {
     :not(img):not(video):not(audio).active {
         margin-left: 30px;
         // input is floated to deal with multi-line labels
-        display: block; 
+        display: block;
     }
     // clearfix with small adjustments to not mess up radio buttons.
     &:before, &:after {
@@ -217,7 +246,8 @@ legend {
                 margin-right: 10px;
             }
             input[type="radio"], input[type="checkbox"] {
-                margin-top: 4px; //slight variation between grid and fh theme for default radio/checkbox
+                margin-top: 4px;
+                //slight variation between grid and fh theme for default radio/checkbox
                 margin-left: 5px;
             }
             &:focus, &:hover, &:active, &[data-checked] {
@@ -256,6 +286,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
         float: left;
         display: block;
         //margin: -2px 0 0px 7px;
+   
     }
 }
 
