@@ -592,10 +592,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
     FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
         var i, parentSelector, parentIndex, $target, $node, nodeName, $siblings, $parents;
         $target = this.node( selector, index ).get();
-        // console.debug('selector: '+selector+', target: ', $target);
         // add() sorts the resulting collection in document order
         $parents = $target.parents().add( $target );
-        // console.debug( 'makeBugCompliant() received expression: ' + expr + ' inside repeat: ' + selector + ' context parents are: ', $parents );
         // traverse collection in reverse document order
         for ( i = $parents.length - 1; i >= 0; i-- ) {
             $node = $parents.eq( i );
