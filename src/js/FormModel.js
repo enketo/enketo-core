@@ -523,7 +523,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
     FormModel.prototype.cloneAllTemplates = function() {
         // in reverse document order to properly deal with nested repeat templates
         this.$.find( 'model > instance:eq(0) [template]' ).reverse().each( function() {
-            if ( !$( this ).parent().attr( 'template' ) && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
+            if ( $( this ).parent().closest( '[template]' ).length === 0 && $( this ).siblings( $( this ).prop( 'nodeName' ) ).not( '[template]' ).length === 0 ) {
                 $( this ).clone().insertAfter( $( this ) ).find( '*' ).addBack().removeAttr( 'template' );
             }
         } );
