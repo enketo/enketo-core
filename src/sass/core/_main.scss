@@ -203,7 +203,7 @@ legend {
     padding: 4px 0 4px 0;
     margin: 0 10px 1px 10px;
     // TODO: remove hover rule for tables (in likert already done)
-    &:hover {
+    &:hover:not(.filler) {
         background-color: $accent-color-2;
     }
     :not(img):not(video):not(audio).active {
@@ -227,16 +227,21 @@ legend {
         @include flex-wrap(wrap);
         @include flex-direction(row);
     }
-    label {
+    label, .filler {
         flex: 1;
         min-width: 30%;
         padding-right: 10px;
         float: left;
     }
+    .filler, .filler:hover, .filler:focus {
+        border: none !important;
+        background: transparent !important;
+    }
     [type="radio"], [type="checkbox"] {
         width: auto;
     }
 }
+
 .or-appearance-horizontal-compact {
     label {
         padding-right: 10px;
