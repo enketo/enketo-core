@@ -53,11 +53,11 @@ button,
     button,
     .invalid-required .or-required-msg.active,
     .invalid-constraint .or-constraint-msg.active {
-        display: none !important;
+        display: none;
     }
     .or-branch.disabled {
         opacity: 1;
-        display: block !important;
+        display: block;
     }
     input[type="file"] {
         // still let it take up space
@@ -110,7 +110,7 @@ label, legend, .trigger, .note {
         font-weight: normal;
         background: none;
         color: black;
-        padding: 5px 0;
+        padding: 5px 5px 12px 5px;
     }
     label {
         > span.or-hint.active {
@@ -213,8 +213,8 @@ label, legend, .trigger, .note {
     page-break-inside: avoid;
 }
 
-// the below rules do not have an affect in Chrome and Opera
-// it works fine in IE10, IE11 and Safari
+// the below rules do not have an effect in Chrome and Opera
+// but work fine in IE10, IE11 and Safari
 h3, h4 {
     page-break-after: avoid;
     + .trigger, + .question, + .note {
