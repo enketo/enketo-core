@@ -222,6 +222,22 @@ legend {
 }
 
 .or-appearance-horizontal {
+    .option-wrapper {
+        @include display-flex;
+        @include flex-wrap(wrap);
+        @include flex-direction(row);
+    }
+    label {
+        flex: 1;
+        min-width: 30%;
+        padding-right: 10px;
+        float: left;
+    }
+    [type="radio"], [type="checkbox"] {
+        width: auto;
+    }
+}
+.or-appearance-horizontal-compact {
     label {
         padding-right: 10px;
         float: left;

@@ -179,14 +179,18 @@ label, legend, .trigger, .note {
         display: none;
     }
     ul {
+        @include display-flex;
+        @include flex-wrap(wrap);
+        @include flex-direction(row);
         position: static;
         display: block;
         border: none;
         box-shadow: none;
         list-style-type: circle;
         li, li.active {
+            flex: 1;
+            min-width: 30%;
             display: inline-block;
-            //border: 1px solid #000000;
             margin-right: 20px;
         }
         a {
