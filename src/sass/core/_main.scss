@@ -228,6 +228,7 @@ legend {
         @include flex-direction(row);
     }
     label, .filler {
+        overflow: hidden;
         flex: 1;
         min-width: 30%;
         padding-right: 10px;
