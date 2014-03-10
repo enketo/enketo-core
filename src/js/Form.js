@@ -280,7 +280,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 instanceID.setVal( '', null, 'string' );
             };
 
-            //implements jr:choice-name
+            // Implements jr:choice-name
+            // TODO: this needs to work for all expressions (relevants, constraints), now it only works for calulated items
+            // Ideally this belongs in the form Model, but unfortunately it needs access to the view
             fixExpr = function( expr, resTypeStr, selector, index, tryNative ) {
                 var value, name, $input, label = '',
                     matches = expr.match( /jr:choice-name\(([^,]+),\s?'(.*?)'\)/ );
