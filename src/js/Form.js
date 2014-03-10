@@ -1905,8 +1905,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     if ( status !== this.status ) {
                         this.status = status;
-                        $form.trigger( 'progressupdate' );
-                        console.log( 'new progress status in %:', status );
+                        $form.trigger( 'progressupdate', status );
                     }
                 },
                 get: function() {

@@ -53,6 +53,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Radiopicker.prototype._setDelegatedHandlers = function() {
         var $label,
             $form = $( this.element );
+
         //applies a data-checked attribute to the parent label of a checked checkbox and radio button
         $form.on( 'click', 'input[type="radio"]:checked', function( event ) {
             $( this ).parent( 'label' ).siblings().removeAttr( 'data-checked' ).end().attr( 'data-checked', 'true' );
@@ -62,6 +63,12 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
             $label = $( this ).parent( 'label' );
             if ( $( this ).is( ':checked' ) ) $label.attr( 'data-checked', 'true' );
             else $label.removeAttr( 'data-checked' );
+        } );
+
+        // new radiobutton/checkbox icons don't trigger focus even, which is necessary for 
+        // progress update and subtle "required" message
+        $form.on( 'click', 'input[type="radio"], input[type="checkbox"]', function( event ) {
+            $( this ).trigger( 'fakefocus' );
         } );
 
         //defaults
