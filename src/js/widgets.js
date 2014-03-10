@@ -146,7 +146,7 @@ define( [ 'text!enketo-config', 'Modernizr', 'jquery' ], function( configStr, Mo
     function create( $group ) {
         var widget, $els;
 
-        console.log( 'widgets', widgetConfig );
+        //console.log( 'widgets', widgetConfig );
         for ( var i = 0; i < widgetConfig.length; i++ ) {
             widget = widgetConfig[ i ];
             widget.options = widget.options || {};

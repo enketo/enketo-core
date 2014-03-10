@@ -433,6 +433,18 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
         } );
 
+        it( 're-evaluates when a node with a relative path inside a relevant expression is changed', function() {
+            form = loadForm( 'relative.xml' );
+            form.init();
+            var $form = form.getView().$,
+                $a = $form.find( '[name="/relative/a"]' ),
+                $branch = $form.find( '[name="/relative/c"]' ).closest( '.or-branch' );
+
+            $a.val( 'abcd' ).trigger( 'change' );
+            expect( $branch.length ).toEqual( 1 );
+            expect( $branch.hasClass( 'disabled' ) ).toEqual( false );
+        } );
+
         describe( 'when used with calculated items', function() {
             form = loadForm( 'calcs.xml' );
             form.init();
@@ -457,9 +469,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             } );
         } );
 
-        //for some reason form.init() causes a declaration exception "Cannot read property 'style' of undefined"
-        //this may be a phantomjs issue, so I gave up trying to fix it.
-        xdescribe( 'inside repeats when multiple repeats are present upon loading (issue #507)', function() {
+        describe( 'inside repeats when multiple repeats are present upon loading (issue #507)', function() {
             form = loadForm( 'multiple_repeats_relevant.xml' );
             form.init();
             var $relNodes = form.getView().$.find( '[name="/multiple_repeats_relevant/rep/skipq"]' ).parent( '.or-branch' );
@@ -520,7 +530,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
     } );
 
-    //TODO widgets are not loaded asynchronously, this is better moved to a separate widget test
+    //TODO widgets are now loaded asynchronously, this is better moved to a separate widget test
     xdescribe( 'Readonly items', function() {
         it( 'preserve their default value', function() {
             var form = loadForm( 'readonly.xml' );
@@ -583,7 +593,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'country';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'country';
+                    } );
                 }, 'itemsetUpdate not called!', 1000 );
 
                 runs( function() {
@@ -601,7 +613,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'country';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'country';
+                    } );
                 }, 'itemsetUpdate not called!', 1000 );
 
                 //select second option
@@ -610,7 +624,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'city';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'city';
+                    } );
                 }, 'itemsetUpdate not called!', 1000 );
 
                 runs( function() {
@@ -627,7 +643,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'city';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'city';
+                    } );
                 }, 'itemsetUpdate not called!', 1000 );
 
                 runs( function() {
@@ -652,7 +670,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'country2';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'country2';
+                    } );
                 }, 'itemsetUpdate not called!', 1000 );
 
                 runs( function() {
@@ -671,7 +691,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'country2';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'country2';
+                    } );
                 }, 'itemsetUpdate not called for country2!', 1000 );
 
                 //select second option
@@ -680,7 +702,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'city2';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'city2';
+                    } );
                 }, 'itemsetUpdate not called for city2 [1]!', 1000 );
 
                 runs( function() {
@@ -697,7 +721,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'city2';
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'city2';
+                    } );
                 }, 'itemsetUpdate not called for city2 [2]!', 1000 );
 
                 runs( function() {
@@ -743,8 +769,10 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'state';
-                }, 'itemsetUpdate not called!', 1000 );
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'state';
+                    } );
+                }, 'itemsetUpdate not called for state!', 1000 );
 
                 //select second option
                 runs( function() {
@@ -753,8 +781,10 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 } );
 
                 waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ] === 'county';
-                }, 'itemsetUpdate not called!', 1000 );
+                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
+                        return node === 'county';
+                    } );
+                }, 'itemsetUpdate not called for county!', 1000 );
 
                 runs( function() {
                     expect( $items1Radio().length ).toEqual( 2 );

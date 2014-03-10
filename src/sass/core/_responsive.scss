@@ -41,7 +41,7 @@
     //@include small-screen-paddings;
     body {
         //background: none;
-        line-height: 1.05 * $baseLineHeight;
+        line-height: 1.05 * $line-height-base;
     }
     .main {
         //margin: 0;
@@ -55,7 +55,7 @@
     //@include small-screen-paddings;
     body {
         //background: none;
-        line-height: 1.09 * $baseLineHeight;
+        line-height: 1.09 * $line-height-base;
     }
     input {
         &[type="text"],&[type="password"], &[type="url"], &[type="email"],

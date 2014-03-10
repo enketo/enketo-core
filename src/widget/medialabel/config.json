@@ -1,6 +1,0 @@
-{
-    "name": "medialabelwidget",
-    "stylesheet": "medialabelwidget.scss",
-    "selector": "fieldset:not(.or-appearance-compact, .or-appearance-quickcompact) .option-wrapper>label, fieldset:not(.or-appearance-compact, .or-appearance-quickcompact) legend",
-    "options": {}
-}

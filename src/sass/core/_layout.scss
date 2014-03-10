@@ -24,9 +24,10 @@ body {
 }
 
 .main {
-    @include display-flex;
-    @include flex-direction(column);
-    @include flex(1);
+    // flex used to push footer down, but when form.or present this messes up IE10, IE11
+    //@include display-flex;
+    //@include flex-direction(column);
+    //@include flex(1);
     margin: 0 auto;
     padding: 100px 0 70px 0;
     position: relative;

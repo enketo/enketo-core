@@ -1,5 +1,0 @@
-.with-media{
-  > input[type="radio"], > input[type="checkbox"]{ 
-    ~ span.active:not(.or-hint):not(.or-constraint-msg){
-      display: block;
-      margin: -2px 0 0 40px;} } }

@@ -1,56 +1,72 @@
-@mixin likert-filler {
+@mixin likert-filler() {
     content: '';
     display: block;
     position: absolute;
-    top: -5px;
+    top: -3px;
     //width: calc(50% - 10px);
     width: 50%;
-    background-color: white;
+    background-color: $question-bg;
     height: 10px;
 }
 
-.or-appearance-likert .option-wrapper {
-    @include display-flex;
-    @include flex-wrap(nowrap);
-    @include flex-direction(row);
-    > label {
-        @include flex(1);
+.or-appearance-likert {
+    .option-wrapper {
         @include display-flex;
         @include flex-wrap(nowrap);
-        @include flex-direction(column);
-        float: none; // to eliminate a problem when mixing horizontal and likert appearances
-        padding-right: 0; // to eliminate a problem when mixing horizontal and likert appearances
-        input[type=radio], input[type=checkbox] {
-            position: relative;
-            left: 50%;
-            padding: 0;
-            margin-left: -10px;
-            background-color: white;
-            z-index: 10;
-        }
-        .active {
+        @include flex-direction(row);
+        > label {
+            @include flex(1);
+            @include display-flex;
+            @include flex-wrap(nowrap);
+            @include flex-direction(column);
             margin: 0;
+            float: none;
+            // to eliminate a problem when mixing horizontal and likert appearances
+            padding-left: 0 !important;
+            padding-right: 0;
+            // to eliminate a problem when mixing horizontal and likert appearances
+            // regular radiobuttons, 
+            // for alternative radiobutton tweaks see radiocheck.scss
+            input[type=radio],
+            input[type=checkbox] {
+                position: relative;
+                left: 50%;
+                padding: 0;
+                margin-left: -10px;
+                background-color: white;
+                z-index: 10;
+            }
+            .active {
+                margin: 0;
+            }
+            .option-label {
+                position: relative;
+                flex: 1;
+                text-align: center;
+                margin-top: -8.5px;
+                padding-top: 15px;
+                border-top: 3px solid $radiocheck-unchecked-color;
+                font-size: 12px;
+                @include font-normal;
+            }
+            &:first-of-type .option-label::after {
+                @include likert-filler;
+                left: 0;
+            }
+            &:last-of-type .option-label::after {
+                @include likert-filler;
+                right: 0;
+            }
+            &:hover {
+                background-color: transparent;
+            }
         }
-        .option-label {
-            position: relative;
-            flex: 1;
-            text-align: center;
-            margin-top: -13px;
-            padding-top: 15px;
-            border-top: 3px solid #ccc;
-            font-size: 12px;
-            @include font-normal;
-        }
-        &:first-of-type .option-label::after {
-            @include likert-filler;
-            left: 0;
-        }
-        &:last-of-type .option-label::after {
-            @include likert-filler;
-            right: 0;
-        }
-        &:hover {
-            background-color: transparent;
+    }
+    &:hover .option-wrapper > label {
+        &:first-of-type, &:last-of-type {
+            .option-label::after {
+                 background-color: $question-hover-bg;
+            }
         }
     }
 }
@@ -59,7 +75,7 @@
 .or-repeat .or-appearance-likert .option-wrapper > label {
     &:first-of-type .option-label::after,
     &:last-of-type .option-label::after,
-    input[type=radio], input[type=checkbox],  {
+    input[type=radio], input[type=checkbox] {
         background-color: $repeat-bg;
     }
 }

@@ -32,6 +32,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstr
          */
 
         function TimepickerExtended( element, options, event ) {
+            this.namespace = pluginName;
             //call the Super constructor
             Widget.call( this, element, options );
             this._init();
@@ -52,7 +53,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstr
                 timeVal = $( this.element ).val(),
                 $fakeTime = $( '<div class="widget bootstrap-timepicker">' +
                     '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
-                    '<button class="btn-reset"><i class="glyphicon glyphicon-trash"> </i></button></div>' ),
+                    '<button class="btn-reset"><i class="glyphicon glyphicon-refresh"> </i></button></div>' ),
                 $fakeTimeReset = $fakeTime.find( '.btn-reset' ),
                 $fakeTimeI = $fakeTime.find( 'input' );
 

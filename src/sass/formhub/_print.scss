@@ -1,101 +1,27 @@
-$baseFontSize: 15px;
-$baseLineHeight: 20px;
+/** FORMHUB THEME **/
 
-@mixin font-normal {
-    font-family: courier, times, serif;
-    font-weight: normal;
-    font-style: normal;
-}
-
-@mixin font-bold {
-    font-family: courier, times, serif;
-    font-weight: bold;
-    font-style: normal;
-}
-
-$very_dark: #444444;
-$dark: #666666;
-$medium: #888888;
-$light: #aaaaaa;
-$very_light: #cccccc;
-
-.or {
-    h2, h3, h4, .required {
-        color: black;
-    }
-    legend span {
-        display: block;
-    }
-    .trigger {
-        font-weight: normal;
-        border: 1px solid black;
-        background: none;
-        color: black;
-    }
-    //$dark;}
+// fancy radiobuttons
+.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
     label {
-        > span.or-hint.active {
-            color: black;
-            display: block;
+        input[type=checkbox] {
+            ~ .option-label::before {
+                content: '\e60b' !important;
+                color: black;
+            }
+            &:checked ~ .option-label::before {
+                content: '\e60c' !important;
+                color: black;
+            }
         }
-        //> input[type="radio"] ~ span.active, 
-        //> input[type="checkbox"] ~ span.active{
-        //  display: inline; }
-   
-    }
-    .required {
-        float: right;
-    }
-    .or-repeat {
-        background: none;
-    }
-    input:not([type="radio"]):not([type="checkbox"]), select, textarea {
-        @include border-radius(0px);
-        @include box-shadow-none;
-        @include appearance-none;
-        border: none;
-        background: none;
-        border-bottom: 1px solid black;
-    }
-    input[type="file"] {
-        display: none !important;
-    }
-    input[type="radio"] {
-        -webkit-appearance: radio;
-    }
-    input[type="checkbox"] {
-        -webkit-appearance: checkbox;
-    }
-  /*input[type="checkbox"]{
-    display: none !important;
-    ~ .active{
-      -webkit-print-color-adjust:exact;
-      margin-left: 15px;
-      padding-left: 35px;
-    background: ;
-    } }
-  input[type="radio"]{
-    display: none !important;
-    ~ .active{
-      -webkit-print-color-adjust:exact;
-      margin-left: 15px;
-      padding-left: 35px;
-      background: 
-    } }*/
-    textarea {
-        //border-bottom: none;
-        -webkit-print-color-adjust: exact;
-        background-image: url("/images/line.png");
-        background-repeat: repeat;
-    }
-    .geopoint {
-        height: 280px;
-        .map-canvas {
-            bottom: 0;
-            width: 450px;
-        }
-        label.geo:nth-of-type(3) {
-            border-top: none;
+        input[type=radio] {
+            ~ .option-label::before {
+                content: '\e607' !important;
+                color: black;
+            }
+            &:checked ~ .option-label::before {
+                content: '\e606' !important;
+                color: black;
+            }
         }
     }
 }

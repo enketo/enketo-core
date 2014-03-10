@@ -1,5 +1,6 @@
 node_modules/*
-build/*
+build/css/*
+build/js/*
 .sass-cache/*
 ._*
 .grunt/*

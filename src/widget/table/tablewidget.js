@@ -32,6 +32,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      */
 
     function Tablewidget( element, options, event ) {
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         this.init();
     }
@@ -43,9 +44,12 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     Tablewidget.prototype.constructor = Tablewidget;
 
     Tablewidget.prototype.init = function() {
+        this.fixXlsFormShortcutMarkup();
+    };
+
+    Tablewidget.prototype.fixXlsFormShortcutMarkup = function() {
         var $labels, $hints, $note, $h4,
             that = this;
-        console.log( 'init table' );
         $( this.element ).parent().parent()
             .find( '.or-appearance-field-list .or-appearance-label' )
             .prev( '.note' ).each( function() {
@@ -56,7 +60,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
                 $( '<h4></h4>' ).insertAfter( $note ).append( $labels ).append( $hints );
 
                 // remove the original note
-                $note.remove();;
+                $note.remove();
             } );
     };
 

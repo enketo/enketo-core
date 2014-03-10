@@ -30,6 +30,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
      */
 
     function DesktopSelectpicker( element, options, e ) {
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         if ( e ) {
             e.stopPropagation();
@@ -78,7 +79,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
 
         var li = [];
         var liHtml = '';
-        var inputAttr = ( this.multiple ) ? "type='checkbox'" : "type='radio' style='display: none;' name='" + Math.random() * 100000 + "'";
+        var inputAttr = ( this.multiple ) ? "type='checkbox'" : "type='radio' name='" + Math.random() * 100000 + "'";
         var _this = this;
         var checkedInputAttr,
             checkedLiAttr;
@@ -110,9 +111,9 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
                     liHtml +=
                         "<li " + checkedLiAttr + ">" +
                         "<a class='option-wrapper' tabindex='-1' href='#'>" +
-                        "<label class='checkbox inline'>" +
+                        "<label>" +
                         "<input class='ignore' " + inputAttr + checkedInputAttr + "value='" + li[ i ].value + "' />" +
-                        li[ i ].label + "</label>" +
+                        "<span class='option-label'>" + li[ i ].label + "</span></label>" +
                         "</a>" +
                         "</li>";
                 }
@@ -231,7 +232,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
 
             //only instantiate if options is an object AND if options.touch is falsy
             if ( !data && typeof options == 'object' && !options.touch ) {
-                console.log( 'initializing desktopselect widget' );
                 $this.data( pluginName, ( data = new DesktopSelectpicker( this, options, event ) ) );
             } else if ( data && typeof options == 'string' ) {
                 data[ options ]( this );

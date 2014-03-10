@@ -1,8 +1,11 @@
 // these override the default variables if they exist already
-$baseFontSize: 15px;
+$font-size-base: 15px;
 $accent-color-1: #CE4F07;
+$accent-color-2: lighten($accent-color-1, 50%);
 $repeat-bg: lighten($accent-color-1, 55%);
+$radiocheck-unchecked-color: #cccccc;
+$radiocheck-checked-color: lighten($accent-color-1, 10%);//rgb(227, 142, 40);
 
 $note-bg: #ffffff;
-$note-border: 2px solid #D4D4D4;
+$note-border: 1px solid #e1e1e1;
 $note-border-radius: 0;

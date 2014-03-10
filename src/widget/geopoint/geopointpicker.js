@@ -34,6 +34,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
 
         function Geopointpicker( element, options ) {
             var that = this;
+            this.namespace = pluginName;
             // call the super class constructor
             Widget.call( this, element, options );
 
@@ -64,7 +65,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
         Geopointpicker.prototype._init = function() {
             var that = this,
                 inputVals;
-            console.log( 'this', this );
+
             this._addDomElements();
 
             inputVals = this.$inputOrigin.val().split( ' ' );
@@ -157,8 +158,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
                 '<div class="geo-inputs">' +
                 '<label class="geo">latitude (x.y &deg;)<input class="ignore" name="lat" type="number" step="0.0001" /></label>' +
                 '<label class="geo">longitude (x.y &deg;)<input class="ignore" name="long" type="number" step="0.0001" /></label>' +
-                '<label class="geo"><input class="ignore" name="alt" type="number" step="0.1" />altitude (m)</label>' +
-                '<label class="geo"><input class="ignore" name="acc" type="number" step="0.1" />accuracy (m)</label>' +
+                '<label class="geo">altitude (m)<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
+                '<label class="geo">accuracy (m)<input class="ignore" name="acc" type="number" step="0.1" /></label>' +
                 '</div>' +
                 '</div>'
             );

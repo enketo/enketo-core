@@ -2,8 +2,8 @@
 $bootstrap-sass-asset-helper: false;
 
 // fonts
-$baseFontSize: 16px;
-$baseLineHeight: 20px;
+$font-size-base: 16px;
+$line-height-base: 1.25;
 
 // borders
 $groupline: #bbbbbb;
@@ -16,6 +16,7 @@ $input-max-width: 80%;
 
 // colors, icons
 $accent-color-1: #252525;
+$accent-color-2: lighten($accent-color-1, 50%);
 $images-path: '../../images/';
 $icon-font-path: '/lib/bootstrap-sass/fonts/';
 $repeat-bg: lighten($accent-color-1, 55%);
@@ -23,6 +24,11 @@ $note-bg: #eeeeee;
 $note-color: black;
 $note-border: 1px solid #aaaaaa;
 $note-border-radius: 4px;
+$radiocheck-unchecked-color: $accent-color-1;
+$radiocheck-checked-color: $accent-color-1;
+$question-hover-bg: white;
+$question-focus-bg: white;
+$question-bg: white;
 
 // layout
 $max-content-width: 720px;

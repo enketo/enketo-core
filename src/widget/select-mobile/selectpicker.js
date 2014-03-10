@@ -30,6 +30,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
      */
 
     function MobileSelectpicker( element, options, e ) {
+        this.namespace = pluginName;
         Widget.call( this, element, options );
         this._init();
     }
