@@ -94,18 +94,18 @@ input, select, textarea {
             &::before {
                 content: "\00BB  ";
             }
-            font-size: 90%;
+            font-size: 80%;
         }
         .or-group {
-            h4 .active {
-                &::before {
-                    content: "\00BB  \00BB  ";
-                }
-                font-size: 80%;
+            h4 .active::before {
+                content: "\00BB  \00BB  ";
             }
             .or-group {
-                h4 .active {
-                    &::before {
+                h4 .active::before {
+                    content: "\00BB  \00BB  \00BB  ";
+                }
+                .or-group {
+                    h4 .active::before {
                         content: "\00BB  \00BB  \00BB  ";
                     }
                 }

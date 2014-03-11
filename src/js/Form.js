@@ -382,7 +382,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $current: [],
                 $activePages: $(),
                 init: function() {
-                    var $pagenav = $( '<nav class="pages-nav btn-group"></nav>' );
 
                     if ( $form.hasClass( 'pages' ) ) {
                         var $allPages = $form.find( '.note, .question, .trigger, .or-appearance-field-list' )
@@ -399,11 +398,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                         if ( $allPages.length > 1 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
                             this.$formFooter = $( '.form-footer' );
-                            this.$btnFirst = $( '<a class="btn btn-default disabled first-page" href="#"><span class="glyphicon glyphicon-backward"></span></a>' );
-                            this.$btnPrev = $( '<a class="btn btn-default disabled previous-page" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>' );
-                            this.$btnNext = $( '<a class="btn btn-default next-page" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>' );
-                            this.$btnLast = $( '<a class="btn btn-default disabled last-page" href="#"><span class="glyphicon glyphicon-forward"></span></a>' );
-                            $pagenav.append( this.$btnFirst, this.$btnPrev, this.$btnNext, this.$btnLast ).insertAfter( this.$formFooter );
+                            this.$btnFirst = this.$formFooter.find( '.first-page' );
+                            this.$btnPrev = this.$formFooter.find( '.previous-page' );
+                            this.$btnNext = this.$formFooter.find( '.next-page' );
+                            this.$btnLast = this.$formFooter.find( '.last-page' );
 
                             this.updateAllActive( $allPages );
                             this.toggleButtons( 0 );
@@ -428,6 +426,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         return false;
                     } );
                     this.$btnNext.click( function() {
+                        console.log( 'next!' );
                         that.next();
                         return false;
                     } );
@@ -583,7 +582,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         prev = this.getPrev( i );
                     this.$btnNext.add( this.$btnLast ).toggleClass( 'disabled', !next );
                     this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
-                    this.$formFooter.toggleClass( 'hide', !! next );
+                    this.$formFooter.toggleClass( 'end', !next );
                 }
             };
 

@@ -1,3 +1,5 @@
+$form-padding: 45px;
+
 html {
     height: 100%;
 }
@@ -40,7 +42,7 @@ body {
         @include display-flex;
         @include flex-direction(column);
         @include flex-wrap(nowrap);
-        padding: 45px;
+        padding: $form-padding;
         position: relative;
         min-height: 100%;
     }
@@ -83,7 +85,12 @@ body {
     font-size: 0.9em;
 }
 
-#submit-form, #submit-form-single, #validate-form, #launch-form {
+.form-footer {
+    width: calc(100% + ( 2 * #{$form-padding} ));
+    margin: 45px -#{$form-padding} -#{$form-padding} -#{$form-padding};
+}
+
+/*#submit-form, #submit-form-single, #validate-form, #launch-form {
     position: relative;
     width: 150px;
     left: 50%;
@@ -92,7 +99,7 @@ body {
         width: 100%;
         margin: 1px auto 1px auto;
     }
-}
+}*/
 
 .enketo-power {
     position: relative;
