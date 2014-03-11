@@ -532,22 +532,21 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 flipTo: function( pageEl, newIndex ) {
                     var that = this;
 
-                    console.log( 'flipping to', pageEl, 'index', newIndex );
-
                     // if there is a current page
                     if ( this.$current.length > 0 && this.$current.closest( 'html' ).length === 1 ) {
                         // if current page is not same as pageEl
                         if ( this.$current[ 0 ] !== pageEl ) {
                             this.$current.addClass( 'fade-out' )
                                 .one( 'transitionend', function() {
-                                    console.log( 'transition ended' );
                                     that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
                                     that.setToCurrent( pageEl );
+                                    that.focusOnFirstQuestion( pageEl );
                                     that.toggleButtons( newIndex );
                                 } );
                         }
                     } else {
                         this.setToCurrent( pageEl );
+                        this.focusOnFirstQuestion( pageEl );
                         this.toggleButtons( newIndex );
                     }
 
@@ -575,6 +574,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     //this.updateAllActive();
                     this.flipTo( $closest[ 0 ] );
+                },
+                focusOnFirstQuestion: function( pageEl ) {
+                    //triggering fake focus in case element cannot be focused (if hidden by widget)
+                    $( pageEl ).find( '.question:not(.disabled)' ).filter( function() {
+                        return $( this ).parents( '.disabled' ).length === 0;
+                    } ).eq( 0 ).find( 'input, select, textarea' ).eq( 0 ).trigger( 'fakefocus' );
                 },
                 toggleButtons: function( index ) {
                     var i = index || this.getCurrentIndex(),
