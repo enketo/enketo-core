@@ -77,7 +77,7 @@ label, legend, .trigger, .note {
     font-size: $printBaseFontSize;
 }
 .question-label, .option-label, label.geo {
-    font-size: $printBaseFontSize !important;
+    font-size: $printBaseFontSize;
 }
 .question input:not([type=radio]):not([type=checkbox]) {
     font-size: $printBaseFontSize;
