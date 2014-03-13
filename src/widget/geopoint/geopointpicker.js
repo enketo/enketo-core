@@ -367,6 +367,17 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
             this.$acc.val( Math.round( acc * 10 ) / 10 ).trigger( ev );
         };
 
+        Geopointpicker.prototype.disable = function() {
+            this.$map.hide();
+            this.$widget.find( '.btn' ).addClass( 'disabled' );
+        };
+
+        Geopointpicker.prototype.enable = function() {
+            this.$map.show();
+            this.$widget.find( '.btn' ).removeClass( 'disabled' );
+        };
+
+
         $.fn[ pluginName ] = function( options, event ) {
 
             return this.each( function() {
