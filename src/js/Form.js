@@ -1653,12 +1653,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $clone.insertAfter( $node )
                         .parent( '.or-group' ).numberRepeats();
 
-
                     $clone.clearInputs( '' );
-
-                    // Re-initiate widgets in clone
-                    widgets.destroy( $clone );
-                    widgets.init( $clone );
 
                     // Note: in http://formhub.org/formhub_u/forms/hh_polio_survey_cloned/form.xml a parent group of a repeat
                     // has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining 
@@ -1683,14 +1678,19 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.toggleButtons( $master.parent() );
 
                     // Create a new data point in <instance> by cloning the template node
+                    // and clone data node if it doesn't already exist
                     path = $master.attr( 'name' );
-
-                    // Clone data node if it doesn't already exist
                     if ( path.length > 0 && index >= 0 ) {
                         model.cloneTemplate( path, index );
                     }
 
+                    // this will trigger setting default values and other stuff
                     $clone.trigger( 'addrepeat', index + 1 );
+
+                    // Re-initiate widgets in clone after default values have been set
+                    widgets.destroy( $clone );
+                    widgets.init( $clone );
+
                     //p.report();
                     return true;
                 },
