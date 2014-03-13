@@ -1049,9 +1049,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                         type = $branchNode.prop( 'nodeName' ).toLowerCase();
 
-                        if ( type == 'label' ) {
+                        if ( type === 'label' ) {
                             $branchNode.children( 'input:not(.force-disabled), select, textarea' ).prop( 'disabled', false );
-                        } else {
+                        } else if ( type === 'fieldset' ) {
                             $branchNode.prop( 'disabled', false );
                             /*
                              * A temporary workaround for a Chrome bug described in https://github.com/modilabs/enketo/issues/503
@@ -1060,6 +1060,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                              */
                             $branchNode.find( '*:not(.or-branch) input[type="file"]:not(.force-disabled, [data-relevant])' )
                                 .prop( 'disabled', true ).prop( 'disabled', false );
+                        } else {
+                            $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', false );
                         }
                     }
                 }
@@ -1086,10 +1088,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             $branchNode.removeClass( 'pre-init' );
                         }
 
-                        if ( type == 'label' ) {
+                        if ( type === 'label' ) {
                             $branchNode.children( 'input, select, textarea' ).prop( 'disabled', true );
-                        } else {
+                        } else if ( type === 'fieldset' ) {
                             $branchNode.prop( 'disabled', true );
+                        } else {
+                            $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', true );
                         }
                     }
                 }

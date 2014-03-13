@@ -151,7 +151,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
     DesktopSelectpicker.prototype._clickListener = function() {
         var _this = this;
 
-        this.$picker.find( 'li' ).on( 'click', function( e ) {
+        this.$picker.on( 'click', 'li:not(.disabled)', function( e ) {
             e.preventDefault();
             var $li = $( this ),
                 $input = $li.find( 'input' ),
@@ -202,16 +202,16 @@ define( [ 'jquery', 'enketo-js/Widget', 'bootstrap' ], function( $, Widget ) {
 
     //override super method
     DesktopSelectpicker.prototype.disable = function() {
-        //disables the default link behaviour in disabled state
-        this.$picker.find( 'a.dropdown-toggle' ).on( 'click', function( event ) {
-            event.preventDefault();
-        } );
-        console.debug( pluginName, 'disable called' );
+        this.$picker.find( 'li' ).addClass( 'disabled' );
+    };
+
+    //override super method
+    DesktopSelectpicker.prototype.enable = function() {
+        this.$picker.find( 'li' ).removeClass( 'disabled' );
     };
 
     //override super method
     DesktopSelectpicker.prototype.update = function() {
-        console.debug( pluginName, 'update called' );
         this.$picker.remove();
         this._init();
     };
