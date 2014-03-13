@@ -699,11 +699,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     inputType = this.getInputType( $node );
                     name = this.getName( $node );
 
-                    if ( inputType == 'radio' ) {
+                    if ( inputType === 'radio' ) {
                         return this.getWrapNodes( $node ).find( 'input:checked' ).val() || '';
                     }
                     // checkbox values bug in jQuery as (node.val() should work)
-                    if ( inputType == 'checkbox' ) {
+                    if ( inputType === 'checkbox' ) {
                         this.getWrapNodes( $node ).find( 'input[name="' + name + '"]:checked' ).each( function() {
                             values.push( $( this ).val() );
                         } );
@@ -1764,8 +1764,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         validCons = model.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
                     }
 
-                    //validate 'required'
-                    validReq = ( n.enabled && n.inputType !== 'hidden' && n.required && n.val.length < 1 ) ? false : true;
+                    //validate 'required', checking value in Model (not View)
+                    validReq = ( n.enabled && n.inputType !== 'hidden' && n.required && model.node( n.path, n.ind ).getVal()[ 0 ].length < 1 ) ? false : true;
 
                     if ( validReq === false ) {
                         that.setValid( $( this ), 'constraint' );

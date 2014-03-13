@@ -137,12 +137,16 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                         file, {
                             success: function( fsURL ) {
                                 $preview.attr( 'src', fsURL );
-                                $input.attr( 'data-previous-file-name', file.name );
+                                $input.attr( 'data-previous-file-name', file.name )
+                                    .removeAttr( 'data-loaded-file-name' )
+                                    .siblings( '.file-loaded' ).remove();
                                 $input.trigger( 'change.passthrough' ).after( $preview );
                             },
                             error: function( e ) {
                                 console.error( 'error: ', e );
-                                $input.val( '' );
+                                $input.val( '' )
+                                    .removeAttr( 'data-loaded-file-name' )
+                                    .siblings( '.file-loaded' ).remove();
                                 $input.after( '<div class="file-feedback text-error">' +
                                     'Failed to save file</span>' );
                             }
