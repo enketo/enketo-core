@@ -63,8 +63,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
         Geopointpicker.prototype.constructor = Geopointpicker;
 
         Geopointpicker.prototype._init = function() {
-            var that = this,
-                inputVals;
+            var inputVals, lt, lg, al, ac,
+                that = this;
 
             this._addDomElements();
 
@@ -82,35 +82,21 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
 
                 that.$inputOrigin.val( value ).trigger( 'change' );
 
-                if ( event.namespace !== 'bymap' && event.namespace !== 'bysearch' ) {
-                    that._updateMap( lat, lng );
-                }
+                gmapsDone( function() {
+                    if ( event.namespace !== 'bymap' && event.namespace !== 'bysearch' ) {
+                        that._updateMap( lat, lng );
+                    }
 
-                if ( event.namespace !== 'bysearch' && this.$search ) {
-                    that.$search.val( '' );
-                }
+                    if ( event.namespace !== 'bysearch' && this.$search ) {
+                        that.$search.val( '' );
+                    }
+                } );
+
             } );
 
             this.$widget.on( 'focus blur', 'input', function( event ) {
                 that.$inputOrigin.trigger( event.type );
             } );
-
-            if ( inputVals[ 3 ] ) {
-                this.$acc.val( inputVals[ 3 ] );
-            }
-            if ( inputVals[ 2 ] ) {
-                this.$alt.val( inputVals[ 2 ] );
-            }
-            if ( inputVals[ 1 ] ) {
-                this.$lng.val( inputVals[ 1 ] );
-            }
-            if ( inputVals[ 0 ].length > 0 ) {
-                this.$lat.val( inputVals[ 0 ] ).trigger( 'change' );
-            }
-
-            if ( this.$detect ) {
-                this._enableDetection();
-            }
 
             if ( !this.options.touch ) {
                 gmapsDone( function() {
@@ -136,6 +122,19 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
                         }
                     }, 500 );
                 } );
+            }
+
+            lt = inputVals[ 0 ] || null;
+            lg = inputVals[ 1 ] || null;
+            al = inputVals[ 2 ] || null;
+            ac = inputVals[ 3 ] || null;
+
+            if ( lt && lg ) {
+                this._updateInputs( lt, lg, al, ac, 'change' );
+            }
+
+            if ( this.$detect ) {
+                this._enableDetection();
             }
         };
 
