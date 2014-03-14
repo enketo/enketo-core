@@ -106,7 +106,17 @@ input, select, textarea {
                 }
                 .or-group {
                     h4 .active::before {
-                        content: "\00BB  \00BB  \00BB  ";
+                        content: "\00BB  \00BB  \00BB  \00BB";
+                    }
+                    .or-group {
+                        h4 .active::before {
+                            content: "\00BB  \00BB  \00BB  \00BB  \00BB";
+                        }
+                        .or-group {
+                            h4 .active::before {
+                                content: "\00BB  \00BB  \00BB  \00BB  \00BB  \00BB";
+                            }
+                        }
                     }
                 }
             }
