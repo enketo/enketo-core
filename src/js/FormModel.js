@@ -454,7 +454,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             },
             'geopoint': {
                 validate: function( x ) {
-                    var coords = x.toString().split( ' ' );
+                    var coords = x.toString().trim().split( ' ' );
                     return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
                         ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
                         ( typeof coords[ 2 ] == 'undefined' || !isNaN( coords[ 2 ] ) ) &&
@@ -462,6 +462,28 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 },
                 convert: function( x ) {
                     return $.trim( x.toString() );
+                }
+            },
+            'geotrace': {
+                validate: function( x ) {
+                    var geopoints = x.toString().split( ';' );
+                    return geopoints.length >= 2 && geopoints.every( function( geopoint ) {
+                        return new Nodeset().types.geopoint.validate( geopoint );
+                    } );
+                },
+                convert: function( x ) {
+                    return x.toString().trim();
+                }
+            },
+            'geoshape': {
+                validate: function( x ) {
+                    var geopoints = x.toString().split( ';' );
+                    return geopoints.length >= 4 && ( geopoints[ 0 ] === geopoints[ geopoints.length - 1 ] ) && geopoints.every( function( geopoint ) {
+                        return new Nodeset().types.geopoint.validate( geopoint );
+                    } );
+                },
+                convert: function( x ) {
+                    return x.toString().trim();
                 }
             },
             'binary': {

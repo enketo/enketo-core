@@ -8,7 +8,8 @@ requirejs.config( {
         "xpath": "xpath/build/xpathjs_javarosa",
         "file-manager": "file-manager/src/file-manager",
         "jquery.xpath": "jquery-xpath/jquery.xpath",
-        "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe"
+        "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
+        "leaflet": "leaflet/leaflet"
     },
     shim: {
         "xpath": {
@@ -28,6 +29,9 @@ requirejs.config( {
         },
         "Modernizr": {
             exports: "Modernizr"
+        },
+        "leaflet": {
+            exports: "L"
         }
     }
 } );

@@ -80,7 +80,8 @@ module.exports = function( grunt ) {
                                 text: 'text/text',
                                 xpath: 'xpath/build/xpathjs_javarosa',
                                 'jquery.xpath': 'jquery-xpath/jquery.xpath',
-                                'jquery.touchswipe': 'jquery-touchswipe/jquery.touchSwipe'
+                                'jquery.touchswipe': 'jquery-touchswipe/jquery.touchSwipe',
+                                'leaflet': 'leaflet/leaflet'
                             },
                             shim: {
                                 'xpath': {
@@ -97,6 +98,9 @@ module.exports = function( grunt ) {
                                 'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker': {
                                     deps: [ 'jquery' ],
                                     exports: 'jQuery.fn.timepicker'
+                                },
+                                'leaflet': {
+                                    exports: 'L'
                                 }
                             },
                             map: {

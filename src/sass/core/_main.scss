@@ -174,6 +174,8 @@ input, select, textarea {
         border-bottom: $note-border;
         border-bottom-left-radius: $note-border-radius;
         border-bottom-right-radius: $note-border-radius;
+        // this becomes necessary if the note contains a floated element
+        margin-bottom: 18px;
     }
 }
 
@@ -288,7 +290,7 @@ legend {
         }
     }
     input:not([type="radio"]):not([type="checkbox"]), textarea, select {
-        @include border-radius(2px);
+        //@include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
     }
@@ -403,7 +405,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
     }
 }
 
-.btn-reset {
+.btn-reset, .btn-remove {
     margin-left: 10px;
     background: none;
     border: none;

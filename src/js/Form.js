@@ -1748,35 +1748,36 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var validCons, validReq,
                         n = that.input.getProps( $( this ) );
 
-                    //why is this called? add explanation when figured out that it is necessary!
-                    //event.stopImmediatePropagation();
+                    // why is this called? add explanation when figured out that it is necessary!
+                    // event.stopImmediatePropagation();
 
-                    //set file input values to the actual name of file (without c://fakepath or anything like that)
+                    // set file input values to the actual name of file (without c://fakepath or anything like that)
                     if ( n.val.length > 0 && n.inputType === 'file' && $( this )[ 0 ].files[ 0 ] && $( this )[ 0 ].files[ 0 ].size > 0 ) {
                         n.val = $( this )[ 0 ].files[ 0 ].name;
                     }
 
                     if ( event.type === 'validate' ) {
-                        //the enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not
-                        //if an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid)
+                        // the enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not
+                        // if an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid)
                         validCons = ( n.enabled && n.inputType !== 'hidden' ) ? model.node( n.path, n.ind ).validate( n.constraint, n.xmlType ) : true;
                     } else {
                         validCons = model.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
+                        // geotrace and geoshape are very complex data types that require various change events
+                        // to avoid annoying users, we ignore the INVALID onchange validation result
+                        validCons = ( validCons === false && ( n.xmlType === 'geotrace' || n.xmlType === 'geoshape' ) ) ? null : validCons;
                     }
 
-                    //validate 'required', checking value in Model (not View)
+                    // validate 'required', checking value in Model (not View)
                     validReq = ( n.enabled && n.inputType !== 'hidden' && n.required && model.node( n.path, n.ind ).getVal()[ 0 ].length < 1 ) ? false : true;
 
                     if ( validReq === false ) {
                         that.setValid( $( this ), 'constraint' );
                         if ( event.type === 'validate' ) {
-                            //console.error('setting node '+n.path+' to invalid-required', n);
                             that.setInvalid( $( this ), 'required' );
                         }
                     } else {
                         that.setValid( $( this ), 'required' );
                         if ( typeof validCons !== 'undefined' && validCons === false ) {
-                            //console.error('setting node '+n.path+' to invalid-constraint', n);
                             that.setInvalid( $( this ), 'constraint' );
                         } else if ( validCons !== null ) {
                             that.setValid( $( this ), 'constraint' );

@@ -294,7 +294,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
                     zoom: zoom,
                     center: new google.maps.LatLng( lat, lng ),
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    streetViewControl: false
+                    streetViewControl: false,
+                    zoomControl: true
                 };
                 this.map = new google.maps.Map( this.$map[ 0 ], mapOptions );
                 this._placeMarker();

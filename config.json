@@ -3,7 +3,7 @@
         "enketo-widget/note/notewidget",
         "enketo-widget/select-desktop/selectpicker",
         "enketo-widget/select-mobile/selectpicker",
-        "enketo-widget/geopoint/geopointpicker",
+        "enketo-widget/geo/geopicker",
         "enketo-widget/table/tablewidget",
         "enketo-widget/radio/radiopicker",
         "enketo-widget/date/datepicker-extended",
@@ -13,6 +13,9 @@
         "enketo-widget/file-offline/offline-filepicker",
         "enketo-widget/select-likert/likertitem"
     ],
-    "gmapsStaticApiKey": "",
-    "gmapsDynamicApiKey": ""
+    "tile": {
+        "source": "https://{s}.tiles.mapbox.com/v3/examples.map-vyofok3q/{z}/{x}/{y}.png",
+        "attribution": "Map data &copy; <a target=\"_blank\" href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
+    },
+    "google_api_key": ""
 }
