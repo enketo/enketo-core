@@ -33,7 +33,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          */
 
         function Form( formSelector, dataStr, dataStrToEdit ) {
-            var model, dataToEdit, form, $form, $formClone, repeatsPresent, fixExpr,
+            var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
                 loadErrors = [];
 
             /**
@@ -1441,6 +1441,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                                     xmlType = 'datetime';
                                     param = 'end';
                                     break;
+                                case 'deviceID':
+                                    item = 'property';
+                                    xmlType = 'string';
+                                    param = 'deviceid';
+                                    break;
+                                case 'userID':
+                                    item = 'property';
+                                    xmlType = 'string';
+                                    param = 'username';
+                                    break;
                             }
                         }
                         if ( item ) {
@@ -1483,10 +1493,39 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return o.curVal;
                 },
                 'property': function( o ) {
-                    // of = 'deviceid', 'subscriberid', 'simserial', 'phonenumber'
-                    // return '' except for deviceid?
+                    var readCookie, noSupportMsg, response;
+
+                    readCookie = function( name, c, C, i ) {
+                        if ( cookies ) {
+                            return cookies[ name ];
+                        }
+
+                        c = document.cookie.split( '; ' );
+                        cookies = {};
+
+                        for ( i = c.length - 1; i >= 0; i-- ) {
+                            C = c[ i ].split( '=' );
+                            cookies[ C[ 0 ] ] = decodeURIComponent( C[ 1 ] );
+                        }
+
+                        return cookies[ name ];
+                    };
+
+                    // 'deviceid', 'subscriberid', 'simserial', 'phonenumber'
                     if ( o.curVal.length === 0 ) {
-                        return 'no device properties in enketo';
+                        noSupportMsg = 'no ' + o.param + ' property in enketo';
+                        switch ( o.param ) {
+                            case 'deviceid':
+                                response = readCookie( '__enketo_meta_deviceid' );
+                                break;
+                                //case 'username':
+                                //    response = readCookie( '__enketo_meta_uid' );
+                                //    break;
+                            default:
+                                response = noSupportMsg;
+                                break;
+                        }
+                        return response;
                     }
                     return o.curVal;
                 },
