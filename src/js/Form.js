@@ -1516,7 +1516,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         noSupportMsg = 'no ' + o.param + ' property in enketo';
                         switch ( o.param ) {
                             case 'deviceid':
-                                response = readCookie( '__enketo_meta_deviceid' );
+                                response = readCookie( '__enketo_meta_deviceid' ) || 'Error: could not determine deviceID';
                                 break;
                                 //case 'username':
                                 //    response = readCookie( '__enketo_meta_uid' );

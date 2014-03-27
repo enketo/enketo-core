@@ -124,7 +124,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         }
 
         function testPreloadNonExistingValue( node ) {
-            it( "has populated previously empty preload item (WITH preload binding): " + node.selector + "", function() {
+            it( "populates previously empty preload item (WITH preload binding): " + node.selector + "", function() {
                 form = new Form( formStr5, dataStr5b );
                 form.init();
                 expect( form.getModel().node( node.selector ).getVal()[ 0 ].length > 0 ).toBe( true );
