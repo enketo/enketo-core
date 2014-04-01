@@ -25,9 +25,9 @@
         text-align: center;
     }
     // center the checkboxes, radiobuttons, fake radiobuttions, and fake checkboxes
-    input[type=radio], 
+    input[type=radio],
     input[type=checkbox],
-    input[type=radio] ~ .option-label::before, 
+    input[type=radio] ~ .option-label::before,
     input[type=checkbox] ~ .option-label::before {
         position: relative;
         left: 50%;
@@ -41,9 +41,12 @@
 }
 
 .question.or-appearance-list-nolabel {
-    label .active {
-        visibility: hidden;
-        float: none;
+    label {
+        .active {
+            display: none;
+            //visibility: hidden;
+            float: none;
+        }
     }
 }
 
