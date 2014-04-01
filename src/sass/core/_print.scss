@@ -147,7 +147,7 @@ label, legend, .trigger, .note {
     border: 1px solid red;
 }
 
-.geopoint.widget {
+.geopicker.widget {
     margin-top: 10px;
     .geo-inputs {
         width: 100%;
@@ -170,6 +170,12 @@ label, legend, .trigger, .note {
                 padding-top: 0px !important;
             }
         }
+    }
+    .points {
+        display: none;
+    }
+    .search-bar {
+        display: none;
     }
 }
 
