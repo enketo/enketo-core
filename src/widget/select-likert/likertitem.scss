@@ -1,4 +1,4 @@
-@mixin likert-filler() {
+@mixin likert-filler {
     content: '';
     display: block;
     position: absolute;
@@ -65,7 +65,16 @@
     &:hover .option-wrapper > label {
         &:first-of-type, &:last-of-type {
             .option-label::after {
-                 background-color: $question-hover-bg;
+                background-color: $question-hover-bg;
+            }
+        }
+    }
+    &.focus {
+        .option-wrapper > label {
+            &:first-of-type, &:last-of-type {
+                .option-label::after {
+                    background-color: $question-focus-bg;
+                }
             }
         }
     }
