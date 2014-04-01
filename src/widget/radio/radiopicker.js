@@ -17,7 +17,8 @@
 define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget, $ ) {
     "use strict";
 
-    var pluginName = 'radiopicker';
+    var $lastFocused = null,
+        pluginName = 'radiopicker';
 
     /**
      * Enhances radio buttons
@@ -68,7 +69,10 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         // new radiobutton/checkbox icons don't trigger focus even, which is necessary for 
         // progress update and subtle "required" message
         $form.on( 'click', 'input[type="radio"], input[type="checkbox"]', function( event ) {
-            $( this ).trigger( 'fakefocus' );
+            if ( $lastFocused ) {
+                $lastFocused.trigger( 'fakeblur' );
+            }
+            $lastFocused = $( this ).trigger( 'fakefocus' );
         } );
 
         //defaults
