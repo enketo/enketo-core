@@ -66,13 +66,21 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
             else $label.removeAttr( 'data-checked' );
         } );
 
-        // new radiobutton/checkbox icons don't trigger focus even, which is necessary for 
+        // new radiobutton/checkbox icons don't trigger focus event, which is necessary for 
         // progress update and subtle "required" message
+        // we need to unfocus the previously focused elemnt
         $form.on( 'click', 'input[type="radio"], input[type="checkbox"]', function( event ) {
             if ( $lastFocused ) {
                 $lastFocused.trigger( 'fakeblur' );
             }
             $lastFocused = $( this ).trigger( 'fakefocus' );
+        } );
+        // clear last focused element when a non-radio/checkbox element gets focus
+        $form.on( 'focusin fakefocus', 'input:not([type="radio"], [type="checkbox"]), textarea, select', function( event ) {
+            if ( $lastFocused ) {
+                $lastFocused.trigger( 'fakeblur' );
+            }
+            $lastFocused = null;
         } );
 
         //defaults
