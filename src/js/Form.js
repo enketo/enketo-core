@@ -536,14 +536,20 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( this.$current.length > 0 && this.$current.closest( 'html' ).length === 1 ) {
                         // if current page is not same as pageEl
                         if ( this.$current[ 0 ] !== pageEl ) {
-                            this.$current.addClass( 'fade-out' )
-                                .one( 'transitionend', function() {
-                                    that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
-                                    that.setToCurrent( pageEl );
-                                    that.focusOnFirstQuestion( pageEl );
-                                    that.toggleButtons( newIndex );
-                                } );
+                            this.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
+                            this.setToCurrent( pageEl );
+                            this.focusOnFirstQuestion( pageEl );
+                            this.toggleButtons( newIndex );
                         }
+
+                        //                            this.$current.addClass( 'fade-out' )
+                        //                                .one( 'transitionend', function() {
+                        //                                    that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
+                        //                                    that.setToCurrent( pageEl );
+                        //                                    that.focusOnFirstQuestion( pageEl );
+                        //                                    that.toggleButtons( newIndex );
+                        //                                } );
+                        // }
                     } else {
                         this.setToCurrent( pageEl );
                         this.focusOnFirstQuestion( pageEl );
