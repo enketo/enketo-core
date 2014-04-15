@@ -28,11 +28,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          * @param {string} formSelector  jquery selector for the form
          * @param {string} dataStr       <instance> as XML string
          * @param {?string=} dataStrToEdit <instance> as XML string that is to be edit. This may not be a complete instance (empty nodes could be missing) and may have additional nodes.
+         * @param { ?boolean= } local    whether the dataStrToEdit is a local record
          *
          * @constructor
          */
 
-        function Form( formSelector, dataStr, dataStrToEdit ) {
+        function Form( formSelector, dataStr, dataStrToEdit, local ) {
             var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
                 loadErrors = [];
 
@@ -263,7 +264,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         loadErrors.push( error );
                     }
                 } );
-                //add deprecatedID node, copy instanceID value to deprecatedID and empty deprecatedID
+
                 instanceID = model.node( '*>meta>instanceID' );
                 if ( instanceID.get().length !== 1 ) {
                     error = 'InstanceID node in default instance error (found ' + instanceID.get().length + ' instanceID nodes)';
@@ -271,13 +272,17 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     loadErrors.push( error );
                     return;
                 }
+                // add deprecatedID node
                 if ( model.node( '*>meta>deprecatedID' ).get().length !== 1 ) {
                     var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
                     document.adoptNode( deprecatedIDXMLNode );
                     $( deprecatedIDXMLNode ).appendTo( model.node( '*>meta' ).get() );
                 }
-                model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
-                instanceID.setVal( '', null, 'string' );
+                // if record is not local, copy instanceID value to deprecatedID and empty instanceID
+                if ( !local ) {
+                    model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
+                    instanceID.setVal( '', null, 'string' );
+                }
             };
 
             // Implements jr:choice-name

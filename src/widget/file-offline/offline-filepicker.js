@@ -86,9 +86,19 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
 
         //this attribute is added by the Form instance when loading data to edit
         existingFileName = $input.attr( 'data-loaded-file-name' );
+
         if ( existingFileName ) {
-            $input.after( '<div class="file-loaded text-warning">This form was loaded with "' +
-                existingFileName + '". To preserve this file, do not change this input.</div>' );
+            fileManager.retrieveFile( this._getInstanceID(), {
+                fileName: existingFileName
+            }, {
+                success: function( file ) {
+                    console.log( 'yippieeeee!, found file in local filesystem!' );
+                },
+                error: function() {
+                    $input.after( '<div class="file-loaded text-warning">This form was loaded with "' +
+                        existingFileName + '". To preserve this file, do not change this input.</div>' );
+                }
+            } );
         }
         $input.parent().addClass( 'with-media clearfix' );
 
@@ -124,8 +134,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                 prevFileName = $input.attr( 'data-previous-file-name' );
                 file = $input[ 0 ].files[ 0 ];
                 mediaType = $input.attr( 'accept' );
-                $preview = ( mediaType && mediaType === 'image/*' ) ? $( '<img />' ) : ( mediaType === 'audio/*' ) ? $( '<audio controls="controls"/>' ) : ( mediaType === 'video/*' ) ? $( '<video controls="controls"/>' ) : $( '<span>No preview for this mediatype</span>' );
-                $preview.addClass( 'file-preview' );
+                //$preview = ( mediaType && mediaType === 'image/*' ) ? $( '<img />' ) : ( mediaType === 'audio/*' ) ? $( '<audio controls="controls"/>' ) : ( mediaType === 'video/*' ) ? $( '<video controls="controls"/>' ) : $( '<span>No preview for this mediatype</span>' );
+                //$preview.addClass( 'file-preview' );
                 if ( prevFileName && ( !file || prevFileName !== file.name ) ) {
                     fileManager.deleteFile( prevFileName );
                 }
@@ -136,7 +146,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                     fileManager.saveFile(
                         file, {
                             success: function( fsURL ) {
-                                $preview.attr( 'src', fsURL );
+                                $preview = that._createPreview( fsURL, mediaType );
+                                //$preview.attr( 'src', fsURL );
                                 $input.attr( 'data-previous-file-name', file.name )
                                     .removeAttr( 'data-loaded-file-name' )
                                     .siblings( '.file-loaded' ).remove();
@@ -165,6 +176,14 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                 }
             }
         } );
+    };
+
+    OfflineFilepicker.prototype._createPreview = function( fsURL, mediaType ) {
+        var $preview;
+
+        $preview = ( mediaType && mediaType === 'image/*' ) ? $( '<img />' ) : ( mediaType === 'audio/*' ) ? $( '<audio controls="controls"/>' ) : ( mediaType === 'video/*' ) ? $( '<video controls="controls"/>' ) : $( '<span>No preview for this mediatype</span>' );
+
+        return $preview.addClass( 'file-preview' ).attr( 'src', fsURL );
     };
 
     OfflineFilepicker.prototype._getInstanceID = function() {
