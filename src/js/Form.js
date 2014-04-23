@@ -824,12 +824,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $form.find( 'select' ).each( function() {
                         that.setSelect( $( this ) );
                     } );
-                    // quick fix for labels and legends that do not contain a span.active without other class
-                    $form.find( 'legend span.active:not(.or-hint, .or-constraint-msg), label span.active:not(.or-hint, .or-constraint-msg)' ).each( function() {
-                        if ( $( this ).text().trim().length === 0 ) {
-                            $( this ).text( '[MISSING TRANSLATION]' );
-                        }
-                    } );
 
                     $form.trigger( 'changelanguage' );
                 },
