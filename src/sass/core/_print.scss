@@ -218,6 +218,11 @@ label, legend, .trigger, .note {
     border-color: black;
 }
 
+// pages mode
+.pages.or [role="page"] {
+    display: block;
+}
+
 // pagebreak management
 *:not(.or-appearance-field-list) .question, .note, .trigger, .or-appearance-field-list {
     page-break-inside: avoid;
