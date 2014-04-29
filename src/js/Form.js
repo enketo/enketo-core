@@ -910,9 +910,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         selector.push( filter + '[' + attr + '*="/' + node + ' "]' );
                         // #2: followed by )
                         selector.push( filter + '[' + attr + '*="/' + node + ')"]' );
-                        // #3: at the end of an expression
+                        // #3: followed by , if used as first parameter of multiple parameters
+                        selector.push( filter + '[' + attr + '*="/' + node + ',"]' );
+                        // #4: at the end of an expression
                         selector.push( filter + '[' + attr + '$="/' + node + '"]' );
-                        // #4: followed by ] (used in itemset filters)
+                        // #5: followed by ] (used in itemset filters)
                         selector.push( filter + '[' + attr + '*="/' + node + ']"]' );
                     } );
                 }
