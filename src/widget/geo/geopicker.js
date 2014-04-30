@@ -193,7 +193,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         Geopicker.prototype._getProps = function() {
             var map = this.options.touch !== true || ( this.options.touch === true && $( this.element ).closest( '.or-appearance-maps' ).length > 0 );
             return {
-                detect: !! navigator.geolocation,
+                detect: !!navigator.geolocation,
                 map: map,
                 search: map,
                 //updateMapFn: map ? ( this.options.touch ? "_updateStaticMap" : "_updateDynamicMap" ) : null,

@@ -143,10 +143,10 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config' ],
                 '<button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top">' +
                 '<i class="glyphicon glyphicon-screenshot"> </i></button>',
                 search =
-                    '<div class="input-group">' +
-                    '<input class="geo ignore form-control" name="search" type="text" placeholder="search for place or address" disabled="disabled"/>' +
-                    '<span class="input-group-btn"><button class="btn btn-default"><i class="glyphicon glyphicon-search"> </i></button></span>' +
-                    '</div>',
+                '<div class="input-group">' +
+                '<input class="geo ignore form-control" name="search" type="text" placeholder="search for place or address" disabled="disabled"/>' +
+                '<span class="input-group-btn"><button class="btn btn-default"><i class="glyphicon glyphicon-search"> </i></button></span>' +
+                '</div>',
                 map = '<div class="map-canvas-wrapper"><div class="map-canvas"></div></div>';
 
             this.$inputOrigin = $( this.element );

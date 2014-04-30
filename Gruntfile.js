@@ -184,7 +184,7 @@ module.exports = function( grunt ) {
             config = grunt.config( 'prepWidgetSass' ),
             widgets = grunt.file.readJSON( config.widgetConfigPath ).widgets,
             content = '// Dynamically created list of widget stylesheets to import based on the content\r\n' +
-                '// based on the content of config.json\r\n\r\n';
+            '// based on the content of config.json\r\n\r\n';
 
         widgets.forEach( function( widget ) {
             if ( widget.indexOf( 'enketo-widget/' ) === 0 ) {

@@ -758,7 +758,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     // the has-value class enables hiding empty readonly inputs for prettier notes
                     if ( $inputNodes.is( '[readonly]' ) ) {
-                        $inputNodes.toggleClass( 'has-value', !! value );
+                        $inputNodes.toggleClass( 'has-value', !!value );
                     }
 
                     $inputNodes.val( value );
