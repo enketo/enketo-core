@@ -238,10 +238,12 @@ legend {
         @include display-flex;
         @include flex-wrap(wrap);
         @include flex-direction(row);
+        // safari needs this to be inline or inline-block
+        display: inline-block;
     }
     label, .filler {
         overflow: hidden;
-        flex: 1;
+        @include flex(1);
         min-width: 30%;
         padding-right: 10px;
         float: left;
