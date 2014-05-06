@@ -1683,7 +1683,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         console.error( 'Nothing to clone' );
                         return false;
                     }
-                    $parent = $node.parent( '.or-group' );
+                    $parent = $node.parent( '.or-group. .or-group-data' );
                     $master = $parent.children( '.or-repeat:not(.clone)' ).eq( 0 );
                     $clone = $master.clone( true, true );
 
