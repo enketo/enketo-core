@@ -28,12 +28,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          * @param {string} formSelector  jquery selector for the form
          * @param {string} dataStr       <instance> as XML string
          * @param {?string=} dataStrToEdit <instance> as XML string that is to be edit. This may not be a complete instance (empty nodes could be missing) and may have additional nodes.
-         * @param { ?boolean= } local    whether the dataStrToEdit is a local record
+         * @param { ?boolean= } unsubmitted    whether the dataStrToEdit has been submitted to the OpenRosa server before
          *
          * @constructor
          */
 
-        function Form( formSelector, dataStr, dataStrToEdit, local ) {
+        function Form( formSelector, dataStr, dataStrToEdit, unsubmitted ) {
             var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
                 loadErrors = [];
 
@@ -189,9 +189,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $input = $form.find( '[name="' + path + '"]' ).eq( 0 );
 
                     xmlDataType = ( $input.length > 0 ) ? form.input.getXmlType( $input ) : 'string';
-                    // We don't want file nodes to be marked as such because the files themselves will be missing
-                    // so we use string... When the user changes the file, type="file" will be set again
-                    xmlDataType = ( xmlDataType === 'binary' ) ? 'string' : xmlDataType;
 
                     target = model.node( path, index );
 
@@ -216,7 +213,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( $target.length > 1 ) {
                         console.error( 'Found multiple nodes with path: ' + path + ' and index: ' + index );
                     }
-                    //if there is a corresponding node in the form's original instances
+                    //if there is a corresponding node in the form's original instance
                     else if ( $target.length === 1 ) {
                         //set the value
                         target.setVal( value, null, xmlDataType );
@@ -272,14 +269,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     loadErrors.push( error );
                     return;
                 }
-                // add deprecatedID node
-                if ( model.node( '*>meta>deprecatedID' ).get().length !== 1 ) {
-                    var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
-                    document.adoptNode( deprecatedIDXMLNode );
-                    $( deprecatedIDXMLNode ).appendTo( model.node( '*>meta' ).get() );
-                }
+
                 // if record is not local, copy instanceID value to deprecatedID and empty instanceID
-                if ( !local ) {
+                if ( !unsubmitted ) {
+                    // add deprecatedID node
+                    if ( model.node( '*>meta>deprecatedID' ).get().length !== 1 ) {
+                        var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
+                        document.adoptNode( deprecatedIDXMLNode );
+                        $( deprecatedIDXMLNode ).appendTo( model.node( '*>meta' ).get() );
+                    }
+
                     model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
                     instanceID.setVal( '', null, 'string' );
                 }
@@ -758,7 +757,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     // the has-value class enables hiding empty readonly inputs for prettier notes
                     if ( $inputNodes.is( '[readonly]' ) ) {
-                        $inputNodes.toggleClass( 'has-value', !!value );
+                        $inputNodes.toggleClass( 'has-value', !! value );
                     }
 
                     $inputNodes.val( value );

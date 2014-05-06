@@ -58,7 +58,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
             $input = $( this.element ),
             feedbackMsg = "Awaiting user permission to store local data (files)",
             feedbackClass = "info",
-            allClear = false;
+            allClear = false,
+            that = this;
 
         //TODO: add online file widget in case fileManager is undefined or use file manager with temporary storage?
         if ( typeof fileManager == "undefined" || !fileManager ) {
@@ -88,11 +89,13 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         existingFileName = $input.attr( 'data-loaded-file-name' );
 
         if ( existingFileName ) {
-            fileManager.retrieveFile( this._getInstanceID(), {
-                fileName: existingFileName
-            }, {
-                success: function( file ) {
-                    console.log( 'yippieeeee!, found file in local filesystem!' );
+            fileManager.retrieveFileUrl( this._getInstanceID(), existingFileName, {
+                success: function( fsUrl ) {
+                    var $prev = that._createPreview( fsUrl, 'image/*' );
+                    $input.attr( 'data-previous-file-name', existingFileName )
+                        .removeAttr( 'data-loaded-file-name' )
+                        .siblings( '.file-loaded' ).remove();
+                    $input.after( $prev );
                 },
                 error: function() {
                     $input.after( '<div class="file-loaded text-warning">This form was loaded with "' +
@@ -134,11 +137,16 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                 prevFileName = $input.attr( 'data-previous-file-name' );
                 file = $input[ 0 ].files[ 0 ];
                 mediaType = $input.attr( 'accept' );
-                //$preview = ( mediaType && mediaType === 'image/*' ) ? $( '<img />' ) : ( mediaType === 'audio/*' ) ? $( '<audio controls="controls"/>' ) : ( mediaType === 'video/*' ) ? $( '<video controls="controls"/>' ) : $( '<span>No preview for this mediatype</span>' );
-                //$preview.addClass( 'file-preview' );
-                if ( prevFileName && ( !file || prevFileName !== file.name ) ) {
-                    fileManager.deleteFile( prevFileName );
-                }
+
+                // removed cleanup as it will cause a problem in the following scenario:
+                // 1. record is loaded from local storage with file input
+                // 2. user changes file input 
+                // 3. but user changes mind and decides not to save updated record
+                // 4. the file in the stored record no longer exists
+                // It is better to let the controller deal with clearing filesystem storage (which it does)
+                // if ( prevFileName && ( !file || prevFileName !== file.name ) ) {
+                //    fileManager.deleteFile( prevFileName );
+                // }
                 $input.siblings( '.file-feedback, .file-preview, .file-loaded' ).remove();
                 console.debug( 'file: ', file );
                 if ( file && file.size > 0 && file.size <= maxSubmissionSize ) {
