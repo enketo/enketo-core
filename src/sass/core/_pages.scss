@@ -26,23 +26,4 @@
             @include transition-fast;
         }
     }
-    ~ .pages-nav {
-        @include display-flex;
-        @include flex-direction(row);
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        .btn {
-            border-radius: 0;
-            color: #4D4D4D;
-        }
-        .previous-page, .next-page {
-            @include flex(1);
-            width: 50%;
-        }
-        .first-page, .last-page{
-            width: 60px;
-        }
-    }
 }

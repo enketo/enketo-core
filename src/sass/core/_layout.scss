@@ -87,7 +87,11 @@ body {
 
 .form-footer {
     width: calc(100% + ( 2 * #{$form-padding} ));
-    margin: 45px -#{$form-padding} -#{$form-padding} -#{$form-padding};
+    // shorthand for margin not working in node-sass
+    margin-top: 45px;
+    margin-right: -#{$form-padding};
+    margin-bottom: -#{$form-padding};
+    margin-left: -#{$form-padding};
 }
 
 /*#submit-form, #submit-form-single, #validate-form, #launch-form {
