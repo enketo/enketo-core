@@ -1,0 +1,6 @@
+{
+    "name": "distresspicker",
+    "stylesheet": "distresspicker.scss",
+    "selector": ".or-appearance-distress > input",
+    "options": {}
+}
