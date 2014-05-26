@@ -15,11 +15,15 @@ $green: rgb(60, 182, 67);
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         border-bottom: none;
-        margin-left: $width / 4;
-        margin-top: 10px;
+        margin: 10px 10px 65px 35px;
+        //margin-top: 10px;
         @include gradient-vertical-three-colors($red, $yellow, 50%, $green);
     }
     .bulb {
+        position: absolute;
+        top: 100%;
+        left: -16px;
+        z-index: 0;
         width: $width;
         height: $width;
         border: $border;
@@ -39,11 +43,11 @@ $green: rgb(60, 182, 67);
     }
     .slider.slider-vertical .slider-track {
         top: 18px;
-        //height: calc(100% - 10px);
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         border-bottom: none;
         background: $handle-color;
+        z-index: 10;
     }
     .scale {
         @include font-normal;

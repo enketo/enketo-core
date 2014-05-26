@@ -53,13 +53,14 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
             tooltip: 'hide',
             value: 0
         } );
+        this.$widget = $( this.element ).closest( '.slider' ).addClass( 'widget' );
         this._addBulb();
         this._addScale();
         this._setChangeHandler();
     };
 
     Distresspicker.prototype._addBulb = function() {
-        $( this.element ).closest( '.slider' ).after(
+        this.$widget.append(
             '<div class="bulb"><div class="inner"></div></div>'
         );
     };
@@ -69,27 +70,16 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
         for ( var i = 10; i > 0; i-- ) {
             $scale.append( '<div class="number"><div class="value">' + i + '</div></div>' );
         }
-        $( this.element ).closest( '.slider' ).prepend( $scale );
+        this.$widget.prepend( $scale );
     };
 
     /**
      * Set delegated event handlers
      */
     Distresspicker.prototype._setChangeHandler = function() {
-        $( this.element ).on( 'slide', function( slideEvt ) {
-            console.log( 'slide event', slideEvt.value );
+        $( this.element ).on( 'slideStop.' + this.namespace, function( slideEvt ) {
             $( this ).trigger( 'change' );
         } );
-    };
-
-    /**
-     * Override default destroy method to do nothing
-     *
-     * @param  {Element} element The element (not) to destroy the widget on ;)
-     */
-    Distresspicker.prototype.destroy = function( element ) {
-        //all handlers are global and deep copies of repeats should keep functionality intact
-        //console.debug( pluginName, 'destroy called' );
     };
 
 
