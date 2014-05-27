@@ -43,6 +43,13 @@
     $separator-width: 4%;
     $detect-width: 40px;
     margin-top: 25px;
+    img {
+        //undo global settings
+        float: none;
+        margin: 0;
+        max-height: none;
+        max-width: none;
+    }
     .geo-inputs {
         min-width: 160px;
         width: $input-width;
@@ -274,8 +281,9 @@
             }
         }
         .points {
-            display:none;
+            display: none;
             //padding: 0 25px 25px 25px;
+       
         }
     }
 }
