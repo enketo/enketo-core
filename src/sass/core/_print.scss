@@ -35,6 +35,7 @@ body {
 .form-footer,
 .or-appearance-no-print,
 button,
+.ad,
 .paper #submit-form {
     display: none !important;
 }
@@ -65,24 +66,26 @@ button,
     }
 }
 
-
 // font sizes  & line heights
 h3 {
     font-size: 1.6 * $printBaseFontSize;
 }
+
 h4 {
     font-size: 1.3 * $printBaseFontSize;
 }
+
 label, legend, .trigger, .note {
     font-size: $printBaseFontSize;
 }
+
 .question-label, .option-label, label.geo {
     font-size: $printBaseFontSize;
 }
+
 .question input:not([type=radio]):not([type=checkbox]) {
     font-size: $printBaseFontSize;
 }
-
 
 .or {
     h2, h3, h4, .required {
@@ -91,9 +94,7 @@ label, legend, .trigger, .note {
     h3, h4 {
         margin: 0;
     }
-    h3 {
-
-    }
+    h3 {}
     .question {
         margin-bottom: 0;
     }
