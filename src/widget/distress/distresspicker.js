@@ -45,15 +45,18 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
      * Initialize
      */
     Distresspicker.prototype._init = function() {
+        var step = ( $( this.element ).attr( 'data-type-xml' ) === 'decimal' ) ? 0.1 : 1,
+            value = Number( this.element.value ) || -1;
+
         $( this.element ).slider( {
             reversed: true,
-            min: 0,
+            min: -1,
             max: 10,
             orientation: 'vertical',
-            tooltip: 'hide',
-            value: 0
+            step: step,
+            value: value
         } );
-        this.$widget = $( this.element ).closest( '.slider' ).addClass( 'widget' );
+        this.$widget = $( this.element ).next( '.slider' );
         this._addBulb();
         this._addScale();
         this._setChangeHandler();
@@ -67,7 +70,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
 
     Distresspicker.prototype._addScale = function() {
         var $scale = $( '<div class="scale"></div>' );
-        for ( var i = 10; i > 0; i-- ) {
+        for ( var i = 10; i >= -1; i-- ) {
             $scale.append( '<div class="number"><div class="value">' + i + '</div></div>' );
         }
         this.$widget.prepend( $scale );
@@ -78,25 +81,40 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
      */
     Distresspicker.prototype._setChangeHandler = function() {
         $( this.element ).on( 'slideStop.' + this.namespace, function( slideEvt ) {
+            // set to empty if value = -1
+            if ( this.value == -1 ) {
+                this.value = '';
+            }
             $( this ).trigger( 'change' );
         } );
     };
 
+    Distresspicker.prototype.disable = function() {
+        console.log( 'disableing', this.element );
+        $( this.element )
+            .slider( 'disable' )
+            .slider( 'setValue', this.element.value );
+    };
+
+    Distresspicker.prototype.enable = function() {
+        $( this.element )
+            .slider( 'enable' );
+    };
 
     $.fn[ pluginName ] = function( options, event ) {
-        //this widget works globally, and only needs to be instantiated once per form
-        var $this = $( this ),
-            data = $this.data( pluginName );
+        return this.each( function() {
+            var $this = $( this ),
+                data = $( this ).data( pluginName );
 
-        options = options || {};
+            options = options || {};
 
-        if ( !data && typeof options === 'object' ) {
-            $this.data( pluginName, ( data = new Distresspicker( $this[ 0 ], options, event ) ) );
-        } else if ( data && typeof options == 'string' ) {
-            data[ options ]( this );
-        }
-
-        return this;
+            if ( !data && typeof options === 'object' ) {
+                $this.data( pluginName, ( data = new Distresspicker( this, options, event ) ) );
+            } else if ( data && typeof options == 'string' ) {
+                //pass the context, used for destroy() as this method is called on a cloned widget
+                data[ options ]( this );
+            }
+        } );
     };
 
 } );

@@ -219,6 +219,23 @@ label, legend, .trigger, .note {
     border-color: black;
 }
 
+.or-appearance-distress {
+    .slider.slider-vertical {
+        border: 1px solid black;
+        border-bottom: none;
+    }
+    .bulb {
+        border: 1px solid black;
+        .inner {
+            border: 1px solid black;
+        }
+    }
+    .slider.slider-vertical .slider-track {
+        border: 1px solid black;
+        border-bottom: none;
+    }
+}
+
 // pages mode
 .pages.or [role="page"] {
     display: block;

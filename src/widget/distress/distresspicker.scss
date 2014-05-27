@@ -19,6 +19,9 @@ $green: rgb(60, 182, 67);
         //margin-top: 10px;
         @include gradient-vertical-three-colors($red, $yellow, 50%, $green);
     }
+    .slider-disabled {
+        opacity: 0.5;
+    }
     .bulb {
         position: absolute;
         top: 100%;
@@ -58,9 +61,12 @@ $green: rgb(60, 182, 67);
         font-size: 12px;
         .number {
             line-height: 16px;
-            height: 10%;
+            height: 9.09%;
             width: 5px;
             border-bottom: $border;
+            &:last-child {
+                display: none;
+            }
         }
         .value {
             position: relative;
