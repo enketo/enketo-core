@@ -184,10 +184,8 @@ label, legend, .trigger, .note {
 }
 
 .or {
-    $media-margin: 10px;
     img, audio, video {
-        float: right;
-        margin: $media-margin 0 $media-margin $media-margin;
+        display: block;
         max-height: 300px;
         max-width: 70%;
     }
@@ -230,6 +228,11 @@ legend {
     }
     &:after {
         clear: both;
+    }
+    img, video, audio {
+        $media-margin: 10px;
+        float: right;
+        margin: $media-margin 0 $media-margin $media-margin;
     }
 }
 
