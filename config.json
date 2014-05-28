@@ -11,7 +11,8 @@
         "enketo-widget/datetime/datetimepicker-extended",
         "enketo-widget/mediagrid/mediagridpicker",
         "enketo-widget/file-offline/offline-filepicker",
-        "enketo-widget/select-likert/likertitem"
+        "enketo-widget/select-likert/likertitem",
+        "enketo-widget/distress/distresspicker"
     ],
     "tile": {
         "source": "https://{s}.tiles.mapbox.com/v3/examples.map-vyofok3q/{z}/{x}/{y}.png",

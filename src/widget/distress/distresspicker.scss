@@ -1,0 +1,79 @@
+$border: 1px solid #aaaaaa;
+$width: 60px;
+$handle-color: #3a94a5;
+$red: rgb(226, 4, 24);
+$yellow: rgb(253, 211, 3);
+$green: rgb(60, 182, 67);
+
+.or-appearance-distress {
+    //background: green;
+    .slider.slider-vertical {
+        height: 210px;
+        width: $width / 2;
+        border-radius: $width / 4;
+        border: $border;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+        margin: 10px 10px 65px 35px;
+        //margin-top: 10px;
+        @include gradient-vertical-three-colors($red, $yellow, 50%, $green);
+    }
+    .slider-disabled {
+        opacity: 0.5;
+    }
+    .bulb {
+        position: absolute;
+        top: 100%;
+        left: -16px;
+        z-index: 0;
+        width: $width;
+        height: $width;
+        border: $border;
+        border-radius: $width / 2;
+        margin: -5px 0 10px 0;
+        background: $green;
+        .inner {
+            $inner-width: 24px;
+            width: $inner-width;
+            height: $inner-width;
+            border-radius: $inner-width / 2;
+            background: $handle-color;
+            margin: ($width - $inner-width - 2px) / 2;
+            //  17px;
+       
+        }
+    }
+    .slider.slider-vertical .slider-track {
+        top: 18px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+        background: $handle-color;
+        z-index: 10;
+    }
+    .scale {
+        @include font-normal;
+        height: 100%;
+        position: absolute;
+        top: -1px;
+        left: -5px;
+        font-size: 12px;
+        .number {
+            line-height: 16px;
+            height: 9.09%;
+            width: 5px;
+            border-bottom: $border;
+            &:last-child {
+                display: none;
+            }
+        }
+        .value {
+            position: relative;
+            top: 50%;
+            left: -18px;
+            width: 20px;
+            text-align: center;
+        }
+    }
+}

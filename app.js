@@ -9,7 +9,8 @@ requirejs.config( {
         "file-manager": "file-manager/src/file-manager",
         "jquery.xpath": "jquery-xpath/jquery.xpath",
         "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
-        "leaflet": "leaflet/leaflet"
+        "leaflet": "leaflet/leaflet",
+        "bootstrap-slider": "bootstrap-slider/js/bootstrap-slider"
     },
     shim: {
         "xpath": {
