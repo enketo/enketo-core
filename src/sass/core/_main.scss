@@ -1,3 +1,5 @@
+$media-margin: 10px;
+
 body {
     @include font-normal;
 }
@@ -159,6 +161,10 @@ input, select, textarea {
             display: block;
         }
     }
+    img, video, audio {
+        float: right;
+        margin: $media-margin 0 $media-margin $media-margin;
+    }
 }
 
 .note + .note {
@@ -230,7 +236,6 @@ legend {
         clear: both;
     }
     img, video, audio {
-        $media-margin: 10px;
         float: right;
         margin: $media-margin 0 $media-margin $media-margin;
     }
