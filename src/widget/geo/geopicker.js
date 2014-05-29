@@ -22,8 +22,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             config = JSON.parse( configStr ),
             //defaultView = [ 39.7334, -104.9926 ],
             defaultZoom = 15,
-            tile = config.tile || {
-                "source": "https://{s}.tiles.mapbox.com/v3/examples.map-vyofok3q/{z}/{x}/{y}.png",
+            tile = ( config && config.tile && config.tile.source ) ? config.tile : {
+                "source": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 "attribution": 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
             },
             searchSource = "https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}",
