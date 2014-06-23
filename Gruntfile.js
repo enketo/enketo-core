@@ -81,7 +81,8 @@ module.exports = function( grunt ) {
                                 xpath: 'xpath/build/xpathjs_javarosa',
                                 'jquery.xpath': 'jquery-xpath/jquery.xpath',
                                 'jquery.touchswipe': 'jquery-touchswipe/jquery.touchSwipe',
-                                'leaflet': 'leaflet/leaflet'
+                                'leaflet': 'leaflet/leaflet',
+                                'bootstrap-slider': 'bootstrap-slider/js/bootstrap-slider'
                             },
                             shim: {
                                 'xpath': {
