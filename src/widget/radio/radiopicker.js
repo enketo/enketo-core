@@ -87,7 +87,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         $form.find( 'input[type="radio"]:checked, input[type="checkbox"]:checked' ).parent( 'label' ).attr( 'data-checked', 'true' );
 
         //add unselect functionality
-        $form.on( 'click', '[data-checked]>input[type="radio"]', function( event ) {
+        $form.on( 'click', '[data-checked]>input[type="radio"]:not(.no-unselect)', function( event ) {
             $( this ).prop( 'checked', false ).trigger( 'change' ).parent().removeAttr( 'data-checked' );
         } );
     };

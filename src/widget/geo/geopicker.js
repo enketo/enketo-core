@@ -1,5 +1,5 @@
 /**
- * @preserve Copyright 2012 Martijn van de Rijdt & Modi Labs
+ * @preserve Copyright 2014 Martijn van de Rijdt
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,14 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
 
         var pluginName = 'geopicker',
             config = JSON.parse( configStr ),
-            //defaultView = [ 39.7334, -104.9926 ],
             defaultZoom = 15,
-            tile = ( config && config.tile && config.tile.source ) ? config.tile : {
-                "source": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                "attribution": 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-            },
+            // MapBox TileJSON format
+            maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps : [ {
+                "name": "streets",
+                "maxzoom": 24,
+                "tiles": [ "http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png" ],
+                "attribution": "Tiles courtesy of <a href=\"http://hot.openstreetmap.se/\" target=\"_blank\">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>"
+            } ],
             searchSource = "https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}",
             iconSingle = L.divIcon( {
                 iconSize: 24,
@@ -191,12 +193,24 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
          * @return {{search: boolean, detect: boolean, map: boolean, updateMapFn: string, type: string}} The widget properties object
          */
         Geopicker.prototype._getProps = function() {
-            var map = this.options.touch !== true || ( this.options.touch === true && $( this.element ).closest( '.or-appearance-maps' ).length > 0 );
+            var appearances = [],
+                map = this.options.touch !== true || ( this.options.touch === true && $( this.element ).closest( '.or-appearance-maps' ).length > 0 );
+
+            if ( map ) {
+                appearances = $( this.element ).closest( '.question' ).attr( 'class' ).split( ' ' )
+                    .filter( function( item ) {
+                        return item !== 'or-appearance-maps' && /or-appearance-/.test( item );
+                    } );
+                appearances.forEach( function( appearance, index ) {
+                    appearances[ index ] = appearance.substring( 14 );
+                } );
+            }
+
             return {
                 detect: !!navigator.geolocation,
                 map: map,
                 search: map,
-                //updateMapFn: map ? ( this.options.touch ? "_updateStaticMap" : "_updateDynamicMap" ) : null,
+                appearances: appearances,
                 type: this.element.attributes[ 'data-type-xml' ].textContent,
                 touch: this.options.touch
             };
@@ -479,26 +493,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                             .always( function() {
 
                             } );
-                        /*$.get( "http://nominatim.openstreetmap.org/search/" + address + "?format=json", function( response ) {
-                            var location = response[ 0 ] || null;
-                            if ( location && location.lat && location.lon ) {
-                                that._updateMap( [ location.lat, location.lon ], defaultZoom );
-                                that.$search.closest( '.input-group' ).removeClass( 'has-error' );
-                            } else {
-                                //TODO: add error message
-                                that.$search.closest( '.input-group' ).addClass( 'has-error' );
-                                console.log( "Location '" + address + "' not found" );
-                            }
-                        }, 'json' )
-                            .fail( function() {
-                                //TODO: add error message
-                                that.$search.closest( '.input-group' ).addClass( 'has-error' );
-                                console.log( "Error. Geocoding service may not be available or app is offline" );
-                            } )
-                            .always( function() {
-
-                            } );
-                        */
                     } else {
 
                     }
@@ -550,35 +544,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             }
         };
 
-
-
-        /**
-         * Loads a static map. (No markers due to difficult of determining zoom level that would show all of them)
-         *
-         * @param  @param  {Array.<number>|{lat: number, lng: number}} latLng  latitude and longitude coordinates
-         * @param  {number} zoom zoom level
-         */
-        /*Geopicker.prototype._updateStaticMap = function( latLng, zoom ) {
-            var lat, lng, width, height,
-                markers = '';
-
-            if ( !this.props.map ) {
-                return;
-            }
-
-            latLng = latLng || this.points[ 0 ] || defaultLatLng;
-
-            lat = latLng[ 0 ] || latLng.lat || 0;
-            lng = latLng[ 1 ] || latLng.lng || 0;
-            width = Math.round( this.$map.width() );
-            height = Math.round( this.$map.height() );
-
-            this.$map.addClass( 'static' ).empty().append(
-                '<img src="' + tile[ "static" ][ "source" ].replace( '{markers}/', '' ).replace( '{lat}', lat ).replace( '{lon}', lng ).replace( '{z}', defaultZoom ).replace( '{width}', width ).replace( '{height}', height ) + '"/>' +
-                '<div class="attribution">' + tile[ "static" ][ "attribution" ] + '</div>'
-            );
-        };*/
-
         /**
          * Updates the dynamic map to either show the provided coordinates (in the center), with the provided zoom level
          * or updates any markers, polylines, polygons
@@ -587,12 +552,17 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
          * @param  {number} zoom zoom
          */
         Geopicker.prototype._updateDynamicMap = function( latLng, zoom ) {
-            var z, that = this;
+            var z, layers, options, baseMaps, that = this;
 
-            console.log( 'dynamic map to be updated with latLng', latLng );
+            // console.log( 'dynamic map to be updated with latLng', latLng );
             if ( !this.map ) {
-                console.log( 'no map yet, creating it' );
-                this.map = L.map( 'map' + this.mapId )
+                layers = this._getLayers();
+                options = {
+                    layers: this._getDefaultLayer( layers )
+                };
+
+                // console.log( 'no map yet, creating it' );
+                this.map = L.map( 'map' + this.mapId, options )
                     .on( 'click', function( e ) {
                         console.log( 'clicked on map', e.latlng );
                         // do nothing if the field has a current marker
@@ -605,13 +575,25 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                         }
                     } );
 
-                L.tileLayer( tile[ "source" ], {
-                    attribution: tile[ "attribution" ],
-                    maxZoom: 18
-                } ).addTo( this.map );
-
                 // watch out, default "Leaflet" link clicks away from page, loosing all data
                 this.map.attributionControl.setPrefix( '' );
+
+                // add layer control
+                if ( layers.length > 1 ) {
+                    L.control.layers( this._getBaseLayers( layers ), null ).addTo( this.map );
+                }
+
+                // change default leaflet layer control button
+                that.$widget.find( '.leaflet-control-layers-toggle' ).append( '<span class="glyphicon glyphicon-globe"></span>' );
+
+                // Add ignore and option-label class to Leaflet-added input elements and their labels
+                // something weird seems to happen. It seems the layercontrol is added twice (second replacing first) 
+                // which means the classes are not present in the final control. 
+                // Using the baselayerchange event handler is a trick that seems to work.
+                this.map.on( 'baselayerchange', function() {
+                    that.$widget.find( '.leaflet-control-container input' ).addClass( 'ignore no-unselect' ).next( 'span' ).addClass( 'option-label' );
+                } );
+
             }
 
             if ( !latLng ) {
@@ -633,6 +615,52 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             }
         };
 
+        Geopicker.prototype._getLayers = function() {
+            var url, name, attribution,
+                iterator = 1,
+                layers = [];
+
+            maps.forEach( function( map ) {
+                // randomly pick a tile source from the array and store it in the maps config
+                // so it will be re-used when the form is reset or multiple geo widgets are created
+                map.tileIndex = ( map.tileIndex !== 'undefined' ) ? Math.round( Math.random() * 100 ) % map.tiles.length : map.tileIndex;
+                url = map.tiles[ map.tileIndex ];
+                name = map.name || 'map-' + iterator++;
+                attribution = map.attribution || '';
+                layers.push( L.tileLayer( url, {
+                    id: map.id || name,
+                    name: name,
+                    attribution: attribution
+                } ) );
+            } );
+
+            return layers;
+        };
+
+        Geopicker.prototype._getDefaultLayer = function( layers ) {
+            var defaultLayer,
+                that = this;
+
+            layers.reverse().some( function( layer ) {
+                defaultLayer = layer;
+                return that.props.appearances.some( function( appearance ) {
+                    return appearance === layer.options.name;
+                } );
+            } );
+
+            return defaultLayer;
+        };
+
+        Geopicker.prototype._getBaseLayers = function( layers ) {
+            var baseLayers = {};
+
+            layers.forEach( function( layer ) {
+                baseLayers[ layer.options.name ] = layer;
+            } );
+
+            return baseLayers;
+        };
+
         /**
          * Updates the markers on the dynamic map from the current list of points.
          */
@@ -641,7 +669,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 markers = [],
                 that = this;
 
-            console.log( 'updateing markers', this.points );
+            // console.log( 'updating markers', this.points );
 
             if ( this.markerLayer ) {
                 this.markerLayer.clearLayers();
@@ -656,41 +684,30 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 if ( that._isValidLatLng( latLng ) ) {
                     coords.push( latLng );
                     markers.push( L.marker( latLng, {
-                            icon: icon,
-                            clickable: true,
-                            draggable: true,
-                            alt: index,
-                            opacity: 0.9
-                        } ).on( 'click', function( e ) {
-                            console.log( 'clicked marker', e );
-                            if ( e.target.options.alt === 0 && that.props.type === 'geoshape' ) {
-                                that._closePolygon();
-                            } else {
-                                that._setCurrent( e.target.options.alt );
-                            }
-                        } ).on( 'dragend', function( e ) {
-                            var latLng = e.target.getLatLng();
-                            // first set the current index the point dragged
-                            that._setCurrent( e.target.options.alt );
-                            that._updateInputs( latLng, 'change.bymap' );
-                            that._updateMap();
-                        } )
-                        /*.on( 'mouseover', function( e ) {
-                        console.log( 'mousover!', e );
+                        icon: icon,
+                        clickable: true,
+                        draggable: true,
+                        alt: index,
+                        opacity: 0.9
+                    } ).on( 'click', function( e ) {
                         if ( e.target.options.alt === 0 && that.props.type === 'geoshape' ) {
-                            var popup = L.popup()
-                                .setLatLng( e.latlng )
-                                .setContent( 'click point to close the shape' )
-                                .openOn( that.map );
+                            that._closePolygon();
+                        } else {
+                            that._setCurrent( e.target.options.alt );
                         }
-                    } )*/
-                    );
+                    } ).on( 'dragend', function( e ) {
+                        var latLng = e.target.getLatLng();
+                        // first set the current index the point dragged
+                        that._setCurrent( e.target.options.alt );
+                        that._updateInputs( latLng, 'change.bymap' );
+                        that._updateMap();
+                    } ) );
                 } else {
                     console.log( 'this latLng was not considered valid', latLng );
                 }
             } );
 
-            console.log( 'markers to update', markers );
+            // console.log( 'markers to update', markers );
 
             if ( markers.length > 0 ) {
                 this.markerLayer = L.layerGroup( markers ).addTo( this.map );
@@ -714,7 +731,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 return;
             }
 
-            console.log( 'updating polyline' );
+            // console.log( 'updating polyline' );
             if ( this.points.length < 2 || !this._isValidLatLngList( this.points ) ) {
                 // remove quirky line remainder
                 if ( this.map ) {
@@ -727,29 +744,13 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
                 this.polyline = null;
                 this.polygon = null;
-                console.log( 'list of points invalid' );
+                // console.log( 'list of points invalid' );
                 return;
             }
 
-            // polyline and polygon are mutually exclusive
             if ( this.props.type === 'geoshape' ) {
-                /*console.log( 'detected that this polyline is a polygon' );
-                if ( this.polyline ) {
-                    if ( this.map ) {
-                        this.map.removeLayer( this.polyline );
-                    }
-                    this.polyline = null;
-                }*/
-
                 this._updatePolygon();
-                //return;
             }
-            /*else if ( this.polygon ) {
-                if ( this.map ) {
-                    this.map.removeLayer( this.polygon );
-                }
-                this.polygon = null;
-            }*/
 
             polylinePoints = ( this.points[ this.points.length - 1 ].join( '' ) !== '' ) ? this.points : this.points.slice( 0, this.points.length - 1 );
 
@@ -761,8 +762,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             } else {
                 this.polyline.setLatLngs( polylinePoints );
             }
+
             this.map.fitBounds( this.polyline.getBounds() );
-            console.log( 'done updating polyline' );
         };
 
 
@@ -777,29 +778,21 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 return;
             }
 
-            console.log( 'updating polygon' );
-
+            // console.log( 'updating polygon' );
             polygonPoints = ( this.points[ this.points.length - 1 ].join( '' ) !== '' ) ? this.points : this.points.slice( 0, this.points.length - 1 );
 
             if ( !this.polygon ) {
-                console.log( 'creating new polygon' );
+                // console.log( 'creating new polygon' );
                 this.polygon = L.polygon( polygonPoints, {
                     color: 'red',
                     stroke: false
                 } );
                 this.map.addLayer( this.polygon );
             } else {
-                console.log( 'updating existing polygon', this.points );
+                // console.log( 'updating existing polygon', this.points );
                 this.polygon.setLatLngs( polygonPoints );
             }
-            //this.map.fitBounds( this.polygon.getBounds() );
-            console.log( 'done updating polygon' );
         };
-
-        /*Geopicker.prototype._isPolygon = function( latLngs ) {
-            // no need to check for validaty of latLngs. This already happened in _updatePolyline.
-            return this.props.type === 'geoshape' && latLngs.length >= 4 && JSON.stringify( latLngs[ 0 ] ) === JSON.stringify( latLngs[ latLngs.length - 1 ] );
-        };*/
 
 
         Geopicker.prototype._addPoint = function() {

@@ -14,9 +14,10 @@
         "enketo-widget/select-likert/likertitem",
         "enketo-widget/distress/distresspicker"
     ],
-    "tile": {
-        "source": "https://{s}.tiles.mapbox.com/v3/examples.map-vyofok3q/{z}/{x}/{y}.png",
-        "attribution": "Map data &copy; <a target=\"_blank\" href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
-    },
+    "maps": [ {
+        "tiles": [ "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
+        "name": "streets",
+        "attribution": "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
+    } ],
     "google_api_key": ""
 }

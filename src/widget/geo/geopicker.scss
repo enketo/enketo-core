@@ -285,6 +285,25 @@
        
         }
     }
+    .leaflet-control-layers-toggle,
+    .leaflet-retina .leaflet-control-layers-toggle {
+        background: none;
+        padding: 5px;
+        color: #888;
+        text-align: center;
+        font-size: 20px;
+    }
+}
+
+// apply Enketo style to radio buttons in Leaflet layer control
+.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) .geopicker label {
+    line-height: 16px;
+    font-weight: normal;
+    input[type=radio] ~ .option-label::before {
+        font-size: 16px;
+        height: 16px;
+        margin-right: 2px;
+    }
 }
 
 /* required styles for Leaflet (unchanged) */
