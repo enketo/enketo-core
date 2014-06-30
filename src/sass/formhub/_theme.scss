@@ -3,6 +3,10 @@
 /** apply bootstrap .form-control class by default **/
 input:not([type=radio]):not([type=checkbox]), select, textarea {
     @extend .form-control;
+    // @extend works differently in node-sass
+    // below are some (weird) fixes copied from bootstraps .form-control class...
+    font-size: $font-size-base;
+    padding: $padding-base-vertical $padding-base-horizontal;
 }
 
 .or-group {
