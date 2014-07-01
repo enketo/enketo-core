@@ -532,7 +532,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
             }
 
-            // serves to remember last requested map coordinates to initiate map in mobile view
+            // serves to remember last requested map coordinates to initialize map in mobile view
             if ( latLng ) {
                 this.lastLatLng = latLng;
                 this.lastZoom = zoom;
@@ -616,7 +616,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         };
 
         Geopicker.prototype._getLayers = function() {
-            var url, name, attribution,
+            var url,
                 iterator = 1,
                 layers = [];
 
@@ -625,12 +625,12 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 // so it will be re-used when the form is reset or multiple geo widgets are created
                 map.tileIndex = ( map.tileIndex !== 'undefined' ) ? Math.round( Math.random() * 100 ) % map.tiles.length : map.tileIndex;
                 url = map.tiles[ map.tileIndex ];
-                name = map.name || 'map-' + iterator++;
-                attribution = map.attribution || '';
                 layers.push( L.tileLayer( url, {
                     id: map.id || name,
-                    name: name,
-                    attribution: attribution
+                    maxZoom: map.maxzoom || 18,
+                    minZoom: map.minzoom || 0,
+                    name: map.name || 'map-' + iterator++,
+                    attribution: map.attribution || ''
                 } ) );
             } );
 
@@ -714,7 +714,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 // change the view to fit all the markers
                 // don't use this for multiple markers, it messed up map clicks to place points
                 if ( this.points.length === 1 || !this._isValidLatLngList( this.points ) ) {
-                    this.map.fitBounds( coords );
+                    // center the map, keep zoom level unchanged
+                    this.map.setView( coords[ 0 ] );
                 }
             }
 
