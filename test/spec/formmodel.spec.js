@@ -177,6 +177,8 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                 [ "/thedata/nodeA", null, null, 'val4', 'int', false ],
                 [ "/thedata/nodeA", 0, null, '2', 'int', true ],
                 [ "/thedata/nodeA", 0, null, 3, 'int', true ],
+                [ "/thedata/nodeA", 0, null, '2.', 'int', false ],
+                [ "/thedata/nodeA", 0, null, '2.0', 'int', false ],
 
                 [ "/thedata/nodeA", null, null, 'val5565ghgyuyuy', 'date', false ], //Chrome turns val5 into a valid date...
                 [ "/thedata/nodeA", null, null, '2012-01-01', 'date', true ],

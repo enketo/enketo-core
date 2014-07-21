@@ -386,7 +386,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             },
             'int': {
                 validate: function( x ) {
-                    return ( !isNaN( x - 0 ) && x !== null && Math.round( x ) == x ) ? true : false; //x.toString() == parseInt(x, 10).toString();
+                    return ( !isNaN( x - 0 ) && x !== null && Math.round( x ).toString() === x.toString() ) ? true : false;
                 },
                 convert: function( x ) {
                     // deals with Java issue and possible db issues:
