@@ -157,6 +157,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             if ( typeof newVals !== 'undefined' && newVals !== null ) {
                 newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
             } else newVal = '';
+
             newVal = this.convert( newVal, xmlDataType );
 
             $target = this.get();
@@ -376,11 +377,21 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             'decimal': {
                 validate: function( x ) {
                     return ( !isNaN( x - 0 ) && x !== null ) ? true : false;
+                },
+                convert: function( x ) {
+                    // deals with Java issue and possible db issues:
+                    // https://github.com/MartijnR/enketo-core/issues/40
+                    return ( x === 'NaN' ) ? '' : x;
                 }
             },
             'int': {
                 validate: function( x ) {
                     return ( !isNaN( x - 0 ) && x !== null && Math.round( x ) == x ) ? true : false; //x.toString() == parseInt(x, 10).toString();
+                },
+                convert: function( x ) {
+                    // deals with Java issue and possible db issues:
+                    // https://github.com/MartijnR/enketo-core/issues/40
+                    return ( x === 'NaN' ) ? '' : x;
                 }
             },
             'date': {

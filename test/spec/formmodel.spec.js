@@ -10,7 +10,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
     describe( "Data node getter", function() {
         var i, t =
-                [
+            [
                 [ "", null, null, 20 ],
                 [ "", null, {},
                     20
@@ -134,8 +134,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
     } );
 
     describe( 'Date node (&) value getter', function() {
-        var //form = new Form('',''),
-        data = getModel( 'thedata.xml' ); //dataStr1);
+        var data = getModel( 'thedata.xml' ); //dataStr1);
 
         it( 'returns an array of one node value', function() {
             expect( data.node( "/thedata/nodeB" ).getVal() ).toEqual( [ 'b' ] );
@@ -222,9 +221,12 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                 [ "/thedata/nodeA", null, null, '0 a', 'geopoint', false ],
                 [ "/thedata/nodeA", null, null, '0', 'geopoint', false ],
                 [ "/thedata/nodeA", null, null, '0 0 a', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '0 0 0 a', 'geopoint', false ]
+                [ "/thedata/nodeA", null, null, '0 0 0 a', 'geopoint', false ],
 
-                //				//TO DO binary (?)
+                [ "/thedata/nodeA", null, null, 'NaN', 'int', null ], //value remains "" so null 
+                [ "/thedata/nodeA", null, null, 'NaN', 'decimal', null ] //value remains "" so null
+
+                //TO DO binary (?)
             ];
 
         function test( n ) {
@@ -245,22 +247,45 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             } );
         }
 
+        it( 'converts NaN to "" (quietly) for nodes with type=int', function() {
+            var result,
+                node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
+            // prime the node with a value
+            node.setVal( 5, null, 'int' );
+            expect( node.getVal() ).toEqual( [ '5' ] );
+            // attempt to set the value to NaN
+            result = node.setVal( 'NaN', null, 'int' );
+            expect( result ).toEqual( true );
+            expect( node.getVal() ).toEqual( [ '' ] );
+        } );
+
+        it( 'converts NaN to "" (quietly) for nodes with type=decimal', function() {
+            var result,
+                node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
+            // prime the node with a value
+            node.setVal( 5.1, null, 'decimal' );
+            expect( node.getVal() ).toEqual( [ '5.1' ] );
+            // attempt to set the value to NaN
+            result = node.setVal( 'NaN', null, 'decimal' );
+            expect( result ).toEqual( true );
+            expect( node.getVal() ).toEqual( [ '' ] );
+        } );
+
         it( 'sets a non-empty value to empty', function() {
-            var node = data.node( '/thedata/nodeA', null, null );
-            data = getModel( 'thedata.xml' ); //dataStr1);
+            var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
             node.setVal( 'value', null, 'string' );
             expect( node.setVal( '' ) ).toBe( true );
         } );
 
         it( 'adds a file attribute to data nodes with a value and with xml-type: binary', function() {
-            node = data.node( '/thedata/nodeA', null, null );
+            var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
             expect( node.get().attr( 'type' ) ).toBe( undefined );
             node.setVal( 'this.jpg', null, 'binary' );
             expect( node.get().attr( 'type' ) ).toBe( 'file' );
         } );
 
         it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', function() {
-            node = data.node( '/thedata/nodeA', null, null );
+            var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
             node.setVal( 'this.jpg', null, 'binary' );
             expect( node.get().attr( 'type' ) ).toBe( 'file' );
             node.setVal( '', null, 'binary' );
@@ -271,11 +296,9 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
     describe( "Data node cloner", function() {
         it( "has cloned a data node", function() {
-            var //form = new Form('', ''),
-            data = getModel( 'thedata.xml' ), //dataStr1),
+            var data = getModel( 'thedata.xml' ),
                 node = data.node( "/thedata/nodeA" ),
                 $precedingTarget = data.node( "/thedata/repeatGroup/nodeC", 0 ).get();
-            //form.Form('form');
 
             expect( data.node( '/thedata/repeatGroup/nodeA', 0 ).get().length ).toEqual( 0 );
             node.clone( $precedingTarget );
@@ -285,10 +308,8 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
     describe( "Data node remover", function() {
         it( "has removed a data node", function() {
-            var //form = new Form('', ''),
-            data = getModel( 'thedata.xml' ), //dataStr1),
+            var data = getModel( 'thedata.xml' ),
                 node = data.node( "/thedata/nodeA" );
-            //form.Form('form');
 
             expect( node.get().length ).toEqual( 1 );
             data.node( "/thedata/nodeA" ).remove();
