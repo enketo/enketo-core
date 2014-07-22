@@ -190,6 +190,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     xmlDataType = ( $input.length > 0 ) ? form.input.getXmlType( $input ) : 'string';
 
+                    // If XML type is binary, the XML node will get the file attribute.
+                    // If a record is loaded for editing via API (without media files)
+                    // this will trigger an error message upon submission, because the 
+                    // file cannot be found in the local filesystem.
+                    // To avoid showing this error message in that particular case, 
+                    // we cheat and pretend the XML data type is the plain old 'string'
+                    if ( !unsubmitted ) {
+                        xmlDataType = ( xmlDataType === 'binary' ) ? 'string' : xmlDataType;
+                    }
+
                     target = model.node( path, index );
 
                     /*
