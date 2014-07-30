@@ -1,4 +1,4 @@
-enketo-core [![Build Status](https://travis-ci.org/MartijnR/enketo-core.png)](https://travis-ci.org/MartijnR/enketo-core)
+enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.png)](https://travis-ci.org/enketo/enketo-core)
 ================
 
 The engine that powers [Enketo Smart Paper](https://enketo.org).
@@ -6,8 +6,6 @@ The engine that powers [Enketo Smart Paper](https://enketo.org).
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
 
 Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
-
-__If you think this repo is mildly useful, consider hitting the star button...__
 
 
 ###How to run it
@@ -142,12 +140,13 @@ I would like to acknowledge and thank the indirect contribution by the creators 
 
 ###Related Projects
 
-* [XPathJS_javarosa](https://github.com/MartijnR/xpathjs_javarosa) - used inside this repo
+* [enketo-express](https://github.com/enketo/enketo-express) - A modern node.js version of Enketo Smart Paper
+* [enketo-xpath-js](https://github.com/enketo/enketo-xpathjs) - used inside this repo
 * [enketo-xslt](https://github.com/MartijnR/enketo-xslt) - the XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
 * [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) - a minimalistic example in PHP of an XSLT transformer
 * [enketo-xslt-transformer-node] - To follow hopefully
-* [enketo-dristhi](https://github.com/MartijnR/enketo-dristhi) - used inside an Android app around enketo
+* [enketo-dristhi](https://github.com/enketo/enketo-dristhi) - used inside an Android app around enketo
 * [enketo-json](https://github.com/MartijnR/enketo-json) - XML-JSON instance convertor used inside e.g. Dristhi
-* [file-manager](https://github.com/MartijnR/file-manager) - library to deal with the experimental Filesystem API
+* [file-manager](https://github.com/enketo/file-manager) - library to deal with the experimental Filesystem API
 * [openrosa-forms](https://github.com/MartijnR/openrosa-forms) - bunch of test forms, for development
 * [enketo-api-docs](https://github.com/MartijnR/enketo-api-docs) - recommended API to support with your app
