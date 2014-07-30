@@ -1,12 +1,12 @@
 [submodule "lib/xpath"]
 	path = lib/xpath
-	url = https://github.com/MartijnR/xpathjs_javarosa.git
+url=https://github.com/enketo/enketo-xpathjs.git
 [submodule "lib/text"]
 	path = lib/text
 	url = https://github.com/requirejs/text.git
 [submodule "lib/file-manager"]
 	path = lib/file-manager
-	url = https://github.com/MartijnR/file-manager.git
+url=https://github.com/enketo/file-manager.git
 [submodule "src/widget/time/bootstrap3-timepicker"]
 	path = src/widget/time/bootstrap3-timepicker
 	url = https://github.com/m3wolf/bootstrap3-timepicker.git
@@ -15,10 +15,10 @@
 	url = https://github.com/eternicode/bootstrap-datepicker.git
 [submodule "lib/jquery-xpath"]
 	path = lib/jquery-xpath
-	url = https://github.com/MartijnR/jquery-xpath.git
+url=https://github.com/enketo/jquery-xpath.git
 [submodule "lib/jquery-touchswipe"]
 	path = lib/jquery-touchswipe
 	url = https://github.com/mattbryson/TouchSwipe-Jquery-Plugin.git
 [submodule "lib/bootstrap-slider"]
 	path = lib/bootstrap-slider
-	url = https://github.com/MartijnR/bootstrap-slider.git
+url=https://github.com/enketo/bootstrap-slider.git
