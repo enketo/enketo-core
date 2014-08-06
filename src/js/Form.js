@@ -833,7 +833,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $( '#form-languages option' ).removeClass( 'active' );
                     $( this ).addClass( 'active' );
 
-                    $form.find( '[lang]' ).removeClass( 'active' ).filter( '[lang="' + lang + '"], [lang=""]' ).addClass( 'active' );
+                    $form.find( '[lang]' )
+                        .removeClass( 'active' )
+                        .filter( '[lang="' + lang + '"], [lang=""]' )
+                        .filter( function( index ) {
+                            var $this = $( this );
+                            return !$this.hasClass( 'or-form-short' ) || ( $this.hasClass( 'or-form-short' ) && $this.siblings( '.or-form-long' ).length === 0 );
+                        } )
+                        .addClass( 'active' );
 
                     $form.find( 'select' ).each( function() {
                         that.setSelect( $( this ) );

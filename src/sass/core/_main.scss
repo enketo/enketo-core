@@ -30,7 +30,7 @@ input, select, textarea {
 /** hide stuff **/
 
 .or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,
-.option-wrapper .itemset-template, .itemset-labels {
+.option-wrapper .itemset-template, .itemset-labels, .or-hint.or-form-print, .or-hint.or-form-print.active {
     display: none;
 }
 

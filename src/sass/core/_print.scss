@@ -113,12 +113,6 @@ label, legend, .trigger, .note {
         color: black;
         padding: 5px 5px 12px 5px;
     }
-    label {
-        > span.or-hint.active {
-            color: black;
-            display: block;
-        }
-    }
     .required {
         float: right;
     }
@@ -136,10 +130,18 @@ label, legend, .trigger, .note {
     input[type="file"] {
         display: none !important;
     }
-    .or-hint.active {
+    .or-hint.active, .or-hint.or-form-print.active {
+        color: black;
+        display: block;
         padding-top: 5px;
         margin-top: 0;
         line-height: 1em;
+    }
+    .or-hint.or-form-print.active {
+        border: 1px dotted black;
+        padding: 1px;
+        margin-top: 5px;
+        font-size: 10px;
     }
 }
 
