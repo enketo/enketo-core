@@ -85,7 +85,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             // load default value
             if ( loadedVal ) {
                 $( this.element ).val().trim().split( ';' ).forEach( function( el, i ) {
-                    console.log( 'adding loaded point', el.trim().split( ' ' ) );
+                    // console.debug( 'adding loaded point', el.trim().split( ' ' ) );
                     that.points[ i ] = el.trim().split( ' ' );
                     that.points[ i ].forEach( function( str, i, arr ) {
                         arr[ i ] = Number( str );
@@ -201,11 +201,12 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this._updateMap( [ 0, 0 ], 1 );
                 if ( this.props.detect ) {
                     navigator.geolocation.getCurrentPosition( function( position ) {
-                        console.log( 'tracepicker found it', position );
                         that._updateMap( [ position.coords.latitude, position.coords.longitude ], defaultZoom );
                     } );
                 }
             } else {
+                // center map around first loaded geopoint value
+                //this._updateMap( L.latLng( this.points[ 0 ][ 0 ], this.points[ 0 ][ 1 ] ) );
                 this._updateMap();
                 this._setCurrent( this.currentIndex );
             }
@@ -451,7 +452,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             if ( !this.props.touch || this._inFullScreenMode() ) {
                 this._updateMarkers();
             }
-            console.log( 'set current index to ', this.currentIndex );
+            // console.debug( 'set current index to ', this.currentIndex );
         };
 
         /**
@@ -553,7 +554,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
          * @return {Function} Returns call to function
          */
         Geopicker.prototype._updateMap = function( latLng, zoom ) {
-            console.log( 'trace update map', 'latLng', latLng, 'zoom', zoom, 'points', this.points );
+
             if ( !this.props.map ) {
                 return;
             }
@@ -572,7 +573,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this.lastLatLng = latLng;
                 this.lastZoom = zoom;
             }
-            console.log( 'stored lastLatLng', this.lastLatLng, this.lastZoom );
+            // console.debug( 'stored lastLatLng', this.lastLatLng, this.lastZoom );
 
             if ( !this.props.touch || this._inFullScreenMode() ) {
                 this._updateDynamicMap( latLng, zoom );
@@ -641,17 +642,13 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this._updateMarkers();
                 if ( this.points.length === 1 && this.points[ 0 ].toString() === '' ) {
                     if ( this.lastLatLng ) {
-                        z = this.lastZoom || defaultZoom;
-                        console.log( 'loading last', this.lastLatLng, this.lastZoom );
-                        this.map.setView( this.lastLatLng, z );
+                        this.map.setView( this.lastLatLng, this.lastZoom || defaultZoom );
                     } else {
-                        this.map.setView( 0, 0, 18 );
+                        this.map.setView( L.latLng( 0, 0 ), zoom || defaultZoom );
                     }
-
                 }
             } else {
-                console.log( 'setting map view with center', latLng );
-                this.map.setView( latLng, zoom );
+                this.map.setView( latLng, zoom || defaultZoom );
             }
         };
 
@@ -766,7 +763,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 // don't use this for multiple markers, it messed up map clicks to place points
                 if ( this.points.length === 1 || !this._isValidLatLngList( this.points ) ) {
                     // center the map, keep zoom level unchanged
-                    this.map.setView( coords[ 0 ] );
+                    this.map.setView( coords[ 0 ], this.lastZoom || defaultZoom );
                 }
             }
         };
