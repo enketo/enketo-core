@@ -73,14 +73,14 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 that = this,
                 defaultLatLng = [ 16.8164, -3.0171 ];
 
+            this.$question = $( this.element ).closest( '.question' );
+
             this.mapId = Math.round( Math.random() * 10000000 );
             this.props = this._getProps();
 
             this._addDomElements();
             this.currentIndex = 0;
             this.points = [];
-
-            this.$question = $( this.element ).closest( '.question' );
 
             // load default value
             if ( loadedVal ) {
@@ -147,6 +147,11 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 that._updateMap();
                 return false;
             } );
+
+            // add wide class if question is wide
+            if ( this.props.wide ) {
+                this.$widget.addClass( 'wide' );
+            }
 
             // copy hide-input class from question to widget and add show/hide input controller
             this.$widget
@@ -237,7 +242,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 search: map,
                 appearances: appearances,
                 type: this.element.attributes[ 'data-type-xml' ].textContent,
-                touch: this.options.touch
+                touch: this.options.touch,
+                wide: ( this.$question.width() / this.$question.closest( 'form.or' ).width() > 0.8 )
             };
         };
 
@@ -1049,7 +1055,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 if ( area >= 10000 ) {
                     areaStr = ( area * 0.0001 ).toFixed( 2 ) + ' ha';
                 } else {
-                    areaStr = area.toFixed( 2 ) + ' m&sup2;';
+                    areaStr = area.toFixed( 0 ) + ' m&sup2;';
                 }
 
                 return areaStr;

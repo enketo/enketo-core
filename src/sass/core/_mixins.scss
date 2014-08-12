@@ -155,7 +155,7 @@
     flex-grow: 1;
     -webkit-flex-shrink: 1;
     flex-shrink: 1;
-    // Internet Explorer 10 and 11 have a box-sizing box with multiline flexboxes
+    // Internet Explorer 10 and 11 have a box-sizing issue with multiline flexboxes
     // box-sizing: border-box is ignored
     // 2 x 6px padding + 1 border = 13px adjustment
     -webkit-flex-basis: calc(#{$flex} - 13px);
