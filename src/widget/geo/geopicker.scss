@@ -19,7 +19,7 @@
 .enketo-area-popup {
     .leaflet-popup-content-wrapper {
         border-radius: 2px;
-        color: rgb(255, 0, 0);
+        color: black;
         background: none;
         box-shadow: none;
     }
@@ -41,7 +41,7 @@
         z-index: 1;
         display: none;
         font-weight: normal;
-        color: rgb(255, 0, 0);
+        color: black;
     }
 }
 
