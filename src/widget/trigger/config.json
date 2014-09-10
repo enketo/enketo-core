@@ -1,0 +1,6 @@
+{
+    "name": "triggerwidget",
+    "stylesheet": "trigger.scss",
+    "selector": ".trigger",
+    "options": {}
+}

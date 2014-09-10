@@ -12,7 +12,8 @@
         "enketo-widget/mediagrid/mediagridpicker",
         "enketo-widget/file-offline/offline-filepicker",
         "enketo-widget/select-likert/likertitem",
-        "enketo-widget/distress/distresspicker"
+        "enketo-widget/distress/distresspicker",
+        "enketo-widget/trigger/triggerwidget"
     ],
     "maps": [ {
         "tiles": [ "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
