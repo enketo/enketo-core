@@ -1,0 +1,30 @@
+.file-picker {
+    .fake-file-input {
+        // replace this with a mixin after getting rid of bootstrap
+        @include font-normal;
+        font-size: $font-size-base;
+        height: $input-height;
+        width: $input-min-width;
+        @extend input[type="file"];
+        @extend .form-control;
+        padding: 5px 10px;
+    }
+    .file-feedback, .file-preview {
+        @include font-normal;
+    }
+    .file-feedback.error {
+        @include error-text;
+    }
+    .file-feedback.warning {
+        @extend .text-warning;
+    }
+    .file-preview {
+        margin-top: 10px;
+    }
+}
+
+input[type="file"].transparent {
+    position: absolute;
+    visibility: hidden;
+    z-index: 5;
+}

@@ -1,9 +1,10 @@
-node_modules/*
-build/css/*
-build/js/*
-.sass-cache/*
+node_modules
+build/css
+build/js
+lib/bower-components
+.sass-cache
 ._*
-.grunt/*
+.grunt
 *.sublime-project
 *.sublime-workspace
 _site

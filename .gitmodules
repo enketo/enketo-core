@@ -4,9 +4,6 @@ url=https://github.com/enketo/enketo-xpathjs.git
 [submodule "lib/text"]
 	path = lib/text
 	url = https://github.com/requirejs/text.git
-[submodule "lib/file-manager"]
-	path = lib/file-manager
-url=https://github.com/enketo/file-manager.git
 [submodule "src/widget/time/bootstrap3-timepicker"]
 	path = src/widget/time/bootstrap3-timepicker
 	url = https://github.com/m3wolf/bootstrap3-timepicker.git

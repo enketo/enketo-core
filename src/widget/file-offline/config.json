@@ -1,6 +1,0 @@
-{
-	"name": "offlineFilepicker",
-	"stylesheet": "offline-filepicker.scss",
-	"selector": "input[type=\"file\"]",
-	"options": {}
-}

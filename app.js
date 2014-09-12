@@ -6,11 +6,13 @@ requirejs.config( {
         "enketo-config": "../config.json",
         "text": "text/text",
         "xpath": "xpath/build/xpathjs_javarosa",
-        "file-manager": "file-manager/src/file-manager",
+        "file-manager": "../src/js/file-manager",
+        "jquery": "bower-components/jquery/dist/jquery",
         "jquery.xpath": "jquery-xpath/jquery.xpath",
         "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
         "leaflet": "leaflet/leaflet",
-        "bootstrap-slider": "bootstrap-slider/js/bootstrap-slider"
+        "bootstrap-slider": "bootstrap-slider/js/bootstrap-slider",
+        "q": "bower-components/q/q"
     },
     shim: {
         "xpath": {
@@ -37,8 +39,8 @@ requirejs.config( {
     }
 } );
 
-requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form' ],
-    function( $, Modernizr, Form ) {
+requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form', 'file-manager' ],
+    function( $, Modernizr, Form, fileManager ) {
         var loadErrors, form;
 
         //if querystring touch=true is added, override Modernizr
@@ -71,8 +73,12 @@ requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form' ],
             if ( !form.isValid() ) {
                 alert( 'Form contains errors. Please see fields marked in red.' );
             } else {
-                alert( 'Form is valid! (see XML record in the console)' );
+                alert( 'Form is valid! (see XML record and media files in the console)' );
                 console.log( 'record:', form.getDataStr() );
+                fileManager.getFiles()
+                    .then( function( files ) {
+                        console.log( 'media files:', files );
+                    } );
             }
         } );
 
