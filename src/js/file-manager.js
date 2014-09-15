@@ -83,23 +83,22 @@ define( [ "q", "jquery" ], function( Q, $ ) {
     }
 
     /**
-     * Obtain files belonging to the specified instanceID
-     * @param { string? } id instanceID, defaults to current instanceID
+     * Obtain files currently stored in file input elements of open record
      * @return {[File]} array of files
      */
-    function getFiles( id ) {
+    function getCurrentFiles() {
         var file,
             deferred = Q.defer(),
             files = [];
 
+        // first get any files inside file input elements
         $( 'form.or input[type="file"]' ).each( function() {
             file = this.files[ 0 ];
             if ( file ) {
                 files.push( file );
             }
         } );
-        deferred.resolve( files );
-        return deferred.promise;
+        return files;
     }
 
     /**
@@ -127,6 +126,6 @@ define( [ "q", "jquery" ], function( Q, $ ) {
         isWaitingForPermissions: isWaitingForPermissions,
         init: init,
         getFileUrl: getFileUrl,
-        getFiles: getFiles
+        getCurrentFiles: getCurrentFiles
     };
 } );

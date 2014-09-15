@@ -79,6 +79,9 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                     fileManager.getFileUrl( existingFileName )
                         .then( function( url ) {
                             that._showPreview( url, that.mediaType );
+                        } )
+                        .catch( function() {
+                            that._showFeedback( 'File "' + existingFileName + '" could not be found (leave unchanged if already submitted and you want to preserve it).', 'error' );
                         } );
                 }
             } )
@@ -125,7 +128,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
     };
 
     Filepicker.prototype._showFileName = function( file ) {
-        var fileName = ( file && file.name ) ? file.name : '';
+        var fileName = ( typeof file === 'object' && file.name ) ? file.name : file;
         this.$fakeInput.text( fileName );
     };
 
