@@ -276,8 +276,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 '</div>' +
                 '</div>' +
                 '<div class="geo-inputs">' +
-                '<label class="geo">latitude (x.y &deg;)<input class="ignore" name="lat" type="number" step="0.0001" min="-90" max="90"/></label>' +
-                '<label class="geo">longitude (x.y &deg;)<input class="ignore" name="long" type="number" step="0.0001" min="-180" max="180"/></label>' +
+                '<label class="geo">latitude (x.y &deg;)<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label>' +
+                '<label class="geo">longitude (x.y &deg;)<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
                 '<label class="geo">altitude (m)<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
                 '<label class="geo">accuracy (m)<input class="ignore" name="acc" type="number" step="0.1" /></label>' +
                 '<button type="button" class="btn-remove"><span class="glyphicon glyphicon-trash"> </span></button>' +
@@ -338,8 +338,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
          * @return {Boolean} Whether the value was changed.
          */
         Geopicker.prototype._updateValue = function() {
-            var oldGeoTraceValue = $( this.element ).val(),
-                newGeoTraceValue = '',
+            var oldValue = $( this.element ).val(),
+                newValue = '',
                 that = this;
 
             this._markAsValid();
@@ -354,26 +354,26 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
 
                 geopoint = ( lat && lng ) ? lat + ' ' + lng + ' ' + alt + ' ' + acc : "";
 
-                //only last item may be empty
+                // only last item may be empty
                 if ( !that._isValidGeopoint( geopoint ) && !( geopoint === '' && index === array.length - 1 ) ) {
                     that._markAsInvalid( index );
                 }
-                //newGeoTraceValue += geopoint;
+                // newGeoTraceValue += geopoint;
                 if ( !( geopoint === '' && index === array.length - 1 ) ) {
-                    newGeoTraceValue += geopoint;
+                    newValue += geopoint;
                     if ( index !== array.length - 1 ) {
-                        newGeoTraceValue += ';';
+                        newValue += ';';
                     }
                 } else {
                     // remove trailing semi-colon
-                    newGeoTraceValue = newGeoTraceValue.substring( 0, newGeoTraceValue.lastIndexOf( ';' ) );
+                    newValue = newValue.substring( 0, newValue.lastIndexOf( ';' ) );
                 }
             } );
 
-            console.log( 'updating value by joining', this.points, 'old value', oldGeoTraceValue, 'new value', newGeoTraceValue );
+            console.log( 'updating value by joining', this.points, 'old value', oldValue, 'new value', newValue );
 
-            if ( oldGeoTraceValue !== newGeoTraceValue ) {
-                $( this.element ).val( newGeoTraceValue ).trigger( 'change' );
+            if ( oldValue !== newValue ) {
+                $( this.element ).val( newValue ).trigger( 'change' );
                 return true;
             } else {
                 return false;
@@ -947,8 +947,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
 
             ev = ( typeof ev !== 'undefined' ) ? ev : 'change';
 
-            this.$lat.val( Math.round( lat * 10000 ) / 10000 || '' );
-            this.$lng.val( Math.round( lng * 10000 ) / 10000 || '' );
+            this.$lat.val( Math.round( lat * 1000000 ) / 1000000 || '' );
+            this.$lng.val( Math.round( lng * 1000000 ) / 1000000 || '' );
             this.$alt.val( Math.round( alt * 10 ) / 10 || '' );
             this.$acc.val( Math.round( acc * 10 ) / 10 || '' ).trigger( ev );
         };
