@@ -106,7 +106,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
 
                 event.stopImmediatePropagation();
 
-                if ( event.namespace !== 'bymap' && event.namespace !== 'bysearch' && that.polyline && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
+                // if the points array contains empty points, skip the intersection check, it will be done before closing the polygon
+                if ( event.namespace !== 'bymap' && event.namespace !== 'bysearch' && that.polyline && !that.containsEmptyPoints( that.points, that.currentIndex ) && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
                     that._showIntersectError();
                     that._updateInputs( that.points[ that.currentIndex ], 'nochange' );
                 } else {
@@ -604,20 +605,22 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                     layers: this._getDefaultLayer( layers )
                 };
 
-                // console.log( 'no map yet, creating it' );
                 this.map = L.map( 'map' + this.mapId, options )
                     .on( 'click', function( e ) {
-                        var latLng = e.latlng;
-                        if ( that.polyline && that.updatedPolylineWouldIntersect( latLng, that.currentIndex + 1 ) ) {
+                        var latLng = e.latlng,
+                            indexToPlacePoint = ( that.$lat.val() && that.$lng.val() ) ? that.points.length : that.currentIndex;
+                        // Skip intersection check if points contain empties. It will be done later, before the polygon is closed.
+                        if ( that.props.type !== 'geopoint' && !that.containsEmptyPoints( that.points, indexToPlacePoint ) && that.updatedPolylineWouldIntersect( latLng, indexToPlacePoint ) ) {
                             that._showIntersectError();
                         } else {
-                            // do nothing if the field has a current marker
-                            // instead the user will have to drag to change it by map
                             if ( !that.$lat.val() || !that.$lng.val() || that.props.type === 'geopoint' ) {
                                 that._updateInputs( latLng, 'change.bymap' );
-                            } else if ( that.$lat.val() && that.$lng.val() && that.props.type !== 'geopoint' ) {
+                            } else if ( that.$lat.val() && that.$lng.val() ) {
                                 that._addPoint();
                                 that._updateInputs( latLng, 'change.bymap' );
+                            } else {
+                                // do nothing if the field has a current marker
+                                // instead the user will have to drag to change it by map
                             }
                         }
                     } );
@@ -930,6 +933,11 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this._addPoint();
             }
 
+            // final check to see if there are intersections
+            if ( this.polyline && !this.containsEmptyPoints( this.points, this.points.length ) && this.updatedPolylineWouldIntersect( this.points[ 0 ], this.currentIndex ) ) {
+                return this._showIntersectError();
+            }
+
             this._updateInputs( this.points[ 0 ] );
         };
 
@@ -968,6 +976,20 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             this.$map.show();
             this.$widget.find( '.btn' ).removeClass( 'disabled' );
         };
+
+        /**
+         * Checks whether the array of points contains empty ones, excluding the last point.
+         * Marks points as errors if empty
+         *
+         * @allowedIndex {number=} The index in which an empty value is allowed
+         * @return {[type]} [description]
+         */
+        Geopicker.prototype.containsEmptyPoints = function( points, allowedIndex ) {
+            return points.some( function( point, index ) {
+                return index !== allowedIndex && ( !point[ 0 ] || !point[ 1 ] );
+            } );
+        };
+
 
         /**
          * Check if a polyline created from the current collection of points
@@ -1084,34 +1106,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                     }
                 }
                 return false;
-            },
-
-            // Check for intersection if new latlng was added to this polyline.
-            // NOTE: does not support detecting intersection for degenerate cases.
-            newLatLngIntersects: function( latlng, skipFirst ) {
-                // Cannot check a polyline for intersecting lats/lngs when not added to the map
-                if ( !this._map ) {
-                    return false;
-                }
-
-                return this.newPointIntersects( this._map.latLngToLayerPoint( latlng ), skipFirst );
-            },
-
-            // Check for intersection if new point was added to this polyline.
-            // newPoint must be a layer point.
-            // NOTE: does not support detecting intersection for degenerate cases.
-            newPointIntersects: function( newPoint, skipFirst ) {
-                var points = this._originalPoints,
-                    len = points ? points.length : 0,
-                    lastPoint = points ? points[ len - 1 ] : null,
-                    // The previous previous line segment. Previous line segment doesn't need testing.
-                    maxIndex = len - 2;
-
-                if ( this._tooFewPointsForIntersection( 1 ) ) {
-                    return false;
-                }
-
-                return this._lineSegmentsIntersectsRange( lastPoint, newPoint, maxIndex, skipFirst ? 1 : 0 );
             },
 
             // Polylines with 2 sides can only intersect in cases where points are collinear (we don't support detecting these).
