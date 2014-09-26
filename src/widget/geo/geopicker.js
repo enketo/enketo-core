@@ -947,10 +947,10 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
 
             ev = ( typeof ev !== 'undefined' ) ? ev : 'change';
 
-            this.$lat.val( Math.round( lat * 1000000 ) / 1000000 || '' );
-            this.$lng.val( Math.round( lng * 1000000 ) / 1000000 || '' );
-            this.$alt.val( Math.round( alt * 10 ) / 10 || '' );
-            this.$acc.val( Math.round( acc * 10 ) / 10 || '' ).trigger( ev );
+            this.$lat.val( lat || '' );
+            this.$lng.val( lng || '' );
+            this.$alt.val( alt || '' );
+            this.$acc.val( acc || '' ).trigger( ev );
         };
 
         /**
