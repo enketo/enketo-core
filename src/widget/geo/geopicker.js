@@ -474,15 +474,16 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 event.preventDefault();
                 navigator.geolocation.getCurrentPosition( function( position ) {
                     var latLng = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
+                        lat: Math.round( position.coords.latitude * 1000000 ) / 1000000,
+                        lng: Math.round( position.coords.longitude * 1000000 ) / 1000000
                     };
+
                     if ( that.polyline && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
                         that._showIntersectError();
                     } else {
                         //that.points[that.currentIndex] = [ position.coords.latitude, position.coords.longitude ];
                         //that._updateMap( );
-                        that._updateInputs( [ position.coords.latitude, position.coords.longitude, position.coords.altitude, position.coords.accuracy ] );
+                        that._updateInputs( [ latLng.lat, latLng.lng, position.coords.altitude, position.coords.accuracy ] );
                         // if current index is last of points, automatically create next point
                         if ( that.currentIndex === that.points.length - 1 && that.props.type !== 'geopoint' ) {
                             that._addPoint();
@@ -609,6 +610,11 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                     .on( 'click', function( e ) {
                         var latLng = e.latlng,
                             indexToPlacePoint = ( that.$lat.val() && that.$lng.val() ) ? that.points.length : that.currentIndex;
+
+                        // reduce precision to 6 decimals
+                        latLng.lat = Math.round( latLng.lat * 1000000 ) / 1000000;
+                        latLng.lng = Math.round( latLng.lng * 1000000 ) / 1000000;
+
                         // Skip intersection check if points contain empties. It will be done later, before the polygon is closed.
                         if ( that.props.type !== 'geopoint' && !that.containsEmptyPoints( that.points, indexToPlacePoint ) && that.updatedPolylineWouldIntersect( latLng, indexToPlacePoint ) ) {
                             that._showIntersectError();
@@ -749,6 +755,11 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                     } ).on( 'dragend', function( e ) {
                         var latLng = e.target.getLatLng(),
                             index = e.target.options.alt;
+
+                        // reduce precision to 6 decimals
+                        latLng.lat = Math.round( latLng.lat * 1000000 ) / 1000000;
+                        latLng.lng = Math.round( latLng.lng * 1000000 ) / 1000000;
+
                         if ( that.polyline && that.updatedPolylineWouldIntersect( latLng, index ) ) {
                             that._showIntersectError();
                             that._updateMarkers();
