@@ -11,7 +11,8 @@ define( [ "q", "jquery" ], function( Q, $ ) {
     "use strict";
 
     var maxSize,
-        supported = typeof FileReader === 'function';
+        supported = typeof FileReader === 'function',
+        notSupportedAdvisoryMsg = '';
 
     /**
      * Initialize the file manager .
@@ -123,6 +124,7 @@ define( [ "q", "jquery" ], function( Q, $ ) {
 
     return {
         isSupported: isSupported,
+        notSupportedAdvisoryMsg: notSupportedAdvisoryMsg,
         isWaitingForPermissions: isWaitingForPermissions,
         init: init,
         getFileUrl: getFileUrl,
