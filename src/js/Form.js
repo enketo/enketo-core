@@ -231,8 +231,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     //if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
                     //this use of node(path,index,file).get() is a bit of a trick that is difficult to wrap one's head around
                     else if ( model.node( path, 0, {
-                        noTemplate: false
-                    } ).get().closest( '[template]' ).length > 0 ) {
+                            noTemplate: false
+                        } ).get().closest( '[template]' ).length > 0 ) {
                         //clone the template node 
                         //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub)
                         $template = model.node( path, 0, {
@@ -1034,6 +1034,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var result = model.evaluate( expr, 'boolean', contextPath, index );
                     return result;
                 }
+
                 /**
                  * Processes the evaluation result for a branch
                  *
@@ -1049,6 +1050,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         disable( $branchNode );
                     }
                 }
+
                 /**
                  * Checks whether branch currently has 'relevant' state
                  *
@@ -1058,6 +1060,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 function selfRelevant( $branchNode ) {
                     return !$branchNode.hasClass( 'disabled' ) && !$branchNode.hasClass( 'pre-init' );
                 }
+
                 /**
                  * Enables and reveals a branch node/group
                  *
@@ -1088,6 +1091,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         }
                     }
                 }
+
                 /**
                  * Disables and hides a branch node/group
                  *

@@ -1,7 +1,7 @@
-enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.png)](https://travis-ci.org/enketo/enketo-core)
+enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core.svg)](https://david-dm.org/enketo/enketo-core)
 ================
 
-The engine that powers [Enketo Smart Paper](https://enketo.org).
+The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools.
 
 This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
 

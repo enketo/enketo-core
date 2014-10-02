@@ -160,17 +160,19 @@ module.exports = function( grunt ) {
             }
         },
         modernizr: {
-            "devFile": "remote",
-            "outputFile": "lib/Modernizr.js",
-            "extra": {
-                "shiv": false,
-                "printshiv": true,
-                "load": false,
-                "mq": false,
-                "cssclasses": true
-            },
-            "uglify": false,
-            "parseFiles": true
+            dist: {
+                "devFile": "remote",
+                "outputFile": "lib/Modernizr.js",
+                "extra": {
+                    "shiv": false,
+                    "printshiv": true,
+                    "load": false,
+                    "mq": false,
+                    "cssclasses": true
+                },
+                "uglify": false,
+                "parseFiles": true
+            }
         }
     } );
 
