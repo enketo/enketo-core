@@ -84,8 +84,8 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
                     showMeridian: false
                 } )
                 .val( timeVal )
-            //the time picker itself has input elements
-            .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
+                //the time picker itself has input elements
+                .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
             this._setManualHandler( $fakeDateI );
             this._setFocusHandler( $fakeDateI.add( $fakeTimeI ) );

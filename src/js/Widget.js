@@ -47,14 +47,14 @@ define( [ 'jquery' ], function( $ ) {
          */
         destroy: function( element ) {
             $( element )
-            //data is not used elsewhere by enketo
-            .removeData( this.namespace )
-            //remove all the event handlers that used this.namespace as the namespace
-            .off( '.' + this.namespace )
-            //show the original element
-            .show()
-            //remove elements immediately after the target that have the widget class
-            .next( '.widget' ).remove();
+                //data is not used elsewhere by enketo
+                .removeData( this.namespace )
+                //remove all the event handlers that used this.namespace as the namespace
+                .off( '.' + this.namespace )
+                //show the original element
+                .show()
+                //remove elements immediately after the target that have the widget class
+                .next( '.widget' ).remove();
             //console.debug( this.namespace, 'destroy' );
         },
         /**

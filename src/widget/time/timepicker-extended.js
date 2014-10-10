@@ -61,11 +61,11 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstr
             $timeI.hide().after( $fakeTime );
 
             $fakeTimeI.timepicker( {
-                defaultTime: ( timeVal.length > 0 ) ? timeVal : 'current',
-                showMeridian: false
-            } ).val( timeVal )
-            //the time picker itself has input elements
-            .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
+                    defaultTime: ( timeVal.length > 0 ) ? timeVal : 'current',
+                    showMeridian: false
+                } ).val( timeVal )
+                //the time picker itself has input elements
+                .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
             $fakeTimeI.on( 'change', function() {
                 var $this = $( this ),
