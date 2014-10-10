@@ -10,9 +10,10 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      *
      * @constructor
      * @param {string} dataStr String of the default XML instance
+     * @param {?{full:boolean}} options.full Whether to initialize the full model or only the primary instance (for future)
      */
 
-    function FormModel( dataStr ) {
+    function FormModel( dataStr, options ) {
         var $data,
             that = this;
 
@@ -23,6 +24,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         //TEMPORARY DUE TO FIREFOX ISSUE, REMOVE ALL NAMESPACES FROM STRING, 
         //BETTER TO LEARN HOW TO DEAL WITH DEFAULT NAMESPACES THOUGH
         dataStr = dataStr.replace( /xmlns\=\"[a-zA-Z0-9\:\/\.]*\"/g, '' );
+
+        // TODO: if options && !options.full, strip all secondary instances from string before parsing!
 
         try {
             this.xml = $.parseXML( dataStr );
@@ -37,7 +40,6 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
         /**
          * Initializes FormModel
-         *
          */
         FormModel.prototype.init = function() {
             var /** @type {string} */ val;
@@ -185,7 +187,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 return null;
             }
             if ( $target.length === 0 ) {
-                console.error( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found!' );
+                console.error( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found. Ignored.' );
                 return null;
             }
             //always validate if the new value is not empty, even if value didn't change (see validateAll() function)
