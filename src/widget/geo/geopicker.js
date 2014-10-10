@@ -518,17 +518,17 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                     if ( address ) {
                         address = address.split( /\s+/ ).join( '+' );
                         $.get( searchSource.replace( '{address}', address ), function( response ) {
-                                var latLng;
-                                if ( response.results && response.results.length > 0 && response.results[ 0 ].geometry && response.results[ 0 ].geometry.location ) {
-                                    latLng = response.results[ 0 ].geometry.location;
-                                    that._updateMap( [ latLng.lat, latLng.lng ], defaultZoom );
-                                    that.$search.closest( '.input-group' ).removeClass( 'has-error' );
-                                } else {
-                                    //TODO: add error message
-                                    that.$search.closest( '.input-group' ).addClass( 'has-error' );
-                                    console.log( "Location '" + address + "' not found" );
-                                }
-                            }, 'json' )
+                            var latLng;
+                            if ( response.results && response.results.length > 0 && response.results[ 0 ].geometry && response.results[ 0 ].geometry.location ) {
+                                latLng = response.results[ 0 ].geometry.location;
+                                that._updateMap( [ latLng.lat, latLng.lng ], defaultZoom );
+                                that.$search.closest( '.input-group' ).removeClass( 'has-error' );
+                            } else {
+                                //TODO: add error message
+                                that.$search.closest( '.input-group' ).addClass( 'has-error' );
+                                console.log( "Location '" + address + "' not found" );
+                            }
+                        }, 'json' )
                             .fail( function() {
                                 //TODO: add error message
                                 that.$search.closest( '.input-group' ).addClass( 'has-error' );
@@ -871,8 +871,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 readableArea = L.GeometryUtil.readableArea( area );
 
                 L.popup( {
-                        className: 'enketo-area-popup'
-                    } )
+                    className: 'enketo-area-popup'
+                } )
                     .setLatLng( this.polygon.getBounds().getCenter() )
                     .setContent( readableArea )
                     .openOn( this.map );

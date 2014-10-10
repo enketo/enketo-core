@@ -45,11 +45,11 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
             .parent().addClass( 'with-media clearfix' );
 
         this.$widget = $(
-                '<div class="widget file-picker">' +
-                '<div class="fake-file-input"></div>' +
-                '<div class="file-feedback"></div>' +
-                '<div class="file-preview"></div>' +
-                '</div>' )
+            '<div class="widget file-picker">' +
+            '<div class="fake-file-input"></div>' +
+            '<div class="file-feedback"></div>' +
+            '<div class="file-preview"></div>' +
+            '</div>' )
             .insertAfter( $input );
         this.$feedback = this.$widget.find( '.file-feedback' );
         this.$preview = this.$widget.find( '.file-preview' );
