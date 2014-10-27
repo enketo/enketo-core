@@ -1,0 +1,99 @@
+// Button variants
+// -------------------------
+// Easily pump out default styles, as well as :hover, :focus, :active,
+// and disabled options for all buttons
+@mixin button-variant($color, $background, $border) {
+    color: $color;
+    background-color: $background;
+    border-color: $border;
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+        color: $color;
+        background-color: darken($background, 8%);
+        border-color: darken($border, 12%);
+    }
+    .open & {
+        &.dropdown-toggle {
+            color: $color;
+            background-color: darken($background, 8%);
+            border-color: darken($border, 12%);
+        }
+    }
+    &:active,
+    &.active {
+        background-image: none;
+    }
+    .open & {
+        &.dropdown-toggle {
+            background-image: none;
+        }
+    }
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        &,
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+            background-color: $background;
+            border-color: $border;
+        }
+    }
+    .badge {
+        color: $background;
+        background-color: $color;
+    }
+}
+
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 15px;
+    line-height: 1.25;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    &:focus, &:link, &:active, &:visited {
+        text-decoration: none;
+    }
+}
+
+.btn-default {
+    @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
+}
+
+.btn-primary {
+    @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+}
+
+// special minimal icon-only buttons
+.btn-icon-only {
+    margin: 0 0 0 10px;
+    padding: 0;
+    color: $text-color;
+    background: none;
+    border: none;
+    @include box-shadow-none;
+    opacity: 0.7;
+    &:hover, &:focus, &:active, &.active, &:disabled, &.disabled {
+        background: none;
+        @include box-shadow-none;
+    }
+    &:hover {
+        color: $text-color;
+        opacity: 0.5;
+    }
+}

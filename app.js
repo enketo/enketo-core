@@ -18,10 +18,6 @@ requirejs.config( {
         "xpath": {
             exports: "XPathJS"
         },
-        "bootstrap": {
-            deps: [ "jquery" ],
-            exports: "jQuery.fn.popover"
-        },
         "widget/date/bootstrap3-datepicker/js/bootstrap-datepicker": {
             deps: [ "jquery" ],
             exports: "jQuery.fn.datepicker"
@@ -41,7 +37,7 @@ requirejs.config( {
 
 requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form', 'file-manager' ],
     function( $, Modernizr, Form, fileManager ) {
-        var loadErrors, form;
+        var loadErrors, form, formStr, modelStr;
 
         //if querystring touch=true is added, override Modernizr
         if ( getURLParameter( 'touch' ) === 'true' ) {

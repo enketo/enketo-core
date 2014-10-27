@@ -1,37 +1,22 @@
 $media-margin: 10px;
 
-body {
-    @include font-normal;
-}
-
-strong {
-    @include font-bold;
-}
-
-h2, h3, h4 {
-    @include font-bold;
-    color: $accent-color-1;
-    text-align: center;
-}
-
-h3 {
-    padding: 5px 0 15px 0;
-    word-wrap: break-word;
-}
-
-h4 {
-    text-align: left;
-}
-
-input, select, textarea {
-    @include font-normal;
-}
-
 /** hide stuff **/
 
 .or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,
 .option-wrapper .itemset-template, .itemset-labels, .or-hint.or-form-print, .or-hint.or-form-print.active {
     display: none;
+}
+
+.or {
+    h3 {
+        padding: 5px 0 15px 0;
+        word-wrap: break-word;
+    }
+    h4 {
+        text-align: left;
+        margin-top: 9px;
+        margin-bottom: 9px;
+    }
 }
 
 /** hints **/
@@ -71,7 +56,7 @@ input, select, textarea {
         position: absolute;
         top: 7px;
         right: 10px;
-        color: $accent-color-1;
+        color: $brand-primary-color;
         + .or-group {
             border-top: none;
         }
@@ -135,9 +120,11 @@ input, select, textarea {
     display: block;
     margin: 0 0 9px 0;
     padding-top: 15px;
+    border: none;
     > fieldset {
         padding: 0;
         margin: 0;
+        border: none;
     }
 }
 
@@ -201,10 +188,14 @@ label, legend, .trigger, .note {
 }
 
 legend {
+    display: block;
     position: relative;
     line-height: 12px;
     border: none;
-    //margin-bottom: 0.6em; //works in Chrome
+    width: 100%;
+    padding: 0;
+    margin-bottom: 18px;
+    //works in Chrome
     > span {
         vertical-align: 12px;
     }
@@ -220,7 +211,7 @@ legend {
     margin: 0 10px 1px 10px;
     // TODO: remove hover rule for tables (in likert already done)
     &:hover:not(.filler) {
-        background-color: $accent-color-2;
+        background-color: $brand-secondary-color;
     }
     :not(img):not(video):not(audio).active {
         margin-left: 30px;
@@ -295,7 +286,7 @@ legend {
                 margin-left: 5px;
             }
             &:focus, &:hover, &:active, &[data-checked] {
-                background-color: $accent-color-2;
+                background-color: $brand-secondary-color;
             }
         }
     }
@@ -307,15 +298,22 @@ legend {
     input:not([type="radio"]):not([type="checkbox"]), textarea {
         border: 1px solid #ddd8ce;
     }
+    select {
+        width: 100%;
+    }
 }
 
-input:not([type="radio"]):not([type="checkbox"]), textarea, select, .widget {
+input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select, .widget {
     display: block;
     margin: 8px 0 0 0;
 }
 
 input:not([type="radio"]):not([type="checkbox"]), textarea {
     height: $input-height;
+}
+
+select {
+    width: $input-max-width;
 }
 
 .question input, .note input {
@@ -362,7 +360,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
 
 .required {
     margin-left: 3px;
-    color: $accent-color-1;
+    color: $brand-primary-color;
 }
 
 .required-subtle {
@@ -387,7 +385,9 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
 
 .invalid-constraint, .invalid-required {
     @include transition-fast;
-    @include error-bg-border;
+    background-color: $state-danger-bg;
+    border-color: $state-danger-border;
+    border-radius: $border-radius-small;
     $pad: 10px;
     margin-right: -$pad;
     margin-left: -$pad;
@@ -396,39 +396,21 @@ input:not([type="radio"]):not([type="checkbox"]), textarea {
     padding-bottom: $pad;
 }
 
-.invalid-required {
-    .or-required-msg.active {
-        @include error-text;
-    }
+.invalid-constraint .or-constraint-msg.active,
+.invalid-required .or-required-msg.active {
+    display: block;
 }
 
-.invalid-constraint {
-    .or-constraint-msg.active {
-        @include error-text;
-    }
+.or-required-msg.active, .or-constraint-msg.active {
+    @include font-bold;
+    padding-top: 5px;
+    font-size: 0.85em;
+    color: $state-danger-text;
 }
 
 // this may have a very significant positive impact on performance
 .or-branch {
     &.disabled, &.or-branch.pre-init {
         display: none;
-    }
-}
-
-.btn-reset, .btn-remove {
-    margin-left: 10px;
-    background: none;
-    border: none;
-    box-shadow: none;
-    opacity: 0.5;
-    &:hover {
-        opacity: 0.7;
-    }
-    &[readonly] {
-        background: none;
-    }
-    .glyphicon-trash {
-        color: #000;
-        vertical-align: middle;
     }
 }

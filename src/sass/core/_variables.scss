@@ -1,35 +1,109 @@
-//bootstrap icon font gets messed up if helper is used
-$bootstrap-sass-asset-helper: false;
+// bootstrap icon font gets messed up if helper is used
+//$bootstrap-sass-asset-helper: false !default;
+//$images-path: "../../images/" !default;
+//$icon-font-path: "/lib/bootstrap-sass/fonts/" !default;
 
 // fonts
-$font-size-base: 16px;
-$line-height-base: 1.25;
+$font-size-base: 16px !default;
+$line-height-base: 1.25 !default;
 
-// borders
-$groupline: #bbbbbb;
-$line: 3px solid $groupline;
+// line-heights
+$line-height-base: 1.42857 !default;
+$line-height-computed: floor($font-size-base * $line-height-base) !default;
 
-// inputs
-$input-height: 34px;
-$input-min-width: 0.2 * 720px;
-$input-max-width: 80%;
+// padding
+$padding-base-vertical: 6px !default;
+$padding-base-horizontal: 12px !default;
+$padding-large-vertical: 10px !default;
+$padding-large-horizontal: 16px !default;
+
+// input sizing
+$input-height: 34px !default;
+$input-min-width: 0.2 * 720px !default;
+$input-max-width: 80% !default;
 
 // colors, icons
-$accent-color-1: #252525;
-$accent-color-2: lighten($accent-color-1, 50%);
-$images-path: '../../images/';
-$icon-font-path: '/lib/bootstrap-sass/fonts/';
-$repeat-bg: lighten($accent-color-1, 55%);
-$note-bg: #eeeeee;
-$note-color: black;
-$note-border: 1px solid #aaaaaa;
-$note-border-radius: 4px;
-$radiocheck-unchecked-color: $accent-color-1;
-$radiocheck-checked-color: $accent-color-1;
-$question-hover-bg: white;
-$question-focus-bg: white;
-$question-bg: white;
+$gray-darker: lighten(black, 13.5%) !default;
+$gray-dark: lighten(black, 20%) !default;
+$gray: lighten(black, 33.5%) !default;
+$gray-light: lighten(black, 60%) !default;
+$gray-lighter: lighten(black, 93.5%) !default;
+
+$body-bg: white !default;
+
+$brand-primary-color: #252525 !default;
+$brand-secondary-color: lighten($brand-primary-color, 50%) !default;
+
+$repeat-bg: lighten($brand-primary-color, 55%) !default;
+
+$note-bg: #eeeeee !default;
+$note-color: black !default;
+$note-border: 1px solid #aaaaaa !default;
+
+$radiocheck-unchecked-color: $brand-primary-color !default;
+$radiocheck-checked-color: $brand-primary-color !default;
+
+$question-hover-bg: white !default;
+$question-focus-bg: white !default;
+$question-bg: white !default;
+
+$input-bg: white !default;
+$input-bg-disabled: $gray-lighter !default;
+$input-color: $gray !default;
+$input-color-placeholder: $gray-light !default;
+$input-border: #cccccc !default;
+$input-border-focus: #66afe9 !default;
+
+$legend-color: $gray-dark !default;
+$legend-border-color: #e5e5e5 !default;
+
+// links
+$link-color: $brand-primary-color !default;
+$link-hover-color: darken($link-color, 15%) !default;
 
 // layout
-$max-content-width: 720px;
-$main-breakpoint: $max-content-width;
+$max-content-width: 720px !default;
+$main-breakpoint: $max-content-width !default;
+
+// buttons
+$btn-default-color: #333333 !default;
+$btn-default-bg: white !default;
+$btn-default-border: #cccccc !default;
+
+$btn-primary-color: white !default;
+$btn-primary-bg: $brand-primary-color !default;
+$btn-primary-border: darken($btn-primary-bg, 5%) !default;
+
+// borders and lines
+$groupline: #bbbbbb !default;
+$line: 3px solid $groupline !default;
+$hr-border: $gray-lighter !default;
+$border-radius-base: 4px !default;
+$border-radius-large: 6px !default;
+$border-radius-small: 3px !default;
+$input-border-radius: $border-radius-base !default;
+$note-border-radius: 4px !default;
+
+// text states
+$text-color: $gray-dark !default;
+$text-muted: $gray-light !default;
+
+$state-success-text: #3c763d !default;
+$state-success-bg: #dff0d8 !default;
+$state-success-border: darken(adjust-hue($state-success-bg, -10), 5%) !default;
+
+$state-info-text: #31708f !default;
+$state-info-bg: #d9edf7 !default;
+$state-info-border: darken(adjust-hue($state-info-bg, -10), 7%) !default;
+
+$state-warning-text: #8a6d3b !default;
+$state-warning-bg: #fcf8e3 !default;
+$state-warning-border: darken(adjust-hue($state-warning-bg, -10), 5%) !default;
+
+$state-danger-text: #a94442 !default;
+
+// #B94A48
+$state-danger-bg: #f2dede !default;
+$state-danger-border: darken(adjust-hue($state-danger-bg, -10), 5%) !default;
+
+//#EED3D7;

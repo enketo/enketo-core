@@ -1,13 +1,16 @@
 @import "core/fonts";
-@import "core/variables";
 @import "formhub/variables";
+@import "core/variables";
 @import "core/mixins";
 @import "formhub/mixins";
 
-@import "bootstrap";
+@import "core/reset";
+@import "core/utilities";
+@import "core/icons";
 @import "core/layout";
+@import "core/buttons";
 @import "core/main";
 @import "widgets";
-@import "core/bootstrap-slider";
+@import "core/slider";
 @import "core/responsive";
-@import 'formhub/theme';
+@import "formhub/theme";

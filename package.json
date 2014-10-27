@@ -2,10 +2,10 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "2.3.0",
+    "version": "3.0.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/MartijnR/enketo-core"
+        "url": "https://github.com/enketo/enketo-core"
     },
     "contributors": [
         "Martijn van de Rijdt"
@@ -14,16 +14,18 @@
         "test": "grunt test"
     },
     "devDependencies": {
-        "grunt-contrib-jasmine": "~0.5.2",
-        "grunt-template-jasmine-requirejs": "~0.1.7",
         "grunt": "0.4.x",
-        "grunt-contrib-connect": "0.8.x",
-        "grunt-contrib-jshint": "0.10.x",
-        "grunt-contrib-requirejs": "0.4.x",
-        "grunt-contrib-sass": "0.8.x",
-        "grunt-contrib-watch": "0.6.x",
-        "grunt-jsbeautifier": "0.2.x",
-        "grunt-modernizr": "0.6.x",
-        "load-grunt-tasks": "0.6.x"
+        "grunt-concurrent": "1.x.x",
+        "grunt-contrib-connect": "0.x.x",
+        "grunt-contrib-jasmine": "~0.5.2",
+        "grunt-contrib-jshint": "0.x.x",
+        "grunt-contrib-requirejs": "0.x.x",
+        "grunt-contrib-sass": "0.x.x",
+        "grunt-contrib-watch": "0.x.x",
+        "grunt-jsbeautifier": "0.x.x",
+        "grunt-modernizr": "0.x.x",
+        "grunt-template-jasmine-requirejs": "~0.1.7",
+        "load-grunt-tasks": "1.x.x",
+        "time-grunt": "1.x.x"
     }
 }

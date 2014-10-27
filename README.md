@@ -17,8 +17,7 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 4. install sass with `gem install sass` or `gem update sass` if already installed
 4. build and test with `grunt`
 5. start built-in server with `grunt server` 
-6. browse to [http://localhost:8080/forms/dev.html](http://localhost:8080/forms/dev.html) (static form) or 
-7. browse to [http://localhost:8080/forms/index.html](http://localhost:8080/forms/index.html) (dynamic AJAX form loader)
+8. browse to [http://localhost:8080/forms/index.html](http://localhost:8080/forms/index.html)
 
 
 ###Recommended usage as a library
@@ -77,7 +76,7 @@ requirejs(['js/Form'], function (Form){
 
 ###How to create or extend widgets
 
-The form [dev.html](forms/dev.html) is a useful form to test widgets. For new widgets, I recommend usin this [plugin template](https://gist.github.com/MartijnR/6943281). The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
+To create new widgets, I recommend using this [plugin template](https://gist.github.com/MartijnR/6943281). The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
 
 Each widget needs to fulfill following requirements:
 

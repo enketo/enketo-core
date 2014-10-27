@@ -10,13 +10,11 @@
  */
 .bootstrap-timepicker {
     position: relative;
-
     &.pull-right {
         .bootstrap-timepicker-widget {
             &.dropdown-menu {
                 left: auto;
                 right: 0;
-
                 &:before {
                     left: auto;
                     right: 12px;
@@ -28,16 +26,16 @@
             }
         }
     }
-
     .add-on {
         cursor: pointer;
         i {
-           display: inline-block;
-           width: 16px;
-           height: 16px;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
         }
     }
 }
+
 .bootstrap-timepicker-widget {
     &.dropdown-menu {
         padding: 4px;
@@ -63,23 +61,23 @@
     }
     &.timepicker-orient-left {
         &:before {
-           left: 6px;
+            left: 6px;
         }
         &:after {
-           left: 7px;
+            left: 7px;
         }
     }
     &.timepicker-orient-right {
         &:before {
-           right: 6px;
+            right: 6px;
         }
         &:after {
-           right: 7px;
+            right: 7px;
         }
     }
     &.timepicker-orient-top {
         &:before {
-           top: -7px;
+            top: -7px;
         }
         &:after {
             top: -6px;
@@ -100,21 +98,17 @@
     a.btn, input {
         border-radius: 4px;
     }
-
     table {
         width: 100%;
         margin: 0;
-
         td {
             text-align: center;
             height: 30px;
             margin: 0;
             padding: 2px;
-
             &:not(.separator) {
                 min-width: 30px;
             }
-
             span {
                 width: 100%;
             }
@@ -126,7 +120,6 @@
                 padding: 8px 0;
                 outline: 0;
                 color: #333;
-
                 &:hover {
                     text-decoration: none;
                     background-color: #eee;
@@ -135,7 +128,6 @@
                     border-radius: 4px;
                     border-color: #ddd;
                 }
-
                 i {
                     margin-top: 2px;
                     font-size: 18px;
@@ -165,7 +157,6 @@
 @media (max-width: 767px) {
     .bootstrap-timepicker {
         //width: 100%;
-
         .dropdown-menu {
             width: 100%;
         }
@@ -174,12 +165,30 @@
 
 /** added by Martijn **/
 
-.bootstrap-timepicker{
+.bootstrap-timepicker {
     input[type="text"] {
         display: inline-block;
-        width: $input-min-width;} }
+        width: $input-min-width;
+    }
+}
+
 .bootstrap-timepicker-widget {
     &.dropdown-menu {
-        input{
+        input {
             width: 50px;
-            margin: 0 auto; } } }
+            margin: 0 auto;
+        }
+    }
+}
+
+.glyphicon {
+    @extend .icon;
+}
+
+.glyphicon-chevron-up {
+    @extend .icon-chevron-up;
+}
+
+.glyphicon-chevron-down {
+    @extend .icon-chevron-down;
+}

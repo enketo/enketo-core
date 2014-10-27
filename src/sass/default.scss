@@ -2,11 +2,13 @@
 @import "core/variables";
 @import "core/mixins";
 
-@import "bootstrap";
-@import "core/mixins";
+@import "core/reset";
+@import "core/utilities";
+@import "core/icons";
 @import "core/layout";
+@import "core/buttons";
 @import "core/main";
 @import "widgets";
-@import "core/bootstrap-slider";
+@import "core/slider";
 @import "core/responsive";
-@import 'default/theme';
+@import "default/theme";

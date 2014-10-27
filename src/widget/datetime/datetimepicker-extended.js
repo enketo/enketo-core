@@ -144,7 +144,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
                     '<div class="bootstrap-timepicker">' +
                     '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' +
                     timeVal + '" placeholder="hh:mm"/>' +
-                    '<button class="btn-reset"><i class="glyphicon glyphicon-refresh"> </i></button>' +
+                    '<button class="btn-icon-only btn-reset"><i class="icon icon-refresh"> </i></button>' +
                     '</div>' ),
                 $fakeTimeI = $fakeTime.find( 'input' );
 

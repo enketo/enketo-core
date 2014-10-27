@@ -3,12 +3,9 @@
 	<head>
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600&subset=latin,cyrillic-ext,cyrillic,greek-ext,greek,vietnamese,latin-ext' rel='stylesheet' type='text/css'>
 		<link type="text/css" href="../build/css/formhub.css" media="all" rel="stylesheet" />
+		<link type="text/css" href="../build/css/formhub-print.css" media="print" rel="stylesheet" />
+		<!--<link type="text/css" href="../build/css/default.css" media="all" rel="stylesheet" />-->
 
-		<script type="text/javascript" data-main="../app.js" src="../lib/bower-components/requirejs/require.js"></script>
-
-		<!--<script type="text/javascript"  src="../build/js/combined.min.js"></script>-->
-		
-		<script> var modelStr; </script>
 	</head>
 	<body>
 		<div class="main">
@@ -16,17 +13,21 @@
 				<section class="guidance">
 					<p>Add querystring to source of XForm, eg:</p>
 					<ul>
-						<li><a href="?xform=http://sample-forms.enketo.org/widgets.xml">?xform=http://sample-forms.enketo.org/widgets.xml</a></li>
+						<li><a href="?xform=http://ona.io/enketo/forms/9794/form.xml">?xform=http://ona.io/enketo/forms/9794/form.xml</a></li>
 					</ul>
 				</section>
 				<header class="form-header clearfix">
 					<span class="form-language-selector"><span>Choose Language</span></span>
 				</header>
 				<!-- this is where the form will go -->			
-				<button id="validate-form" class="btn btn-primary btn-large" ><i class="glyphicon glyphicon-ok"></i> Validate</button>
+				<button id="validate-form" class="btn btn-primary" style="width:200px; margin: 0 auto;">Validate</button>
 				<div class="enketo-power">Powered by <a href="http://enketo.org" title="enketo.org website"><img src="https://enketo.org/images/enketo_bare_100x37.png" alt="enketo logo" /></a>
 				</div>
 			</article>
-		</div>	
+		</div>
+
+		<script src="//localhost:35729/livereload.js"></script>
+		<script type="text/javascript" data-main="../app.js" src="../lib/bower-components/requirejs/require.js"></script>
+		<!--<script type="text/javascript"  src="../build/js/combined.min.js"></script>-->
 	</body>
 </html>

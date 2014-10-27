@@ -21,10 +21,10 @@
             border: 2px solid transparent;
         }
         ~ img:hover {
-            border-color: lighten($accent-color-1, 30%);
+            border-color: lighten($brand-primary-color, 30%);
         }
         &:checked ~ img, &:checked ~ img:hover {
-            border-color: $accent-color-1;
+            border-color: $brand-primary-color;
         }
     }
 }

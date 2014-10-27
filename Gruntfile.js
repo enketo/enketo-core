@@ -9,11 +9,22 @@
 module.exports = function( grunt ) {
     var js;
 
+    // show elapsed time at the end
+    require( 'time-grunt' )( grunt );
+    // load all grunt tasks
     require( 'load-grunt-tasks' )( grunt );
 
     // Project configuration.
     grunt.initConfig( {
         pkg: grunt.file.readJSON( 'package.json' ),
+        concurrent: {
+            develop: {
+                tasks: [ 'connect:server:keepalive', 'watch' ],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
+        },
         connect: {
             server: {
                 options: {
@@ -52,14 +63,16 @@ module.exports = function( grunt ) {
                 files: [ 'config.json', 'grid/sass/**/*.scss', 'src/sass/**/*.scss', 'src/widget/**/*.scss' ],
                 tasks: [ 'style' ],
                 options: {
-                    spawn: false
+                    spawn: true,
+                    livereload: true,
                 }
             },
             js: {
                 files: [ '*.js', 'src/**/*.js' ],
                 tasks: [ 'modernizr' ],
                 options: {
-                    spawn: false
+                    spawn: false,
+                    livereload: true
                 }
             }
         },
@@ -210,5 +223,6 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'test', [ 'modernizr', 'jsbeautifier:test', 'jshint', 'connect:test', 'compile', 'jasmine' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
+    grunt.registerTask( 'develop', [ 'concurrent:develop' ] );
     grunt.registerTask( 'default', [ 'modernizr', 'jshint', 'prepWidgetSass', 'sass', 'test' ] );
 };

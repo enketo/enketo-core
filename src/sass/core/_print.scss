@@ -119,7 +119,7 @@ label, legend, .trigger, .note {
     .or-repeat {
         background: none;
     }
-    input:not([type="radio"]):not([type="checkbox"]), select, textarea {
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], select, textarea {
         @include border-radius(0px);
         @include box-shadow-none;
         @include appearance-none;

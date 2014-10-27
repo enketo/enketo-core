@@ -263,17 +263,17 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             var map = '<div class="map-canvas-wrapper"><div class=map-canvas id="map' + this.mapId + '"></div></div>',
                 points = '<div class="points"><button type="button" class="addpoint">+</button></div>',
                 close = '<button type="button" class="close-chain-btn btn btn-default btn-xs">close polygon</button>',
-                mapBtn = '<a href="#" class="show-map-btn btn btn-default">Map</a>';
+                mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
 
             this.$widget = $(
                 '<div class="geopicker widget">' +
                 '<div class="search-bar hide-search no-map no-detect">' +
-                '<a href="#" class="hide-map-btn btn btn-default"><span class="glyphicon glyphicon-arrow-left"> </span></a>' +
+                '<button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' +
                 '<button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top">' +
-                '<span class="glyphicon glyphicon-screenshot"> </span></button>' +
+                '<span class="icon icon-crosshairs"> </span></button>' +
                 '<div class="input-group">' +
                 '<input class="geo ignore" name="search" type="text" placeholder="search for place or address" disabled="disabled"/>' +
-                '<span class="input-group-btn"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"> </i></button></span>' +
+                '<button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button>' +
                 '</div>' +
                 '</div>' +
                 '<div class="geo-inputs">' +
@@ -281,7 +281,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 '<label class="geo">longitude (x.y &deg;)<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
                 '<label class="geo">altitude (m)<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
                 '<label class="geo">accuracy (m)<input class="ignore" name="acc" type="number" step="0.1" /></label>' +
-                '<button type="button" class="btn-remove"><span class="glyphicon glyphicon-trash"> </span></button>' +
+                '<button type="button" class="btn-icon-only btn-remove"><span class="icon icon-trash"> </span></button>' +
                 '</div>' +
                 '</div>'
             );
@@ -640,7 +640,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
 
                 // change default leaflet layer control button
-                that.$widget.find( '.leaflet-control-layers-toggle' ).append( '<span class="glyphicon glyphicon-globe"></span>' );
+                that.$widget.find( '.leaflet-control-layers-toggle' ).append( '<span class="icon icon-globe"></span>' );
 
                 // Add ignore and option-label class to Leaflet-added input elements and their labels
                 // something weird seems to happen. It seems the layercontrol is added twice (second replacing first) 

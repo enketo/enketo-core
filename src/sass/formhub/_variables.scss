@@ -1,11 +1,14 @@
-// these override the default variables if they exist already
-$font-size-base: 15px;
-$accent-color-1: #CE4F07;
-$accent-color-2: lighten($accent-color-1, 50%);
-$repeat-bg: lighten($accent-color-1, 55%);
-$radiocheck-unchecked-color: #cccccc;
-$radiocheck-checked-color: lighten($accent-color-1, 10%);//rgb(227, 142, 40);
+// load this before the core/variables
 
-$note-bg: #ffffff;
-$note-border: 1px solid #e1e1e1;
-$note-border-radius: 0;
+$font-size-base: 15px !default;
+$brand-primary-color: #ce4f07 !default;
+$brand-secondary-color: lighten($brand-primary-color, 50%) !default;
+
+$repeat-bg: lighten($brand-primary-color, 55%) !default;
+
+$radiocheck-unchecked-color: #cccccc !default;
+$radiocheck-checked-color: lighten($brand-primary-color, 10%) !default;
+
+$note-bg: white !default;
+$note-border: 1px solid #e1e1e1 !default;
+$note-border-radius: 0 !default;

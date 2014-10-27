@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'bootstrap', 'jquery.touchswipe' ],
+define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.touchswipe' ],
     function( FormModel, widgets, $ ) {
         "use strict";
 
@@ -1639,8 +1639,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.formO = formO;
                     $form.find( '.or-repeat' ).prepend( '<span class="repeat-number"></span>' );
                     $form.find( '.or-repeat:not([data-repeat-fixed])' )
-                        .append( '<div class="repeat-buttons"><button type="button" class="btn btn-default repeat"><i class="glyphicon glyphicon-plus"> </i></button>' +
-                            '<button type="button" disabled class="btn btn-default remove"><i class="glyphicon glyphicon-minus"> </i></button></div>' );
+                        .append( '<div class="repeat-buttons"><button type="button" class="btn btn-default repeat"><i class="icon icon-plus"> </i></button>' +
+                            '<button type="button" disabled class="btn btn-default remove"><i class="icon icon-minus"> </i></button></div>' );
 
                     //delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
                     $form.on( 'click', 'button.repeat:enabled', function() {
