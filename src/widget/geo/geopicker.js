@@ -371,7 +371,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
             } );
 
-            console.log( 'updating value by joining', this.points, 'old value', oldValue, 'new value', newValue );
+            // console.log( 'updating value by joining', this.points, 'old value', oldValue, 'new value', newValue );
 
             if ( oldValue !== newValue ) {
                 $( this.element ).val( newValue ).trigger( 'change' );
@@ -424,7 +424,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
          * @return {Boolean}        Whether latLng is valid or not
          */
         Geopicker.prototype._isValidLatLng = function( latLng ) {
-            console.log( 'checking validity of latLng', latLng );
             var lat, lng;
 
             lat = ( typeof latLng[ 0 ] === 'number' ) ? latLng[ 0 ] : ( typeof latLng.lat === 'number' ) ? latLng.lat : null;
@@ -772,7 +771,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                         }
                     } ) );
                 } else {
-                    console.log( 'this latLng was not considered valid', latLng );
+                    console.debug( 'this latLng was not considered valid', latLng );
                 }
             } );
 

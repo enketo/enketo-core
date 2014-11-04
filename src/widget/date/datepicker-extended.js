@@ -69,8 +69,6 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstr
             this._setFocusHandler( $fakeDateI );
             this._setResetHandler( $fakeDateI );
 
-            console.log( 'setting picker with settings:', settings );
-
             $fakeDateI.datepicker( {
                 format: settings.format,
                 autoclose: true,
@@ -81,13 +79,11 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstr
             } ).on( 'changeDate', function( e ) {
                 // copy changes made by datepicker to original input field
                 var value = $( this ).val();
-                console.log( 'unchanged value', value );
                 if ( settings.startView === 'decade' && value.length === 4 ) {
                     value += '-01-01';
                 } else if ( settings.startView === 'year' && value.length < 8 ) {
                     value += '-01';
                 }
-                console.log( 'datepicker date changed to', value );
                 $( that.element ).val( value ).trigger( 'change' ).blur();
             } );
         };
