@@ -468,7 +468,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         Geopicker.prototype._enableDetection = function() {
             var that = this,
                 options = {
-                    enableHighAccuracy: true
+                    enableHighAccuracy: true,
+                    maximumAge: 0
                 };
             this.$detect.click( function( event ) {
                 event.preventDefault();
