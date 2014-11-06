@@ -290,12 +290,12 @@ legend {
             }
         }
     }
-    input:not([type="radio"]):not([type="checkbox"]), textarea, select {
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
         //@include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
     }
-    input:not([type="radio"]):not([type="checkbox"]), textarea {
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
         border: 1px solid #ddd8ce;
     }
     select {

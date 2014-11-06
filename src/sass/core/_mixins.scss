@@ -202,68 +202,7 @@
     flex-direction: $dir;
 }
 
-@mixin placeholder($color: $input-color-placeholder) {
-    &::-moz-placeholder {
-        color: $color;
-        // Firefox
-        opacity: 1;
-    }
-    // See https://github.com/twbs/bootstrap/pull/11526
-    &:-ms-input-placeholder {
-        color: $color;
-    }
-    // Internet Explorer 10+
-    &::-webkit-input-placeholder {
-        color: $color;
-    }
-    // Safari and Chrome
-}
-
-@mixin form-control-focus($color: $input-border-focus) {
-    $color-rgba: rgba(red($color), green($color), blue($color), 0.6);
-    &:focus {
-        border-color: $color;
-        outline: 0;
-        @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px $color-rgba);
-    }
-}
-
-@mixin form-control {
-    display: block;
-    //width: 100%;
-    height: $input-height;
-    // Make inputs at least the height of their button counterpart (base line-height + padding + border)
-    padding: $padding-base-vertical $padding-base-horizontal;
-    @include font-normal;
-    font-size: $font-size-base;
-    line-height: $line-height-base;
-    color: $input-color;
-    background-color: $input-bg;
-    background-image: none;
-    // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
-    border: 1px solid $input-border;
-    border-radius: $input-border-radius;
-    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
-    @include transition(border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s);
-    // Customize the `:focus` state to imitate native WebKit styles.
-    @include form-control-focus;
-    // Placeholder
-    @include placeholder;
-    // Disabled and read-only inputs
-    //
-    // HTML5 says that controls under a fieldset > legend:first-child won't be
-    // disabled if the fieldset is disabled. Due to implementation difficulty, we
-    // don't honor that edge case; we style them as disabled anyway.
-    &[disabled],
-    &[readonly],
-    fieldset[disabled] & {
-        cursor: not-allowed;
-        background-color: $input-bg-disabled;
-        opacity: 1;
-        // iOS fix for unreadable disabled content
-   
-    }
-}
+@mixin form-control {}
 
 // Creates two color stops, start and end, by specifying a color and position for each color stop.
 // Color stops are not available in IE9 and below.

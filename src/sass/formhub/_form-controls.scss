@@ -2,6 +2,19 @@ input[type=text], input[type=password], input[type=url], input[type=email], inpu
     @include form-control;
 }
 
+// fix readonly inputs inside widgets that are not actually 'readonly'
+input:not([readonly]) + .widget {
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], select, textarea {
+        &[readonly] {
+            background-color: $input-bg;
+            cursor: auto;
+            &:hover {
+                background-color: $input-bg;
+            }
+        }
+    }
+}
+
 //
 // Forms
 // --------------------------------------------------
