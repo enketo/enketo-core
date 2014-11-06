@@ -153,11 +153,11 @@
 
 @mixin flex($value, $total: null) {
     $flex: 100%;
-    @if not $total {
+    @if $total == null {
         $flex: $value;
     }
     @else if $total >= $value {
-        $flex: $value / $total * 100%;
+        $flex: percentage($value / $total);
     }
     -webkit-flex: $flex;
     -ms-flex: $flex;
@@ -166,11 +166,11 @@
 
 @mixin flex_IEhack($value, $total: null) {
     $flex: 100%;
-    @if not $total {
+    @if $total == null {
         $flex: $value;
     }
     @else if $total >= $value {
-        $flex: $value / $total * 100%;
+        $flex: percentage($value / $total);
     }
     -webkit-flex-grow: 1;
     flex-grow: 1;
