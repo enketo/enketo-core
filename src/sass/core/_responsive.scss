@@ -51,7 +51,10 @@
     }
     .form-footer {
         width: calc(100% + ( 2 * #{$form-padding} ));
-        margin: 45px -#{$form-padding} -#{$form-padding} -#{$form-padding}; 
+        margin: 45px;
+        margin-right: -#{$form-padding};
+        margin-bottom: -#{$form-padding};
+        margin-left: -#{$form-padding};
     }
 }
 
@@ -75,7 +78,6 @@
         article {
             padding: 70px $form-padding $form-padding $form-padding;
         }
-
     }
     .form-header {
         margin: 5px 0;
@@ -85,6 +87,9 @@
     }
     .form-footer {
         width: calc(100% + ( 2 * #{$form-padding} ));
-        margin: 45px -#{$form-padding} -#{$form-padding} -#{$form-padding};
+        margin-top: 45px;
+        margin-right: -#{$form-padding};
+        margin-bottom: -#{$form-padding};
+        margin-left: -#{$form-padding};
     }
 }
