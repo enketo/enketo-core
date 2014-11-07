@@ -865,12 +865,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
             FormView.prototype.editStatus = {
                 set: function( status ) {
-                    $form.attr( 'data-edited', Boolean( status ) );
-                    $form.trigger( 'edit', status );
+                    if ( status && status !== $form.data( 'edited' ) ) {
+                        $form.trigger( 'edited' );
+                    }
+                    $form.data( 'edited', status );
                 },
                 get: function() {
-                    console.log( 'form element', $form );
-                    return ( $form.attr( 'data-edited' ) === 'true' ) ? true : false;
+                    return !!$form.data( 'edited' );
                 }
             };
 
