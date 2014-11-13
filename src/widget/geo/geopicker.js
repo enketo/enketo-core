@@ -242,7 +242,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 map: map,
                 search: map,
                 appearances: appearances,
-                type: this.element.attributes[ 'data-type-xml' ].textContent,
+                type: this.element.attributes[ 'data-type-xml' ].value,
                 touch: this.options.touch,
                 wide: ( this.$question.width() / this.$question.closest( 'form.or' ).width() > 0.8 )
             };
