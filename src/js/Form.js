@@ -1440,7 +1440,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             } );
                             dataNode.setVal( newVal, null, props.xmlType );
                         } else {
-                            console.error( 'Preload "' + item + '"" not supported. May or may not be a big deal.' );
+                            console.log( 'Preload "' + item + '" not supported. May or may not be a big deal.' );
                         }
                     } );
                     // In addition the presence of certain meta data in the instance may automatically trigger a preload function
