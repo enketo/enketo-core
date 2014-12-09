@@ -93,7 +93,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 } );
             }
 
-            this.$widget.find( 'input:not([name="search"])' ).on( 'change change.bymap change.bysearch', function( event ) {
+            // handle point input changes
+            this.$widget.find( '[name="lat"], [name="long"], [name="alt"], [name="acc"]' ).on( 'change change.bymap change.bysearch', function( event ) {
                 var lat = that.$lat.val() ? Number( that.$lat.val() ) : "",
                     lng = that.$lng.val() ? Number( that.$lng.val() ) : "",
                     // we need to avoid a missing alt in case acc is not empty!
@@ -119,21 +120,63 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
             } );
 
-            this.$points.on( 'click', '.point', function() {
-                that._setCurrent( that.$points.find( '.point' ).index( $( this ) ) );
+            // handle KML input changes
+            this.$kmlInput.on( 'change', function( event ) {
+                var $addPointBtn = that.$points.find( '.addpoint' ),
+                    $progress = $( this ).prev( '.paste-progress' ).removeClass( 'hide' ),
+                    value = event.target.value,
+                    coords = that._convertKmlCoordinatesToLeafletCoordinates( value );
+
+                // reset textarea 
+                event.target.value = '';
+
+                setTimeout( function() {
+                    // mimic manual input point-by-point
+                    coords.forEach( function( latLng, index ) {
+                        that._updateInputs( latLng );
+                        if ( index < coords.length - 1 ) {
+                            $addPointBtn.click();
+                        }
+                    } );
+                    // remove progress bar;
+                    $progress.remove();
+                    // switch to points input mode
+                    that._switchInputType( 'points' );
+                }, 10 );
+            } );
+
+            // handle input switcher
+            this.$widget.find( '.toggle-input-type-btn' ).on( 'click', function( event ) {
+                var type = that.$inputGroup.hasClass( 'kml-input-mode' ) ? 'points' : 'kml';
+                that._switchInputType( type );
                 return false;
             } );
 
+            // handle original input changes
+            $( this.element ).on( 'change', function() {
+                that.$kmlInput.prop( 'disabled', !!this.value );
+            } );
+
+            // handle point switcher
+            this.$points.on( 'click', '.point', function() {
+                that._setCurrent( that.$points.find( '.point' ).index( $( this ) ) );
+                that._switchInputType( 'points' );
+                return false;
+            } );
+
+            // handle addpoint button click
             this.$points.find( '.addpoint' ).on( 'click', function() {
                 that._addPoint();
                 return false;
             } );
 
+            // handle polygon close button click
             this.$widget.find( '.close-chain-btn' ).on( 'click', function() {
                 that._closePolygon();
                 return false;
             } );
 
+            // handle point remove click
             this.$widget.find( '.btn-remove' ).on( 'click', function() {
                 if ( that.points.length < 2 ) {
                     that._updateInputs( [] );
@@ -142,6 +185,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
             } );
 
+            // handle fullscreen map button click
             this.$map.find( '.show-map-btn' ).on( 'click', function() {
                 that.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
                 that.$widget.addClass( 'full-screen' );
@@ -157,7 +201,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             // copy hide-input class from question to widget and add show/hide input controller
             this.$widget
                 .toggleClass( 'hide-input', this.$question.hasClass( 'or-appearance-hide-input' ) )
-                .find( '.toggle-input-btn' ).on( 'click', function() {
+                .find( '.toggle-input-visibility-btn' ).on( 'click', function() {
                     that.$widget.toggleClass( 'hide-input' );
                     $( this ).toggleClass( 'open', that.$widget.hasClass( 'hide-input' ) );
                     if ( that.map ) {
@@ -178,6 +222,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 return false;
             } );
 
+            // pass blur and focus events back to original input
             this.$widget.on( 'focus blur', 'input', function( event ) {
                 $( that.element ).trigger( event.type );
             } );
@@ -192,7 +237,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this._enableDetection();
             }
 
-            // creating "point buttons"
+            // create "point buttons"
             if ( loadedVal ) {
                 this.points.forEach( function( el, i ) {
                     that._addPointBtn( i + 1 );
@@ -201,7 +246,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this._addPoint();
             }
 
-            // setting map location on load
+            // set map location on load
             if ( !loadedVal ) {
                 // set worldview in case permissions take too long (e.g. in FF);
                 this._updateMap( [ 0, 0 ], 1 );
@@ -215,6 +260,14 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 //this._updateMap( L.latLng( this.points[ 0 ][ 0 ], this.points[ 0 ][ 1 ] ) );
                 this._updateMap();
                 this._setCurrent( this.currentIndex );
+            }
+        };
+
+        Geopicker.prototype._switchInputType = function( type ) {
+            if ( type === 'kml' ) {
+                this.$inputGroup.addClass( 'kml-input-mode' );
+            } else if ( type === 'points' ) {
+                this.$inputGroup.removeClass( 'kml-input-mode' );
             }
         };
 
@@ -262,6 +315,12 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         Geopicker.prototype._addDomElements = function() {
             var map = '<div class="map-canvas-wrapper"><div class=map-canvas id="map' + this.mapId + '"></div></div>',
                 points = '<div class="points"><button type="button" class="addpoint">+</button></div>',
+                kml = '<a href="#" class="toggle-input-type-btn"><span class="kml-input">KML</span><span class="points-input">points</span></a>' +
+                '<label class="geo kml">KML coordinates' +
+                '<progress class="paste-progress hide"></progress>' +
+                '<textarea class="ignore" name="kml" placeholder="paste KML coordinates here"></textarea>' +
+                '<span class="disabled-msg">remove all points to enable</span>' +
+                '</label>',
                 close = '<button type="button" class="close-chain-btn btn btn-default btn-xs">close polygon</button>',
                 mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
 
@@ -277,10 +336,10 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 '</div>' +
                 '</div>' +
                 '<div class="geo-inputs">' +
-                '<label class="geo">latitude (x.y &deg;)<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label>' +
-                '<label class="geo">longitude (x.y &deg;)<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
-                '<label class="geo">altitude (m)<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
-                '<label class="geo">accuracy (m)<input class="ignore" name="acc" type="number" step="0.1" /></label>' +
+                '<label class="geo lat">latitude (x.y &deg;)<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label>' +
+                '<label class="geo long">longitude (x.y &deg;)<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
+                '<label class="geo alt">altitude (m)<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
+                '<label class="geo acc">accuracy (m)<input class="ignore" name="acc" type="number" step="0.1" /></label>' +
                 '<button type="button" class="btn-icon-only btn-remove"><span class="icon icon-trash"> </span></button>' +
                 '</div>' +
                 '</div>'
@@ -293,13 +352,14 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             }
 
             this.$search = this.$widget.find( '[name="search"]' );
+            this.$inputGroup = this.$widget.find( '.geo-inputs' );
 
             // add the map canvas
             if ( this.props.map ) {
                 this.$widget.find( '.search-bar' ).removeClass( 'no-map' ).after( map );
                 this.$map = this.$widget.find( '.map-canvas' );
                 // add the hide/show inputs button
-                this.$map.parent().append( '<button type="button" class="toggle-input-btn"> </button>' );
+                this.$map.parent().append( '<button type="button" class="toggle-input-visibility-btn"> </button>' );
             } else {
                 this.$map = $();
             }
@@ -309,19 +369,28 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this.$map.append( mapBtn );
             }
 
+            // unhide search bar 
+            // TODO: can be done in CSS?
             if ( !this.props.touch ) {
                 this.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
             }
 
-            // if points bar is required
+            // if geoshape or geotrace
             if ( this.props.type !== 'geopoint' ) {
+                // add points bar
                 this.$points = $( points );
-                if ( this.props.type === 'geoshape' ) {
-                    this.$widget.find( '.geo-inputs' ).append( close );
-                }
                 this.$widget.prepend( this.$points );
+                // add polygon 'close' button
+                if ( this.props.type === 'geoshape' ) {
+                    this.$inputGroup.append( close );
+                }
+                // add KML paste textarea;
+                var $kml = $( kml );
+                this.$kmlInput = $kml.find( '[name="kml"]' );
+                this.$inputGroup.prepend( $kml );
             } else {
                 this.$points = $();
+                this.$kmlInput = $();
             }
 
             this.$lat = this.$widget.find( '[name="lat"]' );
@@ -384,7 +453,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         /**
          * Checks an Openrosa geopoint for validity. This function is used to provide more detailed
          * error feedback than provided by the form controller. This can be used to pinpoint the exact
-         * invalid geopoints in a list of geopoint (the form controller only validates the total list).
+         * invalid geopoints in a list of geopoints (the form controller only validates the total list).
          *
          * @param  {string}  geopoint [description]
          * @return {Boolean}          [description]
@@ -792,7 +861,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
          * Updates the polyline on the dynamic map from the current list of points
          */
         Geopicker.prototype._updatePolyline = function() {
-            var polylinePoints;
+            var polylinePoints,
+                that = this;
 
             if ( this.props.type === 'geopoint' ) {
                 return;
@@ -830,7 +900,10 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 this.polyline.setLatLngs( polylinePoints );
             }
 
-            this.map.fitBounds( this.polyline.getBounds() );
+            // possible bug in Leaflet, using timeout to work around
+            setTimeout( function() {
+                that.map.fitBounds( that.polyline.getBounds() );
+            }, 0 );
         };
 
 
@@ -863,6 +936,10 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             this._updateArea( polygonPoints );
         };
 
+        /**
+         * Updates the area in m2 shown inside a polygon.
+         * @type {[type]}
+         */
         Geopicker.prototype._updateArea = function( points ) {
             var area, readableArea;
 
@@ -905,6 +982,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             if ( changed ) {
                 this._updateMap();
             }
+
             return changed;
         };
 
@@ -972,6 +1050,41 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
             this.$acc.val( acc || '' ).trigger( ev );
         };
 
+        /** 
+         * Converts the contents of a single KML <coordinates> element (may inlude the coordinates tags as well) to an array
+         * of geopoint coordinates used in the ODK XForm format. Note that the KML format does not allow spaces within a tuple of coordinates
+         * only between. Separator between KML tuples can be newline, space or a combination.
+         * It only extracts the value of the first <coordinates> element or, if <coordinates> are not included from the whole string.
+         *
+         * @param  {string} kmlCoordinates [description]
+         * @return {Array.<Array<Number>>} Array of geopoint coordinates
+         */
+        Geopicker.prototype._convertKmlCoordinatesToLeafletCoordinates = function( kmlCoordinates ) {
+            var coordinates = [],
+                reg = /<\s?coordinates>(([^<]|\n)*)<\/\s?coordinates\s?>/,
+                tags = reg.test( kmlCoordinates );
+
+            kmlCoordinates = ( tags ) ? kmlCoordinates.match( reg )[ 1 ] : kmlCoordinates;
+            kmlCoordinates.trim().split( /\s+/ ).forEach( function( item ) {
+                var coordinate = [];
+
+                item.split( ',' ).forEach( function( c, index ) {
+                    var value = Number( c );
+                    if ( index === 0 ) {
+                        coordinate[ 1 ] = value;
+                    } else if ( index === 1 ) {
+                        coordinate[ 0 ] = value;
+                    } else if ( index === 2 ) {
+                        coordinate[ 2 ] = value;
+                    }
+                } );
+
+                coordinates.push( coordinate );
+            } );
+
+            return coordinates;
+        };
+
         /**
          * Disables the widget
          */
@@ -989,8 +1102,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         };
 
         /**
-         * Checks whether the array of points contains empty ones, excluding the last point.
-         * Marks points as errors if empty
+         * Checks whether the array of points contains empty ones.
          *
          * @allowedIndex {number=} The index in which an empty value is allowed
          * @return {[type]} [description]

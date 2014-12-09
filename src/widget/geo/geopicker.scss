@@ -76,11 +76,24 @@
         max-width: none;
     }
     .geo-inputs {
+        position: relative;
         min-width: 160px;
         width: $input-width;
         margin: 0 $separator-width 0 0;
         @media screen and (max-width: 700px) {
             width: 100%;
+        }
+        .paste-progress, .disabled-msg {
+            position: absolute;
+            display: block;
+            top: 50%;
+            width: calc(100% - 20px);
+            text-align: center;
+            margin: 0px 10px;
+        }
+        .disabled-msg {
+            display: none;
+            color: $state-danger-text;
         }
     }
     .map-canvas-wrapper {
@@ -123,7 +136,7 @@
             display: table-cell;
         }
     }
-    .btn:not(.close-chain-btn) {
+    .btn:not(.close-chain-btn):not(.toggle-input-type-btn) {
         height: 34px;
         //padding-bottom: 4px;
    
@@ -142,7 +155,7 @@
         padding: 0 5px;
         margin-left: 15px;
     }
-    .toggle-input-btn {
+    .toggle-input-visibility-btn {
         $input-button-border: 2px solid #aaaaaa;
         position: absolute;
         top: calc(50% - 15px);
@@ -213,13 +226,13 @@
         border: none;
         padding: 0;
         margin: 15px 0 0 0;
-        &:nth-of-type(1) {
+        &.lat, &.kml {
             padding-top: 5px;
         }
-        &:nth-of-type(2) {
+        &.long {
             margin-bottom: 20px;
         }
-        &:nth-of-type(3) {
+        &.alt {
             border-top: solid 1px $groupline;
             padding: 12px 0 0 0;
             margin: 0 0 0 0;
@@ -227,41 +240,82 @@
                 border-top: none;
             }
         }
-        &:nth-of-type(4) {
+        &.acc {
             padding: 0;
             margin: 5px 0 0 0;
         }
-        &:nth-of-type(3), &:nth-of-type(4) {
+        &.alt, &.acc {
             min-height: 70px;
             line-height: 50px;
             font-size: 0.75 * $font-size-base;
         }
     }
-    input {
-        &[name="lat"],&[name="long"] {
-            float: none;
-            @include border-box;
-            width: 100%;
-            &:invalid {
-                //copied from bootstrap
-                color: $state-danger-text;
-                border-color: $state-danger-text;
-                @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
-                // Redeclare so transitions work
-                &:focus {
-                    border-color: darken($state-danger-text, 10%);
-                    $shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px lighten($state-danger-text, 20%);
-                    @include box-shadow($shadow);
-                }
+    input[name="lat"],input[name="long"],textarea[name="kml"] {
+        float: none;
+        @include border-box;
+        width: 100%;
+        /*&:invalid {
+            //copied from bootstrap
+            color: $state-danger-text;
+            border-color: $state-danger-text;
+            @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
+            // Redeclare so transitions work
+            &:focus {
+                border-color: darken($state-danger-text, 10%);
+                $shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px lighten($state-danger-text, 20%);
+                @include box-shadow($shadow);
             }
+        }*/
+    }
+    input[name="alt"], input[name="acc"] {
+        @include border-box;
+        display: block;
+        float: right;
+        width: 40%;
+        @media screen and (max-width: 700px) {
+            width: 50%;
         }
-        &[name="alt"], &[name="acc"] {
-            @include border-box;
+    }
+    textarea[name="kml"] {
+        min-height: 260px;
+        overflow: auto;
+        &:disabled + .disabled-msg {
             display: block;
-            float: right;
-            width: 40%;
-            @media screen and (max-width: 700px) {
-                width: 50%;
+        }
+    }
+    .geo.kml {
+        display: none;
+        margin-bottom: 10px;
+    }
+    .toggle-input-type-btn {
+        border: none;
+        background: none;
+        color: #ccc;
+        position: absolute;
+        top: -10px;
+        right: 0;
+        @include font-normal;
+        font-size: 12px;
+        .kml-input {
+            display: block;
+        }
+        .points-input {
+            display: none;
+        }
+    }
+    .kml-input-mode {
+        .geo {
+            display: none;
+        }
+        .geo.kml {
+            display: block;
+        }
+        .toggle-input-type-btn {
+            .kml-input {
+                display: none;
+            }
+            .points-input {
+                display: block;
             }
         }
     }
@@ -310,7 +364,7 @@
             //width: 160px;
             margin-left: 25px;
             margin-bottom: 15px;
-            .geo {
+            .geo, .toggle-input-type-btn {
                 display: none;
             }
             .close-chain-btn {
@@ -385,6 +439,9 @@
             }
         }
         .geo-inputs .geo {
+            display: none;
+        }
+        .toggle-input-type-btn {
             display: none;
         }
         .close-chain-btn {
