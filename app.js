@@ -71,10 +71,7 @@ requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form', 'file-manager' ],
             } else {
                 alert( 'Form is valid! (see XML record and media files in the console)' );
                 console.log( 'record:', form.getDataStr() );
-                fileManager.getFiles()
-                    .then( function( files ) {
-                        console.log( 'media files:', files );
-                    } );
+                console.log( 'media files:', fileManager.getCurrentFiles() );
             }
         } );
 
