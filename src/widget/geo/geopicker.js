@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
-    function( $, Widget, configStr, L ) {
+define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
+    function( $, Widget, configStr, L, Q ) {
         "use strict";
 
         var pluginName = 'geopicker',
@@ -29,6 +29,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 "attribution": "Tiles courtesy of <a href=\"http://hot.openstreetmap.se/\" target=\"_blank\">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>"
             } ],
             searchSource = "https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}",
+            googleApiKey = config.googleApiKey || config.google_api_key,
             iconSingle = L.divIcon( {
                 iconSize: 24,
                 className: 'enketo-geopoint-marker'
@@ -572,8 +573,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         Geopicker.prototype._enableSearch = function() {
             var that = this;
 
-            if ( config[ 'google_api_key' ] ) {
-                searchSource = searchSource.replace( '{api_key}', config[ 'google_api_key' ] );
+            if ( googleApiKey ) {
+                searchSource = searchSource.replace( '{api_key}', googleApiKey );
             } else {
                 searchSource = searchSource.replace( '&key={api_key}', '' );
             }
@@ -624,18 +625,22 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         };
 
         /**
-         * Calls the appropriate map update function.
+         * Updates the map to either show the provided coordinates (in the center), with the provided zoom level
+         * or update any markers, polylines, or polygons.
          *
          * @param  @param  {Array.<number>|{lat: number, lng: number}} latLng  latitude and longitude coordinates
          * @param  {number=} zoom zoom level
          * @return {Function} Returns call to function
          */
         Geopicker.prototype._updateMap = function( latLng, zoom ) {
+            var that = this;
 
+            // check if the widget is supposed to have a map
             if ( !this.props.map ) {
                 return;
             }
 
+            // determine zoom level
             if ( !zoom ) {
                 if ( this.map ) {
                     // note: there are conditions where getZoom returns undefined!
@@ -645,81 +650,85 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
             }
 
-            // serves to remember last requested map coordinates to initialize map in mobile view
+            // update last requested map coordinates to be used to initialize map in mobile fullscreen view
             if ( latLng ) {
                 this.lastLatLng = latLng;
                 this.lastZoom = zoom;
             }
-            // console.debug( 'stored lastLatLng', this.lastLatLng, this.lastZoom );
 
+            // update the map if it is visible
             if ( !this.props.touch || this._inFullScreenMode() ) {
-                this._updateDynamicMap( latLng, zoom );
+                if ( !this.map ) {
+                    this._addDynamicMap()
+                        .then( function() {
+                            that._updateDynamicMapView( latLng, zoom );
+                        } );
+                } else {
+                    that._updateDynamicMapView( latLng, zoom );
+                }
             }
         };
 
-        /**
-         * Updates the dynamic map to either show the provided coordinates (in the center), with the provided zoom level
-         * or updates any markers, polylines, polygons
-         *
-         * @param  {Array.<number>|{lat: number, lng: number}} latLng  latitude and longitude coordinates
-         * @param  {number} zoom zoom
-         */
-        Geopicker.prototype._updateDynamicMap = function( latLng, zoom ) {
-            var z, layers, options, baseMaps,
-                that = this;
+        Geopicker.prototype._addDynamicMap = function() {
+            var that = this;
 
-            // console.debug( 'dynamic map to be updated with latLng', latLng );
-            if ( !this.map ) {
-                layers = this._getLayers();
-                options = {
-                    layers: this._getDefaultLayer( layers )
-                };
+            return this._getLayers()
+                .then( function( layers ) {
+                    var deferred = Q.defer(),
+                        options = {
+                            layers: that._getDefaultLayer( layers )
+                        };
 
-                this.map = L.map( 'map' + this.mapId, options )
-                    .on( 'click', function( e ) {
-                        var latLng = e.latlng,
-                            indexToPlacePoint = ( that.$lat.val() && that.$lng.val() ) ? that.points.length : that.currentIndex;
+                    that.map = L.map( 'map' + that.mapId, options )
+                        .on( 'click', function( e ) {
+                            var latLng = e.latlng,
+                                indexToPlacePoint = ( that.$lat.val() && that.$lng.val() ) ? that.points.length : that.currentIndex;
 
-                        // reduce precision to 6 decimals
-                        latLng.lat = Math.round( latLng.lat * 1000000 ) / 1000000;
-                        latLng.lng = Math.round( latLng.lng * 1000000 ) / 1000000;
+                            // reduce precision to 6 decimals
+                            latLng.lat = Math.round( latLng.lat * 1000000 ) / 1000000;
+                            latLng.lng = Math.round( latLng.lng * 1000000 ) / 1000000;
 
-                        // Skip intersection check if points contain empties. It will be done later, before the polygon is closed.
-                        if ( that.props.type !== 'geopoint' && !that.containsEmptyPoints( that.points, indexToPlacePoint ) && that.updatedPolylineWouldIntersect( latLng, indexToPlacePoint ) ) {
-                            that._showIntersectError();
-                        } else {
-                            if ( !that.$lat.val() || !that.$lng.val() || that.props.type === 'geopoint' ) {
-                                that._updateInputs( latLng, 'change.bymap' );
-                            } else if ( that.$lat.val() && that.$lng.val() ) {
-                                that._addPoint();
-                                that._updateInputs( latLng, 'change.bymap' );
+                            // Skip intersection check if points contain empties. It will be done later, before the polygon is closed.
+                            if ( that.props.type !== 'geopoint' && !that.containsEmptyPoints( that.points, indexToPlacePoint ) && that.updatedPolylineWouldIntersect( latLng, indexToPlacePoint ) ) {
+                                that._showIntersectError();
                             } else {
-                                // do nothing if the field has a current marker
-                                // instead the user will have to drag to change it by map
+                                if ( !that.$lat.val() || !that.$lng.val() || that.props.type === 'geopoint' ) {
+                                    that._updateInputs( latLng, 'change.bymap' );
+                                } else if ( that.$lat.val() && that.$lng.val() ) {
+                                    that._addPoint();
+                                    that._updateInputs( latLng, 'change.bymap' );
+                                } else {
+                                    // do nothing if the field has a current marker
+                                    // instead the user will have to drag to change it by map
+                                }
                             }
-                        }
+                        } );
+
+                    // watch out, default "Leaflet" link clicks away from page, loosing all data
+                    that.map.attributionControl.setPrefix( '' );
+
+                    // add layer control
+                    if ( layers.length > 1 ) {
+                        L.control.layers( that._getBaseLayers( layers ), null ).addTo( that.map );
+                    }
+
+                    // change default leaflet layer control button
+                    that.$widget.find( '.leaflet-control-layers-toggle' ).append( '<span class="icon icon-globe"></span>' );
+
+                    // Add ignore and option-label class to Leaflet-added input elements and their labels
+                    // something weird seems to happen. It seems the layercontrol is added twice (second replacing first) 
+                    // which means the classes are not present in the final control. 
+                    // Using the baselayerchange event handler is a trick that seems to work.
+                    that.map.on( 'baselayerchange', function() {
+                        that.$widget.find( '.leaflet-control-container input' ).addClass( 'ignore no-unselect' ).next( 'span' ).addClass( 'option-label' );
                     } );
 
-                // watch out, default "Leaflet" link clicks away from page, loosing all data
-                this.map.attributionControl.setPrefix( '' );
-
-                // add layer control
-                if ( layers.length > 1 ) {
-                    L.control.layers( this._getBaseLayers( layers ), null ).addTo( this.map );
-                }
-
-                // change default leaflet layer control button
-                that.$widget.find( '.leaflet-control-layers-toggle' ).append( '<span class="icon icon-globe"></span>' );
-
-                // Add ignore and option-label class to Leaflet-added input elements and their labels
-                // something weird seems to happen. It seems the layercontrol is added twice (second replacing first) 
-                // which means the classes are not present in the final control. 
-                // Using the baselayerchange event handler is a trick that seems to work.
-                this.map.on( 'baselayerchange', function() {
-                    that.$widget.find( '.leaflet-control-container input' ).addClass( 'ignore no-unselect' ).next( 'span' ).addClass( 'option-label' );
+                    deferred.resolve();
+                    return deferred.promise;
                 } );
+        };
 
-            }
+        Geopicker.prototype._updateDynamicMapView = function( latLng, zoom ) {
 
             if ( !latLng ) {
                 this._updatePolyline();
@@ -737,30 +746,67 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
         };
 
         Geopicker.prototype._showIntersectError = function() {
-            //this.$map.find( '.intersect-error' ).remove().end().append( '<div class="intersect-error">Cannot intersect border<div>' );
             alert( 'Borders cannot intersect!' );
         };
 
+        /**
+         * Obtains the tile layers according to the definition in the app configuration.
+         *
+         * @return {Promise} [description]
+         */
         Geopicker.prototype._getLayers = function() {
-            var url,
-                iterator = 1,
-                layers = [];
+            var that = this,
+                tasks = [];
 
-            maps.forEach( function( map ) {
-                // randomly pick a tile source from the array and store it in the maps config
-                // so it will be re-used when the form is reset or multiple geo widgets are created
-                map.tileIndex = ( map.tileIndex !== 'undefined' ) ? Math.round( Math.random() * 100 ) % map.tiles.length : map.tileIndex;
-                url = map.tiles[ map.tileIndex ];
-                layers.push( L.tileLayer( url, {
-                    id: map.id || name,
-                    maxZoom: map.maxzoom || 18,
-                    minZoom: map.minzoom || 0,
-                    name: map.name || 'map-' + iterator++,
-                    attribution: map.attribution || ''
-                } ) );
+            maps.forEach( function( map, index ) {
+                if ( map.tiles ) {
+                    tasks.push( that._getLeafletTileLayer( map, index ) );
+                } else {
+                    console.error( 'Configuration error for map tiles. Not a valid tile layer: ', map );
+                }
             } );
 
-            return layers;
+            return Q.all( tasks );
+        };
+
+        /**
+         * Asynchronously (fake) obtains a Leaflet/Mapbox tilelayer
+         *
+         * @param  {{}}     map   map layer as defined in the apps configuration
+         * @param  {number} index the index of the layer
+         * @return {Promise}
+         */
+        Geopicker.prototype._getLeafletTileLayer = function( map, index ) {
+            var url,
+                options = this._getTileOptions( map, index ),
+                deferred = Q.defer();
+
+            // randomly pick a tile source from the array and store it in the maps config
+            // so it will be re-used when the form is reset or multiple geo widgets are created
+            map.tileIndex = ( map.tileIndex === undefined ) ? Math.round( Math.random() * 100 ) % map.tiles.length : map.tileIndex;
+            url = map.tiles[ map.tileIndex ];
+            deferred.resolve( L.tileLayer( url, options ) );
+
+            return deferred.promise;
+        };
+
+        /**
+         * Creates the tile layer options object from the maps configuration and defaults.
+         *
+         * @param  {{}}     map   map layer as defined in the apps configuration
+         * @param  {[type]} index the index of the layer
+         * @return {{id: string, maxZoom: number, minZoom: number, name: string, attribution: string}}   Tilelayer options object
+         */
+        Geopicker.prototype._getTileOptions = function( map, index ) {
+            var name = map.name || 'map-' + ( index + 1 );
+
+            return {
+                id: map.id || name,
+                maxZoom: map.maxzoom || 18,
+                minZoom: map.minzoom || 0,
+                name: name,
+                attribution: map.attribution || ''
+            };
         };
 
         Geopicker.prototype._getDefaultLayer = function( layers ) {
@@ -1296,5 +1342,4 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet' ],
                 }
             } );
         };
-
     } );
