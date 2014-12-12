@@ -18,7 +18,8 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
     function( $, Widget, configStr, L, Q ) {
         "use strict";
 
-        var pluginName = 'geopicker',
+        var googleMapsScriptRequested, googleMapsScriptLoaded,
+            pluginName = 'geopicker',
             config = JSON.parse( configStr ),
             defaultZoom = 15,
             // MapBox TileJSON format
@@ -759,6 +760,9 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
                 tasks = [];
 
             maps.forEach( function( map, index ) {
+                if ( typeof map.tiles === 'string' && /^GOOGLE_(SATELLITE|ROADMAP|HYBRID|TERRAIN)/.test( map.tiles ) ) {
+                    tasks.push( that._getGoogleTileLayer( map, index ) );
+                } else
                 if ( map.tiles ) {
                     tasks.push( that._getLeafletTileLayer( map, index ) );
                 } else {
@@ -791,6 +795,26 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
         };
 
         /**
+         * Asynchronously obtains a Google Maps tilelayer
+         *
+         * @param  {{}}     map   map layer as defined in the apps configuration
+         * @param  {number} index the index of the layer
+         * @return {Promise}
+         */
+        Geopicker.prototype._getGoogleTileLayer = function( map, index ) {
+            var deferred = Q.defer(),
+                options = this._getTileOptions( map, index ),
+                type = map.tiles.substring( 7 );
+
+            this._loadGoogleMapsScript()
+                .then( function() {
+                    deferred.resolve( new L.Google( type, options ) );
+                } );
+
+            return deferred.promise;
+        };
+
+        /**
          * Creates the tile layer options object from the maps configuration and defaults.
          *
          * @param  {{}}     map   map layer as defined in the apps configuration
@@ -807,6 +831,40 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
                 name: name,
                 attribution: map.attribution || ''
             };
+        };
+
+        /**
+         * Loader for the Google Maps script that can be called multiple times, but will ensure the
+         * script is only requested once.
+         *
+         * @return {Promise} [description]
+         */
+        Geopicker.prototype._loadGoogleMapsScript = function() {
+            var apiKeyQueryParam, loadUrl,
+                that = this;
+
+            // request Google maps script only once, using a variable outside of the scope of the current widget
+            // in case multiple widgets exist in the same form
+            if ( !googleMapsScriptRequested ) {
+                // create deferred object, also outside of the scope of the current widget
+                googleMapsScriptLoaded = Q.defer();
+                // create a global callback to be called by the Google Maps script once this has loaded
+                window.gmapsLoaded = function() {
+                    // clean up the global function
+                    delete window.gmapsLoaded;
+                    // resolve the deferred object
+                    googleMapsScriptLoaded.resolve();
+                };
+                // make the request for the Google Maps script asynchronously
+                apiKeyQueryParam = ( googleApiKey ) ? "&key=" + googleApiKey : "";
+                loadUrl = "http://maps.google.com/maps/api/js?v=3.exp" + apiKeyQueryParam + "&sensor=false&libraries=places&callback=gmapsLoaded";
+                require( [ loadUrl ] );
+                // ensure if won't be requested again
+                googleMapsScriptRequested = true;
+            }
+
+            // return the promise of the deferred object outside of the scope of the current widget
+            return googleMapsScriptLoaded.promise;
         };
 
         Geopicker.prototype._getDefaultLayer = function( layers ) {
@@ -1342,4 +1400,213 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
                 }
             } );
         };
+
+
+        /*
+         * Google layer using Google Maps API
+         * from https://github.com/shramov/leaflet-plugins/blob/master/layer/tile/Google.js
+         */
+
+        /* global google: true */
+
+        L.Google = L.Class.extend( {
+            includes: L.Mixin.Events,
+
+            options: {
+                minZoom: 0,
+                maxZoom: 18,
+                tileSize: 256,
+                subdomains: 'abc',
+                errorTileUrl: '',
+                attribution: '',
+                opacity: 1,
+                continuousWorld: false,
+                noWrap: false,
+                mapOptions: {
+                    backgroundColor: '#dddddd'
+                }
+            },
+
+            // Possible types: SATELLITE, ROADMAP, HYBRID, TERRAIN
+            initialize: function( type, options ) {
+                L.Util.setOptions( this, options );
+
+                this._ready = google.maps.Map !== undefined;
+                if ( !this._ready ) L.Google.asyncWait.push( this );
+
+                this._type = type || 'SATELLITE';
+            },
+
+            onAdd: function( map, insertAtTheBottom ) {
+                this._map = map;
+                this._insertAtTheBottom = insertAtTheBottom;
+
+                // create a container div for tiles
+                this._initContainer();
+                this._initMapObject();
+
+                // set up events
+                map.on( 'viewreset', this._resetCallback, this );
+
+                this._limitedUpdate = L.Util.limitExecByInterval( this._update, 150, this );
+                map.on( 'move', this._update, this );
+
+                map.on( 'zoomanim', this._handleZoomAnim, this );
+
+                //20px instead of 1em to avoid a slight overlap with google's attribution
+                map._controlCorners.bottomright.style.marginBottom = '20px';
+
+                this._reset();
+                this._update();
+            },
+
+            onRemove: function( map ) {
+                map._container.removeChild( this._container );
+
+                map.off( 'viewreset', this._resetCallback, this );
+
+                map.off( 'move', this._update, this );
+
+                map.off( 'zoomanim', this._handleZoomAnim, this );
+
+                map._controlCorners.bottomright.style.marginBottom = '0em';
+            },
+
+            getAttribution: function() {
+                return this.options.attribution;
+            },
+
+            setOpacity: function( opacity ) {
+                this.options.opacity = opacity;
+                if ( opacity < 1 ) {
+                    L.DomUtil.setOpacity( this._container, opacity );
+                }
+            },
+
+            setElementSize: function( e, size ) {
+                e.style.width = size.x + 'px';
+                e.style.height = size.y + 'px';
+            },
+
+            _initContainer: function() {
+                var tilePane = this._map._container,
+                    first = tilePane.firstChild;
+
+                if ( !this._container ) {
+                    this._container = L.DomUtil.create( 'div', 'leaflet-google-layer leaflet-top leaflet-left' );
+                    this._container.id = '_GMapContainer_' + L.Util.stamp( this );
+                    this._container.style.zIndex = 'auto';
+                }
+
+                tilePane.insertBefore( this._container, first );
+
+                this.setOpacity( this.options.opacity );
+                this.setElementSize( this._container, this._map.getSize() );
+            },
+
+            _initMapObject: function() {
+                if ( !this._ready ) return;
+                this._google_center = new google.maps.LatLng( 0, 0 );
+                var map = new google.maps.Map( this._container, {
+                    center: this._google_center,
+                    zoom: 0,
+                    tilt: 0,
+                    mapTypeId: google.maps.MapTypeId[ this._type ],
+                    disableDefaultUI: true,
+                    keyboardShortcuts: false,
+                    draggable: false,
+                    disableDoubleClickZoom: true,
+                    scrollwheel: false,
+                    streetViewControl: false,
+                    styles: this.options.mapOptions.styles,
+                    backgroundColor: this.options.mapOptions.backgroundColor
+                } );
+
+                var _this = this;
+                this._reposition = google.maps.event.addListenerOnce( map, 'center_changed',
+                    function() {
+                        _this.onReposition();
+                    } );
+                this._google = map;
+
+                google.maps.event.addListenerOnce( map, 'idle',
+                    function() {
+                        _this._checkZoomLevels();
+                    } );
+                //Reporting that map-object was initialized.
+                this.fire( 'MapObjectInitialized', {
+                    mapObject: map
+                } );
+            },
+
+            _checkZoomLevels: function() {
+                //setting the zoom level on the Google map may result in a different zoom level than the one requested
+                //(it won't go beyond the level for which they have data).
+                // verify and make sure the zoom levels on both Leaflet and Google maps are consistent
+                if ( this._google.getZoom() !== this._map.getZoom() ) {
+                    //zoom levels are out of sync. Set the leaflet zoom level to match the google one
+                    this._map.setZoom( this._google.getZoom() );
+                }
+            },
+
+            _resetCallback: function( e ) {
+                this._reset( e.hard );
+            },
+
+            _reset: function( clearOldContainer ) {
+                this._initContainer();
+            },
+
+            _update: function( e ) {
+                if ( !this._google ) return;
+                this._resize();
+
+                var center = this._map.getCenter();
+                var _center = new google.maps.LatLng( center.lat, center.lng );
+
+                this._google.setCenter( _center );
+                this._google.setZoom( Math.round( this._map.getZoom() ) );
+
+                this._checkZoomLevels();
+            },
+
+            _resize: function() {
+                var size = this._map.getSize();
+                if ( this._container.style.width === size.x &&
+                    this._container.style.height === size.y )
+                    return;
+                this.setElementSize( this._container, size );
+                this.onReposition();
+            },
+
+
+            _handleZoomAnim: function( e ) {
+                var center = e.center;
+                var _center = new google.maps.LatLng( center.lat, center.lng );
+
+                this._google.setCenter( _center );
+                this._google.setZoom( Math.round( e.zoom ) );
+            },
+
+
+            onReposition: function() {
+                if ( !this._google ) return;
+                google.maps.event.trigger( this._google, 'resize' );
+            }
+        } );
+
+        L.Google.asyncWait = [];
+        L.Google.asyncInitialize = function() {
+            var i;
+            for ( i = 0; i < L.Google.asyncWait.length; i++ ) {
+                var o = L.Google.asyncWait[ i ];
+                o._ready = true;
+                if ( o._container ) {
+                    o._initMapObject();
+                    o._update();
+                }
+            }
+            L.Google.asyncWait = [];
+        };
+
     } );
