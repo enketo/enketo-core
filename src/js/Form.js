@@ -922,22 +922,30 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     selector = [ filter + '[' + attr + ']' ];
                 } else {
                     updated.nodes.forEach( function( node ) {
-                        // The target node name is ALWAYS at the END of a path inside the expression.
-                        // #1: followed by space
-                        selector.push( filter + '[' + attr + '*="/' + node + ' "]' );
-                        // #2: followed by )
-                        selector.push( filter + '[' + attr + '*="/' + node + ')"]' );
-                        // #3: followed by , if used as first parameter of multiple parameters
-                        selector.push( filter + '[' + attr + '*="/' + node + ',"]' );
-                        // #4: at the end of an expression
-                        selector.push( filter + '[' + attr + '$="/' + node + '"]' );
-                        // #5: followed by ] (used in itemset filters)
-                        selector.push( filter + '[' + attr + '*="/' + node + ']"]' );
+                        selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, node ) );
                     } );
+                    // add all the paths that use the /* selector at end of path
+                    selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, '*' ) );
                 }
 
                 //TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
                 return $collection.find( selector.join() );
+            };
+
+            FormView.prototype.getQuerySelectorsForLogic = function( filter, attr, nodeName ) {
+                return [
+                    // The target node name is ALWAYS at the END of a path inside the expression.
+                    // #1: followed by space
+                    filter + '[' + attr + '*="/' + nodeName + ' "]',
+                    // #2: followed by )
+                    filter + '[' + attr + '*="/' + nodeName + ')"]',
+                    // #3: followed by , if used as first parameter of multiple parameters
+                    filter + '[' + attr + '*="/' + nodeName + ',"]',
+                    // #4: at the end of an expression
+                    filter + '[' + attr + '$="/' + nodeName + '"]',
+                    // #5: followed by ] (used in itemset filters)
+                    filter + '[' + attr + '*="/' + nodeName + ']"]'
+                ];
             };
 
             /**
