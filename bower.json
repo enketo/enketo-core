@@ -1,6 +1,6 @@
 {
     "name": "enketo-core",
-    "version": "3.2.1",
+    "version": "3.2.2",
     "homepage": "https://github.com/enketo/enketo-core",
     "authors": [
         "Martijn van de Rijdt <martijn@enketo.org>"

@@ -526,7 +526,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
             this.$points.find( '.point' ).removeClass( 'active' ).eq( index ).addClass( 'active' );
             this._updateInputs( this.points[ index ], '' );
             // make sure that the current marker is marked as active
-            if ( !this.props.touch || this._inFullScreenMode() ) {
+            if ( this.map && ( !this.props.touch || this._inFullScreenMode() ) ) {
                 this._updateMarkers();
             }
             // console.debug( 'set current index to ', this.currentIndex );
