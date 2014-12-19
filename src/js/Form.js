@@ -342,21 +342,25 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 }
 
                 //var profiler = new Profiler('preloads.init()');
-                this.preloads.init( this ); //before widgets.init (as instanceID used in offlineFilepicker widget)
+                // before widgets.init (as instanceID used in offlineFilepicker widget)
+                this.preloads.init( this );
                 //profiler.report();
 
                 this.grosslyViolateStandardComplianceByIgnoringCertainCalcs(); //before calcUpdate!
 
                 //profiler = new Profiler('calcupdate');
-                this.calcUpdate(); //before repeat.init as repeat count may use a calculated item
+                // before repeat.init as repeat count may use a calculated item
+                this.calcUpdate();
                 //profiler.report();
 
                 //profiler = new Profiler('setLangs()');
-                this.langs.init(); //test: before itemsetUpdate
+                // test: before itemsetUpdate
+                this.langs.init();
                 //profiler.report();
 
                 //profiler = new Profiler('repeat.init()');
-                this.repeat.init( this ); //after radio button data-name setting
+                // after radio button data-name setting
+                this.repeat.init( this );
                 //profiler.report();
 
                 //profiler = new Profiler('itemsets initialization');
@@ -368,7 +372,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //profiler.report();
 
                 //profiler = new Profiler('widgets initialization');
-                widgets.init(); //after setAllVals()
+                // after setAllVals()
+                widgets.init();
                 //profiler.report();
 
                 //profiler = new Profiler('bootstrapify');
@@ -376,7 +381,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //profiler.report();
 
                 //profiler = new Profiler('branch.init()');
-                this.branchUpdate(); //after widgets.init()
+                // after widgets.init()
+                this.branchUpdate();
                 //profiler.report();
 
                 this.pages.init(); // after branch.init();
@@ -385,7 +391,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 this.outputUpdate();
                 //profiler.report();
 
-                this.setEventHandlers(); //after widgets init to make sure widget handlers are called before
+                // after widgets init to make sure widget handlers are called before
+                // after loading existing instance to not trigger an 'edit' event
+                this.setEventHandlers();
 
                 this.editStatus.set( false );
                 //profiler.report('time taken across all functions to evaluate '+xpathEvalNum+' XPath expressions: '+xpathEvalTime);
@@ -556,13 +564,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.toggleButtons( newIndex );
                         }
 
-                        //                            this.$current.addClass( 'fade-out' )
-                        //                                .one( 'transitionend', function() {
-                        //                                    that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
-                        //                                    that.setToCurrent( pageEl );
-                        //                                    that.focusOnFirstQuestion( pageEl );
-                        //                                    that.toggleButtons( newIndex );
-                        //                                } );
+                        // this.$current.addClass( 'fade-out' )
+                        //     .one( 'transitionend', function() {
+                        //         that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
+                        //         that.setToCurrent( pageEl );
+                        //         that.focusOnFirstQuestion( pageEl );
+                        //         that.toggleButtons( newIndex );
+                        //     } );
                         // }
                     } else {
                         this.setToCurrent( pageEl );
@@ -865,6 +873,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
             FormView.prototype.editStatus = {
                 set: function( status ) {
+                    // only trigger edit event once
                     if ( status && status !== $form.data( 'edited' ) ) {
                         $form.trigger( 'edited' );
                     }
@@ -1907,18 +1916,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 } );
 
                 model.$.on( 'dataupdate', function( event, updated ) {
-                    // console.log( 'dataupdate', updated );
                     that.calcUpdate( updated ); //EACH CALCUPDATE THAT CHANGES A VALUE TRIGGERS ANOTHER CALCUPDATE => INEFFICIENT
                     that.branchUpdate( updated );
                     that.outputUpdate( updated );
                     that.itemsetUpdate( updated );
-                } );
-
-                // edit is fired when the form changes due to user input or repeats added/removed
-                // branch update doesn't require detection as it always happens as a result of an event that triggers change or changerepeat.
-                $form.on( 'change addrepeat removerepeat', function( event ) {
+                    // edit is fired when the model changes after the form has been initialized
                     that.editStatus.set( true );
                 } );
+
 
                 $form.on( 'addrepeat', function( event, index ) {
                     var $clone = $( event.target );
