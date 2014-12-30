@@ -1733,11 +1733,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         that.formO.setValid( $( this ) );
                     } );
 
-                    $clone.insertAfter( $node )
-                        .parent( '.or-group' ).numberRepeats();
-
-                    $clone.clearInputs( '' );
-
                     // Note: in http://formhub.org/formhub_u/forms/hh_polio_survey_cloned/form.xml a parent group of a repeat
                     // has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining 
                     // the proper index if .or-repeat was not included in the selector
@@ -1758,6 +1753,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         $clone.find( 'input[type="radio"][data-name="' + radioNames[ i ] + '"]' ).attr( 'name', timestamp );
                     }
 
+                    // remove the widgets before adding clone
+                    widgets.destroy( $clone );
+                    // clear the inputs before adding clone
+                    $clone.clearInputs( '' );
+                    // insert the clone after values and widgets have been reset
+                    $clone.insertAfter( $node )
+                        .parent( '.or-group' ).numberRepeats();
+
                     this.toggleButtons( $master.parent() );
 
                     // Create a new data point in <instance> by cloning the template node
@@ -1771,7 +1774,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $clone.trigger( 'addrepeat', index + 1 );
 
                     // Re-initiate widgets in clone after default values have been set
-                    widgets.destroy( $clone );
                     widgets.init( $clone );
 
                     //p.report();
