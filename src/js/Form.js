@@ -788,11 +788,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              *  Since not all data nodes with a value have a corresponding input element, it could be considered to turn this
              *  around and cycle through the HTML form elements and check for each form element whether data is available.
              */
-            FormView.prototype.setAllVals = function() {
+            FormView.prototype.setAllVals = function( $group, groupIndex ) {
                 var index, name, value,
-                    that = this;
+                    that = this,
+                    selector = ( $group && $group.attr( 'name' ) ) ? $group.attr( 'name' ) : null;
 
-                model.node( null, null, {
+                groupIndex = ( typeof groupIndex !== 'undefined' ) ? groupIndex : null;
+
+                model.node( selector, groupIndex, {
                     noEmpty: true
                 } ).get().each( function() {
                     try {
@@ -1929,7 +1932,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $form.on( 'addrepeat', function( event, index ) {
                     var $clone = $( event.target );
                     // Set defaults of added repeats in FormView, setAllVals does not trigger change event
-                    that.setAllVals( $clone );
+                    that.setAllVals( $clone, index );
                     // for a NEW repeat ALL calculations inside that repeat have to be initialized
                     that.calcUpdate( {
                         repeatPath: $clone.attr( 'name' ),
