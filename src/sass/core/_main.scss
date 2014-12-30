@@ -339,12 +339,15 @@ select {
 }
 
 .or-repeat {
+    .repeat-buttons {
+        margin-top: 30px;
+    }
     .repeat {
-        //margin: 0 -34px -5px 10px;
-   
+        margin-bottom: 0;
     }
     .remove {
         float: right;
+        margin-bottom: 0;
         margin-right: 0;
     }
 }
