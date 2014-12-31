@@ -1716,16 +1716,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  */
                 clone: function( $node, animate ) {
                     //var p = new Profiler('repeat cloning');
-                    var $master, $clone, $parent, index, radioNames, i, path, timestamp, duration,
+                    var $siblings, $master, $clone, index, radioNames, i, path, timestamp,
                         that = this;
 
-                    duration = ( animate === false ) ? 0 : 400;
                     if ( $node.length !== 1 ) {
                         console.error( 'Nothing to clone' );
                         return false;
                     }
-                    $parent = $node.parent( '.or-group, .or-group-data' );
-                    $master = $parent.children( '.or-repeat:not(.clone)' ).eq( 0 );
+                    $siblings = $node.siblings( '.or-repeat' );
+                    $master = ( $node.hasClass( 'clone' ) ) ? $siblings.not( '.clone' ).eq( 0 ) : $node;
                     $clone = $master.clone( true, true );
 
                     // Add clone class and remove any child clones.. (cloned repeats within repeats..)
@@ -1761,10 +1760,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // clear the inputs before adding clone
                     $clone.clearInputs( '' );
                     // insert the clone after values and widgets have been reset
-                    $clone.insertAfter( $node )
-                        .parent( '.or-group' ).numberRepeats();
-
-                    this.toggleButtons( $master.parent() );
+                    $clone.insertAfter( $node );
+                    // number the repeats
+                    this.numberRepeats( $siblings.add( $node ).add( $clone ) );
+                    // enable or disable + and - buttons
+                    this.toggleButtons( $siblings.add( $node ).add( $clone ) );
 
                     // Create a new data point in <instance> by cloning the template node
                     // and clone data node if it doesn't already exist
@@ -1783,17 +1783,17 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return true;
                 },
                 remove: function( $repeat ) {
-                    var delay = 600, // dataNode,
+                    var delay = 600,
                         that = this,
                         $prev = $repeat.prev( '.or-repeat' ),
                         repeatPath = $repeat.attr( 'name' ),
                         repeatIndex = $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $repeat ),
-                        $parentGroup = $repeat.parent( '.or-group' );
+                        $siblings = $repeat.siblings( '.or-repeat' );
 
                     $repeat.hide( delay, function() {
                         $repeat.remove();
-                        $parentGroup.numberRepeats();
-                        that.toggleButtons( $parentGroup );
+                        that.numberRepeats( $siblings );
+                        that.toggleButtons( $siblings );
                         // trigger the removerepeat on the previous repeat (always present)
                         // so that removerepeat handlers know where the repeat was removed
                         $prev.trigger( 'removerepeat' );
@@ -1801,15 +1801,35 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         model.node( repeatPath, repeatIndex ).remove();
                     } );
                 },
-                toggleButtons: function( $node ) {
-                    $node = ( typeof $node == 'undefined' || $node.length === 0 || !$node ) ? $node = $form : $node;
+                toggleButtons: function( $repeats ) {
+                    $repeats = ( !$repeats || $repeats.length === 0 ) ? $form : $repeats;
 
                     //first switch everything off and remove hover state
-                    $node.find( 'button.repeat, button.remove' ).prop( 'disabled', true ); //button('disable').removeClass('ui-state-hover');
+                    $repeats.find( 'button.repeat, button.remove' ).prop( 'disabled', true );
 
                     //then enable the appropriate ones
-                    $node.find( '.or-repeat:last-child > .repeat-buttons button.repeat' ).prop( 'disabled', false ); //.button('enable');
-                    $node.find( 'button.remove' ).not( ':eq(0)' ).prop( 'disabled', false );
+                    $repeats.last().find( 'button.repeat' ).prop( 'disabled', false );
+                    $repeats.find( 'button.remove' ).not( ':first' ).prop( 'disabled', false );
+                },
+                numberRepeats: function( $repeats ) {
+                    $repeats.each( function() {
+                        var repSiblings, qtyRepeats, i;
+                        // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
+                        if ( $( this ).prev( '.or-repeat' ).length === 0 ) {
+                            repSiblings = $( this ).siblings( '.or-repeat' );
+                            qtyRepeats = repSiblings.length + 1;
+                            if ( qtyRepeats > 1 ) {
+                                $( this ).find( '.repeat-number' ).text( '1' );
+                                i = 2;
+                                repSiblings.each( function() {
+                                    $( this ).find( '.repeat-number' ).text( i );
+                                    i++;
+                                } );
+                            } else {
+                                $( this ).find( '.repeat-number' ).empty();
+                            }
+                        }
+                    } );
                 }
             };
 
