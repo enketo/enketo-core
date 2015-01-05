@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en"  class="no-js">
 	<head>
+		<title>Enketo-Core Developer template</title>
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600&amp;subset=latin,cyrillic-ext,cyrillic,greek-ext,greek,vietnamese,latin-ext' rel='stylesheet' type='text/css'>
 
 		<!--<link type="text/css" href="../build/css/default.css" media="all" rel="stylesheet" />-->
 		<link type="text/css" href="../build/css/formhub.css" media="all" rel="stylesheet" />
 		<!--<link type="text/css" href="../build/css/grid.css" media="all" rel="stylesheet" />-->
+
+		<style typet="text/css">
+			.form-footer .disabled{
+				display: none;
+			}
+		</style>
 
 	</head>
 	<body>
@@ -20,10 +27,24 @@
 				<header class="form-header clearfix">
 					<span class="form-language-selector"><span>Choose Language</span></span>
 				</header>
+
 				<!-- this is where the form will go -->			
-				<button id="validate-form" class="btn btn-primary" style="width:200px; margin: 0 auto;">Validate</button>
-				<div class="enketo-power">Powered by <a href="http://enketo.org" title="enketo.org website"><img src="https://enketo.org/images/enketo_bare_100x37.png" alt="enketo logo" /></a>
-				</div>
+				
+				<div class="form-footer">
+						<!-- 
+						Used some quick-and-dirty inline CSS styles here because the form-footer should be styled in the 
+						mother application 
+						-->
+						<a href="#" class="previous-page disabled" style="position:absolute; left: 10px; bottom: 40px;">Back</a>
+						<button id="validate-form" class="btn btn-primary" style="width:200px; margin-left: calc(50% - 100px);">Validate</button>
+      					<a href="#" class="btn btn-primary next-page disabled" style="width: 200px; margin-left: calc(50% - 100px)">Next</a>
+      				
+      				<div class="enketo-power" style="margin-bottom: 30px;">Powered by <a href="http://enketo.org" title="enketo.org website"><img src="https://enketo.org/images/enketo_bare_100x37.png" alt="enketo logo" /></a> </div>
+
+    				<a href="#" class="btn btn-default disabled first-page" style="width: 49.7%; border-radius: 0;">Return to Beginning</a>
+    				<a href="#" class="btn btn-default disabled last-page" style="width: 49.7%; border-radius: 0;">Go to End</a>
+    			</div>
+				
 			</article>
 		</div>
 

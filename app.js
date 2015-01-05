@@ -55,7 +55,7 @@ requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form', 'file-manager' ],
                 $data = $( $.parseXML( data ) );
                 formStr = ( new XMLSerializer() ).serializeToString( $data.find( 'form:eq(0)' )[ 0 ] );
                 modelStr = ( new XMLSerializer() ).serializeToString( $data.find( 'model:eq(0)' )[ 0 ] );
-                $( '#validate-form' ).before( formStr );
+                $( '.form-header' ).after( formStr );
                 initializeForm();
             }, 'text' );
         } else if ( $( 'form.or' ).length > 0 ) {

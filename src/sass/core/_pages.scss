@@ -6,7 +6,6 @@
         display: none;
         &.contains-current {
             display: block;
-
         }
     }
     [role="page"] {
@@ -21,9 +20,43 @@
         &.hidden {
             opacity: 0;
         }
-        &.fade-out { 
+        &.fade-out {
             opacity: 0;
             @include transition-fast;
         }
+    }
+}
+
+// deals only with showing hiding buttons in pages mode
+.pages ~ .form-footer {
+    &.end {
+        .btn {
+            display: inline-block;
+        }
+        .previous-page {}
+        .next-page {
+            display: none;
+        }
+    }
+    .logout, .draft {
+        display: block;
+    }
+    .logout {
+        margin-bottom: 50px;
+    }
+    .btn {
+        display: none;
+    }
+    .previous-page, .next-page {
+        display: inline-block;
+        &.disabled {
+            display: none;
+        }
+    }
+    .first-page, .last-page {
+        display: inline-block;
+    }
+    .logout, .draft {
+        display: none;
     }
 }
