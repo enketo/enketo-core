@@ -1,0 +1,254 @@
+@import "mixins";
+
+$printBaseFontSize: 10px;
+
+.or {
+    input:not([type="radio"]):not([type="checkbox"]), select, textarea {
+        border-bottom: none;
+    }
+}
+
+.or h4 {
+    // the background: white trick doesn't work in prints but looks nicest on screen
+    // so we apply this fix only on prints
+    border-right: 1px solid #ffffff;
+    width: calc(100% + 1px);
+}
+
+.note, .trigger {
+    //-webkit-print-color-adjust: exact;
+    background: #cccccc;
+}
+
+.or .or-branch.disabled {
+    // warning: took me hours to find this, default is set to block...
+    /* override inline style */
+    @include display-flex;
+}
+
+.or-repeat .repeat-number {
+    top: -20px;
+    font-size: 12px;
+}
+
+.question {
+    &.non-select::after {
+        content: ' ';
+        display: block;
+        height: 1px;
+        width: 100%;
+        order: 10;
+        margin-bottom: -5px;
+        border-bottom: 1px dotted black;
+    }
+    &.widget.date, &.widget.bootstrap-timepicker {
+        display: none;
+    }
+    &:not(.or-appearance-maps) input {
+        &[type=number], &[type=date], &[type=time], &[type=datetime] {
+            opacity: 0.7;
+            display: block !important;
+            visibility: hidden;
+        }
+    }
+    &.or-appearance-maps label.geo {
+        &::after {
+            content: ' ';
+            display: block;
+            height: 1px;
+            width: 100%;
+            border-bottom: 1px dotted black;
+        }
+        input {
+            display: block !important;
+            visibility: hidden;
+        }
+    }
+    // just hiding file-feedback so it provides a bit of empty space in the printout
+    .file-feedback {
+        visibility: hidden;
+        display: block !important;
+    }
+}
+
+.question, .note, .trigger {
+    padding-bottom: 10px;
+    .question-label, .option-label, label.geo {
+        line-height: $printBaseFontSize;
+        font-size: $printBaseFontSize;
+    }
+    input:not([type=radio]):not([type=checkbox]),
+    .geopicker.widget input[type=number] {
+        font-size: $printBaseFontSize;
+        line-height: $printBaseFontSize;
+        height: 20px;
+    }
+    textarea {
+        height: 45px;
+    }
+}
+
+.or-repeat {
+    background: #ffffff;
+}
+
+.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
+    label {
+        $line-h: 15px;
+        line-height: $line-h;
+        .option-label {
+            line-height: $line-h;
+            &::before {
+                font-size: $line-h;
+                width: $line-h;
+            }
+        }
+    }
+}
+
+.geopicker.widget {
+    .geo-inputs label.geo:nth-of-type(3), .geo-inputs label.geo:nth-of-type(4) {
+        min-height: 0;
+        input {
+            float: none;
+        }
+    }
+}
+
+.bootstrap-select {
+    margin: 0;
+    padding: 0;
+    .dropdown-toggle ~ .dropdown-menu .option-wrapper {
+        padding-left: 0;
+    }
+    ul {
+        li, li.active {
+            border: none;
+            margin-right: 0;
+            a {
+                background: none;
+                padding: 0;
+                label {
+                    font-size: $printBaseFontSize !important;
+                    margin: 0;
+                }
+            }
+        }
+        li:not(.active) a label::before {
+            font-size: 15px;
+            margin-right: 7px;
+        }
+        li.active a label::before {
+            font-size: 15px;
+            margin-right: 7px;
+        }
+    }
+}
+
+// below are (hopefully) temporary adjustments to get page-breaks to work in multi-line flexbox layouts
+// the issue it attemps to solve is described here: http://stackoverflow.com/questions/20408033/how-to-get-page-break-inside-avoid-to-work-nicely-with-flex-wrap-wrap
+
+.or, .or-group, .or-group-data, .or-repeat {
+    display: block;
+    width: 100%;
+}
+
+.or .question, .or .note, .or .trigger {
+    //default;
+    width: 100%;
+    @include display-inline-flex;
+    vertical-align: top;
+    //padding: 5px 5px 12px 5px;
+    // unfortunately we cannot target actual page-breaks to provide a top-border
+    &:not(.invalid-required):not(.invalid-constraint) {
+        border-top: $grid-border;
+    }
+}
+
+.or .or-branch.disabled {
+    @include display-inline-flex;
+}
+
+@media print, screen and (min-width: 700px) {
+    @for $total from 1 through $max-columns {
+        .or-appearance-w#{$total} {
+            display: block;
+            width: 100%;
+            &.question, &.note, &.trigger {
+                @if $total >= $default-grid-width {
+                    width: 100%;
+                }
+                @else {
+                    width: $total / 4 * 100%;
+                }
+            }
+            @for $width from 1 through $total {
+                .or-appearance-w#{$width} {
+                    @include display-inline-flex;
+                    width: $width / $total * 100%;
+                }
+            }
+        }
+    }
+}
+
+#dialog-print {
+    fieldset {
+        margin: 20px 0;
+    }
+    legend {
+        @include font-bold;
+        font-size: 16px;
+        margin-bottom: 10px;
+        ~ label {
+            display: inline-block;
+            width: auto;
+            font-weight: normal;
+            input {
+                width: auto;
+                display: inline-block;
+                height: auto;
+                margin-right: 7px;
+            }
+            &:hover {
+                background: none;
+            }
+            + label {
+                margin-left: 20px;
+            }
+        }
+    }
+    .progress {
+        display: none;
+        progress {
+            margin-top: 50px;
+        }
+    }
+    &.preparing {
+        .select-format {
+            display: none;
+        }
+        .progress {
+            display: block;
+        }
+    }
+    button {
+        display: inline-block !important;
+    }
+}
+
+.back-to-screen-view {
+    margin: 10px auto;
+    display: block !important;
+}
+
+@media print {
+    #dialog-print {
+        display: none;
+    }
+    .back-to-screen-view {
+        display: none !important;
+    }
+}
+
+// End of adjustment to get page breaks to work in multi-line flexbox

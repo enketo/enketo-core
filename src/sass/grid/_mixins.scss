@@ -1,0 +1,66 @@
+@mixin font-bold {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+@mixin font-normal {
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+}
+
+// !important is added to make sure a clearfix doesn't override it
+@mixin checkbox-unchecked-icon {
+    @include enketo-icon;
+    content: '\e60b' !important;
+    color: $radiocheck-unchecked-color;
+}
+
+@mixin checkbox-checked-icon {
+    @include enketo-icon;
+    content: '\e60c' !important;
+    color: $radiocheck-checked-color;
+}
+
+@mixin radio-unchecked-icon {
+    @include enketo-icon;
+    content: '\e607' !important;
+    color: $radiocheck-unchecked-color;
+}
+
+@mixin radio-checked-icon {
+    @include enketo-icon;
+    content: '\e606' !important;
+    color: $radiocheck-checked-color;
+}
+
+// override form-control-focus from core
+@mixin form-control-focus($color: $input-border-focus) {}
+
+// override form-control from core
+@mixin form-control {
+    @include flex(1);
+    border: none;
+    @include box-shadow-none;
+    background: $input-bg;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: $input-height;
+    // hack: IE11 will give height 0, effectively hiding the input element without flex-basis
+    flex-basis: $input-height;
+    &:focus {
+        outline: none;
+        @include box-shadow-none;
+    }
+    // Placeholder
+    @include placeholder;
+    &[disabled],
+    &[readonly],
+    fieldset[disabled] & {
+        cursor: not-allowed;
+        background-color: $input-bg-disabled;
+        opacity: 1;
+    }
+}
