@@ -122,6 +122,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                 } )
                 .catch( function( error ) {
                     $input.val( '' );
+                    that._showFileName( '' );
                     that._showPreview( null );
                     that._showFeedback( error.message, 'error' );
                 } );
@@ -129,7 +130,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
     };
 
     Filepicker.prototype._showFileName = function( file ) {
-        var fileName = ( typeof file === 'object' && file.name ) ? file.name : file;
+        var fileName = ( typeof file === 'object' && file.name ) ? file.name : ( file ? file : '' );
         this.$fakeInput.text( fileName );
     };
 
