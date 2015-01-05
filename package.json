@@ -20,10 +20,10 @@
         "grunt-contrib-jasmine": "~0.5.2",
         "grunt-contrib-jshint": "0.x.x",
         "grunt-contrib-requirejs": "0.x.x",
-        "grunt-contrib-sass": "0.x.x",
         "grunt-contrib-watch": "0.x.x",
         "grunt-jsbeautifier": "0.x.x",
         "grunt-modernizr": "0.x.x",
+        "grunt-sass": "0.17.x",
         "grunt-template-jasmine-requirejs": "~0.1.7",
         "load-grunt-tasks": "1.x.x",
         "time-grunt": "1.x.x"

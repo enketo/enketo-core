@@ -137,18 +137,15 @@ module.exports = function( grunt ) {
             widgetConfigPath: 'config.json'
         },
         sass: {
-            dist: {
-                options: {
-                    style: 'expanded',
-                    noCache: true
-                },
-                files: [ {
-                    expand: true,
-                    cwd: 'src/sass',
-                    src: [ '**/*.scss', '!**/_*.scss' ],
-                    dest: 'build/css',
-                    ext: '.css'
-                } ]
+            compile: {
+                cwd: 'src/sass',
+                dest: 'build/css',
+                expand: true,
+                outputStyle: 'expanded',
+                src: '**/*.scss',
+                ext: '.css',
+                flatten: true,
+                extDot: 'last'
             }
         },
         // this compiles all javascript to a single minified file
