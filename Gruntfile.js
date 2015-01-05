@@ -133,7 +133,7 @@ module.exports = function( grunt ) {
             }
         },
         prepWidgetSass: {
-            writePath: 'src/sass/_widgets.scss',
+            writePath: 'src/sass/core/_widgets.scss',
             widgetConfigPath: 'config.json'
         },
         sass: {
@@ -199,7 +199,7 @@ module.exports = function( grunt ) {
                 //strip require.js module name
                 widgetFolderPath = widget.substr( 0, widget.lastIndexOf( '/' ) + 1 );
                 //replace widget require.js path shortcut with proper path relative to src/js
-                widgetSassPath = widgetFolderPath.replace( /^enketo-widget\//, '../widget/' );
+                widgetSassPath = widgetFolderPath.replace( /^enketo-widget\//, '../../widget/' );
                 //create path to widget config file
                 widgetConfigPath = widgetFolderPath.replace( /^enketo-widget\//, 'src/widget/' ) + 'config.json';
                 grunt.log.writeln( 'widget config path: ' + widgetConfigPath );
