@@ -192,51 +192,6 @@ $printBaseFontSize: 10px;
     }
 }
 
-#dialog-print {
-    fieldset {
-        margin: 20px 0;
-    }
-    legend {
-        @include font-bold;
-        font-size: 16px;
-        margin-bottom: 10px;
-        ~ label {
-            display: inline-block;
-            width: auto;
-            font-weight: normal;
-            input {
-                width: auto;
-                display: inline-block;
-                height: auto;
-                margin-right: 7px;
-            }
-            &:hover {
-                background: none;
-            }
-            + label {
-                margin-left: 20px;
-            }
-        }
-    }
-    .progress {
-        display: none;
-        progress {
-            margin-top: 50px;
-        }
-    }
-    &.preparing {
-        .select-format {
-            display: none;
-        }
-        .progress {
-            display: block;
-        }
-    }
-    button {
-        display: inline-block !important;
-    }
-}
-
 .back-to-screen-view {
     margin: 10px auto;
     display: block !important;
