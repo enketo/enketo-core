@@ -507,7 +507,6 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         };
     }
 
-
     /**
      * Gets the instance ID
      *
@@ -517,6 +516,14 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         return this.node( ':first>meta>instanceID' ).getVal()[ 0 ];
     };
 
+    /**
+     * Gets the instance Name
+     *
+     * @return {string} instanceID
+     */
+    FormModel.prototype.getInstanceName = function() {
+        return this.node( ':first>meta>instanceName' ).getVal()[ 0 ];
+    };
 
     //index is the index of the node (defined in Nodeset), that the clone should be added immediately after
     //if a node with that name and that index+1 already exists the node will NOT be cloned

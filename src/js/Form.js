@@ -86,6 +86,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             this.getInstanceID = function() {
                 return model.getInstanceID();
             };
+            this.getInstanceName = function() {
+                return model.getInstanceName();
+            };
             this.getView = function() {
                 return form;
             };
