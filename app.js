@@ -92,7 +92,7 @@ requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form', 'file-manager' ],
 
         function getURLParameter( name ) {
             return decodeURI(
-                ( RegExp( name + '=' + '(.+?)(&|$)' ).exec( location.search ) || [ , null ] )[ 1 ]
+                ( RegExp( name + '=' + '(.+?)(&|$)' ).exec( location.search ) || [ null, null ] )[ 1 ]
             );
         }
     } );
