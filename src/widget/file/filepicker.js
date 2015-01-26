@@ -58,7 +58,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         // show loaded file name regardless of whether widget is supported
         if ( existingFileName ) {
             this._showFileName( existingFileName, this.mediaType );
-            $input.removeAttr( 'data-loaded-file-name' );
         }
 
         if ( !fileManager || !fileManager.isSupported() ) {
@@ -100,8 +99,9 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         var that = this;
 
         $( this.element ).on( 'change.passthrough.' + this.namespace, function( event ) {
-            var file,
-                $input = $( this );
+            var file, fileName,
+                $input = $( this ),
+                loadedFileName = $input.attr( 'data-loaded-file-name' );
 
             // trigger eventhandler to update instance value
             if ( event.namespace === 'passthrough' ) {
@@ -111,13 +111,17 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
 
             // get the file
             file = this.files[ 0 ];
+            fileName = that._getFileName( file );
 
             // process the file
             fileManager.getFileUrl( file )
                 .then( function( url ) {
                     that._showPreview( url, that.mediaType );
                     that._showFeedback( '' );
-                    that._showFileName( file );
+                    that._showFileName( fileName );
+                    if ( loadedFileName && loadedFileName !== fileName ) {
+                        $input.removeAttr( 'data-loaded-file-name' );
+                    }
                     $input.trigger( 'change.passthrough' );
                 } )
                 .catch( function( error ) {
@@ -129,8 +133,11 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         } );
     };
 
-    Filepicker.prototype._showFileName = function( file ) {
-        var fileName = ( typeof file === 'object' && file.name ) ? file.name : ( file ? file : '' );
+    Filepicker.prototype._getFileName = function( file ) {
+        return ( typeof file === 'object' && file.name ) ? file.name : '';
+    };
+
+    Filepicker.prototype._showFileName = function( fileName ) {
         this.$fakeInput.text( fileName );
     };
 
