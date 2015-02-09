@@ -44,6 +44,20 @@ h4 + .or-repeat {
     @include border-box;
 }
 
+// override to flexboxes in pages mode
+.pages.or [role="page"].current {
+    @include display-flex;
+    @include flex-wrap(wrap);
+    @include flex-direction(row);
+    @include border-box;
+    .or-group:not(.disabled), .or-group-data:not(.disabled), .or-repeat:not(.disabled) {
+        @include display-flex;
+        @include flex-wrap(wrap);
+        @include flex-direction(row);
+        @include border-box;
+    }
+}
+
 // top-level groups border
 .or > .or-group, .or > .or-group-data {
     border-right: $grid-border;

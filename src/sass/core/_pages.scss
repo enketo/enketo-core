@@ -10,7 +10,6 @@
     }
     [role="page"] {
         display: none;
-        //border: 1px solid red;
         &.current {
             display: block;
             .or-group:not(.disabled), .or-group-data:not(.disabled), .or-repeat:not(.disabled) {
