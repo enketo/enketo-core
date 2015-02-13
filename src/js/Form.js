@@ -34,7 +34,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          */
 
         function Form( formSelector, dataStr, dataStrToEdit, unsubmitted ) {
-            var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
+            var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr, _getMaxSize,
                 loadErrors = [];
 
             /**
@@ -319,6 +319,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return expr.replace( matches[ 0 ], "'" + label + "'" );
                 }
                 return expr;
+            };
+
+            _getMaxSize = function() {
+                var maxSize = $( document ).data( 'maxSubmissionSize' ) || 5 * 1024 * 1024;
+                return maxSize;
             };
 
 
@@ -1862,9 +1867,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // why is this called? add explanation when figured out that it is necessary!
                     // event.stopImmediatePropagation();
 
+                    var isValidFile = false;
+
                     // set file input values to the actual name of file (without c://fakepath or anything like that)
                     if ( n.val.length > 0 && n.inputType === 'file' && $( this )[ 0 ].files[ 0 ] && $( this )[ 0 ].files[ 0 ].size > 0 ) {
                         n.val = $( this )[ 0 ].files[ 0 ].name;
+                        isValidFile = true;
                     }
 
                     if ( event.type === 'validate' ) {
@@ -1872,7 +1880,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         // if an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid)
                         validCons = ( n.enabled && n.inputType !== 'hidden' ) ? model.node( n.path, n.ind ).validate( n.constraint, n.xmlType ) : true;
                     } else {
-                        validCons = model.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
+                       if(isValidFile){
+                            if($( this )[ 0 ].files[ 0 ].size <= _getMaxSize())
+                            {
+                                validCons = model.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
+                            }
+                       }
+                       else {
+                            validCons = model.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
+                       }
                         // geotrace and geoshape are very complex data types that require various change events
                         // to avoid annoying users, we ignore the INVALID onchange validation result
                         validCons = ( validCons === false && ( n.xmlType === 'geotrace' || n.xmlType === 'geoshape' ) ) ? null : validCons;
