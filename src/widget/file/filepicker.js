@@ -98,15 +98,17 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
     Filepicker.prototype._changeListener = function() {
         var that = this;
 
-        $( this.element ).on( 'change.passthrough.' + this.namespace, function( event ) {
+        $( this.element ).on( 'change.propagate.' + this.namespace, function( event ) {
             var file, fileName,
                 $input = $( this ),
                 loadedFileName = $input.attr( 'data-loaded-file-name' );
 
             // trigger eventhandler to update instance value
-            if ( event.namespace === 'passthrough' ) {
+            if ( event.namespace === 'propagate' ) {
                 $input.trigger( 'change.file' );
                 return false;
+            } else {
+                event.stopImmediatePropagation();
             }
 
             // get the file
@@ -116,16 +118,20 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
             // process the file
             fileManager.getFileUrl( file )
                 .then( function( url ) {
+                    // update UI
                     that._showPreview( url, that.mediaType );
                     that._showFeedback( '' );
                     that._showFileName( fileName );
                     if ( loadedFileName && loadedFileName !== fileName ) {
                         $input.removeAttr( 'data-loaded-file-name' );
                     }
-                    $input.trigger( 'change.passthrough' );
+                    // update record
+                    $input.trigger( 'change.propagate' );
                 } )
                 .catch( function( error ) {
-                    $input.val( '' );
+                    // update record to clear any existing valid value
+                    $input.val( '' ).trigger( 'change.propagate' );
+                    // update UI
                     that._showFileName( '' );
                     that._showPreview( null );
                     that._showFeedback( error.message, 'error' );
