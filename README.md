@@ -130,21 +130,33 @@ We would be happy to discuss whether your contribution should be a part of the c
 I would like to acknowledge and thank the indirect contribution by the creators of the following excellent works that were used in the project:
 
 * [XPathJS by Andrej Pavlovic](https://github.com/andrejpavlovic/xpathjs)
-* [JQuery](http://jquery.com)
-* [Modernizr](http://modernizr.com)
-* [Bootstrap](http://twitter.github.com/bootstrap/)
 * [Bootstrap Datepicker by eternicode](https://github.com/eternicode/bootstrap-datepicker)
 * [Bootstrap Timepicker by jdewit](http://jdewit.github.io/bootstrap-timepicker/)
 
+###Sponsors
+
+The development of this app and [enketo-core](https://github.com/enketo/enketo-core) was sponsored by:
+
+* [Sustainable Engineering Lab at Columbia University](http://modi.mech.columbia.edu/)
+* [WHO - HRP project](http://www.who.int/reproductivehealth/topics/mhealth/en/index.html)
+* [Santa Fe Insitute & Slum/Shack Dwellers International](http://www.santafe.edu/)
+* [Enketo LLC](http://www.linkedin.com/company/enketo-llc)
+* [iMMAP](http://immap.org)
+* [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
+* [Enketo LLC](https://enketo.org)
+
 ###Related Projects
 
-* [enketo-express](https://github.com/enketo/enketo-express) - A modern node.js version of Enketo Smart Paper
-* [enketo-xpath-js](https://github.com/enketo/enketo-xpathjs) - used inside this repo
-* [enketo-xslt](https://github.com/MartijnR/enketo-xslt) - the XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
-* [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) - a minimalistic example in PHP of an XSLT transformer
+* [Enketo Express](https://github.com/enketo/enketo-express) - A modern node.js version of Enketo Smart Paper
+* [Enketo Legacy](https://github.com/enketo/enketo-legacy) - The old not-so-modern version of Enketo Smart Paper
+* [Enketo XpathJS](https://github.com/enketo/enketo-xpathjs) - used inside this repo
+* [Enketo XSLT](https://github.com/enketo/enketo-xslt) - the XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
+* [Enketo XSLT Transformer PHP](https://github.com/enketo/enketo-xslt-transformer-php) - a minimalistic example in PHP of an XSLT transformer
 * [enketo-xslt-transformer-node] - To follow hopefully
-* [enketo-dristhi](https://github.com/enketo/enketo-dristhi) - used inside an Android app around enketo
-* [enketo-json](https://github.com/MartijnR/enketo-json) - XML-JSON instance convertor used inside e.g. Dristhi
-* [file-manager](https://github.com/enketo/file-manager) - library to deal with the experimental Filesystem API
-* [openrosa-forms](https://github.com/MartijnR/openrosa-forms) - bunch of test forms, for development
-* [enketo-api-docs](https://github.com/MartijnR/enketo-api-docs) - recommended API to support with your app
+* [Enketo Dristhi](https://github.com/enketo/enketo-dristhi) - used inside an Android app around enketo
+* [Enketo JSON](https://github.com/enketo/enketo-json) - XML-JSON instance convertor used inside e.g. Dristhi
+
+### Change log
+
+See [CHANGELOG](./CHANGELOG.md)
+
