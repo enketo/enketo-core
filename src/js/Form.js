@@ -1555,6 +1555,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                         for ( i = c.length - 1; i >= 0; i-- ) {
                             C = c[ i ].split( '=' );
+                            // decode URI
+                            C[ 1 ] = decodeURIComponent( C[ 1 ] );
+                            // if cookie is signed (using expressjs/cookie-parser/), extract value
+                            if ( C[ 1 ].substr( 0, 2 ) === 's:' ) {
+                                C[ 1 ] = C[ 1 ].slice( 2 );
+                                C[ 1 ] = C[ 1 ].slice( 0, C[ 1 ].lastIndexOf( '.' ) );
+                            }
                             cookies[ C[ 0 ] ] = decodeURIComponent( C[ 1 ] );
                         }
 
