@@ -7,26 +7,12 @@ This repo is meant to use as a building block for your own enketo-powered applic
 
 Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
+###Usage as a library
 
-###How to run it
-
-1. install [node](http://nodejs.org/), [grunt-cli](http://gruntjs.com/getting-started), and bower
-2. clone the repo
-3. get the submodules with `git submodule update --init --recursive` (run this again after pulling updates!)
-3. install most dependencies with `npm install` and `bower install`
-4. build and test with `grunt`
-5. start built-in server with `grunt server` 
-8. browse to [http://localhost:8080/forms/index.html](http://localhost:8080/forms/index.html)
-
-
-###Recommended usage as a library
-
-1. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/) (add `?xform=http://myforms.com/myform.xml` to use API).
-2. Fork enketo-core so you can extend it and easily send pull requests back to this repository.
-3. Add your enketo-core fork as a git submodule to your app (e.g. in /lib). This provides an easy way to pull updates to enketo-core into your application.
-4. Ignore (or copy parts of) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead
-5. If you make changes to enketo-core, send a pull request to the [https://github.com/MartijnR/enketo-core]! As an added advantage, when your pull request gets accepted it will be much easier to keep your app up-to-date with the latest enketo-core updates without merge conflicts.
-6. Main methods illustrated in code below:
+1. Add as a git submodule (future: bower)
+2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/) (add `?xform=http://myforms.com/myform.xml` to use API).
+3. Ignore (or copy parts of) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead
+4. Main methods illustrated in code below:
 
 ```javascript 
 
@@ -72,6 +58,16 @@ requirejs(['js/Form'], function (Form){
     } );
 });
 ```
+
+###How to run to develop on enketo-core
+
+1. install [node](http://nodejs.org/), [grunt-cli](http://gruntjs.com/getting-started), and bower
+2. clone the repo
+3. get the submodules with `git submodule update --init --recursive` (run this again after pulling updates!)
+3. install most dependencies with `npm install` and `bower install`
+4. build and test with `grunt`
+5. start built-in server with `grunt server` 
+8. browse to [http://localhost:8080/forms/index.html](http://localhost:8080/forms/index.html)
 
 ###How to create or extend widgets
 

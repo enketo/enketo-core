@@ -5,14 +5,15 @@
     "authors": [
         "Martijn van de Rijdt <martijn@enketo.org>"
     ],
+    "main": "src/js/Form.js",
+    "keywords": [ "enketo", "OpenRosa", "ODK", "XForm" ],
     "license": "Apache2",
     "private": true,
     "ignore": [
         "**/.*",
         "node_modules",
         "bower_components",
-        "test",
-        "tests"
+        "test"
     ],
     "dependencies": {
         "q": "1.0.1",
