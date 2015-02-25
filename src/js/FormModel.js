@@ -6,16 +6,19 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
     "use strict";
 
     /**
-     * Class dealing with the XML Instance (the data) of a form
+     * Class dealing with the XML Model of a form
      *
      * @constructor
-     * @param {string} dataStr String of the default XML instance
+     * @param {string} modelStr String of the default XML instance
+     * @param {?<{id:string, xmlStr: string}> } externalData Array of external data objects
      * @param {?{full:boolean}} options.full Whether to initialize the full model or only the primary instance (for future)
      */
 
-    function FormModel( dataStr, options ) {
-        var $data,
+    function FormModel( modelStr, externalData, options ) {
+        var $model, id,
             that = this;
+
+        externalData = externalData || [];
 
         this.loadErrors = [];
         this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
@@ -23,20 +26,31 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
         //TEMPORARY DUE TO FIREFOX ISSUE, REMOVE ALL NAMESPACES FROM STRING, 
         //BETTER TO LEARN HOW TO DEAL WITH DEFAULT NAMESPACES THOUGH
-        dataStr = dataStr.replace( /xmlns\=\"[a-zA-Z0-9\:\/\.]*\"/g, '' );
+        modelStr = modelStr.replace( /xmlns\=\"[a-zA-Z0-9\:\/\.]*\"/g, '' );
 
         // TODO: if options && !options.full, strip all secondary instances from string before parsing!
 
         try {
-            this.xml = $.parseXML( dataStr );
+            id = 'model';
+            this.xml = $.parseXML( modelStr );
+            // add external data to model
+            externalData.forEach( function( instance ) {
+                id = 'instance "' + instance.id + '"' || 'instance unknown';
+                that.xml.getElementById( instance.id ).appendChild( $.parseXML( instance.xmlStr ).firstChild );
+            } );
         } catch ( e ) {
             console.error( e );
-            this.loadErrors.push( 'Error trying to parse XML model/instance.' );
+            this.loadErrors.push( 'Error trying to parse XML ' + id + '.' );
         }
 
-        $data = $( this.xml );
+        $model = $( this.xml );
 
-        this.$ = $data;
+        // check if all secondary instances with an external source have been populated
+        $model.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
+            that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
+        } );
+
+        this.$ = $model;
 
         /**
          * Initializes FormModel
@@ -54,6 +68,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             } );
 
             this.cloneAllTemplates();
+
             return this.loadErrors;
         };
 
@@ -94,7 +109,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             this.filter.noEmpty = ( typeof filter.noEmpty !== 'undefined' ) ? filter.noEmpty : false;
             this.index = index;
 
-            if ( $data.find( 'model>instance' ).length > 0 ) {
+            if ( $model.find( 'model>instance' ).length > 0 ) {
                 //to refer to non-first instance, the instance('id_literal')/path/to/node syntax can be used
                 if ( this.selector !== defaultSelector && this.selector.indexOf( '/' ) !== 0 && that.INSTANCE.test( this.selector ) ) {
                     this.selector = this.selector.replace( that.INSTANCE, "model > instance#$1" );
@@ -117,13 +132,13 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
             // noTemplate is ignored if onlyTemplate === true
             if ( this.filter.onlyTemplate === true ) {
-                $nodes = $data.xfind( this.selector ).filter( '[template]' );
+                $nodes = $model.xfind( this.selector ).filter( '[template]' );
             }
             // default
             else if ( this.filter.noTemplate === true ) {
-                $nodes = $data.xfind( this.selector ).not( '[template], [template] *' );
+                $nodes = $model.xfind( this.selector ).not( '[template], [template] *' );
             } else {
-                $nodes = $data.xfind( this.selector );
+                $nodes = $model.xfind( this.selector );
             }
             //noEmpty automatically excludes non-leaf nodes
             if ( this.filter.noEmpty === true ) {
@@ -171,7 +186,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 success = this.validate( expr, xmlDataType );
                 updated = this.getClosestRepeat();
                 updated.nodes = [ $target.prop( 'nodeName' ) ];
-                $data.trigger( 'dataupdate', updated );
+                $model.trigger( 'dataupdate', updated );
                 //add type="file" attribute for file references
                 if ( xmlDataType === 'binary' ) {
                     if ( newVal.length > 0 ) {
@@ -217,7 +232,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             if ( $node.length === 1 ) {
                 nodeName = $node.prop( 'nodeName' );
                 path = $node.getXPath( 'instance' );
-                $family = $data.find( nodeName ).filter( function() {
+                $family = $model.find( nodeName ).filter( function() {
                     $this = $( this );
                     return !$this.is( '[template]' ) && $this.find( 'template' ).length === 0 && path === $this.getXPath( 'instance' );
                 } );
@@ -270,7 +285,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                     allClonedNodeNames.push( $this.prop( 'nodeName' ) );
                 } );
 
-                $data.trigger( 'dataupdate', {
+                $model.trigger( 'dataupdate', {
                     nodes: allClonedNodeNames,
                     repeatPath: $dataNode.getXPath( 'instance' ),
                     repeatIndex: this.getIndex( $clone )
@@ -303,7 +318,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
                 $dataNode.remove();
 
-                $data.trigger( 'dataupdate', {
+                $model.trigger( 'dataupdate', {
                     updatedNodes: allRemovedNodeNames,
                     repeatPath: repeatPath,
                     repeatIndex: repeatIndex

@@ -455,4 +455,51 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
     } );
 
+    describe( 'external instances functionality', function() {
+        var loadErrors, model,
+            modelStr = '<model><instance><cascade_external id="cascade_external" version=""><country/><city/><neighborhood/><meta><instanceID/></meta></cascade_external></instance><instance id="cities" src="jr://file/cities.xml" /><instance id="neighborhoods" src="jr://file/neighbourhoods.xml" /><instance id="countries" src="jr://file/countries.xml" /></model>',
+            citiesStr = '<root><item><itextId>static_instance-cities-0</itextId><country>nl</country><name>ams</name></item></root>';
+
+        it( 'outputs errors if external instances in the model are not provided upon instantiation', function() {
+            model = new Model( modelStr );
+            loadErrors = model.init();
+            expect( loadErrors.length ).toEqual( 3 );
+            expect( loadErrors[ 0 ] ).toEqual( 'External instance "cities" is empty.' );
+            expect( loadErrors[ 1 ] ).toEqual( 'External instance "neighborhoods" is empty.' );
+            expect( loadErrors[ 2 ] ).toEqual( 'External instance "countries" is empty.' );
+        } );
+
+        it( 'populates matching external instances', function() {
+            model = new Model( modelStr, [ {
+                id: 'cities',
+                xmlStr: citiesStr
+            }, {
+                id: 'neighborhoods',
+                xmlStr: '<root/>'
+            }, {
+                id: 'countries',
+                xmlStr: '<root/>'
+            } ] );
+            loadErrors = model.init();
+            expect( loadErrors.length ).toEqual( 0 );
+            expect( model.$.find( 'instance#cities > root > item > country:eq(0)' ).text() ).toEqual( 'nl' );
+        } );
+
+        it( 'outputs errors if an external instance is not valid XML', function() {
+            model = new Model( modelStr, [ {
+                id: 'cities',
+                xmlStr: '<root>'
+            }, {
+                id: 'neighborhoods',
+                xmlStr: '<root/>'
+            }, {
+                id: 'countries',
+                xmlStr: '<root/>'
+            } ] );
+            loadErrors = model.init();
+            expect( loadErrors.length ).toEqual( 4 );
+            expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML instance "cities".' );
+        } );
+    } );
+
 } );

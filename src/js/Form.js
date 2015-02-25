@@ -33,9 +33,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          * @constructor
          */
 
-        function Form( formSelector, dataStr, dataStrToEdit, unsubmitted ) {
+        function Form( formSelector, dataStr, dataStrToEdit, externalData, unsubmitted ) {
             var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
                 loadErrors = [];
+
+            externalData = externalData || [];
 
             /**
              * Function: init
@@ -47,7 +49,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // cloning children to keep any delegated event handlers on 'form.or' intact upon resetting
                 $formClone = $( formSelector ).clone().appendTo( '<original></original>' );
 
-                model = new FormModel( dataStr );
+                model = new FormModel( dataStr, externalData );
                 form = new FormView( formSelector );
 
                 //var profiler = new Profiler('model.init()');
@@ -65,10 +67,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //profiler = new Profiler('html form.init()');
                 form.init();
                 //profiler.report();
-
-                if ( loadErrors.length > 0 ) {
-                    console.error( 'loadErrors: ', loadErrors );
-                }
 
                 if ( window.scrollTo ) {
                     window.scrollTo( 0, 0 );
@@ -1169,7 +1167,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                 $nodes.each( function() {
-                    var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, $instanceItems, index, context,
+                    var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, $instanceItems, index, context, labelRefValue,
                         $template = $( this ),
                         newItems = {},
                         prevItems = $template.data(),
@@ -1223,6 +1221,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $( this ).parent( 'select' ).siblings( '.or-option-translations' ).empty();
 
                     $instanceItems.each( function() {
+                        labelRefValue = $( this ).children( labelRef ).text();
                         $htmlItem = $( '<root/>' );
                         $template
                             .clone().appendTo( $htmlItem )
@@ -1230,9 +1229,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             .addClass( 'itemset' )
                             .removeAttr( 'data-items-path' );
 
-                        $htmlItemLabels = ( labelType === 'itext' ) ?
-                            $labels.find( '[data-itext-id="' + $( this ).children( labelRef ).text() + '"]' ).clone() :
-                            $( '<span class="active" lang="">' + $( this ).children( labelRef ).text() + '</span>' );
+                        $htmlItemLabels = ( labelType === 'itext' && $labels.find( '[data-itext-id="' + labelRefValue + '"]' ).length > 0 ) ?
+                            $labels.find( '[data-itext-id="' + labelRefValue + '"]' ).clone() :
+                            $( '<span class="option-label active" lang="">' + labelRefValue + '</span>' );
 
                         value = $( this ).children( valueRef ).text();
                         $htmlItem.find( '[value]' ).attr( 'value', value );
