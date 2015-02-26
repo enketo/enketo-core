@@ -3,10 +3,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased] 
+[3.5.0] 
 ---------
+##### Added
+- Ability to pass external XML data to the form object.
+
 ##### Changed
-- Updated installation instructions
+- Updated installation instructions.
+- Cleaner, more robust way of passing parameters to instantiate Form.
+- Sample form link in developer template.
+- If itext reference element for itemset item cannot be found use the itextref ID as label instead.
 
 [3.4.1] - 2015-02-19
 ---------

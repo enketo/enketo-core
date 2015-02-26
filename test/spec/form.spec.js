@@ -6,7 +6,10 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
     var loadForm = function( filename, editStr ) {
         var strings = mockForms1[ filename ];
-        return new Form( strings.html_form, strings.xml_model, editStr );
+        return new Form( strings.html_form, {
+            modelStr: strings.xml_model,
+            instanceStr: editStr
+        } );
     };
 
     describe( "Output functionality ", function() {
@@ -14,7 +17,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
         // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
         // since the issue was resolved by updating outputs with a one millisecond delay (!).
         // Nevertheless, these tests can be useful.
-        var form = new Form( formStr2, dataStr2 );
+        var form = new Form( formStr2, {
+            modelStr: dataStr2
+        } );
 
         form.init();
 
@@ -58,13 +63,17 @@ define( [ "enketo-js/Form" ], function( Form ) {
         var form, t;
 
         it( "ignores a calculate binding on [ROOT]/meta/instanceID", function() {
-            form = new Form( formStr2, dataStr2 );
+            form = new Form( formStr2, {
+                modelStr: dataStr2
+            } );
             form.init();
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
         } );
 
         it( "generates an instanceID on meta/instanceID WITHOUT preload binding", function() {
-            form = new Form( formStr2, dataStr2 );
+            form = new Form( formStr2, {
+                modelStr: dataStr2
+            } );
             form.init();
             form.getView().$.find( 'fieldset#or-preload-items' ).remove();
             expect( form.getView().$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
@@ -72,22 +81,28 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         it( "generates an instanceID WITH preload binding", function() {
-            form = new Form( formStr3, dataStr2 );
+            form = new Form( formStr3, {
+                modelStr: dataStr2
+            } );
             form.init();
             expect( form.getView().$
-                .find( 'fieldset#or-preload-items input[name="/random/meta/instanceID"][data-preload="instance"]' ).length )
+                    .find( 'fieldset#or-preload-items input[name="/random/meta/instanceID"][data-preload="instance"]' ).length )
                 .toEqual( 1 );
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
         } );
 
         it( "does not generate a new instanceID if one is already present", function() {
-            form = new Form( formStr3, dataStr3 );
+            form = new Form( formStr3, {
+                modelStr: dataStr3
+            } );
             form.init();
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ] ).toEqual( 'c13fe058-3349-4736-9645-8723d2806c8b' );
         } );
 
         it( "generates a timeStart on meta/timeStart WITHOUT preload binding", function() {
-            form = new Form( formStr2, dataStr2 );
+            form = new Form( formStr2, {
+                modelStr: dataStr2
+            } );
             form.init();
             form.getView().$.find( 'fieldset#or-preload-items' ).remove();
             expect( form.getView().$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
@@ -97,7 +112,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
         it( "generates a timeEnd on init and updates this after a beforesave event WITHOUT preload binding", function() {
             var timeEnd, timeEndNew;
             //jasmine.Clock.useMock();
-            form = new Form( formStr2, dataStr2 );
+            form = new Form( formStr2, {
+                modelStr: dataStr2
+            } );
             form.init();
             form.getView().$.find( 'fieldset#or-preload-items' ).remove();
             expect( form.getView().$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
@@ -117,7 +134,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
         function testPreloadExistingValue( node ) {
             it( "obtains unchanged preload value of item (WITH preload binding): " + node.selector + "", function() {
-                form = new Form( formStr5, dataStr5a );
+                form = new Form( formStr5, {
+                    modelStr: dataStr5a
+                } );
                 form.init();
                 expect( form.getModel().node( node.selector ).getVal()[ 0 ] ).toEqual( node.result );
             } );
@@ -125,7 +144,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
         function testPreloadNonExistingValue( node ) {
             it( "populates previously empty preload item (WITH preload binding): " + node.selector + "", function() {
-                form = new Form( formStr5, dataStr5b );
+                form = new Form( formStr5, {
+                    modelStr: dataStr5b
+                } );
                 form.init();
                 expect( form.getModel().node( node.selector ).getVal()[ 0 ].length > 0 ).toBe( true );
             } );
@@ -179,7 +200,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         it( 'correctly populates input field even if the instance node name is not unique and occurs at multiple levels', function() {
-            form = new Form( formStr4, dataStr4 );
+            form = new Form( formStr4, {
+                modelStr: dataStr4
+            } );
             form.init();
             expect( form.getView().$.find( '[name="/nodename_bug/hh/hh"]' ).val() ).toEqual( 'hi' );
         } );
@@ -378,14 +401,18 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         it( "hides irrelevant branches upon initialization", function() {
-            form = new Form( formStr6, dataStr6 );
+            form = new Form( formStr6, {
+                modelStr: dataStr6
+            } );
             form.init();
             expect( form.getView().$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
             expect( form.getView().$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 1 );
         } );
 
         it( "reveals a group branch when the relevant condition is met", function() {
-            form = new Form( formStr6, dataStr6 );
+            form = new Form( formStr6, {
+                modelStr: dataStr6
+            } );
             form.init();
             //first check incorrect value that does not meet relevant condition
             form.getView().$.find( '[name="/data/nodeA"]' ).val( 'no' ).trigger( 'change' );
@@ -396,7 +423,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         it( "reveals a question when the relevant condition is met", function() {
-            form = new Form( formStr6, dataStr6 );
+            form = new Form( formStr6, {
+                modelStr: dataStr6
+            } );
             form.init();
             //first check incorrect value that does not meet relevant condition
             form.getView().$.find( '[name="/data/group/nodeB"]' ).val( 3 ).trigger( 'change' );
@@ -487,7 +516,9 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
         beforeEach( function() {
             jQuery.fx.off = true; //turn jQuery animations off
-            form = new Form( formStr6, dataStr6 );
+            form = new Form( formStr6, {
+                modelStr: dataStr6
+            } );
             form.init();
             $numberInput = form.getView().$.find( '[name="/data/group/nodeB"]' );
             $numberLabel = form.getView().input.getWrapNodes( $numberInput );

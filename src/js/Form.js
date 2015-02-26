@@ -26,18 +26,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          * or private) because only one instance will be created at a time.
          *
          * @param {string} formSelector  jquery selector for the form
-         * @param {string} dataStr       <instance> as XML string
-         * @param {?string=} dataStrToEdit <instance> as XML string that is to be edit. This may not be a complete instance (empty nodes could be missing) and may have additional nodes.
-         * @param { ?boolean= } unsubmitted    whether the dataStrToEdit has been submitted to the OpenRosa server before
+         * @param {{modelStr: string, ?instanceStr: string, ?unsubmitted: boolean, ?external: <{id: string, xmlStr: string }> }} data data object containing model, (partial) instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
          *
          * @constructor
          */
 
-        function Form( formSelector, dataStr, dataStrToEdit, externalData, unsubmitted ) {
+        function Form( formSelector, data ) {
             var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
                 loadErrors = [];
-
-            externalData = externalData || [];
 
             /**
              * Function: init
@@ -49,7 +45,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // cloning children to keep any delegated event handlers on 'form.or' intact upon resetting
                 $formClone = $( formSelector ).clone().appendTo( '<original></original>' );
 
-                model = new FormModel( dataStr, externalData );
+                model = new FormModel( data.modelStr, data.external );
                 form = new FormView( formSelector );
 
                 //var profiler = new Profiler('model.init()');
@@ -57,8 +53,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 //profiler.report();
 
-                if ( typeof dataStrToEdit !== 'undefined' && dataStrToEdit && dataStrToEdit.length > 0 ) {
-                    dataToEdit = new FormModel( dataStrToEdit );
+                if ( data.instanceStr ) {
+                    dataToEdit = new FormModel( data.instanceStr );
                     loadErrors = loadErrors.concat( dataToEdit.init() );
                     this.load( dataToEdit );
                 }
@@ -197,7 +193,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // file cannot be found in the local filesystem.
                     // To avoid showing this error message in that particular case, 
                     // we cheat and pretend the XML data type is the plain old 'string'
-                    if ( !unsubmitted ) {
+                    if ( !data.unsubmitted ) {
                         xmlDataType = ( xmlDataType === 'binary' ) ? 'string' : xmlDataType;
                     }
 
@@ -282,7 +278,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 }
 
                 // if record is not local, copy instanceID value to deprecatedID and empty instanceID
-                if ( !unsubmitted ) {
+                if ( !data.unsubmitted ) {
                     // add deprecatedID node
                     if ( model.node( '*>meta>deprecatedID' ).get().length !== 1 ) {
                         var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;

@@ -1,4 +1,4 @@
-enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg)](https://travis-ci.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies)
+enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies)
 ================
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools.
@@ -23,17 +23,25 @@ requirejs(['js/Form'], function (Form){
 	// In this example we assume the HTML was injected at the server and modelStr 
 	// was injected as a global variable inside a <script> tag.
 
-	// string of the jquery selector of the HTML Form DOM element
+	// required string of the jquery selector of the HTML Form DOM element
 	var formSelector = 'form.or:eq(0)';
 
-	// string of the default instance defined in the XForm
-	var modelStr = globalXMLInstance;
+	// required object containing data for the form
+	var data = {};
 
-	// string of an existing instance to be edited
-	var modelToEditStr = null;
+	// required string of the default instance defined in the XForm
+	data.modelStr = globalXMLInstance;
 
-	// instantiate a form, with 2 (or 3) parameters
-	var form = new Form( formSelector, modelStr, modelToEditStr);
+	// optional string of an existing instance to be edited
+	data.instanceStr = null;
+	// optional boolean whether this instance has been unsubmitted so far
+	data.unsubmitted = true;
+
+	// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
+	data.external = [];
+
+	// instantiate a form, with 2 parameters
+	var form = new Form( formSelector, data);
 
 	//initialize the form and capture any load errors
 	var loadErrors = form.init();
