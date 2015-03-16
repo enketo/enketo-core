@@ -162,5 +162,5 @@ The development of this app and [enketo-core](https://github.com/enketo/enketo-c
 
 ### Change log
 
-See [CHANGELOG](./CHANGELOG.md)
+See [change log](./CHANGELOG.md)
 

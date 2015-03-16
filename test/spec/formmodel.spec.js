@@ -160,7 +160,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                 [ "/thedata/nodeA", null, null, 'val3', 'somewrongtype', true ], //default type is string
 
                 [ "/thedata/nodeA", 1, null, 'val13', 'string', null ], //non-existing node
-                [ "/thedata/repeatGroup/nodeC", null, null, 'val', null ], //multiple nodes
+                [ "/thedata/repeatGroup/nodeC", null, null, 'val', null, null ], //multiple nodes
 
                 [ "/thedata/nodeA", 0, null, '4', 'double', true ], //double is a non-existing xml data type so turned into string
                 [ "/thedata/nodeA", 0, null, 5, 'double', true ],

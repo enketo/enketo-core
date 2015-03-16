@@ -588,7 +588,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 form.init();
 
                 formHTMLO = form.getView();
-                spyOn( formHTMLO, 'itemsetUpdate' ).andCallThrough();
+                spyOn( formHTMLO, 'itemsetUpdate' ).and.callThrough();
 
                 $items1Radio = function() {
                     return form.getView().$.find( sel1Radio );
@@ -619,72 +619,50 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
             it( 'level 2: with <input type="radio"> elements has the expected amount of options', function() {
                 //select first option in cascade
-                runs( function() {
-                    form.getView().$.find( sel1Radio + '[value="nl"]' ).prop( 'checked', true ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel1Radio + '[value="nl"]' ).prop( 'checked', true ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'country';
-                    } );
-                }, 'itemsetUpdate not called!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'country';
+                } ) ).toEqual( true );
 
-                runs( function() {
-                    expect( $items1Radio().length ).toEqual( 2 );
-                    expect( $items2Radio().length ).toEqual( 3 );
-                    expect( $items2Radio().siblings().text() ).toEqual( 'AmsterdamAmsterdamRotterdamRotterdamDrontenDronten' );
-                    expect( $items3Radio().length ).toEqual( 0 );
-                } );
+                expect( $items1Radio().length ).toEqual( 2 );
+                expect( $items2Radio().length ).toEqual( 3 );
+                expect( $items2Radio().siblings().text() ).toEqual( 'AmsterdamAmsterdamRotterdamRotterdamDrontenDronten' );
+                expect( $items3Radio().length ).toEqual( 0 );
             } );
 
             it( 'level 3: with <input type="radio"> elements has the expected amount of options', function() {
                 //select first option
-                runs( function() {
-                    form.getView().$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', true ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', true ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'country';
-                    } );
-                }, 'itemsetUpdate not called!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'country';
+                } ) ).toEqual( true );
 
                 //select second option
-                runs( function() {
-                    form.getView().$.find( sel2Radio + '[value="ams"]' ).attr( 'checked', true ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel2Radio + '[value="ams"]' ).attr( 'checked', true ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'city';
-                    } );
-                }, 'itemsetUpdate not called!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'city';
+                } ) ).toEqual( true );
 
-                runs( function() {
-                    expect( $items1Radio().length ).toEqual( 2 );
-                    expect( $items2Radio().length ).toEqual( 3 );
-                    expect( $items3Radio().length ).toEqual( 2 );
-                    expect( $items3Radio().siblings().text() ).toEqual( 'WesterparkWesterparkDe DamDam' );
-                } );
+                expect( $items1Radio().length ).toEqual( 2 );
+                expect( $items2Radio().length ).toEqual( 3 );
+                expect( $items3Radio().length ).toEqual( 2 );
+                expect( $items3Radio().siblings().text() ).toEqual( 'WesterparkWesterparkDe DamDam' );
 
                 //select other first option to change itemset
-                runs( function() {
-                    form.getView().$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', false );
-                    form.getView().$.find( sel1Radio + '[value="usa"]' ).attr( 'checked', true ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', false );
+                form.getView().$.find( sel1Radio + '[value="usa"]' ).attr( 'checked', true ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'city';
-                    } );
-                }, 'itemsetUpdate not called!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'city';
+                } ) ).toEqual( true );
 
-                runs( function() {
-                    expect( $items1Radio().length ).toEqual( 2 );
-                    expect( $items2Radio().length ).toEqual( 3 );
-                    expect( $items2Radio().siblings().text() ).toEqual( 'DenverDenverNieuw AmsterdamNew York CityDe EngelenLos Angeles' );
-                    expect( $items3Radio().length ).toEqual( 0 );
-                } );
+                expect( $items1Radio().length ).toEqual( 2 );
+                expect( $items2Radio().length ).toEqual( 3 );
+                expect( $items2Radio().siblings().text() ).toEqual( 'DenverDenverNieuw AmsterdamNew York CityDe EngelenLos Angeles' );
+                expect( $items3Radio().length ).toEqual( 0 );
             } );
 
             it( 'level 1: with <select> <option> elements has the expected amount of options', function() {
@@ -696,74 +674,52 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
             it( 'level 2: with <select> <option> elements has the expected amount of options', function() {
                 //select first option in cascade
-                runs( function() {
-                    form.getView().$.find( sel1Select ).val( "nl" ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel1Select ).val( "nl" ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'country2';
-                    } );
-                }, 'itemsetUpdate not called!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'country2';
+                } ) ).toEqual( true );
 
-                runs( function() {
-                    expect( $items1Select().length ).toEqual( 2 );
-                    expect( $items2Select().length ).toEqual( 3 );
-                    expect( $items2Select().eq( 0 ).attr( 'value' ) ).toEqual( 'ams' );
-                    expect( $items2Select().eq( 2 ).attr( 'value' ) ).toEqual( 'dro' );
-                    expect( $items3Select().length ).toEqual( 0 );
-                } );
+                expect( $items1Select().length ).toEqual( 2 );
+                expect( $items2Select().length ).toEqual( 3 );
+                expect( $items2Select().eq( 0 ).attr( 'value' ) ).toEqual( 'ams' );
+                expect( $items2Select().eq( 2 ).attr( 'value' ) ).toEqual( 'dro' );
+                expect( $items3Select().length ).toEqual( 0 );
             } );
 
             it( 'level 3: with <select> <option> elements has the expected amount of options', function() {
                 //select first option in cascade
-                runs( function() {
-                    form.getView().$.find( sel1Select ).val( "nl" ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel1Select ).val( "nl" ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'country2';
-                    } );
-                }, 'itemsetUpdate not called for country2!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'country2';
+                } ) ).toEqual( true );
 
                 //select second option
-                runs( function() {
-                    form.getView().$.find( sel2Select ).val( "ams" ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel2Select ).val( "ams" ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'city2';
-                    } );
-                }, 'itemsetUpdate not called for city2 [1]!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'city2';
+                } ) ).toEqual( true );
 
-                runs( function() {
-                    expect( $items1Select().length ).toEqual( 2 );
-                    expect( $items2Select().length ).toEqual( 3 );
-                    expect( $items3Select().length ).toEqual( 2 );
-                    expect( $items3Select().eq( 0 ).attr( 'value' ) ).toEqual( 'wes' );
-                    expect( $items3Select().eq( 1 ).attr( 'value' ) ).toEqual( 'dam' );
-                } );
+                expect( $items1Select().length ).toEqual( 2 );
+                expect( $items2Select().length ).toEqual( 3 );
+                expect( $items3Select().length ).toEqual( 2 );
+                expect( $items3Select().eq( 0 ).attr( 'value' ) ).toEqual( 'wes' );
+                expect( $items3Select().eq( 1 ).attr( 'value' ) ).toEqual( 'dam' );
 
                 //select other first option to change itemset
-                runs( function() {
-                    form.getView().$.find( sel1Select ).val( "usa" ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel1Select ).val( "usa" ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'city2';
-                    } );
-                }, 'itemsetUpdate not called for city2 [2]!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'city2';
+                } ) ).toEqual( true );
 
-                runs( function() {
-                    expect( $items1Select().length ).toEqual( 2 );
-                    expect( $items2Select().length ).toEqual( 3 );
-                    expect( $items2Select().eq( 0 ).attr( 'value' ) ).toEqual( 'den' );
-                    expect( $items2Select().eq( 2 ).attr( 'value' ) ).toEqual( 'la' );
-                    expect( $items3Select().length ).toEqual( 0 );
-                } );
+                expect( $items1Select().length ).toEqual( 2 );
+                expect( $items2Select().length ).toEqual( 3 );
+                expect( $items2Select().eq( 0 ).attr( 'value' ) ).toEqual( 'den' );
+                expect( $items2Select().eq( 2 ).attr( 'value' ) ).toEqual( 'la' );
+                expect( $items3Select().length ).toEqual( 0 );
             } );
         } );
 
@@ -779,7 +735,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 form.init();
 
                 formHTMLO = form.getView();
-                spyOn( formHTMLO, 'itemsetUpdate' ).andCallThrough();
+                spyOn( formHTMLO, 'itemsetUpdate' ).and.callThrough();
 
                 $items1Radio = function() {
                     return form.getView().$.find( sel1Radio );
@@ -794,35 +750,25 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
             it( 'level 3: with <input type="radio"> elements using direct references to instance labels without itext has the expected amount of options', function() {
                 //select first option
-                runs( function() {
-                    form.getView().$.find( sel1Radio + '[value="washington"]' )
-                        .attr( 'checked', true ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel1Radio + '[value="washington"]' )
+                    .attr( 'checked', true ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'state';
-                    } );
-                }, 'itemsetUpdate not called for state!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'state';
+                } ) ).toEqual( true );
 
                 //select second option
-                runs( function() {
-                    form.getView().$.find( sel2Radio + '[value="king"]' )
-                        .attr( 'checked', true ).trigger( 'change' );
-                } );
+                form.getView().$.find( sel2Radio + '[value="king"]' )
+                    .attr( 'checked', true ).trigger( 'change' );
 
-                waitsFor( function() {
-                    return formHTMLO.itemsetUpdate.mostRecentCall.args[ 0 ].nodes.some( function( node ) {
-                        return node === 'county';
-                    } );
-                }, 'itemsetUpdate not called for county!', 1000 );
+                expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
+                    return node === 'county';
+                } ) ).toEqual( true );
 
-                runs( function() {
-                    expect( $items1Radio().length ).toEqual( 2 );
-                    expect( $items2Radio().length ).toEqual( 3 );
-                    expect( $items3Radio().length ).toEqual( 2 );
-                    expect( $items3Radio().siblings().text() ).toEqual( 'SeattleRedmond' );
-                } );
+                expect( $items1Radio().length ).toEqual( 2 );
+                expect( $items2Radio().length ).toEqual( 3 );
+                expect( $items3Radio().length ).toEqual( 2 );
+                expect( $items3Radio().siblings().text() ).toEqual( 'SeattleRedmond' );
             } );
         } );
 

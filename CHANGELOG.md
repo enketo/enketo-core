@@ -3,7 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[3.5.0] 
+[Unreleased]
+-------------
+##### Changed
+- Updated tests to latest Jasmine
+
+[3.5.0] - 2015-02-27
 ---------
 ##### Added
 - Ability to pass external XML data to the form object.
