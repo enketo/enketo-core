@@ -1,40 +1,4 @@
-requirejs.config( {
-    baseUrl: "../lib",
-    paths: {
-        "enketo-js": "../src/js",
-        "enketo-widget": "../src/widget",
-        "enketo-config": "../config.json",
-        "text": "text/text",
-        "xpath": "xpath/build/xpathjs_javarosa",
-        "file-manager": "../src/js/file-manager",
-        "jquery": "bower-components/jquery/dist/jquery",
-        "jquery.xpath": "jquery-xpath/jquery.xpath",
-        "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
-        "leaflet": "leaflet/leaflet",
-        "bootstrap-slider": "bootstrap-slider/js/bootstrap-slider",
-        "q": "bower-components/q/q"
-    },
-    shim: {
-        "xpath": {
-            exports: "XPathJS"
-        },
-        "widget/date/bootstrap3-datepicker/js/bootstrap-datepicker": {
-            deps: [ "jquery" ],
-            exports: "jQuery.fn.datepicker"
-        },
-        "widget/time/bootstrap3-timepicker/js/bootstrap-timepicker": {
-            deps: [ "jquery" ],
-            exports: "jQuery.fn.timepicker"
-        },
-        "Modernizr": {
-            exports: "Modernizr"
-        },
-        "leaflet": {
-            exports: "L"
-        }
-    }
-} );
-
+requirejs( [ 'require-config' ], function( rc ) {
     requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form', 'file-manager' ],
         function( $, Modernizr, Form, fileManager ) {
             var loadErrors, form, formStr, modelStr;
@@ -96,3 +60,4 @@ requirejs.config( {
                 );
             }
         } );
+} );

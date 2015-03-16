@@ -34,6 +34,7 @@ requirejs(['js/Form'], function (Form){
 
 	// optional string of an existing instance to be edited
 	data.instanceStr = null;
+
 	// optional boolean whether this instance has been unsubmitted so far
 	data.unsubmitted = true;
 
@@ -59,7 +60,7 @@ requirejs(['js/Form'], function (Form){
             form.resetView();
 
             // reinstantiate a new form with the default model 
-            form = new Form( 'form.or:eq(0)', modelStr);
+            form = new Form( 'form.or:eq(0)', { modelStr: modelStr } );
 
             // do what you want with the record
         }
@@ -120,7 +121,7 @@ Each widget needs to fulfill following requirements:
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
 * Still trying to find a JS Documentation system to use with grunt that likes Closure-style JSDoc
 * JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues (Note, I had to add `"ensure_newline_at_eof_on_save": true` to the Sublime Text 2 user settings to make grunt jsbeautifier happy with the style produced by the ST2 JsFormat plugin.)
-* Testing is done with Jasmine (in browser and headless with phantomjs `grunt test`)
+* Testing is done with Jasmine and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
 * When making a pull request, please add tests where relevant
 
 ###Notes for CSS Developers

@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 -------------
 ##### Changed
-- Updated tests to latest Jasmine
+- Updated tests to latest Jasmine and switched to Karma test runner
 
 [3.5.0] - 2015-02-27
 ---------

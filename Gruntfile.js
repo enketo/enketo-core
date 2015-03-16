@@ -76,60 +76,18 @@ module.exports = function( grunt ) {
                 }
             }
         },
-        jasmine: {
-            test: {
-                src: 'src/js/**/*.js',
-                options: {
-                    keepRunner: true,
-                    specs: 'test/spec/*.js',
-                    helpers: [ 'test/util/*.js', 'test/mock/*.js' ],
-                    host: 'http://127.0.0.1:8000/',
-                    template: require( 'grunt-template-jasmine-requirejs' ),
-                    templateOptions: {
-                        requireConfig: {
-                            baseUrl: 'lib',
-                            paths: {
-                                'enketo-js': '../src/js',
-                                'enketo-widget': '../src/widget',
-                                'enketo-config': '../config.json',
-                                text: 'text/text',
-                                xpath: 'xpath/build/xpathjs_javarosa',
-                                jquery: 'bower-components/jquery/dist/jquery',
-                                'jquery.xpath': 'jquery-xpath/jquery.xpath',
-                                'jquery.touchswipe': 'jquery-touchswipe/jquery.touchSwipe',
-                                'leaflet': 'leaflet/leaflet',
-                                'bootstrap-slider': 'bootstrap-slider/js/bootstrap-slider',
-                                'q': 'bower-components/q/q'
-                            },
-                            shim: {
-                                'xpath': {
-                                    exports: 'XPathJS'
-                                },
-                                'bootstrap': {
-                                    deps: [ 'jquery' ],
-                                    exports: 'jQuery.fn.bootstrap'
-                                },
-                                'widget/date/bootstrap3-datepicker/js/bootstrap-datepicker': {
-                                    deps: [ 'jquery' ],
-                                    exports: 'jQuery.fn.datepicker'
-                                },
-                                'widget/time/bootstrap3-timepicker/js/bootstrap-timepicker': {
-                                    deps: [ 'jquery' ],
-                                    exports: 'jQuery.fn.timepicker'
-                                },
-                                'leaflet': {
-                                    exports: 'L'
-                                }
-                            },
-                            map: {
-                                '*': {
-                                    'enketo-js': '../src/js',
-                                    'enketo-widget': '../src/widget'
-                                }
-                            }
-                        }
-                    }
-                },
+        karma: {
+            options: {
+                singleRun: true,
+                reporters: [ 'dots' ]
+            },
+            headless: {
+                configFile: 'test/karma.conf.js',
+                browsers: [ 'PhantomJS' ]
+            },
+            browsers: {
+                configFile: 'test/karma.conf.js',
+                browsers: [ 'Chrome', 'ChromeCanary', /*'Firefox'*/ /*, 'Opera',*/ 'Safari' ]
             }
         },
         prepWidgetSass: {
@@ -153,8 +111,8 @@ module.exports = function( grunt ) {
             compile: {
                 options: {
                     name: '../app',
-                    baseUrl: 'lib',
-                    mainConfigFile: "app.js",
+                    baseUrl: './lib',
+                    mainConfigFile: 'require-config.js',
                     findNestedDependencies: true,
                     include: ( function() {
                         //add widgets js and widget config.json files
@@ -217,7 +175,7 @@ module.exports = function( grunt ) {
     } );
 
     grunt.registerTask( 'compile', [ 'modernizr', 'requirejs:compile' ] );
-    grunt.registerTask( 'test', [ 'modernizr', 'jsbeautifier:test', 'jshint', 'connect:test', 'compile', 'jasmine' ] );
+    grunt.registerTask( 'test', [ 'modernizr', 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'concurrent:develop' ] );
