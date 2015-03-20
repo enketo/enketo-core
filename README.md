@@ -7,7 +7,7 @@ This repo is meant to use as a building block for your own enketo-powered applic
 
 Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
-###Usage as a library
+### Usage as a library
 
 1. Add as a git submodule (future: bower)
 2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-xslt-transformer-php](https://github.com/MartijnR/enketo-xslt-transformer-php) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/) (add `?xform=http://myforms.com/myform.xml` to use API).
@@ -68,7 +68,7 @@ requirejs(['js/Form'], function (Form){
 });
 ```
 
-###How to run to develop on enketo-core
+### How to run to develop on enketo-core
 
 1. install [node](http://nodejs.org/), [grunt-cli](http://gruntjs.com/getting-started), and bower
 2. clone the repo
@@ -78,7 +78,7 @@ requirejs(['js/Form'], function (Form){
 5. start built-in server with `grunt server` 
 8. browse to [http://localhost:8080/forms/index.html](http://localhost:8080/forms/index.html)
 
-###How to create or extend widgets
+### How to create or extend widgets
 
 To create new widgets, I recommend using this [plugin template](https://gist.github.com/MartijnR/6943281). The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
 
@@ -108,14 +108,14 @@ Each widget needs to fulfill following requirements:
 * send a `fakefocus` and `fakeblur` event to the original input when the widget gets focus or looses it (see select-desktop)
 * please write Jasmine specs and a runner.html in the widget's /test folder.....(yeah, need to do that for the existing widgets too...)
 
-###Notes for All Developers
+### Notes for All Developers
 
 * build with Grunt (using Compass for sass is also possible as long as config.json does not change)
 * use `grunt watch` to automatically compile (sass) when a source file changes
 * requires webserver - one is included in this repo and can be fired up with `grunt server`
 * adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
 
-###Notes for JavaScript Developers
+### Notes for JavaScript Developers
 
 * The JS library uses Require.js
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
@@ -124,13 +124,13 @@ Each widget needs to fulfill following requirements:
 * Testing is done with Jasmine and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
 * When making a pull request, please add tests where relevant
 
-###Notes for CSS Developers
+### Notes for CSS Developers
 
 The core can be fairly easily extended with alternative themes. 
 See the *default* and the *formhub* themes already included in /src/sass. 
 We would be happy to discuss whether your contribution should be a part of the core, the default theme or be turned into a new theme. 
 
-###Acknowledgements
+### Acknowledgements
 
 I would like to acknowledge and thank the indirect contribution by the creators of the following excellent works that were used in the project:
 
@@ -138,7 +138,7 @@ I would like to acknowledge and thank the indirect contribution by the creators 
 * [Bootstrap Datepicker by eternicode](https://github.com/eternicode/bootstrap-datepicker)
 * [Bootstrap Timepicker by jdewit](http://jdewit.github.io/bootstrap-timepicker/)
 
-###Sponsors
+### Sponsors
 
 The development of this app and [enketo-core](https://github.com/enketo/enketo-core) was sponsored by:
 
@@ -150,7 +150,7 @@ The development of this app and [enketo-core](https://github.com/enketo/enketo-c
 * [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
 * [Enketo LLC](https://enketo.org)
 
-###Related Projects
+### Related Projects
 
 * [Enketo Express](https://github.com/enketo/enketo-express) - A modern node.js version of Enketo Smart Paper
 * [Enketo Legacy](https://github.com/enketo/enketo-legacy) - The old not-so-modern version of Enketo Smart Paper
@@ -164,4 +164,8 @@ The development of this app and [enketo-core](https://github.com/enketo/enketo-c
 ### Change log
 
 See [change log](./CHANGELOG.md)
+
+### Performance (live)
+
+to follow
 
