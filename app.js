@@ -24,6 +24,7 @@ requirejs( [ 'require-config' ], function( rc ) {
                 }, 'text' );
             } else if ( $( 'form.or' ).length > 0 ) {
                 $( '.guidance' ).remove();
+                modelStr = globalModelStr;
                 initializeForm();
             }
 

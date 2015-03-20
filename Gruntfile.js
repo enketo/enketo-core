@@ -174,10 +174,10 @@ module.exports = function( grunt ) {
 
     } );
 
-    grunt.registerTask( 'compile', [ 'modernizr', 'requirejs:compile' ] );
+    grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
     grunt.registerTask( 'test', [ 'modernizr', 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'concurrent:develop' ] );
-    grunt.registerTask( 'default', [ 'modernizr', 'jshint', 'prepWidgetSass', 'sass', 'test' ] );
+    grunt.registerTask( 'default', [ 'prepWidgetSass', 'sass', 'compile' ] );
 };

@@ -2,6 +2,7 @@ node_modules
 build/css
 build/js
 lib/bower-components
+temp
 .sass-cache
 ._*
 .grunt
