@@ -3,10 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[3.5.1] - 2015-03-20
 -------------
 ##### Changed
 - Updated tests to latest Jasmine and switched to Karma test runner
+
+#### Fixed
+- Save as Draft functionality broken in pages mode
 
 [3.5.0] - 2015-02-27
 ---------
@@ -21,11 +24,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [3.4.1] - 2015-02-19
 ---------
-##### Fixed
-- In media input widget, when media is too large, record is still populated with file name.
-
 ##### Added
 - Change log
+
+##### Fixed
+- In media input widget, when media is too large, record is still populated with file name.
 
 [3.4.0] - 2015-02-19
 ---------
