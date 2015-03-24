@@ -1985,16 +1985,25 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              * @return {boolean} whether the form contains any errors
              */
             FormView.prototype.validateAll = function() {
-                var that = this,
-                    $firstError;
+                var $firstError,
+                    that = this;
 
                 //can't fire custom events on disabled elements therefore we set them all as valid
                 $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +
                     'input:disabled, select:disabled, textarea:disabled' ).each( function() {
                     that.setValid( $( this ) );
                 } );
-                $form.find( 'input, select, textarea' ).not( '.ignore' ).trigger( 'validate' );
+
+                $form.find( '.question' ).each( function( q ) {
+                    // only trigger validate on first input and huge **pure CSS** selector (huge performance impact)
+                    $( this )
+                        .find( 'input:not(.ignore):not(:disabled), select:not(.ignore):not(:disabled), textarea:not(.ignore):not(:disabled)' )
+                        .eq( 0 )
+                        .trigger( 'validate' );
+                } );
+
                 $firstError = $form.find( '.invalid-required, .invalid-constraint' ).eq( 0 );
+
                 if ( $firstError.length > 0 && window.scrollTo ) {
                     if ( this.pages.active ) {
                         // move to the first page with an error
