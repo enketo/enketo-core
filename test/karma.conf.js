@@ -54,7 +54,7 @@ module.exports = function( config ) {
                 pattern: 'lib/Modernizr.js',
                 included: false
             }, {
-                pattern: 'lib/xpath/build/xpathjs_javarosa.js',
+                pattern: 'lib/xpath/build/enketo-xpathjs.js',
                 included: false
             }, {
                 pattern: 'lib/bower-components/jquery/dist/jquery.js',

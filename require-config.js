@@ -6,7 +6,7 @@ require.config( {
         "enketo-config": "../config.json",
         "require-config": "../require-config", // required for build task
         "text": "text/text",
-        "xpath": "xpath/build/xpathjs_javarosa",
+        "xpath": "xpath/build/enketo-xpathjs",
         "file-manager": "../src/js/file-manager",
         "jquery": "bower-components/jquery/dist/jquery",
         "jquery.xpath": "jquery-xpath/jquery.xpath",
