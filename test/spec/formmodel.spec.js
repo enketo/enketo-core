@@ -5,7 +5,9 @@ if ( typeof define !== 'function' ) {
 define( [ "enketo-js/FormModel" ], function( Model ) {
 
     var getModel = function( filename ) {
-        return new Model( mockForms1[ filename ].xml_model );
+        var model = new Model( mockForms1[ filename ].xml_model );
+        model.init();
+        return model;
     };
 
     describe( "Data node getter", function() {
@@ -23,30 +25,9 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                     20
                 ],
                 [ null, null, {
-                        noTemplate: true
-                    },
-                    20
-                ],
-                [ null, null, {
-                        noTemplate: false
-                    },
-                    22
-                ],
-                [ null, null, {
-                        onlyTemplate: true
-                    },
-                    1
-                ],
-                [ null, null, {
                         noEmpty: true
                     },
                     9 //when tested outside Form class, instanceID is not populated
-                ],
-                [ null, null, {
-                        noEmpty: true,
-                        noTemplate: false
-                    },
-                    10 //when tested outside Form class, instanceID is not populated
                 ],
                 [ "/thedata/nodeA", null, null, 1 ],
                 [ "/thedata/nodeA", 1, null, 0 ],
@@ -60,32 +41,8 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                     },
                     1
                 ],
-                [ "/thedata/nodeA", null, {
-                        onlyTemplate: true
-                    },
-                    0
-                ],
-                [ "/thedata/nodeA", null, {
-                        noTemplate: true
-                    },
-                    1
-                ],
-                [ "/thedata/nodeA", null, {
-                        noTemplate: false
-                    },
-                    1
-                ],
                 [ "/thedata/repeatGroup", null, null, 3 ],
-                [ "/thedata/repeatGroup", null, {
-                        onlyTemplate: true
-                    },
-                    1
-                ],
-                [ "/thedata/repeatGroup", null, {
-                        noTemplate: false
-                    },
-                    4
-                ],
+
                 [ "//nodeC", null, null, 3 ],
                 [ "/thedata/repeatGroup/nodeC", null, null, 3 ],
                 [ "/thedata/repeatGroup/nodeC", 2, null, 1 ],
@@ -98,21 +55,6 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                         onlyleaf: true
                     },
                     3
-                ],
-                [ "/thedata/repeatGroup/nodeC", null, {
-                        onlyTemplate: true
-                    },
-                    0
-                ],
-                [ "/thedata/repeatGroup/nodeC", null, {
-                        noTemplate: true
-                    },
-                    3
-                ],
-                [ "/thedata/repeatGroup/nodeC", null, {
-                        noTemplate: false
-                    },
-                    4
                 ]
             ],
             data = getModel( 'thedata.xml' ); //form.Data(dataStr1);
@@ -296,18 +238,6 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
     } );
 
-    describe( "Data node cloner", function() {
-        it( "has cloned a data node", function() {
-            var data = getModel( 'thedata.xml' ),
-                node = data.node( "/thedata/nodeA" ),
-                $precedingTarget = data.node( "/thedata/repeatGroup/nodeC", 0 ).get();
-
-            expect( data.node( '/thedata/repeatGroup/nodeA', 0 ).get().length ).toEqual( 0 );
-            node.clone( $precedingTarget );
-            expect( data.node( '/thedata/repeatGroup/nodeA', 0 ).get().length ).toEqual( 1 );
-        } );
-    } );
-
     describe( "Data node remover", function() {
         it( "has removed a data node", function() {
             var data = getModel( 'thedata.xml' ),
@@ -362,97 +292,80 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
     } );
 
 
-    describe( 'functionality to obtain string of the XML instance (DataXML.getStr() for storage or uploads)', function() {
-        var str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12,
-            modelA = getModel( 'new_cascading_selections.xml' ),
-            modelB = getModel( 'thedata.xml' );
+    describe( 'functionality to obtain string of the primary XML instance for storage or uploads)', function() {
+        var modelA = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' ),
+            modelC = new Model( '<model                                        ><instance><data><group    template=""><a/></group></data></instance></model>' ),
+            modelB = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' );
+
         modelA.init();
+        modelC.init();
         modelB.init();
-        str1 = modelA.getStr();
-        str2 = modelA.getStr( null, null );
-        str3 = modelA.getStr( false, false );
-        str4 = modelA.getStr( true, false );
-        str5 = modelA.getStr( false, true );
-        str6 = modelA.getStr( true, true );
-        str7 = modelA.getStr( true, true, false );
-        str8 = modelA.getStr( null, null, true );
-        str9 = modelA.getStr( true, true, true );
 
-        str10 = modelB.getStr();
-        str11 = modelB.getStr( true );
-        str12 = modelB.getStr( false, false, true );
-
-        testModelPresent = function( str ) {
-            return isValidXML( str ) && new RegExp( /^<model/g ).test( str );
-        };
-        testInstancePresent = function( str ) {
-            return isValidXML( str ) && new RegExp( /<instance[\s|>]/g ).test( str );
-        };
-        testInstanceNumber = function( str ) {
-            return str.match( /<instance[\s|>]/g ).length;
-        };
-        //testNamespacePresent = function(str){return isValidXML(str) && new RegExp(/xmlns=/).test(str);};
-        testTemplatePresent = function( str ) {
-            return isValidXML( str ) && new RegExp( /template=/ ).test( str );
-        };
-        isValidXML = function( str ) {
-            var $xml;
-            try {
-                $xml = $.parseXML( str );
-            } catch ( e ) {}
-            return typeof $xml === 'object';
-        };
-
-        it( 'returns a string of the primary instance only when called without 3rd parameter: true', function() {
-            expect( testModelPresent( str1 ) ).toBe( false );
-            expect( testInstancePresent( str1 ) ).toBe( false );
-            expect( testModelPresent( str2 ) ).toBe( false );
-            expect( testInstancePresent( str2 ) ).toBe( false );
-            expect( testModelPresent( str3 ) ).toBe( false );
-            expect( testInstancePresent( str3 ) ).toBe( false );
-            expect( testModelPresent( str4 ) ).toBe( false );
-            expect( testInstancePresent( str4 ) ).toBe( false );
-            expect( testModelPresent( str5 ) ).toBe( false );
-            expect( testInstancePresent( str5 ) ).toBe( false );
-            expect( testModelPresent( str6 ) ).toBe( false );
-            expect( testInstancePresent( str6 ) ).toBe( false );
-            expect( testModelPresent( str7 ) ).toBe( false );
-            expect( testInstancePresent( str7 ) ).toBe( false );
+        it( 'returns primary instance without templates', function() {
+            expect( modelA.getStr() ).toEqual( '<data><group><a/></group></data>' );
+            expect( modelC.getStr() ).toEqual( '<data><group><a/></group></data>' );
         } );
 
-        it( 'returns a string of the model and all instances when called with 3rd parameter: true', function() {
-            expect( testModelPresent( str8 ) ).toBe( true );
-            expect( testInstancePresent( str8 ) ).toBe( true );
-            expect( testInstanceNumber( str8 ) ).toBe( 4 );
-            expect( testModelPresent( str9 ) ).toBe( true );
-            expect( testInstancePresent( str9 ) ).toBe( true );
-            expect( testInstanceNumber( str9 ) ).toBe( 4 );
-            expect( testInstancePresent( str12 ) ).toBe( true );
-            expect( testInstanceNumber( str12 ) ).toBe( 1 );
-        } );
-
-        it( 'returns a string with repeat templates included when called with 1st parameter: true', function() {
-            expect( testTemplatePresent( str10 ) ).toBe( false );
-            expect( testTemplatePresent( str11 ) ).toBe( true );
+        it( 'returns primary instance and leaves namespaces intact', function() {
+            expect( modelB.getStr() ).toEqual( '<data xmlns="https://some.namespace.com/"><a/></data>' );
         } );
 
     } );
 
-    describe( 'output data functionality', function() {
-        var model;
 
-        it( 'outputs a clone of the primary instance first child as a jQuery object if the object is wrapped inside <instance> and <model>', function() {
-            model = new Model( '<model><instance><node/></instance><instance id="secondary"><secondary/></instance></model>' );
-            expect( model.getInstanceClone().length ).toEqual( 1 );
-            expect( model.getInstanceClone().prop( 'nodeName' ) ).toEqual( 'node' );
+    describe( 'converting absolute paths', function() {
+        [
+            // to be converted
+            [ '/path/to/node', '/model/instance[1]/path/to/node' ],
+            [ '/models/to/node', '/model/instance[1]/models/to/node' ],
+            [ '/outputs_in_repeats/rep/name', '/model/instance[1]/outputs_in_repeats/rep/name' ],
+            [ '/path/to/node[/path/to/node]', '/model/instance[1]/path/to/node[/model/instance[1]/path/to/node]' ],
+            [ '/path/to/node[ /path/to/node ]', '/model/instance[1]/path/to/node[ /model/instance[1]/path/to/node ]' ],
+            [ 'concat(/output_in_repeats/to/node, "2")', 'concat(/model/instance[1]/output_in_repeats/to/node, "2")' ],
+            [ 'concat(/path/to/node, "2")', 'concat(/model/instance[1]/path/to/node, "2")' ],
+            [ 'concat( /path/to/node, "2" )', 'concat( /model/instance[1]/path/to/node, "2" )' ],
+
+            // to leave unchanged
+            [ 'path/to/node' ],
+            [ 'concat(path/to/node, "2")' ],
+            [ '../path/to/node' + '../node' ],
+            [ '/model/path/to/node' ]
+
+        ].forEach( function( test ) {
+            it( 'converts correctly', function() {
+                var model = new Model( '<model><instance/></model>' );
+                var expected = test[ 1 ] || test[ 0 ];
+                expect( model.shiftRoot( test[ 0 ] ) ).toEqual( expected );
+            } );
         } );
+    } );
 
-        it( 'outputs a clone of the first node as a jQuery object if the object is NOT wrapped inside <instance> and <model>', function() {
-            model = new Model( '<node/>' );
-            expect( model.getInstanceClone().length ).toEqual( 1 );
-            expect( model.getInstanceClone().prop( 'nodeName' ) ).toEqual( 'node' );
+    describe( 'converting instance("id") to absolute paths', function() {
+        [
+            [ 'instance("a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ]
+
+        ].forEach( function( test ) {
+            it( 'happens correctly', function() {
+                var model = new Model( '<model><instance/></model>' );
+                var expected = test[ 1 ];
+                expect( model.replaceInstanceFn( test[ 0 ] ) ).toEqual( expected );
+            } );
         } );
+    } );
 
+    describe( 'converting expressions with current()', function() {
+        [
+            [ 'instance("a")/path/to/node[current()/.. = /path/to/value]', 'instance("a")/path/to/node[.. = /path/to/value]' ],
+            [ 'instance("a")/path/to/node[current()/. = /path/to/value]', 'instance("a")/path/to/node[. = /path/to/value]' ],
+            [ 'instance("a")/path/to/node[current()/path/to/wut = /path/to/value]', 'instance("a")/path/to/node[/path/to/wut = /path/to/value]' ]
+
+        ].forEach( function( test ) {
+            it( 'happens correctly', function() {
+                var model = new Model( '<model><instance/></model>' );
+                var expected = test[ 1 ];
+                expect( model.replaceCurrentFn( test[ 0 ] ) ).toEqual( expected );
+            } );
+        } );
     } );
 
     describe( 'external instances functionality', function() {
@@ -500,6 +413,64 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             expect( loadErrors.length ).toEqual( 4 );
             expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML instance "cities".' );
         } );
+    } );
+
+    describe( 'getting templates', function() {
+        var model = new Model( '<model></model>' );
+        model.templates = {
+            '/path/to/some/repeat/template': 'a template'
+        };
+
+        it( 'works for the exact path to the repeat', function() {
+            expect( model.getTemplate( '/path/to/some/repeat/template' ) ).toEqual( 'a template' );
+        } );
+
+        it( 'works for a child node of the template', function() {
+            expect( model.getTemplate( '/path/to/some/repeat/template/group/leaf' ) ).toEqual( 'a template' );
+        } );
+
+        it( 'returns undefined when template is not available', function() {
+            expect( model.getTemplate( '/path' ) ).not.toBeDefined();
+        } );
+    } );
+
+
+    describe( 'Using XPath with default namespace', function() {
+
+        describe( 'on the primary instance child', function() {
+            var model = new Model( '<model><instance><data xmlns="http://unknown.namespace.com/34324sdagd"><nodeA>5</nodeA></data></instance></model>' );
+
+            model.init();
+
+            it( 'works for Nodeset().get()', function() {
+                expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
+                expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( "5" );
+            } );
+
+            it( 'works for evaluate()', function() {
+                expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
+                expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( "5" );
+            } );
+
+        } );
+
+        describe( ' on the model', function() {
+            var model = new Model( '<model xmlns="http://www.w3.org/2002/xforms"><instance><data><nodeA>5</nodeA></data></instance></model>' );
+
+            model.init();
+
+            it( 'works for Nodeset().get()', function() {
+                expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
+                expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( "5" );
+            } );
+
+            it( 'works for evaluate()', function() {
+                expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
+                expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( "5" );
+            } );
+
+        } );
+
     } );
 
 } );

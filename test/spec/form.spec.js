@@ -213,7 +213,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         var form, loadErrors;
 
         describe( 'when a deprecatedID node is not present in the form format', function() {
-            form = loadForm( 'thedata.xml', dataEditStr1 ); //new Form(formStr1, dataStr1, dataEditStr1);
+            form = loadForm( 'thedata.xml', dataEditStr1 );
             form.init();
 
             it( "adds a deprecatedID node", function() {
@@ -243,7 +243,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         describe( 'when instanceID and deprecatedID nodes are already present in the form format', function() {
-            form = loadForm( 'thedata.xml', dataEditStr1 ); //new Form(formStr1, dataEditStr1, dataEditStr1);
+            form = loadForm( 'thedata.xml', dataEditStr1 );
             form.init();
 
             it( "does not NOT add another instanceID node", function() {
@@ -395,11 +395,6 @@ define( [ "enketo-js/Form" ], function( Form ) {
     describe( 'branching functionality', function() {
         var form;
 
-        beforeEach( function() {
-            //turn jQuery animations off
-            jQuery.fx.off = true;
-        } );
-
         it( "hides irrelevant branches upon initialization", function() {
             form = new Form( formStr6, {
                 modelStr: dataStr6
@@ -524,8 +519,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             $numberLabel = form.getView().input.getWrapNodes( $numberInput );
         } );
 
-        //this fails in phantomJS...
-        xit( "validates a DISABLED and required number field without a value", function() {
+        it( "validates a DISABLED and required number field without a value", function() {
             $numberInput.val( '' ).trigger( 'change' );
             expect( $numberLabel.length ).toEqual( 1 );
             expect( $numberInput.val().length ).toEqual( 0 );

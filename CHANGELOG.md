@@ -3,6 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[3.5.2] - 2015-04-08
+##### Added
+- support for current()
+
+##### Fixed
+- very slow validation performance when form contains radiobuttons or checkboxes
+- slow XPath evaluator performance by avoiding the need to clone the XML model
+- maintaining default namespaces in model & instance when provided in XForm
+
 [3.5.1] - 2015-03-20
 -------------
 ##### Changed

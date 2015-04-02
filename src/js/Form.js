@@ -71,8 +71,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 return loadErrors;
             };
 
-            this.ex = function( expr, type, selector, index ) {
-                return model.evaluate( expr, type, selector, index );
+            this.ex = function( expr, type, selector, index, tryNative ) {
+                return model.evaluate( expr, type, selector, index, tryNative );
             };
             this.getModel = function() {
                 return model;
@@ -95,8 +95,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              * @param {boolean=} incNs
              * @param {boolean=} all
              */
-            this.getDataStr = function( incTempl, incNs, all ) {
-                return model.getStr( incTempl, incNs, all );
+            this.getDataStr = function() {
+                return model.getStr();
             };
 
             this.getRecordName = function() {
@@ -164,7 +164,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             this.load = function( instanceOfFormModel ) {
                 var nodesToLoad, index, xmlDataType, path, value, target, $input, $target, $template, instanceID, error,
                     filter = {
-                        noTemplate: true,
                         noEmpty: true
                     };
 
@@ -226,20 +225,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         target.setVal( value, null, xmlDataType );
                     }
                     //if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
-                    //this use of node(path,index,file).get() is a bit of a trick that is difficult to wrap one's head around
-                    else if ( model.node( path, 0, {
-                            noTemplate: false
-                        } ).get().closest( '[template]' ).length > 0 ) {
+                    else if ( ( $template = model.getTemplate( path ) ) ) {
                         //clone the template node 
-                        //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub)
-                        $template = model.node( path, 0, {
-                            noTemplate: false
-                        } ).get().closest( '[template]' );
-                        //TODO: test this for nested repeats
+                        //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub);
                         //if a preceding repeat with that path was empty this repeat may not have been created yet,
                         //so we need to make sure all preceding repeats are created
                         for ( var p = 0; p < index; p++ ) {
-                            model.cloneTemplate( $template.getXPath( 'instance' ), p );
+                            model.cloneRepeat( path, p );
                         }
                         //try setting the value again
                         target = model.node( path, index );
@@ -792,13 +784,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 groupIndex = ( typeof groupIndex !== 'undefined' ) ? groupIndex : null;
 
-                model.node( selector, groupIndex, {
-                    noEmpty: true
-                } ).get().each( function() {
+                model.node( selector, groupIndex ).get().find( '*' ).filter( function() {
+                    // only return non-empty leafnodes
+                    return $( this ).children().length === 0 && $( this ).text();
+                } ).each( function() {
+                    var $node = $( this );
                     try {
-                        value = $( this ).text();
-                        name = $( this ).getXPath( 'instance' );
-                        index = model.node( name ).get().index( $( this ) );
+                        value = $node.text();
+                        name = $node.getXPath( 'instance' );
+                        index = model.node( name ).get().index( this );
                         that.input.setVal( name, index, value );
                     } catch ( e ) {
                         console.error( e );
@@ -1175,6 +1169,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         labelRef = $labels.attr( 'data-label-ref' ),
                         valueRef = $labels.attr( 'data-value-ref' );
 
+                    /**
+                     * CommCare/ODK change the context to the *itemset* value (in the secondary instance), hence they need to use the current()
+                     * function to make sure that relative paths in the nodeset predicate refer to the correct primary instance node
+                     * Enketo does *not* change the context. It uses the context of the question, not the itemset. Hence it has no need for current().
+                     * I am not sure what is correct, but for now for XLSForm-style secondary instances with only one level underneath the <item>s that
+                     * the nodeset retrieves, Enketo's aproach works well.
+                     */
                     context = that.input.getName( $input );
 
                     /*
@@ -1189,7 +1190,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                         $instanceItems = itemsCache[ itemsXpath ];
                     } else {
-                        var safeToTryNative = true; // temporary until WGXP
+                        var safeToTryNative = true;
                         $instanceItems = $( model.evaluate( itemsXpath, 'nodes', context, index, safeToTryNative ) );
                         if ( !insideRepeat ) {
                             itemsCache[ itemsXpath ] = $instanceItems;
@@ -1269,7 +1270,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     val = '',
                     that = this;
 
-                // console.log( 'outputUpdate', updated );
+                //console.log( 'outputUpdate', updated );
 
                 $nodes = this.getNodesToUpdate( 'data-value', '.or-output', updated );
 
@@ -1296,7 +1297,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( typeof outputCache[ expr ] !== 'undefined' ) {
                         val = outputCache[ expr ];
                     } else {
-                        val = model.evaluate( expr, 'string', context, index );
+                        val = model.evaluate( expr, 'string', context, index, true );
                         if ( !insideRepeat ) {
                             outputCache[ expr ] = val;
                         }
@@ -1775,7 +1776,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // and clone data node if it doesn't already exist
                     path = $master.attr( 'name' );
                     if ( path.length > 0 && index >= 0 ) {
-                        model.cloneTemplate( path, index );
+                        model.cloneRepeat( path, index );
                     }
 
                     // this will trigger setting default values and other stuff
@@ -1952,7 +1953,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // edit is fired when the model changes after the form has been initialized
                     that.editStatus.set( true );
                 } );
-
 
                 $form.on( 'addrepeat', function( event, index ) {
                     var $clone = $( event.target );

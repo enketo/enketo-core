@@ -41,7 +41,7 @@ var dataEditStr1 =
 
 var dataStr2 =
     "<model>" +
-    '<instance xmlns="http://www.w3.org/2002/xforms">' +
+    '<instance>' +
     '<random id="random"><formhub><uuid/></formhub>' +
     '<random__/>' +
     '<note_random/>' +
@@ -60,30 +60,16 @@ var formStr2 =
     '<form class="or" autocomplete="off" id="random">' +
     '<section class="form-logo"> </section>' +
     '<h2 id="form-title">Random<span></span></h2>' +
-    '<div id="stats" style="display: none;">' +
-    '<span id="jrSelect">0</span>' +
-    '<span id="jrSelect1">0</span>' +
-    '<span id="jrItem">0</span>' +
-    '<span id="jrItemset">0</span>' +
-    '<span id="jrInput">0</span>' +
-    '<span id="jrUpload">0</span>' +
-    '<span id="jrTrigger">2</span>' +
-    '<span id="jrRepeat">0</span>' +
-    '<span id="jrRelevant">0</span>' +
-    '<span id="jrConstraint">0</span>' +
-    '<span id="jrCalculate">4</span>' +
-    '<span id="jrPreload">0</span>' +
-    '</div>' +
     '<label class="question">' +
-    '<input name="/random/meta/instanceID" type="hidden" data-calculate="(1+1)" />' + /*******/
+    '<input name="/random/meta/instanceID" type="hidden" data-calculate="(1+1)" />' +
     '</label>' +
-    '<fieldset class="trigger ui-state-highlight" name="/random/note_random">' +
+    '<fieldset class="trigger" name="/random/note_random">' +
     '<div class="question-icons"><span class="required"></span><span class="hint"></span></div>' +
     '<span lang="en" class="active">This is the random number that was generated: ' +
     '<span class="or-output" data-value="/random/random__"></span>' +
     '</span>' +
     '</fieldset>' +
-    '<fieldset class="trigger ui-state-highlight" name="/random/note_uuid">' +
+    '<fieldset class="trigger" name="/random/note_uuid">' +
     '<div class="question-icons">' +
     '<span class="required"></span><span class="hint"></span>' +
     '</div>' +
@@ -306,7 +292,7 @@ var formStr5 =
 var dataStr6 =
     '<model>' +
     '<instance>' +
-    '<data id="TestGroupBranch" version="3" xmlns="http://rapaide.com/testGroupBranch">' +
+    '<data id="TestGroupBranch" version="3">' +
     '<nodeA/>' +
     '<group>' +
     '<nodeB/>' +
@@ -329,7 +315,7 @@ var formStr6 =
     '<input name="/data/nodeA" type="text" data-type-xml="string"/>' +
     '</label>' +
     '</fieldset>' +
-    '<fieldset class="or-group or-branch pre-init" name="/data/group" data-relevant="/data/nodeA = &quot;yes&quot">' +
+    '<fieldset class="or-group or-branch pre-init" name="/data/group" data-relevant="/data/nodeA = &quot;yes&quot;">' +
     '<h4><span lang="en">Group with relevant binding</span></h4>' +
     '<label class="question">' +
     '<span lang="en">Enter 2 to reveal select1</span>' +
