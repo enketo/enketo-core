@@ -17,7 +17,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      */
 
     function FormModel( modelStr, externalData, options ) {
-        var $model, id,
+        var $model, id, instanceDoc, instanceRoot,
             that = this;
 
         externalData = externalData || [];
@@ -43,7 +43,13 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             // add external data to model
             externalData.forEach( function( instance ) {
                 id = 'instance "' + instance.id + '"' || 'instance unknown';
-                that.xml.getElementById( instance.id ).appendChild( $.parseXML( instance.xmlStr ).firstChild );
+                instanceDoc = that.xml.getElementById( instance.id );
+                // remove any existing content that is just an XLSForm hack to pass ODK Validate
+                instanceRoot = instanceDoc.querySelector( 'root' );
+                if ( instanceRoot ) {
+                    instanceDoc.removeChild( instanceRoot );
+                }
+                instanceDoc.appendChild( $.parseXML( instance.xmlStr ).firstChild );
             } );
         } catch ( e ) {
             console.error( e );
