@@ -192,7 +192,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         var form;
 
         it( 'correctly populates input fields of non-repeat node names in the instance', function() {
-            form = loadForm( 'thedata.xml' ); //new Form(formStr1, dataStr1);
+            form = loadForm( 'thedata.xml' );
             form.init();
             expect( form.getView().$.find( '[name="/thedata/nodeB"]' ).val() ).toEqual( 'b' );
             expect( form.getView().$.find( '[name="/thedata/repeatGroup/nodeC"]' ).eq( 2 ).val() ).toEqual( 'c3' );
@@ -217,7 +217,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             form.init();
 
             it( "adds a deprecatedID node", function() {
-                expect( form.getModel().node( '* > meta > deprecatedID' ).get().length ).toEqual( 1 );
+                expect( form.getModel().node( '/thedata/meta/deprecatedID' ).get().length ).toEqual( 1 );
             } );
 
             //this is an important test even though it may not seem to be...
@@ -226,12 +226,12 @@ define( [ "enketo-js/Form" ], function( Form ) {
             } );
 
             it( "gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit", function() {
-                expect( form.getModel().node( '*>meta>deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel().node( '/thedata/meta/deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "gives the instanceID node a new value", function() {
-                expect( form.getModel().node( '*>meta>instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
-                expect( form.getModel().node( '*>meta>instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+                expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "adds data from the instance-to-edit to the form instance", function() {
@@ -247,20 +247,20 @@ define( [ "enketo-js/Form" ], function( Form ) {
             form.init();
 
             it( "does not NOT add another instanceID node", function() {
-                expect( form.getModel().node( '*>meta>instanceID' ).get().length ).toEqual( 1 );
+                expect( form.getModel().node( '/thedata/meta/instanceID' ).get().length ).toEqual( 1 );
             } );
 
             it( "does not NOT add another deprecatedID node", function() {
-                expect( form.getModel().node( '*>meta>deprecatedID' ).get().length ).toEqual( 1 );
+                expect( form.getModel().node( '/thedata/meta/deprecatedID' ).get().length ).toEqual( 1 );
             } );
 
             it( "gives the deprecatedID node the old value of the instanceID node of the instance-to-edit", function() {
-                expect( form.getModel().node( '*>meta>deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel().node( '/thedata/meta/deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "gives the instanceID node a new value", function() {
-                expect( form.getModel().node( '*>meta>instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
-                expect( form.getModel().node( '*>meta>instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+                expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
             it( "adds data from the instance-to-edit to the form instance", function() {

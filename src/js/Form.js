@@ -186,26 +186,20 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     xmlDataType = ( $input.length > 0 ) ? form.input.getXmlType( $input ) : 'string';
 
-                    // If XML type is binary, the XML node will get the file attribute.
-                    // If a record is loaded for editing via API (without media files)
-                    // this will trigger an error message upon submission, because the 
-                    // file cannot be found in the local filesystem.
-                    // To avoid showing this error message in that particular case, 
-                    // we cheat and pretend the XML data type is the plain old 'string'
+                    /**
+                     * If XML type is binary, the XML node will get the file attribute.
+                     * If a record is loaded for editing via API (without media files)
+                     * this will trigger an error message upon submission, because the
+                     * file cannot be found in the local filesystem.
+                     * To avoid showing this error message in that particular case,
+                     * we cheat and pretend the XML data type is the plain old 'string'
+                     */
                     if ( !data.unsubmitted ) {
                         xmlDataType = ( xmlDataType === 'binary' ) ? 'string' : xmlDataType;
                     }
 
                     target = model.node( path, index );
 
-                    /*
-                     *  Proper error handling on xfind with .error(function(){}) doesn't seem to work
-                     *  this catch block is created to catch namespace prefix errors.
-                     *  When we have WGXP, it would be better to remove this and
-                     *  replace xfind with the proper XPath evaluator and pass a namespace handler
-                     *  currently namespace prefix errors show up as 'unsupported psuedo selector' in JQuery
-                     *  Note that this is just additional security because known namespaces will be removed in PHP.
-                     */
                     try {
                         $target = target.get();
                     } catch ( error ) {
@@ -215,25 +209,25 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         return;
                     }
 
-                    //if there are multiple nodes with that name and index (actually impossible)
+                    // if there are multiple nodes with that name and index (actually impossible)
                     if ( $target.length > 1 ) {
                         console.error( 'Found multiple nodes with path: ' + path + ' and index: ' + index );
                     }
-                    //if there is a corresponding node in the form's original instance
+                    // if there is a corresponding node in the form's original instance
                     else if ( $target.length === 1 ) {
                         //set the value
                         target.setVal( value, null, xmlDataType );
                     }
-                    //if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
+                    // if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
                     else if ( ( $template = model.getTemplate( path ) ) ) {
-                        //clone the template node 
+                        // clone the template node 
                         //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub);
                         //if a preceding repeat with that path was empty this repeat may not have been created yet,
-                        //so we need to make sure all preceding repeats are created
+                        // so we need to make sure all preceding repeats are created
                         for ( var p = 0; p < index; p++ ) {
                             model.cloneRepeat( path, p );
                         }
-                        //try setting the value again
+                        // try setting the value again
                         target = model.node( path, index );
                         if ( target.get().length === 1 ) {
                             target.setVal( value, null, xmlDataType );
@@ -244,11 +238,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         }
                     }
                     //as an exception, missing meta nodes will be quietly added if a meta node exists at that path
-                    //the latter requires e.g the root node to have the correct name
+                    // the latter requires e.g the root node to have the correct name
                     else if ( $( this ).parent( 'meta' ).length === 1 && model.node( $( this ).parent( 'meta' ).getXPath( 'instance' ), 0 ).get().length === 1 ) {
                         //if there is no existing meta node with that node as child
-                        if ( model.node( ':first > meta > ' + name, 0 ).get().length === 0 ) {
-                            $( this ).clone().appendTo( model.node( ':first > meta' ).get() );
+                        if ( model.node( '/*/meta/' + name, 0 ).get().length === 0 ) {
+                            $( this ).clone().appendTo( model.node( '/*/meta' ).get() );
                         } else {
                             error = 'Found duplicate meta node (' + name + ')!';
                             console.error( error );
@@ -261,7 +255,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
                 } );
 
-                instanceID = model.node( '*>meta>instanceID' );
+                instanceID = model.node( '/*/meta/instanceID' );
                 if ( instanceID.get().length !== 1 ) {
                     error = 'InstanceID node in default instance error (found ' + instanceID.get().length + ' instanceID nodes)';
                     console.error( error );
@@ -272,13 +266,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // if record is not local, copy instanceID value to deprecatedID and empty instanceID
                 if ( !data.unsubmitted ) {
                     // add deprecatedID node
-                    if ( model.node( '*>meta>deprecatedID' ).get().length !== 1 ) {
+                    if ( model.node( '/*/meta/deprecatedID' ).get().length !== 1 ) {
                         var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
                         document.adoptNode( deprecatedIDXMLNode );
-                        $( deprecatedIDXMLNode ).appendTo( model.node( '*>meta' ).get() );
+                        $( deprecatedIDXMLNode ).appendTo( model.node( '/*/meta' ).get() );
                     }
 
-                    model.node( '*>meta>deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
+                    model.node( '/*/meta/deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
                     instanceID.setVal( '', null, 'string' );
                 }
             };
@@ -1463,11 +1457,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     } );
                     // In addition the presence of certain meta data in the instance may automatically trigger a preload function
                     // even if the binding is not present. Note, that this actually does not deal with HTML elements at all.
-                    meta = model.node( '*>meta>*' );
+                    meta = model.node( '/*/meta/*' );
                     meta.get().each( function() {
                         item = null;
                         name = $( this ).prop( 'nodeName' );
-                        dataNode = model.node( '*>meta>' + name );
+                        dataNode = model.node( '/*/meta/' + name );
                         curVal = dataNode.getVal()[ 0 ];
                         //first check if there isn't a binding with a preloader that already took care of this
                         if ( $form.find( '#or-preload-items input[name$="/meta/' + name + '"][data-preload]' ).length === 0 ) {

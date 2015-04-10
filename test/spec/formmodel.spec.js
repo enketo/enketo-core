@@ -10,6 +10,15 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
         return model;
     };
 
+    // I don't remember why this functionality exists
+    describe( "Primary instance node values", function() {
+        var model = new Model( '<model><instance><data><nodeA> 2  </nodeA></instance></model>' );
+        model.init();
+        it( 'are trimmed during initialization', function() {
+            expect( model.getStr() ).toEqual( '<data><nodeA>2</nodeA></data>' );
+        } );
+    } );
+
     describe( "Data node getter", function() {
         var i, t =
             [
@@ -244,8 +253,10 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                 node = data.node( "/thedata/nodeA" );
 
             expect( node.get().length ).toEqual( 1 );
-            data.node( "/thedata/nodeA" ).remove();
+            /*data.node( "/thedata/nodeA" )*/
+            node.remove();
             expect( node.get().length ).toEqual( 0 );
+            expect( data.node( "/thedata/nodeA" ).get().length ).toEqual( 0 );
         } );
     } );
 
@@ -318,6 +329,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             // to be converted
             [ '/path/to/node', '/model/instance[1]/path/to/node' ],
             [ '/models/to/node', '/model/instance[1]/models/to/node' ],
+            [ '/*/meta/instanceID', '/model/instance[1]/*/meta/instanceID' ],
             [ '/outputs_in_repeats/rep/name', '/model/instance[1]/outputs_in_repeats/rep/name' ],
             [ '/path/to/node[/path/to/node]', '/model/instance[1]/path/to/node[/model/instance[1]/path/to/node]' ],
             [ '/path/to/node[ /path/to/node ]', '/model/instance[1]/path/to/node[ /model/instance[1]/path/to/node ]' ],
@@ -332,10 +344,14 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             [ '/model/path/to/node' ]
 
         ].forEach( function( test ) {
-            it( 'converts correctly', function() {
+            it( 'converts correctly when the model and instance node are included in the model', function() {
                 var model = new Model( '<model><instance/></model>' );
                 var expected = test[ 1 ] || test[ 0 ];
                 expect( model.shiftRoot( test[ 0 ] ) ).toEqual( expected );
+            } );
+            it( 'does nothing if model and instance node are absent in the model', function() {
+                var model = new Model( '<data><nodeA/></data>' );
+                expect( model.shiftRoot( test[ 0 ] ) ).toEqual( test[ 0 ] );
             } );
         } );
     } );
