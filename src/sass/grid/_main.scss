@@ -149,6 +149,9 @@ h4 + .or-repeat {
     audio, video, img {
         order: 3;
     }
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
+        width: 100%;
+    }
     textarea {
         min-height: 2 * $input-height;
     }
