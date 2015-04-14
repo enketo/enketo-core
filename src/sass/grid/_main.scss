@@ -44,8 +44,8 @@ h4 + .or-repeat {
     @include border-box;
 }
 
-// override to flexboxes in pages mode
-.pages.or [role="page"].current {
+// override to flexboxes in pages mode, except when question = page
+.pages.or [role="page"].current:not(.question) {
     @include display-flex;
     @include flex-wrap(wrap);
     @include flex-direction(row);
