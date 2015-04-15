@@ -12,7 +12,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
     // I don't remember why this functionality exists
     describe( "Primary instance node values", function() {
-        var model = new Model( '<model><instance><data><nodeA> 2  </nodeA></instance></model>' );
+        var model = new Model( '<model><instance><data><nodeA> 2  </nodeA></data></instance></model>' );
         model.init();
         it( 'are trimmed during initialization', function() {
             expect( model.getStr() ).toEqual( '<data><nodeA>2</nodeA></data>' );
@@ -306,7 +306,9 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
     describe( 'functionality to obtain string of the primary XML instance for storage or uploads)', function() {
         var modelA = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' ),
             modelC = new Model( '<model                                        ><instance><data><group    template=""><a/></group></data></instance></model>' ),
-            modelB = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' );
+            modelB = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' ),
+            instanceA = new Model( '<widgets><nodeA/></widgets>' ),
+            instanceB = new Model( '<widgets xmlns="https://some.namespace.com"><nodeA/></widgets>' );
 
         modelA.init();
         modelC.init();
@@ -317,8 +319,14 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             expect( modelC.getStr() ).toEqual( '<data><group><a/></group></data>' );
         } );
 
+
         it( 'returns primary instance and leaves namespaces intact', function() {
             expect( modelB.getStr() ).toEqual( '<data xmlns="https://some.namespace.com/"><a/></data>' );
+        } );
+
+        it( 'returns documentElement if model contains not <model> and <instance>', function() {
+            expect( instanceA.getStr() ).toEqual( '<widgets><nodeA/></widgets>' );
+            expect( instanceB.getStr() ).toEqual( '<widgets xmlns="https://some.namespace.com"><nodeA/></widgets>' );
         } );
 
     } );

@@ -653,7 +653,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * @return {string}           XML string
      */
     FormModel.prototype.getStr = function() {
-        var dataStr = ( new XMLSerializer() ).serializeToString( this.xml.querySelector( 'instance > *' ) );
+        var dataStr = ( new XMLSerializer() ).serializeToString( this.xml.querySelector( 'instance > *' ) || this.xml.documentElement );
         // remove tabs
         dataStr = dataStr.replace( /\t/g, '' );
         // restore default namespaces
@@ -800,7 +800,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             }
         } else {
             // either the first data child of the first instance or the first child (for loaded instances without a model)
-            context = this.xml.querySelector( 'instance > *' ) || this.xml.firstChild;
+            context = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
         }
 
         // decode
