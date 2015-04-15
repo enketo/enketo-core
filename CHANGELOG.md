@@ -5,8 +5,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------
+
+
+[3.5.3] - 2015-04-15
+---------------------
+##### Changed
+- text and number inputs in Grid Theme now displayed in full cell width
+
 ##### Fixed
 - remove existing content form external instances
+- geowidget not displayed displayed in full width in pages mode with Grid Theme
+- hide/show input fields button in Geo Widgets in Grid Theme not clickable after clicking show
 
 [3.5.2] - 2015-04-08
 ---------------
