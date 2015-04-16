@@ -87,7 +87,7 @@ define( [ 'jquery' ], function( $ ) {
     }
 
     function isGrid() {
-        return $( 'form.or' ).hasClass( 'theme-grid' );
+        //return $( 'form.or' ).hasClass( 'theme-grid' );
     }
 
     function fixGrid( paper ) {
