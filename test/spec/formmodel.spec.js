@@ -446,15 +446,15 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
         };
 
         it( 'works for the exact path to the repeat', function() {
-            expect( model.getTemplate( '/path/to/some/repeat/template' ) ).toEqual( 'a template' );
+            expect( model.getTemplatePath( '/path/to/some/repeat/template' ) ).toEqual( '/path/to/some/repeat/template' );
         } );
 
         it( 'works for a child node of the template', function() {
-            expect( model.getTemplate( '/path/to/some/repeat/template/group/leaf' ) ).toEqual( 'a template' );
+            expect( model.getTemplatePath( '/path/to/some/repeat/template/group/leaf' ) ).toEqual( '/path/to/some/repeat/template' );
         } );
 
         it( 'returns undefined when template is not available', function() {
-            expect( model.getTemplate( '/path' ) ).not.toBeDefined();
+            expect( model.getTemplatePath( '/path' ) ).not.toBeDefined();
         } );
     } );
 

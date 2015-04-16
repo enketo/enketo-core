@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[ Unreleased ]
+-----------------
+##### Fixed
+- When existing instance with multiple repeats is loaded, only the first repeat is created and populated
+
 [3.5.4] - 2015-04-16
 ---------------
 ##### Fixed

@@ -536,8 +536,8 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * Clones a <repeat>able instance node. If a template exists it will use this, otherwise it will clone an empty version of the first node.
      * If the node with the specified index already exists, this function will do nothing.
      *
-     * @param  {string} selector [description]
-     * @param  {number} index    [description]
+     * @param  {string} selector selector of a repeat or a node that is contained inside a repeat
+     * @param  {number} index    index of the repeat that the new repeat should be inserted after.
      */
     FormModel.prototype.cloneRepeat = function( selector, index ) {
         var $insertAfterNode, name, allClonedNodeNames, $templateClone,
@@ -589,21 +589,22 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
 
     /**
-     * Finds a template that would contain the provided node path.
+     * Finds a template path that would contain the provided node path if that template exists in the form.
      *
-     * @param  {string} nodePath the /path/to/node
-     * @return {*}               the template (jquery object)
+     * @param  {string} nodePath the /path/to/template/node
+     * @return {*}               the /path/to/template
      */
-    FormModel.prototype.getTemplate = function( nodePath ) {
-        var template = null,
+    FormModel.prototype.getTemplatePath = function( nodePath ) {
+        var templateIndex,
+            template = null,
             that = this;
 
         nodePath.split( '/' ).some( function( value, index, array ) {
-            template = that.templates[ array.slice( 0, array.length - index ).join( '/' ) ];
-            return template;
+            templateIndex = array.slice( 0, array.length - index ).join( '/' );
+            return that.templates[ templateIndex ];
         } );
 
-        return template;
+        return templateIndex || undefined;
     };
 
     /**

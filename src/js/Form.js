@@ -162,7 +162,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              *
              */
             this.load = function( instanceOfFormModel ) {
-                var nodesToLoad, index, xmlDataType, path, value, target, $input, $target, $template, instanceID, error,
+                var nodesToLoad, index, xmlDataType, path, value, target, $input, $target, templatePath, instanceID, error,
                     filter = {
                         noEmpty: true
                     };
@@ -219,13 +219,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         target.setVal( value, null, xmlDataType );
                     }
                     // if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
-                    else if ( ( $template = model.getTemplate( path ) ) ) {
+                    //  TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub);
+                    else if ( ( templatePath = model.getTemplatePath( path ) ) ) {
                         // clone the template node 
-                        //TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub);
-                        //if a preceding repeat with that path was empty this repeat may not have been created yet,
+                        // if a preceding repeat with that path was empty this repeat may not have been created yet,
                         // so we need to make sure all preceding repeats are created
                         for ( var p = 0; p < index; p++ ) {
-                            model.cloneRepeat( path, p );
+                            model.cloneRepeat( templatePath, p );
                         }
                         // try setting the value again
                         target = model.node( path, index );
