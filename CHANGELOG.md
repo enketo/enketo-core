@@ -3,9 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[3.5.4] - 2015-04-16
 ---------------
-
+##### Fixed
+- **critical**: all non-native form logic fails to evaluate in Internet Explorer
 
 [3.5.3] - 2015-04-15
 ---------------------

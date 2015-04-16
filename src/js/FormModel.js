@@ -78,7 +78,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             } ).get().each( function() {
                 this.textContent = this.textContent.trim();
             } );
-            this.bindJsEvaluator();
+
             this.cloneAllTemplates();
             this.extractTemplates();
 
@@ -843,6 +843,9 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         // if that didn't work, try the slow XPathJS evaluator 
         if ( !result ) {
             try {
+                if ( typeof doc.jsEvaluate === 'undefined' ) {
+                    this.bindJsEvaluator();
+                }
                 // console.log( 'trying the slow enketo-xpathjs "openrosa" evaluator for', expr, index );
                 result = doc.jsEvaluate( expr, context, this.nsResolver, resTypeNum, null );
             } catch ( e ) {
