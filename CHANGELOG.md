@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[ Unreleased ]
+[ 3.5.5 ] - 2015-04-17
 -----------------
 ##### Fixed
 - When existing instance with multiple repeats is loaded, only the first repeat is created and populated
+- XML nodenames ending with hyphen or underscore failed to be found
 
 [3.5.4] - 2015-04-16
 ---------------

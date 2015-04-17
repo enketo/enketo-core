@@ -336,6 +336,8 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
         [
             // to be converted
             [ '/path/to/node', '/model/instance[1]/path/to/node' ],
+            [ '/_member_/new/*', '/model/instance[1]/_member_/new/*' ],
+            [ '/_member-/new/*', '/model/instance[1]/_member-/new/*' ],
             [ '/models/to/node', '/model/instance[1]/models/to/node' ],
             [ '/*/meta/instanceID', '/model/instance[1]/*/meta/instanceID' ],
             [ '/outputs_in_repeats/rep/name', '/model/instance[1]/outputs_in_repeats/rep/name' ],

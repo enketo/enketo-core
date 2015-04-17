@@ -729,7 +729,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
     FormModel.prototype.shiftRoot = function( expr ) {
         if ( this.hasInstance ) {
             expr = expr.replace( /^(\/(?!model\/)[^\/][^\/\s]*\/)/g, '/model/instance[1]$1' );
-            expr = expr.replace( /([^a-zA-Z0-9\.\]\)\/\*])(\/(?!model\/)[^\/][^\/\s]*\/)/g, '$1/model/instance[1]$2' );
+            expr = expr.replace( /([^a-zA-Z0-9\.\]\)\/\*_-])(\/(?!model\/)[^\/][^\/\s]*\/)/g, '$1/model/instance[1]$2' );
         }
         return expr;
     };
