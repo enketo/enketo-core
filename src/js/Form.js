@@ -1350,7 +1350,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $nodes = $nodes.add( this.getNodesToUpdate( 'data-relevant', '[data-calculate]', updated ) );
 
                 $nodes.each( function() {
-                    var result, valid, $dataNodes, $dataNode, index,
+                    var result, valid, dataNodesObj, dataNodes, $dataNode, index,
                         $this = $( this ),
                         name = $this.attr( 'name' ),
                         dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name,
@@ -1361,16 +1361,18 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         relevantExpr = $this.attr( 'data-relevant' ),
                         relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
 
+
+                    dataNodesObj = model.node( name );
+                    dataNodes = dataNodesObj.get();
+
                     /*
                      * If the update was triggered by a datanode inside a repeat
                      * and the dependent node is inside the same repeat
                      */
-                    $dataNodes = model.node( name ).get();
-
-                    if ( $dataNodes.length > 1 && updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
+                    if ( dataNodes.length > 1 && updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
                         $dataNode = model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
-                        index = $dataNodes.index( $dataNode );
-                    } else if ( $dataNodes.length === 1 ) {
+                        index = $( dataNodes ).index( $dataNode );
+                    } else if ( dataNodes.length === 1 ) {
                         index = 0;
                     } else {
                         console.error( 'Potential issue: Multiple data nodes with same path found. Cannot deal with this and will just ignore them. ', $dataNodes );
@@ -1382,7 +1384,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     // it is possible that the fixed expr is '' which causes an error in XPath
                     result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index ) : '';
-                    valid = model.node( name, index ).setVal( result, constraint, dataType );
+
+                    // filter the result set to only include the target node
+                    dataNodesObj.setIndex( index );
+
+                    // set the value
+                    valid = dataNodesObj.setVal( result, constraint, dataType );
 
                     // not the most efficient to use input.setVal here as it will do another lookup
                     // of the node, that we already have...
@@ -1862,7 +1869,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // why is the file namespace added
                 $form.on( 'change.file validate', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
                     var validCons, validReq,
-                        n = that.input.getProps( $( this ) );
+                        n = that.input.getProps( $( this ) ),
+                        dataNodeObj = model.node( n.path, n.ind );
 
                     // why is this called? add explanation when figured out that it is necessary!
                     // event.stopImmediatePropagation();
@@ -1875,16 +1883,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( event.type === 'validate' ) {
                         // the enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not
                         // if an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid)
-                        validCons = ( n.enabled && n.inputType !== 'hidden' ) ? model.node( n.path, n.ind ).validate( n.constraint, n.xmlType ) : true;
+                        validCons = ( n.enabled && n.inputType !== 'hidden' ) ? dataNodeObj.validate( n.constraint, n.xmlType ) : true;
                     } else {
-                        validCons = model.node( n.path, n.ind ).setVal( n.val, n.constraint, n.xmlType );
+                        validCons = dataNodeObj.setVal( n.val, n.constraint, n.xmlType );
                         // geotrace and geoshape are very complex data types that require various change events
                         // to avoid annoying users, we ignore the INVALID onchange validation result
                         validCons = ( validCons === false && ( n.xmlType === 'geotrace' || n.xmlType === 'geoshape' ) ) ? null : validCons;
                     }
 
                     // validate 'required', checking value in Model (not View)
-                    validReq = ( n.enabled && n.inputType !== 'hidden' && n.required && model.node( n.path, n.ind ).getVal()[ 0 ].length < 1 ) ? false : true;
+                    validReq = ( n.enabled && n.inputType !== 'hidden' && n.required && dataNodeObj.getVal()[ 0 ].length < 1 ) ? false : true;
 
                     if ( validReq === false ) {
                         that.setValid( $( this ), 'constraint' );

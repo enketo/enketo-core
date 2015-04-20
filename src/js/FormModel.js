@@ -156,30 +156,39 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
          * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
          */
         Nodeset.prototype.get = function() {
-            var p, $nodes, /** @type {string} */ val, context;
+            var nodes, $nodes, /** @type {string} */ val;
+            // cache evaluation result
+            if ( !this.nodes ) {
+                this.nodes = that.evaluate( this.selector, 'nodes', null, null, true );
+            }
 
-
-            // default
-            //$nodes = $model.xfind( this.selector);
-            $nodes = $( that.evaluate( this.selector, 'nodes', null, null, true ) );
-
-            //noEmpty automatically excludes non-leaf nodes
+            // noEmpty automatically excludes non-leaf nodes
             if ( this.filter.noEmpty === true ) {
-                $nodes = $nodes.filter( function() {
+                $nodes = $( this.nodes ).filter( function() {
                     val = $( this ).text();
                     return $( this ).children().length === 0 && $.trim( val ).length > 0;
                 } );
             }
-            //this may still contain empty leaf nodes
+            // this may still contain empty leaf nodes
             else if ( this.filter.onlyLeaf === true ) {
-                $nodes = $nodes.filter( function() {
+                $nodes = $( this.nodes ).filter( function() {
                     return $( this ).children().length === 0;
                 } );
+            } else {
+                $nodes = $( this.nodes );
             }
-            $nodes = ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
 
-            return $nodes;
+            return ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
         };
+
+        /**
+         * Sets the index of the Nodeset instance
+         *
+         * @param {=number?} index The 0-based index
+         */
+        Nodeset.prototype.setIndex = function( index ) {
+            this.index = index;
+        }
 
         /**
          * Sets data node values.
@@ -249,12 +258,12 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         };
 
         /**
-         * Obtains the index of a repeated node
+         * Determines the index of a repeated node amongst all nodes with the same XPath selector
          *
          * @param  {} $node optional jquery element
          * @return {number}       [description]
          */
-        Nodeset.prototype.getIndex = function( $node ) {
+        Nodeset.prototype.determineIndex = function( $node ) {
             var nodeName, path, $this, $family;
 
             $node = $node || this.get();
@@ -267,7 +276,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 } );
                 return ( $family.length === 1 ) ? null : $family.index( $node );
             } else {
-                console.error( 'no node, or multiple nodes, provided to nodeset.getIndex' );
+                console.error( 'no node, or multiple nodes, provided to nodeset.determineIndex' );
                 return -1;
             }
         };
@@ -284,7 +293,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
             return ( nodeName === 'instance' ) ? {} : {
                 repeatPath: $node.getXPath( 'instance' ),
-                repeatIndex: this.getIndex( $node )
+                repeatIndex: this.determineIndex( $node )
             };
         };
 
@@ -306,9 +315,10 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 } );
 
                 repeatPath = $dataNode.getXPath( 'instance' );
-                repeatIndex = this.getIndex( $dataNode );
+                repeatIndex = this.determineIndex( $dataNode );
 
                 $dataNode.remove();
+                this.nodes = null;
 
                 $model.trigger( 'dataupdate', {
                     updatedNodes: allRemovedNodeNames,
@@ -561,7 +571,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
             that.$.trigger( 'dataupdate', {
                 nodes: allClonedNodeNames,
                 repeatPath: selector,
-                repeatIndex: that.node().getIndex( $templateClone )
+                repeatIndex: that.node().determineIndex( $templateClone )
             } );
 
         } else {
