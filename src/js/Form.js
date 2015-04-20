@@ -215,7 +215,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
                     // if there is a corresponding node in the form's original instance
                     else if ( $target.length === 1 ) {
-                        //set the value
                         target.setVal( value, null, xmlDataType );
                     }
                     // if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
@@ -237,7 +236,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             loadErrors.push( error );
                         }
                     }
-                    //as an exception, missing meta nodes will be quietly added if a meta node exists at that path
+                    // As an exception, missing meta nodes will be quietly added if a meta node exists at that path
                     // the latter requires e.g the root node to have the correct name
                     else if ( $( this ).parent( 'meta' ).length === 1 && model.node( $( this ).parent( 'meta' ).getXPath( 'instance' ), 0 ).get().length === 1 ) {
                         //if there is no existing meta node with that node as child
@@ -263,7 +262,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return;
                 }
 
-                // if record is not local, copy instanceID value to deprecatedID and empty instanceID
+                // If record is not local, copy instanceID value to deprecatedID and empty instanceID
                 if ( !data.unsubmitted ) {
                     // add deprecatedID node
                     if ( model.node( '/*/meta/deprecatedID' ).get().length !== 1 ) {
@@ -477,7 +476,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 setBranchHandlers: function() {
                     var that = this;
                     // TODO: can be optimized by smartly updating the active pages
-                    $form.on( 'showbranch hidebranch', function( event ) {
+                    $form.on( 'changebranch', function( event ) {
                         that.updateAllActive();
                         that.toggleButtons();
                     } );
@@ -953,6 +952,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 var p, $branchNode, result, insideRepeat, insideRepeatClone, cacheIndex, $nodes,
                     relevantCache = {},
                     alreadyCovered = [],
+                    branchChange = false,
                     that = this,
                     evaluations = 0,
                     clonedRepeatsPresent;
@@ -1027,6 +1027,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     process( $branchNode, result );
                 } );
 
+                if ( branchChange ) {
+                    this.$.trigger( 'changebranch' );
+                }
+
                 /**
                  * Evaluates a relevant expression (for future fancy stuff this is placed in a separate function)
                  *
@@ -1075,13 +1079,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     var type;
 
                     if ( !selfRelevant( $branchNode ) ) {
-                        $branchNode.removeClass( 'disabled pre-init' ).trigger( 'showbranch' );
+                        branchChange = true;
+                        $branchNode.removeClass( 'disabled pre-init' );
+
                         widgets.enable( $branchNode );
 
                         type = $branchNode.prop( 'nodeName' ).toLowerCase();
 
                         if ( type === 'label' ) {
-                            $branchNode.children( 'input:not(.force-disabled), select, textarea' ).prop( 'disabled', false );
+                            $branchNode.children( 'input, select, textarea' ).prop( 'disabled', false );
                         } else if ( type === 'fieldset' ) {
                             $branchNode.prop( 'disabled', false );
                             /*
@@ -1089,8 +1095,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                              * where the file inputs end up in a weird partially enabled state.
                              * Refresh the state by disabling and enabling the file inputs again.
                              */
-                            $branchNode.find( '*:not(.or-branch) input[type="file"]:not(.force-disabled, [data-relevant])' )
-                                .prop( 'disabled', true ).prop( 'disabled', false );
+                            $branchNode.find( '*:not(.or-branch) input[type="file"]:not([data-relevant])' )
+                                .prop( 'disabled', true )
+                                .prop( 'disabled', false );
                         } else {
                             $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', false );
                         }
@@ -1105,8 +1112,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 function disable( $branchNode ) {
                     var type = $branchNode.prop( 'nodeName' ).toLowerCase(),
                         virgin = $branchNode.hasClass( 'pre-init' );
-                    if ( selfRelevant( $branchNode ) || virgin ) {
-                        $branchNode.addClass( 'disabled' ).trigger( 'hidebranch' );
+                    if ( virgin || selfRelevant( $branchNode ) ) {
+                        branchChange = true;
+                        $branchNode.addClass( 'disabled' );
 
                         // if the branch was previously enabled
                         if ( !virgin ) {
