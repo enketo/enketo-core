@@ -154,7 +154,7 @@ $media-margin: 10px;
     }
 }
 
-.note + .note {
+.note:not(.disabled) + .note {
     border-top: none;
     border-bottom: none;
     @include border-radius(0);
