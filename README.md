@@ -27,19 +27,16 @@ requirejs(['js/Form'], function (Form){
 	var formSelector = 'form.or:eq(0)';
 
 	// required object containing data for the form
-	var data = {};
-
-	// required string of the default instance defined in the XForm
-	data.modelStr = globalXMLInstance;
-
-	// optional string of an existing instance to be edited
-	data.instanceStr = null;
-
-	// optional boolean whether this instance has been unsubmitted so far
-	data.unsubmitted = true;
-
-	// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
-	data.external = [];
+	var data = {
+		// required string of the default instance defined in the XForm
+		modelStr: globalXMLInstance,
+		// optional string of an existing instance to be edited
+		instanceStr: null,
+		// optional boolean whether this instance has been unsubmitted so far
+		unsubmitted: true,
+		// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
+		external = []
+	};
 
 	// instantiate a form, with 2 parameters
 	var form = new Form( formSelector, data);
@@ -152,12 +149,12 @@ The development of this app and [enketo-core](https://github.com/enketo/enketo-c
 
 ### Related Projects
 
-* [Enketo Express](https://github.com/enketo/enketo-express) - A modern node.js version of Enketo Smart Paper
-* [Enketo Legacy](https://github.com/enketo/enketo-legacy) - The old not-so-modern version of Enketo Smart Paper
-* [Enketo XpathJS](https://github.com/enketo/enketo-xpathjs) - used inside this repo
-* [Enketo XSLT](https://github.com/enketo/enketo-xslt) - the XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
-* [Enketo XSLT Transformer PHP](https://github.com/enketo/enketo-xslt-transformer-php) - a minimalistic example in PHP of an XSLT transformer
-* [enketo-xslt-transformer-node] - To follow hopefully
+* [Enketo Express](https://github.com/enketo/enketo-express) - The modern node.js Enketo Smart Paper app
+* [Enketo Legacy](https://github.com/enketo/enketo-legacy) - The old PHP Enketo Smart Paper app 
+* [Enketo XpathJS](https://github.com/enketo/enketo-xpathjs) - The XPath evaluator used in the form engine (enketo-core)
+* [Enketo Transformer](https://github.com/enketo/enketo-transformer) - Node.js XSL Transformer module for Enketo.
+* [Enketo XSLT](https://github.com/enketo/enketo-xslt) - The XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
+* [Enketo XSLT Transformer PHP](https://github.com/enketo/enketo-xslt-transformer-php) - A minimalistic example in PHP of an XSLT transformer
 * [Enketo Dristhi](https://github.com/enketo/enketo-dristhi) - used inside an Android app around enketo
 * [Enketo JSON](https://github.com/enketo/enketo-json) - XML-JSON instance convertor used inside e.g. Dristhi
 
@@ -167,5 +164,5 @@ See [change log](./CHANGELOG.md)
 
 ### Performance (live)
 
-to follow
+See [graphs](https://github.com/enketo/enketo-core-performance-monitor#live-results)
 
