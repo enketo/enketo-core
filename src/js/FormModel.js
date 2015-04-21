@@ -188,7 +188,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
          */
         Nodeset.prototype.setIndex = function( index ) {
             this.index = index;
-        }
+        };
 
         /**
          * Sets data node values.
