@@ -1398,36 +1398,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             };
 
             FormView.prototype.bootstrapify = function() {
-                //if no constraintmessage use a default
-                //TODO: move to XSLT
-                $form.addClass( 'clearfix' )
-                    .find( 'label, legend' ).each( function() {
-                        var $label = $( this );
-                        if ( $label.parent( '.option-wrapper' ).length === 0 &&
-                            $label.parent( '#or-calculated-items, #or-preload-items' ).length === 0 &&
-                            $label.find( '.or-constraint-msg' ).length === 0 &&
-                            ( $label.prop( 'nodeName' ).toLowerCase() == 'legend' ||
-                                $label.children( 'input.ignore' ).length !== $label.children( 'input' ).length ||
-                                $label.children( 'select.ignore' ).length !== $label.children( 'select' ).length ||
-                                $label.children( 'textarea.ignore' ).length !== $label.children( 'textarea' ).length ) ) {
-                            $label.prepend( '<span class="or-constraint-msg active" lang="">Value not allowed</span>' );
-                        }
-                    } );
-
-                //move constraint message to bottom of question and add message for required (could also be done in XSLT)
-                //TODO: move to XSLT
-                $form.find( '.or-constraint-msg' ).each( function() {
-                    var $question = $( this ).closest( '.question' ).not( '.or-appearance-label' ),
-                        $constraintMsg = $( this ).detach(),
-                        isRequired = $question.find( '[required]' ).length > 0,
-                        hasRequiredMsg = $question.find( '.or-required-msg' ).length > 0;
-
-                    $question.append( $constraintMsg );
-                    if ( !hasRequiredMsg && isRequired ) {
-                        $constraintMsg.after( '<span class="or-required-msg active" lang="">This field is required</span>' );
-                    }
-                } );
-
                 // took a shortcut, but this should actually move to its own 'horizontal-choices-widget'
                 // even better to move to XSLT
                 $form.find( '.or-appearance-horizontal .option-wrapper' ).each( function() {
@@ -1438,7 +1408,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         $wrapper.append( '<label class="filler"></label>' );
                     }
                 } );
-
             };
 
             /*
