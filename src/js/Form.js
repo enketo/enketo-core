@@ -358,10 +358,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 widgets.init();
                 //profiler.report();
 
-                //profiler = new Profiler('bootstrapify');
-                this.bootstrapify();
-                //profiler.report();
-
                 //profiler = new Profiler('branch.init()');
                 // after widgets.init()
                 this.branchUpdate();
