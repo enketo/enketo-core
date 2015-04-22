@@ -1397,19 +1397,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 } );
             };
 
-            FormView.prototype.bootstrapify = function() {
-                // took a shortcut, but this should actually move to its own 'horizontal-choices-widget'
-                // even better to move to XSLT
-                $form.find( '.or-appearance-horizontal .option-wrapper' ).each( function() {
-                    var $wrapper = $( this ),
-                        $options = $wrapper.find( 'label' );
-
-                    if ( ( $options.length % 3 ) === 2 ) {
-                        $wrapper.append( '<label class="filler"></label>' );
-                    }
-                } );
-            };
-
             /*
              * Note that preloaders may be deprecated in the future and be handled as metadata without bindings at all, in which
              * case all this stuff should perhaps move to FormModel
