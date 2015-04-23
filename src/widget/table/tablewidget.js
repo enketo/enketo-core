@@ -90,4 +90,5 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         } );
     };
 
+    return pluginName;
 } );

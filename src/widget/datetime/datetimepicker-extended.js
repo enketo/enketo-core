@@ -201,4 +201,5 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
             } );
         };
 
+        return pluginName;
     } );

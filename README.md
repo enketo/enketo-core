@@ -82,8 +82,8 @@ To create new widgets, I recommend using this [plugin template](https://gist.git
 Each widget needs to fulfill following requirements:
 
 * be an AMD-compliant jQuery plugin
+* it needs to return its own name
 * be in its own folder with a config.json file, including
-	* `name: ` the name of the widget used to instantiate it, or null if the widget only contains scss (see select-likert)
 	* `selector: ` the selector of the elements to instantiate the widget on, or `null` if it needs to be applied globally
 	* `options: ` any default options to pass
 	* `stylesheet: ` path to stylesheet scss file relative to the widget's own folder

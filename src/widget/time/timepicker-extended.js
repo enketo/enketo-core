@@ -106,4 +106,5 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstr
             } );
         };
 
+        return pluginName;
     } );

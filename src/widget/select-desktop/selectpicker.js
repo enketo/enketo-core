@@ -382,4 +382,5 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
 
     }( jQuery );
 
+    return pluginName;
 } );

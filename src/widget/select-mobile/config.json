@@ -1,6 +1,5 @@
 {
-	"name": "mobileSelectpicker",
-	"stylesheet": "selectpicker.scss",
-	"selector": "select[multiple]",
-	"options": {}
+    "stylesheet": "selectpicker.scss",
+    "selector": "select[multiple]",
+    "options": {}
 }

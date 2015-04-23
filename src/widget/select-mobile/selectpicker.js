@@ -91,4 +91,6 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
             }
         } );
     };
+
+    return pluginName;
 } );

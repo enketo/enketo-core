@@ -1,5 +1,4 @@
 {
-    "name": "geopicker",
     "stylesheet": "geopicker.scss",
     "selector": "input[data-type-xml=\"geopoint\"], input[data-type-xml=\"geotrace\"], input[data-type-xml=\"geoshape\"]",
     "options": {}

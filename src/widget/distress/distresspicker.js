@@ -117,4 +117,5 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
         } );
     };
 
+    return pluginName;
 } );

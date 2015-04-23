@@ -1,5 +1,4 @@
 {
-    "name": "filepicker",
     "stylesheet": "filepicker.scss",
     "selector": "input[type=\"file\"]",
     "options": {}

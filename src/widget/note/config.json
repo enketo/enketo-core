@@ -1,6 +1,5 @@
 {
-    "name": "notewidget",
     "stylesheet": "note.scss",
-    "selector": ".note, .trigger",
+    "selector": ".note",
     "options": {}
 }

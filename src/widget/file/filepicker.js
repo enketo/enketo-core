@@ -199,4 +199,5 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         } );
     };
 
+    return pluginName;
 } );

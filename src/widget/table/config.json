@@ -1,6 +1,5 @@
 {
-	"name": "tablewidget",
-	"stylesheet": "tablewidget.scss",
-	"selector": "*:first",
-	"options": {}
+    "stylesheet": "tablewidget.scss",
+    "selector": "*:first",
+    "options": {}
 }

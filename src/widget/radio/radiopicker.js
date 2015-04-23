@@ -99,7 +99,6 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      */
     Radiopicker.prototype.destroy = function( element ) {
         //all handlers are global and deep copies of repeats should keep functionality intact
-        console.debug( pluginName, 'destroy called' );
     };
 
 
@@ -119,4 +118,5 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         return this;
     };
 
+    return pluginName;
 } );

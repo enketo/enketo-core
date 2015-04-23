@@ -1609,4 +1609,5 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
             L.Google.asyncWait = [];
         };
 
+        return pluginName;
     } );
