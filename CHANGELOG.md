@@ -3,44 +3,58 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[ 3.5.6 ] - 2015-04-23
+-----------------
+##### Changed
+- Branch update performance
+- Calculate update performance 
+- Widget loading performance
+
+##### Fixed
+- Top border missing and margin too small when a visible note is preceded by a hidden note.
+- Any branch containing a geoshape widget caused an exception to occur when it was made irrelevant.
+- Appearance 'horizontal' no longer displays with evenly-spaced columns.
+- Some buttons in Safari have border and background when they shouldn't have.
+- Side bar in Safari is not stretching to bottom.
+
 [ 3.5.5 ] - 2015-04-17
 -----------------
 ##### Fixed
-- When existing instance with multiple repeats is loaded, only the first repeat is created and populated
-- XML nodenames ending with hyphen or underscore failed to be found
+- When existing instance with multiple repeats is loaded, only the first repeat is created and populated.
+- XML nodenames ending with hyphen or underscore failed to be found.
 
 [3.5.4] - 2015-04-16
 ---------------
 ##### Fixed
-- **critical**: all non-native form logic fails to evaluate in Internet Explorer
+- **critical**: All non-native form logic fails to evaluate in Internet Explorer.
 
 [3.5.3] - 2015-04-15
 ---------------------
 ##### Changed
-- text and number inputs in Grid Theme now displayed in full cell width
+- Text and number inputs in Grid Theme now displayed in full cell width.
 
 ##### Fixed
-- remove existing content form external instances
-- geowidget not displayed displayed in full width in pages mode with Grid Theme
-- hide/show input fields button in Geo Widgets in Grid Theme not clickable after clicking show
+- Remove existing content form external instances.
+- Geowidget not displayed displayed in full width in pages mode with Grid Theme.
+- Hide/show input fields button in Geo Widgets in Grid Theme not clickable after clicking show.
 
 [3.5.2] - 2015-04-08
 ---------------
 ##### Added
-- support for current()
+- Support for current()
 
 ##### Fixed
-- very slow validation performance when form contains radiobuttons or checkboxes
-- slow XPath evaluator performance by avoiding the need to clone the XML model
-- maintaining default namespaces in model & instance when provided in XForm
+- Very slow validation performance when form contains radiobuttons or checkboxes.
+- Slow XPath evaluator performance by avoiding the need to clone the XML model.
+- Maintaining default namespaces in model & instance when provided in XForm.
 
 [3.5.1] - 2015-03-20
 -------------
 ##### Changed
-- Updated tests to latest Jasmine and switched to Karma test runner
+- Updated tests to latest Jasmine and switched to Karma test runner.
 
 #### Fixed
-- Save as Draft functionality broken in pages mode
+- Save as Draft functionality broken in pages mode.
 
 [3.5.0] - 2015-02-27
 ---------
