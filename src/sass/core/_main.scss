@@ -232,40 +232,6 @@ legend {
     }
 }
 
-.or-appearance-horizontal {
-    .option-wrapper {
-        @include display-flex;
-        @include flex-wrap(wrap);
-        @include flex-direction(row);
-        // safari needs this to be inline or inline-block
-        display: inline-block;
-    }
-    label, .filler {
-        overflow: hidden;
-        @include flex(1);
-        min-width: 30%;
-        padding-right: 10px;
-        float: left;
-    }
-    .filler, .filler:hover, .filler:focus {
-        border: none !important;
-        background: transparent !important;
-    }
-    [type="radio"], [type="checkbox"] {
-        width: auto;
-    }
-}
-
-.or-appearance-horizontal-compact {
-    label {
-        padding-right: 10px;
-        float: left;
-    }
-    [type="radio"], [type="checkbox"] {
-        width: auto;
-    }
-}
-
 .touch {
     .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
         // touch radio buttons and checkboxes
