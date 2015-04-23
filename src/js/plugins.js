@@ -14,12 +14,13 @@ define( [ 'jquery' ], function( $ ) {
             //remove media previews
             $( this ).find( '.file-preview' ).remove();
             //remove input values
-            $( this ).find( 'input, select, textarea' ).each( function() {
-                var type = $( this ).attr( 'type' );
-                if ( $( this ).prop( 'nodeName' ).toUpperCase() === 'SELECT' ) {
+            $( this ).find( 'input, select, textarea' ).not( '.ignore' ).each( function() {
+                var $node = $( this ),
+                    type = $node.attr( 'type' );
+                if ( $node.prop( 'nodeName' ).toUpperCase() === 'SELECT' ) {
                     type = 'select';
                 }
-                if ( $( this ).prop( 'nodeName' ).toUpperCase() === 'TEXTAREA' ) {
+                if ( $node.prop( 'nodeName' ).toUpperCase() === 'TEXTAREA' ) {
                     type = 'textarea';
                 }
                 switch ( type ) {
@@ -35,30 +36,29 @@ define( [ 'jquery' ], function( $ ) {
                     case 'password':
                     case 'text':
                     case 'file':
-                        $( this ).removeAttr( 'data-previous-file-name data-loaded-file-name' );
+                        $node.removeAttr( 'data-previous-file-name data-loaded-file-name' );
                         /* falls through */
                     case 'hidden':
                     case 'textarea':
-                        if ( $( this ).val() !== '' ) {
-                            $( this ).val( '' ).trigger( ev );
+                        if ( $node.val() !== '' ) {
+                            $node.val( '' ).trigger( ev );
                         }
                         break;
                     case 'radio':
                     case 'checkbox':
-                        if ( $( this ).prop( 'checked' ) ) {
-                            $( this ).prop( 'checked', false );
-                            $( this ).trigger( ev );
+                        if ( $node.prop( 'checked' ) ) {
+                            $node.prop( 'checked', false );
+                            $node.trigger( ev );
                         }
                         break;
                     case 'select':
-                        if ( $( this )[ 0 ].selectedIndex >= 0 ) {
-                            $( this )[ 0 ].selectedIndex = -1;
-                            $( this ).trigger( ev );
+                        if ( $node[ 0 ].selectedIndex >= 0 ) {
+                            $node[ 0 ].selectedIndex = -1;
+                            $node.trigger( ev );
                         }
                         break;
                     default:
-                        console.error( 'Unrecognized input type found when trying to reset: ' + type );
-                        console.error( $( this ) );
+                        console.error( 'Unrecognized input type found when trying to reset', this );
                 }
             } );
         } );
