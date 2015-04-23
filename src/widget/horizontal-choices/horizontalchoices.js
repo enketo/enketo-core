@@ -6,11 +6,11 @@
 define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
     "use strict";
 
-    //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
     var pluginName = 'horizontalChoices';
 
     /**
-     * Horizontal Choices Widgets. Adds a filler for Grid Theme.
+     * Horizontal Choices Widgets. Adds a filler if the last row contains two elements.
+     * The filler avoids the last radiobutton or checkbox to not be lined up correctly below the second column.
      *
      * @constructor
      * @param {Element}                       element   Element to apply widget to.

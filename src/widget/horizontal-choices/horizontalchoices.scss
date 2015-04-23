@@ -8,11 +8,8 @@
    
     }
     label, .filler {
-        overflow: hidden;
-        @include flex(1);
-        min-width: 30%;
+        @include flex(1 0 30%);
         padding-right: 10px;
-        float: left;
     }
     .filler, .filler:hover, .filler:focus {
         border: none !important;
