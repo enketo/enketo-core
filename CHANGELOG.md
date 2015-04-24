@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased] - 2015-04-24
+------------------------
+##### Fixed
+- Form wider than screen on small screens.
+
 [ 3.5.6 ] - 2015-04-23
 -----------------
 ##### Changed
