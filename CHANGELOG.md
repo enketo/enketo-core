@@ -7,8 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ------------------------
 ##### Fixed
 - Form wider than screen on small screens.
+- Slow click responses.
 
-[ 3.5.6 ] - 2015-04-23
+[3.5.6] - 2015-04-23
 -----------------
 ##### Changed
 - Branch update performance
@@ -22,7 +23,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Some buttons in Safari have border and background when they shouldn't have.
 - Side bar in Safari is not stretching to bottom.
 
-[ 3.5.5 ] - 2015-04-17
+[3.5.5] - 2015-04-17
 -----------------
 ##### Fixed
 - When existing instance with multiple repeats is loaded, only the first repeat is created and populated.

@@ -1869,18 +1869,18 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 //using fakefocus because hidden (by widget) elements won't get focus
                 $form.on( 'focus blur fakefocus fakeblur', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
-                    var props = that.input.getProps( $( this ) ),
-                        required = $( this ).attr( 'required' ),
-                        $question = $( this ).closest( '.question' ),
+                    var $input = $( this ),
+                        props = that.input.getProps( $input ),
+                        $question = $input.closest( '.question' ),
                         $legend = $question.find( 'legend' ).eq( 0 ),
                         loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' ),
-                        insideTable = ( $( this ).closest( '.or-appearance-list-nolabel' ).length > 0 ),
+                        insideTable = ( $input.closest( '.or-appearance-list-nolabel' ).length > 0 ),
                         $reqSubtle = $question.find( '.required-subtle' ),
                         reqSubtle = $( '<span class="required-subtle" style="color: transparent;">Required</span>' );
 
                     if ( event.type === 'focusin' || event.type === "fakefocus" ) {
                         $question.addClass( 'focus' );
-                        if ( required && $reqSubtle.length === 0 && !insideTable ) {
+                        if ( props.required && $reqSubtle.length === 0 && !insideTable ) {
                             $reqSubtle = $( reqSubtle );
 
                             if ( $legend.length > 0 ) {
@@ -1899,7 +1899,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         }
                     } else if ( event.type === 'focusout' || event.type === 'fakeblur' ) {
                         $question.removeClass( 'focus' );
-                        if ( required && props.val.length > 0 ) {
+                        if ( props.required && props.val.length > 0 ) {
                             $reqSubtle.remove();
                         } else if ( !loudErrorShown ) {
                             $reqSubtle.removeAttr( 'style' );
@@ -1925,6 +1925,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         repeatPath: $clone.attr( 'name' ),
                         repeatIndex: index
                     } );
+                    that.progress.update();
+                } );
+
+                $form.on( 'removerepeat', function( event ) {
+                    that.progress.update();
                 } );
 
                 $form.on( 'changelanguage', function() {
@@ -1983,16 +1988,25 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             FormView.prototype.progress = {
                 status: 0,
                 lastChanged: null,
+                $all: null,
+                updateTotal: function() {
+                    this.$all = $form.find( '.question' ).not( '.disabled' ).filter( function() {
+                        return $( this ).closest( '.disabled' ).length === 0;
+                    } );
+                },
                 // updates rounded % value of progress and triggers event if changed
                 update: function( el ) {
-                    var status,
-                        $all = $form.find( '.question' ).not( '.disabled' ).filter( function() {
-                            return $( this ).closest( '.disabled' ).length === 0;
-                        } );
-                    this.lastChanged = el || this.lastChanged;
-                    status = Math.round( ( ( $all.index( $( this.lastChanged ).closest( '.question' ) ) + 1 ) * 100 ) / $all.length );
+                    var status;
 
-                    if ( status !== this.status ) {
+                    if ( !this.$all || !el ) {
+                        this.updateTotal();
+                    }
+
+                    this.lastChanged = el || this.lastChanged;
+                    status = Math.round( ( ( this.$all.index( $( this.lastChanged ).closest( '.question' ) ) + 1 ) * 100 ) / this.$all.length );
+
+                    // if the current el was removed (inside removed repeat), the status will be 0 - leave unchanged
+                    if ( status > 0 && status !== this.status ) {
                         this.status = status;
                         $form.trigger( 'progressupdate', status );
                     }
