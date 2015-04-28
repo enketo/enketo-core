@@ -1655,12 +1655,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         // console.debug('number of reps in count attribute: ' +numRepsInCount);
                         index = $form.find( '.or-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
                         $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get();
-                        numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) + ':not([template])' ).addBack().length;
+                        numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) ).addBack().length;
                         numRepsDefault = ( numRepsInCount > numRepsInInstance ) ? numRepsInCount : numRepsInInstance;
-                        // console.debug('default number of repeats for '+$repeat.attr('name')+' is '+numRepsDefault);
                         // First rep is already included (by XSLT transformation)
-                        for ( i = 1; i < numRepsDefault; i++ ) {
-                            that.clone( $repeat.siblings().addBack().last(), false );
+                        if ( numRepsDefault > 1 ) {
+                            that.clone( $repeat.siblings().addBack().last(), numRepsDefault - 1, true );
                         }
                         //now check the defaults of all the descendants of this repeat and its new siblings, level-by-level
                         $repeat.siblings( '.or-repeat' ).addBack().find( '.or-repeat' )
@@ -1671,8 +1670,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             } );
                     };
 
-                    //clone form fields to create the default number 
-                    //NOTE THIS ASSUMES THE DEFAULT NUMBER IS STATIC, NOT DYNAMIC
+                    // Clone form fields to create the default number 
+                    // Note: this assumes that the repeat count is static not dynamic/
                     $form.find( '.or-repeat' ).filter( function( i ) {
                         return $( this ).parents( '.or-repeat' ).length === 0;
                     } ).each( function() {
@@ -1683,13 +1682,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 /**
                  * clone a repeat group/node
                  * @param   {jQuery} $node node to clone
-                 * @param   {boolean=} animate whether to animate the cloning
+                 * @param   {boolean=} initialFormLoad Whether this cloning is part of the initial form load
                  * @return  {boolean}       [description]
                  */
-                clone: function( $node, animate ) {
+                clone: function( $node, count, initialFormLoad ) {
                     //var p = new Profiler('repeat cloning');
-                    var $siblings, $master, $clone, index, radioNames, i, path, timestamp,
+                    var $siblings, $master, $clone, index, total, path,
                         that = this;
+
+                    count = count || 1;
 
                     if ( $node.length !== 1 ) {
                         console.error( 'Nothing to clone' );
@@ -1711,47 +1712,50 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining 
                     // the proper index if .or-repeat was not included in the selector
                     index = $form.find( '.or-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
-                    // add ____x to names of radio buttons where x is the index
-                    radioNames = [];
 
-                    $clone.find( 'input[type="radio"]' ).each( function() {
-                        if ( $.inArray( $( this ).attr( 'data-name' ), radioNames ) === -1 ) {
-                            radioNames.push( $( this ).attr( 'data-name' ) );
-                        }
-                    } );
-
-                    for ( i = 0; i < radioNames.length; i++ ) {
-                        // Amazingly, this executes so fast when compiled that the timestamp in milliseconds is
-                        // not sufficient guarantee of uniqueness (??)
-                        timestamp = new Date().getTime().toString() + '_' + Math.floor( ( Math.random() * 10000 ) + 1 );
-                        $clone.find( 'input[type="radio"][data-name="' + radioNames[ i ] + '"]' ).attr( 'name', timestamp );
-                    }
-
-                    // remove the widgets before adding clone
-                    widgets.destroy( $clone );
                     // clear the inputs before adding clone
                     $clone.clearInputs( '' );
-                    // insert the clone after values and widgets have been reset
-                    $clone.insertAfter( $node );
-                    // number the repeats
-                    this.numberRepeats( $siblings.add( $node ).add( $clone ) );
-                    // enable or disable + and - buttons
-                    this.toggleButtons( $siblings.add( $node ).add( $clone ) );
 
-                    // Create a new data point in <instance> by cloning the template node
-                    // and clone data node if it doesn't already exist
-                    path = $master.attr( 'name' );
-                    if ( path.length > 0 && index >= 0 ) {
-                        model.cloneRepeat( path, index );
+                    total = count + index;
+
+                    // Add required number of repeats
+                    for ( ; index < total; index++ ) {
+
+                        // Fix names of radio button groups
+                        $clone.find( '.option-wrapper' ).each( this.fixRadioNames );
+
+                        // Destroy widgets before inserting the clone
+                        if ( !initialFormLoad ) {
+                            widgets.destroy( $clone );
+                        }
+
+                        // Insert the clone after values and widgets have been reset
+                        $clone.insertAfter( $node );
+
+                        // Create a new data point in <instance> by cloning the template node
+                        // and clone data node if it doesn't already exist
+                        path = $master.attr( 'name' );
+                        if ( path.length > 0 && index >= 0 ) {
+                            model.cloneRepeat( path, index );
+                        }
+
+                        // This will trigger setting default values and other stuff
+                        $clone.trigger( 'addrepeat', index + 1 );
+
+                        // Re-initiate widgets in clone after default values have been set
+                        if ( !initialFormLoad ) {
+                            widgets.init( $clone );
+                        }
+
+                        $siblings = $siblings.add( $clone );
+                        $clone = $clone.clone();
                     }
 
-                    // this will trigger setting default values and other stuff
-                    $clone.trigger( 'addrepeat', index + 1 );
+                    // number the repeats
+                    this.numberRepeats( $siblings.add( $node ) );
+                    // enable or disable + and - buttons
+                    this.toggleButtons( $siblings.add( $node ) );
 
-                    // Re-initiate widgets in clone after default values have been set
-                    widgets.init( $clone );
-
-                    //p.report();
                     return true;
                 },
                 remove: function( $repeat ) {
@@ -1769,9 +1773,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         // trigger the removerepeat on the previous repeat (always present)
                         // so that removerepeat handlers know where the repeat was removed
                         $prev.trigger( 'removerepeat' );
-                        //now remove the data node
+                        // now remove the data node
                         model.node( repeatPath, repeatIndex ).remove();
                     } );
+                },
+                fixRadioNames: function( index, element ) {
+                    $( element ).find( 'input[type="radio"]' )
+                        .attr( 'name', Math.floor( ( Math.random() * 10000000 ) + 1 ) );
                 },
                 toggleButtons: function( $repeats ) {
                     $repeats = ( !$repeats || $repeats.length === 0 ) ? $form : $repeats;
