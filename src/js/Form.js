@@ -317,7 +317,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             }
 
             FormView.prototype.init = function() {
-                var name, $required, $hint;
+                var name, $required, $hint,
+                    that = this;
 
                 if ( typeof model == 'undefined' || !( model instanceof FormModel ) ) {
                     return console.error( 'variable data needs to be defined as instance of FormModel' );
@@ -374,6 +375,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 this.setEventHandlers();
 
                 this.editStatus.set( false );
+
+                setTimeout( function() {
+                    that.progress.update();
+                }, 0 );
                 //profiler.report('time taken across all functions to evaluate '+xpathEvalNum+' XPath expressions: '+xpathEvalTime);
             };
 
