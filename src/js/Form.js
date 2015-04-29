@@ -442,9 +442,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 setSwipeHandlers: function() {
                     var that = this;
-                    $( document ).swipe( {
+                    $( '.main' ).swipe( {
                         allowPageScroll: "vertical",
-                        threshold: 50,
+                        threshold: 75,
                         swipeLeft: function( ev ) {
                             that.next();
                         },
