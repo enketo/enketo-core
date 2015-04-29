@@ -3,11 +3,17 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased] - 2015-04-24
+[3.5.7] - 2015-04-29
 ------------------------
+##### Changed
+- Faster default repeat creation (with repeat count).
+- Faster click responses, especially on low-powered devices.
+- Faster widget loading.
+- Grid theme breakpoint to switch to single column changed from 700px to 600px.
+
 ##### Fixed
 - Form wider than screen on small screens.
-- Slow click responses.
+- Sidebar records and handle not clickable in pages mode on touchscreens.
 
 [3.5.6] - 2015-04-23
 -----------------
