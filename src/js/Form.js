@@ -620,10 +620,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         ind: this.getIndex( $node ),
                         inputType: this.getInputType( $node ),
                         xmlType: this.getXmlType( $node ),
-                        constraint: $node.attr( 'data-constraint' ),
-                        relevant: $node.attr( 'data-relevant' ),
+                        constraint: this.getConstraint( $node ),
+                        relevant: this.getRelevant( $node ),
                         val: this.getVal( $node ),
-                        required: ( $node.attr( 'required' ) !== undefined && $node.parents( '.or-appearance-label' ).length === 0 ) ? true : false,
+                        required: this.isRequired( $node ),
                         enabled: this.isEnabled( $node ),
                         multiple: this.isMultiple( $node )
                     };
@@ -647,6 +647,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     } else if ( nodeName == 'fieldset' || nodeName == 'section' ) {
                         return 'fieldset';
                     } else return console.error( 'unexpected input node type provided' );
+                },
+                getConstraint: function( $node ) {
+                    return $node.attr( 'data-constraint' );
+                },
+                getRelevant: function( $node ) {
+                    return $node.attr( 'data-relevant' );
                 },
                 getXmlType: function( $node ) {
                     if ( $node.length !== 1 ) {
@@ -700,6 +706,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 isEnabled: function( $node ) {
                     return !( $node.prop( 'disabled' ) || $node.parents( '.disabled' ).length > 0 );
+                },
+                isRequired: function( $node ) {
+                    return ( $node.attr( 'required' ) !== undefined && $node.parents( '.or-appearance-label' ).length === 0 );
                 },
                 getVal: function( $node ) {
                     var inputType, values = [],
@@ -1831,11 +1840,28 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
                 } );
 
-                // why is the file namespace added
+                // Why is the file namespace added?
                 $form.on( 'change.file validate', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
-                    var validCons, validReq,
-                        n = that.input.getProps( $( this ) ),
-                        dataNodeObj = model.node( n.path, n.ind );
+                    var validCons, validReq, _dataNodeObj,
+                        $input = $( this ),
+                        // all relevant properties, except for the **very expensive** index property
+                        n = {
+                            path: that.input.getName( $input ),
+                            inputType: that.input.getInputType( $input ),
+                            xmlType: that.input.getXmlType( $input ),
+                            enabled: that.input.isEnabled( $input ),
+                            constraint: that.input.getConstraint( $input ),
+                            val: that.input.getVal( $input ),
+                            required: that.input.isRequired( $input )
+                        },
+                        getDataNodeObj = function() {
+                            if ( !_dataNodeObj ) {
+                                // Only now, will we determine the index.
+                                n.ind = that.input.getIndex( $input );
+                                _dataNodeObj = model.node( n.path, n.ind );
+                            }
+                            return _dataNodeObj;
+                        };
 
                     // why is this called? add explanation when figured out that it is necessary!
                     // event.stopImmediatePropagation();
@@ -1846,18 +1872,27 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
 
                     if ( event.type === 'validate' ) {
-                        // the enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not
-                        // if an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid)
-                        validCons = ( n.enabled && n.inputType !== 'hidden' ) ? dataNodeObj.validate( n.constraint, n.xmlType ) : true;
+                        // The enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not.
+                        // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
+                        if ( !n.enabled || n.inputType === 'hidden' ) {
+                            validCons = true;
+                        } else
+                        // Use a dirty trick to not have to determine the index with the following insider knowledge.
+                        // It could potentially be sped up more by excluding n.val === "", but this would not be safe, in case the view is not in sync with the model.
+                        if ( !n.constraint && ( n.xmlType === 'string' || n.xmlType === 'select' || n.xmlType === 'select1' || n.xmlType === 'binary' ) ) {
+                            validCons = true;
+                        } else {
+                            validCons = getDataNodeObj().validate( n.constraint, n.xmlType );
+                        }
                     } else {
-                        validCons = dataNodeObj.setVal( n.val, n.constraint, n.xmlType );
+                        validCons = getDataNodeObj().setVal( n.val, n.constraint, n.xmlType );
                         // geotrace and geoshape are very complex data types that require various change events
                         // to avoid annoying users, we ignore the INVALID onchange validation result
                         validCons = ( validCons === false && ( n.xmlType === 'geotrace' || n.xmlType === 'geoshape' ) ) ? null : validCons;
                     }
 
                     // validate 'required', checking value in Model (not View)
-                    validReq = ( n.enabled && n.inputType !== 'hidden' && n.required && dataNodeObj.getVal()[ 0 ].length < 1 ) ? false : true;
+                    validReq = !( n.enabled && n.inputType !== 'hidden' && n.required && getDataNodeObj().getVal()[ 0 ].length === 0 );
 
                     if ( validReq === false ) {
                         that.setValid( $( this ), 'constraint' );
@@ -1974,8 +2009,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     that.setValid( $( this ) );
                 } );
 
-                $form.find( '.question' ).each( function( q ) {
-                    // only trigger validate on first input and huge **pure CSS** selector (huge performance impact)
+                $form.find( '.question' ).each( function() {
+                    // only trigger validate on first input and use a **pure CSS** selector (huge performance impact)
                     $( this )
                         .find( 'input:not(.ignore):not(:disabled), select:not(.ignore):not(:disabled), textarea:not(.ignore):not(:disabled)' )
                         .eq( 0 )

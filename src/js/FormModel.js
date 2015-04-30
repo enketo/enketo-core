@@ -355,18 +355,25 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
          * @return {boolean}
          */
         Nodeset.prototype.validate = function( expr, xmlDataType ) {
-            var typeValid, exprValid,
-                value = this.getVal()[ 0 ];
+            var typeValid, exprValid, value;
+
+            if ( !xmlDataType || typeof this.types[ xmlDataType.toLowerCase() ] == 'undefined' ) {
+                xmlDataType = 'string';
+            }
+
+            // This one weird trick results in a small validation performance increase.
+            // Do not obtain *the value* if the expr is empty and data type is string, select, select1, binary knowing that this will always return true.
+            if ( !expr && ( xmlDataType === 'string' || xmlDataType === 'select' || xmlDataType === 'select1' || xmlDataType === 'binary' ) ) {
+                return true;
+            }
+
+            value = this.getVal()[ 0 ];
 
             if ( value.toString() === '' ) {
                 return true;
             }
 
-            if ( typeof xmlDataType == 'undefined' || xmlDataType === null || typeof this.types[ xmlDataType.toLowerCase() ] == 'undefined' ) {
-                xmlDataType = 'string';
-            }
             typeValid = this.types[ xmlDataType.toLowerCase() ].validate( value );
-
             exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? that.evaluate( expr, 'boolean', this.originalSelector, this.index ) : true;
 
             return ( typeValid && exprValid );
