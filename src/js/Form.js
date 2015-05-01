@@ -220,7 +220,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
                     //  TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub);
                     else if ( ( templatePath = model.getTemplatePath( path ) ) ) {
-                        // clone the template node 
+                        // clone the template node
                         // if a preceding repeat with that path was empty this repeat may not have been created yet,
                         // so we need to make sure all preceding repeats are created
                         for ( var p = 0; p < index; p++ ) {
@@ -469,7 +469,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         // note that that.$current will have length 1 even if it was removed from DOM!!
                         if ( that.$current.closest( 'html' ).length === 0 ) {
                             that.updateAllActive();
-                            // is it best to go to previous page always? 
+                            // is it best to go to previous page always?
                             that.flipToPageContaining( $( event.target ) );
                         }
                     } );
@@ -574,7 +574,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     this.updateAllActive();
                     this.flipTo( this.$activePages.last()[ 0 ] );
                 },
-                // flips to the page provided as jQueried parameter or the page containing 
+                // flips to the page provided as jQueried parameter or the page containing
                 // the jQueried element provided as parameter
                 // alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
                 // it flips to the page contained with the jQueried parameter;
@@ -992,7 +992,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         }
                         return;
                     }
-                    /* 
+                    /*
                      * Determining ancestry is expensive. Using the knowledge most forms don't use repeats and
                      * if they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
                      * The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
@@ -1061,7 +1061,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * @param  {boolean} result      [description]
                  */
                 function process( $branchNode, result ) {
-                    // for mysterious reasons '===' operator fails after Advanced Compilation even though result has value true 
+                    // for mysterious reasons '===' operator fails after Advanced Compilation even though result has value true
                     // and type boolean
                     if ( result === true ) {
                         enable( $branchNode );
@@ -1222,7 +1222,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     // console.log( 'template node name:', templateNodeName, '$template', $template );
 
-                    // clear data values through inputs. Note: if a value exists, 
+                    // clear data values through inputs. Note: if a value exists,
                     // this will trigger a dataupdate event which may call this update function again
                     $( this ).closest( '.question' )
                         .clearInputs( 'change' )
@@ -1385,7 +1385,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     } else if ( dataNodes.length === 1 ) {
                         index = 0;
                     } else {
-                        console.error( 'Potential issue: Multiple data nodes with same path found. Cannot deal with this and will just ignore them. ', $dataNodes );
+                        console.error( 'Potential issue: Multiple data nodes with same path found. Cannot deal with this and will just ignore them. ', dataNodes );
                         return;
                     }
 
@@ -1581,7 +1581,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return o.curVal;
                 },
                 'uid': function( o ) {
-                    //general 
+                    //general
                     if ( o.curVal.length === 0 ) {
                         return 'no uid yet in enketo';
                     }
@@ -1589,7 +1589,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 'browser': function( o ) {
                     /*if (o.curVal.length === 0){
-                    if (o.param == 'name'){ 
+                    if (o.param == 'name'){
                     var a = ($.browser.webkit) ? 'webkit' : ($.browser.mozilla) ? 'mozilla' : ($.browser.opera) ? 'opera' : ($.browser.msie) ? 'msie' : 'unknown';
                     //console.debug(a);
                     return a;
@@ -1679,7 +1679,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             } );
                     };
 
-                    // Clone form fields to create the default number 
+                    // Clone form fields to create the default number
                     // Note: this assumes that the repeat count is static not dynamic/
                     $form.find( '.or-repeat' ).filter( function( i ) {
                         return $( this ).parents( '.or-repeat' ).length === 0;
@@ -1718,7 +1718,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     } );
 
                     // Note: in http://formhub.org/formhub_u/forms/hh_polio_survey_cloned/form.xml a parent group of a repeat
-                    // has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining 
+                    // has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining
                     // the proper index if .or-repeat was not included in the selector
                     index = $form.find( '.or-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
 
@@ -1828,7 +1828,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //first prevent default submission, e.g. when text field is filled in and Enter key is pressed
                 $form.attr( 'onsubmit', 'return false;' );
 
-                /* 
+                /*
                  * workaround for Chrome to clear invalid values right away
                  * issue: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178437)
                  * a workaround was chosen instead of replacing the change event listener to a blur event listener
