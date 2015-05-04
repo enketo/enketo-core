@@ -77,7 +77,7 @@ h4 + .or-repeat {
 }
 
 // undo default for visually merged successive notes
-.note + .note {
+.note:not(.disabled) + .note {
     margin-top: 0;
     border-top: none;
     border-bottom: $grid-border;

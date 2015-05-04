@@ -3,6 +3,21 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[3.5.8] - 2015-05-04
+-------------------------
+##### Added 
+- Enable print script for themes based on Grid Theme that include "grid" in the theme name.
+
+##### Changed
+- Do not attempt to load table/radio/likert/media grid widgets when they are not required.
+- Even faster validation for some forms.
+
+##### Fixed
+- Screen view remaining at full screen width after printing form with Grid Theme.
+- Print dialog buttons not visible with Grid Theme (Enketo Express).
+- Sequential notes overlapping each other with Grid Theme.
+- Exception occuring in some specific cases when loading an existing record.
+
 [3.5.7] - 2015-04-29
 ------------------------
 ##### Changed
