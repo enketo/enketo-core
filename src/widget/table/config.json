@@ -1,5 +1,5 @@
 {
     "stylesheet": "tablewidget.scss",
-    "selector": "*:first",
+    "selector": "form",
     "options": {}
 }

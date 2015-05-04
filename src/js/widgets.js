@@ -123,9 +123,7 @@ define( [ 'text!enketo-config', 'Modernizr', 'q', 'jquery' ], function( configSt
      * @return {jQuery}          a jQuery collection
      */
     function _getElements( $group, selector ) {
-        // Important: Always return $form if selector is falsy.
-        // This will avoid creating double delegated event handlers.
-        return ( selector ) ? $group.find( selector ) : $form;
+        return ( selector ) ? ( selector === 'form' ? $form : $group.find( selector ) ) : $();
     }
 
     /**

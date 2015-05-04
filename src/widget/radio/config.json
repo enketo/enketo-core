@@ -1,5 +1,5 @@
 {
     "stylesheet": "radiopicker.scss",
-    "selector": null,
+    "selector": "form",
     "options": {}
 }
