@@ -80,7 +80,7 @@ define( [ 'jquery' ], function( $ ) {
     function styleReset() {
         printStyleSheet.media.mediaText = 'print';
         $printStyleSheetLink.attr( 'media', 'print' );
-        $( '.print-height-adjusted, .print-width-adjusted' )
+        $( '.print-height-adjusted, .print-width-adjusted, .main' )
             .removeAttr( 'style' )
             .removeClass( 'print-height-adjusted print-width-adjusted' );
         $( '.back-to-screen-view' ).off( 'click' ).remove();
