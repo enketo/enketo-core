@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+------------------------
+##### Added
+- Indexed-repeat() function
+
 [3.5.8] - 2015-05-04
 -------------------------
 ##### Added 

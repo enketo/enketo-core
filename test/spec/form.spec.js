@@ -391,7 +391,6 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
     } );
 
-
     describe( 'branching functionality', function() {
         var form;
 

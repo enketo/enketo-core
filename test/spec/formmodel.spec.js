@@ -394,6 +394,22 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
         } );
     } );
 
+    describe( 'converting indexed-repeat()', function() {
+        [
+            [ 'indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '/path/to/repeat[position() = 2]/node' ],
+            [ ' indexed-repeat( /path/to/repeat/node, /path/to/repeat, 2 )', ' /path/to/repeat[position() = 2]/node' ],
+            [ '1 + indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '1 + /path/to/repeat[position() = 2]/node' ],
+            [ 'concat(indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2), "fluff")', 'concat(/path/to/repeat[position() = 2]/node, "fluff")' ],
+            [ 'indexed-repeat(/p/t/r/ar/node, /p/t/r, 2, /p/t/r/ar, 3 )', '/p/t/r[position() = 2]/ar[position() = 3]/node' ]
+        ].forEach( function( test ) {
+            it( 'happens correctly', function() {
+                var model = new Model( '<model><instance/></model>' );
+                var expected = test[ 1 ];
+                expect( model.replaceIndexedRepeatFn( test[ 0 ] ) ).toEqual( expected );
+            } );
+        } );
+    } );
+
     describe( 'external instances functionality', function() {
         var loadErrors, model,
             modelStr = '<model><instance><cascade_external id="cascade_external" version=""><country/><city/><neighborhood/><meta><instanceID/></meta></cascade_external></instance><instance id="cities" src="jr://file/cities.xml" /><instance id="neighborhoods" src="jr://file/neighbourhoods.xml" /><instance id="countries" src="jr://file/countries.xml" /></model>',

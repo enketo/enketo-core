@@ -921,7 +921,15 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 // If the update was triggered from a repeat, it improves performance (a lot)
                 // to exclude all those repeats that did not trigger it...
-                $collection = ( $repeat ) ? this.$nonRepeats[ attr ].add( $repeat ) : $form;
+                // However, this would break if people are referring to nodes in other
+                // repeats such as with /path/to/repeat[3]/node or indexed-repeat(/path/to/repeat/node /path/to/repeat, 3)
+                if ( $repeat ) {
+                    $collection = this.$nonRepeats[ attr ]
+                        .add( $repeat )
+                        .add( $form.find( '[' + attr + '*="indexed-repeat("], [' + attr + '*="position()"]' ).closest( '.or-repeat' ) );
+                } else {
+                    $collection = $form;
+                }
 
                 if ( !updated.nodes || updated.nodes.length === 0 ) {
                     selector = [ filter + '[' + attr + ']' ];
@@ -933,7 +941,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, '*' ) );
                 }
 
-                //TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
+                // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
                 return $collection.find( selector.join() );
             };
 
