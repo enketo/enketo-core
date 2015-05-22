@@ -621,6 +621,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         inputType: this.getInputType( $node ),
                         xmlType: this.getXmlType( $node ),
                         constraint: this.getConstraint( $node ),
+                        calculation: this.getCalculation( $node ),
                         relevant: this.getRelevant( $node ),
                         val: this.getVal( $node ),
                         required: this.isRequired( $node ),
@@ -653,6 +654,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 getRelevant: function( $node ) {
                     return $node.attr( 'data-relevant' );
+                },
+                getCalculation: function( $node ) {
+                    return $node.attr( 'data-calculate' );
                 },
                 getXmlType: function( $node ) {
                     if ( $node.length !== 1 ) {
@@ -1373,15 +1377,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $nodes.each( function() {
                     var result, valid, dataNodesObj, dataNodes, $dataNode, index,
                         $this = $( this ),
-                        name = $this.attr( 'name' ),
+                        name = that.input.getName( $this ), //$this.attr('data-name') || $this.attr( 'name' ),
                         dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name,
-                        expr = $this.attr( 'data-calculate' ),
-                        dataType = $this.attr( 'data-type-xml' ),
+                        expr = that.input.getCalculation( $this ), //$this.attr( 'data-calculate' ),
+                        dataType = that.input.getXmlType( $this ), //$this.attr( 'data-type-xml' ),
                         // for inputs that have a calculation and need to be validated
-                        constraint = $this.attr( 'data-constraint' ),
-                        relevantExpr = $this.attr( 'data-relevant' ),
+                        constraint = that.input.getConstraint( $this ), //$this.attr( 'data-constraint' ),
+                        relevantExpr = that.input.getRelevant( $this ), //$this.attr( 'data-relevant' ),
                         relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
-
 
                     dataNodesObj = model.node( name );
                     dataNodes = dataNodesObj.get();

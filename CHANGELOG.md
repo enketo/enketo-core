@@ -3,10 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[3.5.9] - 2015-05-22
 ------------------------
 ##### Added
 - Indexed-repeat() function
+
+##### Fixed
+- Calculation on a select_one question inside a repeat clone throws an exception.
 
 [3.5.8] - 2015-05-04
 -------------------------
