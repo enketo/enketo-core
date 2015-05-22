@@ -22,6 +22,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
         externalData = externalData || [];
 
+        this.convertedExpressions = {};
         this.templates = {};
         this.loadErrors = [];
         this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
@@ -66,6 +67,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         } );
 
         //this.instancesArray = Array.prototype.slice.call( this.xml.firstChild.children );
+        this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
         this.$ = $model;
 
         /**
@@ -680,14 +682,16 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
     };
 
     /**
-     * There is a bug in JavaRosa that has resulted in the usage of incorrect formulae on nodes inside repeat nodes.
+     * There is a huge bug in JavaRosa that has resulted in the usage of incorrect formulae on nodes inside repeat nodes.
      * Those formulae use absolute paths when relative paths should have been used. See more here:
-     * https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations (point 3).
+     * http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms
+     *
      * Tools such as pyxform also build forms in this incorrect manner. See https://github.com/modilabs/pyxform/issues/91
      * It will take time to correct this so makeBugCompliant() aims to mimic the incorrect
      * behaviour by injecting the 1-based [position] of repeats into the XPath expressions. The resulting expression
      * will then be evaluated in a way users expect (as if the paths were relative) without having to mess up
      * the XPath Evaluator.
+     *
      * E.g. '/data/rep_a/node_a' could become '/data/rep_a[2]/node_a' if the context is inside
      * the second rep_a repeat.
      *
@@ -835,7 +839,7 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * @return { ?(number|string|boolean|Array<element>) } the result
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
-        var j, error, context, doc, resTypeNum, resultTypes, result, $collection, response;
+        var j, error, context, doc, resTypeNum, resultTypes, result, $collection, response, repeats, cacheKey;
 
         // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
         //    index + ' and result type: ' + resTypeStr );
@@ -843,29 +847,42 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
         resTypeStr = resTypeStr || 'any';
         index = index || 0;
         doc = this.xml;
-
-        expr = expr.trim();
-        expr = this.shiftRoot( expr );
-        expr = this.replaceInstanceFn( expr );
-        expr = this.replaceCurrentFn( expr );
-        expr = this.replaceIndexedRepeatFn( expr );
+        repeats = null;
 
         // path corrections for repeated nodes: http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms
         if ( selector ) {
             $collection = this.node( selector ).get();
+            repeats = $collection.length;
             context = $collection.eq( index )[ 0 ];
-            if ( $collection.length > 1 ) {
-                expr = this.makeBugCompliant( expr, selector, index );
-            }
         } else {
             // either the first data child of the first instance or the first child (for loaded instances without a model)
-            context = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
+            context = this.rootElement;
         }
 
-        // decode
-        expr = expr.replace( /&lt;/g, '<' );
-        expr = expr.replace( /&gt;/g, '>' );
-        expr = expr.replace( /&quot;/g, '"' );
+        // cache key includes the number of repeated context nodes, 
+        // to force a new cache item if the number of repeated changes to > 0
+        // TODO: these cache keys can get quite large. Would it be beneficial to get the md5 of the key?
+        cacheKey = [ expr, selector, index, repeats ].join( '|' );
+
+        // if no cached conversion exists
+        if ( !this.convertedExpressions[ cacheKey ] ) {
+            expr = expr;
+            expr = expr.trim();
+            expr = this.shiftRoot( expr );
+            expr = this.replaceInstanceFn( expr );
+            expr = this.replaceCurrentFn( expr );
+            expr = this.replaceIndexedRepeatFn( expr );
+            if ( repeats && repeats > 1 ) {
+                expr = this.makeBugCompliant( expr, selector, index );
+            }
+            // decode
+            expr = expr.replace( /&lt;/g, '<' );
+            expr = expr.replace( /&gt;/g, '>' );
+            expr = expr.replace( /&quot;/g, '"' );
+            this.convertedExpressions[ cacheKey ] = expr;
+        } else {
+            expr = this.convertedExpressions[ cacheKey ];
+        }
 
         resultTypes = {
             0: [ 'any', 'ANY_TYPE' ],
