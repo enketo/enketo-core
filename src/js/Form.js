@@ -919,14 +919,17 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $repeat = $form.find( '.or-repeat[name="' + updated.repeatPath + '"]' ).eq( updated.repeatIndex );
                 }
 
-                // If the update was triggered from a repeat, it improves performance (a lot)
-                // to exclude all those repeats that did not trigger it...
-                // However, this would break if people are referring to nodes in other
-                // repeats such as with /path/to/repeat[3]/node or indexed-repeat(/path/to/repeat/node /path/to/repeat, 3)
+                /**
+                 * If the update was triggered from a repeat, it improves performance (a lot)
+                 * to exclude all those repeats that did not trigger it...
+                 * However, this would break if people are referring to nodes in other
+                 * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node /path/to/repeat, 3)
+                 * so we add those (in a very innefficient way)
+                 **/
                 if ( $repeat ) {
                     $collection = this.$nonRepeats[ attr ]
                         .add( $repeat )
-                        .add( $form.find( '[' + attr + '*="indexed-repeat("], [' + attr + '*="position()"]' ).closest( '.or-repeat' ) );
+                        .add( $form.find( '.or-repeat [' + attr + '*="indexed-repeat("], .or-repeat [' + attr + '*="position()"], .or-repeat [' + attr + '*="["]' ).closest( '.or-repeat' ) );
                 } else {
                     $collection = $form;
                 }

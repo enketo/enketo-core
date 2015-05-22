@@ -798,9 +798,9 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
 
             if ( params.length % 2 === 1 ) {
 
-                //trim parameters
-                params.forEach( function( param, index ) {
-                    params[ index ] = param.trim();
+                // trim parameters
+                params = params.map( function( param ) {
+                    return param.trim();
                 } );
 
                 positionedPath = params[ 0 ];
