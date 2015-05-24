@@ -2,10 +2,8 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, $ ) {
+define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, utils, $ ) {
     "use strict";
-
-
 
     /**
      * Class dealing with the XML Model of a form
@@ -15,7 +13,6 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * @param {?<{id:string, xmlStr: string}> } externalData Array of external data objects
      * @param {?{full:boolean}} options.full Whether to initialize the full model or only the primary instance (for future)
      */
-
     function FormModel( modelStr, externalData, options ) {
         var $model, id, instanceDoc, instanceRoot,
             that = this;
@@ -790,15 +787,15 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
      * @return {string}      converted XPath expression
      */
     FormModel.prototype.replaceIndexedRepeatFn = function( expr ) {
-        var indexedRepeats = expr.match( /(indexed-repeat\s?\([^\)]+\))/g );
+        var indexedRepeats = utils.parseFunctionFromExpression( expr, 'indexed-repeat' );
 
-        if ( !indexedRepeats ) {
+        if ( !indexedRepeats.length ) {
             return expr;
         }
 
         indexedRepeats.forEach( function( indexedRepeat, irIndex ) {
             var i, positionedPath,
-                params = indexedRepeat.replace( /indexed-repeat\s?\(([^\)]+)\)/g, '$1' ).split( ',' );
+                params = indexedRepeat[ 1 ].split( ',' );
 
             if ( params.length % 2 === 1 ) {
 
@@ -812,10 +809,10 @@ define( [ 'xpath', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xp
                 for ( i = params.length - 1; i > 1; i -= 2 ) {
                     positionedPath = positionedPath.replace( params[ i - 1 ], params[ i - 1 ] + '[position() = ' + params[ i ] + ']' );
                 }
-                expr = expr.replace( indexedRepeat, positionedPath );
+                expr = expr.replace( indexedRepeat[ 0 ], positionedPath );
 
             } else {
-                console.error( 'indexed repeat with incorrect number of parameters found', indexedRepeat );
+                console.error( 'indexed repeat with incorrect number of parameters found', indexedRepeat[ 0 ] );
                 return "'Error with indexed-repeat parameters'";
             }
         } );

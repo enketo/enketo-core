@@ -400,7 +400,8 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             [ ' indexed-repeat( /path/to/repeat/node , /path/to/repeat , 2 )', ' /path/to/repeat[position() = 2]/node' ],
             [ '1 + indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '1 + /path/to/repeat[position() = 2]/node' ],
             [ 'concat(indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2), "fluff")', 'concat(/path/to/repeat[position() = 2]/node, "fluff")' ],
-            [ 'indexed-repeat(/p/t/r/ar/node, /p/t/r, 2, /p/t/r/ar, 3 )', '/p/t/r[position() = 2]/ar[position() = 3]/node' ]
+            [ 'indexed-repeat(/p/t/r/ar/node, /p/t/r, 2, /p/t/r/ar, 3 )', '/p/t/r[position() = 2]/ar[position() = 3]/node' ],
+            [ 'indexed-repeat( /p/t/r/node,  /p/t/r , position(..) - 1)', '/p/t/r[position() = position(..) - 1]/node' ]
         ].forEach( function( test ) {
             it( 'happens correctly', function() {
                 var model = new Model( '<model><instance/></model>' );
