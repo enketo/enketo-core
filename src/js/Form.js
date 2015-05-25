@@ -931,9 +931,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * so we add those (in a very innefficient way)
                  **/
                 if ( $repeat ) {
+                    // the non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
                     $collection = this.$nonRepeats[ attr ]
-                        .add( $repeat )
-                        .add( $form.find( '.or-repeat [' + attr + '*="indexed-repeat("], .or-repeat [' + attr + '*="position()"], .or-repeat [' + attr + '*="["]' ).closest( '.or-repeat' ) );
+                        .add( $repeat );
                 } else {
                     $collection = $form;
                 }
@@ -1396,28 +1396,36 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( dataNodes.length > 1 && updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
                         $dataNode = model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
                         index = $( dataNodes ).index( $dataNode );
+                        updateCalc( index );
                     } else if ( dataNodes.length === 1 ) {
                         index = 0;
+                        updateCalc( index );
                     } else {
-                        console.error( 'Potential issue: Multiple data nodes with same path found. Cannot deal with this and will just ignore them. ', dataNodes );
-                        return;
+                        // This occurs when update is called with empty updated object and multiple repeats are present
+                        dataNodes.each( function( index ) {
+                            updateCalc( index );
+                        } );
                     }
 
-                    //not sure if using 'string' is always correct
-                    expr = fixExpr( expr, 'string', name, index );
 
-                    // it is possible that the fixed expr is '' which causes an error in XPath
-                    result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index ) : '';
+                    function updateCalc( index ) {
 
-                    // filter the result set to only include the target node
-                    dataNodesObj.setIndex( index );
+                        //not sure if using 'string' is always correct
+                        expr = fixExpr( expr, 'string', name, index );
 
-                    // set the value
-                    valid = dataNodesObj.setVal( result, constraint, dataType );
+                        // it is possible that the fixed expr is '' which causes an error in XPath
+                        result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index ) : '';
 
-                    // not the most efficient to use input.setVal here as it will do another lookup
-                    // of the node, that we already have...
-                    that.input.setVal( name, index, result );
+                        // filter the result set to only include the target node
+                        dataNodesObj.setIndex( index );
+
+                        // set the value
+                        valid = dataNodesObj.setVal( result, constraint, dataType );
+
+                        // not the most efficient to use input.setVal here as it will do another lookup
+                        // of the node, that we already have...
+                        that.input.setVal( name, index, result );
+                    }
                 } );
             };
 
@@ -1705,11 +1713,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 /**
                  * clone a repeat group/node
                  * @param   {jQuery} $node node to clone
+                 * @param   {number=} count number of clones to create
                  * @param   {boolean=} initialFormLoad Whether this cloning is part of the initial form load
                  * @return  {boolean}       [description]
                  */
                 clone: function( $node, count, initialFormLoad ) {
-                    //var p = new Profiler('repeat cloning');
                     var $siblings, $master, $clone, index, total, path,
                         that = this;
 
@@ -1719,9 +1727,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         console.error( 'Nothing to clone' );
                         return false;
                     }
+
                     $siblings = $node.siblings( '.or-repeat' );
                     $master = ( $node.hasClass( 'clone' ) ) ? $siblings.not( '.clone' ).eq( 0 ) : $node;
                     $clone = $master.clone( true, true );
+                    path = $master.attr( 'name' );
 
                     // Add clone class and remove any child clones.. (cloned repeats within repeats..)
                     $clone.addClass( 'clone' ).find( '.clone' ).remove();
@@ -1734,7 +1744,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // Note: in http://formhub.org/formhub_u/forms/hh_polio_survey_cloned/form.xml a parent group of a repeat
                     // has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining
                     // the proper index if .or-repeat was not included in the selector
-                    index = $form.find( '.or-repeat[name="' + $node.attr( 'name' ) + '"]' ).index( $node );
+                    index = $form.find( '.or-repeat[name="' + path + '"]' ).index( $node );
 
                     // clear the inputs before adding clone
                     $clone.clearInputs( '' );
@@ -1757,7 +1767,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                         // Create a new data point in <instance> by cloning the template node
                         // and clone data node if it doesn't already exist
-                        path = $master.attr( 'name' );
                         if ( path.length > 0 && index >= 0 ) {
                             model.cloneRepeat( path, index );
                         }
@@ -1768,6 +1777,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         // Re-initiate widgets in clone after default values have been set
                         if ( !initialFormLoad ) {
                             widgets.init( $clone );
+                        } else {
+                            // Upon inital formload the eventhandlers for calculated items have not yet been set.
+                            // Calculations have already been initialized before the repeat clone(s) were created.
+                            // Therefore, we manually trigger a calculation update for the cloned repeat.
+                            that.formO.calcUpdate( {
+                                repeatPath: path,
+                                repeatIndex: index + 1
+                            } );
                         }
 
                         $siblings = $siblings.add( $clone );
