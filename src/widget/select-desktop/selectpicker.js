@@ -252,7 +252,9 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
         Dropdown.prototype.toggle = function( e ) {
             var $this = $( this );
 
-            if ( $this.is( '.disabled, :disabled' ) ) return;
+            if ( $this.is( '.disabled, :disabled' ) ) {
+                return;
+            }
 
             var $parent = getParent( $this );
             var isActive = $parent.hasClass( 'open' );
@@ -270,7 +272,9 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
                 };
                 $parent.trigger( e = $.Event( 'show.bs.dropdown', relatedTarget ) );
 
-                if ( e.isDefaultPrevented() ) return;
+                if ( e.isDefaultPrevented() ) {
+                    return;
+                }
 
                 $parent
                     .toggleClass( 'open' )
@@ -283,14 +287,18 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
         };
 
         Dropdown.prototype.keydown = function( e ) {
-            if ( !/(38|40|27)/.test( e.keyCode ) ) return;
+            if ( !/(38|40|27)/.test( e.keyCode ) ) {
+                return;
+            }
 
             var $this = $( this );
 
             e.preventDefault();
             e.stopPropagation();
 
-            if ( $this.is( '.disabled, :disabled' ) ) return;
+            if ( $this.is( '.disabled, :disabled' ) ) {
+                return;
+            }
 
             var $parent = getParent( $this );
             var isActive = $parent.hasClass( 'open' );
@@ -303,7 +311,9 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
             var desc = ' li:not(.divider):visible a';
             var $items = $parent.find( '[role=menu]' + desc + ', [role=listbox]' + desc );
 
-            if ( !$items.length ) return;
+            if ( !$items.length ) {
+                return;
+            }
 
             var index = $items.index( $items.filter( ':focus' ) );
 
@@ -321,9 +331,13 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
                 var relatedTarget = {
                     relatedTarget: this
                 };
-                if ( !$parent.hasClass( 'open' ) ) return;
+                if ( !$parent.hasClass( 'open' ) ) {
+                    return;
+                }
                 $parent.trigger( e = $.Event( 'hide.bs.dropdown', relatedTarget ) );
-                if ( e.isDefaultPrevented() ) return;
+                if ( e.isDefaultPrevented() ) {
+                    return;
+                }
                 $parent.removeClass( 'open' ).trigger( 'hidden.bs.dropdown', relatedTarget );
             } );
         }

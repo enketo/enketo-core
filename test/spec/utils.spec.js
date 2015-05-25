@@ -37,7 +37,7 @@ define( [ "enketo-js/utils" ], function( utils ) {
             } );
         }
 
-        for ( i = 0; i < t.length; i++ ) {
+        for ( var i = 0; i < t.length; i++ ) {
             test( t[ i ][ 0 ], t[ i ][ 1 ], t[ i ][ 2 ] );
         }
 

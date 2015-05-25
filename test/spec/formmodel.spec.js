@@ -38,14 +38,14 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                     },
                     9 //when tested outside Form class, instanceID is not populated
                 ],
-                [ "/thedata/nodeA", null, null, 1 ],
-                [ "/thedata/nodeA", 1, null, 0 ],
-                [ "/thedata/nodeA", null, {
+                [ '/thedata/nodeA', null, null, 1 ],
+                [ '/thedata/nodeA', 1, null, 0 ],
+                [ '/thedata/nodeA', null, {
                         noEmpty: true
                     },
                     0
                 ], //"int"
-                [ "/thedata/nodeA", null, {
+                [ '/thedata/nodeA', null, {
                         onlyleaf: true
                     },
                     1
@@ -107,83 +107,83 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
     describe( 'Data node XML data type conversion & validation', function() {
         var i, data,
             t = [
-                [ "/thedata/nodeA", null, null, 'val1', null, true ],
-                [ "/thedata/nodeA", null, null, 'val3', 'somewrongtype', true ], //default type is string
+                [ '/thedata/nodeA', null, null, 'val1', null, true ],
+                [ '/thedata/nodeA', null, null, 'val3', 'somewrongtype', true ], //default type is string
 
-                [ "/thedata/nodeA", 1, null, 'val13', 'string', null ], //non-existing node
+                [ '/thedata/nodeA', 1, null, 'val13', 'string', null ], //non-existing node
                 [ "/thedata/repeatGroup/nodeC", null, null, 'val', null, null ], //multiple nodes
 
-                [ "/thedata/nodeA", 0, null, '4', 'double', true ], //double is a non-existing xml data type so turned into string
-                [ "/thedata/nodeA", 0, null, 5, 'double', true ],
+                [ '/thedata/nodeA', 0, null, '4', 'double', true ], //double is a non-existing xml data type so turned into string
+                [ '/thedata/nodeA', 0, null, 5, 'double', true ],
 
-                [ "/thedata/nodeA", null, null, 'val2', 'string', true ],
-                [ "/thedata/nodeA", 0, null, [ 'a', 'b', 'c' ], 'string', true ],
-                [ "/thedata/nodeA", 0, null, [ 'd', 'e', 'f', '' ], 'string', true ],
-                [ "/thedata/nodeA", 0, null, 'val12', 'string', true ],
-                [ "/thedata/nodeA", 0, null, '14', 'string', true ],
-                [ "/thedata/nodeA", 0, null, 1, 'string', true ],
+                [ '/thedata/nodeA', null, null, 'val2', 'string', true ],
+                [ '/thedata/nodeA', 0, null, [ 'a', 'b', 'c' ], 'string', true ],
+                [ '/thedata/nodeA', 0, null, [ 'd', 'e', 'f', '' ], 'string', true ],
+                [ '/thedata/nodeA', 0, null, 'val12', 'string', true ],
+                [ '/thedata/nodeA', 0, null, '14', 'string', true ],
+                [ '/thedata/nodeA', 0, null, 1, 'string', true ],
 
-                [ "/thedata/nodeA", null, null, 'val11', 'decimal', false ],
+                [ '/thedata/nodeA', null, null, 'val11', 'decimal', false ],
 
-                [ "/thedata/nodeA", null, null, 'val4', 'int', false ],
-                [ "/thedata/nodeA", 0, null, '2', 'int', true ],
-                [ "/thedata/nodeA", 0, null, 3, 'int', true ],
-                [ "/thedata/nodeA", 0, null, '2.', 'int', false ],
-                [ "/thedata/nodeA", 0, null, '2.0', 'int', false ],
+                [ '/thedata/nodeA', null, null, 'val4', 'int', false ],
+                [ '/thedata/nodeA', 0, null, '2', 'int', true ],
+                [ '/thedata/nodeA', 0, null, 3, 'int', true ],
+                [ '/thedata/nodeA', 0, null, '2.', 'int', false ],
+                [ '/thedata/nodeA', 0, null, '2.0', 'int', false ],
 
-                [ "/thedata/nodeA", null, null, 'val5565ghgyuyuy', 'date', false ], //Chrome turns val5 into a valid date...
-                [ "/thedata/nodeA", null, null, '2012-01-01', 'date', true ],
-                [ "/thedata/nodeA", null, null, '2012-12-32', 'date', false ],
-                //["/thedata/nodeA", null, null, 324, 'date', true], //fails in phantomjs
+                [ '/thedata/nodeA', null, null, 'val5565ghgyuyuy', 'date', false ], //Chrome turns val5 into a valid date...
+                [ '/thedata/nodeA', null, null, '2012-01-01', 'date', true ],
+                [ '/thedata/nodeA', null, null, '2012-12-32', 'date', false ],
+                //['/thedata/nodeA', null, null, 324, 'date', true], //fails in phantomjs
 
-                [ "/thedata/nodeA", null, null, 'val5565ghgyuyua', 'datetime', false ], //Chrome turns val10 into a valid date..
-                [ "/thedata/nodeA", null, null, '2012-01-01T00:00:00-06', 'datetime', true ],
-                [ "/thedata/nodeA", null, null, '2012-12-32T00:00:00-06', 'datetime', false ],
-                [ "/thedata/nodeA", null, null, '2012-12-31T23:59:59-06', 'datetime', true ],
-                [ "/thedata/nodeA", null, null, '2012-12-31T23:59:59-06:30', 'datetime', true ],
-                [ "/thedata/nodeA", null, null, '2012-12-31T23:59:59Z', 'datetime', true ],
-                [ "/thedata/nodeA", null, null, '2012-01-01T30:00:00-06', 'datetime', false ],
-                //["/thedata/nodeA", null, null, '2013-05-31T07:00-02', 'datetime', true],fails in phantomJSs
+                [ '/thedata/nodeA', null, null, 'val5565ghgyuyua', 'datetime', false ], //Chrome turns val10 into a valid date..
+                [ '/thedata/nodeA', null, null, '2012-01-01T00:00:00-06', 'datetime', true ],
+                [ '/thedata/nodeA', null, null, '2012-12-32T00:00:00-06', 'datetime', false ],
+                [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06', 'datetime', true ],
+                [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06:30', 'datetime', true ],
+                [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59Z', 'datetime', true ],
+                [ '/thedata/nodeA', null, null, '2012-01-01T30:00:00-06', 'datetime', false ],
+                //['/thedata/nodeA', null, null, '2013-05-31T07:00-02', 'datetime', true],fails in phantomJSs
 
-                [ "/thedata/nodeA", null, null, 'a', 'time', false ],
-                [ "/thedata/nodeA", null, null, 'aa:bb', 'time', false ],
-                [ "/thedata/nodeA", null, null, '0:0', 'time', true ],
-                [ "/thedata/nodeA", null, null, '00:00', 'time', true ],
-                [ "/thedata/nodeA", null, null, '23:59', 'time', true ],
-                [ "/thedata/nodeA", null, null, '23:59:59', 'time', true ],
-                [ "/thedata/nodeA", null, null, '24:00', 'time', false ],
-                [ "/thedata/nodeA", null, null, '00:60', 'time', false ],
-                [ "/thedata/nodeA", null, null, '00:00:60', 'time', false ],
-                [ "/thedata/nodeA", null, null, '-01:00', 'time', false ],
-                [ "/thedata/nodeA", null, null, '00:-01', 'time', false ],
-                [ "/thedata/nodeA", null, null, '00:00:-01', 'time', false ],
-                [ "/thedata/nodeA", null, null, '13:17:00.000-07', 'time', true ],
+                [ '/thedata/nodeA', null, null, 'a', 'time', false ],
+                [ '/thedata/nodeA', null, null, 'aa:bb', 'time', false ],
+                [ '/thedata/nodeA', null, null, '0:0', 'time', true ],
+                [ '/thedata/nodeA', null, null, '00:00', 'time', true ],
+                [ '/thedata/nodeA', null, null, '23:59', 'time', true ],
+                [ '/thedata/nodeA', null, null, '23:59:59', 'time', true ],
+                [ '/thedata/nodeA', null, null, '24:00', 'time', false ],
+                [ '/thedata/nodeA', null, null, '00:60', 'time', false ],
+                [ '/thedata/nodeA', null, null, '00:00:60', 'time', false ],
+                [ '/thedata/nodeA', null, null, '-01:00', 'time', false ],
+                [ '/thedata/nodeA', null, null, '00:-01', 'time', false ],
+                [ '/thedata/nodeA', null, null, '00:00:-01', 'time', false ],
+                [ '/thedata/nodeA', null, null, '13:17:00.000-07', 'time', true ],
 
-                [ "/thedata/nodeA", null, null, 'val2', 'barcode', true ],
+                [ '/thedata/nodeA', null, null, 'val2', 'barcode', true ],
 
-                [ "/thedata/nodeA", null, null, '0 0 0 0', 'geopoint', true ],
-                [ "/thedata/nodeA", null, null, '10 10', 'geopoint', true ],
-                [ "/thedata/nodeA", null, null, '10 10 10', 'geopoint', true ],
-                [ "/thedata/nodeA", null, null, '-90 -180', 'geopoint', true ],
-                [ "/thedata/nodeA", null, null, '90 180', 'geopoint', true ],
-                [ "/thedata/nodeA", null, null, '-91 -180', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '-90 -181', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '91 180', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '90 -181', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, 'a -180', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '0 a', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '0', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '0 0 a', 'geopoint', false ],
-                [ "/thedata/nodeA", null, null, '0 0 0 a', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '0 0 0 0', 'geopoint', true ],
+                [ '/thedata/nodeA', null, null, '10 10', 'geopoint', true ],
+                [ '/thedata/nodeA', null, null, '10 10 10', 'geopoint', true ],
+                [ '/thedata/nodeA', null, null, '-90 -180', 'geopoint', true ],
+                [ '/thedata/nodeA', null, null, '90 180', 'geopoint', true ],
+                [ '/thedata/nodeA', null, null, '-91 -180', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '-90 -181', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '91 180', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '90 -181', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, 'a -180', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '0 a', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '0', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '0 0 a', 'geopoint', false ],
+                [ '/thedata/nodeA', null, null, '0 0 0 a', 'geopoint', false ],
 
-                [ "/thedata/nodeA", null, null, 'NaN', 'int', null ], //value remains "" so null 
-                [ "/thedata/nodeA", null, null, 'NaN', 'decimal', null ] //value remains "" so null
+                [ '/thedata/nodeA', null, null, 'NaN', 'int', null ], //value remains "" so null 
+                [ '/thedata/nodeA', null, null, 'NaN', 'decimal', null ] //value remains "" so null
 
                 //TO DO binary (?)
             ];
 
         function test( n ) {
-            it( "converts and validates xml-type " + n.type + " with value: " + n.value, function() {
+            it( 'converts and validates xml-type ' + n.type + ' with value: ' + n.value, function() {
                 data = getModel( 'thedata.xml' ); //dataStr1);
                 expect( data.node( n.selector, n.index, n.filter ).setVal( n.value, null, n.type ) ).toEqual( n.result );
             } );
@@ -250,23 +250,23 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
     describe( "Data node remover", function() {
         it( "has removed a data node", function() {
             var data = getModel( 'thedata.xml' ),
-                node = data.node( "/thedata/nodeA" );
+                node = data.node( '/thedata/nodeA' );
 
             expect( node.get().length ).toEqual( 1 );
-            /*data.node( "/thedata/nodeA" )*/
+            /*data.node( '/thedata/nodeA' )*/
             node.remove();
             expect( node.get().length ).toEqual( 0 );
-            expect( data.node( "/thedata/nodeA" ).get().length ).toEqual( 0 );
+            expect( data.node( '/thedata/nodeA' ).get().length ).toEqual( 0 );
         } );
     } );
 
     describe( "XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)", function() {
         var i, t = [
-                [ "/thedata/nodeB", "string", null, 0, "b" ],
-                [ "../nodeB", "string", "/thedata/nodeA", 0, "b" ],
-                [ "/thedata/nodeB", "boolean", null, 0, true ],
-                [ "/thedata/notexist", "boolean", null, 0, false ],
-                [ "/thedata/repeatGroup[2]/nodeC", "string", null, 0, "c2" ],
+                [ '/thedata/nodeB', 'string', null, 0, 'b' ],
+                [ '../nodeB', 'string', '/thedata/nodeA', 0, 'b' ],
+                [ '/thedata/nodeB', 'boolean', null, 0, true ],
+                [ '/thedata/notexist', 'boolean', null, 0, false ],
+                [ '/thedata/repeatGroup[2]/nodeC', 'string', null, 0, 'c2' ],
                 [ '/thedata/repeatGroup[position()=3]/nodeC', 'string', null, 0, 'c3' ],
                 [ 'coalesce(/thedata/nodeA, /thedata/nodeB)', 'string', null, 0, 'b' ],
                 [ 'coalesce(/thedata/nodeB, /thedata/nodeA)', 'string', null, 0, 'b' ],
@@ -287,18 +287,18 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
         // this tests the makeBugCompliant() workaround that injects a position into an absolute path
         // for the issue described here: https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations
-        it( "evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())", function() {
+        it( 'evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())', function() {
             //data = getModel( 'thedata.xml' ); //new Form(formStr1, dataStr1);
 
-            expect( data.evaluate( "/thedata/repeatGroup/nodeC", "string", "/thedata/repeatGroup/nodeC", 2 ) ).toEqual( "c3" );
+            expect( data.evaluate( '/thedata/repeatGroup/nodeC', 'string', '/thedata/repeatGroup/nodeC', 2 ) ).toEqual( 'c3' );
         } );
 
         it( 'is able to address a secondary instance by id with the instance(id)/path/to/node syntax', function() {
             var dataO = getModel( 'new_cascading_selections.xml' );
-            expect( dataO.evaluate( "instance('cities')/root/item/name", "string" ) ).toEqual( 'ams' );
-            expect( dataO.evaluate( "instance('cities')/root/item[country=/new_cascading_selections/group4/country4]/name", "string" ) ).toEqual( 'den' );
-            expect( dataO.evaluate( "instance('cities')/root/item[country=/new_cascading_selections/group4/country4 and 1<2]", "nodes" ).length ).toEqual( 3 );
-            expect( dataO.evaluate( "instance('cities')/root/item[country=/new_cascading_selections/group4/country4 and name=/new_cascading_selections/group4/city4]", "nodes" ).length ).toEqual( 1 );
+            expect( dataO.evaluate( 'instance("cities")/root/item/name', 'string' ) ).toEqual( 'ams' );
+            expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4]/name', 'string' ) ).toEqual( 'den' );
+            expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and 1<2]', 'nodes' ).length ).toEqual( 3 );
+            expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and name=/new_cascading_selections/group4/city4]', 'nodes' ).length ).toEqual( 1 );
         } );
     } );
 
@@ -487,12 +487,12 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
             it( 'works for Nodeset().get()', function() {
                 expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
-                expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( "5" );
+                expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( '5' );
             } );
 
             it( 'works for evaluate()', function() {
                 expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
-                expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( "5" );
+                expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( '5' );
             } );
 
         } );
@@ -504,12 +504,12 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
             it( 'works for Nodeset().get()', function() {
                 expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
-                expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( "5" );
+                expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( '5' );
             } );
 
             it( 'works for evaluate()', function() {
                 expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
-                expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( "5" );
+                expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( '5' );
             } );
 
         } );

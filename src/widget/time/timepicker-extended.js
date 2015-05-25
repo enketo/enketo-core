@@ -49,7 +49,6 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/time/bootstr
          */
         TimepickerExtended.prototype._init = function() {
             var $timeI = $( this.element ),
-                $p = $( this ).parent( 'label' ),
                 timeVal = $( this.element ).val(),
                 $fakeTime = $( '<div class="widget bootstrap-timepicker">' +
                     '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +

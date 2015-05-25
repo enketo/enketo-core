@@ -48,8 +48,8 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
     };
 
     Tablewidget.prototype.fixXlsFormShortcutMarkup = function() {
-        var $labels, $hints, $note, $h4,
-            that = this;
+        var $labels, $hints, $note;
+
         $( this.element ).parent().parent()
             .find( '.or-appearance-field-list .or-appearance-label' )
             .prev( '.note' ).each( function() {

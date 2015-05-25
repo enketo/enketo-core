@@ -155,7 +155,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
          * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
          */
         Nodeset.prototype.get = function() {
-            var nodes, $nodes, /** @type {string} */ val;
+            var $nodes, /** @type {string} */ val;
             // cache evaluation result
             if ( !this.nodes ) {
                 this.nodes = that.evaluate( this.selector, 'nodes', null, null, true );
@@ -612,7 +612,6 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
      */
     FormModel.prototype.getTemplatePath = function( nodePath ) {
         var templateIndex,
-            template = null,
             that = this;
 
         nodePath.split( '/' ).some( function( value, index, array ) {

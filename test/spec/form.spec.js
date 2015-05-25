@@ -133,7 +133,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         function testPreloadExistingValue( node ) {
-            it( "obtains unchanged preload value of item (WITH preload binding): " + node.selector + "", function() {
+            it( 'obtains unchanged preload value of item (WITH preload binding): ' + node.selector + '', function() {
                 form = new Form( formStr5, {
                     modelStr: dataStr5a
                 } );
@@ -170,7 +170,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             [ '/widgets/meta/instanceID', 'uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8' ]
         ];
 
-        for ( i = 0; i < t.length; i++ ) {
+        for ( var i = 0; i < t.length; i++ ) {
             testPreloadExistingValue( {
                 selector: t[ i ][ 0 ],
                 result: t[ i ][ 1 ]
@@ -188,7 +188,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
     } );
 
-    describe( "Loading instance values into html input fields functionality", function() {
+    describe( 'Loading instance values into html input fields functionality', function() {
         var form;
 
         it( 'correctly populates input fields of non-repeat node names in the instance', function() {
@@ -294,7 +294,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
     } );
 
     describe( 'repeat functionality', function() {
-        var form, timerCallback;
+        var form;
 
         //turn jQuery animations off
         jQuery.fx.off = true;
@@ -368,7 +368,6 @@ define( [ "enketo-js/Form" ], function( Form ) {
             form = loadForm( 'nested_repeats.xml' );
             form.init();
             var formH = form.getView(),
-                model = form.getModel(),
                 $dates = formH.$.find( '[name="/nested_repeats/kids/kids_details/immunization_info/date"]' );
 
             expect( $dates.length ).toEqual( 5 );
@@ -506,7 +505,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
     } );
 
     describe( 'Required field validation', function() {
-        var form, $numberInput, $branch;
+        var form, $numberInput, $numberLabel, $branch;
 
         beforeEach( function() {
             jQuery.fx.off = true; //turn jQuery animations off
@@ -799,18 +798,18 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
 
     describe( 'clearing inputs', function() {
-        $fieldset = $( '<fieldset><input type="number" value="23" /><input type="text" value="abc" /><textarea>abcdef</textarea></fieldset>"' );
+        var $fieldset = $( '<fieldset><input type="number" value="23" /><input type="text" value="abc" /><textarea>abcdef</textarea></fieldset>"' );
 
         it( 'works!', function() {
-            expect( $fieldset.find( '[type="number"]' ).val() ).toEqual( "23" );
-            expect( $fieldset.find( '[type="text"]' ).val() ).toEqual( "abc" );
-            expect( $fieldset.find( 'textarea' ).val() ).toEqual( "abcdef" );
+            expect( $fieldset.find( '[type="number"]' ).val() ).toEqual( '23' );
+            expect( $fieldset.find( '[type="text"]' ).val() ).toEqual( 'abc' );
+            expect( $fieldset.find( 'textarea' ).val() ).toEqual( 'abcdef' );
 
             $fieldset.clearInputs();
 
-            expect( $fieldset.find( '[type="number"]' ).val() ).toEqual( "" );
-            expect( $fieldset.find( '[type="text"]' ).val() ).toEqual( "" );
-            expect( $fieldset.find( 'textarea' ).val() ).toEqual( "" );
+            expect( $fieldset.find( '[type="number"]' ).val() ).toEqual( '' );
+            expect( $fieldset.find( '[type="text"]' ).val() ).toEqual( '' );
+            expect( $fieldset.find( 'textarea' ).val() ).toEqual( '' );
 
         } );
     } );

@@ -22,7 +22,6 @@ define( function( window ) {
     Date.prototype.toISOLocalString = function() {
         //2012-09-05T12:57:00.000-04:00 (ODK)
         var offset = {},
-            plus,
             pad2 = function( x ) {
                 return ( x < 10 ) ? '0' + x : x;
             };

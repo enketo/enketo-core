@@ -53,7 +53,6 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
          */
 
         function Geopicker( element, options ) {
-            var that = this;
             this.namespace = pluginName;
             // call the super class constructor
             Widget.call( this, element, options );
@@ -72,8 +71,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
          */
         Geopicker.prototype._init = function() {
             var loadedVal = $( this.element ).val().trim(),
-                that = this,
-                defaultLatLng = [ 16.8164, -3.0171 ];
+                that = this;
 
             this.$question = $( this.element ).closest( '.question' );
 
@@ -840,8 +838,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
          * @return {Promise} [description]
          */
         Geopicker.prototype._loadGoogleMapsScript = function() {
-            var apiKeyQueryParam, loadUrl,
-                that = this;
+            var apiKeyQueryParam, loadUrl;
 
             // request Google maps script only once, using a variable outside of the scope of the current widget
             // in case multiple widgets exist in the same form
@@ -1076,8 +1073,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
          * @return {Boolean]}        Whether point changed.
          */
         Geopicker.prototype._editPoint = function( latLng ) {
-            var changed,
-                oldVal = this.points[ this.currentIndex ];
+            var changed;
 
             this.points[ this.currentIndex ] = latLng;
 

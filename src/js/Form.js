@@ -48,10 +48,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 model = new FormModel( data.modelStr, data.external );
                 form = new FormView( formSelector );
 
-                //var profiler = new Profiler('model.init()');
                 loadErrors = loadErrors.concat( model.init() );
-
-                //profiler.report();
 
                 if ( data.instanceStr ) {
                     dataToEdit = new FormModel( data.instanceStr );
@@ -60,9 +57,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 }
                 repeatsPresent = ( $( formSelector ).find( '.or-repeat' ).length > 0 );
 
-                //profiler = new Profiler('html form.init()');
                 form.init();
-                //profiler.report();
 
                 if ( window.scrollTo ) {
                     window.scrollTo( 0, 0 );
@@ -324,51 +319,38 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return console.error( 'variable data needs to be defined as instance of FormModel' );
                 }
 
-                //var profiler = new Profiler('preloads.init()');
                 // before widgets.init (as instanceID used in offlineFilepicker widget)
                 this.preloads.init( this );
-                //profiler.report();
 
-                this.grosslyViolateStandardComplianceByIgnoringCertainCalcs(); //before calcUpdate!
+                // before calcUpdate!
+                this.grosslyViolateStandardComplianceByIgnoringCertainCalcs();
 
-                //profiler = new Profiler('calcupdate');
-                // before repeat.init as repeat count may use a calculated item
+                // before repeat.init to make sure the jr:repeat-count calculation has been evaluated
                 this.calcUpdate();
-                //profiler.report();
 
-                //profiler = new Profiler('setLangs()');
-                // test: before itemsetUpdate
+                // before itemsetUpdate
                 this.langs.init();
-                //profiler.report();
 
-                //profiler = new Profiler('repeat.init()');
                 // after radio button data-name setting
                 this.repeat.init( this );
-                //profiler.report();
 
-                //profiler = new Profiler('itemsets initialization');
+                // after repeat.init()
                 this.itemsetUpdate();
-                //profiler.report();
 
-                //profiler = new Profiler('setting default values in form inputs');
+                // after repeat.init()
                 this.setAllVals();
-                //profiler.report();
 
-                //profiler = new Profiler('widgets initialization');
-                // after setAllVals()
+                // after setAllVals(), after repeat.init()
                 widgets.init();
-                //profiler.report();
 
-                //profiler = new Profiler('branch.init()');
-                // after widgets.init()
+                // after widgets.init(), and repeat.init()
                 this.branchUpdate();
-                //profiler.report();
 
-                this.pages.init(); // after branch.init();
+                // after branch.init();
+                this.pages.init();
 
-                //profiler = new Profiler('outputUpdate initial');
+                // after repeat.init()
                 this.outputUpdate();
-                //profiler.report();
 
                 // after widgets init to make sure widget handlers are called before
                 // after loading existing instance to not trigger an 'edit' event
@@ -379,7 +361,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 setTimeout( function() {
                     that.progress.update();
                 }, 0 );
-                //profiler.report('time taken across all functions to evaluate '+xpathEvalNum+' XPath expressions: '+xpathEvalTime);
             };
 
             FormView.prototype.pages = {
@@ -398,8 +379,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             .attr( 'role', 'page' );
 
                         this.setToCurrent( $allPages.first( ':not(.disabled)' ) );
-
-                        //console.log( 'all pages', $allPages );
 
                         if ( $allPages.length > 1 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
                             this.$formFooter = $( '.form-footer' );
@@ -431,7 +410,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         return false;
                     } );
                     this.$btnNext.click( function() {
-                        console.log( 'next!' );
                         that.next();
                         return false;
                     } );
@@ -449,7 +427,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             that.next();
                         },
                         swipeRight: function( ev ) {
-                            console.log( 'swipe left!' );
                             that.prev();
                         }
                     } );
@@ -464,9 +441,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         that.flipToPageContaining( $( event.target ) );
                     } );
                     $form.on( 'removerepeat', function( event ) {
-                        console.log( 'handling repeat removal in page object', event.target );
                         // if the current page is removed
-                        // note that that.$current will have length 1 even if it was removed from DOM!!
+                        // note that that.$current will have length 1 even if it was removed from DOM!
                         if ( that.$current.closest( 'html' ).length === 0 ) {
                             that.updateAllActive();
                             // is it best to go to previous page always?
@@ -486,7 +462,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return this.$current;
                 },
                 updateAllActive: function( $all ) {
-                    //console.log( 'refreshing collection of active pages' );
                     $all = $all || $( '.or [role="page"]' );
                     this.$activePages = $all.filter( function() {
                         return $( this ).closest( '.disabled' ).length === 0;
@@ -512,8 +487,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     if ( next ) {
                         this.flipTo( next, currentIndex + 1 );
-                    } else {
-                        console.log( 'no page present to flip forward to!' );
                     }
                 },
                 prev: function() {
@@ -524,8 +497,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     if ( prev ) {
                         this.flipTo( prev, currentIndex - 1 );
-                    } else {
-                        console.log( 'no page present to flip backward to' );
                     }
                 },
                 setToCurrent: function( pageEl ) {
@@ -928,7 +899,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * to exclude all those repeats that did not trigger it...
                  * However, this would break if people are referring to nodes in other
                  * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node /path/to/repeat, 3)
-                 * so we add those (in a very innefficient way)
+                 * so we add those (in a very inefficient way)
                  **/
                 if ( $repeat ) {
                     // the non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
@@ -981,8 +952,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     that = this,
                     evaluations = 0,
                     clonedRepeatsPresent;
-
-                // console.log( 'branchUpdate', updated );
 
                 $nodes = this.getNodesToUpdate( 'data-relevant', '', updated );
 
@@ -1177,8 +1146,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     needToUpdateLangs = false,
                     itemsCache = {};
 
-                // console.log( 'itemsetUpdate', updated );
-
                 $nodes = this.getNodesToUpdate( 'data-items-path', '.itemset-template', updated );
 
                 clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
@@ -1234,8 +1201,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
 
                     $template.data( newItems );
-
-                    // console.log( 'template node name:', templateNodeName, '$template', $template );
 
                     // clear data values through inputs. Note: if a value exists,
                     // this will trigger a dataupdate event which may call this update function again
@@ -1297,8 +1262,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     val = '',
                     that = this;
 
-                //console.log( 'outputUpdate', updated );
-
                 $nodes = this.getNodesToUpdate( 'data-value', '.or-output', updated );
 
                 clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
@@ -1349,7 +1312,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             FormView.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function() {
                 var $culprit = $form.find( '[name$="/meta/instanceID"][data-calculate]' );
                 if ( $culprit.length > 0 ) {
-                    //console.log( "Found meta/instanceID with binding that has a calculate attribute and removed this calculation. It ain't right!" );
                     $culprit.removeAttr( 'data-calculate' );
                 }
             };
@@ -1366,8 +1328,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     that = this;
 
                 updated = updated || {};
-
-                // console.log( 'calcUpdate', updated );
 
                 $nodes = this.getNodesToUpdate( 'data-calculate', '', updated );
 
@@ -1406,7 +1366,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             updateCalc( index );
                         } );
                     }
-
 
                     function updateCalc( index ) {
 
@@ -1593,10 +1552,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return o.curVal;
                 },
                 'user': function( o ) {
-                    //uuid, user_id, user_type
-                    //if (o.param == 'uuid'){
-                    //  return (o.curVal.length > 1) ? o.curVal : model.evaluate('uuid()', 'string');
-                    //}
                     if ( o.curVal.length === 0 ) {
                         return 'user preload item not supported in enketo yet';
                     }
@@ -1606,26 +1561,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     //general
                     if ( o.curVal.length === 0 ) {
                         return 'no uid yet in enketo';
-                    }
-                    return o.curVal;
-                },
-                'browser': function( o ) {
-                    /*if (o.curVal.length === 0){
-                    if (o.param == 'name'){
-                    var a = ($.browser.webkit) ? 'webkit' : ($.browser.mozilla) ? 'mozilla' : ($.browser.opera) ? 'opera' : ($.browser.msie) ? 'msie' : 'unknown';
-                    //console.debug(a);
-                    return a;
-                    }
-                    if (o.param == 'version'){
-                    return $.browser.version;
-                    }
-                    return o.param+' not supported in enketo';
-                    }
-                    return o.curVal;*/
-                },
-                'os': function( o ) {
-                    if ( o.curVal.length === 0 ) {
-                        return 'not known';
                     }
                     return o.curVal;
                 },
@@ -1683,7 +1618,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         repLevel++;
                         repCountPath = $repeat.attr( 'data-repeat-count' ) || "";
                         numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal()[ 0 ], 10 ) : 0;
-                        // console.debug('number of reps in count attribute: ' +numRepsInCount);
                         index = $form.find( '.or-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
                         $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get();
                         numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) ).addBack().length;
