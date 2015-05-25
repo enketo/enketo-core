@@ -50,6 +50,8 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         }
     };
 
+    Notewidget.prototype.destroy = function( element ) {};
+
     $.fn[ pluginName ] = function( options, event ) {
         return this.each( function() {
             var $this = $( this ),

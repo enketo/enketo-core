@@ -69,10 +69,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      *
      * @param  {Element} element The element (not) to destroy the widget on ;)
      */
-    Tablewidget.prototype.destroy = function( element ) {
-        //nothing to do
-        console.debug( pluginName, 'destroy called' );
-    };
+    Tablewidget.prototype.destroy = function( element ) {};
 
     $.fn[ pluginName ] = function( options, event ) {
 
