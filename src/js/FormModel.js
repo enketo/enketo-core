@@ -18,10 +18,13 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
             that = this;
 
         externalData = externalData || [];
+        options = options || {};
+        options.full = ( typeof options.full !== 'undefined' ) ? options.full : true;
 
         this.convertedExpressions = {};
         this.templates = {};
         this.loadErrors = [];
+
         this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
         this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\()/;
 
@@ -33,7 +36,11 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
          */
         modelStr = modelStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, ' data-$1' );
 
-        // TODO: if options && !options.full, strip all secondary instances from string before parsing!
+        if ( !options.full ) {
+            // strip all secondary instances from string before parsing
+            // this regex works because the model never includes itext in Enketo
+            modelStr = modelStr.replace( /^(<model\s*><instance((?!<instance).)+<\/instance\s*>\s*)(<instance.+<\/instance\s*>)*/, '$1' );
+        }
 
         try {
             id = 'model';

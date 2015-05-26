@@ -51,7 +51,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 loadErrors = loadErrors.concat( model.init() );
 
                 if ( data.instanceStr ) {
-                    dataToEdit = new FormModel( data.instanceStr );
+                    dataToEdit = new FormModel( data.instanceStr, null, {
+                        full: false
+                    } );
                     loadErrors = loadErrors.concat( dataToEdit.init() );
                     this.load( dataToEdit );
                 }

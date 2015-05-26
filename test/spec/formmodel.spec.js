@@ -19,6 +19,35 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
     } );
 
+    describe( 'Instantiating a model', function() {
+        var modelStr = '<model><instance><data id="data"><nodeA>2</nodeA></data></instance>' +
+            '<instance id="countries"><root><item><country>NL</country</item></root></instance></model>';
+
+        it( 'without options, it includes all instances', function() {
+            var model = new Model( modelStr );
+            model.init();
+            expect( model.xml.querySelector( 'model > instance#countries' ) ).not.toBeNull();
+            expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).toEqual( 'NL' );
+        } );
+
+        it( 'with option.full = true, it includes all instances', function() {
+            var model = new Model( modelStr, null, {
+                full: true
+            } );
+            model.init();
+            expect( model.xml.querySelector( 'model > instance#countries' ) ).not.toBeNull();
+            expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).toEqual( 'NL' );
+        } );
+
+        it( 'with options.full = false, strips the secondary instances', function() {
+            var model = new Model( modelStr, null, {
+                full: false
+            } );
+            model.init();
+            expect( model.xml.querySelector( 'model > instance#countries' ) ).toBeNull();
+        } );
+    } );
+
     describe( 'Data node getter', function() {
         var i, t =
             [
