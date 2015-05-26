@@ -290,7 +290,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             return $( this ).attr( 'value' ) === value;
                         } ).siblings( '.option-label.active' ).text();
                     }
-                    return expr.replace( matches[ 0 ], "'" + label + "'" );
+                    return expr.replace( matches[ 0 ], '"' + label + '"' );
                 }
                 return expr;
             };
@@ -312,8 +312,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             }
 
             FormView.prototype.init = function() {
-                var $required, $hint,
-                    that = this;
+                var that = this;
 
                 if ( typeof model === 'undefined' || !( model instanceof FormModel ) ) {
                     return console.error( 'variable data needs to be defined as instance of FormModel' );

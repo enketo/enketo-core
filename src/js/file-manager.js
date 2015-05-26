@@ -101,26 +101,6 @@ define( [ 'q', 'jquery' ], function( Q, $ ) {
         return files;
     }
 
-    /**
-     * Whether the file is too large too handle and should be rejected
-     * @param  {[type]}  file the File
-     * @return {Boolean}
-     */
-    function _isTooLarge( file ) {
-        return file && file.size > _getMaxSize();
-    }
-
-    /**
-     * Returns the maximum size of a file
-     * @return {Number}
-     */
-    function _getMaxSize() {
-        if ( !maxSize ) {
-            maxSize = $( document ).data( 'maxSubmissionSize' ) || 5 * 1024 * 1024;
-        }
-        return maxSize;
-    }
-
     return {
         isSupported: isSupported,
         notSupportedAdvisoryMsg: notSupportedAdvisoryMsg,

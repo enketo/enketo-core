@@ -4,10 +4,9 @@
  */
 
 /*jshint node:true*/
-"use strict";
+'use strict';
 
 module.exports = function( grunt ) {
-    var js;
 
     // show elapsed time at the end
     require( 'time-grunt' )( grunt );
@@ -122,31 +121,31 @@ module.exports = function( grunt ) {
                         } );
                         return [ './bower-components/requirejs/require.js' ].concat( widgets );
                     } )(),
-                    out: "build/js/combined.min.js",
-                    optimize: "uglify2"
+                    out: 'build/js/combined.min.js',
+                    optimize: 'uglify2'
                 }
             }
         },
         modernizr: {
             dist: {
-                "devFile": "remote",
-                "outputFile": "lib/Modernizr.js",
-                "extra": {
-                    "shiv": false,
-                    "printshiv": true,
-                    "load": false,
-                    "mq": false,
-                    "cssclasses": true
+                'devFile': 'remote',
+                'outputFile': 'lib/Modernizr.js',
+                'extra': {
+                    'shiv': false,
+                    'printshiv': true,
+                    'load': false,
+                    'mq': false,
+                    'cssclasses': true
                 },
-                "uglify": false,
-                "parseFiles": true
+                'uglify': false,
+                'parseFiles': true
             }
         }
     } );
 
     //maybe this can be turned into a npm module?
     grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function() {
-        var widgetConfig, widgetFolderPath, widgetSassPath, widgetConfigPath,
+        var widgetFolderPath, widgetSassPath, widgetConfigPath,
             config = grunt.config( 'prepWidgetSass' ),
             widgets = grunt.file.readJSON( config.widgetConfigPath ).widgets,
             content = '// Dynamically created list of widget stylesheets to import based on the content\r\n' +

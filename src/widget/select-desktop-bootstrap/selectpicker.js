@@ -15,7 +15,7 @@
  */
 
 define( [ 'enketo-js/Widget', 'jquery', 'bootstrap' ], function( Widget, $ ) {
-    "use strict";
+    'use strict';
 
     var pluginName = 'desktopSelectpicker';
 
@@ -79,7 +79,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap' ], function( Widget, $ ) {
 
         var li = [];
         var liHtml = '';
-        var inputAttr = ( this.multiple ) ? "type='checkbox'" : "type='radio' name='" + Math.random() * 100000 + "'";
+        var inputAttr = ( this.multiple ) ? 'type="checkbox"' : 'type="radio" name="' + Math.random() * 100000 + '"';
         var _this = this;
         var checkedInputAttr,
             checkedLiAttr;
@@ -96,8 +96,8 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap' ], function( Widget, $ ) {
             template = template.replace( '__SELECTED_OPTIONS', this._createSelectedStr() );
             for ( var i = 0; i < li.length; i++ ) {
                 if ( li[ i ].value ) {
-                    checkedInputAttr = ( li[ i ].selected ) ? " checked='checked'" : '';
-                    checkedLiAttr = ( li[ i ].selected && !_this.multiple ) ? "class='active'" : '';
+                    checkedInputAttr = ( li[ i ].selected ) ? ' checked="checked"' : '';
+                    checkedLiAttr = ( li[ i ].selected && !_this.multiple ) ? 'class="active"' : '';
                     /**
                      * e.g.:
                      * <li checked="checked">
@@ -109,13 +109,13 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap' ], function( Widget, $ ) {
                      *    </li>
                      */
                     liHtml +=
-                        "<li " + checkedLiAttr + ">" +
-                        "<a class='option-wrapper' tabindex='-1' href='#'>" +
-                        "<label>" +
-                        "<input class='ignore' " + inputAttr + checkedInputAttr + "value='" + li[ i ].value + "' />" +
-                        "<span class='option-label'>" + li[ i ].label + "</span></label>" +
-                        "</a>" +
-                        "</li>";
+                        '<li ' + checkedLiAttr + '>' +
+                        '<a class="option-wrapper" tabindex="-1" href="#">' +
+                        '<label>' +
+                        '<input class="ignore" ' + inputAttr + checkedInputAttr + 'value="' + li[ i ].value + '" />' +
+                        '<span class="option-label">' + li[ i ].label + '</span></label>' +
+                        '</a>' +
+                        '</li>';
                 }
             }
         }
@@ -229,9 +229,9 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap' ], function( Widget, $ ) {
                 data = $this.data( pluginName );
 
             //only instantiate if options is an object AND if options.touch is falsy
-            if ( !data && typeof options == 'object' && !options.touch ) {
+            if ( !data && typeof options === 'object' && !options.touch ) {
                 $this.data( pluginName, ( data = new DesktopSelectpicker( this, options, event ) ) );
-            } else if ( data && typeof options == 'string' ) {
+            } else if ( data && typeof options === 'string' ) {
                 data[ options ]( this );
             }
         } );

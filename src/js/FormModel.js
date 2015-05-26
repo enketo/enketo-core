@@ -893,13 +893,13 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
 
         // translate typeStr to number according to DOM level 3 XPath constants
         for ( resTypeNum in resultTypes ) {
-
-            resTypeNum = Number( resTypeNum );
-
-            if ( resultTypes[ resTypeNum ][ 0 ] === resTypeStr ) {
-                break;
-            } else {
-                resTypeNum = 0;
+            if ( resultTypes.hasOwnProperty( resTypeNum ) ) {
+                resTypeNum = Number( resTypeNum );
+                if ( resultTypes[ resTypeNum ][ 0 ] === resTypeStr ) {
+                    break;
+                } else {
+                    resTypeNum = 0;
+                }
             }
         }
 
@@ -936,10 +936,12 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
             // for type = any, see if a valid string, number or boolean is returned
             if ( resTypeNum === 0 ) {
                 for ( resTypeNum in resultTypes ) {
-                    resTypeNum = Number( resTypeNum );
-                    if ( resTypeNum === Number( result.resultType ) && resTypeNum > 0 && resTypeNum < 4 ) {
-                        response = result[ resultTypes[ resTypeNum ][ 2 ] ];
-                        break;
+                    if ( resultTypes.hasOwnProperty( resTypeNum ) ) {
+                        resTypeNum = Number( resTypeNum );
+                        if ( resTypeNum === Number( result.resultType ) && resTypeNum > 0 && resTypeNum < 4 ) {
+                            response = result[ resultTypes[ resTypeNum ][ 2 ] ];
+                            break;
+                        }
                     }
                 }
                 console.error( 'Expression: ' + expr + ' did not return any boolean, string or number value as expected' );
