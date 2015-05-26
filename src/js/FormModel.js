@@ -3,7 +3,7 @@ if ( typeof define !== 'function' ) {
 }
 
 define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, utils, $ ) {
-    "use strict";
+    'use strict';
 
     /**
      * Class dealing with the XML Model of a form
@@ -205,7 +205,9 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
 
             if ( typeof newVals !== 'undefined' && newVals !== null ) {
                 newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
-            } else newVal = '';
+            } else {
+                newVal = '';
+            }
 
             newVal = this.convert( newVal, xmlDataType );
 
@@ -263,7 +265,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
          * @return {number}       [description]
          */
         Nodeset.prototype.determineIndex = function( $node ) {
-            var nodeName, path, $this, $family;
+            var nodeName, path, $family;
 
             $node = $node || this.get();
 
@@ -356,7 +358,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
         Nodeset.prototype.validate = function( expr, xmlDataType ) {
             var typeValid, exprValid, value;
 
-            if ( !xmlDataType || typeof this.types[ xmlDataType.toLowerCase() ] == 'undefined' ) {
+            if ( !xmlDataType || typeof this.types[ xmlDataType.toLowerCase() ] === 'undefined' ) {
                 xmlDataType = 'string';
             }
 
@@ -430,7 +432,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
                     var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/,
                         segments = pattern.exec( x ),
                         date = new Date( x );
-                    if ( new Date( x ).toString() == 'Invalid Date' ) {
+                    if ( new Date( x ).toString() === 'Invalid Date' ) {
                         //this code is really only meant for the Rhino and PhantomJS engines, in browsers it may never be reached
                         if ( segments && Number( segments[ 1 ] ) > 0 && Number( segments[ 3 ] ) >= 0 && Number( segments[ 3 ] ) < 12 && Number( segments[ 5 ] ) < 32 ) {
                             date = new Date( Number( segments[ 1 ] ), ( Number( segments[ 3 ] ) - 1 ), Number( segments[ 5 ] ) );
@@ -457,7 +459,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
                     if ( new Date( x ).toString() !== 'Invalid Date' && patternCorrect.test( x ) ) {
                         return x;
                     }
-                    if ( new Date( x ).toString() == 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
+                    if ( new Date( x ).toString() === 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
                         return x + ':00';
                     }
                     date = new Date( x );
@@ -493,8 +495,8 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
                     var coords = x.toString().trim().split( ' ' );
                     return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
                         ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
-                        ( typeof coords[ 2 ] == 'undefined' || !isNaN( coords[ 2 ] ) ) &&
-                        ( typeof coords[ 3 ] == 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
+                        ( typeof coords[ 2 ] === 'undefined' || !isNaN( coords[ 2 ] ) ) &&
+                        ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
                 },
                 convert: function( x ) {
                     return $.trim( x.toString() );
@@ -812,7 +814,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
 
             } else {
                 console.error( 'indexed repeat with incorrect number of parameters found', indexedRepeat[ 0 ] );
-                return "'Error with indexed-repeat parameters'";
+                return '"Error with indexed-repeat parameters"';
             }
         } );
 
@@ -935,7 +937,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
             if ( resTypeNum === 0 ) {
                 for ( resTypeNum in resultTypes ) {
                     resTypeNum = Number( resTypeNum );
-                    if ( resTypeNum == Number( result.resultType ) && resTypeNum > 0 && resTypeNum < 4 ) {
+                    if ( resTypeNum === Number( result.resultType ) && resTypeNum > 0 && resTypeNum < 4 ) {
                         response = result[ resultTypes[ resTypeNum ][ 2 ] ];
                         break;
                     }

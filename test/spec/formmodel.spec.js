@@ -2,7 +2,7 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ "enketo-js/FormModel" ], function( Model ) {
+define( [ 'enketo-js/FormModel' ], function( Model ) {
 
     var getModel = function( filename ) {
         var model = new Model( mockForms1[ filename ].xml_model );
@@ -11,7 +11,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
     };
 
     // I don't remember why this functionality exists
-    describe( "Primary instance node values", function() {
+    describe( 'Primary instance node values', function() {
         var model = new Model( '<model><instance><data><nodeA> 2  </nodeA></data></instance></model>' );
         model.init();
         it( 'are trimmed during initialization', function() {
@@ -19,11 +19,11 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
         } );
     } );
 
-    describe( "Data node getter", function() {
+    describe( 'Data node getter', function() {
         var i, t =
             [
-                [ "", null, null, 20 ],
-                [ "", null, {},
+                [ '', null, null, 20 ],
+                [ '', null, {},
                     20
                 ],
                 //["/", null, {}, 9], //issue with xfind, not important
@@ -50,17 +50,17 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                     },
                     1
                 ],
-                [ "/thedata/repeatGroup", null, null, 3 ],
+                [ '/thedata/repeatGroup', null, null, 3 ],
 
-                [ "//nodeC", null, null, 3 ],
-                [ "/thedata/repeatGroup/nodeC", null, null, 3 ],
-                [ "/thedata/repeatGroup/nodeC", 2, null, 1 ],
-                [ "/thedata/repeatGroup/nodeC", null, {
+                [ '//nodeC', null, null, 3 ],
+                [ '/thedata/repeatGroup/nodeC', null, null, 3 ],
+                [ '/thedata/repeatGroup/nodeC', 2, null, 1 ],
+                [ '/thedata/repeatGroup/nodeC', null, {
                         noEmpty: true
                     },
                     2
                 ],
-                [ "/thedata/repeatGroup/nodeC", null, {
+                [ '/thedata/repeatGroup/nodeC', null, {
                         onlyleaf: true
                     },
                     3
@@ -69,7 +69,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             data = getModel( 'thedata.xml' ); //form.Data(dataStr1);
 
         function test( node ) {
-            it( "obtains nodes (selector: " + node.selector + ", index: " + node.index + ", filter: " + JSON.stringify( node.filter ) + ")", function() {
+            it( 'obtains nodes (selector: ' + node.selector + ', index: ' + node.index + ', filter: ' + JSON.stringify( node.filter ) + ')', function() {
                 expect( data.node( node.selector, node.index, node.filter ).get().length ).toEqual( node.result );
             } );
         }
@@ -88,19 +88,19 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
         var data = getModel( 'thedata.xml' ); //dataStr1);
 
         it( 'returns an array of one node value', function() {
-            expect( data.node( "/thedata/nodeB" ).getVal() ).toEqual( [ 'b' ] );
+            expect( data.node( '/thedata/nodeB' ).getVal() ).toEqual( [ 'b' ] );
         } );
 
         it( 'returns an array of multiple node values', function() {
-            expect( data.node( "/thedata/repeatGroup/nodeC" ).getVal() ).toEqual( [ '', 'c2', 'c3' ] );
+            expect( data.node( '/thedata/repeatGroup/nodeC' ).getVal() ).toEqual( [ '', 'c2', 'c3' ] );
         } );
 
         it( 'returns an empty array', function() {
-            expect( data.node( "/thedata/nodeX" ).getVal() ).toEqual( [] );
+            expect( data.node( '/thedata/nodeX' ).getVal() ).toEqual( [] );
         } );
 
         it( 'obtains a node value of a node with a . in the name', function() {
-            expect( data.node( "/thedata/someweights/w.3" ).getVal() ).toEqual( [ '5' ] );
+            expect( data.node( '/thedata/someweights/w.3' ).getVal() ).toEqual( [ '5' ] );
         } );
     } );
 
@@ -111,7 +111,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
                 [ '/thedata/nodeA', null, null, 'val3', 'somewrongtype', true ], //default type is string
 
                 [ '/thedata/nodeA', 1, null, 'val13', 'string', null ], //non-existing node
-                [ "/thedata/repeatGroup/nodeC", null, null, 'val', null, null ], //multiple nodes
+                [ '/thedata/repeatGroup/nodeC', null, null, 'val', null, null ], //multiple nodes
 
                 [ '/thedata/nodeA', 0, null, '4', 'double', true ], //double is a non-existing xml data type so turned into string
                 [ '/thedata/nodeA', 0, null, 5, 'double', true ],
@@ -247,8 +247,8 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
 
     } );
 
-    describe( "Data node remover", function() {
-        it( "has removed a data node", function() {
+    describe( 'Data node remover', function() {
+        it( 'has removed a data node', function() {
             var data = getModel( 'thedata.xml' ),
                 node = data.node( '/thedata/nodeA' );
 
@@ -260,7 +260,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
         } );
     } );
 
-    describe( "XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)", function() {
+    describe( 'XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)', function() {
         var i, t = [
                 [ '/thedata/nodeB', 'string', null, 0, 'b' ],
                 [ '../nodeB', 'string', '/thedata/nodeA', 0, 'b' ],
@@ -276,7 +276,7 @@ define( [ "enketo-js/FormModel" ], function( Model ) {
             data = getModel( 'thedata.xml' );
 
         function test( expr, resultType, contextSelector, index, result ) {
-            it( "evaluates XPath: " + expr, function() {
+            it( 'evaluates XPath: ' + expr, function() {
                 expect( data.evaluate( expr, resultType, contextSelector, index ) ).toEqual( result );
             } );
         }

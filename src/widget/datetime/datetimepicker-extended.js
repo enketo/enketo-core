@@ -19,7 +19,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
         'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker'
     ],
     function( Widget, Modernizr, $ ) {
-        "use strict";
+        'use strict';
 
         var pluginName = 'datetimepickerExtended';
 
@@ -123,8 +123,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
          * @return {jQuery}        the jQuery-wrapped fake date input element
          */
         DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
-            var $datetimeI = $( this.element ),
-                $fakeDate = $(
+            var $fakeDate = $(
                     '<div class="date">' +
                     '<input class="ignore input-small" type="text" readonly="readonly" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
                     '</div>' ),
@@ -139,8 +138,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
          * @return {jQuery}        the jQuery-wrapped fake date input element
          */
         DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
-            var $datetimeI = $( this.element ),
-                $fakeTime = $(
+            var $fakeTime = $(
                     '<div class="bootstrap-timepicker">' +
                     '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' +
                     timeVal + '" placeholder="hh:mm"/>' +
@@ -194,7 +192,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
                     $this.data( pluginName, ( data = new DatetimepickerExtended( this, options, event ) ) );
                 }
                 //only call method if widget was instantiated before
-                else if ( data && typeof options == 'string' ) {
+                else if ( data && typeof options === 'string' ) {
                     //pass the element as a parameter as this is used in fix()
                     data[ options ]( this );
                 }

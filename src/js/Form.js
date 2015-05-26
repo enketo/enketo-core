@@ -16,7 +16,7 @@
 
 define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.touchswipe' ],
     function( FormModel, widgets, $ ) {
-        "use strict";
+        'use strict';
 
         /**
          * Class: Form
@@ -261,7 +261,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 if ( !data.unsubmitted ) {
                     // add deprecatedID node
                     if ( model.node( '/*/meta/deprecatedID' ).get().length !== 1 ) {
-                        var deprecatedIDXMLNode = $.parseXML( "<deprecatedID/>" ).documentElement;
+                        var deprecatedIDXMLNode = $.parseXML( '<deprecatedID/>' ).documentElement;
                         document.adoptNode( deprecatedIDXMLNode );
                         $( deprecatedIDXMLNode ).appendTo( model.node( '/*/meta' ).get() );
                     }
@@ -312,10 +312,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             }
 
             FormView.prototype.init = function() {
-                var name, $required, $hint,
+                var $required, $hint,
                     that = this;
 
-                if ( typeof model == 'undefined' || !( model instanceof FormModel ) ) {
+                if ( typeof model === 'undefined' || !( model instanceof FormModel ) ) {
                     return console.error( 'variable data needs to be defined as instance of FormModel' );
                 }
 
@@ -421,7 +421,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 setSwipeHandlers: function() {
                     var that = this;
                     $( '.main' ).swipe( {
-                        allowPageScroll: "vertical",
+                        allowPageScroll: 'vertical',
                         threshold: 75,
                         swipeLeft: function( ev ) {
                             that.next();
@@ -506,8 +506,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         .parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
                 },
                 flipTo: function( pageEl, newIndex ) {
-                    var that = this;
-
                     // if there is a current page
                     if ( this.$current.length > 0 && this.$current.closest( 'html' ).length === 1 ) {
                         // if current page is not same as pageEl
@@ -517,7 +515,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.focusOnFirstQuestion( pageEl );
                             this.toggleButtons( newIndex );
                         }
-
                         // this.$current.addClass( 'fade-out' )
                         //     .one( 'transitionend', function() {
                         //         that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
@@ -579,7 +576,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 //multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
                 getWrapNodes: function( $inputNodes ) {
                     var type = this.getInputType( $inputNodes.eq( 0 ) );
-                    return ( type == 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question, .note' );
+                    return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question, .note' );
                 },
                 /** very inefficient, should actually not be used **/
                 getProps: function( $node ) {
@@ -606,19 +603,21 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         return ''; //console.error('getInputType(): no input node provided or multiple');
                     }
                     nodeName = $node.prop( 'nodeName' ).toLowerCase();
-                    if ( nodeName == 'input' ) {
+                    if ( nodeName === 'input' ) {
                         if ( $node.attr( 'type' ).length > 0 ) {
                             return $node.attr( 'type' ).toLowerCase();
                         } else {
                             return console.error( '<input> node has no type' );
                         }
-                    } else if ( nodeName == 'select' ) {
+                    } else if ( nodeName === 'select' ) {
                         return 'select';
-                    } else if ( nodeName == 'textarea' ) {
+                    } else if ( nodeName === 'textarea' ) {
                         return 'textarea';
-                    } else if ( nodeName == 'fieldset' || nodeName == 'section' ) {
+                    } else if ( nodeName === 'fieldset' || nodeName === 'section' ) {
                         return 'fieldset';
-                    } else return console.error( 'unexpected input node type provided' );
+                    } else {
+                        return console.error( 'unexpected input node type provided' );
+                    }
                 },
                 getConstraint: function( $node ) {
                     return $node.attr( 'data-constraint' );
@@ -677,7 +676,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return $wrapNodesSameName.index( $wrapNode );
                 },
                 isMultiple: function( $node ) {
-                    return ( this.getInputType( $node ) == 'checkbox' || $node.attr( 'multiple' ) !== undefined ) ? true : false;
+                    return ( this.getInputType( $node ) === 'checkbox' || $node.attr( 'multiple' ) !== undefined ) ? true : false;
                 },
                 isEnabled: function( $node ) {
                     return !( $node.prop( 'disabled' ) || $node.parents( '.disabled' ).length > 0 );
@@ -707,11 +706,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return ( !$node.val() ) ? '' : ( $.isArray( $node.val() ) ) ? $node.val().join( ' ' ).trim() : $node.val().trim();
                 },
                 setVal: function( name, index, value ) {
-                    var $inputNodes, type, date, $target;
-                    // values = value.split(' ');
+                    var $inputNodes, type, $target;
+
                     index = index || 0;
 
-                    if ( this.getInputType( $form.find( '[data-name="' + name + '"]' ).eq( 0 ) ) == 'radio' ) {
+                    if ( this.getInputType( $form.find( '[data-name="' + name + '"]' ).eq( 0 ) ) === 'radio' ) {
                         $target = this.getWrapNodes( $form.find( '[data-name="' + name + '"]' ) ).eq( index ).find( 'input[value="' + value + '"]' );
                         // why not use this.getIndex?
                         $target.prop( 'checked', true );
@@ -784,7 +783,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 init: function() {
                     var lang,
                         that = this,
-                        setOptionLangs,
                         defaultLang = $form.find( '#form-languages' ).attr( 'data-default-lang' ),
                         $langSelector = $( '.form-language-selector' );
 
@@ -1140,10 +1138,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
              */
             FormView.prototype.itemsetUpdate = function( updated ) {
-                var clonedRepeatsPresent, insideRepeat, insideRepeatClone, $repeat, $nodes,
+                var clonedRepeatsPresent, insideRepeat, insideRepeatClone, $nodes,
                     that = this,
-                    cleverSelector = [],
-                    needToUpdateLangs = false,
                     itemsCache = {};
 
                 $nodes = this.getNodesToUpdate( 'data-items-path', '.itemset-template', updated );
@@ -1465,13 +1461,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     } );
                 },
                 'timestamp': function( o ) {
-                    var value,
-                        that = this;
+                    var value;
                     // when is 'start' or 'end'
-                    if ( o.param == 'start' ) {
+                    if ( o.param === 'start' ) {
                         return ( o.curVal.length > 0 ) ? o.curVal : model.evaluate( 'now()', 'string' );
                     }
-                    if ( o.param == 'end' ) {
+                    if ( o.param === 'end' ) {
                         //set event handler for each save event (needs to be triggered!)
                         $form.on( 'beforesave', function() {
                             value = model.evaluate( 'now()', 'string' );
@@ -1541,7 +1536,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 'context': function( o ) {
                     // 'application', 'user'??
                     if ( o.curVal.length === 0 ) {
-                        return ( o.param == 'application' ) ? 'enketo' : o.param + ' not supported in enketo';
+                        return ( o.param === 'application' ) ? 'enketo' : o.param + ' not supported in enketo';
                     }
                     return o.curVal;
                 },
@@ -1566,7 +1561,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 //Not according to spec yet, this will be added to spec but name may change
                 'instance': function( o ) {
-                    var id = ( o.curVal.length > 0 ) ? o.curVal : model.evaluate( "concat('uuid:', uuid())", 'string' );
+                    var id = ( o.curVal.length > 0 ) ? o.curVal : model.evaluate( 'concat("uuid:", uuid())', 'string' );
                     //store the current instanceID as data on the form element so it can be easily accessed by e.g. widgets
                     $form.data( {
                         instanceID: id
@@ -1591,7 +1586,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * @param  {FormView} formO the parent form object
                  */
                 init: function( formO ) {
-                    var i, numRepsInCount, repCountPath, numRepsInInstance, numRepsDefault, cloneDefaultReps, repLevel, $dataRepeat, index,
+                    var numRepsInCount, repCountPath, numRepsInInstance, numRepsDefault, cloneDefaultReps, repLevel, $dataRepeat, index,
                         that = this;
 
                     this.formO = formO;
@@ -1616,7 +1611,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     cloneDefaultReps = function( $repeat ) {
                         repLevel++;
-                        repCountPath = $repeat.attr( 'data-repeat-count' ) || "";
+                        repCountPath = $repeat.attr( 'data-repeat-count' ) || '';
                         numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal()[ 0 ], 10 ) : 0;
                         index = $form.find( '.or-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
                         $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get();
@@ -1891,7 +1886,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         $reqSubtle = $question.find( '.required-subtle' ),
                         reqSubtle = $( '<span class="required-subtle" style="color: transparent;">Required</span>' );
 
-                    if ( event.type === 'focusin' || event.type === "fakefocus" ) {
+                    if ( event.type === 'focusin' || event.type === 'fakefocus' ) {
                         $question.addClass( 'focus' );
                         if ( props.required && $reqSubtle.length === 0 && !insideTable ) {
                             $reqSubtle = $( reqSubtle );

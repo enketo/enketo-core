@@ -7,8 +7,8 @@
  * types.
  */
 
-define( [ "q", "jquery" ], function( Q, $ ) {
-    "use strict";
+define( [ 'q', 'jquery' ], function( Q, $ ) {
+    'use strict';
 
     var maxSize,
         supported = typeof FileReader !== 'undefined',

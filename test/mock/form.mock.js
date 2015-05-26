@@ -4,43 +4,43 @@
  */
 
 var dataEditStr1 =
-    "<thedata id='something'>" +
-    "<meta>" +
+    '<thedata id="something">' +
+    '<meta>' +
     '<instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID>' +
     '<timeStart/>' +
     '<timeEnd/>' +
-    "</meta>" +
-    "<nodeA>2012-02-05T15:34:00.000-04</nodeA>" +
-    "<nodeB>b</nodeB>" +
-    "<repeatGroup>" +
-    "<nodeC>some data one</nodeC>" +
-    "</repeatGroup>" +
-    "<repeatGroup>" +
-    "<nodeC></nodeC>" +
-    "</repeatGroup>" +
-    "<repeatGroup>" +
-    "<nodeC></nodeC>" +
-    "</repeatGroup>" +
-    "<repeatGroup>" +
-    "<nodeC></nodeC>" +
-    "</repeatGroup>" +
-    "<repeatGroup>" +
-    "<nodeC>some data five</nodeC>" +
-    "</repeatGroup>" +
-    "<somenodes>" +
-    "<A>two</A>" +
-    "<B>three</B>" +
-    "<C>four</C>" +
-    "</somenodes>" +
-    "<someweights>" +
-    "<w1>1</w1>" +
-    "<w2>3</w2>" +
-    "<w.3>5</w.3>" +
-    "</someweights>" +
-    "</thedata>";
+    '</meta>' +
+    '<nodeA>2012-02-05T15:34:00.000-04</nodeA>' +
+    '<nodeB>b</nodeB>' +
+    '<repeatGroup>' +
+    '<nodeC>some data one</nodeC>' +
+    '</repeatGroup>' +
+    '<repeatGroup>' +
+    '<nodeC></nodeC>' +
+    '</repeatGroup>' +
+    '<repeatGroup>' +
+    '<nodeC></nodeC>' +
+    '</repeatGroup>' +
+    '<repeatGroup>' +
+    '<nodeC></nodeC>' +
+    '</repeatGroup>' +
+    '<repeatGroup>' +
+    '<nodeC>some data five</nodeC>' +
+    '</repeatGroup>' +
+    '<somenodes>' +
+    '<A>two</A>' +
+    '<B>three</B>' +
+    '<C>four</C>' +
+    '</somenodes>' +
+    '<someweights>' +
+    '<w1>1</w1>' +
+    '<w2>3</w2>' +
+    '<w.3>5</w.3>' +
+    '</someweights>' +
+    '</thedata>';
 
 var dataStr2 =
-    "<model>" +
+    '<model>' +
     '<instance>' +
     '<random id="random"><formhub><uuid/></formhub>' +
     '<random__/>' +

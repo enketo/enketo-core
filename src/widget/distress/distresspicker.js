@@ -15,10 +15,9 @@
  */
 
 define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, $ ) {
-    "use strict";
+    'use strict';
 
-    var $lastFocused = null,
-        pluginName = 'distresspicker';
+    var pluginName = 'distresspicker';
 
     /**
      * Enhances radio buttons
@@ -82,7 +81,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
     Distresspicker.prototype._setChangeHandler = function() {
         $( this.element ).on( 'slideStop.' + this.namespace, function( slideEvt ) {
             // set to empty if value = -1
-            if ( this.value == -1 ) {
+            if ( this.value === -1 ) {
                 this.value = '';
             }
             $( this ).trigger( 'change' );
@@ -110,7 +109,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
 
             if ( !data && typeof options === 'object' ) {
                 $this.data( pluginName, ( data = new Distresspicker( this, options, event ) ) );
-            } else if ( data && typeof options == 'string' ) {
+            } else if ( data && typeof options === 'string' ) {
                 //pass the context, used for destroy() as this method is called on a cloned widget
                 data[ options ]( this );
             }

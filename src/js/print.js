@@ -19,7 +19,7 @@
  */
 
 define( [ 'jquery' ], function( $ ) {
-    "use strict";
+    'use strict';
     var dpi, printStyleSheet, $printStyleSheetLink;
 
     // make sure setDpi is not called until DOM is ready
@@ -32,9 +32,9 @@ define( [ 'jquery' ], function( $ ) {
      */
     function setDpi() {
         var dpiO = {},
-            e = document.body.appendChild( document.createElement( "DIV" ) );
-        e.style.width = "1in";
-        e.style.padding = "0";
+            e = document.body.appendChild( document.createElement( 'DIV' ) );
+        e.style.width = '1in';
+        e.style.padding = '0';
         dpiO.v = e.offsetWidth;
         e.parentNode.removeChild( e );
         dpi = dpiO.v;
@@ -45,7 +45,7 @@ define( [ 'jquery' ], function( $ ) {
      * @return {Element} [description]
      */
     function getPrintStyleSheet() {
-        var sheet, media;
+        var sheet;
         // document.styleSheets is an Object not an Array!
         for ( var i in document.styleSheets ) {
             sheet = document.styleSheets[ i ];

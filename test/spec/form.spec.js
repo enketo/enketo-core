@@ -2,7 +2,7 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ "enketo-js/Form" ], function( Form ) {
+define( [ 'enketo-js/Form' ], function( Form ) {
 
     var loadForm = function( filename, editStr ) {
         var strings = mockForms1[ filename ];
@@ -12,7 +12,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
     };
 
-    describe( "Output functionality ", function() {
+    describe( 'Output functionality ', function() {
         // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
         // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
         // since the issue was resolved by updating outputs with a one millisecond delay (!).
@@ -23,16 +23,16 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
         form.init();
 
-        it( "tested upon initialization: node random__", function() {
+        it( 'tested upon initialization: node random__', function() {
             expect( form.getView().$.find( '[data-value="/random/random__"]' ).text().length ).toEqual( 17 );
         } );
 
-        it( "tested upon initialization: node uuid__", function() {
+        it( 'tested upon initialization: node uuid__', function() {
             expect( form.getView().$.find( '[data-value="/random/uuid__"]' ).text().length ).toEqual( 36 );
         } );
     } );
 
-    describe( "Output functionality within repeats", function() {
+    describe( 'Output functionality within repeats', function() {
         var $o = [],
             form = loadForm( 'outputs_in_repeats.xml' );
         form.init();
@@ -59,10 +59,10 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
     } );
 
-    describe( "Preload and MetaData functionality", function() {
+    describe( 'Preload and MetaData functionality', function() {
         var form, t;
 
-        it( "ignores a calculate binding on [ROOT]/meta/instanceID", function() {
+        it( 'ignores a calculate binding on [ROOT]/meta/instanceID', function() {
             form = new Form( formStr2, {
                 modelStr: dataStr2
             } );
@@ -70,7 +70,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
         } );
 
-        it( "generates an instanceID on meta/instanceID WITHOUT preload binding", function() {
+        it( 'generates an instanceID on meta/instanceID WITHOUT preload binding', function() {
             form = new Form( formStr2, {
                 modelStr: dataStr2
             } );
@@ -80,7 +80,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
         } );
 
-        it( "generates an instanceID WITH preload binding", function() {
+        it( 'generates an instanceID WITH preload binding', function() {
             form = new Form( formStr3, {
                 modelStr: dataStr2
             } );
@@ -91,7 +91,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
         } );
 
-        it( "does not generate a new instanceID if one is already present", function() {
+        it( 'does not generate a new instanceID if one is already present', function() {
             form = new Form( formStr3, {
                 modelStr: dataStr3
             } );
@@ -99,7 +99,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ] ).toEqual( 'c13fe058-3349-4736-9645-8723d2806c8b' );
         } );
 
-        it( "generates a timeStart on meta/timeStart WITHOUT preload binding", function() {
+        it( 'generates a timeStart on meta/timeStart WITHOUT preload binding', function() {
             form = new Form( formStr2, {
                 modelStr: dataStr2
             } );
@@ -109,7 +109,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getModel().node( '/random/meta/timeStart' ).getVal()[ 0 ].length > 10 ).toBe( true );
         } );
 
-        it( "generates a timeEnd on init and updates this after a beforesave event WITHOUT preload binding", function() {
+        it( 'generates a timeEnd on init and updates this after a beforesave event WITHOUT preload binding', function() {
             var timeEnd, timeEndNew;
             //jasmine.Clock.useMock();
             form = new Form( formStr2, {
@@ -143,7 +143,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         }
 
         function testPreloadNonExistingValue( node ) {
-            it( "populates previously empty preload item (WITH preload binding): " + node.selector + "", function() {
+            it( 'populates previously empty preload item (WITH preload binding): ' + node.selector + '', function() {
                 form = new Form( formStr5, {
                     modelStr: dataStr5b
                 } );
@@ -209,32 +209,32 @@ define( [ "enketo-js/Form" ], function( Form ) {
 
     } );
 
-    describe( "Loading instance-to-edit functionality", function() {
+    describe( 'Loading instance-to-edit functionality', function() {
         var form, loadErrors;
 
         describe( 'when a deprecatedID node is not present in the form format', function() {
             form = loadForm( 'thedata.xml', dataEditStr1 );
             form.init();
 
-            it( "adds a deprecatedID node", function() {
+            it( 'adds a deprecatedID node', function() {
                 expect( form.getModel().node( '/thedata/meta/deprecatedID' ).get().length ).toEqual( 1 );
             } );
 
             //this is an important test even though it may not seem to be...
-            it( "includes the deprecatedID in the string to be submitted", function() {
+            it( 'includes the deprecatedID in the string to be submitted', function() {
                 expect( form.getModel().getStr().indexOf( '<deprecatedID>' ) ).not.toEqual( -1 );
             } );
 
-            it( "gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit", function() {
+            it( 'gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit', function() {
                 expect( form.getModel().node( '/thedata/meta/deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
-            it( "gives the instanceID node a new value", function() {
+            it( 'gives the instanceID node a new value', function() {
                 expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
                 expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
-            it( "adds data from the instance-to-edit to the form instance", function() {
+            it( 'adds data from the instance-to-edit to the form instance', function() {
                 expect( form.getModel().node( '/thedata/nodeA' ).getVal()[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
                 expect( form.getModel().node( '/thedata/repeatGroup/nodeC', 0 ).getVal()[ 0 ] ).toEqual( 'some data one' );
                 expect( form.getModel().node( '/thedata/repeatGroup/nodeC', 4 ).getVal()[ 0 ] ).toEqual( 'some data five' );
@@ -246,24 +246,24 @@ define( [ "enketo-js/Form" ], function( Form ) {
             form = loadForm( 'thedata.xml', dataEditStr1 );
             form.init();
 
-            it( "does not NOT add another instanceID node", function() {
+            it( 'does not NOT add another instanceID node', function() {
                 expect( form.getModel().node( '/thedata/meta/instanceID' ).get().length ).toEqual( 1 );
             } );
 
-            it( "does not NOT add another deprecatedID node", function() {
+            it( 'does not NOT add another deprecatedID node', function() {
                 expect( form.getModel().node( '/thedata/meta/deprecatedID' ).get().length ).toEqual( 1 );
             } );
 
-            it( "gives the deprecatedID node the old value of the instanceID node of the instance-to-edit", function() {
+            it( 'gives the deprecatedID node the old value of the instanceID node of the instance-to-edit', function() {
                 expect( form.getModel().node( '/thedata/meta/deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
-            it( "gives the instanceID node a new value", function() {
+            it( 'gives the instanceID node a new value', function() {
                 expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
                 expect( form.getModel().node( '/thedata/meta/instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
-            it( "adds data from the instance-to-edit to the form instance", function() {
+            it( 'adds data from the instance-to-edit to the form instance', function() {
                 expect( form.getModel().node( '/thedata/nodeA' ).getVal()[ 0 ] ).toEqual( '2012-02-05T15:34:00.000-04:00' );
                 expect( form.getModel().node( '/thedata/repeatGroup/nodeC', 0 ).getVal()[ 0 ] ).toEqual( 'some data one' );
             } );
@@ -288,7 +288,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 form = loadForm( 'thedata.xml', dataEditStr1a ); //new Form(formStr1, dataStr1, dataEditStr1a);
                 loadErrors = form.init();
                 expect( loadErrors.length ).toEqual( 1 );
-                expect( loadErrors[ 0 ] ).toEqual( "Found duplicate meta node (instanceID)!" );
+                expect( loadErrors[ 0 ] ).toEqual( 'Found duplicate meta node (instanceID)!' );
             } );
         } );
     } );
@@ -305,7 +305,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 form.init();
             } );
 
-            it( "removes the correct instance and HTML node when the '-' button is clicked (issue 170)", function() {
+            it( 'removes the correct instance and HTML node when the ' - ' button is clicked (issue 170)', function() {
                 var repeatSelector = '.or-repeat[name="/thedata/repeatGroup"]',
                     nodePath = '/thedata/repeatGroup/nodeC',
                     nodeSelector = 'input[name="' + nodePath + '"]',
@@ -327,7 +327,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
                 expect( formH.$.find( nodeSelector ).eq( index - 1 ).val() ).toEqual( 'c2' );
             } );
 
-            it( "marks cloned invalid fields as valid", function() {
+            it( 'marks cloned invalid fields as valid', function() {
                 var repeatSelector = '.or-repeat[name="/thedata/repeatGroup"]',
                     nodeSelector = 'input[name="/thedata/repeatGroup/nodeC"]',
                     formH = form.getView(),
@@ -350,12 +350,11 @@ define( [ "enketo-js/Form" ], function( Form ) {
             } );
         } );
 
-        it( "clones nested repeats if they are present in the instance upon initialization (issue #359) ", function() {
+        it( 'clones nested repeats if they are present in the instance upon initialization (issue #359) ', function() {
             //note that this form contains multiple repeats in the instance
             form = loadForm( 'nested_repeats.xml' );
             form.init();
             var formH = form.getView(),
-                model = form.getModel(),
                 $1stLevelTargetRepeat = formH.$.find( '.or-repeat[name="/nested_repeats/kids/kids_details"]' ).eq( 1 ),
                 $2ndLevelTargetRepeats = $1stLevelTargetRepeat.find( '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]' );
 
@@ -364,7 +363,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         //doesn't work in bloody Travis. STFU Travis!
-        xit( "doesn't duplicate date widgets in a cloned repeat", function() {
+        xit( 'doesn\'t duplicate date widgets in a cloned repeat', function() {
             form = loadForm( 'nested_repeats.xml' );
             form.init();
             var formH = form.getView(),
@@ -376,7 +375,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
     } );
 
     describe( 'calculations', function() {
-        var formH, dataO, input1, input2,
+        var formH, dataO,
             form = loadForm( 'calcs_in_repeats.xml' );
         form.init();
         formH = form.getView();
@@ -393,7 +392,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
     describe( 'branching functionality', function() {
         var form;
 
-        it( "hides irrelevant branches upon initialization", function() {
+        it( 'hides irrelevant branches upon initialization', function() {
             form = new Form( formStr6, {
                 modelStr: dataStr6
             } );
@@ -402,7 +401,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getView().$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 1 );
         } );
 
-        it( "reveals a group branch when the relevant condition is met", function() {
+        it( 'reveals a group branch when the relevant condition is met', function() {
             form = new Form( formStr6, {
                 modelStr: dataStr6
             } );
@@ -415,7 +414,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( form.getView().$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( false );
         } );
 
-        it( "reveals a question when the relevant condition is met", function() {
+        it( 'reveals a question when the relevant condition is met', function() {
             form = new Form( formStr6, {
                 modelStr: dataStr6
             } );
@@ -505,7 +504,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
     } );
 
     describe( 'Required field validation', function() {
-        var form, $numberInput, $numberLabel, $branch;
+        var form, $numberInput, $numberLabel;
 
         beforeEach( function() {
             jQuery.fx.off = true; //turn jQuery animations off
@@ -517,7 +516,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
             $numberLabel = form.getView().input.getWrapNodes( $numberInput );
         } );
 
-        it( "validates a DISABLED and required number field without a value", function() {
+        it( 'validates a DISABLED and required number field without a value', function() {
             $numberInput.val( '' ).trigger( 'change' );
             expect( $numberLabel.length ).toEqual( 1 );
             expect( $numberInput.val().length ).toEqual( 0 );
@@ -526,7 +525,7 @@ define( [ "enketo-js/Form" ], function( Form ) {
         } );
 
         //see issue #144
-        it( "validates an enabled and required number field with value 0 and 1", function() {
+        it( 'validates an enabled and required number field with value 0 and 1', function() {
             form.getView().$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
             expect( $numberLabel.length ).toEqual( 1 );
             $numberInput.val( 0 ).trigger( 'change' ).trigger( 'validate' );
@@ -535,13 +534,13 @@ define( [ "enketo-js/Form" ], function( Form ) {
             expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
         } );
 
-        it( "invalidates an enabled and required number field without a value", function() {
+        it( 'invalidates an enabled and required number field without a value', function() {
             form.getView().$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
             $numberInput.val( '' ).trigger( 'change' ).trigger( 'validate' );
             expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( true );
         } );
 
-        it( "invalidates an enabled and required textarea that contains only a newline character or other whitespace characters", function() {
+        it( 'invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', function() {
             form = loadForm( 'thedata.xml' ); //new Form(formStr1, dataStr1);
             form.init();
             var $textarea = form.getView().$.find( '[name="/thedata/nodeF"]' );

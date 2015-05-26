@@ -1,5 +1,5 @@
 define( [ 'text!enketo-config', 'Modernizr', 'q', 'jquery' ], function( configStr, Modernizr, Q, $ ) {
-    "use strict";
+    'use strict';
 
     var $form,
         widgets = [],
@@ -132,7 +132,6 @@ define( [ 'text!enketo-config', 'Modernizr', 'q', 'jquery' ], function( configSt
      * @param  {jQuery} $group The elements inside which widgets need to be created.
      */
     function _instantiate( $group ) {
-        var widget;
 
         widgets.forEach( function( widget ) {
             var $elements;
