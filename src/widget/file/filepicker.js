@@ -1,5 +1,5 @@
 define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, fileManager ) {
-    "use strict";
+    'use strict';
 
     var pluginName = 'filepicker';
 

@@ -15,7 +15,7 @@
  */
 
 define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
-    "use strict";
+    'use strict';
 
     var pluginName = 'mobileSelectpicker';
 

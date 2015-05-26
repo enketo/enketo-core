@@ -665,7 +665,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
 
             it( 'level 2: with <select> <option> elements has the expected amount of options', function() {
                 //select first option in cascade
-                form.getView().$.find( sel1Select ).val( "nl" ).trigger( 'change' );
+                form.getView().$.find( sel1Select ).val( 'nl' ).trigger( 'change' );
 
                 expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
                     return node === 'country2';
@@ -680,14 +680,14 @@ define( [ 'enketo-js/Form' ], function( Form ) {
 
             it( 'level 3: with <select> <option> elements has the expected amount of options', function() {
                 //select first option in cascade
-                form.getView().$.find( sel1Select ).val( "nl" ).trigger( 'change' );
+                form.getView().$.find( sel1Select ).val( 'nl' ).trigger( 'change' );
 
                 expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
                     return node === 'country2';
                 } ) ).toEqual( true );
 
                 //select second option
-                form.getView().$.find( sel2Select ).val( "ams" ).trigger( 'change' );
+                form.getView().$.find( sel2Select ).val( 'ams' ).trigger( 'change' );
 
                 expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
                     return node === 'city2';
@@ -700,7 +700,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
                 expect( $items3Select().eq( 1 ).attr( 'value' ) ).toEqual( 'dam' );
 
                 //select other first option to change itemset
-                form.getView().$.find( sel1Select ).val( "usa" ).trigger( 'change' );
+                form.getView().$.find( sel1Select ).val( 'usa' ).trigger( 'change' );
 
                 expect( formHTMLO.itemsetUpdate.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
                     return node === 'city2';

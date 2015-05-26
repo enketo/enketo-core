@@ -2,10 +2,10 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ "enketo-js/utils" ], function( utils ) {
+define( [ 'enketo-js/utils' ], function( utils ) {
 
 
-    describe( "Parsing expressions", function() {
+    describe( 'Parsing expressions', function() {
         var t = [
             [ 'func(b,c)', '', [] ],
             [ 'func(b,c)', undefined, [] ],

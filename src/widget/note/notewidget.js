@@ -15,7 +15,7 @@
  */
 
 define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget, $ ) {
-    "use strict";
+    'use strict';
 
     var pluginName = 'notewidget';
 

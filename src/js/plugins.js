@@ -80,8 +80,8 @@ define( [ 'jquery' ], function( $ ) {
                 $( this ).replaceWith( name );
             } );
             html = $( this ).html();
-            html = html.replace( /__([^\s][^_]*[^\s])__/gm, "<strong>$1</strong>" );
-            html = html.replace( /\*\*([^\s][^\*]*[^\s])\*\*/gm, "<strong>$1</strong>" );
+            html = html.replace( /__([^\s][^_]*[^\s])__/gm, '<strong>$1</strong>' );
+            html = html.replace( /\*\*([^\s][^\*]*[^\s])\*\*/gm, '<strong>$1</strong>' );
             html = html.replace( /_([^\s][^_]*[^\s])_/gm, '<em>$1</em>' );
             html = html.replace( /\*([^\s][^\*]*[^\s])\*/gm, '<em>$1</em>' );
             //only replaces if url is valid (worthwhile feature?)

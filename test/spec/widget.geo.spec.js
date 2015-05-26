@@ -2,7 +2,7 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ "jquery", "enketo-widget/geo/geopicker" ], function( $ ) {
+define( [ 'jquery', 'enketo-widget/geo/geopicker' ], function( $ ) {
     var form = '<form class="or"><label class="question"><input type="text" data-type-xml="geoshape"/></label></form>';
 
     describe( 'geoshape widget', function() {
@@ -22,7 +22,7 @@ define( [ "jquery", "enketo-widget/geo/geopicker" ], function( $ ) {
             expect( geoshapePicker ).not.toBeUndefined();
         } );
 
-        describe( "KML to Leaflet conversion", function() {
+        describe( 'KML to Leaflet conversion', function() {
             var kmlCoordinates = '81.601884,44.160723 83.529902,43.665148 82.947737,44.248831 81.509322,44.321015',
                 a = {
                     kml: '<coordinates>' + kmlCoordinates + '</coordinates>',

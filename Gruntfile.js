@@ -38,16 +38,16 @@ module.exports = function( grunt ) {
         },
         jsbeautifier: {
             test: {
-                src: [ "*.js", "src/js/*.js", "src/widget/*/*.js" ],
+                src: [ '*.js', 'src/js/*.js', 'src/widget/*/*.js' ],
                 options: {
-                    config: "./.jsbeautifyrc",
-                    mode: "VERIFY_ONLY"
+                    config: './.jsbeautifyrc',
+                    mode: 'VERIFY_ONLY'
                 }
             },
             fix: {
-                src: [ "*.js", "src/js/*.js", "src/widget/*/*.js" ],
+                src: [ '*.js', 'src/js/*.js', 'src/widget/*/*.js' ],
                 options: {
-                    config: "./.jsbeautifyrc"
+                    config: './.jsbeautifyrc'
                 }
             }
         },

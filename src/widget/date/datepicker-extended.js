@@ -16,7 +16,7 @@
 
 define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
     function( Widget, Modernizr, $ ) {
-        "use strict";
+        'use strict';
 
         //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
         var pluginName = 'datepickerExtended';

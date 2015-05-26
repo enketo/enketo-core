@@ -17,9 +17,9 @@ require.config( {
     baseUrl: '/base/lib',
 
     paths: {
-        "enketo-js": "/base/src/js",
-        "enketo-widget": "/base/src/widget",
-        "test": "/base/test"
+        'enketo-js': '/base/src/js',
+        'enketo-widget': '/base/src/widget',
+        'test': '/base/test'
     },
 
     // dynamically load all test files
