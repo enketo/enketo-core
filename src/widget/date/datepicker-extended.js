@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
-    function( Widget, Modernizr, $ ) {
-        'use strict';
+define( [ 'enketo-js/Widget', 'support', 'jquery', 'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
+    function( Widget, support, $ ) {
+        "use strict";
 
         //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
         var pluginName = 'datepickerExtended';
@@ -172,7 +172,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-widget/date/bootstr
                  * webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30"
                  */
 
-                if ( !data && typeof options === 'object' && ( !options.touch || !Modernizr.inputtypes.date || badSamsung.test( navigator.userAgent ) ) ) {
+                if ( !data && typeof options === 'object' && ( !options.touch || !support.inputtypes.date || badSamsung.test( navigator.userAgent ) ) ) {
                     $this.data( pluginName, ( data = new DatepickerExtended( this, options, event ) ) );
                 }
                 //only call method if widget was instantiated before

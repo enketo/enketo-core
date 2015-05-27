@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
+define( [ 'enketo-js/Widget', 'support', 'jquery', 'enketo-js/extend',
         'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker',
         'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker'
     ],
-    function( Widget, Modernizr, $ ) {
-        'use strict';
+
+    function( Widget, support, $ ) {
+        "use strict";
 
         var pluginName = 'datetimepickerExtended';
 
@@ -188,7 +189,7 @@ define( [ 'enketo-js/Widget', 'Modernizr', 'jquery', 'enketo-js/extend',
                 browser: "Mozilla/5.0 (Linux; U; Android 4.1.1; en-us; GT-P3113 Build/JRO03C) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30";
                 webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30" 
                 */
-                if ( !data && typeof options === 'object' && ( !options.touch || !Modernizr.inputtypes.datetime || badSamsung.test( navigator.userAgent ) ) ) {
+                if ( !data && typeof options === 'object' && ( !options.touch || !support.inputtypes.datetime || badSamsung.test( navigator.userAgent ) ) ) {
                     $this.data( pluginName, ( data = new DatetimepickerExtended( this, options, event ) ) );
                 }
                 //only call method if widget was instantiated before

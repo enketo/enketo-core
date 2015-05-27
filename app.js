@@ -7,13 +7,13 @@
 
 
 requirejs( [ 'require-config' ], function( rc ) {
-    requirejs( [ 'jquery', 'Modernizr', 'enketo-js/Form', 'file-manager' ],
-        function( $, Modernizr, Form, fileManager ) {
+    requirejs( [ 'jquery', 'support', 'enketo-js/Form', 'file-manager' ],
+        function( $, support, Form, fileManager ) {
             var loadErrors, form, formStr, modelStr;
 
-            // if querystring touch=true is added, override Modernizr
+            // if querystring touch=true is added, override detected touchscreen presence
             if ( getURLParameter( 'touch' ) === 'true' ) {
-                Modernizr.touch = true;
+                support.touch = true;
                 $( 'html' ).addClass( 'touch' );
             }
 

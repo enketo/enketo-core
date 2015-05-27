@@ -1,5 +1,5 @@
-define( [ 'text!enketo-config', 'Modernizr', 'q', 'jquery' ], function( configStr, Modernizr, Q, $ ) {
-    'use strict';
+define( [ 'text!enketo-config', 'support', 'q', 'jquery' ], function( configStr, support, Q, $ ) {
+    "use strict";
 
     var $form, init, enable, disable, destroy,
         _getWidgetConfigs, _getElements, _instantiate, _load, _setLangChangeHandler, _setOptionChangeHandler,
@@ -136,7 +136,7 @@ define( [ 'text!enketo-config', 'Modernizr', 'q', 'jquery' ], function( configSt
         widgets.forEach( function( widget ) {
             var $elements;
             widget.options = widget.options || {};
-            widget.options.touch = Modernizr.touch;
+            widget.options.touch = support.touch;
 
             if ( !widget.selector && widget.selector !== null ) {
                 return console.error( 'widget configuration has no acceptable selector property', widget );

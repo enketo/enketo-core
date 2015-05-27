@@ -51,9 +51,6 @@ module.exports = function( config ) {
                 pattern: 'lib/bootstrap-slider/js/bootstrap-slider.js',
                 included: false
             }, {
-                pattern: 'lib/Modernizr.js',
-                included: false
-            }, {
                 pattern: 'lib/xpath/build/enketo-xpathjs.js',
                 included: false
             }, {

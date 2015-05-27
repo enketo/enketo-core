@@ -1,6 +1,6 @@
-define( 'Modernizr', [], {
+define( 'support', [], {
     touch: false,
-    inputTypes: {
+    inputtypes: {
         date: true,
         time: true
     }

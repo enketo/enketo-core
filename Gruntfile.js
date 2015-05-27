@@ -68,7 +68,7 @@ module.exports = function( grunt ) {
             },
             js: {
                 files: [ '*.js', 'src/**/*.js' ],
-                tasks: [ 'modernizr' ],
+                tasks: [],
                 options: {
                     spawn: false,
                     livereload: true
@@ -125,21 +125,6 @@ module.exports = function( grunt ) {
                     optimize: 'uglify2'
                 }
             }
-        },
-        modernizr: {
-            dist: {
-                'devFile': 'remote',
-                'outputFile': 'lib/Modernizr.js',
-                'extra': {
-                    'shiv': false,
-                    'printshiv': true,
-                    'load': false,
-                    'mq': false,
-                    'cssclasses': true
-                },
-                'uglify': false,
-                'parseFiles': true
-            }
         }
     } );
 
@@ -174,7 +159,7 @@ module.exports = function( grunt ) {
     } );
 
     grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
-    grunt.registerTask( 'test', [ 'modernizr', 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
+    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'concurrent:develop' ] );

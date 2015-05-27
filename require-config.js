@@ -13,7 +13,8 @@ require.config( {
         "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
         "leaflet": "leaflet/leaflet",
         "bootstrap-slider": "bootstrap-slider/js/bootstrap-slider",
-        "q": "bower-components/q/q"
+        "q": "bower-components/q/q",
+        "support": "../src/js/support"
     },
     shim: {
         "xpath": {
@@ -26,9 +27,6 @@ require.config( {
         "widget/time/bootstrap3-timepicker/js/bootstrap-timepicker": {
             deps: [ "jquery" ],
             exports: "jQuery.fn.timepicker"
-        },
-        "Modernizr": {
-            exports: "Modernizr"
         },
         "leaflet": {
             exports: "L"
