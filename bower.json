@@ -6,7 +6,12 @@
         "Martijn van de Rijdt <martijn@enketo.org>"
     ],
     "main": "src/js/Form.js",
-    "keywords": [ "enketo", "OpenRosa", "ODK", "XForm" ],
+    "keywords": [
+        "enketo",
+        "OpenRosa",
+        "ODK",
+        "XForm"
+    ],
     "license": "Apache2",
     "private": true,
     "ignore": [
@@ -18,6 +23,7 @@
     "dependencies": {
         "q": "1.0.1",
         "jquery": "~2.1.1",
-        "requirejs": "~2.1.15"
+        "requirejs": "~2.1.15",
+        "leaflet": "~0.7.3"
     }
 }

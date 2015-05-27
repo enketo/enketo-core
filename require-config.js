@@ -11,7 +11,7 @@ require.config( {
         "jquery": "bower-components/jquery/dist/jquery",
         "jquery.xpath": "jquery-xpath/jquery.xpath",
         "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
-        "leaflet": "leaflet/leaflet",
+        "leaflet": "bower-components/leaflet/dist/leaflet",
         "bootstrap-slider": "bootstrap-slider/js/bootstrap-slider",
         "q": "bower-components/q/q",
         "support": "../src/js/support"

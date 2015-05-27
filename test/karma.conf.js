@@ -45,7 +45,7 @@ module.exports = function( config ) {
                 pattern: 'lib/text/text.js',
                 included: false
             }, {
-                pattern: 'lib/leaflet/leaflet.js',
+                pattern: 'lib/bower-components/leaflet/dist/leaflet.js',
                 included: false
             }, {
                 pattern: 'lib/bootstrap-slider/js/bootstrap-slider.js',
