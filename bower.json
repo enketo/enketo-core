@@ -22,7 +22,6 @@
     ],
     "dependencies": {
         "q": "1.0.1",
-        "jquery": "~2.1.1",
         "requirejs": "~2.1.15",
         "leaflet": "~0.7.3"
     }

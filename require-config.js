@@ -8,7 +8,6 @@ require.config( {
         "text": "text/text",
         "xpath": "xpath/build/enketo-xpathjs",
         "file-manager": "../src/js/file-manager",
-        "jquery": "bower-components/jquery/dist/jquery",
         "jquery.xpath": "jquery-xpath/jquery.xpath",
         "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
         "leaflet": "bower-components/leaflet/dist/leaflet",
