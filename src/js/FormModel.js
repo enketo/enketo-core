@@ -26,7 +26,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
         this.loadErrors = [];
 
         this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
-        this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\()/;
+        this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^\)])/;
 
         /**
          * Default namespaces (on a primary instance, instance child, model) would create a problem using the **native** XPath evaluator.
