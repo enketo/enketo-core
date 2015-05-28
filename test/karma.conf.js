@@ -54,7 +54,7 @@ module.exports = function( config ) {
                 pattern: 'lib/xpath/build/enketo-xpathjs.js',
                 included: false
             }, {
-                pattern: 'lib/jquery.js',
+                pattern: 'lib/bower-components/jquery/dist/jquery.js',
                 included: false
             }, {
                 pattern: 'lib/bower-components/q/q.js',

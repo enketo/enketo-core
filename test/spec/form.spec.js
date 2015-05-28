@@ -297,7 +297,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
         var form;
 
         //turn jQuery animations off
-        //jQuery.fx.off = true;
+        jQuery.fx.off = true;
 
         describe( 'cloning', function() {
             beforeEach( function() {
@@ -507,7 +507,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
         var form, $numberInput, $numberLabel;
 
         beforeEach( function() {
-            //jQuery.fx.off = true; //turn jQuery animations off
+            jQuery.fx.off = true; //turn jQuery animations off
             form = new Form( formStr6, {
                 modelStr: dataStr6
             } );
@@ -574,7 +574,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
                 sel3Select = 'select[name="/new_cascading_selections/group2/neighborhood2"]';
 
             beforeEach( function() {
-                //jQuery.fx.off = true; //turn jQuery animations off
+                jQuery.fx.off = true; //turn jQuery animations off
                 form = loadForm( 'new_cascading_selections.xml' );
                 form.init();
 
@@ -721,7 +721,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
                 sel3Radio = ':not(.itemset-template) > input:radio[data-name="/form/city"]';
 
             beforeEach( function() {
-                //jQuery.fx.off = true; //turn jQuery animations off
+                jQuery.fx.off = true; //turn jQuery animations off
                 form = loadForm( 'cascading_mixture_itext_noitext.xml' );
                 form.init();
 

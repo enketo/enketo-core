@@ -1737,15 +1737,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         repeatIndex = $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $repeat ),
                         $siblings = $repeat.siblings( '.or-repeat' );
 
-                    $repeat.hide();
-                    $repeat.remove();
-                    that.numberRepeats( $siblings );
-                    that.toggleButtons( $siblings );
-                    // trigger the removerepeat on the previous repeat (always present)
-                    // so that removerepeat handlers know where the repeat was removed
-                    $prev.trigger( 'removerepeat' );
-                    // now remove the data node
-                    model.node( repeatPath, repeatIndex ).remove();
+                    $repeat.hide( delay, function() {
+                        $repeat.remove();
+                        that.numberRepeats( $siblings );
+                        that.toggleButtons( $siblings );
+                        // trigger the removerepeat on the previous repeat (always present)
+                        // so that removerepeat handlers know where the repeat was removed
+                        $prev.trigger( 'removerepeat' );
+                        // now remove the data node
+                        model.node( repeatPath, repeatIndex ).remove();
+                    } );
                 },
                 fixRadioNames: function( index, element ) {
                     $( element ).find( 'input[type="radio"]' )
