@@ -3,6 +3,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[3.5.10] - 2015-05-28
+------------------------
+##### Changed
+- Faster loading
+
+##### Fixed
+- Indexed-repeat() position(..) parameter and nested expressions caused function to fail.
+- Irrelevant questions inside a repeat clone are shown but should be hidden.
+- Calculations inside repeat clones are not evaluated upon form load
+
 [3.5.9] - 2015-05-22
 ------------------------
 ##### Added
