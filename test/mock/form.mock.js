@@ -269,21 +269,6 @@ var formStr5 =
     '<input name="/widgets/uid" type="hidden" data-preload="uid" data-preload-params="" data-type-xml="string"/>' +
     '</label>' +
     '<label class="question">' +
-    '<input name="/widgets/browser_name" type="hidden" data-preload="browser" data-preload-params="name" data-type-xml="string"/>' +
-    '</label>' +
-    '<label class="question">' +
-    '<input name="/widgets/browser_version" type="hidden" data-preload="browser" data-preload-params="version" data-type-xml="string"/>' +
-    '</label>' +
-    '<label class="question">' +
-    '<input name="/widgets/os_name" type="hidden" data-preload="os" data-preload-params="name" data-type-xml="string"/>' +
-    '</label>' +
-    '<label class="question">' +
-    '<input name="/widgets/os_version" type="hidden" data-preload="os" data-preload-params="version" data-type-xml="string"/>' +
-    '</label>' +
-    '<label class="question">' +
-    '<input name="/widgets/unknown" type="hidden" data-preload="unknown" data-preload-params="nothing" data-type-xml="string"/>' +
-    '</label>' +
-    '<label class="question">' +
     '<input name="/widgets/meta/instanceID" type="hidden" data-preload="instance" data-preload-params="" data-type-xml="string"/>' +
     '</label>' +
     '</fieldset>' +

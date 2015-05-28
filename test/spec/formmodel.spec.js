@@ -423,19 +423,30 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
     } );
 
-    describe( 'converting indexed-repeat()', function() {
+    describe( 'converting indexed-repeat() ', function() {
         [
             [ 'indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '/path/to/repeat[position() = 2]/node' ],
             [ ' indexed-repeat( /path/to/repeat/node , /path/to/repeat , 2 )', ' /path/to/repeat[position() = 2]/node' ],
             [ '1 + indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '1 + /path/to/repeat[position() = 2]/node' ],
             [ 'concat(indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2), "fluff")', 'concat(/path/to/repeat[position() = 2]/node, "fluff")' ],
-            [ 'indexed-repeat(/p/t/r/ar/node, /p/t/r, 2, /p/t/r/ar, 3 )', '/p/t/r[position() = 2]/ar[position() = 3]/node' ],
-            [ 'indexed-repeat( /p/t/r/node,  /p/t/r , position(..) - 1)', '/p/t/r[position() = position(..) - 1]/node' ]
+            [ 'indexed-repeat(/p/t/r/ar/node, /p/t/r, 2, /p/t/r/ar, 3 )', '/p/t/r[position() = 2]/ar[position() = 3]/node' ]
         ].forEach( function( test ) {
-            it( 'happens correctly', function() {
+            it( 'works, with a number as 3rd (5th, 7th) parameter', function() {
                 var model = new Model( '<model><instance/></model>' );
                 var expected = test[ 1 ];
                 expect( model.replaceIndexedRepeatFn( test[ 0 ] ) ).toEqual( expected );
+            } );
+        } );
+
+        [
+            [ 'indexed-repeat( /p/t/r/node,  /p/t/r , position(..)    )', '/p/t/r[position() = 3]/node' ],
+            [ 'indexed-repeat( /p/t/r/node,  /p/t/r , position(..) - 1)', '/p/t/r[position() = 2]/node' ],
+        ].forEach( function( test ) {
+            it( 'works, with an expresssion as 3rd (5th, 7th) parameter', function() {
+                var model = new Model( '<model><instance><p><t><r><node/></r><r><node/></r><r><node/></r></t></p></instance></model>' );
+                var expected = test[ 1 ];
+                model.init();
+                expect( model.replaceIndexedRepeatFn( test[ 0 ], '/p/t/r/node', 2 ) ).toEqual( expected );
             } );
         } );
     } );

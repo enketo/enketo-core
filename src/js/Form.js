@@ -908,8 +908,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $collection = $form;
                 }
 
+                // add selectors based on specific changed nodes
                 if ( !updated.nodes || updated.nodes.length === 0 ) {
-                    selector = [ filter + '[' + attr + ']' ];
+                    selector = selector.concat( [ filter + '[' + attr + ']' ] );
                 } else {
                     updated.nodes.forEach( function( node ) {
                         selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, node ) );

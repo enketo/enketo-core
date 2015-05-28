@@ -26,7 +26,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
         this.loadErrors = [];
 
         this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
-        this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\()/;
+        this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\()/;
 
         /**
          * Default namespaces (on a primary instance, instance child, model) would create a problem using the **native** XPath evaluator.
@@ -70,7 +70,6 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
             that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
         } );
 
-        //this.instancesArray = Array.prototype.slice.call( this.xml.firstChild.children );
         this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
         this.$ = $model;
 
@@ -794,15 +793,16 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
      * @param  {string} expr the XPath expression
      * @return {string}      converted XPath expression
      */
-    FormModel.prototype.replaceIndexedRepeatFn = function( expr ) {
-        var indexedRepeats = utils.parseFunctionFromExpression( expr, 'indexed-repeat' );
+    FormModel.prototype.replaceIndexedRepeatFn = function( expr, selector, index ) {
+        var that = this,
+            indexedRepeats = utils.parseFunctionFromExpression( expr, 'indexed-repeat' );
 
         if ( !indexedRepeats.length ) {
             return expr;
         }
 
         indexedRepeats.forEach( function( indexedRepeat, irIndex ) {
-            var i, positionedPath,
+            var i, positionedPath, position,
                 params = indexedRepeat[ 1 ].split( ',' );
 
             if ( params.length % 2 === 1 ) {
@@ -815,7 +815,10 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
                 positionedPath = params[ 0 ];
 
                 for ( i = params.length - 1; i > 1; i -= 2 ) {
-                    positionedPath = positionedPath.replace( params[ i - 1 ], params[ i - 1 ] + '[position() = ' + params[ i ] + ']' );
+                    // The position will become an XPath predicate. The context for an XPath predicate, is not the same
+                    // as the context for the complete expression, so we have to evaluate the position separately.
+                    position = !isNaN( params[ i ] ) ? params[ i ] : that.evaluate( params[ i ], 'number', selector, index, true );
+                    positionedPath = positionedPath.replace( params[ i - 1 ], params[ i - 1 ] + '[position() = ' + position + ']' );
                 }
                 expr = expr.replace( indexedRepeat[ 0 ], positionedPath );
 
@@ -876,7 +879,8 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
             expr = this.shiftRoot( expr );
             expr = this.replaceInstanceFn( expr );
             expr = this.replaceCurrentFn( expr );
-            expr = this.replaceIndexedRepeatFn( expr );
+            // beware: this function needs to come before makeBugCompliant
+            expr = this.replaceIndexedRepeatFn( expr, selector, index );
             if ( repeats && repeats > 1 ) {
                 expr = this.makeBugCompliant( expr, selector, index );
             }
