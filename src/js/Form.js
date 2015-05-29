@@ -958,20 +958,27 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                 $nodes.each( function() {
+                    var $node = $( this );
                     //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
                     if ( $.inArray( $( this ).attr( 'name' ), alreadyCovered ) !== -1 ) {
                         return;
                     }
+
+                    $branchNode = $node.closest( '.or-branch' );
+
+                    // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
+                    if ( $branchNode.parent().closest( '.disabled' ).length ) {
+                        return;
+                    }
+
                     p = {};
                     cacheIndex = null;
 
-                    p.relevant = $( this ).attr( 'data-relevant' );
-                    p.path = that.input.getName( $( this ) );
-
-                    $branchNode = $( this ).closest( '.or-branch' );
+                    p.relevant = that.input.getRelevant( $node );
+                    p.path = that.input.getName( $node );
 
                     if ( $branchNode.length !== 1 ) {
-                        if ( $( this ).parents( '#or-calculated-items' ).length === 0 ) {
+                        if ( $node.parents( '#or-calculated-items' ).length === 0 ) {
                             console.error( 'could not find branch node for ', $( this ) );
                         }
                         return;
@@ -988,7 +995,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      * Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
                      * It can be safely set to 0 for other branches.
                      */
-                    p.ind = ( insideRepeatClone ) ? that.input.getIndex( $( this ) ) : 0;
+                    p.ind = ( insideRepeatClone ) ? that.input.getIndex( $node ) : 0;
                     /*
                      * Caching is only possible for expressions that do not contain relative paths to nodes.
                      * So, first do a *very* aggresive check to see if the expression contains a relative path.
