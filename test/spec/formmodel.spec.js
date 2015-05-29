@@ -21,7 +21,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
 
     describe( 'Instantiating a model', function() {
         var modelStr = '<model><instance><data id="data"><nodeA>2</nodeA></data></instance>' +
-            '<instance id="countries"><root><item><country>NL</country</item></root></instance></model>';
+            '<instance id="countries"><root><item><country>NL</country></item></root></instance></model>';
 
         it( 'without options, it includes all instances', function() {
             var model = new Model( modelStr );
