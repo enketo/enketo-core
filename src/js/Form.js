@@ -1255,17 +1255,18 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
              */
             FormView.prototype.outputUpdate = function( updated ) {
-                var expr, clonedRepeatsPresent, insideRepeat, insideRepeatClone, $context, context, index, $nodes,
+                var expr, clonedRepeatsPresent, insideRepeat, insideRepeatClone, $context, $output, context, index, $nodes,
                     outputCache = {},
                     val = '',
                     that = this;
 
                 $nodes = this.getNodesToUpdate( 'data-value', '.or-output', updated );
 
-                clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
+                clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 );
 
                 $nodes.each( function() {
-                    expr = $( this ).attr( 'data-value' );
+                    $output = $( this );
+                    expr = $output.attr( 'data-value' );
                     /*
                      * Note that in XForms input is the parent of label and in HTML the other way around so an output inside a label
                      * should look at the HTML input to determine the context.
@@ -1273,13 +1274,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      * or the parent with a name attribute
                      * or the whole document
                      */
-                    $context = ( $( this ).parent( 'span' ).parent( 'label' ).find( '[name]' ).eq( 0 ).length === 1 ) ?
-                        $( this ).parent().parent().find( '[name]' ).eq( 0 ) :
-                        $( this ).parent( 'span' ).parent( 'legend' ).parent( 'fieldset' ).find( '[name]' ).eq( 0 ).length === 1 ?
-                        $( this ).parent().parent().parent().find( '[name]' ).eq( 0 ) : $( this ).closest( '[name]' );
+                    $context = $output.closest( '.question, .note, .or-group' ).find( '[name]' ).eq( 0 );
                     context = that.input.getName( $context );
-                    insideRepeat = ( clonedRepeatsPresent && $( this ).closest( '.or-repeat' ).length > 0 );
-                    insideRepeatClone = ( clonedRepeatsPresent && $( this ).closest( '.or-repeat.clone' ).length > 0 );
+                    insideRepeat = ( clonedRepeatsPresent && $output.closest( '.or-repeat' ).length > 0 );
+                    insideRepeatClone = ( insideRepeat && $output.closest( '.or-repeat.clone' ).length > 0 );
                     index = ( insideRepeatClone ) ? that.input.getIndex( $context ) : 0;
 
                     if ( typeof outputCache[ expr ] !== 'undefined' ) {
