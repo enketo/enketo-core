@@ -1,4 +1,4 @@
-define( [ 'text!enketo-config', 'support', 'q', 'jquery' ], function( configStr, support, Q, $ ) {
+define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( configStr, support, Q, $ ) {
     "use strict";
 
     var $form, init, enable, disable, destroy,

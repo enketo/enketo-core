@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'support', 'jquery', 'enketo-js/extend',
+define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-js/extend',
         'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker',
         'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker'
     ],

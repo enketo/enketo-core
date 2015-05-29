@@ -7,7 +7,7 @@
 
 
 requirejs( [ 'require-config' ], function( rc ) {
-    requirejs( [ 'jquery', 'support', 'enketo-js/Form', 'file-manager' ],
+    requirejs( [ 'jquery', 'enketo-js/support', 'enketo-js/Form', 'file-manager' ],
         function( $, support, Form, fileManager ) {
             var loadErrors, form, formStr, modelStr;
 
