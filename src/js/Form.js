@@ -1157,16 +1157,24 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 $nodes.each( function() {
                     var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, $instanceItems, index, context, labelRefValue,
-                        $template = $( this ),
-                        newItems = {},
-                        prevItems = $template.data(),
-                        templateNodeName = $( this ).prop( 'nodeName' ).toLowerCase(),
-                        $input = ( templateNodeName === 'label' ) ? $( this ).children( 'input' ).eq( 0 ) : $( this ).parent( 'select' ),
-                        $labels = $template.closest( 'label, select' ).siblings( '.itemset-labels' ),
-                        itemsXpath = $template.attr( 'data-items-path' ),
-                        labelType = $labels.attr( 'data-label-type' ),
-                        labelRef = $labels.attr( 'data-label-ref' ),
-                        valueRef = $labels.attr( 'data-value-ref' );
+                        $template, newItems, prevItems, templateNodeName, $input, $labels, itemsXpath, labelType, labelRef, valueRef;
+
+                    $template = $( this );
+
+                    // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
+                    if ( $template.closest( '.or-branch' ).parent().closest( '.disabled' ).length ) {
+                        return;
+                    }
+
+                    newItems = {};
+                    prevItems = $template.data();
+                    templateNodeName = $( this ).prop( 'nodeName' ).toLowerCase();
+                    $input = ( templateNodeName === 'label' ) ? $( this ).children( 'input' ).eq( 0 ) : $( this ).parent( 'select' );
+                    $labels = $template.closest( 'label, select' ).siblings( '.itemset-labels' );
+                    itemsXpath = $template.attr( 'data-items-path' );
+                    labelType = $labels.attr( 'data-label-type' );
+                    labelRef = $labels.attr( 'data-label-ref' );
+                    valueRef = $labels.attr( 'data-value-ref' );
 
                     /**
                      * CommCare/ODK change the context to the *itemset* value (in the secondary instance), hence they need to use the current()
