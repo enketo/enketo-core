@@ -1281,6 +1281,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 $nodes.each( function() {
                     $output = $( this );
+
+                    // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
+                    if ( $output.closest( '.or-branch' ).parent().closest( '.disabled' ).length ) {
+                        return;
+                    }
+
                     expr = $output.attr( 'data-value' );
                     /*
                      * Note that in XForms input is the parent of label and in HTML the other way around so an output inside a label
@@ -1346,16 +1352,17 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $nodes = $nodes.add( this.getNodesToUpdate( 'data-relevant', '[data-calculate]', updated ) );
 
                 $nodes.each( function() {
-                    var result, valid, dataNodesObj, dataNodes, $dataNode, index,
-                        $this = $( this ),
-                        name = that.input.getName( $this ), //$this.attr('data-name') || $this.attr( 'name' ),
-                        dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name,
-                        expr = that.input.getCalculation( $this ), //$this.attr( 'data-calculate' ),
-                        dataType = that.input.getXmlType( $this ), //$this.attr( 'data-type-xml' ),
-                        // for inputs that have a calculation and need to be validated
-                        constraint = that.input.getConstraint( $this ), //$this.attr( 'data-constraint' ),
-                        relevantExpr = that.input.getRelevant( $this ), //$this.attr( 'data-relevant' ),
-                        relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
+                    var result, valid, dataNodesObj, dataNodes, $dataNode, index, name, dataNodeName, expr, dataType, constraint, relevantExpr, relevant, $this;
+
+                    $this = $( this );
+                    name = that.input.getName( $this );
+                    dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
+                    expr = that.input.getCalculation( $this );
+                    dataType = that.input.getXmlType( $this );
+                    // for inputs that have a calculation and need to be validated
+                    constraint = that.input.getConstraint( $this );
+                    relevantExpr = that.input.getRelevant( $this );
+                    relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
 
                     dataNodesObj = model.node( name );
                     dataNodes = dataNodesObj.get();
