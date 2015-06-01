@@ -170,8 +170,9 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
             // noEmpty automatically excludes non-leaf nodes
             if ( this.filter.noEmpty === true ) {
                 $nodes = $( this.nodes ).filter( function() {
-                    val = $( this ).text();
-                    return $( this ).children().length === 0 && $.trim( val ).length > 0;
+                    var $node = $( this );
+                    val = $node.text();
+                    return $node.children().length === 0 && val.trim().length > 0;
                 } );
             }
             // this may still contain empty leaf nodes

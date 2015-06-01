@@ -159,7 +159,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              *
              */
             this.load = function( instanceOfFormModel ) {
-                var nodesToLoad, index, xmlDataType, path, value, target, $input, $target, templatePath, instanceID, error,
+                var nodesToLoad, xmlDataType, instanceID, error,
                     filter = {
                         noEmpty: true
                     };
@@ -172,11 +172,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 } );
 
                 nodesToLoad.each( function() {
-                    var errMsg,
-                        name = $( this ).prop( 'nodeName' );
-                    path = $( this ).getXPath( 'instance' );
-                    index = instanceOfFormModel.node( path ).get().index( $( this ) );
-                    value = $( this ).text();
+                    var errMsg, name, path, index, value, target, $input, $target, templatePath,
+                        $node = $( this );
+
+                    name = $node.prop( 'nodeName' );
+                    path = $node.getXPath( 'instance' );
+                    index = instanceOfFormModel.node( path ).get().index( $node );
+                    value = $node.text();
 
                     //input is not populated in this function, so we take index 0 to get the XML data type
                     $input = $form.find( '[name="' + path + '"]' ).eq( 0 );
@@ -235,10 +237,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     }
                     // As an exception, missing meta nodes will be quietly added if a meta node exists at that path
                     // the latter requires e.g the root node to have the correct name
-                    else if ( $( this ).parent( 'meta' ).length === 1 && model.node( $( this ).parent( 'meta' ).getXPath( 'instance' ), 0 ).get().length === 1 ) {
+                    else if ( $node.parent( 'meta' ).length === 1 && model.node( $node.parent( 'meta' ).getXPath( 'instance' ), 0 ).get().length === 1 ) {
                         //if there is no existing meta node with that node as child
                         if ( model.node( '/*/meta/' + name, 0 ).get().length === 0 ) {
-                            $( this ).clone().appendTo( model.node( '/*/meta' ).get() );
+                            $node.clone().appendTo( model.node( '/*/meta' ).get() );
                         } else {
                             error = 'Found duplicate meta node (' + name + ')!';
                             console.error( error );
@@ -763,8 +765,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 groupIndex = ( typeof groupIndex !== 'undefined' ) ? groupIndex : null;
 
                 model.node( selector, groupIndex ).get().find( '*' ).filter( function() {
+                    var $node = $(this);
                     // only return non-empty leafnodes
-                    return $( this ).children().length === 0 && $( this ).text();
+                    return $node.children().length === 0 && $node.text();
                 } ).each( function() {
                     var $node = $( this );
                     try {
@@ -830,12 +833,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 setSelect: function( $select ) {
                     var value, /** @type {string} */ curLabel, /** @type {string} */ newLabel;
                     $select.children( 'option' ).not( '[value=""]' ).each( function() {
-                        curLabel = $( this ).text();
-                        value = $( this ).attr( 'value' );
-                        newLabel = $( this ).parent( 'select' ).siblings( '.or-option-translations' )
+                        var $option = $(this);
+                        curLabel = $option.text();
+                        value = $option.attr( 'value' );
+                        newLabel = $option.parent( 'select' ).siblings( '.or-option-translations' )
                             .children( '.active[data-option-value="' + value + '"]' ).text().trim();
                         newLabel = ( typeof newLabel !== 'undefined' && newLabel.length > 0 ) ? newLabel : curLabel;
-                        $( this ).text( newLabel );
+                        $option.text( newLabel );
                     } );
                 }
             };
@@ -959,8 +963,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                 $nodes.each( function() {
                     var $node = $( this );
+
                     //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
-                    if ( $.inArray( $( this ).attr( 'name' ), alreadyCovered ) !== -1 ) {
+                    if ( $.inArray( $node.attr( 'name' ), alreadyCovered ) !== -1 ) {
                         return;
                     }
 
@@ -1168,8 +1173,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     newItems = {};
                     prevItems = $template.data();
-                    templateNodeName = $( this ).prop( 'nodeName' ).toLowerCase();
-                    $input = ( templateNodeName === 'label' ) ? $( this ).children( 'input' ).eq( 0 ) : $( this ).parent( 'select' );
+                    templateNodeName = $template.prop( 'nodeName' ).toLowerCase();
+                    $input = ( templateNodeName === 'label' ) ? $template.children( 'input' ).eq( 0 ) : $template.parent( 'select' );
                     $labels = $template.closest( 'label, select' ).siblings( '.itemset-labels' );
                     itemsXpath = $template.attr( 'data-items-path' );
                     labelType = $labels.attr( 'data-label-type' );
@@ -1217,13 +1222,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     // clear data values through inputs. Note: if a value exists,
                     // this will trigger a dataupdate event which may call this update function again
-                    $( this ).closest( '.question' )
+                    $template.closest( '.question' )
                         .clearInputs( 'change' )
                         .find( templateNodeName ).not( $template ).remove();
-                    $( this ).parent( 'select' ).siblings( '.or-option-translations' ).empty();
+                    $template.parent( 'select' ).siblings( '.or-option-translations' ).empty();
 
                     $instanceItems.each( function() {
-                        labelRefValue = $( this ).children( labelRef ).text();
+                        var $item = $(this);
+                        labelRefValue = $item.children( labelRef ).text();
                         $htmlItem = $( '<root/>' );
                         $template
                             .clone().appendTo( $htmlItem )
@@ -1235,7 +1241,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             $labels.find( '[data-itext-id="' + labelRefValue + '"]' ).clone() :
                             $( '<span class="option-label active" lang="">' + labelRefValue + '</span>' );
 
-                        value = $( this ).children( valueRef ).text();
+                        value = $item.children( valueRef ).text();
                         $htmlItem.find( '[value]' ).attr( 'value', value );
 
                         if ( templateNodeName === 'label' ) {
@@ -1309,8 +1315,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             outputCache[ expr ] = val;
                         }
                     }
-                    if ( $( this ).text !== val ) {
-                        $( this ).text( val );
+                    if ( $output.text !== val ) {
+                        $output.text( val );
                     }
                 } );
             };
@@ -1414,13 +1420,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
              */
             FormView.prototype.preloads = {
                 init: function( parentO ) {
-                    var item, param, name, curVal, newVal, meta, dataNode, props, xmlType,
+                    var item, param, name, curVal, newVal, meta, dataNode, props, xmlType, $preload,
                         that = this;
                     //these initialize actual preload items
                     $form.find( '#or-preload-items input' ).each( function() {
-                        props = parentO.input.getProps( $( this ) );
-                        item = $( this ).attr( 'data-preload' ).toLowerCase();
-                        param = $( this ).attr( 'data-preload-params' ).toLowerCase();
+                        $preload = $( this );
+                        props = parentO.input.getProps( $preload );
+                        item = $preload.attr( 'data-preload' ).toLowerCase();
+                        param = $preload.attr( 'data-preload-params' ).toLowerCase();
 
                         if ( typeof that[ item ] !== 'undefined' ) {
                             dataNode = model.node( props.path, props.index );
@@ -1646,7 +1653,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         //now check the defaults of all the descendants of this repeat and its new siblings, level-by-level
                         $repeat.siblings( '.or-repeat' ).addBack().find( '.or-repeat' )
                             .filter( function( i ) {
-                                return $( this ).parents( '.or-repeat' ).length === repLevel;
+                                return $( this ).parentsUntil( '.or', '.or-repeat' ).length === repLevel;
                             } ).each( function() {
                                 cloneDefaultReps( $( this ) );
                             } );
@@ -1655,7 +1662,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // Clone form fields to create the default number
                     // Note: this assumes that the repeat count is static not dynamic/
                     $form.find( '.or-repeat' ).filter( function( i ) {
-                        return $( this ).parents( '.or-repeat' ).length === 0;
+                        return $( this ).parentsUntil( '.or', '.or-repeat' ).length === 0;
                     } ).each( function() {
                         repLevel = 0;
                         cloneDefaultReps( $( this ) );
@@ -1784,20 +1791,21 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 numberRepeats: function( $repeats ) {
                     $repeats.each( function() {
-                        var repSiblings, qtyRepeats, i;
+                        var repSiblings, qtyRepeats, i,
+                            $repeat = $( this );
                         // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
-                        if ( $( this ).prev( '.or-repeat' ).length === 0 ) {
+                        if ( $repeat.prev( '.or-repeat' ).length === 0 ) {
                             repSiblings = $( this ).siblings( '.or-repeat' );
                             qtyRepeats = repSiblings.length + 1;
                             if ( qtyRepeats > 1 ) {
-                                $( this ).find( '.repeat-number' ).text( '1' );
+                                $repeat.find( '.repeat-number' ).text( '1' );
                                 i = 2;
                                 repSiblings.each( function() {
                                     $( this ).find( '.repeat-number' ).text( i );
                                     i++;
                                 } );
                             } else {
-                                $( this ).find( '.repeat-number' ).empty();
+                                $repeat.find( '.repeat-number' ).empty();
                             }
                         }
                     } );
@@ -1817,8 +1825,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * because I'm guessing that Google will bring back the old behaviour.
                  */
                 $form.on( 'blur', 'input:not([type="text"], [type="radio"], [type="checkbox"])', function( event ) {
-                    if ( typeof $( this ).prop( 'validity' ).badInput !== 'undefined' && $( this ).prop( 'validity' ).badInput ) {
-                        $( this ).val( '' );
+                    var $input = $( this );
+                    if ( typeof $input.prop( 'validity' ).badInput !== 'undefined' && $input.prop( 'validity' ).badInput ) {
+                        $input.val( '' );
                     }
                 } );
 
@@ -1849,8 +1858,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // event.stopImmediatePropagation();
 
                     // set file input values to the actual name of file (without c://fakepath or anything like that)
-                    if ( n.val.length > 0 && n.inputType === 'file' && $( this )[ 0 ].files[ 0 ] && $( this )[ 0 ].files[ 0 ].size > 0 ) {
-                        n.val = $( this )[ 0 ].files[ 0 ].name;
+                    if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
+                        n.val = $input[ 0 ].files[ 0 ].name;
                     }
 
                     if ( event.type === 'validate' ) {
@@ -1877,16 +1886,16 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     validReq = !( n.enabled && n.inputType !== 'hidden' && n.required && getDataNodeObj().getVal()[ 0 ].length === 0 );
 
                     if ( validReq === false ) {
-                        that.setValid( $( this ), 'constraint' );
+                        that.setValid( $input, 'constraint' );
                         if ( event.type === 'validate' ) {
-                            that.setInvalid( $( this ), 'required' );
+                            that.setInvalid( $input, 'required' );
                         }
                     } else {
-                        that.setValid( $( this ), 'required' );
+                        that.setValid( $input, 'required' );
                         if ( typeof validCons !== 'undefined' && validCons === false ) {
-                            that.setInvalid( $( this ), 'constraint' );
+                            that.setInvalid( $input, 'constraint' );
                         } else if ( validCons !== null ) {
-                            that.setValid( $( this ), 'constraint' );
+                            that.setValid( $input, 'constraint' );
                         }
                     }
                 } );
