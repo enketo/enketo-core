@@ -560,7 +560,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 focusOnFirstQuestion: function( pageEl ) {
                     //triggering fake focus in case element cannot be focused (if hidden by widget)
                     $( pageEl ).find( '.question:not(.disabled)' ).filter( function() {
-                        return $( this ).parents( '.disabled' ).length === 0;
+                        return $( this ).parentsUntil( '.or', '.disabled' ).length === 0;
                     } ).eq( 0 ).find( 'input, select, textarea' ).eq( 0 ).trigger( 'fakefocus' );
                 },
                 toggleButtons: function( index ) {
@@ -682,10 +682,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return ( this.getInputType( $node ) === 'checkbox' || $node.attr( 'multiple' ) !== undefined ) ? true : false;
                 },
                 isEnabled: function( $node ) {
-                    return !( $node.prop( 'disabled' ) || $node.parents( '.disabled' ).length > 0 );
+                    return !( $node.prop( 'disabled' ) || $node.parentsUntil( '.or', '.disabled' ).length > 0 );
                 },
                 isRequired: function( $node ) {
-                    return ( $node.attr( 'required' ) !== undefined && $node.parents( '.or-appearance-label' ).length === 0 );
+                    return ( $node.attr( 'required' ) !== undefined && $node.parentsUntil( '.or', '.or-appearance-label' ).length === 0 );
                 },
                 getVal: function( $node ) {
                     var inputType, values = [],
@@ -765,7 +765,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 groupIndex = ( typeof groupIndex !== 'undefined' ) ? groupIndex : null;
 
                 model.node( selector, groupIndex ).get().find( '*' ).filter( function() {
-                    var $node = $(this);
+                    var $node = $( this );
                     // only return non-empty leafnodes
                     return $node.children().length === 0 && $node.text();
                 } ).each( function() {
@@ -833,7 +833,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 setSelect: function( $select ) {
                     var value, /** @type {string} */ curLabel, /** @type {string} */ newLabel;
                     $select.children( 'option' ).not( '[value=""]' ).each( function() {
-                        var $option = $(this);
+                        var $option = $( this );
                         curLabel = $option.text();
                         value = $option.attr( 'value' );
                         newLabel = $option.parent( 'select' ).siblings( '.or-option-translations' )
@@ -887,7 +887,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // The collection of non-repeat inputs is cached (unchangeable)
                 if ( !this.$nonRepeats[ attr ] ) {
                     this.$nonRepeats[ attr ] = $form.find( filter + '[' + attr + ']' )
-                        .closest( '.calculation, .question, .note, .trigger' ).filter( function( index ) {
+                        .parentsUntil( '.or', '.calculation, .question, .note, .trigger' ).filter( function( index ) {
                             return $( this ).closest( '.or-repeat' ).length === 0;
                         } );
                 }
@@ -969,6 +969,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         return;
                     }
 
+                    // since this result is almost certainly not empty, closest() is the most efficient
                     $branchNode = $node.closest( '.or-branch' );
 
                     // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
@@ -983,7 +984,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     p.path = that.input.getName( $node );
 
                     if ( $branchNode.length !== 1 ) {
-                        if ( $node.parents( '#or-calculated-items' ).length === 0 ) {
+                        if ( $node.parentsUntil( '.or', '#or-calculated-items' ).length === 0 ) {
                             console.error( 'could not find branch node for ', $( this ) );
                         }
                         return;
@@ -994,8 +995,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      * The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
                      * (6-7 seconds of loading time on the bench6 form)
                      */
-                    insideRepeat = ( clonedRepeatsPresent && $branchNode.closest( '.or-repeat' ).length > 0 ) ? true : false;
-                    insideRepeatClone = ( clonedRepeatsPresent && $branchNode.closest( '.or-repeat.clone' ).length > 0 ) ? true : false;
+                    insideRepeat = ( clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
+                    insideRepeatClone = ( clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
                     /*
                      * Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
                      * It can be safely set to 0 for other branches.
@@ -1167,7 +1168,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $template = $( this );
 
                     // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
-                    if ( $template.closest( '.or-branch' ).parent().closest( '.disabled' ).length ) {
+                    if ( $template.parentsUntil( '.or', '.or-branch' ).parentsUntil( '.or', '.disabled' ).length ) {
                         return;
                     }
 
@@ -1194,8 +1195,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
                      * It can be safely set to 0 for other branches.
                      */
-                    insideRepeat = ( clonedRepeatsPresent && $input.closest( '.or-repeat' ).length > 0 ) ? true : false;
-                    insideRepeatClone = ( clonedRepeatsPresent && $input.closest( '.or-repeat.clone' ).length > 0 ) ? true : false;
+                    insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
+                    insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
 
                     index = ( insideRepeatClone ) ? that.input.getIndex( $input ) : 0;
 
@@ -1228,7 +1229,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $template.parent( 'select' ).siblings( '.or-option-translations' ).empty();
 
                     $instanceItems.each( function() {
-                        var $item = $(this);
+                        var $item = $( this );
                         labelRefValue = $item.children( labelRef ).text();
                         $htmlItem = $( '<root/>' );
                         $template
@@ -1303,8 +1304,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      */
                     $context = $output.closest( '.question, .note, .or-group' ).find( '[name]' ).eq( 0 );
                     context = that.input.getName( $context );
-                    insideRepeat = ( clonedRepeatsPresent && $output.closest( '.or-repeat' ).length > 0 );
-                    insideRepeatClone = ( insideRepeat && $output.closest( '.or-repeat.clone' ).length > 0 );
+                    insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
+                    insideRepeatClone = ( insideRepeat && $output.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 );
                     index = ( insideRepeatClone ) ? that.input.getIndex( $context ) : 0;
 
                     if ( typeof outputCache[ expr ] !== 'undefined' ) {
@@ -1913,7 +1914,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         $question = $input.closest( '.question' ),
                         $legend = $question.find( 'legend' ).eq( 0 ),
                         loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' ),
-                        insideTable = ( $input.closest( '.or-appearance-list-nolabel' ).length > 0 ),
+                        insideTable = ( $input.parentsUntil( '.or', '.or-appearance-list-nolabel' ).length > 0 ),
                         $reqSubtle = $question.find( '.required-subtle' ),
                         reqSubtle = $( '<span class="required-subtle" style="color: transparent;">Required</span>' );
 
@@ -2030,7 +2031,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 $all: null,
                 updateTotal: function() {
                     this.$all = $form.find( '.question' ).not( '.disabled' ).filter( function() {
-                        return $( this ).closest( '.disabled' ).length === 0;
+                        return $( this ).parentsUntil( '.or', '.disabled' ).length === 0;
                     } );
                 },
                 // updates rounded % value of progress and triggers event if changed
