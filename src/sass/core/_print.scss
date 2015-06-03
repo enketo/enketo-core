@@ -7,14 +7,16 @@ $printBaseFontSize: 12px;
 }
 
 body {
+    display: block;
     overflow: visible;
     background: none;
     .main {
         overflow: visible;
         margin: 0;
         padding: 0;
-        article {
+        .paper {
             padding: 3px;
+            display: block;
         }
     }
     .paper {

@@ -49,7 +49,6 @@ define( [ 'jquery' ], function( $ ) {
         // document.styleSheets is an Object not an Array!
         for ( var i in document.styleSheets ) {
             sheet = document.styleSheets[ i ];
-            console.log( 'checking prop', i, sheet );
             if ( sheet.media.mediaText === 'print' ) {
                 return sheet;
             }
@@ -94,14 +93,12 @@ define( [ 'jquery' ], function( $ ) {
         var $row, $el, left, lowestX, maxWidth, diff,
             firstRow = true;
 
-        console.log( 'paper pixel width', getPaperPixelWidth( paper ) );
         // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
         $( '.main' ).css( 'width', getPaperPixelWidth( paper ) ).addClass( 'print-width-adjusted' );
         // wait for browser repainting after width change
         setTimeout( function() {
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
             maxWidth = $( '#form-title' ).outerWidth() - 1;
-            console.log( 'maxWidth', maxWidth );
             $( '.question, .note, .trigger' ).not( '.draft' ).each( function() {
                 $el = $( this );
                 left = $el.offset().left;
@@ -128,12 +125,13 @@ define( [ 'jquery' ], function( $ ) {
                         cumulativeWidth += width;
                     } );
                     if ( cumulativeWidth < maxWidth ) {
-                        console.log( 'adjusting width' );
 
                         diff = maxWidth - cumulativeWidth;
                         $row.each( function( index ) {
+                            var width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
+                            // round down to 2 decimals to avoid 100.001% totals
                             $( this )
-                                .css( 'width', ( ( widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff ) * 100 / maxWidth ) + '%' )
+                                .css( 'width', ( Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100 ) + '%' )
                                 .addClass( 'print-width-adjusted' );
                         } );
                     }
