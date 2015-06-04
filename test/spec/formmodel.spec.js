@@ -31,7 +31,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
 
         it( 'with option.full = true, it includes all instances', function() {
-            var model = new Model( modelStr, null, {
+            var model = new Model( modelStr, {
                 full: true
             } );
             model.init();
@@ -40,7 +40,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
 
         it( 'with options.full = false, strips the secondary instances', function() {
-            var model = new Model( modelStr, null, {
+            var model = new Model( modelStr, {
                 full: false
             } );
             model.init();
@@ -95,11 +95,18 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
                     3
                 ]
             ],
-            data = getModel( 'thedata.xml' ); //form.Data(dataStr1);
+            model = new Model( '<model><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
+                '<repeatGroup template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
+                '<repeatGroup><nodeC>c2</nodeC></repeatGroup>' +
+                '<repeatGroup><nodeC>c3</nodeC></repeatGroup>' +
+                '<somenodes><A>one</A><B>one</B><C>one</C></somenodes><someweights><w1>1</w1><w2>3</w2><w.3>5</w.3></someweights><nodeF/>' +
+                '<meta><instanceID/></meta></thedata></instance></model>' );
+
+        model.init();
 
         function test( node ) {
             it( 'obtains nodes (selector: ' + node.selector + ', index: ' + node.index + ', filter: ' + JSON.stringify( node.filter ) + ')', function() {
-                expect( data.node( node.selector, node.index, node.filter ).get().length ).toEqual( node.result );
+                expect( model.node( node.selector, node.index, node.filter ).get().length ).toEqual( node.result );
             } );
         }
         for ( i = 0; i < t.length; i++ ) {
@@ -331,35 +338,25 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
     } );
 
-
     describe( 'functionality to obtain string of the primary XML instance for storage or uploads)', function() {
-        var modelA = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' ),
-            modelC = new Model( '<model                                        ><instance><data><group    template=""><a/></group></data></instance></model>' ),
-            modelB = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' ),
-            instanceA = new Model( '<widgets><nodeA/></widgets>' ),
-            instanceB = new Model( '<widgets xmlns="https://some.namespace.com"><nodeA/></widgets>' );
-
-        modelA.init();
-        modelC.init();
-        modelB.init();
-
-        it( 'returns primary instance without templates', function() {
-            expect( modelA.getStr() ).toEqual( '<data><group><a/></group></data>' );
-            expect( modelC.getStr() ).toEqual( '<data><group><a/></group></data>' );
+        it( 'returns primary instance without templates - A', function() {
+            var model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' );
+            model.init();
+            expect( model.getStr() ).toEqual( '<data><group><a/></group></data>' );
         } );
 
+        it( 'returns primary instance without templates - B', function() {
+            var model = new Model( '<model><instance><data><group    template=""><a/></group></data></instance></model>' );
+            model.init();
+            expect( model.getStr() ).toEqual( '<data><group><a/></group></data>' );
+        } );
 
         it( 'returns primary instance and leaves namespaces intact', function() {
-            expect( modelB.getStr() ).toEqual( '<data xmlns="https://some.namespace.com/"><a/></data>' );
+            var model = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' );
+            model.init();
+            expect( model.getStr() ).toEqual( '<data xmlns="https://some.namespace.com/"><a/></data>' );
         } );
-
-        it( 'returns documentElement if model contains not <model> and <instance>', function() {
-            expect( instanceA.getStr() ).toEqual( '<widgets><nodeA/></widgets>' );
-            expect( instanceB.getStr() ).toEqual( '<widgets xmlns="https://some.namespace.com"><nodeA/></widgets>' );
-        } );
-
     } );
-
 
     describe( 'converting absolute paths', function() {
         [
@@ -386,6 +383,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
             it( 'converts correctly when the model and instance node are included in the model', function() {
                 var model = new Model( '<model><instance/></model>' );
                 var expected = test[ 1 ] || test[ 0 ];
+                model.init();
                 expect( model.shiftRoot( test[ 0 ] ) ).toEqual( expected );
             } );
             it( 'does nothing if model and instance node are absent in the model', function() {
@@ -403,6 +401,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
             it( 'happens correctly', function() {
                 var model = new Model( '<model><instance/></model>' );
                 var expected = test[ 1 ];
+                model.init();
                 expect( model.replaceInstanceFn( test[ 0 ] ) ).toEqual( expected );
             } );
         } );
@@ -418,6 +417,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
             it( 'happens correctly', function() {
                 var model = new Model( '<model><instance/></model>' );
                 var expected = test[ 1 ];
+                model.init();
                 expect( model.replaceCurrentFn( test[ 0 ] ) ).toEqual( expected );
             } );
         } );
@@ -434,6 +434,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
             it( 'works, with a number as 3rd (5th, 7th) parameter', function() {
                 var model = new Model( '<model><instance/></model>' );
                 var expected = test[ 1 ];
+                model.init();
                 expect( model.replaceIndexedRepeatFn( test[ 0 ] ) ).toEqual( expected );
             } );
         } );
@@ -466,35 +467,41 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
 
         it( 'populates matching external instances', function() {
-            model = new Model( modelStr, [ {
-                id: 'cities',
-                xmlStr: citiesStr
-            }, {
-                id: 'neighborhoods',
-                xmlStr: '<root/>'
-            }, {
-                id: 'countries',
-                xmlStr: '<root/>'
-            } ] );
+            model = new Model( {
+                modelStr: modelStr,
+                external: [ {
+                    id: 'cities',
+                    xmlStr: citiesStr
+                }, {
+                    id: 'neighborhoods',
+                    xmlStr: '<root/>'
+                }, {
+                    id: 'countries',
+                    xmlStr: '<root/>'
+                } ]
+            } );
             loadErrors = model.init();
             expect( loadErrors.length ).toEqual( 0 );
             expect( model.$.find( 'instance#cities > root > item > country:eq(0)' ).text() ).toEqual( 'nl' );
         } );
 
         it( 'outputs errors if an external instance is not valid XML', function() {
-            model = new Model( modelStr, [ {
-                id: 'cities',
-                xmlStr: '<root>'
-            }, {
-                id: 'neighborhoods',
-                xmlStr: '<root/>'
-            }, {
-                id: 'countries',
-                xmlStr: '<root/>'
-            } ] );
+            model = new Model( {
+                modelStr: modelStr,
+                external: [ {
+                    id: 'cities',
+                    xmlStr: '<root>'
+                }, {
+                    id: 'neighborhoods',
+                    xmlStr: '<root/>'
+                }, {
+                    id: 'countries',
+                    xmlStr: '<root/>'
+                } ]
+            } );
             loadErrors = model.init();
             expect( loadErrors.length ).toEqual( 4 );
-            expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML instance "cities".' );
+            expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML instance "cities". Invalid XML: <root>' );
         } );
     } );
 
@@ -517,6 +524,16 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
     } );
 
+    describe( 'auto-cloning repeats in empty model', function() {
+        var model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
+            '<rep3 jr:template=""><three/></rep3></rep2></rep1></data></instance></model>' );
+        model.init();
+
+        it( 'works for nested repeats', function() {
+            expect( model.getStr() ).toEqual( '<data><rep1><one/><rep2><two/><rep3><three/></rep3></rep2></rep1></data>' );
+        } );
+
+    } );
 
     describe( 'Using XPath with default namespace', function() {
 

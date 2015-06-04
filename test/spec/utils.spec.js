@@ -4,7 +4,6 @@ if ( typeof define !== 'function' ) {
 
 define( [ 'enketo-js/utils' ], function( utils ) {
 
-
     describe( 'Parsing expressions', function() {
         var t = [
             [ 'func(b,c)', '', [] ],

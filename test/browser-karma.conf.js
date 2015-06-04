@@ -18,7 +18,7 @@ module.exports = function( config ) {
             'require-config.js',
             'test/test-main.js',
             'test/mock/*.js', {
-                pattern: 'test/spec/*.spec.js',
+                pattern: 'test/spec/*spec.js', // covers both .spec.js and .browser-spec.js
                 included: false
             }, {
                 pattern: 'src/js/*.js',
@@ -59,6 +59,9 @@ module.exports = function( config ) {
             }, {
                 pattern: 'lib/bower-components/q/q.js',
                 included: false
+            }, {
+                pattern: 'lib/bower-components/mergexml/mergexml.js',
+                included: false
             },
         ],
 
@@ -97,7 +100,7 @@ module.exports = function( config ) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', 'Safari', 'PhantomJS', 'Opera' ],
+        browsers: [],
 
 
         // Continuous Integration mode

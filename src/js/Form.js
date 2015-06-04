@@ -26,7 +26,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          * or private) because only one instance will be created at a time.
          *
          * @param {string} formSelector  jquery selector for the form
-         * @param {{modelStr: string, ?instanceStr: string, ?unsubmitted: boolean, ?external: <{id: string, xmlStr: string }> }} data data object containing model, (partial) instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
+         * @param {{modelStr: string, ?instanceStr: string, ?submitted: boolean, ?external: <{id: string, xmlStr: string }> }} data data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
          *
          * @constructor
          */
@@ -45,18 +45,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // cloning children to keep any delegated event handlers on 'form.or' intact upon resetting
                 $formClone = $( formSelector ).clone().appendTo( '<original></original>' );
 
-                model = new FormModel( data.modelStr, data.external );
-                form = new FormView( formSelector );
-
+                model = new FormModel( data );
                 loadErrors = loadErrors.concat( model.init() );
 
-                if ( data.instanceStr ) {
-                    dataToEdit = new FormModel( data.instanceStr, null, {
-                        full: false
-                    } );
-                    loadErrors = loadErrors.concat( dataToEdit.init() );
-                    this.load( dataToEdit );
-                }
+                form = new FormView( formSelector );
+
                 repeatsPresent = ( $( formSelector ).find( '.or-repeat' ).length > 0 );
 
                 form.init();
@@ -153,131 +146,17 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             };
 
             /**
-             * Function to load an (possibly incomplete) instance so that it can be edited.
-             *
-             * @param  {Object} instanceOfFormModel [description]
-             *
+             * Implements jr:choice-name
+             * TODO: this needs to work for all expressions (relevants, constraints), now it only works for calulated items
+             * Ideally this belongs in the form Model, but unfortunately it needs access to the view
+             * 
+             * @param  {[type]} expr       [description]
+             * @param  {[type]} resTypeStr [description]
+             * @param  {[type]} selector   [description]
+             * @param  {[type]} index      [description]
+             * @param  {[type]} tryNative  [description]
+             * @return {[type]}            [description]
              */
-            this.load = function( instanceOfFormModel ) {
-                var nodesToLoad, xmlDataType, instanceID, error,
-                    filter = {
-                        noEmpty: true
-                    };
-
-                nodesToLoad = instanceOfFormModel.node( null, null, filter ).get();
-                // first empty all form data nodes, to clear any default values except those inside templates
-                model.node( null, null, filter ).get().each( function() {
-                    // something seems fishy about doing it this way instead of using node.setVal('');
-                    $( this ).text( '' );
-                } );
-
-                nodesToLoad.each( function() {
-                    var errMsg, name, path, index, value, target, $input, $target, templatePath,
-                        $node = $( this );
-
-                    name = $node.prop( 'nodeName' );
-                    path = $node.getXPath( 'instance' );
-                    index = instanceOfFormModel.node( path ).get().index( $node );
-                    value = $node.text();
-
-                    //input is not populated in this function, so we take index 0 to get the XML data type
-                    $input = $form.find( '[name="' + path + '"]' ).eq( 0 );
-
-                    xmlDataType = ( $input.length > 0 ) ? form.input.getXmlType( $input ) : 'string';
-
-                    /**
-                     * If XML type is binary, the XML node will get the file attribute.
-                     * If a record is loaded for editing via API (without media files)
-                     * this will trigger an error message upon submission, because the
-                     * file cannot be found in the local filesystem.
-                     * To avoid showing this error message in that particular case,
-                     * we cheat and pretend the XML data type is the plain old 'string'
-                     */
-                    if ( !data.unsubmitted ) {
-                        xmlDataType = ( xmlDataType === 'binary' ) ? 'string' : xmlDataType;
-                    }
-
-                    target = model.node( path, index );
-
-                    try {
-                        $target = target.get();
-                    } catch ( error ) {
-                        console.error( error );
-                        errMsg = error.message || 'unknown error';
-                        loadErrors.push( errMsg + ' when retrieving ' + path );
-                        return;
-                    }
-
-                    // if there are multiple nodes with that name and index (actually impossible)
-                    if ( $target.length > 1 ) {
-                        console.error( 'Found multiple nodes with path: ' + path + ' and index: ' + index );
-                    }
-                    // if there is a corresponding node in the form's original instance
-                    else if ( $target.length === 1 ) {
-                        target.setVal( value, null, xmlDataType );
-                    }
-                    // if there is no corresponding data node but there is a corresponding template node (=> <repeat>)
-                    //  TODO add support for repeated nodes in forms that do not use template="" (not possible in formhub);
-                    else if ( ( templatePath = model.getTemplatePath( path ) ) ) {
-                        // clone the template node
-                        // if a preceding repeat with that path was empty this repeat may not have been created yet,
-                        // so we need to make sure all preceding repeats are created
-                        for ( var p = 0; p < index; p++ ) {
-                            model.cloneRepeat( templatePath, p );
-                        }
-                        // try setting the value again
-                        target = model.node( path, index );
-                        if ( target.get().length === 1 ) {
-                            target.setVal( value, null, xmlDataType );
-                        } else {
-                            errMsg = 'Error occured trying to clone template node to set the repeat value of the instance to be edited.';
-                            console.error( errMsg );
-                            loadErrors.push( errMsg );
-                        }
-                    }
-                    // As an exception, missing meta nodes will be quietly added if a meta node exists at that path
-                    // the latter requires e.g the root node to have the correct name
-                    else if ( $node.parent( 'meta' ).length === 1 && model.node( $node.parent( 'meta' ).getXPath( 'instance' ), 0 ).get().length === 1 ) {
-                        //if there is no existing meta node with that node as child
-                        if ( model.node( '/*/meta/' + name, 0 ).get().length === 0 ) {
-                            $node.clone().appendTo( model.node( '/*/meta' ).get() );
-                        } else {
-                            errMsg = 'Found duplicate meta node (' + name + ')!';
-                            console.error( errMsg );
-                            loadErrors.push( errMsg );
-                        }
-                    } else {
-                        errMsg = 'Did not find form element with path: ' + path + ' and index: ' + index + ' so failed to load model.';
-                        console.error( errMsg );
-                        loadErrors.push( errMsg );
-                    }
-                } );
-
-                instanceID = model.node( '/*/meta/instanceID' );
-                if ( instanceID.get().length !== 1 ) {
-                    error = 'InstanceID node in default instance error (found ' + instanceID.get().length + ' instanceID nodes)';
-                    console.error( error );
-                    loadErrors.push( error );
-                    return;
-                }
-
-                // If record is not local, copy instanceID value to deprecatedID and empty instanceID
-                if ( !data.unsubmitted ) {
-                    // add deprecatedID node
-                    if ( model.node( '/*/meta/deprecatedID' ).get().length !== 1 ) {
-                        var deprecatedIDXMLNode = $.parseXML( '<deprecatedID/>' ).documentElement;
-                        document.adoptNode( deprecatedIDXMLNode );
-                        $( deprecatedIDXMLNode ).appendTo( model.node( '/*/meta' ).get() );
-                    }
-
-                    model.node( '/*/meta/deprecatedID' ).setVal( instanceID.getVal()[ 0 ], null, 'string' );
-                    instanceID.setVal( '', null, 'string' );
-                }
-            };
-
-            // Implements jr:choice-name
-            // TODO: this needs to work for all expressions (relevants, constraints), now it only works for calulated items
-            // Ideally this belongs in the form Model, but unfortunately it needs access to the view
             fixExpr = function( expr, resTypeStr, selector, index, tryNative ) {
                 var value, name, $input, label = '',
                     matches = expr.match( /jr:choice-name\(([^,]+),\s?'(.*?)'\)/ );
@@ -298,7 +177,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 }
                 return expr;
             };
-
 
             /**
              * Inner Class dealing with the HTML Form
@@ -733,7 +611,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         if ( type === 'date' || type === 'datetime' ) {
                             // convert current value (loaded from instance) to a value that a native datepicker understands
                             // TODO test for IE, FF, Safari when those browsers start including native datepickers
-                            value = model.node().convert( value, type );
+                            value = model.node( name, index ).convert( value, type );
                         }
                     }
 
@@ -770,6 +648,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     return $node.children().length === 0 && $node.text();
                 } ).each( function() {
                     var $node = $( this );
+
                     try {
                         value = $node.text();
                         name = $node.getXPath( 'instance' );
@@ -1303,7 +1182,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                      * or the whole document
                      */
                     $context = $output.closest( '.question, .note, .or-group' ).find( '[name]' ).eq( 0 );
-                    context = that.input.getName( $context );
+                    context = ( $context.length ) ? that.input.getName( $context ) : undefined;
+
                     insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
                     insideRepeatClone = ( insideRepeat && $output.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 );
                     index = ( insideRepeatClone ) ? that.input.getIndex( $context ) : 0;
@@ -1639,8 +1519,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         return false;
                     } );
 
-                    cloneDefaultReps = function( $repeat ) {
-                        repLevel++;
+                    cloneDefaultReps = function( $repeat, repLevel ) {
                         repCountPath = $repeat.attr( 'data-repeat-count' ) || '';
                         numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal()[ 0 ], 10 ) : 0;
                         index = $form.find( '.or-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
@@ -1651,12 +1530,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         if ( numRepsDefault > 1 ) {
                             that.clone( $repeat.siblings().addBack().last(), numRepsDefault - 1, true );
                         }
-                        //now check the defaults of all the descendants of this repeat and its new siblings, level-by-level
+                        // Now check the defaults of all the descendants of this repeat and its new siblings, level-by-level.
                         $repeat.siblings( '.or-repeat' ).addBack().find( '.or-repeat' )
                             .filter( function( i ) {
                                 return $( this ).parentsUntil( '.or', '.or-repeat' ).length === repLevel;
                             } ).each( function() {
-                                cloneDefaultReps( $( this ) );
+                                cloneDefaultReps( $( this ), repLevel + 1 );
                             } );
                     };
 
@@ -1665,8 +1544,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $form.find( '.or-repeat' ).filter( function( i ) {
                         return $( this ).parentsUntil( '.or', '.or-repeat' ).length === 0;
                     } ).each( function() {
-                        repLevel = 0;
-                        cloneDefaultReps( $( this ) );
+                        cloneDefaultReps( $( this ), 1 );
                     } );
                 },
                 /**
@@ -1677,7 +1555,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * @return  {boolean}       [description]
                  */
                 clone: function( $node, count, initialFormLoad ) {
-                    var $siblings, $master, $clone, index, total, path,
+                    var $siblings, $master, $clone, $repeatsToUpdate, index, total, path,
                         that = this;
 
                     count = count || 1;
@@ -1750,10 +1628,12 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         $clone = $clone.clone();
                     }
 
+                    $repeatsToUpdate = $siblings.add( $node ).add( $siblings.find( '.or-repeat' ) );
+
                     // number the repeats
-                    this.numberRepeats( $siblings.add( $node ) );
+                    this.numberRepeats( $repeatsToUpdate );
                     // enable or disable + and - buttons
-                    this.toggleButtons( $siblings.add( $node ) );
+                    this.toggleButtons( $repeatsToUpdate );
 
                     return true;
                 },
@@ -1781,32 +1661,38 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         .attr( 'name', Math.floor( ( Math.random() * 10000000 ) + 1 ) );
                 },
                 toggleButtons: function( $repeats ) {
+                    var $repeat, $repSiblingsAndSelf;
+
                     $repeats = ( !$repeats || $repeats.length === 0 ) ? $form : $repeats;
 
-                    //first switch everything off and remove hover state
-                    $repeats.find( 'button.repeat, button.remove' ).prop( 'disabled', true );
+                    $repeats.each( function() {
+                        $repeat = $( this );
+                        $repSiblingsAndSelf = $repeat.siblings( '.or-repeat' ).addBack();
+                        //first switch everything off and remove hover state
+                        $repSiblingsAndSelf.children( '.repeat-buttons' ).find( 'button.repeat, button.remove' ).prop( 'disabled', true );
 
-                    //then enable the appropriate ones
-                    $repeats.last().find( 'button.repeat' ).prop( 'disabled', false );
-                    $repeats.find( 'button.remove' ).not( ':first' ).prop( 'disabled', false );
+                        //then enable the appropriate ones
+                        $repSiblingsAndSelf.last().children( '.repeat-buttons' ).find( 'button.repeat' ).prop( 'disabled', false );
+                        $repSiblingsAndSelf.children( '.repeat-buttons' ).find( 'button.remove' ).not( ':first' ).prop( 'disabled', false );
+                    } );
                 },
                 numberRepeats: function( $repeats ) {
                     $repeats.each( function() {
-                        var repSiblings, qtyRepeats, i,
+                        var $repSiblings, qtyRepeats, i,
                             $repeat = $( this );
                         // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
                         if ( $repeat.prev( '.or-repeat' ).length === 0 ) {
-                            repSiblings = $( this ).siblings( '.or-repeat' );
-                            qtyRepeats = repSiblings.length + 1;
+                            $repSiblings = $( this ).siblings( '.or-repeat' );
+                            qtyRepeats = $repSiblings.length + 1;
                             if ( qtyRepeats > 1 ) {
                                 $repeat.find( '.repeat-number' ).text( '1' );
                                 i = 2;
-                                repSiblings.each( function() {
-                                    $( this ).find( '.repeat-number' ).text( i );
+                                $repSiblings.each( function() {
+                                    $( this ).find( '.repeat-number' ).eq( 0 ).text( i );
                                     i++;
                                 } );
                             } else {
-                                $repeat.find( '.repeat-number' ).empty();
+                                $repeat.find( '.repeat-number' ).eq( 0 ).empty();
                             }
                         }
                     } );
@@ -1854,9 +1740,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             }
                             return _dataNodeObj;
                         };
-
-                    // why is this called? add explanation when figured out that it is necessary!
-                    // event.stopImmediatePropagation();
 
                     // set file input values to the actual name of file (without c://fakepath or anything like that)
                     if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {

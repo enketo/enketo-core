@@ -2,22 +2,34 @@ if ( typeof define !== 'function' ) {
     var define = require( 'amdefine' )( module );
 }
 
-define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, utils, $ ) {
+define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, MergeXML, utils, $ ) {
     'use strict';
+
+    var FormModel, Nodeset, types;
+
 
     /**
      * Class dealing with the XML Model of a form
      *
      * @constructor
-     * @param {string} modelStr String of the default XML instance
-     * @param {?<{id:string, xmlStr: string}> } externalData Array of external data objects
-     * @param {?{full:boolean}} options.full Whether to initialize the full model or only the primary instance (for future)
+     * @param {{modelStr: string, ?instanceStr: string, ?external: <{id: string, xmlStr: string }>, ?submitted: boolean }} data:
+     *                            data object containing XML model, 
+     *                            (partial) XML instance to load, 
+     *                            external data array
+     *                            flag to indicate whether data was submitted before
+     * @param {?{?full:boolean}} options Whether to initialize the full model or only the primary instance
      */
-    function FormModel( modelStr, externalData, options ) {
-        var $model, id, instanceDoc, instanceRoot,
-            that = this;
+    FormModel = function( data, options ) {
+        var that = this;
 
-        externalData = externalData || [];
+        if ( typeof data === 'string' ) {
+            data = {
+                modelStr: data
+            };
+        }
+
+        data.external = data.external || [];
+        data.submitted = ( typeof data.submitted !== 'undefined' ) ? data.submitted : true;
         options = options || {};
         options.full = ( typeof options.full !== 'undefined' ) ? options.full : true;
 
@@ -28,25 +40,37 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
         this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
         this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^\)])/;
 
+        this.data = data;
+        this.options = options;
+    };
+
+    /**
+     * Initializes FormModel
+     */
+    FormModel.prototype.init = function() {
+        var id, instanceDoc, instanceRoot,
+            that = this;
         /**
          * Default namespaces (on a primary instance, instance child, model) would create a problem using the **native** XPath evaluator.
          * It wouldn't find any regular /path/to/nodes. The solution is to ignore these by renaming these attributes to data-xmlns.
          *
          * If the regex is later deemed too aggressive, it could target the model, primary instance and primary instance child only, after creating an XML Document.
          */
-        modelStr = modelStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, ' data-$1' );
+        this.data.modelStr = this.data.modelStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, ' data-$1' );
 
-        if ( !options.full ) {
-            // strip all secondary instances from string before parsing
-            // this regex works because the model never includes itext in Enketo
-            modelStr = modelStr.replace( /^(<model\s*><instance((?!<instance).)+<\/instance\s*>\s*)(<instance.+<\/instance\s*>)*/, '$1' );
+        if ( !this.options.full ) {
+            // Strip all secondary instances from string before parsing
+            // This regex works because the model never includes itext in Enketo
+            this.data.modelStr = this.data.modelStr.replace( /^(<model\s*><instance((?!<instance).)+<\/instance\s*>\s*)(<instance.+<\/instance\s*>)*/, '$1' );
         }
 
+        // Create the model
         try {
             id = 'model';
-            this.xml = $.parseXML( modelStr );
+            // the default model
+            this.xml = $.parseXML( this.data.modelStr );
             // add external data to model
-            externalData.forEach( function( instance ) {
+            this.data.external.forEach( function( instance ) {
                 id = 'instance "' + instance.id + '"' || 'instance unknown';
                 instanceDoc = that.xml.getElementById( instance.id );
                 // remove any existing content that is just an XLSForm hack to pass ODK Validate
@@ -58,486 +82,187 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
             } );
         } catch ( e ) {
             console.error( e );
-            this.loadErrors.push( 'Error trying to parse XML ' + id + '.' );
+            this.loadErrors.push( 'Error trying to parse XML ' + id + '. ' + e.message );
         }
 
-        $model = $( this.xml );
+        // Initialize/process the model
+        if ( this.xml ) {
+            this.$ = $( this.xml );
+            this.hasInstance = !!this.xml.querySelector( 'model > instance' ) || false;
+            this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
 
-        this.hasInstance = $model.find( 'model > instance' ).length > 0;
-
-        // check if all secondary instances with an external source have been populated
-        $model.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
-            that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
-        } );
-
-        this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
-        this.$ = $model;
-
-        /**
-         * Initializes FormModel
-         */
-        FormModel.prototype.init = function() {
-            // trimming values
-            this.node( null, null, {
-                noEmpty: true
-            } ).get().each( function() {
-                this.textContent = this.textContent.trim();
+            // Check if all secondary instances with an external source have been populated
+            this.$.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
+                that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
             } );
 
+            this.trimValues();
             this.cloneAllTemplates();
             this.extractTemplates();
 
-            return this.loadErrors;
-        };
-
-        /**
-         * Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
-         * OpenRosa functions or for browsers that do not have a native evaluator.
-         */
-        FormModel.prototype.bindJsEvaluator = function() {
-            var evaluator = new XPathJS.XPathEvaluator();
-
-            XPathJS.bindDomLevel3XPath( this.xml, {
-                'window': {
-                    JsXPathException: true,
-                    JsXPathExpression: true,
-                    JsXPathNSResolver: true,
-                    JsXPathResult: true,
-                    JsXPathNamespace: true
-                },
-                'document': {
-                    jsCreateExpression: function() {
-                        return evaluator.createExpression.apply( evaluator, arguments );
-                    },
-                    jsCreateNSResolver: function() {
-                        return evaluator.createNSResolver.apply( evaluator, arguments );
-                    },
-                    jsEvaluate: function() {
-                        return evaluator.evaluate.apply( evaluator, arguments );
+            // Merge an existing instance into the model, AFTER templates have been removed
+            try {
+                id = 'record';
+                if ( this.data.instanceStr ) {
+                    this.mergeXml( this.data.instanceStr );
+                    if ( this.data.submitted ) {
+                        this.deprecateId();
                     }
                 }
-            } );
-        };
-
-        /**
-         * Constructs a new Nodeset
-         *
-         * @param {(string|null)=} selector - [type/description]
-         * @param {(string|number|null)=} index    - [type/description]
-         * @param {(Object|null)=} filter   - [type/description]
-         * @param filter.onlyLeaf
-         * @param filter.noEmpty
-         * @return {Nodeset}
-         */
-        this.node = function( selector, index, filter ) {
-            return new Nodeset( selector, index, filter );
-        };
-
-        /**
-         * Inner Class dealing with nodes and nodesets of the XML instance
-         *
-         * @constructor
-         * @param {string=} selector simpleXPath or jQuery selectedor
-         * @param {number=} index    the index of the target node with that selector
-         * @param {?{onlyLeaf: boolean, noEmpty: boolean}=} filter   filter object for the result nodeset
-         */
-
-        function Nodeset( selector, index, filter ) {
-            var defaultSelector = that.hasInstance ? '/model/instance[1]//*' : '//*';
-            this.originalSelector = selector;
-            this.selector = ( typeof selector === 'string' && selector.length > 0 ) ? selector : defaultSelector;
-            filter = ( typeof filter !== 'undefined' && filter !== null ) ? filter : {};
-            this.filter = filter;
-            this.filter.onlyLeaf = ( typeof filter.onlyLeaf !== 'undefined' ) ? filter.onlyLeaf : false;
-            this.filter.noEmpty = ( typeof filter.noEmpty !== 'undefined' ) ? filter.noEmpty : false;
-            this.index = index;
+            } catch ( e ) {
+                console.error( e );
+                this.loadErrors.push( 'Error trying to parse XML ' + id + '. ' + e.message );
+            }
         }
 
-        /**
-         * Privileged method to find data nodes filtered by a jQuery or XPath selector and additional filter properties
-         * Without parameters it returns a collection of all data nodes excluding template nodes and their children. Therefore, most
-         * queries will not require filter properties. This function handles all (?) data queries in the application.
-         *
-         * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
+        return this.loadErrors;
+    };
+
+    /**
+     * Returns a new Nodeset instance
+     *
+     * @param {(string|null)=} selector - [type/description]
+     * @param {(string|number|null)=} index    - [type/description]
+     * @param {(Object|null)=} filter   - [type/description]
+     * @param filter.onlyLeaf
+     * @param filter.noEmpty
+     * @return {Nodeset}
+     */
+    FormModel.prototype.node = function( selector, index, filter ) {
+        return new Nodeset( selector, index, filter, this );
+    };
+
+    /**
+     * Merges an XML instance string into the XML Model
+     *
+     * @param  {string} recordStr The XML record as string
+     * @param  {string} modelDoc  The XML model to merge the record into
+     */
+    FormModel.prototype.mergeXml = function( recordStr ) {
+        var modelInstanceChildStr, merger, modelInstanceEl, modelInstanceChildEl;
+
+        if ( !recordStr ) {
+            return;
+        }
+
+        modelInstanceEl = this.xml.querySelector( 'instance' );
+        modelInstanceChildEl = this.xml.querySelector( 'instance > *' ); // do not use firstChild as it may find a #textNode
+
+        if ( !modelInstanceChildEl ) {
+            throw new Error( 'Model is corrupt. It does not contain a childnode of instance' );
+        }
+
+        merger = new MergeXML( {
+            join: false
+        } );
+
+        modelInstanceChildStr = ( new XMLSerializer() ).serializeToString( modelInstanceChildEl );
+
+        // first the model, to preserve DOM order of that of the default instance
+        merger.AddSource( modelInstanceChildStr );
+        // then merge the record into the model
+        merger.AddSource( recordStr );
+
+        if ( merger.error.code ) {
+            throw new Error( merger.error.text );
+        }
+
+        // remove the primary instance  childnode from the original model
+        this.xml.querySelector( 'instance' ).removeChild( modelInstanceChildEl );
+        // adopt the merged instance childnode
+        modelInstanceChildEl = this.xml.adoptNode( merger.Get( 0 ).documentElement, true );
+        // append the adopted node to the primary instance
+        modelInstanceEl.appendChild( modelInstanceChildEl );
+        // reset the rootElement
+        this.rootElement = modelInstanceChildEl;
+
+    };
+
+    /**
+     * Trims values
+     * 
+     */
+    FormModel.prototype.trimValues = function() {
+        this.node( null, null, {
+            noEmpty: true
+        } ).get().each( function() {
+            this.textContent = this.textContent.trim();
+        } );
+    };
+
+    /**
+     * [deprecateId description]
+     * @return {[type]} [description]
+     */
+    FormModel.prototype.deprecateId = function() {
+        var instanceIdEls, instanceIdEl, deprecatedIdEls, deprecatedIdEl, metaEl;
+
+        /*
+         * When implementing this function using the this.node(selector) to find nodes instead of querySelectorAll,
+         * I found that the results were always empty even if the nodes existed. There seems to be 
+         * some sort of delay in updating the XML Document (in mergeXML) that causes a problem
+         * when the XPath evaluator is used to retrieve nodes.
          */
-        Nodeset.prototype.get = function() {
-            var $nodes, /** @type {string} */ val;
-            // cache evaluation result
-            if ( !this.nodes ) {
-                this.nodes = that.evaluate( this.selector, 'nodes', null, null, true );
-            }
 
-            // noEmpty automatically excludes non-leaf nodes
-            if ( this.filter.noEmpty === true ) {
-                $nodes = $( this.nodes ).filter( function() {
-                    var $node = $( this );
-                    val = $node.text();
-                    return $node.children().length === 0 && val.trim().length > 0;
-                } );
-            }
-            // this may still contain empty leaf nodes
-            else if ( this.filter.onlyLeaf === true ) {
-                $nodes = $( this.nodes ).filter( function() {
-                    return $( this ).children().length === 0;
-                } );
-            } else {
-                $nodes = $( this.nodes );
-            }
+        instanceIdEls = this.xml.querySelectorAll( '* > meta > instanceID' );
 
-            return ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
-        };
+        if ( instanceIdEls.length !== 1 ) {
+            throw new Error( 'Invalid primary instance. Found ' + instanceIdEls.length + ' instanceID nodes but expected 1.' );
+        }
 
-        /**
-         * Sets the index of the Nodeset instance
-         *
-         * @param {=number?} index The 0-based index
-         */
-        Nodeset.prototype.setIndex = function( index ) {
-            this.index = index;
-        };
+        instanceIdEl = instanceIdEls[ 0 ];
 
-        /**
-         * Sets data node values.
-         *
-         * @param {(string|Array.<string>)=} newVals    The new value of the node.
-         * @param {?string=} expr  XPath expression to validate the node.
-         * @param {?string=} xmlDataType XML data type of the node
-         *
-         * @return {?boolean} null is returned when the node is not found or multiple nodes were selected
-         */
-        Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
-            var $target, curVal, /**@type {string}*/ newVal, success, updated;
+        deprecatedIdEls = this.xml.querySelectorAll( '* > meta > deprecatedID' );
 
-            curVal = this.getVal()[ 0 ];
+        if ( deprecatedIdEls.length > 1 ) {
+            throw new Error( 'Invalid primary instance. Found ' + deprecatedIdEls.length + ' deprecatedID nodes but expected 1.' );
+        }
 
-            if ( typeof newVals !== 'undefined' && newVals !== null ) {
-                newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
-            } else {
-                newVal = '';
-            }
+        deprecatedIdEl = deprecatedIdEls[ 0 ];
 
-            newVal = this.convert( newVal, xmlDataType );
+        // add deprecatedID node
+        if ( !deprecatedIdEl ) {
+            deprecatedIdEl = $.parseXML( '<deprecatedID/>' ).documentElement;
+            this.xml.adoptNode( deprecatedIdEl );
+            metaEl = this.xml.querySelector( '* > meta' );
+            metaEl.appendChild( deprecatedIdEl );
+        }
 
-            $target = this.get();
+        // give deprecatedID element the value of the instanceId
+        deprecatedIdEl.textContent = instanceIdEl.textContent;
 
-            if ( $target.length === 1 && $.trim( newVal.toString() ) !== $.trim( curVal.toString() ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
-                //first change the value so that it can be evaluated in XPath (validated)
-                $target.text( newVal );
-                //then return validation result
-                success = this.validate( expr, xmlDataType );
-                updated = this.getClosestRepeat();
-                updated.nodes = [ $target.prop( 'nodeName' ) ];
-                $model.trigger( 'dataupdate', updated );
-                //add type="file" attribute for file references
-                if ( xmlDataType === 'binary' ) {
-                    if ( newVal.length > 0 ) {
-                        $target.attr( 'type', 'file' );
-                    } else {
-                        $target.removeAttr( 'type' );
-                    }
-                }
-                return success;
-            }
-            if ( $target.length > 1 ) {
-                console.error( 'nodeset.setVal expected nodeset with one node, but received multiple' );
-                return null;
-            }
-            if ( $target.length === 0 ) {
-                console.error( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found. Ignored.' );
-                return null;
-            }
-            //always validate if the new value is not empty, even if value didn't change (see validateAll() function)
-            //return (newVal.length > 0 && validateAll) ? this.validate(expr, xmlDataType) : true;
-            return null;
-        };
+        // set the instanceID value to empty
+        instanceIdEl.textContent = '';
+    };
 
+    /**
+     * Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
+     * OpenRosa functions or for browsers that do not have a native evaluator.
+     */
+    FormModel.prototype.bindJsEvaluator = function() {
+        var evaluator = new XPathJS.XPathEvaluator();
 
-        /**
-         * Obtains the data value if a JQuery or XPath selector for a single node is provided.
-         *
-         * @return {Array<string|number|boolean>} [description]
-         */
-        Nodeset.prototype.getVal = function() {
-            var vals = [];
-            this.get().each( function() {
-                vals.push( $( this ).text() );
-            } );
-            return vals;
-        };
-
-        /**
-         * Determines the index of a repeated node amongst all nodes with the same XPath selector
-         *
-         * @param  {} $node optional jquery element
-         * @return {number}       [description]
-         */
-        Nodeset.prototype.determineIndex = function( $node ) {
-            var nodeName, path, $family;
-
-            $node = $node || this.get();
-
-            if ( $node.length === 1 ) {
-                nodeName = $node.prop( 'nodeName' );
-                path = $node.getXPath( 'instance' );
-                $family = $model.find( nodeName ).filter( function() {
-                    return path === $( this ).getXPath( 'instance' );
-                } );
-                return ( $family.length === 1 ) ? null : $family.index( $node );
-            } else {
-                console.error( 'no node, or multiple nodes, provided to nodeset.determineIndex' );
-                return -1;
-            }
-        };
-
-        // if repeats have not been cloned yet, they are not considered a repeat by this function
-        Nodeset.prototype.getClosestRepeat = function() {
-            var $node = this.get(),
-                nodeName = $node.prop( 'nodeName' );
-
-            while ( $node.siblings( nodeName ).length === 0 && nodeName !== 'instance' ) {
-                $node = $node.parent();
-                nodeName = $node.prop( 'nodeName' );
-            }
-
-            return ( nodeName === 'instance' ) ? {} : {
-                repeatPath: $node.getXPath( 'instance' ),
-                repeatIndex: this.determineIndex( $node )
-            };
-        };
-
-        /**
-         * Remove a repeat node
-         */
-        Nodeset.prototype.remove = function() {
-            var $dataNode, allRemovedNodeNames, $this, repeatPath, repeatIndex;
-
-            $dataNode = this.get();
-
-            if ( $dataNode.length > 0 ) {
-
-                allRemovedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
-
-                $dataNode.find( '*' ).each( function() {
-                    $this = $( this );
-                    allRemovedNodeNames.push( $this.prop( 'nodeName' ) );
-                } );
-
-                repeatPath = $dataNode.getXPath( 'instance' );
-                repeatIndex = this.determineIndex( $dataNode );
-
-                $dataNode.remove();
-                this.nodes = null;
-
-                $model.trigger( 'dataupdate', {
-                    updatedNodes: allRemovedNodeNames,
-                    repeatPath: repeatPath,
-                    repeatIndex: repeatIndex
-                } );
-            } else {
-                console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );
-            }
-        };
-
-        /**
-         * Convert a value to a specified data type( though always stringified )
-         * @param  {?string=} x           value to convert
-         * @param  {?string=} xmlDataType XML data type
-         * @return {string}               string representation of converted value
-         */
-        Nodeset.prototype.convert = function( x, xmlDataType ) {
-            if ( x.toString() === '' ) {
-                return x;
-            }
-            if ( typeof xmlDataType !== 'undefined' && xmlDataType !== null &&
-                typeof this.types[ xmlDataType.toLowerCase() ] !== 'undefined' &&
-                typeof this.types[ xmlDataType.toLowerCase() ].convert !== 'undefined' ) {
-                return this.types[ xmlDataType.toLowerCase() ].convert( x );
-            }
-            return x;
-        };
-
-        /**
-         * Validate a value with an XPath Expression and /or xml data type
-         * @param  {?string=} expr        XPath expression
-         * @param  {?string=} xmlDataType XML datatype
-         * @return {boolean}
-         */
-        Nodeset.prototype.validate = function( expr, xmlDataType ) {
-            var typeValid, exprValid, value;
-
-            if ( !xmlDataType || typeof this.types[ xmlDataType.toLowerCase() ] === 'undefined' ) {
-                xmlDataType = 'string';
-            }
-
-            // This one weird trick results in a small validation performance increase.
-            // Do not obtain *the value* if the expr is empty and data type is string, select, select1, binary knowing that this will always return true.
-            if ( !expr && ( xmlDataType === 'string' || xmlDataType === 'select' || xmlDataType === 'select1' || xmlDataType === 'binary' ) ) {
-                return true;
-            }
-
-            value = this.getVal()[ 0 ];
-
-            if ( value.toString() === '' ) {
-                return true;
-            }
-
-            typeValid = this.types[ xmlDataType.toLowerCase() ].validate( value );
-            exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? that.evaluate( expr, 'boolean', this.originalSelector, this.index ) : true;
-
-            return ( typeValid && exprValid );
-        };
-
-        /**
-         * @namespace types
-         * @type {Object}
-         */
-        Nodeset.prototype.types = {
-            'string': {
-                //max length of type string is 255 chars.Convert( truncate ) silently ?
-                validate: function( x ) {
-                    return true;
-                }
+        XPathJS.bindDomLevel3XPath( this.xml, {
+            'window': {
+                JsXPathException: true,
+                JsXPathExpression: true,
+                JsXPathNSResolver: true,
+                JsXPathResult: true,
+                JsXPathNamespace: true
             },
-            'select': {
-                validate: function( x ) {
-                    return true;
-                }
-            },
-            'select1': {
-                validate: function( x ) {
-                    return true;
-                }
-            },
-            'decimal': {
-                validate: function( x ) {
-                    return ( !isNaN( x - 0 ) && x !== null ) ? true : false;
+            'document': {
+                jsCreateExpression: function() {
+                    return evaluator.createExpression.apply( evaluator, arguments );
                 },
-                convert: function( x ) {
-                    // deals with Java issue and possible db issues:
-                    // https://github.com/MartijnR/enketo-core/issues/40
-                    return ( x === 'NaN' ) ? '' : x;
-                }
-            },
-            'int': {
-                validate: function( x ) {
-                    return ( !isNaN( x - 0 ) && x !== null && Math.round( x ).toString() === x.toString() ) ? true : false;
+                jsCreateNSResolver: function() {
+                    return evaluator.createNSResolver.apply( evaluator, arguments );
                 },
-                convert: function( x ) {
-                    // deals with Java issue and possible db issues:
-                    // https://github.com/MartijnR/enketo-core/issues/40
-                    return ( x === 'NaN' ) ? '' : x;
-                }
-            },
-            'date': {
-                validate: function( x ) {
-                    var pattern = ( /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/ ),
-                        segments = pattern.exec( x );
-
-                    return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString() !== 'Invalid Date' ) : false;
-                },
-                convert: function( x ) {
-                    var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/,
-                        segments = pattern.exec( x ),
-                        date = new Date( x );
-                    if ( new Date( x ).toString() === 'Invalid Date' ) {
-                        //this code is really only meant for the Rhino and PhantomJS engines, in browsers it may never be reached
-                        if ( segments && Number( segments[ 1 ] ) > 0 && Number( segments[ 3 ] ) >= 0 && Number( segments[ 3 ] ) < 12 && Number( segments[ 5 ] ) < 32 ) {
-                            date = new Date( Number( segments[ 1 ] ), ( Number( segments[ 3 ] ) - 1 ), Number( segments[ 5 ] ) );
-                        }
-                    }
-                    //date.setUTCHours(0,0,0,0);
-                    //return date.toUTCString();//.getUTCFullYear(), datetime.getUTCMonth(), datetime.getUTCDate());
-                    return date.getUTCFullYear().toString().pad( 4 ) + '-' + ( date.getUTCMonth() + 1 ).toString().pad( 2 ) + '-' + date.getUTCDate().toString().pad( 2 );
-                }
-            },
-            'datetime': {
-                validate: function( x ) {
-                    //the second part builds in some tolerance for slightly-off dates provides as defaults (e.g.: 2013-05-31T07:00-02)
-                    return ( new Date( x.toString() ).toString() !== 'Invalid Date' || new Date( this.convert( x.toString() ) ).toString() !== 'Invalid Date' );
-                },
-                convert: function( x ) {
-                    var date, // timezone, segments, dateS, timeS,
-                        patternCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2}):([0-9]{2})$/,
-                        patternAlmostCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2})$/;
-                    /* 
-                     * if the pattern is right, or almost right but needs a small correction for JavaScript to handle it,
-                     * do not risk changing the time zone by calling toISOLocalString()
-                     */
-                    if ( new Date( x ).toString() !== 'Invalid Date' && patternCorrect.test( x ) ) {
-                        return x;
-                    }
-                    if ( new Date( x ).toString() === 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
-                        return x + ':00';
-                    }
-                    date = new Date( x );
-                    return ( date.toString() !== 'Invalid Date' ) ? date.toISOLocalString() : date.toString();
-                }
-            },
-            'time': {
-                validate: function( x ) {
-                    var date = new Date(),
-                        segments = x.toString().split( ':' );
-                    if ( segments.length < 2 ) {
-                        return false;
-                    }
-                    segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString().split( '.' )[ 0 ] ) : 0;
-
-                    return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString() !== 'Invalid Date' );
-                },
-                convert: function( x ) {
-                    var segments = x.toString().split( ':' );
-                    $.each( segments, function( i, val ) {
-                        segments[ i ] = val.toString().pad( 2 );
-                    } );
-                    return segments.join( ':' );
-                }
-            },
-            'barcode': {
-                validate: function( x ) {
-                    return true;
-                }
-            },
-            'geopoint': {
-                validate: function( x ) {
-                    var coords = x.toString().trim().split( ' ' );
-                    return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
-                        ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
-                        ( typeof coords[ 2 ] === 'undefined' || !isNaN( coords[ 2 ] ) ) &&
-                        ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
-                },
-                convert: function( x ) {
-                    return $.trim( x.toString() );
-                }
-            },
-            'geotrace': {
-                validate: function( x ) {
-                    var geopoints = x.toString().split( ';' );
-                    return geopoints.length >= 2 && geopoints.every( function( geopoint ) {
-                        return new Nodeset().types.geopoint.validate( geopoint );
-                    } );
-                },
-                convert: function( x ) {
-                    return x.toString().trim();
-                }
-            },
-            'geoshape': {
-                validate: function( x ) {
-                    var geopoints = x.toString().split( ';' );
-                    return geopoints.length >= 4 && ( geopoints[ 0 ] === geopoints[ geopoints.length - 1 ] ) && geopoints.every( function( geopoint ) {
-                        return new Nodeset().types.geopoint.validate( geopoint );
-                    } );
-                },
-                convert: function( x ) {
-                    return x.toString().trim();
-                }
-            },
-            'binary': {
-                validate: function( x ) {
-                    return true;
+                jsEvaluate: function() {
+                    return evaluator.evaluate.apply( evaluator, arguments );
                 }
             }
-        };
-    }
+        } );
+    };
 
     /**
      * Gets the instance ID
@@ -572,9 +297,11 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
         name = $template.prop( 'nodeName' );
         $insertAfterNode = this.node( selector, index ).get();
 
-        // if templatenodes and insertAfterNode(s) have been identified 
+        // If templatenodes and insertAfterNode(s) have been identified 
         // AND the node following insertAfterNode doesn't already exist (! important for nested repeats!)
-        if ( $template[ 0 ] && $insertAfterNode.length === 1 && $insertAfterNode.next().prop( 'nodeName' ) !== name ) {
+        // Strictly speaking using .next() is more efficient, but we use .nextAll() in case the document order has changed due to 
+        // incorrect merging of an existing record.
+        if ( $template[ 0 ] && $insertAfterNode.length === 1 && $insertAfterNode.nextAll( name ).length === 0 ) {
             $templateClone = $template.clone().insertAfter( $insertAfterNode );
 
             allClonedNodeNames = [ $template.prop( 'nodeName' ) ];
@@ -583,15 +310,16 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
                 allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
             } );
 
-            that.$.trigger( 'dataupdate', {
+            this.$.trigger( 'dataupdate', {
                 nodes: allClonedNodeNames,
                 repeatPath: selector,
-                repeatIndex: that.node().determineIndex( $templateClone )
+                repeatIndex: that.node( selector, index ).determineIndex( $templateClone )
             } );
 
         } else {
-            // console.error ('Could not locate node: '+path+' with index '+index+' in data instance.There could be multiple template node (a BUG) or none.');
-            if ( $insertAfterNode.next().prop( 'nodeName' ) !== name ) {
+            // Strictly speaking using .next() is more efficient, but we use .nextAll() in case the document order has changed due to 
+            // incorrect merging of an existing record.
+            if ( $insertAfterNode.nextAll( name ).length === 0 ) {
                 console.error( 'Could not find template node and/or node to insert the clone after' );
             }
         }
@@ -641,9 +369,9 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
      */
     FormModel.prototype.cloneAllTemplates = function() {
         var that = this;
-        // in reverse document order to properly deal with nested repeat templates
+
         // for now we support both the official namespaced template and the hacked non-namespaced template attributes
-        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@jr:template]', 'nodes', null, null, true ).reverse().forEach( function( templateEl ) {
+        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@jr:template]', 'nodes', null, null, true ).forEach( function( templateEl ) {
             var nodeName = templateEl.nodeName,
                 selector = $( templateEl ).getXPath( 'instance' ),
                 ancestorTemplateNodes = that.evaluate( 'ancestor::' + nodeName + '[@template] | ancestor::' + nodeName + '[@jr:template]', 'nodes', selector, 0, true );
@@ -678,7 +406,7 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
      * @return {string}           XML string
      */
     FormModel.prototype.getStr = function() {
-        var dataStr = ( new XMLSerializer() ).serializeToString( this.xml.querySelector( 'instance > *' ) || this.xml.documentElement );
+        var dataStr = ( new XMLSerializer() ).serializeToString( this.xml.querySelector( 'instance > *' ) || this.xml.documentElement, 'text/xml' );
         // remove tabs
         dataStr = dataStr.replace( /\t/g, '' );
         // restore default namespaces
@@ -967,6 +695,416 @@ define( [ 'xpath', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/
                 response = result[ resultTypes[ resTypeNum ][ 2 ] ];
             }
             return response;
+        }
+    };
+
+    /**
+     * Class dealing with nodes and nodesets of the XML instance
+     *
+     * @constructor
+     * @param {string=} selector simpleXPath or jQuery selectedor
+     * @param {number=} index    the index of the target node with that selector
+     * @param {?{onlyLeaf: boolean, noEmpty: boolean}=} filter   filter object for the result nodeset
+     * @param { FormModel } model instance of FormModel
+     */
+    Nodeset = function( selector, index, filter, model ) {
+        var defaultSelector = model.hasInstance ? '/model/instance[1]//*' : '//*';
+
+        this.model = model;
+        this.originalSelector = selector;
+        this.selector = ( typeof selector === 'string' && selector.length > 0 ) ? selector : defaultSelector;
+        filter = ( typeof filter !== 'undefined' && filter !== null ) ? filter : {};
+        this.filter = filter;
+        this.filter.onlyLeaf = ( typeof filter.onlyLeaf !== 'undefined' ) ? filter.onlyLeaf : false;
+        this.filter.noEmpty = ( typeof filter.noEmpty !== 'undefined' ) ? filter.noEmpty : false;
+        this.index = index;
+    };
+
+    /**
+     * Privileged method to find data nodes filtered by a jQuery or XPath selector and additional filter properties
+     * Without parameters it returns a collection of all data nodes excluding template nodes and their children. Therefore, most
+     * queries will not require filter properties. This function handles all (?) data queries in the application.
+     *
+     * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
+     */
+    Nodeset.prototype.get = function() {
+        var $nodes, /** @type {string} */ val;
+
+        // cache evaluation result
+        if ( !this.nodes ) {
+            this.nodes = this.model.evaluate( this.selector, 'nodes', null, null, true );
+        }
+
+        // noEmpty automatically excludes non-leaf nodes
+        if ( this.filter.noEmpty === true ) {
+            $nodes = $( this.nodes ).filter( function() {
+                var $node = $( this );
+                val = $node.text();
+                return $node.children().length === 0 && val.trim().length > 0;
+            } );
+        }
+        // this may still contain empty leaf nodes
+        else if ( this.filter.onlyLeaf === true ) {
+            $nodes = $( this.nodes ).filter( function() {
+                return $( this ).children().length === 0;
+            } );
+        } else {
+            $nodes = $( this.nodes );
+        }
+
+        return ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
+    };
+
+    /**
+     * Sets the index of the Nodeset instance
+     *
+     * @param {=number?} index The 0-based index
+     */
+    Nodeset.prototype.setIndex = function( index ) {
+        this.index = index;
+    };
+
+    /**
+     * Sets data node values.
+     *
+     * @param {(string|Array.<string>)=} newVals    The new value of the node.
+     * @param {?string=} expr  XPath expression to validate the node.
+     * @param {?string=} xmlDataType XML data type of the node
+     *
+     * @return {?boolean} null is returned when the node is not found or multiple nodes were selected
+     */
+    Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
+        var $target, curVal, /**@type {string}*/ newVal, success, updated;
+
+        curVal = this.getVal()[ 0 ];
+
+        if ( typeof newVals !== 'undefined' && newVals !== null ) {
+            newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
+        } else {
+            newVal = '';
+        }
+
+        newVal = this.convert( newVal, xmlDataType );
+
+        $target = this.get();
+
+        if ( $target.length === 1 && $.trim( newVal.toString() ) !== $.trim( curVal.toString() ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
+            //first change the value so that it can be evaluated in XPath (validated)
+            $target.text( newVal );
+            //then return validation result
+            success = this.validate( expr, xmlDataType );
+            updated = this.getClosestRepeat();
+            updated.nodes = [ $target.prop( 'nodeName' ) ];
+            this.model.$.trigger( 'dataupdate', updated );
+            //add type="file" attribute for file references
+            if ( xmlDataType === 'binary' ) {
+                if ( newVal.length > 0 ) {
+                    $target.attr( 'type', 'file' );
+                } else {
+                    $target.removeAttr( 'type' );
+                }
+            }
+
+            return success;
+        }
+        if ( $target.length > 1 ) {
+            console.error( 'nodeset.setVal expected nodeset with one node, but received multiple' );
+            return null;
+        }
+        if ( $target.length === 0 ) {
+            console.error( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found. Ignored.' );
+            return null;
+        }
+        //always validate if the new value is not empty, even if value didn't change (see validateAll() function)
+        //return (newVal.length > 0 && validateAll) ? this.validate(expr, xmlDataType) : true;
+        return null;
+    };
+
+
+    /**
+     * Obtains the data value if a JQuery or XPath selector for a single node is provided.
+     *
+     * @return {Array<string|number|boolean>} [description]
+     */
+    Nodeset.prototype.getVal = function() {
+        var vals = [];
+        this.get().each( function() {
+            vals.push( $( this ).text() );
+        } );
+        return vals;
+    };
+
+    /**
+     * Determines the index of a repeated node amongst all nodes with the same XPath selector
+     *
+     * @param  {} $node optional jquery element
+     * @return {number}       [description]
+     */
+    Nodeset.prototype.determineIndex = function( $node ) {
+        var nodeName, path, $family;
+
+        $node = $node || this.get();
+
+        if ( $node.length === 1 ) {
+            nodeName = $node.prop( 'nodeName' );
+            path = $node.getXPath( 'instance' );
+            $family = this.model.$.find( nodeName ).filter( function() {
+                return path === $( this ).getXPath( 'instance' );
+            } );
+            return ( $family.length === 1 ) ? null : $family.index( $node );
+        } else {
+            console.error( 'no node, or multiple nodes, provided to nodeset.determineIndex' );
+            return -1;
+        }
+    };
+
+    // if repeats have not been cloned yet, they are not considered a repeat by this function
+    Nodeset.prototype.getClosestRepeat = function() {
+        var $node = this.get(),
+            nodeName = $node.prop( 'nodeName' );
+
+        while ( $node.siblings( nodeName ).length === 0 && nodeName !== 'instance' ) {
+            $node = $node.parent();
+            nodeName = $node.prop( 'nodeName' );
+        }
+
+        return ( nodeName === 'instance' ) ? {} : {
+            repeatPath: $node.getXPath( 'instance' ),
+            repeatIndex: this.determineIndex( $node )
+        };
+    };
+
+    /**
+     * Remove a repeat node
+     */
+    Nodeset.prototype.remove = function() {
+        var $dataNode, allRemovedNodeNames, $this, repeatPath, repeatIndex;
+
+        $dataNode = this.get();
+
+        if ( $dataNode.length > 0 ) {
+
+            allRemovedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
+
+            $dataNode.find( '*' ).each( function() {
+                $this = $( this );
+                allRemovedNodeNames.push( $this.prop( 'nodeName' ) );
+            } );
+
+            repeatPath = $dataNode.getXPath( 'instance' );
+            repeatIndex = this.determineIndex( $dataNode );
+
+            $dataNode.remove();
+            this.nodes = null;
+
+            this.model.$.trigger( 'dataupdate', {
+                updatedNodes: allRemovedNodeNames,
+                repeatPath: repeatPath,
+                repeatIndex: repeatIndex
+            } );
+        } else {
+            console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );
+        }
+    };
+
+    /**
+     * Convert a value to a specified data type( though always stringified )
+     * @param  {?string=} x           value to convert
+     * @param  {?string=} xmlDataType XML data type
+     * @return {string}               string representation of converted value
+     */
+    Nodeset.prototype.convert = function( x, xmlDataType ) {
+        if ( x.toString() === '' ) {
+            return x;
+        }
+        if ( typeof xmlDataType !== 'undefined' && xmlDataType !== null &&
+            typeof types[ xmlDataType.toLowerCase() ] !== 'undefined' &&
+            typeof types[ xmlDataType.toLowerCase() ].convert !== 'undefined' ) {
+            return types[ xmlDataType.toLowerCase() ].convert( x );
+        }
+        return x;
+    };
+
+    /**
+     * Validate a value with an XPath Expression and /or xml data type
+     * @param  {?string=} expr        XPath expression
+     * @param  {?string=} xmlDataType XML datatype
+     * @return {boolean}
+     */
+    Nodeset.prototype.validate = function( expr, xmlDataType ) {
+        var typeValid, exprValid, value;
+
+        if ( !xmlDataType || typeof types[ xmlDataType.toLowerCase() ] === 'undefined' ) {
+            xmlDataType = 'string';
+        }
+
+        // This one weird trick results in a small validation performance increase.
+        // Do not obtain *the value* if the expr is empty and data type is string, select, select1, binary knowing that this will always return true.
+        if ( !expr && ( xmlDataType === 'string' || xmlDataType === 'select' || xmlDataType === 'select1' || xmlDataType === 'binary' ) ) {
+            return true;
+        }
+
+        value = this.getVal()[ 0 ];
+
+        if ( value.toString() === '' ) {
+            return true;
+        }
+
+        typeValid = types[ xmlDataType.toLowerCase() ].validate( value );
+        exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? this.model.evaluate( expr, 'boolean', this.originalSelector, this.index ) : true;
+
+        return ( typeValid && exprValid );
+    };
+
+    /**
+     * @namespace types
+     * @type {Object}
+     */
+    types = {
+        'string': {
+            //max length of type string is 255 chars.Convert( truncate ) silently ?
+            validate: function( x ) {
+                return true;
+            }
+        },
+        'select': {
+            validate: function( x ) {
+                return true;
+            }
+        },
+        'select1': {
+            validate: function( x ) {
+                return true;
+            }
+        },
+        'decimal': {
+            validate: function( x ) {
+                return ( !isNaN( x - 0 ) && x !== null ) ? true : false;
+            },
+            convert: function( x ) {
+                // deals with Java issue and possible db issues:
+                // https://github.com/MartijnR/enketo-core/issues/40
+                return ( x === 'NaN' ) ? '' : x;
+            }
+        },
+        'int': {
+            validate: function( x ) {
+                return ( !isNaN( x - 0 ) && x !== null && Math.round( x ).toString() === x.toString() ) ? true : false;
+            },
+            convert: function( x ) {
+                // deals with Java issue and possible db issues:
+                // https://github.com/MartijnR/enketo-core/issues/40
+                return ( x === 'NaN' ) ? '' : x;
+            }
+        },
+        'date': {
+            validate: function( x ) {
+                var pattern = ( /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/ ),
+                    segments = pattern.exec( x );
+
+                return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString() !== 'Invalid Date' ) : false;
+            },
+            convert: function( x ) {
+                var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/,
+                    segments = pattern.exec( x ),
+                    date = new Date( x );
+                if ( new Date( x ).toString() === 'Invalid Date' ) {
+                    //this code is really only meant for the Rhino and PhantomJS engines, in browsers it may never be reached
+                    if ( segments && Number( segments[ 1 ] ) > 0 && Number( segments[ 3 ] ) >= 0 && Number( segments[ 3 ] ) < 12 && Number( segments[ 5 ] ) < 32 ) {
+                        date = new Date( Number( segments[ 1 ] ), ( Number( segments[ 3 ] ) - 1 ), Number( segments[ 5 ] ) );
+                    }
+                }
+                //date.setUTCHours(0,0,0,0);
+                //return date.toUTCString();//.getUTCFullYear(), datetime.getUTCMonth(), datetime.getUTCDate());
+                return date.getUTCFullYear().toString().pad( 4 ) + '-' + ( date.getUTCMonth() + 1 ).toString().pad( 2 ) + '-' + date.getUTCDate().toString().pad( 2 );
+            }
+        },
+        'datetime': {
+            validate: function( x ) {
+                //the second part builds in some tolerance for slightly-off dates provides as defaults (e.g.: 2013-05-31T07:00-02)
+                return ( new Date( x.toString() ).toString() !== 'Invalid Date' || new Date( this.convert( x.toString() ) ).toString() !== 'Invalid Date' );
+            },
+            convert: function( x ) {
+                var date, // timezone, segments, dateS, timeS,
+                    patternCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2}):([0-9]{2})$/,
+                    patternAlmostCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2})$/;
+                /* 
+                 * if the pattern is right, or almost right but needs a small correction for JavaScript to handle it,
+                 * do not risk changing the time zone by calling toISOLocalString()
+                 */
+                if ( new Date( x ).toString() !== 'Invalid Date' && patternCorrect.test( x ) ) {
+                    return x;
+                }
+                if ( new Date( x ).toString() === 'Invalid Date' && patternAlmostCorrect.test( x ) ) {
+                    return x + ':00';
+                }
+                date = new Date( x );
+                return ( date.toString() !== 'Invalid Date' ) ? date.toISOLocalString() : date.toString();
+            }
+        },
+        'time': {
+            validate: function( x ) {
+                var date = new Date(),
+                    segments = x.toString().split( ':' );
+                if ( segments.length < 2 ) {
+                    return false;
+                }
+                segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString().split( '.' )[ 0 ] ) : 0;
+
+                return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString() !== 'Invalid Date' );
+            },
+            convert: function( x ) {
+                var segments = x.toString().split( ':' );
+                $.each( segments, function( i, val ) {
+                    segments[ i ] = val.toString().pad( 2 );
+                } );
+                return segments.join( ':' );
+            }
+        },
+        'barcode': {
+            validate: function( x ) {
+                return true;
+            }
+        },
+        'geopoint': {
+            validate: function( x ) {
+                var coords = x.toString().trim().split( ' ' );
+                return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
+                    ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
+                    ( typeof coords[ 2 ] === 'undefined' || !isNaN( coords[ 2 ] ) ) &&
+                    ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
+            },
+            convert: function( x ) {
+                return $.trim( x.toString() );
+            }
+        },
+        'geotrace': {
+            validate: function( x ) {
+                var geopoints = x.toString().split( ';' );
+                return geopoints.length >= 2 && geopoints.every( function( geopoint ) {
+                    return types.geopoint.validate( geopoint );
+                } );
+            },
+            convert: function( x ) {
+                return x.toString().trim();
+            }
+        },
+        'geoshape': {
+            validate: function( x ) {
+                console.debug( 'validating geoshape, this: ', this );
+                var geopoints = x.toString().split( ';' );
+                return geopoints.length >= 4 && ( geopoints[ 0 ] === geopoints[ geopoints.length - 1 ] ) && geopoints.every( function( geopoint ) {
+                    return types.geopoint.validate( geopoint );
+                } );
+            },
+            convert: function( x ) {
+                return x.toString().trim();
+            }
+        },
+        'binary': {
+            validate: function( x ) {
+                return true;
+            }
         }
     };
 

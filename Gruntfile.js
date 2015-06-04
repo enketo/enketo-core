@@ -81,12 +81,12 @@ module.exports = function( grunt ) {
                 reporters: [ 'dots' ]
             },
             headless: {
-                configFile: 'test/karma.conf.js',
+                configFile: 'test/headless-karma.conf.js',
                 browsers: [ 'PhantomJS' ]
             },
             browsers: {
-                configFile: 'test/karma.conf.js',
-                browsers: [ 'Chrome', 'ChromeCanary', /*'Firefox'*/ /*, 'Opera',*/ 'Safari' ]
+                configFile: 'test/browser-karma.conf.js',
+                browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', /*'Opera',*/ 'Safari' ]
             }
         },
         prepWidgetSass: {

@@ -13,6 +13,7 @@ require.config( {
         "jquery.touchswipe": "jquery-touchswipe/jquery.touchSwipe",
         "leaflet": "bower-components/leaflet/dist/leaflet",
         "bootstrap-slider": "bootstrap-slider/js/bootstrap-slider",
+        "merge-xml": "bower-components/mergexml/mergexml",
         "q": "bower-components/q/q",
         "support": "../src/js/support"
     },

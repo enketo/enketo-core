@@ -56,7 +56,6 @@ define( [ 'jquery', 'enketo-widget/geo/geopicker' ], function( $ ) {
             } );
 
             it( 'only extracts the values of the first <coordinates> if multiple are present', function() {
-                console.debug( 'going to extract from', a.kml + b.kml );
                 expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml + b.kml ) ).toEqual( a.result );
                 expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( b.kml + a.kml ) ).toEqual( b.result );
                 expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( gobbledigook + b.kml + gobbledigook + a.kml + gobbledigook ) ).toEqual( b.result );

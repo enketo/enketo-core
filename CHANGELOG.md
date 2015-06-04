@@ -3,6 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[3.5.12] - 2015-06-16
+------------------------
+##### Fixed
+- Firefox only prints first page.
+- Records with nested repeats loaded incorrectly and completely corrupting model.
+
+
 [3.5.11] - 2015-06-02
 ------------------------
 ##### Changed
