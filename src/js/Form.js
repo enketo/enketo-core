@@ -230,9 +230,9 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         if ( target.get().length === 1 ) {
                             target.setVal( value, null, xmlDataType );
                         } else {
-                            error = 'Error occured trying to clone template node to set the repeat value of the instance to be edited.';
-                            console.error( error );
-                            loadErrors.push( error );
+                            errMsg = 'Error occured trying to clone template node to set the repeat value of the instance to be edited.';
+                            console.error( errMsg );
+                            loadErrors.push( errMsg );
                         }
                     }
                     // As an exception, missing meta nodes will be quietly added if a meta node exists at that path
@@ -242,14 +242,14 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         if ( model.node( '/*/meta/' + name, 0 ).get().length === 0 ) {
                             $node.clone().appendTo( model.node( '/*/meta' ).get() );
                         } else {
-                            error = 'Found duplicate meta node (' + name + ')!';
-                            console.error( error );
-                            loadErrors.push( error );
+                            errMsg = 'Found duplicate meta node (' + name + ')!';
+                            console.error( errMsg );
+                            loadErrors.push( errMsg );
                         }
                     } else {
-                        error = 'Did not find form element with path: ' + path + ' and index: ' + index + ' so failed to load model.';
-                        console.error( error );
-                        loadErrors.push( error );
+                        errMsg = 'Did not find form element with path: ' + path + ' and index: ' + index + ' so failed to load model.';
+                        console.error( errMsg );
+                        loadErrors.push( errMsg );
                     }
                 } );
 
