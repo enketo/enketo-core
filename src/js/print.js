@@ -64,12 +64,12 @@ define( [ 'jquery' ], function( $ ) {
      * Applies the print stylesheet to the current view by changing stylesheets media property to 'all'
      */
     function styleToAll() {
-        //sometimes, setStylesheet fails upon loading
+        // sometimes, setStylesheet fails upon loading
         printStyleSheet = printStyleSheet || getPrintStyleSheet();
         $printStyleSheetLink = $printStyleSheetLink || getPrintStyleSheetLink();
-        //Chrome:
+        // Chrome:
         printStyleSheet.media.mediaText = 'all';
-        //Firefox:
+        // Firefox:
         $printStyleSheetLink.attr( 'media', 'all' );
     }
 
@@ -196,7 +196,6 @@ define( [ 'jquery' ], function( $ ) {
                         styleReset();
                     }, 1500 );
                 }
-
             };
 
         // TODO: would be nice if fixGrid can become synchronous again or
