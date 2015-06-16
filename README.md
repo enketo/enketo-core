@@ -1,4 +1,4 @@
-enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies)
+enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
 ================
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools.

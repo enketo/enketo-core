@@ -282,62 +282,70 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 setButtonHandlers: function() {
                     var that = this;
-                    this.$btnFirst.click( function() {
+                    // Make sure eventhandlers are not duplicated after resetting form.
+                    this.$btnFirst.off( '.pagemode' ).on( 'click.pagemode', function() {
                         that.flipToFirst();
                         return false;
                     } );
-                    this.$btnPrev.click( function() {
+                    this.$btnPrev.off( '.pagemode' ).on( 'click.pagemode', function() {
                         that.prev();
                         return false;
                     } );
-                    this.$btnNext.click( function() {
+                    this.$btnNext.off( '.pagemode' ).on( 'click.pagemode', function() {
                         that.next();
                         return false;
                     } );
-                    this.$btnLast.click( function() {
+                    this.$btnLast.off( '.pagemode' ).on( 'click.pagemode', function() {
                         that.flipToLast();
                         return false;
                     } );
                 },
                 setSwipeHandlers: function() {
                     var that = this;
-                    $( '.main' ).swipe( {
-                        allowPageScroll: 'vertical',
-                        threshold: 75,
-                        swipeLeft: function( ev ) {
-                            that.next();
-                        },
-                        swipeRight: function( ev ) {
-                            that.prev();
-                        }
-                    } );
+                    $( '.main' )
+                        .swipe( 'destroy' )
+                        .swipe( {
+                            allowPageScroll: 'vertical',
+                            threshold: 75,
+                            swipeLeft: function( ev ) {
+                                that.next();
+                            },
+                            swipeRight: function( ev ) {
+                                that.prev();
+                            }
+                        } );
                 },
                 setRepeatHandlers: function() {
                     var that = this;
                     // TODO: can be optimized by smartly updating the active pages
-                    $form.on( 'addrepeat', function( event ) {
-                        that.updateAllActive();
-                        //removing the class in effect avoids the animation
-                        $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
-                        that.flipToPageContaining( $( event.target ) );
-                    } );
-                    $form.on( 'removerepeat', function( event ) {
-                        // if the current page is removed
-                        // note that that.$current will have length 1 even if it was removed from DOM!
-                        if ( that.$current.closest( 'html' ).length === 0 ) {
+                    $form
+                        .off( 'addrepeat.pagemode' )
+                        .on( 'addrepeat.pagemode', function( event ) {
                             that.updateAllActive();
-                            // is it best to go to previous page always?
+                            // removing the class in effect avoids the animation
+                            $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
                             that.flipToPageContaining( $( event.target ) );
-                        }
-                    } );
+                        } )
+                        .off( 'removerepeat.pagemode' )
+                        .on( 'removerepeat.pagemode', function( event ) {
+                            // if the current page is removed
+                            // note that that.$current will have length 1 even if it was removed from DOM!
+                            if ( that.$current.closest( 'html' ).length === 0 ) {
+                                that.updateAllActive();
+                                // is it best to go to previous page always?
+                                that.flipToPageContaining( $( event.target ) );
+                            }
+                        } );
                 },
                 setBranchHandlers: function() {
                     var that = this;
                     // TODO: can be optimized by smartly updating the active pages
-                    $form.on( 'changebranch', function( event ) {
-                        that.updateAllActive();
-                        that.toggleButtons();
-                    } );
+                    $form
+                        .off( 'changebranch.pagemode' )
+                        .on( 'changebranch.pagemode', function( event ) {
+                            that.updateAllActive();
+                            that.toggleButtons();
+                        } );
                 },
                 getCurrent: function() {
                     return this.$current;
@@ -396,20 +404,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.focusOnFirstQuestion( pageEl );
                             this.toggleButtons( newIndex );
                         }
-                        // this.$current.addClass( 'fade-out' )
-                        //     .one( 'transitionend', function() {
-                        //         that.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
-                        //         that.setToCurrent( pageEl );
-                        //         that.focusOnFirstQuestion( pageEl );
-                        //         that.toggleButtons( newIndex );
-                        //     } );
-                        // }
                     } else {
                         this.setToCurrent( pageEl );
                         this.focusOnFirstQuestion( pageEl );
                         this.toggleButtons( newIndex );
                     }
-
 
                     if ( window.scrollTo ) {
                         window.scrollTo( 0, 0 );
