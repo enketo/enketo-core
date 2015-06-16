@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased] 
+------------------------
+##### Fixed
+- Groups and repeats missing from print view in pages mode.
+
 [3.5.12] - 2015-06-16
 ------------------------
 ##### Fixed

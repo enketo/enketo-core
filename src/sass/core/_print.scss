@@ -240,8 +240,13 @@ label, legend, .trigger, .note {
 }
 
 // pages mode
-.pages.or [role="page"] {
-    display: block;
+.pages.or {
+    [role="page"] {
+        display: inherit;
+    }
+    .or-group, .or-group-data, .or-repeat {
+        display: inherit;
+    }
 }
 
 // pagebreak management
