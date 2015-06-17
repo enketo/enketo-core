@@ -259,8 +259,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             } )
                             .attr( 'role', 'page' );
 
-                        this.setToCurrent( $allPages.first( ':not(.disabled)' ) );
-
                         if ( $allPages.length > 1 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
                             this.$formFooter = $( '.form-footer' );
                             this.$btnFirst = this.$formFooter.find( '.first-page' );
@@ -276,6 +274,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             this.setSwipeHandlers();
                             this.active = true;
                         }
+
+                        this.flipToFirst();
 
                         $form.show();
                     }
