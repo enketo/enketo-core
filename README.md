@@ -9,7 +9,7 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 
 ### Usage as a library
 
-1. Add as a git submodule (future: bower)
+1. Add as a git submodule (future: bower and/or npm)
 2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/) (add `?xform=http://myforms.com/myform.xml` to use API).
 3. Ignore (or copy parts of) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead
 4. Main methods illustrated in code below:
@@ -32,8 +32,8 @@ requirejs(['js/Form'], function (Form){
 		modelStr: globalXMLInstance,
 		// optional string of an existing instance to be edited
 		instanceStr: null,
-		// optional boolean whether this instance has been unsubmitted so far
-		unsubmitted: true,
+		// optional boolean whether this instance has been submitted already
+		ubmitted: false,
 		// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
 		external = []
 	};
@@ -107,7 +107,7 @@ Each widget needs to fulfill following requirements:
 
 ### Notes for All Developers
 
-* build with Grunt (using Compass for sass is also possible as long as config.json does not change)
+* build with Grunt
 * use `grunt watch` to automatically compile (sass) when a source file changes
 * requires webserver - one is included in this repo and can be fired up with `grunt server`
 * adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
