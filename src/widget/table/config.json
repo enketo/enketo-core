@@ -1,5 +1,5 @@
 {
     "stylesheet": "tablewidget.scss",
-    "selector": "form",
+    "selector": null,
     "options": {}
 }

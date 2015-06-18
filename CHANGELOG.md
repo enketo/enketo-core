@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+------------------------
+##### Fixed
+- A note preceding a traditional table is formatted as a group label.
+
 [3.5.13] - 2015-06-18 
 ------------------------
 ##### Fixed
