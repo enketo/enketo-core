@@ -26,7 +26,7 @@ define( function( window ) {
                 return ( x < 10 ) ? '0' + x : x;
             };
 
-        if ( this.toString() == 'Invalid Date' ) {
+        if ( this.toString() === 'Invalid Date' ) {
             return this.toString();
         }
 

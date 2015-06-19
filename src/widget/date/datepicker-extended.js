@@ -176,7 +176,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/date
                     $this.data( pluginName, ( data = new DatepickerExtended( this, options, event ) ) );
                 }
                 //only call method if widget was instantiated before
-                else if ( data && typeof options == 'string' ) {
+                else if ( data && typeof options === 'string' ) {
                     //pass the element as a parameter as this is used in fix()
                     data[ options ]( this );
                 }

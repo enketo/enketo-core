@@ -10,8 +10,7 @@
 define( [ 'q', 'jquery' ], function( Q, $ ) {
     'use strict';
 
-    var maxSize,
-        supported = typeof FileReader !== 'undefined',
+    var supported = typeof FileReader !== 'undefined',
         notSupportedAdvisoryMsg = '';
 
     /**

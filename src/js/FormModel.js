@@ -20,7 +20,6 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
      * @param {?{?full:boolean}} options Whether to initialize the full model or only the primary instance
      */
     FormModel = function( data, options ) {
-        var that = this;
 
         if ( typeof data === 'string' ) {
             data = {
@@ -530,7 +529,7 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
             return expr;
         }
 
-        indexedRepeats.forEach( function( indexedRepeat, irIndex ) {
+        indexedRepeats.forEach( function( indexedRepeat ) {
             var i, positionedPath, position,
                 params = indexedRepeat[ 1 ].split( ',' );
 
@@ -963,17 +962,17 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
     types = {
         'string': {
             //max length of type string is 255 chars.Convert( truncate ) silently ?
-            validate: function( x ) {
+            validate: function() {
                 return true;
             }
         },
         'select': {
-            validate: function( x ) {
+            validate: function() {
                 return true;
             }
         },
         'select1': {
-            validate: function( x ) {
+            validate: function() {
                 return true;
             }
         },
@@ -1062,7 +1061,7 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
             }
         },
         'barcode': {
-            validate: function( x ) {
+            validate: function() {
                 return true;
             }
         },
@@ -1102,7 +1101,7 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
             }
         },
         'binary': {
-            validate: function( x ) {
+            validate: function() {
                 return true;
             }
         }

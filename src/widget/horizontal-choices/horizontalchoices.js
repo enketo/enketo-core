@@ -65,7 +65,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
                 $this.data( pluginName, ( data = new HorizontalChoices( this, options, event ) ) );
             }
             //only call method if widget was instantiated before
-            else if ( data && typeof options == 'string' ) {
+            else if ( data && typeof options === 'string' ) {
                 //pass the element as a parameter as this is used in destroy() for cloned elements and widgets
                 data[ options ]( this );
             }

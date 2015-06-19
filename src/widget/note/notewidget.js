@@ -61,7 +61,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
 
             if ( !data && typeof options === 'object' ) {
                 $this.data( pluginName, ( data = new Notewidget( this, options, event ) ) );
-            } else if ( data && typeof options == 'string' ) {
+            } else if ( data && typeof options === 'string' ) {
                 data[ options ]( this );
             }
         } );

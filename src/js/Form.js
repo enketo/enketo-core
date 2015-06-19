@@ -342,7 +342,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // TODO: can be optimized by smartly updating the active pages
                     $form
                         .off( 'changebranch.pagemode' )
-                        .on( 'changebranch.pagemode', function( event ) {
+                        .on( 'changebranch.pagemode', function() {
                             that.updateAllActive();
                             that.toggleButtons();
                         } );
@@ -765,7 +765,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 // The collection of non-repeat inputs is cached (unchangeable)
                 if ( !this.$nonRepeats[ attr ] ) {
                     this.$nonRepeats[ attr ] = $form.find( filter + '[' + attr + ']' )
-                        .parentsUntil( '.or', '.calculation, .question, .note, .trigger' ).filter( function( index ) {
+                        .parentsUntil( '.or', '.calculation, .question, .note, .trigger' ).filter( function() {
                             return $( this ).closest( '.or-repeat' ).length === 0;
                         } );
                 }
@@ -1495,7 +1495,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * @param  {FormView} formO the parent form object
                  */
                 init: function( formO ) {
-                    var numRepsInCount, repCountPath, numRepsInInstance, numRepsDefault, cloneDefaultReps, repLevel, $dataRepeat, index,
+                    var numRepsInCount, repCountPath, numRepsInInstance, numRepsDefault, cloneDefaultReps, $dataRepeat, index,
                         that = this;
 
                     this.formO = formO;
@@ -1531,7 +1531,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         }
                         // Now check the defaults of all the descendants of this repeat and its new siblings, level-by-level.
                         $repeat.siblings( '.or-repeat' ).addBack().find( '.or-repeat' )
-                            .filter( function( i ) {
+                            .filter( function() {
                                 return $( this ).parentsUntil( '.or', '.or-repeat' ).length === repLevel;
                             } ).each( function() {
                                 cloneDefaultReps( $( this ), repLevel + 1 );
@@ -1540,7 +1540,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     // Clone form fields to create the default number
                     // Note: this assumes that the repeat count is static not dynamic/
-                    $form.find( '.or-repeat' ).filter( function( i ) {
+                    $form.find( '.or-repeat' ).filter( function() {
                         return $( this ).parentsUntil( '.or', '.or-repeat' ).length === 0;
                     } ).each( function() {
                         cloneDefaultReps( $( this ), 1 );
@@ -1710,7 +1710,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * a workaround was chosen instead of replacing the change event listener to a blur event listener
                  * because I'm guessing that Google will bring back the old behaviour.
                  */
-                $form.on( 'blur', 'input:not([type="text"], [type="radio"], [type="checkbox"])', function( event ) {
+                $form.on( 'blur', 'input:not([type="text"], [type="radio"], [type="checkbox"])', function() {
                     var $input = $( this );
                     if ( typeof $input.prop( 'validity' ).badInput !== 'undefined' && $input.prop( 'validity' ).badInput ) {
                         $input.val( '' );
@@ -1850,7 +1850,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     that.progress.update();
                 } );
 
-                $form.on( 'removerepeat', function( event ) {
+                $form.on( 'removerepeat', function() {
                     that.progress.update();
                 } );
 

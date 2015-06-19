@@ -1,5 +1,5 @@
 define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( configStr, support, Q, $ ) {
-    "use strict";
+    'use strict';
 
     var $form, init, enable, disable, destroy,
         _getWidgetConfigs, _getElements, _instantiate, _load, _setLangChangeHandler, _setOptionChangeHandler,

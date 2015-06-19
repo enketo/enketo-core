@@ -16,7 +16,7 @@
 
 define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker' ],
     function( Widget, support, $ ) {
-        "use strict";
+        'use strict';
 
         var pluginName = 'timepickerExtended';
 
@@ -98,7 +98,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/time
                     $this.data( pluginName, ( data = new TimepickerExtended( this, options, event ) ) );
                 }
                 //only call method if widget was instantiated before
-                else if ( data && typeof options == 'string' ) {
+                else if ( data && typeof options === 'string' ) {
                     //pass the element as a parameter as this is used in fix()
                     data[ options ]( this );
                 }

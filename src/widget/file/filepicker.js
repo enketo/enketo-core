@@ -192,7 +192,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
                 $this.data( pluginName, ( data = new Filepicker( this, options, event ) ) );
             }
             //only call method if widget was instantiated before
-            else if ( data && typeof options == 'string' ) {
+            else if ( data && typeof options === 'string' ) {
                 //pass the element as a parameter as this is used in fix()
                 data[ options ]( this );
             }

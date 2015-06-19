@@ -20,7 +20,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-js/extend',
     ],
 
     function( Widget, support, $ ) {
-        "use strict";
+        'use strict';
 
         var pluginName = 'datetimepickerExtended';
 

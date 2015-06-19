@@ -48,9 +48,11 @@ define( [ 'jquery' ], function( $ ) {
         var sheet;
         // document.styleSheets is an Object not an Array!
         for ( var i in document.styleSheets ) {
-            sheet = document.styleSheets[ i ];
-            if ( sheet.media.mediaText === 'print' ) {
-                return sheet;
+            if ( document.styleSheets.hasOwnProperty( i ) ) {
+                sheet = document.styleSheets[ i ];
+                if ( sheet.media.mediaText === 'print' ) {
+                    return sheet;
+                }
             }
         }
         return null;
