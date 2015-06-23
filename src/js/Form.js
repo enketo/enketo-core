@@ -32,7 +32,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
          */
 
         function Form( formSelector, data ) {
-            var model, dataToEdit, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
+            var model, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
                 loadErrors = [];
 
             /**
@@ -307,10 +307,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         .swipe( {
                             allowPageScroll: 'vertical',
                             threshold: 75,
-                            swipeLeft: function( ev ) {
+                            swipeLeft: function() {
                                 that.next();
                             },
-                            swipeRight: function( ev ) {
+                            swipeRight: function() {
                                 that.prev();
                             }
                         } );
@@ -695,7 +695,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     $form.find( '[lang]' )
                         .removeClass( 'active' )
                         .filter( '[lang="' + lang + '"], [lang=""]' )
-                        .filter( function( index ) {
+                        .filter( function() {
                             var $this = $( this );
                             return !$this.hasClass( 'or-form-short' ) || ( $this.hasClass( 'or-form-short' ) && $this.siblings( '.or-form-long' ).length === 0 );
                         } )
@@ -727,7 +727,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 set: function( status ) {
                     // only trigger edit event once
                     if ( status && status !== $form.data( 'edited' ) ) {
-                        $form.trigger( 'edited' );
+                        $form.trigger( 'edited.enketo' );
                     }
                     $form.data( 'edited', status );
                 },
@@ -1740,6 +1740,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                             return _dataNodeObj;
                         };
 
+
                     // set file input values to the actual name of file (without c://fakepath or anything like that)
                     if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
                         n.val = $input[ 0 ].files[ 0 ].name;
@@ -1780,6 +1781,11 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         } else if ( validCons !== null ) {
                             that.setValid( $input, 'constraint' );
                         }
+                    }
+
+                    // propagate event externally after internal processing is completed
+                    if ( event.type === 'change' ) {
+                        $form.trigger( 'valuechange.enketo' );
                     }
                 } );
 
@@ -1930,7 +1936,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     // if the current el was removed (inside removed repeat), the status will be 0 - leave unchanged
                     if ( status > 0 && status !== this.status ) {
                         this.status = status;
-                        $form.trigger( 'progressupdate', status );
+                        $form.trigger( 'progressupdate.enketo', status );
                     }
                 },
                 get: function() {
