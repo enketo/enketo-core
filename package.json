@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "3.5.13",
+    "version": "3.6.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/enketo/enketo-core"
@@ -15,7 +15,7 @@
     },
     "devDependencies": {
         "grunt": "0.4.x",
-        "grunt-concurrent": "1.x.x",
+        "grunt-concurrent": "2.x.x",
         "grunt-contrib-connect": "0.x.x",
         "grunt-contrib-jshint": "0.x.x",
         "grunt-contrib-requirejs": "0.x.x",

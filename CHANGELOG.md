@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[3.6.0] - 2015-06-23
 ------------------------
+##### Added
+- A valuechange event is fired to facilitate an external auto-save feature.
+
 ##### Fixed
 - A note preceding a traditional table is formatted as a group label.
 
