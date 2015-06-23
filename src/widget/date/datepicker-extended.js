@@ -16,7 +16,7 @@
 
 define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
     function( Widget, support, $ ) {
-        "use strict";
+        'use strict';
 
         //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
         var pluginName = 'datepickerExtended';
@@ -31,7 +31,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/date
          * @param {*=}                            event     event
          */
 
-        function DatepickerExtended( element, options, event ) {
+        function DatepickerExtended( element, options ) {
             this.namespace = pluginName;
             //call the Super constructor
             Widget.call( this, element, options );
@@ -76,7 +76,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/date
                 startView: settings.startView,
                 minViewMode: settings.minViewMode,
                 orientation: 'top'
-            } ).on( 'changeDate', function( e ) {
+            } ).on( 'changeDate', function() {
                 // copy changes made by datepicker to original input field
                 var value = $( this ).val();
                 if ( settings.startView === 'decade' && value.length === 4 ) {
@@ -134,7 +134,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/date
          * @param { jQuery } $fakeDateI Fake date input element
          */
         DatepickerExtended.prototype._setResetHandler = function( $fakeDateI ) {
-            $fakeDateI.next( '.btn-reset' ).on( 'click', function( event ) {
+            $fakeDateI.next( '.btn-reset' ).on( 'click', function() {
                 $fakeDateI.val( '' ).trigger( 'changeDate' ).datepicker( 'update' );
             } );
         };

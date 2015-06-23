@@ -29,7 +29,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
      * @param {*=} event     event
      */
 
-    function Radiopicker( element, options, event ) {
+    function Radiopicker( element, options ) {
         this.namespace = pluginName;
         Widget.call( this, element, options );
         this._init();
@@ -115,7 +115,7 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
 
         if ( !data && typeof options === 'object' ) {
             $this.data( pluginName, ( data = new Radiopicker( $this[ 0 ], options, event ) ) );
-        } else if ( data && typeof options == 'string' ) {
+        } else if ( data && typeof options === 'string' ) {
             data[ options ]( this );
         }
 

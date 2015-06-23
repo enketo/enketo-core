@@ -39,7 +39,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-js/extend',
          * @param {*=}                            event     event
          */
 
-        function DatetimepickerExtended( element, options, event ) {
+        function DatetimepickerExtended( element, options ) {
             this.namespace = pluginName;
             //call the Super constructor
             Widget.call( this, element, options );
@@ -102,7 +102,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-js/extend',
             } );
 
             //reset button
-            $fakeTimeI.next( '.btn-reset' ).on( 'click', function( event ) {
+            $fakeTimeI.next( '.btn-reset' ).on( 'click', function() {
                 $fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
                 $fakeTimeI.val( '' ).trigger( 'change' );
             } );
@@ -155,7 +155,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-js/extend',
          *
          * @param { jQuery } $fakeDateI Fake date input element
          */
-        DatetimepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {};
+        DatetimepickerExtended.prototype._setManualHandler = function() {};
 
         /**
          * Handler for focus and blur events.

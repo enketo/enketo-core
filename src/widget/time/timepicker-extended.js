@@ -31,7 +31,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/time
          * @param {*=}                            event     event
          */
 
-        function TimepickerExtended( element, options, event ) {
+        function TimepickerExtended( element, options ) {
             this.namespace = pluginName;
             //call the Super constructor
             Widget.call( this, element, options );
@@ -77,7 +77,7 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/time
             } );
 
             //reset button
-            $fakeTimeReset.on( 'click', function( event ) {
+            $fakeTimeReset.on( 'click', function() {
                 $fakeTimeI.val( '' ).trigger( 'change' );
             } );
 

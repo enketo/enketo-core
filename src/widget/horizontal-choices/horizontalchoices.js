@@ -18,7 +18,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
      * @param {*=}                            event     event
      */
 
-    function HorizontalChoices( element, options, event ) {
+    function HorizontalChoices( element, options ) {
         // set the namespace (important!)
         this.namespace = pluginName;
         // call the Super constructor
@@ -49,7 +49,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
      *
      * @param  {Element} element The element the widget is applied on
      */
-    HorizontalChoices.prototype.destroy = function( element ) {};
+    HorizontalChoices.prototype.destroy = function() {};
 
 
     $.fn[ pluginName ] = function( options, event ) {
