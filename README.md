@@ -33,7 +33,7 @@ requirejs(['js/Form'], function (Form){
 		// optional string of an existing instance to be edited
 		instanceStr: null,
 		// optional boolean whether this instance has been submitted already
-		ubmitted: false,
+		submitted: false,
 		// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
 		external = []
 	};

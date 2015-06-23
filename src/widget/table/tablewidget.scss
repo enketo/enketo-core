@@ -34,10 +34,6 @@
         margin-left: -10px;
         visibility: visible;
     }
-    ~ .note {
-        background-color: transparent;
-        @extend h4;
-    }
 }
 
 .question.or-appearance-list-nolabel {
