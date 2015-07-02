@@ -73,6 +73,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
             var loadedVal = $( this.element ).val().trim(),
                 that = this;
 
+            this.$form = $( this.element ).closest( 'form.or' );
             this.$question = $( this.element ).closest( '.question' );
 
             this.mapId = Math.round( Math.random() * 10000000 );
@@ -191,6 +192,15 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
                 that.$widget.addClass( 'full-screen' );
                 that._updateMap();
                 return false;
+            } );
+
+            // ensure all tiles are displayed when revealing page, https://github.com/kobotoolbox/enketo-express/issues/188
+            // remove handler once it has been used
+            this.$form.on( 'pageflip.enketo.map' + this.mapId, function( event ) {
+                if ( that.map && $.contains( event.target, that.element ) ) {
+                    that.map.invalidateSize();
+                    that.$form.off( 'pageflip.enketo.map' + that.mapId );
+                }
             } );
 
             // add wide class if question is wide
@@ -1199,6 +1209,10 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
         Geopicker.prototype.enable = function() {
             this.$map.show();
             this.$widget.find( '.btn' ).removeClass( 'disabled' );
+            // ensure all tiles are displayed, https://github.com/kobotoolbox/enketo-express/issues/188
+            if ( this.map ) {
+                this.map.invalidateSize();
+            }
         };
 
         /**

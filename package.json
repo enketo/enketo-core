@@ -3,6 +3,7 @@
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
     "version": "3.6.1",
+    "license": "Apache-2.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/enketo/enketo-core"

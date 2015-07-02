@@ -413,6 +413,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     if ( window.scrollTo ) {
                         window.scrollTo( 0, 0 );
                     }
+
+                    $( pageEl ).trigger( 'pageflip.enketo' );
                 },
                 flipToFirst: function() {
                     this.updateAllActive();
