@@ -77,3 +77,11 @@ $green: rgb(60, 182, 67);
         }
     }
 }
+
+// corrections for rtl display
+.or[dir="rtl"] {
+    .slider.slider-vertical .slider-handle {
+        margin-right: -4.5px;
+        margin-left: auto;
+    }
+}

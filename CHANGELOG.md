@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ------------------------
+##### Added
+- Right-to-left script directionality support.
+
 ##### Fixed
 - Geo Widget map tiles only partially loaded if widget not visible upon initial form load.
 

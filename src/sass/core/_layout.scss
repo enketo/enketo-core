@@ -10,7 +10,6 @@ body {
     @include flex-wrap(nowrap);
     position: relative;
     min-height: 100%;
-    overflow: auto;
 }
 
 .paper {
@@ -29,7 +28,6 @@ body {
     margin: 0 auto;
     padding: 100px 0 70px 0;
     position: relative;
-    text-align: left;
     width: $max-content-width;
     max-width: 100%;
     .paper {
@@ -78,6 +76,10 @@ body {
     border: 1px solid #ccc;
     margin: 0 0 0 16px;
     font-size: 0.9em;
+}
+
+[dir="rtl"] #form-languages {
+    margin: 0 16px 0 0;
 }
 
 .form-footer {

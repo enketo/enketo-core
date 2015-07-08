@@ -169,6 +169,9 @@ label, legend, .trigger, .note {
                 border-top: none;
                 font-size: auto;
             }
+            &.kml {
+                display: none;
+            }
             input {
                 width: 100% !important;
                 margin-top: 8px !important;
@@ -193,7 +196,6 @@ label, legend, .trigger, .note {
         @include display-flex;
         @include flex-wrap(wrap);
         @include flex-direction(row);
-        position: static;
         display: block;
         border: none;
         box-shadow: none;

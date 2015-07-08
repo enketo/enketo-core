@@ -92,8 +92,7 @@ define( [ 'jquery' ], function( $ ) {
     }
 
     function fixGrid( paper ) {
-        var $row, $el, left, lowestX, maxWidth, diff,
-            firstRow = true;
+        var $row, $el, top, rowTop, maxWidth, diff;
 
         // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
         $( '.main' ).css( 'width', getPaperPixelWidth( paper ) ).addClass( 'print-width-adjusted' );
@@ -103,18 +102,18 @@ define( [ 'jquery' ], function( $ ) {
             maxWidth = $( '#form-title' ).outerWidth() - 1;
             $( '.question, .note, .trigger' ).not( '.draft' ).each( function() {
                 $el = $( this );
-                left = $el.offset().left;
-                // determine the lowest possible x-coordinate
-                lowestX = ( lowestX || lowestX === 0 ) ? lowestX : left;
-
+                top = $el.offset().top;
+                rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
                 $row = $row || $el;
-                if ( left > lowestX ) {
+
+                if ( top === rowTop ) {
                     $row = $row.add( $el );
-                } else if ( left === lowestX && !firstRow ) {
+                } else if ( top > rowTop ) {
                     var height,
                         widths = [],
                         cumulativeWidth = 0,
                         maxHeight = 0;
+
                     $row.each( function() {
                         height = $( this ).outerHeight();
                         maxHeight = ( height > maxHeight ) ? height : maxHeight;
@@ -126,6 +125,7 @@ define( [ 'jquery' ], function( $ ) {
                     widths.forEach( function( width ) {
                         cumulativeWidth += width;
                     } );
+
                     if ( cumulativeWidth < maxWidth ) {
 
                         diff = maxWidth - cumulativeWidth;
@@ -139,10 +139,10 @@ define( [ 'jquery' ], function( $ ) {
                     }
                     // start a new row
                     $row = $el;
-                } else if ( !firstRow ) {
-                    console.error( 'unexpected x-coordinate: ', left, 'for element:', $el, 'lowest expected', lowestX );
+                    rowTop = $el.offset().top;
+                } else {
+                    console.error( 'unexpected question top position: ', top, 'for element:', $el, 'expected >=', rowTop );
                 }
-                firstRow = false;
             } );
             // Chrome 34 doesn't like the fact that main has an inline fixed width (see issue #99)
             // since we do not need it any more, after we have set the adjusted widths to a %-value, we can remove it. 

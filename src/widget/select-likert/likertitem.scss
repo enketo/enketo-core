@@ -80,6 +80,31 @@
     }
 }
 
+// corrections for rtl display
+.or[dir="rtl"] .or-appearance-likert {
+    .option-wrapper {
+        > label {
+            margin-right: 0;
+            &:first-of-type .option-label::after {
+                left: auto;
+                right: 0;
+            }
+            &:last-of-type .option-label::after {
+                right: auto;
+                left: 0;
+            }
+            input[type=radio],
+            input[type=checkbox] {
+                right: 50%;
+                margin-right: -10px;
+            }
+        }
+        .option-label {
+            margin-right: 0;
+        }
+    }
+}
+
 // fix colors when background is not default inside repeats
 .or-repeat .or-appearance-likert .option-wrapper > label {
     &:first-of-type .option-label::after,

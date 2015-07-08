@@ -1,3 +1,10 @@
+$geo-main-breakpoint: $main-breakpoint;
+$map-height: 275px;
+$map-width: 65%;
+$input-width: 27%;
+$separator-width: 4%;
+$input-button-border: 2px solid #aaaaaa;
+
 .enketo-geopoint-marker {
     $size: 24px;
     @extend .icon-marker;
@@ -63,11 +70,6 @@
 }
 
 .geopicker {
-    $map-height: 275px;
-    $map-width: 65%;
-    $input-width: 27%;
-    $separator-width: 4%;
-    //$detect-width: 40px;
     margin-top: 25px;
     img {
         //undo global settings
@@ -80,8 +82,9 @@
         min-width: 160px;
         width: $input-width;
         margin: 0 $separator-width 0 0;
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: $geo-main-breakpoint) {
             width: 100%;
+            margin-top: 25px;
         }
         .paste-progress, .disabled-msg {
             position: absolute;
@@ -104,7 +107,7 @@
         float: right;
         padding-left: $separator-width;
         border-left: solid 1px $groupline;
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: $geo-main-breakpoint) {
             width: 100%;
             float: none;
             padding-left: 0;
@@ -156,7 +159,6 @@
         margin-left: 15px;
     }
     .toggle-input-visibility-btn {
-        $input-button-border: 2px solid #aaaaaa;
         position: absolute;
         top: calc(50% - 15px);
         left: -16px;
@@ -237,7 +239,7 @@
             border-top: solid 1px $groupline;
             padding: 12px 0 0 0;
             margin: 0 0 0 0;
-            @media screen and (max-width: 700px) {
+            @media screen and (max-width: $geo-main-breakpoint) {
                 border-top: none;
             }
         }
@@ -273,7 +275,7 @@
         display: block;
         float: right;
         width: 40%;
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: $geo-main-breakpoint) {
             width: 50%;
         }
     }
@@ -461,6 +463,57 @@
         }
         .map-canvas .show-map-btn {
             margin-top: 170px;
+        }
+    }
+}
+
+.or[dir="rtl"] .geopicker {
+    .map-canvas-wrapper, .search-bar {
+        float: left;
+        padding-left: 0;
+        padding-right: $separator-width;
+        border-left: none;
+        border-right: solid 1px $groupline;
+        @media screen and (max-width: $geo-main-breakpoint) {
+            float: none;
+            padding-right: 0;
+            border-right: none;
+        }
+    }
+    .toggle-input-visibility-btn {
+        right: -16px;
+        border-right: 3px solid #aaaaaa;
+        border-bottom: $input-button-border;
+        border-top: $input-button-border;
+        border-left: none;
+        &.open {
+            right: -20px;
+            border-right: none;
+            border-left: 3px solid #aaaaaa;
+        }
+    }
+    input[name="alt"],
+    input[name="acc"] {
+        float: left;
+    }
+    .btn[name="geodetect"] {
+        float: left;
+        font-size: 16px;
+        margin: 0 $separator-width 0 0;
+    }
+    .search-bar {
+        [name="search"] {
+            float: none;
+        }
+        .search-btn {
+            float: right;
+        }
+    }
+    &:not(.full-screen).hide-input {
+        .map-canvas-wrapper, .search-bar {
+            float: none;
+            border-right: none;
+            padding-right: 0;
         }
     }
 }

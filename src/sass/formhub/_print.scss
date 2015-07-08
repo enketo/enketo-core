@@ -1,27 +1,49 @@
 /** FORMHUB THEME **/
-
-// fancy radiobuttons
-.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
+@mixin fancy-radio-check-print($pos: before) {
     label {
         input[type=checkbox] {
-            ~ .option-label::before {
+            &:not(:checked) ~ .option-label::#{$pos} {
                 content: '\e60b' !important;
                 color: black;
             }
-            &:checked ~ .option-label::before {
+            &:checked ~ .option-label::#{$pos} {
                 content: '\e60c' !important;
                 color: black;
             }
         }
         input[type=radio] {
-            ~ .option-label::before {
+            &:not(:checked) ~ .option-label::#{$pos} {
                 content: '\e607' !important;
                 color: black;
             }
-            &:checked ~ .option-label::before {
+            &:checked ~ .option-label::#{$pos} {
                 content: '\e606' !important;
                 color: black;
             }
+        }
+    }
+}
+
+.question {
+    @include fancy-radio-check-print(before);
+}
+
+.or[dir="rtl"] {
+    .question:not(.or-appearance-label):not(.appearance-likert):not(.or-appearance-list-nolabel):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
+        @include fancy-radio-check-print(after);
+    }
+}
+
+.bootstrap-select {
+    .option-wrapper > label {
+        padding-left: 35px !important;
+    }
+}
+
+[dir="rtl"] {
+    .bootstrap-select {
+        .option-wrapper > label {
+            padding-right: 35px !important;
         }
     }
 }

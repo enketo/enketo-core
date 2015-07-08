@@ -13,7 +13,7 @@ $media-margin: 10px;
         word-wrap: break-word;
     }
     h4 {
-        text-align: left;
+        text-align: inherit;
         margin-top: 9px;
         margin-bottom: 9px;
     }
@@ -128,12 +128,21 @@ $media-margin: 10px;
     }
 }
 
-// to make sure media doesn't break outside the box
-.question, .trigger, .note {
-    @include clearfix;
+.question, .note {
+    > img, > video, > audio {
+        margin: $media-margin 0 $media-margin $media-margin;
+    }
 }
 
-.trigger, .note {
+.or[dir="rtl"] {
+    .question, .note {
+        > img, > video, > audio {
+            margin: $media-margin $media-margin $media-margin 0;
+        }
+    }
+}
+
+.note {
     @include font-normal;
     color: $note-color;
     background: $note-bg;
@@ -147,10 +156,6 @@ $media-margin: 10px;
         &.has-value {
             display: block;
         }
-    }
-    img, video, audio {
-        float: right;
-        margin: $media-margin 0 $media-margin $media-margin;
     }
 }
 
@@ -172,7 +177,7 @@ $media-margin: 10px;
     }
 }
 
-label, legend, .trigger, .note {
+label, legend, .note {
     font-size: $font-size-base;
 }
 
@@ -202,33 +207,47 @@ legend {
 }
 
 //works in safari, some other webkit browsers
-.option-wrapper > label {
-    @include font-normal;
-    display: block;
-    margin: 0;
-    cursor: pointer;
-    padding: 4px 0 4px 0;
-    margin: 0 10px 1px 10px;
-    // TODO: remove hover rule for tables (in likert already done)
-    &:hover:not(.filler) {
-        background-color: $brand-secondary-color;
+.option-wrapper {
+    > label {
+        @include font-normal;
+        display: block;
+        margin: 0;
+        cursor: pointer;
+        padding: 4px 0 4px 0;
+        margin: 0 10px 1px 10px;
+        // TODO: remove hover rule for tables (in likert already done)
+        &:hover:not(.filler) {
+            background-color: $brand-secondary-color;
+        }
+        // clearfix with small adjustments to not mess up radio buttons.
+        &:before, &:after {
+            content: " ";
+            display: table;
+        }
+        &:after {
+            clear: both;
+        }
     }
-    :not(img):not(video):not(audio).active {
+    .option-label {
         margin-left: 30px;
         // input is floated to deal with multi-line labels
         display: block;
     }
-    // clearfix with small adjustments to not mess up radio buttons.
-    &:before, &:after {
-        content: " ";
-        display: table;
-    }
-    &:after {
-        clear: both;
-    }
     img, video, audio {
         float: right;
         margin: $media-margin 0 $media-margin $media-margin;
+    }
+}
+
+.or[dir="rtl"] {
+    .option-wrapper {
+        .option-label {
+            margin-right: 30px;
+        }
+        img, video, audio {
+            float: left;
+            margin: $media-margin $media-margin $media-margin 0;
+        }
     }
 }
 
@@ -240,12 +259,8 @@ legend {
             border: 1px solid #ccc;
             @include border-radius(4px);
             width: auto;
-            margin: 0 20px 6.4px 0;
+            margin: 0 0 6.4px 0;
             padding: 10px 10px 10px 10px;
-            text-align: left;
-            .active {
-                margin-right: 10px;
-            }
             input[type="radio"], input[type="checkbox"] {
                 margin-top: 4px;
                 //slight variation between grid and fh theme for default radio/checkbox
@@ -271,7 +286,7 @@ legend {
 
 input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select, .widget {
     display: block;
-    margin: 8px 0 0 0;
+    margin: 8px 0 8px 0;
 }
 
 input:not([type="radio"]):not([type="checkbox"]), textarea {
@@ -293,8 +308,15 @@ select {
         // input is floated to deal with multi-line labels
         float: left;
         display: block;
-        //margin: -2px 0 0px 7px;
-   
+    }
+}
+
+.or[dir="rtl"] {
+    .question input, .note input {
+        &[type="radio"], &[type=checkbox] {
+            // input is floated to deal with multi-line labels
+            float: right;
+        }
     }
 }
 
@@ -318,17 +340,19 @@ select {
     }
 }
 
-//.input-append .add-on {
-//  padding: ($input-height - 12)/2 5px;
-//  margin-top: 8px;
-//  border-top-right-radius: 3px;
-//  border-bottom-right-radius: 3px;}
+.or[dir="rtl"] {
+    .remove {
+        float: left;
+    }
+}
+
 .alert {
     margin-bottom: 4px;
 }
 
 .required {
     margin-left: 3px;
+    margin-right: 3px;
     color: $brand-primary-color;
 }
 
@@ -341,6 +365,10 @@ select {
     @media screen and (max-width: 500px) {
         font-size: 0.5em;
     }
+}
+
+.or[dir="rtl"] .required-subtle {
+    float: left;
 }
 
 .focus .required-subtle {

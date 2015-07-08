@@ -3,27 +3,28 @@
         border: none;
     }
     .option-wrapper > label {
-        float: left;
+        display: inline-block;
         &:hover {
             background: none;
         }
-        span.active:not(.or-hint):not(.or-constraint-msg) {
-            margin-left: 0;
+        .active {
             display: none;
+        }
+        img.active {
+            display: block;
+            margin-left: 0;
+            margin-right: 0;
+            max-width: 150px;
+            max-height: 150px;
+            border: 2px solid transparent;
+            &:hover {
+                border-color: lighten($brand-primary-color, 30%);
+            }
         }
     }
     input {
         display: none;
-        ~ img.active {
-            margin-left: 0;
-            max-width: 150px;
-            max-height: 150px;
-            border: 2px solid transparent;
-        }
-        ~ img:hover {
-            border-color: lighten($brand-primary-color, 30%);
-        }
-        &:checked ~ img, &:checked ~ img:hover {
+        &:checked ~ img.active, &:checked ~ img.active:hover {
             border-color: $brand-primary-color;
         }
     }
