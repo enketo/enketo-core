@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[3.6.2] - 2015-07-20
 ------------------------
 ##### Fixed
 - Geo Widget map tiles only partially loaded if widget not visible upon initial form load.
+- Nested branches not evaluated when parent is enabled.
 
 [3.6.1] - 2015-06-24
 ------------------------

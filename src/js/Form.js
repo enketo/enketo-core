@@ -834,7 +834,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     alreadyCovered = [],
                     branchChange = false,
                     that = this,
-                    evaluations = 0,
                     clonedRepeatsPresent;
 
                 $nodes = this.getNodesToUpdate( 'data-relevant', '', updated );
@@ -851,11 +850,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     // since this result is almost certainly not empty, closest() is the most efficient
                     $branchNode = $node.closest( '.or-branch' );
-
-                    // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
-                    if ( $branchNode.parent().closest( '.disabled' ).length ) {
-                        return;
-                    }
 
                     p = {};
                     cacheIndex = null;
@@ -903,7 +897,6 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         result = relevantCache[ cacheIndex ];
                     } else {
                         result = evaluate( p.relevant, p.path, p.ind );
-                        evaluations++;
                         relevantCache[ cacheIndex ] = result;
                     }
 
