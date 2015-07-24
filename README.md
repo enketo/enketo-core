@@ -128,6 +128,7 @@ See the *plain*, the *grid*, and the *formhub* themes already included in /src/s
 We would be happy to discuss whether your contribution should be a part of the core, the default theme or be turned into a new theme. 
 
 For custom themes that go beyond just changing colors and fonts, keep in mind all the different contexts for a theme:
+
 1. non-touchscreen vs touchscreen (add ?touch=true during development)
 2. default one-page-mode and multiple-pages-mode
 3. right-to-left form language vs left-to-right form language (!) - also the UI-language may have a different directionality
