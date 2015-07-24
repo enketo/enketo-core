@@ -667,34 +667,38 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 init: function() {
                     var lang,
                         that = this,
-                        defaultLang = $form.find( '#form-languages' ).attr( 'data-default-lang' ),
-                        $langSelector = $( '.form-language-selector' );
+                        $formLanguages = $form.find( '#form-languages' ),
+                        $langSelector = $( '.form-language-selector' ),
+                        defaultLang = $formLanguages.attr( 'data-default-lang' ) || $formLanguages.find( 'option' ).eq( 0 ).attr( 'value' ),
+                        defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'dir' ) || 'ltr';
 
-                    $( '#form-languages' ).detach().appendTo( $langSelector );
+                    $formLanguages
+                        .detach()
+                        .appendTo( $langSelector )
+                        .val( defaultLang );
 
-                    if ( !defaultLang || defaultLang === '' ) {
-                        defaultLang = $( '#form-languages option' ).eq( 0 ).attr( 'value' );
-                    }
-                    $( '#form-languages' ).val( defaultLang );
+                    $form
+                        .attr( 'dir', defaultDirectionality );
 
-                    if ( $( '#form-languages option' ).length < 2 ) {
+                    if ( $formLanguages.find( 'option' ).length < 2 ) {
                         return;
                     }
 
                     $langSelector.removeClass( 'hide' );
 
-                    $( '#form-languages' ).change( function( event ) {
-                        lang = $( this ).val();
+                    $formLanguages.change( function( event ) {
                         event.preventDefault();
+                        lang = $( this ).val();
                         that.setAll( lang );
                     } );
                 },
                 setAll: function( lang ) {
-                    var that = this;
-                    $( '#form-languages option' ).removeClass( 'active' );
-                    $( this ).addClass( 'active' );
+                    var that = this,
+                        dir = $( '#form-languages' ).find( '[value="' + lang + '"]' ).attr( 'dir' ) || 'ltr';
 
-                    $form.find( '[lang]' )
+                    $form
+                        .attr( 'dir', dir )
+                        .find( '[lang]' )
                         .removeClass( 'active' )
                         .filter( '[lang="' + lang + '"], [lang=""]' )
                         .filter( function() {

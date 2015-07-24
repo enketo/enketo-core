@@ -29,6 +29,14 @@
     }
 }
 
+.or[dir="rtl"] .question .widget.datetimepicker {
+    .date, .bootstrap-timepicker {
+        .btn-reset {
+            float: left;
+        }
+    }
+}
+
 .or-appearance-likert .option-wrapper > label .option-label {
     border-top-width: 1.5px;
 }

@@ -30,6 +30,15 @@
     }
 }
 
+.or[dir="rtl"] .bootstrap-select {
+    .dropdown-toggle {
+        .caret {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+    }
+}
+
 // extracted from bootstrap button-groups.scss:
 //
 // Button groups
@@ -43,7 +52,6 @@
     // match .btn alignment given font-size hack above
     > .btn {
         position: relative;
-        float: left;
         // Bring the "active" button to the front
         &:hover,
         &:focus,
@@ -171,6 +179,12 @@ $dropdown-link-disabled-color: $gray-light !default;
         white-space: nowrap;
         // prevent links from randomly breaking onto new lines
    
+    }
+}
+
+.or[dir="rtl"] {
+    .dropdown-menu {
+        right: 0;
     }
 }
 

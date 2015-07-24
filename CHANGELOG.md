@@ -3,8 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[3.6.2] - 2015-07-20
+[3.7.0] - 2015-07-24
 ------------------------
+##### Added
+- Right-to-left script directionality support.
+
+
+[3.6.2] - 2015-07-20
+----------------------
 ##### Fixed
 - Geo Widget map tiles only partially loaded if widget not visible upon initial form load.
 - Nested branches not evaluated when parent is enabled.

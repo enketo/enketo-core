@@ -2,7 +2,7 @@
 @import "../formhub/form-controls";
 
 /** core/layout **/
-body, .main, .paper, .or, .or-group, .or-group-data, .or-repeat, .question, .trigger {
+body, .main, .paper, .or, .or-group, .or-group-data, .or-repeat, .question {
     position: relative;
 }
 
@@ -69,9 +69,9 @@ h4 + .or-repeat {
 }
 
 // top-level questions border
-.or > .question, .or > .note, .or > .trigger {
+.or > .question, .or > .note {
     border: $grid-border;
-    ~ .question, .or > .note, .or > .trigger {
+    ~ .question, .or > .note {
         border-top: none;
     }
 }
@@ -88,7 +88,7 @@ h4 + .or-repeat {
 }
 
 // griddable elements - ie. wrappers around questions and notes
-.question, .trigger, .note {
+.question, .note {
     @include flex(1, 1);
     @include border-box;
     border-bottom: $grid-border;
@@ -110,12 +110,12 @@ h4 + .or-repeat {
 // display: flex messes up img size so apply it sparingly only to questions
 // and not to notes. We loose the ability to display image labels nicely in 
 // questions (though fine in tables)
-.question, .note, .trigger {
+.question, .note {
     @include display-flex;
     @include flex-wrap(no-wrap);
     @include flex-direction(column);
     cursor: text;
-    &:not(.note):not(.trigger):not(.focus):hover {
+    &:not(.note):not(.focus):hover {
         background: $question-hover-bg;
     }
     &.focus {
@@ -124,7 +124,7 @@ h4 + .or-repeat {
     .required {
         position: absolute;
         top: -2px;
-        right: 2px;
+        right: 0;
     }
     .required-subtle {
         position: absolute;
@@ -165,6 +165,17 @@ h4 + .or-repeat {
     }
     .or-constraint-msg, .or-required-msg {
         order: 5;
+    }
+}
+
+.or[dir="rtl"] .question {
+    .required {
+        right: auto;
+        left: 0;
+    }
+    .required-subtle {
+        right: auto;
+        left: 2px;
     }
 }
 
