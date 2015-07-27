@@ -306,7 +306,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         .swipe( 'destroy' )
                         .swipe( {
                             allowPageScroll: 'vertical',
-                            threshold: 75,
+                            threshold: 150,
                             swipeLeft: function() {
                                 that.next();
                             },
