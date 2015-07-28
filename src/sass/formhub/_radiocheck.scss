@@ -59,13 +59,13 @@ $line-h: 20px;
 }
 
 // tweak for touchscreens
-.touch .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
+.touch .question.simple-select {
     .option-wrapper > label {
         padding-left: 40px;
     }
 }
 
-.touch .or[dir="rtl"] .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
+.touch .or[dir="rtl"] .question.simple-select {
     .option-wrapper > label {
         padding-right: 40px;
         padding-left: 10px;
@@ -77,7 +77,7 @@ $line-h: 20px;
 
 .or[dir="rtl"],
 [dir="rtl"] .form-footer {
-    .question:not(.or-appearance-label):not(.or-appearance-likert):not(.or-appearance-list-nolabel):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
+    .question.simple-select {
         @include option-padding(right);
         label {
             .option-label:not(img):not(video):not(audio) {
@@ -85,14 +85,16 @@ $line-h: 20px;
             }
         }
     }
-    // triggers are odd, because of the hardcoded 'OK' in ltr characters.
-    .question.trigger {
+}
+
+// triggers are odd, because of the hardcoded 'OK' in ltr characters.
+.or[dir="rtl"] {
+    .question.simple-select.trigger {
         .option-wrapper label {
             margin-right: 0;
             padding-right: 10px;
             .option-label::after {
                 @include icon-size;
-                margin-right: -20px;
                 padding-left: 10px;
             }
         }
@@ -166,21 +168,6 @@ $line-h: 20px;
         }
         .option-label {
             margin-top: -11.5px;
-        }
-    }
-}
-
-// tweaks for compact, quickcompact
-.or-appearance-quickcompact, .or-appearance-compact {
-    .option-wrapper > label {
-        padding-left: 10px;
-    }
-}
-
-.or[dir="rtl"] {
-    .or-appearance-quickcompact, .or-appearance-compact {
-        .option-wrapper > label {
-            padding-right: 10px;
         }
     }
 }

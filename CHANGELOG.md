@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased] 
 ------------------------
+##### Added
+- Appearance "compact-n" support for media grid pickers.
+
 ##### Changed
 - Made page swipe less sensitive in pages-mode.
 
@@ -12,7 +15,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ------------------------
 ##### Added
 - Right-to-left script directionality support.
-
 
 [3.6.2] - 2015-07-20
 ----------------------

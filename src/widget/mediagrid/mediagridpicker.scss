@@ -1,9 +1,12 @@
-.question.or-appearance-compact, .question.or-appearance-quickcompact {
-    legend {
+@mixin compact-grid(){
+     legend {
         border: none;
     }
     .option-wrapper > label {
         display: inline-block;
+        margin: 0;
+        // aggressively and dumbly override _radiocheck.scss
+        padding: 10px !important;
         &:hover {
             background: none;
         }
@@ -14,8 +17,10 @@
             display: block;
             margin-left: 0;
             margin-right: 0;
+            // force similar sizing for all images
             max-width: 150px;
             max-height: 150px;
+            float: none;
             border: 2px solid transparent;
             &:hover {
                 border-color: lighten($brand-primary-color, 30%);
@@ -26,6 +31,26 @@
         display: none;
         &:checked ~ img.active, &:checked ~ img.active:hover {
             border-color: $brand-primary-color;
+        }
+    }
+}
+
+.question.or-appearance-compact, .question.or-appearance-quickcompact {
+   @include compact-grid;
+}
+
+@for $total from 1 through 10 {
+    .question.or-appearance-compact-#{$total} {
+        @include compact-grid;
+        .option-wrapper > label {
+            width: #{100 / $total}%;
+            img.active {
+                // Use natural image size, but reduce to fit cell if necessary
+                // Deliberately deviated from ODK Collect scaling-up behaviour 
+                // because scaling up images never provides satisfactory results.
+                max-width: 100%;
+                max-height: 100%;
+            }
         }
     }
 }
