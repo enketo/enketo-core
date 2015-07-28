@@ -306,10 +306,9 @@ define( [ 'enketo-js/Form' ], function( Form ) {
     } );
 
     describe( 'branching functionality', function() {
-        var form;
 
         it( 'hides irrelevant branches upon initialization', function() {
-            form = new Form( formStr6, {
+            var form = new Form( formStr6, {
                 modelStr: dataStr6
             } );
             form.init();
@@ -318,7 +317,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
         } );
 
         it( 'reveals a group branch when the relevant condition is met', function() {
-            form = new Form( formStr6, {
+            var form = new Form( formStr6, {
                 modelStr: dataStr6
             } );
             form.init();
@@ -331,7 +330,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
         } );
 
         it( 'reveals a question when the relevant condition is met', function() {
-            form = new Form( formStr6, {
+            var form = new Form( formStr6, {
                 modelStr: dataStr6
             } );
             form.init();
@@ -350,8 +349,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
 	 */
         it( 'a) evaluates relevant logic on a repeated radio-button-question and b) injects the position correctly (issue 208)', function() {
             var repeatSelector = '.or-repeat[name="/issue208/rep"]';
-            //form = new Form(formStr7, dataStr7);
-            form = loadForm( 'issue208.xml' );
+            var form = loadForm( 'issue208.xml' );
             form.init();
 
             form.getView().$.find( repeatSelector ).eq( 0 ).find( 'button.repeat' ).click();
@@ -371,7 +369,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
         } );
 
         it( 're-evaluates when a node with a relative path inside a relevant expression is changed', function() {
-            form = loadForm( 'relative.xml' );
+            var form = loadForm( 'relative.xml' );
             form.init();
             var $form = form.getView().$,
                 $a = $form.find( '[name="/relative/a"]' ),
@@ -383,7 +381,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
         } );
 
         describe( 'when used with calculated items', function() {
-            form = loadForm( 'calcs.xml' );
+            var form = loadForm( 'calcs.xml' );
             form.init();
             var $node = form.getView().$.find( '[name="/calcs/cond1"]' );
             var dataO = form.getModel();
@@ -407,7 +405,7 @@ define( [ 'enketo-js/Form' ], function( Form ) {
         } );
 
         describe( 'inside repeats when multiple repeats are present upon loading (issue #507)', function() {
-            form = loadForm( 'multiple_repeats_relevant.xml' );
+            var form = loadForm( 'multiple_repeats_relevant.xml' );
             form.init();
             var $relNodes = form.getView().$.find( '[name="/multiple_repeats_relevant/rep/skipq"]' ).parent( '.or-branch' );
             it( 'correctly evaluates the relevant logic of each question inside all repeats', function() {
@@ -417,6 +415,28 @@ define( [ 'enketo-js/Form' ], function( Form ) {
                 expect( $relNodes.eq( 1 ).hasClass( 'disabled' ) ).toBe( true );
             } );
         } );
+
+        describe( 'in nested branches ', function() {
+            var form = new Form( formStr7, {
+                modelStr: dataStr7
+            } );
+            form.init();
+            var $nestedBranch = form.getView().$.find( '[name="/data/group/nodeC"]' ).closest( '.question' );
+
+            it( 'works correctly when an ancestor branch gets enabled', function() {
+                expect( $nestedBranch.closest( '.disabled' ).length ).toEqual( 1 );
+                // enable parent branch
+                //expect( form.getModel().getStr() ).toEqual( 'wut' );
+                form.getModel().node( '/data/nodeA', 0 ).setVal( '1' );
+                expect( $nestedBranch.closest( '.disabled' ).length ).toEqual( 0 );
+                // check if nested branch has been initialized and is enabled
+                expect( $nestedBranch.hasClass( 'pre-init' ) ).toBe( false );
+                expect( $nestedBranch.hasClass( 'disabled' ) ).toBe( false );
+            } );
+
+
+        } );
+
     } );
 
     describe( 'Required field validation', function() {

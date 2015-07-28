@@ -318,6 +318,29 @@ var formStr6 =
     '</label>' +
     '</form>';
 
+var dataStr7 =
+    '<model>' +
+    '<instance>' +
+    '<data>' +
+    '<nodeA/>' +
+    '<nodeB>1</nodeB>' +
+    '<group>' +
+    '<nodeC/>' +
+    '</group>' +
+    '</data>' +
+    '</instance>' +
+    '</model>';
+
+var formStr7 =
+    '<form class="or">' +
+    '<fieldset class="or-group or-branch pre-init" name="/data/group" data-relevant="/data/nodeA > 0">' +
+    '<label class="question or-branch pre-init">' +
+    '<span>Enter 2 to reveal select1</span>' +
+    '<input name="/data/group/nodeC" type="number" data-type-xml="int" data-relevant="/data/nodeB > 0">' +
+    '</label>' +
+    '</fieldset>' +
+    '</form>';
+
 var dataEditStr_nested_repeats =
     '<nested_repeats id="nested_repeats">' +
     '<formhub>' +
