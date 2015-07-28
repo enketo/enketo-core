@@ -34,6 +34,7 @@
         "karma-requirejs": "0.2.x",
         "karma-safari-launcher": "0.1.x",
         "load-grunt-tasks": "3.x.x",
+        "phantomjs": "1.9.x",
         "requirejs": "2.1.x",
         "time-grunt": "1.x.x"
     }
