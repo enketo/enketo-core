@@ -575,10 +575,11 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
      * @return { ?(number|string|boolean|Array<element>) } the result
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
-        var j, error, context, doc, resTypeNum, resultTypes, result, $collection, response, repeats, cacheKey;
+        var j, error, context, doc, resTypeNum, resultTypes, result, $collection, response, repeats, cacheKey, original, cacheable;
 
         // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
         //    index + ' and result type: ' + resTypeStr );
+        original = expr;
         tryNative = tryNative || false;
         resTypeStr = resTypeStr || 'any';
         index = index || 0;
@@ -600,6 +601,12 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
         // TODO: these cache keys can get quite large. Would it be beneficial to get the md5 of the key?
         cacheKey = [ expr, selector, index, repeats ].join( '|' );
 
+        // This function needs to come before makeBugCompliant.
+        // An expression transformation with indexed-repeat cannot be cached because in 
+        // "indexed-repeat(node, repeat nodeset, index)" the index parameter could be an expression.
+        expr = this.replaceIndexedRepeatFn( expr, selector, index );
+        cacheable = ( original === expr );
+
         // if no cached conversion exists
         if ( !this.convertedExpressions[ cacheKey ] ) {
             expr = expr;
@@ -607,8 +614,6 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
             expr = this.shiftRoot( expr );
             expr = this.replaceInstanceFn( expr );
             expr = this.replaceCurrentFn( expr );
-            // beware: this function needs to come before makeBugCompliant
-            expr = this.replaceIndexedRepeatFn( expr, selector, index );
             if ( repeats && repeats > 1 ) {
                 expr = this.makeBugCompliant( expr, selector, index );
             }
@@ -616,7 +621,9 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
             expr = expr.replace( /&lt;/g, '<' );
             expr = expr.replace( /&gt;/g, '>' );
             expr = expr.replace( /&quot;/g, '"' );
-            this.convertedExpressions[ cacheKey ] = expr;
+            if ( cacheable ) {
+                this.convertedExpressions[ cacheKey ] = expr;
+            }
         } else {
             expr = this.convertedExpressions[ cacheKey ];
         }

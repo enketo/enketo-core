@@ -11,6 +11,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Made page swipe less sensitive in pages-mode.
 
+##### Fixed
+- Indexed-repeat() expressions not working if the position is dynamic.
+
 [3.7.0] - 2015-07-24
 ------------------------
 ##### Added
