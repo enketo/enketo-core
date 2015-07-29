@@ -40,28 +40,18 @@
 @media screen and (max-width: 600px) {
     $form-padding: 30px;
     body {
-        //background: none;
         line-height: 1.05 * $line-height-base;
     }
     .main {
-        //margin: 0;
         article {
             padding: 70px $form-padding $form-padding $form-padding;
         }
-    }
-    .form-footer {
-        width: calc(100% + ( 2 * #{$form-padding} ));
-        margin: 45px;
-        margin-right: -#{$form-padding};
-        margin-bottom: -#{$form-padding};
-        margin-left: -#{$form-padding};
     }
 }
 
 @media screen and (max-width: 400px) {
     $form-padding: 20px;
     body {
-        //background: none;
         line-height: 1.09 * $line-height-base;
     }
     input {
@@ -74,7 +64,6 @@
         width: 100%;
     }
     .main {
-        //margin: 0;
         article {
             padding: 70px $form-padding $form-padding $form-padding;
         }
@@ -84,12 +73,5 @@
         .form-language-selector {
             border-right: none;
         }
-    }
-    .form-footer {
-        width: calc(100% + ( 2 * #{$form-padding} ));
-        margin-top: 45px;
-        margin-right: -#{$form-padding};
-        margin-bottom: -#{$form-padding};
-        margin-left: -#{$form-padding};
     }
 }
