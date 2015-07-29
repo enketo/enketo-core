@@ -670,7 +670,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                         $formLanguages = $form.find( '#form-languages' ),
                         $langSelector = $( '.form-language-selector' ),
                         defaultLang = $formLanguages.attr( 'data-default-lang' ) || $formLanguages.find( 'option' ).eq( 0 ).attr( 'value' ),
-                        defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'dir' ) || 'ltr';
+                        defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
                     $formLanguages
                         .detach()
@@ -694,7 +694,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                 },
                 setAll: function( lang ) {
                     var that = this,
-                        dir = $( '#form-languages' ).find( '[value="' + lang + '"]' ).attr( 'dir' ) || 'ltr';
+                        dir = $( '#form-languages' ).find( '[value="' + lang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
                     $form
                         .attr( 'dir', dir )

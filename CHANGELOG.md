@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ------------------------
 ##### Fixed
 - Page navigation buttons messed up on small screen in pages-mode.
+- Top-level (non-grouped) questions on first row do not have a top border.
+- Language options in form language selector oddly aligned when mix of rtl and ltr languages is used (FF).
 
 [3.8.0] - 2015-07-28 
 ------------------------
