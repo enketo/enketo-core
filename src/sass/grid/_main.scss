@@ -71,9 +71,10 @@ h4 + .or-repeat {
 // top-level questions border
 .or > .question, .or > .note {
     border: $grid-border;
-    ~ .question, .or > .note {
-        border-top: none;
-    }
+    // This is cheating for top-level questions to avoid thick double borders.
+    // Normally, recommend to group everything.
+    margin-left: -1px;
+    margin-top: -1px;
 }
 
 // undo default for visually merged successive notes
