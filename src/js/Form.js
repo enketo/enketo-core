@@ -301,19 +301,20 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     } );
                 },
                 setSwipeHandlers: function() {
-                    var that = this;
-                    $( '.main' )
-                        .swipe( 'destroy' )
-                        .swipe( {
-                            allowPageScroll: 'vertical',
-                            threshold: 150,
-                            swipeLeft: function() {
-                                that.next();
-                            },
-                            swipeRight: function() {
-                                that.prev();
-                            }
-                        } );
+                    var that = this,
+                        $main = $( '.main' );
+
+                    $main.swipe( 'destroy' );
+                    $main.swipe( {
+                        allowPageScroll: 'vertical',
+                        threshold: 150,
+                        swipeLeft: function() {
+                            that.next();
+                        },
+                        swipeRight: function() {
+                            that.prev();
+                        }
+                    } );
                 },
                 setRepeatHandlers: function() {
                     var that = this;

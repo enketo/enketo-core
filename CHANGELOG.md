@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+------------------------
+##### Fixed
+- In pages mode, an exception occurs after submission showing empty page.
+
 [3.8.1] - 2015-07-29
 ------------------------
 ##### Fixed
