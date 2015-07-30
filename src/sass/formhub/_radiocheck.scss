@@ -181,3 +181,17 @@ $line-h: 20px;
         }
     }
 }
+
+.bootstrap-select .dropdown-toggle ~ .dropdown-menu {
+    @include option-padding(left);
+}
+
+.or[dir="rtl"] .bootstrap-select .dropdown-toggle ~ .dropdown-menu {
+    @include option-padding(right);
+    .option-wrapper {
+        padding-right: 5px;
+    }
+    .option-label {
+        margin-right: 0;
+    }
+}
