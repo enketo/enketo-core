@@ -198,7 +198,7 @@ h4 + .or-repeat {
 .or-repeat {
     margin: 0;
     padding: 0;
-    background: #efefef;
+    background: $repeat-bg;
     &.clone {}
     .repeat-number {
         position: absolute;
@@ -214,6 +214,7 @@ h4 + .or-repeat {
     .repeat-buttons {
         width: calc(100% + 1px);
         position: relative;
+        margin-top: 0;
     }
     .repeat, .remove {
         padding: 0;
