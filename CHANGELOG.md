@@ -9,7 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Repeat background color in Grid theme
 
 ##### Fixed
-- Repeat button location in Grid theme
+- Repeat button location in Grid theme.
+- Radio buttons inside cloned repeat, require 2 clicks if the master was selected.
 
 
 [3.8.2] - 2015-07-30

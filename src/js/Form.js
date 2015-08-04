@@ -594,10 +594,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                     index = index || 0;
 
                     if ( this.getInputType( $form.find( '[data-name="' + name + '"]' ).eq( 0 ) ) === 'radio' ) {
-                        $target = this.getWrapNodes( $form.find( '[data-name="' + name + '"]' ) ).eq( index ).find( 'input[value="' + value + '"]' );
-                        // why not use this.getIndex?
-                        $target.prop( 'checked', true );
-                        return;
+                        type = 'radio';
+                        $inputNodes = $form.find( '[data-name="' + name + '"]' );
                     } else {
                         // why not use this.getIndex?
                         $inputNodes = this.getWrapNodes( $form.find( '[name="' + name + '"]' ).eq( index ) ).find( '[name="' + name + '"]' );
@@ -619,6 +617,8 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     if ( this.isMultiple( $inputNodes.eq( 0 ) ) === true ) {
                         value = value.split( ' ' );
+                    } else if ( type === 'radio' ) {
+                        value = [ value ];
                     }
 
                     // the has-value class enables hiding empty readonly inputs for prettier notes
@@ -1554,7 +1554,7 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
                  * @return  {boolean}       [description]
                  */
                 clone: function( $node, count, initialFormLoad ) {
-                    var $siblings, $master, $clone, $repeatsToUpdate, index, total, path,
+                    var $siblings, $master, $clone, $repeatsToUpdate, $radiocheckbox, index, total, path,
                         that = this;
 
                     count = count || 1;
@@ -1609,6 +1609,13 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                         // This will trigger setting default values and other stuff
                         $clone.trigger( 'addrepeat', index + 1 );
+
+                        // Remove data-checked attributes for non-checked radio buttons and checkboxes
+                        // Add data-checked attributes for checked ones.
+                        // This actually belongs in the radio widget
+                        $radiocheckbox = $clone.find( '[type="radio"],[type="checkbox"]' );
+                        $radiocheckbox.parent( 'label' ).removeAttr( 'data-checked' );
+                        $radiocheckbox.filter( ':checked' ).parent( 'label' ).attr( 'data-checked', 'true' );
 
                         // Re-initiate widgets in clone after default values have been set
                         if ( !initialFormLoad ) {
