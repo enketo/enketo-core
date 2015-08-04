@@ -450,9 +450,10 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
             if ( nodeName.toLowerCase() !== 'instance' && nodeName.toLowerCase() !== 'model' && $siblings.length > 0 ) {
                 parentSelector = $node.getXPath( 'instance' );
                 parentIndex = $siblings.add( $node ).index( $node );
-                // console.log('calculated repeat 0-based index: '+parentIndex+' for repeat node with path: '+parentSelector);
-                expr = expr.replace( new RegExp( parentSelector, 'g' ), parentSelector + '[' + ( parentIndex + 1 ) + ']' );
-                // console.log( 'new expression: ' + expr );
+                // Add position to segments that do not have an XPath predicate. This is where it gets very messy.
+                if ( !new RegExp( parentSelector + '\\[' ).test( expr ) ) {
+                    expr = expr.replace( new RegExp( parentSelector, 'g' ), parentSelector + '[' + ( parentIndex + 1 ) + ']' );
+                }
             }
         }
         return expr;

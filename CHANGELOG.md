@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Repeat button location in Grid theme.
 - Radio buttons inside cloned repeat, require 2 clicks if the master was selected.
 - Radio button and checkbox default values not populated correctly in cloned repeat. Overriding values in first repeat. 
-
+- Indexed-repeat() result incorrect if expression is inside 2+ repeat.
 
 [3.8.2] - 2015-07-30
 ------------------------
