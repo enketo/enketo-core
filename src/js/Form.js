@@ -595,10 +595,10 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
 
                     if ( this.getInputType( $form.find( '[data-name="' + name + '"]' ).eq( 0 ) ) === 'radio' ) {
                         type = 'radio';
-                        $inputNodes = $form.find( '[data-name="' + name + '"]' );
+                        $inputNodes = this.getWrapNodes( $form.find( '[data-name="' + name + '"]' ) ).eq( index ).find( '[data-name="' + name + '"]' );
                     } else {
                         // why not use this.getIndex?
-                        $inputNodes = this.getWrapNodes( $form.find( '[name="' + name + '"]' ).eq( index ) ).find( '[name="' + name + '"]' );
+                        $inputNodes = this.getWrapNodes( $form.find( '[name="' + name + '"]' ) ).eq( index ).find( '[name="' + name + '"]' );
                         type = this.getInputType( $inputNodes.eq( 0 ) );
 
                         if ( type === 'file' ) {
