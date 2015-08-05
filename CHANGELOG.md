@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[3.8.3] - 2015-08-05
 ------------------------
 ##### Changed
 - Repeat background color in Grid theme.
@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Radio buttons inside cloned repeat, require 2 clicks if the master was selected.
 - Radio button and checkbox default values not populated correctly in cloned repeat. Overriding values in first repeat. 
 - Indexed-repeat() result incorrect if expression is inside 2+ repeat.
+- Webform not responsive when used in full-size iframe.
 
 [3.8.2] - 2015-07-30
 ------------------------
