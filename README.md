@@ -73,7 +73,7 @@ requirejs(['js/Form'], function (Form){
 3. install most dependencies with `npm install` and `bower install`
 4. build and test with `grunt`
 5. start built-in server with `grunt server` 
-8. browse to [http://localhost:8080/forms/index.html](http://localhost:8080/forms/index.html)
+8. browse to [http://localhost:8005/forms/index.html](http://localhost:8005/forms/index.html)
 
 ### How to create or extend widgets
 
