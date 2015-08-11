@@ -18,12 +18,14 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
                 [ '<a><b>record</b></a>', '<model><instance><a><b>model</b></a></instance></model>', '<model><instance><a><b>record</b></a></instance></model>' ],
                 // preserve non-alphabetic document order of model
                 [ '<a><c/></a>', '<model><instance><a><c/><b/></a></instance></model>', '<model><instance><a><c/><b/></a></instance></model>' ],
-                // repeated nodes in record get added
+                // repeated nodes in record get added (including repeat childnodes that are missing from record)
                 [ '<a><c><d>record</d></c><c/></a>', '<model><instance><a><c><d>model</d></c></a></instance></model>',
-                    '<model><instance><a><c><d>record</d></c><c/></a></instance></model>'
+                    '<model><instance><a><c><d>record</d></c><c><d/></c></a></instance></model>'
                 ],
                 // repeated nodes in record get added in the right order
                 [ '<a><r/><r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><r/><r/><meta/></a></instance></model>' ],
+                // repeated groups with missing template nodes in record get added
+                [ '<a><r/><r/></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><r><b/></r><meta/></a></instance></model>' ],
                 // unused model namespaces preserved:
                 [ '<a><c>record</c></a>', '<model xmlns:cc="http://cc.com"><instance><a><c/></a></instance></model>', '<model xmlns:cc="http://cc.com"><instance><a><c>record</c></a></instance></model>' ],
                 // used model namespaces preserved (though interestingly the result includes a duplicate namespace declaration - probably a minor bug in merge-xml-js)
@@ -123,7 +125,7 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
                 // with improper template=""
                 [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model><instance><a><r template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<model><instance><a><r><b>5</b></r><r><b>6</b></r><meta><instanceID/><deprecatedID/></meta></a></instance></model>' ],
                 // with proper jr:template="" and namespace definition
-                [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r  jr:template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r xmlns:jr="http://openrosa.org/javarosa"><b>5</b></r><r><b>6</b></r><meta><instanceID/><deprecatedID/></meta></a></instance></model>' ],
+                [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r><b>5</b></r><r><b>6</b></r><meta><instanceID/><deprecatedID/></meta></a></instance></model>' ],
             ].forEach( function( test ) {
                 var result, expected,
                     model = new Model( {

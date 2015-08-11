@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Reduce space between border and form on small screens.
 
+##### Fixed
+- Loading a record with multiple repeats with missing nodes fails with error message.
 
 [3.8.3] - 2015-08-05
 ------------------------

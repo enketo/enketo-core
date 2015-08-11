@@ -29,7 +29,7 @@
         "karma-chrome-launcher": "0.2.x",
         "karma-firefox-launcher": "0.1.x",
         "karma-jasmine": "0.3.x",
-        "karma-opera-launcher": "0.2.x",
+        "karma-opera-launcher": "0.3.x",
         "karma-phantomjs-launcher": "0.2.x",
         "karma-requirejs": "0.2.x",
         "karma-safari-launcher": "0.1.x",

@@ -139,6 +139,7 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
      */
     FormModel.prototype.mergeXml = function( recordStr ) {
         var modelInstanceChildStr, merger, modelInstanceEl, modelInstanceChildEl;
+        var that = this;
 
         if ( !recordStr ) {
             return;
@@ -150,6 +151,39 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
         if ( !modelInstanceChildEl ) {
             throw new Error( 'Model is corrupt. It does not contain a childnode of instance' );
         }
+
+        /**
+         * To comply with quirky behaviour of repeats in XForms, we manually create the correct number of repeat instances
+         * before merging. This resolves these two issues:
+         *  a) Multiple repeat instances in record are added out of order when merged into a record that contains fewer 
+         *     repeat instances, see https://github.com/kobotoolbox/enketo-express/issues/223
+         *  b) If a repeat node is missing from a repeat instance (e.g. the 2nd) in a record, and that repeat instance is not 
+         *     in the model, that node will be missing in the result.
+         */
+
+        $( $.parseXML( recordStr ) ).find( '*' ).each( function() {
+            var path;
+            var $node = $( this );
+            var nodeName = $node.prop( 'nodeName' );
+            /**
+             * TODO: fails when node has namespace.
+             * The most solid way is probably to create an instance of FormModel for the record.
+             * However, since namespaced nodes will likely never pop up inside a repeat, 
+             * and cloning a namespaced repeat woul fail anyway, we just catch and ignore any 
+             * exceptions here.
+             */
+            try {
+                var $siblings = $node.siblings( nodeName );
+                if ( $siblings.length > 0 && $node.prev( nodeName ).length === 0 ) {
+                    path = $node.getXPath( 'instance' );
+                    $siblings.each( function( index ) {
+                        that.cloneRepeat( path, index, true );
+                    } );
+                }
+            } catch ( e ) {
+                console.error( 'Ignored error:', e );
+            }
+        } );
 
         merger = new MergeXML( {
             join: false
@@ -287,8 +321,9 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
      *
      * @param  {string} selector selector of a repeat or a node that is contained inside a repeat
      * @param  {number} index    index of the repeat that the new repeat should be inserted after.
+     * @param  {boolean} merge   whether this operation is part of a merge operation (won't send dataupdate event and clears all values)
      */
-    FormModel.prototype.cloneRepeat = function( selector, index ) {
+    FormModel.prototype.cloneRepeat = function( selector, index, merge ) {
         var $insertAfterNode, name, allClonedNodeNames, $templateClone,
             $template = this.templates[ selector ] || this.node( selector, 0 ).get(),
             that = this;
@@ -303,18 +338,23 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
         if ( $template[ 0 ] && $insertAfterNode.length === 1 && $insertAfterNode.nextAll( name ).length === 0 ) {
             $templateClone = $template.clone().insertAfter( $insertAfterNode );
 
-            allClonedNodeNames = [ $template.prop( 'nodeName' ) ];
+            if ( !merge ) {
+                allClonedNodeNames = [ $template.prop( 'nodeName' ) ];
 
-            $template.find( '*' ).each( function() {
-                allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
-            } );
+                $template.find( '*' ).each( function() {
+                    allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
+                } );
 
-            this.$.trigger( 'dataupdate', {
-                nodes: allClonedNodeNames,
-                repeatPath: selector,
-                repeatIndex: that.node( selector, index ).determineIndex( $templateClone )
-            } );
-
+                this.$.trigger( 'dataupdate', {
+                    nodes: allClonedNodeNames,
+                    repeatPath: selector,
+                    repeatIndex: that.node( selector, index ).determineIndex( $templateClone )
+                } );
+            } else {
+                // this is part of a merge operation (during form load) where the values will be populated from the record, 
+                // defaults are therefore not desired
+                $templateClone.find( '*' ).text( '' );
+            }
         } else {
             // Strictly speaking using .next() is more efficient, but we use .nextAll() in case the document order has changed due to 
             // incorrect merging of an existing record.
