@@ -8,7 +8,7 @@ init:
 
 .PHONY: build build-require build-browserify
 build: build-require build-browserify
-build-grunt:
+build-require:
 	grunt compile
 build-browserify:
 	browserify src/js/Form.js \
