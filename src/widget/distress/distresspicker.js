@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, $ ) {
+define( function(require, exports, module){
     'use strict';
+    var Widget = require('enketo-js/Widget');
+    var $ = require('jquery');
+    require('bootstrap-slider');
 
     var pluginName = 'distresspicker';
 
@@ -116,5 +119,5 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
         } );
     };
 
-    return pluginName;
+    module.exports = pluginName;
 } );

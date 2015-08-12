@@ -1,5 +1,8 @@
-define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, fileManager ) {
+define( function(require, exports, module){
     'use strict';
+    var $ = require('jquery');
+    var Widget = require('enketo-js/Widget');
+    var fileManager = require('file-manager');
 
     var pluginName = 'filepicker';
 
@@ -199,5 +202,5 @@ define( [ 'jquery', 'enketo-js/Widget', 'file-manager' ], function( $, Widget, f
         } );
     };
 
-    return pluginName;
+    module.exports = pluginName;
 } );

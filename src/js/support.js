@@ -2,7 +2,8 @@
  * Detects features. Replacement for Modernizr.
  */
 
-define( [], function() {
+define( function(require, exports, module){
+    'use strict';
     var features = {
             inputtypes: {}
         },
@@ -23,5 +24,5 @@ define( [], function() {
         features.touch = false;
     }
 
-    return features;
+    module.exports = features;
 } );

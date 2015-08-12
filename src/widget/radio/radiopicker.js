@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget, $ ) {
+define( function(require, exports, module){
     'use strict';
+    var Widget = require('enketo-js/Widget');
+    var $ = require('jquery');
+    require('enketo-js/plugins');
 
     var $lastFocused = null,
         pluginName = 'radiopicker';
@@ -122,5 +125,5 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         return this;
     };
 
-    return pluginName;
+    module.exports = pluginName;
 } );

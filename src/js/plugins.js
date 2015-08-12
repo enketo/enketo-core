@@ -1,4 +1,6 @@
-define( [ 'jquery' ], function( $ ) {
+define( function(require, exports, module){
+    'use strict';
+    var $ = require('jquery');
 
     /**
      * Clears form input fields and triggers events when doing this. If formelement is cloned but not yet added to DOM

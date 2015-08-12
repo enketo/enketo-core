@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
-    function( $, Widget, configStr, L, Q ) {
+define( function(require, exports, module){
         'use strict';
+        var $ = require('jquery');
+        var Widget = require('enketo-js/Widget');
+        var configStr = require('text!enketo-config');
+        var L = require('leaflet');
+        var Q = require('q');
 
         var googleMapsScriptRequested, googleMapsScriptLoaded,
             pluginName = 'geopicker',
@@ -1628,5 +1632,5 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
             L.Google.asyncWait = [];
         };
 
-        return pluginName;
+        module.exports = pluginName;
     } );

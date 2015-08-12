@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-define( [ 'jquery' ], function( $ ) {
+define( function(require, exports, module){
+    'use strict';
+    var $ = require('jquery');
 
     /**
      * A Widget class that can be extended to provide some of the basic widget functionality out of the box.
@@ -82,5 +84,5 @@ define( [ 'jquery' ], function( $ ) {
 
     };
 
-    return Widget;
+    module.exports = Widget;
 } );

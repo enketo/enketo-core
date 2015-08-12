@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-js/extend',
-        'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker',
-        'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker'
-    ],
-
-    function( Widget, support, $ ) {
-        'use strict';
+define( function(require, exports, module){
+    'use strict';
+    var Widget = require('enketo-js/Widget');
+    var support = require('enketo-js/support');
+    var $ = require('jquery');
+    require('enketo-js/extend');
+    require('enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker');
+    require('enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker');
 
         var pluginName = 'datetimepickerExtended';
 
@@ -200,5 +201,5 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-js/extend',
             } );
         };
 
-        return pluginName;
+        module.exports = pluginName;
     } );

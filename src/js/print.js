@@ -18,8 +18,9 @@
  * Deals with printing
  */
 
-define( [ 'jquery' ], function( $ ) {
+define( function(require, exports, module){
     'use strict';
+    var $ = require('jquery');
     var dpi, printStyleSheet, $printStyleSheetLink;
 
     // make sure setDpi is not called until DOM is ready
@@ -222,5 +223,5 @@ define( [ 'jquery' ], function( $ ) {
         }
     }
 
-    return printForm;
+    module.exports = printForm;
 } );

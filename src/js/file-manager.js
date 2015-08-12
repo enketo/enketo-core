@@ -7,8 +7,10 @@
  * types.
  */
 
-define( [ 'q', 'jquery' ], function( Q, $ ) {
+define( function(require, exports, module){
     'use strict';
+    var Q = require('q');
+    var $ = require('jquery');
 
     var supported = typeof FileReader !== 'undefined',
         notSupportedAdvisoryMsg = '';
@@ -100,7 +102,7 @@ define( [ 'q', 'jquery' ], function( Q, $ ) {
         return files;
     }
 
-    return {
+    module.exports = {
         isSupported: isSupported,
         notSupportedAdvisoryMsg: notSupportedAdvisoryMsg,
         isWaitingForPermissions: isWaitingForPermissions,
