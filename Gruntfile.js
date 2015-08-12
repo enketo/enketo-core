@@ -121,7 +121,7 @@ module.exports = function( grunt ) {
                         } );
                         return [ './bower-components/requirejs/require.js' ].concat( widgets );
                     } )(),
-                    out: 'build/js/combined.min.js',
+                    out: 'build/js/requirejs-combined.min.js',
                     optimize: 'uglify2'
                 }
             }
