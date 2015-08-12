@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
+define( function(require, exports, module){
     'use strict';
+    var $ = require('jquery');
+    var Widget = require('enketo-js/Widget');
 
     var pluginName = 'desktopSelectpicker';
 
@@ -408,5 +410,5 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
 
     }( jQuery );
 
-    return pluginName;
+    module.exports = pluginName;
 } );

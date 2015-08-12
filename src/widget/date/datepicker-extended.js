@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker' ],
-    function( Widget, support, $ ) {
-        'use strict';
+define( function(require, exports, module){
+    'use strict';
+    var Widget = require('enketo-js/Widget');
+    var support = require('enketo-js/support');
+    var $ = require('jquery');
+    require('enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker');
 
         //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
         var pluginName = 'datepickerExtended';
@@ -183,5 +186,5 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/date
             } );
         };
 
-        return pluginName;
+        module.exports = pluginName;
     } );

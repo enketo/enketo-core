@@ -1,5 +1,5 @@
-define( [], function() {
-
+define( function(require, exports, module){
+    'use strict';
 
     /**
      * Parses an Expression to extract a function call and its parameter content as a string.
@@ -36,7 +36,7 @@ define( [], function() {
         return results;
     }
 
-    return {
+    module.exports = {
         parseFunctionFromExpression: parseFunctionFromExpression
     };
 } );

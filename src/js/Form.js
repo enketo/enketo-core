@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.touchswipe' ],
-    function( FormModel, widgets, $ ) {
-        'use strict';
+define( function(require, exports, module){
+    'use strict';
+    var FormModel = require('enketo-js/FormModel');
+    var widgets = require('enketo-js/widgets');
+    var $ = require('jquery');
+    require('enketo-js/plugins');
+    require('enketo-js/extend');
+    require('jquery.touchswipe');
 
         /**
          * Class: Form
@@ -1967,5 +1972,5 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             };
         }
 
-        return Form;
+        module.exports = Form;
     } );

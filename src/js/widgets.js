@@ -1,5 +1,9 @@
-define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( configStr, support, Q, $ ) {
+define( function(require, exports, module){
     'use strict';
+    var configStr = require('text!enketo-config');
+    var support = require('enketo-js/support');
+    var Q = require('q');
+    var $ = require('jquery');
 
     var $form, init, enable, disable, destroy,
         _getWidgetConfigs, _getElements, _instantiate, _load, _setLangChangeHandler, _setOptionChangeHandler,
@@ -215,7 +219,7 @@ define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( 
         }
     };
 
-    return {
+    module.exports = {
         init: init,
         enable: enable,
         disable: disable,

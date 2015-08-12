@@ -1,9 +1,12 @@
-if ( typeof define !== 'function' ) {
-    var define = require( 'amdefine' )( module );
-}
-
-define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.xpath' ], function( XPathJS, MergeXML, utils, $ ) {
+define( function(require, exports, module){
     'use strict';
+    var XPathJS = require('xpath');
+    var MergeXML = require('merge-xml');
+    var utils = require('enketo-js/utils');
+    var $ = require('jquery');
+    require('enketo-js/plugins');
+    require('enketo-js/extend');
+    require('jquery.xpath');
 
     var FormModel, Nodeset, types;
 
@@ -1155,5 +1158,5 @@ define( [ 'xpath', 'merge-xml', 'enketo-js/utils', 'jquery', 'enketo-js/plugins'
         }
     };
 
-    return FormModel;
+    module.exports = FormModel;
 } );

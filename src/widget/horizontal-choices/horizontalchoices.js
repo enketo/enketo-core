@@ -3,8 +3,10 @@
  *
  */
 
-define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
+define( function(require, exports, module){
     'use strict';
+    var $ = require('jquery');
+    var Widget = require('enketo-js/Widget');
 
     var pluginName = 'horizontalChoices';
 
@@ -72,5 +74,5 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
         } );
     };
 
-    return pluginName;
+    module.exports = pluginName;
 } );
