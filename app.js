@@ -5,10 +5,11 @@
  * Place a replacement for this controller elsewhere in your app.
  */
 
+var $ = require('jquery');
+var support = require('./src/js/support');
+var Form = require('./src/js/Form');
+var fileManager = require('./src/js/file-manager');
 
-requirejs( [ 'require-config' ], function( rc ) {
-    requirejs( [ 'jquery', 'enketo-js/support', 'enketo-js/Form', 'file-manager' ],
-        function( $, support, Form, fileManager ) {
             var loadErrors, form, formStr, modelStr;
 
             // if querystring touch=true is added, override detected touchscreen presence
@@ -64,5 +65,3 @@ requirejs( [ 'require-config' ], function( rc ) {
                     ( new RegExp( name + '=' + '(.+?)(&|$)' ).exec( location.search ) || [ null, null ] )[ 1 ]
                 );
             }
-        } );
-} );

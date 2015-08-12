@@ -1,8 +1,6 @@
-if ( typeof define !== 'function' ) {
-    var define = require( 'amdefine' )( module );
-}
+var $ = require('jquery');
+require('../../src/widget/geo/geopicker');
 
-define( [ 'jquery', 'enketo-widget/geo/geopicker' ], function( $ ) {
     var form = '<form class="or"><label class="question"><input type="text" data-type-xml="geoshape"/></label></form>';
 
     describe( 'geoshape widget', function() {
@@ -67,4 +65,3 @@ define( [ 'jquery', 'enketo-widget/geo/geopicker' ], function( $ ) {
 
         } );
     } );
-} );

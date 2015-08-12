@@ -1,3 +1,8 @@
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
 /**
  * @preserve Copyright 2014 Martijn van de Rijdt
  *
@@ -14,13 +19,16 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
-    function( $, Widget, configStr, L, Q ) {
+define( function(require, exports, module){
         'use strict';
+        var $ = require('jquery');
+        var Widget = require('../../js/Widget');
+        var config = require('text!enketo-config');
+        var L = require('leaflet');
+        var Q = require('q');
 
         var googleMapsScriptRequested, googleMapsScriptLoaded,
             pluginName = 'geopicker',
-            config = JSON.parse( configStr ),
             defaultZoom = 15,
             // MapBox TileJSON format
             maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps : [ {
@@ -865,7 +873,7 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
                 // make the request for the Google Maps script asynchronously
                 apiKeyQueryParam = ( googleApiKey ) ? '&key=' + googleApiKey : '';
                 loadUrl = 'http://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&sensor=false&libraries=places&callback=gmapsLoaded';
-                require( [ loadUrl ] );
+                $.getScript( loadUrl );
                 // ensure if won't be requested again
                 googleMapsScriptRequested = true;
             }
@@ -1397,16 +1405,20 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
         $.fn[ pluginName ] = function( options, event ) {
 
             return this.each( function() {
-                var $this = $( this ),
-                    data = $( this ).data( pluginName );
+                try {
+                    var $this = $( this ),
+                        data = $( this ).data( pluginName );
 
-                options = options || {};
+                    options = options || {};
 
-                if ( !data && typeof options === 'object' ) {
-                    $this.data( pluginName, ( data = new Geopicker( this, options, event ) ) );
-                } else if ( data && typeof options === 'string' ) {
-                    //pass the context, used for destroy() as this method is called on a cloned widget
-                    data[ options ]( this );
+                    if ( !data && typeof options === 'object' ) {
+                        $this.data( pluginName, ( data = new Geopicker( this, options, event ) ) );
+                    } else if ( data && typeof options === 'string' ) {
+                        //pass the context, used for destroy() as this method is called on a cloned widget
+                        data[ options ]( this );
+                    }
+                } catch ( e ) {
+                    console.log ( 'Failed to initialise geopicker for ' + this + ': ' + e );
                 }
             } );
         };
@@ -1628,5 +1640,5 @@ define( [ 'jquery', 'enketo-js/Widget', 'text!enketo-config', 'leaflet', 'q' ],
             L.Google.asyncWait = [];
         };
 
-        return pluginName;
+        module.exports = pluginName;
     } );

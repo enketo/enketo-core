@@ -1,3 +1,8 @@
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
 /**
  * @preserve Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
  *
@@ -14,7 +19,9 @@
  * limitations under the License.
  */
 
-define( [ 'jquery' ], function( $ ) {
+define( function(require, exports, module){
+    'use strict';
+    var $ = require('jquery');
 
     /**
      * A Widget class that can be extended to provide some of the basic widget functionality out of the box.
@@ -82,5 +89,5 @@ define( [ 'jquery' ], function( $ ) {
 
     };
 
-    return Widget;
+    module.exports = Widget;
 } );

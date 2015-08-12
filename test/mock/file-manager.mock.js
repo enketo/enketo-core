@@ -1,1 +1,0 @@
-define( 'file-manager', [ ], {} );

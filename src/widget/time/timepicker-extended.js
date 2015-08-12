@@ -1,3 +1,8 @@
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
 /**
  * @preserve Copyright 2012 Martijn van de Rijdt & Modi Labs
  *
@@ -14,9 +19,12 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker' ],
-    function( Widget, support, $ ) {
-        'use strict';
+define( function(require, exports, module){
+    'use strict';
+    var Widget = require('../../js/Widget');
+    var support = require('../../js/support');
+    var $ = require('jquery');
+    require('./bootstrap3-timepicker/js/bootstrap-timepicker');
 
         var pluginName = 'timepickerExtended';
 
@@ -105,5 +113,5 @@ define( [ 'enketo-js/Widget', 'enketo-js/support', 'jquery', 'enketo-widget/time
             } );
         };
 
-        return pluginName;
+        module.exports = pluginName;
     } );

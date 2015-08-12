@@ -1,19 +1,19 @@
 {
     "widgets": [
-        "enketo-widget/note/notewidget",
-        "enketo-widget/select-desktop/selectpicker",
-        "enketo-widget/select-mobile/selectpicker",
-        "enketo-widget/geo/geopicker",
-        "enketo-widget/table/tablewidget",
-        "enketo-widget/radio/radiopicker",
-        "enketo-widget/date/datepicker-extended",
-        "enketo-widget/time/timepicker-extended",
-        "enketo-widget/datetime/datetimepicker-extended",
-        "enketo-widget/mediagrid/mediagridpicker",
-        "enketo-widget/file/filepicker",
-        "enketo-widget/select-likert/likertitem",
-        "enketo-widget/distress/distresspicker",
-        "enketo-widget/horizontal-choices/horizontalchoices"
+        "./src/widget/note/notewidget",
+        "./src/widget/select-desktop/selectpicker",
+        "./src/widget/select-mobile/selectpicker",
+        "./src/widget/geo/geopicker",
+        "./src/widget/table/tablewidget",
+        "./src/widget/radio/radiopicker",
+        "./src/widget/date/datepicker-extended",
+        "./src/widget/time/timepicker-extended",
+        "./src/widget/datetime/datetimepicker-extended",
+        "./src/widget/mediagrid/mediagridpicker",
+        "./src/widget/file/filepicker",
+        "./src/widget/select-likert/likertitem",
+        "./src/widget/distress/distresspicker",
+        "./src/widget/horizontal-choices/horizontalchoices"
     ],
     "maps": [ {
         "tiles": [ "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
