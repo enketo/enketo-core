@@ -192,11 +192,12 @@ label, legend, .trigger, .note {
     .dropdown-toggle {
         display: none;
     }
-    ul {
+    .dropdown-menu {
         @include display-flex;
         @include flex-wrap(wrap);
         @include flex-direction(row);
         display: block;
+        position: relative;
         border: none;
         box-shadow: none;
         list-style-type: circle;
