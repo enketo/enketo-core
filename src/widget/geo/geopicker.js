@@ -22,7 +22,7 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 define( function(require, exports, module){
         'use strict';
         var $ = require('jquery');
-        var Widget = require('enketo-js/Widget');
+        var Widget = require('../../js/Widget');
         var configStr = require('text!enketo-config');
         var L = require('leaflet');
         var Q = require('q');
@@ -874,6 +874,7 @@ define( function(require, exports, module){
                 // make the request for the Google Maps script asynchronously
                 apiKeyQueryParam = ( googleApiKey ) ? '&key=' + googleApiKey : '';
                 loadUrl = 'http://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&sensor=false&libraries=places&callback=gmapsLoaded';
+                // TODO check if this will work without requirejs
                 require( [ loadUrl ] );
                 // ensure if won't be requested again
                 googleMapsScriptRequested = true;

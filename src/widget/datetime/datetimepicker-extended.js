@@ -21,12 +21,12 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 
 define( function(require, exports, module){
     'use strict';
-    var Widget = require('enketo-js/Widget');
-    var support = require('enketo-js/support');
+    var Widget = require('../../js/Widget');
+    var support = require('../../js/support');
     var $ = require('jquery');
-    require('enketo-js/extend');
-    require('enketo-widget/date/bootstrap3-datepicker/js/bootstrap-datepicker');
-    require('enketo-widget/time/bootstrap3-timepicker/js/bootstrap-timepicker');
+    require('../../js/extend');
+    require('../date/bootstrap3-datepicker/js/bootstrap-datepicker');
+    require('../time/bootstrap3-timepicker/js/bootstrap-timepicker');
 
         var pluginName = 'datetimepickerExtended';
 

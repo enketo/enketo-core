@@ -45,6 +45,8 @@
         "jquery.touchswipe": "./lib/jquery-touchswipe/jquery.touchSwipe.js",
         "jquery.xpath": "./lib/jquery-xpath/jquery.xpath.js",
         "merge-xml": "./lib/bower-components/mergexml/mergexml.js",
-        "xpath": "./lib/xpath/build/enketo-xpathjs.js"
+        "xpath": "./lib/xpath/build/enketo-xpathjs.js",
+        "leaflet": "./lib/bower-components/leaflet/dist/leaflet.js",
+        "bootstrap-slider": "./lib/bootstrap-slider/js/bootstrap-slider.js"
     }
 }
