@@ -21,7 +21,7 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 
 define( function(require, exports, module){
     'use strict';
-    var Widget = require('enketo-js/Widget');
+    var Widget = require('../../js/Widget');
     var $ = require('jquery');
     require('bootstrap-slider');
 
