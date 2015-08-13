@@ -197,7 +197,7 @@ label, legend, .trigger, .note {
         @include flex-wrap(wrap);
         @include flex-direction(row);
         display: block;
-        position: relative;
+        position: static;
         border: none;
         box-shadow: none;
         list-style-type: circle;
