@@ -37,5 +37,14 @@
         "phantomjs": "1.9.x",
         "requirejs": "2.1.x",
         "time-grunt": "1.x.x"
+    },
+    "browser": {
+        "jquery": false,
+        "q": "./lib/bower-components/q/q.js",
+        "text!enketo-config": "./config.json",
+        "jquery.touchswipe": "./lib/jquery-touchswipe/jquery.touchSwipe.js",
+        "jquery.xpath": "./lib/jquery-xpath/jquery.xpath.js",
+        "merge-xml": "./lib/bower-components/mergexml/mergexml.js",
+        "xpath": "./lib/xpath/build/enketo-xpathjs.js"
     }
 }
