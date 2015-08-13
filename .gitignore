@@ -1,7 +1,9 @@
-node_modules
-build/css
-build/js
-lib/bower-components
+/node_modules/
+/build/css/
+/build/fetch/
+/build/js/
+/build/lib/
+/lib/bower-components/
 temp
 .sass-cache
 ._*
