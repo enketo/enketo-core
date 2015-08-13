@@ -6,7 +6,7 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 define( function(require, exports, module){
     'use strict';
     var configStr = require('text!enketo-config');
-    var support = require('enketo-js/support');
+    var support = require('./support');
     var Q = require('q');
     var $ = require('jquery');
 

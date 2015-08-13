@@ -12,9 +12,7 @@ build-require:
 	grunt compile
 build-browserify:
 	browserify src/js/Form.js \
-		-o build/js/browserify-bundle.js \
-		-r ./src/js/file-manager.js \
-		-r ./lib/bower-components/jquery/dist/jquery.js
+		-o build/js/browserify-bundle.js
 
 .PHONY: test
 test:

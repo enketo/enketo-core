@@ -21,11 +21,11 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 
 define( function(require, exports, module){
     'use strict';
-    var FormModel = require('enketo-js/FormModel');
-    var widgets = require('enketo-js/widgets');
+    var FormModel = require('./FormModel');
+    var widgets = require('./widgets');
     var $ = require('jquery');
-    require('enketo-js/plugins');
-    require('enketo-js/extend');
+    require('./plugins');
+    require('./extend');
     require('jquery.touchswipe');
 
         /**

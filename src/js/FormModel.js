@@ -7,10 +7,10 @@ define( function(require, exports, module){
     'use strict';
     var XPathJS = require('xpath');
     var MergeXML = require('merge-xml');
-    var utils = require('enketo-js/utils');
+    var utils = require('./utils');
     var $ = require('jquery');
-    require('enketo-js/plugins');
-    require('enketo-js/extend');
+    require('./plugins');
+    require('./extend');
     require('jquery.xpath');
 
     var FormModel, Nodeset, types;
