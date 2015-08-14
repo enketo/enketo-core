@@ -26,7 +26,9 @@ define( function(require, exports, module){
 
         _getWidgetConfigs( config )
             .then( function( widgets ) {
-                _instantiate( $group );
+                widgets.forEach( function( widget ) {
+                    _instantiate( widget, $group );
+                } );
             } );
     };
 
@@ -136,13 +138,15 @@ define( function(require, exports, module){
     };
 
     /**
-     * Instantiate widgets on a group (whole form or newly cloned repeat)
+     * Instantiate a widget on a group (whole form or newly cloned repeat)
      *
+     * @param  widget The widget to instantiate
      * @param  {jQuery} $group The elements inside which widgets need to be created.
      */
-    _instantiate = function( $group ) {
+    _instantiate = function( widget, $group ) {
 
-        widgets.forEach( function( widget ) {
+        //don't let an error loading one widget affect the others
+        try {
             var $elements;
             widget.options = widget.options || {};
             widget.options.touch = support.touch;
@@ -170,7 +174,9 @@ define( function(require, exports, module){
                         _setOptionChangeHandler( widget, $elements );
                     }
                 } );
-        } );
+        } catch ( loadingError ) {
+            console.log( 'Error loading widget ' + widget.path + ': ' + loadingError );
+        }
     };
 
     /**
@@ -189,6 +195,8 @@ define( function(require, exports, module){
         widgetName = require( widget.path.substring(1) + '.js' );
         widget.name = widgetName;
         deferred.resolve( widget );
+
+        console.log( 'Loaded widget: ' + widgetName );
 
         return deferred.promise;
     };
