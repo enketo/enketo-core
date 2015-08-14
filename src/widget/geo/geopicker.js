@@ -23,13 +23,12 @@ define( function(require, exports, module){
         'use strict';
         var $ = require('jquery');
         var Widget = require('../../js/Widget');
-        var configStr = require('text!enketo-config');
+        var config = require('text!enketo-config');
         var L = require('leaflet');
         var Q = require('q');
 
         var googleMapsScriptRequested, googleMapsScriptLoaded,
             pluginName = 'geopicker',
-            config = JSON.parse( configStr ),
             defaultZoom = 15,
             // MapBox TileJSON format
             maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps : [ {
