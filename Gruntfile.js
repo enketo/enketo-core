@@ -109,8 +109,7 @@ module.exports = function( grunt ) {
         requirejs: {
             compile: {
                 options: {
-                    name: '../app',
-                    baseUrl: './lib',
+                    name: './app',
                     mainConfigFile: 'require-config.js',
                     findNestedDependencies: true,
                     include: ( function() {
@@ -119,7 +118,7 @@ module.exports = function( grunt ) {
                         widgets.forEach( function( widget, index, arr ) {
                             arr.push( 'text!' + widget.substr( 0, widget.lastIndexOf( '/' ) + 1 ) + 'config.json' );
                         } );
-                        return [ './bower-components/requirejs/require.js' ].concat( widgets );
+                        return [ './lib/bower-components/requirejs/require.js' ].concat( widgets );
                     } )(),
                     out: 'build/js/requirejs-combined.min.js',
                     optimize: 'uglify2'
