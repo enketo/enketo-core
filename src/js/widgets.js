@@ -5,7 +5,7 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 }
 define( function(require, exports, module){
     'use strict';
-    var configStr = require('text!enketo-config');
+    var config = require('text!enketo-config');
     var support = require('./support');
     var Q = require('q');
     var $ = require('jquery');
@@ -24,7 +24,7 @@ define( function(require, exports, module){
         $form = $( 'form.or' );
         $group = $group || $form;
 
-        _getWidgetConfigs( JSON.parse( configStr ) )
+        _getWidgetConfigs( config )
             .then( function( widgets ) {
                 _instantiate( $group );
             } );
@@ -99,27 +99,27 @@ define( function(require, exports, module){
      * @param  {Function} callback
      */
     _getWidgetConfigs = function( config ) {
-        var id, widget,
+        var i, id, widget,
             deferred = Q.defer(),
             widgetConfigFiles = [];
 
-        //add widget configuration to config object
-        for ( var i = 0; i < config.widgets.length; i++ ) {
-            id = 'text!' + config.widgets[ i ].substr( 0, config.widgets[ i ].lastIndexOf( '/' ) + 1 ) + 'config.json';
-            widgetConfigFiles.push( id );
-        }
-
-        //load widget config files
-        require( widgetConfigFiles, function() {
-
-            for ( var i = 0; i < arguments.length; i++ ) {
-                widget = JSON.parse( arguments[ i ] );
+        //add widget configuration to config object and load widget config files
+        for ( i = 0; i < config.widgets.length; i++ ) {
+            // FIXME here we have to remove the leading `.` from paths because
+            // browserify maps them strangely
+            id = config.widgets[ i ]
+                    .substring(1)
+                    .replace( /\/[^\/]*$/, '/config.json' );
+            try {
+                widget = require( id );
                 widget.path = config.widgets[ i ];
                 widgets.push( widget );
+            } catch(e) {
+                console.log( 'Error loading widget "' + id + '": ' + e );
             }
+        }
 
-            deferred.resolve( widgets );
-        } );
+        deferred.resolve( widgets );
 
         return deferred.promise;
     };
@@ -180,11 +180,15 @@ define( function(require, exports, module){
      * @return {[type]}        [description]
      */
     _load = function( widget ) {
-        var deferred = Q.defer();
-        require( [ widget.path ], function( widgetName ) {
-            widget.name = widgetName;
-            deferred.resolve( widget );
-        } );
+        var deferred, widgetName;
+
+        deferred = Q.defer();
+
+        // FIXME we have to remove the leading `.` from widget path because
+        // browserify maps paths strangely
+        widgetName = require( widget.path.substring(1) + '.js' );
+        widget.name = widgetName;
+        deferred.resolve( widget );
 
         return deferred.promise;
     };

@@ -1,19 +1,19 @@
 {
     "widgets": [
-        "../widget/note/notewidget",
-        "../widget/select-desktop/selectpicker",
-        "../widget/select-mobile/selectpicker",
-        "../widget/geo/geopicker",
-        "../widget/table/tablewidget",
-        "../widget/radio/radiopicker",
-        "../widget/date/datepicker-extended",
-        "../widget/time/timepicker-extended",
-        "../widget/datetime/datetimepicker-extended",
-        "../widget/mediagrid/mediagridpicker",
-        "../widget/file/filepicker",
-        "../widget/select-likert/likertitem",
-        "../widget/distress/distresspicker",
-        "../widget/horizontal-choices/horizontalchoices"
+        "./src/widget/note/notewidget",
+        "./src/widget/select-desktop/selectpicker",
+        "./src/widget/select-mobile/selectpicker",
+        "./src/widget/geo/geopicker",
+        "./src/widget/table/tablewidget",
+        "./src/widget/radio/radiopicker",
+        "./src/widget/date/datepicker-extended",
+        "./src/widget/time/timepicker-extended",
+        "./src/widget/datetime/datetimepicker-extended",
+        "./src/widget/mediagrid/mediagridpicker",
+        "./src/widget/file/filepicker",
+        "./src/widget/select-likert/likertitem",
+        "./src/widget/distress/distresspicker",
+        "./src/widget/horizontal-choices/horizontalchoices"
     ],
     "maps": [ {
         "tiles": [ "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
