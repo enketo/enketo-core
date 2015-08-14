@@ -223,3 +223,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0);
     // IE9 and down, gets no color-stop at all for proper fallback
 }
+
+@mixin form-footer-margin($padding) {
+    margin: 45px -#{$padding} -#{$padding} -#{$padding};
+}

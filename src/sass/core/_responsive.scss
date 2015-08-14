@@ -47,6 +47,9 @@
             padding: 70px $form-padding $form-padding $form-padding;
         }
     }
+    .form-footer {
+        @include form-footer-margin($form-padding);
+    }
 }
 
 @media screen and (max-width: 400px) {
@@ -73,5 +76,8 @@
         .form-language-selector {
             border-right: none;
         }
+    }
+    .form-footer {
+        @include form-footer-margin($form-padding);
     }
 }

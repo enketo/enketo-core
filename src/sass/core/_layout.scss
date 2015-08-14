@@ -83,12 +83,7 @@ body {
 }
 
 .form-footer {
-    width: calc(100% + ( 2 * #{$form-padding} ));
-    // shorthand for margin not working in node-sass
-    margin-top: 45px;
-    margin-right: -#{$form-padding};
-    margin-bottom: -#{$form-padding};
-    margin-left: -#{$form-padding};
+    @include form-footer-margin($form-padding);
 }
 
 .enketo-power {
