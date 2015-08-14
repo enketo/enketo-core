@@ -6,8 +6,8 @@
  */
 
 
-requirejs( [ 'require-config' ], function( rc ) {
-    requirejs( [ 'jquery', 'enketo-js/support', 'enketo-js/Form', 'file-manager' ],
+requirejs( [ './require-config' ], function( rc ) {
+    requirejs( [ 'jquery', './src/js/support', './src/js/Form', './src/js/file-manager' ],
         function( $, support, Form, fileManager ) {
             var loadErrors, form, formStr, modelStr;
 
