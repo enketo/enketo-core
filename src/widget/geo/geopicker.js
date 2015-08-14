@@ -873,8 +873,7 @@ define( function(require, exports, module){
                 // make the request for the Google Maps script asynchronously
                 apiKeyQueryParam = ( googleApiKey ) ? '&key=' + googleApiKey : '';
                 loadUrl = 'http://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&sensor=false&libraries=places&callback=gmapsLoaded';
-                // TODO check if this will work without requirejs
-                require( [ loadUrl ] );
+                $.getScript( loadUrl );
                 // ensure if won't be requested again
                 googleMapsScriptRequested = true;
             }
@@ -1406,16 +1405,20 @@ define( function(require, exports, module){
         $.fn[ pluginName ] = function( options, event ) {
 
             return this.each( function() {
-                var $this = $( this ),
-                    data = $( this ).data( pluginName );
+                try {
+                    var $this = $( this ),
+                        data = $( this ).data( pluginName );
 
-                options = options || {};
+                    options = options || {};
 
-                if ( !data && typeof options === 'object' ) {
-                    $this.data( pluginName, ( data = new Geopicker( this, options, event ) ) );
-                } else if ( data && typeof options === 'string' ) {
-                    //pass the context, used for destroy() as this method is called on a cloned widget
-                    data[ options ]( this );
+                    if ( !data && typeof options === 'object' ) {
+                        $this.data( pluginName, ( data = new Geopicker( this, options, event ) ) );
+                    } else if ( data && typeof options === 'string' ) {
+                        //pass the context, used for destroy() as this method is called on a cloned widget
+                        data[ options ]( this );
+                    }
+                } catch ( e ) {
+                    console.log ( 'Failed to initialise geopicker for ' + this + ': ' + e );
                 }
             } );
         };
