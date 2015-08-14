@@ -116,7 +116,7 @@ define( function(require, exports, module){
                 widget = require( id );
                 widget.path = config.widgets[ i ];
                 widgets.push( widget );
-            } catch(e) {
+            } catch( e ) {
                 console.log( 'Error loading widget "' + id + '": ' + e );
             }
         }
