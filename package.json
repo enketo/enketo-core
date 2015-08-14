@@ -56,6 +56,7 @@
         "transform": "browserify-shim"
     },
     "browserify-shim": {
-        "./lib/bower-components/jquery/dist/jquery.js": "jQuery"
+        "./lib/bower-components/jquery/dist/jquery.js": "jQuery",
+        "./lib/xpath/build/enketo-xpathjs.js": "XPathJS"
     }
 }
