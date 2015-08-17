@@ -105,7 +105,7 @@ module.exports = function( grunt ) {
         browserify: {
             standalone: {
                 files: {
-                    'build/js/enketo-bundle.js': [ 'app.js' ]
+                    'build/js/enketo-bundle.js': [ 'medic-mobile.js' ]
                 },
             },
             options: {
