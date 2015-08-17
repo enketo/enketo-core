@@ -51,6 +51,7 @@ compare-built:
 
 .PHONY: compile-dependencies
 compile-dependencies:
+	mkdir -p build/lib
 	mkdir -p build/fetch/cc
 	(cd build/fetch/cc && \
 		wget -c http://dl.google.com/closure-compiler/${CC_VERSION} && \
