@@ -44,7 +44,7 @@
     },
     "browser": {
         "text!enketo-config": "./config.json",
-        "widgets": "./src/js/widgets.js"
+        "widgets": "./src/js/widgets.js",
         "extended-xpath": "./node_modules/openrosa-xpath-evaluator/src/extended-xpath.js",
         "openrosa-xpath-extensions": "./node_modules/openrosa-xpath-evaluator/src/openrosa-xpath-extensions.js"
     },
