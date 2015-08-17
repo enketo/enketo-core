@@ -43,7 +43,7 @@
         "watchify": "^3.3.1"
     },
     "browser": {
-        "jquery": false,
+        "jquery": "./jquery-shim.js",
         "q": "./lib/bower-components/q/q.js",
         "text!enketo-config": "./config.json",
         "jquery.touchswipe": "./lib/jquery-touchswipe/jquery.touchSwipe.js",
