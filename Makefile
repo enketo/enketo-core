@@ -15,11 +15,13 @@ init:
 	npm install
 	bower install
 
-.PHONY: build build-require build-browserify
+.PHONY: build-init build build-require build-browserify
 build: build-require build-browserify
+build-init:
+	mkdir -p build/js
 build-require:
 	grunt compile
-build-browserify:
+build-browserify: build-init
 	./node_modules/browserify/bin/cmd.js \
 		app.browserify.js \
 		-o build/js/browserify-bundle.js \
@@ -49,7 +51,6 @@ compare-built:
 
 .PHONY: compile-dependencies
 compile-dependencies:
-	mkdir -p build/lib
 	mkdir -p build/fetch/cc
 	(cd build/fetch/cc && \
 		wget -c http://dl.google.com/closure-compiler/${CC_VERSION} && \
