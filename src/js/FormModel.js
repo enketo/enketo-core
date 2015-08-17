@@ -5,10 +5,11 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 }
 define( function(require, exports, module){
     'use strict';
-    var XPathJS = require('xpath');
     var MergeXML = require('merge-xml');
     var utils = require('./utils');
     var $ = require('jquery');
+    var ExtendedXpathEvaluator = require('extended-xpath');
+    var openrosa_xpath_extensions = require( 'openrosa-xpath-extensions');
     require('./plugins');
     require('./extend');
     require('jquery.xpath');
@@ -247,28 +248,40 @@ define( function(require, exports, module){
      * OpenRosa functions or for browsers that do not have a native evaluator.
      */
     FormModel.prototype.bindJsEvaluator = function() {
-        var evaluator = new XPathJS.XPathEvaluator();
-
-        XPathJS.bindDomLevel3XPath( this.xml, {
-            'window': {
-                JsXPathException: true,
-                JsXPathExpression: true,
-                JsXPathNSResolver: true,
-                JsXPathResult: true,
-                JsXPathNamespace: true
-            },
-            'document': {
-                jsCreateExpression: function() {
-                    return evaluator.createExpression.apply( evaluator, arguments );
-                },
-                jsCreateNSResolver: function() {
-                    return evaluator.createNSResolver.apply( evaluator, arguments );
-                },
-                jsEvaluate: function() {
-                    return evaluator.evaluate.apply( evaluator, arguments );
-                }
-            }
-        } );
+        // re-implement XPathJS ourselves!
+        var evaluator = new XPathEvaluator();
+        this.xml.jsCreateExpression = function() {
+            return evaluator.createExpression.apply( evaluator, arguments );
+        };
+        this.xml.jsCreateNSResolver = function() {
+            return evaluator.createNSResolver.apply( evaluator, arguments );
+        };
+        this.xml.jsEvaluate = function(e, contextPath, namespaceResolver, resultType, result) {
+            var val, evaluator;
+            evaluator = new ExtendedXpathEvaluator(
+                    function wrappedXpathEvaluator(v) {
+                        var doc = contextPath.ownerDocument;
+                        return doc.evaluate(v, contextPath, namespaceResolver,
+                                // We pretty much always want to get a String in
+                                // the java rosa functions, and we don't want to
+                                // pass the top-level expectation all the way
+                                // down, so it's fairly safe to hard-code this,
+                                // especially considering we handle NUMBER_TYPEs
+                                // manually.
+                                // TODO what is `result` for?  Should it be
+                                // replaced in this call?
+                                XPathResult.STRING_TYPE, result);
+                                //resultType, result);
+                    },
+                    openrosa_xpath_extensions);
+            val = evaluator.evaluate(e);
+            return val;
+        };
+        window.JsXPathException =
+                window.JsXPathExpression =
+                window.JsXPathNSResolver =
+                window.JsXPathResult =
+                window.JsXPathNamespace = true;
     };
 
     /**
@@ -569,7 +582,8 @@ define( function(require, exports, module){
     };
 
     /**
-     * Evaluates an XPath Expression using XPathJS_javarosa (not native XPath 1.0 evaluator)
+     * Evaluates an XPath Expression with available XPath evaluators, including
+     * javarosa extensions.
      *
      * This function does not seem to work properly for nodeset resulttypes otherwise:
      * muliple nodes can be accessed by returned node.snapshotItem(i)(.textContent)
@@ -669,7 +683,7 @@ define( function(require, exports, module){
             }
         }
 
-        // if that didn't work, try the slow XPathJS evaluator 
+        // if that didn't work, try the slower custom XPath JS evaluator
         if ( !result ) {
             try {
                 if ( typeof doc.jsEvaluate === 'undefined' ) {

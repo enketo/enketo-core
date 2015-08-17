@@ -1,6 +1,3 @@
-[submodule "lib/xpath"]
-	path = lib/xpath
-url=https://github.com/enketo/enketo-xpathjs.git
 [submodule "lib/text"]
 	path = lib/text
 	url = https://github.com/requirejs/text.git
@@ -10,9 +7,6 @@ url=https://github.com/enketo/enketo-xpathjs.git
 [submodule "src/widget/date/bootstrap3-datepicker"]
 	path = src/widget/date/bootstrap3-datepicker
 	url = https://github.com/eternicode/bootstrap-datepicker.git
-[submodule "lib/jquery-xpath"]
-	path = lib/jquery-xpath
-url=https://github.com/enketo/jquery-xpath.git
 [submodule "lib/jquery-touchswipe"]
 	path = lib/jquery-touchswipe
 	url = https://github.com/mattbryson/TouchSwipe-Jquery-Plugin.git
