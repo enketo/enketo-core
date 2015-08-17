@@ -38,12 +38,15 @@
         "karma-phantomjs-launcher": "0.2.x",
         "karma-safari-launcher": "0.1.x",
         "load-grunt-tasks": "3.x.x",
+        "openrosa-xpath-evaluator": "git@github.com:alxndrsn/openrosa-xpath-evaluator.git#dcad66cd4a7de3121d3a468990167623968565b5",
         "phantomjs": "1.9.x",
         "time-grunt": "1.x.x"
     },
     "browser": {
         "text!enketo-config": "./config.json",
         "widgets": "./src/js/widgets.js"
+        "extended-xpath": "./node_modules/openrosa-xpath-evaluator/src/extended-xpath.js",
+        "openrosa-xpath-extensions": "./node_modules/openrosa-xpath-evaluator/src/openrosa-xpath-extensions.js"
     },
     "dependencies": {
         "bootstrap-datepicker": "1.4.x",
