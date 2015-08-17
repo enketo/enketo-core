@@ -64,3 +64,6 @@ compile: build-browserify compile-dependencies
 		--language_in ES5 \
 		--js_output_file=build/js/browserify-bundle.min.js \
 		build/js/browserify-bundle.js
+
+dev: build-browserify
+	cp build/js/browserify-bundle.js ../webapp/static/enketo/js/medic-enketo-core-SNAPSHOT.js
