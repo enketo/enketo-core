@@ -1,4 +1,4 @@
-default: init test build compile compare-built server
+eefault: init test browserify compile compare-built server
 
 CC_VERSION = compiler-20150729.tar.gz
 WIDGETS_REQUIRED = $(shell node -e "require('./config.json').widgets.forEach(function(widget) {\
@@ -15,13 +15,10 @@ init:
 	npm install
 	bower install
 
-.PHONY: build-init build build-require build-browserify
-build: build-require build-browserify
+.PHONY: build-init browserify
 build-init:
 	mkdir -p build/js
-build-require:
-	grunt compile
-build-browserify: build-init
+browserify: build-init
 	./node_modules/browserify/bin/cmd.js \
 		app.js \
 		-o build/js/browserify-bundle.js \
@@ -29,7 +26,7 @@ build-browserify: build-init
 		-r ./src/widget/date/bootstrap3-datepicker/js/bootstrap-datepicker.js
 
 .PHONY: watch
-watch:
+watch: build-init
 	./node_modules/watchify/bin/cmd.js \
 		--debug --verbose \
 		app.js \

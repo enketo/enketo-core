@@ -104,26 +104,6 @@ module.exports = function( grunt ) {
                 flatten: true,
                 extDot: 'last'
             }
-        },
-        // this compiles all javascript to a single minified file
-        requirejs: {
-            compile: {
-                options: {
-                    name: './app',
-                    mainConfigFile: 'require-config.js',
-                    findNestedDependencies: true,
-                    include: ( function() {
-                        //add widgets js and widget config.json files
-                        var widgets = grunt.file.readJSON( 'config.json' ).widgets;
-                        widgets.forEach( function( widget, index, arr ) {
-                            arr.push( 'text!' + widget.substr( 0, widget.lastIndexOf( '/' ) + 1 ) + 'config.json' );
-                        } );
-                        return [ './lib/bower-components/requirejs/require.js' ].concat( widgets );
-                    } )(),
-                    out: 'build/js/requirejs-combined.min.js',
-                    optimize: 'uglify2'
-                }
-            }
         }
     } );
 
@@ -157,7 +137,7 @@ module.exports = function( grunt ) {
 
     } );
 
-    grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
+    grunt.registerTask( 'compile', [] );
     grunt.registerTask( 'test', [ /*'jsbeautifier:test',*/ 'jshint', 'compile', 'karma:headless' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
