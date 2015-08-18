@@ -113,6 +113,11 @@ module.exports = function( grunt ) {
                 alias: browserify_aliases(),
             },
         },
+        uglify: {
+            standalone: {
+                files: { 'build/js/enketo.grunt.min.js': [ 'build/js/enketo.grunt.js' ] },
+            },
+        },
     } );
 
     function browserify_aliases() {
@@ -169,7 +174,7 @@ module.exports = function( grunt ) {
 
     } );
 
-    grunt.registerTask( 'compile', [] );
+    grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
     grunt.registerTask( 'test', [ /*'jsbeautifier:test',*/ 'jshint', 'compile', 'karma:headless' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
