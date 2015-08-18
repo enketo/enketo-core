@@ -1,6 +1,6 @@
-default: init test build compile compare-built server
+default: init test build compare-built server
 
-CC_VERSION = compiler-20150729.tar.gz
+VERSION = $(shell [ -z "`git status --porcelain`" ] && git describe --tags --exact-match 2>/dev/null || echo 'SNAPSHOT')
 WIDGETS_REQUIRED = $(shell node -e "require('./config.json').widgets.forEach(function(widget) {\
 	widget = widget.replace(/^..\/widget\//, './src/widget/'); \
 	console.log('-r ' + widget + '.js -r ' \
@@ -15,7 +15,7 @@ init:
 	npm install
 	bower install
 
-.PHONY: build-init build build-require build-browserify
+.PHONY: build-init build build-require build-browserify build-medic
 build: build-require build-browserify
 build-init:
 	mkdir -p build/js
@@ -23,8 +23,14 @@ build-require:
 	grunt compile
 build-browserify: build-init
 	./node_modules/browserify/bin/cmd.js \
-		medic-mobile.js \
+		app.browserify.js \
 		-o build/js/browserify-bundle.js \
+		${WIDGETS_REQUIRED} \
+		-r ./src/widget/date/bootstrap3-datepicker/js/bootstrap-datepicker.js
+build-medic: build-init
+	./node_modules/browserify/bin/cmd.js \
+		medic-mobile.js \
+		-o build/js/browserify-medic-bundle.js \
 		${WIDGETS_REQUIRED} \
 		-r ./src/widget/date/bootstrap3-datepicker/js/bootstrap-datepicker.js
 
@@ -49,21 +55,6 @@ server:
 compare-built:
 	ls -al build/js/*.js
 
-.PHONY: compile-dependencies
-compile-dependencies:
-	mkdir -p build/lib
-	mkdir -p build/fetch/cc
-	(cd build/fetch/cc && \
-		wget -c http://dl.google.com/closure-compiler/${CC_VERSION} && \
-		tar -xf ${CC_VERSION} && \
-		cp compiler.jar ../../lib)
-
-.PHONY: compile
-compile: build-browserify compile-dependencies
-	java -jar build/lib/compiler.jar \
-		--language_in ES5 \
-		--js_output_file=build/js/browserify-bundle.min.js \
-		build/js/browserify-bundle.js
-
-dev: build-browserify
-	cp build/js/browserify-bundle.js ../webapp/static/enketo/js/medic-enketo-core-SNAPSHOT.js
+.PHONY: dev
+dev: build-medic
+	cp build/js/browserify-medic-bundle.js ../webapp/static/enketo/js/enketo-core-${VERSION}.js
