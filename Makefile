@@ -1,4 +1,4 @@
-eefault: init test browserify compile compare-built server
+eefault: init test browserify compile server
 
 CC_VERSION = compiler-20150729.tar.gz
 WIDGETS_REQUIRED = $(shell node -e "require('./config.json').widgets.forEach(function(widget) {\
@@ -41,10 +41,6 @@ test:
 .PHONY: server
 server:
 	grunt server
-
-.PHONY: compare-built
-compare-built:
-	ls -al build/js/*.js
 
 .PHONY: compile-dependencies
 compile-dependencies:
