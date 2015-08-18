@@ -104,8 +104,40 @@ module.exports = function( grunt ) {
                 flatten: true,
                 extDot: 'last'
             }
-        }
+        },
+        browserify: {
+            standalone: {
+                files: { 'build/js/enketo.grunt.js': browserify_includeList() },
+            },
+            options: {
+                alias: browserify_aliases(),
+            },
+        },
     } );
+
+    function browserify_aliases() {
+        var aliases = {};
+        browserify_widgetIncludes().forEach(function(w) {
+            aliases[w] = w;
+        });
+        return aliases;
+    }
+
+    function browserify_widgetIncludes() {
+        var config = require('./config.json'),
+                includes = [];
+        config.widgets.forEach(function(widget) {
+            includes.push(widget + '.js');
+            includes.push(widget.replace(/\/[^\/]*$$/, '') + '/config.json');
+        });
+        return includes;
+    }
+
+    function browserify_includeList() {
+        var includes = browserify_widgetIncludes();
+        includes.unshift('app.js');
+        return includes;
+    }
 
     //maybe this can be turned into a npm module?
     grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function() {
