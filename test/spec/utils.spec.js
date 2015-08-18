@@ -1,8 +1,4 @@
-if ( typeof define !== 'function' ) {
-    var define = require( 'amdefine' )( module );
-}
-
-define( [ 'enketo-js/utils' ], function( utils ) {
+var utils = require('../../src/js/utils');
 
     describe( 'Parsing expressions', function() {
         var t = [
@@ -41,5 +37,3 @@ define( [ 'enketo-js/utils' ], function( utils ) {
         }
 
     } );
-
-} );

@@ -1,8 +1,4 @@
-if ( typeof define !== 'function' ) {
-    var define = require( 'amdefine' )( module );
-}
-
-define( [ 'enketo-js/Form' ], function( Form ) {
+var Form = require('../../src/js/Form');
 
     var loadForm = function( filename, editStr ) {
         var strings = mockForms1[ filename ];
@@ -759,5 +755,3 @@ define( [ 'enketo-js/Form' ], function( Form ) {
             expect( form.getEditStatus() ).toBe( true );
         } );
     } );
-
-} );
