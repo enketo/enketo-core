@@ -1,5 +1,14 @@
-define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( configStr, support, Q, $ ) {
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
+define( function(require, exports, module){
     'use strict';
+    var config = require('text!enketo-config');
+    var support = require('./support');
+    var Q = require('q');
+    var $ = require('jquery');
 
     var $form, init, enable, disable, destroy,
         _getWidgetConfigs, _getElements, _instantiate, _load, _setLangChangeHandler, _setOptionChangeHandler,
@@ -15,9 +24,11 @@ define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( 
         $form = $( 'form.or' );
         $group = $group || $form;
 
-        _getWidgetConfigs( JSON.parse( configStr ) )
+        _getWidgetConfigs( config )
             .then( function( widgets ) {
-                _instantiate( $group );
+                widgets.forEach( function( widget ) {
+                    _instantiate( widget, $group );
+                } );
             } );
     };
 
@@ -90,27 +101,27 @@ define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( 
      * @param  {Function} callback
      */
     _getWidgetConfigs = function( config ) {
-        var id, widget,
+        var i, id, widget,
             deferred = Q.defer(),
             widgetConfigFiles = [];
 
-        //add widget configuration to config object
-        for ( var i = 0; i < config.widgets.length; i++ ) {
-            id = 'text!' + config.widgets[ i ].substr( 0, config.widgets[ i ].lastIndexOf( '/' ) + 1 ) + 'config.json';
-            widgetConfigFiles.push( id );
-        }
-
-        //load widget config files
-        require( widgetConfigFiles, function() {
-
-            for ( var i = 0; i < arguments.length; i++ ) {
-                widget = JSON.parse( arguments[ i ] );
+        //add widget configuration to config object and load widget config files
+        for ( i = 0; i < config.widgets.length; i++ ) {
+            // FIXME here we have to remove the leading `.` from paths because
+            // browserify maps them strangely
+            id = config.widgets[ i ]
+                    .substring(1)
+                    .replace( /\/[^\/]*$/, '/config.json' );
+            try {
+                widget = require( id );
                 widget.path = config.widgets[ i ];
                 widgets.push( widget );
+            } catch( e ) {
+                console.log( 'Error loading widget "' + id + '": ' + e );
             }
+        }
 
-            deferred.resolve( widgets );
-        } );
+        deferred.resolve( widgets );
 
         return deferred.promise;
     };
@@ -127,13 +138,15 @@ define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( 
     };
 
     /**
-     * Instantiate widgets on a group (whole form or newly cloned repeat)
+     * Instantiate a widget on a group (whole form or newly cloned repeat)
      *
+     * @param  widget The widget to instantiate
      * @param  {jQuery} $group The elements inside which widgets need to be created.
      */
-    _instantiate = function( $group ) {
+    _instantiate = function( widget, $group ) {
 
-        widgets.forEach( function( widget ) {
+        //don't let an error loading one widget affect the others
+        try {
             var $elements;
             widget.options = widget.options || {};
             widget.options.touch = support.touch;
@@ -161,7 +174,9 @@ define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( 
                         _setOptionChangeHandler( widget, $elements );
                     }
                 } );
-        } );
+        } catch ( loadingError ) {
+            console.log( 'Error loading widget ' + widget.path + ': ' + loadingError );
+        }
     };
 
     /**
@@ -171,11 +186,17 @@ define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( 
      * @return {[type]}        [description]
      */
     _load = function( widget ) {
-        var deferred = Q.defer();
-        require( [ widget.path ], function( widgetName ) {
-            widget.name = widgetName;
-            deferred.resolve( widget );
-        } );
+        var deferred, widgetName;
+
+        deferred = Q.defer();
+
+        // FIXME we have to remove the leading `.` from widget path because
+        // browserify maps paths strangely
+        widgetName = require( widget.path.substring(1) + '.js' );
+        widget.name = widgetName;
+        deferred.resolve( widget );
+
+        console.log( 'Loaded widget: ' + widgetName );
 
         return deferred.promise;
     };
@@ -215,7 +236,7 @@ define( [ 'text!enketo-config', 'enketo-js/support', 'q', 'jquery' ], function( 
         }
     };
 
-    return {
+    module.exports = {
         init: init,
         enable: enable,
         disable: disable,

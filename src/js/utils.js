@@ -1,5 +1,10 @@
-define( [], function() {
-
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
+define( function(require, exports, module){
+    'use strict';
 
     /**
      * Parses an Expression to extract a function call and its parameter content as a string.
@@ -36,7 +41,7 @@ define( [], function() {
         return results;
     }
 
-    return {
+    module.exports = {
         parseFunctionFromExpression: parseFunctionFromExpression
     };
 } );

@@ -105,28 +105,44 @@ module.exports = function( grunt ) {
                 extDot: 'last'
             }
         },
-        // this compiles all javascript to a single minified file
-        requirejs: {
-            compile: {
-                options: {
-                    name: '../app',
-                    baseUrl: './lib',
-                    mainConfigFile: 'require-config.js',
-                    findNestedDependencies: true,
-                    include: ( function() {
-                        //add widgets js and widget config.json files
-                        var widgets = grunt.file.readJSON( 'config.json' ).widgets;
-                        widgets.forEach( function( widget, index, arr ) {
-                            arr.push( 'text!' + widget.substr( 0, widget.lastIndexOf( '/' ) + 1 ) + 'config.json' );
-                        } );
-                        return [ './bower-components/requirejs/require.js' ].concat( widgets );
-                    } )(),
-                    out: 'build/js/combined.min.js',
-                    optimize: 'uglify2'
-                }
-            }
-        }
+        browserify: {
+            standalone: {
+                files: { 'build/js/enketo.grunt.js': browserify_includeList() },
+            },
+            options: {
+                alias: browserify_aliases(),
+            },
+        },
+        uglify: {
+            standalone: {
+                files: { 'build/js/enketo.grunt.min.js': [ 'build/js/enketo.grunt.js' ] },
+            },
+        },
     } );
+
+    function browserify_aliases() {
+        var aliases = {};
+        browserify_widgetIncludes().forEach(function(w) {
+            aliases[w] = w;
+        });
+        return aliases;
+    }
+
+    function browserify_widgetIncludes() {
+        var config = require('./config.json'),
+                includes = [];
+        config.widgets.forEach(function(widget) {
+            includes.push(widget + '.js');
+            includes.push(widget.replace(/\/[^\/]*$$/, '') + '/config.json');
+        });
+        return includes;
+    }
+
+    function browserify_includeList() {
+        var includes = browserify_widgetIncludes();
+        includes.unshift('app.js');
+        return includes;
+    }
 
     //maybe this can be turned into a npm module?
     grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function() {
@@ -137,18 +153,18 @@ module.exports = function( grunt ) {
             '// based on the content of config.json\r\n\r\n';
 
         widgets.forEach( function( widget ) {
-            if ( widget.indexOf( 'enketo-widget/' ) === 0 ) {
+            if ( widget.indexOf( './src/' ) === 0 ) {
                 //strip require.js module name
                 widgetFolderPath = widget.substr( 0, widget.lastIndexOf( '/' ) + 1 );
                 //replace widget require.js path shortcut with proper path relative to src/js
-                widgetSassPath = widgetFolderPath.replace( /^enketo-widget\//, '../../widget/' );
+                widgetSassPath = widgetFolderPath.replace( /^\.\/src\//, '../../' );
                 //create path to widget config file
-                widgetConfigPath = widgetFolderPath.replace( /^enketo-widget\//, 'src/widget/' ) + 'config.json';
+                widgetConfigPath = widgetFolderPath + 'config.json';
                 grunt.log.writeln( 'widget config path: ' + widgetConfigPath );
                 //create path to widget stylesheet file
                 widgetSassPath += grunt.file.readJSON( widgetConfigPath ).stylesheet;
             } else {
-                grunt.log.error( [ 'Expected widget path "' + widget + '" in config.json to be preceded by "widget/".' ] );
+                grunt.log.error( [ 'Expected widget path "' + widget + '" in config.json to be preceded by "./src/".' ] );
             }
             //replace this by a function that parses config.json in each widget folder to get the 'stylesheet' variable
             content += '@import "' + widgetSassPath + '";\r\n';
@@ -158,8 +174,8 @@ module.exports = function( grunt ) {
 
     } );
 
-    grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
+    grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
+    grunt.registerTask( 'test', [ /*'jsbeautifier:test',*/ 'jshint', 'compile', 'karma:headless' ] );
     grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'concurrent:develop' ] );

@@ -1,3 +1,8 @@
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
 /**
  * Simple file manager with cross-browser support. That uses the FileReader
  * to create previews. Can be replaced with a more advanced version that
@@ -7,8 +12,10 @@
  * types.
  */
 
-define( [ 'q', 'jquery' ], function( Q, $ ) {
+define( function(require, exports, module){
     'use strict';
+    var Q = require('q');
+    var $ = require('jquery');
 
     var supported = typeof FileReader !== 'undefined',
         notSupportedAdvisoryMsg = '';
@@ -100,7 +107,7 @@ define( [ 'q', 'jquery' ], function( Q, $ ) {
         return files;
     }
 
-    return {
+    module.exports = {
         isSupported: isSupported,
         notSupportedAdvisoryMsg: notSupportedAdvisoryMsg,
         isWaitingForPermissions: isWaitingForPermissions,

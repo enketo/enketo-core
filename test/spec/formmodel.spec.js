@@ -1,8 +1,4 @@
-if ( typeof define !== 'function' ) {
-    var define = require( 'amdefine' )( module );
-}
-
-define( [ 'enketo-js/FormModel' ], function( Model ) {
+var Model = require('../../src/js/FormModel');
 
     var getModel = function( filename ) {
         var model = new Model( mockForms1[ filename ].xml_model );
@@ -572,5 +568,3 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
         } );
 
     } );
-
-} );

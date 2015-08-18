@@ -1,3 +1,8 @@
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
 /**
  * @preserve Copyright 2012 Martijn van de Rijdt & Modi Labs
  *
@@ -14,9 +19,14 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugins', 'enketo-js/extend', 'jquery.touchswipe' ],
-    function( FormModel, widgets, $ ) {
-        'use strict';
+define( function(require, exports, module){
+    'use strict';
+    var FormModel = require('./FormModel');
+    var widgets = require('./widgets');
+    var $ = require('jquery');
+    require('./plugins');
+    require('./extend');
+    require('jquery.touchswipe');
 
         /**
          * Class: Form
@@ -1967,5 +1977,5 @@ define( [ 'enketo-js/FormModel', 'enketo-js/widgets', 'jquery', 'enketo-js/plugi
             };
         }
 
-        return Form;
+        module.exports = Form;
     } );

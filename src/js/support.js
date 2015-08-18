@@ -1,8 +1,14 @@
+if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
+    var define = function (factory) {
+        factory(require, exports, module);
+    };
+}
 /**
  * Detects features. Replacement for Modernizr.
  */
 
-define( [], function() {
+define( function(require, exports, module){
+    'use strict';
     var features = {
             inputtypes: {}
         },
@@ -23,5 +29,5 @@ define( [], function() {
         features.touch = false;
     }
 
-    return features;
+    module.exports = features;
 } );

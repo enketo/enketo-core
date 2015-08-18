@@ -1,12 +1,7 @@
-if ( typeof define !== 'function' ) {
-    var define = require( 'amdefine' )( module );
-}
-
 /*
  * In a future version of PhantomJS with DOMParser support for XML Documents, these tests can move to the regular spec.
  */
-
-define( [ 'enketo-js/FormModel' ], function( Model ) {
+var Form = require('../../src/js/FormModel');
 
     describe( 'merging an instance into the model', function() {
 
@@ -169,4 +164,3 @@ define( [ 'enketo-js/FormModel' ], function( Model ) {
             } );
         } );
     } );
-} );
