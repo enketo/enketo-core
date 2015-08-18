@@ -116,18 +116,18 @@ module.exports = function( grunt ) {
             '// based on the content of config.json\r\n\r\n';
 
         widgets.forEach( function( widget ) {
-            if ( widget.indexOf( 'enketo-widget/' ) === 0 ) {
+            if ( widget.indexOf( './src/' ) === 0 ) {
                 //strip require.js module name
                 widgetFolderPath = widget.substr( 0, widget.lastIndexOf( '/' ) + 1 );
                 //replace widget require.js path shortcut with proper path relative to src/js
-                widgetSassPath = widgetFolderPath.replace( /^enketo-widget\//, '../../widget/' );
+                widgetSassPath = widgetFolderPath.replace( /^\.\/src\//, '../../' );
                 //create path to widget config file
-                widgetConfigPath = widgetFolderPath.replace( /^enketo-widget\//, 'src/widget/' ) + 'config.json';
+                widgetConfigPath = widgetFolderPath + 'config.json';
                 grunt.log.writeln( 'widget config path: ' + widgetConfigPath );
                 //create path to widget stylesheet file
                 widgetSassPath += grunt.file.readJSON( widgetConfigPath ).stylesheet;
             } else {
-                grunt.log.error( [ 'Expected widget path "' + widget + '" in config.json to be preceded by "widget/".' ] );
+                grunt.log.error( [ 'Expected widget path "' + widget + '" in config.json to be preceded by "./src/".' ] );
             }
             //replace this by a function that parses config.json in each widget folder to get the 'stylesheet' variable
             content += '@import "' + widgetSassPath + '";\r\n';

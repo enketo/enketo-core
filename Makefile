@@ -1,4 +1,4 @@
-eefault: init test browserify server
+eefault: init browserify style server
 
 WIDGETS_REQUIRED = $(shell node -e "require('./config.json').widgets.forEach(function(widget) {\
 	widget = widget.replace(/^..\/widget\//, './src/widget/'); \
@@ -40,3 +40,7 @@ test:
 .PHONY: server
 server:
 	grunt server
+
+.PHONY: style
+style:
+	grunt style
