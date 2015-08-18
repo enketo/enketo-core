@@ -1,6 +1,5 @@
-eefault: init test browserify compile server
+eefault: init test browserify server
 
-CC_VERSION = compiler-20150729.tar.gz
 WIDGETS_REQUIRED = $(shell node -e "require('./config.json').widgets.forEach(function(widget) {\
 	widget = widget.replace(/^..\/widget\//, './src/widget/'); \
 	console.log('-r ' + widget + '.js -r ' \
@@ -41,18 +40,3 @@ test:
 .PHONY: server
 server:
 	grunt server
-
-.PHONY: compile-dependencies
-compile-dependencies:
-	mkdir -p build/fetch/cc
-	(cd build/fetch/cc && \
-		wget -c http://dl.google.com/closure-compiler/${CC_VERSION} && \
-		tar -xf ${CC_VERSION} && \
-		cp compiler.jar ../../lib)
-
-.PHONY: compile
-compile: build-browserify compile-dependencies
-	java -jar build/lib/compiler.jar \
-		--language_in ES5 \
-		--js_output_file=build/js/browserify-bundle.min.js \
-		build/js/browserify-bundle.js
