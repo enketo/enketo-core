@@ -23,7 +23,7 @@ build-require:
 	grunt compile
 build-browserify: build-init
 	./node_modules/browserify/bin/cmd.js \
-		app.browserify.js \
+		app.js \
 		-o build/js/browserify-bundle.js \
 		${WIDGETS_REQUIRED} \
 		-r ./src/widget/date/bootstrap3-datepicker/js/bootstrap-datepicker.js
@@ -32,7 +32,7 @@ build-browserify: build-init
 watch:
 	./node_modules/watchify/bin/cmd.js \
 		--debug --verbose \
-		app.browserify.js \
+		app.js \
 		-o build/js/browserify-bundle.js \
 		${WIDGETS_REQUIRED} \
 		-r ./src/widget/date/bootstrap3-datepicker/js/bootstrap-datepicker.js
