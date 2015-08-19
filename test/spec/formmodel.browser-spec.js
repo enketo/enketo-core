@@ -1,7 +1,7 @@
 /*
  * In a future version of PhantomJS with DOMParser support for XML Documents, these tests can move to the regular spec.
  */
-var Form = require('../../src/js/FormModel');
+var Model = require('../../src/js/FormModel');
 
     describe( 'merging an instance into the model', function() {
 

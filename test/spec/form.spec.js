@@ -1,4 +1,6 @@
 var Form = require('../../src/js/Form');
+var mockForms1 = require('../mock/transforms.mock');
+var mockForms2 = require('../mock/form.mock');
 
     var loadForm = function( filename, editStr ) {
         var strings = mockForms1[ filename ];
@@ -13,8 +15,8 @@ var Form = require('../../src/js/Form');
         // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
         // since the issue was resolved by updating outputs with a one millisecond delay (!).
         // Nevertheless, these tests can be useful.
-        var form = new Form( formStr2, {
-            modelStr: dataStr2
+        var form = new Form( mockForms2.formStr2, {
+            modelStr: mockForms2.dataStr2
         } );
 
         form.init();
@@ -59,16 +61,16 @@ var Form = require('../../src/js/Form');
         var form, t;
 
         it( 'ignores a calculate binding on [ROOT]/meta/instanceID', function() {
-            form = new Form( formStr2, {
-                modelStr: dataStr2
+            form = new Form( mockForms2.formStr2, {
+                modelStr: mockForms2.dataStr2
             } );
             form.init();
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
         } );
 
         it( 'generates an instanceID on meta/instanceID WITHOUT preload binding', function() {
-            form = new Form( formStr2, {
-                modelStr: dataStr2
+            form = new Form( mockForms2.formStr2, {
+                modelStr: mockForms2.dataStr2
             } );
             form.init();
             form.getView().$.find( 'fieldset#or-preload-items' ).remove();
@@ -77,8 +79,8 @@ var Form = require('../../src/js/Form');
         } );
 
         it( 'generates an instanceID WITH preload binding', function() {
-            form = new Form( formStr3, {
-                modelStr: dataStr2
+            form = new Form( mockForms2.formStr3, {
+                modelStr: mockForms2.dataStr2
             } );
             form.init();
             expect( form.getView().$
@@ -88,16 +90,16 @@ var Form = require('../../src/js/Form');
         } );
 
         it( 'does not generate a new instanceID if one is already present', function() {
-            form = new Form( formStr3, {
-                modelStr: dataStr3
+            form = new Form( mockForms2.formStr3, {
+                modelStr: mockForms2.dataStr3
             } );
             form.init();
             expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ] ).toEqual( 'c13fe058-3349-4736-9645-8723d2806c8b' );
         } );
 
         it( 'generates a timeStart on meta/timeStart WITHOUT preload binding', function() {
-            form = new Form( formStr2, {
-                modelStr: dataStr2
+            form = new Form( mockForms2.formStr2, {
+                modelStr: mockForms2.dataStr2
             } );
             form.init();
             form.getView().$.find( 'fieldset#or-preload-items' ).remove();
@@ -108,8 +110,8 @@ var Form = require('../../src/js/Form');
         it( 'generates a timeEnd on init and updates this after a beforesave event WITHOUT preload binding', function() {
             var timeEnd, timeEndNew;
             //jasmine.Clock.useMock();
-            form = new Form( formStr2, {
-                modelStr: dataStr2
+            form = new Form( mockForms2.formStr2, {
+                modelStr: mockForms2.dataStr2
             } );
             form.init();
             form.getView().$.find( 'fieldset#or-preload-items' ).remove();
@@ -130,8 +132,8 @@ var Form = require('../../src/js/Form');
 
         function testPreloadExistingValue( node ) {
             it( 'obtains unchanged preload value of item (WITH preload binding): ' + node.selector + '', function() {
-                form = new Form( formStr5, {
-                    modelStr: dataStr5a
+                form = new Form( mockForms2.formStr5, {
+                    modelStr: mockForms2.dataStr5a
                 } );
                 form.init();
                 expect( form.getModel().node( node.selector ).getVal()[ 0 ] ).toEqual( node.result );
@@ -140,8 +142,8 @@ var Form = require('../../src/js/Form');
 
         function testPreloadNonExistingValue( node ) {
             it( 'populates previously empty preload item (WITH preload binding): ' + node.selector + '', function() {
-                form = new Form( formStr5, {
-                    modelStr: dataStr5b
+                form = new Form( mockForms2.formStr5, {
+                    modelStr: mockForms2.dataStr5b
                 } );
                 form.init();
                 expect( form.getModel().node( node.selector ).getVal()[ 0 ].length > 0 ).toBe( true );
@@ -196,8 +198,8 @@ var Form = require('../../src/js/Form');
         } );
 
         it( 'correctly populates input field even if the instance node name is not unique and occurs at multiple levels', function() {
-            form = new Form( formStr4, {
-                modelStr: dataStr4
+            form = new Form( mockForms2.formStr4, {
+                modelStr: mockForms2.dataStr4
             } );
             form.init();
             expect( form.getView().$.find( '[name="/nodename_bug/hh/hh"]' ).val() ).toEqual( 'hi' );
@@ -213,7 +215,7 @@ var Form = require('../../src/js/Form');
 
         describe( 'cloning', function() {
             beforeEach( function() {
-                form = loadForm( 'thedata.xml' ); //new Form(formStr1, dataStr1);
+                form = loadForm( 'thedata.xml' ); //new Form(mockForms2.formStr1, mockForms2.dataStr1);
                 form.init();
             } );
 
@@ -304,8 +306,8 @@ var Form = require('../../src/js/Form');
     describe( 'branching functionality', function() {
 
         it( 'hides irrelevant branches upon initialization', function() {
-            var form = new Form( formStr6, {
-                modelStr: dataStr6
+            var form = new Form( mockForms2.formStr6, {
+                modelStr: mockForms2.dataStr6
             } );
             form.init();
             expect( form.getView().$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
@@ -313,8 +315,8 @@ var Form = require('../../src/js/Form');
         } );
 
         it( 'reveals a group branch when the relevant condition is met', function() {
-            var form = new Form( formStr6, {
-                modelStr: dataStr6
+            var form = new Form( mockForms2.formStr6, {
+                modelStr: mockForms2.dataStr6
             } );
             form.init();
             //first check incorrect value that does not meet relevant condition
@@ -326,8 +328,8 @@ var Form = require('../../src/js/Form');
         } );
 
         it( 'reveals a question when the relevant condition is met', function() {
-            var form = new Form( formStr6, {
-                modelStr: dataStr6
+            var form = new Form( mockForms2.formStr6, {
+                modelStr: mockForms2.dataStr6
             } );
             form.init();
             //first check incorrect value that does not meet relevant condition
@@ -413,8 +415,8 @@ var Form = require('../../src/js/Form');
         } );
 
         describe( 'in nested branches ', function() {
-            var form = new Form( formStr7, {
-                modelStr: dataStr7
+            var form = new Form( mockForms2.formStr7, {
+                modelStr: mockForms2.dataStr7
             } );
             form.init();
             var $nestedBranch = form.getView().$.find( '[name="/data/group/nodeC"]' ).closest( '.question' );
@@ -440,8 +442,8 @@ var Form = require('../../src/js/Form');
 
         beforeEach( function() {
             jQuery.fx.off = true; //turn jQuery animations off
-            form = new Form( formStr6, {
-                modelStr: dataStr6
+            form = new Form( mockForms2.formStr6, {
+                modelStr: mockForms2.dataStr6
             } );
             form.init();
             $numberInput = form.getView().$.find( '[name="/data/group/nodeB"]' );
@@ -473,7 +475,7 @@ var Form = require('../../src/js/Form');
         } );
 
         it( 'invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', function() {
-            form = loadForm( 'thedata.xml' ); //new Form(formStr1, dataStr1);
+            form = loadForm( 'thedata.xml' ); //new Form(mockForms2.formStr1, mockForms2.dataStr1);
             form.init();
             var $textarea = form.getView().$.find( '[name="/thedata/nodeF"]' );
             $textarea.val( '\n' ).trigger( 'change' ).trigger( 'validate' );

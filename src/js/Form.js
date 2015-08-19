@@ -22,7 +22,7 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 define( function(require, exports, module){
     'use strict';
     var FormModel = require('./FormModel');
-    var widgets = require('./widgets');
+    var widgets = require('./widgets-controller');
     var $ = require('jquery');
     require('./plugins');
     require('./extend');

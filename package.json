@@ -49,7 +49,8 @@
         "merge-xml": "./lib/bower-components/mergexml/mergexml.js",
         "xpath": "./lib/xpath/build/enketo-xpathjs.js",
         "leaflet": "./lib/bower-components/leaflet/dist/leaflet.js",
-        "bootstrap-slider": "./lib/bootstrap-slider/js/bootstrap-slider.js"
+        "bootstrap-slider": "./lib/bootstrap-slider/js/bootstrap-slider.js",
+        "widgets": "./src/js/widgets.js"
     },
     "browserify": {
         "transform": "browserify-shim"

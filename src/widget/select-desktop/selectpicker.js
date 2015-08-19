@@ -415,5 +415,8 @@ define( function(require, exports, module){
 
     }( jQuery );
 
-    module.exports = pluginName;
+    module.exports = {
+        'name': pluginName,
+        'selector': 'select:not(#form-languages)'
+    };
 } );

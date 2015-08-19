@@ -1,4 +1,5 @@
 var Model = require('../../src/js/FormModel');
+var mockForms1 = require('../mock/transforms.mock');
 
     var getModel = function( filename ) {
         var model = new Model( mockForms1[ filename ].xml_model );

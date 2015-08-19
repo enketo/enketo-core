@@ -130,5 +130,8 @@ define( function(require, exports, module){
         return this;
     };
 
-    module.exports = pluginName;
+    module.exports = {
+        'name': pluginName,
+        'selector': 'form'
+    };
 } );

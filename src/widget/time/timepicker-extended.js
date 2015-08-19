@@ -113,5 +113,8 @@ define( function(require, exports, module){
             } );
         };
 
-        module.exports = pluginName;
+        module.exports = {
+            'name': pluginName,
+            'selector': 'input[type="time"]:not([readonly])'
+        };
     } );

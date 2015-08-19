@@ -1640,5 +1640,8 @@ define( function(require, exports, module){
             L.Google.asyncWait = [];
         };
 
-        module.exports = pluginName;
+        module.exports = {
+            'name': pluginName,
+            'selector': 'input[data-type-xml="geopoint"], input[data-type-xml="geotrace"], input[data-type-xml="geoshape"]'
+        };
     } );
