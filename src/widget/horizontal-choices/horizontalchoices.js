@@ -29,7 +29,7 @@ define( function(require, exports, module){
         // set the namespace (important!)
         this.namespace = pluginName;
         // call the Super constructor
-        Widget.call( this, element, pluginName, options );
+        Widget.call( this, element, options );
         this._init();
     }
 
