@@ -1,6 +1,6 @@
-if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
-    var define = function (factory) {
-        factory(require, exports, module);
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
     };
 }
 /**
@@ -19,9 +19,9 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
  * limitations under the License.
  */
 
-define( function(require, exports, module){
+define( function( require, exports, module ) {
     'use strict';
-    var $ = require('jquery');
+    var $ = require( 'jquery' );
 
     /**
      * A Widget class that can be extended to provide some of the basic widget functionality out of the box.

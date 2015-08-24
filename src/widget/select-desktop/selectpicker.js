@@ -1,6 +1,6 @@
-if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
-    var define = function (factory) {
-        factory(require, exports, module);
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
     };
 }
 /**
@@ -19,10 +19,10 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
  * limitations under the License.
  */
 
-define( function(require, exports, module){
+define( function( require, exports, module ) {
     'use strict';
-    var $ = require('jquery');
-    var Widget = require('../../js/Widget');
+    var $ = require( 'jquery' );
+    var Widget = require( '../../js/Widget' );
 
     var pluginName = 'desktopSelectpicker';
 

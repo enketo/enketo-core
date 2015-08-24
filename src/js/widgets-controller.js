@@ -1,16 +1,16 @@
-if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
-    var define = function (factory) {
-        factory(require, exports, module);
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
     };
 }
-define( function(require, exports, module){
+define( function( require, exports, module ) {
     'use strict';
-    var config = require('text!enketo-config');
-    var support = require('./support');
-    var $ = require('jquery');
-    var widgets = require('widgets').filter(function(widget){
+    var config = require( 'text!enketo-config' );
+    var support = require( './support' );
+    var $ = require( 'jquery' );
+    var widgets = require( 'widgets' ).filter( function( widget ) {
         return widget.selector;
-    });
+    } );
     var $form, init, enable, disable, destroy,
         _getWidgets, _getElements, _instantiate, _load, _setLangChangeHandler, _setOptionChangeHandler;
 
@@ -117,8 +117,8 @@ define( function(require, exports, module){
         widget.options = widget.options || {};
         widget.options.touch = support.touch;
 
-        if (!widget.name){
-            return console.error('widget doesn\'t have a name');
+        if ( !widget.name ) {
+            return console.error( 'widget doesn\'t have a name' );
         }
 
         $elements = _getElements( $group, widget.selector );

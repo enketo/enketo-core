@@ -1,6 +1,6 @@
-if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
-    var define = function (factory) {
-        factory(require, exports, module);
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
     };
 }
 //extend native objects, aka monkey patching ..... really I see no harm!

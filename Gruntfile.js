@@ -7,7 +7,7 @@
 'use strict';
 
 module.exports = function( grunt ) {
-    var appConfig = grunt.file.readJSON('config.json');
+    var appConfig = grunt.file.readJSON( 'config.json' );
 
     // show elapsed time at the end
     require( 'time-grunt' )( grunt );
@@ -104,7 +104,9 @@ module.exports = function( grunt ) {
         },
         browserify: {
             standalone: {
-                files: { 'build/js/enketo-bundle.js': ['app.js'] },
+                files: {
+                    'build/js/enketo-bundle.js': [ 'app.js' ]
+                },
             },
             options: {
                 alias: {},
@@ -112,15 +114,17 @@ module.exports = function( grunt ) {
         },
         uglify: {
             standalone: {
-                files: { 'build/js/enketo-bundle.min.js': [ 'build/js/enketo-bundle.js' ] },
+                files: {
+                    'build/js/enketo-bundle.min.js': [ 'build/js/enketo-bundle.js' ]
+                },
             },
         },
     } );
 
     grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
-    grunt.registerTask( 'test', [ /*'jsbeautifier:test',*/ 'jshint', 'compile', 'karma:headless' ] );
-    grunt.registerTask( 'style', ['sass' ] );
+    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
+    grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'browserify', 'concurrent:develop' ] );
-    grunt.registerTask( 'default', ['style', 'compile' ] );
+    grunt.registerTask( 'default', [ 'style', 'compile' ] );
 };

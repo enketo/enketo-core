@@ -1,17 +1,17 @@
-if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
-    var define = function (factory) {
-        factory(require, exports, module);
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
     };
 }
-define( function(require, exports, module){
+define( function( require, exports, module ) {
     'use strict';
-    var MergeXML = require('mergexml/mergexml');
-    var XPathJS = require('enketo-xpathjs');
-    var utils = require('./utils');
-    var $ = require('jquery');
-    require('./plugins');
-    require('./extend');
-    require('jquery-xpath-basic');
+    var MergeXML = require( 'mergexml/mergexml' );
+    var XPathJS = require( 'enketo-xpathjs' );
+    var utils = require( './utils' );
+    var $ = require( 'jquery' );
+    require( './plugins' );
+    require( './extend' );
+    require( 'jquery-xpath-basic' );
 
     var FormModel, Nodeset, types;
 
