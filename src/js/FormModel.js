@@ -5,13 +5,13 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 }
 define( function(require, exports, module){
     'use strict';
-    var XPathJS = require('xpath');
-    var MergeXML = require('merge-xml');
+    var MergeXML = require('mergexml/mergexml');
+    var XPathJS = require('enketo-xpathjs');
     var utils = require('./utils');
     var $ = require('jquery');
     require('./plugins');
     require('./extend');
-    require('jquery.xpath');
+    require('jquery-xpath-basic');
 
     var FormModel, Nodeset, types;
 

@@ -6,6 +6,9 @@
  */
 
 var $ = require('jquery');
+// until all plugins are commonJS-friendly, expose jQuery globally
+window.jQuery = $;
+
 var support = require('./src/js/support');
 var Form = require('./src/js/Form');
 var fileManager = require('./src/js/file-manager');

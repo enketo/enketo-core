@@ -24,21 +24,20 @@ define( function(require, exports, module){
     var Widget = require('../../js/Widget');
     var support = require('../../js/support');
     var $ = require('jquery');
-    require('./bootstrap3-timepicker/js/bootstrap-timepicker');
+    require('bootstrap-timepicker/js/bootstrap-timepicker');
 
         var pluginName = 'timepickerExtended';
 
         /**
          * Extends jdewit's bootstrap-timepicker without changing the original
          * https://github.com/jdewit/bootstrap-timepicker
-         * TODO: I'd like to find a replacement for jdewit's widget during the move to bootstrap 3.
+         * TODO: find a replacement for jdewit's widget
          *
          * @constructor
          * @param {Element}                       element   Element to apply widget to.
          * @param {(boolean|{touch: boolean})}    options   options
          * @param {*=}                            event     event
          */
-
         function TimepickerExtended( element, options ) {
             this.namespace = pluginName;
             //call the Super constructor

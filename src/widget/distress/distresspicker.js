@@ -23,7 +23,7 @@ define( function(require, exports, module){
     'use strict';
     var Widget = require('../../js/Widget');
     var $ = require('jquery');
-    require('bootstrap-slider');
+    require('bootstrap-slider-basic');
 
     var pluginName = 'distresspicker';
 

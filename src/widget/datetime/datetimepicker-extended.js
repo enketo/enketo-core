@@ -25,8 +25,8 @@ define( function(require, exports, module){
     var support = require('../../js/support');
     var $ = require('jquery');
     require('../../js/extend');
-    require('../date/bootstrap3-datepicker/js/bootstrap-datepicker');
-    require('../time/bootstrap3-timepicker/js/bootstrap-timepicker');
+    require('bootstrap-datepicker/dist/js/bootstrap-datepicker');
+    require('bootstrap-timepicker/js/bootstrap-timepicker');
 
         var pluginName = 'datetimepickerExtended';
 

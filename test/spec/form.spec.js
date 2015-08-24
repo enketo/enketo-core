@@ -1,4 +1,5 @@
 var Form = require('../../src/js/Form');
+var $ = require('jquery');
 var mockForms1 = require('../mock/transforms.mock');
 var mockForms2 = require('../mock/form.mock');
 

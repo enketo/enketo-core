@@ -24,7 +24,7 @@ define( function(require, exports, module){
     var Widget = require('../../js/Widget');
     var support = require('../../js/support');
     var $ = require('jquery');
-    require('./bootstrap3-datepicker/js/bootstrap-datepicker');
+    require('bootstrap-datepicker/dist/js/bootstrap-datepicker');
 
         //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
         var pluginName = 'datepickerExtended';
@@ -82,8 +82,7 @@ define( function(require, exports, module){
                 autoclose: true,
                 todayHighlight: true,
                 startView: settings.startView,
-                minViewMode: settings.minViewMode,
-                orientation: 'top'
+                minViewMode: settings.minViewMode
             } ).on( 'changeDate', function() {
                 // copy changes made by datepicker to original input field
                 var value = $( this ).val();

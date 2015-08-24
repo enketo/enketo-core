@@ -1,62 +1,58 @@
 {
-    "name": "enketo-core",
-    "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
-    "homepage": "https://enketo.org",
-    "version": "3.8.4",
-    "license": "Apache-2.0",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/enketo/enketo-core"
-    },
-    "contributors": [
-        "Martijn van de Rijdt"
-    ],
-    "scripts": {
-        "test": "grunt test"
-    },
-    "devDependencies": {
-        "browserify": "^11.0.1",
-        "browserify-shim": "^3.8.10",
-        "grunt": "0.4.x",
-        "grunt-browserify": "^4.0.0",
-        "grunt-concurrent": "2.x.x",
-        "grunt-contrib-connect": "0.x.x",
-        "grunt-contrib-jshint": "0.x.x",
-        "grunt-contrib-uglify": "^0.9.1",
-        "grunt-contrib-watch": "0.x.x",
-        "grunt-jsbeautifier": "0.x.x",
-        "grunt-karma": "0.12.x",
-        "grunt-sass": "1.0.x",
-        "jasmine-core": "2.3.x",
-        "karma": "0.13.x",
-        "karma-browserify": "^4.3.0",
-        "karma-chrome-launcher": "0.2.x",
-        "karma-firefox-launcher": "0.1.x",
-        "karma-jasmine": "0.3.x",
-        "karma-phantomjs-launcher": "0.2.x",
-        "karma-safari-launcher": "0.1.x",
-        "load-grunt-tasks": "3.x.x",
-        "phantomjs": "1.9.x",
-        "time-grunt": "1.x.x",
-        "watchify": "^3.3.1"
-    },
-    "browser": {
-        "jquery": "./lib/bower-components/jquery/dist/jquery.js",
-        "q": "./lib/bower-components/q/q.js",
-        "text!enketo-config": "./config.json",
-        "jquery.touchswipe": "./lib/jquery-touchswipe/jquery.touchSwipe.js",
-        "jquery.xpath": "./lib/jquery-xpath/jquery.xpath.js",
-        "merge-xml": "./lib/bower-components/mergexml/mergexml.js",
-        "xpath": "./lib/xpath/build/enketo-xpathjs.js",
-        "leaflet": "./lib/bower-components/leaflet/dist/leaflet.js",
-        "bootstrap-slider": "./lib/bootstrap-slider/js/bootstrap-slider.js",
-        "widgets": "./src/js/widgets.js"
-    },
-    "browserify": {
-        "transform": "browserify-shim"
-    },
-    "browserify-shim": {
-        "./lib/bower-components/jquery/dist/jquery.js": "jQuery",
-        "./lib/xpath/build/enketo-xpathjs.js": "XPathJS"
-    }
+  "name": "enketo-core",
+  "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
+  "homepage": "https://enketo.org",
+  "version": "3.8.4",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enketo/enketo-core"
+  },
+  "contributors": [
+    "Martijn van de Rijdt"
+  ],
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "browserify": "^11.0.1",
+    "grunt": "0.4.x",
+    "grunt-browserify": "^4.0.0",
+    "grunt-concurrent": "2.x.x",
+    "grunt-contrib-connect": "0.x.x",
+    "grunt-contrib-jshint": "0.x.x",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-watch": "0.x.x",
+    "grunt-jsbeautifier": "0.x.x",
+    "grunt-karma": "0.12.x",
+    "grunt-sass": "1.0.x",
+    "jasmine-core": "2.3.x",
+    "karma": "0.13.x",
+    "karma-browserify": "^4.3.0",
+    "karma-chrome-launcher": "0.2.x",
+    "karma-firefox-launcher": "0.1.x",
+    "karma-jasmine": "0.3.x",
+    "karma-phantomjs-launcher": "0.2.x",
+    "karma-safari-launcher": "0.1.x",
+    "load-grunt-tasks": "3.x.x",
+    "phantomjs": "1.9.x",
+    "time-grunt": "1.x.x",
+    "watchify": "^3.3.1"
+  },
+  "browser": {
+    "text!enketo-config": "./config.json",
+    "widgets": "./src/js/widgets.js"
+  },
+  "dependencies": {
+    "bootstrap-datepicker": "1.4.x",
+    "bootstrap-slider-basic": "3.0.x",
+    "bootstrap-timepicker": "0.2.x",
+    "enketo-xpathjs": "1.2.x",
+    "jquery": "2.1.x",
+    "jquery-touchswipe": "1.6.x",
+    "jquery-xpath-basic": "1.0.x",
+    "leaflet": "0.7.x",
+    "mergexml": "1.1.x",
+    "q": "1.4.x"
+  }
 }

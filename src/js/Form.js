@@ -26,7 +26,7 @@ define( function(require, exports, module){
     var $ = require('jquery');
     require('./plugins');
     require('./extend');
-    require('jquery.touchswipe');
+    require('jquery-touchswipe');
 
         /**
          * Class: Form
