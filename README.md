@@ -1,4 +1,5 @@
-enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
+## enketo-core 
+[![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
 ================
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) and [various third party tools](https://enketo.org/#tools).
@@ -9,7 +10,7 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 
 ### Usage as a library
 
-1. Install as a git submodule, with `npm enketo-core --save` or `bower install enketo-core --save`.
+1. Install as a git submodule, with `npm enketo-core --save`.
 2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/transform](http://xslt-dev.enketo.org/transform/) (add `?xform=http://myforms.com/myform.xml` to use API).
 3. Add [themes](./src/sass) to your stylesheet build system (2 stylesheets per theme, 1 is for `media="print"`).
 4. Override [config.json](./config.json) and optionally [widgets.js](./src/js/widgets.js) with your app-specific versions.
