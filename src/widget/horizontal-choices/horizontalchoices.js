@@ -1,10 +1,17 @@
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
+    };
+}
 /**
  * Horizontal Choices Widget
  *
  */
 
-define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
+define( function( require, exports, module ) {
     'use strict';
+    var $ = require( 'jquery' );
+    var Widget = require( '../../js/Widget' );
 
     var pluginName = 'horizontalChoices';
 
@@ -22,7 +29,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
         // set the namespace (important!)
         this.namespace = pluginName;
         // call the Super constructor
-        Widget.call( this, element, pluginName, options );
+        Widget.call( this, element, options );
         this._init();
     }
 
@@ -72,5 +79,8 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
         } );
     };
 
-    return pluginName;
+    module.exports = {
+        'name': pluginName,
+        'selector': '.or-appearance-horizontal'
+    };
 } );

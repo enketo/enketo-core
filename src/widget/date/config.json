@@ -1,5 +1,0 @@
-{
-    "stylesheet": "datepicker-extended.scss",
-    "selector": "input[type=\"date\"]:not([readonly])",
-    "options": {}
-}

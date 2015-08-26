@@ -1,79 +1,78 @@
-enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
+enketo-core [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#info=devDependencies) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
 ================
 
-The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools.
+The engine that powers [Enketo Smart Paper](https://enketo.org) and [various third party tools](https://enketo.org/#tools).
 
-This repo is meant to use as a building block for your own enketo-powered application or to add features that you'd like to see in enketo hosted on [formhub.org](https://formhub.org) and [enketo.org](https://enketo.org)
+This repo is meant to use as a building block for any enketo-powered application.
 
 Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
 ### Usage as a library
 
-1. Add as a git submodule (future: bower and/or npm)
-2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/](http://xslt-dev.enketo.org/) (add `?xform=http://myforms.com/myform.xml` to use API).
-3. Ignore (or copy parts of) [Gruntfile.js](Gruntfile.js), [config.json](config.json) and [app.js](app.js) and create your own app's build system instead
-4. Main methods illustrated in code below:
+1. Install as a git submodule, with `npm enketo-core --save` or `bower install enketo-core --save`.
+2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/transform](http://xslt-dev.enketo.org/transform/) (add `?xform=http://myforms.com/myform.xml` to use API).
+3. Add [themes](./src/sass) to your stylesheet build system (2 stylesheets per theme, 1 is for `media="print"`).
+4. Override [config.json](./config.json) and optionally [widgets.js](./src/js/widgets.js) with your app-specific versions.
+5. Main methods illustrated in code below:
 
 ```javascript 
+	
+var Form = require('enketo-core');
 
-requirejs(['js/Form'], function (Form){
+// The XSL transformation result contains a HTML Form and XML instance.
+// These can be obtained dynamically on the client, or at the server/
+// In this example we assume the HTML was injected at the server and modelStr 
+// was injected as a global variable inside a <script> tag.
 
-	// The XSL transformation result contains a HTML Form and XML instance.
-	// These can be obtained dynamically on the client, or at the server/
-	// In this example we assume the HTML was injected at the server and modelStr 
-	// was injected as a global variable inside a <script> tag.
+// required string of the jquery selector of the HTML Form DOM element
+var formSelector = 'form.or:eq(0)';
 
-	// required string of the jquery selector of the HTML Form DOM element
-	var formSelector = 'form.or:eq(0)';
+// required object containing data for the form
+var data = {
+	// required string of the default instance defined in the XForm
+	modelStr: globalXMLInstance,
+	// optional string of an existing instance to be edited
+	instanceStr: null,
+	// optional boolean whether this instance has been submitted already
+	submitted: false,
+	// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
+	external = []
+};
 
-	// required object containing data for the form
-	var data = {
-		// required string of the default instance defined in the XForm
-		modelStr: globalXMLInstance,
-		// optional string of an existing instance to be edited
-		instanceStr: null,
-		// optional boolean whether this instance has been submitted already
-		submitted: false,
-		// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
-		external = []
-	};
+// instantiate a form, with 2 parameters
+var form = new Form( formSelector, data);
 
-	// instantiate a form, with 2 parameters
-	var form = new Form( formSelector, data);
+//initialize the form and capture any load errors
+var loadErrors = form.init();
 
-	//initialize the form and capture any load errors
-	var loadErrors = form.init();
+//submit button handler for validate button
+$( '#submit' ).on( 'click', function() {
+    form.validateForm();
+    if ( !form.isValid() ) {
+        alert( 'Form contains errors. Please see fields marked in red.' );
+    } else {
+        // Record is valid! 
+        var record = form.getDataStr();
 
-	//submit button handler for validate button
-    $( '#submit' ).on( 'click', function() {
-        form.validateForm();
-        if ( !form.isValid() ) {
-            alert( 'Form contains errors. Please see fields marked in red.' );
-        } else {
-            // Record is valid! 
-            var record = form.getDataStr();
+        // reset the form view
+        form.resetView();
 
-            // reset the form view
-            form.resetView();
+        // reinstantiate a new form with the default model 
+        form = new Form( 'form.or:eq(0)', { modelStr: modelStr } );
 
-            // reinstantiate a new form with the default model 
-            form = new Form( 'form.or:eq(0)', { modelStr: modelStr } );
+        // do what you want with the record
+    }
+} );
 
-            // do what you want with the record
-        }
-    } );
-});
 ```
 
 ### How to run to develop on enketo-core
 
-1. install [node](http://nodejs.org/), [grunt-cli](http://gruntjs.com/getting-started), and bower
-2. clone the repo
-3. get the submodules with `git submodule update --init --recursive` (run this again after pulling updates!)
-3. install most dependencies with `npm install` and `bower install`
-4. build and test with `grunt`
-5. start built-in server with `grunt server` 
-8. browse to [http://localhost:8005/forms/index.html](http://localhost:8005/forms/index.html)
+1. install [node](http://nodejs.org/) and [grunt-cli](http://gruntjs.com/getting-started)
+2. install dependencies with `npm install`
+3. build with `grunt`
+4. start built-in auto-reloading development server with `grunt develop` 
+5. browse to [http://localhost:8005/forms/index.html](http://localhost:8005/forms/index.html)
 
 ### How to create or extend widgets
 
@@ -81,12 +80,9 @@ To create new widgets, I recommend using this [plugin template](https://gist.git
 
 Each widget needs to fulfill following requirements:
 
-* be an AMD-compliant jQuery plugin
-* it needs to return its own name
-* be in its own folder with a config.json file, including
-	* `selector: ` the selector of the elements to instantiate the widget on, or `null` if it needs to be applied globally
-	* `options: ` any default options to pass
-	* `stylesheet: ` path to stylesheet scss file relative to the widget's own folder
+* be an CommonJS/AMD-compliant jQuery plugin
+* it needs to return an object with its own name and selector-to-instantiate with
+* path to stylesheet scss file relative to the widget's own folder to be added in [_widgets.scss](./src/sass/core/_widgets.scss) (this will be automated in the future)
 * be responsive up to a minimum window width of 320px
 * use JSDoc style documentation for the purpose of passing the Google Closure Compiler without warnings and errors
 * if hiding the original input element, it needs to load the default value from that input element into the widget
@@ -108,13 +104,12 @@ Each widget needs to fulfill following requirements:
 ### Notes for All Developers
 
 * build with Grunt
-* use `grunt watch` to automatically compile (sass) when a source file changes
-* requires webserver - one is included in this repo and can be fired up with `grunt server`
+* helpful to use `grunt develop` to automatically compile (sass and js) when a source file changes, serve, and refresh
 * adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
 
 ### Notes for JavaScript Developers
 
-* The JS library uses Require.js
+* The JS library uses CommonJS modules, but it the modules are still AMD-compliant. It may be quite a bit of work to get them working properly using requirejs though (AMD-specific issues won't be fixed by author, but AMD-specific patches/PRs are welcome)
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
 * Still trying to find a JS Documentation system to use with grunt that likes Closure-style JSDoc
 * JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues (Note, I had to add `"ensure_newline_at_eof_on_save": true` to the Sublime Text 2 user settings to make grunt jsbeautifier happy with the style produced by the ST2 JsFormat plugin.)
@@ -124,7 +119,7 @@ Each widget needs to fulfill following requirements:
 ### Notes for CSS Developers
 
 The core can be fairly easily extended with alternative themes. 
-See the *plain*, the *grid*, and the *formhub* themes already included in /src/sass. 
+See the *plain*, the *grid*, and the *formhub* themes already included in [/src/sass](./src/sass). 
 We would be happy to discuss whether your contribution should be a part of the core, the default theme or be turned into a new theme. 
 
 For custom themes that go beyond just changing colors and fonts, keep in mind all the different contexts for a theme:

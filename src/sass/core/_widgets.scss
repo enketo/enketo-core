@@ -1,7 +1,4 @@
-// Dynamically created list of widget stylesheets to import based on the content
-// based on the content of config.json
-
-@import "../../widget/note/note.scss";
+@import "../../widget/note/notewidget.scss";
 @import "../../widget/select-desktop/selectpicker.scss";
 @import "../../widget/select-mobile/selectpicker.scss";
 @import "../../widget/geo/geopicker.scss";

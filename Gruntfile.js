@@ -7,6 +7,7 @@
 'use strict';
 
 module.exports = function( grunt ) {
+    var appConfig = grunt.file.readJSON( 'config.json' );
 
     // show elapsed time at the end
     require( 'time-grunt' )( grunt );
@@ -68,7 +69,7 @@ module.exports = function( grunt ) {
             },
             js: {
                 files: [ '*.js', 'src/**/*.js' ],
-                tasks: [],
+                tasks: [ 'browserify' ],
                 options: {
                     spawn: false,
                     livereload: true
@@ -89,10 +90,6 @@ module.exports = function( grunt ) {
                 browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', /*'Opera',*/ 'Safari' ]
             }
         },
-        prepWidgetSass: {
-            writePath: 'src/sass/core/_widgets.scss',
-            widgetConfigPath: 'config.json'
-        },
         sass: {
             compile: {
                 cwd: 'src/sass',
@@ -105,63 +102,29 @@ module.exports = function( grunt ) {
                 extDot: 'last'
             }
         },
-        // this compiles all javascript to a single minified file
-        requirejs: {
-            compile: {
-                options: {
-                    name: '../app',
-                    baseUrl: './lib',
-                    mainConfigFile: 'require-config.js',
-                    findNestedDependencies: true,
-                    include: ( function() {
-                        //add widgets js and widget config.json files
-                        var widgets = grunt.file.readJSON( 'config.json' ).widgets;
-                        widgets.forEach( function( widget, index, arr ) {
-                            arr.push( 'text!' + widget.substr( 0, widget.lastIndexOf( '/' ) + 1 ) + 'config.json' );
-                        } );
-                        return [ './bower-components/requirejs/require.js' ].concat( widgets );
-                    } )(),
-                    out: 'build/js/combined.min.js',
-                    optimize: 'uglify2'
-                }
-            }
-        }
+        browserify: {
+            standalone: {
+                files: {
+                    'build/js/enketo-bundle.js': [ 'app.js' ]
+                },
+            },
+            options: {
+                alias: {},
+            },
+        },
+        uglify: {
+            standalone: {
+                files: {
+                    'build/js/enketo-bundle.min.js': [ 'build/js/enketo-bundle.js' ]
+                },
+            },
+        },
     } );
 
-    //maybe this can be turned into a npm module?
-    grunt.registerTask( 'prepWidgetSass', 'Preparing _widgets.scss dynamically', function() {
-        var widgetFolderPath, widgetSassPath, widgetConfigPath,
-            config = grunt.config( 'prepWidgetSass' ),
-            widgets = grunt.file.readJSON( config.widgetConfigPath ).widgets,
-            content = '// Dynamically created list of widget stylesheets to import based on the content\r\n' +
-            '// based on the content of config.json\r\n\r\n';
-
-        widgets.forEach( function( widget ) {
-            if ( widget.indexOf( 'enketo-widget/' ) === 0 ) {
-                //strip require.js module name
-                widgetFolderPath = widget.substr( 0, widget.lastIndexOf( '/' ) + 1 );
-                //replace widget require.js path shortcut with proper path relative to src/js
-                widgetSassPath = widgetFolderPath.replace( /^enketo-widget\//, '../../widget/' );
-                //create path to widget config file
-                widgetConfigPath = widgetFolderPath.replace( /^enketo-widget\//, 'src/widget/' ) + 'config.json';
-                grunt.log.writeln( 'widget config path: ' + widgetConfigPath );
-                //create path to widget stylesheet file
-                widgetSassPath += grunt.file.readJSON( widgetConfigPath ).stylesheet;
-            } else {
-                grunt.log.error( [ 'Expected widget path "' + widget + '" in config.json to be preceded by "widget/".' ] );
-            }
-            //replace this by a function that parses config.json in each widget folder to get the 'stylesheet' variable
-            content += '@import "' + widgetSassPath + '";\r\n';
-        } );
-
-        grunt.file.write( config.writePath, content );
-
-    } );
-
-    grunt.registerTask( 'compile', [ 'requirejs:compile' ] );
+    grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
     grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
-    grunt.registerTask( 'style', [ 'prepWidgetSass', 'sass' ] );
+    grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
-    grunt.registerTask( 'develop', [ 'concurrent:develop' ] );
-    grunt.registerTask( 'default', [ 'prepWidgetSass', 'sass', 'compile' ] );
+    grunt.registerTask( 'develop', [ 'browserify', 'concurrent:develop' ] );
+    grunt.registerTask( 'default', [ 'style', 'compile' ] );
 };

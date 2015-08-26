@@ -1,3 +1,8 @@
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
+    };
+}
 /**
  * @preserve Copyright 2012 Martijn van de Rijdt & Modi Labs
  *
@@ -14,8 +19,11 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, $ ) {
+define( function( require, exports, module ) {
     'use strict';
+    var Widget = require( '../../js/Widget' );
+    var $ = require( 'jquery' );
+    require( 'bootstrap-slider-basic' );
 
     var pluginName = 'distresspicker';
 
@@ -116,5 +124,8 @@ define( [ 'enketo-js/Widget', 'jquery', 'bootstrap-slider' ], function( Widget, 
         } );
     };
 
-    return pluginName;
+    module.exports = {
+        'name': pluginName,
+        'selector': '.or-appearance-distress input[type="number"]'
+    };
 } );

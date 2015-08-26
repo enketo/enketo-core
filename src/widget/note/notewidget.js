@@ -1,3 +1,8 @@
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
+    };
+}
 /**
  * @preserve Copyright 2012 Martijn van de Rijdt & Modilabs
  *
@@ -14,8 +19,11 @@
  * limitations under the License.
  */
 
-define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget, $ ) {
+define( function( require, exports, module ) {
     'use strict';
+    var Widget = require( '../../js/Widget' );
+    var $ = require( 'jquery' );
+    require( '../../js/plugins' );
 
     var pluginName = 'notewidget';
 
@@ -67,5 +75,8 @@ define( [ 'enketo-js/Widget', 'jquery', 'enketo-js/plugins' ], function( Widget,
         } );
     };
 
-    return pluginName;
+    module.exports = {
+        'name': pluginName,
+        'selector': '.note'
+    };
 } );

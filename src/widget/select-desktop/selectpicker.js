@@ -1,3 +1,8 @@
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
+    };
+}
 /**
  * @preserve Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
  *
@@ -14,8 +19,10 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
+define( function( require, exports, module ) {
     'use strict';
+    var $ = require( 'jquery' );
+    var Widget = require( '../../js/Widget' );
 
     var pluginName = 'desktopSelectpicker';
 
@@ -408,5 +415,8 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
 
     }( jQuery );
 
-    return pluginName;
+    module.exports = {
+        'name': pluginName,
+        'selector': 'select:not(#form-languages)'
+    };
 } );

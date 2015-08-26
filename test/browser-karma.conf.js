@@ -10,17 +10,14 @@ module.exports = function( config ) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: [ 'jasmine', 'requirejs' ],
+        frameworks: [ 'browserify', 'jasmine' ],
 
 
         // list of files / patterns to load in the browser
         files: [
-            'require-config.js',
-            'test/test-main.js',
-            'test/mock/*.js', {
-                pattern: 'test/spec/*spec.js', // covers both .spec.js and .browser-spec.js
-                included: false
-            }, {
+            'test/mock/*.js',
+            'test/spec/*spec.js', // covers both .spec.js and .browser-spec.js
+            {
                 pattern: 'src/js/*.js',
                 included: false
             }, {
@@ -29,40 +26,7 @@ module.exports = function( config ) {
             }, {
                 pattern: 'config.json',
                 included: false
-            }, {
-                pattern: 'src/widget/date/bootstrap3-datepicker/js/bootstrap-datepicker.js',
-                included: false
-            }, {
-                pattern: 'src/widget/time/bootstrap3-timepicker/js/bootstrap-timepicker.js',
-                included: false
-            }, {
-                pattern: 'lib/jquery-touchswipe/jquery.touchSwipe.js',
-                included: false
-            }, {
-                pattern: 'lib/jquery-xpath/jquery.xpath.js',
-                included: false
-            }, {
-                pattern: 'lib/text/text.js',
-                included: false
-            }, {
-                pattern: 'lib/bower-components/leaflet/dist/leaflet.js',
-                included: false
-            }, {
-                pattern: 'lib/bootstrap-slider/js/bootstrap-slider.js',
-                included: false
-            }, {
-                pattern: 'lib/xpath/build/enketo-xpathjs.js',
-                included: false
-            }, {
-                pattern: 'lib/bower-components/jquery/dist/jquery.js',
-                included: false
-            }, {
-                pattern: 'lib/bower-components/q/q.js',
-                included: false
-            }, {
-                pattern: 'lib/bower-components/mergexml/mergexml.js',
-                included: false
-            },
+            }
         ],
 
 
@@ -72,7 +36,9 @@ module.exports = function( config ) {
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {},
+        preprocessors: {
+            'test/**/*.js': [ 'browserify' ],
+        },
 
 
         // test results reporter to use

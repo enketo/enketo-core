@@ -1,3 +1,8 @@
+if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
+    var define = function( factory ) {
+        factory( require, exports, module );
+    };
+}
 /**
  * @preserve Copyright 2013 Martijn van de Rijdt & Modi Labs
  *
@@ -14,8 +19,10 @@
  * limitations under the License.
  */
 
-define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
+define( function( require, exports, module ) {
     'use strict';
+    var $ = require( 'jquery' );
+    var Widget = require( '../../js/Widget' );
 
     var pluginName = 'mobileSelectpicker';
 
@@ -92,5 +99,9 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
         } );
     };
 
-    return pluginName;
+    module.exports = {
+        'name': pluginName,
+        'selector': 'select[multiple]'
+    };
+
 } );
