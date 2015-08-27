@@ -12,3 +12,4 @@ temp
 *.sublime-workspace
 _site
 _SpecRunner.html
+npm-debug.log

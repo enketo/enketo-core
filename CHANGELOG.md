@@ -3,6 +3,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.0.1] - 2015-08-27
+--------------------
+##### Fixed
+- datepicker and timepicker css only included as reference in compiled stylesheet.
+
+[4.0.0] - 2015-08-26
+--------------------
+##### Changed
+- Switched to CommonJS modules
+
 [3.8.5] - 2015-08-26
 ------------------------
 ##### Fixed
