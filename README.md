@@ -110,7 +110,7 @@ Each widget needs to fulfill following requirements:
 
 ### Notes for JavaScript Developers
 
-* The JS library uses CommonJS modules, but it the modules are still AMD-compliant. It may be quite a bit of work to get them working properly using requirejs though (AMD-specific issues won't be fixed by author, but AMD-specific patches/PRs are welcome)
+* The JS library uses CommonJS modules, but all the modules are still AMD-compliant. It may be quite a bit of work to get them working properly using requirejs though (AMD-specific issues won't be fixed by author, but AMD-specific patches/PRs are welcome)
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
 * Still trying to find a JS Documentation system to use with grunt that likes Closure-style JSDoc
 * JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues (Note, I had to add `"ensure_newline_at_eof_on_save": true` to the Sublime Text 2 user settings to make grunt jsbeautifier happy with the style produced by the ST2 JsFormat plugin.)
