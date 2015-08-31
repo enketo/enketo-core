@@ -287,7 +287,7 @@ define( [ 'jquery', 'enketo-js/Widget' ], function( $, Widget ) {
         };
 
         Dropdown.prototype.keydown = function( e ) {
-            if ( !/(38|40|27)/.test( e.keyCode ) ) {
+            if ( !/^(38|40|27)$/.test( e.keyCode ) ) {
                 return;
             }
 
