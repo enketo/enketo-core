@@ -294,7 +294,7 @@ define( function( require, exports, module ) {
         };
 
         Dropdown.prototype.keydown = function( e ) {
-            if ( !/(38|40|27)/.test( e.keyCode ) ) {
+            if ( !/^(38|40|27)$/.test( e.keyCode ) ) {
                 return;
             }
 
