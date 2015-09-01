@@ -6,7 +6,6 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 define( function( require, exports, module ) {
     'use strict';
     var MergeXML = require( 'mergexml/mergexml' );
-    var XPathJS = require( 'enketo-xpathjs' );
     var utils = require( './utils' );
     var $ = require( 'jquery' );
     require( './plugins' );
@@ -280,30 +279,7 @@ define( function( require, exports, module ) {
      * Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
      * OpenRosa functions or for browsers that do not have a native evaluator.
      */
-    FormModel.prototype.bindJsEvaluator = function() {
-        var evaluator = new XPathJS.XPathEvaluator();
-
-        XPathJS.bindDomLevel3XPath( this.xml, {
-            'window': {
-                JsXPathException: true,
-                JsXPathExpression: true,
-                JsXPathNSResolver: true,
-                JsXPathResult: true,
-                JsXPathNamespace: true
-            },
-            'document': {
-                jsCreateExpression: function() {
-                    return evaluator.createExpression.apply( evaluator, arguments );
-                },
-                jsCreateNSResolver: function() {
-                    return evaluator.createNSResolver.apply( evaluator, arguments );
-                },
-                jsEvaluate: function() {
-                    return evaluator.evaluate.apply( evaluator, arguments );
-                }
-            }
-        } );
-    };
+    FormModel.prototype.bindJsEvaluator = require( './XPathEvaluatorBinding' );
 
     /**
      * Gets the instance ID
