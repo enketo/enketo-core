@@ -116,6 +116,7 @@ module.exports = function( grunt ) {
             options: {
                 alias: {
                     jquery:'./jquery-shim.js',
+                    'xpath-evaluator-binding':'./src/js/OpenrosaXpathEvaluatorBinding.js',
                 },
             },
         },

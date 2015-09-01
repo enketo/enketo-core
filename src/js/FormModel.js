@@ -8,8 +8,6 @@ define( function( require, exports, module ) {
     var MergeXML = require( 'mergexml/mergexml' );
     var utils = require( './utils' );
     var $ = require( 'jquery' );
-    var ExtendedXpathEvaluator = require('extended-xpath');
-    var openrosa_xpath_extensions = require( 'openrosa-xpath-extensions');
     require( './plugins' );
     require( './extend' );
     require( 'jquery-xpath-basic' );
