@@ -114,7 +114,6 @@ module.exports = function( grunt ) {
             },
             options: {
                 alias: {},
-                exclude: [ 'jquery' ],
             },
         },
         uglify: {
