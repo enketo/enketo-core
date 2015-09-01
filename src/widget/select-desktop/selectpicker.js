@@ -244,7 +244,7 @@ define( function( require, exports, module ) {
         } );
     };
 
-    + function( $ ) {
+    (function( $ ) {
         //'use strict';
 
         // DROPDOWN CLASS DEFINITION
@@ -413,7 +413,7 @@ define( function( require, exports, module ) {
             .on( 'click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle )
             .on( 'keydown.bs.dropdown.data-api', toggle + ', [role=menu], [role=listbox]', Dropdown.prototype.keydown );
 
-    }( jQuery );
+    }( jQuery ));
 
     module.exports = {
         'name': pluginName,
