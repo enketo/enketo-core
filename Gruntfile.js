@@ -112,11 +112,11 @@ module.exports = function( grunt ) {
                 src: 'medic-mobile.js',
                 dest: 'build/js/medic-enketo-bundle.js',
                 require: [ 'jquery' ],
-            },
-            options: {
-                alias: {
-                    jquery:'./jquery-shim.js',
-                    'xpath-evaluator-binding':'./src/js/OpenrosaXpathEvaluatorBinding.js',
+                options: {
+                    alias: {
+                        jquery:'./jquery-shim.js',
+                        'xpath-evaluator-binding':'./src/js/OpenrosaXpathEvaluatorBinding.js',
+                    },
                 },
             },
         },
