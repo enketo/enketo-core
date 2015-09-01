@@ -105,8 +105,12 @@ module.exports = function( grunt ) {
         browserify: {
             standalone: {
                 files: {
-                    'build/js/enketo-bundle.js': [ 'medic-mobile.js' ]
+                    'build/js/enketo-bundle.js': [ 'app.js' ]
                 },
+            },
+            medic: {
+                src: 'medic-mobile.js',
+                dest: 'build/js/medic-enketo-bundle.js',
             },
             options: {
                 alias: {},
@@ -128,4 +132,5 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'browserify', 'concurrent:develop' ] );
     grunt.registerTask( 'default', [ 'style', 'compile' ] );
+    grunt.registerTask( 'medic', [ 'style', 'browserify:medic' ] );
 };
