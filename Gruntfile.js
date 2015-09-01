@@ -111,9 +111,12 @@ module.exports = function( grunt ) {
             medic: {
                 src: 'medic-mobile.js',
                 dest: 'build/js/medic-enketo-bundle.js',
+                require: [ 'jquery' ],
             },
             options: {
-                alias: {},
+                alias: {
+                    jquery:'./jquery-shim.js',
+                },
             },
         },
         uglify: {
