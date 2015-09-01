@@ -14,7 +14,6 @@ define( function( require, exports, module ) {
         require( '../widget/date/datepicker-extended' ),
         require( '../widget/time/timepicker-extended' ),
         require( '../widget/datetime/datetimepicker-extended' ),
-        require( '../widget/horizontal-choices/horizontalchoices' )
     ];
 
     module.exports = widgets;
