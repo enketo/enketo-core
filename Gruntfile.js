@@ -107,15 +107,25 @@ module.exports = function( grunt ) {
                 files: {
                     'build/js/enketo-bundle.js': [ 'app.js' ]
                 },
+                options: {
+                    alias: {
+                        'text!enketo-config': './config.json',
+                        'widgets': './src/js/widgets.js',
+                    },
+                },
             },
             medic: {
-                src: 'medic-mobile.js',
+                src: './src/medic/app.js',
                 dest: 'build/js/medic-enketo-bundle.js',
                 require: [ 'jquery' ],
                 options: {
                     alias: {
-                        jquery:'./jquery-shim.js',
-                        'xpath-evaluator-binding':'./src/js/OpenrosaXpathEvaluatorBinding.js',
+                        jquery:'./src/medic/jquery-shim.js',
+                        'text!enketo-config': './src/medic/config.json',
+                        'widgets': './src/medic/widgets.js',
+                        './XPathEvaluatorBinding':'./src/medic/OpenrosaXpathEvaluatorBinding.js',
+                        'extended-xpath': './node_modules/openrosa-xpath-evaluator/src/extended-xpath.js',
+                        'openrosa-xpath-extensions': './node_modules/openrosa-xpath-evaluator/src/openrosa-xpath-extensions.js'
                     },
                 },
             },
