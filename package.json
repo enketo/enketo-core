@@ -38,7 +38,6 @@
         "karma-phantomjs-launcher": "0.2.x",
         "karma-safari-launcher": "0.1.x",
         "load-grunt-tasks": "3.x.x",
-        "openrosa-xpath-evaluator": "git@github.com:alxndrsn/openrosa-xpath-evaluator.git#827e5a00f7ceba6bd688edb91755c63a44a62a07",
         "phantomjs": "1.9.x",
         "time-grunt": "1.x.x"
     },
@@ -52,6 +51,7 @@
         "jquery-xpath-basic": "1.0.x",
         "leaflet": "0.7.x",
         "mergexml": "1.1.x",
+        "openrosa-xpath-evaluator": "git@github.com:alxndrsn/openrosa-xpath-evaluator.git#827e5a00f7ceba6bd688edb91755c63a44a62a07",
         "q": "1.4.x"
     }
 }
