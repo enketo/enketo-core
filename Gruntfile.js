@@ -114,21 +114,6 @@ module.exports = function( grunt ) {
                     },
                 },
             },
-            medic: {
-                src: './src/medic/app.js',
-                dest: 'build/js/medic-enketo-bundle.js',
-                require: [ 'jquery' ],
-                options: {
-                    alias: {
-                        jquery:'./src/medic/jquery-shim.js',
-                        'text!enketo-config': './src/medic/config.json',
-                        'widgets': './src/medic/widgets.js',
-                        './XPathEvaluatorBinding':'./src/medic/OpenrosaXpathEvaluatorBinding.js',
-                        'extended-xpath': './node_modules/openrosa-xpath-evaluator/src/extended-xpath.js',
-                        'openrosa-xpath-extensions': './node_modules/openrosa-xpath-evaluator/src/openrosa-xpath-extensions.js'
-                    },
-                },
-            },
         },
         uglify: {
             standalone: {
@@ -145,5 +130,4 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'browserify', 'concurrent:develop' ] );
     grunt.registerTask( 'default', [ 'style', 'compile' ] );
-    grunt.registerTask( 'medic', [ 'style', 'browserify:medic' ] );
 };
