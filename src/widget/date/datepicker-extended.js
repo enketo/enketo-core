@@ -53,7 +53,7 @@ define( function( require, exports, module ) {
     DatepickerExtended.prototype.constructor = DatepickerExtended;
 
     /**
-     * Initialize timepicker widget
+     * Initialize datepicker widget
      */
     DatepickerExtended.prototype._init = function() {
         var that = this,

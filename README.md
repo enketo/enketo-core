@@ -10,7 +10,7 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 
 ### Usage as a library
 
-1. Install as a git submodule, with `npm enketo-core --save`.
+1. Install with `npm install enketo-core --save` or include as a git submodule.
 2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/transform](http://xslt-dev.enketo.org/transform/) (add `?xform=http://myforms.com/myform.xml` to use API).
 3. Add [themes](./src/sass) to your stylesheet build system (2 stylesheets per theme, 1 is for `media="print"`).
 4. Override [config.json](./config.json) and optionally [widgets.js](./src/js/widgets.js) with your app-specific versions.
@@ -77,7 +77,7 @@ $( '#submit' ).on( 'click', function() {
 
 ### How to create or extend widgets
 
-To create new widgets, I recommend using this [plugin template](https://gist.github.com/MartijnR/6943281). The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device and whether the widgets are inside a newly cloned repeat.
+To create new widgets, we recommend using this [plugin template](https://gist.github.com/MartijnR/6943281). The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device.
 
 Each widget needs to fulfill following requirements:
 
@@ -100,20 +100,20 @@ Each widget needs to fulfill following requirements:
 * if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option `{ touch: [boolean] }` is passed to the plugin by default. If your widget requires tweaks for mobile, you could create an all-in-one widget using the `options.touch` check or you could create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow clearing of the original input (i.e. setting value to '')
 * send a `fakefocus` and `fakeblur` event to the original input when the widget gets focus or looses it (see select-desktop)
-* please write Jasmine specs and a runner.html in the widget's /test folder.....(yeah, need to do that for the existing widgets too...)
+* please write test specs in the widget's /test folder.....(yeah, need to do that for the existing widgets too...)
 
 ### Notes for All Developers
 
-* build with Grunt
+* build with grunt
 * helpful to use `grunt develop` to automatically compile (sass and js) when a source file changes, serve, and refresh
 * adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
 
 ### Notes for JavaScript Developers
 
-* The JS library uses CommonJS modules, but all the modules are still AMD-compliant. It may be quite a bit of work to get them working properly using requirejs though (AMD-specific issues won't be fixed by author, but AMD-specific patches/PRs are welcome)
+* The JS library uses CommonJS modules, but all the modules are still AMD-compliant. It may be quite a bit of work to get them working properly using requirejs though (AMD-specific issues won't be fixed by us, but AMD-specific patches/PRs are welcome)
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
-* Still trying to find a JS Documentation system to use with grunt that likes Closure-style JSDoc
-* JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues (Note, I had to add `"ensure_newline_at_eof_on_save": true` to the Sublime Text 2 user settings to make grunt jsbeautifier happy with the style produced by the ST2 JsFormat plugin.)
+* Still trying to find a JS Documentation system to use that likes Closure-style JSDoc
+* JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues (Note, I had to add `"ensure_newline_at_eof_on_save": true` to the Sublime Text 3 user settings to make grunt jsbeautifier happy with the style produced by the ST3 JsFormat plugin.)
 * Testing is done with Jasmine and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
 * When making a pull request, please add tests where relevant
 
