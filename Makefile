@@ -1,7 +1,5 @@
 default: init test build compare-built server
 
-VERSION = $(shell [ -z "`git status --porcelain`" ] && git describe --tags --exact-match 2>/dev/null || echo 'SNAPSHOT')
-
 debug:
 	@echo ${WIDGETS_REQUIRED}
 
@@ -28,7 +26,3 @@ server:
 .PHONY: compare-built
 compare-built:
 	ls -al build/js/*.js
-
-.PHONY: dev
-dev: build
-	cp build/js/medic-enketo-bundle.js ../webapp/static/enketo/js/enketo-core-${VERSION}.js
