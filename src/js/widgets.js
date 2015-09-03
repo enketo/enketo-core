@@ -5,7 +5,7 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 }
 
 define( function( require, exports, module ) {
-    widgets = [
+    var widgets = [
         require( '../widget/note/notewidget' ),
         require( '../widget/select-desktop/selectpicker' ),
         require( '../widget/select-mobile/selectpicker' ),
