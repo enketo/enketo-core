@@ -62,7 +62,7 @@ define( function( require, exports, module ) {
 
             repeatsPresent = ( $( formSelector ).find( '.or-repeat' ).length > 0 );
 
-            form.init();
+            loadErrors = loadErrors.concat( form.init() );
 
             if ( window.scrollTo ) {
                 window.scrollTo( 0, 0 );
@@ -210,48 +210,54 @@ define( function( require, exports, module ) {
                 return console.error( 'variable data needs to be defined as instance of FormModel' );
             }
 
-            // before widgets.init (as instanceID used in offlineFilepicker widget)
-            this.preloads.init( this );
+            try {
+                // before widgets.init (as instanceID used in offlineFilepicker widget)
+                this.preloads.init( this );
 
-            // before calcUpdate!
-            this.grosslyViolateStandardComplianceByIgnoringCertainCalcs();
+                // before calcUpdate!
+                this.grosslyViolateStandardComplianceByIgnoringCertainCalcs();
 
-            // before repeat.init to make sure the jr:repeat-count calculation has been evaluated
-            this.calcUpdate();
+                // before repeat.init to make sure the jr:repeat-count calculation has been evaluated
+                this.calcUpdate();
 
-            // before itemsetUpdate
-            this.langs.init();
+                // before itemsetUpdate
+                this.langs.init();
 
-            // after radio button data-name setting
-            this.repeat.init( this );
+                // after radio button data-name setting
+                this.repeat.init( this );
 
-            // after repeat.init()
-            this.itemsetUpdate();
+                // after repeat.init()
+                this.itemsetUpdate();
 
-            // after repeat.init()
-            this.setAllVals();
+                // after repeat.init()
+                this.setAllVals();
 
-            // after setAllVals(), after repeat.init()
-            widgets.init();
+                // after setAllVals(), after repeat.init()
+                widgets.init();
 
-            // after widgets.init(), and repeat.init()
-            this.branchUpdate();
+                // after widgets.init(), and repeat.init()
+                this.branchUpdate();
 
-            // after branch.init();
-            this.pages.init();
+                // after branch.init();
+                this.pages.init();
 
-            // after repeat.init()
-            this.outputUpdate();
+                // after repeat.init()
+                this.outputUpdate();
 
-            // after widgets init to make sure widget handlers are called before
-            // after loading existing instance to not trigger an 'edit' event
-            this.setEventHandlers();
+                // after widgets init to make sure widget handlers are called before
+                // after loading existing instance to not trigger an 'edit' event
+                this.setEventHandlers();
 
-            this.editStatus.set( false );
+                this.editStatus.set( false );
 
-            setTimeout( function() {
-                that.progress.update();
-            }, 0 );
+                setTimeout( function() {
+                    that.progress.update();
+                }, 0 );
+
+                return [];
+            } catch ( e ) {
+                return [ e.name + ': ' + e.message ];
+            }
         };
 
         FormView.prototype.pages = {

@@ -8,6 +8,7 @@ define( function( require, exports, module ) {
     var MergeXML = require( 'mergexml/mergexml' );
     var utils = require( './utils' );
     var $ = require( 'jquery' );
+    var FormLogicError = require( './FormLogicError' );
     require( './plugins' );
     require( './extend' );
     require( 'jquery-xpath-basic' );
@@ -93,19 +94,23 @@ define( function( require, exports, module ) {
 
         // Initialize/process the model
         if ( this.xml ) {
-            this.$ = $( this.xml );
-            this.hasInstance = !!this.xml.querySelector( 'model > instance' ) || false;
-            this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
+            try {
+                this.$ = $( this.xml );
+                this.hasInstance = !!this.xml.querySelector( 'model > instance' ) || false;
+                this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
 
-            // Check if all secondary instances with an external source have been populated
-            this.$.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
-                that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
-            } );
+                // Check if all secondary instances with an external source have been populated
+                this.$.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
+                    that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
+                } );
 
-            this.trimValues();
-            this.cloneAllTemplates();
-            this.extractTemplates();
-
+                this.trimValues();
+                this.cloneAllTemplates();
+                this.extractTemplates();
+            } catch ( e ) {
+                console.error( e );
+                this.loadErrors.push( e.name + ': ' + e.message );
+            }
             // Merge an existing instance into the model, AFTER templates have been removed
             try {
                 id = 'record';
@@ -520,9 +525,18 @@ define( function( require, exports, module ) {
      * @return {string}      new expression
      */
     FormModel.prototype.replaceInstanceFn = function( expr ) {
+        var prefix;
+        var that = this;
+
         // TODO: would be more consistent to use utls.parseFunctionFromExpression() and utils.stripQuotes
         return expr.replace( this.INSTANCE, function( match, id ) {
-            return '/model/instance[@id="' + id + '"]';
+            prefix = '/model/instance[@id="' + id + '"]';
+            // check if referred instance exists in model
+            if ( that.evaluate( prefix, 'nodes', null, null, true ).length ) {
+                return prefix;
+            } else {
+                throw new FormLogicError( 'instance "' + id + '" does not exist in model' );
+            }
         } );
     };
 
@@ -549,6 +563,7 @@ define( function( require, exports, module ) {
      */
     FormModel.prototype.replaceIndexedRepeatFn = function( expr, selector, index ) {
         var that = this;
+        var error;
         var indexedRepeats = utils.parseFunctionFromExpression( expr, 'indexed-repeat' );
 
         if ( !indexedRepeats.length ) {
@@ -575,8 +590,7 @@ define( function( require, exports, module ) {
                 expr = expr.replace( indexedRepeat[ 0 ], positionedPath );
 
             } else {
-                console.error( 'indexed repeat with incorrect number of parameters found', indexedRepeat[ 0 ] );
-                return '"Error with indexed-repeat parameters"';
+                throw new FormLogicError( 'indexed repeat with incorrect number of parameters found: ' + indexedRepeat[ 0 ] );
             }
         } );
 
@@ -585,6 +599,7 @@ define( function( require, exports, module ) {
 
     FormModel.prototype.replacePullDataFn = function( expr, selector, index ) {
         var that = this;
+        var error;
         var pullDatas = utils.parseFunctionFromExpression( expr, 'pulldata' );
 
         if ( !pullDatas.length ) {
@@ -614,8 +629,7 @@ define( function( require, exports, module ) {
                 expr = expr.replace( pullData[ 0 ], searchXPath );
 
             } else {
-                console.error( 'pulldata with incorrect number of parameters found', pullData[ 0 ] );
-                return '"Error with pulldata parameters"';
+                throw new FormLogicError( 'pulldata with incorrect number of parameters found: ' + pullData[ 0 ] );
             }
         } );
 
@@ -733,11 +747,7 @@ define( function( require, exports, module ) {
                 // console.log( 'trying the slow enketo-xpathjs "openrosa" evaluator for', expr, index );
                 result = doc.jsEvaluate( expr, context, this.nsResolver, resTypeNum, null );
             } catch ( e ) {
-                error = 'Error occurred trying to evaluate: ' + expr + ', message: ' + e.message;
-                console.error( error );
-                $( document ).trigger( 'xpatherror', error );
-                this.loadErrors.push( error );
-                return null;
+                throw new FormLogicError( 'Could not evaluate: ' + expr + ', message: ' + e.message );
             }
         }
 

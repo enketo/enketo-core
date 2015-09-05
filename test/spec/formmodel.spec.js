@@ -396,7 +396,7 @@ describe( 'converting instance("id") to absolute paths', function() {
 
     ].forEach( function( test ) {
         it( 'happens correctly', function() {
-            var model = new Model( '<model><instance/></model>' );
+            var model = new Model( '<model><instance/><instance id="a"/></model>' );
             var expected = test[ 1 ];
             model.init();
             expect( model.replaceInstanceFn( test[ 0 ] ) ).toEqual( expected );

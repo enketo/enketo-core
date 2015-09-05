@@ -3,6 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.1.0] - 2015-09-05
+--------------------
+##### Added
+- Support for pulldata function if external data is referenced in XForm instance.
+
+##### Fixed
+- Output loading error if external instance is referenced in XPath but does not exist in the model.
+
 [4.0.2] - 2015-09-04 
 --------------------
 ##### Added
