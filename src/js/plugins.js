@@ -72,38 +72,6 @@ define( function( require, exports, module ) {
     };
 
     /**
-     * Supports a small subset of MarkDown and converts this to HTML: _, __, *, **, []()
-     * Also converts newline characters
-     *
-     * Not supported: escaping and other MarkDown syntax
-     */
-    $.fn.markdownToHtml = function() {
-        return this.each( function() {
-            var html,
-                $childStore = $( '<div/>' );
-            $( this ).children( ':not(input, select, textarea)' ).each( function( index ) {
-                var name = '$$$' + index;
-                $( this ).clone().markdownToHtml().appendTo( $childStore );
-                $( this ).replaceWith( name );
-            } );
-            html = $( this ).html();
-            html = html.replace( /__([^\s][^_]*[^\s])__/gm, '<strong>$1</strong>' );
-            html = html.replace( /\*\*([^\s][^\*]*[^\s])\*\*/gm, '<strong>$1</strong>' );
-            html = html.replace( /_([^\s][^_]*[^\s])_/gm, '<em>$1</em>' );
-            html = html.replace( /\*([^\s][^\*]*[^\s])\*/gm, '<em>$1</em>' );
-            //only replaces if url is valid (worthwhile feature?)
-            //html = html.replace( /\[(.*)\]\(((https?:\/\/)(([\da-z\.\-]+)\.([a-z\.]{2,6})|(([0-9]{1,3}\.){3}[0-9]{1,3}))([\/\w \.\-]*)*\/?[\/\w \.\-\=\&\?]*)\)/gm, '<a href="$2">$1</a>' );
-            html = html.replace( /\[([^\]]*)\]\(([^\)]+)\)/gm, '<a href="$2" target="_blank">$1</a>' );
-            html = html.replace( /\n/gm, '<br />' );
-            $childStore.children().each( function( i ) {
-                var regex = new RegExp( '\\$\\$\\$' + i );
-                html = html.replace( regex, $( this )[ 0 ].outerHTML );
-            } );
-            $( this ).text( '' ).append( html );
-        } );
-    };
-
-    /**
      * Reverses a jQuery collection
      * @type {Array}
      */

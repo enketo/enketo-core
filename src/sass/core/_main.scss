@@ -7,15 +7,19 @@ $media-margin: 10px;
     display: none;
 }
 
-.or {
-    h3 {
+.or, .or-group {
+    > h3 {
         padding: 5px 0 15px 0;
         word-wrap: break-word;
+        color: $brand-primary-color;
+        text-align: center;
     }
-    h4 {
+    > h4 {
         text-align: inherit;
         margin-top: 9px;
         margin-bottom: 9px;
+        color: $brand-primary-color;
+        text-align: center;
     }
 }
 

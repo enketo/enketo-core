@@ -87,8 +87,6 @@ h6 {
 
 h2, h3, h4 {
     @include font-bold;
-    color: $brand-primary-color;
-    text-align: center;
 }
 
 input, select, textarea {
