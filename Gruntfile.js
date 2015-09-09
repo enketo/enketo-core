@@ -60,7 +60,7 @@ module.exports = function( grunt ) {
         },
         watch: {
             sass: {
-                files: [ 'config.json', 'grid/sass/**/*.scss', 'src/sass/**/*.scss', 'src/widget/**/*.scss' ],
+                files: [ 'grid/sass/**/*.scss', 'src/sass/**/*.scss', 'src/widget/**/*.scss' ],
                 tasks: [ 'style' ],
                 options: {
                     spawn: true,
