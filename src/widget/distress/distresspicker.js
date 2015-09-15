@@ -28,7 +28,7 @@ define( function( require, exports, module ) {
     var pluginName = 'distresspicker';
 
     /**
-     * Enhances radio buttons
+     * Creates a distress picker.
      *
      * @constructor
      * @param {Element} element Element to apply widget to.
@@ -63,14 +63,15 @@ define( function( require, exports, module ) {
             step: step,
             value: value
         } );
-        this.$widget = $( this.element ).next( '.slider' );
+        this.$widget = $( this.element ).next( '.widget' );
+        this.$slider = this.$widget.find( '.slider' );
         this._addBulb();
         this._addScale();
         this._setChangeHandler();
     };
 
     Distresspicker.prototype._addBulb = function() {
-        this.$widget.append(
+        this.$slider.append(
             '<div class="bulb"><div class="inner"></div></div>'
         );
     };
@@ -80,7 +81,7 @@ define( function( require, exports, module ) {
         for ( var i = 10; i >= -1; i-- ) {
             $scale.append( '<div class="number"><div class="value">' + i + '</div></div>' );
         }
-        this.$widget.prepend( $scale );
+        this.$slider.prepend( $scale );
     };
 
     /**
@@ -89,7 +90,7 @@ define( function( require, exports, module ) {
     Distresspicker.prototype._setChangeHandler = function() {
         $( this.element ).on( 'slideStop.' + this.namespace, function( slideEvt ) {
             // set to empty if value = -1
-            if ( this.value === -1 ) {
+            if ( Number( this.value ) === -1 ) {
                 this.value = '';
             }
             $( this ).trigger( 'change' );

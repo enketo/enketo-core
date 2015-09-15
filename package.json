@@ -47,7 +47,7 @@
     },
     "dependencies": {
         "bootstrap-datepicker": "1.4.x",
-        "bootstrap-slider-basic": "3.0.x",
+        "bootstrap-slider-basic": "3.2.x",
         "bootstrap-timepicker": "0.2.x",
         "enketo-xpathjs": "1.2.x",
         "jquery": "2.1.x",

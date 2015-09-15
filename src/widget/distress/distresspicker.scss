@@ -7,7 +7,7 @@ $green: rgb(60, 182, 67);
 
 .or-appearance-distress {
     //background: green;
-    .slider.slider-vertical {
+    .slider-vertical .slider {
         height: 210px;
         width: $width / 2;
         border-radius: $width / 4;
@@ -40,11 +40,9 @@ $green: rgb(60, 182, 67);
             border-radius: $inner-width / 2;
             background: $handle-color;
             margin: ($width - $inner-width - 2px) / 2;
-            //  17px;
-       
         }
     }
-    .slider.slider-vertical .slider-track {
+    .slider-vertical .slider-track {
         top: 18px;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
@@ -80,7 +78,7 @@ $green: rgb(60, 182, 67);
 
 // corrections for rtl display
 .or[dir="rtl"] {
-    .slider.slider-vertical .slider-handle {
+    .slider-vertical .slider-handle {
         margin-right: -4.5px;
         margin-left: auto;
     }
