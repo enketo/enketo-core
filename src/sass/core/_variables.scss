@@ -11,11 +11,12 @@ $line-height-base: 1.25 !default;
 $line-height-base: 1.42857 !default;
 $line-height-computed: floor($font-size-base * $line-height-base) !default;
 
-// padding
+// padding, margin
 $padding-base-vertical: 6px !default;
 $padding-base-horizontal: 12px !default;
 $padding-large-vertical: 10px !default;
 $padding-large-horizontal: 16px !default;
+$question-margin: 20px !default;
 
 // input sizing
 $input-height: 34px !default;

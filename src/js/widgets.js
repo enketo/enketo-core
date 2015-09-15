@@ -19,7 +19,8 @@ define( function( require, exports, module ) {
         require( '../widget/file/filepicker' ),
         require( '../widget/select-likert/likertitem' ),
         require( '../widget/distress/distresspicker' ),
-        require( '../widget/horizontal-choices/horizontalchoices' )
+        require( '../widget/horizontal-choices/horizontalchoices' ),
+        require( '../widget/analog-scale/analog-scalepicker' ),
     ];
 
     module.exports = widgets;

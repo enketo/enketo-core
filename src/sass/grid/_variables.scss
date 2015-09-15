@@ -18,7 +18,8 @@ $max-columns: 10;
 $grid-border: 1px solid black;
 
 // questions
-$question-margin: 0;
+// leave px unit for value 0, as it is used in calcs
+$question-margin: 0px;
 $q-pad-top: 6px;
 $q-pad-right: 6px;
 $q-pad-bottom: 13px;

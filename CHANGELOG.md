@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 --------------------
 ##### Added
 - Ability to extend data types.
+- Analog Scale picker.
 
 [4.1.1] - 2015-09-08
 --------------------
