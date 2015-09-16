@@ -193,7 +193,7 @@ define( function( require, exports, module ) {
                     } );
                 }
             } catch ( e ) {
-                console.error( 'Ignored error:', e );
+                console.log( 'Ignored error:', e );
             }
         } );
 
@@ -892,7 +892,7 @@ define( function( require, exports, module ) {
             return null;
         }
         if ( $target.length === 0 ) {
-            console.error( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found. Ignored.' );
+            console.log( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found. Ignored.' );
             return null;
         }
         //always validate if the new value is not empty, even if value didn't change (see validateAll() function)
