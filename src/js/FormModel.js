@@ -1188,5 +1188,7 @@ define( function( require, exports, module ) {
         }
     };
 
+    FormModel.types = types;
+
     module.exports = FormModel;
 } );
