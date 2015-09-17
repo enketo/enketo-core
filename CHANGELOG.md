@@ -3,10 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Added
+- Ability to extend data types.
+
 [4.1.1] - 2015-09-08
 --------------------
 ##### Added
-- styling support markdown headings
+- Styling support for markdown headings.
 
 ##### Removed
 - Markdown transformation support moved to enketo-transformer 1.5.0+ (and much more comprehensive)

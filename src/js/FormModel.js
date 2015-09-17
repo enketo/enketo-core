@@ -1188,5 +1188,8 @@ define( function( require, exports, module ) {
         }
     };
 
+    // Expose types to facilitate extending with custom types
+    FormModel.prototype.types = types;
+
     module.exports = FormModel;
 } );
