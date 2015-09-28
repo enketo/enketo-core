@@ -51,7 +51,7 @@
         "jquery-xpath-basic": "1.0.x",
         "leaflet": "0.7.x",
         "mergexml": "1.1.x",
-        "openrosa-xpath-evaluator": "git://github.com/alxndrsn/openrosa-xpath-evaluator.git#827e5a00f7ceba6bd688edb91755c63a44a62a07",
+        "openrosa-xpath-evaluator": "git://github.com/alxndrsn/openrosa-xpath-evaluator.git#e019219654aeb556a804d3fb49cdc943dd07fee7",
         "q": "1.4.x"
     }
 }
