@@ -563,7 +563,6 @@ define( function( require, exports, module ) {
      */
     FormModel.prototype.replaceIndexedRepeatFn = function( expr, selector, index ) {
         var that = this;
-        var error;
         var indexedRepeats = utils.parseFunctionFromExpression( expr, 'indexed-repeat' );
 
         if ( !indexedRepeats.length ) {
@@ -599,7 +598,6 @@ define( function( require, exports, module ) {
 
     FormModel.prototype.replacePullDataFn = function( expr, selector, index ) {
         var that = this;
-        var error;
         var pullDatas = utils.parseFunctionFromExpression( expr, 'pulldata' );
 
         if ( !pullDatas.length ) {
@@ -652,7 +650,7 @@ define( function( require, exports, module ) {
      * @return { ?(number|string|boolean|Array<element>) } the result
      */
     FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
-        var j, error, context, doc, resTypeNum, resultTypes, result, $collection, response, repeats, cacheKey, original, cacheable;
+        var j, context, doc, resTypeNum, resultTypes, result, $collection, response, repeats, cacheKey, original, cacheable;
 
         // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
         //    index + ' and result type: ' + resTypeStr );
