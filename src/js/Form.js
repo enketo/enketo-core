@@ -605,7 +605,7 @@ define( function( require, exports, module ) {
                 return ( !$node.val() ) ? '' : ( $.isArray( $node.val() ) ) ? $node.val().join( ' ' ).trim() : $node.val().trim();
             },
             setVal: function( name, index, value ) {
-                var $inputNodes, type, $target;
+                var $inputNodes, type;
 
                 index = index || 0;
 
@@ -1254,7 +1254,7 @@ define( function( require, exports, module ) {
             $nodes = $nodes.add( this.getNodesToUpdate( 'data-relevant', '[data-calculate]', updated ) );
 
             $nodes.each( function() {
-                var result, valid, dataNodesObj, dataNodes, $dataNode, index, name, dataNodeName, expr, dataType, constraint, relevantExpr, relevant, $this;
+                var result, dataNodesObj, dataNodes, $dataNode, index, name, dataNodeName, expr, dataType, constraint, relevantExpr, relevant, $this;
 
                 $this = $( this );
                 name = that.input.getName( $this );
@@ -1299,7 +1299,7 @@ define( function( require, exports, module ) {
                     dataNodesObj.setIndex( index );
 
                     // set the value
-                    valid = dataNodesObj.setVal( result, constraint, dataType );
+                    dataNodesObj.setVal( result, constraint, dataType );
 
                     // not the most efficient to use input.setVal here as it will do another lookup
                     // of the node, that we already have...

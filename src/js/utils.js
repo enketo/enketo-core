@@ -61,10 +61,6 @@ define( function( require, exports, module ) {
         return str;
     }
 
-    function _trim( item ) {
-        return item.trim();
-    }
-
     module.exports = {
         parseFunctionFromExpression: parseFunctionFromExpression,
         stripQuotes: stripQuotes,

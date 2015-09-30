@@ -12,7 +12,7 @@ define( function( require, exports, module ) {
         return widget.selector;
     } );
     var $form, init, enable, disable, destroy,
-        _getWidgets, _getElements, _instantiate, _load, _setLangChangeHandler, _setOptionChangeHandler;
+        _getElements, _instantiate, _setLangChangeHandler, _setOptionChangeHandler;
 
     if ( typeof config === 'string' ) {
         config = JSON.parse( config );

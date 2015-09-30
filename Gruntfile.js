@@ -7,8 +7,6 @@
 'use strict';
 
 module.exports = function( grunt ) {
-    var appConfig = grunt.file.readJSON( 'config.json' );
-
     // show elapsed time at the end
     require( 'time-grunt' )( grunt );
     // load all grunt tasks
