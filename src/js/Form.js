@@ -293,7 +293,7 @@ define( function( require, exports, module ) {
 
                     this.flipToFirst();
 
-                    $form.show();
+                    $form.removeClass( 'hide' );
                 }
             },
             setButtonHandlers: function() {

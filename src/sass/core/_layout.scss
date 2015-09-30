@@ -21,10 +21,15 @@ body {
 }
 
 .or {
+    @include flex(1);
     margin-bottom: 20px;
 }
 
 .main {
+    @include flex(1);
+    @include display-flex;
+    @include flex-direction(column);
+    @include flex-wrap(nowrap);
     margin: 0 auto;
     padding: 100px 0 70px 0;
     position: relative;

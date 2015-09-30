@@ -9,6 +9,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Ability to extend data types.
 - Analog Scale picker.
 
+#### Fixed
+- In pages mode, page not stretching to at least bottom of window.
+
 [4.1.1] - 2015-09-08
 --------------------
 ##### Added

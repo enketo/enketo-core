@@ -41,6 +41,7 @@ h4 + .or-repeat {
     @include display-flex;
     @include flex-wrap(wrap);
     @include flex-direction(row);
+    @include align-content(flex-start);
     @include border-box;
 }
 
@@ -242,13 +243,16 @@ legend {
 
 .or {
     h3 {
-        @include flex(1, 1);
+        width: calc(100% + 1px);
+        border-right: $grid-border;
+        border-right-color: transparent;
         padding-top: 0;
         text-align: inherit;
     }
     h4 {
-        @include flex(1, 1);
-        //or just width: 100%;
+        width: calc(100% + 1px);
+        border-right: $grid-border;
+        border-right-color: transparent;
         border-bottom: 5px solid black;
         padding-bottom: 5px;
         margin-bottom: 0;

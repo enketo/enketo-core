@@ -202,6 +202,13 @@
     flex-direction: $dir;
 }
 
+@mixin align-content($val: flex-start) {
+    -webkit-align-content: $val;
+    -ms-align-content: $val;
+    -moz-align-content: $val;
+    align-content: $val;
+}
+
 @mixin form-control {}
 
 // Creates two color stops, start and end, by specifying a color and position for each color stop.

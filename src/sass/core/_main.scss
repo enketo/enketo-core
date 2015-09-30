@@ -23,6 +23,10 @@ $media-margin: 10px;
     }
 }
 
+.or.hide {
+    display: none;
+}
+
 /** hints **/
 .or-hint.active {
     @include font-normal;

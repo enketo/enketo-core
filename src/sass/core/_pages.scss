@@ -1,6 +1,4 @@
 .pages.or {
-    // to reduce browser re-painting before js starts kicking in and sets role="page"
-    display: none;
     .or-group, .or-group-data, .or-repeat {
         // to hide group border and title if no or-appearance-pages class is set
         display: none;
