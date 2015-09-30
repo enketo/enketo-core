@@ -82,7 +82,7 @@ define( function( require, exports, module ) {
             .then( function() {
                 that._showFeedback();
                 that._changeListener();
-                $input.removeAttr( 'disabled' );
+                $input.prop( 'disabled', false );
                 if ( existingFileName ) {
                     fileManager.getFileUrl( existingFileName )
                         .then( function( url ) {
