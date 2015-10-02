@@ -48,7 +48,7 @@ define( function( require, exports, module ) {
         this.mediaType = $input.attr( 'accept' );
 
         $input
-            .attr( 'disabled', 'disabled' )
+            .prop( 'disabled', true )
             .addClass( 'transparent' )
             .parent().addClass( 'with-media clearfix' );
 

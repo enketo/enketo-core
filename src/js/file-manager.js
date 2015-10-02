@@ -107,6 +107,16 @@ define( function( require, exports, module ) {
         return files;
     }
 
+    /**
+     * Placeholder function to check if file size is acceptable. 
+     * 
+     * @param  {Blob}  file [description]
+     * @return {Boolean}      [description]
+     */
+    function _isTooLarge( file ) {
+        return false;
+    }
+
     module.exports = {
         isSupported: isSupported,
         notSupportedAdvisoryMsg: notSupportedAdvisoryMsg,
