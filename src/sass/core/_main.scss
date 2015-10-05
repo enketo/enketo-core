@@ -129,6 +129,7 @@ $media-margin: 10px;
     margin: 0 0 9px 0;
     padding-top: 15px;
     border: none;
+    position: relative;
     > fieldset {
         padding: 0;
         margin: 0;
@@ -359,9 +360,21 @@ select {
 }
 
 .required {
-    margin-left: 3px;
-    margin-right: 3px;
+    position: absolute;
+    top: 10px;
+    left: -10px;
     color: $brand-primary-color;
+}
+
+legend .required {
+    top: 0;
+}
+
+.or[dir="rtl"] {
+    .required {
+        left: auto;
+        right: -10px;
+    }
 }
 
 .required-subtle {
