@@ -40,7 +40,7 @@
 				<!-- Do not remove the comment below. It is used in enketo-core-performance-monitor. -->
 				<!-- {{<form>}} -->			
 				
-				<div class="form-footer">
+				<section class="form-footer">
 						<!-- 
 						Used some quick-and-dirty inline CSS styles here because the form-footer should be styled in the 
 						mother application 
@@ -50,10 +50,11 @@
       					<a href="#" class="btn btn-primary next-page disabled" style="width: 200px; margin-left: calc(50% - 100px)">Next</a>
       				
       				<div class="enketo-power" style="margin-bottom: 30px;">Powered by <a href="http://enketo.org" title="enketo.org website"><img src="https://enketo.org/images/enketo_bare_100x37.png" alt="enketo logo" /></a> </div>
-
-    				<a href="#" class="btn btn-default disabled first-page" style="width: 49.7%; border-radius: 0;">Return to Beginning</a>
-    				<a href="#" class="btn btn-default disabled last-page" style="width: 49.7%; border-radius: 0;">Go to End</a>
-    			</div>
+      				<div class="form-footer__jump-nav" style="display: flex; flex-direction: row;">
+    					<a href="#" class="btn btn-default disabled first-page" style="flex: 1; border-radius: 0;">Return to Beginning</a>
+    					<a href="#" class="btn btn-default disabled last-page" style="flex: 1; border-radius: 0;">Go to End</a>
+    				</div>
+    			</section>
 				
 			</article>
 		</div>
