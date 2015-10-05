@@ -69,6 +69,10 @@ $q-pad-right: 0px !default;
     .question-label.active[lang] {
         display: none;
     }
+    .widget {
+        // override main.scss style
+        margin: 0;
+    }
     .scale {
         @include font-normal;
         height: 100%;
@@ -103,7 +107,7 @@ $q-pad-right: 0px !default;
         background-color: black;
         text-align: center;
         color: white;
-        width: 170px;
+        max-width: 170px;
         padding: 10px 35px;
         margin: 20px auto;
         @extend h5;
@@ -115,7 +119,7 @@ $q-pad-right: 0px !default;
         padding: 8px;
         display: block;
         min-width: 1px;
-        min-height: $font-size-base * 1.25 + 16px;
+        min-height: $font-size-base * 1.25 + 22px;
     }
     .max-label,
     .min-label {

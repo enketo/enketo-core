@@ -38,6 +38,7 @@ define( function( require, exports, module ) {
     Analogscalepicker.prototype._init = function() {
         var $question = $( this.element ).closest( '.question' );
         var value = Number( this.element.value ) || -1;
+        var step = $( this.element ).attr( 'data-type-xml' ) === 'decimal' ? 0.1 : 1;
 
         this.orientation = $question.hasClass( 'or-appearance-horizontal' ) ? 'horizontal' : 'vertical';
 
@@ -48,7 +49,7 @@ define( function( require, exports, module ) {
             min: 0,
             max: 100,
             orientation: this.orientation,
-            step: 1,
+            step: step,
             value: value
         } );
         this.$widget = $( this.element ).next( '.widget' );
@@ -140,7 +141,6 @@ define( function( require, exports, module ) {
         } );
     };
 
-
     /*
      * Stretch the question to full page height.
      * Doing this with pure css flexbox using "flex-direction: column" interferes with the Grid theme 
@@ -157,12 +157,14 @@ define( function( require, exports, module ) {
     };
 
     Analogscalepicker.prototype._stretchHeight = function() {
-        var $question = $( this ).closest( '.question' ).css( 'height', 'auto' );
+        var $question = $( this ).closest( '.question' ).css( 'min-height', 'auto' );
         var height = $question.outerHeight();
         var $form = $question.closest( '.or' );
         var diff = ( $form.offset().top + $form.height() ) - ( $question.offset().top + height ) - 10;
         if ( diff ) {
-            $question.css( 'height', height + diff + 'px' );
+            // To somewhat avoid problems when a repeat is clone and height is set while the widget is detached
+            // we use min-height instead of height.
+            $question.css( 'min-height', height + diff + 'px' );
         }
     };
 
@@ -208,6 +210,6 @@ define( function( require, exports, module ) {
 
     module.exports = {
         'name': pluginName,
-        'selector': '.or-appearance-analog-scale input[data-type-xml="int"]'
+        'selector': '.or-appearance-analog-scale input[type="number"]'
     };
 } );

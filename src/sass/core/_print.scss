@@ -243,6 +243,26 @@ label, legend, .trigger, .note {
     }
 }
 
+.or-appearance-analog-scale {
+    .show-value {
+        display: none;
+    }
+    .scale__ticks {
+        display: none;
+    }
+    .slider-vertical .slider-track {
+        border-right: 1px solid black;
+        margin-left: -8.5px;
+    }
+    .slider-horizontal .slider-track {
+        border-bottom: 1px solid black;
+        margin-top: -10px;
+    }
+    .slider-handle {
+        display: none;
+    }
+}
+
 // pages mode
 .pages.or {
     [role="page"] {
