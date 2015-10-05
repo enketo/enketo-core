@@ -3,14 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.2.0] - 2015-10-05
 --------------------
-##### Changed
-- Moved required * top left top of label
-
 ##### Added
 - Ability to extend data types.
 - Analog Scale picker.
+
+##### Changed
+- Moved required * to top left of label.
 
 #### Fixed
 - In pages mode, page not stretching to at least bottom of window.

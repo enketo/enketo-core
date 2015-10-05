@@ -1,4 +1,4 @@
-var Model = require( '../../src/js/FormModel' );
+var Model = require( '../../src/js/Form-model' );
 var mockForms1 = require( '../mock/transforms.mock' );
 
 var getModel = function( filename ) {

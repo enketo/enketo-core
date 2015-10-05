@@ -21,7 +21,7 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 
 define( function( require, exports, module ) {
     'use strict';
-    var FormModel = require( './FormModel' );
+    var FormModel = require( './Form-model' );
     var widgets = require( './widgets-controller' );
     var $ = require( 'jquery' );
     require( './plugins' );

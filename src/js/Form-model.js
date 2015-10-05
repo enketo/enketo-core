@@ -8,7 +8,7 @@ define( function( require, exports, module ) {
     var MergeXML = require( 'mergexml/mergexml' );
     var utils = require( './utils' );
     var $ = require( 'jquery' );
-    var FormLogicError = require( './FormLogicError' );
+    var FormLogicError = require( './Form-logic-error' );
     require( './plugins' );
     require( './extend' );
     require( 'jquery-xpath-basic' );
@@ -284,7 +284,7 @@ define( function( require, exports, module ) {
      * Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
      * OpenRosa functions or for browsers that do not have a native evaluator.
      */
-    FormModel.prototype.bindJsEvaluator = require( './XPathEvaluatorBinding' );
+    FormModel.prototype.bindJsEvaluator = require( './xpath-evaluator-binding' );
 
     /**
      * Gets the instance ID
