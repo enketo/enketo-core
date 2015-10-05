@@ -18,7 +18,7 @@
 			}
 		</style>
 		<script>
-			// Do not remove the comment below. It is used in enketo-core-performance-monitor.
+			// The comment below is used in enketo-core-performance-monitor.
 			//{{globalModelStr}}
 	</script>
 
@@ -26,6 +26,9 @@
 	<body>
 		<div class="main">
 			<article class="paper" >
+				<!-- 
+					This section is to be removed in application 
+				-->
 				<section class="guidance">
 					<p>Add querystring to source of XForm, eg:</p>
 					<ul>
@@ -33,17 +36,22 @@
 						<li><a href="?xform=https://ona.io/enketo/forms/66458/form.xml">?xform=https://ona.io/enketo/forms/66458/form.xml</a></li>
 					</ul>
 				</section>
+				<!-- 
+					This form header (markup/css) can be changed in the application. 
+					Just make sure to keep a .form-language-selector element into which the form language selector (<select>)
+					will be appended by Enketo Core.
+				-->
 				<header class="form-header clearfix">
 					<span class="form-language-selector"><span>Choose Language</span></span>
 				</header>
 
-				<!-- Do not remove the comment below. It is used in enketo-core-performance-monitor. -->
+				<!-- The comment below is used in enketo-core-performance-monitor. -->
 				<!-- {{<form>}} -->			
 				
 				<section class="form-footer">
 						<!-- 
 						Used some quick-and-dirty inline CSS styles here because the form-footer should be styled in the 
-						mother application 
+						mother application. The HTML markup can be changed as well. 
 						-->
 						<a href="#" class="previous-page disabled" style="position:absolute; left: 10px; bottom: 40px;">Back</a>
 						<button id="validate-form" class="btn btn-primary" style="width:200px; margin-left: calc(50% - 100px);">Validate</button>
@@ -58,8 +66,11 @@
 				
 			</article>
 		</div>
-
+		
+		<!-- for development only -->
 		<script src="//localhost:35729/livereload.js"></script>
+		
+		<!-- all the scripts -->
 		<script type="text/javascript"  src="../build/js/enketo-bundle.js"></script>
 	</body>
 </html>
