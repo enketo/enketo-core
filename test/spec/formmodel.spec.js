@@ -216,9 +216,14 @@ describe( 'Data node XML data type conversion & validation', function() {
         ];
 
     function test( n ) {
-        it( 'converts and validates xml-type ' + n.type + ' with value: ' + n.value, function() {
+        it( 'converts and validates xml-type ' + n.type + ' with value: ' + n.value, function( done ) {
             data = getModel( 'thedata.xml' ); //dataStr1);
-            expect( data.node( n.selector, n.index, n.filter ).setVal( n.value, null, n.type ) ).toEqual( n.result );
+            data.node( n.selector, n.index, n.filter ).setVal( n.value, null, n.type )
+                .then( function( result ) {
+                    expect( result ).toEqual( n.result );
+                })
+                .then( done )
+                .catch( done );
         } );
     }
 
@@ -233,34 +238,57 @@ describe( 'Data node XML data type conversion & validation', function() {
         } );
     }
 
-    it( 'converts NaN to "" (quietly) for nodes with type=int', function() {
+    it( 'converts NaN to "" (quietly) for nodes with type=int', function( done ) {
         var result,
             node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
         // prime the node with a value
-        node.setVal( 5, null, 'int' );
-        expect( node.getVal() ).toEqual( [ '5' ] );
-        // attempt to set the value to NaN
-        result = node.setVal( 'NaN', null, 'int' );
-        expect( result ).toEqual( true );
-        expect( node.getVal() ).toEqual( [ '' ] );
+        node.setVal( 5, null, 'int' )
+            .then( function() {
+                expect( node.getVal() ).toEqual( [ '5' ] );
+            } )
+            .then( function() {
+                // attempt to set the value to NaN
+                return node.setVal( 'NaN', null, 'int' );
+            } )
+            .then( function( result ) {
+                expect( result ).toEqual( true );
+                expect( node.getVal() ).toEqual( [ '' ] );
+            } )
+            .then( done )
+            .catch( done );
     } );
 
-    it( 'converts NaN to "" (quietly) for nodes with type=decimal', function() {
+    it( 'converts NaN to "" (quietly) for nodes with type=decimal', function( done ) {
         var result,
             node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
         // prime the node with a value
-        node.setVal( 5.1, null, 'decimal' );
-        expect( node.getVal() ).toEqual( [ '5.1' ] );
-        // attempt to set the value to NaN
-        result = node.setVal( 'NaN', null, 'decimal' );
-        expect( result ).toEqual( true );
-        expect( node.getVal() ).toEqual( [ '' ] );
+        node.setVal( 5.1, null, 'decimal' )
+            .then( function() {
+                expect( node.getVal() ).toEqual( [ '5.1' ] );
+            } )
+            .then( function() {
+                // attempt to set the value to NaN
+                return node.setVal( 'NaN', null, 'decimal' );
+            } )
+            .then( function( result ) {
+                expect( result ).toEqual( true );
+                expect( node.getVal() ).toEqual( [ '' ] );
+            } )
+            .then( done )
+            .catch( done );
     } );
 
-    it( 'sets a non-empty value to empty', function() {
+    it( 'sets a non-empty value to empty', function( done ) {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
-        node.setVal( 'value', null, 'string' );
-        expect( node.setVal( '' ) ).toBe( true );
+        node.setVal( 'value', null, 'string' )
+            .then( function() {
+                return node.setVal( '' );
+            } )
+            .then( function( result ) {
+                expect( result ).toBe( true );
+            } )
+            .then( done )
+            .catch( done );
     } );
 
     it( 'adds a file attribute to data nodes with a value and with xml-type: binary', function() {

@@ -38,14 +38,16 @@ if ( getURLParameter( 'xform' ) !== 'null' ) {
 
 // validate handler for validate button
 $( '#validate-form' ).on( 'click', function() {
-    form.validate();
-    if ( !form.isValid() ) {
-        alert( 'Form contains errors. Please see fields marked in red.' );
-    } else {
-        alert( 'Form is valid! (see XML record and media files in the console)' );
-        console.log( 'record:', form.getDataStr() );
-        console.log( 'media files:', fileManager.getCurrentFiles() );
-    }
+    form.validate()
+        .then( function( valid ) {
+            if ( !valid ) {
+                alert( 'Form contains errors. Please see fields marked in red.' );
+            } else {
+                alert( 'Form is valid! (see XML record and media files in the console)' );
+                console.log( 'record:', form.getDataStr() );
+                console.log( 'media files:', fileManager.getCurrentFiles() );
+            }
+        } );
 } );
 
 // initialize the form
