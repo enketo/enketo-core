@@ -34,35 +34,38 @@ var data = {
 	modelStr: globalXMLInstance,
 	// optional string of an existing instance to be edited
 	instanceStr: null,
-	// optional boolean whether this instance has been submitted already
+	// optional boolean whether this instance has ever been submitted before
 	submitted: false,
-	// optional array of objects containing {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
+	// optional array of external data objects containing: 
+	// {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
 	external = []
 };
 
 // instantiate a form, with 2 parameters
 var form = new Form( formSelector, data);
 
-//initialize the form and capture any load errors
+// initialize the form and capture any load errors
 var loadErrors = form.init();
 
-//submit button handler for validate button
+// submit button handler for validate button
 $( '#submit' ).on( 'click', function() {
-    form.validateForm();
-    if ( !form.isValid() ) {
-        alert( 'Form contains errors. Please see fields marked in red.' );
-    } else {
-        // Record is valid! 
-        var record = form.getDataStr();
+    form.validateForm()
+    	.then(function (valid){
+    		if ( !valid ) {
+       			alert( 'Form contains errors. Please see fields marked in red.' );
+    		} else {
+        		// Record is valid! 
+        		var record = form.getDataStr();
 
-        // reset the form view
-        form.resetView();
+        		// reset the form view
+        		form.resetView();
 
-        // reinstantiate a new form with the default model 
-        form = new Form( 'form.or:eq(0)', { modelStr: modelStr } );
+        		// reinstantiate a new form with the default model 
+        		form = new Form( formSelector, { modelStr: modelStr } );
 
-        // do what you want with the record
-    }
+        		// do what you want with the record
+    		}
+    	});
 } );
 
 ```
@@ -113,7 +116,7 @@ Each widget needs to fulfill following requirements:
 * The JS library uses CommonJS modules, but all the modules are still AMD-compliant. It may be quite a bit of work to get them working properly using requirejs though (AMD-specific issues won't be fixed by us, but AMD-specific patches/PRs are welcome)
 * Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
 * Still trying to find a JS Documentation system to use that likes Closure-style JSDoc
-* JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues (Note, I had to add `"ensure_newline_at_eof_on_save": true` to the Sublime Text 3 user settings to make grunt jsbeautifier happy with the style produced by the ST3 JsFormat plugin.)
+* JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues.
 * Testing is done with Jasmine and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
 * When making a pull request, please add tests where relevant
 
@@ -132,14 +135,6 @@ For custom themes that go beyond just changing colors and fonts, keep in mind al
 5. questions inside a (nested) repeat group have a different background
 6. large screen size --> smaller screen size ---> smallest screen size 
 7. question in valid vs. invalid state
-
-### Acknowledgements
-
-I would like to acknowledge and thank the indirect contribution by the creators of the following excellent works that were used in the project:
-
-* [XPathJS by Andrej Pavlovic](https://github.com/andrejpavlovic/xpathjs)
-* [Bootstrap Datepicker by eternicode](https://github.com/eternicode/bootstrap-datepicker)
-* [Bootstrap Timepicker by jdewit](http://jdewit.github.io/bootstrap-timepicker/)
 
 ### Sponsors
 
@@ -171,4 +166,3 @@ See [change log](./CHANGELOG.md)
 ### Performance (live)
 
 See [graphs](https://github.com/enketo/enketo-core-performance-monitor#live-results)
-

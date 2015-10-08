@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.3.0] - 2015-10-08
+--------------------
+##### Changed
+- validate() now returns a Promise (**Warning!**)
+
 [4.2.0] - 2015-10-05
 --------------------
 ##### Added
