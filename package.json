@@ -16,7 +16,7 @@
         "url": "https://www.linkedin.com/in/martijnvanderijdt"
     },
     "contributors": [ {
-        "name": "Alex Anderson",
+        "name": "Alex Anderson"
     } ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/Form.js",
