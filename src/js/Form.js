@@ -24,7 +24,7 @@ define( function( require, exports, module ) {
     var FormModel = require( './Form-model' );
     var widgets = require( './widgets-controller' );
     var $ = require( 'jquery' );
-    var Promise = require( 'q' ).Promise;
+    var Promise = require( 'lie' );
     require( './plugins' );
     require( './extend' );
     require( 'jquery-touchswipe' );

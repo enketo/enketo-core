@@ -8,7 +8,7 @@ define( function( require, exports, module ) {
     var MergeXML = require( 'mergexml/mergexml' );
     var utils = require( './utils' );
     var $ = require( 'jquery' );
-    var Promise = require( 'q' ).Promise;
+    var Promise = require( 'lie' );
     var FormLogicError = require( './Form-logic-error' );
     require( './plugins' );
     require( './extend' );

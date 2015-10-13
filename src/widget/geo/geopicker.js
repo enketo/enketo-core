@@ -25,7 +25,7 @@ define( function( require, exports, module ) {
     var Widget = require( '../../js/Widget' );
     var config = require( 'text!enketo-config' );
     var L = require( 'leaflet' );
-    var Promise = require( 'q' ).Promise;
+    var Promise = require( 'lie' );
 
     var googleMapsScriptRequest,
         pluginName = 'geopicker',

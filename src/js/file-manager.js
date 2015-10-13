@@ -14,7 +14,7 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 
 define( function( require, exports, module ) {
     'use strict';
-    var Promise = require( 'q' ).Promise;
+    var Promise = require( 'lie' );
     var $ = require( 'jquery' );
 
     var supported = typeof FileReader !== 'undefined',
