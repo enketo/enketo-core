@@ -25,9 +25,9 @@ define( function( require, exports, module ) {
     var Widget = require( '../../js/Widget' );
     var config = require( 'text!enketo-config' );
     var L = require( 'leaflet' );
-    var Q = require( 'q' );
+    var Promise = require( 'q' ).Promise;
 
-    var googleMapsScriptRequested, googleMapsScriptLoaded,
+    var googleMapsScriptRequest,
         pluginName = 'geopicker',
         defaultZoom = 15,
         // MapBox TileJSON format
@@ -691,10 +691,9 @@ define( function( require, exports, module ) {
 
         return this._getLayers()
             .then( function( layers ) {
-                var deferred = Q.defer(),
-                    options = {
-                        layers: that._getDefaultLayer( layers )
-                    };
+                var options = {
+                    layers: that._getDefaultLayer( layers )
+                };
 
                 that.map = L.map( 'map' + that.mapId, options )
                     .on( 'click', function( e ) {
@@ -739,9 +738,6 @@ define( function( require, exports, module ) {
                 that.map.on( 'baselayerchange', function() {
                     that.$widget.find( '.leaflet-control-container input' ).addClass( 'ignore no-unselect' ).next( 'span' ).addClass( 'option-label' );
                 } );
-
-                deferred.resolve();
-                return deferred.promise;
             } );
     };
 
@@ -786,7 +782,7 @@ define( function( require, exports, module ) {
             }
         } );
 
-        return Q.all( tasks );
+        return Promise.all( tasks );
     };
 
     /**
@@ -798,16 +794,13 @@ define( function( require, exports, module ) {
      */
     Geopicker.prototype._getLeafletTileLayer = function( map, index ) {
         var url,
-            options = this._getTileOptions( map, index ),
-            deferred = Q.defer();
+            options = this._getTileOptions( map, index );
 
         // randomly pick a tile source from the array and store it in the maps config
         // so it will be re-used when the form is reset or multiple geo widgets are created
         map.tileIndex = ( map.tileIndex === undefined ) ? Math.round( Math.random() * 100 ) % map.tiles.length : map.tileIndex;
         url = map.tiles[ map.tileIndex ];
-        deferred.resolve( L.tileLayer( url, options ) );
-
-        return deferred.promise;
+        return Promise.resolve( L.tileLayer( url, options ) );
     };
 
     /**
@@ -818,16 +811,13 @@ define( function( require, exports, module ) {
      * @return {Promise}
      */
     Geopicker.prototype._getGoogleTileLayer = function( map, index ) {
-        var deferred = Q.defer(),
-            options = this._getTileOptions( map, index ),
+        var options = this._getTileOptions( map, index ),
             type = map.tiles.substring( 7 );
 
-        this._loadGoogleMapsScript()
+        return this._loadGoogleMapsScript()
             .then( function() {
-                deferred.resolve( new L.Google( type, options ) );
+                return new L.Google( type, options );
             } );
-
-        return deferred.promise;
     };
 
     /**
@@ -856,30 +846,29 @@ define( function( require, exports, module ) {
      * @return {Promise} [description]
      */
     Geopicker.prototype._loadGoogleMapsScript = function() {
-        var apiKeyQueryParam, loadUrl;
-
         // request Google maps script only once, using a variable outside of the scope of the current widget
         // in case multiple widgets exist in the same form
-        if ( !googleMapsScriptRequested ) {
+        if ( !googleMapsScriptRequest ) {
             // create deferred object, also outside of the scope of the current widget
-            googleMapsScriptLoaded = Q.defer();
-            // create a global callback to be called by the Google Maps script once this has loaded
-            window.gmapsLoaded = function() {
-                // clean up the global function
-                delete window.gmapsLoaded;
-                // resolve the deferred object
-                googleMapsScriptLoaded.resolve();
-            };
-            // make the request for the Google Maps script asynchronously
-            apiKeyQueryParam = ( googleApiKey ) ? '&key=' + googleApiKey : '';
-            loadUrl = 'http://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&sensor=false&libraries=places&callback=gmapsLoaded';
-            $.getScript( loadUrl );
-            // ensure if won't be requested again
-            googleMapsScriptRequested = true;
+            googleMapsScriptRequest = new Promise( function( resolve, reject ) {
+                var apiKeyQueryParam, loadUrl;
+
+                // create a global callback to be called by the Google Maps script once this has loaded
+                window.gmapsLoaded = function() {
+                    // clean up the global function
+                    delete window.gmapsLoaded;
+                    // resolve the deferred object
+                    resolve();
+                };
+                // make the request for the Google Maps script asynchronously
+                apiKeyQueryParam = ( googleApiKey ) ? '&key=' + googleApiKey : '';
+                loadUrl = 'http://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&sensor=false&libraries=places&callback=gmapsLoaded';
+                $.getScript( loadUrl );
+            } );
         }
 
         // return the promise of the deferred object outside of the scope of the current widget
-        return googleMapsScriptLoaded.promise;
+        return googleMapsScriptRequest;
     };
 
     Geopicker.prototype._getDefaultLayer = function( layers ) {

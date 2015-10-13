@@ -14,7 +14,7 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 
 define( function( require, exports, module ) {
     'use strict';
-    var Q = require( 'q' );
+    var Promise = require( 'q' ).Promise;
     var $ = require( 'jquery' );
 
     var supported = typeof FileReader !== 'undefined',
@@ -25,15 +25,11 @@ define( function( require, exports, module ) {
      * @return {[type]} promise boolean or rejection with Error
      */
     function init() {
-        var deferred = Q.defer();
-
         if ( supported ) {
-            deferred.resolve( true );
+            return Promise.resolve( true );
         } else {
-            deferred.reject( new Error( 'FileReader not supported.' ) );
+            return Promise.reject( new Error( 'FileReader not supported.' ) );
         }
-
-        return deferred.promise;
     }
 
     /**
@@ -60,33 +56,33 @@ define( function( require, exports, module ) {
      * @return {[type]}         promise url string or rejection with Error
      */
     function getFileUrl( subject ) {
-        var error, reader,
-            deferred = Q.defer();
+        return new Promise( function( resolve, reject ) {
+            var error, reader;
 
-        if ( !subject ) {
-            deferred.resolve( null );
-        } else if ( typeof subject === 'string' ) {
-            // TODO obtain from storage
-        } else if ( typeof subject === 'object' ) {
-            if ( _isTooLarge( subject ) ) {
-                error = new Error( 'File too large (max ' +
-                    ( Math.round( ( _getMaxSize() * 100 ) / ( 1024 * 1024 ) ) / 100 ) +
-                    ' Mb)' );
-                deferred.reject( error );
+            if ( !subject ) {
+                resolve( null );
+            } else if ( typeof subject === 'string' ) {
+                // TODO obtain from storage
+            } else if ( typeof subject === 'object' ) {
+                if ( _isTooLarge( subject ) ) {
+                    error = new Error( 'File too large (max ' +
+                        ( Math.round( ( _getMaxSize() * 100 ) / ( 1024 * 1024 ) ) / 100 ) +
+                        ' Mb)' );
+                    reject( error );
+                } else {
+                    reader = new FileReader();
+                    reader.onload = function( e ) {
+                        resolve( e.target.result );
+                    };
+                    reader.onerror = function( e ) {
+                        reject( error );
+                    };
+                    reader.readAsDataURL( subject );
+                }
             } else {
-                reader = new FileReader();
-                reader.onload = function( e ) {
-                    deferred.resolve( e.target.result );
-                };
-                reader.onerror = function( e ) {
-                    deferred.reject( error );
-                };
-                reader.readAsDataURL( subject );
+                reject( new Error( 'Unknown error occurred' ) );
             }
-        } else {
-            deferred.reject( new Error( 'Unknown error occurred' ) );
-        }
-        return deferred.promise;
+        } );
     }
 
     /**
