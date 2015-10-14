@@ -97,7 +97,7 @@ button {
         background: none;
         @include box-shadow-none;
     }
-    &:hover {
+    &:hover, &:disabled, &.disabled {
         color: $text-color;
         opacity: 0.5;
     }
