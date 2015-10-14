@@ -385,14 +385,23 @@ define( function( require, exports, module ) {
                 return this.$activePages.index( this.$current );
             },
             next: function() {
-                var next, currentIndex;
+                var that = this,
+                    currentIndex;
                 this.updateAllActive();
                 currentIndex = this.getCurrentIndex();
-                next = this.getNext( currentIndex );
 
-                if ( next ) {
-                    this.flipTo( next, currentIndex + 1 );
-                }
+                form.validateContent( this.$current )
+                    .then( function( valid ) {
+                        var next;
+
+                        if ( !valid ) return;
+
+                        next = that.getNext( currentIndex );
+
+                        if ( next ) {
+                            that.flipTo( next, currentIndex + 1 );
+                        }
+                    } );
             },
             prev: function() {
                 var prev, currentIndex;
@@ -1837,19 +1846,27 @@ define( function( require, exports, module ) {
 
         /**
          * Validates all enabled input fields after first resetting everything as valid.
-         * @return {boolean} whether the form contains any errors
+         * @return {Promise} wrapping {boolean} whether the form contains any errors
          */
         FormView.prototype.validateAll = function() {
+            return this.validateContent( $form );
+        };
+
+        /**
+         * Validates all enabled input fields in the supplied container, after first resetting everything as valid.
+         * @return {Promise} wrapping {boolean} whether the container contains any errors
+         */
+        FormView.prototype.validateContent = function( $container ) {
             var $firstError,
                 that = this;
 
             //can't fire custom events on disabled elements therefore we set them all as valid
-            $form.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +
+            $container.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +
                 'input:disabled, select:disabled, textarea:disabled' ).each( function() {
                 that.setValid( $( this ) );
             } );
 
-            var validations = $form.find( '.question' ).map( function() {
+            var validations = $container.find( '.question' ).addBack( '.question' ).map( function() {
                 // only trigger validate on first input and use a **pure CSS** selector (huge performance impact)
                 var $elem = $( this )
                     .find( 'input:not(.ignore):not(:disabled), select:not(.ignore):not(:disabled), textarea:not(.ignore):not(:disabled)' );
@@ -1861,7 +1878,10 @@ define( function( require, exports, module ) {
 
             return Promise.all( validations )
                 .then( function() {
-                    $firstError = $form.find( '.invalid-required, .invalid-constraint' ).eq( 0 );
+                    $firstError = $container
+                        .find( '.invalid-required, .invalid-constraint' )
+                        .addBack( '.invalid-required, .invalid-constraint' )
+                        .eq( 0 );
 
                     if ( $firstError.length > 0 ) {
                         if ( that.pages.active ) {
@@ -1932,7 +1952,7 @@ define( function( require, exports, module ) {
 
         FormView.prototype.validateInput = function( eventType, $input ) {
             var that = this,
-                validCons, validReq, _dataNodeObj,
+                valid, validCons, validReq, _dataNodeObj,
                 // all relevant properties, except for the **very expensive** index property
                 n = {
                     path: that.input.getName( $input ),
@@ -1990,9 +2010,11 @@ define( function( require, exports, module ) {
                 if ( eventType === 'validate' ) {
                     that.setInvalid( $input, 'required' );
                 }
+
+                valid = Promise.resolve( false );
             } else {
                 that.setValid( $input, 'required' );
-                validCons = validCons
+                valid = validCons
                     .then( function( validCons ) {
                         if ( typeof validCons !== 'undefined' && validCons === false ) {
                             that.setInvalid( $input, 'constraint' );
@@ -2011,7 +2033,7 @@ define( function( require, exports, module ) {
                 $form.trigger( 'valuechange.enketo' );
             }
 
-            return validCons;
+            return valid;
         };
     }
 
