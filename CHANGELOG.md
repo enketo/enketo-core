@@ -3,10 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.4.0] - 2015-10-14
 --------------------
 ##### Added
 - In pages mode, the current page will be validated and needs to pass before going to the Next page.
+
+##### Changed
+- Analog scale picker reset button disabled when value is empty.
+- Analog scale picker reset button hidden when disabled. 
+- Analog scale picker handle hidden when value is empty.
 
 ##### Fixed
 - In pages mode, if the page contains a single question, this question does not get focus.

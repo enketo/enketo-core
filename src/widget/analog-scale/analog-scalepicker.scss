@@ -71,7 +71,10 @@ $q-pad-right: 0px !default;
     }
     .widget {
         // override main.scss style
-        margin: 0;
+        // The margin-bottom is maintained to 
+        // have space for the constraint message in the horizontal
+        // analog scale widget.
+        margin: 0 0 9px 0;
     }
     .scale {
         @include font-normal;
@@ -95,6 +98,11 @@ $q-pad-right: 0px !default;
         // outline: 0;
    
     }
+    .slider--empty {
+        .slider-handle {
+            background: transparent;
+        }
+    }
     .slider-selection {
         background: transparent;
         box-shadow: none;
@@ -102,6 +110,9 @@ $q-pad-right: 0px !default;
     }
     .btn-reset {
         position: relative;
+        &:disabled {
+            visibility: hidden;
+        }
     }
     .show-value__box {
         background-color: black;
@@ -151,6 +162,9 @@ $q-pad-right: 0px !default;
             left: -25px;
             width: 20px;
             text-align: center;
+        }
+        .min-label {
+            margin-top: -20px;
         }
         .btn-reset {
             width: 20px;

@@ -18,9 +18,8 @@ define( function( require, exports, module ) {
      * @constructor
      * @param {Element} element Element to apply widget to.
      * @param {(boolean|{touch: boolean})} options options
-     * @param {*=} event     event
      */
-    function Analogscalepicker( element, options, event ) {
+    function Analogscalepicker( element, options ) {
         this.namespace = pluginName;
         Widget.call( this, element, options );
         this._init();
@@ -37,6 +36,7 @@ define( function( require, exports, module ) {
      */
     Analogscalepicker.prototype._init = function() {
         var $question = $( this.element ).closest( '.question' );
+        var $input = $( this.element );
         var value = Number( this.element.value ) || -1;
         var step = $( this.element ).attr( 'data-type-xml' ) === 'decimal' ? 0.1 : 1;
 
@@ -44,15 +44,17 @@ define( function( require, exports, module ) {
 
         this.ticks = !$question.hasClass( 'or-appearance-no-ticks' );
 
-        $( this.element ).slider( {
-            reversed: this.orientation === 'vertical',
-            min: 0,
-            max: 100,
-            orientation: this.orientation,
-            step: step,
-            value: value
-        } );
-        this.$widget = $( this.element ).next( '.widget' );
+        $input
+            .slider( {
+                reversed: this.orientation === 'vertical',
+                min: 0,
+                max: 100,
+                orientation: this.orientation,
+                step: step,
+                value: value
+            } );
+
+        this.$widget = $input.next( '.widget' );
         this.$slider = this.$widget.find( '.slider' );
         this.$labelContent = $( '<div class="label-content widget" />' ).prependTo( $question );
         this.$originalLabels = $question.find( '.question-label, .or-hint, .or-required-msg, .or-constraint-msg' );
@@ -63,6 +65,9 @@ define( function( require, exports, module ) {
         this._renderScale();
         this._setChangeHandler();
         this._setResizeHander();
+
+        // update reset button and slider "empty" state
+        $input.trigger( 'programmaticChange' + this.namespace );
     };
 
     /** 
@@ -96,6 +101,7 @@ define( function( require, exports, module ) {
     Analogscalepicker.prototype._renderScale = function() {
         var i;
         var $scale = $( '<div class="scale"></div>' );
+
         if ( this.orientation === 'vertical' ) {
             for ( i = 100; i >= 0; i -= 10 ) {
                 $scale.append( this._getNumberHtml( i ) );
@@ -116,12 +122,11 @@ define( function( require, exports, module ) {
     Analogscalepicker.prototype._renderResetButton = function() {
         var that = this;
 
-        $( '<button class="btn-icon-only btn-reset"><i class="icon icon-refresh"></i></button>' )
+        this.$resetBtn = $( '<button class="btn-icon-only btn-reset"><i class="icon icon-refresh"></i></button>' )
             .appendTo( this.$widget )
-            .on( 'click', function( evt ) {
+            .on( 'click', function() {
                 $( that.element ).slider( 'setValue', 0, false );
-                $( that.element ).val( '' ).trigger( 'change' );
-                that._updateCurrentValueShown();
+                $( that.element ).val( '' ).trigger( 'programmaticChange' + that.namespace );
                 return false;
             } );
     };
@@ -135,8 +140,11 @@ define( function( require, exports, module ) {
     Analogscalepicker.prototype._setChangeHandler = function() {
         var that = this;
 
-        $( this.element ).on( 'slideStop.' + this.namespace, function( slideEvt ) {
+        $( this.element ).on( 'slideStop.' + this.namespace + ' programmaticChange' + this.namespace, function() {
+            var empty = ( this.value === '' );
             $( this ).trigger( 'change' );
+            that.$resetBtn.prop( 'disabled', empty );
+            that.$slider.toggleClass( 'slider--empty', empty );
             that._updateCurrentValueShown();
         } );
     };
