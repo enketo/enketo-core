@@ -3,6 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- In pages mode, if the page contains a single question, this question does not get focus.
+- In pages mode, when the form is inside a scrollable container, it doesn't scroll to first question.
+
+
 [4.3.0] - 2015-10-08
 --------------------
 ##### Changed
