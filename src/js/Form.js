@@ -387,13 +387,15 @@ define( function( require, exports, module ) {
                 return this.$activePages.index( this.$current );
             },
             next: function() {
-                var next, currentIndex;
-                var that = this;
+                var that = this,
+                    currentIndex;
                 this.updateAllActive();
                 currentIndex = this.getCurrentIndex();
 
                 form.validateContent( this.$current )
                     .then( function( valid ) {
+                        var next;
+
                         if ( !valid ) return;
 
                         next = that.getNext( currentIndex );
