@@ -456,9 +456,16 @@ define( function( require, exports, module ) {
             },
             focusOnFirstQuestion: function( pageEl ) {
                 //triggering fake focus in case element cannot be focused (if hidden by widget)
-                $( pageEl ).find( '.question:not(.disabled)' ).filter( function() {
-                    return $( this ).parentsUntil( '.or', '.disabled' ).length === 0;
-                } ).eq( 0 ).find( 'input, select, textarea' ).eq( 0 ).trigger( 'fakefocus' );
+                $( pageEl )
+                    .find( '.question:not(.disabled)' )
+                    .addBack( '.question:not(.disabled)' )
+                    .filter( function() {
+                        return $( this ).parentsUntil( '.or', '.disabled' ).length === 0;
+                    } )
+                    .eq( 0 )
+                    .find( 'input, select, textarea' )
+                    .eq( 0 )
+                    .trigger( 'fakefocus' );
             },
             toggleButtons: function( index ) {
                 var i = index || this.getCurrentIndex(),
