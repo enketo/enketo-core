@@ -40,9 +40,6 @@ if ( getURLParameter( 'xform' ) !== 'null' ) {
 $( '#validate-form' ).on( 'click', function() {
     form.validate()
         .then( function( valid ) {
-            // trigger event (used in enketo-core-performance-monitor)
-            document.querySelector('form.or').dispatchEvent(new Event('validationComplete'));
-            
             if ( !valid ) {
                 alert( 'Form contains errors. Please see fields marked in red.' );
             } else {
