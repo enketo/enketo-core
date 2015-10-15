@@ -1756,6 +1756,11 @@ define( function( require, exports, module ) {
             // Why is the file namespace added?
             $form.on( 'change.file validate', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
                 that.validateInput( event.type, $( this ) );
+
+                // propagate event externally after internal processing is completed
+                if ( event.type === 'change' ) {
+                    $form.trigger( 'valuechange.enketo' );
+                }
             } );
 
             // doing this on the focus event may have little effect on performance, because nothing else is happening :)
@@ -1952,7 +1957,7 @@ define( function( require, exports, module ) {
 
         FormView.prototype.validateInput = function( eventType, $input ) {
             var that = this,
-                valid, validCons, validReq, _dataNodeObj,
+                validCons, validReq, _dataNodeObj,
                 // all relevant properties, except for the **very expensive** index property
                 n = {
                     path: that.input.getName( $input ),
@@ -2011,10 +2016,10 @@ define( function( require, exports, module ) {
                     that.setInvalid( $input, 'required' );
                 }
 
-                valid = Promise.resolve( false );
+                return Promise.resolve( false );
             } else {
                 that.setValid( $input, 'required' );
-                valid = validCons
+                return validCons
                     .then( function( validCons ) {
                         if ( typeof validCons !== 'undefined' && validCons === false ) {
                             that.setInvalid( $input, 'constraint' );
@@ -2027,13 +2032,6 @@ define( function( require, exports, module ) {
                         throw e;
                     } );
             }
-
-            // propagate event externally after internal processing is completed
-            if ( eventType === 'change' ) {
-                $form.trigger( 'valuechange.enketo' );
-            }
-
-            return valid;
         };
     }
 
