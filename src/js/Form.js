@@ -384,6 +384,13 @@ define( function( require, exports, module ) {
             getCurrentIndex: function() {
                 return this.$activePages.index( this.$current );
             },
+            /**
+             * Changes the `pages.next()` function to return a `Promise`, wrapping one of the following values:
+             *
+             * @return {Promise} wrapping {boolean} or {number}.  If a {number}, this is the index into
+             *         `$activePages` of the new current page; if a {boolean}, {false} means that validation
+             *         failed, and {true} that validation passed, but the page did not change.
+             */
             next: function() {
                 var that = this,
                     currentIndex;
