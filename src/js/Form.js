@@ -390,17 +390,21 @@ define( function( require, exports, module ) {
                 this.updateAllActive();
                 currentIndex = this.getCurrentIndex();
 
-                form.validateContent( this.$current )
+                return form.validateContent( this.$current )
                     .then( function( valid ) {
-                        var next;
+                        var next, newIndex;
 
-                        if ( !valid ) return;
+                        if ( !valid ) return false;
 
                         next = that.getNext( currentIndex );
 
                         if ( next ) {
-                            that.flipTo( next, currentIndex + 1 );
+                            newIndex = currentIndex + 1;
+                            that.flipTo( next, newIndex );
+                            return newIndex;
                         }
+
+                        return true;
                     } );
             },
             prev: function() {
