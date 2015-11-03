@@ -146,6 +146,8 @@ The development of this app and [enketo-core](https://github.com/enketo/enketo-c
 * [Enketo LLC](http://www.linkedin.com/company/enketo-llc)
 * [iMMAP](http://immap.org)
 * [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
+* [Ona](https://ona.io)
+* [Medic Mobile](http://medicmobile.org/)
 * [Enketo LLC](https://enketo.org)
 
 ### Related Projects
