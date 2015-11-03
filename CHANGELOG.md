@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.4.1] - 2015-11-03
+--------------------
+##### Fixed
+- Fixed icons in timepicker.
+
 [4.4.0] - 2015-10-14
 --------------------
 ##### Added

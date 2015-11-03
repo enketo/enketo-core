@@ -16,15 +16,13 @@
     }
 }
 
-.glyphicon {
+.icon-chevron-up {
     @extend .icon;
-}
-
-.glyphicon-chevron-up {
     @extend .icon-chevron-up;
 }
 
-.glyphicon-chevron-down {
+.icon-chevron-down {
+    @extend .icon;
     @extend .icon-chevron-down;
 }
 
