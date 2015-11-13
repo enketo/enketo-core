@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.4.2] - 2015-11-13
+--------------------
+##### Fixed
+- Current() does not switch context instance for relative paths in an XPath predicate.
+
 [4.4.1] - 2015-11-03
 --------------------
 ##### Fixed

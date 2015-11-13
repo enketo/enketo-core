@@ -221,7 +221,7 @@ describe( 'Data node XML data type conversion & validation', function() {
             data.node( n.selector, n.index, n.filter ).setVal( n.value, null, n.type )
                 .then( function( result ) {
                     expect( result ).toEqual( n.result );
-                })
+                } )
                 .then( done )
                 .catch( done );
         } );
@@ -432,18 +432,20 @@ describe( 'converting instance("id") to absolute paths', function() {
     } );
 } );
 
-describe( 'converting expressions with current()', function() {
+describe( 'converting expressions with current() for context /data/node', function() {
+    var context = '/data/node';
+
     [
-        [ 'instance("a")/path/to/node[current()/.. = /path/to/value]', 'instance("a")/path/to/node[.. = /path/to/value]' ],
-        [ 'instance("a")/path/to/node[current()/. = /path/to/value]', 'instance("a")/path/to/node[. = /path/to/value]' ],
-        [ 'instance("a")/path/to/node[current()/path/to/wut = /path/to/value]', 'instance("a")/path/to/node[/path/to/wut = /path/to/value]' ]
+        [ 'instance("a")/path/to/node[filter = current()/data/some/node]', 'instance("a")/path/to/node[filter = /data/some/node]' ],
+        [ 'instance("a")/path/to/node[filter = current()/.]', 'instance("a")/path/to/node[filter = /data/node/.]' ],
+        [ 'instance("a")/path/to/node[filter = current()/../some/node]', 'instance("a")/path/to/node[filter = /data/node/../some/node]' ]
 
     ].forEach( function( test ) {
         it( 'happens correctly', function() {
             var model = new Model( '<model><instance/></model>' );
             var expected = test[ 1 ];
             model.init();
-            expect( model.replaceCurrentFn( test[ 0 ] ) ).toEqual( expected );
+            expect( model.replaceCurrentFn( test[ 0 ], context ) ).toEqual( expected );
         } );
     } );
 } );

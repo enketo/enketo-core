@@ -542,16 +542,23 @@ define( function( require, exports, module ) {
     };
 
     /** 
-     * Replaces current()/ with '' or '/' because Enketo does not (yet) change the context in an itemset.
+     * Replaces current() with /absolute/path/to/node to ensure the context is shifted to the primary instance
+     * 
      * Doing this here instead of adding a current() function to the XPath evaluator, means we can keep using
      * the much faster native evaluator in most cases!
      *
-     * @param  {string} expr original expression
-     * @return {string}      new expression
+     * Root will be shifted, and repeat positions injected, **later on**, so it's not included here.
+     *
+     * @param  {string} expr            original expression
+     * @param  {string} contextSelector context selector 
+     * @return {string}                 new expression
      */
-    FormModel.prototype.replaceCurrentFn = function( expr ) {
-        expr = expr.replace( /current\(\)\/\./g, '.' );
-        expr = expr.replace( /current\(\)/g, '' );
+    FormModel.prototype.replaceCurrentFn = function( expr, contextSelector ) {
+        // relative paths
+        expr = expr.replace( 'current()/.', contextSelector + '/.' );
+        // absolute paths
+        expr = expr.replace( 'current()/', '/' );
+
         return expr;
     };
 
@@ -688,9 +695,10 @@ define( function( require, exports, module ) {
         if ( !this.convertedExpressions[ cacheKey ] ) {
             expr = expr;
             expr = expr.trim();
-            expr = this.shiftRoot( expr );
             expr = this.replaceInstanceFn( expr );
-            expr = this.replaceCurrentFn( expr );
+            expr = this.replaceCurrentFn( expr, selector );
+            // shiftRoot should come after replaceCurrentFn
+            expr = this.shiftRoot( expr );
             if ( repeats && repeats > 1 ) {
                 expr = this.makeBugCompliant( expr, selector, index );
             }
