@@ -1788,13 +1788,12 @@ define( function( require, exports, module ) {
                     $legend = $question.find( 'legend' ).eq( 0 ),
                     loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' ),
                     insideTable = ( $input.parentsUntil( '.or', '.or-appearance-list-nolabel' ).length > 0 ),
-                    $reqSubtle = $question.find( '.required-subtle' ),
-                    reqSubtle = $( '<span class="required-subtle" style="color: transparent;">Required</span>' );
+                    $reqSubtle = $question.find( '.required-subtle' );
 
                 if ( event.type === 'focusin' || event.type === 'fakefocus' ) {
                     $question.addClass( 'focus' );
                     if ( props.required && $reqSubtle.length === 0 && !insideTable ) {
-                        $reqSubtle = $( reqSubtle );
+                        $reqSubtle = $( '<span class="required-subtle" style="color: transparent;">Required</span>' );
 
                         if ( $legend.length > 0 ) {
                             $legend.append( $reqSubtle );
