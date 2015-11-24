@@ -30,11 +30,11 @@
         "grunt-concurrent": "2.x.x",
         "grunt-contrib-connect": "0.x.x",
         "grunt-contrib-jshint": "0.x.x",
-        "grunt-contrib-uglify": "0.9.x",
+        "grunt-contrib-uglify": "0.11.x",
         "grunt-contrib-watch": "0.x.x",
         "grunt-jsbeautifier": "0.x.x",
         "grunt-karma": "0.12.x",
-        "grunt-sass": "1.0.x",
+        "grunt-sass": "1.1.x",
         "jasmine-core": "2.3.x",
         "karma": "0.13.x",
         "karma-browserify": "^4.3.0",
@@ -52,7 +52,7 @@
         "widgets": "./src/js/widgets.js"
     },
     "dependencies": {
-        "bootstrap-datepicker": "1.4.x",
+        "bootstrap-datepicker": "1.5.x",
         "bootstrap-slider-basic": "3.2.x",
         "bootstrap-timepicker": "0.2.x",
         "enketo-xpathjs": "1.2.x",
