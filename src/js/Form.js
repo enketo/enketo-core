@@ -79,6 +79,9 @@ define( function( require, exports, module ) {
         this.getInstanceID = function() {
             return model.getInstanceID();
         };
+        this.getDeprecatedID = function() {
+            return model.getDeprecatedID();
+        };
         this.getInstanceName = function() {
             return model.getInstanceName();
         };

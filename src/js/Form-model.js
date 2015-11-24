@@ -297,6 +297,15 @@ define( function( require, exports, module ) {
     };
 
     /**
+     * Gets the deprecated ID
+     *
+     * @return {string} deprecatedID
+     */
+    FormModel.prototype.getDeprecatedID = function() {
+        return this.node( '/*/meta/deprecatedID' ).getVal()[ 0 ] || "";
+    };
+
+    /**
      * Gets the instance Name
      *
      * @return {string} instanceID

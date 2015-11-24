@@ -321,6 +321,20 @@ describe( 'Data node remover', function() {
     } );
 } );
 
+
+describe( 'DeprecatedID value getter', function() {
+    it( 'returns "" if deprecatedID node does not exist', function() {
+        var model = new Model( '<model><instance><data></data></instance></model>' );
+        model.init();
+        expect( model.getDeprecatedID() ).toEqual( '' );
+    } );
+    it( 'returns value of deprecatedID node', function() {
+        var model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></data></instance></model>' );
+        model.init();
+        expect( model.getDeprecatedID() ).toEqual( 'a' );
+    } );
+} );
+
 describe( 'XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)', function() {
     var i, t = [
             [ '/thedata/nodeB', 'string', null, 0, 'b' ],

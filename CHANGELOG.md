@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.4.3] - 2015-11-24
+--------------------
+##### Added
+- Ability to obtain deprecatedID from model.
+
 [4.4.2] - 2015-11-13
 --------------------
 ##### Fixed

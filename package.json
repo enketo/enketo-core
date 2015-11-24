@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "4.4.2",
+    "version": "4.4.3",
     "license": "Apache-2.0",
     "os": [ "darwin", "linux" ],
     "keywords": [ "enketo", "OpenRosa", "ODK", "XForms" ],
