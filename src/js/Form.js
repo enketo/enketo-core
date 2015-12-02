@@ -348,7 +348,17 @@ define( function( require, exports, module ) {
                         that.updateAllActive();
                         // removing the class in effect avoids the animation
                         $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
+
+                        // TODO we should only force a page-change if required -
+                        // this call instantly scrolls to the top of the page
+                        // even if we were already on the correct page, which is
+                        // disorientating users.
                         that.flipToPageContaining( $( event.target ) );
+
+                        // Make sure that the newly-added fields are actually
+                        // visible.  This may be unnecessary when page-flipping
+                        // is fixed (above).
+                        event.target.scrollIntoView();
                     } )
                     .off( 'removerepeat.pagemode' )
                     .on( 'removerepeat.pagemode', function( event ) {
