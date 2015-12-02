@@ -329,7 +329,7 @@ describe( 'DeprecatedID value getter', function() {
         expect( model.getDeprecatedID() ).toEqual( '' );
     } );
     it( 'returns value of deprecatedID node', function() {
-        var model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></data></instance></model>' );
+        var model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
         model.init();
         expect( model.getDeprecatedID() ).toEqual( 'a' );
     } );
