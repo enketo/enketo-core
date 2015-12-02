@@ -102,7 +102,7 @@ define( function( require, exports, module ) {
                 data = $this.data( pluginName );
 
             if ( !data && typeof options === 'object' && ( !options.touch || !support.inputtypes.time ) ) {
-                $this.data( pluginName, ( data = new TimepickerExtended( this, options, event ) ) );
+                $this.data( pluginName, new TimepickerExtended( this, options, event ) );
             }
             //only call method if widget was instantiated before
             else if ( data && typeof options === 'string' ) {

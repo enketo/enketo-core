@@ -122,7 +122,7 @@ define( function( require, exports, module ) {
         options = options || {};
 
         if ( !data && typeof options === 'object' ) {
-            $this.data( pluginName, ( data = new Radiopicker( $this[ 0 ], options, event ) ) );
+            $this.data( pluginName, new Radiopicker( $this[ 0 ], options, event ) );
         } else if ( data && typeof options === 'string' ) {
             data[ options ]( this );
         }

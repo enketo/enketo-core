@@ -67,7 +67,7 @@ define( function( require, exports, module ) {
             options = options || {};
 
             if ( !data && typeof options === 'object' ) {
-                $this.data( pluginName, ( data = new Notewidget( this, options, event ) ) );
+                $this.data( pluginName, new Notewidget( this, options, event ) );
             } else if ( data && typeof options === 'string' ) {
                 data[ options ]( this );
             }

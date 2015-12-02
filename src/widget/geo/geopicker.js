@@ -1401,7 +1401,7 @@ define( function( require, exports, module ) {
                 options = options || {};
 
                 if ( !data && typeof options === 'object' ) {
-                    $this.data( pluginName, ( data = new Geopicker( this, options, event ) ) );
+                    $this.data( pluginName, new Geopicker( this, options, event ) );
                 } else if ( data && typeof options === 'string' ) {
                     //pass the context, used for destroy() as this method is called on a cloned widget
                     data[ options ]( this );

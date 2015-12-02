@@ -69,7 +69,7 @@ define( function( require, exports, module ) {
 
             //only instantiate if options is an object (i.e. not a string) and if it doesn't exist already
             if ( !data && typeof options === 'object' ) {
-                $this.data( pluginName, ( data = new HorizontalChoices( this, options, event ) ) );
+                $this.data( pluginName, new HorizontalChoices( this, options, event ) );
             }
             //only call method if widget was instantiated before
             else if ( data && typeof options === 'string' ) {

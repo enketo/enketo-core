@@ -91,7 +91,7 @@ define( function( require, exports, module ) {
 
             //only instantiate if options is an object AND if options.touch is truthy
             if ( !data && typeof options === 'object' && options.touch ) {
-                $this.data( pluginName, ( data = new MobileSelectpicker( this, options, event ) ) );
+                $this.data( pluginName, new MobileSelectpicker( this, options, event ) );
             }
             if ( data && typeof options === 'string' ) {
                 data[ options ]( this );

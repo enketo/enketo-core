@@ -196,7 +196,7 @@ define( function( require, exports, module ) {
                 webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30" 
                 */
             if ( !data && typeof options === 'object' && ( !options.touch || !support.inputtypes.datetime || badSamsung.test( navigator.userAgent ) ) ) {
-                $this.data( pluginName, ( data = new DatetimepickerExtended( this, options, event ) ) );
+                $this.data( pluginName, new DatetimepickerExtended( this, options, event ) );
             }
             //only call method if widget was instantiated before
             else if ( data && typeof options === 'string' ) {

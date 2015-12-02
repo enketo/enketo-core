@@ -382,7 +382,7 @@ define( function( require, exports, module ) {
                 var data = $this.data( 'bs.dropdown' );
 
                 if ( !data ) {
-                    $this.data( 'bs.dropdown', ( data = new Dropdown( this ) ) );
+                    $this.data( 'bs.dropdown', new Dropdown( this ) );
                 }
                 if ( typeof option === 'string' ) {
                     data[ option ].call( $this );

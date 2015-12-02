@@ -180,7 +180,7 @@ define( function( require, exports, module ) {
              */
 
             if ( !data && typeof options === 'object' && ( !options.touch || !support.inputtypes.date || badSamsung.test( navigator.userAgent ) ) ) {
-                $this.data( pluginName, ( data = new DatepickerExtended( this, options, event ) ) );
+                $this.data( pluginName, new DatepickerExtended( this, options, event ) );
             }
             //only call method if widget was instantiated before
             else if ( data && typeof options === 'string' ) {
