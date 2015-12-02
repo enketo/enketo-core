@@ -7,5 +7,5 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 define( function( require, exports, module ) {
     module.exports = {
         'name': 'tablewidget'
-    }
+    };
 } );
