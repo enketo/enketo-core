@@ -232,5 +232,5 @@
 }
 
 @mixin form-footer-margin($padding) {
-    margin: 45px -#{$padding} -#{$padding} -#{$padding};
+    margin: 45px (-$padding) (-$padding) (-$padding);
 }
