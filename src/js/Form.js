@@ -250,6 +250,10 @@ define( function( require, exports, module ) {
                 // after loading existing instance to not trigger an 'edit' event
                 this.setEventHandlers();
 
+                // update field calculations again to make sure that dependent
+                // field values are calculated
+                this.calcUpdate();
+
                 this.editStatus.set( false );
 
                 setTimeout( function() {
