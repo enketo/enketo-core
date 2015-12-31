@@ -16,6 +16,7 @@ define( function( require, exports, module ) {
     'use strict';
     var Promise = require( 'lie' );
     var $ = require( 'jquery' );
+    var utils = require( './utils' );
 
     var supported = typeof FileReader !== 'undefined',
         notSupportedAdvisoryMsg = '';
@@ -90,13 +91,23 @@ define( function( require, exports, module ) {
      * @return {[File]} array of files
      */
     function getCurrentFiles() {
-        var file,
-            files = [];
+        var file;
+        var newFilename;
+        var files = [];
 
         // first get any files inside file input elements
         $( 'form.or input[type="file"]' ).each( function() {
             file = this.files[ 0 ];
-            if ( file ) {
+            if ( file && file.name ) {
+                // Correct file names by adding a unique-ish postfix
+                // First create a clone, because the name property is immutable
+                // TODO: in the future, when browser support increase we can invoke
+                // the File constructor to do this.
+                newFilename = utils.getFilename( file, this.dataset.filenamePostfix );
+                file = new Blob( [ file ], {
+                    type: file.type
+                } );
+                file.name = newFilename;
                 files.push( file );
             }
         } );

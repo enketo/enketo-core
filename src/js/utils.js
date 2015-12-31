@@ -61,8 +61,28 @@ define( function( require, exports, module ) {
         return str;
     }
 
+    // Because iOS gives any camera-provided file the same filename, we need to a 
+    // unique-ified filename.
+    // 
+    // See https://github.com/kobotoolbox/enketo-express/issues/374
+    function getFilename( file, postfix ) {
+        var filenameParts;
+        if ( typeof file === 'object' && file.name ) {
+            postfix = postfix || '';
+            filenameParts = file.name.split( '.' );
+            if ( filenameParts.length > 1 ) {
+                filenameParts[ filenameParts.length - 2 ] += postfix;
+            } else if ( filenameParts.length === 1 ) {
+                filenameParts[ 0 ] += postfix;
+            }
+            return filenameParts.join( '.' );
+        }
+        return '';
+    }
+
     module.exports = {
         parseFunctionFromExpression: parseFunctionFromExpression,
         stripQuotes: stripQuotes,
+        getFilename: getFilename
     };
 } );

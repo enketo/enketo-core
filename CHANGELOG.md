@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.4.6] - 2015-12-31
+--------------------
+##### Fixed
+- Files from iOS camera app overwrite each other if in the same record because filenames are the same.
+
 [4.4.5] - 2015-12-22
 --------------------
 ##### Changed

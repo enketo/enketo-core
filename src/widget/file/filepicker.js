@@ -8,6 +8,7 @@ define( function( require, exports, module ) {
     var $ = require( 'jquery' );
     var Widget = require( '../../js/Widget' );
     var fileManager = require( '../../js/file-manager' );
+    var utils = require( '../../js/utils' );
 
     var pluginName = 'filepicker';
 
@@ -109,8 +110,10 @@ define( function( require, exports, module ) {
         $( this.element ).on( 'change.propagate.' + this.namespace, function( event ) {
             var file;
             var fileName;
+            var postfix;
             var $input = $( this );
             var loadedFileName = $input.attr( 'data-loaded-file-name' );
+            var now = new Date();
 
             // trigger eventhandler to update instance value
             if ( event.namespace === 'propagate' ) {
@@ -122,7 +125,9 @@ define( function( require, exports, module ) {
 
             // get the file
             file = this.files[ 0 ];
-            fileName = that._getFileName( file );
+            postfix = '-' + now.getHours() + '_' + now.getMinutes() + '_' + now.getSeconds();
+            this.dataset.filenamePostfix = postfix;
+            fileName = utils.getFilename( file, postfix );
 
             // process the file
             fileManager.getFileUrl( file )
@@ -146,10 +151,6 @@ define( function( require, exports, module ) {
                     that._showFeedback( error.message, 'error' );
                 } );
         } );
-    };
-
-    Filepicker.prototype._getFileName = function( file ) {
-        return ( typeof file === 'object' && file.name ) ? file.name : '';
     };
 
     Filepicker.prototype._showFileName = function( fileName ) {

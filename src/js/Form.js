@@ -25,6 +25,7 @@ define( function( require, exports, module ) {
     var widgets = require( './widgets-controller' );
     var $ = require( 'jquery' );
     var Promise = require( 'lie' );
+    var utils = require( './utils' );
     require( './plugins' );
     require( './extend' );
     require( 'jquery-touchswipe' );
@@ -2006,7 +2007,7 @@ define( function( require, exports, module ) {
 
             // set file input values to the actual name of file (without c://fakepath or anything like that)
             if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
-                n.val = $input[ 0 ].files[ 0 ].name;
+                n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
             }
 
             if ( eventType === 'validate' ) {
