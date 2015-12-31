@@ -1972,27 +1972,36 @@ define( function( require, exports, module ) {
 
         };
 
+        /**
+         * Validates input values AND updates model if event type is not 'validate'.
+         * 
+         * @param  {string} eventType [description]
+         * @param  {jQuery} $input    [description]
+         * @return {[type]}           [description]
+         */
         FormView.prototype.validateInput = function( eventType, $input ) {
-            var that = this,
-                validCons, validReq, _dataNodeObj,
-                // all relevant properties, except for the **very expensive** index property
-                n = {
-                    path: that.input.getName( $input ),
-                    inputType: that.input.getInputType( $input ),
-                    xmlType: that.input.getXmlType( $input ),
-                    enabled: that.input.isEnabled( $input ),
-                    constraint: that.input.getConstraint( $input ),
-                    val: that.input.getVal( $input ),
-                    required: that.input.isRequired( $input )
-                },
-                getDataNodeObj = function() {
-                    if ( !_dataNodeObj ) {
-                        // Only now, will we determine the index.
-                        n.ind = that.input.getIndex( $input );
-                        _dataNodeObj = model.node( n.path, n.ind );
-                    }
-                    return _dataNodeObj;
-                };
+            var that = this;
+            var validCons;
+            var validReq;
+            var _dataNodeObj;
+            // all relevant properties, except for the **very expensive** index property
+            var n = {
+                path: that.input.getName( $input ),
+                inputType: that.input.getInputType( $input ),
+                xmlType: that.input.getXmlType( $input ),
+                enabled: that.input.isEnabled( $input ),
+                constraint: that.input.getConstraint( $input ),
+                val: that.input.getVal( $input ),
+                required: that.input.isRequired( $input )
+            };
+            var getDataNodeObj = function() {
+                if ( !_dataNodeObj ) {
+                    // Only now, will we determine the index.
+                    n.ind = that.input.getIndex( $input );
+                    _dataNodeObj = model.node( n.path, n.ind );
+                }
+                return _dataNodeObj;
+            };
 
 
             // set file input values to the actual name of file (without c://fakepath or anything like that)

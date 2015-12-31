@@ -41,9 +41,9 @@ define( function( require, exports, module ) {
      * Initialize
      */
     Filepicker.prototype._init = function() {
-        var $input = $( this.element ),
-            existingFileName = $input.attr( 'data-loaded-file-name' ),
-            that = this;
+        var $input = $( this.element );
+        var existingFileName = $input.attr( 'data-loaded-file-name' );
+        var that = this;
 
         this.mediaType = $input.attr( 'accept' );
 
@@ -107,9 +107,10 @@ define( function( require, exports, module ) {
         var that = this;
 
         $( this.element ).on( 'change.propagate.' + this.namespace, function( event ) {
-            var file, fileName,
-                $input = $( this ),
-                loadedFileName = $input.attr( 'data-loaded-file-name' );
+            var file;
+            var fileName;
+            var $input = $( this );
+            var loadedFileName = $input.attr( 'data-loaded-file-name' );
 
             // trigger eventhandler to update instance value
             if ( event.namespace === 'propagate' ) {
