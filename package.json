@@ -35,7 +35,7 @@
         "grunt-jsbeautifier": "0.x.x",
         "grunt-karma": "0.12.x",
         "grunt-sass": "1.1.x",
-        "jasmine-core": "2.3.x",
+        "jasmine-core": "2.4.x",
         "karma": "0.13.x",
         "karma-browserify": "^4.3.0",
         "karma-chrome-launcher": "0.2.x",
