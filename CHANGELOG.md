@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- Existing XForm content of secondary external instance not properly clear if nodename is not 'root' or if multiple root-level nodes are present.
+
 [4.4.6] - 2015-12-31
 --------------------
 ##### Fixed

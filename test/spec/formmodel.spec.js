@@ -562,6 +562,27 @@ describe( 'external instances functionality', function() {
         expect( loadErrors.length ).toEqual( 4 );
         expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML instance "cities". Invalid XML: <root>' );
     } );
+
+    it( 'removes existing (internal) content before adding external instances', function() {
+        var populatedInstance = '<instance id="cities" src="jr://file/cities.xml"><existing>existing</existing><another>something</another></instance>';
+        model = new Model( {
+            modelStr: modelStr.replace( '<instance id="cities" src="jr://file/cities.xml" />', populatedInstance ),
+            external: [ {
+                id: 'cities',
+                xmlStr: citiesStr
+            }, {
+                id: 'neighborhoods',
+                xmlStr: '<root/>'
+            }, {
+                id: 'countries',
+                xmlStr: '<root/>'
+            } ]
+        } );
+        loadErrors = model.init();
+        expect( loadErrors.length ).toEqual( 0 );
+        expect( model.$.find( 'instance#cities > existing' ).length ).toEqual( 0 );
+        expect( model.$.find( 'instance#cities > another' ).length ).toEqual( 0 );
+    } );
 } );
 
 describe( 'getting templates', function() {

@@ -56,8 +56,12 @@ define( function( require, exports, module ) {
      * Initializes FormModel
      */
     FormModel.prototype.init = function() {
-        var id, instanceDoc, instanceRoot,
-            that = this;
+        var id;
+        var i;
+        var instanceDoc;
+        var secondaryInstanceChildren;
+        var that = this;
+
         /**
          * Default namespaces (on a primary instance, instance child, model) would create a problem using the **native** XPath evaluator.
          * It wouldn't find any regular /path/to/nodes. The solution is to ignore these by renaming these attributes to data-xmlns.
@@ -82,9 +86,9 @@ define( function( require, exports, module ) {
                 id = 'instance "' + instance.id + '"' || 'instance unknown';
                 instanceDoc = that.xml.getElementById( instance.id );
                 // remove any existing content that is just an XLSForm hack to pass ODK Validate
-                instanceRoot = instanceDoc.querySelector( 'root' );
-                if ( instanceRoot ) {
-                    instanceDoc.removeChild( instanceRoot );
+                secondaryInstanceChildren = instanceDoc.childNodes;
+                for ( i = secondaryInstanceChildren.length - 1; i >= 0; i-- ) {
+                    instanceDoc.removeChild( secondaryInstanceChildren[ i ] );
                 }
                 instanceDoc.appendChild( $.parseXML( instance.xmlStr ).firstChild );
             } );
