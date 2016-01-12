@@ -70,7 +70,20 @@ $( '#submit' ).on( 'click', function() {
 
 ```
 
-### How to run to develop on enketo-core
+### Browser support
+
+The following browsers are officially supported:
+* latest Android webview on latest Android OS
+* latest WKWebView on latest iOS
+* latest version of Chrome/Chromium on OS X, Linux, Windows, Android and iOS
+* latest version of Firefox on OS X, Windows, Linux, Android and iOS
+* latest version of Safari on OS X, Windows, and on the latest version of iOS
+* latest version of Microsoft Edge
+
+We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
+Note that some applications using Enketo Core (e.g. Enketo Express) may have more limited browser support. 
+
+### How to develop Enketo Core
 
 1. install [node](http://nodejs.org/) and [grunt-cli](http://gruntjs.com/getting-started)
 2. install dependencies with `npm install`
