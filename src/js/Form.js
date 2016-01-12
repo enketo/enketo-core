@@ -523,7 +523,7 @@ define( function( require, exports, module ) {
                     calculation: this.getCalculation( $node ),
                     relevant: this.getRelevant( $node ),
                     val: this.getVal( $node ),
-                    required: this.isRequired( $node ),
+                    required: this.getRequired( $node ),
                     enabled: this.isEnabled( $node ),
                     multiple: this.isMultiple( $node )
                 };
@@ -552,6 +552,12 @@ define( function( require, exports, module ) {
             },
             getConstraint: function( $node ) {
                 return $node.attr( 'data-constraint' );
+            },
+            getRequired: function( $node ) {
+                // only return value if input is not a table heading input
+                if ( $node.parentsUntil( '.or', '.or-appearance-label' ).length === 0 ) {
+                    return $node.attr( 'data-required' );
+                }
             },
             getRelevant: function( $node ) {
                 return $node.attr( 'data-relevant' );
@@ -611,9 +617,6 @@ define( function( require, exports, module ) {
             },
             isEnabled: function( $node ) {
                 return !( $node.prop( 'disabled' ) || $node.parentsUntil( '.or', '.disabled' ).length > 0 );
-            },
-            isRequired: function( $node ) {
-                return ( $node.attr( 'required' ) !== undefined && $node.parentsUntil( '.or', '.or-appearance-label' ).length === 0 );
             },
             getVal: function( $node ) {
                 var inputType, values = [],
@@ -1993,7 +1996,7 @@ define( function( require, exports, module ) {
                 enabled: that.input.isEnabled( $input ),
                 constraint: that.input.getConstraint( $input ),
                 val: that.input.getVal( $input ),
-                required: that.input.isRequired( $input )
+                required: that.input.getRequired( $input )
             };
             var getDataNodeObj = function() {
                 if ( !_dataNodeObj ) {
@@ -2035,7 +2038,13 @@ define( function( require, exports, module ) {
             }
 
             // validate 'required', checking value in Model (not View)
-            validReq = !( n.enabled && n.inputType !== 'hidden' && n.required && getDataNodeObj().getVal()[ 0 ].length === 0 );
+            if ( n.enabled && n.inputType !== 'hidden' && n.required && getDataNodeObj().getVal()[ 0 ].length === 0 ) {
+                // If result of required expression evaluation is true, it does not pass.
+                // n.ind has been populated in the getDataNodeObj call
+                validReq = !model.evaluate( n.required, 'boolean', n.path, n.ind, false );
+            } else {
+                validReq = true;
+            }
 
             if ( validReq === false ) {
                 that.setValid( $input, 'constraint' );

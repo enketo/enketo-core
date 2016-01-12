@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Added
+- Support for dynamic _required_ expressions.
+
 ##### Fixed
 - Existing XForm content of secondary external instance not properly clear if nodename is not 'root' or if multiple root-level nodes are present.
 

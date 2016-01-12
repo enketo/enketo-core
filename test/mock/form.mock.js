@@ -306,7 +306,7 @@ formStr6 :
     '<h4><span lang="en">Group with relevant binding</span></h4>' +
     '<label class="question">' +
     '<span lang="en">Enter 2 to reveal select1</span>' +
-    '<input name="/data/group/nodeB" type="number" data-type-xml="int" required="required"/>' +
+    '<input name="/data/group/nodeB" type="number" data-type-xml="int" data-required="true()"/>' +
     '</label>' +
     '</fieldset>' +
     '<label class="question or-branch pre-init or-appearance-minimal">' +
