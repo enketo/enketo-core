@@ -155,7 +155,10 @@ define( function( require, exports, module ) {
      * @param  {string} modelDoc  The XML model to merge the record into
      */
     FormModel.prototype.mergeXml = function( recordStr ) {
-        var modelInstanceChildStr, merger, modelInstanceEl, modelInstanceChildEl;
+        var modelInstanceChildStr;
+        var merger;
+        var modelInstanceEl;
+        var modelInstanceChildEl;
         var that = this;
 
         if ( !recordStr ) {
@@ -168,6 +171,12 @@ define( function( require, exports, module ) {
         if ( !modelInstanceChildEl ) {
             throw new Error( 'Model is corrupt. It does not contain a childnode of instance' );
         }
+
+        /** 
+         * A Namespace merge problem occurs when ODK decides to invent a new namespace for a submission
+         * that is different from the XForm model namespace... So we just remove this nonsense.
+         */
+        recordStr = recordStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, '' );
 
         /**
          * To comply with quirky behaviour of repeats in XForms, we manually create the correct number of repeat instances

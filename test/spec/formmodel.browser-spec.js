@@ -40,6 +40,11 @@ describe( 'merging an instance into the model', function() {
             // model has xml declaration and instance has not
             [ '<a/>', '<?xml version="1.0" encoding="UTF-8"?><model><instance><a><b/></a></instance></model>',
                 '<?xml version="1.0" encoding="UTF-8"?><model><instance><a><b/></a></instance></model>'
+            ],
+            // record and instance have different default namespace
+            [ '<a xmlns="http://rogue.opendatakit.namespace"><c>record</c></a>',
+                '<model><instance><a><c/></a></instance></model>',
+                '<model><instance><a><c>record</c></a></instance></model>'
             ]
         ].forEach( function( test ) {
             var result, expected,
@@ -50,7 +55,7 @@ describe( 'merging an instance into the model', function() {
             model.init();
             model.mergeXml( test[ 0 ] );
 
-            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );;
+            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
             expected = test[ 2 ];
 
             it( 'produces the expected result for instance: ' + test[ 0 ], function() {

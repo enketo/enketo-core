@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.5.1] - 2015-01-13
+--------------------
+##### Fixed
+- Incompatible namespace added by an ODK Collect submission causes a namespace error when loaded.
+
 [4.5.0] - 2015-01-12
 --------------------
 ##### Added
