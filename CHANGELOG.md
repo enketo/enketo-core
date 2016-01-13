@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.5.2] - 2015-01-14
+--------------------
+##### Fixed
+- jQuery conflict (in Enketo Express), reverted to jQuery 2.1.4
+
 [4.5.1] - 2015-01-13
 --------------------
 ##### Fixed
