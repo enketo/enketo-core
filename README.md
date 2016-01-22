@@ -49,7 +49,7 @@ var loadErrors = form.init();
 
 // submit button handler for validate button
 $( '#submit' ).on( 'click', function() {
-    form.validateForm()
+    form.validate()
     	.then(function (valid){
     		if ( !valid ) {
        			alert( 'Form contains errors. Please see fields marked in red.' );
