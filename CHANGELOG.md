@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.5.3] - 2015-02-02
+--------------------
+##### Fixed
+- Min() and max() functions did not deal with empty values correctly.
+
 [4.5.2] - 2015-01-14
 --------------------
 ##### Fixed
