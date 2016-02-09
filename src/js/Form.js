@@ -454,8 +454,6 @@ define( function( require, exports, module ) {
                     this.toggleButtons( newIndex );
                 }
 
-                pageEl.scrollIntoView();
-
                 $( pageEl ).trigger( 'pageflip.enketo' );
             },
             flipToFirst: function() {
@@ -490,6 +488,8 @@ define( function( require, exports, module ) {
                     .find( 'input, select, textarea' )
                     .eq( 0 )
                     .trigger( 'fakefocus' );
+
+                pageEl.scrollIntoView();
             },
             toggleButtons: function( index ) {
                 var i = index || this.getCurrentIndex(),

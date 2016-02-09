@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Form section headers are now left-aligned again.
 
+##### Fixed
+- In pages mode, adding a repeat to the current page scrolls to top of page.
+
 [4.5.3] - 2015-02-02
 --------------------
 ##### Fixed
