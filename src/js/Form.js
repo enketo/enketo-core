@@ -2027,9 +2027,7 @@ define( function( require, exports, module ) {
                     validCons = getDataNodeObj().validate( n.constraint, n.xmlType );
                 }
             } else {
-                var dataNodeObject = getDataNodeObj();
-                dataNodeObject.setVal( n.val, n.constraint, n.xmlType );
-                validCons = dataNodeObject.validate( n.constraint, n.xmlType )
+                validCons = getDataNodeObj().setVal( n.val, n.constraint, n.xmlType )
                     .then( function( validCons ) {
                         // geotrace and geoshape are very complex data types that require various change events
                         // to avoid annoying users, we ignore the INVALID onchange validation result

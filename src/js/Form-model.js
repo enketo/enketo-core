@@ -880,7 +880,8 @@ define( function( require, exports, module ) {
      * @param {?string=} expr  XPath expression to validate the node.
      * @param {?string=} xmlDataType XML data type of the node
      *
-     * @return {Promise} wrapping {?boolean}; null is returned when the node is not found or multiple nodes were selected
+     * @return {Promise} wrapping {?boolean}; null is returned when the node is not found or multiple nodes were selected,
+     *                            otherwise the constraint evaluation result true/false is returned.
      */
     Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
         var $target, curVal, /**@type {string}*/ newVal, success, updated;
