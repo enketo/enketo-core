@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- Form scrolls to first question upon form load.
+
 [4.5.4] - 2015-02-09
 --------------------
 ##### Changed

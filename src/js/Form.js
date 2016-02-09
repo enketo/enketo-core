@@ -66,7 +66,7 @@ define( function( require, exports, module ) {
 
             loadErrors = loadErrors.concat( form.init() );
 
-            $( formSelector )[ 0 ].scrollIntoView();
+            document.querySelector( 'body' ).scrollIntoView();
 
             return loadErrors;
         };
