@@ -447,14 +447,14 @@ define( function( require, exports, module ) {
                         this.setToCurrent( pageEl );
                         this.focusOnFirstQuestion( pageEl );
                         this.toggleButtons( newIndex );
+                        $( pageEl ).trigger( 'pageflip.enketo' );
                     }
                 } else {
                     this.setToCurrent( pageEl );
                     this.focusOnFirstQuestion( pageEl );
                     this.toggleButtons( newIndex );
+                    $( pageEl ).trigger( 'pageflip.enketo' );
                 }
-
-                $( pageEl ).trigger( 'pageflip.enketo' );
             },
             flipToFirst: function() {
                 this.updateAllActive();
