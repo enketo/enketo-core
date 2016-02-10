@@ -160,6 +160,7 @@ define( function( require, exports, module ) {
         var modelInstanceEl;
         var modelInstanceChildEl;
         var that = this;
+        var $record;
 
         if ( !recordStr ) {
             return;
@@ -178,6 +179,8 @@ define( function( require, exports, module ) {
          */
         recordStr = recordStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, '' );
 
+        $record = $( $.parseXML( recordStr ) );
+
         /**
          * To comply with quirky behaviour of repeats in XForms, we manually create the correct number of repeat instances
          * before merging. This resolves these two issues:
@@ -187,7 +190,7 @@ define( function( require, exports, module ) {
          *     in the model, that node will be missing in the result.
          */
 
-        $( $.parseXML( recordStr ) ).find( '*' ).each( function() {
+        $record.find( '*' ).each( function() {
             var path;
             var $node = $( this );
             var nodeName = $node.prop( 'nodeName' );
@@ -209,6 +212,23 @@ define( function( require, exports, module ) {
             } catch ( e ) {
                 console.log( 'Ignored error:', e );
             }
+        } );
+
+        /** 
+         * Any default values in the model, may have been emptied in the instance.
+         * MergeXML will keep those default values, so we manually clear defaults before merging.
+         */
+        // first find all empty leaf nodes in record
+        $record.find( '*' ).filter( function() {
+            var $node = $( this );
+            var val = $node.text();
+            return $node.children().length === 0 && val.trim().length === 0 && $node.children().length === 0;
+        } ).each( function() {
+            var $node = $( this );
+            // TODO: This probably doesn't support namespaces properly.
+            var path = $node.getXPath( 'instance', true );
+            // find the corresponding node in the model, and set value to empty
+            that.node( path, 0 ).setVal( '' );
         } );
 
         merger = new MergeXML( {

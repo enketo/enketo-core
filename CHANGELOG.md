@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.5.5] - 2015-02-10
 --------------------
 ##### Fixed
 - Form scrolls to first question upon form load.
+- Default values that are set to "" in record, re-appear when record is loaded.
 
 [4.5.4] - 2015-02-09
 --------------------

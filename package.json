@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "4.5.4",
+    "version": "4.5.5",
     "license": "Apache-2.0",
     "os": [ "darwin", "linux" ],
     "keywords": [ "enketo", "OpenRosa", "ODK", "XForms" ],
@@ -60,7 +60,7 @@
         "jquery-touchswipe": "1.6.x",
         "jquery-xpath-basic": "1.0.x",
         "leaflet": "0.7.x",
-        "lie": "^3.0.1",
-        "mergexml": "1.1.x"
+        "lie": "3.0.x",
+        "mergexml": "1.1.0"
     }
 }

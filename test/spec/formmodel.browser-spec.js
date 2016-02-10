@@ -11,6 +11,12 @@ describe( 'merging an instance into the model', function() {
             [ '<a><b/></a>', '<model><instance><a><b/><c/></a></instance></model>', '<model><instance><a><b/><c/></a></instance></model>' ],
             // record value overrides model (default) value
             [ '<a><b>record</b></a>', '<model><instance><a><b>model</b></a></instance></model>', '<model><instance><a><b>record</b></a></instance></model>' ],
+            // record value overrides model (default) value with an empty value
+            [ '<a><b/></a>', '<model><instance><a><b>default</b></a></instance></model>', '<model><instance><a><b/></a></instance></model>' ],
+            // record value overrides model (default) value inside a repeat with an empty value
+            [ '<a><re><b/></re><re><b/></re></a>', '<model><instance><a><re><b>default1</b></re><re><b>default2</b></re></a></instance></model>',
+                '<model><instance><a><re><b/></re><re><b/></re></a></instance></model>'
+            ],
             // preserve non-alphabetic document order of model
             [ '<a><c/></a>', '<model><instance><a><c/><b/></a></instance></model>', '<model><instance><a><c/><b/></a></instance></model>' ],
             // repeated nodes in record get added (including repeat childnodes that are missing from record)
