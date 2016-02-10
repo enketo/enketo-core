@@ -37,14 +37,14 @@
         "grunt-sass": "1.1.x",
         "jasmine-core": "2.4.x",
         "karma": "0.13.x",
-        "karma-browserify": "^4.3.0",
+        "karma-browserify": "5.0.x",
         "karma-chrome-launcher": "0.2.x",
         "karma-firefox-launcher": "0.1.x",
         "karma-jasmine": "0.3.x",
-        "karma-phantomjs-launcher": "0.2.x",
+        "karma-phantomjs-launcher": "1.0.x",
         "karma-safari-launcher": "0.1.x",
         "load-grunt-tasks": "3.x.x",
-        "phantomjs": "1.9.x",
+        "phantomjs": "2.1.x",
         "time-grunt": "1.x.x"
     },
     "browser": {
