@@ -52,7 +52,7 @@
         "widgets": "./src/js/widgets.js"
     },
     "dependencies": {
-        "bootstrap-datepicker": "1.5.x",
+        "bootstrap-datepicker": "1.6.x",
         "bootstrap-slider-basic": "3.2.x",
         "bootstrap-timepicker": "0.2.x",
         "enketo-xpathjs": "1.2.4",
