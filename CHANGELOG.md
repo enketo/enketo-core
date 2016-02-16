@@ -35,6 +35,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [4.5.0] - 2015-01-12
 --------------------
+##### Changed
+- ** Now requires enketo-xslt v1.2.5 **
+
 ##### Added
 - Support for dynamic _required_ expressions.
 - Basic support for big-image form attributes on itext values.
