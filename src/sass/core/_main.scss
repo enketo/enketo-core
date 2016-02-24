@@ -19,6 +19,9 @@ $media-margin: 10px;
         margin-top: 9px;
         margin-bottom: 9px;
         color: $brand-primary-color;
+        strong {
+            font-size: inherit;
+        }
     }
 }
 
@@ -170,6 +173,9 @@ $media-margin: 10px;
         &.has-value {
             display: block;
         }
+    }
+    strong {
+        font-size: inherit;
     }
 }
 
