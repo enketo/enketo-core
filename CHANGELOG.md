@@ -3,6 +3,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.5.6] - 2015-02-26
+--------------------
+##### Added
+- Make form UI strings translatable.
+
+##### Changed
+- Font size for bold text in Grid theme now back to what it was (smaller).
+
+##### Fixed
+- Select pulldown options are underlined.
+- Group headings are left-aligned in RTL languages.
+
 [4.5.5] - 2015-02-10
 --------------------
 ##### Fixed

@@ -23,7 +23,7 @@ define( function( require, exports, module ) {
     'use strict';
     var $ = require( 'jquery' );
     var Widget = require( '../../js/Widget' );
-
+    var t = require( 'translator' ).t;
     var pluginName = 'desktopSelectpicker';
 
     /**
@@ -45,7 +45,7 @@ define( function( require, exports, module ) {
         }
 
         this.$picker = null;
-        this.noneSelectedText = options.noneSelectedText || 'none selected';
+        this.noneSelectedText = t( 'selectpicker.noneselected' ) || 'none selected';
         this.lengthmax = options.maxlength || 15;
         this.multiple = ( typeof $( element ).attr( 'multiple' ) !== 'undefined' && $( element ).attr( 'multiple' ) !== false );
         this._init();
@@ -139,9 +139,10 @@ define( function( require, exports, module ) {
      * @return {string}
      */
     DesktopSelectpicker.prototype._createSelectedStr = function() {
-        var textToShow,
-            selectedLabels = [],
-            $select = $( this.element );
+        var textToShow;
+        var xSelectedTxt;
+        var selectedLabels = [];
+        var $select = $( this.element );
         $select.find( 'option:selected' ).each( function() {
             if ( $( this ).attr( 'value' ).length > 0 ) {
                 selectedLabels.push( $( this ).text() );
@@ -152,7 +153,10 @@ define( function( require, exports, module ) {
             return this.noneSelectedText;
         }
         textToShow = selectedLabels.join( ', ' );
-        return ( textToShow.length > this.lengthmax ) ? selectedLabels.length + ' selected' : textToShow;
+        var xSelectedTxt = t( 'selectpicker.numberselected', {
+            number: selectedLabels.length
+        } ) || selectedLabels.length + ' selected';
+        return ( textToShow.length > this.lengthmax ) ? xSelectedTxt : textToShow;
     };
 
     DesktopSelectpicker.prototype._clickListener = function() {

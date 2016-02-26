@@ -26,7 +26,8 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 define( function( require, exports, module ) {
     'use strict';
     var $ = require( 'jquery' );
-    var dpi, printStyleSheet, $printStyleSheetLink;
+    var dpi, printStyleSheet;
+    var $printStyleSheetLink;
 
     // make sure setDpi is not called until DOM is ready
     $( document ).ready( function() {
@@ -37,8 +38,8 @@ define( function( require, exports, module ) {
      * Calculates the dots per inch and sets the dpi property
      */
     function setDpi() {
-        var dpiO = {},
-            e = document.body.appendChild( document.createElement( 'DIV' ) );
+        var dpiO = {};
+        var e = document.body.appendChild( document.createElement( 'DIV' ) );
         e.style.width = '1in';
         e.style.padding = '0';
         dpiO.v = e.offsetWidth;
@@ -159,20 +160,20 @@ define( function( require, exports, module ) {
     }
 
     function getPaperPixelWidth( paper ) {
-        var printWidth,
-            // the final margin is determined by the browser's print functionality
-            // better too large than too small here
-            margin = 0.4,
-            formats = {
-                A4: {
-                    width: 8.27,
-                    height: 11.69
-                },
-                letter: {
-                    width: 8.5,
-                    height: 11
-                }
-            };
+        var printWidth;
+        // the final margin is determined by the browser's print functionality
+        // better too large than too small here
+        var margin = 0.4;
+        var formats = {
+            A4: {
+                width: 8.27,
+                height: 11.69
+            },
+            letter: {
+                width: 8.5,
+                height: 11
+            }
+        };
 
         printWidth = ( paper.orientation === 'portrait' ) ? formats[ paper.format ].width : formats[ paper.format ].height;
 
@@ -184,27 +185,27 @@ define( function( require, exports, module ) {
      */
     function confirmPaperSettingsAndPrint( confirm ) {
         var texts = {
-                dialog: 'print',
-                heading: 'Select Print Settings'
+            dialog: 'print',
+            heading: 'Select Print Settings'
+        };
+        var options = {
+            posButton: 'Prepare',
+            posAction: function( values ) {
+                fixGrid( values );
+                $( window ).one( 'printviewready', function() {
+                    window.print();
+                } );
             },
-            options = {
-                posButton: 'Prepare',
-                posAction: function( values ) {
-                    fixGrid( values );
-                    $( window ).one( 'printviewready', function() {
-                        window.print();
-                    } );
-                },
-                negButton: 'Close',
-                negAction: function() {
+            negButton: 'Close',
+            negAction: function() {
+                styleReset();
+            },
+            afterAction: function() {
+                setTimeout( function() {
                     styleReset();
-                },
-                afterAction: function() {
-                    setTimeout( function() {
-                        styleReset();
-                    }, 1500 );
-                }
-            };
+                }, 1500 );
+            }
+        };
 
         // TODO: would be nice if fixGrid can become synchronous again or
         // a progress is shown when it is churning away.
