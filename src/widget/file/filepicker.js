@@ -130,7 +130,7 @@ define( function( require, exports, module ) {
             fileName = utils.getFilename( file, postfix );
 
             // process the file
-            fileManager.getFileUrl( file )
+            fileManager.getFileUrl( file, fileName )
                 .then( function( url ) {
                     // update UI
                     that._showPreview( url, that.mediaType );

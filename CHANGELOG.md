@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.5.7] - 2015-03-04
 --------------------
+##### Added
+- Ability to maintain a cache of base64-encoded blobs outside of enketo-core.
+
 ##### Changed
 - Powered by Enketo requirement.
 
