@@ -181,3 +181,22 @@ See [change log](./CHANGELOG.md)
 ### Performance (live)
 
 See [graphs](https://github.com/enketo/enketo-core-performance-monitor#live-results)
+
+### License
+
+See [license](./LICENSE) document. 
+
+In addition, any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/#about](https://enketo.org/#about) and on [this page](#sponsors) are exempted from this requirements and so are contributors listed in [package.json](./package.json).
+
+The aim of this requirement is to force adopters to give something back to the Enketo project, by at least spreading the word and thereby encouraging further adoption.
+
+Specifications:
+
+1. The word "Enketo" is displayed using Enketo's logo.
+2. The minimum font-size of "Powered by" is 12 pixels.
+3. The minimum height of the Enketo logo matches the font-size used.
+4. The Enketo logo is hyperlinked to https://enketo.org
+
+Example:
+
+Powered by <a href="https://enketo.org"><img height="16" style="height: 16px;" src="https://enketo.org/images/enketo_bare_100x37.png" /></a>
