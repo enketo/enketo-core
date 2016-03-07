@@ -193,7 +193,7 @@ The aim of this requirement is to force adopters to give something back to the E
 Specifications:
 
 1. The word "Enketo" is displayed using Enketo's logo.
-2. The minimum font-size of "Powered by" is 12 pixels.
+2. The minimum font-size of "Powered by" is 12 points.
 3. The minimum height of the Enketo logo matches the font-size used.
 4. The Enketo logo is hyperlinked to https://enketo.org
 
