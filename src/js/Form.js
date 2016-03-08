@@ -26,6 +26,7 @@ define( function( require, exports, module ) {
     var $ = require( 'jquery' );
     var Promise = require( 'lie' );
     var utils = require( './utils' );
+    var t = require( './fake-translator' ).t;
     require( './plugins' );
     require( './extend' );
     require( 'jquery-touchswipe' );
@@ -1793,18 +1794,19 @@ define( function( require, exports, module ) {
 
             //using fakefocus because hidden (by widget) elements won't get focus
             $form.on( 'focus blur fakefocus fakeblur', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
-                var $input = $( this ),
-                    props = that.input.getProps( $input ),
-                    $question = $input.closest( '.question' ),
-                    $legend = $question.find( 'legend' ).eq( 0 ),
-                    loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' ),
-                    insideTable = ( $input.parentsUntil( '.or', '.or-appearance-list-nolabel' ).length > 0 ),
-                    $reqSubtle = $question.find( '.required-subtle' );
+                var $input = $( this );
+                var props = that.input.getProps( $input );
+                var $question = $input.closest( '.question' );
+                var $legend = $question.find( 'legend' ).eq( 0 );
+                var loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' );
+                var insideTable = ( $input.parentsUntil( '.or', '.or-appearance-list-nolabel' ).length > 0 );
+                var $reqSubtle = $question.find( '.required-subtle' );
+                var reqSubtleTxt = t( 'form.required' ) || 'required';
 
                 if ( event.type === 'focusin' || event.type === 'fakefocus' ) {
                     $question.addClass( 'focus' );
                     if ( props.required && $reqSubtle.length === 0 && !insideTable ) {
-                        $reqSubtle = $( '<span class="required-subtle" style="color: transparent;">Required</span>' );
+                        $reqSubtle = $( '<span class="required-subtle" style="color: transparent;">' + reqSubtleTxt + '</span>' );
 
                         if ( $legend.length > 0 ) {
                             $legend.append( $reqSubtle );

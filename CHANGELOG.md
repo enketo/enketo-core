@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - All default map layers now obtained via https.
 
+##### Fixed
+- Subtle "required" message not translatable.
+
 [4.5.7] - 2015-03-04
 --------------------
 ##### Added
