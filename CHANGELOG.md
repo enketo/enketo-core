@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Changed
+- All default map layers now obtained via https.
+
 [4.5.7] - 2015-03-04
 --------------------
 ##### Added

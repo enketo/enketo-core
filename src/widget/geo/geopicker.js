@@ -35,8 +35,8 @@ define( function( require, exports, module ) {
     var maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps : [ {
         'name': 'streets',
         'maxzoom': 24,
-        'tiles': [ 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png' ],
-        'attribution': 'Tiles courtesy of <a href=\"http://hot.openstreetmap.se/\" target=\"_blank\">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>'
+        'tiles': [ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' ],
+        'attribution': '© <a href=\"http://openstreetmap.org\">OpenStreetMap</a> | <a href=\"www.openstreetmap.org/copyright\">Terms</a>'
     } ];
     var searchSource = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
     var googleApiKey = config.googleApiKey || config.google_api_key;
@@ -873,7 +873,7 @@ define( function( require, exports, module ) {
                 };
                 // make the request for the Google Maps script asynchronously
                 apiKeyQueryParam = ( googleApiKey ) ? '&key=' + googleApiKey : '';
-                loadUrl = 'http://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&sensor=false&libraries=places&callback=gmapsLoaded';
+                loadUrl = 'https://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&libraries=places&callback=gmapsLoaded';
                 $.getScript( loadUrl );
             } );
         }
