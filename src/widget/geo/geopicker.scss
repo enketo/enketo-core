@@ -425,7 +425,7 @@ $input-button-border: 2px solid #aaaaaa;
     .leaflet-control-layers-toggle,
     .leaflet-retina .leaflet-control-layers-toggle {
         background: none;
-        padding: 5px;
+        padding: 3px 5px 7px 5px;
         color: #888;
         text-align: center;
         font-size: 20px;
@@ -433,6 +433,8 @@ $input-button-border: 2px solid #aaaaaa;
     .leaflet-control-layers-list {
         label {
             margin-bottom: 5px;
+            // not translated, so avoid RTL effect:
+            text-align: left;
         }
     }
     &:not(.full-screen).hide-input {

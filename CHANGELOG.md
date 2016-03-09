@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+
+##### Fixed
+- RTL form language right-aligns map layer options.
+
+[4.5.8] - 2015-03-08
+--------------------
 ##### Changed
 - All default map layers now obtained via https.
 
