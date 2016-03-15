@@ -297,11 +297,10 @@ define( function( require, exports, module ) {
                         this.setBranchHandlers();
                         this.setSwipeHandlers();
                         this.active = true;
+                        this.flipToFirst();
+                    } else {
+                        $form.removeClass( 'pages' );
                     }
-
-                    this.flipToFirst();
-
-                    $form.removeClass( 'hide' );
                 }
             },
             setButtonHandlers: function() {

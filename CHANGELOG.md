@@ -3,12 +3,17 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[4.5.9] - 2015-03-09
+[Unreleased] - 
+--------------------
+##### Fixed
+-  Single-page form in pages mode throws exception and has no submit button.
+
+[4.5.9] - 2016-03-09
 --------------------
 ##### Fixed
 - RTL form language right-aligns map layer options.
 
-[4.5.8] - 2015-03-08
+[4.5.8] - 2016-03-08
 --------------------
 ##### Changed
 - All default map layers now obtained via https.
@@ -16,7 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Subtle "required" message not translatable.
 
-[4.5.7] - 2015-03-04
+[4.5.7] - 2016-03-04
 --------------------
 ##### Added
 - Ability to maintain a cache of base64-encoded blobs outside of enketo-core.
@@ -24,7 +29,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Powered by Enketo requirement.
 
-[4.5.6] - 2015-02-26
+[4.5.6] - 2016-02-26
 --------------------
 ##### Added
 - Make form UI strings translatable.
@@ -36,13 +41,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Select pulldown options are underlined.
 - Group headings are left-aligned in RTL languages.
 
-[4.5.5] - 2015-02-10
+[4.5.5] - 2016-02-10
 --------------------
 ##### Fixed
 - Form scrolls to first question upon form load.
 - Default values that are set to "" in record, re-appear when record is loaded.
 
-[4.5.4] - 2015-02-09
+[4.5.4] - 2016-02-09
 --------------------
 ##### Changed
 - Form section headers are now left-aligned again.
@@ -51,22 +56,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - In pages mode, adding a repeat to the current page scrolls to top of page.
 - Constraint is evaluated twice when form value is changed.
 
-[4.5.3] - 2015-02-02
+[4.5.3] - 2016-02-02
 --------------------
 ##### Fixed
 - Min() and max() functions did not deal with empty values correctly.
 
-[4.5.2] - 2015-01-14
+[4.5.2] - 2016-01-14
 --------------------
 ##### Fixed
 - jQuery conflict (in Enketo Express), reverted to jQuery 2.1.4
 
-[4.5.1] - 2015-01-13
+[4.5.1] - 2016-01-13
 --------------------
 ##### Fixed
 - Incompatible namespace added by an ODK Collect submission causes a namespace error when loaded.
 
-[4.5.0] - 2015-01-12
+[4.5.0] - 2016-01-12
 --------------------
 ##### Changed
 - ** Now requires enketo-xslt v1.2.5 **
