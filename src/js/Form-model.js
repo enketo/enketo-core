@@ -134,6 +134,10 @@ define( function( require, exports, module ) {
         return this.loadErrors;
     };
 
+    FormModel.prototype.getVersion = function() {
+        return this.evaluate( '/node()/@version', 'string', null, null, true );
+    };
+
     /**
      * Returns a new Nodeset instance
      *

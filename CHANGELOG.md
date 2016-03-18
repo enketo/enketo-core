@@ -3,10 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased] - 
+[4.5.10] - 2016-03-18
 --------------------
+##### Added
+- Ability to extract version, action and method attributes (minor).
+
 ##### Fixed
--  Single-page form in pages mode throws exception and has no submit button.
+- Single-page form in pages mode throws exception and has no submit button.
 
 [4.5.9] - 2016-03-09
 --------------------

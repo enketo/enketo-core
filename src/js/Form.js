@@ -93,6 +93,15 @@ define( function( require, exports, module ) {
         this.getEncryptionKey = function() {
             return form.$.data( 'base64rsapublickey' );
         };
+        this.getAction = function() {
+            return form.$.attr( 'action' );
+        };
+        this.getMethod = function() {
+            return form.$.attr( 'method' );
+        }
+        this.getVersion = function() {
+            return model.getVersion();
+        }
 
         /**
          * @param {boolean=} incTempl
