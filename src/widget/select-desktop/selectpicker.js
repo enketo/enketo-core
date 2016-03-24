@@ -153,7 +153,7 @@ define( function( require, exports, module ) {
             return this.noneSelectedText;
         }
         textToShow = selectedLabels.join( ', ' );
-        var xSelectedTxt = t( 'selectpicker.numberselected', {
+        xSelectedTxt = t( 'selectpicker.numberselected', {
             number: selectedLabels.length
         } ) || selectedLabels.length + ' selected';
         return ( textToShow.length > this.lengthmax ) ? xSelectedTxt : textToShow;

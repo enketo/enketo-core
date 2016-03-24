@@ -45,8 +45,14 @@ define( function( require, exports, module ) {
      */
 
     function Form( formSelector, data ) {
-        var model, cookies, form, $form, $formClone, repeatsPresent, fixExpr,
-            loadErrors = [];
+        var model;
+        var cookies;
+        var form;
+        var $form;
+        var $formClone;
+        var repeatsPresent;
+        var fixExpr;
+        var loadErrors = [];
 
         /**
          * Function: init
@@ -98,10 +104,10 @@ define( function( require, exports, module ) {
         };
         this.getMethod = function() {
             return form.$.attr( 'method' );
-        }
+        };
         this.getVersion = function() {
             return model.getVersion();
-        }
+        };
 
         /**
          * @param {boolean=} incTempl
@@ -181,8 +187,11 @@ define( function( require, exports, module ) {
          * @return {[type]}            [description]
          */
         fixExpr = function( expr, resTypeStr, selector, index, tryNative ) {
-            var value, name, $input, label = '',
-                matches = expr.match( /jr:choice-name\(([^,]+),\s?'(.*?)'\)/ );
+            var value;
+            var name;
+            var $input;
+            var label = '';
+            var matches = expr.match( /jr:choice-name\(([^,]+),\s?'(.*?)'\)/ );
 
             if ( matches ) {
                 value = model.evaluate( matches[ 1 ], resTypeStr, selector, index, tryNative );
@@ -333,8 +342,8 @@ define( function( require, exports, module ) {
                 } );
             },
             setSwipeHandlers: function() {
-                var that = this,
-                    $main = $( '.main' );
+                var that = this;
+                var $main = $( '.main' );
 
                 $main.swipe( 'destroy' );
                 $main.swipe( {
@@ -409,8 +418,8 @@ define( function( require, exports, module ) {
              *         failed, and {true} that validation passed, but the page did not change.
              */
             next: function() {
-                var that = this,
-                    currentIndex;
+                var that = this;
+                var currentIndex;
                 this.updateAllActive();
                 currentIndex = this.getCurrentIndex();
 
@@ -418,7 +427,9 @@ define( function( require, exports, module ) {
                     .then( function( valid ) {
                         var next, newIndex;
 
-                        if ( !valid ) return false;
+                        if ( !valid ) {
+                            return false;
+                        }
 
                         next = that.getNext( currentIndex );
 
@@ -432,7 +443,8 @@ define( function( require, exports, module ) {
                     } );
             },
             prev: function() {
-                var prev, currentIndex;
+                var prev;
+                var currentIndex;
                 this.updateAllActive();
                 currentIndex = this.getCurrentIndex();
                 prev = this.getPrev( currentIndex );
@@ -598,7 +610,11 @@ define( function( require, exports, module ) {
              * @return {number}       The index
              */
             getIndex: function( $node ) {
-                var inputType, name, $wrapNode, $wrapNodesSameName;
+                var inputType;
+                var name;
+                var $wrapNode;
+                var $wrapNodesSameName;
+
                 if ( $node.length !== 1 ) {
                     return console.error( 'getIndex(): no input node provided or multiple' );
                 }
@@ -628,8 +644,10 @@ define( function( require, exports, module ) {
                 return !( $node.prop( 'disabled' ) || $node.parentsUntil( '.or', '.disabled' ).length > 0 );
             },
             getVal: function( $node ) {
-                var inputType, values = [],
-                    name;
+                var inputType;
+                var values = [];
+                var name;
+
                 if ( $node.length !== 1 ) {
                     return console.error( 'getVal(): no inputNode provided or multiple' );
                 }
@@ -649,7 +667,8 @@ define( function( require, exports, module ) {
                 return ( !$node.val() ) ? '' : ( $.isArray( $node.val() ) ) ? $node.val().join( ' ' ).trim() : $node.val().trim();
             },
             setVal: function( name, index, value ) {
-                var $inputNodes, type;
+                var $inputNodes;
+                var type;
 
                 index = index || 0;
 
@@ -698,9 +717,11 @@ define( function( require, exports, module ) {
          *  around and cycle through the HTML form elements and check for each form element whether data is available.
          */
         FormView.prototype.setAllVals = function( $group, groupIndex ) {
-            var index, name, value,
-                that = this,
-                selector = ( $group && $group.attr( 'name' ) ) ? $group.attr( 'name' ) : null;
+            var index;
+            var name;
+            var value;
+            var that = this;
+            var selector = ( $group && $group.attr( 'name' ) ) ? $group.attr( 'name' ) : null;
 
             groupIndex = ( typeof groupIndex !== 'undefined' ) ? groupIndex : null;
 
@@ -726,12 +747,12 @@ define( function( require, exports, module ) {
 
         FormView.prototype.langs = {
             init: function() {
-                var lang,
-                    that = this,
-                    $formLanguages = $form.find( '#form-languages' ),
-                    $langSelector = $( '.form-language-selector' ),
-                    defaultLang = $formLanguages.attr( 'data-default-lang' ) || $formLanguages.find( 'option' ).eq( 0 ).attr( 'value' ),
-                    defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'data-dir' ) || 'ltr';
+                var lang;
+                var that = this;
+                var $formLanguages = $form.find( '#form-languages' );
+                var $langSelector = $( '.form-language-selector' );
+                var defaultLang = $formLanguages.attr( 'data-default-lang' ) || $formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
+                var defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
                 $formLanguages
                     .detach()
@@ -754,8 +775,8 @@ define( function( require, exports, module ) {
                 } );
             },
             setAll: function( lang ) {
-                var that = this,
-                    dir = $( '#form-languages' ).find( '[value="' + lang + '"]' ).attr( 'data-dir' ) || 'ltr';
+                var that = this;
+                var dir = $( '#form-languages' ).find( '[value="' + lang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
                 $form
                     .attr( 'dir', dir )
@@ -776,7 +797,9 @@ define( function( require, exports, module ) {
             },
             // swap language of <select> <option>s
             setSelect: function( $select ) {
-                var value, /** @type {string} */ curLabel, /** @type {string} */ newLabel;
+                var value;
+                var /** @type {string} */ curLabel;
+                var /** @type {string} */ newLabel;
                 $select.children( 'option' ).not( '[value=""]' ).each( function() {
                     var $option = $( this );
                     curLabel = $option.text();
@@ -821,10 +844,10 @@ define( function( require, exports, module ) {
          * @return {jQuery}           A jQuery collection of elements
          */
         FormView.prototype.getNodesToUpdate = function( attr, filter, updated ) {
-            var $collection,
-                $repeat = null,
-                selector = [],
-                that = this;
+            var $collection;
+            var $repeat = null;
+            var selector = [];
+            var that = this;
 
             updated = updated || {};
             filter = filter || '';
@@ -894,12 +917,18 @@ define( function( require, exports, module ) {
          * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
          */
         FormView.prototype.branchUpdate = function( updated ) {
-            var p, $branchNode, result, insideRepeat, insideRepeatClone, cacheIndex, $nodes,
-                relevantCache = {},
-                alreadyCovered = [],
-                branchChange = false,
-                that = this,
-                clonedRepeatsPresent;
+            var p;
+            var $branchNode;
+            var result;
+            var insideRepeat;
+            var insideRepeatClone;
+            var cacheIndex;
+            var $nodes;
+            var relevantCache = {};
+            var alreadyCovered = [];
+            var branchChange = false;
+            var that = this;
+            var clonedRepeatsPresent;
 
             $nodes = this.getNodesToUpdate( 'data-relevant', '', updated );
 
@@ -1055,8 +1084,9 @@ define( function( require, exports, module ) {
              * @param  {jQuery} $branchNode The jQuery object to hide and disable
              */
             function disable( $branchNode ) {
-                var type = $branchNode.prop( 'nodeName' ).toLowerCase(),
-                    virgin = $branchNode.hasClass( 'pre-init' );
+                var type = $branchNode.prop( 'nodeName' ).toLowerCase();
+                var virgin = $branchNode.hasClass( 'pre-init' );
+
                 if ( virgin || selfRelevant( $branchNode ) ) {
                     branchChange = true;
                     $branchNode.addClass( 'disabled' );
@@ -1091,9 +1121,12 @@ define( function( require, exports, module ) {
          * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
          */
         FormView.prototype.itemsetUpdate = function( updated ) {
-            var clonedRepeatsPresent, insideRepeat, insideRepeatClone, $nodes,
-                that = this,
-                itemsCache = {};
+            var clonedRepeatsPresent;
+            var insideRepeat;
+            var insideRepeatClone;
+            var $nodes;
+            var that = this;
+            var itemsCache = {};
 
             $nodes = this.getNodesToUpdate( 'data-items-path', '.itemset-template', updated );
 
@@ -1215,10 +1248,18 @@ define( function( require, exports, module ) {
          * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
          */
         FormView.prototype.outputUpdate = function( updated ) {
-            var expr, clonedRepeatsPresent, insideRepeat, insideRepeatClone, $context, $output, context, index, $nodes,
-                outputCache = {},
-                val = '',
-                that = this;
+            var expr;
+            var clonedRepeatsPresent;
+            var insideRepeat;
+            var insideRepeatClone;
+            var $context;
+            var $output;
+            var context;
+            var index;
+            var $nodes;
+            var outputCache = {};
+            var val = '';
+            var that = this;
 
             $nodes = this.getNodesToUpdate( 'data-value', '.or-output', updated );
 
@@ -1287,8 +1328,8 @@ define( function( require, exports, module ) {
          * @param {Array<string>=}  updatedNodes    Array of updated nodes
          */
         FormView.prototype.calcUpdate = function( updated ) {
-            var $nodes,
-                that = this;
+            var $nodes;
+            var that = this;
 
             updated = updated || {};
 
@@ -1298,7 +1339,19 @@ define( function( require, exports, module ) {
             $nodes = $nodes.add( this.getNodesToUpdate( 'data-relevant', '[data-calculate]', updated ) );
 
             $nodes.each( function() {
-                var result, dataNodesObj, dataNodes, $dataNode, index, name, dataNodeName, expr, dataType, constraint, relevantExpr, relevant, $this;
+                var result;
+                var dataNodesObj;
+                var dataNodes;
+                var $dataNode;
+                var index;
+                var name;
+                var dataNodeName;
+                var expr;
+                var dataType;
+                var constraint;
+                var relevantExpr;
+                var relevant;
+                var $this;
 
                 $this = $( this );
                 name = that.input.getName( $this );
@@ -1360,8 +1413,18 @@ define( function( require, exports, module ) {
          */
         FormView.prototype.preloads = {
             init: function( parentO ) {
-                var item, param, name, curVal, newVal, meta, dataNode, props, xmlType, $preload,
-                    that = this;
+                var item;
+                var param;
+                var name;
+                var curVal;
+                var newVal;
+                var meta;
+                var dataNode;
+                var props;
+                var xmlType;
+                var $preload;
+                var that = this;
+
                 //these initialize actual preload items
                 $form.find( '#or-preload-items input' ).each( function() {
                     $preload = $( this );
@@ -1446,7 +1509,10 @@ define( function( require, exports, module ) {
                 return 'error - unknown timestamp parameter';
             },
             'date': function( o ) {
-                var today, year, month, day;
+                var today;
+                var year;
+                var month;
+                var day;
 
                 if ( o.curVal.length === 0 ) {
                     today = new Date( model.evaluate( 'today()', 'string' ) );
@@ -1459,7 +1525,9 @@ define( function( require, exports, module ) {
                 return o.curVal;
             },
             'property': function( o ) {
-                var readCookie, noSupportMsg, response;
+                var readCookie;
+                var noSupportMsg;
+                var response;
 
                 readCookie = function( name, c, C, i ) {
                     if ( cookies ) {
@@ -1555,8 +1623,14 @@ define( function( require, exports, module ) {
              * @param  {FormView} formO the parent form object
              */
             init: function( formO ) {
-                var numRepsInCount, repCountPath, numRepsInInstance, numRepsDefault, cloneDefaultReps, $dataRepeat, index,
-                    that = this;
+                var numRepsInCount;
+                var repCountPath;
+                var numRepsInInstance;
+                var numRepsDefault;
+                var cloneDefaultReps;
+                var $dataRepeat;
+                var index;
+                var that = this;
 
                 this.formO = formO;
                 $form.find( '.or-repeat' ).prepend( '<span class="repeat-number"></span>' );
@@ -1614,8 +1688,15 @@ define( function( require, exports, module ) {
              * @return  {boolean}       [description]
              */
             clone: function( $node, count, initialFormLoad ) {
-                var $siblings, $master, $clone, $repeatsToUpdate, $radiocheckbox, index, total, path,
-                    that = this;
+                var $siblings;
+                var $master;
+                var $clone;
+                var $repeatsToUpdate;
+                var $radiocheckbox;
+                var index;
+                var total;
+                var path;
+                var that = this;
 
                 count = count || 1;
 
@@ -1704,12 +1785,12 @@ define( function( require, exports, module ) {
                 return true;
             },
             remove: function( $repeat ) {
-                var delay = 600,
-                    that = this,
-                    $prev = $repeat.prev( '.or-repeat' ),
-                    repeatPath = $repeat.attr( 'name' ),
-                    repeatIndex = $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $repeat ),
-                    $siblings = $repeat.siblings( '.or-repeat' );
+                var delay = 600;
+                var that = this;
+                var $prev = $repeat.prev( '.or-repeat' );
+                var repeatPath = $repeat.attr( 'name' );
+                var repeatIndex = $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $repeat );
+                var $siblings = $repeat.siblings( '.or-repeat' );
 
                 $repeat.hide( delay, function() {
                     $repeat.remove();
@@ -1727,7 +1808,8 @@ define( function( require, exports, module ) {
                     .attr( 'name', Math.floor( ( Math.random() * 10000000 ) + 1 ) );
             },
             toggleButtons: function( $repeats ) {
-                var $repeat, $repSiblingsAndSelf;
+                var $repeat;
+                var $repSiblingsAndSelf;
 
                 $repeats = ( !$repeats || $repeats.length === 0 ) ? $form : $repeats;
 
@@ -1744,8 +1826,10 @@ define( function( require, exports, module ) {
             },
             numberRepeats: function( $repeats ) {
                 $repeats.each( function() {
-                    var $repSiblings, qtyRepeats, i,
-                        $repeat = $( this );
+                    var $repSiblings;
+                    var qtyRepeats;
+                    var i;
+                    var $repeat = $( this );
                     // if it is the first-of-type (not that ':first-of-type' does not have cross-browser support)
                     if ( $repeat.prev( '.or-repeat' ).length === 0 ) {
                         $repSiblings = $( this ).siblings( '.or-repeat' );
@@ -1893,8 +1977,8 @@ define( function( require, exports, module ) {
          * @return {Promise} wrapping {boolean} whether the container contains any errors
          */
         FormView.prototype.validateContent = function( $container ) {
-            var $firstError,
-                that = this;
+            var $firstError;
+            var that = this;
 
             //can't fire custom events on disabled elements therefore we set them all as valid
             $container.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +

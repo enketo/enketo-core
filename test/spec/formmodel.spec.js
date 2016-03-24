@@ -239,8 +239,7 @@ describe( 'Data node XML data type conversion & validation', function() {
     }
 
     it( 'converts NaN to "" (quietly) for nodes with type=int', function( done ) {
-        var result,
-            node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
+        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
         // prime the node with a value
         node.setVal( 5, null, 'int' )
             .then( function() {

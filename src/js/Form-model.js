@@ -339,7 +339,7 @@ define( function( require, exports, module ) {
      * @return {string} deprecatedID
      */
     FormModel.prototype.getDeprecatedID = function() {
-        return this.node( '/*/meta/deprecatedID' ).getVal()[ 0 ] || "";
+        return this.node( '/*/meta/deprecatedID' ).getVal()[ 0 ] || '';
     };
 
     /**
@@ -431,8 +431,8 @@ define( function( require, exports, module ) {
      * @return {*}               the /path/to/template
      */
     FormModel.prototype.getTemplatePath = function( nodePath ) {
-        var templateIndex,
-            that = this;
+        var templateIndex;
+        var that = this;
 
         nodePath.split( '/' ).some( function( value, index, array ) {
             templateIndex = array.slice( 0, array.length - index ).join( '/' );
@@ -520,7 +520,15 @@ define( function( require, exports, module ) {
      * @return {string} modified    expression with injected positions (1-based!)
      */
     FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
-        var i, parentSelector, parentIndex, $target, $node, nodeName, $siblings, $parents;
+        var i;
+        var parentSelector;
+        var parentIndex;
+        var $target;
+        var $node;
+        var nodeName;
+        var $siblings;
+        var $parents;
+
         $target = this.node( selector, index ).get();
         // add() sorts the resulting collection in document order
         $parents = $target.parents().add( $target );
@@ -869,7 +877,8 @@ define( function( require, exports, module ) {
      * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
      */
     Nodeset.prototype.get = function() {
-        var $nodes, /** @type {string} */ val;
+        var $nodes;
+        var /** @type {string} */ val;
 
         // cache evaluation result
         if ( !this.nodes ) {
@@ -916,7 +925,11 @@ define( function( require, exports, module ) {
      *                            otherwise the constraint evaluation result true/false is returned.
      */
     Nodeset.prototype.setVal = function( newVals, expr, xmlDataType ) {
-        var $target, curVal, /**@type {string}*/ newVal, success, updated;
+        var $target;
+        var curVal;
+        var /**@type {string}*/ newVal;
+        var success;
+        var updated;
 
         curVal = this.getVal()[ 0 ];
 
@@ -983,7 +996,9 @@ define( function( require, exports, module ) {
      * @return {number}       [description]
      */
     Nodeset.prototype.determineIndex = function( $node ) {
-        var nodeName, path, $family;
+        var nodeName;
+        var path;
+        var $family;
 
         $node = $node || this.get();
 
@@ -1002,8 +1017,8 @@ define( function( require, exports, module ) {
 
     // if repeats have not been cloned yet, they are not considered a repeat by this function
     Nodeset.prototype.getClosestRepeat = function() {
-        var $node = this.get(),
-            nodeName = $node.prop( 'nodeName' );
+        var $node = this.get();
+        var nodeName = $node.prop( 'nodeName' );
 
         while ( $node.siblings( nodeName ).length === 0 && nodeName !== 'instance' ) {
             $node = $node.parent();
@@ -1020,7 +1035,11 @@ define( function( require, exports, module ) {
      * Remove a repeat node
      */
     Nodeset.prototype.remove = function() {
-        var $dataNode, allRemovedNodeNames, $this, repeatPath, repeatIndex;
+        var $dataNode;
+        var allRemovedNodeNames;
+        var $this;
+        var repeatPath;
+        var repeatIndex;
 
         $dataNode = this.get();
 
@@ -1074,8 +1093,8 @@ define( function( require, exports, module ) {
      * @return {Promise} wrapping a boolean indicating if the value is valid or not; error also indicates invalid field, or problem validating it
      */
     Nodeset.prototype.validate = function( expr, xmlDataType ) {
-        var that = this,
-            value;
+        var that = this;
+        var value;
 
         if ( !xmlDataType || typeof types[ xmlDataType.toLowerCase() ] === 'undefined' ) {
             xmlDataType = 'string';
