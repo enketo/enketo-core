@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- Values in cloned repeat without jr:template are not emptied.
+
 [4.5.10] - 2016-03-18
 --------------------
 ##### Added

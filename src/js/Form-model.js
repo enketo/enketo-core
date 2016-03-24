@@ -352,7 +352,7 @@ define( function( require, exports, module ) {
     };
 
     /**
-     * Clones a <repeat>able instance node. If a template exists it will use this, otherwise it will clone an empty version of the first node.
+     * Clones a <repeat>able instance node. If a template exists it will use this, otherwise it will clone an empty version of the first repeat node.
      * If the node with the specified index already exists, this function will do nothing.
      *
      * @param  {string} selector selector of a repeat or a node that is contained inside a repeat
@@ -360,9 +360,13 @@ define( function( require, exports, module ) {
      * @param  {boolean} merge   whether this operation is part of a merge operation (won't send dataupdate event and clears all values)
      */
     FormModel.prototype.cloneRepeat = function( selector, index, merge ) {
-        var $insertAfterNode, name, allClonedNodeNames, $templateClone,
-            $template = this.templates[ selector ] || this.node( selector, 0 ).get(),
-            that = this;
+        var $insertAfterNode;
+        var name;
+        var allClonedNodeNames;
+        var $templateClone;
+        var jrTemplate = !!this.templates[ selector ];
+        var $template = this.templates[ selector ] || this.node( selector, 0 ).get();
+        var that = this;
 
         name = $template.prop( 'nodeName' );
         $insertAfterNode = this.node( selector, index ).get();
@@ -374,6 +378,14 @@ define( function( require, exports, module ) {
         if ( $template[ 0 ] && $insertAfterNode.length === 1 && $insertAfterNode.nextAll( name ).length === 0 ) {
             $templateClone = $template.clone().insertAfter( $insertAfterNode );
 
+
+            // If part of a merge operation (during form load) where the values will be populated from the record, defaults are not desired.
+            // If no jrTemplate is present all values should be cleared as well.
+            if ( merge || !jrTemplate ) {
+                $templateClone.find( '*' ).text( '' );
+            }
+
+            // publish the changes
             if ( !merge ) {
                 allClonedNodeNames = [ $template.prop( 'nodeName' ) ];
 
@@ -386,10 +398,6 @@ define( function( require, exports, module ) {
                     repeatPath: selector,
                     repeatIndex: that.node( selector, index ).determineIndex( $templateClone )
                 } );
-            } else {
-                // this is part of a merge operation (during form load) where the values will be populated from the record, 
-                // defaults are therefore not desired
-                $templateClone.find( '*' ).text( '' );
             }
         } else {
             // Strictly speaking using .next() is more efficient, but we use .nextAll() in case the document order has changed due to 
