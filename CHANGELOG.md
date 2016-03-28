@@ -3,10 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.5.12] - 2016-03-28
 ---------------------
 ##### Changed
-- Wider select minimal widget.
+- Wider select minimal widget in all themes. Full 100% of cell in Grid theme.
 - Always show value in select minimal widget when only a single value is selected.
 
 ##### Fixed

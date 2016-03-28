@@ -123,3 +123,10 @@ html:not(.touch) .question .geopoint.widget {
         }
     }
 }
+
+// select picker
+.bootstrap-select {
+    .dropdown-toggle {
+        width: 100%;
+    }
+}
