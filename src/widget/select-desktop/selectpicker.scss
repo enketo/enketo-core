@@ -1,12 +1,21 @@
 .bootstrap-select {
     margin-top: 15px;
     .dropdown-toggle {
-        min-width: $input-min-width - 14px;
+        width: $input-min-width * $golden-ratio - 14px;
         @include font-normal;
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         text-align: left;
         .caret {
-            margin-left: 10px;
+            position: absolute;
+            top: 14px;
+            right: 12px;
+        }
+        .selected {
+            width: calc(100% - 12px);
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         ~ .dropdown-menu {
             .option-wrapper {

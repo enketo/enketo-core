@@ -46,7 +46,7 @@ define( function( require, exports, module ) {
 
         this.$picker = null;
         this.noneSelectedText = t( 'selectpicker.noneselected' ) || 'none selected';
-        this.lengthmax = options.maxlength || 15;
+
         this.multiple = ( typeof $( element ).attr( 'multiple' ) !== 'undefined' && $( element ).attr( 'multiple' ) !== false );
         this._init();
     }
@@ -139,8 +139,6 @@ define( function( require, exports, module ) {
      * @return {string}
      */
     DesktopSelectpicker.prototype._createSelectedStr = function() {
-        var textToShow;
-        var xSelectedTxt;
         var selectedLabels = [];
         var $select = $( this.element );
         $select.find( 'option:selected' ).each( function() {
@@ -151,12 +149,13 @@ define( function( require, exports, module ) {
 
         if ( selectedLabels.length === 0 ) {
             return this.noneSelectedText;
+        } else if ( selectedLabels.length === 1 ) {
+            return selectedLabels[ 0 ];
+        } else {
+            return t( 'selectpicker.numberselected', {
+                number: selectedLabels.length
+            } ) || selectedLabels.length + ' selected';
         }
-        textToShow = selectedLabels.join( ', ' );
-        xSelectedTxt = t( 'selectpicker.numberselected', {
-            number: selectedLabels.length
-        } ) || selectedLabels.length + ' selected';
-        return ( textToShow.length > this.lengthmax ) ? xSelectedTxt : textToShow;
     };
 
     DesktopSelectpicker.prototype._clickListener = function() {
@@ -227,7 +226,7 @@ define( function( require, exports, module ) {
 
     /**
      * [selectpicker description]
-     * @param {({btnStyle: string, noneSelectedText: string, maxlength:number}|string)=} option options
+     * @param {({btnStyle: string, noneSelectedText: string}|string)=} option options
      * @param {*=} event       [description]
      */
     $.fn[ pluginName ] = function( options, event ) {
