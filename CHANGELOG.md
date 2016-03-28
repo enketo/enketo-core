@@ -5,8 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Wider select minimal widget.
+- Always show value in select minimal widget when only a single value is selected.
+
 ##### Fixed
 - Radio buttons and checkboxes not properly aligned vertically.
+- Select minimal widget not aligned properly in RTL language.
 
 [4.5.11] - 2016-03-24
 ---------------------

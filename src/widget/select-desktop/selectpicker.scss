@@ -42,9 +42,12 @@
 
 .or[dir="rtl"] .bootstrap-select {
     .dropdown-toggle {
+        text-align: right;
         .caret {
             margin-left: 0;
             margin-right: 10px;
+            left: 12px;
+            right: auto;
         }
     }
 }
