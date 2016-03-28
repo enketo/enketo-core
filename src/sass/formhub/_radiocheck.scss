@@ -21,6 +21,7 @@ $line-h: 20px;
         .option-label::before {
             margin-#{$opp-dir}: 10px;
             margin-#{$dir}: -30px;
+            vertical-align: bottom;
         }
     }
 }
