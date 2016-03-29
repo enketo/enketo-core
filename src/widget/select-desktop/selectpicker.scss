@@ -18,6 +18,9 @@
             white-space: nowrap;
         }
         ~ .dropdown-menu {
+            max-height: 200px;
+            max-width: 100%;
+            overflow: auto;
             .option-wrapper {
                 padding-left: 5px;
                 background-color: transparent;
