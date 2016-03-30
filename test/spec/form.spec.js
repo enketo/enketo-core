@@ -1,4 +1,4 @@
-/* global describe, require, it */
+/* global describe, require, it, beforeEach, afterEach*/
 var Form = require( '../../src/js/Form' );
 var $ = require( 'jquery' );
 var mockForms1 = require( '../mock/forms' );
@@ -500,6 +500,70 @@ xdescribe( 'Readonly items', function() {
 describe( 'Itemset functionality', function() {
     var form;
 
+    describe( 'in a cascading multi-select after an itemset update', function() {
+        var $items1;
+        var $items2;
+        var items1 = ':not(.itemset-template) > input:checkbox[name="/select-from-selected/crops"]';
+        var items2 = ':not(.itemset-template) > input:checkbox[name="/select-from-selected/crop"]';
+
+        beforeEach( function() {
+            form = loadForm( 'select-from-selected.xml' );
+            form.init();
+            $items1 = function() {
+                return form.getView().$.find( items1 );
+            };
+            $items2 = function() {
+                return form.getView().$.find( items2 );
+            };
+        } );
+
+        it( 'retains (checks) any current values that are still valid values', function() {
+            $items1().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
+            expect( $items2().length ).toEqual( 2 );
+            expect( $items2().siblings().text() ).toEqual( 'BananaCacao' );
+            // check model
+            expect( form.getModel().$.find( 'crops' ).text() ).toEqual( 'banana cacao' );
+            expect( form.getModel().$.find( 'crop' ).text() ).toEqual( '' );
+            // select both items in itemset 2
+            $items2().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
+            // check model
+            expect( form.getModel().$.find( 'crops' ).text() ).toEqual( 'banana cacao' );
+            expect( form.getModel().$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+            // select an additional item in itemset 1
+            $items1().filter( '[value="maize"]' ).prop( 'checked', true ).trigger( 'change' );
+            // check that the new item was added to itemset 2
+            expect( $items2().length ).toEqual( 3 );
+            expect( $items2().siblings().text() ).toEqual( 'BananaCacaoMaize' );
+            // check that the first two items of itemset 2 are still selected
+            expect( $items2().filter( '[value="banana"]' ).prop( 'checked' ) ).toEqual( true );
+            expect( $items2().filter( '[value="cacao"]' ).prop( 'checked' ) ).toEqual( true );
+            // check that the new item is unselected
+            expect( $items2().filter( '[value="maize"]' ).prop( 'checked' ) ).toEqual( false );
+            // check model
+            expect( form.getModel().$.find( 'crops' ).text() ).toEqual( 'banana cacao maize' );
+            expect( form.getModel().$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+        } );
+
+        it( 'removes (unchecks) any current values that are no longer valid values', function() {
+            $items1().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
+            // select both items in itemset 2
+            $items2().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
+            expect( form.getModel().$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+            // add a third non-existing item to model for itemset 2
+            form.getModel().$.find( 'crop' ).text( 'banana fake cacao' )
+            expect( form.getModel().$.find( 'crop' ).text() ).toEqual( 'banana fake cacao' );
+            // select an additional item in itemset 1, to trigger update of itemset 2
+            $items1().filter( '[value="maize"]' ).prop( 'checked', true ).trigger( 'change' );
+            // check that the new item was added to itemset 2
+            expect( $items2().siblings().text() ).toEqual( 'BananaCacaoMaize' );
+            // check that the first two items of itemset 2 are still selected
+            expect( $items2().filter( '[value="banana"]' ).prop( 'checked' ) ).toEqual( true );
+            expect( $items2().filter( '[value="cacao"]' ).prop( 'checked' ) ).toEqual( true );
+            // check model to see that the fake value was removed
+            expect( form.getModel().$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+        } );
+    } );
+
     describe( 'in a cascading select using itext for all labels', function() {
         var $items1Radio, $items2Radio, $items3Radio, $items1Select, $items2Select, $items3Select, formHTMLO,
             sel1Radio = ':not(.itemset-template) > input:radio[data-name="/new_cascading_selections/group1/country"]',
@@ -510,7 +574,6 @@ describe( 'Itemset functionality', function() {
             sel3Select = 'select[name="/new_cascading_selections/group2/neighborhood2"]';
 
         beforeEach( function() {
-            jQuery.fx.off = true; //turn jQuery animations off
             form = loadForm( 'new_cascading_selections.xml' );
             form.init();
 

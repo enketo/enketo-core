@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>select-from-selected</h:title>
+    <model>
+      <itext>
+        <translation lang="English">
+          <text id="/select-from-selected/crops/fruittree:label">
+            <value>Fruits from trees</value>
+          </text>
+          <text id="/select-from-selected/crops/vegetables:label">
+            <value>Vegetables</value>
+          </text>
+          <text id="/select-from-selected/crops/yucacasava:label">
+            <value>Yuca</value>
+          </text>
+          <text id="/select-from-selected/crops/other1:label">
+            <value>Other 1</value>
+          </text>
+          <text id="/select-from-selected/crops/cacao:label">
+            <value>Cacao</value>
+          </text>
+          <text id="/select-from-selected/crops/maize:label">
+            <value>Maize</value>
+          </text>
+          <text id="static_instance-crop_list-16">
+            <value>Other 2</value>
+          </text>
+          <text id="/select-from-selected/crops/legume:label">
+            <value>lentils, chickpeas, other legume</value>
+          </text>
+          <text id="/select-from-selected/crops/foddergrass:label">
+            <value>Fodder grass crops</value>
+          </text>
+          <text id="/select-from-selected/crops/peanut:label">
+            <value>Peanut</value>
+          </text>
+          <text id="static_instance-crop_list-5">
+            <value>Fodder tree crops</value>
+          </text>
+          <text id="static_instance-crop_list-8">
+            <value>Maize</value>
+          </text>
+          <text id="static_instance-crop_list-9">
+            <value>Nuts from trees</value>
+          </text>
+          <text id="static_instance-crop_list-6">
+            <value>Fruits from trees</value>
+          </text>
+          <text id="static_instance-crop_list-7">
+            <value>lentils, chickpeas, other legume</value>
+          </text>
+          <text id="static_instance-crop_list-4">
+            <value>Fodder grass crops</value>
+          </text>
+          <text id="/select-from-selected/crops/nuttree:label">
+            <value>Nuts from trees</value>
+          </text>
+          <text id="static_instance-crop_list-2">
+            <value>Cacao</value>
+          </text>
+          <text id="static_instance-crop_list-3">
+            <value>Coffee</value>
+          </text>
+          <text id="static_instance-crop_list-0">
+            <value>Banana</value>
+          </text>
+          <text id="static_instance-crop_list-1">
+            <value>Beans</value>
+          </text>
+          <text id="static_instance-crop_list-10">
+            <value>Platano</value>
+          </text>
+          <text id="static_instance-crop_list-11">
+            <value>Peanut</value>
+          </text>
+          <text id="static_instance-crop_list-12">
+            <value>Sorghum or Millet</value>
+          </text>
+          <text id="static_instance-crop_list-13">
+            <value>Vegetables</value>
+          </text>
+          <text id="static_instance-crop_list-14">
+            <value>Yuca</value>
+          </text>
+          <text id="/select-from-selected/crops/foddertree:label">
+            <value>Fodder tree crops</value>
+          </text>
+          <text id="/select-from-selected/crops/plantain:label">
+            <value>Platano</value>
+          </text>
+          <text id="static_instance-crop_list-17">
+            <value>Other 3</value>
+          </text>
+          <text id="/select-from-selected/crops/banana:label">
+            <value>Banana</value>
+          </text>
+          <text id="/select-from-selected/crops/coffee:label">
+            <value>Coffee</value>
+          </text>
+          <text id="/select-from-selected/crops/other2:label">
+            <value>Other 2</value>
+          </text>
+          <text id="/select-from-selected/crops/beans:label">
+            <value>Beans</value>
+          </text>
+          <text id="/select-from-selected/crops/other3:label">
+            <value>Other 3</value>
+          </text>
+          <text id="/select-from-selected/crops/sorghummillet:label">
+            <value>Sorghum or Millet</value>
+          </text>
+          <text id="static_instance-crop_list-15">
+            <value>Other 1</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <select-from-selected id="select-from-selected">
+          <crops/>
+          <crop/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </select-from-selected>
+      </instance>
+      <instance id="crop_list">
+        <root>
+          <item>
+            <itextId>static_instance-crop_list-0</itextId>
+            <name>banana</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-1</itextId>
+            <name>beans</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-2</itextId>
+            <name>cacao</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-3</itextId>
+            <name>coffee</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-4</itextId>
+            <name>foddergrass</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-5</itextId>
+            <name>foddertree</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-6</itextId>
+            <name>fruittree</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-7</itextId>
+            <name>legume</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-8</itextId>
+            <name>maize</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-9</itextId>
+            <name>nuttree</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-10</itextId>
+            <name>plantain</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-11</itextId>
+            <name>peanut</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-12</itextId>
+            <name>sorghummillet</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-13</itextId>
+            <name>vegetables</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-14</itextId>
+            <name>yucacasava</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-15</itextId>
+            <name>other1</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-16</itextId>
+            <name>other2</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-17</itextId>
+            <name>other3</name>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/select-from-selected/crops" type="select"/>
+      <bind nodeset="/select-from-selected/crop" type="select"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/select-from-selected/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select ref="/select-from-selected/crops">
+      <label>Which crops did you grow or harvest during the past 12 months?</label>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/banana:label')"/>
+        <value>banana</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/beans:label')"/>
+        <value>beans</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/cacao:label')"/>
+        <value>cacao</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/coffee:label')"/>
+        <value>coffee</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/foddergrass:label')"/>
+        <value>foddergrass</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/foddertree:label')"/>
+        <value>foddertree</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/fruittree:label')"/>
+        <value>fruittree</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/legume:label')"/>
+        <value>legume</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/maize:label')"/>
+        <value>maize</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/nuttree:label')"/>
+        <value>nuttree</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/plantain:label')"/>
+        <value>plantain</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/peanut:label')"/>
+        <value>peanut</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/sorghummillet:label')"/>
+        <value>sorghummillet</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/vegetables:label')"/>
+        <value>vegetables</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/yucacasava:label')"/>
+        <value>yucacasava</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/other1:label')"/>
+        <value>other1</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/other2:label')"/>
+        <value>other2</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select-from-selected/crops/other3:label')"/>
+        <value>other3</value>
+      </item>
+    </select>
+    <select ref="/select-from-selected/crop">
+      <label>Select a crop</label>
+      <itemset nodeset="instance('crop_list')/root/item[selected( /select-from-selected/crops , name)]">
+        <value ref="name"/>
+        <label ref="jr:itext(itextId)"/>
+      </itemset>
+    </select>
+  </h:body>
+</h:html>

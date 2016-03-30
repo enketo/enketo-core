@@ -1133,7 +1133,7 @@ define( function( require, exports, module ) {
             clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
             $nodes.each( function() {
-                var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, $instanceItems, index, context, labelRefValue,
+                var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, currentValue, $instanceItems, index, context, labelRefValue,
                     $template, newItems, prevItems, templateNodeName, $input, $labels, itemsXpath, labelType, labelRef, valueRef;
 
                 $template = $( this );
@@ -1181,9 +1181,9 @@ define( function( require, exports, module ) {
                     }
                 }
 
-                // this property allows for more efficient 'itemschanged' detection
+                // This property allows for more efficient 'itemschanged' detection
                 newItems.length = $instanceItems.length;
-                //this may cause problems for large itemsets. Use md5 instead?
+                // This may cause problems for large itemsets. Use md5 instead?
                 newItems.text = $instanceItems.text();
 
                 if ( newItems.length === prevItems.length && newItems.text === prevItems.text ) {
@@ -1192,10 +1192,10 @@ define( function( require, exports, module ) {
 
                 $template.data( newItems );
 
-                // clear data values through inputs. Note: if a value exists,
-                // this will trigger a dataupdate event which may call this update function again
+                /**
+                 * Remove current items before rebuilding a new itemset from scratch.
+                 */
                 $template.closest( '.question' )
-                    .clearInputs( 'change' )
                     .find( templateNodeName ).not( $template ).remove();
                 $template.parent( 'select' ).siblings( '.or-option-translations' ).empty();
 
@@ -1231,6 +1231,18 @@ define( function( require, exports, module ) {
                         $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
                     }
                 } );
+
+                /**
+                 * Attempt to populate inputs with current value in model.
+                 * Note that if the current value is not empty and the new itemset does not 
+                 * include (an) item(s) with this/se value(s), this will clear/update the model and
+                 * this will trigger a dataupdate event. This may call this update function again.
+                 */
+                currentValue = model.node( context, index ).getVal()[ 0 ];
+                if ( currentValue !== '' ) {
+                    that.input.setVal( context, index, currentValue );
+                    $input.trigger( 'change' );
+                }
 
                 if ( $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
                     //populate labels (with current language)
