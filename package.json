@@ -4,8 +4,16 @@
     "homepage": "https://enketo.org",
     "version": "4.5.12",
     "license": "Apache-2.0",
-    "os": [ "darwin", "linux" ],
-    "keywords": [ "enketo", "OpenRosa", "ODK", "XForms" ],
+    "os": [
+        "darwin",
+        "linux"
+    ],
+    "keywords": [
+        "enketo",
+        "OpenRosa",
+        "ODK",
+        "XForms"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/enketo/enketo-core"
@@ -25,6 +33,7 @@
         "test": "grunt test"
     },
     "devDependencies": {
+        "enketo-transformer": "*",
         "grunt": "0.4.x",
         "grunt-browserify": "5.0.x",
         "grunt-concurrent": "2.x.x",
@@ -36,6 +45,7 @@
         "grunt-karma": "0.12.x",
         "grunt-sass": "1.1.x",
         "jasmine-core": "2.4.x",
+        "json-pretty": "0.0.1",
         "karma": "0.13.x",
         "karma-browserify": "5.0.x",
         "karma-chrome-launcher": "0.2.x",

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>calcs</h:title>
+    <model>
+      <instance>
+        <calcs id="calcs">
+          <calc1/>
+          <calc2/>
+          <cond1/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </calcs>
+      </instance>
+      <bind calculate="1 + 2" nodeset="/calcs/calc1" relevant=" /calcs/cond1  = 'yes'" type="string"/>
+      <bind calculate="concat('1', '2')" nodeset="/calcs/calc2" type="string"/>
+      <bind nodeset="/calcs/cond1" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/calcs/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/calcs/cond1">
+      <label>enter 'yes' to make calc1 relevant</label>
+    </input>
+  </h:body>
+</h:html>

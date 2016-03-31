@@ -1,0 +1,83 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>issue208</h:title>
+    <model>
+      <itext>
+        <translation lang="English">
+          <text id="/issue208/rep/nodeA/no:label">
+            <value>No</value>
+          </text>
+          <text id="/issue208/rep/nodeB/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/issue208/rep/nodeB/dkrf:label">
+            <value>Don't know</value>
+          </text>
+          <text id="/issue208/rep/nodeB:label">
+            <value>Select</value>
+          </text>
+          <text id="/issue208/rep/nodeA/dkrf:label">
+            <value>Don't know</value>
+          </text>
+          <text id="/issue208/rep/nodeA/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/issue208/rep/nodeB/no:label">
+            <value>No</value>
+          </text>
+          <text id="/issue208/rep/nodeA:label">
+            <value>Select</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <issue208 id="issue208"><formhub><uuid/></formhub>
+          <rep jr:template="">
+            <nodeA/>
+            <nodeB/>
+          </rep>
+        </issue208>
+      </instance>
+      <bind nodeset="/issue208/formhub/uuid" type="string" calculate="'06b37a5069414b1b98cdd92155f6a793'" />
+      <bind nodeset="/issue208/rep/nodeA" type="select1"/>
+      <bind nodeset="/issue208/rep/nodeB" relevant="/issue208/rep/nodeA = 'yes'" type="select1"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/issue208/rep">
+      <label></label>
+      <repeat nodeset="/issue208/rep">
+        <select1 ref="/issue208/rep/nodeA">
+          <label ref="jr:itext('/issue208/rep/nodeA:label')"/>
+          <item>
+            <label ref="jr:itext('/issue208/rep/nodeA/yes:label')"/>
+            <value>yes</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/issue208/rep/nodeA/no:label')"/>
+            <value>no</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/issue208/rep/nodeA/dkrf:label')"/>
+            <value>dkrf</value>
+          </item>
+        </select1>
+        <select1 ref="/issue208/rep/nodeB">
+          <label ref="jr:itext('/issue208/rep/nodeB:label')"/>
+          <item>
+            <label ref="jr:itext('/issue208/rep/nodeB/yes:label')"/>
+            <value>yes</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/issue208/rep/nodeB/no:label')"/>
+            <value>no</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/issue208/rep/nodeB/dkrf:label')"/>
+            <value>dkrf</value>
+          </item>
+        </select1>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

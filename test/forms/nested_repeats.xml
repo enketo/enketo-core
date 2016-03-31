@@ -1,0 +1,138 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Nested repeats Test</h:title>
+    <model>
+      <instance>
+        <nested_repeats id="nested_repeats"><formhub><uuid/></formhub>
+          <kids>
+            <has_kids>1</has_kids>
+            <kids_details jr:template="">
+              <kids_name/>
+              <kids_age/>
+              <immunization_info jr:template="">
+                <vaccine/>
+                <date/>
+              </immunization_info>
+            </kids_details>
+            <kids_details>
+              <kids_name>Tom</kids_name>
+              <kids_age>2</kids_age>
+              <immunization_info>
+                <vaccine>Polio</vaccine>
+                <date/>
+              </immunization_info>
+              <immunization_info>
+                <vaccine>Rickets</vaccine>
+                <date/>
+              </immunization_info>
+            </kids_details>
+            <kids_details>
+              <kids_name>Dick</kids_name>
+              <kids_age>5</kids_age>
+              <immunization_info>
+                <vaccine>Malaria</vaccine>
+                <date/>
+              </immunization_info>
+              <immunization_info>
+                <vaccine>Flu</vaccine>
+                <date/>
+              </immunization_info>
+              <immunization_info>
+                <vaccine>Polio</vaccine>
+                <date/>
+              </immunization_info>
+            </kids_details>
+            <nested_group>
+              <nested_name/>
+              <nested_age/>
+            </nested_group>
+          </kids>
+          <gps/>
+          <web_browsers/>
+        </nested_repeats>
+      </instance>
+      <bind nodeset="/nested_repeats/formhub/uuid" type="string" calculate="'f19b44ccf710492eb4d1ed6f468324f1'" />
+      <bind nodeset="/nested_repeats/kids/has_kids" type="select1"/>
+      <bind nodeset="/nested_repeats/kids/kids_details" relevant="/nested_repeats/kids/has_kids='1'"/>
+      <bind nodeset="/nested_repeats/kids/kids_details/kids_name" type="string"/>
+      <bind nodeset="/nested_repeats/kids/kids_details/kids_age" type="int"/>
+      <bind nodeset="/nested_repeats/kids/kids_details/immunization_info/vaccine" type="string"/>
+      <bind nodeset="/nested_repeats/kids/kids_details/immunization_info/date" type="date"/>
+      <bind nodeset="/nested_repeats/kids/nested_group/nested_name" type="string"/>
+      <bind nodeset="/nested_repeats/kids/nested_group/nested_age" type="int"/>
+      <bind nodeset="/nested_repeats/gps" type="geopoint"/>
+      <bind nodeset="/nested_repeats/web_browsers" type="select"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/nested_repeats/kids">
+      <label>Kids</label>
+      <select1 ref="/nested_repeats/kids/has_kids">
+        <label>4. Do you have any kids?</label>
+        <item>
+          <label>no</label>
+          <value>0</value>
+        </item>
+        <item>
+          <label>yes</label>
+          <value>1</value>
+        </item>
+      </select1>
+      <group ref="/nested_repeats/kids/kids_details">
+        <label>4.1 Kids Details</label>
+        <repeat nodeset="/nested_repeats/kids/kids_details">
+          <input ref="/nested_repeats/kids/kids_details/kids_name">
+            <label>4.1.1 Child's Name</label>
+          </input>
+          <input ref="/nested_repeats/kids/kids_details/kids_age">
+            <label>4.1.2 Child's Age</label>
+          </input>
+          <group ref="/nested_repeats/kids/kids_details/immunization_info">
+            <label></label>
+            <repeat nodeset="/nested_repeats/kids/kids_details/immunization_info">
+              <input ref="/nested_repeats/kids/kids_details/immunization_info/vaccine">
+                <label>An immunization record</label>
+              </input>
+              <input ref="/nested_repeats/kids/kids_details/immunization_info/date">
+                <label>date</label>
+              </input>
+            </repeat>
+          </group>
+        </repeat>
+      </group>
+      <group ref="/nested_repeats/kids/nested_group">
+        <label>4.2 A Nested Group</label>
+        <input ref="/nested_repeats/kids/nested_group/nested_name">
+          <label>4.3 A Nested Name</label>
+        </input>
+        <input ref="/nested_repeats/kids/nested_group/nested_age">
+          <label>4.4 A Nested Age</label>
+        </input>
+      </group>
+    </group>
+    <input ref="/nested_repeats/gps">
+      <label>5. Record your GPS coordinates.</label>
+      <hint>GPS coordinates can only be collected when outside.</hint>
+    </input>
+    <select ref="/nested_repeats/web_browsers">
+      <label>6. What web browsers do you use?</label>
+      <hint>Select all that apply.</hint>
+      <item>
+        <label>Mozilla Firefox</label>
+        <value>firefox</value>
+      </item>
+      <item>
+        <label>Google Chrome</label>
+        <value>chrome</value>
+      </item>
+      <item>
+        <label>Internet Explorer</label>
+        <value>ie</value>
+      </item>
+      <item>
+        <label>Safari</label>
+        <value>safari</value>
+      </item>
+    </select>
+  </h:body>
+</h:html>

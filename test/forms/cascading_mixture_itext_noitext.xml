@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>Cascading Triple Select Form</h:title>
+    <model>
+      <itext>
+        <translation lang="english">
+          <text id="washington">
+            <value>Washington State</value>
+          </text>
+          <text id="illinois">
+            <value>Illinois State</value>
+          </text>
+          <text id="king">
+            <value>King County</value>
+          </text>
+          <text id="pierce">
+            <value>Pierce County</value>
+          </text>
+          <text id="douglas">
+            <value>Douglas County</value>
+          </text>
+          <text id="cook">
+            <value>Cook County</value>
+          </text>
+        </translation>
+        <translation lang="italian">
+          <text id="washington">
+            <value>State of Washington</value>
+          </text>
+          <text id="illinois">
+            <value>State of Illinois</value>
+          </text>
+          <text id="king">
+            <value>County King</value>
+          </text>
+          <text id="pierce">
+            <value>County Pierce</value>
+          </text>
+          <text id="douglas">
+            <value>County Douglas</value>
+          </text>
+          <text id="cook">
+            <value>County Cook</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <form id="CascadingTripleSelect" version="2012072301">
+          <state />
+          <county />
+          <city />
+        </form>
+      </instance>
+      <instance id="choices">
+        <states>
+          <state>
+            <value>washington</value>
+            <counties>
+              <county>
+                <value>king</value>
+                <cities>
+                  <city>
+                    <name>Seattle</name>
+                    <value>sea</value>
+                  </city>
+                  <city>
+                    <name>Redmond</name>
+                    <value>red</value>
+                  </city>
+                </cities>
+              </county>
+              <county>
+                <value>pierce</value>
+                <cities>
+                  <city>
+                    <name>Tacoma</name>
+                    <value>tac</value>
+                  </city>
+                  <city>
+                    <name>Puyallup</name>
+                    <value>puy</value>
+                  </city>
+                </cities>
+              </county>
+              <county>
+                <value>douglas</value>
+                <cities>
+                  <city>
+                    <name>Bridgeport</name>
+                    <value>bri</value>
+                  </city>
+                  <city>
+                    <name>Coulee Dam</name>
+                    <value>cod</value>
+                  </city>
+                  <city>
+                    <name>East Wenatchee</name>
+                    <value>ewe</value>
+                  </city>
+                  <city>
+                    <name>Rock Island</name>
+                    <value>roi</value>
+                  </city>
+                </cities>
+              </county>
+            </counties>
+          </state>
+          <state>
+            <value>illinois</value>
+            <counties>
+              <county>
+                <value>cook</value>
+                <cities>
+                  <city>
+                    <name>Chicago</name>
+                    <value>chi</value>
+                  </city>
+                  <city>
+                    <name>Oak Lawn</name>
+                    <value>oal</value>
+                  </city>
+                  <city>
+                    <name>Oak Forest</name>
+                    <value>oaf</value>
+                  </city>
+                </cities>
+              </county>
+              <county>
+                <value>douglas</value>
+                <cities>
+                  <city>
+                    <name>Arcola</name>
+                    <value>arc</value>
+                  </city>
+                  <city>
+                    <name>Tuscola</name>
+                    <value>tus</value>
+                  </city>
+                  <city>
+                    <name>Villa Grove</name>
+                    <value>vig</value>
+                  </city>
+                </cities>
+              </county>
+            </counties>
+          </state>
+        </states>
+      </instance>
+      <bind nodeset="/form/state" type="select1" />
+      <bind nodeset="/form/county" type="select1" />
+      <bind nodeset="/form/city" type="select1" />
+    </model>
+  </h:head>
+  <h:body>
+    <select1 ref="/form/state">
+      <itemset nodeset="instance('choices')/states/state">
+        <label ref="jr:itext(value)" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+    <select1 ref="/form/county">
+      <itemset nodeset="instance('choices')/states/state[value=/form/state]/counties/county">
+        <label ref="jr:itext(value)" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+    <select1 ref="/form/city">
+      <itemset nodeset="instance('choices')/states/state[value=/form/state]/counties/county[value=/form/county]/cities/city">
+        <label ref="name" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+  </h:body>
+</h:html>

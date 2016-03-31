@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>outputs_in_repeats</h:title>
+    <model>
+      <instance><outputs_in_repeats id="outputs_in_repeats"><rep jr:template="">
+            <name/>
+            <note/>
+            <animal/>
+            <color/>
+            <animal2/>
+          </rep>
+          <meta>
+            <instanceID/>
+          </meta>
+        </outputs_in_repeats>
+      </instance>
+      <bind nodeset="/outputs_in_repeats/rep/name" type="string"/>
+      <bind nodeset="/outputs_in_repeats/rep/note" readonly="true()" type="string"/>
+      <bind nodeset="/outputs_in_repeats/rep/animal" type="select1"/>
+      <bind nodeset="/outputs_in_repeats/rep/color" type="string"/>
+      <bind nodeset="/outputs_in_repeats/rep/animal2" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/outputs_in_repeats/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/outputs_in_repeats/rep">
+      <label>repeated group</label>
+      <repeat nodeset="/outputs_in_repeats/rep">
+        <input ref="/outputs_in_repeats/rep/name">
+          <label>enter name</label>
+        </input>
+        <input ref="/outputs_in_repeats/rep/note">
+          <label>your name is: <output value=" /outputs_in_repeats/rep/name "/></label></input>
+        <select1 ref="/outputs_in_repeats/rep/animal">
+          <label><output value=" /outputs_in_repeats/rep/name "/>, please select an animal</label><item>
+            <label>elephant</label>
+            <value>elephant</value>
+          </item>
+          <item>
+            <label>cow</label>
+            <value>cow</value>
+          </item>
+          <item>
+            <label>rabbit</label>
+            <value>rabbit</value>
+          </item>
+        </select1>
+        <input ref="/outputs_in_repeats/rep/color">
+          <label>what is color of <output value=" /outputs_in_repeats/rep/animal "/></label></input>
+        <select1 appearance="minimal" ref="/outputs_in_repeats/rep/animal2">
+          <label><output value=" /outputs_in_repeats/rep/name "/>, please select another animal</label><item>
+            <label>elephant</label>
+            <value>elephant</value>
+          </item>
+          <item>
+            <label>cow</label>
+            <value>cow</value>
+          </item>
+          <item>
+            <label>rabbit</label>
+            <value>rabbit</value>
+          </item>
+        </select1>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

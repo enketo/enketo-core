@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>multiple default repeats with relevant questions</h:title>
+    <model>
+      <instance>
+        <multiple_repeats_relevant id="repeats_relevant">
+          <something/>
+          <rep jr:template="">
+            <val/>
+            <skipq/>
+          </rep>
+            <rep>
+                <val/>
+                <skipq/>
+            </rep>
+            <rep>
+                <val/>
+                <skipq/>
+            </rep>
+          <meta>
+            <instanceID/>
+          </meta>
+        </multiple_repeats_relevant>
+      </instance>
+      <bind nodeset="/multiple_repeats_relevant/something" relevant="1 + 1 = 2" type="string"/>
+      <bind nodeset="/multiple_repeats_relevant/rep/val" type="string"/>
+      <bind nodeset="/multiple_repeats_relevant/rep/skipq" relevant=" /multiple_repeats_relevant/rep/val  = 'diarrhea'" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/multiple_repeats_relevant/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/multiple_repeats_relevant/something">
+      <label>something with a relevant that will be cached</label>
+    </input>
+    <group ref="/multiple_repeats_relevant/rep">
+      <label></label>
+      <repeat nodeset="/multiple_repeats_relevant/rep">
+        <input ref="/multiple_repeats_relevant/rep/val">
+          <label>enter value</label>
+        </input>
+        <input ref="/multiple_repeats_relevant/rep/skipq">
+          <label>enter number</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

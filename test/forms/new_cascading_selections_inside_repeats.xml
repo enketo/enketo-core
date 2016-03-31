@@ -1,0 +1,280 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>cascading selections inside repeats</h:title>
+    <model>
+      <itext>
+        <translation lang="Dutch">
+          <text id="static_instance-cities-3">
+            <value>De Engelen</value>
+          </text>
+          <text id="static_instance-cities-2">
+            <value>Nieuw Amsterdam</value>
+          </text>
+          <text id="static_instance-cities-1">
+            <value>Denver</value>
+          </text>
+          <text id="static_instance-cities-0">
+            <value>Amsterdam</value>
+          </text>
+          <text id="static_instance-neighborhoods-2">
+            <value>Goeie lucht</value>
+          </text>
+          <text id="static_instance-cities-5">
+            <value>Dronten</value>
+          </text>
+          <text id="static_instance-cities-4">
+            <value>Rotterdam</value>
+          </text>
+          <text id="/new_cascading_selections_inside_repeats/group1/country/usa:label">
+            <value>Verenigde Staten</value>
+          </text>
+          <text id="static_instance-neighborhoods-5">
+            <value>De haven</value>
+          </text>
+          <text id="static_instance-neighborhoods-6">
+            <value>De Dam</value>
+          </text>
+          <text id="static_instance-neighborhoods-7">
+            <value>'t Centrum</value>
+          </text>
+          <text id="static_instance-neighborhoods-0">
+            <value>Van der Bronk Plantage</value>
+          </text>
+          <text id="static_instance-neighborhoods-1">
+            <value>Haarlem</value>
+          </text>
+          <text id="/new_cascading_selections_inside_repeats/group1/country/nl:label">
+            <value>Nederland</value>
+          </text>
+          <text id="static_instance-neighborhoods-3">
+            <value>Westerpark</value>
+          </text>
+          <text id="static_instance-countries-1">
+            <value>Verenigde Staten</value>
+          </text>
+          <text id="static_instance-countries-0">
+            <value>Nederland</value>
+          </text>
+          <text id="static_instance-neighborhoods-8">
+            <value>De haven</value>
+          </text>
+          <text id="static_instance-neighborhoods-4">
+            <value>Park Heuvel</value>
+          </text>
+        </translation>
+        <translation lang="English">
+          <text id="static_instance-cities-3">
+            <value>Los Angeles</value>
+          </text>
+          <text id="static_instance-cities-2">
+            <value>New York City</value>
+          </text>
+          <text id="static_instance-cities-1">
+            <value>Denver</value>
+          </text>
+          <text id="static_instance-cities-0">
+            <value>Amsterdam</value>
+          </text>
+          <text id="static_instance-neighborhoods-2">
+            <value>Bel Air</value>
+          </text>
+          <text id="static_instance-cities-5">
+            <value>Dronten</value>
+          </text>
+          <text id="static_instance-cities-4">
+            <value>Rotterdam</value>
+          </text>
+          <text id="/new_cascading_selections_inside_repeats/group1/country/usa:label">
+            <value>United States</value>
+          </text>
+          <text id="static_instance-neighborhoods-5">
+            <value>Harbor</value>
+          </text>
+          <text id="static_instance-neighborhoods-6">
+            <value>Dam</value>
+          </text>
+          <text id="static_instance-neighborhoods-7">
+            <value>Downtown</value>
+          </text>
+          <text id="static_instance-neighborhoods-0">
+            <value>Bronx</value>
+          </text>
+          <text id="static_instance-neighborhoods-1">
+            <value>Harlem</value>
+          </text>
+          <text id="/new_cascading_selections_inside_repeats/group1/country/nl:label">
+            <value>The Netherlands</value>
+          </text>
+          <text id="static_instance-neighborhoods-3">
+            <value>Westerpark</value>
+          </text>
+          <text id="static_instance-countries-1">
+            <value>United States</value>
+          </text>
+          <text id="static_instance-countries-0">
+            <value>The Netherlands</value>
+          </text>
+          <text id="static_instance-neighborhoods-8">
+            <value>Harbor</value>
+          </text>
+          <text id="static_instance-neighborhoods-4">
+            <value>Park Hill</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <new_cascading_selections_inside_repeats id="cascading_select_inside_repeats">
+          <group1 jr:template="">
+            <country/>
+            <city/>
+            <neighborhood/>
+          </group1>
+          <meta>
+            <instanceID/>
+          </meta>
+        </new_cascading_selections_inside_repeats>
+      </instance>
+      <instance id="cities">
+        <root>
+          <item>
+            <itextId>static_instance-cities-0</itextId>
+            <country>nl</country>
+            <name>ams</name>
+          </item>
+          <item>
+            <itextId>static_instance-cities-1</itextId>
+            <country>usa</country>
+            <name>den</name>
+          </item>
+          <item>
+            <itextId>static_instance-cities-2</itextId>
+            <country>usa</country>
+            <name>nyc</name>
+          </item>
+          <item>
+            <itextId>static_instance-cities-3</itextId>
+            <country>usa</country>
+            <name>la</name>
+          </item>
+          <item>
+            <itextId>static_instance-cities-4</itextId>
+            <country>nl</country>
+            <name>rot</name>
+          </item>
+          <item>
+            <itextId>static_instance-cities-5</itextId>
+            <country>nl</country>
+            <name>dro</name>
+          </item>
+        </root>
+      </instance>
+      <instance id="neighborhoods">
+        <root>
+          <item>
+            <itextId>static_instance-neighborhoods-0</itextId>
+            <city>nyc</city>
+            <country>usa</country>
+            <name>bronx</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-1</itextId>
+            <city>nyc</city>
+            <country>usa</country>
+            <name>harlem</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-2</itextId>
+            <city>la</city>
+            <country>usa</country>
+            <name>belair</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-3</itextId>
+            <city>ams</city>
+            <country>nl</country>
+            <name>wes</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-4</itextId>
+            <city>den</city>
+            <country>usa</country>
+            <name>parkhill</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-5</itextId>
+            <city>rot</city>
+            <country>nl</country>
+            <name>haven</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-6</itextId>
+            <city>ams</city>
+            <country>nl</country>
+            <name>dam</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-7</itextId>
+            <city>rot</city>
+            <country>nl</country>
+            <name>centrum</name>
+          </item>
+          <item>
+            <itextId>static_instance-neighborhoods-8</itextId>
+            <city>dro</city>
+            <country>nl</country>
+            <name>haven</name>
+          </item>
+        </root>
+      </instance>
+      <instance id="countries">
+        <root>
+          <item>
+            <itextId>static_instance-countries-0</itextId>
+            <name>nl</name>
+          </item>
+          <item>
+            <itextId>static_instance-countries-1</itextId>
+            <name>usa</name>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/new_cascading_selections_inside_repeats/group1/country" type="select1"/>
+      <bind nodeset="/new_cascading_selections_inside_repeats/group1/city" type="select1"/>
+      <bind nodeset="/new_cascading_selections_inside_repeats/group1/neighborhood" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/new_cascading_selections_inside_repeats/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/new_cascading_selections_inside_repeats/group1">
+      <label>Cascading Selects with Radio Buttons</label>
+      <repeat nodeset="/new_cascading_selections_inside_repeats/group1">
+        <select1 ref="/new_cascading_selections_inside_repeats/group1/country">
+          <label>Country</label>
+          <item>
+            <label ref="jr:itext('/new_cascading_selections_inside_repeats/group1/country/nl:label')"/>
+            <value>nl</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/new_cascading_selections_inside_repeats/group1/country/usa:label')"/>
+            <value>usa</value>
+          </item>
+        </select1>
+        <select1 ref="/new_cascading_selections_inside_repeats/group1/city">
+          <label>City</label>
+          <itemset nodeset="instance('cities')/root/item[country= /new_cascading_selections_inside_repeats/group1/country ]">
+            <value ref="name"/>
+            <label ref="jr:itext(itextId)"/>
+          </itemset>
+        </select1>
+        <select1 ref="/new_cascading_selections_inside_repeats/group1/neighborhood">
+          <label>Neighborhood</label>
+          <itemset nodeset="instance('neighborhoods')/root/item[country= /new_cascading_selections_inside_repeats/group1/country  and city= /new_cascading_selections_inside_repeats/group1/city ]">
+            <value ref="name"/>
+            <label ref="jr:itext(itextId)"/>
+          </itemset>
+        </select1>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

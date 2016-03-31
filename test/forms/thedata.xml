@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>thedata</h:title>
+    <model>
+      <instance>
+        <thedata id="thedata">
+          <nodeA/>
+          <nodeB>b</nodeB>
+          <repeatGroup jr:template="">
+            <nodeC>cdefault</nodeC>
+          </repeatGroup>
+          <repeatGroup>
+          	<nodeC />
+          </repeatGroup>
+          <repeatGroup>
+          	<nodeC>c2</nodeC>
+          </repeatGroup>
+          <repeatGroup>
+          	<nodeC>c3</nodeC>
+          </repeatGroup>
+          <somenodes>
+          	<A>one</A>
+          	<B>one</B>
+          	<C>one</C>
+          </somenodes>
+          <someweights>
+          	<w1>1</w1>
+          	<w2>3</w2>
+          	<w.3>5</w.3>
+          </someweights>
+          <nodeF/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </thedata>
+      </instance>
+      <bind nodeset="/thedata/nodeA" type="dateTime"/>
+      <bind nodeset="/thedata/nodeB" required="1" type="string"/>
+      <bind nodeset="/thedata/repeatGroup/nodeC" type="string"/>
+      <bind nodeset="/thedata/nodeF" type="string" required="true()"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/thedata/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/thedata/nodeA">
+      <label>mylabel</label>
+    </input>
+    <input ref="/thedata/nodeB">
+      <label>mylabel</label>
+    </input>
+    <group ref="/thedata/repeatGroup">
+      <label></label>
+      <repeat nodeset="/thedata/repeatGroup">
+        <input ref="/thedata/repeatGroup/nodeC">
+          <label>mylabel</label>
+        </input>
+      </repeat>
+    </group>
+    <input appearance="multiline" ref="/thedata/nodeF">
+      <label>mylabel</label>
+    </input>
+  </h:body>
+</h:html>

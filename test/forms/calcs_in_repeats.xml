@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>calcs_in_repeats</h:title>
+    <model>
+      <instance>
+        <calcs_in_repeats id="calcs_in_repeats">
+          <formhub>
+            <uuid/>
+          </formhub>
+          <calc1/>
+          <calc2/>
+          <cond1/>
+          <rep1 jr:template="">
+            <num1/>
+            <calc3/>
+          </rep1>
+          <note1/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </calcs_in_repeats>
+      </instance>
+      <bind calculate="1 + 2" nodeset="/calcs_in_repeats/calc1" relevant=" /calcs_in_repeats/cond1  = 'yes'" type="string"/>
+      <bind calculate="concat('1', '2')" nodeset="/calcs_in_repeats/calc2" type="string"/>
+      <bind nodeset="/calcs_in_repeats/cond1" type="string"/>
+      <bind nodeset="/calcs_in_repeats/rep1/num1" type="int"/>
+      <bind calculate=" /calcs_in_repeats/rep1/num1  * 20" nodeset="/calcs_in_repeats/rep1/calc3" type="string"/>
+      <bind nodeset="/calcs_in_repeats/note1" readonly="true()" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/calcs_in_repeats/meta/instanceID" readonly="true()" type="string"/>
+      <bind calculate="'47eed988240249948e42aadfa6bcdb86'" nodeset="/calcs_in_repeats/formhub/uuid" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/calcs_in_repeats/cond1">
+      <label>enter 'yes' to make calc1 relevant</label>
+    </input>
+    <group ref="/calcs_in_repeats/rep1">
+      <label/>
+      <repeat nodeset="/calcs_in_repeats/rep1">
+        <input ref="/calcs_in_repeats/rep1/num1">
+          <label>enter a number</label>
+        </input>
+      </repeat>
+    </group>
+    <input ref="/calcs_in_repeats/note1">
+      <label>value of num1 inside (first) repeat is: <output value=" /calcs_in_repeats/rep1/num1 "/></label></input>
+  </h:body>
+</h:html>

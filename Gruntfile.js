@@ -1,9 +1,10 @@
+/* jshint node:true */
+/* global Promise */
+
 /**
  * When using enketo-core in your own app, you'd want to replace
  * this build file with one of your own in your project root.
  */
-
-/*jshint node:true*/
 'use strict';
 
 module.exports = function( grunt ) {
@@ -119,8 +120,38 @@ module.exports = function( grunt ) {
         },
     } );
 
+    grunt.registerTask( 'transforms', 'Creating forms.json', function( task ) {
+        var forms = {};
+        var done = this.async();
+        var jsonStringify = require( 'json-pretty' );
+        var formsJsonPath = 'test/mock/forms.json';
+        var xformsPaths = grunt.file.expand( {}, 'test/forms/*.xml' );
+        var transformer = require( 'enketo-transformer' );
+
+        xformsPaths.reduce( function( prevPromise, filePath ) {
+                return prevPromise.then( function() {
+                    var xformStr = grunt.file.read( filePath );
+                    grunt.log.writeln( 'Transforming ' + filePath + '...' );
+                    return transformer.transform( {
+                            xform: xformStr
+                        } )
+                        .then( function( result ) {
+                            forms[ filePath.substring( filePath.lastIndexOf( '/' ) + 1 ) ] = {
+                                html_form: result.form,
+                                xml_model: result.model
+                            };
+                        } );
+                } );
+
+            }, Promise.resolve() )
+            .then( function() {
+                grunt.file.write( formsJsonPath, jsonStringify( forms ) );
+                done();
+            } );
+    } );
+
     grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'karma:headless' ] );
+    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'transforms', 'karma:headless' ] );
     grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'browserify', 'concurrent:develop' ] );

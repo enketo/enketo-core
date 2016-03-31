@@ -1,6 +1,7 @@
+/* global describe, require, it */
 var Form = require( '../../src/js/Form' );
 var $ = require( 'jquery' );
-var mockForms1 = require( '../mock/transforms.mock' );
+var mockForms1 = require( '../mock/forms' );
 var mockForms2 = require( '../mock/form.mock' );
 
 var loadForm = function( filename, editStr ) {

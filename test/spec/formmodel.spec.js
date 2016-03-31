@@ -1,5 +1,6 @@
+/* global describe, require, it */
 var Model = require( '../../src/js/Form-model' );
-var mockForms1 = require( '../mock/transforms.mock' );
+var mockForms1 = require( '../mock/forms' );
 
 var getModel = function( filename ) {
     var model = new Model( mockForms1[ filename ].xml_model );

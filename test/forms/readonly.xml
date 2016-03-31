@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>readonly</h:title>
+    <model>
+      <instance>
+        <readonly id="readonly">
+          <a>martijn</a>
+          <b>is</b>
+          <c>nuts</c>
+          <meta>
+            <instanceID/>
+          </meta>
+        </readonly>
+      </instance>
+      <bind nodeset="/readonly/a" readonly="true()" type="string"/>
+      <bind nodeset="/readonly/b" readonly="true()" type="string"/>
+      <bind nodeset="/readonly/c" readonly="true()" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/readonly/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/readonly/a">
+      <label>who?</label>
+    </input>
+    <input ref="/readonly/b">
+      <label>huh?</label>
+    </input>
+    <input ref="/readonly/c">
+      <label>what?</label>
+    </input>
+  </h:body>
+</h:html>

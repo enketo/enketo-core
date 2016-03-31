@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Relative nodes used in branch logic</h:title>
+    <model>
+      <instance>
+        <relative id="relative">
+          <a/>
+          <b/>
+          <c/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </relative>
+      </instance>
+      <bind nodeset="/relative/a" type="string"/>
+      <bind nodeset="/relative/b" readonly="true()" type="string"/>
+      <bind nodeset="/relative/c" readonly="true()" relevant="string-length( ../a ) &gt; 3" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/relative/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/relative/a">
+      <label>Enter text</label>
+    </input>
+    <input ref="/relative/b">
+      <label>if above entry is more than 3 characters, the branch below will become relevant</label>
+    </input>
+    <input ref="/relative/c">
+      <label>Relevant!</label>
+    </input>
+  </h:body>
+</h:html>

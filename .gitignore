@@ -4,6 +4,7 @@
 /build/js/
 /build/lib/
 /lib/bower-components/
+/test/mock/forms.json
 temp
 .sass-cache
 ._*
