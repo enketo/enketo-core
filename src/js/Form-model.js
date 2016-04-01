@@ -93,7 +93,7 @@ define( function( require, exports, module ) {
                 instanceDoc.appendChild( $.parseXML( instance.xmlStr ).firstChild );
             } );
         } catch ( e ) {
-            console.error( e );
+            console.error( 'parseXML error' );
             this.loadErrors.push( 'Error trying to parse XML ' + id + '. ' + e.message );
         }
 
