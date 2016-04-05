@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+
+##### Fixed
+- Number inputs in Grid Theme not printing
+
 [4.5.13] - 2016-04-01
 ---------------------
 ##### Changed
