@@ -59,8 +59,8 @@ define( function( require, exports, module ) {
                         }
                         break;
                     case 'select':
-                        if ( $node[ 0 ].selectedIndex >= 0 ) {
-                            $node[ 0 ].selectedIndex = -1;
+                        if ( $node[ 0 ].selectedIndex > 0 ) {
+                            $node[ 0 ].selectedIndex = 0;
                             $node.trigger( ev );
                         }
                         break;

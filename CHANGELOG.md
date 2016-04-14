@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Number inputs in Grid Theme not printing
 - Value of distress widget not easily visible when printing.
+- Select element not showing first value in virgin state (e.g. when creating a repeat).
 
 [4.5.13] - 2016-04-01
 ---------------------
