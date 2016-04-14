@@ -2,6 +2,11 @@
      legend {
         border: none;
     }
+    .option-wrapper {      
+    // this flexiness is required for appearance=random
+        @include flex-direction(row);
+        @include flex-wrap(wrap);
+    }
     .option-wrapper > label {
         display: inline-block;
         margin: 0;

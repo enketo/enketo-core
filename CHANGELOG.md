@@ -3,13 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.5.14] - 2016-04-14
 ---------------------
+##### Changed
+- Prepare for ability to change order of radiobutton/checkbox options using CSS 'border' property.
 
 ##### Fixed
 - Number inputs in Grid Theme not printing
 - Value of distress widget not easily visible when printing.
-- Select element not showing first value in virgin state (e.g. when creating a repeat).
+- Select element on mobile not showing first value in virgin state (e.g. when creating a repeat).
 
 [4.5.13] - 2016-04-01
 ---------------------

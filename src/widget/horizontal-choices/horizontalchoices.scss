@@ -21,6 +21,12 @@
 }
 
 .or-appearance-horizontal-compact {
+    // the flexiness is only for appearance=random
+    .option-wrapper {
+        @include display-flex;
+        @include flex-wrap(wrap);
+        @include flex-direction(row);
+    }
     label {
         display: inline-block;
     }

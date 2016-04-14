@@ -228,6 +228,9 @@ legend {
 
 //works in safari, some other webkit browsers
 .option-wrapper {
+    // this flexiness is required for appearance="random"
+    @include display-flex;
+    @include flex-direction(column);
     > label {
         @include font-normal;
         display: block;
