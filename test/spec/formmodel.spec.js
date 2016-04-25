@@ -335,6 +335,40 @@ describe( 'DeprecatedID value getter', function() {
     } );
 } );
 
+
+describe( 'getXPath', function() {
+    var xmlStr = '<root><path><to><node/><repeat><number/></repeat><repeat><number/><number/></repeat></to></path></root>';
+    var model = new Model( xmlStr );
+    model.init();
+
+    it( 'returns /root/path/to/node without parameters', function() {
+        var node = model.xml.querySelector( 'node' );
+        expect( model.getXPath( node ) ).toEqual( '/root/path/to/node' );
+    } );
+
+    it( 'returns same /root/path/to/node if first parameter is null', function() {
+        var node = model.xml.querySelector( 'node' );
+        expect( model.getXPath( node, null ) ).toEqual( '/root/path/to/node' );
+    } );
+
+    it( 'returns path from context first node provided as parameter', function() {
+        var node = model.xml.querySelector( 'node' );
+        expect( model.getXPath( node, 'root' ) ).toEqual( '/path/to/node' );
+    } );
+    it( 'returned path includes no positions if there are no siblings with the same name along the path', function() {
+        var node = model.xml.querySelector( 'node' );
+        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/node' );
+    } );
+    it( 'returned path includes positions when asked', function() {
+        var node = model.xml.querySelectorAll( 'number' )[ 1 ];
+        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number' );
+    } );
+    it( 'returned path includes positions when asked (multiple levels)', function() {
+        var node = model.xml.querySelectorAll( 'number' )[ 2 ];
+        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number[2]' );
+    } );
+} );
+
 describe( 'XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)', function() {
     var i, t = [
             [ '/thedata/nodeB', 'string', null, 0, 'b' ],

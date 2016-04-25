@@ -12,7 +12,6 @@ define( function( require, exports, module ) {
     var FormLogicError = require( './Form-logic-error' );
     require( './plugins' );
     require( './extend' );
-    require( 'jquery-xpath-basic' );
 
     var FormModel, Nodeset, types;
 
@@ -47,6 +46,8 @@ define( function( require, exports, module ) {
 
         this.INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
         this.OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^\)])/;
+        this.OPENROSA_XFORM_NS = 'http://openrosa.org/xforms';
+        this.JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
 
         this.data = data;
         this.options = options;
@@ -81,7 +82,7 @@ define( function( require, exports, module ) {
             id = 'model';
             // the default model
             this.xml = $.parseXML( this.data.modelStr );
-            // add external data to model
+            // add external data to model 
             this.data.external.forEach( function( instance ) {
                 id = 'instance "' + instance.id + '"' || 'instance unknown';
                 instanceDoc = that.xml.getElementById( instance.id );
@@ -103,6 +104,7 @@ define( function( require, exports, module ) {
                 this.$ = $( this.xml );
                 this.hasInstance = !!this.xml.querySelector( 'model > instance' ) || false;
                 this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
+                this.setNamespaces();
 
                 // Check if all secondary instances with an external source have been populated
                 this.$.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
@@ -193,25 +195,18 @@ define( function( require, exports, module ) {
          *  b) If a repeat node is missing from a repeat instance (e.g. the 2nd) in a record, and that repeat instance is not 
          *     in the model, that node will be missing in the result.
          */
-
         $record.find( '*' ).each( function() {
             var path;
-            var $node = $( this );
-            var nodeName = $node.prop( 'nodeName' );
+            var index;
+            var node = this;
             /**
-             * TODO: fails when node has namespace.
              * The most solid way is probably to create an instance of FormModel for the record.
-             * However, since namespaced nodes will likely never pop up inside a repeat, 
-             * and cloning a namespaced repeat woul fail anyway, we just catch and ignore any 
-             * exceptions here.
              */
             try {
-                var $siblings = $node.siblings( nodeName );
-                if ( $siblings.length > 0 && $node.prev( nodeName ).length === 0 ) {
-                    path = $node.getXPath( 'instance' );
-                    $siblings.each( function( index ) {
-                        that.cloneRepeat( path, index, true );
-                    } );
+                index = that.getRepeatIndex( node );
+                if ( index > 0 ) {
+                    path = that.getXPath( node, 'instance' );
+                    that.cloneRepeat( path, ( index - 1 ), true );
                 }
             } catch ( e ) {
                 console.log( 'Ignored error:', e );
@@ -224,13 +219,11 @@ define( function( require, exports, module ) {
          */
         // first find all empty leaf nodes in record
         $record.find( '*' ).filter( function() {
-            var $node = $( this );
-            var val = $node.text();
-            return $node.children().length === 0 && val.trim().length === 0 && $node.children().length === 0;
+            var node = this;
+            var val = node.textContent;
+            return node.childNodes.length === 0 && val.trim().length === 0;
         } ).each( function() {
-            var $node = $( this );
-            // TODO: This probably doesn't support namespaces properly.
-            var path = $node.getXPath( 'instance', true );
+            var path = that.getXPath( this, 'instance', true );
             // find the corresponding node in the model, and set value to empty
             that.node( path, 0 ).setVal( '' );
         } );
@@ -262,6 +255,59 @@ define( function( require, exports, module ) {
     };
 
     /**
+     * Creates an XPath from a node
+     * @param { XMLElement} node XML node
+     * @param  {string=} rootNodeName   if absent the root is #document
+     * @param  {boolean=} includePosition whether or not to include the positions /path/to/repeat[2]/node
+     * @return {string}                 XPath
+     */
+    FormModel.prototype.getXPath = function( node, rootNodeName, includePosition ) {
+        var index;
+        var steps = [];
+        var position = '';
+        var nodeName = node.nodeName;
+        var parent = node.parentNode;
+        var parentName = parent.nodeName;
+
+        rootNodeName = rootNodeName || '#document';
+        includePosition = includePosition || false;
+
+        if ( includePosition ) {
+            index = this.getRepeatIndex( node );
+            if ( index > 0 ) {
+                position = '[' + ( index + 1 ) + ']';
+            }
+        }
+
+        steps.push( nodeName + position );
+
+        while ( parent && parentName !== rootNodeName && parentName !== '#document' ) {
+            if ( includePosition ) {
+                index = this.getRepeatIndex( parent );
+                position = ( index > 0 ) ? '[' + ( index + 1 ) + ']' : '';
+            }
+            steps.push( parentName + position );
+            parent = parent.parentNode;
+            parentName = parent.nodeName;
+        }
+
+        return '/' + steps.reverse().join( '/' );
+    };
+
+    FormModel.prototype.getRepeatIndex = function( node ) {
+        var index = 0;
+        var nodeName = node.nodeName;
+        var prevSibling = node.previousSibling;
+
+        while ( prevSibling && prevSibling.nodeName === nodeName ) {
+            index++;
+            prevSibling = prevSibling.previousSibling;
+        }
+
+        return index;
+    };
+
+    /**
      * Trims values
      * 
      */
@@ -278,7 +324,11 @@ define( function( require, exports, module ) {
      * @return {[type]} [description]
      */
     FormModel.prototype.deprecateId = function() {
-        var instanceIdEls, instanceIdEl, deprecatedIdEls, deprecatedIdEl, metaEl;
+        var instanceIdEls;
+        var instanceIdEl;
+        var deprecatedIdEls;
+        var deprecatedIdEl;
+        var metaEl;
 
         /*
          * When implementing this function using the this.node(selector) to find nodes instead of querySelectorAll,
@@ -330,7 +380,13 @@ define( function( require, exports, module ) {
      * @return {string} instanceID
      */
     FormModel.prototype.getInstanceID = function() {
-        return this.node( '/*/meta/instanceID' ).getVal()[ 0 ];
+        var n = this.node( '/*/__orx:meta/__orx:instanceID' );
+
+        if ( n.get().length === 0 ) {
+            n = this.node( '/*/meta/instanceID' );
+        }
+
+        return n.getVal()[ 0 ];
     };
 
     /**
@@ -339,7 +395,13 @@ define( function( require, exports, module ) {
      * @return {string} deprecatedID
      */
     FormModel.prototype.getDeprecatedID = function() {
-        return this.node( '/*/meta/deprecatedID' ).getVal()[ 0 ] || '';
+        var n = this.node( '/*/__orx:meta/__orx:instanceID' );
+
+        if ( n.get().length === 0 ) {
+            n = this.node( '/*/meta/deprecatedID' );
+        }
+
+        return n.getVal()[ 0 ] || '';
     };
 
     /**
@@ -348,7 +410,13 @@ define( function( require, exports, module ) {
      * @return {string} instanceID
      */
     FormModel.prototype.getInstanceName = function() {
-        return this.node( '/*/meta/instanceName' ).getVal()[ 0 ];
+        var n = this.node( '/*/__orx:meta/__orx:instanceName' );
+
+        if ( n.get().length === 0 ) {
+            n = this.node( '/*/meta/instanceName' );
+        }
+
+        return n.getVal()[ 0 ];
     };
 
     /**
@@ -371,10 +439,12 @@ define( function( require, exports, module ) {
         name = $template.prop( 'nodeName' );
         $insertAfterNode = this.node( selector, index ).get();
 
-        // If templatenodes and insertAfterNode(s) have been identified 
-        // AND the node following insertAfterNode doesn't already exist (! important for nested repeats!)
-        // Strictly speaking using .next() is more efficient, but we use .nextAll() in case the document order has changed due to 
-        // incorrect merging of an existing record.
+        /**
+         * If templatenodes and insertAfterNode(s) have been identified 
+         * AND the node following insertAfterNode doesn't already exist (! important for nested repeats!)
+         * Strictly speaking using .next() is more efficient, but we use .nextAll() in case the document order has changed due to 
+         * incorrect merging of an existing record.
+         */
         if ( $template[ 0 ] && $insertAfterNode.length === 1 && $insertAfterNode.nextAll( name ).length === 0 ) {
             $templateClone = $template.clone().insertAfter( $insertAfterNode );
 
@@ -417,9 +487,8 @@ define( function( require, exports, module ) {
         var that = this;
         // in reverse document order to properly deal with nested repeat templates
         // for now we support both the official namespaced template and the hacked non-namespaced template attributes
-        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@jr:template]', 'nodes', null, null, true ).reverse().forEach( function( templateEl ) {
-            var $template = $( templateEl );
-            that.templates[ $template.getXPath( 'instance' ) ] = $template.removeAttr( 'template' ).removeAttr( 'jr:template' ).remove();
+        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@__jr:template]', 'nodes', null, null, true ).reverse().forEach( function( templateEl ) {
+            that.templates[ that.getXPath( templateEl, 'instance' ) ] = $( templateEl ).removeAttr( 'template' ).removeAttr( 'jr:template' ).remove();
         } );
     };
 
@@ -454,10 +523,10 @@ define( function( require, exports, module ) {
         var that = this;
 
         // for now we support both the official namespaced template and the hacked non-namespaced template attributes
-        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@jr:template]', 'nodes', null, null, true ).forEach( function( templateEl ) {
+        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@__jr:template]', 'nodes', null, null, true ).forEach( function( templateEl ) {
             var nodeName = templateEl.nodeName,
-                selector = $( templateEl ).getXPath( 'instance' ),
-                ancestorTemplateNodes = that.evaluate( 'ancestor::' + nodeName + '[@template] | ancestor::' + nodeName + '[@jr:template]', 'nodes', selector, 0, true );
+                selector = that.getXPath( templateEl, 'instance' ),
+                ancestorTemplateNodes = that.evaluate( 'ancestor::' + nodeName + '[@template] | ancestor::' + nodeName + '[@__jr:template]', 'nodes', selector, 0, true );
             if ( ancestorTemplateNodes.length === 0 && $( templateEl ).siblings( nodeName ).length === 0 ) {
                 $( templateEl ).clone().insertAfter( $( templateEl ) ).find( '*' ).addBack().removeAttr( 'template' ).removeAttr( 'jr:template' );
             }
@@ -529,6 +598,8 @@ define( function( require, exports, module ) {
         var $siblings;
         var $parents;
 
+        // TODO: eliminate jQuery from this function.
+
         $target = this.node( selector, index ).get();
         // add() sorts the resulting collection in document order
         $parents = $target.parents().add( $target );
@@ -540,7 +611,7 @@ define( function( require, exports, module ) {
             $siblings = $node.siblings( nodeName ).not( '[template]' );
             // if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
             if ( nodeName.toLowerCase() !== 'instance' && nodeName.toLowerCase() !== 'model' && $siblings.length > 0 ) {
-                parentSelector = $node.getXPath( 'instance' );
+                parentSelector = this.getXPath( $node.get( 0 ), 'instance' );
                 parentIndex = $siblings.add( $node ).index( $node );
                 // Add position to segments that do not have an XPath predicate. This is where it gets very messy.
                 if ( !new RegExp( parentSelector + '\\[' ).test( expr ) ) {
@@ -551,19 +622,31 @@ define( function( require, exports, module ) {
         return expr;
     };
 
-    FormModel.prototype.nsResolver = {
+    FormModel.prototype.setNamespaces = function() {
+        var namespaces = {
+            __orx: this.OPENROSA_XFORM_NS,
+            __jr: this.JAVAROSA_XFORMS_NS
+        };
+        var namespaceNodes = this.evaluate( '//namespace::*', 'nodes' );
 
-        lookupNamespaceURI: function( prefix ) {
-            var namespaces = {
-                'jr': 'http://openrosa.org/javarosa',
-                'xsd': 'http://www.w3.org/2001/XMLSchema',
-                'orx': 'http://openrosa.org/xforms/', // CommCare uses 'http://openrosa.org/jr/xforms'
-                'cc': 'http://commcarehq.org/xforms'
-            };
-
-            return namespaces[ prefix ] || null;
+        if ( namespaceNodes ) {
+            namespaceNodes.forEach( function( node ) {
+                namespaces[ node.localName ] = node.namespaceURI;
+            } );
         }
+        this.namespaces = namespaces;
     };
+
+    FormModel.prototype.getNsResolver = function() {
+        var namespaces = ( typeof this.namespaces === 'undefined' ) ? {} : this.namespaces;
+
+        return {
+            lookupNamespaceURI: function( prefix ) {
+                return namespaces[ prefix ] || null;
+            }
+        };
+    };
+
 
     /**
      * Shift root to first instance for all absolute paths not starting with /model
@@ -800,7 +883,7 @@ define( function( require, exports, module ) {
         if ( tryNative && typeof doc.evaluate !== 'undefined' && !this.OPENROSA.test( expr ) ) {
             try {
                 // console.log( 'trying the blazing fast native XPath Evaluator for', expr, index );
-                result = doc.evaluate( expr, context, this.nsResolver, resTypeNum, null );
+                result = doc.evaluate( expr, context, this.getNsResolver(), resTypeNum, null );
             } catch ( e ) {
                 console.log( '%cWell native XPath evaluation did not work... No worries, worth a shot, the expression probably ' +
                     'contained unknown OpenRosa functions or errors:', 'color:orange', expr );
@@ -940,16 +1023,16 @@ define( function( require, exports, module ) {
         }
 
         newVal = this.convert( newVal, xmlDataType );
-
         $target = this.get();
 
-        if ( $target.length === 1 && $.trim( newVal.toString() ) !== $.trim( curVal.toString() ) ) { //|| (target.length > 1 && typeof this.index == 'undefined') ){
+        if ( $target.length === 1 && newVal.toString().trim() !== curVal.toString().trim() ) {
             //first change the value so that it can be evaluated in XPath (validated)
             $target.text( newVal );
             //then return validation result
             success = this.validate( expr, xmlDataType );
             updated = this.getClosestRepeat();
             updated.nodes = [ $target.prop( 'nodeName' ) ];
+
             this.model.$.trigger( 'dataupdate', updated );
             //add type="file" attribute for file references
             if ( xmlDataType === 'binary' ) {
@@ -975,7 +1058,6 @@ define( function( require, exports, module ) {
         return Promise.resolve( null );
     };
 
-
     /**
      * Obtains the data value if a JQuery or XPath selector for a single node is provided.
      *
@@ -999,14 +1081,15 @@ define( function( require, exports, module ) {
         var nodeName;
         var path;
         var $family;
+        var that = this;
 
         $node = $node || this.get();
 
         if ( $node.length === 1 ) {
             nodeName = $node.prop( 'nodeName' );
-            path = $node.getXPath( 'instance' );
+            path = this.model.getXPath( $node.get( 0 ), 'instance' );
             $family = this.model.$.find( nodeName ).filter( function() {
-                return path === $( this ).getXPath( 'instance' );
+                return path === that.model.getXPath( this, 'instance' );
             } );
             return ( $family.length === 1 ) ? null : $family.index( $node );
         } else {
@@ -1017,17 +1100,17 @@ define( function( require, exports, module ) {
 
     // if repeats have not been cloned yet, they are not considered a repeat by this function
     Nodeset.prototype.getClosestRepeat = function() {
-        var $node = this.get();
-        var nodeName = $node.prop( 'nodeName' );
+        var el = this.get().get( 0 );
+        var nodeName = el.nodeName;
 
-        while ( $node.siblings( nodeName ).length === 0 && nodeName !== 'instance' ) {
-            $node = $node.parent();
-            nodeName = $node.prop( 'nodeName' );
+        while ( nodeName !== 'instance' && ( ( el.nextSibling && el.nextSibling.nodeName !== nodeName ) || ( el.previousSibling && el.previousSibling.nodeName !== nodeName ) ) ) {
+            el = el.parentNode;
+            nodeName = el.nodeName;
         }
 
         return ( nodeName === 'instance' ) ? {} : {
-            repeatPath: $node.getXPath( 'instance' ),
-            repeatIndex: this.determineIndex( $node )
+            repeatPath: this.model.getXPath( el, 'instance' ),
+            repeatIndex: this.determineIndex( $( el ) )
         };
     };
 
@@ -1052,7 +1135,7 @@ define( function( require, exports, module ) {
                 allRemovedNodeNames.push( $this.prop( 'nodeName' ) );
             } );
 
-            repeatPath = $dataNode.getXPath( 'instance' );
+            repeatPath = this.model.getXPath( $dataNode.get( 0 ), 'instance' );
             repeatIndex = this.determineIndex( $dataNode );
 
             $dataNode.remove();

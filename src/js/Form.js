@@ -734,7 +734,7 @@ define( function( require, exports, module ) {
 
                 try {
                     value = $node.text();
-                    name = $node.getXPath( 'instance' );
+                    name = model.getXPath( $node.get( 0 ), 'instance' );
                     index = model.node( name ).get().index( this );
                     that.input.setVal( name, index, value );
                 } catch ( e ) {
@@ -1062,7 +1062,7 @@ define( function( require, exports, module ) {
 
                     if ( type === 'label' ) {
                         $branchNode.children( 'input, select, textarea' ).prop( 'disabled', false );
-                    } else if ( type === 'fieldset' ) {
+                    } else if ( type === 'fieldset' || type === 'section' ) {
                         $branchNode.prop( 'disabled', false );
                         /*
                          * A temporary workaround for a Chrome bug described in https://github.com/modilabs/enketo/issues/503
@@ -1105,7 +1105,7 @@ define( function( require, exports, module ) {
 
                     if ( type === 'label' ) {
                         $branchNode.children( 'input, select, textarea' ).prop( 'disabled', true );
-                    } else if ( type === 'fieldset' ) {
+                    } else if ( type === 'fieldset' || type === 'section' ) {
                         $branchNode.prop( 'disabled', true );
                     } else {
                         $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', true );
@@ -1318,6 +1318,9 @@ define( function( require, exports, module ) {
          * See https://groups.google.com/forum/?fromgroups=#!topic/opendatakit-developers/oBn7eQNQGTg
          * and http://code.google.com/p/opendatakit/issues/detail?id=706
          *
+         * This is using an aggressive name attribute selector to also find e.g. name="/../orx:meta/orx:instanceID", with
+         * *ANY* namespace prefix.
+         *
          * Once the following is complete this function can and should be removed:
          *
          * 1. ODK Collect starts supporting an instanceID preload item (or automatic handling of meta->instanceID without binding)
@@ -1326,7 +1329,7 @@ define( function( require, exports, module ) {
          *
          */
         FormView.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function() {
-            var $culprit = $form.find( '[name$="/meta/instanceID"][data-calculate]' );
+            var $culprit = $form.find( '[name$="instanceID"][data-calculate]' );
             if ( $culprit.length > 0 ) {
                 $culprit.removeAttr( 'data-calculate' );
             }
@@ -1435,6 +1438,7 @@ define( function( require, exports, module ) {
                 var props;
                 var xmlType;
                 var $preload;
+                var namespaced = true;
                 var that = this;
 
                 //these initialize actual preload items
@@ -1452,6 +1456,7 @@ define( function( require, exports, module ) {
                             curVal: curVal,
                             dataNode: dataNode
                         } );
+
                         dataNode.setVal( newVal, null, props.xmlType );
                     } else {
                         console.log( 'Preload "' + item + '" not supported. May or may not be a big deal.' );
@@ -1459,15 +1464,24 @@ define( function( require, exports, module ) {
                 } );
                 // In addition the presence of certain meta data in the instance may automatically trigger a preload function
                 // even if the binding is not present. Note, that this actually does not deal with HTML elements at all.
-                meta = model.node( '/*/meta/*' );
+                meta = model.node( '/*/__orx:meta/__orx:*' );
+                if ( meta.get().length === 0 ) {
+                    namespaced = false;
+                    meta = model.node( '/*/meta/*' );
+                }
+
                 meta.get().each( function() {
+                    var localName;
                     item = null;
-                    name = $( this ).prop( 'nodeName' );
-                    dataNode = model.node( '/*/meta/' + name );
+                    xmlType = null;
+                    param = null;
+                    name = this.nodeName;
+                    dataNode = ( namespaced ) ? model.node( '/*/__orx:meta/' + name ) : model.node( '/*/meta/' + name );
                     curVal = dataNode.getVal()[ 0 ];
-                    //first check if there isn't a binding with a preloader that already took care of this
-                    if ( $form.find( '#or-preload-items input[name$="/meta/' + name + '"][data-preload]' ).length === 0 ) {
-                        switch ( name ) {
+                    // First check if there isn't a binding with a preloader that already took care of this
+                    if ( $form.find( '#or-preload-items input[name$="' + name + '"][data-preload]' ).length === 0 ) {
+                        localName = ( namespaced ) ? name.substring( name.indexOf( ':' ) + 1 ) : name;
+                        switch ( localName ) {
                             case 'instanceID':
                                 item = 'instance';
                                 xmlType = 'string';

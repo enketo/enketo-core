@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>nested-branches</h:title>
+    <model>
+      <instance>
+        <nested-branches id="nested-branches">
+          <a/>
+          <b>1</b>
+          <group>
+            <c/>
+          </group>
+          <meta>
+            <instanceID/>
+          </meta>
+        </nested-branches>
+      </instance>
+      <bind nodeset="/nested-branches/a" type="string"/>
+      <bind nodeset="/nested-branches/b" type="string"/>
+      <bind nodeset="/nested-branches/group" relevant=" /nested-branches/a  &gt; 0"/>
+      <bind nodeset="/nested-branches/group/c" relevant=" /nested-branches/b  &gt; 0" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/nested-branches/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/nested-branches/a">
+      <label>text</label>
+    </input>
+    <input ref="/nested-branches/b">
+      <label>text</label>
+    </input>
+    <group ref="/nested-branches/group">
+      <input ref="/nested-branches/group/c">
+        <label>number</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>

@@ -266,68 +266,6 @@ module.exports = {
         '</fieldset>' +
         '</form>',
 
-    dataStr6: '<model>' +
-        '<instance>' +
-        '<data id="TestGroupBranch" version="3">' +
-        '<nodeA/>' +
-        '<group>' +
-        '<nodeB/>' +
-        '</group>' +
-        '<nodeC/>' +
-        '</data>' +
-        '</instance>' +
-        '</model>',
-
-    formStr6: '<form class="or" id="TestGroupBranch">' +
-        '<div id="form-languages" style="display:none;" data-default-lang="">' +
-        '<a href="#" lang="en">' +
-        '<span>English</span>' +
-        '</a>' +
-        '</div>' +
-        '<fieldset class="">' +
-        '<label class="question">' +
-        '<span lang="en">Enter yes to reveal group</span>' +
-        '<input name="/data/nodeA" type="text" data-type-xml="string"/>' +
-        '</label>' +
-        '</fieldset>' +
-        '<fieldset class="or-group or-branch pre-init" name="/data/group" data-relevant="/data/nodeA = &quot;yes&quot;">' +
-        '<h4><span lang="en">Group with relevant binding</span></h4>' +
-        '<label class="question">' +
-        '<span lang="en">Enter 2 to reveal select1</span>' +
-        '<input name="/data/group/nodeB" type="number" data-type-xml="int" data-required="true()"/>' +
-        '</label>' +
-        '</fieldset>' +
-        '<label class="question or-branch pre-init or-appearance-minimal">' +
-        '<span lang="en">Select 1 option</span>' +
-        '<select name="/data/nodeC" data-relevant="/data/group/nodeB = 2">' +
-        '<option value="">...</option>' +
-        '<option value="r">option 1</option>' +
-        '<option value="g">option 2</option>' +
-        '<option value="b">option 3</option>' +
-        '</select>' +
-        '</label>' +
-        '</form>',
-
-    dataStr7: '<model>' +
-        '<instance>' +
-        '<data>' +
-        '<nodeA/>' +
-        '<nodeB>1</nodeB>' +
-        '<group>' +
-        '<nodeC/>' +
-        '</group>' +
-        '</data>' +
-        '</instance>' +
-        '</model>',
-
-    formStr7: '<form class="or">' +
-        '<fieldset class="or-group or-branch pre-init" name="/data/group" data-relevant="/data/nodeA > 0">' +
-        '<label class="question or-branch pre-init">' +
-        '<span>Enter 2 to reveal select1</span>' +
-        '<input name="/data/group/nodeC" type="number" data-type-xml="int" data-relevant="/data/nodeB > 0">' +
-        '</label>' +
-        '</fieldset>' +
-        '</form>',
 
     dataEditStr_nested_repeats: '<nested_repeats id="nested_repeats">' +
         '<formhub>' +

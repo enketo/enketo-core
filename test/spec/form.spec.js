@@ -70,6 +70,12 @@ describe( 'Preload and MetaData functionality', function() {
         expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
+    it( 'ignores a calculate binding on [ROOT]/orx:meta/orx:instanceID', function() {
+        form = loadForm( 'meta-namespace.xml' );
+        form.init();
+        expect( form.getModel().node( '/data/orx:meta/orx:instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+    } );
+
     it( 'generates an instanceID on meta/instanceID WITHOUT preload binding', function() {
         form = new Form( mockForms2.formStr2, {
             modelStr: mockForms2.dataStr2
@@ -308,18 +314,14 @@ describe( 'calculations', function() {
 describe( 'branching functionality', function() {
 
     it( 'hides irrelevant branches upon initialization', function() {
-        var form = new Form( mockForms2.formStr6, {
-            modelStr: mockForms2.dataStr6
-        } );
+        var form = loadForm( 'group_branch.xml' );
         form.init();
         expect( form.getView().$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
         expect( form.getView().$.find( '[name="/data/nodeC"]' ).parents( '.disabled' ).length ).toEqual( 1 );
     } );
 
     it( 'reveals a group branch when the relevant condition is met', function() {
-        var form = new Form( mockForms2.formStr6, {
-            modelStr: mockForms2.dataStr6
-        } );
+        var form = loadForm( 'group_branch.xml' );
         form.init();
         //first check incorrect value that does not meet relevant condition
         form.getView().$.find( '[name="/data/nodeA"]' ).val( 'no' ).trigger( 'change' );
@@ -330,9 +332,7 @@ describe( 'branching functionality', function() {
     } );
 
     it( 'reveals a question when the relevant condition is met', function() {
-        var form = new Form( mockForms2.formStr6, {
-            modelStr: mockForms2.dataStr6
-        } );
+        var form = loadForm( 'group_branch.xml' );
         form.init();
         //first check incorrect value that does not meet relevant condition
         form.getView().$.find( '[name="/data/group/nodeB"]' ).val( 3 ).trigger( 'change' );
@@ -417,17 +417,16 @@ describe( 'branching functionality', function() {
     } );
 
     describe( 'in nested branches ', function() {
-        var form = new Form( mockForms2.formStr7, {
-            modelStr: mockForms2.dataStr7
-        } );
+        var form = loadForm( 'nested-branches.xml' );
+
         form.init();
-        var $nestedBranch = form.getView().$.find( '[name="/data/group/nodeC"]' ).closest( '.question' );
+        var $nestedBranch = form.getView().$.find( '[name="/nested-branches/group/c"]' ).closest( '.question' );
 
         it( 'works correctly when an ancestor branch gets enabled', function() {
             expect( $nestedBranch.closest( '.disabled' ).length ).toEqual( 1 );
             // enable parent branch
             //expect( form.getModel().getStr() ).toEqual( 'wut' );
-            form.getModel().node( '/data/nodeA', 0 ).setVal( '1' );
+            form.getModel().node( '/nested-branches/a', 0 ).setVal( '1' );
             expect( $nestedBranch.closest( '.disabled' ).length ).toEqual( 0 );
             // check if nested branch has been initialized and is enabled
             expect( $nestedBranch.hasClass( 'pre-init' ) ).toBe( false );
@@ -444,9 +443,7 @@ describe( 'Required field validation', function() {
 
     beforeEach( function() {
         jQuery.fx.off = true; //turn jQuery animations off
-        form = new Form( mockForms2.formStr6, {
-            modelStr: mockForms2.dataStr6
-        } );
+        form = loadForm( 'group_branch.xml' );
         form.init();
         $numberInput = form.getView().$.find( '[name="/data/group/nodeB"]' );
         $numberLabel = form.getView().input.getWrapNodes( $numberInput );
@@ -477,7 +474,7 @@ describe( 'Required field validation', function() {
     } );
 
     it( 'invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', function() {
-        form = loadForm( 'thedata.xml' ); //new Form(mockForms2.formStr1, mockForms2.dataStr1);
+        form = loadForm( 'thedata.xml' );
         form.init();
         var $textarea = form.getView().$.find( '[name="/thedata/nodeF"]' );
         $textarea.val( '\n' ).trigger( 'change' ).trigger( 'validate' );

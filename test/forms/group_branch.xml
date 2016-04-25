@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" >
+  <h:head>
+    <h:title>Test: Group Branching NEW</h:title>
+    <model>
+      <instance>
+        <data id="TestGroupBranch New" version="4">
+          <nodeA/>
+          <group>
+            <nodeB/>
+          </group>
+          <nodeC/>
+          <meta>
+              <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="eng">
+           <text id="/data/nodeA:label">
+            <value>Enter 'yes' to reveal group</value>
+          </text>
+          <text id="/data/group:label">
+            <value>Group with relevant binding</value>
+          </text>
+          <text id="/data/group/nodeB:label">
+            <value>Enter '2' to reveal select1</value>
+          </text>
+          <text id="/data/nodeC:label">
+            <value>Select 1 option</value>
+          </text>
+          <text id="/data/nodeC:option0">
+            <value>option 1</value>
+          </text>
+          <text id="/data/nodeC:option1">
+            <value>option 2</value>
+          </text>
+          <text id="/data/nodeC:option2">
+            <value>option 3</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/nodeA" type="string"/> 
+      <bind nodeset="/data/group" relevant="/data/nodeA = 'yes'" />  
+      <bind nodeset="/data/group/nodeB" type="int" required="true()" />
+      <bind nodeset="/data/nodeC" relevant="/data/group/nodeB = 2" /> 
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <input ref="/data/nodeA">
+        <label ref="jr:itext('/data/nodeA:label')" />
+      </input>
+    </group>
+    <group ref="/data/group">
+      <label ref="jr:itext('/data/group:label')" />
+      <input ref="/data/group/nodeB">
+        <label ref="jr:itext('/data/group/nodeB:label')"/>
+      </input>
+    </group>
+    <select1 ref="/data/nodeC" appearance="minimal">
+      <label ref="jr:itext('/data/nodeC:label')"/>
+      <item>
+          <label>...</label>
+          <value></value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/nodeC:option0')"/>
+        <value>r</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/nodeC:option1')"/>
+        <value>g</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/nodeC:option2')"/>
+        <value>b</value>
+      </item>
+    </select1>
+  </h:body>
+</h:html>

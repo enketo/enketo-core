@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>comment</h:title>
+    <model>
+      <instance>
+        <data id="meta-namespace">
+          <a/>
+          <b/>
+          <orx:meta>
+              <orx:instanceID/>
+              <orx:timeStart/>
+              <orx:timeEnd/>
+              <orx:deviceID/>
+              <orx:userID/>
+          </orx:meta>
+        </data>
+      </instance>
+      <bind nodeset="/data/a" type="string"/>
+      <bind nodeset="/data/b" type="int"/>
+      <bind calculate="concat('uuid:', 'IGNORE')" nodeset="/data/orx:meta/orx:instanceID" readonly="true()" type="string"/>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/data/orx:meta/orx:timeStart" type="dateTime"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/data/orx:meta/orx:timeEnd" type="dateTime"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/data/orx:meta/orx:deviceID" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/a">
+      <label>Enter text</label>
+      <hint>required unless comment</hint>
+    </input>
+    <input ref="/data/b">
+      <label>Enter a number</label>
+      <hint>&gt; 5 unless comment</hint>
+    </input>
+  </h:body>
+</h:html>
