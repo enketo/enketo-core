@@ -44,6 +44,7 @@ $( '#validate-form' ).on( 'click', function() {
                 alert( 'Form contains errors. Please see fields marked in red.' );
             } else {
                 alert( 'Form is valid! (see XML record and media files in the console)' );
+                $( 'form.or' ).trigger( 'beforesave' );
                 console.log( 'record:', form.getDataStr() );
                 console.log( 'media files:', fileManager.getCurrentFiles() );
             }
