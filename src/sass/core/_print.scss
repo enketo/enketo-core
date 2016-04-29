@@ -266,6 +266,10 @@ label, legend, .trigger, .note {
     }
 }
 
+.or-appearance-comment.hide {
+    display: block !important;
+}
+
 // pages mode
 .pages.or {
     [role="page"] {

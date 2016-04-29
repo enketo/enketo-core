@@ -124,6 +124,11 @@ html:not(.touch) .question .geopoint.widget {
     }
 }
 
+// comment widget
+.or-comment-widget .question {
+    border: $grid-border;
+}
+
 // select picker
 .bootstrap-select {
     .dropdown-toggle {

@@ -5,14 +5,22 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
 }
 define( function( require, exports, module ) {
     'use strict';
+    var options;
+    var $form;
+    var init;
+    var enable;
+    var disable;
+    var destroy;
+    var _getElements;
+    var _instantiate;
+    var _setLangChangeHandler;
+    var _setOptionChangeHandler;
     var config = require( 'text!enketo-config' );
     var support = require( './support' );
     var $ = require( 'jquery' );
     var widgets = require( 'widgets' ).filter( function( widget ) {
         return widget.selector;
     } );
-    var $form, init, enable, disable, destroy,
-        _getElements, _instantiate, _setLangChangeHandler, _setOptionChangeHandler;
 
     if ( typeof config === 'string' ) {
         config = JSON.parse( config );
@@ -22,11 +30,13 @@ define( function( require, exports, module ) {
      * Initializes widgets
      *
      * @param  {jQuery} $group The element inside which the widgets have to be initialized.
+     * @param { *} options Options (e.g. helper function of Form.js passed)
      */
 
-    init = function( $group ) {
+    init = function( $group, opts ) {
         $form = $( 'form.or' );
         $group = $group || $form;
+        options = options || opts;
 
         widgets.forEach( function( widget ) {
             _instantiate( widget, $group );
@@ -119,6 +129,13 @@ define( function( require, exports, module ) {
 
         if ( !widget.name ) {
             return console.error( 'widget doesn\'t have a name' );
+        }
+
+        if ( widget.helpersRequired && widget.helpersRequired.length > 0 ) {
+            widget.options.helpers = {};
+            widget.helpersRequired.forEach( function( helper ) {
+                widget.options.helpers[ helper ] = options[ helper ];
+            } );
         }
 
         $elements = _getElements( $group, widget.selector );

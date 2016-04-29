@@ -171,6 +171,9 @@ h4 + .or-repeat {
     .or-constraint-msg, .or-required-msg {
         order: 5;
     }
+    .btn-comment {
+        order: 6;
+    }
 }
 
 .or[dir="rtl"] .question {

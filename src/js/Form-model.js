@@ -1017,7 +1017,7 @@ define( function( require, exports, module ) {
         curVal = this.getVal()[ 0 ];
 
         if ( typeof newVals !== 'undefined' && newVals !== null ) {
-            newVal = ( $.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
+            newVal = ( Array.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
         } else {
             newVal = '';
         }
@@ -1026,9 +1026,9 @@ define( function( require, exports, module ) {
         $target = this.get();
 
         if ( $target.length === 1 && newVal.toString().trim() !== curVal.toString().trim() ) {
-            //first change the value so that it can be evaluated in XPath (validated)
-            $target.text( newVal );
-            //then return validation result
+            // first change the value so that it can be evaluated in XPath (validated)
+            $target.text( newVal.toString().trim() );
+            // then return validation result
             success = this.validate( expr, xmlDataType );
             updated = this.getClosestRepeat();
             updated.nodes = [ $target.prop( 'nodeName' ) ];

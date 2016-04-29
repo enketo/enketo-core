@@ -255,7 +255,10 @@ define( function( require, exports, module ) {
                 this.setAllVals();
 
                 // after setAllVals(), after repeat.init()
-                widgets.init();
+                widgets.init( null, {
+                    input: this.input,
+                    pathToAbsolute: this.pathToAbsolute
+                } );
 
                 // after widgets.init(), and repeat.init()
                 this.branchUpdate();
@@ -522,10 +525,10 @@ define( function( require, exports, module ) {
             }
         };
 
-        //this may not be the most efficient. Could also be implemented like model.Nodeset;
-        //also use for fieldset nodes (to evaluate branch logic) and also used to get and set form data of the app settings
+        // This may not be the most efficient. Could also be implemented like model.Nodeset.
+        // Also used for fieldset nodes (to evaluate branch logic).
         FormView.prototype.input = {
-            //multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
+            // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
             getWrapNodes: function( $inputNodes ) {
                 var type = this.getInputType( $inputNodes.eq( 0 ) );
                 return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question, .note' );
@@ -664,7 +667,7 @@ define( function( require, exports, module ) {
                     } );
                     return values;
                 }
-                return ( !$node.val() ) ? '' : ( $.isArray( $node.val() ) ) ? $node.val().join( ' ' ).trim() : $node.val().trim();
+                return ( !$node.val() ) ? '' : $node.val();
             },
             setVal: function( name, index, value ) {
                 var $inputNodes;
@@ -2094,6 +2097,19 @@ define( function( require, exports, module ) {
          */
         FormView.prototype.addPageBreaks = function() {
 
+        };
+
+        FormView.prototype.pathToAbsolute = function( targetPath, contextPath ) {
+            var target;
+
+            if ( targetPath.indexOf( '/' ) === 0 ) {
+                return targetPath;
+            }
+
+            // index is irrelevant (no positions in returned path)
+            target = model.evaluate( targetPath, 'node', contextPath, 0, true );
+
+            return model.getXPath( target, 'instance', false );
         };
 
         /**

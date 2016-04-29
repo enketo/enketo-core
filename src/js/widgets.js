@@ -22,6 +22,7 @@ define( function( require, exports, module ) {
         require( '../widget/horizontal-choices/horizontalchoices' ),
         require( '../widget/analog-scale/analog-scalepicker' ),
         require( '../widget/big-image/image-viewer' ),
+        require( '../widget/comment/commentwidget' ),
     ];
 
     module.exports = widgets;

@@ -1,0 +1,78 @@
+$padding: 20px;
+
+.or-comment-widget {    
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -5px;
+    z-index: 1001;
+    width: calc(100% + 10px);
+    &__content {
+        position:relative;
+        border: 1px solid $gray;
+        background: white;
+        padding: $padding;
+        padding-bottom: 70px;
+        &__btn-close {
+            position: absolute;
+            right: $padding;
+            bottom: $padding;
+        }
+    }
+    &__overlay {
+        position: fixed;
+        background: rgba(0, 0, 0, 0.4);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    &__question {
+        @include font-normal;
+        font-style: italic;
+        display: table-row;
+        &__icon {
+            width: 25px;
+            color: $brand-primary-color;
+            display: table-cell;
+        }
+        &__text {
+            display: table-cell;
+        }
+        &__text + &__text{
+            padding-top: 10px;
+        }
+    }
+}
+
+.btn-comment {  
+    width: 15px;
+    height: 19px;
+    margin-top: 10px;
+    position: relative;
+    left: calc(100% - 25px);
+    .icon {
+        @extend .icon-sticky-note;
+    }
+    &.empty {
+        .icon {
+            @extend .icon-sticky-note-o;
+        }
+    }
+}
+
+.or[dir="rtl"] {
+    .btn-comment {
+        left: auto;
+        right: calc(100% - 25px);
+    }
+    .or-comment-widget {
+        &__content {
+            &__btn-close{
+                right: auto;
+                left: $padding;
+            }
+        }
+    }
+}
+
