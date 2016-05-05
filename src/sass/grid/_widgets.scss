@@ -127,6 +127,9 @@ html:not(.touch) .question .geopoint.widget {
 // comment widget
 .or-comment-widget .question {
     border: $grid-border;
+    input, textarea {
+        order: 4;
+    }
 }
 
 // select picker

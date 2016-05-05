@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.7.2] - 2016-05-06
+---------------------
+##### Fixed
+- Comment widget vertical ordering incorrect in Grid theme.
+
 [4.7.1] - 2016-05-05
 ---------------------
 ##### Fixed
