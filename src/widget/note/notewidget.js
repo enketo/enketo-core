@@ -51,10 +51,6 @@ define( function( require, exports, module ) {
     Notewidget.prototype._init = function() {
         var $el = $( this.element );
         $el.find( '[readonly]' ).addClass( 'ignore' );
-
-        if ( $el.is( '.note' ) && !$el.next().is( '.note' ) ) {
-            $el.addClass( 'last-of-class' );
-        }
     };
 
     Notewidget.prototype.destroy = function( element ) {};

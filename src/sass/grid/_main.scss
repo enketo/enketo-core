@@ -78,17 +78,6 @@ h4 + .or-repeat {
     margin-top: -1px;
 }
 
-// undo default for visually merged successive notes
-.note:not(.disabled) + .note {
-    margin-top: 0;
-    border-top: none;
-    border-bottom: $grid-border;
-    &.last-of-class {
-        border-bottom: $grid-border;
-        margin-bottom: 0;
-    }
-}
-
 // griddable elements - ie. wrappers around questions and notes
 .question, .note {
     @include flex(1, 1);

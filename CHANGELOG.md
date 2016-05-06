@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.7.3] - 2016-05-07
 ---------------------
+##### Changed
+- Styling of notes (readonly questions).
+
 ##### Fixed
 - String literals not excluded from /model/instance[1] injection.
 
