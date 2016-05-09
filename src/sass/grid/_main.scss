@@ -7,7 +7,7 @@ body, .main, .paper, .or, .or-group, .or-group-data, .or-repeat, .question {
 }
 
 body {
-    line-height: 20px;
+    line-height: 1.5;
 }
 
 .paper {
@@ -30,7 +30,7 @@ h4 + .or-repeat {
 }
 
 // trick to hide group border on screen view
-.or h4 {
+.or-group > h4 {
     background: #ffffff;
     margin: 0 -1px 0 0;
     padding: 12px $q-pad-right $q-pad-right $q-pad-left;
@@ -236,22 +236,21 @@ legend {
     margin-bottom: 8px;
 }
 
-.or {
-    h3 {
-        width: calc(100% + 1px);
-        border-right: $grid-border;
-        border-right-color: transparent;
-        padding-top: 0;
-        text-align: inherit;
-    }
-    h4 {
-        width: calc(100% + 1px);
-        border-right: $grid-border;
-        border-right-color: transparent;
-        border-bottom: 5px solid black;
-        padding-bottom: 5px;
-        margin-bottom: 0;
-    }
+#form-title {
+    width: calc(100% + 1px);
+    border-right: $grid-border;
+    border-right-color: transparent;
+    padding-top: 0;
+    text-align: inherit;
+}
+
+.or-group > h4, .or-repeat > h4 {
+    width: calc(100% + 1px);
+    border-right: $grid-border;
+    border-right-color: transparent;
+    border-bottom: 5px solid black;
+    padding-bottom: 5px;
+    margin-bottom: 0;
 }
 
 // the awesome grid

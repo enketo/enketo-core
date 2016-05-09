@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.7.4] - 2016-05-09
+---------------------
+##### Fixed
+- Styling issues with labels containing # markup, especially in Grid theme.
+
 [4.7.3] - 2016-05-07
 ---------------------
 ##### Changed

@@ -29,6 +29,16 @@ $media-margin: 10px;
     display: none;
 }
 
+.or {
+    .question-label, .or-hint {
+        h1, h2, h3, h4, h5, h6 {
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
 /** hints **/
 .or-hint.active {
     @include font-normal;
@@ -87,30 +97,30 @@ $media-margin: 10px;
     margin: 1.5em 0 0.4em 0;
     .or-group {
         margin: 1.5em 0 0.5em 0;
-        h4 .active {
+        > h4 .active {
             &::before {
                 content: "\00BB  ";
             }
             font-size: 80%;
         }
         .or-group {
-            h4 .active::before {
+            > h4 .active::before {
                 content: "\00BB  \00BB  ";
             }
             .or-group {
-                h4 .active::before {
+                > h4 .active::before {
                     content: "\00BB  \00BB  \00BB  ";
                 }
                 .or-group {
-                    h4 .active::before {
+                    > h4 .active::before {
                         content: "\00BB  \00BB  \00BB  \00BB";
                     }
                     .or-group {
-                        h4 .active::before {
+                        > h4 .active::before {
                             content: "\00BB  \00BB  \00BB  \00BB  \00BB";
                         }
                         .or-group {
-                            h4 .active::before {
+                            > h4 .active::before {
                                 content: "\00BB  \00BB  \00BB  \00BB  \00BB  \00BB";
                             }
                         }
