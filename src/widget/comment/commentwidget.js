@@ -31,13 +31,15 @@ define( function( require, exports, module ) {
 
     Comment.prototype._init = function() {
         this.$linkedQuestion = this._getLinkedQuestion( this.element );
+        this.$commentQuestion = $( this.element ).closest( '.question' );
 
         if ( this.$linkedQuestion.length === 1 ) {
-            $( this.element ).closest( '.question' ).addClass( 'hide' );
+            this.$commentQuestion.addClass( 'hide' );
             this.$commentButton = $( '<button class="btn-icon-only btn-comment" type="button"><i class="icon icon-sticky-note-o"> </i></button>' );
             this._setCommentButtonState( this.element.value );
             this.$linkedQuestion.append( this.$commentButton );
             this._setCommentButtonHandler();
+            this._setValidationHandler();
         }
     };
 
@@ -81,13 +83,15 @@ define( function( require, exports, module ) {
     Comment.prototype._showCommentModal = function( linkedQuestionLabel, linkedQuestionValue, linkedQuestionErrorMsg ) {
         var $widget;
         var $content;
+        var $input;
         var $overlay;
         var that = this;
         var $comment = $( this.element ).closest( '.question' ).clone( false );
         var closeText = t( 'alert.default.button' ) || 'Close';
-        var $closeButton = $( '<button class="btn btn-primary or-comment-widget__content__btn-close">' + closeText + '</button>' );
+        var $closeButtons = $( '<button class="btn btn-primary or-comment-widget__content__btn-close">' + closeText + '</button>' +
+            '<button class="btn btn-icon-only or-comment-widget__content__btn-close-x">&times;</button>' );
 
-        $comment
+        $input = $comment
             .removeClass( 'or-appearance-comment hide' )
             .find( 'input, textarea' )
             .addClass( 'ignore' )
@@ -101,7 +105,7 @@ define( function( require, exports, module ) {
             '<div class="or-comment-widget__question"><span class="or-comment-widget__question__icon">A</span>' +
             '<span class="or-comment-widget__question__text">' + linkedQuestionValue + '</span></div>' +
             '<hr /></div>'
-        ).append( $comment ).append( $closeButton );
+        ).append( $comment ).append( $closeButtons );
 
         $widget = $(
             '<section class="widget or-comment-widget"></section>'
@@ -110,14 +114,14 @@ define( function( require, exports, module ) {
         this.$linkedQuestion.find( '.or-comment-widget' ).remove();
         this.$linkedQuestion.prepend( $widget );
 
-        $widget.find( 'input, textarea' ).on( 'change', function() {
+        $input.on( 'change', function() {
             var value = this.value;
             $( that.element ).val( value ).trigger( 'change' );
             that._setCommentButtonState( value );
             return false;
         } );
 
-        $closeButton.add( $overlay ).on( 'click', function() {
+        $closeButtons.add( $overlay ).on( 'click', function() {
             that._hideCommentModal( that.$linkedQuestion );
         } );
     };

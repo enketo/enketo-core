@@ -12,11 +12,25 @@ $padding: 20px;
         border: 1px solid $gray;
         background: white;
         padding: $padding;
-        padding-bottom: 70px;
+        padding-bottom: 100px;
         &__btn-close {
             position: absolute;
             right: $padding;
             bottom: $padding;
+        }
+         &__btn-close-x{
+            top: 15px;
+            right: 3px;
+            position: absolute;
+            content: "\00D7";
+            font-size: 26px;
+            font-weight: normal;
+            line-height: 31px;
+            height: 30px;
+            width: 30px;
+            text-align: center;
+            color: #bbb;
+            background: transparent;
         }
     }
     &__overlay {
@@ -38,6 +52,7 @@ $padding: 20px;
         }
         &__text {
             display: table-cell;
+            padding-right:35px;
         }
         &__text + &__text{
             padding-top: 10px;
@@ -59,6 +74,11 @@ $padding: 20px;
             @extend .icon-sticky-note-o;
         }
     }
+    &.invalid {
+        @include transition-fast;
+        color: $state-danger-text;
+        background: red;
+    }
 }
 
 .or[dir="rtl"] {
@@ -72,7 +92,16 @@ $padding: 20px;
                 right: auto;
                 left: $padding;
             }
+            &__btn-close-x{
+                right: auto;
+                left: 3px;
+            }
+        }
+        &__question {
+            &__text{
+                padding-right:auto;
+                padding-left:35px;
+            }
         }
     }
 }
-
