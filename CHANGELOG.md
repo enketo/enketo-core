@@ -3,6 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.7.5] - 2016-05-13
+---------------------
+##### Changed
+- Added close x button to comment widget
+
+##### Fixed
+- If comment is required/invalid there is no error indication.
+
 [4.7.4] - 2016-05-09
 ---------------------
 ##### Fixed

@@ -1998,7 +1998,11 @@ define( function( require, exports, module ) {
          * @return {Promise} wrapping {boolean} whether the form contains any errors
          */
         FormView.prototype.validateAll = function() {
-            return this.validateContent( $form );
+            return this.validateContent( $form )
+                .then( function( valid ) {
+                    $form.trigger( 'validated.enketo' );
+                    return valid;
+                } );
         };
 
         /**

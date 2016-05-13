@@ -58,10 +58,15 @@ define( function( require, exports, module ) {
             .eq( 0 );
     };
 
-    Comment.prototype._setCommentButtonState = function( value ) {
+    Comment.prototype._commentHasError = function() {
+        return this.$commentQuestion.hasClass( 'invalid-required' ) || this.$commentQuestion.hasClass( 'invalid-constraint' );
+    };
+
+    Comment.prototype._setCommentButtonState = function( value, error ) {
         value = ( typeof value === 'string' ) ? value.trim() : value;
         this.$commentButton.toggleClass( 'empty', !value );
-    }
+        this.$commentButton.toggleClass( 'invalid', !!error );
+    };
 
     Comment.prototype._setCommentButtonHandler = function() {
         var that = this;
@@ -73,6 +78,15 @@ define( function( require, exports, module ) {
                 var label = that._getCurrentLabel();
                 that._showCommentModal( label, value );
             }
+        } );
+    };
+
+    Comment.prototype._setValidationHandler = function() {
+        var that = this;
+        $( 'form.or' ).on( 'validated.enketo', function( evt ) {
+            var error = that._commentHasError();
+            var value = that.element.value;
+            that._setCommentButtonState( value, error );
         } );
     };
 
@@ -111,13 +125,16 @@ define( function( require, exports, module ) {
             '<section class="widget or-comment-widget"></section>'
         ).append( $overlay ).append( $content );
 
-        this.$linkedQuestion.find( '.or-comment-widget' ).remove();
-        this.$linkedQuestion.prepend( $widget );
+        this.$linkedQuestion
+            .find( '.or-comment-widget' ).remove().end()
+            .prepend( $widget );
 
         $input.on( 'change', function() {
+            var error;
             var value = this.value;
             $( that.element ).val( value ).trigger( 'change' );
-            that._setCommentButtonState( value );
+            error = that._commentHasError();
+            that._setCommentButtonState( value, error );
             return false;
         } );
 
