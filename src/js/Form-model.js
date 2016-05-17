@@ -627,7 +627,11 @@ define( function( require, exports, module ) {
             __orx: this.OPENROSA_XFORM_NS,
             __jr: this.JAVAROSA_XFORMS_NS
         };
-        var namespaceNodes = this.evaluate( '//namespace::*', 'nodes' );
+        /**
+         * This function is extremely slow with an XForms model that contains lots of nodes (e.g. with secondary instances). 
+         * For now it has therefore been restricted to only look at top-level nodes in the primary instance.
+         */
+        var namespaceNodes = this.evaluate( '/model/instance[1]/node()/namespace::*', 'nodes' );
 
         if ( namespaceNodes ) {
             namespaceNodes.forEach( function( node ) {

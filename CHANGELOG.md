@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.7.8] - 2016-05-17
+---------------------
+##### Fixed
+- Extreme form loading performance degradation if XForm model is very large.
+
 [4.7.5] - 2016-05-13
 ---------------------
 ##### Changed
