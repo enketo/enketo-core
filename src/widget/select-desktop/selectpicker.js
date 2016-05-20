@@ -58,8 +58,9 @@ define( function( require, exports, module ) {
     DesktopSelectpicker.prototype.constructor = DesktopSelectpicker;
 
     DesktopSelectpicker.prototype._init = function() {
-        var $template = this._getTemplate(),
-            $select = $( this.element );
+        var $template = this._getTemplate();
+        var $select = $( this.element );
+        this.readonly = !!$select.attr( 'readonly' );
         $select.css( 'display', 'none' );
         $template = this._createLi( $template );
         this.$picker = $template.insertAfter( $select );
@@ -83,13 +84,15 @@ define( function( require, exports, module ) {
     };
 
     DesktopSelectpicker.prototype._createLi = function( template ) {
-
         var li = [];
         var liHtml = '';
         var inputAttr = ( this.multiple ) ? 'type="checkbox"' : 'type="radio" name="' + Math.random() * 100000 + '"';
         var _this = this;
-        var checkedInputAttr,
-            checkedLiAttr;
+        var readonlyAttr = ( this.readonly ) ? ' readonly="readonly"' : '';
+        var disabledAttr = ( this.readonly ) ? ' disabled="disabled"' : '';
+        var disabledClass = ( this.readonly ) ? ' class="disabled"' : '';
+        var checkedInputAttr;
+        var checkedLiAttr;
 
         $( this.element ).find( 'option' ).each( function() {
             li.push( {
@@ -116,10 +119,10 @@ define( function( require, exports, module ) {
                      *    </li>
                      */
                     liHtml +=
-                        '<li ' + checkedLiAttr + '>' +
+                        '<li ' + disabledClass + checkedLiAttr + '>' +
                         '<a class="option-wrapper" tabindex="-1" href="#">' +
                         '<label>' +
-                        '<input class="ignore" ' + inputAttr + checkedInputAttr + 'value="' + li[ i ].value + '" />' +
+                        '<input class="ignore" ' + inputAttr + checkedInputAttr + readonlyAttr + disabledAttr + ' value="' + li[ i ].value + '" />' +
                         '<span class="option-label">' + li[ i ].label + '</span></label>' +
                         '</a>' +
                         '</li>';

@@ -10,6 +10,11 @@
     font-style: normal;
 }
 
+@mixin disabled-radiocheck-style {
+    color: $gray;
+    opacity: 0.5;
+}
+
 // !important is added to make sure a clearfix doesn't override it
 @mixin checkbox-unchecked-icon {
     @include enketo-icon;

@@ -50,7 +50,7 @@ define( function( require, exports, module ) {
 
     Notewidget.prototype._init = function() {
         var $el = $( this.element );
-        $el.find( '[readonly]' ).addClass( 'ignore' );
+        $el.find( '[readonly]' ).addClass( 'ignore' ).prop( 'disabled', true );
     };
 
     Notewidget.prototype.destroy = function( element ) {};

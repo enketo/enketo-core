@@ -26,8 +26,16 @@ $line-h: 20px;
     }
 }
 
+@mixin disabled {
+    &:disabled, &[readonly] {
+        ~ .option-label::before {
+            @include disabled-radiocheck-style;
+        }
+    }
+}
+
 /* fancy radio buttons / checkboxes */
-.question {
+.question, .note {
     @include option-padding(left);
     label {
         line-height: $line-h;
@@ -46,6 +54,7 @@ $line-h: 20px;
             &:checked ~ .option-label::before {
                 @include radio-checked-icon;
             }
+            @include disabled;
         }
         input[type=checkbox] {
             display: none;
@@ -55,6 +64,7 @@ $line-h: 20px;
             &:checked ~ .option-label::before {
                 @include checkbox-checked-icon;
             }
+            @include disabled;
         }
     }
 }
