@@ -3,12 +3,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.7.7] - 2016-05-20
 ---------------------
+##### Changed
+- Comment widget styling.
+- Now requiring Update button click to store comment.
+
 ##### Fixed
 - Readonly select questions still selectable.
 
-[4.7.8] - 2016-05-17
+[4.7.6] - 2016-05-17
 ---------------------
 ##### Fixed
 - Extreme form loading performance degradation if XForm model is very large.

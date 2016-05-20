@@ -35,9 +35,9 @@ define( function( require, exports, module ) {
 
         if ( this.$linkedQuestion.length === 1 ) {
             this.$commentQuestion.addClass( 'hide' );
-            this.$commentButton = $( '<button class="btn-icon-only btn-comment" type="button"><i class="icon icon-sticky-note-o"> </i></button>' );
+            this.$commentButton = $( '<button class="btn-icon-only btn-comment" type="button"><i class="icon"> </i></button>' );
             this._setCommentButtonState( this.element.value );
-            this.$linkedQuestion.append( this.$commentButton );
+            this.$linkedQuestion.find( '.question-label' ).last().after( this.$commentButton );
             this._setCommentButtonHandler();
             this._setValidationHandler();
         }
@@ -71,7 +71,7 @@ define( function( require, exports, module ) {
     Comment.prototype._setCommentButtonHandler = function() {
         var that = this;
         this.$commentButton.click( function() {
-            if ( that._isCommentModalShown( this ) ) {
+            if ( that._isCommentModalShown( that.$linkedQuestion ) ) {
                 that._hideCommentModal( that.$linkedQuestion );
             } else {
                 var value = that._getCurrentValue();
@@ -90,8 +90,8 @@ define( function( require, exports, module ) {
         } );
     };
 
-    Comment.prototype._isCommentModalShown = function( button ) {
-        return $( button ).next( '.widget' ).length === 1;
+    Comment.prototype._isCommentModalShown = function( $linkedQuestion ) {
+        return $linkedQuestion.find( '.or-comment-widget' ).length === 1;
     };
 
     Comment.prototype._showCommentModal = function( linkedQuestionLabel, linkedQuestionValue, linkedQuestionErrorMsg ) {
@@ -101,9 +101,9 @@ define( function( require, exports, module ) {
         var $overlay;
         var that = this;
         var $comment = $( this.element ).closest( '.question' ).clone( false );
-        var closeText = t( 'alert.default.button' ) || 'Close';
-        var $closeButtons = $( '<button class="btn btn-primary or-comment-widget__content__btn-close">' + closeText + '</button>' +
-            '<button class="btn btn-icon-only or-comment-widget__content__btn-close-x">&times;</button>' );
+        var updateText = t( 'alert.default.button' ) || 'Update';
+        var $updateButton = $( '<button class="btn btn-primary or-comment-widget__content__btn-update" type="button">' + updateText + '</button>' );
+        var $closeButton = $( '<button class="btn-icon-only or-comment-widget__content__btn-close-x" type="button">&times;</button>' );
 
         $input = $comment
             .removeClass( 'or-appearance-comment hide' )
@@ -114,12 +114,10 @@ define( function( require, exports, module ) {
         $overlay = $( '<div class="or-comment-widget__overlay"></div>' );
         $content = $(
             '<div class="or-comment-widget__content">' +
-            '<div class="or-comment-widget__question"><span class="or-comment-widget__question__icon">Q</span>' +
-            '<span class="or-comment-widget__question__text">' + linkedQuestionLabel + '</span></div>' +
-            '<div class="or-comment-widget__question"><span class="or-comment-widget__question__icon">A</span>' +
-            '<span class="or-comment-widget__question__text">' + linkedQuestionValue + '</span></div>' +
+            '<div class="or-comment-widget__question-label">' + linkedQuestionLabel + '</div>' +
+            '<div class="or-comment-widget__question-value">' + linkedQuestionValue + '</div>' +
             '<hr /></div>'
-        ).append( $comment ).append( $closeButtons );
+        ).append( $comment ).append( $closeButton ).append( $updateButton );
 
         $widget = $(
             '<section class="widget or-comment-widget"></section>'
@@ -129,17 +127,19 @@ define( function( require, exports, module ) {
             .find( '.or-comment-widget' ).remove().end()
             .prepend( $widget );
 
-        $input.on( 'change', function() {
+        $updateButton.on( 'click', function() {
             var error;
-            var value = this.value;
+            var value = $input.val();
             $( that.element ).val( value ).trigger( 'change' );
             error = that._commentHasError();
             that._setCommentButtonState( value, error );
+            that._hideCommentModal( that.$linkedQuestion );
             return false;
         } );
 
-        $closeButtons.add( $overlay ).on( 'click', function() {
+        $closeButton.add( $overlay ).on( 'click', function() {
             that._hideCommentModal( that.$linkedQuestion );
+            return false;
         } );
     };
 

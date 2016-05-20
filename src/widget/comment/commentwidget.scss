@@ -1,4 +1,4 @@
-$padding: 20px;
+$padding: 30px;
 
 .or-comment-widget {    
     display: block;
@@ -13,14 +13,14 @@ $padding: 20px;
         background: white;
         padding: $padding;
         padding-bottom: 100px;
-        &__btn-close {
+        &__btn-update {
             position: absolute;
             right: $padding;
             bottom: $padding;
         }
-         &__btn-close-x{
-            top: 15px;
-            right: 3px;
+        &__btn-close-x{
+            top: 20px;
+            right: 13px;
             position: absolute;
             content: "\00D7";
             font-size: 26px;
@@ -41,22 +41,18 @@ $padding: 20px;
         bottom: 0;
         left: 0;
     }
-    &__question {
+    &__question-label, &__question-value {
         @include font-normal;
         font-style: italic;
-        display: table-row;
-        &__icon {
-            width: 25px;
-            color: $brand-primary-color;
-            display: table-cell;
-        }
-        &__text {
-            display: table-cell;
-            padding-right:35px;
-        }
-        &__text + &__text{
-            padding-top: 10px;
-        }
+        padding-right: 35px;
+    }
+    &__question-value {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+    .question textarea, 
+    .question input[type="text"] {
+        width: 100%;
     }
     // Avoid artefacts of linkedQuestion that contains widget
     // If linked question is invalid, but the widget is not, the message
@@ -71,11 +67,6 @@ $padding: 20px;
 }
 
 .btn-comment {  
-    width: 15px;
-    height: 19px;
-    margin-top: 10px;
-    position: relative;
-    left: calc(100% - 25px);
     .icon {
         @extend .icon-sticky-note;
     }
@@ -87,7 +78,15 @@ $padding: 20px;
     &.invalid {
         @include transition-fast;
         color: $state-dangerest-text;
+        .icon {
+            font-weight: bold;
+        }
     }
+}
+
+// legend hack
+legend .btn-comment .icon {
+    top: -10px;
 }
 
 .or[dir="rtl"] {
@@ -97,20 +96,22 @@ $padding: 20px;
     }
     .or-comment-widget {
         &__content {
-            &__btn-close{
+            &__btn-update{
                 right: auto;
                 left: $padding;
             }
             &__btn-close-x{
                 right: auto;
-                left: 3px;
+                left: 13px;
             }
         }
-        &__question {
-            &__text{
-                padding-right:auto;
-                padding-left:35px;
-            }
+        &__question-label, __question-value {
+            padding-right:auto;
+            padding-left:35px;
+        }
+         &__question-value {
+            margin-left: auto;
+            margin-right: 20px;
         }
     }
 }
