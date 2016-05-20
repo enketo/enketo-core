@@ -101,7 +101,7 @@ define( function( require, exports, module ) {
         var $overlay;
         var that = this;
         var $comment = $( this.element ).closest( '.question' ).clone( false );
-        var updateText = t( 'alert.default.button' ) || 'Update';
+        var updateText = t( 'widget.comment.update' ) || 'Update';
         var $updateButton = $( '<button class="btn btn-primary or-comment-widget__content__btn-update" type="button">' + updateText + '</button>' );
         var $closeButton = $( '<button class="btn-icon-only or-comment-widget__content__btn-close-x" type="button">&times;</button>' );
 
