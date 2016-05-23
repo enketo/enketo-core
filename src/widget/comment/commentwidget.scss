@@ -86,7 +86,8 @@ $padding: 30px;
 
 // legend hack
 legend .btn-comment .icon {
-    top: -10px;
+    position: absolute;
+    top: -2px;
 }
 
 .or[dir="rtl"] {

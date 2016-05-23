@@ -132,6 +132,34 @@ html:not(.touch) .question .geopoint.widget {
     }
 }
 
+.btn-comment {
+    position: absolute;
+    top: $q-pad-top;
+    right: $q-pad-left;
+    //left: $q-pad-right;
+    margin: 0;
+}
+
+legend .btn-comment {
+    right: 0;
+    top: 0;
+    // undo legend hack
+    .icon {
+        position: static;
+    }
+}
+
+.or[dir="rtl"] {
+    .btn-comment {
+        left: $q-pad-left;
+        right: auto;
+    }
+    legend .btn-comment {
+        left: 0;
+        right: auto;
+    }
+}
+
 // select picker
 .bootstrap-select {
     .dropdown-toggle {
