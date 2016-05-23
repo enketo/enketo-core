@@ -105,12 +105,12 @@ legend .btn-comment .icon {
                 left: 13px;
             }
         }
-        &__question-label, __question-value {
-            padding-right:auto;
-            padding-left:35px;
+        &__question-label, &__question-value {
+            padding-right: 0;
+            padding-left: 35px;
         }
          &__question-value {
-            margin-left: auto;
+            margin-left: 0;
             margin-right: 20px;
         }
     }
