@@ -211,6 +211,7 @@ h4 + .or-repeat {
         width: calc(100% + 1px);
         position: relative;
         margin-top: 0;
+        height: 0px;
     }
     .repeat, .remove {
         padding: 0;
@@ -219,11 +220,11 @@ h4 + .or-repeat {
     }
     .repeat {
         float: right;
-        margin-right: -19px;
+        margin-right: -25px;
     }
     .remove {
         float: left;
-        margin-left: -18px;
+        margin-left: -20px;
     }
 }
 

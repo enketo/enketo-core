@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Comment widget styling issues.
+- Repeat buttons crossing border in Grid Theme.
 
 [4.7.7] - 2016-05-20
 ---------------------
