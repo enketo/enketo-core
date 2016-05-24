@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.7.8] - 2016-05-26
 ---------------------
 ##### Fixed
-- IE Namespace errors when non-native XPath evaluator is used for namespaced nodes.
+- IE11 Record loading "Interface not supported" error.
+- IE11 Namespace errors when non-native XPath evaluator is used for namespaced nodes.
 - Comment widget styling issues.
 - Repeat buttons crossing border in Grid Theme.
 
