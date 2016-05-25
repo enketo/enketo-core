@@ -162,11 +162,11 @@ define( function( require, exports, module ) {
             case document.ELEMENT_NODE:
                 var newNode = document.createElementNS(node.namespaceURI, node.nodeName);
                 if(node.attributes && node.attributes.length > 0)
-                for(var i = 0, il = node.attributes.length; i < il; i++)
-                    newNode.setAttribute(node.attributes[i].nodeName, node.getAttribute(node.attributes[i].nodeName));
+                    for(var i = 0, il = node.attributes.length; i < il; i++)
+                        newNode.setAttribute(node.attributes[i].nodeName, node.getAttribute(node.attributes[i].nodeName));
                 if(allChildren && node.childNodes && node.childNodes.length > 0)
-                for(var i = 0, il = node.childNodes.length; i < il; i++)
-                    newNode.appendChild(this.importNode(node.childNodes[i], allChildren));
+                    for(var i = 0, il = node.childNodes.length; i < il; i++)
+                        newNode.appendChild(this.importNode(node.childNodes[i], allChildren));
                 return newNode;
                 break;
             case document.TEXT_NODE:
