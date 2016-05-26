@@ -153,6 +153,29 @@ define( function( require, exports, module ) {
     FormModel.prototype.node = function( selector, index, filter ) {
         return new Nodeset( selector, index, filter, this );
     };
+    
+    /**
+     * Alternative adoptNode on IE (http://stackoverflow.com/questions/1811116/ie-support-for-dom-importnode)
+     */
+    FormModel.prototype.importNode = function(node, allChildren) {
+        switch (node.nodeType) {
+            case document.ELEMENT_NODE:
+                var newNode = document.createElementNS(node.namespaceURI, node.nodeName);
+                if(node.attributes && node.attributes.length > 0)
+                    for(var i = 0, il = node.attributes.length; i < il; i++)
+                        newNode.setAttribute(node.attributes[i].nodeName, node.getAttribute(node.attributes[i].nodeName));
+                if(allChildren && node.childNodes && node.childNodes.length > 0)
+                    for(var i = 0, il = node.childNodes.length; i < il; i++)
+                        newNode.appendChild(this.importNode(node.childNodes[i], allChildren));
+                return newNode;
+                break;
+            case document.TEXT_NODE:
+            case document.CDATA_SECTION_NODE:
+            case document.COMMENT_NODE:
+                return document.createTextNode(node.nodeValue);
+                break;
+        }
+    }
 
     /**
      * Alternative adoptNode on IE (http://stackoverflow.com/questions/1811116/ie-support-for-dom-importnode)
