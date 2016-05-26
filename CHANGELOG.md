@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ---------------------
 ##### Fixed
+- IE Namespace errors when non-native XPath evaluator is used for namespaced nodes.
 - Comment widget styling issues.
 - Repeat buttons crossing border in Grid Theme.
 

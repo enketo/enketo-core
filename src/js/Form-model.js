@@ -915,7 +915,7 @@ define( function( require, exports, module ) {
                     this.bindJsEvaluator();
                 }
                 // console.log( 'trying the slow enketo-xpathjs "openrosa" evaluator for', expr, index );
-                result = doc.jsEvaluate( expr, context, this.nsResolver, resTypeNum, null );
+                result = doc.jsEvaluate( expr, context, this.getNsResolver(), resTypeNum, null );
             } catch ( e ) {
                 throw new FormLogicError( 'Could not evaluate: ' + expr + ', message: ' + e.message );
             }
