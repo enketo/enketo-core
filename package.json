@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "4.7.8",
+    "version": "4.7.9",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -42,7 +42,7 @@
         "grunt-contrib-uglify": "1.0.x",
         "grunt-contrib-watch": "1.x.x",
         "grunt-jsbeautifier": "0.x.x",
-        "grunt-karma": "1.0.0",
+        "grunt-karma": "2.0.0",
         "grunt-sass": "https://github.com/liamkeaton/grunt-sass.git#365ab105bb05e850b89da411fc42ad850ecfdcbf",
         "jasmine-core": "2.4.x",
         "json-pretty": "0.0.1",
