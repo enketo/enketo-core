@@ -257,7 +257,8 @@ define( function( require, exports, module ) {
                 // after setAllVals(), after repeat.init()
                 widgets.init( null, {
                     input: this.input,
-                    pathToAbsolute: this.pathToAbsolute
+                    pathToAbsolute: this.pathToAbsolute,
+                    evaluate: model.evaluate.bind( model )
                 } );
 
                 // after widgets.init(), and repeat.init()
