@@ -3,10 +3,22 @@ $padding: 30px;
 .or-comment-widget {    
     display: block;
     position: absolute;
-    top: 0;
-    left: -5px;
     z-index: 1001;
-    width: calc(100% + 10px);
+    top: 100%;
+    left: 0;
+    width: 100%;
+    &__overlay  {
+        background: rgba(0, 0, 0, 0.3);
+        &+ .question {
+            background: white;
+            padding-left: $padding;
+            padding-right: $padding;
+            padding-bottom: $padding;
+            margin-left: -$padding;
+            margin-right: -$padding;
+        }
+    }
+
     &__content {
         position:relative;
         border: 1px solid $gray;

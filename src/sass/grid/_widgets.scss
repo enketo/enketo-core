@@ -125,10 +125,19 @@ html:not(.touch) .question .geopoint.widget {
 }
 
 // comment widget
-.or-comment-widget .question {
-    border: $grid-border;
-    input, textarea {
-        order: 4;
+.or-comment-widget {
+    &__content {
+        padding-top: 60px;
+    }
+    &__overlay + .question {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .question {
+        border: $grid-border;
+        input, textarea {
+            order: 4;
+        }
     }
 }
 

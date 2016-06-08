@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Comment widget now shown below linked question.
+- Comment widget automatically focuses on comment input.
+
 [4.7.9] - 2016-06-01
 ---------------------
 ##### Added

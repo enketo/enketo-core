@@ -74,9 +74,7 @@ define( function( require, exports, module ) {
             if ( that._isCommentModalShown( that.$linkedQuestion ) ) {
                 that._hideCommentModal( that.$linkedQuestion );
             } else {
-                var value = that._getCurrentValue();
-                var label = that._getCurrentLabel();
-                that._showCommentModal( label, value );
+                that._showCommentModal();
             }
         } );
     };
@@ -94,7 +92,7 @@ define( function( require, exports, module ) {
         return $linkedQuestion.find( '.or-comment-widget' ).length === 1;
     };
 
-    Comment.prototype._showCommentModal = function( linkedQuestionLabel, linkedQuestionValue, linkedQuestionErrorMsg ) {
+    Comment.prototype._showCommentModal = function() {
         var $widget;
         var $content;
         var $input;
@@ -112,12 +110,8 @@ define( function( require, exports, module ) {
             .removeAttr( 'name data-for data-type-xml' )
             .removeData();
         $overlay = $( '<div class="or-comment-widget__overlay"></div>' );
-        $content = $(
-            '<div class="or-comment-widget__content">' +
-            '<div class="or-comment-widget__question-label">' + linkedQuestionLabel + '</div>' +
-            '<div class="or-comment-widget__question-value">' + linkedQuestionValue + '</div>' +
-            '<hr /></div>'
-        ).append( $comment ).append( $closeButton ).append( $updateButton );
+        $content = $( '<div class="or-comment-widget__content"></div>' )
+            .append( $comment ).append( $closeButton ).append( $updateButton );
 
         $widget = $(
             '<section class="widget or-comment-widget"></section>'
@@ -125,7 +119,10 @@ define( function( require, exports, module ) {
 
         this.$linkedQuestion
             .find( '.or-comment-widget' ).remove().end()
-            .prepend( $widget );
+            .prepend( $widget )
+            .before( $overlay.clone( false ) );
+
+        $input.focus();
 
         $updateButton.on( 'click', function() {
             var error;
@@ -144,17 +141,9 @@ define( function( require, exports, module ) {
     };
 
     Comment.prototype._hideCommentModal = function( $linkedQuestion ) {
-        $linkedQuestion.find( '.or-comment-widget' ).remove();
-    };
-
-    Comment.prototype._getCurrentValue = function() {
-        var $input = this.$linkedQuestion.find( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ).eq( 0 );
-        var value = this.options.helpers.input.getVal( $input );
-        return Array.isArray( value ) ? value.join( ' ' ) : value;
-    };
-
-    Comment.prototype._getCurrentLabel = function() {
-        return this.$linkedQuestion.find( '.question-label.active' ).text();
+        $linkedQuestion
+            .find( '.or-comment-widget' ).remove().end()
+            .prev( '.or-comment-widget__overlay' ).remove();
     };
 
     Comment.prototype.destroy = function( element ) {
