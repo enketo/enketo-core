@@ -250,7 +250,9 @@ define( function( require, exports, module ) {
         } );
     };
 
-    + function( $ ) {
+    +
+
+    function( $ ) {
         //'use strict';
 
         // DROPDOWN CLASS DEFINITION
