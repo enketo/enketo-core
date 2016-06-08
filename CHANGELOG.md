@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.7.10] - 2016-06-08
 ---------------------
 ##### Changed
 - Comment widget now shown below linked question.
@@ -70,7 +70,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.7.0] - 2016-05-04
 ---------------------
 ##### Added
-- Proper namespace support.
+- Proper namespace support. **Warning: Requires enketo-transformer 1.8.0+ or enketo-xslt 1.3.0+**
 - Comment widget.
 
 [4.6.0] - 2016-04-26
