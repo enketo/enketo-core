@@ -106,6 +106,11 @@ define( function( require, exports, module ) {
                 this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
                 this.setNamespaces();
 
+                // check if instanceID is present
+                if ( !this.getMetaNode( 'instanceID' ).get().get( 0 ) ) {
+                    that.loadErrors.push( 'Invalid primary instance. Missing instanceID node.' );
+                }
+
                 // Check if all secondary instances with an external source have been populated
                 this.$.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
                     that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
@@ -393,21 +398,13 @@ define( function( require, exports, module ) {
          * when the XPath evaluator is used to retrieve nodes.
          */
 
-        instanceIdEls = this.xml.querySelectorAll( '* > meta > instanceID' );
+        instanceIdEl = this.getMetaNode( 'instanceID' ).get().get( 0 );
 
-        if ( instanceIdEls.length !== 1 ) {
-            throw new Error( 'Invalid primary instance. Found ' + instanceIdEls.length + ' instanceID nodes but expected 1.' );
+        if ( !instanceIdEl ) {
+            throw new Error( 'Invalid primary instance. Missing instanceID node.' );
         }
 
-        instanceIdEl = instanceIdEls[ 0 ];
-
-        deprecatedIdEls = this.xml.querySelectorAll( '* > meta > deprecatedID' );
-
-        if ( deprecatedIdEls.length > 1 ) {
-            throw new Error( 'Invalid primary instance. Found ' + deprecatedIdEls.length + ' deprecatedID nodes but expected 1.' );
-        }
-
-        deprecatedIdEl = deprecatedIdEls[ 0 ];
+        deprecatedIdEl = this.getMetaNode( 'deprecatedID' ).get().get( 0 );
 
         // add deprecatedID node
         if ( !deprecatedIdEl ) {
@@ -436,13 +433,7 @@ define( function( require, exports, module ) {
      * @return {string} instanceID
      */
     FormModel.prototype.getInstanceID = function() {
-        var n = this.node( '/*/__orx:meta/__orx:instanceID' );
-
-        if ( n.get().length === 0 ) {
-            n = this.node( '/*/meta/instanceID' );
-        }
-
-        return n.getVal()[ 0 ];
+        return this.getMetaNode( 'instanceID' ).getVal()[ 0 ];
     };
 
     /**
@@ -451,13 +442,7 @@ define( function( require, exports, module ) {
      * @return {string} deprecatedID
      */
     FormModel.prototype.getDeprecatedID = function() {
-        var n = this.node( '/*/__orx:meta/__orx:instanceID' );
-
-        if ( n.get().length === 0 ) {
-            n = this.node( '/*/meta/deprecatedID' );
-        }
-
-        return n.getVal()[ 0 ] || '';
+        return this.getMetaNode( 'deprecatedID' ).getVal()[ 0 ] || '';
     };
 
     /**
@@ -466,13 +451,17 @@ define( function( require, exports, module ) {
      * @return {string} instanceID
      */
     FormModel.prototype.getInstanceName = function() {
-        var n = this.node( '/*/__orx:meta/__orx:instanceName' );
+        return this.getMetaNode( 'instanceName' ).getVal()[ 0 ];
+    };
+
+    FormModel.prototype.getMetaNode = function( localName ) {
+        var n = this.node( '/*/__orx:meta/__orx:' + localName, 0 );
 
         if ( n.get().length === 0 ) {
-            n = this.node( '/*/meta/instanceName' );
+            n = this.node( '/*/meta/' + localName, 0 );
         }
 
-        return n.getVal()[ 0 ];
+        return n;
     };
 
     /**

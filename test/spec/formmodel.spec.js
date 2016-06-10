@@ -10,10 +10,11 @@ var getModel = function( filename ) {
 
 // I don't remember why this functionality exists
 describe( 'Primary instance node values', function() {
-    var model = new Model( '<model><instance><data><nodeA> 2  </nodeA></data></instance></model>' );
+    var metaInstanceID = '<meta><instanceID/></meta>';
+    var model = new Model( '<model><instance><data><nodeA> 2  </nodeA>' + metaInstanceID + '</data></instance></model>' );
     model.init();
     it( 'are trimmed during initialization', function() {
-        expect( model.getStr() ).toEqual( '<data><nodeA>2</nodeA></data>' );
+        expect( model.getStr() ).toEqual( '<data><nodeA>2</nodeA>' + metaInstanceID + '</data>' );
     } );
 } );
 
@@ -43,6 +44,13 @@ describe( 'Instantiating a model', function() {
         } );
         model.init();
         expect( model.xml.querySelector( 'model > instance#countries' ) ).toBeNull();
+    } );
+
+    it( 'without an instanceID node, returns an error', function() {
+        var result = new Model( modelStr ).init();
+
+        expect( result.length ).toEqual( 1 );
+        expect( /Missing\sinstanceID/.test( result[ 0 ] ) ).toEqual( true );
     } );
 } );
 
