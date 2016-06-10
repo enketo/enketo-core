@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- In IE11, external data cannot be added to model.
+
 [4.7.10] - 2016-06-08
 ---------------------
 ##### Changed

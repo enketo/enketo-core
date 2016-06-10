@@ -85,7 +85,7 @@ define( function( require, exports, module ) {
             // add external data to model 
             this.data.external.forEach( function( instance ) {
                 id = 'instance "' + instance.id + '"' || 'instance unknown';
-                instanceDoc = that.xml.getElementById( instance.id );
+                instanceDoc = that.getSecondaryInstance( instance.id );
                 // remove any existing content that is just an XLSForm hack to pass ODK Validate
                 secondaryInstanceChildren = instanceDoc.childNodes;
                 for ( i = secondaryInstanceChildren.length - 1; i >= 0; i-- ) {
@@ -136,6 +136,29 @@ define( function( require, exports, module ) {
         return this.loadErrors;
     };
 
+    /**
+     * For some unknown reason we cannot use doc.getElementById(id) or doc.querySelector('#'+id)
+     * in IE11. This function is a replacement for this specifically to find a secondary instance.
+     * 
+     * @param  {string} id [description]
+     * @return {Element}    [description]
+     */
+    FormModel.prototype.getSecondaryInstance = function( id ) {
+        var instanceEl;
+
+        [].slice.call( this.xml.querySelectorAll( 'model > instance' ) ).some( function( el ) {
+            var idAttr = el.getAttribute( 'id' );
+            if ( idAttr === id ) {
+                instanceEl = el;
+                return true;
+            } else {
+                return false;
+            }
+        } );
+
+        return instanceEl;
+    };
+
     FormModel.prototype.getVersion = function() {
         return this.evaluate( '/node()/@version', 'string', null, null, true );
     };
@@ -155,7 +178,7 @@ define( function( require, exports, module ) {
     };
 
     /**
-     * Alternative adoptNode on IE (http://stackoverflow.com/questions/1811116/ie-support-for-dom-importnode)
+     * Alternative adoptNode on IE11 (http://stackoverflow.com/questions/1811116/ie-support-for-dom-importnode)
      */
     FormModel.prototype.importNode = function( node, allChildren ) {
         var i;
