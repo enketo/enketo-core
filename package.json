@@ -33,7 +33,7 @@
         "test": "grunt test"
     },
     "devDependencies": {
-        "enketo-transformer": "1.8.1",
+        "enketo-transformer": "1.8.2",
         "grunt": "1.0.x",
         "grunt-browserify": "5.0.x",
         "grunt-concurrent": "2.x.x",
@@ -46,7 +46,7 @@
         "grunt-sass": "https://github.com/liamkeaton/grunt-sass.git#365ab105bb05e850b89da411fc42ad850ecfdcbf",
         "jasmine-core": "2.4.x",
         "json-pretty": "0.0.1",
-        "karma": "0.13.x",
+        "karma": "1.1.x",
         "karma-browserify": "5.0.x",
         "karma-chrome-launcher": "1.0.x",
         "karma-firefox-launcher": "1.0.x",
