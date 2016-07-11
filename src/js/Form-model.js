@@ -1293,21 +1293,11 @@ define( function( require, exports, module ) {
         'decimal': {
             validate: function( x ) {
                 return ( !isNaN( x - 0 ) && x !== null ) ? true : false;
-            },
-            convert: function( x ) {
-                // deals with Java issue and possible db issues:
-                // https://github.com/MartijnR/enketo-core/issues/40
-                return ( x === 'NaN' ) ? '' : x;
             }
         },
         'int': {
             validate: function( x ) {
                 return ( !isNaN( x - 0 ) && x !== null && Math.round( x ).toString() === x.toString() ) ? true : false;
-            },
-            convert: function( x ) {
-                // deals with Java issue and possible db issues:
-                // https://github.com/MartijnR/enketo-core/issues/40
-                return ( x === 'NaN' ) ? '' : x;
             }
         },
         'date': {

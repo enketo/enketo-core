@@ -218,8 +218,12 @@ describe( 'Data node XML data type conversion & validation', function() {
             [ '/thedata/nodeA', null, null, '0 0 a', 'geopoint', false ],
             [ '/thedata/nodeA', null, null, '0 0 0 a', 'geopoint', false ],
 
-            [ '/thedata/nodeA', null, null, 'NaN', 'int', null ], //value remains "" so null 
-            [ '/thedata/nodeA', null, null, 'NaN', 'decimal', null ] //value remains "" so null
+            [ '/thedata/nodeA', null, null, 'NaN', 'int', false ],
+            [ '/thedata/nodeA', null, null, 'NaN', 'decimal', false ],
+            [ '/thedata/nodeA', null, null, 'Infinity', 'int', true ],
+            [ '/thedata/nodeA', null, null, 'Infinity', 'decimal', true ],
+            [ '/thedata/nodeA', null, null, '-Infinity', 'int', true ],
+            [ '/thedata/nodeA', null, null, '-Infinity', 'decimal', true ]
 
             //TO DO binary (?)
         ];
@@ -246,45 +250,6 @@ describe( 'Data node XML data type conversion & validation', function() {
             result: t[ i ][ 5 ]
         } );
     }
-
-    it( 'converts NaN to "" (quietly) for nodes with type=int', function( done ) {
-        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
-        // prime the node with a value
-        node.setVal( 5, null, 'int' )
-            .then( function() {
-                expect( node.getVal() ).toEqual( [ '5' ] );
-            } )
-            .then( function() {
-                // attempt to set the value to NaN
-                return node.setVal( 'NaN', null, 'int' );
-            } )
-            .then( function( result ) {
-                expect( result ).toEqual( true );
-                expect( node.getVal() ).toEqual( [ '' ] );
-            } )
-            .then( done )
-            .catch( done );
-    } );
-
-    it( 'converts NaN to "" (quietly) for nodes with type=decimal', function( done ) {
-        var result,
-            node = getModel( 'thedata.xml' ).node( '/thedata/nodeA' );
-        // prime the node with a value
-        node.setVal( 5.1, null, 'decimal' )
-            .then( function() {
-                expect( node.getVal() ).toEqual( [ '5.1' ] );
-            } )
-            .then( function() {
-                // attempt to set the value to NaN
-                return node.setVal( 'NaN', null, 'decimal' );
-            } )
-            .then( function( result ) {
-                expect( result ).toEqual( true );
-                expect( node.getVal() ).toEqual( [ '' ] );
-            } )
-            .then( done )
-            .catch( done );
-    } );
 
     it( 'sets a non-empty value to empty', function( done ) {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
