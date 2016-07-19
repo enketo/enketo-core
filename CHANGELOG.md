@@ -3,9 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- Comment widget scrolling and button hover behavior.
+
 [4.8.0] - 2016-07-11
 ---------------------
-#### Fixed
+##### Fixed
 - Integer and decimal type values convert 'NaN' to '' (reverted ODK Aggregate bug workaround).
 
 [4.7.11] - 2016-06-10

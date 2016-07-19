@@ -124,6 +124,8 @@ define( function( require, exports, module ) {
 
         $input.focus();
 
+        $widget.get( 0 ).scrollIntoView( false );
+
         $updateButton.on( 'click', function() {
             var error;
             var value = $input.val();

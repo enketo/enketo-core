@@ -78,7 +78,8 @@ $padding: 30px;
     }
 }
 
-.btn-comment {  
+.btn-comment {
+    cursor: pointer;
     .icon {
         @extend .icon-sticky-note;
     }
