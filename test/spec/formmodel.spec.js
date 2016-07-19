@@ -279,6 +279,13 @@ describe( 'Data node XML data type conversion & validation', function() {
         expect( node.get().attr( 'type' ) ).toBe( undefined );
     } );
 
+    it( 'does not trim a string value', function() {
+        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
+        var value = ' a  ';
+        node.setVal( value, null, 'string' );
+        expect( node.getVal()[ 0 ] ).toEqual( value );
+    } );
+
 } );
 
 describe( 'Data node remover', function() {

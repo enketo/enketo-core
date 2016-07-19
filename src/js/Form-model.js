@@ -1090,7 +1090,7 @@ define( function( require, exports, module ) {
 
         if ( $target.length === 1 && newVal.toString().trim() !== curVal.toString().trim() ) {
             // first change the value so that it can be evaluated in XPath (validated)
-            $target.text( newVal.toString().trim() );
+            $target.text( newVal.toString() );
             // then return validation result
             success = this.validate( expr, xmlDataType );
             updated = this.getClosestRepeat();

@@ -3,9 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.8.1] - 2016-07-19
 --------------------
 ##### Fixed
+- String values are trimmed before added to model.
 - Comment widget scrolling and button hover behavior.
 
 [4.8.0] - 2016-07-11
