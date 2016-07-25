@@ -161,15 +161,15 @@ describe( 'merging an instance into the model', function() {
             expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML record. Different root nodes' );
         } );
 
-        it( 'when an instance-to-edit is provided with double instanceID nodes', function() {
+        it( 'when an instance-to-edit is provided with to a model that does not contain an instanceID node', function() {
             var model = new Model( {
-                modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
-                instanceStr: '<thedata id="something"><meta><instanceID>7c99</instanceID><instanceID>uhoh</instanceID></meta><nodeA>2012</nodeA></thedata>'
+                modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta></meta></thedata></instance></model>',
+                instanceStr: '<thedata id="something"><meta><instanceID>7c99</instanceID></meta><nodeA>2012</nodeA></thedata>'
             } );
             var loadErrors = model.init();
 
             expect( loadErrors.length ).toEqual( 1 );
-            expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML record. Invalid primary instance. Found 2 instanceID nodes but expected 1.' );
+            expect( loadErrors[ 0 ] ).toEqual( 'Invalid primary instance. Missing instanceID node.' );
         } );
     } );
 } );
