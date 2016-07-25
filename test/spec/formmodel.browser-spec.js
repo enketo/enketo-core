@@ -49,6 +49,11 @@ describe( 'merging an instance into the model', function() {
             [ '<a xmlns="http://rogue.opendatakit.namespace"><c>record</c></a>',
                 '<model><instance><a><c/></a></instance></model>',
                 '<model><instance><a><c>record</c></a></instance></model>'
+            ],
+            // rogue record contains a node with a template or jr:template attribute
+            [ '<a><r template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><meta/></a></instance></model>' ],
+            [ '<a xmlns:jr="http://someth.ing"><r jr:template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>',
+                '<model><instance><a xmlns:jr="http://someth.ing"><r><b/></r><meta/></a></instance></model>'
             ]
         ].forEach( function( test ) {
             var result, expected,

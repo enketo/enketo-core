@@ -221,6 +221,8 @@ define( function( require, exports, module ) {
         var modelInstanceEl;
         var modelInstanceChildEl;
         var that = this;
+        var templateEls;
+        var record;
         var $record;
 
         if ( !recordStr ) {
@@ -239,8 +241,25 @@ define( function( require, exports, module ) {
          * that is different from the XForm model namespace... So we just remove this nonsense.
          */
         recordStr = recordStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, '' );
+        record = $.parseXML( recordStr );
+        $record = $( record );
 
-        $record = $( $.parseXML( recordStr ) );
+        /**
+         * Normally records will not contain the special "jr:template" attribute. However, we should still be able to deal with
+         * this if they do, including the old hacked non-namespaced "template" attribute. 
+         * https://github.com/enketo/enketo-core/issues/376
+         * 
+         * The solution if these are found is to delete the node.
+         * 
+         * Since the record is not a FormModel instance we revert to a very aggressive querySelectorAll that selects all 
+         * nodes with a template attribute name IN ANY NAMESPACE.
+         */
+
+        templateEls = record.querySelectorAll( '[*|template]' );
+
+        for ( var i = 0; i < templateEls.length; i++ ) {
+            templateEls[ i ].remove();
+        }
 
         /**
          * To comply with quirky behaviour of repeats in XForms, we manually create the correct number of repeat instances
@@ -269,8 +288,8 @@ define( function( require, exports, module ) {
         } );
 
         /** 
-         * Any default values in the model, may have been emptied in the instance.
-         * MergeXML will keep those default values, so we manually clear defaults before merging.
+         * Any default values in the model, may have been emptied in the record.
+         * MergeXML will keep those default values, which would be bad, so we manually clear defaults before merging.
          */
         // first find all empty leaf nodes in record
         $record.find( '*' ).filter( function() {
@@ -288,6 +307,7 @@ define( function( require, exports, module ) {
         } );
 
         modelInstanceChildStr = ( new XMLSerializer() ).serializeToString( modelInstanceChildEl );
+        recordStr = ( new XMLSerializer() ).serializeToString( record );
 
         // first the model, to preserve DOM order of that of the default instance
         merger.AddSource( modelInstanceChildStr );
@@ -531,12 +551,15 @@ define( function( require, exports, module ) {
     FormModel.prototype.extractTemplates = function() {
         var that = this;
         // in reverse document order to properly deal with nested repeat templates
-        // for now we support both the official namespaced template and the hacked non-namespaced template attributes
-        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@__jr:template]', 'nodes', null, null, true ).reverse().forEach( function( templateEl ) {
+        this.getTemplateNodes().reverse().forEach( function( templateEl ) {
             that.templates[ that.getXPath( templateEl, 'instance' ) ] = $( templateEl ).removeAttr( 'template' ).removeAttr( 'jr:template' ).remove();
         } );
     };
 
+    FormModel.prototype.getTemplateNodes = function() {
+        // for now we support both the official namespaced template and the hacked non-namespaced template attributes
+        return this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@__jr:template]', 'nodes', null, null, true );
+    };
 
     /**
      * Finds a template path that would contain the provided node path if that template exists in the form.
