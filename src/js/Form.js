@@ -1018,7 +1018,7 @@ define( function( require, exports, module ) {
              * @return {boolean}             [description]
              */
             function evaluate( expr, contextPath, index ) {
-                var result = model.evaluate( expr, 'boolean', contextPath, index, true );
+                var result = model.evaluate( expr, 'boolean', contextPath, index );
                 return result;
             }
 
@@ -1380,7 +1380,7 @@ define( function( require, exports, module ) {
                 // for inputs that have a calculation and need to be validated
                 constraint = that.input.getConstraint( $this );
                 relevantExpr = that.input.getRelevant( $this );
-                relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name, null, true ) : true;
+                relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
 
                 dataNodesObj = model.node( name );
                 dataNodes = dataNodesObj.get();
@@ -1409,7 +1409,7 @@ define( function( require, exports, module ) {
                     expr = fixExpr( expr, 'string', name, index );
 
                     // it is possible that the fixed expr is '' which causes an error in XPath
-                    result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index, true ) : '';
+                    result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index ) : '';
 
                     // filter the result set to only include the target node
                     dataNodesObj.setIndex( index );
@@ -2180,7 +2180,7 @@ define( function( require, exports, module ) {
             if ( n.enabled && n.inputType !== 'hidden' && n.required && getDataNodeObj().getVal()[ 0 ].length === 0 ) {
                 // If result of required expression evaluation is true, it does not pass.
                 // n.ind has been populated in the getDataNodeObj call
-                validReq = !model.evaluate( n.required, 'boolean', n.path, n.ind, true );
+                validReq = !model.evaluate( n.required, 'boolean', n.path, n.ind, false );
             } else {
                 validReq = true;
             }
