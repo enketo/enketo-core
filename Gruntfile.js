@@ -120,6 +120,8 @@ module.exports = function( grunt ) {
         },
     } );
 
+    grunt.loadNpmTasks( 'grunt-sass' );
+
     grunt.registerTask( 'transforms', 'Creating forms.json', function( task ) {
         var forms = {};
         var done = this.async();
