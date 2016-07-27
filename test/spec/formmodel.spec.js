@@ -360,7 +360,8 @@ describe( 'XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for compreh
             [ 'coalesce(/thedata/nodeA, /thedata/nodeB)', 'string', null, 0, 'b' ],
             [ 'coalesce(/thedata/nodeB, /thedata/nodeA)', 'string', null, 0, 'b' ],
             [ 'weighted-checklist(3, 3, /thedata/somenodes/A, /thedata/someweights/w2)', 'boolean', null, 0, true ],
-            [ 'weighted-checklist(9, 9, /thedata/somenodes/*, /thedata/someweights/*)', 'boolean', null, 0, true ]
+            [ 'weighted-checklist(9, 9, /thedata/somenodes/*, /thedata/someweights/*)', 'boolean', null, 0, true ],
+            [ '"2012-07-24" > "2012-07-23"', 'boolean', null, 0, true ],
         ],
         data = getModel( 'thedata.xml' );
 
@@ -377,8 +378,6 @@ describe( 'XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for compreh
     // this tests the makeBugCompliant() workaround that injects a position into an absolute path
     // for the issue described here: https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations
     it( 'evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())', function() {
-        //data = getModel( 'thedata.xml' ); //new Form(formStr1, dataStr1);
-
         expect( data.evaluate( '/thedata/repeatGroup/nodeC', 'string', '/thedata/repeatGroup/nodeC', 2 ) ).toEqual( 'c3' );
     } );
 
