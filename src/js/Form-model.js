@@ -696,16 +696,24 @@ define( function( require, exports, module ) {
             __jr: this.JAVAROSA_XFORMS_NS
         };
         /**
-         * This function is extremely slow with an XForms model that contains lots of nodes (e.g. with secondary instances). 
-         * For now it has therefore been restricted to only look at top-level nodes in the primary instance.
+         * Passing through all nodes would be very slow with an XForms model that contains lots of nodes such as large secondary instances. 
+         * (The namespace XPath axis is not support in native browser XPath evaluators unfortunately).
+         * 
+         * For now it has therefore been restricted to only look at the top-level node in the primary instance.
+         * We can always expand that later.
          */
-        var namespaceNodes = this.evaluate( '/model/instance[1]/node()/namespace::*', 'nodes' );
+        var node = this.evaluate( '/model/instance[1]/*', 'node', null, null, true );
 
-        if ( namespaceNodes ) {
-            namespaceNodes.forEach( function( node ) {
-                namespaces[ node.localName ] = node.namespaceURI;
-            } );
+        if ( node && node.hasAttributes() ) {
+            for ( var i = 0; i < node.attributes.length; i++ ) {
+                var attribute = node.attributes[ i ];
+
+                if ( attribute.name.indexOf( 'xmlns:' ) === 0 ) {
+                    namespaces[ attribute.name.substring( 6 ) ] = attribute.value;
+                }
+            }
         }
+
         this.namespaces = namespaces;
     };
 
