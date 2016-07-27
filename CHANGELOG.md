@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.8.2] - 2016-07-27
 --------------------
 ##### Fixed
 - If record-to-edit contains a repeat node with a "template" attribute, repeat behaviour breaks in multiple ways.

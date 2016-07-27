@@ -33,13 +33,13 @@
         "test": "grunt test"
     },
     "devDependencies": {
-        "enketo-transformer": "1.8.2",
+        "enketo-transformer": "1.9.0",
         "grunt": "1.0.x",
         "grunt-browserify": "5.0.x",
         "grunt-concurrent": "2.x.x",
         "grunt-contrib-connect": "1.0.x",
         "grunt-contrib-jshint": "1.0.x",
-        "grunt-contrib-uglify": "1.0.x",
+        "grunt-contrib-uglify": "2.0.x",
         "grunt-contrib-watch": "1.x.x",
         "grunt-jsbeautifier": "0.x.x",
         "grunt-karma": "2.0.0",
@@ -47,7 +47,7 @@
         "jasmine-core": "2.4.x",
         "json-pretty": "0.0.1",
         "karma": "1.1.x",
-        "karma-browserify": "5.0.x",
+        "karma-browserify": "5.1.x",
         "karma-chrome-launcher": "1.0.x",
         "karma-firefox-launcher": "1.0.x",
         "karma-jasmine": "1.0.x",
@@ -70,7 +70,7 @@
         "jquery": "2.1.x",
         "jquery-touchswipe": "1.6.x",
         "leaflet": "0.7.x",
-        "lie": "3.0.x",
+        "lie": "3.1.x",
         "mergexml": "1.1.0"
     }
 }
