@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 --------------------
 ##### Fixed
 - If record-to-edit contains a repeat node with a "template" attribute, repeat behaviour breaks in multiple ways.
+- Slow performance of pulldata() for large documents.
 
 [4.8.1] - 2016-07-19
 --------------------

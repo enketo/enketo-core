@@ -523,9 +523,10 @@ describe( 'converting pulldata() ', function() {
     ].forEach( function( test ) {
         it( 'works', function() {
             var model = new Model( '<model><instance><data><a>aa</a><b>22</b></data></instance></model>' );
+            var fn = test[ 0 ];
             var expected = test[ 1 ];
             model.init();
-            expect( model.replacePullDataFn( test[ 0 ] ) ).toEqual( expected );
+            expect( model.convertPullDataFn( fn )[ fn ] ).toEqual( expected );
         } );
     } );
 } );

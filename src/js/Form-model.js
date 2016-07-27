@@ -844,11 +844,27 @@ define( function( require, exports, module ) {
     };
 
     FormModel.prototype.replacePullDataFn = function( expr, selector, index ) {
+        var pullDataResult;
+        var that = this;
+        var replacements = this.convertPullDataFn( expr, selector, index );
+
+        for ( var pullData in replacements ) {
+            if ( replacements.hasOwnProperty( pullData ) ) {
+                // We evaluate this here, so we can use the native evaluator safely. This speeds up pulldata() by about a factor *740*!
+                pullDataResult = that.evaluate( replacements[ pullData ], 'string', selector, index, true );
+                expr = expr.replace( pullData, '"' + pullDataResult + '"' );
+            }
+        }
+        return expr;
+    };
+
+    FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
         var that = this;
         var pullDatas = utils.parseFunctionFromExpression( expr, 'pulldata' );
+        var replacements = {};
 
         if ( !pullDatas.length ) {
-            return expr;
+            return replacements;
         }
 
         pullDatas.forEach( function( pullData ) {
@@ -871,14 +887,14 @@ define( function( require, exports, module ) {
                 searchValue = searchValue === '' || isNaN( searchValue ) ? '\'' + searchValue + '\'' : searchValue;
                 searchXPath = 'instance(' + params[ 0 ] + ')/root/item[' + params[ 2 ] + ' = ' + searchValue + ']/' + params[ 1 ];
 
-                expr = expr.replace( pullData[ 0 ], searchXPath );
+                replacements[ pullData[ 0 ] ] = searchXPath;
 
             } else {
                 throw new FormLogicError( 'pulldata with incorrect number of parameters found: ' + pullData[ 0 ] );
             }
         } );
 
-        return expr;
+        return replacements;
     };
 
     /**
