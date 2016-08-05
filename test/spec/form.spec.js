@@ -62,6 +62,7 @@ describe( 'Output functionality within repeats', function() {
 describe( 'Preload and MetaData functionality', function() {
     var form, t;
 
+    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on [ROOT]/meta/instanceID', function() {
         form = new Form( mockForms2.formStr2, {
             modelStr: mockForms2.dataStr2
@@ -70,12 +71,14 @@ describe( 'Preload and MetaData functionality', function() {
         expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
+    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on [ROOT]/orx:meta/orx:instanceID', function() {
         form = loadForm( 'meta-namespace.xml' );
         form.init();
         expect( form.getModel().node( '/data/orx:meta/orx:instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
+    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'generates an instanceID on meta/instanceID WITHOUT preload binding', function() {
         form = new Form( mockForms2.formStr2, {
             modelStr: mockForms2.dataStr2
@@ -86,6 +89,7 @@ describe( 'Preload and MetaData functionality', function() {
         expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
+    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'generates an instanceID WITH preload binding', function() {
         form = new Form( mockForms2.formStr3, {
             modelStr: mockForms2.dataStr2
@@ -97,6 +101,7 @@ describe( 'Preload and MetaData functionality', function() {
         expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
+    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'does not generate a new instanceID if one is already present', function() {
         form = new Form( mockForms2.formStr3, {
             modelStr: mockForms2.dataStr3
@@ -284,7 +289,6 @@ describe( 'repeat functionality', function() {
         expect( $2ndLevelTargetRepeats.length ).toEqual( 3 );
     } );
 
-    //doesn't work in bloody Travis. STFU Travis!
     xit( 'doesn\'t duplicate date widgets in a cloned repeat', function() {
         form = loadForm( 'nested_repeats.xml' );
         form.init();
@@ -292,8 +296,38 @@ describe( 'repeat functionality', function() {
             $dates = formH.$.find( '[name="/nested_repeats/kids/kids_details/immunization_info/date"]' );
 
         expect( $dates.length ).toEqual( 5 );
+        // for some reason these widgets are not instantiated here
         expect( $dates.parent().find( '.widget.date' ).length ).toEqual( 5 );
     } );
+
+    describe( 'ordinals are set for default repeat instances in the default model upon initialization', function() {
+        var config = require( 'text!enketo-config' );
+        var dflt = config[ 'repeat ordinals' ];
+        beforeAll( function() {
+            config.repeatOrdinals = true;
+        } );
+
+        afterAll( function() {
+            config.repeatOrdinals = dflt;
+        } );
+        // this test is only interested in the model, but adding ordinals to default repeat instances is directed
+        // by Form.js
+        it( 'initialize correctly with ordinals if more than one top-level repeat is included in model', function() {
+            var f = loadForm( 'nested_repeats.xml' );
+            f.init();
+            var model = f.getModel();
+            expect( model.getStr().replace( />\s+</g, '><' ) ).toContain(
+                '<kids_details enk:last-used-ordinal="2" enk:ordinal="1"><kids_name>Tom</kids_name><kids_age>2</kids_age>' +
+                '<immunization_info enk:last-used-ordinal="2" enk:ordinal="1"><vaccine>Polio</vaccine><date/></immunization_info>' +
+                '<immunization_info enk:ordinal="2"><vaccine>Rickets</vaccine><date/></immunization_info></kids_details>' +
+                '<kids_details enk:ordinal="2"><kids_name>Dick</kids_name><kids_age>5</kids_age>' +
+                '<immunization_info enk:last-used-ordinal="3" enk:ordinal="1"><vaccine>Malaria</vaccine><date/></immunization_info>' +
+                '<immunization_info enk:ordinal="2"><vaccine>Flu</vaccine><date/></immunization_info>' +
+                '<immunization_info enk:ordinal="3"><vaccine>Polio</vaccine><date/></immunization_info>' +
+                '</kids_details>' );
+        } );
+    } );
+
 } );
 
 describe( 'calculations', function() {
@@ -343,10 +377,10 @@ describe( 'branching functionality', function() {
     } );
 
     /*
-	Issue 208 was a combination of two issues:
-		1. branch logic wasn't evaluated on repeated radiobuttons (only on the original) in branch.update()
-		2. position[i] wasn't properly injected in makeBugCompiant() if the context node was a radio button or checkbox
-	 */
+    Issue 208 was a combination of two issues:
+        1. branch logic wasn't evaluated on repeated radiobuttons (only on the original) in branch.update()
+        2. position[i] wasn't properly injected in makeBugCompiant() if the context node was a radio button or checkbox
+     */
     it( 'a) evaluates relevant logic on a repeated radio-button-question and b) injects the position correctly (issue 208)', function() {
         var repeatSelector = '.or-repeat[name="/issue208/rep"]';
         var form = loadForm( 'issue208.xml' );
@@ -467,21 +501,35 @@ describe( 'Required field validation', function() {
         expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
     } );
 
-    it( 'invalidates an enabled and required number field without a value', function() {
+    // failing
+    it( 'invalidates an enabled and required number field without a value', function( done ) {
+        // first make branch relevant
         form.getView().$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
-        $numberInput.val( '' ).trigger( 'change' ).trigger( 'validate' );
-        expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( true );
+        // now set value to empty
+        $numberInput.val( '' ).trigger( 'change' );
+        form.getView().validateInput( $numberInput )
+            .then( function() {
+                expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( true );
+                done();
+            } );
     } );
 
-    it( 'invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', function() {
+    it( 'invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', function( done ) {
         form = loadForm( 'thedata.xml' );
         form.init();
         var $textarea = form.getView().$.find( '[name="/thedata/nodeF"]' );
-        $textarea.val( '\n' ).trigger( 'change' ).trigger( 'validate' );
-        expect( $textarea.length ).toEqual( 1 );
-        expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
-        $textarea.val( '  \n  \n\r \t ' ).trigger( 'change' ).trigger( 'validate' );
-        expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
+        $textarea.val( '\n' ).trigger( 'change' );
+        form.getView().validateInput( $textarea )
+            .then( function() {
+                expect( $textarea.length ).toEqual( 1 );
+                expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
+                $textarea.val( '  \n  \n\r \t ' ).trigger( 'change' );
+                return form.getView().validateInput( $textarea );
+            } )
+            .then( function() {
+                expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
+                done();
+            } );
     } );
 } );
 
@@ -547,7 +595,7 @@ describe( 'Itemset functionality', function() {
             $items2().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
             expect( form.getModel().$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
             // add a third non-existing item to model for itemset 2
-            form.getModel().$.find( 'crop' ).text( 'banana fake cacao' )
+            form.getModel().$.find( 'crop' ).text( 'banana fake cacao' );
             expect( form.getModel().$.find( 'crop' ).text() ).toEqual( 'banana fake cacao' );
             // select an additional item in itemset 1, to trigger update of itemset 2
             $items1().filter( '[value="maize"]' ).prop( 'checked', true ).trigger( 'change' );

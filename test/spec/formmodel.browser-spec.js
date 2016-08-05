@@ -98,8 +98,9 @@ describe( 'merging an instance into the model', function() {
             expect( model.node( '/thedata/meta/deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
         } );
 
-        it( 'empties the instanceID', function() {
-            expect( model.node( '/thedata/meta/instanceID' ).getVal()[ 0 ] ).toEqual( '' );
+        it( 'generates a new instanceID', function() {
+            expect( model.node( '/thedata/meta/instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            expect( model.node( '/thedata/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
         } );
     } );
 
@@ -132,9 +133,9 @@ describe( 'merging an instance into the model', function() {
     describe( 'when the model contains templates', function() {
         [
             // with improper template=""
-            [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model><instance><a><r template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<model><instance><a><r><b>5</b></r><r><b>6</b></r><meta><instanceID/><deprecatedID/></meta></a></instance></model>' ],
+            [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model><instance><a><r template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<a><r><b>5</b></r><r><b>6</b></r>' ],
             // with proper jr:template="" and namespace definition
-            [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r><b>5</b></r><r><b>6</b></r><meta><instanceID/><deprecatedID/></meta></a></instance></model>' ],
+            [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<instance><a><r><b>5</b></r><r><b>6</b></r>' ],
         ].forEach( function( test ) {
             var result, expected,
                 model = new Model( {
@@ -149,7 +150,7 @@ describe( 'merging an instance into the model', function() {
 
             it( 'the initialization will merge the repeat values correctly and remove the templates', function() {
                 expect( model.xml.querySelectorAll( 'a > r' ).length ).toEqual( 2 );
-                expect( result ).toEqual( expected );
+                expect( result ).toContain( expected );
             } );
         } );
     } );
@@ -176,5 +177,67 @@ describe( 'merging an instance into the model', function() {
             expect( loadErrors.length ).toEqual( 1 );
             expect( loadErrors[ 0 ] ).toEqual( 'Invalid primary instance. Missing instanceID node.' );
         } );
+    } );
+} );
+
+
+// Runs fine headlessly locally, but not on Travis for some reason.
+describe( 'instanceID and deprecatedID are populated upon model initilization', function() {
+    it( 'for a new record', function() {
+        var model = new Model( {
+            modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>'
+        } );
+        model.init();
+
+        expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><\/meta><\/a>/ );
+    } );
+
+    it( 'for an existing unsubmitted record', function() {
+        var model = new Model( {
+            modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
+            instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>',
+            submitted: false
+        } );
+        model.init();
+
+        expect( model.getStr() ).toEqual( '<a><meta><instanceID>abc</instanceID></meta></a>' );
+    } );
+
+    it( 'for an existing previously-submitted record(1)', function() {
+        var model = new Model( {
+            modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
+            instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>'
+        } );
+        model.init();
+
+        expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
+    } );
+
+    it( 'for an existing previously-submitted record (2)', function() {
+        var model = new Model( {
+            modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
+            instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>',
+            submitted: true
+        } );
+        model.init();
+
+        expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
+    } );
+
+    it( 'data update events for instanceID and deprecatedID fire on model.$events', function() {
+        var model = new Model( {
+            modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
+            instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>',
+            submitted: true
+        } );
+        var eventObjects = [];
+        model.$events.on( 'dataupdate', function( event, updated ) {
+            eventObjects.push( updated );
+        } );
+        model.init();
+        expect( eventObjects.length ).toEqual( 2 );
+        expect( eventObjects[ 0 ].fullPath ).toEqual( '/a/meta/instanceID' );
+        expect( eventObjects[ 1 ].fullPath ).toEqual( '/a/meta/deprecatedID' );
+
     } );
 } );

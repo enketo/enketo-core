@@ -7,5 +7,6 @@
         "tiles": "GOOGLE_SATELLITE",
         "name": "satellite"
     } ],
-    "googleApiKey": ""
+    "googleApiKey": "",
+    "repeatOrdinals": false
 }

@@ -65,6 +65,12 @@ define( function( require, exports, module ) {
             $formClone = $( formSelector ).clone().appendTo( '<original></original>' );
 
             model = new FormModel( data );
+
+            // Before initializing form view, passthrough dataupdate event externally
+            model.$events.on( 'dataupdate', function( event, updated ) {
+                $( formSelector ).trigger( 'dataupdate.enketo', updated );
+            } );
+
             loadErrors = loadErrors.concat( model.init() );
 
             form = new FormView( formSelector );
@@ -233,8 +239,13 @@ define( function( require, exports, module ) {
             }
 
             try {
-                // before widgets.init (as instanceID used in offlineFilepicker widget)
                 this.preloads.init( this );
+
+                // before widgets.init (as instanceID used in offlineFilepicker widget)
+                // store the current instanceID as data on the form element so it can be easily accessed by e.g. widgets
+                $form.data( {
+                    instanceID: model.getInstanceID()
+                } );
 
                 // before calcUpdate!
                 this.grosslyViolateStandardComplianceByIgnoringCertainCalcs();
@@ -1442,7 +1453,6 @@ define( function( require, exports, module ) {
                 var props;
                 var xmlType;
                 var $preload;
-                var namespaced = true;
                 var that = this;
 
                 //these initialize actual preload items
@@ -1467,30 +1477,19 @@ define( function( require, exports, module ) {
                     }
                 } );
                 // In addition the presence of certain meta data in the instance may automatically trigger a preload function
-                // even if the binding is not present. Note, that this actually does not deal with HTML elements at all.
-                meta = model.node( '/*/__orx:meta/__orx:*' );
-                if ( meta.get().length === 0 ) {
-                    namespaced = false;
-                    meta = model.node( '/*/meta/*' );
-                }
-
-                meta.get().each( function() {
+                // TODO: remove this completely now that instanceID and deprecatedID are set in the form model?
+                model.getMetaNode( '*' ).get().each( function() {
                     var localName;
                     item = null;
                     xmlType = null;
                     param = null;
                     name = this.nodeName;
-                    dataNode = ( namespaced ) ? model.node( '/*/__orx:meta/' + name ) : model.node( '/*/meta/' + name );
+                    dataNode = model.node( model.getXPath( this, 'instance' ) );
                     curVal = dataNode.getVal()[ 0 ];
                     // First check if there isn't a binding with a preloader that already took care of this
                     if ( $form.find( '#or-preload-items input[name$="' + name + '"][data-preload]' ).length === 0 ) {
-                        localName = ( namespaced ) ? name.substring( name.indexOf( ':' ) + 1 ) : name;
+                        localName = name.indexOf( ':' ) ? name.substring( name.indexOf( ':' ) + 1 ) : name;
                         switch ( localName ) {
-                            case 'instanceID':
-                                item = 'instance';
-                                xmlType = 'string';
-                                param = '';
-                                break;
                             case 'timeStart':
                                 item = 'timestamp';
                                 xmlType = 'datetime';
@@ -1534,6 +1533,7 @@ define( function( require, exports, module ) {
                         value = model.evaluate( 'now()', 'string' );
                         o.dataNode.setVal( value, null, 'datetime' );
                     } );
+                    //TODO: why populate this upon load?
                     return model.evaluate( 'now()', 'string' );
                 }
                 return 'error - unknown timestamp parameter';
@@ -1625,15 +1625,6 @@ define( function( require, exports, module ) {
                     return 'no uid yet in enketo';
                 }
                 return o.curVal;
-            },
-            //Not according to spec yet, this will be added to spec but name may change
-            'instance': function( o ) {
-                var id = ( o.curVal.length > 0 ) ? o.curVal : model.evaluate( 'concat("uuid:", uuid())', 'string' );
-                //store the current instanceID as data on the form element so it can be easily accessed by e.g. widgets
-                $form.data( {
-                    instanceID: id
-                } );
-                return id;
             }
         };
 
@@ -1899,13 +1890,39 @@ define( function( require, exports, module ) {
             } );
 
             // Why is the file namespace added?
-            $form.on( 'change.file validate', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
-                that.validateInput( event.type, $( this ) );
+            $form.on( 'change.file', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
+                var updated;
+                var validCheck;
+                var requiredCheck;
+                var requiredExpr;
+                var $input = $( this );
+                var n = {
+                    path: that.input.getName( $input ),
+                    inputType: that.input.getInputType( $input ),
+                    xmlType: that.input.getXmlType( $input ),
+                    enabled: that.input.isEnabled( $input ),
+                    constraint: that.input.getConstraint( $input ),
+                    val: that.input.getVal( $input ),
+                    required: that.input.getRequired( $input ),
+                    index: that.input.getIndex( $input )
+                };
+
+                // determine 'required' check if applicable
+                if ( n.enabled && n.inputType !== 'hidden' && n.required ) {
+                    requiredExpr = n.required;
+                }
+                // set file input values to the actual name of file (without c://fakepath or anything like that)
+                if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
+                    n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
+                }
+
+                updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr );
+                validCheck = ( updated ) ? updated.validCheck : Promise.resolve( null );
+                requiredCheck = ( updated ) ? updated.requiredCheck : Promise.resolve( null );
+                that.validationFeedback( $( this ), validCheck, requiredCheck );
 
                 // propagate event externally after internal processing is completed
-                if ( event.type === 'change' ) {
-                    $form.trigger( 'valuechange.enketo' );
-                }
+                $form.trigger( 'valuechange.enketo' );
             } );
 
             // doing this on the focus event may have little effect on performance, because nothing else is happening :)
@@ -1954,7 +1971,7 @@ define( function( require, exports, module ) {
                 }
             } );
 
-            model.$.on( 'dataupdate', function( event, updated ) {
+            model.$events.on( 'dataupdate', function( event, updated ) {
                 that.calcUpdate( updated ); //EACH CALCUPDATE THAT CHANGES A VALUE TRIGGERS ANOTHER CALCUPDATE => INEFFICIENT
                 that.branchUpdate( updated );
                 that.outputUpdate( updated );
@@ -2027,7 +2044,7 @@ define( function( require, exports, module ) {
                 if ( $elem.length === 0 ) {
                     return Promise.resolve();
                 }
-                return that.validateInput( 'validate', $elem.eq( 0 ) );
+                return that.validateInput( $elem.eq( 0 ) );
             } ).toArray();
 
             return Promise.all( validations )
@@ -2117,17 +2134,17 @@ define( function( require, exports, module ) {
             return model.getXPath( target, 'instance', false );
         };
 
+
         /**
-         * Validates input values AND updates model if event type is not 'validate'.
+         * Validates question values.
          * 
-         * @param  {string} eventType [description]
          * @param  {jQuery} $input    [description]
-         * @return {[type]}           [description]
+         * @return {Promise}           [description]
          */
-        FormView.prototype.validateInput = function( eventType, $input ) {
+        FormView.prototype.validateInput = function( $input ) {
             var that = this;
-            var validCons;
-            var validReq;
+            var validCheck = Promise.resolve( true );
+            var requiredCheck = Promise.resolve( true );
             var _dataNodeObj;
             // all relevant properties, except for the **very expensive** index property
             var n = {
@@ -2136,7 +2153,6 @@ define( function( require, exports, module ) {
                 xmlType: that.input.getXmlType( $input ),
                 enabled: that.input.isEnabled( $input ),
                 constraint: that.input.getConstraint( $input ),
-                val: that.input.getVal( $input ),
                 required: that.input.getRequired( $input )
             };
             var getDataNodeObj = function() {
@@ -2148,65 +2164,46 @@ define( function( require, exports, module ) {
                 return _dataNodeObj;
             };
 
-
-            // set file input values to the actual name of file (without c://fakepath or anything like that)
-            if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
-                n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
-            }
-
-            if ( eventType === 'validate' ) {
-                // The enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not.
-                // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
-                if ( !n.enabled || n.inputType === 'hidden' ) {
-                    validCons = Promise.resolve( true );
-                } else
+            // The enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not.
+            // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
+            if ( n.enabled && n.inputType !== 'hidden' ) {
                 // Use a dirty trick to not have to determine the index with the following insider knowledge.
                 // It could potentially be sped up more by excluding n.val === "", but this would not be safe, in case the view is not in sync with the model.
-                if ( !n.constraint && ( n.xmlType === 'string' || n.xmlType === 'select' || n.xmlType === 'select1' || n.xmlType === 'binary' ) ) {
-                    validCons = Promise.resolve( true );
-                } else {
-                    validCons = getDataNodeObj().validate( n.constraint, n.xmlType );
-                }
-            } else {
-                validCons = getDataNodeObj().setVal( n.val, n.constraint, n.xmlType )
-                    .then( function( validCons ) {
-                        // geotrace and geoshape are very complex data types that require various change events
-                        // to avoid annoying users, we ignore the INVALID onchange validation result
-                        return ( validCons === false && ( n.xmlType === 'geotrace' || n.xmlType === 'geoshape' ) ) ? null : validCons;
-                    } );
-            }
-
-            // validate 'required', checking value in Model (not View)
-            if ( n.enabled && n.inputType !== 'hidden' && n.required && getDataNodeObj().getVal()[ 0 ].length === 0 ) {
-                // If result of required expression evaluation is true, it does not pass.
-                // n.ind has been populated in the getDataNodeObj call
-                validReq = !model.evaluate( n.required, 'boolean', n.path, n.ind, false );
-            } else {
-                validReq = true;
-            }
-
-            if ( validReq === false ) {
-                that.setValid( $input, 'constraint' );
-                if ( eventType === 'validate' ) {
-                    that.setInvalid( $input, 'required' );
+                if ( !( n.constraint && ( n.xmlType === 'string' || n.xmlType === 'select' || n.xmlType === 'select1' || n.xmlType === 'binary' ) ) ) {
+                    validCheck = getDataNodeObj().validateConstraintAndType( n.constraint, n.xmlType );
                 }
 
-                return Promise.resolve( false );
-            } else {
-                that.setValid( $input, 'required' );
-                return validCons
-                    .then( function( validCons ) {
-                        if ( typeof validCons !== 'undefined' && validCons === false ) {
-                            that.setInvalid( $input, 'constraint' );
-                        } else if ( validCons !== null ) {
-                            that.setValid( $input, 'constraint' );
-                        }
-                    } )
-                    .catch( function( e ) {
+                if ( n.required ) {
+                    requiredCheck = getDataNodeObj().validateRequired( n.required );
+                }
+            }
+
+            return this.validationFeedback( $input, validCheck, requiredCheck );
+        };
+
+        FormView.prototype.validationFeedback = function( $input, validCheck, requiredCheck ) {
+            var that = this;
+            return requiredCheck
+                .then( function( passed ) {
+                    if ( passed === false ) {
+                        that.setValid( $input, 'constraint' );
+                        that.setInvalid( $input, 'required' );
+                        return null;
+                    } else {
+                        that.setValid( $input, 'required' );
+                        return validCheck;
+                    }
+                } ).then( function( passed ) {
+                    if ( passed === false ) {
                         that.setInvalid( $input, 'constraint' );
-                        throw e;
-                    } );
-            }
+                    } else if ( passed !== null ) {
+                        that.setValid( $input, 'constraint' );
+                    }
+                } )
+                .catch( function( e ) {
+                    that.setInvalid( $input, 'constraint' );
+                    throw e;
+                } );
         };
     }
 

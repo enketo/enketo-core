@@ -67,7 +67,7 @@ module.exports = function( grunt ) {
                 }
             },
             js: {
-                files: [ '*.js', 'src/**/*.js' ],
+                files: [ 'config.json', '*.js', 'src/**/*.js' ],
                 tasks: [ 'browserify' ],
                 options: {
                     spawn: false,

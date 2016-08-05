@@ -3,10 +3,21 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.9.0] - 2016-08-29
 --------------------
+##### Added
+- Ability to listen for dataupdate events on model before model is initialized
+- Optional ability to add repeat ordinal attributes to model in enketo namespace
+- Improved extensibility by adding more information to the dataupdate event
+
+##### Changed
+- Validation logic refactored and behaviour for required field validation sligthly changed. If a required has a value and is then emptied, the background will turn red.
+
 ##### Removed
 - Workaround for [ODK Aggregate bug](https://github.com/opendatakit/opendatakit/issues/1116) because it doesn't really solve anything.
+
+##### Fixed
+- Fragile namespace handling in model.
 
 [4.8.4] - 2016-08-15
 --------------------
