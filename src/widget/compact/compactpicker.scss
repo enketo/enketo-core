@@ -15,10 +15,13 @@
         &:hover {
             background: none;
         }
-        .active {
-            display: none;
+        .option-label{
+            padding: 2px;
+            &::before, &::after {
+                display: none;
+            }   
         }
-        img.active {
+        .active {
             display: block;
             margin-left: 0;
             margin-right: 0;
@@ -34,7 +37,7 @@
     }
     input {
         display: none;
-        &:checked ~ img.active, &:checked ~ img.active:hover {
+        &:checked ~ .active, &:checked ~ .active:hover {
             border-color: $brand-primary-color;
         }
     }

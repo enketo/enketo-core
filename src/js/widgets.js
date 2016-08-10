@@ -15,7 +15,7 @@ define( function( require, exports, module ) {
         require( '../widget/date/datepicker-extended' ),
         require( '../widget/time/timepicker-extended' ),
         require( '../widget/datetime/datetimepicker-extended' ),
-        require( '../widget/mediagrid/mediagridpicker' ),
+        require( '../widget/compact/compactpicker' ),
         require( '../widget/file/filepicker' ),
         require( '../widget/select-likert/likertitem' ),
         require( '../widget/distress/distresspicker' ),
