@@ -106,11 +106,6 @@ For GMaps layers you have the four options as tiles values: `"GOOGLE_SATELLITE"`
 #### googleApiKey
 The Google API key that is used for geolocation (in the geo widgets' search box). Can be obtained [here](https://console.developers.google.com/project). Make sure to enable the _GeoCoding API_ service. If you are using Google Maps layers, the same API key is used. Make sure to enable the _Google Maps JavaScript API v3_ service as well in that case (see next item).
 
-#### workaround ODK bugs
-Default is `false`. When set to `true` this works around the following ODK bugs by introducing non-compliant XPath behaviour:
-
-* https://github.com/opendatakit/opendatakit/issues/1116 (Enketo will set value of NaN to '' for decimal and integer inputs) 
-
 
 ### How to develop Enketo Core
 

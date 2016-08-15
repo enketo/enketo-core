@@ -7,6 +7,5 @@
         "tiles": "GOOGLE_SATELLITE",
         "name": "satellite"
     } ],
-    "googleApiKey": "",
-    "workaround ODK bugs": false
+    "googleApiKey": ""
 }

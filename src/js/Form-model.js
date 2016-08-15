@@ -10,7 +10,6 @@ define( function( require, exports, module ) {
     var $ = require( 'jquery' );
     var Promise = require( 'lie' );
     var FormLogicError = require( './Form-logic-error' );
-    var config = require( 'text!enketo-config' );
     require( './plugins' );
     require( './extend' );
 
@@ -1341,25 +1340,11 @@ define( function( require, exports, module ) {
         'decimal': {
             validate: function( x ) {
                 return ( !isNaN( x - 0 ) && x !== null ) ? true : false;
-            },
-            convert: function( x ) {
-                if ( config[ 'workaround ODK bugs' ] === true ) {
-                    // https://github.com/opendatakit/opendatakit/issues/1116
-                    return ( x === 'NaN' || x === 'Infinity' || x === '-Infinity' || isNaN( x - 0 ) ) ? '' : x;
-                }
-                return isNaN( x ) ? 'NaN' : x;
             }
         },
         'int': {
             validate: function( x ) {
                 return ( !isNaN( x - 0 ) && x !== null && Math.round( x ).toString() === x.toString() ) ? true : false;
-            },
-            convert: function( x ) {
-                if ( config[ 'workaround ODK bugs' ] === true ) {
-                    // https://github.com/opendatakit/opendatakit/issues/1116
-                    return ( x === 'NaN' || x === 'Infinity' || x === '-Infinity' || isNaN( x - 0 ) ) ? '' : x;
-                }
-                return isNaN( x ) ? 'NaN' : x;
             }
         },
         'date': {
