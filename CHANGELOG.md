@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.8.4] - 2016-08-15
+--------------------
+##### Changed
+- Added workaround option for [ODK Aggregate bug](https://github.com/opendatakit/opendatakit/issues/1116) with NaN, Infity, -Infinity
+
 [4.8.3] - 2016-08-10
 --------------------
 ##### Fixed
