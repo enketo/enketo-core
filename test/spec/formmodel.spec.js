@@ -630,6 +630,7 @@ describe( 'getting templates', function() {
 } );
 
 describe( 'auto-cloning repeats in empty model', function() {
+    require( '../../config' ).repeatOrdinals = false;
     var model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
         '<rep3 jr:template=""><three/></rep3></rep2></rep1></data></instance></model>' );
     model.init();

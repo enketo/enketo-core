@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.9.1] - 2016-09-16
+--------------------
+##### Fixed
+- IE11 adds rogue namespaces to ordinal attributes.
+
 [4.9.0] - 2016-08-29
 --------------------
 ##### Added

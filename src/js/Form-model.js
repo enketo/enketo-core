@@ -515,31 +515,32 @@ define( function( require, exports, module ) {
         firstRepeatInSeries = $repeatSeries.get( 0 );
 
         /**
-         * It would seem more proper to use getAttributeNs and setAttributeNs. However, this results in duplicate
-         * namespace declarations on each repeat node when serializing the model.
+         * getAttributeNs and setAttributeNs results in duplicate namespace declarations on each repeat node when serializing the model.
+         * However, the regular getAttribte and setAttribute do not work properly in IE11.
          */
-
         function incrementAndGetOrdinal() {
-            var lastUsedOrdinal = firstRepeatInSeries.getAttribute( enkNs + ':last-used-ordinal' ) || 0;
+            var lastUsedOrdinal = firstRepeatInSeries.getAttributeNS( that.ENKETO_XFORMS_NS, 'last-used-ordinal' ) || 0;
             var newOrdinal = Number( lastUsedOrdinal ) + 1;
-            firstRepeatInSeries.setAttribute( enkNs + ':last-used-ordinal', newOrdinal );
+            firstRepeatInSeries.setAttributeNS( that.ENKETO_XFORMS_NS, enkNs + ':last-used-ordinal', newOrdinal );
             return newOrdinal;
         }
 
         function addOrdinalAttribute( el ) {
-            if ( config.repeatOrdinals === true && !el.getAttribute( enkNs + ':ordinal' ) ) {
-                el.setAttribute( enkNs + ':ordinal', incrementAndGetOrdinal() );
+            if ( config.repeatOrdinals === true && !el.getAttributeNS( that.ENKETO_XFORMS_NS, 'ordinal' ) ) {
+                el.setAttributeNS( that.ENKETO_XFORMS_NS, enkNs + ':ordinal', incrementAndGetOrdinal() );
             }
         }
 
         function removeOrdinalAttributes( el ) {
             if ( config.repeatOrdinals === true ) {
-                // find all nested repeats first
-                var repeats = Array.prototype.slice.call( el.querySelectorAll( '[' + enkNs + '\\:ordinal]' ) );
+                // Find all nested repeats first (this is only used for repeats that have no template).
+                // The querySelector is actually too unspecific as it matches all ordinal attributes in ANY namespace.
+                // However the proper [enk\\:ordinal] doesn't work if setAttributeNS was used to add the attribute.
+                var repeats = Array.prototype.slice.call( el.querySelectorAll( '[*|ordinal]' ) );
                 repeats.push( el );
                 for ( var i = 0; i < repeats.length; i++ ) {
-                    repeats[ i ].removeAttribute( enkNs + ':last-used-ordinal' );
-                    repeats[ i ].removeAttribute( enkNs + ':ordinal' );
+                    repeats[ i ].removeAttributeNS( that.ENKETO_XFORMS_NS, 'last-used-ordinal' );
+                    repeats[ i ].removeAttributeNS( that.ENKETO_XFORMS_NS, 'ordinal' );
                 }
             }
         }
@@ -685,9 +686,26 @@ define( function( require, exports, module ) {
         var dataStr = ( new XMLSerializer() ).serializeToString( this.xml.querySelector( 'instance > *' ) || this.xml.documentElement, 'text/xml' );
         // restore default namespaces
         dataStr = dataStr.replace( /\s(data-)(xmlns\=("|')[^\s\>]+("|'))/g, ' $2' );
+        // If not IE, strip duplicate namespace declarations. IE doesn't manage to add a namespace declaration to the root element.
+        if ( navigator.userAgent.indexOf( 'Trident/' ) === -1 ) {
+            dataStr = this.removeDuplicateEnketoNsDeclarations( dataStr );
+        }
         return dataStr;
     };
 
+
+    FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
+        var i = 0;
+        var declarationExp = new RegExp( '( xmlns:' + this.getNamespacePrefix( this.ENKETO_XFORMS_NS ) + '="' + this.ENKETO_XFORMS_NS + '")', 'g' );
+        return xmlStr.replace( declarationExp, function( match, p1 ) {
+            i++;
+            if ( i > 1 ) {
+                return '';
+            } else {
+                return match;
+            }
+        } );
+    };
 
     FormModel.prototype.getXmlFragmentStr = function( node ) {
         var clone;
@@ -805,7 +823,7 @@ define( function( require, exports, module ) {
                     that.namespaces[ prefix ] = arr[ 1 ];
                     // add to document
                     if ( arr[ 2 ] ) {
-                        node.setAttribute( 'xmlns:' + prefix, arr[ 1 ] );
+                        node.setAttributeNS( 'http://www.w3.org/2000/xmlns/', 'xmlns:' + prefix, arr[ 1 ] );
                     }
                 }
             } );

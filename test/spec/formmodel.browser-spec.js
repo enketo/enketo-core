@@ -3,6 +3,8 @@ var Model = require( '../../src/js/Form-model' );
 
 describe( 'merging an instance into the model', function() {
 
+    require( '../../config' ).repeatOrdinals = false;
+
     describe( '', function() {
         [
             // partial record, empty
