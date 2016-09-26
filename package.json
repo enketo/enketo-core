@@ -43,7 +43,7 @@
         "grunt-contrib-watch": "1.x.x",
         "grunt-jsbeautifier": "0.x.x",
         "grunt-karma": "2.0.0",
-        "grunt-sass": "https://github.com/liamkeaton/grunt-sass.git#365ab105bb05e850b89da411fc42ad850ecfdcbf",
+        "grunt-sass": "1.2.1",
         "jasmine-core": "2.4.x",
         "json-pretty": "0.0.1",
         "karma": "1.1.x",

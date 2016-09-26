@@ -5,7 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Fixed
 - Int() XPath function provides incorrect results for very small and very large numbers.
+- Fails to build with official grunt-sass.
 
 [4.9.1] - 2016-09-16
 --------------------

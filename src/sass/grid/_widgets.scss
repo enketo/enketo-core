@@ -2,7 +2,6 @@
 
 .question .geopoint.widget {
     input[type=number], input[type=text] {
-        @extend .form-control;
         &[name=alt], &[name=acc] {
             width: 40%;
         }
@@ -13,16 +12,20 @@
 .widget.bootstrap-timepicker,
 .widget.datetimepicker {
     @include display-flex;
+
     @include flex-wrap(no-wrap);
+
     @include flex-direction(row);
 }
 
 .question .widget.datetimepicker {
     .date, .bootstrap-timepicker {
         @include flex(1);
+
         input {
             width: auto;
         }
+
         .btn-reset {
             float: right;
         }
@@ -44,6 +47,7 @@
 // tables
 .question.or-appearance-list-nolabel, .question.or-appearance-label {
     margin: 0;
+
     &:not(:last-child) {
         border-bottom: none;
     }
@@ -58,7 +62,9 @@
         // touch radio buttons and checkboxes
         .option-wrapper > label {
             border: none;
+
             @include border-radius(0);
+
             &[data-checked] {
                 background-color: transparent;
             }
@@ -70,31 +76,40 @@
 .question .geopicker.widget {
     input[type=text], input[type=number], textarea {
         @include border-radius(0);
+
         @include box-shadow-none;
+
         border: none;
         border-bottom: 1px dotted #cccccc;
         background-color: transparent;
     }
+
     input[type=text][name=search] {
         width: 80%;
     }
+
     textarea {
         // because textarea has placeholder
         padding-top: 10px;
     }
+
     label.geo.alt {
         border-top: none;
     }
+
     .btn:not(.close-chain-btn) {
         background: transparent;
         border: none;
+
         &:hover {
             opacity: 0.6;
         }
     }
+
     .map-canvas-wrapper, .search-bar {
         border-left: none;
     }
+
     &:not(.full-screen).hide-input {
         &.wide {
             .map-canvas {
@@ -102,6 +117,7 @@
             }
         }
     }
+
     .toggle-input-btn:not(.open) {
         left: 0;
     }
@@ -112,12 +128,15 @@ html:not(.touch) .question .geopoint.widget {
         button.btn {
             border: none;
             background: transparent;
+
             @include border-radius(0);
+
             &:hover {
                 background: transparent;
                 color: #aaaaaa;
             }
         }
+
         [name=search] ~ .input-group-btn .btn {
             border-bottom: 1px dotted #cccccc;
         }
@@ -129,12 +148,15 @@ html:not(.touch) .question .geopoint.widget {
     &__content {
         padding-top: 60px;
     }
+
     &__overlay + .question {
         margin-left: 0;
         margin-right: 0;
     }
+
     .question {
         border: $grid-border;
+
         input, textarea {
             order: 4;
         }
@@ -145,6 +167,7 @@ html:not(.touch) .question .geopoint.widget {
     position: absolute;
     top: $q-pad-top;
     right: $q-pad-left;
+
     //left: $q-pad-right;
     margin: 0;
 }
@@ -152,6 +175,7 @@ html:not(.touch) .question .geopoint.widget {
 legend .btn-comment {
     right: 0;
     top: 0;
+
     // undo legend hack
     .icon {
         position: static;
@@ -163,6 +187,7 @@ legend .btn-comment {
         left: $q-pad-left;
         right: auto;
     }
+
     legend .btn-comment {
         left: 0;
         right: auto;
