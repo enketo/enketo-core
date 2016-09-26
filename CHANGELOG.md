@@ -3,6 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+- Int() XPath function provides incorrect results for very small and very large numbers.
+
 [4.9.1] - 2016-09-16
 --------------------
 ##### Fixed
