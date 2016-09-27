@@ -123,6 +123,16 @@
     }
 }
 
+.esri-geopicker {
+    input[type=text], input[type=number], textarea, select {
+        border-bottom: 1px dotted #cccccc;
+    }
+
+    .geo-unit {
+        right: 12px;
+    }
+}
+
 html:not(.touch) .question .geopoint.widget {
     .search-bar {
         button.btn {
@@ -191,6 +201,13 @@ legend .btn-comment {
     legend .btn-comment {
         left: 0;
         right: auto;
+    }
+
+    .esri-geopicker {
+        .geo-unit {
+            right: auto;
+            left: 12px;
+        }
     }
 }
 

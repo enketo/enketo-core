@@ -55,6 +55,8 @@ $( '#validate-form' ).on( 'click', function() {
 function initializeForm() {
     form = new Form( 'form.or:eq(0)', {
         modelStr: modelStr
+    }, {
+        webMapId: 'f2e9b762544945f390ca4ac3671cfa72'
     } );
     // for debugging
     window.form = form;

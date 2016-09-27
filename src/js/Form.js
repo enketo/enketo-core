@@ -40,11 +40,12 @@ define( function( require, exports, module ) {
      *
      * @param {string} formSelector  jquery selector for the form
      * @param {{modelStr: string, ?instanceStr: string, ?submitted: boolean, ?external: <{id: string, xmlStr: string }> }} data data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
-     *
+     * @param { {?webMapId: string}} options form options
+     * 
      * @constructor
      */
 
-    function Form( formSelector, data ) {
+    function Form( formSelector, data, options ) {
         var model;
         var cookies;
         var form;
@@ -77,7 +78,7 @@ define( function( require, exports, module ) {
 
             repeatsPresent = ( $( formSelector ).find( '.or-repeat' ).length > 0 );
 
-            loadErrors = loadErrors.concat( form.init() );
+            loadErrors = loadErrors.concat( form.init( options ) );
 
             document.querySelector( 'body' ).scrollIntoView();
 
@@ -231,7 +232,7 @@ define( function( require, exports, module ) {
             this.$nonRepeats = {};
         }
 
-        FormView.prototype.init = function() {
+        FormView.prototype.init = function( options ) {
             var that = this;
 
             if ( typeof model === 'undefined' || !( model instanceof FormModel ) ) {
@@ -266,11 +267,12 @@ define( function( require, exports, module ) {
                 this.setAllVals();
 
                 // after setAllVals(), after repeat.init()
-                widgets.init( null, {
-                    input: this.input,
-                    pathToAbsolute: this.pathToAbsolute,
-                    evaluate: model.evaluate.bind( model )
-                } );
+                options = typeof options !== 'object' ? {} : options;
+                options.input = this.input;
+                options.pathToAbsolute = this.pathToAbsolute;
+                options.evaluate = model.evaluate.bind( model );
+                options.formClasses = utils.toArray( $form.get( 0 ).classList );
+                widgets.init( null, options );
 
                 // after widgets.init(), and repeat.init()
                 this.branchUpdate();

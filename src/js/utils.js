@@ -80,9 +80,24 @@ define( function( require, exports, module ) {
         return '';
     }
 
+    /**
+     * Converts NodeLists or DOMtokenLists to an array
+     * @param  {[type]} list [description]
+     * @return {[type]}      [description]
+     */
+    function toArray( list ) {
+        var array = [];
+        // iterate backwards ensuring that length is an UInt32
+        for ( var i = list.length >>> 0; i--; ) {
+            array[ i ] = list[ i ];
+        }
+        return array;
+    }
+
     module.exports = {
         parseFunctionFromExpression: parseFunctionFromExpression,
         stripQuotes: stripQuotes,
-        getFilename: getFilename
+        getFilename: getFilename,
+        toArray: toArray
     };
 } );
