@@ -38,7 +38,7 @@ var data = {
 	submitted: false,
 	// optional array of external data objects containing: 
 	// {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
-	external = []
+	external: []
 };
 
 // instantiate a form, with 2 parameters
