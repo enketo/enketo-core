@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.9.3] - 2016-09-29
+--------------------
+##### Fixed
+- XPath functions that contain '' or "" are sometimes evaluated incorrectly.
+
 [4.9.2] - 2016-09-26
 --------------------
 ##### Fixed

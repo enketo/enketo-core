@@ -429,6 +429,14 @@ describe( 'converting absolute paths', function() {
         [ 'concat(/output_in_repeats/to/node, "2")', 'concat(/model/instance[1]/output_in_repeats/to/node, "2")' ],
         [ 'concat(/path/to/node, "2")', 'concat(/model/instance[1]/path/to/node, "2")' ],
         [ 'concat( /path/to/node, "2" )', 'concat( /model/instance[1]/path/to/node, "2" )' ],
+        [ "join(' ', if( /r/a > 0, 'a', '-'), if( /r/o > 0, 'b', ''))",
+            "join(' ', if( /model/instance[1]/r/a > 0, 'a', '-'), if( /model/instance[1]/r/o > 0, 'b', ''))"
+        ],
+        [ "join(' ', if( /r/a > 0, 'a', ''), if( /r/o > 0, 'b', ''))",
+            // note the 3rd arg of the first if() is emtpy string! https://github.com/kobotoolbox/enketo-express/issues/559
+            "join(' ', if( /model/instance[1]/r/a > 0, 'a', ''), if( /model/instance[1]/r/o > 0, 'b', ''))"
+        ],
+
 
         // to leave unchanged
         [ 'path/to/node' ],

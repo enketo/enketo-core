@@ -859,7 +859,7 @@ define( function( require, exports, module ) {
      * @return {string}      new expression
      */
     FormModel.prototype.shiftRoot = function( expr ) {
-        var LITERALS = /"([^"]+)(")|'([^']+)(')/g;
+        var LITERALS = /"([^"]*)(")|'([^']*)(')/g;
         if ( this.hasInstance ) {
             // Encode all string literals in order to exclude them, without creating a monsterly regex
             expr = expr.replace( LITERALS, function( m, p1, p2, p3, p4 ) {
