@@ -3,11 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased] 
+[4.10.0] - 2016-10-05
 --------------------
+##### Changed
+- Upgraded to jQuery 3.1.x. **Warning: Likely requires the app that uses enketo-core to also upgrade to jQuery 3.1.x!**
+
 ##### Fixed
 - Widgets not disabled when they become irrelevant.
-
 
 [4.9.3] - 2016-09-29
 --------------------
