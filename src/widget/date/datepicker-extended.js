@@ -24,7 +24,7 @@ define( function( require, exports, module ) {
     var Widget = require( '../../js/Widget' );
     var support = require( '../../js/support' );
     var $ = require( 'jquery' );
-    require( 'bootstrap-datepicker/dist/js/bootstrap-datepicker' );
+    require( 'bootstrap-datepicker' );
 
     //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
     var pluginName = 'datepickerExtended';

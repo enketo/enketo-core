@@ -24,7 +24,7 @@ define( function( require, exports, module ) {
     var Widget = require( '../../js/Widget' );
     var support = require( '../../js/support' );
     var $ = require( 'jquery' );
-    require( 'bootstrap-timepicker/js/bootstrap-timepicker' );
+    require( 'bootstrap-timepicker' );
 
     var pluginName = 'timepickerExtended';
 
@@ -74,11 +74,11 @@ define( function( require, exports, module ) {
             .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
         $fakeTimeI.on( 'change', function() {
-            var $this = $( this ),
-                // the following line can be removed if https://github.com/jdewit/bootstrap-timepicker/issues/202 gets approved
-                val = ( /^[0-9]:/.test( $this.val() ) ) ? '0' + $this.val() : $this.val();
+            var val = this.value;
+            // the following line can be removed if https://github.com/jdewit/bootstrap-timepicker/issues/202 gets approved
+            val = /^[0-9]:/.test( val ) ? '0' + val : val;
             // add 00 minutes if they are missing (probably a bug in bootstrap timepicker)
-            val = ( /^[0-9]{2}:$/.test( val ) ) ? val + '00' : val;
+            val = /^[0-9]{2}:$/.test( val ) ? val + '00' : val;
             $timeI.val( val ).trigger( 'change' ).blur();
             return false;
         } );

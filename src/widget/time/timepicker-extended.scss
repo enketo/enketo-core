@@ -16,13 +16,19 @@
     }
 }
 
-.icon-chevron-up {
+.bootstrap-timepicker-widget table td span {
+    width: 12px;
+}
+
+.glyphicon-chevron-up {
     @extend .icon;
+
     @extend .icon-chevron-up;
 }
 
-.icon-chevron-down {
+.glyphicon-chevron-down {
     @extend .icon;
+
     @extend .icon-chevron-down;
 }
 
