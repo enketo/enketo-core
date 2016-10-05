@@ -69,14 +69,20 @@ define( function( require, exports, module ) {
          * Most of the times this branch can remain empty.
          * Check with $('.or-branch').show() whether input is disabled in a disabled branch.
          */
-        disable: function() {
+        disable: function( element ) {
+            $( element )
+                .next( '.widget' ).addClass( 'readonly' );
             //console.debug( this.namespace, 'disable' );
         },
         /**
          * Does whatever necessary to enable the widget if its parent branch is enabled.
          * Most of the times this function can remain empty.
          */
-        enable: function() {
+        enable: function( element ) {
+            if ( !this.props.readonly ) {
+                $( element )
+                    .next( '.widget' ).removeClass( 'readonly' );
+            }
             //console.debug( this.namespace, 'enable' );
         },
         /**

@@ -14,11 +14,13 @@ $media-margin: 10px;
         color: $brand-primary-color;
         text-align: center;
     }
+
     > h4 {
         text-align: inherit;
         margin-top: 9px;
         margin-bottom: 9px;
         color: $brand-primary-color;
+
         strong {
             font-size: inherit;
         }
@@ -42,6 +44,7 @@ $media-margin: 10px;
 /** hints **/
 .or-hint.active {
     @include font-normal;
+
     color: #888888;
     display: block;
     line-height: 16px;
@@ -49,6 +52,7 @@ $media-margin: 10px;
     font-size: 11px;
     font-style: italic;
     padding-top: 5px;
+
     ~ br {
         display: none;
     }
@@ -58,6 +62,7 @@ $media-margin: 10px;
     display: block;
     text-align: center;
     width: 100%;
+
     img {
         float: none;
         display: inline;
@@ -71,20 +76,25 @@ $media-margin: 10px;
     margin: 0 0 3px 0;
     padding: 20px 10px 10px 10px;
     position: relative;
+
     .repeat-number {
         display: block;
         position: absolute;
         top: 7px;
         right: 10px;
         color: $brand-primary-color;
+
         + .or-group {
             border-top: none;
         }
     }
+
     .or-repeat {
         background-color: $question-bg;
+
         .or-repeat {
             background-color: $repeat-bg;
+
             .or-repeat {
                 background-color: $question-bg;
             }
@@ -95,30 +105,38 @@ $media-margin: 10px;
 .or-group {
     border-top: $line;
     margin: 1.5em 0 0.4em 0;
+
     .or-group {
         margin: 1.5em 0 0.5em 0;
+
         > h4 .active {
             &::before {
                 content: "\00BB  ";
             }
+
             font-size: 80%;
         }
+
         .or-group {
             > h4 .active::before {
                 content: "\00BB  \00BB  ";
             }
+
             .or-group {
                 > h4 .active::before {
                     content: "\00BB  \00BB  \00BB  ";
                 }
+
                 .or-group {
                     > h4 .active::before {
                         content: "\00BB  \00BB  \00BB  \00BB";
                     }
+
                     .or-group {
                         > h4 .active::before {
                             content: "\00BB  \00BB  \00BB  \00BB  \00BB";
                         }
+
                         .or-group {
                             > h4 .active::before {
                                 content: "\00BB  \00BB  \00BB  \00BB  \00BB  \00BB";
@@ -137,11 +155,13 @@ $media-margin: 10px;
 
 .question {
     @include font-bold;
+
     display: block;
     margin: 0 0 9px 0;
     padding-top: 15px;
     border: none;
     position: relative;
+
     > fieldset {
         padding: 0;
         margin: 0;
@@ -171,16 +191,20 @@ $media-margin: 10px;
 
 .note {
     @include font-normal;
+
     color: $note-color;
     background: $note-bg;
     display: block;
     margin: 15px 0;
+
     input[readonly]:not([type=radio]):not([type=checkbox]) {
         display: none;
+
         &.has-value {
             display: block;
         }
     }
+
     strong {
         font-size: inherit;
     }
@@ -196,6 +220,7 @@ label, legend, .note {
         max-height: 300px;
         max-width: 70%;
     }
+
     video {
         max-width: 100%;
     }
@@ -209,6 +234,7 @@ legend {
     width: 100%;
     padding: 0;
     margin-bottom: 18px;
+
     //works in Chrome
     > span {
         vertical-align: 12px;
@@ -219,32 +245,41 @@ legend {
 .option-wrapper {
     // this flexiness is required for appearance="random"
     @include display-flex;
+
     @include flex-direction(column);
+
     > label {
         @include font-normal;
+
         display: block;
         margin: 0;
         cursor: pointer;
         padding: 4px 0 4px 0;
         margin: 0 10px 1px 10px;
+
         // TODO: remove hover rule for tables (in likert already done)
         &:hover:not(.filler) {
             background-color: $brand-secondary-color;
         }
+
         // clearfix with small adjustments to not mess up radio buttons.
         &:before, &:after {
             content: " ";
             display: table;
         }
+
         &:after {
             clear: both;
         }
     }
+
     .option-label {
         margin-left: 30px;
+
         // input is floated to deal with multi-line labels
         display: block;
     }
+
     img, video, audio {
         float: right;
         margin: $media-margin 0 $media-margin $media-margin;
@@ -256,6 +291,7 @@ legend {
         .option-label {
             margin-right: 30px;
         }
+
         img, video, audio {
             float: left;
             margin: $media-margin $media-margin $media-margin 0;
@@ -269,34 +305,42 @@ legend {
         .option-wrapper > label {
             background-color: transparent;
             border: 1px solid #ccc;
+
             @include border-radius(4px);
+
             width: auto;
             margin: 0 0 6.4px 0;
             padding: 10px 10px 10px 10px;
+
             input[type="radio"], input[type="checkbox"] {
                 margin-top: 4px;
+
                 //slight variation between grid and fh theme for default radio/checkbox
                 margin-left: 5px;
             }
+
             &:focus, &:hover, &:active, &[data-checked] {
                 background-color: $brand-secondary-color;
             }
         }
     }
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
+
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
         //@include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
     }
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
+
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
         border: 1px solid #ddd8ce;
     }
+
     select {
         width: 100%;
     }
 }
 
-input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select, .widget {
+input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select, .widget {
     display: block;
     margin: 8px 0 8px 0;
 }
@@ -310,12 +354,14 @@ select {
 }
 
 .question input, .note input {
-    &[type="text"],&[type="password"], &[type="url"], &[type="email"], &[type="file"] {
+    &[type="text"], &[type="password"], &[type="url"], &[type="email"], &[type="file"] {
         width: $input-max-width;
     }
+
     &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
         width: $input-min-width;
     }
+
     &[type="radio"], &[type=checkbox] {
         // input is floated to deal with multi-line labels
         float: left;
@@ -342,9 +388,11 @@ select {
     .repeat-buttons {
         margin-top: 30px;
     }
+
     .repeat {
         margin-bottom: 0;
     }
+
     .remove {
         float: right;
         margin-bottom: 0;
@@ -382,10 +430,12 @@ legend .required {
 
 .required-subtle {
     @include transition-slow;
+
     float: right;
     margin-top: 4px;
     color: $state-danger-text;
     font-size: 0.8em;
+
     @media screen and (max-width: 500px) {
         font-size: 0.5em;
     }
@@ -397,19 +447,23 @@ legend .required {
 
 .focus .required-subtle {
     @include transition-slow;
+
     color: #333333;
 }
 
-.disabled {
+.disabled, :disabled {
     opacity: 0.5;
 }
 
 .invalid-constraint, .invalid-required {
     @include transition-fast;
+
     background-color: $state-danger-bg;
     border-color: $state-danger-border;
     border-radius: $border-radius-small;
+
     $pad: 10px;
+
     margin-right: -$pad;
     margin-left: -$pad;
     padding-left: $pad;
@@ -424,6 +478,7 @@ legend .required {
 
 .or-required-msg.active, .or-constraint-msg.active {
     @include font-bold;
+
     padding-top: 5px;
     font-size: 0.85em;
     color: $state-danger-text;

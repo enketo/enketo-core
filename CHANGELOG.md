@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased] 
+--------------------
+##### Fixed
+- Widgets not disabled when they become irrelevant.
+
+
 [4.9.3] - 2016-09-29
 --------------------
 ##### Fixed

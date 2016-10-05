@@ -1105,11 +1105,10 @@ define( function( require, exports, module ) {
                 if ( virgin || selfRelevant( $branchNode ) ) {
                     branchChange = true;
                     $branchNode.addClass( 'disabled' );
-
+                    widgets.disable( $branchNode );
                     // if the branch was previously enabled
                     if ( !virgin ) {
                         $branchNode.clearInputs( 'change' );
-                        widgets.disable( $branchNode );
                         // all remaining fields marked as invalid can now be marked as valid
                         $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
                             that.setValid( $( this ) );
