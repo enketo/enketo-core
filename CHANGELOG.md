@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- Various styling issues with the geo picker with `maps` appearance in RTL languages on touchscreens.
+
 [4.10.0] - 2016-10-05
 --------------------
 ##### Changed

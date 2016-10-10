@@ -7,8 +7,11 @@ $input-button-border: 2px solid #aaaaaa;
 
 .enketo-geopoint-marker {
     $size: 24px;
+
     @extend .icon-marker;
+
     @extend .icon;
+
     margin-top: -#{$size};
     width: $size;
     height: $size;
@@ -27,9 +30,11 @@ $input-button-border: 2px solid #aaaaaa;
         background: none;
         box-shadow: none;
     }
+
     .leaflet-popup-content {
         margin: 3px 20px;
     }
+
     .leaflet-popup-tip-container {
         display: none;
     }
@@ -41,6 +46,7 @@ $input-button-border: 2px solid #aaaaaa;
             display: block;
         }
     }
+
     a.leaflet-popup-close-button {
         z-index: 1;
         display: none;
@@ -51,6 +57,7 @@ $input-button-border: 2px solid #aaaaaa;
 
 .enketo-geopoint-circle-marker {
     $size: 16px;
+
     width: $size;
     height: $size;
     margin-top: -0.5 * $size;
@@ -61,6 +68,7 @@ $input-button-border: 2px solid #aaaaaa;
 
 .enketo-geopoint-circle-marker-active {
     $size: 16px;
+
     width: $size;
     height: $size;
     margin-top: -0.5 * $size;
@@ -71,21 +79,25 @@ $input-button-border: 2px solid #aaaaaa;
 
 .geopicker {
     margin-top: 25px;
+
     img {
         //undo global settings
         margin: 0;
         max-height: none;
         max-width: none;
     }
+
     .geo-inputs {
         position: relative;
         min-width: 160px;
         width: $input-width;
         margin: 0 $separator-width 0 0;
+
         @media screen and (max-width: $geo-main-breakpoint) {
             width: 100%;
             margin-top: 25px;
         }
+
         .paste-progress, .disabled-msg {
             position: absolute;
             display: block;
@@ -94,19 +106,23 @@ $input-button-border: 2px solid #aaaaaa;
             text-align: center;
             margin: 0px 10px;
         }
+
         .disabled-msg {
             display: none;
             color: $state-danger-text;
         }
     }
+
     .map-canvas-wrapper {
         position: relative;
     }
+
     .map-canvas-wrapper, .search-bar {
         width: $map-width;
         float: right;
         padding-left: $separator-width;
         border-left: solid 1px $groupline;
+
         @media screen and (max-width: $geo-main-breakpoint) {
             width: 100%;
             float: none;
@@ -114,14 +130,17 @@ $input-button-border: 2px solid #aaaaaa;
             border-left: none;
         }
     }
+
     .search-bar {
         margin-top: 0;
+
         .input-group {
             position: relative;
             display: table;
             border-collapse: separate;
             width: 80%;
         }
+
         [name="search"] {
             margin: 0 !important;
             border-top-right-radius: 0;
@@ -130,34 +149,43 @@ $input-button-border: 2px solid #aaaaaa;
             float: left;
             display: table-cell;
         }
+
         .hide-map-btn {
             display: none;
         }
+
         .search-btn {
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             display: table-cell;
         }
     }
+
     .btn:not(.close-chain-btn):not(.toggle-input-type-btn) {
         height: 34px;
+
         //padding-bottom: 4px;
    
     }
+
     .btn[name="geodetect"] {
         display: inline-block;
         float: right;
         font-size: 16px;
         margin: 0 0 0 $separator-width;
+
         //width: $detect-width;
    
     }
+
     .close-chain-btn {
         @include font-normal;
+
         float: right;
         padding: 0 5px;
         margin-left: 15px;
     }
+
     .toggle-input-visibility-btn {
         position: absolute;
         top: calc(50% - 15px);
@@ -171,30 +199,37 @@ $input-button-border: 2px solid #aaaaaa;
         width: 7px;
         padding: 0;
         z-index: 10;
+
         &.open {
             left: -20px;
             border-left: none;
             border-right: 3px solid #aaaaaa;
         }
     }
+
     .points {
         width: 100%;
         padding-bottom: 15px;
     }
+
     .point {
         @extend .enketo-geopoint-circle-marker;
+
         margin-right: 10px;
         display: inline-block;
         opacity: 0.9;
+
         &.active {
             @extend .enketo-geopoint-circle-marker-active;
         }
+
         &.has-error:not(.active) {
             border: 1px solid #a94442;
             background: #F2DEDE;
             opacity: 1;
         }
     }
+
     .addpoint {
         border: none;
         background: none;
@@ -209,13 +244,16 @@ $input-button-border: 2px solid #aaaaaa;
         display: inline-block;
         margin-top: -1px;
     }
+
     .hide-search {
         &.no-map {
             border-left: none;
         }
+
         .input-group {
             display: none;
         }
+
         .btn[name="geodetect"] {
             float: none;
             display: block;
@@ -223,40 +261,52 @@ $input-button-border: 2px solid #aaaaaa;
             width: 50%;
         }
     }
+
     label.geo {
         @include font-normal;
+
         display: block;
         border: none;
         padding: 0;
         margin: 15px 0 0 0;
+
         &.lat, &.kml {
             padding-top: 5px;
         }
+
         &.long {
             margin-bottom: 20px;
         }
+
         &.alt {
             border-top: solid 1px $groupline;
             padding: 12px 0 0 0;
             margin: 0 0 0 0;
+
             @media screen and (max-width: $geo-main-breakpoint) {
                 border-top: none;
             }
         }
+
         &.acc {
             padding: 0;
             margin: 5px 0 0 0;
         }
+
         &.alt, &.acc {
             min-height: 70px;
             line-height: 50px;
             font-size: 0.75 * $font-size-base;
         }
     }
-    input[name="lat"],input[name="long"],textarea[name="kml"] {
+
+    input[name="lat"], input[name="long"], textarea[name="kml"] {
         float: none;
+
         @include border-box;
+
         width: 100%;
+
         /*&:invalid {
             //copied from bootstrap
             color: $state-danger-text;
@@ -270,26 +320,33 @@ $input-button-border: 2px solid #aaaaaa;
             }
         }*/
     }
+
     input[name="alt"], input[name="acc"] {
         @include border-box;
+
         display: block;
         float: right;
         width: 40%;
+
         @media screen and (max-width: $geo-main-breakpoint) {
             width: 50%;
         }
     }
+
     textarea[name="kml"] {
         min-height: 260px;
         overflow: auto;
+
         &:disabled + .disabled-msg {
             display: block;
         }
     }
+
     .geo.kml {
         display: none;
         margin-bottom: 10px;
     }
+
     .toggle-input-type-btn {
         border: none;
         background: none;
@@ -297,63 +354,82 @@ $input-button-border: 2px solid #aaaaaa;
         position: absolute;
         top: -10px;
         right: 0;
+
         @include font-normal;
+
         font-size: 12px;
+
         .kml-input {
             display: block;
         }
+
         .points-input {
             display: none;
         }
     }
+
     .kml-input-mode {
         .geo {
             display: none;
         }
+
         .geo.kml {
             display: block;
         }
+
         .toggle-input-type-btn {
             .kml-input {
                 display: none;
             }
+
             .points-input {
                 display: block;
             }
         }
     }
+
     .map-canvas {
         width: 100%;
         border: 1px solid #ccc;
         border-radius: 3px;
         margin-top: 10px;
         height: $map-height;
+
         //position: relative;
         cursor: crosshair;
+
         img {
             max-width: none;
         }
+
         .attribution {
             position: absolute;
             right: 0;
             bottom: 0;
             font-size: 10px;
         }
+
         &.static {
             cursor: not-allowed;
         }
+
         .show-map-btn {
             width: 150px;
             margin: 120px auto;
             display: block;
+
             //color: white;
        
         }
     }
+
     &.full-screen {
         @include display-flex;
+
         @include flex-direction(column);
+
         @include flex-wrap(nowrap);
+
         position: fixed;
         left: 0;
         top: 0;
@@ -363,65 +439,85 @@ $input-button-border: 2px solid #aaaaaa;
         background: white;
         margin-top: 0;
         padding-top: 25px;
+
         .geo-inputs {
             //width: 160px;
             margin-left: 25px;
             margin-bottom: 15px;
+
             .geo, .toggle-input-type-btn {
                 display: none;
             }
+
             .close-chain-btn {
                 float: none;
                 margin-left: 20px;
                 margin-top: 0;
             }
         }
+
         .map-canvas-wrapper {
             float: none;
             width: 100%;
             padding: 0 25px 15px 25px;
+
             @include flex(1);
+
             @include display-flex;
+
             @include flex-direction(column);
+
             @include flex-wrap(nowrap);
+
             // have to use flex again to get map canvas to stretch to 100% height
             .map-canvas {
                 height: 100%;
+
                 @include flex(1);
             }
+
             .show-map-btn {
                 display: none;
             }
         }
+
         .search-bar {
             width: 100%;
             padding: 0 25px 15px 25px;
+
             &.hide-search {
                 display: block;
             }
+
             .hide-map-btn {
                 display: block;
                 float: left;
                 width: 70px;
                 margin-right: 15px;
             }
+
             [name="geodetect"] {
                 width: 70px;
                 margin-left: 15px;
             }
+
             [name="search"] {
                 width: auto;
             }
+
             .input-group {
                 width: auto;
             }
         }
+
         .points {
             display: none;
+
             //padding: 0 25px 25px 25px;
        
         }
     }
+
     .leaflet-control-layers-toggle,
     .leaflet-retina .leaflet-control-layers-toggle {
         background: none;
@@ -430,39 +526,49 @@ $input-button-border: 2px solid #aaaaaa;
         text-align: center;
         font-size: 20px;
     }
+
     .leaflet-control-layers-list {
         label {
             margin-bottom: 5px;
+
             // not translated, so avoid RTL effect:
             text-align: left;
         }
     }
+
     &:not(.full-screen).hide-input {
         &.wide {
             .map-canvas {
                 height: 375px;
             }
         }
+
         .geo-inputs .geo {
             display: none;
         }
+
         .toggle-input-type-btn {
             display: none;
         }
+
         .close-chain-btn {
             float: none;
+
             //margin: 5px 0 5px 20px;
        
         }
+
         .btn-remove {
             margin: 10px 0 5px 0;
         }
+
         .map-canvas-wrapper, .search-bar {
             width: 100%;
             float: none;
             border-left: none;
             padding-left: 0;
         }
+
         .map-canvas .show-map-btn {
             margin-top: 170px;
         }
@@ -472,45 +578,70 @@ $input-button-border: 2px solid #aaaaaa;
 .or[dir="rtl"] .geopicker {
     .map-canvas-wrapper, .search-bar {
         float: left;
-        padding-left: 0;
-        padding-right: $separator-width;
         border-left: none;
         border-right: solid 1px $groupline;
+
         @media screen and (max-width: $geo-main-breakpoint) {
             float: none;
             padding-right: 0;
             border-right: none;
         }
     }
+
     .toggle-input-visibility-btn {
         right: -16px;
         border-right: 3px solid #aaaaaa;
         border-bottom: $input-button-border;
         border-top: $input-button-border;
         border-left: none;
+
         &.open {
             right: -20px;
             border-right: none;
             border-left: 3px solid #aaaaaa;
         }
     }
+
     input[name="alt"],
     input[name="acc"] {
         float: left;
     }
+
     .btn[name="geodetect"] {
         float: left;
         font-size: 16px;
         margin: 0 $separator-width 0 0;
     }
+
     .search-bar {
         [name="search"] {
             float: none;
         }
+
         .search-btn {
             float: right;
         }
     }
+
+    .hide-search {
+        .btn[name="geodetect"] {
+            float: none;
+            margin: 15px auto;
+            width: 50%;
+            display: block;
+        }
+    }
+
+    .close-chain-btn {
+        margin-left: 0;
+        margin-right: 15px;
+    }
+
+    .toggle-input-type-btn {
+        left: 0;
+        right: auto;
+    }
+
     &:not(.full-screen).hide-input {
         .map-canvas-wrapper, .search-bar {
             float: none;
@@ -525,6 +656,7 @@ $input-button-border: 2px solid #aaaaaa;
         .search-btn {
             display: none;
         }
+
         [name=search] {
             border-top-right-radius: $border-radius-base;
             border-bottom-right-radius: $border-radius-base;
@@ -536,6 +668,7 @@ $input-button-border: 2px solid #aaaaaa;
 .question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) .geopicker label {
     line-height: 16px;
     font-weight: normal;
+
     input[type=radio] ~ .option-label::before {
         font-size: 16px;
         height: 16px;
