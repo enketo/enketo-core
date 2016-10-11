@@ -14,6 +14,7 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1;
+
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -60,6 +61,7 @@
 
 @mixin border-box {
     -moz-box-sizing: border-box;
+
     //-webkit-box-sizing: border-box;
     //-ms-box-sizing: border-box;
     box-sizing: border-box;
@@ -98,6 +100,7 @@
 @mixin tab-focus {
     // Default
     outline: thin dotted;
+
     // WebKit
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
@@ -107,11 +110,14 @@
     &:before,
     &:after {
         content: " ";
+
         // 1
         display: table;
+
         // 2
    
     }
+
     &:after {
         clear: both;
     }
@@ -153,12 +159,14 @@
 
 @mixin flex($value, $total: null) {
     $flex: 100%;
+
     @if $total == null {
         $flex: $value;
     }
     @else if $total >= $value {
         $flex: percentage($value / $total);
     }
+
     -webkit-flex: $flex;
     -ms-flex: $flex;
     flex: $flex;
@@ -166,24 +174,29 @@
 
 @mixin flex_IEhack($value, $total: null) {
     $flex: 100%;
+
     @if $total == null {
         $flex: $value;
     }
     @else if $total >= $value {
         $flex: percentage($value / $total);
     }
+
     -webkit-flex-grow: 1;
     flex-grow: 1;
     -webkit-flex-shrink: 1;
     flex-shrink: 1;
+
     // Internet Explorer 10 and 11 have a box-sizing issue with multiline flexboxes
     // box-sizing: border-box is ignored
     // 2 x 6px padding + 1 border = 13px adjustment
     -webkit-flex-basis: calc(#{$flex} - 13px);
+
     // IE10:
     -ms-flex-preferred-size: calc(#{$flex} - 13px);
     -ms-flex-positive: 1;
     -ms-flex-negative: 1;
+
     // unprefixed
     flex-basis: calc(#{$flex} - 13px);
 }
@@ -215,11 +228,14 @@
 // Color stops are not available in IE9 and below.
 @mixin gradient-vertical($start-color: #555555, $end-color: #333333, $start-percent: 0%, $end-percent: 100%) {
     background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);
+
     // Safari 5.1-6, Chrome 10+
     background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent);
+
     // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0);
+
     // IE9 and down
 }
 
@@ -228,9 +244,10 @@
     background-image: linear-gradient($start-color, $mid-color $color-stop, $end-color);
     background-repeat: no-repeat;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0);
+
     // IE9 and down, gets no color-stop at all for proper fallback
 }
 
 @mixin form-footer-margin($padding) {
-    margin: 45px (-$padding) (-$padding) (-$padding);
+    margin: $padding (-$padding) (-$padding) (-$padding);
 }

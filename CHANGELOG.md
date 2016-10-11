@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.10.2] - 2016-10-12
+---------------------
+##### Changed
+- Reduced whitespace in form footer across all forms.
+
 [4.10.1] - 2016-10-11
 --------------------
 ##### Changed
