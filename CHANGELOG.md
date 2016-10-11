@@ -5,8 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Changed
+- Reduce whitespace in form header in pages mode.
+
 ##### Fixed
 - Various styling issues with the geo picker with `maps` appearance in RTL languages on touchscreens.
+
 
 [4.10.0] - 2016-10-05
 --------------------

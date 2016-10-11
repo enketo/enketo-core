@@ -1,6 +1,7 @@
 @mixin small-screen-paddings {
     body {
         padding: 0 !important;
+
         header {
             padding-left: 20px;
             padding-right: 20px;
@@ -10,28 +11,35 @@
 
 @media screen and (max-width: $main-breakpoint) {
     @include small-screen-paddings;
+
     body {
         background: none;
     }
+
     .main {
         margin: 0;
         padding: 0;
     }
+
     .preview-header {
         top: -5px;
     }
+
     .paper {
         @include border-radius(0px);
     }
+
     .form-header {
         top: 0;
         padding-left: 16px;
         padding-right: 16px;
         border-bottom: 1px solid $groupline;
+
         .form-language-selector > span {
             display: none;
         }
     }
+
     #form-title {
         padding-top: 25px;
     }
@@ -39,14 +47,17 @@
 
 @media screen and (max-width: 600px) {
     $form-padding: 30px;
+
     body {
         line-height: 1.05 * $line-height-base;
     }
+
     .main {
         .paper {
             padding: 70px $form-padding $form-padding $form-padding;
         }
     }
+
     .form-footer {
         @include form-footer-margin($form-padding);
     }
@@ -54,29 +65,36 @@
 
 @media screen and (max-width: 400px) {
     $form-padding: 20px;
+
     body {
         line-height: 1.09 * $line-height-base;
     }
+
     input {
-        &[type="text"],&[type="password"], &[type="url"], &[type="email"],
+        &[type="text"], &[type="password"], &[type="url"], &[type="email"],
         &[type="date"], &[type="number"], &[type="time"], &[type="datetime"], &[type="file"] {
             width: 100%;
         }
     }
+
     select, textarea {
         width: 100%;
     }
+
     .main {
         .paper {
             padding: 70px $form-padding $form-padding $form-padding;
         }
     }
+
     .form-header {
         margin: 5px 0;
+
         .form-language-selector {
             border-right: none;
         }
     }
+
     .form-footer {
         @include form-footer-margin($form-padding);
     }
