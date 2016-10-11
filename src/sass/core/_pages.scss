@@ -36,8 +36,10 @@
     }
 }
 
-// deals only with showing hiding buttons in pages mode
 .pages ~ .form-footer {
+    // reduce whitespace
+    margin-top: 0;
+
     &.end {
         .btn {
             display: inline-block;

@@ -3,10 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.10.1] - 2016-10-11
 --------------------
 ##### Changed
-- Reduce whitespace in form header in pages mode.
+- Reduce whitespace in form header and form footer in Pages mode.
 
 ##### Fixed
 - Various styling issues with the geo picker with `maps` appearance in RTL languages on touchscreens.
