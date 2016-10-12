@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Added
+- Method to obtain form languages from Form instance.
+
 ##### Fixed
 - Exception 'Cannot ready property "readonly" occurs when branch is disabled.
 

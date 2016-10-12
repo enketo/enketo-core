@@ -867,3 +867,21 @@ describe( 'form status', function() {
         expect( form.getEditStatus() ).toBe( true );
     } );
 } );
+
+describe( 'form props', function() {
+    var form = loadForm( 'cascading_mixture_itext_noitext.xml' );
+    var formB = loadForm( 'issue208.xml' );
+    form.init();
+    formB.init();
+
+    it( 'provides the languages in the form', function() {
+        expect( form.getLanguages() ).toEqual( [ 'en', 'it' ] );
+        expect( form.getProps().languages ).toEqual( [ 'en', 'it' ] );
+        expect( formB.getLanguages() ).toEqual( [ 'en' ] );
+    } );
+
+    it( 'provides the version of the form', function() {
+        expect( form.getVersion() ).toEqual( '2012072301' );
+        expect( form.getProps().version ).toEqual( '2012072301' );
+    } );
+} );

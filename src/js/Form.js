@@ -114,6 +114,9 @@ define( function( require, exports, module ) {
         this.getVersion = function() {
             return model.getVersion();
         };
+        this.getLanguages = function() {
+            return form.langs.get();
+        };
 
         /**
          * @param {boolean=} incTempl
@@ -144,6 +147,16 @@ define( function( require, exports, module ) {
         };
         this.getSurveyName = function() {
             return $form.find( '#form-title' ).text();
+        };
+
+        this.getProps = function() {
+            return {
+                languages: this.getLanguages(),
+                encryptionKey: this.getEncryptionKey(),
+                action: this.getAction(),
+                method: this.getMethod(),
+                version: this.getVersion()
+            };
         };
 
         /**
@@ -766,8 +779,14 @@ define( function( require, exports, module ) {
                 var that = this;
                 var $formLanguages = $form.find( '#form-languages' );
                 var $langSelector = $( '.form-language-selector' );
-                var defaultLang = $formLanguages.attr( 'data-default-lang' ) || $formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
-                var defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'data-dir' ) || 'ltr';
+                var defaultLang;
+                var defaultDirectionality;
+
+                this.languages = this.get();
+
+                defaultLang = $formLanguages.attr( 'data-default-lang' ) || this.languages[ 0 ];
+                defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'data-dir' ) || 'ltr';
+
 
                 $formLanguages
                     .detach()
@@ -788,6 +807,14 @@ define( function( require, exports, module ) {
                     lang = $( this ).val();
                     that.setAll( lang );
                 } );
+            },
+            get: function() {
+                if ( !Array.isArray( this.languages ) ) {
+                    return $form.find( '#form-languages option' ).map( function() {
+                        return this.value;
+                    } ).get();
+                }
+                return this.languages;
             },
             setAll: function( lang ) {
                 var that = this;
