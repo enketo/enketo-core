@@ -79,7 +79,7 @@ define( function( require, exports, module ) {
          * Most of the times this function can remain empty.
          */
         enable: function( element ) {
-            if ( !this.props.readonly ) {
+            if ( !element.readOnly ) {
                 $( element )
                     .next( '.widget' ).removeClass( 'readonly' );
             }
