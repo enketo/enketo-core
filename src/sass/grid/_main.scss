@@ -12,7 +12,9 @@ body {
 
 .paper {
     border-width: 1px;
+
     @include border-radius(0);
+
     box-shadow: 0 0 5px #888;
 }
 
@@ -20,6 +22,7 @@ body {
 .or-group {
     margin: 0;
     border-top: none;
+
     .or-group {
         margin: 0;
     }
@@ -39,22 +42,33 @@ h4 + .or-repeat {
 // flexboxes
 .or, .or-group, .or-group-data, .or-repeat {
     @include display-flex;
+
     @include flex-wrap(wrap);
+
     @include flex-direction(row);
+
     @include align-content(flex-start);
+
     @include border-box;
 }
 
 // override to flexboxes in pages mode, except when question = page
 .pages.or [role="page"].current:not(.question) {
     @include display-flex;
+
     @include flex-wrap(wrap);
+
     @include flex-direction(row);
+
     @include border-box;
+
     .or-group:not(.disabled), .or-group-data:not(.disabled), .or-repeat:not(.disabled) {
         @include display-flex;
+
         @include flex-wrap(wrap);
+
         @include flex-direction(row);
+
         @include border-box;
     }
 }
@@ -72,6 +86,7 @@ h4 + .or-repeat {
 // top-level questions border
 .or > .question, .or > .note {
     border: $grid-border;
+
     // This is cheating for top-level questions to avoid thick double borders.
     // Normally, recommend to group everything.
     margin-left: -1px;
@@ -81,11 +96,15 @@ h4 + .or-repeat {
 // griddable elements - ie. wrappers around questions and notes
 .question, .note {
     @include flex(1, 1);
+
     @include border-box;
+
     border-bottom: $grid-border;
     border-left: $grid-border;
+
     // overrides note border
     border-right: none;
+
     // overrides note border
     border-top: none;
     position: relative;
@@ -103,15 +122,21 @@ h4 + .or-repeat {
 // questions (though fine in tables)
 .question, .note {
     @include display-flex;
+
     @include flex-wrap(no-wrap);
+
     @include flex-direction(column);
+
     cursor: text;
+
     &:not(.note):not(.focus):hover {
         background: $question-hover-bg;
     }
+
     &.focus {
         background: $question-focus-bg;
     }
+
     .required {
         position: absolute;
         top: -2px;
@@ -120,46 +145,57 @@ h4 + .or-repeat {
         margin-left: 3px;
         margin-right: 3px;
     }
+
     .required-subtle {
         position: absolute;
         bottom: 0;
         right: 2px;
         font-size: 9px;
     }
+
     &.invalid-constraint, &.invalid-required {
         border-radius: 0;
         margin: $question-margin;
         padding: $question-padding;
     }
+
     .question-label {
         text-transform: uppercase;
         font-weight: normal;
         font-size: 12px;
         order: 1;
     }
+
     .or-hint.active {
         order: 2;
     }
+
     audio, video, img {
         order: 3;
     }
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
+
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
         width: 100%;
     }
+
     textarea {
         min-height: 2 * $input-height;
     }
+
     .file-feedback {
         order: 4;
     }
+
     // the use of the :not(.ignore) selector may not work forever
     // but so far only those input inside widgets have that class
     input:not(.ignore), textarea, select, .widget, .option-wrapper {
         order: 4;
     }
+
     .or-constraint-msg, .or-required-msg {
         order: 5;
     }
+
     .btn-comment {
         order: 1;
     }
@@ -170,6 +206,7 @@ h4 + .or-repeat {
         right: auto;
         left: 0;
     }
+
     .required-subtle {
         right: auto;
         left: 2px;
@@ -177,7 +214,7 @@ h4 + .or-repeat {
 }
 
 .touch {
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file],  input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
         border: none;
     }
 }
@@ -195,7 +232,9 @@ h4 + .or-repeat {
     margin: 0;
     padding: 0;
     background: $repeat-bg;
+
     &.clone {}
+
     .repeat-number {
         position: absolute;
         left: 100%;
@@ -207,21 +246,25 @@ h4 + .or-repeat {
         font-size: 18px;
         font-weight: bold;
     }
+
     .repeat-buttons {
         width: calc(100% + 1px);
         position: relative;
         margin-top: 0;
         height: 0px;
     }
+
     .repeat, .remove {
         padding: 0;
         border: none;
         margin-top: -20px;
     }
+
     .repeat {
         float: right;
         margin-right: -25px;
     }
+
     .remove {
         float: left;
         margin-left: -20px;
@@ -241,7 +284,6 @@ legend {
     width: calc(100% + 1px);
     border-right: $grid-border;
     border-right-color: transparent;
-    padding-top: 0;
     text-align: inherit;
 }
 
@@ -260,6 +302,7 @@ legend {
         .or-appearance-w#{$total} {
             //default total of 4 if not provided
             @include flex_IEhack($total, $default-grid-width);
+
             //the actual proper grid
             @for $width from 1 through $total {
                 .or-appearance-w#{$width} {

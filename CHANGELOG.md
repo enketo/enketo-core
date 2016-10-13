@@ -3,10 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.11.0] - 2016-10-13
 ---------------------
 ##### Changed
-- Form header now resizing according to its content.
+- Form header now resizing according to its content. **Warning: Check your formheader styling.**
 
 ##### Fixed
 - Exception 'Cannot ready property "readonly" occurs when branch is disabled.
