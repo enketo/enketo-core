@@ -5,9 +5,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
-##### Added
-- Method to obtain form languages from Form instance.
-
 ##### Changed
 - Form header now resizing according to its content.
 
