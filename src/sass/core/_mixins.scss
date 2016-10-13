@@ -251,3 +251,9 @@
 @mixin form-footer-margin($padding) {
     margin: $padding (-$padding) (-$padding) (-$padding);
 }
+
+@mixin form-header-margin($padding) {
+    margin-left: -$padding;
+    margin-right: -$padding;
+    width: calc(100% + ( 2 * #{$padding}));
+}

@@ -1,19 +1,10 @@
-@mixin small-screen-paddings {
+@media screen and (max-width: $main-breakpoint) {
+    $form-padding: 45px;
+    $form-header-padding: 16px;
+
     body {
         padding: 0 !important;
-
-        header {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-    }
-}
-
-@media screen and (max-width: $main-breakpoint) {
-    @include small-screen-paddings;
-
-    body {
-        background: none;
+        margin: 0;
     }
 
     .main {
@@ -27,16 +18,29 @@
 
     .paper {
         @include border-radius(0px);
+
+        padding-top: 0;
     }
 
+    // When the form-header is absolutely positioned, we'd like the height to be 0,
+    // if there is no visible content (e.g. no languages, no print button, no brand)
+    // To do this we give the content a padding, but set padding and margin of form-header to 0.
     .form-header {
+        position: relative;
         top: 0;
-        padding-left: 16px;
-        padding-right: 16px;
+        padding: 0 14px;
         border-bottom: 1px solid $groupline;
+        min-height: auto;
 
-        .form-language-selector > span {
-            display: none;
+        @include form-header-margin($form-padding);
+
+        .form-language-selector {
+            padding-top: $form-header-padding;
+            padding-bottom: $form-header-padding;
+
+            span {
+                display: none;
+            }
         }
     }
 
@@ -54,8 +58,12 @@
 
     .main {
         .paper {
-            padding: 70px $form-padding $form-padding $form-padding;
+            padding: 0 $form-padding $form-padding $form-padding;
         }
+    }
+
+    .form-header {
+        @include form-header-margin($form-padding);
     }
 
     .form-footer {
@@ -83,12 +91,12 @@
 
     .main {
         .paper {
-            padding: 70px $form-padding $form-padding $form-padding;
+            padding: 0 $form-padding $form-padding $form-padding;
         }
     }
 
     .form-header {
-        margin: 5px 0;
+        @include form-header-margin($form-padding);
 
         .form-language-selector {
             border-right: none;

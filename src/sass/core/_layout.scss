@@ -6,8 +6,11 @@ html {
 
 body {
     @include display-flex;
+
     @include flex-direction(column);
+
     @include flex-wrap(nowrap);
+
     position: relative;
     min-height: 100%;
 }
@@ -22,52 +25,55 @@ body {
 
 .or {
     @include flex(1);
+
     margin-bottom: 20px;
 }
 
 .main {
     @include flex(1);
+
     @include display-flex;
+
     @include flex-direction(column);
+
     @include flex-wrap(nowrap);
+
     margin: 0 auto;
     padding: 100px 0 70px 0;
     position: relative;
     width: 100%;
     max-width: $max-content-width;
-    .paper {
-        @include flex(1);
-        @include display-flex;
-        @include flex-direction(column);
-        @include flex-wrap(nowrap);
-        padding: $form-padding;
-        position: relative;
-        min-height: 100%;
-    }
-    ul.nav-tabs {
-        margin: 20px 0 0 0;
-        li {
-            margin: 0;
-            a {
-                background: none;
-            }
-        }
-    }
+}
+
+.paper {
+    @include flex(1);
+
+    @include display-flex;
+
+    @include flex-direction(column);
+
+    @include flex-wrap(nowrap);
+
+    padding: $form-padding;
+    position: relative;
+    min-height: 100%;
 }
 
 .form-header {
     @include border-box;
+
     left: 0;
     width: 100%;
     position: absolute;
-    top: -75px;
+    top: -76px;
+    min-height: 69px;
     border: none;
     padding: 16px 0;
 }
 
 .form-language-selector {
     float: right;
-    padding: 3px 0;
+    padding: 0;
     margin-left: 10px;
     font-size: 0.8em;
 }
@@ -99,9 +105,11 @@ body {
     font-size: 16px;
     line-height: 23px;
     text-align: center;
+
     a {
         font-style: italic;
     }
+
     img {
         float: none;
         vertical-align: top;
