@@ -9,7 +9,7 @@ Not supported:
 - geotrace
 - geoshape
 
-### Configuration
+### Configure
 
 Like any other widget, this widget has to be enabled in widget.js and widgets.scss. Both these files exist in enketo-core but are normally overwritten in your own app.
 
@@ -46,6 +46,7 @@ var form = new Form( 'form.or:eq(0)', data, options );
 XLSForm:
 
 settings sheet
+
 | form_title | form_id | style                                    |
 |------------|---------|------------------------------------------|
 |            |         | arcgis::f2e9b762544945f390ca4ac3671cfa72 |

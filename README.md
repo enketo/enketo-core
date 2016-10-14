@@ -60,8 +60,8 @@ $( '#submit' ).on( 'click', function() {
         		// reset the form view
         		form.resetView();
 
-        		// reinstantiate a new form with the default model 
-        		form = new Form( formSelector, { modelStr: modelStr } );
+        		// reinstantiate a new form with the default model and no options
+        		form = new Form( formSelector, { modelStr: modelStr }, {} );
 
         		// do what you want with the record
     		}
