@@ -291,11 +291,11 @@ define( function( require, exports, module ) {
         var altTxt = t( 'geopicker.altitude' ) || 'altitude (m)';
         var accTxt = t( 'geopicker.accuracy' ) || 'accuracy (m)';
         var decTxt = t( 'esri-geopicker.decimal' ) || 'decimal';
-        var mgrsSelectorTxt = t( 'esri-geopicker.selector.mgrs' ) || 'MGRS';
+        var mgrsSelectorTxt = t( 'esri-geopicker.mgrs' ) || 'MGRS';
         var degSelectorTxt = t( 'esri-geopicker.degrees' ) || 'degrees, minutes, seconds';
-        var mgrsLabelTxt = t( 'esri-geopicker.label.mgrs' ) || 'MGRS coordinate';
-        var latDegTxt = t( 'geopicker.latitude-degrees' ) || 'latitude (d&deg m&rsquo; s&rdquo; N)';
-        var lngDegTxt = t( 'geopicker.latitude-degrees' ) || 'longitude (d&deg m&rsquo; s&rdquo; W)';
+        var mgrsLabelTxt = t( 'esri-geopicker.coordinate-mgrs' ) || 'MGRS coordinate';
+        var latDegTxt = t( 'esri-geopicker.latitude-degrees' ) || 'latitude (d&deg m&rsquo; s&rdquo; N)';
+        var lngDegTxt = t( 'esri-geopicker.latitude-degrees' ) || 'longitude (d&deg m&rsquo; s&rdquo; W)';
         var d = '<span class="geo-unit">&deg;</span>';
         var m = '<span class="geo-unit">&rsquo;</span>';
         var s = '<span class="geo-unit">&rdquo;</span>';
