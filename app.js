@@ -6,14 +6,14 @@
  */
 
 var $ = require( 'jquery' );
-// until all plugins are commonJS-friendly, expose jQuery globally
-window.jQuery = $;
-
+window.jQuery = $; // required for bootstrap-timepicker
 var support = require( './src/js/support' );
 var Form = require( './src/js/Form' );
 var fileManager = require( './src/js/file-manager' );
-
-var loadErrors, form, formStr, modelStr;
+var loadErrors;
+var form;
+var formStr;
+var modelStr;
 
 // if querystring touch=true is added, override detected touchscreen presence
 if ( getURLParameter( 'touch' ) === 'true' ) {
