@@ -25,6 +25,8 @@ describe( 'merging an instance into the model', function() {
             ],
             // repeated nodes in record get added in the right order
             [ '<a><r/><r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><r/><r/><meta/></a></instance></model>' ],
+            // same as above but there are text nodes as siblings of repeats
+            [ '<a><r/>\n<r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><r/><r/><meta/></a></instance></model>' ],
             // repeated groups with missing template nodes in record get added
             [ '<a><r/><r/></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><r><b/></r><meta/></a></instance></model>' ],
             // unused model namespaces preserved:

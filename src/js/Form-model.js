@@ -396,8 +396,11 @@ define( function( require, exports, module ) {
         var nodeName = node.nodeName;
         var prevSibling = node.previousSibling;
 
-        while ( prevSibling && prevSibling.nodeName === nodeName ) {
-            index++;
+        while ( prevSibling ) {
+            // ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+            if ( prevSibling.nodeName && prevSibling.nodeName === nodeName ) {
+                index++;
+            }
             prevSibling = prevSibling.previousSibling;
         }
 
