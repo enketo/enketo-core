@@ -196,7 +196,12 @@ define( function( require, exports, module ) {
                 var newNode = document.createElementNS( node.namespaceURI, node.nodeName );
                 if ( node.attributes && node.attributes.length > 0 ) {
                     for ( i = 0, il = node.attributes.length; i < il; i++ ) {
-                        newNode.setAttribute( node.attributes[ i ].nodeName, node.getAttribute( node.attributes[ i ].nodeName ) );
+                        var attr = node.attributes[ i ];
+                        if ( attr.namespaceURI ) {
+                            newNode.setAttributeNS( attr.namespaceURI, attr.nodeName, node.getAttributeNS( attr.namespaceURI, attr.localName ) );
+                        } else {
+                            newNode.setAttribute( attr.nodeName, node.getAttribute( attr.nodeName ) );
+                        }
                     }
                 }
                 if ( allChildren && node.childNodes && node.childNodes.length > 0 ) {
@@ -324,9 +329,10 @@ define( function( require, exports, module ) {
 
         /**
          * Due to a bug with namespaced attributes in the mergexml module, we use a dirty trick to fix
-         * namespaced attributes, by serializing and parsing.
+         * namespaced attributes, by serializing and re-parsing. For some reason, in IE11 we **have to**
+         * use merger.Get(1), because new XMLSerializer().serializeToString(merger.Get(0)) throws interface error.
          */
-        mergeResultDoc = $.parseXML( new XMLSerializer().serializeToString( merger.Get( 0 ) ) );
+        mergeResultDoc = $.parseXML( merger.Get( 1 ) );
 
         // remove the primary instance  childnode from the original model
         this.xml.querySelector( 'instance' ).removeChild( modelInstanceChildEl );
@@ -501,7 +507,8 @@ define( function( require, exports, module ) {
      *
      * @param  {string} selector selector of a repeat or a node that is contained inside a repeat
      * @param  {number} index    index of the repeat that the new repeat should be inserted after.
-     * @param  {boolean} merge   whether this operation is part of a merge operation (won't send dataupdate event and clears all values)
+     * @param  {boolean} merge   whether this operation is part of a merge operation (won't send dataupdate event, clears all values and 
+     *                           will not add ordinal attributes as these should be provided in the record)
      */
     FormModel.prototype.cloneRepeat = function( selector, index, merge ) {
         var $insertAfterNode;
@@ -558,10 +565,12 @@ define( function( require, exports, module ) {
 
         $nextSiblingsSameName = $insertAfterNode.nextAll( name );
 
-        // if not exists
-        $repeatSeries.each( function() {
-            addOrdinalAttribute( this );
-        } );
+        // if not exists and not a merge operation
+        if ( !merge ) {
+            $repeatSeries.each( function() {
+                addOrdinalAttribute( this );
+            } );
+        }
 
         /**
          * If templatenodes and insertAfterNode(s) have been identified 
@@ -574,7 +583,11 @@ define( function( require, exports, module ) {
                 .insertAfter( $insertAfterNode );
 
             removeOrdinalAttributes( $templateClone[ 0 ] );
-            addOrdinalAttribute( $templateClone[ 0 ] );
+            // We should not automatically add ordinal attributes for an existing record as the values cannot be known. 
+            // They should be provided in the instanceStr (record).
+            if ( !merge ) {
+                addOrdinalAttribute( $templateClone[ 0 ] );
+            }
 
             // If part of a merge operation (during form load) where the values will be populated from the record, defaults are not desired.
             // If no jrTemplate is present all values should be cleared as well.

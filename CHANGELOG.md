@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - If repeat has no template, duplicate and conflicting ordinal attributes are added.
+- Loading a record with namespaced attributes utterly fails in IE11.
 
 [4.12.0] - 2016-10-17
 ---------------------
