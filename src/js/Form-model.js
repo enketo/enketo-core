@@ -223,6 +223,7 @@ define( function( require, exports, module ) {
         var merger;
         var modelInstanceEl;
         var modelInstanceChildEl;
+        var mergeResultDoc;
         var that = this;
         var templateEls;
         var record;
@@ -321,15 +322,21 @@ define( function( require, exports, module ) {
             throw new Error( merger.error.text );
         }
 
+        /**
+         * Due to a bug with namespaced attributes in the mergexml module, we use a dirty trick to fix
+         * namespaced attributes, by serializing and parsing.
+         */
+        mergeResultDoc = $.parseXML( new XMLSerializer().serializeToString( merger.Get( 0 ) ) );
+
         // remove the primary instance  childnode from the original model
         this.xml.querySelector( 'instance' ).removeChild( modelInstanceChildEl );
         // checking if IE
         if ( global.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
             // IE not support adoptNode
-            modelInstanceChildEl = this.importNode( merger.Get( 0 ).documentElement, true );
+            modelInstanceChildEl = this.importNode( mergeResultDoc.documentElement, true );
         } else {
             // adopt the merged instance childnode
-            modelInstanceChildEl = this.xml.adoptNode( merger.Get( 0 ).documentElement, true );
+            modelInstanceChildEl = this.xml.adoptNode( mergeResultDoc.documentElement, true );
         }
         // append the adopted node to the primary instance
         modelInstanceEl.appendChild( modelInstanceChildEl );
@@ -515,8 +522,8 @@ define( function( require, exports, module ) {
         firstRepeatInSeries = $repeatSeries.get( 0 );
 
         /**
-         * getAttributeNs and setAttributeNs results in duplicate namespace declarations on each repeat node when serializing the model.
-         * However, the regular getAttribte and setAttribute do not work properly in IE11.
+         * getAttributeNs and setAttributeNs results in duplicate namespace declarations on each repeat node in IE11 when serializing the model.
+         * However, the regular getAttribute and setAttribute do not work properly in IE11.
          */
         function incrementAndGetOrdinal() {
             var lastUsedOrdinal = firstRepeatInSeries.getAttributeNS( that.ENKETO_XFORMS_NS, 'last-used-ordinal' ) || 0;
@@ -526,7 +533,11 @@ define( function( require, exports, module ) {
         }
 
         function addOrdinalAttribute( el ) {
-            if ( config.repeatOrdinals === true && !el.getAttributeNS( that.ENKETO_XFORMS_NS, 'ordinal' ) ) {
+            // console.log( 'checking if ordinal attribute already present on', el.attributes, el.getAttributeNS( that.ENKETO_XFORMS_NS, 'ordinal' ), el.getAttribute( enkNs + ':ordinal' ) );
+            if ( config.repeatOrdinals === true && !el.getAttributeNS( that.ENKETO_XFORMS_NS, 'ordinal' ) ) { //&&
+                // when merging an instance that contains ordinal attributes
+                //!el.getAttribute( enkNs + ':ordinal' ) ) {
+                //console.log( 'no it was not' );
                 el.setAttributeNS( that.ENKETO_XFORMS_NS, enkNs + ':ordinal', incrementAndGetOrdinal() );
             }
         }

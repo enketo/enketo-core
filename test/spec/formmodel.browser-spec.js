@@ -157,6 +157,36 @@ describe( 'merging an instance into the model', function() {
         } );
     } );
 
+    describe( 'when the record contains namespaced attributes, the merged result is CORRECTLY namespaced', function() {
+        var ns = 'http://enketo.org/xforms';
+        // issue: https://github.com/kobotoolbox/enketo-express/issues/565
+        [
+            // with repeat template
+            [ '<a xmlns:enk="' + ns + '"><r enk:last-used-ordinal="2" enk:ordinal="1"><b>6</b></r></a>',
+                '<model><instance><a><r><b>5</b></r><meta/></a></instance></model>'
+            ],
+            // with repeat template
+            [ '<a xmlns:enk="' + ns + '"><r enk:last-used-ordinal="2" enk:ordinal="1"><b>6</b></r></a>',
+                '<model><instance><a><r jr:template=""><b>5</b></r><meta/></a></instance></model>'
+            ]
+        ].forEach( function( test ) {
+            var result;
+            var model = new Model( {
+                modelStr: test[ 1 ],
+                instanceStr: test[ 0 ]
+            } );
+            model.init();
+
+            it( 'namespaces are added correctly', function() {
+                // these tests assume a fix attribute order which is a bit fragile
+                expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'last-used-ordinal' ) ).toEqual( '2' );
+                expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'ordinal' ) ).toEqual( '1' );
+                //expect( model.xml.querySelector( 'r' ).attributes[ 1 ].localName ).toEqual( 'ordinal' ); // without prefix!
+                //expect( model.xml.querySelector( 'r' ).attributes[ 1 ].namespaceURI ).toEqual( ns );
+            } );
+        } );
+    } );
+
     describe( 'returns load errors upon initialization', function() {
         it( 'when the instance-to-edit contains nodes that are not present in the default instance', function() {
             var model = new Model( {
