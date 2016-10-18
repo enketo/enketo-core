@@ -9,7 +9,7 @@ Not supported:
 - geotrace
 - geoshape
 
-### Configure
+## Configure
 
 Like any other widget, this widget has to be enabled in widget.js and widgets.scss. Both these files exist in enketo-core but are normally overwritten in your own app.
 
@@ -25,11 +25,11 @@ By default this picker will load a large JS file from a CDN. You can improve per
 
 This cumbersome solution is required because Enketo is using CommonJS modules and the Esri ArcGIS for JS library is using AMD modules.
 
-### Use
+## Use
 
 There are 2 ways you can pass an ArcGIS webmap ID to the widget. Both methods are per form, not per widget, so you cannot load different webmaps on multiple geopoint widgets in the same form.
 
-1. Instantiate the Form with a third options parameter consisting of an object with a `webMapId` property like this:
+### A. Instantiate the Form with an options parameter consisting of an object with a `webMapId` property like this:
 
 ```js
 var data = {
@@ -40,8 +40,7 @@ var options = {
 };
 var form = new Form( 'form.or:eq(0)', data, options );
 ```
-
-2. Define the webmap ID in the XForm/XLSForm as follows:
+### B. Define the webmap ID in the XForm/XLSForm as follows:
 
 XLSForm:
 
@@ -59,5 +58,5 @@ XForm:
 
 Both methods are case-insensitive.
 
-The JS method (1) takes precedence in case both methods are used for the same form.
+The JS method (A) takes precedence in case both methods are used for the same form.
 
