@@ -24,13 +24,13 @@
 
     // When the form-header is absolutely positioned, we'd like the height to be 0,
     // if there is no visible content (e.g. no languages, no print button, no brand)
-    // To do this we give the content a padding, but set padding and margin of form-header to 0.
+    // To do this we give the content a padding, but set padding, min-height and margin of form-header to 0.
     .form-header {
         position: relative;
         top: 0;
         padding: 0 14px;
         border-bottom: 1px solid $groupline;
-        min-height: auto;
+        min-height: 0;
 
         @include form-header-margin($form-padding);
 
