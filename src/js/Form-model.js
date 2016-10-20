@@ -890,16 +890,16 @@ define( function( require, exports, module ) {
         if ( this.hasInstance ) {
             // Encode all string literals in order to exclude them, without creating a monsterly regex
             expr = expr.replace( LITERALS, function( m, p1, p2, p3, p4 ) {
-                var encoded = p1 ? encodeURIComponent( p1 ) : encodeURIComponent( p3 );
+                var encoded = typeof p1 !== 'undefined' ? encodeURIComponent( p1 ) : encodeURIComponent( p3 );
                 var quote = p2 ? p2 : p4;
                 return quote + encoded + quote;
             } );
-            // Insert /mode/instance[1]
+            // Insert /model/instance[1]
             expr = expr.replace( /^(\/(?!model\/)[^\/][^\/\s,"']*\/)/g, '/model/instance[1]$1' );
             expr = expr.replace( /([^a-zA-Z0-9\.\]\)\/\*_-])(\/(?!model\/)[^\/][^\/\s,"']*\/)/g, '$1/model/instance[1]$2' );
             // Decode string literals
             expr = expr.replace( LITERALS, function( m, p1, p2, p3, p4 ) {
-                var decoded = p1 ? decodeURIComponent( p1 ) : decodeURIComponent( p3 );
+                var decoded = typeof p1 !== 'undefined' ? decodeURIComponent( p1 ) : decodeURIComponent( p3 );
                 var quote = p2 ? p2 : p4;
                 return quote + decoded + quote;
             } );

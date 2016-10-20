@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Empty string literals ('""') are evaluated to 'undefined'.
+
 [4.12.2] - 2016-10-20
 ---------------------
 ##### Changed

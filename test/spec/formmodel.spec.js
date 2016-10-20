@@ -449,6 +449,9 @@ describe( 'converting absolute paths', function() {
         [ "concat('/path/to/node')" ],
         [ 'concat("a", "[/path/to/node]")' ],
         [ 'concat("\'", "/path/to/node", "\'")' ],
+        [ '""', '""' ],
+        [ "''", "''" ],
+        [ '', '' ]
 
     ].forEach( function( test ) {
         it( 'converts correctly when the model and instance node are included in the model', function() {
