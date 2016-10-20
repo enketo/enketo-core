@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.12.2] - 2016-10-20
 ---------------------
+##### Changed
+- Added "win32" as supported OS to not block enketo-core's installation as dependency on Windows systems.
+
 ##### Fixed
 - iOS 9 browsers have too much whitespace in formheader in Pages mode on small screens.
 
