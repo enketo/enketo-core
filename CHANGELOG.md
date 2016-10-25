@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- options parameter of Form class changed from `{webMapId: string}` to `{arcGis: {webMapId: string, hasZ: true}}`
+
 ##### Fixed
 - Empty string literals ('""') are evaluated to 'undefined'.
 

@@ -81,6 +81,12 @@ $input-button-border: 2px solid #aaaaaa;
                 }
             }
         }
+
+        &.alt-hide {
+            .alt {
+                visibility: hidden;
+            }
+        }
     }
 
     .toggle-map-visibility-btn {

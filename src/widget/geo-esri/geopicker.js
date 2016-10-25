@@ -69,14 +69,14 @@ define( function( require, exports, module ) {
                         // TODO: is it 100% sure that window.require is available at this point?
                         // The script has has loaded, but has it executed?
                         window.require( [
-                            "esri/geometry/Point",
-                            "esri/Map",
-                            "esri/WebMap",
-                            "esri/views/MapView",
-                            "esri/widgets/Locate",
-                            "esri/widgets/Search",
-                            "dojo/promise/all",
-                            "dojo/domReady!"
+                            'esri/geometry/Point',
+                            'esri/Map',
+                            'esri/WebMap',
+                            'esri/views/MapView',
+                            'esri/widgets/Locate',
+                            'esri/widgets/Search',
+                            'dojo/promise/all',
+                            'dojo/domReady!'
                         ], function(
                             Point,
                             Map,
@@ -291,6 +291,7 @@ define( function( require, exports, module ) {
         var altTxt = t( 'geopicker.altitude' ) || 'altitude (m)';
         var accTxt = t( 'geopicker.accuracy' ) || 'accuracy (m)';
         var decTxt = t( 'esri-geopicker.decimal' ) || 'decimal';
+        var zHide = typeof this.options.helpers.arcGis === 'object' && this.options.helpers.arcGis.hasZ === false ? ' alt-hide' : '';
         var mgrsSelectorTxt = t( 'esri-geopicker.mgrs' ) || 'MGRS';
         var degSelectorTxt = t( 'esri-geopicker.degrees' ) || 'degrees, minutes, seconds';
         var mgrsLabelTxt = t( 'esri-geopicker.coordinate-mgrs' ) || 'MGRS coordinate';
@@ -302,7 +303,7 @@ define( function( require, exports, module ) {
 
         this.$widget = $(
             '<div class="esri-geopicker widget">' +
-            '<div class="geo-inputs">' +
+            '<div class="geo-inputs ' + zHide + '">' +
             '<label class="geo-selector"><select name="geo-input-type" class="ignore"><option value="decimal" selected>' + decTxt + '</option>' +
             '<option value="MGRS">' + mgrsSelectorTxt + '</option>' +
             '<option value="dms">' + degSelectorTxt + '</option></select>' + locateBtn + '</label>' +
@@ -321,7 +322,7 @@ define( function( require, exports, module ) {
             '</label>' +
             '<label class="geo lat">' + latTxt + '<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label>' +
             '<label class="geo long">' + lngTxt + '<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
-            '<label class="geo">' + altTxt + '<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
+            '<label class="geo alt">' + altTxt + '<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
             '<label class="geo">' + accTxt + '<input class="ignore" readonly name="acc" type="number" step="0.1" /></label>' +
             '</div>' +
             '</div>'
@@ -471,8 +472,9 @@ define( function( require, exports, module ) {
         };
         var firstTime = true;
         var fallback = true;
+        var arcGisOptions = this.options.helpers.arcGis || {};
 
-        webMapId = this.options.helpers.webMapId || this._getWebMapIdFromFormClasses( this.options.helpers.formClasses );
+        webMapId = arcGisOptions.webMapId || this._getWebMapIdFromFormClasses( this.options.helpers.formClasses );
         //'ef9c7fbda731474d98647bebb4b33c20'; 
         //'f2e9b762544945f390ca4ac3671cfa72';
         //'ad5759bf407c4554b748356ebe1886e5';
@@ -850,6 +852,6 @@ define( function( require, exports, module ) {
     module.exports = {
         'name': pluginName,
         'selector': 'input[data-type-xml="geopoint"]',
-        'helpersRequired': [ 'webMapId', 'formClasses' ]
+        'helpersRequired': [ 'arcGis', 'formClasses' ]
     };
 } );

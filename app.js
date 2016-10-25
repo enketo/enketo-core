@@ -56,7 +56,10 @@ function initializeForm() {
     form = new Form( 'form.or:eq(0)', {
         modelStr: modelStr
     }, {
-        webMapId: 'f2e9b762544945f390ca4ac3671cfa72'
+        arcGis: {
+            webMapId: 'f2e9b762544945f390ca4ac3671cfa72',
+            hasZ: true
+        }
     } );
     // for debugging
     window.form = form;
