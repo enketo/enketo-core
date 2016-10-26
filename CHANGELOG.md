@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Empty string literals ('""') are evaluated to 'undefined'.
+- MS Edge does not properly clone repeats.
 
 [4.12.2] - 2016-10-20
 ---------------------

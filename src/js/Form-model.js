@@ -3,6 +3,7 @@ if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && type
         factory( require, exports, module );
     };
 }
+
 define( function( require, exports, module ) {
     'use strict';
     var MergeXML = require( 'mergexml/mergexml' );
@@ -640,8 +641,11 @@ define( function( require, exports, module ) {
 
     FormModel.prototype.getTemplateNodes = function() {
         var jrPrefix = this.getNamespacePrefix( this.JAVAROSA_XFORMS_NS );
-        // for now we support both the official namespaced template and the hacked non-namespaced template attributes
-        return this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@' + jrPrefix + ':template]', 'nodes', null, null, true );
+        // For now we support both the official namespaced template and the hacked non-namespaced template attributes
+        // Note: due to an MS Edge bug, we use the slow JS XPath evaluator here. It would be VERY GOOD for performance 
+        // to switch back once the Edge bug is fixed. The bug results in not finding any templates.
+        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/9544701/
+        return this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@' + jrPrefix + ':template]', 'nodes', null, null, false );
     };
 
     /**
@@ -675,12 +679,18 @@ define( function( require, exports, module ) {
         var that = this;
 
         // for now we support both the official namespaced template and the hacked non-namespaced template attributes
-        this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@' + jrPrefix + ':template]', 'nodes', null, null, true ).forEach( function( templateEl ) {
+        this.getTemplateNodes().forEach( function( templateEl ) {
             var nodeName = templateEl.nodeName,
                 selector = that.getXPath( templateEl, 'instance' ),
                 ancestorTemplateNodes = that.evaluate( 'ancestor::' + nodeName + '[@template] | ancestor::' + nodeName + '[@' + jrPrefix + ':template]', 'nodes', selector, 0, true );
             if ( ancestorTemplateNodes.length === 0 && $( templateEl ).siblings( nodeName ).length === 0 ) {
-                $( templateEl ).clone().insertAfter( $( templateEl ) ).find( '*' ).addBack().removeAttr( 'template' ).removeAttr( jrPrefix + ':template' );
+                $( templateEl ).clone().insertAfter( $( templateEl ) )
+                    // for backwards compatibility
+                    .find( '*' ).addBack().removeAttr( 'template' )
+                    // just to be sure, but could be omitted
+                    .removeAttr( jrPrefix + ':template' )
+                    // the proper way of doing this
+                    .get( 0 ).removeAttributeNS( that.JAVAROSA_XFORMS_NS, 'template' );
             }
         } );
     };
@@ -719,7 +729,6 @@ define( function( require, exports, module ) {
         }
         return dataStr;
     };
-
 
     FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
         var i = 0;
