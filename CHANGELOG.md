@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.13.0]
 ---------------------
 ##### Changed
 - options parameter of Form class changed from `{webMapId: string}` to `{arcGis: {webMapId: string, hasZ: true}}`
@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Empty string literals ('""') are evaluated to 'undefined'.
 - MS Edge does not properly clone repeats.
+- "Different Encoding" error if instance encoding is specified, even if it's compatible.
 
 [4.12.2] - 2016-10-20
 ---------------------

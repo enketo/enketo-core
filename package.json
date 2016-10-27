@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "4.12.2",
+    "version": "4.13.0",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -72,6 +72,6 @@
         "jquery-touchswipe": "1.6.x",
         "leaflet": "0.7.x",
         "lie": "3.1.x",
-        "mergexml": "1.1.0"
+        "mergexml": "1.1.2"
     }
 }

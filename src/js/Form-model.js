@@ -329,9 +329,8 @@ define( function( require, exports, module ) {
         }
 
         /**
-         * Due to a bug with namespaced attributes in the mergexml module, we use a dirty trick to fix
-         * namespaced attributes, by serializing and re-parsing. For some reason, in IE11 we **have to**
-         * use merger.Get(1), because new XMLSerializer().serializeToString(merger.Get(0)) throws interface error.
+         * Beware: merge.Get(0) returns an ActiveXObject in IE11. We turn this 
+         * into a proper XML document by parsing the XML string instead.
          */
         mergeResultDoc = $.parseXML( merger.Get( 1 ) );
 
