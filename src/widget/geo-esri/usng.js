@@ -1,3 +1,7 @@
+if ( typeof console.warn === 'undefined' ) {
+    console.warn = console.log;
+}
+
 //// ***************************************************************************
 // *  usng.js  (U.S. National Grid functions)
 // *  Module to calculate National Grid Coordinates
@@ -284,6 +288,7 @@ var theClass = {
         var lonOriginRad = lonOrigin * DEG_2_RAD;
 
         // compute the UTM Zone from the latitude and longitude
+        // comment by Martijn: Nothing is done with this variable.
         UTMZone = zoneNumber + "" + this.UTMLetterDesignator( lat ) + " ";
 
         var N = EQUATORIAL_RADIUS / Math.sqrt( 1 - ECC_SQUARED *

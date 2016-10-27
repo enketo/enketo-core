@@ -3,6 +3,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Added
+- UTM coordinate option to ESRI/ArcGIS geo(point)picker.
+- Auto-record current coordinates in ESRI/ArcGIS geo(point)picker.
+
+##### Changed
+- Styling of ESRI/ArcGIS geo(point)picker.
+
+##### Fixed
+- No error shown when setting coordinates that are outside of Earth's boundaries in the ESRI/ArcGIS geo(point)picker. Picker reaches unrecoverable map state.
+
 [4.13.1] - 2016-10-31
 ---------------------
 ##### Fixed

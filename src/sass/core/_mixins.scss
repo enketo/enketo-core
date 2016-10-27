@@ -123,6 +123,26 @@
     }
 }
 
+@mixin input-as-text {
+    border: none;
+    background: none;
+    width: auto;
+    height: auto;
+    opacity: 1;
+    padding: 0 1em;
+    margin: 0;
+    box-shadow: none;
+    line-height: 1;
+    display: inline;
+    float: none;
+    border-radius: 0;
+    transition: none;
+
+    &:hover {
+        background: none;
+    }
+}
+
 @mixin center-block {
     display: block;
     margin-left: auto;

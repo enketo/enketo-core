@@ -124,6 +124,16 @@
 }
 
 .esri-geopicker {
+    border-bottom: none;
+    padding-bottom: 0;
+
+    .btn[name=geodetect] {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        font-weight: bolder;
+    }
+
     input[type=text], input[type=number], textarea, select {
         border-bottom: 1px dotted #cccccc;
     }

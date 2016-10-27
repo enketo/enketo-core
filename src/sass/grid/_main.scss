@@ -123,7 +123,7 @@ h4 + .or-repeat {
 .question, .note {
     @include display-flex;
 
-    @include flex-wrap(no-wrap);
+    @include flex-wrap(nowrap);
 
     @include flex-direction(column);
 

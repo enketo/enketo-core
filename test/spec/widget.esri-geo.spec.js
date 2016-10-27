@@ -20,14 +20,14 @@ describe( 'ESRI geopoint widget', function() {
         expect( geopointPicker ).not.toBeUndefined();
     } );
 
-    describe( 'convertor of LatLng to degrees, minutes, seconds', function() {
+    describe( 'convertor of LatLng and degrees, minutes, seconds', function() {
         [
             [ '-39.42342342', {
                 latitude: [ 39, 25, 24.324312, 'S' ],
                 longitude: [ 39, 25, 24.324312, 'W' ]
             } ]
         ].forEach( function( test ) {
-            it( 'converts correctly back and forth, test[0]', function() {
+            it( 'converts correctly back and forth:' + test[ 0 ], function() {
                 expect( geopointPicker._latLngToDms( test[ 0 ], test[ 0 ], 8 ) ).toEqual( test[ 1 ] );
                 expect( geopointPicker._dmsToDecimal( test[ 1 ].latitude ) ).toEqual( test[ 0 ] );
                 expect( geopointPicker._dmsToDecimal( test[ 1 ].longitude ) ).toEqual( test[ 0 ] );
@@ -52,8 +52,77 @@ describe( 'ESRI geopoint widget', function() {
         } );
     } );
 
-    describe( 'MGRS to latLong conversion', function() {
+    describe( 'convertor of MGRS and LatLng', function() {
 
+    } );
+
+    describe( 'convertor of LatLng and UTM', function() {
+        [
+            // northen hemisphere
+            [ {
+                latitude: '39.73309517',
+                longitude: '-104.9639134'
+            }, {
+                zone: 13,
+                hemisphere: 'N',
+                easting: 503092.3,
+                northing: 4398134.7
+            } ],
+            // southern hemisphere
+            [ {
+                latitude: '-50.56869918',
+                longitude: '-104.9563346'
+            }, {
+                zone: 13,
+                hemisphere: 'S',
+                easting: 503092.3,
+                northing: 4398134.7
+            } ]
+        ].forEach( function( test ) {
+            var latLng = test[ 0 ];
+            var utm = test[ 1 ];
+            it( 'converts correctly back and forth:' + JSON.stringify( latLng ), function() {
+                expect( geopointPicker._latLngToUtm( latLng.latitude, latLng.longitude ) ).toEqual( utm );
+                expect( geopointPicker._utmToLatLng( utm ) ).toEqual( latLng );
+            } );
+        } );
+
+        // convert zone+letter
+        [
+            // northen hemisphere
+            [ {
+                latitude: '39.73309517',
+                longitude: '-104.9639134'
+            }, {
+                zone: '13R',
+                hemisphere: 'N', // not used in test
+                easting: 503092.3,
+                northing: 4398134.7
+            } ],
+            // southern hemisphere
+            [ {
+                latitude: '-50.56869918',
+                longitude: '-104.9563346'
+            }, {
+                zone: '13F',
+                hemisphere: 'S', // not used in test
+                easting: 503092.3,
+                northing: 4398134.7
+            } ]
+        ].forEach( function( test ) {
+            var latLng = test[ 0 ];
+            var utm = test[ 1 ];
+            var utmResult = JSON.parse( JSON.stringify( utm ) );
+            // remove hemisphere from test value
+            delete utm.hemisphere;
+            utmResult.zone = parseInt( utm.zone, 10 );
+
+            it( 'converts correctly back and forth if UTM uses ZoneNumber+ZoneLetter notation:' + JSON.stringify( utm ), function() {
+                expect( geopointPicker._utmToLatLng( utm ) ).toEqual( latLng );
+                expect( geopointPicker._latLngToUtm( latLng.latitude, latLng.longitude ) ).toEqual( utmResult );
+
+            } );
+        } );
     } );
 
 

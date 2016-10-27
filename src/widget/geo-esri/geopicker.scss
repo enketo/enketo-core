@@ -29,6 +29,8 @@ $input-button-border: 2px solid #aaaaaa;
 
 .esri-geopicker {
     margin-top: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px $gray-light dashed;
 
     .center-mark {
         position: absolute;
@@ -82,9 +84,30 @@ $input-button-border: 2px solid #aaaaaa;
             }
         }
 
+        &.utm-input-mode {
+            .geo.zone-utm, .geo.hemisphere-utm, .geo.easting-utm, .geo.northing-utm {
+                display: block;
+            }
+
+            .geo {
+                &.lat, &.long {
+                    display: none;
+                }
+            }
+        }
+
         &.alt-hide {
             .alt {
-                visibility: hidden;
+                display: none;
+
+                //visibility: hidden;
+           
+            }
+
+            .acc-empty {
+                // allow to stretch to full width
+                max-width: none;
+                flex: 70%;
             }
         }
     }
@@ -109,15 +132,16 @@ $input-button-border: 2px solid #aaaaaa;
 
         position: relative;
         width: $map-width;
-        float: right;
         padding-left: $separator-width;
         border-left: solid 1px $groupline;
         width: 100%;
-        float: none;
+        height: $map-height;
         padding-left: 0;
         border-left: none;
 
         &.hide-map {
+            height: auto;
+
             .map-canvas {
                 display: none;
             }
@@ -139,10 +163,15 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
-    .btn[name="geodetect"] {
+    .btn[name=geodetect] {
         float: right;
         display: none;
         margin: 0 0 0 15px;
+    }
+
+    .btn-icon-only[name=empty] {
+        width: 30px;
+        margin: 0 0 1px 0;
     }
 
     .geo-selector {
@@ -157,6 +186,13 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
+    @media screen and (max-width: 450px) {
+        label.geo.acc-empty {
+            flex: 100%;
+            max-width: none;
+        }
+    }
+
     label.geo {
         @include font-normal;
 
@@ -168,9 +204,28 @@ $input-button-border: 2px solid #aaaaaa;
         padding: 0;
         margin: 15px 0 0 0;
 
-        &[name="lat-deg"], &[name=lat-min], &[name=lat-sec], &[name=lat-hem], &[name="long-deg"], &[name=long-min], &[name=long-sec], &[name=long-hem] {
-            // flex: 25%;
-       
+        // truncate label when it doesn't fit
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        // --- end truncate
+
+        &.acc-empty {
+            @include display-flex;
+
+            @include flex-direction(row);
+
+            @include flex-wrap(nowrap);
+
+            > .geo-label {
+                flex: none;
+            }
+
+            > * {
+                align-self: flex-end;
+            }
         }
 
         &.mgrs {
@@ -180,6 +235,7 @@ $input-button-border: 2px solid #aaaaaa;
 
             input {
                 max-width: 47%;
+                min-width: 165px;
             }
         }
 
@@ -189,6 +245,34 @@ $input-button-border: 2px solid #aaaaaa;
             justify-content: space-between;
             display: none;
             min-width: 45%;
+        }
+
+        &.zone-utm {
+            display: none;
+            min-width: 60px;
+            flex: 10%;
+            padding-right: 10px;
+        }
+
+        &.hemisphere-utm {
+            display: none;
+            min-width: 80px;
+            padding-right: 10px;
+            flex: 20%;
+        }
+
+        &.easting-utm {
+            padding-right: 10px;
+            min-width: 125px;
+        }
+
+        &.northing-utm {
+            min-width: 115px;
+        }
+
+        &.easting-utm, &.northing-utm {
+            display: none;
+            flex: 30%;
         }
 
         .geo-label {
@@ -207,6 +291,20 @@ $input-button-border: 2px solid #aaaaaa;
             + span + span + span {
                 flex: 30%;
             }
+        }
+
+        [name=alt] {
+            margin-bottom: 0;
+        }
+
+        [name=acc][type=number][readonly] {
+            @include input-as-text;
+
+            padding: 0 5px 1px 5px;
+            flex: 1;
+
+            // for some reason, this requires a width
+            width: 30px;
         }
 
         [name=lat-deg], [name=long-deg] {
@@ -240,6 +338,10 @@ $input-button-border: 2px solid #aaaaaa;
             max-width: 40px;
         }
 
+        [name=hemisphere-utm] {
+            width: 100%;
+        }
+
         .geo-unit {
             position: absolute;
             top: 10px;
@@ -247,23 +349,12 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
-    input[name="lat"], input[name="long"], input[name="mgrs"] {
+    input[name=lat], input[name=long], input[name=mgrs], input[name=zone-utm], input[name=easting-utm], input[name=northing-utm], input[name=alt], input[name=acc] {
         float: none;
 
         @include border-box;
 
         width: 100%;
-    }
-
-    input[name="alt"], input[name="acc"] {
-        @include border-box;
-
-        float: right;
-        width: 40%;
-
-        @media screen and (max-width: $geo-main-breakpoint) {
-            width: 50%;
-        }
     }
 
     .interaction-blocker {
@@ -280,7 +371,9 @@ $input-button-border: 2px solid #aaaaaa;
         width: 100%;
         border: 1px solid #ccc;
         border-radius: 3px;
-        height: $map-height;
+        height: 100%;
+
+        //$map-height;
         cursor: crosshair;
 
         img {
@@ -319,20 +412,16 @@ $input-button-border: 2px solid #aaaaaa;
 }
 
 // RTL support
-.or[dir="rtl"] .esri-geopicker {
-    input[name="alt"],
-    input[name="acc"] {
-        float: left;
-    }
-
-    .btn[name="geodetect"] {
+.or[dir=rtl] .esri-geopicker {
+    .btn[name=geodetect] {
         float: left;
         margin: 0 15px 0 0;
     }
 
     .geo-inputs {
-        position: relative;
-        margin: 25px 0 0 $separator-width;
+        //position: relative;
+        margin-right: 0;
+        margin-left: $separator-width;
     }
 
     .geo-unit {

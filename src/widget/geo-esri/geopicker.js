@@ -24,17 +24,16 @@ define( function( require, exports, module ) {
     var $ = require( 'jquery' );
     var Widget = require( '../../js/Widget' );
     var config = require( 'text!enketo-config' );
+    var convertor = require( './usng.js' );
     var Promise = require( 'lie' );
     var t = require( 'translator' ).t;
-    var pluginName = 'esriGeopicker';
-    var overridePluginName = 'geopicker';
-    var esriArcGisJsUrl = config[ 'esriArcGisJsUrl' ] || 'https://js.arcgis.com/4.0/';
-    var convertor = require( './usng.js' );
-    var precision = 10;
+    var PLUGIN_NAME = 'esriGeopicker';
+    var OVERRIDE_PLUGIN_NAME = 'geopicker';
+    var ESRI_ARGIS_JS_URL = config[ 'esriArcGisJsUrl' ] || 'https://js.arcgis.com/4.0/';
+    var PRECISION = 10;
+    var NORTHING_OFFSET = 10000000.0;
     var esriArcGisJsRequest;
     var esri;
-
-    //TODO: obtain webmapId
 
     /**
      * Geopicker widget Class
@@ -45,7 +44,7 @@ define( function( require, exports, module ) {
      */
 
     function Geopicker( element, options ) {
-        this.namespace = pluginName;
+        this.namespace = PLUGIN_NAME;
         // call the super class constructor
         Widget.call( this, element, options );
 
@@ -64,7 +63,7 @@ define( function( require, exports, module ) {
         if ( !esriArcGisJsRequest ) {
             esriArcGisJsRequest = new Promise( function( resolve, reject ) {
                 // make the request for the Esri script asynchronously
-                $.getScript( esriArcGisJsUrl )
+                $.getScript( ESRI_ARGIS_JS_URL )
                     .done( function() {
                         // TODO: is it 100% sure that window.require is available at this point?
                         // The script has has loaded, but has it executed?
@@ -115,6 +114,7 @@ define( function( require, exports, module ) {
 
         this._loadEsriArcGisJs()
             .then( function( mapScriptsAvailable ) {
+                var $utms;
                 that.mapSupported = mapScriptsAvailable;
                 that.$question = $( that.element ).closest( '.question, .note' );
                 that.mapId = 'map' + Math.round( Math.random() * 10000000 );
@@ -127,11 +127,10 @@ define( function( require, exports, module ) {
                 that._addDomElements();
 
                 // handle point input changes
-                that.$widget.find( '[name="lat"], [name="long"], [name="alt"], [name="acc"]' ).on( 'change change.bymap change.bysearch', function( event ) {
-                    var updated;
-                    var lat = that.$lat.val() ? Number( that.$lat.val() ) : '';
-                    var lng = that.$lng.val() ? Number( that.$lng.val() ) : '';
-                    // we need to avoid a missing alt in case acc is not empty!
+                that.$widget.find( '[name="lat"], [name="long"], [name="alt"], [name="acc"]' ).on( 'change', function( event ) {
+                    var changed;
+                    var lat = that.$lat.val() !== '' ? Number( that.$lat.val() ) : '';
+                    var lng = that.$lng.val() !== '' ? Number( that.$lng.val() ) : '';
                     var alt = that.$alt.val() ? Number( that.$alt.val() ) : '';
                     var acc = that.$acc.val() ? Number( that.$acc.val() ) : '';
                     var point = {
@@ -149,8 +148,8 @@ define( function( require, exports, module ) {
                         altitude: point.altitude,
                         accuracy: point.accuracy
                     };
-                    updated = that._updateValue();
-                    if ( updated ) {
+                    changed = that._updateValue();
+                    if ( changed ) {
                         that._updateMap( that.points[ that.currentIndex ] );
                     }
                 } );
@@ -183,17 +182,42 @@ define( function( require, exports, module ) {
                     }
                 } );
 
-                // handle input switcher
+                $utms = that.$zoneutm.add( that.$hemisphereutm ).add( that.$eastingutm ).add( that.$northingutm );
+                $utms.on( 'change', function() {
+                    var names = [ 'zone', 'hemisphere', 'easting', 'northing' ];
+                    var utm = {};
+                    var empties = 0;
+                    $utms.each( function( index, input ) {
+                        utm[ names[ index ] ] = input.value;
+                        // Hemisphere can be empty if zone is number + letter.
+                        // By design this is not a very thorough check to make sure there is some error indication to user.
+                        if ( index !== 1 ) {
+                            empties = input.value === '' ? empties + 1 : empties;
+                        } else if ( input.value === '' && !/[A-z]$/.test( utm.zone ) ) {
+                            empties++;
+                        }
+                    } );
+                    if ( empties === 0 ) {
+                        that._updateInputs( that._utmToLatLng( utm ) );
+                    }
+                } );
+
+                // handle map visibility switcher
                 that.$widget.find( '.toggle-map-visibility-btn' ).on( 'click', function( event ) {
                     that.$map.toggleClass( 'hide-map' );
                     that._updateMap( that.points[ that.currentIndex ] );
                 } );
 
-                // handle input switcher
+                // handle input type switcher
                 that.$inputTypeSwitcher.on( 'change', function( event ) {
                     var type = this.value;
                     that._switchInputType( type );
                     return false;
+                } );
+
+                // handle click of "empty" button
+                that.$widget.find( '[name="empty"]' ).on( 'click', function() {
+                    that._updateInputs( {} );
                 } );
 
                 // disable map navigation on touchscreens until user clicks map
@@ -226,6 +250,8 @@ define( function( require, exports, module ) {
                         that.points[ i ] = point;
                     } );
                     that._updateInputs( that.points[ that.currentIndex ] );
+                } else {
+                    that.$detect.click()
                 }
 
                 if ( that.props.readonly ) {
@@ -242,13 +268,20 @@ define( function( require, exports, module ) {
     };
 
     Geopicker.prototype._switchInputType = function( type ) {
-        if ( type === 'MGRS' ) {
-            this.$inputGroup.addClass( 'mgrs-input-mode' ).removeClass( 'dms-input-mode' );
-        } else if ( type === 'dms' ) {
-            this.$inputGroup.addClass( 'dms-input-mode' ).removeClass( 'mgrs-input-mode' );
-        } else {
-            this.$inputGroup.removeClass( 'dms-input-mode mgrs-input-mode' );
+        var modes = [ 'MGRS', 'UTM', 'dms' ];
+        var index = modes.indexOf( type );
+        var active = '';
+        var inactive = '';
+
+        if ( index !== -1 ) {
+            modes.splice( index, 1 );
+            active = type.toLowerCase() + '-input-mode';
         }
+        inactive = modes.map( function( t ) {
+            return t.toLowerCase() + '-input-mode';
+        } ).join( ' ' );
+
+        this.$inputGroup.addClass( active ).removeClass( inactive );
     };
 
     /**
@@ -279,24 +312,32 @@ define( function( require, exports, module ) {
      * Adds the DOM elements
      */
     Geopicker.prototype._addDomElements = function() {
-        var centerMark = '<span class="center-mark esri-geopoint-marker"> </span>';
+        var centerMark = '<span class="center-mark esri-geopoint-marker" style="display:none;"> </span>';
         var toggleMapBtn = this.props.compact ? '<button type="button" class="toggle-map-visibility-btn"> </button>' : '';
         var locateBtn = this.props.detect ? '<button name="geodetect" type="button" tabindex="0" class="btn btn-default esri-locate esri-widget-button esri-widget esri-component">' +
             '<span aria-hidden="true" class="esri-icon esri-icon-locate" title="Find my location"></span></button>' : '';
         var map = '<div class="map-canvas-wrapper' + ( this.props.compact ? ' hide-map' : '' ) +
             '"><div class="interaction-blocker"></div><div class=map-canvas id="' +
             this.mapId + '"></div>' + centerMark + toggleMapBtn + '</div>';
-        var latTxt = t( 'geopicker.latitude' ) || 'latitude (x.y &deg;)';
-        var lngTxt = t( 'geopicker.longitude' ) || 'longitude (x.y &deg;)';
+        var latTxt = t( 'geopicker.latitude' ) || 'latitude (a.b &deg;)';
+        var lngTxt = t( 'geopicker.longitude' ) || 'longitude (a.b &deg;)';
         var altTxt = t( 'geopicker.altitude' ) || 'altitude (m)';
-        var accTxt = t( 'geopicker.accuracy' ) || 'accuracy (m)';
+        var accTxt = t( 'geopicker.accuracy' ) || 'accuracy (m):';
         var decTxt = t( 'esri-geopicker.decimal' ) || 'decimal';
+        var notAvTxt = t( 'esri-geopicker.notavailable' ) || 'Not Available';
         var zHide = typeof this.options.helpers.arcGis === 'object' && this.options.helpers.arcGis.hasZ === false ? ' alt-hide' : '';
         var mgrsSelectorTxt = t( 'esri-geopicker.mgrs' ) || 'MGRS';
+        var utmSelectorTxt = t( 'esri-geopicker.utm' ) || 'UTM';
         var degSelectorTxt = t( 'esri-geopicker.degrees' ) || 'degrees, minutes, seconds';
         var mgrsLabelTxt = t( 'esri-geopicker.coordinate-mgrs' ) || 'MGRS coordinate';
         var latDegTxt = t( 'esri-geopicker.latitude-degrees' ) || 'latitude (d&deg m&rsquo; s&rdquo; N)';
         var lngDegTxt = t( 'esri-geopicker.latitude-degrees' ) || 'longitude (d&deg m&rsquo; s&rdquo; W)';
+        var utmZoneTxt = t( 'esri-geopicker.utm-zone' ) || 'zone';
+        var utmHemisphereTxt = t( 'esri-geopicker.utm-hemisphere' ) || 'hemisphere';
+        var hemNorthTxt = t( 'esri-geopicker.utm-north' ) || 'North';
+        var hemSouthTxt = t( 'esri-geopicker.utm-soutch' ) || 'South';
+        var utmEastingTxt = t( 'esri-geopicker.utm-easting' ) || 'easting (m)';
+        var utmNorthingTxt = t( 'esri-geopicker.utm-northing' ) || 'northing (m)';
         var d = '<span class="geo-unit">&deg;</span>';
         var m = '<span class="geo-unit">&rsquo;</span>';
         var s = '<span class="geo-unit">&rdquo;</span>';
@@ -306,7 +347,9 @@ define( function( require, exports, module ) {
             '<div class="geo-inputs ' + zHide + '">' +
             '<label class="geo-selector"><select name="geo-input-type" class="ignore"><option value="decimal" selected>' + decTxt + '</option>' +
             '<option value="MGRS">' + mgrsSelectorTxt + '</option>' +
-            '<option value="dms">' + degSelectorTxt + '</option></select>' + locateBtn + '</label>' +
+            '<option value="dms">' + degSelectorTxt + '</option>' +
+            '<option value="UTM">' + utmSelectorTxt + '</option>' +
+            '</select>' + locateBtn + '</label>' +
             '<label class="geo mgrs">' + mgrsLabelTxt + '<input class="ignore" name="mgrs" type="text" /></label>' +
             '<label class="geo lat-dms"><span class="geo-label">' + latDegTxt + '</span>' +
             '<span><input class="ignore" name="lat-deg" type="number" step="1" min="-90" max="90"/>' + d + '</span>' +
@@ -320,10 +363,16 @@ define( function( require, exports, module ) {
             '<span><input class="ignore" name="long-sec" type="number" step="1" min="0" max="59"/>' + s + '</span>' +
             '<select class="ignore" name="long-hem"><option value="W">W</option><option value="E">E</option></select>' +
             '</label>' +
+            '<label class="geo zone-utm">' + utmZoneTxt + '<input class="ignore" name="zone-utm" type="text"/></label>' +
+            '<label class="geo hemisphere-utm">' + utmHemisphereTxt + '<select class="ignore" name="hemisphere-utm"><option value="">...</option>' +
+            '<option value="N">' + hemNorthTxt + '</option><option value="S">' + hemSouthTxt + '</option></select></label>' +
+            '<label class="geo easting-utm">' + utmEastingTxt + '<input class="ignore" name="easting-utm" type="number" step="0.1" min="0"/></label>' +
+            '<label class="geo northing-utm">' + utmNorthingTxt + '<input class="ignore" name="northing-utm" type="number" step="0.1"/></label>' +
             '<label class="geo lat">' + latTxt + '<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label>' +
             '<label class="geo long">' + lngTxt + '<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
             '<label class="geo alt">' + altTxt + '<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
-            '<label class="geo">' + accTxt + '<input class="ignore" readonly name="acc" type="number" step="0.1" /></label>' +
+            '<label class="geo acc-empty"><span class="geo-label">' + accTxt + '</span><input class="ignore" readonly name="acc" type="number" step="0.1" placeholder="' + notAvTxt + '"/>' +
+            '<button type="button" class="btn btn-icon-only" name="empty"><span class="icon icon-trash"> </span></button></label>' +
             '</div>' +
             '</div>'
         );
@@ -331,16 +380,10 @@ define( function( require, exports, module ) {
         // add the map canvas
         this.$widget.prepend( map );
         this.$map = this.$widget.find( '.map-canvas-wrapper' );
-
+        this.$placemarker = this.$widget.find( '.esri-geopoint-marker' );
         this.$inputGroup = this.$widget.find( '.geo-inputs' );
         this.$detect = this.$widget.find( '[name="geodetect"]' );
         this.$inputTypeSwitcher = this.$inputGroup.find( '[name="geo-input-type"]' );
-
-        // touchscreen maps
-        if ( this.props.touch && this.mapSupported ) {
-            // TODO block scrolling
-        }
-
         this.$lat = this.$inputGroup.find( '[name="lat"]' );
         this.$lng = this.$inputGroup.find( '[name="long"]' );
         this.$alt = this.$inputGroup.find( '[name="alt"]' );
@@ -348,6 +391,10 @@ define( function( require, exports, module ) {
         this.$mgrs = this.$inputGroup.find( '[name="mgrs"]' );
         this.$latdms = this.$inputGroup.find( '.lat-dms' );
         this.$lngdms = this.$inputGroup.find( '.long-dms' );
+        this.$zoneutm = this.$inputGroup.find( '[name="zone-utm"]' );
+        this.$hemisphereutm = this.$inputGroup.find( '[name="hemisphere-utm"]' );
+        this.$eastingutm = this.$inputGroup.find( '[name="easting-utm"]' );
+        this.$northingutm = this.$inputGroup.find( '[name="northing-utm"]' );
 
         $( this.element ).hide().after( this.$widget ); //.parent().addClass( 'clearfix' );
     };
@@ -369,10 +416,11 @@ define( function( require, exports, module ) {
             var geopoint;
             var lat = typeof point.latitude === 'number' ? point.latitude : null;
             var lng = typeof point.longitude === 'number' ? point.longitude : null;
+            // we need to avoid a missing alt in case acc is not empty!
             var alt = typeof point.altitude === 'number' ? point.altitude : 0.0;
             var acc = typeof point.accuracy === 'number' ? point.accuracy : 0.0;
 
-            geopoint = ( lat && lng ) ? lat + ' ' + lng + ' ' + alt + ' ' + acc : '';
+            geopoint = ( typeof lat === 'number' && typeof lng === 'number' ) ? lat + ' ' + lng + ' ' + alt + ' ' + acc : '';
 
             if ( !( geopoint === '' && index === array.length - 1 ) ) {
                 newValue += geopoint;
@@ -427,8 +475,8 @@ define( function( require, exports, module ) {
         var lat;
         var lng;
 
-        lat = ( typeof latLng[ 0 ] === 'number' ) ? latLng[ 0 ] : ( typeof latLng.lat === 'number' ) ? latLng.lat : null;
-        lng = ( typeof latLng[ 1 ] === 'number' ) ? latLng[ 1 ] : ( typeof latLng.lng === 'number' ) ? latLng.lng : null;
+        lat = ( typeof latLng.latitude === 'number' ) ? latLng.latitude : null;
+        lng = ( typeof latLng.longitude === 'number' ) ? latLng.longitude : null;
 
         return ( lat !== null && lng !== null && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180 );
     };
@@ -467,8 +515,8 @@ define( function( require, exports, module ) {
         var currentScale;
         var webMapId = '';
         var webMapConfig = {
-            basemap: "streets",
-            ground: "world-elevation"
+            basemap: 'streets',
+            ground: 'world-elevation'
         };
         var firstTime = true;
         var fallback = true;
@@ -534,8 +582,8 @@ define( function( require, exports, module ) {
         // It is crucial to use the same precision for both, to not create an infinite loop.
         // If the webform is offline, it is undefined;
         return ( !center ) ? undefined : {
-            latitude: center.latitude.toPrecision( precision ),
-            longitude: center.longitude.toPrecision( precision )
+            latitude: center.latitude.toPrecision( PRECISION ),
+            longitude: center.longitude.toPrecision( PRECISION )
         };
     };
 
@@ -614,7 +662,11 @@ define( function( require, exports, module ) {
                 that._updateInputs( position.coords );
                 $icon.addClass( 'esri-icon-locate' ).removeClass( 'esri-rotating esri-icon-loading-indicator' );
             }, function() {
-                console.error( 'error occurred trying to obtain position' );
+                console.error( 'error occurred trying to obtain position, defaulting to 0,0' );
+                that._updateInputs( {
+                    latitude: 0,
+                    longitude: 0
+                } );
                 $icon.addClass( 'esri-icon-locate' ).removeClass( 'esri-rotating esri-icon-loading-indicator' );
             }, options );
             return false;
@@ -625,7 +677,6 @@ define( function( require, exports, module ) {
         var that = this;
         mapView.watch( 'stationary', function( newValue, oldValue, propertyName, target ) {
             var currentCenter;
-            //console.debug( 'result', propertyName, oldValue, newValue, target );
 
             // We should only watch movement that is done by user dragging map not programmatic map updating.
             // We should be able to check for the animation.state property, but I did not succeed with this.
@@ -633,10 +684,10 @@ define( function( require, exports, module ) {
                 currentCenter = that._getMapCenter();
                 // TODO: add changed check before updating inputs
                 if ( !that._sameLatLng( currentCenter, that.points[ that.currentIndex ] ) ) {
-                    console.debug( 'stationary and not programmatically updating map' );
+                    // console.debug( 'stationary and not programmatically updating map' );
                     that._updateInputs( that._getMapCenter() );
                 } else {
-                    console.debug( 'map did not change' );
+                    // console.debug( 'map did not change' );
                 }
             }
         } );
@@ -651,8 +702,12 @@ define( function( require, exports, module ) {
             this.mapView
                 .then( function() {
                     currentCenter = that._getMapCenter();
-
-                    if ( !that._sameLatLng( point, currentCenter ) ) {
+                    if ( !that._isValidLatLng( point ) ) {
+                        console.error( 'Not a valid geopoint. Not updating map' );
+                        that._updateInputs( point );
+                        that.$placemarker.hide();
+                    } else if ( !that._sameLatLng( point, currentCenter ) ) {
+                        that.$placemarker.show();
                         esriPoint = new esri.Point( point );
                         that.mapUpdating = true;
                         that.mapView.goTo( esriPoint )
@@ -666,7 +721,8 @@ define( function( require, exports, module ) {
                                 }
                             } );
                     } else {
-                        console.debug( 'no need to update the map view' );
+                        that.$placemarker.show();
+                        console.log( 'No need to update the map view.' );
                     }
                 } );
         }
@@ -677,9 +733,7 @@ define( function( require, exports, module ) {
     };
 
     Geopicker.prototype._latLngToDms = function( latitude, longitude, prec ) {
-        var card;
-
-        prec = prec || precision;
+        prec = prec || PRECISION;
 
         return {
             latitude: this._decimalToDms( latitude, prec ).concat( [ ( latitude > 0 ) ? 'N' : 'S' ] ),
@@ -694,7 +748,7 @@ define( function( require, exports, module ) {
         var min;
         var sec;
 
-        prec = prec || precision;
+        prec = prec || PRECISION;
         absDecimal = Math.abs( decimal );
         deg = Math.floor( absDecimal );
         minRemaining = ( absDecimal - deg ) * 60;
@@ -720,7 +774,50 @@ define( function( require, exports, module ) {
         decSec = ( Math.abs( dms[ 2 ] ) || 0 ) / 3600;
         symbol = ( Number( dms[ 0 ] ) < 0 || dms[ 3 ] === 'S' || dms[ 3 ] === 'W' ) ? '-' : '';
 
-        return symbol + ( decDeg + decMin + decSec ).toPrecision( precision );
+        return symbol + ( decDeg + decMin + decSec ).toPrecision( PRECISION );
+    };
+
+    Geopicker.prototype._latLngToUtm = function( latitude, longitude ) {
+        var utm = [];
+        var hemisphere = 'N';
+        var easting;
+        var northing;
+
+        convertor.LLtoUTM( latitude, longitude, utm );
+
+        easting = Math.round( utm[ 0 ] * 10 ) / 10;
+        northing = Math.round( utm[ 1 ] * 10 ) / 10;
+
+        if ( utm[ 1 ] < 0 ) {
+            hemisphere = 'S';
+            northing = NORTHING_OFFSET + northing;
+        }
+
+        return {
+            zone: utm[ 2 ],
+            hemisphere: hemisphere,
+            easting: easting,
+            northing: northing
+        };
+    };
+
+    Geopicker.prototype._utmToLatLng = function( utm ) {
+        var latLng = {};
+        var match = utm.zone.toString().match( /[A-z]$/ );
+        var zoneLetter = match ? match[ 0 ] : null;
+        // Convert northing to negative notation if in Southern Hemisphere, because usng.js requires this.
+        // If zoneLetter is used, ignore the hemisphere value.
+        if ( zoneLetter ) {
+            utm.zone = parseInt( utm.zone, 10 );
+            utm.northing = zoneLetter.toUpperCase() < 'N' ? utm.northing - NORTHING_OFFSET : utm.northing;
+        } else if ( utm.hemisphere === 'S' ) {
+            utm.northing -= NORTHING_OFFSET
+        }
+        convertor.UTMtoLL( utm.northing, utm.easting, utm.zone, latLng );
+        return {
+            latitude: latLng.lat.toPrecision( PRECISION ),
+            longitude: latLng.lon.toPrecision( PRECISION )
+        };
     };
 
     /*
@@ -746,25 +843,27 @@ define( function( require, exports, module ) {
         var alt;
         var acc;
         var dms;
+        var utm;
 
         if ( !point ) {
             return;
         }
 
-        lat = point.latitude ? Number( point.latitude ).toPrecision( precision ) : '';
-        lng = point.longitude ? Number( point.longitude ).toPrecision( precision ) : '';
+        lat = typeof point.latitude !== 'undefined' && point.latitude !== '' ? Number( point.latitude ).toPrecision( PRECISION ) : '';
+        lng = typeof point.longitude !== 'undefined' && point.longitude !== '' ? Number( point.longitude ).toPrecision( PRECISION ) : '';
         alt = point.altitude || '';
         acc = point.accuracy || '';
 
         ev = ( typeof ev !== 'undefined' ) ? ev : 'change';
 
-        this.$lat.val( lat || '' );
-        this.$lng.val( lng || '' );
-        this.$alt.val( alt || '' );
-        this.$acc.val( acc || '' ).trigger( ev );
+        this.$lat.val( lat );
+        this.$lng.val( lng );
+        this.$alt.val( alt );
+        this.$acc.val( acc ).trigger( ev );
 
         // update secondary inputs without firing a change event
         this.$mgrs.val( convertor.LLtoMGRS( lat, lng, 5 ) );
+
         dms = this._latLngToDms( lat, lng, 5 );
         this.$latdms.find( 'input, select' ).each( function( index ) {
             this.value = dms.latitude[ index ];
@@ -772,6 +871,12 @@ define( function( require, exports, module ) {
         this.$lngdms.find( 'input, select' ).each( function( index ) {
             this.value = dms.longitude[ index ];
         } );
+
+        utm = this._latLngToUtm( lat, lng );
+        this.$zoneutm.val( utm.zone );
+        this.$hemisphereutm.val( utm.hemisphere );
+        this.$eastingutm.val( utm.easting );
+        this.$northingutm.val( utm.northing );
     };
 
     Geopicker.prototype._getWebMapIdFromFormClasses = function( classes ) {
@@ -798,7 +903,7 @@ define( function( require, exports, module ) {
                 $( element )
                     .next( '.widget' )
                     .addClass( 'readonly' )
-                    .find( 'input, select, textarea' ).prop( 'disabled', true )
+                    .find( 'input, select:not([name="geo-input-type"]), textarea' ).prop( 'disabled', true )
                     .end()
                     .find( '.btn' ).prop( 'disabled', true );
             } );
@@ -826,23 +931,23 @@ define( function( require, exports, module ) {
         this._loadEsriArcGisJs()
             .then( function() {
                 $( element )
-                    .removeData( overridePluginName )
+                    .removeData( OVERRIDE_PLUGIN_NAME )
                     .off( '.' + this.namespace )
                     .show()
                     .next( '.widget' ).remove();
             } );
     };
 
-    $.fn[ pluginName ] = function( options, event ) {
+    $.fn[ PLUGIN_NAME ] = function( options, event ) {
 
         return this.each( function() {
             var $this = $( this );
-            var data = $( this ).data( overridePluginName );
+            var data = $( this ).data( OVERRIDE_PLUGIN_NAME );
 
             options = options || {};
 
             if ( !data && typeof options === 'object' ) {
-                $this.data( overridePluginName, new Geopicker( this, options, event ) );
+                $this.data( OVERRIDE_PLUGIN_NAME, new Geopicker( this, options, event ) );
             } else if ( data && typeof options === 'string' ) {
                 data[ options ]( this );
             }
@@ -850,7 +955,7 @@ define( function( require, exports, module ) {
     };
 
     module.exports = {
-        'name': pluginName,
+        'name': PLUGIN_NAME,
         'selector': 'input[data-type-xml="geopoint"]',
         'helpersRequired': [ 'arcGis', 'formClasses' ]
     };
