@@ -3,12 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.13.1] - 2016-10-31
 ---------------------
 ##### Fixed
 - Repeat names with dots do not create multiple repeats upon loading and do not default values except for the first repeat.
+- Public form.validate() function is skipping constraint validation if xml type is string, binary, select or select1.
 
-[4.13.0]
+[4.13.0] - 2016-10-27
 ---------------------
 ##### Changed
 - options parameter of Form class changed from `{webMapId: string}` to `{arcGis: {webMapId: string, hasZ: true}}`

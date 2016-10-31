@@ -2167,12 +2167,7 @@ define( function( require, exports, module ) {
             // The enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not.
             // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
             if ( n.enabled && n.inputType !== 'hidden' ) {
-                // Use a dirty trick to not have to determine the index with the following insider knowledge.
-                // It could potentially be sped up more by excluding n.val === "", but this would not be safe, in case the view is not in sync with the model.
-                if ( !( n.constraint && ( n.xmlType === 'string' || n.xmlType === 'select' || n.xmlType === 'select1' || n.xmlType === 'binary' ) ) ) {
-                    validCheck = getDataNodeObj().validateConstraintAndType( n.constraint, n.xmlType );
-                }
-
+                validCheck = getDataNodeObj().validateConstraintAndType( n.constraint, n.xmlType );
                 if ( n.required ) {
                     requiredCheck = getDataNodeObj().validateRequired( n.required );
                 }

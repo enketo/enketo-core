@@ -36,7 +36,7 @@
         </thedata>
       </instance>
       <bind nodeset="/thedata/nodeA" type="dateTime"/>
-      <bind nodeset="/thedata/nodeB" required="1" type="string"/>
+      <bind nodeset="/thedata/nodeB" required="true()" constraint=". != 'c'" type="string"/>
       <bind nodeset="/thedata/repeatGroup/nodeC" type="string"/>
       <bind nodeset="/thedata/nodeF" type="string" required="true()"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/thedata/meta/instanceID" readonly="true()" type="string"/>

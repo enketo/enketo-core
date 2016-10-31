@@ -478,67 +478,96 @@ describe( 'branching functionality', function() {
 
 } );
 
-describe( 'Required field validation', function() {
-    var form, $numberInput, $numberLabel;
 
-    beforeEach( function() {
-        jQuery.fx.off = true; //turn jQuery animations off
-        form = loadForm( 'group_branch.xml' );
-        form.init();
-        $numberInput = form.getView().$.find( '[name="/data/group/nodeB"]' );
-        $numberLabel = form.getView().input.getWrapNodes( $numberInput );
+describe( 'validation', function() {
+
+    describe( 'feedback to user after equired field validation', function() {
+        var form, $numberInput, $numberLabel;
+
+        beforeEach( function() {
+            jQuery.fx.off = true; //turn jQuery animations off
+            form = loadForm( 'group_branch.xml' );
+            form.init();
+            $numberInput = form.getView().$.find( '[name="/data/group/nodeB"]' );
+            $numberLabel = form.getView().input.getWrapNodes( $numberInput );
+        } );
+
+        it( 'validates a DISABLED and required number field without a value', function() {
+            $numberInput.val( '' ).trigger( 'change' );
+            expect( $numberLabel.length ).toEqual( 1 );
+            expect( $numberInput.val().length ).toEqual( 0 );
+            expect( $numberLabel.parents( '.or-group' ).prop( 'disabled' ) ).toBe( true );
+            expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
+        } );
+
+        //see issue #144
+        it( 'validates an enabled and required number field with value 0 and 1', function() {
+            form.getView().$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
+            expect( $numberLabel.length ).toEqual( 1 );
+            $numberInput.val( 0 ).trigger( 'change' ).trigger( 'validate' );
+            expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
+            $numberInput.val( 1 ).trigger( 'change' ).trigger( 'validate' );
+            expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
+        } );
+
+        // failing
+        it( 'invalidates an enabled and required number field without a value', function( done ) {
+            // first make branch relevant
+            form.getView().$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
+            // now set value to empty
+            $numberInput.val( '' ).trigger( 'change' );
+            form.getView().validateInput( $numberInput )
+                .then( function() {
+                    expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( true );
+                    done();
+                } );
+        } );
+
+        it( 'invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', function( done ) {
+            form = loadForm( 'thedata.xml' );
+            form.init();
+            var $textarea = form.getView().$.find( '[name="/thedata/nodeF"]' );
+            $textarea.val( '\n' ).trigger( 'change' );
+            form.getView().validateInput( $textarea )
+                .then( function() {
+                    expect( $textarea.length ).toEqual( 1 );
+                    expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
+                    $textarea.val( '  \n  \n\r \t ' ).trigger( 'change' );
+                    return form.getView().validateInput( $textarea );
+                } )
+                .then( function() {
+                    expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
+                    done();
+                } );
+        } );
     } );
 
-    it( 'validates a DISABLED and required number field without a value', function() {
-        $numberInput.val( '' ).trigger( 'change' );
-        expect( $numberLabel.length ).toEqual( 1 );
-        expect( $numberInput.val().length ).toEqual( 0 );
-        expect( $numberLabel.parents( '.or-group' ).prop( 'disabled' ) ).toBe( true );
-        expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
+    describe( 'public validate method', function() {
+
+        it( 'returns false if constraint is false', function( done ) {
+            var form = loadForm( 'thedata.xml' );
+            form.init();
+
+            // first make the form valid to make sure we are testing the right thing
+            form.getModel().xml.querySelector( 'nodeF' ).textContent = 'f';
+
+            form.validate()
+                .then( function( result ) {
+                    // check test setup
+                    expect( result ).toEqual( true );
+                    // now make make sure a constraint fails
+                    form.getModel().xml.querySelector( 'nodeB' ).textContent = 'c';
+                    return form.validate();
+                } )
+                .then( function( result ) {
+                    expect( result ).toEqual( false );
+                    done();
+                } );
+        } );
+
     } );
 
-    //see issue #144
-    it( 'validates an enabled and required number field with value 0 and 1', function() {
-        form.getView().$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
-        expect( $numberLabel.length ).toEqual( 1 );
-        $numberInput.val( 0 ).trigger( 'change' ).trigger( 'validate' );
-        expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
-        $numberInput.val( 1 ).trigger( 'change' ).trigger( 'validate' );
-        expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
-    } );
-
-    // failing
-    it( 'invalidates an enabled and required number field without a value', function( done ) {
-        // first make branch relevant
-        form.getView().$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
-        // now set value to empty
-        $numberInput.val( '' ).trigger( 'change' );
-        form.getView().validateInput( $numberInput )
-            .then( function() {
-                expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( true );
-                done();
-            } );
-    } );
-
-    it( 'invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', function( done ) {
-        form = loadForm( 'thedata.xml' );
-        form.init();
-        var $textarea = form.getView().$.find( '[name="/thedata/nodeF"]' );
-        $textarea.val( '\n' ).trigger( 'change' );
-        form.getView().validateInput( $textarea )
-            .then( function() {
-                expect( $textarea.length ).toEqual( 1 );
-                expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
-                $textarea.val( '  \n  \n\r \t ' ).trigger( 'change' );
-                return form.getView().validateInput( $textarea );
-            } )
-            .then( function() {
-                expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
-                done();
-            } );
-    } );
 } );
-
 //TODO widgets are now loaded asynchronously, this is better moved to a separate widget test
 xdescribe( 'Readonly items', function() {
     it( 'preserve their default value', function() {
