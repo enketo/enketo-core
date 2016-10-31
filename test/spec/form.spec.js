@@ -277,6 +277,12 @@ describe( 'repeat functionality', function() {
         } );
     } );
 
+    it( 'clones a repeat view element on load when repeat has dot in nodeName and has multiple instances in XForm', function() {
+        form = loadForm( 'repeat-dot.xml' );
+        form.init();
+        expect( form.getView().$.find( 'input[name="/repeat-dot/rep.dot/a"]' ).length ).toEqual( 2 );
+    } );
+
     it( 'clones nested repeats if they are present in the instance upon initialization (issue #359) ', function() {
         //note that this form contains multiple repeats in the instance
         form = loadForm( 'nested_repeats.xml' );

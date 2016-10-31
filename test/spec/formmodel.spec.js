@@ -321,6 +321,18 @@ describe( 'DeprecatedID value getter', function() {
 } );
 
 
+describe( 'getRepeatSeries', function() {
+    // Note the strategic placements of whitespace '\n'
+    var model = new Model( '<model><instance><a>\n<r><b/><nR/>\n<nR/></r>\n<r><b/><nR/><nR/>\n<nR/></r></a></instance></model>' );
+    model.init();
+    it( 'returns the elements in one series of repeats', function() {
+        expect( model.node( '/a/r', 0 ).getRepeatSeries().length ).toEqual( 2 );
+        expect( model.node( '/a/r/nR', 1 ).getRepeatSeries().length ).toEqual( 2 );
+        expect( model.node( '/a/r/nR', 3 ).getRepeatSeries().length ).toEqual( 3 );
+    } );
+} )
+
+
 describe( 'getXPath', function() {
     var xmlStr = '<root><path><to><node/><repeat><number/></repeat><repeat><number/><number/></repeat></to></path></root>';
     var model = new Model( xmlStr );
@@ -686,6 +698,34 @@ describe( 'Using XPath with default namespace', function() {
             expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( '5' );
         } );
 
+    } );
+
+} );
+
+
+describe( 'Repeat without ordinals', function() {
+    var modelStr = '<model><instance><a><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
+    var modelStrWithTemplate = '<model xmlns:jr="http://openrosa.org/javarosa">' +
+        '<instance><a><rep.dot jr:template=""><b/></rep.dot><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
+
+    it( 'are cloned when necessary when repeat has dot in nodeName without template', function() {
+        var model = new Model( modelStr );
+        model.init();
+
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
+        model.cloneRepeat( '/a/rep.dot', 0, false );
+        // remains unchanged because it was already cloned
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
+    } );
+
+    it( 'are cloned when necessary when repeat has dot in nodeName with template', function() {
+        var model = new Model( modelStrWithTemplate );
+        model.init();
+
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
+        model.cloneRepeat( '/a/rep.dot', 0, false );
+        // remains unchanged because it was already cloned
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
     } );
 
 } );

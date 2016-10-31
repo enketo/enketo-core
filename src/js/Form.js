@@ -1650,7 +1650,7 @@ define( function( require, exports, module ) {
                 var numRepsInInstance;
                 var numRepsDefault;
                 var cloneDefaultReps;
-                var $dataRepeat;
+                var repInModelSeries;
                 var index;
                 var that = this;
 
@@ -1678,9 +1678,8 @@ define( function( require, exports, module ) {
                     repCountPath = $repeat.attr( 'data-repeat-count' ) || '';
                     numRepsInCount = ( repCountPath.length > 0 ) ? parseInt( model.node( repCountPath ).getVal()[ 0 ], 10 ) : 0;
                     index = $form.find( '.or-repeat[name="' + $repeat.attr( 'name' ) + '"]' ).index( $repeat );
-                    $dataRepeat = model.node( $repeat.attr( 'name' ), index ).get();
-                    numRepsInInstance = $dataRepeat.siblings( $dataRepeat.prop( 'nodeName' ) ).addBack().length;
-                    numRepsDefault = ( numRepsInCount > numRepsInInstance ) ? numRepsInCount : numRepsInInstance;
+                    repInModelSeries = model.node( $repeat.attr( 'name' ), index ).getRepeatSeries();
+                    numRepsDefault = ( numRepsInCount > repInModelSeries.length ) ? numRepsInCount : repInModelSeries.length;
                     // First rep is already included (by XSLT transformation)
                     if ( numRepsDefault > 1 ) {
                         that.clone( $repeat.siblings().addBack().last(), numRepsDefault - 1, true );

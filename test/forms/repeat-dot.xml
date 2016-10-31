@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>repeat-dot</h:title>
+    <model>
+      <instance>
+        <repeat-dot id="repeat-dot">
+          <rep.dot jr:template="">
+            <a/>
+          </rep.dot>
+          <rep.dot>
+            <a>1</a>
+          </rep.dot>
+          <rep.dot>
+            <a>2</a>
+          </rep.dot>
+          <meta>
+            <instanceID/>
+          </meta>
+        </repeat-dot>
+      </instance>
+      <bind nodeset="/repeat-dot/rep.dot/a" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/repeat-dot/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/repeat-dot/rep.dot">
+      <label></label>
+      <repeat nodeset="/repeat-dot/rep.dot">
+        <input ref="/repeat-dot/rep.dot/a">
+          <label>Enter text</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

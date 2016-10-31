@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Repeat names with dots do not create multiple repeats upon loading and do not default values except for the first repeat.
+
 [4.13.0]
 ---------------------
 ##### Changed

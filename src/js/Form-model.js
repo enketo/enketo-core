@@ -516,20 +516,24 @@ define( function( require, exports, module ) {
     FormModel.prototype.cloneRepeat = function( selector, index, merge ) {
         var $insertAfterNode;
         var $nextSiblingsSameName;
-        var name;
+        var repeatNode;
         var allClonedNodeNames;
         var $templateClone;
         var jrTemplate = !!this.templates[ selector ];
         var firstRepeatInSeries;
-        var $repeatSeries;
+        var repeatSeries;
         var $template = this.templates[ selector ] || this.node( selector, 0 ).get();
         var that = this;
         var enkNs = this.getNamespacePrefix( that.ENKETO_XFORMS_NS );
 
-        name = $template.prop( 'nodeName' );
-        $insertAfterNode = this.node( selector, index ).get();
-        $repeatSeries = $insertAfterNode.siblings( name ).addBack();
-        firstRepeatInSeries = $repeatSeries.get( 0 );
+        // The replace() is done because jQuery doesn't work with selectors containing non-escaped dots.
+        // It would be better to eliminate jQuery in the model and use the XPath evaluator instead.
+        name = $template.prop( 'nodeName' ).replace( /\./g, '\\.' );
+        repeatNode = this.node( selector, index );
+        $insertAfterNode = repeatNode.get();
+
+        repeatSeries = repeatNode.getRepeatSeries();
+        firstRepeatInSeries = repeatSeries[ 0 ];
 
         /**
          * getAttributeNs and setAttributeNs results in duplicate namespace declarations on each repeat node in IE11 when serializing the model.
@@ -566,12 +570,13 @@ define( function( require, exports, module ) {
             }
         }
 
+        // TODO: create a more XML friendly alternative nodeSet.prototype.nextAll
         $nextSiblingsSameName = $insertAfterNode.nextAll( name );
 
         // if not exists and not a merge operation
         if ( !merge ) {
-            $repeatSeries.each( function() {
-                addOrdinalAttribute( this );
+            repeatSeries.forEach( function( el ) {
+                addOrdinalAttribute( el );
             } );
         }
 
@@ -616,9 +621,7 @@ define( function( require, exports, module ) {
                 } );
             }
         } else {
-            // Strictly speaking using .next() is more efficient, but we use .nextAll() in case the document order has changed due to 
-            // incorrect merging of an existing record.
-            if ( $insertAfterNode.nextAll( name ).length === 0 ) {
+            if ( $nextSiblingsSameName.length === 0 ) {
                 console.error( 'Could not find template node and/or node to insert the clone after' );
             }
         }
@@ -682,7 +685,7 @@ define( function( require, exports, module ) {
             var nodeName = templateEl.nodeName,
                 selector = that.getXPath( templateEl, 'instance' ),
                 ancestorTemplateNodes = that.evaluate( 'ancestor::' + nodeName + '[@template] | ancestor::' + nodeName + '[@' + jrPrefix + ':template]', 'nodes', selector, 0, true );
-            if ( ancestorTemplateNodes.length === 0 && $( templateEl ).siblings( nodeName ).length === 0 ) {
+            if ( ancestorTemplateNodes.length === 0 && $( templateEl ).siblings( nodeName.replace( /\./g, '\\.' ) ).length === 0 ) {
                 $( templateEl ).clone().insertAfter( $( templateEl ) )
                     // for backwards compatibility
                     .find( '*' ).addBack().removeAttr( 'template' )
@@ -1342,8 +1345,6 @@ define( function( require, exports, module ) {
         return vals;
     };
 
-
-
     /**
      * Determines the index of a repeated node amongst all nodes with the same XPath selector
      *
@@ -1361,7 +1362,7 @@ define( function( require, exports, module ) {
         if ( $node.length === 1 ) {
             nodeName = $node.prop( 'nodeName' );
             path = this.model.getXPath( $node.get( 0 ), 'instance' );
-            $family = this.model.$.find( nodeName ).filter( function() {
+            $family = this.model.$.find( nodeName.replace( /\./g, '\\.' ) ).filter( function() {
                 return path === that.model.getXPath( this, 'instance' );
             } );
             return ( $family.length === 1 ) ? null : $family.index( $node );
@@ -1385,6 +1386,40 @@ define( function( require, exports, module ) {
             repeatPath: this.model.getXPath( el, 'instance' ),
             repeatIndex: this.determineIndex( $( el ) )
         };
+    };
+
+    // Obtains all the siblings with the same name and itself
+    Nodeset.prototype.getRepeatSeries = function() {
+        var repeatEl = this.get().get( 0 );
+        var checkEl = repeatEl.previousSibling;
+        var nodeName = repeatEl.nodeName;
+        var result = [];
+
+        // first move to the first repeat in the series
+        while ( checkEl ) {
+            // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+            // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
+            if ( checkEl.nodeName && checkEl.nodeName === nodeName ) {
+                repeatEl = checkEl;
+            }
+            checkEl = checkEl.previousSibling;
+        }
+
+        // add the first
+        result.push( repeatEl );
+        checkEl = repeatEl.nextSibling;
+
+        // then add all subsequent repeats
+        while ( checkEl ) {
+            // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+            // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
+            if ( checkEl.nodeName && checkEl.nodeName === nodeName ) {
+                result.push( checkEl );
+            }
+            checkEl = checkEl.nextSibling;
+        }
+
+        return result;
     };
 
     /**
