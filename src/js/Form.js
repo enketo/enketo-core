@@ -1940,7 +1940,7 @@ define( function( require, exports, module ) {
                 var loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' );
                 var insideTable = ( $input.parentsUntil( '.or', '.or-appearance-list-nolabel' ).length > 0 );
                 var $reqSubtle = $question.find( '.required-subtle' );
-                var reqSubtleTxt = t( 'form.required' ) || 'required';
+                var reqSubtleTxt = t( 'form.required' );
 
                 if ( event.type === 'focusin' || event.type === 'fakefocus' ) {
                     $question.addClass( 'focus' );

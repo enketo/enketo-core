@@ -334,23 +334,23 @@ define( function( require, exports, module ) {
     Geopicker.prototype._addDomElements = function() {
         var map = '<div class="map-canvas-wrapper"><div class=map-canvas id="map' + this.mapId + '"></div></div>';
         var points = '<div class="points"><button type="button" class="addpoint">+</button></div>';
-        var kmlPstTxt = t( 'geopicker.kmlpaste' ) || 'paste KML coordinates here';
-        var kmlCrdsTxt = t( 'geopicker.kmlcoords' ) || 'KML coordinates';
-        var pntsTxt = t( 'geopicker.points' ) || 'points';
+        var kmlPstTxt = t( 'geopicker.kmlpaste' );
+        var kmlCrdsTxt = t( 'geopicker.kmlcoords' );
+        var pntsTxt = t( 'geopicker.points' );
         var kml = '<a href="#" class="toggle-input-type-btn"><span class="kml-input">KML</span><span class="points-input">' + pntsTxt + '</span></a>' +
             '<label class="geo kml">' + kmlCrdsTxt +
             '<progress class="paste-progress hide"></progress>' +
             '<textarea class="ignore" name="kml" placeholder="' + kmlPstTxt + '"></textarea>' +
             '<span class="disabled-msg">remove all points to enable</span>' +
             '</label>';
-        var closePlgnTxt = t( 'geopicker.closepolygon' ) || 'close polygon';
+        var closePlgnTxt = t( 'geopicker.closepolygon' );
         var close = '<button type="button" class="close-chain-btn btn btn-default btn-xs">' + closePlgnTxt + '</button>';
         var mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
-        var latTxt = t( 'geopicker.latitude' ) || 'latitude (x.y &deg;)';
-        var lngTxt = t( 'geopicker.longitude' ) || 'longitude (x.y &deg;)';
-        var altTxt = t( 'geopicker.altitude' ) || 'altitude (m)';
-        var accTxt = t( 'geopicker.accuracy' ) || 'accuracy (m)';
-        var srchTxt = t( 'geopicker.searchPlaceholder' ) || 'search for place or address';
+        var latTxt = t( 'geopicker.latitude' );
+        var lngTxt = t( 'geopicker.longitude' );
+        var altTxt = t( 'geopicker.altitude' );
+        var accTxt = t( 'geopicker.accuracy' );
+        var srchTxt = t( 'geopicker.searchPlaceholder' );
 
         this.$widget = $(
             '<div class="geopicker widget">' +

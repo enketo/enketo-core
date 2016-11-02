@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - UTM coordinate option to ESRI/ArcGIS geo(point)picker.
 - Auto-record current coordinates in ESRI/ArcGIS geo(point)picker.
+- Ability to easily test UI in right-to-left script.
 
 ##### Changed
 - Styling of ESRI/ArcGIS geo(point)picker.

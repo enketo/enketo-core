@@ -40,7 +40,7 @@ function DesktopSelectpicker( element, options, e ) {
     }
 
     this.$picker = null;
-    this.noneSelectedText = t( 'selectpicker.noneselected' ) || 'none selected';
+    this.noneSelectedText = t( 'selectpicker.noneselected' );
 
     this.multiple = ( typeof $( element ).attr( 'multiple' ) !== 'undefined' && $( element ).attr( 'multiple' ) !== false );
     this._init();
@@ -152,7 +152,7 @@ DesktopSelectpicker.prototype._createSelectedStr = function() {
     } else {
         return t( 'selectpicker.numberselected', {
             number: selectedLabels.length
-        } ) || selectedLabels.length + ' selected';
+        } );
     }
 };
 
