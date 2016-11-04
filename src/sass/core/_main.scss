@@ -194,7 +194,7 @@ $media-margin: 10px;
 }
 
 .note {
-    input[readonly]:not([type=radio]):not([type=checkbox]) {
+    input[readonly]:not([type=radio]):not([type=checkbox]), textarea {
         display: none;
 
         &.has-value {
