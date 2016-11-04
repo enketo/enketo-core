@@ -44,12 +44,28 @@ define( function( require, exports, module ) {
 // This is NOT a complete list of all enketo-core UI strings. Use a parser to find 
 // all strings. E.g. https://github.com/i18next/i18next-parser
 SOURCE_STRINGS = {
+    "constraint": {
+        "invalid": "Value not allowed",
+        "required": "This field is required"
+    },
+    "esri-geopicker": {
+        "coordinate-mgrs": "MGRS coordinate",
+        "decimal": "decimal",
+        "degrees": "degrees, minutes, seconds",
+        "latitude-degrees": "latitude (d° m’ s” N)",
+        "longitude-degrees": "longitude (d° m’ s” W)",
+        "mgrs": "MGRS",
+        "notavailable": "Not Available",
+        "utm": "UTM",
+        "utm-easting": "easting (m)",
+        "utm-hemisphere": "hemisphere",
+        "utm-north": "North",
+        "utm-northing": "northing (m)",
+        "utm-south": "South",
+        "utm-zone": "zone"
+    },
     "form": {
         "required": "required"
-    },
-    "selectpicker": {
-        "noneselected": "none selected",
-        "numberselected": "__number__ selected"
     },
     "geopicker": {
         "accuracy": "accuracy (m)",
@@ -62,20 +78,20 @@ SOURCE_STRINGS = {
         "points": "points",
         "searchPlaceholder": "search for place or address"
     },
-    "esri-geopicker": {
-        "decimal": "decimal",
-        "notavailable": "Not Available",
-        "mgrs": "MGRS",
-        "utm": "UTM",
-        "degrees": "degrees, minutes, seconds",
-        "coordinate-mgrs": "MGRS coordinate",
-        "latitude-degrees": "latitude (d&deg m&rsquo; s&rdquo; N)",
-        "longitude-degrees": "longitude (d&deg m&rsquo; s&rdquo; W)",
-        "utm-zone": "zone",
-        "utm-hemisphere": "hemisphere",
-        "utm-north": "North",
-        "utm-south": "South",
-        "utm-easting": "easting (m)",
-        "utm-northing": "northing (m)"
+    "selectpicker": {
+        "noneselected": "none selected",
+        "numberselected": "__number__ selected"
+    },
+    "widget": {
+        "comment": {
+            "update": "Update"
+        }
     }
 };
+
+/**
+ * Add keys from XSL stylesheets manually so i18next-parser will detect them.
+ *
+ * t('constraint.invalid');
+ * t('constraint.required');
+ */
