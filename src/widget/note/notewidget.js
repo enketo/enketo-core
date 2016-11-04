@@ -49,8 +49,7 @@ define( function( require, exports, module ) {
     Notewidget.prototype.constructor = Notewidget;
 
     Notewidget.prototype._init = function() {
-        var $el = $( this.element );
-        $el.find( '[readonly]' ).addClass( 'ignore' ).prop( 'disabled', true );
+        // This widget is not doing anything at the moment. Leaving this in place for now.
     };
 
     Notewidget.prototype.destroy = function( element ) {};

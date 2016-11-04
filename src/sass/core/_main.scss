@@ -154,8 +154,12 @@ $media-margin: 10px;
 }
 
 .question {
+    // The only remaining difference between .question and .note.
+    // Other differences are triggered by the readonly attribute on an input/select/textarea.
     @include font-bold;
+}
 
+.question, .note {
     display: block;
     margin: 0 0 9px 0;
     padding-top: 15px;
@@ -190,13 +194,6 @@ $media-margin: 10px;
 }
 
 .note {
-    @include font-normal;
-
-    color: $note-color;
-    background: $note-bg;
-    display: block;
-    margin: 15px 0;
-
     input[readonly]:not([type=radio]):not([type=checkbox]) {
         display: none;
 

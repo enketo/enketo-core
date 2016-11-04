@@ -1890,40 +1890,42 @@ define( function( require, exports, module ) {
             } );
 
             // Why is the file namespace added?
-            $form.on( 'change.file', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
-                var updated;
-                var validCheck;
-                var requiredCheck;
-                var requiredExpr;
-                var $input = $( this );
-                var n = {
-                    path: that.input.getName( $input ),
-                    inputType: that.input.getInputType( $input ),
-                    xmlType: that.input.getXmlType( $input ),
-                    enabled: that.input.isEnabled( $input ),
-                    constraint: that.input.getConstraint( $input ),
-                    val: that.input.getVal( $input ),
-                    required: that.input.getRequired( $input ),
-                    index: that.input.getIndex( $input )
-                };
+            $form.on( 'change.file',
+                'input:not([readonly]):not(.ignore), select:not([readonly]):not(.ignore), textarea:not([readonly]):not(.ignore)',
+                function( event ) {
+                    var updated;
+                    var validCheck;
+                    var requiredCheck;
+                    var requiredExpr;
+                    var $input = $( this );
+                    var n = {
+                        path: that.input.getName( $input ),
+                        inputType: that.input.getInputType( $input ),
+                        xmlType: that.input.getXmlType( $input ),
+                        enabled: that.input.isEnabled( $input ),
+                        constraint: that.input.getConstraint( $input ),
+                        val: that.input.getVal( $input ),
+                        required: that.input.getRequired( $input ),
+                        index: that.input.getIndex( $input )
+                    };
 
-                // determine 'required' check if applicable
-                if ( n.enabled && n.inputType !== 'hidden' && n.required ) {
-                    requiredExpr = n.required;
-                }
-                // set file input values to the actual name of file (without c://fakepath or anything like that)
-                if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
-                    n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
-                }
+                    // determine 'required' check if applicable
+                    if ( n.enabled && n.inputType !== 'hidden' && n.required ) {
+                        requiredExpr = n.required;
+                    }
+                    // set file input values to the actual name of file (without c://fakepath or anything like that)
+                    if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
+                        n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
+                    }
 
-                updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr );
-                validCheck = ( updated ) ? updated.validCheck : Promise.resolve( null );
-                requiredCheck = ( updated ) ? updated.requiredCheck : Promise.resolve( null );
-                that.validationFeedback( $( this ), validCheck, requiredCheck );
+                    updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr );
+                    validCheck = ( updated ) ? updated.validCheck : Promise.resolve( null );
+                    requiredCheck = ( updated ) ? updated.requiredCheck : Promise.resolve( null );
+                    that.validationFeedback( $( this ), validCheck, requiredCheck );
 
-                // propagate event externally after internal processing is completed
-                $form.trigger( 'valuechange.enketo' );
-            } );
+                    // propagate event externally after internal processing is completed
+                    $form.trigger( 'valuechange.enketo' );
+                } );
 
             // doing this on the focus event may have little effect on performance, because nothing else is happening :)
             $form.on( 'focus fakefocus', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
