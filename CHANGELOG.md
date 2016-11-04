@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.14.0] - 2016-11-04
 ---------------------
 ##### Added
 - UTM coordinate option to ESRI/ArcGIS geo(point)picker.
@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - No error shown when setting coordinates that are outside of Earth's boundaries in the ESRI/ArcGIS geo(point)picker. Picker reaches unrecoverable map state.
+- Min() and max() get stuck in infinite loop when called with multiple nodeset arguments.
 
 [4.13.1] - 2016-10-31
 ---------------------
