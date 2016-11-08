@@ -16,6 +16,7 @@ _SpecRunner.html
 npm-debug.log
 /src/widget/geo-esri/esri/**/*.js
 /src/widget/geo-esri/esri/**/*.css
+!/src/widget/geo-esri/esri/themes/calcite/icons/style.css
 /src/widget/geo-esri/esri/**/*.gif
 /src/widget/geo-esri/esri/**/*.jpg
 /src/widget/geo-esri/esri/**/*.png
