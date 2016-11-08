@@ -29,7 +29,10 @@ define( function( require, exports, module ) {
     var t = require( 'translator' ).t;
     var PLUGIN_NAME = 'esriGeopicker';
     var OVERRIDE_PLUGIN_NAME = 'geopicker';
-    var ESRI_ARGIS_JS_URL = config[ 'esriArcGisJsUrl' ] || 'https://js.arcgis.com/4.0/';
+    var DEFAULT_BASEMAPS = typeof config.arcGis === 'object' && Array.isArray( config.arcGis.basemaps ) ? config.arcGis.basemaps : [ 'streets', 'satellite', 'topo' ];
+    var DEFAULT_HAS_Z = typeof config.arcGis === 'object' && typeof config.arcGis.hasZ === 'boolean' ? config.arcGis.hasZ : true;
+    var DEFAULT_WEBMAP_ID = typeof config.arcGis === 'object' && config.arcGis.webMapId ? config.arcGis.webMapId : undefined;
+    var ESRI_ARGIS_JS_URL = typeof config.arcGis === 'object' && config.arcGis.jsUrl ? config.arcGis.jsUrl : 'https://js.arcgis.com/4.0/';
     var PRECISION = 10;
     var NORTHING_OFFSET = 10000000.0;
     var esriArcGisJsRequest;
@@ -72,15 +75,15 @@ define( function( require, exports, module ) {
                             'esri/Map',
                             'esri/WebMap',
                             'esri/views/MapView',
+                            'esri/widgets/BasemapToggle',
                             'esri/widgets/Locate',
-                            'esri/widgets/Search',
-                            'dojo/promise/all',
-                            'dojo/domReady!'
+                            'esri/widgets/Search'
                         ], function(
                             Point,
                             Map,
                             WebMap,
                             MapView,
+                            BasemapToggle,
                             Locate,
                             Search
                         ) {
@@ -89,6 +92,7 @@ define( function( require, exports, module ) {
                                 Map: Map,
                                 WebMap: WebMap,
                                 MapView: MapView,
+                                BasemapToggle: BasemapToggle,
                                 Locate: Locate,
                                 Search: Search
                             };
@@ -291,6 +295,7 @@ define( function( require, exports, module ) {
      */
     Geopicker.prototype._getProps = function() {
         var that = this;
+        var arcGisOptions = this.options.helpers.arcGis || {};
         var appearances = this.$question.attr( 'class' ).split( ' ' )
             .filter( function( item ) {
                 return item !== 'or-appearance-maps' && /or-appearance-/.test( item );
@@ -304,7 +309,10 @@ define( function( require, exports, module ) {
             compact: compact === true || that.mapSupported === false,
             type: this.element.attributes[ 'data-type-xml' ].value,
             touch: this.options.touch,
-            readonly: this.element.readOnly
+            readonly: this.element.readOnly,
+            hasZ: typeof arcGisOptions.hasZ === 'boolean' ? arcGisOptions.hasZ : DEFAULT_HAS_Z,
+            basemaps: Array.isArray( arcGisOptions.basemaps ) && arcGisOptions.basemaps.length > 0 ? arcGisOptions.basemaps : DEFAULT_BASEMAPS,
+            webMapId: arcGisOptions.webMapId || this._getWebMapIdFromFormClasses( this.options.helpers.formClasses ) || DEFAULT_WEBMAP_ID
         };
     };
 
@@ -325,7 +333,7 @@ define( function( require, exports, module ) {
         var accTxt = t( 'geopicker.accuracy' );
         var decTxt = t( 'esri-geopicker.decimal' );
         var notAvTxt = t( 'esri-geopicker.notavailable' );
-        var zHide = typeof this.options.helpers.arcGis === 'object' && this.options.helpers.arcGis.hasZ === false ? ' alt-hide' : '';
+        var zHide = this.props.hasZ ? '' : ' alt-hide';
         var mgrsSelectorTxt = t( 'esri-geopicker.mgrs' );
         var utmSelectorTxt = t( 'esri-geopicker.utm' );
         var degSelectorTxt = t( 'esri-geopicker.degrees' );
@@ -511,27 +519,16 @@ define( function( require, exports, module ) {
     Geopicker.prototype._addDynamicMap = function() {
         var that = this;
         var map;
-        var mapCenter;
-        var currentScale;
-        var webMapId = '';
         var webMapConfig = {
-            basemap: 'streets',
+            basemap: this.props.basemaps[ 0 ],
             ground: 'world-elevation'
         };
         var firstTime = true;
         var fallback = true;
-        var arcGisOptions = this.options.helpers.arcGis || {};
 
-        webMapId = arcGisOptions.webMapId || this._getWebMapIdFromFormClasses( this.options.helpers.formClasses );
-        //'ef9c7fbda731474d98647bebb4b33c20'; 
-        //'f2e9b762544945f390ca4ac3671cfa72';
-        //'ad5759bf407c4554b748356ebe1886e5';
-        //'71ba2a96c368452bb73d54eadbd59faa';
-        //'45ded9b3e0e145139cc433b503a8f5ab';
-
-        if ( webMapId && webMapId !== 'null' ) {
+        if ( this.props.webMapId && this.props.webMapId !== 'null' ) {
             webMapConfig.portalItem = {
-                id: webMapId
+                id: this.props.webMapId
             };
             fallback = false;
         }
@@ -556,13 +553,17 @@ define( function( require, exports, module ) {
                 console.error( 'error loading alternative fallback webmap: ', error );
             } );
 
-        that.mapView = new esri.MapView( {
+        if ( !window.map ) {
+            window.map = map;
+        }
+
+        this.mapView = new esri.MapView( {
             map: map,
             container: that.mapId,
             zoom: ( fallback ) ? 2 : null
         } );
 
-        that._addUserPanHandler( that.mapView );
+        this._addUserPanHandler( that.mapView );
 
         // We need to add the "ignore" class to all inputs that arcGIS has added to avoid issues with Enketo's engine
         this.mapView.watch( 'ready', function( isReady ) {
@@ -572,8 +573,9 @@ define( function( require, exports, module ) {
             }
         } );
 
-        that._addEsriSearch( that.mapView );
-        that._addEsriLocate( that.mapView );
+        this._addEsriSearch( this.mapView );
+        this._addEsriLocate( this.mapView );
+        this._addBasemapToggle( that.mapView, this.props.basemaps );
     };
 
     Geopicker.prototype._getMapCenter = function() {
@@ -615,7 +617,7 @@ define( function( require, exports, module ) {
             }
         } );
 
-        this.mapView.ui.add( searchWidget, {
+        mapView.ui.add( searchWidget, {
             position: "top-left",
             index: 0
         } );
@@ -638,10 +640,48 @@ define( function( require, exports, module ) {
             that._updateInputs( evt.position.coords );
         } );
 
-        this.mapView.ui.add( locateBtn, {
-            position: "top-left",
+        mapView.ui.add( locateBtn, {
+            position: 'top-left',
             index: 1
         } );
+    };
+
+    Geopicker.prototype._addBasemapToggle = function( mapView, basemapList ) {
+        var that = this;
+        var basemapToggle = new esri.BasemapToggle( {
+            view: mapView,
+            nextBasemap: that._getNextBasemap( mapView.map.basemap.id, basemapList )
+        } );
+
+        basemapToggle.startup();
+
+        basemapToggle.on( 'toggle', function( evt ) {
+            // If the supplied basemap is not valid, the evt on the next toggle returns null
+            var currentId = ( evt && evt.current ) ? evt.current.id : null;
+            var nextBasemap = that._getNextBasemap( currentId, basemapList );
+            // TODO: it might be more efficient to maintain an array of Basemap instances
+            // instead of strings. 
+            basemapToggle.nextBasemap = nextBasemap;
+        } );
+
+        mapView.ui.add( basemapToggle, {
+            position: "bottom-left"
+        } );
+    }
+
+    Geopicker.prototype._getNextBasemap = function( currentBasemap, basemapList ) {
+        var currentIndex;
+        var nextBasemap = basemapList[ 0 ];
+
+        if ( currentBasemap ) {
+            currentIndex = basemapList.indexOf( currentBasemap );
+
+            if ( currentIndex !== -1 && currentIndex !== basemapList.length - 1 ) {
+                nextBasemap = basemapList[ currentIndex + 1 ];
+            }
+        }
+
+        return nextBasemap;
     };
 
     /**

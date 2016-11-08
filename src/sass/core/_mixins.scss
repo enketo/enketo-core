@@ -20,7 +20,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin transition($transition...) {
+@mixin transition-simple($transition...) {
     -webkit-transition: $transition;
     transition: $transition;
 }

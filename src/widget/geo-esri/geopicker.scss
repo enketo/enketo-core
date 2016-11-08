@@ -1,5 +1,17 @@
-@import "./main";
-@import "./calcite";
+// Import from ArcGIS JS API 4.0 main.css everything excepts fonts
+// Note: I had to make some minor changes in the argis-js-api-4.0.0 folder, mainly:
+// - removing the css file if the scss file was in the same folder
+// - changing some import statements by removing .css to ensure they are included inline and not as an @import url(reference)
+// - removed reference to background-image: url(../../esri/images/basemap/basemap-toggle-64.svg) in widgets/BasemapToggle.csss
+// For future updates: just keep changing according to errors in the console.
+
+// @import "arcgis-js-api-4.0.0/fonts/avenir-next/avenir-next";
+@import "esri/css/view-only.scss";
+@import "esri/css/ui.scss";
+@import "esri/css/ui-widgets.scss";
+@import "esri/css/non-ui-widgets.scss";
+
+// --- End of import from ArcGIS JS API
 
 $geo-main-breakpoint: $main-breakpoint;
 $map-height: 325px;

@@ -1,4 +1,4 @@
-# ESRI/ArcGIS Geo Widget
+# ArcGIS (Esri) Geo Widget
 
 Supported: 
 
@@ -9,40 +9,68 @@ Not supported:
 - geotrace
 - geoshape
 
-## Configure
+## Configure and Use
 
 Like any other widget, this widget has to be enabled in widget.js and widgets.scss. Both these files exist in enketo-core but are normally overwritten in your own app.
 
-It is possible to use both this widget (for geopoint question) and the regular geo widget (for geoshape and geotrace questions) together, but this is highly discouraged as they do not match in styling and will result in a very poor loading performance.
+It is possible to use both this widget (for geopoint questions) and the regular geo widget (for geoshape and geotrace questions) together, but this is highly discouraged as they do not quite match in styling and capability and will result in a very poor loading performance.
 
-By default this picker will load a large JS file from a CDN. You can improve performance by serving the much smaller customized build [to follow].js file in /src/widget/geo-esri/ instead by copying it to your static js assets folder and adding the path to (your own app's) config.json:
 
-```json
+### Global Configuration
+
+The global configuration is done in config.json (in your own app's replacement of it).
+
+```jsons
 {
-        "esriArcGisJsUrl": "/static/js/esri-arcgis-4-0.js"
+    "arcGis": {
+    	"jsUrl" : "/static/js/esri-arcgis-4-0.js",
+	    "webMapId": "45ded9b3e0e145139cc433b503a8f5ab",
+	    "hasZ": false, 
+	    "basemaps": [ "streets", "topo", "satellite", "osm" ] 
+	}
 }
 ```
 
-This cumbersome solution is required because Enketo is using CommonJS modules and the Esri ArcGIS for JS library is using AMD modules.
+#### arcGis.jsUrl
+By default this picker will load a large JS file from a CDN. You can improve performance by serving the much smaller customized build [to follow].js file in /src/widget/geo-esri/ instead by copying it to your static js assets folder and adding the path to (your own app's) config.json. This cumbersome solution is required because Enketo is using CommonJS modules and the Esri ArcGIS for JS library is using AMD modules. This item is optional but recommended. This item can only be set as a global configuration.
 
-## Use
+#### arcGis.webMapId
+Optionally, provide the default ArcGIS webmap ID to use. There is no default value in Enketo, but it will default to the ArcGIS JS API default.
 
-There are 2 ways you can pass an ArcGIS webmap ID to the widget. Both methods are per form, not per widget, so you cannot load different webmaps on multiple geopoint widgets in the same form.
+#### arcGis.hasZ
+Optional property to specify whether the altitude coordinate should be shown to the user. The default value is `true`.
 
-### A. Instantiate the Form with an options parameter consisting of an object with a `webMapId` property like this:
+#### arcGis.basemaps
+Optional array of default basemaps to provide to the widget with a toggle button. See [this page](https://developers.arcgis.com/javascript/latest/api-reference/esri-Map.html#basemap) for possible values. The default value is `['streets', 'satellite', 'topo']`.
+
+
+### Form Instantiation Options
+
+Another lower level of configuration can be used on a per-form basis. It is up to the implementer whether to expose a UI to the user for these options or deal with them differently. It should be considered a bonus option for highly advanced applications where a fine-grained control of this geowidget is required. It deviates from all other widgets as none have this level of per-form customization. Most implementations may just not want to use this method.
+
+It has all the options mentioned in the previous section under Global Configuration, except for the `jsUrl` property. This method of passing options takes precedence over the global configuration method so any global values for these properties would be overwritten.
 
 ```js
 var data = {
 	modelStr: modelStr
 };
 var options = {
-    webMapId: '45ded9b3e0e145139cc433b503a8f5ab'
+	arcGis: {
+	    webMapId: '45ded9b3e0e145139cc433b503a8f5ab',
+	    hasZ: false, 
+	    basemaps: [ 'streets', 'topo', 'satellite', 'osm' ] 
+	}
 };
 var form = new Form( 'form.or:eq(0)', data, options );
 ```
-### B. Define the webmap ID in the XForm/XLSForm as follows:
 
-XLSForm:
+### Form Definition Options
+
+There is one option that can be defined by the user in the XForm/XLSForm definition. This is to set the ArcGIS webmap ID. This method takes precedence over the global configuration. However, the **form instantiation method takes precedence** over this method. 
+
+Define the webmap ID in the XForm/XLSForm as follows:
+
+#### XLSForm
 
 settings sheet
 
@@ -50,13 +78,10 @@ settings sheet
 |------------|---------|------------------------------------------|
 |            |         | arcgis::f2e9b762544945f390ca4ac3671cfa72 |
 
-XForm:
+#### XForm
 
 ```xml
 <h:body class="arcgis::f2e9b762544945f390ca4ac3671cfa72" >
 ```
 
 Both methods are case-insensitive.
-
-The JS method (A) takes precedence in case both methods are used for the same form.
-

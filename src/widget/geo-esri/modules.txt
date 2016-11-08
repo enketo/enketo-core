@@ -1,8 +1,7 @@
-"esri/geometry/Point",
-"esri/Map",
-"esri/WebMap",
-"esri/views/MapView",
-"esri/widgets/Locate",
-"esri/widgets/Search",
-"dojo/promise/all",
-"dojo/domReady!"
+'esri/geometry/Point',
+'esri/Map',
+'esri/WebMap',
+'esri/views/MapView',
+'esri/widgets/BasemapToggle'
+'esri/widgets/Locate',
+'esri/widgets/Search',

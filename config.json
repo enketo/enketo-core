@@ -9,5 +9,10 @@
     } ],
     "googleApiKey": "",
     "repeatOrdinals": false,
-    "esriArcGisJsUrl": ""
+    "arcGis": {
+        "jsUrl": "",
+        "webMapId": "",
+        "hasZ": true,
+        "basemaps": [ "streets" ]
+    }
 }
