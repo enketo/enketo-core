@@ -3,7 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[4.15.10] - 2016-11-08
+[4.15.1] - 2016-11-09
+----------------------
+##### Fixed
+- Failing css build
+
+[4.15.0] - 2016-11-08
 ----------------------
 ##### Added
 - Multiple basemaps with toggle button.
