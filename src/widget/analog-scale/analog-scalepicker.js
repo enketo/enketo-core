@@ -35,23 +35,21 @@ define( function( require, exports, module ) {
      * Initialize
      */
     Analogscalepicker.prototype._init = function() {
-        var $question = $( this.element ).closest( '.question' );
+        var $question = $( this.element ).closest( '.question, .note' );
         var $input = $( this.element );
         var value = Number( this.element.value ) || -1;
-        var step = $( this.element ).attr( 'data-type-xml' ) === 'decimal' ? 0.1 : 1;
 
-        this.orientation = $question.hasClass( 'or-appearance-horizontal' ) ? 'horizontal' : 'vertical';
-
-        this.ticks = !$question.hasClass( 'or-appearance-no-ticks' );
+        this.props = this._getProps( $question );
 
         $input
             .slider( {
-                reversed: this.orientation === 'vertical',
+                reversed: this.props.orientation === 'vertical',
                 min: 0,
                 max: 100,
-                orientation: this.orientation,
-                step: step,
-                value: value
+                orientation: this.props.orientation,
+                step: this.props.step,
+                value: value,
+                enabled: !this.props.readonly
             } );
 
         this.$widget = $input.next( '.widget' );
@@ -68,6 +66,21 @@ define( function( require, exports, module ) {
 
         // update reset button and slider "empty" state
         $input.trigger( 'programmaticChange' + this.namespace );
+    };
+
+    Analogscalepicker.prototype._getProps = function( $question ) {
+        var appearances = $question.attr( 'class' ).split( ' ' )
+            .map( function( appearance, index ) {
+                return appearance.substring( 14 );
+            } );
+        var type = this.element.attributes[ 'data-type-xml' ].value;
+
+        return {
+            touch: this.options.touch,
+            readonly: this.element.readOnly,
+            step: type === 'decimal' ? 0.1 : 1,
+            orientation: appearances.indexOf( 'horizontal' ) !== -1 ? 'horizontal' : 'vertical'
+        };
     };
 
     /** 
@@ -102,7 +115,7 @@ define( function( require, exports, module ) {
         var i;
         var $scale = $( '<div class="scale"></div>' );
 
-        if ( this.orientation === 'vertical' ) {
+        if ( this.props.orientation === 'vertical' ) {
             for ( i = 100; i >= 0; i -= 10 ) {
                 $scale.append( this._getNumberHtml( i ) );
             }
