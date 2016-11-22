@@ -52,22 +52,34 @@ define( function( require, exports, module ) {
      * Initialize
      */
     Distresspicker.prototype._init = function() {
-        var step = ( $( this.element ).attr( 'data-type-xml' ) === 'decimal' ) ? 0.1 : 1,
-            value = Number( this.element.value ) || -1;
+        var value = Number( this.element.value ) || -1;
+
+        this.props = this._getProps();
 
         $( this.element ).slider( {
             reversed: true,
             min: -1,
             max: 10,
             orientation: 'vertical',
-            step: step,
-            value: value
+            step: this.props.step,
+            value: value,
+            enabled: !this.props.readonly
         } );
         this.$widget = $( this.element ).next( '.widget' );
         this.$slider = this.$widget.find( '.slider' );
         this._addBulb();
         this._addScale();
         this._setChangeHandler();
+    };
+
+    Distresspicker.prototype._getProps = function() {
+        var type = this.element.attributes[ 'data-type-xml' ].value;
+
+        return {
+            touch: this.options.touch,
+            readonly: this.element.readOnly,
+            step: type === 'decimal' ? 0.1 : 1,
+        };
     };
 
     Distresspicker.prototype._addBulb = function() {
