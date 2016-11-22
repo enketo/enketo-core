@@ -13,8 +13,9 @@ define( function( require, exports, module ) {
     var destroy;
     var _getElements;
     var _instantiate;
-    var _setLangChangeHandler;
-    var _setOptionChangeHandler;
+    var _setLangChangeListener;
+    var _setOptionChangeListener;
+    var _setValChangeListener;
     var config = require( 'text!enketo-config' );
     var support = require( './support' );
     var $ = require( 'jquery' );
@@ -145,8 +146,9 @@ define( function( require, exports, module ) {
         }
 
         $elements[ widget.name ]( widget.options );
-        _setLangChangeHandler( widget, $elements );
-        _setOptionChangeHandler( widget, $elements );
+        _setLangChangeListener( widget, $elements );
+        _setOptionChangeListener( widget, $elements );
+        _setValChangeListener( widget, $elements );
     };
 
 
@@ -158,7 +160,7 @@ define( function( require, exports, module ) {
      * @param {{name: string}} widget The widget configuration object
      * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
      */
-    _setLangChangeHandler = function( widget, $els ) {
+    _setLangChangeListener = function( widget, $els ) {
         // call update for all widgets when language changes 
         if ( $els.length > 0 ) {
             $form.on( 'changelanguage', function() {
@@ -168,18 +170,34 @@ define( function( require, exports, module ) {
     };
 
     /**
-     * Calls widget('update') on select-type widgets when the options change.This function is called upon initialization,
+     * Calls widget('update') on select-type widgets when the options change. This function is called upon initialization,
      * and whenever a new repeat is created. In the latter case, since the widget('update') is called upon
      * the elements of the repeat, there should be no duplicate eventhandlers.
      *
      * @param {{name: string}} widget The widget configuration object
      * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
      */
-
-    _setOptionChangeHandler = function( widget, $els ) {
+    _setOptionChangeListener = function( widget, $els ) {
         if ( $els.length > 0 && $els.prop( 'nodeName' ).toLowerCase() === 'select' ) {
-            $form.on( 'changeoption', 'select', function() {
+            $els.on( 'changeoption', function() {
                 // update (itemselect) picker on which event was triggered because the options changed
+                $( this )[ widget.name ]( 'update' );
+            } );
+        }
+    };
+
+    /**
+     * Calls widget('update') if the form input/select/textarea value changes due to an action outside
+     * of the widget (e.g. a calculation).
+     * 
+     * @param {{name: string}} widget The widget configuration object
+     * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
+     */
+    _setValChangeListener = function( widget, $els ) {
+        var nodeName = $els.prop( 'nodeName' ).toLowerCase();
+        // avoid adding eventhandlers on widgets that apply to the <form> element
+        if ( $els.length > 0 && ( nodeName === 'input' || nodeName === 'select' || nodeName === 'textarea' ) ) {
+            $els.on( 'inputupdate.enketo', function() {
                 $( this )[ widget.name ]( 'update' );
             } );
         }

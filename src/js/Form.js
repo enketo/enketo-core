@@ -722,7 +722,10 @@ define( function( require, exports, module ) {
                     $inputNodes.toggleClass( 'has-value', !!value );
                 }
 
-                $inputNodes.val( value );
+                // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
+                // original input element has changed **programmatically**.
+                // TODO: should only trigger if the value is actually changed.
+                $inputNodes.val( value ).trigger( 'inputupdate.enketo' );
 
                 return;
             }
