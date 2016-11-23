@@ -39,7 +39,7 @@ $line-h: 20px;
 }
 
 /* fancy radio buttons / checkboxes */
-.question, .note {
+.question {
     @include option-padding(left);
 
     label {

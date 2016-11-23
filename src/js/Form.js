@@ -310,7 +310,7 @@ define( function( require, exports, module ) {
             init: function() {
 
                 if ( $form.hasClass( 'pages' ) ) {
-                    var $allPages = $form.find( '.note, .question, .trigger, .or-appearance-field-list' )
+                    var $allPages = $form.find( ' .question, .or-appearance-field-list' )
                         .filter( function() {
                             // something tells me there is a more efficient way to doing this
                             // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
@@ -545,7 +545,7 @@ define( function( require, exports, module ) {
             // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
             getWrapNodes: function( $inputNodes ) {
                 var type = this.getInputType( $inputNodes.eq( 0 ) );
-                return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question, .note' );
+                return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question' );
             },
             /** very inefficient, should actually not be used **/
             getProps: function( $node ) {
@@ -732,9 +732,9 @@ define( function( require, exports, module ) {
         };
 
         /**
-         *  Uses current content of $data to set all the values in the form.
-         *  Since not all data nodes with a value have a corresponding input element, it could be considered to turn this
-         *  around and cycle through the HTML form elements and check for each form element whether data is available.
+         *  Uses current state of model to set all the values in the form.
+         *  Since not all data nodes with a value have a corresponding input element, 
+         *  we cycle through the HTML form elements and check for each form element whether data is available.
          */
         FormView.prototype.setAllVals = function( $group, groupIndex ) {
             var index;
@@ -875,7 +875,7 @@ define( function( require, exports, module ) {
             // The collection of non-repeat inputs is cached (unchangeable)
             if ( !this.$nonRepeats[ attr ] ) {
                 this.$nonRepeats[ attr ] = $form.find( filter + '[' + attr + ']' )
-                    .parentsUntil( '.or', '.calculation, .question, .note, .trigger' ).filter( function() {
+                    .parentsUntil( '.or', '.calculation, .question' ).filter( function() {
                         return $( this ).closest( '.or-repeat' ).length === 0;
                     } );
             }
@@ -1312,7 +1312,7 @@ define( function( require, exports, module ) {
                  * or the parent with a name attribute
                  * or the whole document
                  */
-                $context = $output.closest( '.question, .note, .or-group' ).find( '[name]' ).eq( 0 );
+                $context = $output.closest( '.question, .or-group' ).find( '[name]' ).eq( 0 );
                 context = ( $context.length ) ? that.input.getName( $context ) : undefined;
 
                 insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
@@ -1327,7 +1327,7 @@ define( function( require, exports, module ) {
                         outputCache[ expr ] = val;
                     }
                 }
-                if ( $output.text !== val ) {
+                if ( $output.text() !== val ) {
                     $output.text( val );
                 }
             } );

@@ -35,7 +35,7 @@ define( function( require, exports, module ) {
      * Initialize
      */
     Analogscalepicker.prototype._init = function() {
-        var $question = $( this.element ).closest( '.question, .note' );
+        var $question = $( this.element ).closest( '.question' );
         var $input = $( this.element );
         var value = Number( this.element.value ) || -1;
 

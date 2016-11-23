@@ -84,7 +84,7 @@ h4 + .or-repeat {
 }
 
 // top-level questions border
-.or > .question, .or > .note {
+.or > .question {
     border: $grid-border;
 
     // This is cheating for top-level questions to avoid thick double borders.
@@ -94,7 +94,7 @@ h4 + .or-repeat {
 }
 
 // griddable elements - ie. wrappers around questions and notes
-.question, .note {
+.question {
     @include flex(1, 1);
 
     @include border-box;
@@ -120,7 +120,7 @@ h4 + .or-repeat {
 // display: flex messes up img size so apply it sparingly only to questions
 // and not to notes. We loose the ability to display image labels nicely in 
 // questions (though fine in tables)
-.question, .note {
+.question {
     @include display-flex;
 
     @include flex-wrap(nowrap);

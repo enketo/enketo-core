@@ -116,7 +116,7 @@ define( function( require, exports, module ) {
             .then( function( mapScriptsAvailable ) {
                 var $utms;
                 that.mapSupported = mapScriptsAvailable;
-                that.$question = $( that.element ).closest( '.question, .note' );
+                that.$question = $( that.element ).closest( '.question' );
                 that.mapId = 'map' + Math.round( Math.random() * 10000000 );
                 that.props = that._getProps();
                 //that.mapNavigationDisabled = false;
