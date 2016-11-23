@@ -25,8 +25,8 @@ define( function( require, exports, module ) {
     var $ = require( 'jquery' );
     require( '../../js/plugins' );
 
-    var $lastFocused = null,
-        pluginName = 'radiopicker';
+    var $lastFocused = null;
+    var pluginName = 'radiopicker';
 
     /**
      * Enhances radio buttons
@@ -60,11 +60,17 @@ define( function( require, exports, module ) {
      * Set delegated event handlers
      */
     Radiopicker.prototype._setDelegatedHandlers = function() {
-        var $label, $input,
-            $form = $( this.element );
+        var $label, $input;
+        var $form = $( this.element );
         // Applies a data-checked attribute to the parent label of a checked checkbox and radio button
         $form.on( 'click', 'input[type="radio"]:checked', function( event ) {
             $( this ).parent( 'label' ).siblings().removeAttr( 'data-checked' ).end().attr( 'data-checked', 'true' );
+        } );
+
+        // Readonly buttons/checkboxes will not respond to clicks
+        $form.on( 'click', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', function( event ) {
+            event.stopImmediatePropagation();
+            return false;
         } );
 
         $form.on( 'click', 'input[type="checkbox"]', function( event ) {
@@ -77,7 +83,7 @@ define( function( require, exports, module ) {
             }
         } );
 
-        // new radiobutton/checkbox icons don't trigger focus event, which is necessary for 
+        // New radiobutton/checkbox icons don't trigger focus event, which is necessary for 
         // progress update and subtle "required" message
         // we need to unfocus the previously focused element
         $form.on( 'click', 'input[type="radio"], input[type="checkbox"]', function( event ) {
@@ -87,7 +93,7 @@ define( function( require, exports, module ) {
             $lastFocused = $( this ).trigger( 'fakefocus' );
         } );
 
-        // clear last focused element when a non-radio/checkbox element gets focus
+        // Clear last focused element when a non-radio/checkbox element gets focus
         $form.on( 'focusin fakefocus', 'input:not([type="radio"], [type="checkbox"]), textarea, select', function( event ) {
             if ( $lastFocused ) {
                 $lastFocused.trigger( 'fakeblur' );
@@ -95,10 +101,10 @@ define( function( require, exports, module ) {
             $lastFocused = null;
         } );
 
-        //defaults
+        // Defaults
         $form.find( 'input[type="radio"]:checked, input[type="checkbox"]:checked' ).parent( 'label' ).attr( 'data-checked', 'true' );
 
-        //add unselect functionality
+        // Add unselect functionality
         $form.on( 'click', '[data-checked]>input[type="radio"]:not(.no-unselect)', function( event ) {
             $( this ).prop( 'checked', false ).trigger( 'change' ).parent().removeAttr( 'data-checked' );
         } );
