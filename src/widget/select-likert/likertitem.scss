@@ -3,6 +3,7 @@
     display: block;
     position: absolute;
     top: -3px;
+
     //width: calc(50% - 10px);
     width: 50%;
     background-color: $question-bg;
@@ -12,18 +13,27 @@
 .or-appearance-likert {
     .option-wrapper {
         @include display-flex;
+
         @include flex-wrap(nowrap);
+
         @include flex-direction(row);
+
         > label {
             @include flex(1);
+
             @include display-flex;
+
             @include flex-wrap(nowrap);
+
             @include flex-direction(column);
+
             margin: 0;
             float: none;
+
             // to eliminate a problem when mixing horizontal and likert appearances
             padding-left: 0 !important;
             padding-right: 0;
+
             // to eliminate a problem when mixing horizontal and likert appearances
             // regular radiobuttons, 
             // for alternative radiobutton tweaks see radiocheck.scss
@@ -36,32 +46,42 @@
                 background-color: white;
                 z-index: 10;
             }
+
             .active {
                 margin: 0;
             }
+
             .option-label {
                 position: relative;
+
                 // flex: 1; Not sure why this is here, it prevents label from growing with content in IE11
                 text-align: center;
                 margin-top: -8.5px;
                 padding-top: 15px;
                 border-top: 3px solid $radiocheck-unchecked-color;
                 font-size: 12px;
+
                 @include font-normal;
             }
+
             &:first-of-type .option-label::after {
                 @include likert-filler;
+
                 left: 0;
             }
+
             &:last-of-type .option-label::after {
                 @include likert-filler;
+
                 right: 0;
             }
+
             &:hover {
                 background-color: transparent;
             }
         }
     }
+
     &:hover .option-wrapper > label {
         &:first-of-type, &:last-of-type {
             .option-label::after {
@@ -69,6 +89,7 @@
             }
         }
     }
+
     &.focus {
         .option-wrapper > label {
             &:first-of-type, &:last-of-type {
@@ -85,20 +106,24 @@
     .option-wrapper {
         > label {
             margin-right: 0;
+
             &:first-of-type .option-label::after {
                 left: auto;
                 right: 0;
             }
+
             &:last-of-type .option-label::after {
                 right: auto;
                 left: 0;
             }
+
             input[type=radio],
             input[type=checkbox] {
                 right: 50%;
                 margin-right: -10px;
             }
         }
+
         .option-label {
             margin-right: 0;
         }
