@@ -55,6 +55,7 @@ DesktopSelectpicker.prototype.constructor = DesktopSelectpicker;
 DesktopSelectpicker.prototype._init = function() {
     var $template = this._getTemplate();
     var $select = $( this.element );
+    // beware readonly is not a property on a <select>!
     this.readonly = !!$select.attr( 'readonly' );
     $select.css( 'display', 'none' );
     $template = this._createLi( $template );
@@ -159,39 +160,47 @@ DesktopSelectpicker.prototype._createSelectedStr = function() {
 DesktopSelectpicker.prototype._clickListener = function() {
     var _this = this;
 
-    this.$picker.on( 'click', 'li:not(.disabled)', function( e ) {
-        e.preventDefault();
-        var $li = $( this ),
-            $input = $li.find( 'input' ),
-            $select = $( _this.element ),
-            $option = $select.find( 'option[value="' + $input.val() + '"]' ),
-            selectedBefore = $option.is( ':selected' );
 
-        if ( !_this.multiple ) {
-            _this.$picker.find( 'li' ).removeClass( 'active' );
-            $option.siblings( 'option' ).prop( 'selected', false );
-            _this.$picker.find( 'input' ).prop( 'checked', false );
-        } else {
-            //don't close dropdown for multiple select
-            e.stopPropagation();
-        }
 
-        if ( selectedBefore ) {
-            $li.removeClass( 'active' );
-            $input.prop( 'checked', false );
-            $option.prop( 'selected', false );
-        } else {
+    this.$picker
+        .on( 'click', 'li:not(.disabled)', function( e ) {
+            //console.debug( 'click' );
+            e.preventDefault();
+            var $li = $( this ),
+                $input = $li.find( 'input' ),
+                $select = $( _this.element ),
+                $option = $select.find( 'option[value="' + $input.val() + '"]' ),
+                selectedBefore = $option.is( ':selected' );
+
             if ( !_this.multiple ) {
-                $li.addClass( 'active' );
+                _this.$picker.find( 'li' ).removeClass( 'active' );
+                $option.siblings( 'option' ).prop( 'selected', false );
+                _this.$picker.find( 'input' ).prop( 'checked', false );
+            } else {
+                //don't close dropdown for multiple select
+                e.stopPropagation();
             }
-            $input.prop( 'checked', true );
-            $option.prop( 'selected', true );
-        }
 
-        _this.$picker.find( '.selected' ).html( _this._createSelectedStr() );
+            if ( selectedBefore ) {
+                $li.removeClass( 'active' );
+                $input.prop( 'checked', false );
+                $option.prop( 'selected', false );
+            } else {
+                if ( !_this.multiple ) {
+                    $li.addClass( 'active' );
+                }
+                $input.prop( 'checked', true );
+                $option.prop( 'selected', true );
+            }
 
-        $select.trigger( 'change' );
-    } );
+            _this.$picker.find( '.selected' ).html( _this._createSelectedStr() );
+
+            $select.trigger( 'change' );
+        } )
+        .on( 'click', 'li.disabled', function( e ) {
+            e.stopPropagation;
+            return false;
+        } );
 };
 
 DesktopSelectpicker.prototype._focusListener = function() {
