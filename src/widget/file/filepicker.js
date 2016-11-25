@@ -46,7 +46,7 @@ define( function( require, exports, module ) {
         var existingFileName = $input.attr( 'data-loaded-file-name' );
         var that = this;
 
-        this.mediaType = $input.attr( 'accept' );
+        this.props = this._getProps();
 
         $input
             .prop( 'disabled', true )
@@ -66,7 +66,7 @@ define( function( require, exports, module ) {
 
         // show loaded file name regardless of whether widget is supported
         if ( existingFileName ) {
-            this._showFileName( existingFileName, this.mediaType );
+            this._showFileName( existingFileName, this.props.mediaType );
         }
 
         if ( !fileManager || !fileManager.isSupported() ) {
@@ -87,7 +87,7 @@ define( function( require, exports, module ) {
                 if ( existingFileName ) {
                     fileManager.getFileUrl( existingFileName )
                         .then( function( url ) {
-                            that._showPreview( url, that.mediaType );
+                            that._showPreview( url, that.props.mediaType );
                         } )
                         .catch( function() {
                             that._showFeedback( 'File "' + existingFileName + '" could not be found (leave unchanged if already submitted and you want to preserve it).', 'error' );
@@ -99,6 +99,14 @@ define( function( require, exports, module ) {
             } );
     };
 
+    Filepicker.prototype._getProps = function() {
+        return {
+            mediaType: this.element.getAttribute( 'accept' ),
+            touch: this.options.touch,
+            readonly: this.element.readOnly,
+        };
+    };
+
     Filepicker.prototype._getMaxSubmissionSize = function() {
         var maxSize = $( document ).data( 'maxSubmissionSize' );
         return maxSize || 5 * 1024 * 1024;
@@ -106,6 +114,13 @@ define( function( require, exports, module ) {
 
     Filepicker.prototype._changeListener = function() {
         var that = this;
+
+        $( this.element ).on( 'click', function( event ) {
+            if ( that.props.readonly ) {
+                event.stopImmediatePropagation();
+                return false;
+            }
+        } );
 
         $( this.element ).on( 'change.propagate.' + this.namespace, function( event ) {
             var file;
@@ -115,8 +130,8 @@ define( function( require, exports, module ) {
             var loadedFileName = $input.attr( 'data-loaded-file-name' );
             var now = new Date();
 
-            // trigger eventhandler to update instance value
             if ( event.namespace === 'propagate' ) {
+                // trigger eventhandler to update instance value
                 $input.trigger( 'change.file' );
                 return false;
             } else {
@@ -133,7 +148,7 @@ define( function( require, exports, module ) {
             fileManager.getFileUrl( file, fileName )
                 .then( function( url ) {
                     // update UI
-                    that._showPreview( url, that.mediaType );
+                    that._showPreview( url, that.props.mediaType );
                     that._showFeedback( '' );
                     that._showFileName( fileName );
                     if ( loadedFileName && loadedFileName !== fileName ) {
