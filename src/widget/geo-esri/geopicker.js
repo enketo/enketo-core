@@ -109,7 +109,6 @@ define( function( require, exports, module ) {
      * Initializes the picker
      */
     Geopicker.prototype._init = function() {
-        var loadedVal = $( this.element ).val().trim();
         var that = this;
 
         this._loadEsriArcGisJs()
@@ -119,8 +118,7 @@ define( function( require, exports, module ) {
                 that.$question = $( that.element ).closest( '.question' );
                 that.mapId = 'map' + Math.round( Math.random() * 10000000 );
                 that.props = that._getProps();
-                //that.mapNavigationDisabled = false;
-                that.mapUpdating = false;
+                //that.mapNavigationDisabled = false;;
                 that.currentIndex = 0;
                 that.points = [];
 
@@ -241,16 +239,7 @@ define( function( require, exports, module ) {
                 that._updateMap();
 
                 // load default value
-                if ( loadedVal ) {
-                    $( that.element ).val().trim().split( ';' ).forEach( function( geopoint, i ) {
-                        var point = {};
-                        geopoint.trim().split( ' ' ).forEach( function( coordinate, index ) {
-                            point[ [ 'latitude', 'longitude', 'altitude', 'accuracy' ][ index ] ] = Number( coordinate );
-                        } );
-                        that.points[ i ] = point;
-                    } );
-                    that._updateInputs( that.points[ that.currentIndex ] );
-                } else {
+                if ( !that._loadVal() ) {
                     that.$detect.click()
                 }
 
@@ -263,8 +252,34 @@ define( function( require, exports, module ) {
                 // TODO: use in offline-only mode
                 console.error( 'Esri geo widget initialization error', error );
             } );
+    };
 
+    /**
+     * Loads a value from the original input element into the widget.
+     * This function could be called upon intialization to load the default value.
+     * It could also be called when the value has updated due a calculation.
+     * 
+     * @param  {[type]} val [description]
+     * @return {[type]}     [description]
+     */
+    Geopicker.prototype._loadVal = function( val ) {
+        var that = this;
+        var value = ( typeof val !== 'undefined' ) ? val : this.element.value.trim();
 
+        if ( value && typeof value === 'string' ) {
+            value.split( ';' ).forEach( function( geopoint, i ) {
+                var point = {};
+                geopoint.trim().split( ' ' ).forEach( function( coordinate, index ) {
+                    point[ [ 'latitude', 'longitude', 'altitude', 'accuracy' ][ index ] ] = Number( coordinate );
+                } );
+                that.points[ i ] = point;
+            } );
+            this._updateInputs( this.points[ this.currentIndex ] );
+            // The map won't be updated automatically because the input value is considered to be unchanged
+            that._updateMap( this.points[ this.currentIndex ] );
+        }
+
+        return value;
     };
 
     Geopicker.prototype._switchInputType = function( type ) {
@@ -562,6 +577,8 @@ define( function( require, exports, module ) {
             zoom: ( fallback ) ? 2 : null
         } );
 
+        that.mapUpdating = that.mapView;
+
         that._addUserPanHandler( that.mapView );
 
         // We need to add the "ignore" class to all inputs that arcGIS has added to avoid issues with Enketo's engine
@@ -680,15 +697,17 @@ define( function( require, exports, module ) {
 
             // We should only watch movement that is done by user dragging map not programmatic map updating.
             // We should be able to check for the animation.state property, but I did not succeed with this.
-            if ( !that.mapUpdating && newValue === true ) {
-                currentCenter = that._getMapCenter();
-                // TODO: add changed check before updating inputs
-                if ( !that._sameLatLng( currentCenter, that.points[ that.currentIndex ] ) ) {
-                    // console.debug( 'stationary and not programmatically updating map' );
-                    that._updateInputs( that._getMapCenter() );
-                } else {
-                    // console.debug( 'map did not change' );
-                }
+            if ( newValue === true ) {
+                that.mapUpdating
+                    .then( function() {
+                        currentCenter = that._getMapCenter();
+                        if ( !that._sameLatLng( currentCenter, that.points[ that.currentIndex ] ) ) {
+                            // console.debug( 'stationary and not programmatically updating map' );
+                            that._updateInputs( that._getMapCenter() );
+                        } else {
+                            // console.debug( 'map did not change' );
+                        }
+                    } );
             }
         } );
     };
@@ -699,7 +718,7 @@ define( function( require, exports, module ) {
         var that = this;
 
         if ( point && this.mapView ) {
-            this.mapView
+            this.mapUpdating = this.mapUpdating
                 .then( function() {
                     currentCenter = that._getMapCenter();
                     if ( !that._isValidLatLng( point ) ) {
@@ -709,15 +728,10 @@ define( function( require, exports, module ) {
                     } else if ( !that._sameLatLng( point, currentCenter ) ) {
                         that.$placemarker.show();
                         esriPoint = new esri.Point( point );
-                        that.mapUpdating = true;
-                        that.mapView.goTo( esriPoint )
+                        return that.mapView.goTo( esriPoint )
                             .then( function( viewAnimation ) {
                                 if ( viewAnimation ) {
-                                    viewAnimation.then( function( state ) {
-                                        that.mapUpdating = false;
-                                    } );
-                                } else {
-                                    that.mapUpdating = false;
+                                    return viewAnimation
                                 }
                             } );
                     } else {
@@ -937,6 +951,14 @@ define( function( require, exports, module ) {
                     .next( '.widget' ).remove();
             } );
     };
+
+    Geopicker.prototype.update = function( element ) {
+        var that = this;
+        this._loadEsriArcGisJs()
+            .then( function() {
+                that._loadVal( element.value );
+            } );
+    }
 
     $.fn[ PLUGIN_NAME ] = function( options, event ) {
 
