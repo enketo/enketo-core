@@ -1432,9 +1432,10 @@ define( function( require, exports, module ) {
                     // set the value
                     dataNodesObj.setVal( result, constraint, dataType );
 
-                    // not the most efficient to use input.setVal here as it will do another lookup
+                    // Not the most efficient to use input.setVal here as it will do another lookup
                     // of the node, that we already have...
-                    that.input.setVal( name, index, result );
+                    // We should not use value "result" here because node.setVal() may have done a data type conversion
+                    that.input.setVal( name, index, dataNodesObj.getVal()[ 0 ] );
                 }
             } );
         };
