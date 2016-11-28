@@ -320,7 +320,7 @@ legend {
                 margin-left: 5px;
             }
 
-            &:focus, &:hover, &:active, &[data-checked] {
+            &:focus, &:hover, &:active {
                 background-color: $brand-secondary-color;
             }
         }
