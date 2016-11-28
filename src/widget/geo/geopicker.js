@@ -231,7 +231,8 @@ define( function( require, exports, module ) {
         // hide map controller
         this.$widget.find( '.hide-map-btn' ).on( 'click', function() {
             that.$widget.find( '.search-bar' ).addClass( 'hide-search' );
-            that.$widget.removeClass( 'full-screen' ).find( '.map-canvas' ).removeClass( 'leaflet-container' );
+            that.$widget.removeClass( 'full-screen' ).find( '.map-canvas' ).removeClass( 'leaflet-container' )
+                .find( '.leaflet-google-layer' ).remove();
             if ( that.map ) {
                 that.map.remove();
                 that.map = null;
