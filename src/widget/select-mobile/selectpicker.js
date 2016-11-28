@@ -68,17 +68,22 @@ define( function( require, exports, module ) {
      * display the selected values
      */
     MobileSelectpicker.prototype._showSelectedValues = function() {
-        var i, valueText = [],
-            template = '<span class="widget mobileselect"></span>',
-            $select = $( this.element ),
-            $widget = ( $select.next( '.widget' ).length > 0 ) ? $select.next( '.widget' ) : $( template ).insertAfter( $select ),
-            values = ( $.isArray( $select.val() ) ) ? $select.val() : [ $select.val() ];
+        var i;
+        var valueText = [];
+        var template = '<span class="widget mobileselect"></span>';
+        var $select = $( this.element );
+        var $widget = ( $select.next( '.widget' ).length > 0 ) ? $select.next( '.widget' ) : $( template ).insertAfter( $select );
+        var values = ( $.isArray( $select.val() ) ) ? $select.val() : [ $select.val() ];
 
         for ( i = 0; i < values.length; i++ ) {
             valueText.push( $( this ).find( 'option[value="' + values[ i ] + '"]' ).text() );
         }
 
         $widget.text( values.join( ', ' ) );
+    };
+
+    MobileSelectpicker.prototype.update = function() {
+        this._showSelectedValues();
     };
 
     $.fn[ pluginName ] = function( options, event ) {

@@ -153,9 +153,13 @@ $media-margin: 10px;
     border-top: none;
 }
 
-.question {
+// The only remaining difference between .question and .note.
+// All other differences are triggered by the readonly attribute on an input/select/textarea.
+.question:not(.note) {
     @include font-bold;
+}
 
+.question {
     display: block;
     margin: 0 0 9px 0;
     padding-top: 15px;
@@ -167,6 +171,18 @@ $media-margin: 10px;
         margin: 0;
         border: none;
     }
+
+    // Not very consistent to only do this for simple HTML inputs and not
+    // for geo/select/distress etc. It would have been better if we had
+    // always shown the input field except if appearance 'label' was used (and pyxform added this to notes)
+    // Unfortunately, this might now be too late as it would not be appreciated by existing users.
+    input[readonly]:not([type=radio]):not([type=checkbox]), textarea[readonly] {
+        display: none;
+
+        &.has-value {
+            display: block;
+        }
+    }
 }
 
 // The question label itself is bold already
@@ -175,14 +191,14 @@ $media-margin: 10px;
     font-size: $font-size-base + 1px;
 }
 
-.question, .note {
+.question {
     > img, > video, > audio {
         margin: $media-margin 0 $media-margin $media-margin;
     }
 }
 
 .or[dir="rtl"] {
-    .question, .note {
+    .question {
         > img, > video, > audio {
             margin: $media-margin $media-margin $media-margin 0;
         }
@@ -190,21 +206,6 @@ $media-margin: 10px;
 }
 
 .note {
-    @include font-normal;
-
-    color: $note-color;
-    background: $note-bg;
-    display: block;
-    margin: 15px 0;
-
-    input[readonly]:not([type=radio]):not([type=checkbox]) {
-        display: none;
-
-        &.has-value {
-            display: block;
-        }
-    }
-
     strong {
         font-size: inherit;
     }
@@ -319,7 +320,7 @@ legend {
                 margin-left: 5px;
             }
 
-            &:focus, &:hover, &:active, &[data-checked] {
+            &:focus, &:hover, &:active {
                 background-color: $brand-secondary-color;
             }
         }
@@ -353,7 +354,7 @@ select {
     width: $input-max-width;
 }
 
-.question input, .note input {
+.question input {
     &[type="text"], &[type="password"], &[type="url"], &[type="email"], &[type="file"] {
         width: $input-max-width;
     }
@@ -370,7 +371,7 @@ select {
 }
 
 .or[dir="rtl"] {
-    .question input, .note input {
+    .question input {
         &[type="radio"], &[type=checkbox] {
             // input is floated to deal with multi-line labels
             float: right;
@@ -378,7 +379,7 @@ select {
     }
 }
 
-.question textarea, .note textarea {
+.question textarea {
     width: $input-max-width;
     resize: vertical;
     min-height: 9em;

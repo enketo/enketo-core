@@ -33,14 +33,12 @@ describe( 'Output functionality ', function() {
 } );
 
 describe( 'Output functionality within repeats', function() {
-    var $o = [],
-        form = loadForm( 'outputs_in_repeats.xml' );
+    var $o = [];
+    var form = loadForm( 'outputs_in_repeats.xml' );
     form.init();
     form.getView().$.find( 'button.repeat' ).click();
 
-    for ( var i = 0; i < 8; i++ ) {
-        $o.push( form.getView().$.find( '.or-output' ).eq( i ) );
-    }
+    $o = form.getView().$.find( '.or-output' );
 
     form.getView().$.find( '[name="/outputs_in_repeats/rep/name"]' ).eq( 0 ).val( 'Martijn' ).trigger( 'change' );
     form.getView().$.find( '[name="/outputs_in_repeats/rep/name"]' ).eq( 1 ).val( 'Beth' ).trigger( 'change' );
@@ -48,14 +46,14 @@ describe( 'Output functionality within repeats', function() {
     form.getView().$.find( '[data-name="/outputs_in_repeats/rep/animal"][value="rabbit"]' ).eq( 1 ).prop( 'checked', true ).trigger( 'change' );
 
     it( 'shows correct value when referring to repeated node', function() {
-        expect( $o[ 0 ].text() ).toEqual( 'Martijn' );
-        expect( $o[ 1 ].text() ).toEqual( 'Martijn' );
-        expect( $o[ 2 ].text() ).toEqual( 'elephant' );
-        expect( $o[ 3 ].text() ).toEqual( 'Martijn' );
-        expect( $o[ 4 ].text() ).toEqual( 'Beth' );
-        expect( $o[ 5 ].text() ).toEqual( 'Beth' );
-        expect( $o[ 6 ].text() ).toEqual( 'rabbit' );
-        expect( $o[ 7 ].text() ).toEqual( 'Beth' );
+        expect( $o[ 0 ].textContent ).toEqual( 'Martijn' );
+        expect( $o[ 1 ].textContent ).toEqual( 'Martijn' );
+        expect( $o[ 2 ].textContent ).toEqual( 'elephant' );
+        expect( $o[ 3 ].textContent ).toEqual( 'Martijn' );
+        expect( $o[ 4 ].textContent ).toEqual( 'Beth' );
+        expect( $o[ 5 ].textContent ).toEqual( 'Beth' );
+        expect( $o[ 6 ].textContent ).toEqual( 'rabbit' );
+        expect( $o[ 7 ].textContent ).toEqual( 'Beth' );
     } );
 } );
 

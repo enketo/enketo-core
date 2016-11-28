@@ -310,7 +310,7 @@ define( function( require, exports, module ) {
             init: function() {
 
                 if ( $form.hasClass( 'pages' ) ) {
-                    var $allPages = $form.find( '.note, .question, .trigger, .or-appearance-field-list' )
+                    var $allPages = $form.find( ' .question, .or-appearance-field-list' )
                         .filter( function() {
                             // something tells me there is a more efficient way to doing this
                             // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
@@ -545,7 +545,7 @@ define( function( require, exports, module ) {
             // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
             getWrapNodes: function( $inputNodes ) {
                 var type = this.getInputType( $inputNodes.eq( 0 ) );
-                return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question, .note' );
+                return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question' );
             },
             /** very inefficient, should actually not be used **/
             getProps: function( $node ) {
@@ -722,16 +722,19 @@ define( function( require, exports, module ) {
                     $inputNodes.toggleClass( 'has-value', !!value );
                 }
 
-                $inputNodes.val( value );
+                // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
+                // original input element has changed **programmatically**.
+                // TODO: should only trigger if the value is actually changed.
+                $inputNodes.val( value ).trigger( 'inputupdate.enketo' );
 
                 return;
             }
         };
 
         /**
-         *  Uses current content of $data to set all the values in the form.
-         *  Since not all data nodes with a value have a corresponding input element, it could be considered to turn this
-         *  around and cycle through the HTML form elements and check for each form element whether data is available.
+         *  Uses current state of model to set all the values in the form.
+         *  Since not all data nodes with a value have a corresponding input element, 
+         *  we cycle through the HTML form elements and check for each form element whether data is available.
          */
         FormView.prototype.setAllVals = function( $group, groupIndex ) {
             var index;
@@ -872,7 +875,7 @@ define( function( require, exports, module ) {
             // The collection of non-repeat inputs is cached (unchangeable)
             if ( !this.$nonRepeats[ attr ] ) {
                 this.$nonRepeats[ attr ] = $form.find( filter + '[' + attr + ']' )
-                    .parentsUntil( '.or', '.calculation, .question, .note, .trigger' ).filter( function() {
+                    .parentsUntil( '.or', '.calculation, .question' ).filter( function() {
                         return $( this ).closest( '.or-repeat' ).length === 0;
                     } );
             }
@@ -1309,7 +1312,7 @@ define( function( require, exports, module ) {
                  * or the parent with a name attribute
                  * or the whole document
                  */
-                $context = $output.closest( '.question, .note, .or-group' ).find( '[name]' ).eq( 0 );
+                $context = $output.closest( '.question, .or-group' ).find( '[name]' ).eq( 0 );
                 context = ( $context.length ) ? that.input.getName( $context ) : undefined;
 
                 insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
@@ -1324,7 +1327,7 @@ define( function( require, exports, module ) {
                         outputCache[ expr ] = val;
                     }
                 }
-                if ( $output.text !== val ) {
+                if ( $output.text() !== val ) {
                     $output.text( val );
                 }
             } );
@@ -1429,9 +1432,10 @@ define( function( require, exports, module ) {
                     // set the value
                     dataNodesObj.setVal( result, constraint, dataType );
 
-                    // not the most efficient to use input.setVal here as it will do another lookup
+                    // Not the most efficient to use input.setVal here as it will do another lookup
                     // of the node, that we already have...
-                    that.input.setVal( name, index, result );
+                    // We should not use value "result" here because node.setVal() may have done a data type conversion
+                    that.input.setVal( name, index, dataNodesObj.getVal()[ 0 ] );
                 }
             } );
         };
@@ -1890,40 +1894,42 @@ define( function( require, exports, module ) {
             } );
 
             // Why is the file namespace added?
-            $form.on( 'change.file', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
-                var updated;
-                var validCheck;
-                var requiredCheck;
-                var requiredExpr;
-                var $input = $( this );
-                var n = {
-                    path: that.input.getName( $input ),
-                    inputType: that.input.getInputType( $input ),
-                    xmlType: that.input.getXmlType( $input ),
-                    enabled: that.input.isEnabled( $input ),
-                    constraint: that.input.getConstraint( $input ),
-                    val: that.input.getVal( $input ),
-                    required: that.input.getRequired( $input ),
-                    index: that.input.getIndex( $input )
-                };
+            $form.on( 'change.file',
+                'input:not([readonly]):not(.ignore), select:not([readonly]):not(.ignore), textarea:not([readonly]):not(.ignore)',
+                function( event ) {
+                    var updated;
+                    var validCheck;
+                    var requiredCheck;
+                    var requiredExpr;
+                    var $input = $( this );
+                    var n = {
+                        path: that.input.getName( $input ),
+                        inputType: that.input.getInputType( $input ),
+                        xmlType: that.input.getXmlType( $input ),
+                        enabled: that.input.isEnabled( $input ),
+                        constraint: that.input.getConstraint( $input ),
+                        val: that.input.getVal( $input ),
+                        required: that.input.getRequired( $input ),
+                        index: that.input.getIndex( $input )
+                    };
 
-                // determine 'required' check if applicable
-                if ( n.enabled && n.inputType !== 'hidden' && n.required ) {
-                    requiredExpr = n.required;
-                }
-                // set file input values to the actual name of file (without c://fakepath or anything like that)
-                if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
-                    n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
-                }
+                    // determine 'required' check if applicable
+                    if ( n.enabled && n.inputType !== 'hidden' && n.required ) {
+                        requiredExpr = n.required;
+                    }
+                    // set file input values to the actual name of file (without c://fakepath or anything like that)
+                    if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
+                        n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
+                    }
 
-                updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr );
-                validCheck = ( updated ) ? updated.validCheck : Promise.resolve( null );
-                requiredCheck = ( updated ) ? updated.requiredCheck : Promise.resolve( null );
-                that.validationFeedback( $( this ), validCheck, requiredCheck );
+                    updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr );
+                    validCheck = ( updated ) ? updated.validCheck : Promise.resolve( null );
+                    requiredCheck = ( updated ) ? updated.requiredCheck : Promise.resolve( null );
+                    that.validationFeedback( $( this ), validCheck, requiredCheck );
 
-                // propagate event externally after internal processing is completed
-                $form.trigger( 'valuechange.enketo' );
-            } );
+                    // propagate event externally after internal processing is completed
+                    $form.trigger( 'valuechange.enketo' );
+                } );
 
             // doing this on the focus event may have little effect on performance, because nothing else is happening :)
             $form.on( 'focus fakefocus', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {

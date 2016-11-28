@@ -231,7 +231,8 @@ define( function( require, exports, module ) {
         // hide map controller
         this.$widget.find( '.hide-map-btn' ).on( 'click', function() {
             that.$widget.find( '.search-bar' ).addClass( 'hide-search' );
-            that.$widget.removeClass( 'full-screen' ).find( '.map-canvas' ).removeClass( 'leaflet-container' );
+            that.$widget.removeClass( 'full-screen' ).find( '.map-canvas' ).removeClass( 'leaflet-container' )
+                .find( '.leaflet-google-layer' ).remove();
             if ( that.map ) {
                 that.map.remove();
                 that.map = null;
@@ -254,6 +255,10 @@ define( function( require, exports, module ) {
         // enable detection
         if ( this.props.detect ) {
             this._enableDetection();
+        }
+
+        if ( this.props.readonly ) {
+            this.disable( this.element );
         }
 
         // create "point buttons"
@@ -316,7 +321,8 @@ define( function( require, exports, module ) {
             appearances: appearances,
             type: this.element.attributes[ 'data-type-xml' ].value,
             touch: this.options.touch,
-            wide: ( this.$question.width() / this.$question.closest( 'form.or' ).width() > 0.8 )
+            wide: ( this.$question.width() / this.$question.closest( 'form.or' ).width() > 0.8 ),
+            readonly: this.element.readOnly
         };
     };
 
@@ -708,8 +714,15 @@ define( function( require, exports, module ) {
 
                 that.map = L.map( 'map' + that.mapId, options )
                     .on( 'click', function( e ) {
-                        var latLng = e.latlng,
-                            indexToPlacePoint = ( that.$lat.val() && that.$lng.val() ) ? that.points.length : that.currentIndex;
+                        var latLng;
+                        var indexToPlacePoint;
+
+                        if ( that.props.readonly ) {
+                            return false;
+                        }
+
+                        latLng = e.latlng;
+                        indexToPlacePoint = ( that.$lat.val() && that.$lng.val() ) ? that.points.length : that.currentIndex;
 
                         // reduce precision to 6 decimals
                         latLng.lat = Math.round( latLng.lat * 1000000 ) / 1000000;
@@ -930,8 +943,8 @@ define( function( require, exports, module ) {
                 coords.push( latLng );
                 markers.push( L.marker( latLng, {
                     icon: icon,
-                    clickable: true,
-                    draggable: true,
+                    clickable: !that.props.readonly,
+                    draggable: !that.props.readonly,
                     alt: index,
                     opacity: 0.9
                 } ).on( 'click', function( e ) {
@@ -1205,39 +1218,6 @@ define( function( require, exports, module ) {
     };
 
     /**
-     * Disables the widget
-     */
-    Geopicker.prototype.disable = function() {
-        this.$map.hide();
-        this.$widget.find( '.btn' ).addClass( 'disabled' );
-    };
-
-    /**
-     * Enables a disabled widget
-     */
-    Geopicker.prototype.enable = function() {
-        this.$map.show();
-        this.$widget.find( '.btn' ).removeClass( 'disabled' );
-        // ensure all tiles are displayed, https://github.com/kobotoolbox/enketo-express/issues/188
-        if ( this.map ) {
-            this.map.invalidateSize();
-        }
-    };
-
-    /**
-     * Checks whether the array of points contains empty ones.
-     *
-     * @allowedIndex {number=} The index in which an empty value is allowed
-     * @return {[type]} [description]
-     */
-    Geopicker.prototype.containsEmptyPoints = function( points, allowedIndex ) {
-        return points.some( function( point, index ) {
-            return index !== allowedIndex && ( !point[ 0 ] || !point[ 1 ] );
-        } );
-    };
-
-
-    /**
      * Check if a polyline created from the current collection of points
      * where one point is added or edited would have intersections.
      * @param  {[type]} latLng [description]
@@ -1286,6 +1266,82 @@ define( function( require, exports, module ) {
         this.map.removeLayer( polylineToTest );
 
         return intersects;
+    };
+
+    /**
+     * Checks whether the array of points contains empty ones.
+     *
+     * @allowedIndex {number=} The index in which an empty value is allowed
+     * @return {[type]} [description]
+     */
+    Geopicker.prototype.containsEmptyPoints = function( points, allowedIndex ) {
+        return points.some( function( point, index ) {
+            return index !== allowedIndex && ( !point[ 0 ] || !point[ 1 ] );
+        } );
+    };
+
+
+    /**
+     * Disables the widget
+     */
+    Geopicker.prototype.disable = function( element ) {
+        $( element )
+            .next( '.widget' )
+            .addClass( 'readonly' )
+            .find( 'input, select, textarea' ).prop( 'disabled', true )
+            .end()
+            .find( '.btn:not(.show-map-btn):not(.hide-map-btn), .btn-icon-only, .addpoint' ).prop( 'disabled', true );
+    };
+
+    /**
+     * Enables a disabled widget
+     */
+    Geopicker.prototype.enable = function( element ) {
+        $( element )
+            .next( '.widget' )
+            .removeClass( 'readonly' )
+            .find( 'input, select, textarea' ).prop( 'disabled', false )
+            .end()
+            .find( '.btn:not(.show-map-btn):not(.hide-map-btn), .btn-icon-only, .addpoint' ).prop( 'disabled', false );
+
+        // ensure all tiles are displayed, https://github.com/kobotoolbox/enketo-express/issues/188
+        if ( this.map ) {
+            this.map.invalidateSize();
+        }
+    };
+
+    /**
+     * Updates the widget if the value has updated programmatically (e.g. due to a calculation)
+     */
+    Geopicker.prototype.update = function( element ) {
+        /**
+         * It is somewhat complex to properly update, especially when the widget is currently
+         * showing a list of geotrace/geoshape points. Hence we use the inefficient but robust
+         * method to re-initialize instead.
+         */
+        this.destroy( element );
+        $( element ).data( pluginName, new Geopicker( element, this.options, this.event ) );
+    };
+
+    $.fn[ pluginName ] = function( options, event ) {
+
+        return this.each( function() {
+            try {
+                var $this = $( this );
+                var data = $( this ).data( pluginName );
+
+                options = options || {};
+
+                if ( !data && typeof options === 'object' ) {
+                    $this.data( pluginName, new Geopicker( this, options, event ) );
+                } else if ( data && typeof options === 'string' ) {
+                    //pass the context, used for destroy() as this method is called on a cloned widget
+                    data[ options ]( this );
+                }
+            } catch ( e ) {
+                console.log( 'Failed to initialise geopicker for ' + this + ': ' + e );
+            }
+        } );
     };
 
     // extend Leaflet
@@ -1404,27 +1460,6 @@ define( function( require, exports, module ) {
             return ( p2.y - p.y ) * ( p1.x - p.x ) > ( p1.y - p.y ) * ( p2.x - p.x );
         }
     } );
-
-    $.fn[ pluginName ] = function( options, event ) {
-
-        return this.each( function() {
-            try {
-                var $this = $( this ),
-                    data = $( this ).data( pluginName );
-
-                options = options || {};
-
-                if ( !data && typeof options === 'object' ) {
-                    $this.data( pluginName, new Geopicker( this, options, event ) );
-                } else if ( data && typeof options === 'string' ) {
-                    //pass the context, used for destroy() as this method is called on a cloned widget
-                    data[ options ]( this );
-                }
-            } catch ( e ) {
-                console.log( 'Failed to initialise geopicker for ' + this + ': ' + e );
-            }
-        } );
-    };
 
 
     /*

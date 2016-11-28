@@ -1569,8 +1569,8 @@ define( function( require, exports, module ) {
         },
         'date': {
             validate: function( x ) {
-                var pattern = ( /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/ ),
-                    segments = pattern.exec( x );
+                var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/;
+                var segments = pattern.exec( x );
 
                 return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString() !== 'Invalid Date' ) : false;
             },
@@ -1595,11 +1595,12 @@ define( function( require, exports, module ) {
                 return ( new Date( x.toString() ).toString() !== 'Invalid Date' || new Date( this.convert( x.toString() ) ).toString() !== 'Invalid Date' );
             },
             convert: function( x ) {
-                var date, // timezone, segments, dateS, timeS,
-                    patternCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2}):([0-9]{2})$/,
-                    patternAlmostCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2})$/;
+                var date;
+                var patternCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2}):([0-9]{2})$/;
+                var patternAlmostCorrect = /([0-9]{4}\-[0-9]{2}\-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|\-)([0-9]{2})$/;
+
                 /* 
-                 * if the pattern is right, or almost right but needs a small correction for JavaScript to handle it,
+                 * If the format is correct, or almost correct but needs a small correction for JavaScript to handle it,
                  * do not risk changing the time zone by calling toISOLocalString()
                  */
                 if ( new Date( x ).toString() !== 'Invalid Date' && patternCorrect.test( x ) ) {
@@ -1614,21 +1615,34 @@ define( function( require, exports, module ) {
         },
         'time': {
             validate: function( x ) {
-                var date = new Date(),
-                    segments = x.toString().split( ':' );
+                var segments = x.toString().split( ':' );
                 if ( segments.length < 2 ) {
                     return false;
                 }
                 segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString().split( '.' )[ 0 ] ) : 0;
 
-                return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 && date.toString() !== 'Invalid Date' );
+                return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 );
             },
             convert: function( x ) {
-                var segments = x.toString().split( ':' );
-                $.each( segments, function( i, val ) {
-                    segments[ i ] = val.toString().pad( 2 );
-                } );
-                return segments.join( ':' );
+                var date;
+                var timeAppearsCorrect = /^[0-9]{2}:[0-9]{2}(:[0-9.]*)?$/;
+
+                if ( !timeAppearsCorrect.test( x ) ) {
+                    // An XPath expression would return a datetime string since there is no way to request a timeValue.
+                    // We can test this by trying to convert to a date.
+                    date = new Date( x );
+                    if ( date.toString() !== 'Invalid Date' ) {
+                        x = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+                    }
+                }
+
+                // add padding
+                return x.toString()
+                    .split( ':' )
+                    .map( function( segment ) {
+                        return segment.toString().pad( 2 );
+                    } )
+                    .join( ':' );
             }
         },
         'barcode': {

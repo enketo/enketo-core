@@ -52,22 +52,34 @@ define( function( require, exports, module ) {
      * Initialize
      */
     Distresspicker.prototype._init = function() {
-        var step = ( $( this.element ).attr( 'data-type-xml' ) === 'decimal' ) ? 0.1 : 1,
-            value = Number( this.element.value ) || -1;
+        var value = Number( this.element.value ) || -1;
+
+        this.props = this._getProps();
 
         $( this.element ).slider( {
             reversed: true,
             min: -1,
             max: 10,
             orientation: 'vertical',
-            step: step,
-            value: value
+            step: this.props.step,
+            value: value,
+            enabled: !this.props.readonly
         } );
         this.$widget = $( this.element ).next( '.widget' );
         this.$slider = this.$widget.find( '.slider' );
         this._addBulb();
         this._addScale();
-        this._setChangeHandler();
+        this._setChangeListener();
+    };
+
+    Distresspicker.prototype._getProps = function() {
+        var type = this.element.attributes[ 'data-type-xml' ].value;
+
+        return {
+            touch: this.options.touch,
+            readonly: this.element.readOnly,
+            step: type === 'decimal' ? 0.1 : 1,
+        };
     };
 
     Distresspicker.prototype._addBulb = function() {
@@ -87,7 +99,7 @@ define( function( require, exports, module ) {
     /**
      * Set delegated event handlers
      */
-    Distresspicker.prototype._setChangeHandler = function() {
+    Distresspicker.prototype._setChangeListener = function() {
         $( this.element ).on( 'slideStop.' + this.namespace, function( slideEvt ) {
             // set to empty if value = -1
             if ( Number( this.value ) === -1 ) {
@@ -98,15 +110,26 @@ define( function( require, exports, module ) {
     };
 
     Distresspicker.prototype.disable = function() {
-        console.log( 'disableing', this.element );
+        var value = ( this.element.value !== '' ) ? Number( this.element.value ) : -1;
         $( this.element )
             .slider( 'disable' )
-            .slider( 'setValue', this.element.value );
+            .slider( 'setValue', value, false );
     };
 
     Distresspicker.prototype.enable = function() {
         $( this.element )
             .slider( 'enable' );
+    };
+
+    Distresspicker.prototype.update = function() {
+        var value = ( this.element.value !== '' ) ? Number( this.element.value ) : -1;
+        var $el = $( this.element );
+        var sliderValue = $el.slider( 'getValue' );
+
+        if ( value !== sliderValue ) {
+            $( this.element )
+                .slider( 'setValue', value, false );
+        }
     };
 
     $.fn[ pluginName ] = function( options, event ) {

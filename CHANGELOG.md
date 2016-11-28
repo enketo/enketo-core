@@ -3,6 +3,20 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Removed
+- select-desktop-bootstrap picker
+
+##### Changed
+- readonly styling of: likert widget, compact picker, dates, datetimes, and others.
+
+##### Fixed
+- User is able to manipulate readonly widgets: distresspicker, analog-scale-picker, select-desktop-picker, filepickers, geopicker.
+- Calculations do not update: analog-scale-picker, distresspicker, mobile regular select, mobile multiselect picker preview, timepicker, geopicker, esri-geopicker.
+- XPath calculation returing a datetime string for an XML node with type time is not converted, resulting in an invalid time.
+- Geo widget on touchscreens does not hide Google Maps layer when exiting map view
+
 [4.15.1] - 2016-11-09
 ----------------------
 ##### Fixed

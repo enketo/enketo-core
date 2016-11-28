@@ -41,9 +41,11 @@ $printBaseFontSize: 10px;
         margin-bottom: -5px;
         border-bottom: 1px dotted black;
     }
+
     &.widget.date, &.widget.bootstrap-timepicker {
         display: none;
     }
+
     &:not(.or-appearance-maps) input {
         &[type=date], &[type=time], &[type=datetime] {
             opacity: 0.7;
@@ -51,6 +53,7 @@ $printBaseFontSize: 10px;
             visibility: hidden;
         }
     }
+
     &.or-appearance-maps label.geo {
         &::after {
             content: ' ';
@@ -59,11 +62,13 @@ $printBaseFontSize: 10px;
             width: 100%;
             border-bottom: 1px dotted black;
         }
+
         input {
             display: block !important;
             visibility: hidden;
         }
     }
+
     // just hiding file-feedback so it provides a bit of empty space in the printout
     .file-feedback {
         visibility: hidden;
@@ -71,18 +76,21 @@ $printBaseFontSize: 10px;
     }
 }
 
-.question, .note, .trigger {
+.question {
     padding-bottom: 10px;
+
     .question-label, .option-label, label.geo {
         line-height: $printBaseFontSize;
         font-size: $printBaseFontSize;
     }
+
     input:not([type=radio]):not([type=checkbox]),
     .geopicker.widget input[type=number] {
         font-size: $printBaseFontSize;
         line-height: $printBaseFontSize;
         height: 20px;
     }
+
     textarea {
         height: 45px;
     }
@@ -95,9 +103,12 @@ $printBaseFontSize: 10px;
 .question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
     label {
         $line-h: 15px;
+
         line-height: $line-h;
+
         .option-label {
             line-height: $line-h;
+
             &::before {
                 font-size: $line-h;
                 width: $line-h;
@@ -109,6 +120,7 @@ $printBaseFontSize: 10px;
 .geopicker.widget {
     .geo-inputs label.geo:nth-of-type(3), .geo-inputs label.geo:nth-of-type(4) {
         min-height: 0;
+
         input {
             float: none;
         }
@@ -118,26 +130,32 @@ $printBaseFontSize: 10px;
 .bootstrap-select {
     margin: 0;
     padding: 0;
+
     .dropdown-toggle ~ .dropdown-menu .option-wrapper {
         padding-left: 0;
     }
+
     ul {
         li, li.active {
             border: none;
             margin-right: 0;
+
             a {
                 background: none;
                 padding: 0;
+
                 label {
                     font-size: $printBaseFontSize !important;
                     margin: 0;
                 }
             }
         }
+
         li:not(.active) a label::before {
             font-size: 15px;
             margin-right: 7px;
         }
+
         li.active a label::before {
             font-size: 15px;
             margin-right: 7px;
@@ -153,11 +171,14 @@ $printBaseFontSize: 10px;
     width: 100%;
 }
 
-.or .question, .or .note, .or .trigger {
+.or .question {
     //default;
     width: 100%;
+
     @include display-inline-flex;
+
     vertical-align: top;
+
     //padding: 5px 5px 12px 5px;
     // unfortunately we cannot target actual page-breaks to provide a top-border
     &:not(.invalid-required):not(.invalid-constraint) {
@@ -174,7 +195,8 @@ $printBaseFontSize: 10px;
         .or-appearance-w#{$total} {
             display: block;
             width: 100%;
-            &.question, &.note, &.trigger {
+
+            &.question {
                 @if $total >= $default-grid-width {
                     width: 100%;
                 }
@@ -182,9 +204,11 @@ $printBaseFontSize: 10px;
                     width: $total / 4 * 100%;
                 }
             }
+
             @for $width from 1 through $total {
                 .or-appearance-w#{$width} {
                     @include display-inline-flex;
+
                     width: $width / $total * 100%;
                 }
             }
@@ -201,6 +225,7 @@ $printBaseFontSize: 10px;
     #dialog-print {
         display: none;
     }
+
     .back-to-screen-view {
         display: none !important;
     }

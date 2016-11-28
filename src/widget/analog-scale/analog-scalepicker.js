@@ -38,20 +38,18 @@ define( function( require, exports, module ) {
         var $question = $( this.element ).closest( '.question' );
         var $input = $( this.element );
         var value = Number( this.element.value ) || -1;
-        var step = $( this.element ).attr( 'data-type-xml' ) === 'decimal' ? 0.1 : 1;
 
-        this.orientation = $question.hasClass( 'or-appearance-horizontal' ) ? 'horizontal' : 'vertical';
-
-        this.ticks = !$question.hasClass( 'or-appearance-no-ticks' );
+        this.props = this._getProps( $question );
 
         $input
             .slider( {
-                reversed: this.orientation === 'vertical',
+                reversed: this.props.orientation === 'vertical',
                 min: 0,
                 max: 100,
-                orientation: this.orientation,
-                step: step,
-                value: value
+                orientation: this.props.orientation,
+                step: this.props.step,
+                value: value,
+                enabled: !this.props.readonly
             } );
 
         this.$widget = $input.next( '.widget' );
@@ -63,11 +61,26 @@ define( function( require, exports, module ) {
         this._renderResetButton();
         this._renderLabels();
         this._renderScale();
-        this._setChangeHandler();
-        this._setResizeHander();
+        this._setChangeListener();
+        this._setResizeListener();
 
         // update reset button and slider "empty" state
         $input.trigger( 'programmaticChange' + this.namespace );
+    };
+
+    Analogscalepicker.prototype._getProps = function( $question ) {
+        var appearances = $question.attr( 'class' ).split( ' ' )
+            .map( function( appearance, index ) {
+                return appearance.substring( 14 );
+            } );
+        var type = this.element.attributes[ 'data-type-xml' ].value;
+
+        return {
+            touch: this.options.touch,
+            readonly: this.element.readOnly,
+            step: type === 'decimal' ? 0.1 : 1,
+            orientation: appearances.indexOf( 'horizontal' ) !== -1 ? 'horizontal' : 'vertical'
+        };
     };
 
     /** 
@@ -102,7 +115,7 @@ define( function( require, exports, module ) {
         var i;
         var $scale = $( '<div class="scale"></div>' );
 
-        if ( this.orientation === 'vertical' ) {
+        if ( this.props.orientation === 'vertical' ) {
             for ( i = 100; i >= 0; i -= 10 ) {
                 $scale.append( this._getNumberHtml( i ) );
             }
@@ -128,7 +141,8 @@ define( function( require, exports, module ) {
                 $( that.element ).slider( 'setValue', 0, false );
                 $( that.element ).val( '' ).trigger( 'programmaticChange' + that.namespace );
                 return false;
-            } );
+            } )
+            .prop( 'disabled', that.props.readonly );
     };
 
     Analogscalepicker.prototype._updateCurrentValueShown = function() {
@@ -137,13 +151,13 @@ define( function( require, exports, module ) {
         }
     };
 
-    Analogscalepicker.prototype._setChangeHandler = function() {
+    Analogscalepicker.prototype._setChangeListener = function() {
         var that = this;
 
         $( this.element ).on( 'slideStop.' + this.namespace + ' programmaticChange' + this.namespace, function() {
             var empty = ( this.value === '' );
             $( this ).trigger( 'change' );
-            that.$resetBtn.prop( 'disabled', empty );
+            that.$resetBtn.prop( 'disabled', empty || that.props.readonly );
             that.$slider.toggleClass( 'slider--empty', empty );
             that._updateCurrentValueShown();
         } );
@@ -154,7 +168,7 @@ define( function( require, exports, module ) {
      * Doing this with pure css flexbox using "flex-direction: column" interferes with the Grid theme 
      * because that theme relies on flexbox with "flex-direction: row".
      */
-    Analogscalepicker.prototype._setResizeHander = function() {
+    Analogscalepicker.prototype._setResizeListener = function() {
         var $question = $( this.element ).closest( '.question' );
 
         if ( !$question.hasClass( 'or-appearance-horizontal' ) ) {
@@ -186,9 +200,10 @@ define( function( require, exports, module ) {
     };
 
     Analogscalepicker.prototype.disable = function() {
+        var value = ( this.element.value !== '' ) ? Number( this.element.value ) : 0;
         $( this.element )
             .slider( 'disable' )
-            .slider( 'setValue', this.element.value );
+            .slider( 'setValue', value, false );
     };
 
     Analogscalepicker.prototype.enable = function() {
@@ -197,6 +212,17 @@ define( function( require, exports, module ) {
     };
 
     Analogscalepicker.prototype.update = function() {
+        // in case input value was changed (due to calculation update)
+        var that = this;
+        var value = ( this.element.value !== '' ) ? Number( this.element.value ) : 0;
+        var $el = $( this.element );
+        var sliderValue = $el.slider( 'getValue' );
+        if ( value !== sliderValue ) {
+            $( this.element )
+                .slider( 'setValue', value, false )
+                .trigger( 'programmaticChange' + that.namespace );
+        }
+        // in case language was changed
         this._renderLabels();
     };
 

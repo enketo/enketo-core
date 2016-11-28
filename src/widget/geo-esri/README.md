@@ -13,8 +13,7 @@ Not supported:
 
 Like any other widget, this widget has to be enabled in widget.js and widgets.scss. Both these files exist in enketo-core but are normally overwritten in your own app.
 
-It is possible to use both this widget (for geopoint questions) and the regular geo widget (for geoshape and geotrace questions) together, but this is highly discouraged as they do not quite match in styling and capability and will result in a very poor loading performance.
-
+It is possible to use both this widget (for geopoint questions) and the regular geo widget (for geoshape and geotrace questions) together, but this is highly discouraged as they do not match in styling and will result in a very poor loading performance, and poor performance when geopoints are used with calculations.
 
 ### Global Configuration
 
