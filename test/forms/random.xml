@@ -1,0 +1,40 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Random</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="English">
+          <text id="/random/note_random:label">
+            <value>This is the random number that was generated: <output value="/random/random__"/></value>  </text>
+          <text id="/random/note_uuid:label">
+            <value>This is the uuid that was generated: <output value="/random/uuid__"/></value>  </text>
+        </translation>
+      </itext>
+      <instance>
+        <random id="random"><formhub><uuid/></formhub>
+          <random__/>
+          <note_random/>
+          <uuid__/>
+          <note_uuid/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </random>
+      </instance>
+      <bind nodeset="/random/formhub/uuid" type="string" calculate="'9faaa6efd9bc48f9ab32d7ce5e9148d4'" />
+      <bind calculate="random()" nodeset="/random/random__" required="true()" type="string"/>
+      <bind nodeset="/random/note_random" readonly="true()" type="string"/>
+      <bind calculate="uuid()" nodeset="/random/uuid__" type="string"/>
+      <bind nodeset="/random/note_uuid" readonly="true()" type="string"/>
+      <bind nodeset="/random/meta/instanceID" calculate="'BAD'" readonly="true()" />
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/random/note_random">
+      <label ref="jr:itext('/random/note_random:label')"/>
+    </input>
+    <input ref="/random/note_uuid">
+      <label ref="jr:itext('/random/note_uuid:label')"/>
+    </input>
+  </h:body>
+</h:html>

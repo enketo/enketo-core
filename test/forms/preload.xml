@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Meta Data</h:title>
+    <model>
+      <instance>
+        <preload id="preload">
+          <start/>
+          <end/>
+          <today/>
+          <deviceid/>
+          <subscriberid/>
+          <imei/>
+          <phonenumber/>
+          <username/>
+          <start_note/>
+          <end_note/>
+          <today_note/>
+          <deviceid_note/>
+          <subscriberid_note/>
+          <imei_note/>
+          <phonenumber_note/>
+          <username_note/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </preload>
+      </instance>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/preload/start" type="dateTime"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/preload/end" type="dateTime"/>
+      <bind jr:preload="date" jr:preloadParams="today" nodeset="/preload/today" type="date"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/preload/deviceid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="subscriberid" nodeset="/preload/subscriberid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/preload/imei" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/preload/phonenumber" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="username" nodeset="/preload/username" type="string"/>
+      <bind nodeset="/preload/start_note" readonly="true()" type="string"/>
+      <bind nodeset="/preload/end_note" readonly="true()" type="string"/>
+      <bind nodeset="/preload/today_note" readonly="true()" type="string"/>
+      <bind nodeset="/preload/deviceid_note" readonly="true()" type="string"/>
+      <bind nodeset="/preload/subscriberid_note" readonly="true()" type="string"/>
+      <bind nodeset="/preload/imei_note" readonly="true()" type="string"/>
+      <bind nodeset="/preload/phonenumber_note" readonly="true()" type="string"/>
+      <bind nodeset="/preload/username_note" readonly="true()" type="string"/>
+      <bind jr:preload="uid" nodeset="/preload/meta/instanceID" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/preload/start_note">
+      <label>start: <output value=" /preload/start "/></label></input>
+    <input ref="/preload/end_note">
+      <label>end: <output value=" /preload/end "/></label></input>
+    <input ref="/preload/today_note">
+      <label>today: <output value=" /preload/today "/></label></input>
+    <input ref="/preload/deviceid_note">
+      <label>deviceid: <output value=" /preload/deviceid "/></label></input>
+    <input ref="/preload/subscriberid_note">
+      <label>subscriberid: <output value=" /preload/subscriberid "/></label></input>
+    <input ref="/preload/imei_note">
+      <label>imei: <output value=" /preload/imei "/></label></input>
+    <input ref="/preload/phonenumber_note">
+      <label>phonenumber: <output value=" /preload/phonenumber "/></label></input>
+    <input ref="/preload/username_note">
+      <label>username: <output value=" /preload/username "/></label></input>
+  </h:body>
+</h:html>

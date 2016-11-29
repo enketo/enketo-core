@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head><!-- ODK Aggregate upload time: 2016-11-29T21:45:45.771+0000 on https://enketo-aggregate.appspot.com -->
+    <h:title>Dynamic Defaults Coded in XForm</h:title>
+    <model>
+      <instance>
+        <dynamic-default id="dynamic-default-xform" version="">
+          <one/>
+          <two/>
+          <three/>
+          <four/>
+          <five/>
+          <six/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </dynamic-default>
+      </instance>
+      <bind calculate="once(now())" nodeset="/dynamic-default/one" type="dateTime"/>
+      <bind nodeset="/dynamic-default/two" jr:preload="timestamp" jr:preloadParams="start" type="dateTime"/>
+      <bind calculate="once(today())" nodeset="/dynamic-default/three" type="date"/>
+      <bind nodeset="/dynamic-default/four" jr:preload="date" jr:preloadParams="today" type="date"/>
+      <bind calculate="once(uuid())" nodeset="/dynamic-default/five" type="string"/>
+      <bind nodeset="/dynamic-default/six" jr:preload="uid" type="string"/>
+      <bind nodeset="/dynamic-default/meta/instanceID" jr:preload="uid" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/dynamic-default/one">
+      <label>Enter text</label>
+    </input>
+    <input ref="/dynamic-default/two">
+      <label>Enter text</label>
+    </input>
+    <input ref="/dynamic-default/three">
+      <label>Enter text</label>
+    </input>
+    <input ref="/dynamic-default/four">
+      <label>Enter text</label>
+    </input>
+    <input ref="/dynamic-default/five">
+      <label>Enter text</label>
+    </input>
+    <input ref="/dynamic-default/six">
+      <label>Enter text</label>
+    </input>
+  </h:body>
+</h:html>

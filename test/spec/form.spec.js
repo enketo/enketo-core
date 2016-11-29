@@ -1,11 +1,10 @@
 /* global describe, require, it, beforeEach, afterEach*/
 var Form = require( '../../src/js/Form' );
 var $ = require( 'jquery' );
-var mockForms1 = require( '../mock/forms' );
-var mockForms2 = require( '../mock/form.mock' );
+var forms = require( '../mock/forms' );
 
 var loadForm = function( filename, editStr ) {
-    var strings = mockForms1[ filename ];
+    var strings = forms[ filename ];
     return new Form( strings.html_form, {
         modelStr: strings.xml_model,
         instanceStr: editStr
@@ -17,9 +16,7 @@ describe( 'Output functionality ', function() {
     // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
     // since the issue was resolved by updating outputs with a one millisecond delay (!).
     // Nevertheless, these tests can be useful.
-    var form = new Form( mockForms2.formStr2, {
-        modelStr: mockForms2.dataStr2
-    } );
+    var form = loadForm( 'random.xml' );
 
     form.init();
 
@@ -60,91 +57,106 @@ describe( 'Output functionality within repeats', function() {
 describe( 'Preload and MetaData functionality', function() {
     var form, t;
 
-    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
-    it( 'ignores a calculate binding on [ROOT]/meta/instanceID', function() {
-        form = new Form( mockForms2.formStr2, {
-            modelStr: mockForms2.dataStr2
-        } );
+    // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
+    it( 'ignores a calculate binding on /[ROOT]/meta/instanceID', function() {
+        form = loadForm( 'random.xml' );
         form.init();
         expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
-    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
+    // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on [ROOT]/orx:meta/orx:instanceID', function() {
         form = loadForm( 'meta-namespace.xml' );
         form.init();
         expect( form.getModel().node( '/data/orx:meta/orx:instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
-    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
-    it( 'generates an instanceID on meta/instanceID WITHOUT preload binding', function() {
-        form = new Form( mockForms2.formStr2, {
-            modelStr: mockForms2.dataStr2
-        } );
+    // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
+    it( 'generates an instanceID on /[ROOT]/meta/instanceID WITHOUT preload binding', function() {
+        form = loadForm( 'random.xml' );
         form.init();
         form.getView().$.find( 'fieldset#or-preload-items' ).remove();
         expect( form.getView().$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
         expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
-    // Form.js no longer has anything to do with instanceID population. Test should still pass though.
-    it( 'generates an instanceID WITH preload binding', function() {
-        form = new Form( mockForms2.formStr3, {
-            modelStr: mockForms2.dataStr2
-        } );
+    // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
+    it( 'generates an instanceID WITH a preload binding', function() {
+        form = loadForm( 'preload.xml' );
         form.init();
         expect( form.getView().$
-                .find( 'fieldset#or-preload-items input[name="/random/meta/instanceID"][data-preload="instance"]' ).length )
+                .find( 'fieldset#or-preload-items input[name="/preload/meta/instanceID"][data-preload="uid"]' ).length )
             .toEqual( 1 );
-        expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+        expect( form.getModel().node( '/preload/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'does not generate a new instanceID if one is already present', function() {
-        form = new Form( mockForms2.formStr3, {
-            modelStr: mockForms2.dataStr3
+        form = new Form( forms[ 'random.xml' ].html_form, {
+            modelStr: forms[ 'random.xml' ].xml_model.replace( '<instanceID/>', '<instanceID>existing</instanceID>' )
         } );
         form.init();
-        expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ] ).toEqual( 'c13fe058-3349-4736-9645-8723d2806c8b' );
+        expect( form.getModel().node( '/random/meta/instanceID' ).getVal()[ 0 ] ).toEqual( 'existing' );
     } );
 
-    it( 'generates a timeStart on meta/timeStart WITHOUT preload binding', function() {
-        form = new Form( mockForms2.formStr2, {
-            modelStr: mockForms2.dataStr2
-        } );
+    it( 'generates a timeStart on /[ROOT]/meta/timeStart WITH a preload binding', function() {
+        form = loadForm( 'preload.xml' );
         form.init();
-        form.getView().$.find( 'fieldset#or-preload-items' ).remove();
-        expect( form.getView().$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
-        expect( form.getModel().node( '/random/meta/timeStart' ).getVal()[ 0 ].length > 10 ).toBe( true );
+        expect( form.getModel().node( '/preload/start' ).getVal()[ 0 ].length > 10 ).toBe( true );
     } );
 
-    it( 'generates a timeEnd on init and updates this after a beforesave event WITHOUT preload binding', function() {
-        var timeEnd, timeEndNew;
-        //jasmine.Clock.useMock();
-        form = new Form( mockForms2.formStr2, {
-            modelStr: mockForms2.dataStr2
-        } );
+    it( 'generates a timeEnd on init and updates this after a beforesave event WITH a preload binding', function( done ) {
+        var timeEnd;
+        var timeEndNew;
+
+        form = loadForm( 'preload.xml' );
         form.init();
-        form.getView().$.find( 'fieldset#or-preload-items' ).remove();
-        expect( form.getView().$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
-        timeEnd = form.getModel().node( '/random/meta/timeEnd' ).getVal()[ 0 ];
+        timeEnd = form.getModel().node( '/preload/end' ).getVal()[ 0 ];
+
+        // populating upon initalization is not really a feature, could be removed perhaps
         expect( timeEnd.length > 10 ).toBe( true );
-        //setTimeout(function(){
-        form.getView().$.trigger( 'beforesave' );
-        timeEndNew = form.getModel().node( '/random/meta/timeEnd' ).getVal()[ 0 ];
-        timeEnd = new Date( timeEnd );
-        timeEndNew = new Date( timeEndNew );
-        //for some reason the setTimeout function doesn't work
-        expect( timeEnd - 1 < timeEndNew ).toBe( true );
-        //}, 1001);
-        //jasmine.Clock.tick(1001);
-        //TODO FIX THIS PROPERLY
+
+        setTimeout( function() {
+            form.getView().$.trigger( 'beforesave' );
+            timeEndNew = form.getModel().node( '/preload/end' ).getVal()[ 0 ];
+            //expect( new Date( timeEnd ) < new Date( timeEndNew ) ).toBe( true );
+            expect( new Date( timeEndNew ) - new Date( timeEnd ) ).toEqual( 1000 );
+            done();
+        }, 1000 );
+
+    } );
+
+    it( 'also works with nodes that have a corresponding form control element', function() {
+        form = loadForm( 'preload-input.xml' );
+        form.init();
+
+        [ '/dynamic-default/two', '/dynamic-default/four', '/dynamic-default/six' ].forEach( function( path ) {
+            expect( form.getView().$.find( '[name="' + path + '"]' ).val().length > 9 ).toBe( true );
+            expect( form.getModel().node( path ).getVal()[ 0 ].length > 9 ).toBe( true );
+        } );
     } );
 
     function testPreloadExistingValue( node ) {
         it( 'obtains unchanged preload value of item (WITH preload binding): ' + node.selector + '', function() {
-            form = new Form( mockForms2.formStr5, {
-                modelStr: mockForms2.dataStr5a
+            form = new Form( forms[ 'preload.xml' ].html_form, {
+                modelStr: '<preload>' +
+                    '<start>2012-10-30T08:44:57.000-06</start>' +
+                    '<end>2012-10-30T08:44:57.000-06:00</end>' +
+                    '<today>2012-10-30</today>' +
+                    '<deviceid>some value</deviceid>' +
+                    '<subscriberid>some value</subscriberid>' +
+                    '<imei>2332</imei>' +
+                    '<phonenumber>234234324</phonenumber>' +
+                    '<application>some context</application>' +
+                    '<patient>this one</patient>' +
+                    '<username>John Doe</username>' +
+                    '<browser_name>fake</browser_name>' +
+                    '<browser_version>xx</browser_version>' +
+                    '<os_name>fake</os_name>' +
+                    '<os_version>xx</os_version>' +
+                    '<unknown>some value</unknown>' +
+                    '<meta><instanceID>uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8</instanceID></meta>' +
+                    '</preload>'
             } );
             form.init();
             expect( form.getModel().node( node.selector ).getVal()[ 0 ] ).toEqual( node.result );
@@ -153,30 +165,27 @@ describe( 'Preload and MetaData functionality', function() {
 
     function testPreloadNonExistingValue( node ) {
         it( 'populates previously empty preload item (WITH preload binding): ' + node.selector + '', function() {
-            form = new Form( mockForms2.formStr5, {
-                modelStr: mockForms2.dataStr5b
-            } );
+            form = loadForm( 'preload.xml' );
             form.init();
             expect( form.getModel().node( node.selector ).getVal()[ 0 ].length > 0 ).toBe( true );
         } );
     }
 
     t = [
-        [ '/widgets/start_time', '2012-10-30T08:44:57.000-06:00' ],
-        [ '/widgets/date_today', '2012-10-30' ],
-        [ '/widgets/deviceid', 'some value' ],
-        [ '/widgets/subscriberid', 'some value' ],
-        [ '/widgets/my_simid', '2332' ],
-        [ '/widgets/my_phonenumber', '234234324' ],
-        [ '/widgets/application', 'some context' ],
-        [ '/widgets/patient', 'this one' ],
-        [ '/widgets/user', 'John Doe' ],
-        [ '/widgets/uid', 'John Doe' ],
+        [ '/preload/start', '2012-10-30T08:44:57.000-06:00' ],
+        [ '/preload/today', '2012-10-30' ],
+        [ '/preload/deviceid', 'some value' ],
+        [ '/preload/subscriberid', 'some value' ],
+        [ '/preload/imei', '2332' ],
+        [ '/preload/phonenumber', '234234324' ],
+        //[ '/preload/application', 'some context' ],
+        //[ '/preload/patient', 'this one' ],
+        //[ '/preload/username', 'John Doe' ],
+        //[ '/preload/meta/instanceID', 'uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8' ],
         //['/widgets/browser_name', 'fake'],
         //['/widgets/browser_version', 'xx'],
         //['/widgets/os_name', 'fake'],
         //['/widgets/os_version', 'xx'],
-        [ '/widgets/meta/instanceID', 'uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8' ]
     ];
 
     for ( var i = 0; i < t.length; i++ ) {
@@ -188,12 +197,8 @@ describe( 'Preload and MetaData functionality', function() {
             selector: t[ i ][ 0 ]
         } );
     }
-    testPreloadExistingValue( {
-        selector: '/widgets/unknown',
-        result: 'some value'
-    } );
     testPreloadNonExistingValue( {
-        selector: '/widgets/end_time'
+        selector: '/preload/end'
     } );
 } );
 
@@ -209,9 +214,7 @@ describe( 'Loading instance values into html input fields functionality', functi
     } );
 
     it( 'correctly populates input field even if the instance node name is not unique and occurs at multiple levels', function() {
-        form = new Form( mockForms2.formStr4, {
-            modelStr: mockForms2.dataStr4
-        } );
+        form = loadForm( 'nodename.xml' );
         form.init();
         expect( form.getView().$.find( '[name="/nodename_bug/hh/hh"]' ).val() ).toEqual( 'hi' );
     } );
@@ -226,7 +229,7 @@ describe( 'repeat functionality', function() {
 
     describe( 'cloning', function() {
         beforeEach( function() {
-            form = loadForm( 'thedata.xml' ); //new Form(mockForms2.formStr1, mockForms2.dataStr1);
+            form = loadForm( 'thedata.xml' ); //new Form(forms2.formStr1, forms2.dataStr1);
             form.init();
         } );
 

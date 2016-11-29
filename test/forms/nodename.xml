@@ -1,0 +1,29 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Nodename Bug</h:title>
+    <model>
+      <instance>
+        <nodename_bug id="nodename_bug">
+          <hh>
+            <hh>hi</hh>
+          </hh>
+          <meta>
+            <instanceID/>
+          </meta>
+        </nodename_bug>
+      </instance>
+      <bind nodeset="/nodename_bug/hh/hh" type="string"/>
+      <bind nodeset="/nodename_bug/meta/instanceID" />
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/nodename_bug/hh">
+      <label></label>
+      <repeat nodeset="/nodename_bug/hh">
+        <input ref="/nodename_bug/hh/hh">
+          <label>Enter text</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

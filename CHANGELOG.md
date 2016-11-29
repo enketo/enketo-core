@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.16.0] - 2016-11-30
 ---------------------
+##### Added
+- Support for preload attributes on nodes that have a form control. **Warning: All preload items now require enketo-transformer 1.12.0+!**
+
 ##### Removed
 - select-desktop-bootstrap picker
 

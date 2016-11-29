@@ -1461,7 +1461,7 @@ define( function( require, exports, module ) {
                 var that = this;
 
                 //these initialize actual preload items
-                $form.find( '#or-preload-items input' ).each( function() {
+                $form.find( 'input[data-preload], select[data-preload], textarea[data-preload]' ).each( function() {
                     $preload = $( this );
                     props = parentO.input.getProps( $preload );
                     item = $preload.attr( 'data-preload' ).toLowerCase();
@@ -1479,50 +1479,6 @@ define( function( require, exports, module ) {
                         dataNode.setVal( newVal, null, props.xmlType );
                     } else {
                         console.log( 'Preload "' + item + '" not supported. May or may not be a big deal.' );
-                    }
-                } );
-                // In addition the presence of certain meta data in the instance may automatically trigger a preload function
-                // TODO: remove this completely now that instanceID and deprecatedID are set in the form model?
-                model.getMetaNode( '*' ).get().each( function() {
-                    var localName;
-                    item = null;
-                    xmlType = null;
-                    param = null;
-                    name = this.nodeName;
-                    dataNode = model.node( model.getXPath( this, 'instance' ) );
-                    curVal = dataNode.getVal()[ 0 ];
-                    // First check if there isn't a binding with a preloader that already took care of this
-                    if ( $form.find( '#or-preload-items input[name$="' + name + '"][data-preload]' ).length === 0 ) {
-                        localName = name.indexOf( ':' ) ? name.substring( name.indexOf( ':' ) + 1 ) : name;
-                        switch ( localName ) {
-                            case 'timeStart':
-                                item = 'timestamp';
-                                xmlType = 'datetime';
-                                param = 'start';
-                                break;
-                            case 'timeEnd':
-                                item = 'timestamp';
-                                xmlType = 'datetime';
-                                param = 'end';
-                                break;
-                            case 'deviceID':
-                                item = 'property';
-                                xmlType = 'string';
-                                param = 'deviceid';
-                                break;
-                            case 'userID':
-                                item = 'property';
-                                xmlType = 'string';
-                                param = 'username';
-                                break;
-                        }
-                    }
-                    if ( item ) {
-                        dataNode.setVal( that[ item ]( {
-                            param: param,
-                            curVal: curVal,
-                            dataNode: dataNode
-                        } ), null, xmlType );
                     }
                 } );
             },
@@ -1614,7 +1570,7 @@ define( function( require, exports, module ) {
             },
             'patient': function( o ) {
                 if ( o.curVal.length === 0 ) {
-                    return 'patient preload not supported in enketo';
+                    return 'patient preload item not supported in enketo';
                 }
                 return o.curVal;
             },
@@ -1625,9 +1581,8 @@ define( function( require, exports, module ) {
                 return o.curVal;
             },
             'uid': function( o ) {
-                //general
                 if ( o.curVal.length === 0 ) {
-                    return 'no uid yet in enketo';
+                    return model.evaluate( 'concat("uuid:", uuid())', 'string' );
                 }
                 return o.curVal;
             }
