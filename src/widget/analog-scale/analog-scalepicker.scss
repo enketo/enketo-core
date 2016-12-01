@@ -20,11 +20,13 @@ $q-pad-right: 0px !default;
             background-repeat: no-repeat;
             background-size: 100% 52%;
             background-position: top;
+
             &:last-child {
                 width: 0;
                 margin-right: -2px;
             }
         }
+
         .scale__ticks {
             width: 100%;
             height: 50%;
@@ -46,10 +48,12 @@ $q-pad-right: 0px !default;
             background-repeat: no-repeat;
             background-size: 52% 100%;
             background-position: right;
+
             &:last-child {
                 height: 0;
             }
         }
+
         .scale__ticks {
             width: 50%;
             height: 100%;
@@ -64,27 +68,33 @@ $q-pad-right: 0px !default;
 
 .or-appearance-analog-scale {
     position: relative;
+
     // using a dirty trick, knowing that only only question-labels with a lang attribute
     // are switched when the language changes
-    .question-label.active[lang] {
+    .label-content .question-label.active[lang] {
         display: none;
     }
-    .widget {
+
+    .widget:not(.or-comment-widget) {
         // override main.scss style
         // The margin-bottom is maintained to 
         // have space for the constraint message in the horizontal
         // analog scale widget.
         margin: 0 0 9px 0;
     }
+
     .scale {
         @include font-normal;
+
         height: 100%;
         position: absolute;
         font-size: 12px;
     }
+
     .slider-disabled {
         opacity: 0.5;
     }
+
     .slider-track {
         border-bottom: none;
         background: none;
@@ -92,28 +102,35 @@ $q-pad-right: 0px !default;
         box-shadow: none;
         z-index: 10;
     }
+
     .slider-handle {
         background: $analog-picker-handle-color;
         opacity: 0.9;
+
         // outline: 0;
    
     }
+
     .slider--empty {
         .slider-handle {
             background: transparent;
         }
     }
+
     .slider-selection {
         background: transparent;
         box-shadow: none;
         border-radius: 0;
     }
+
     .btn-reset {
         position: relative;
+
         &:disabled {
             visibility: hidden;
         }
     }
+
     .show-value__box {
         background-color: black;
         text-align: center;
@@ -121,41 +138,56 @@ $q-pad-right: 0px !default;
         max-width: 170px;
         padding: 10px 35px;
         margin: 20px auto;
+
         @extend h5;
+
         @include font-normal;
     }
+
     .show-value__value {
         @include font-bold;
+
         font-size: $font-size-base * 1.25;
         padding: 8px;
         display: block;
         min-width: 1px;
         min-height: $font-size-base * 1.25 + 22px;
     }
+
     .max-label,
     .min-label {
         @include font-normal;
+
         text-align: center;
     }
+
     .slider-vertical {
         @include ticks("vertical");
+
         @include display-flex;
+
         @include flex-direction(column);
+
         width: $analog-picker-width;
+
         .slider {
             @include flex(1);
+
             height: 100%;
             min-height: $analog-picker-min-height;
             max-height: $analog-picker-max-height;
             margin: 10px 0;
             left: 50%;
         }
+
         .slider-handle {
             margin-left: -6px;
         }
+
         .scale {
             left: -6px;
         }
+
         .scale__value {
             position: absolute;
             top: -9px;
@@ -163,37 +195,50 @@ $q-pad-right: 0px !default;
             width: 20px;
             text-align: center;
         }
+
         .min-label {
             margin-top: -20px;
         }
+
         .btn-reset {
             width: 20px;
             left: 100px;
             bottom: 25px;
         }
     }
+
     .slider-horizontal {
         @include display-flex;
+
         @include flex-wrap(nowrap);
+
         @include flex-direction(row);
+
         align-items: center;
         position: relative;
         margin-top: 25px;
+
         @include ticks("horizontal");
+
         .slider {
             @include flex(1);
+
             order: 2;
         }
+
         .slider-track {
             margin-top: -6px;
         }
+
         .slider-handle {
             margin-top: -5.5px;
         }
+
         .scale {
             position: relative;
             top: -6.5px;
         }
+
         .scale__value {
             position: absolute;
             top: -17px;
@@ -201,23 +246,28 @@ $q-pad-right: 0px !default;
             left: -10px;
             text-align: center;
         }
+
         .btn-reset {
             left: 50%;
             bottom: -35px;
         }
+
         .max-label,
         .min-label {
             width: 80px;
         }
+
         .min-label {
             order: 1;
             padding: 10px 15px 10px 0;
         }
+
         .max-label {
             order: 3;
             padding: 10px 0 10px 15px;
         }
     }
+
     &.or-appearance-no-ticks {
         .scale__number {
             &:not(:last-child):not(:first-child) {
@@ -225,21 +275,28 @@ $q-pad-right: 0px !default;
                 border-left: none;
             }
         }
+
         .scale__value {
             display: none;
         }
+
         .scale__ticks {
             display: none;
         }
     }
+
     &:not(.or-appearance-horizontal) {
         @include display-flex;
+
         @include flex(1);
+
         @include flex-direction(row);
+
         .label-content {
             @include flex(1);
         }
     }
+
     &.invalid-constraint, &.invalid-required {
         .or-constraint-msg.active, .or-required-msg.active {
             position: absolute;
@@ -260,19 +317,26 @@ $q-pad-right: 0px !default;
     .or-appearance-analog-scale {
         .slider-horizontal {
             @include flex-wrap(wrap);
+
             margin-top: 45px;
+
             .slider {
                 @include flex(100%);
+
                 order: 1;
             }
+
             .max-label {
                 order: 4;
             }
+
             .min-label {
                 order: 2;
             }
+
             .btn-reset {
                 @include flex(1);
+
                 order: 3;
                 left: auto;
                 bottom: auto;
@@ -289,21 +353,27 @@ $q-pad-right: 0px !default;
                 left: auto;
                 right: 50%;
             }
+
             .btn-reset {
                 left: auto;
                 right: 105px;
             }
+
             .scale__ticks {
                 margin-left: auto;
                 margin-right: 25%;
             }
         }
+
         .slider-horizontal {
             .scale {
                 @include display-flex;
+
                 @include flex-wrap(nowrap);
+
                 @include flex-direction(row);
             }
+
             .scale__number {
                 @for $position from 1 through 11 {
                     &:nth-child(#{$position}) {
@@ -311,12 +381,15 @@ $q-pad-right: 0px !default;
                     }
                 }
             }
+
             .min-label {
                 order: 3;
             }
+
             .max-label {
                 order: 1;
             }
+
             .btn-reset {
                 left: auto;
                 right: 50%;

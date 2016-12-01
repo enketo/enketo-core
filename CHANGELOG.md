@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Label of comment widget not shown when used with an analog-scale question.
+
 [4.16.0] - 2016-11-30
 ---------------------
 ##### Added
