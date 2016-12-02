@@ -35,7 +35,9 @@ define( function( require, exports, module ) {
 
         if ( this.$linkedQuestion.length === 1 ) {
             this.$commentQuestion.addClass( 'hide' );
-            this.$commentButton = $( '<button class="btn-icon-only btn-comment" type="button"><i class="icon"> </i></button>' );
+            // Any <button> inside a <label> receives click events if the <label> is clicked!
+            // See http://codepen.io/MartijnR/pen/rWJeOG?editors=1111
+            this.$commentButton = $( '<a class="btn-icon-only btn-comment" type="button" href="#"><i class="icon"> </i></a>' );
             this._setCommentButtonState( this.element.value );
             this.$linkedQuestion.find( '.question-label' ).last().after( this.$commentButton );
             this._setCommentButtonHandler();
@@ -76,6 +78,7 @@ define( function( require, exports, module ) {
             } else {
                 that._showCommentModal();
             }
+            return false;
         } );
     };
 
