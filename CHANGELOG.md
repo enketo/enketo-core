@@ -7,7 +7,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Label of comment widget not shown when used with an analog-scale question.
-- Comment widget input width not 100% when pared with horizontal analog scale picker.
 
 [4.16.0] - 2016-11-30
 ---------------------
