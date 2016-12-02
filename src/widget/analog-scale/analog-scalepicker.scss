@@ -71,8 +71,14 @@ $q-pad-right: 0px !default;
 
     // using a dirty trick, knowing that only only question-labels with a lang attribute
     // are switched when the language changes
-    .label-content .question-label.active[lang] {
-        display: none;
+    .label-content {
+        .question-label.active {
+            display: inline;
+
+            &[lang] {
+                display: none;
+            }
+        }
     }
 
     .widget:not(.or-comment-widget) {
