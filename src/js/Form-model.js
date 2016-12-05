@@ -514,6 +514,7 @@ define( function( require, exports, module ) {
      *                           will not add ordinal attributes as these should be provided in the record)
      */
     FormModel.prototype.cloneRepeat = function( selector, index, merge ) {
+        var name;
         var $insertAfterNode;
         var $nextSiblingsSameName;
         var repeatNode;

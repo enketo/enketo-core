@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 'use strict';
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
@@ -198,7 +197,7 @@ DesktopSelectpicker.prototype._clickListener = function() {
             $select.trigger( 'change' );
         } )
         .on( 'click', 'li.disabled', function( e ) {
-            e.stopPropagation;
+            e.stopPropagation();
             return false;
         } );
 };

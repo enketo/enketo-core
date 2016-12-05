@@ -55,7 +55,7 @@ module.exports = function( grunt ) {
             options: {
                 jshintrc: '.jshintrc'
             },
-            all: [ '*.js', 'src/js/**/*.js', '!src/js/extern.js' ]
+            all: [ '*.js', 'src/**/*.js', '!esri/**/*.js' ]
         },
         watch: {
             sass: {
