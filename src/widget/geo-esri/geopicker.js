@@ -244,7 +244,7 @@ define( function( require, exports, module ) {
 
                 // load default value
                 if ( !that._loadVal() ) {
-                    that.$detect.click()
+                    that.$detect.click();
                 }
 
                 if ( that.props.readonly ) {
@@ -684,7 +684,7 @@ define( function( require, exports, module ) {
         mapView.ui.add( basemapToggle, {
             position: "bottom-left"
         } );
-    }
+    };
 
     Geopicker.prototype._getNextBasemap = function( currentBasemap, basemapList ) {
         var currentIndex;
@@ -771,7 +771,7 @@ define( function( require, exports, module ) {
                         return that.mapView.goTo( esriPoint )
                             .then( function( viewAnimation ) {
                                 if ( viewAnimation ) {
-                                    return viewAnimation
+                                    return viewAnimation;
                                 }
                             } );
                     } else {
@@ -865,7 +865,7 @@ define( function( require, exports, module ) {
             utm.zone = parseInt( utm.zone, 10 );
             utm.northing = zoneLetter.toUpperCase() < 'N' ? utm.northing - NORTHING_OFFSET : utm.northing;
         } else if ( utm.hemisphere === 'S' ) {
-            utm.northing -= NORTHING_OFFSET
+            utm.northing -= NORTHING_OFFSET;
         }
         convertor.UTMtoLL( utm.northing, utm.easting, utm.zone, latLng );
         return {
@@ -982,14 +982,14 @@ define( function( require, exports, module ) {
     };
 
     Geopicker.prototype.destroy = function( element ) {
-        this._loadEsriArcGisJs()
-            .then( function() {
-                $( element )
-                    .removeData( OVERRIDE_PLUGIN_NAME )
-                    .off( '.' + this.namespace )
-                    .show()
-                    .next( '.widget' ).remove();
-            } );
+        // It is possible for the destroy method to be called before he Esri script has loaded.
+        // E.g. if a form contains multiple instances of a repeat, it will be cloned upon loading.
+        // However, since in that case, the widget is not yet there, it should be safe to go through this.
+        $( element )
+            .removeData( OVERRIDE_PLUGIN_NAME )
+            .off( '.' + this.namespace )
+            .show()
+            .next( '.widget' ).remove();
     };
 
     Geopicker.prototype.update = function( element ) {
@@ -998,7 +998,7 @@ define( function( require, exports, module ) {
             .then( function() {
                 that._loadVal( element.value );
             } );
-    }
+    };
 
     $.fn[ PLUGIN_NAME ] = function( options, event ) {
 

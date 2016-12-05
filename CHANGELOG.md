@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Label of comment widget not shown when used with an analog-scale question.
 - Entire label of complex (geo, analog scale) widget triggers comment button click.
 - Comment icon not displayed inline after non-block label of analog-scale widget.
+- Esri/ArcGIS geopicker does not re-instantiate in a cloned repeat.
 
 [4.16.0] - 2016-11-30
 ---------------------
@@ -40,15 +41,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.14.0] - 2016-11-04
 ---------------------
 ##### Added
-- UTM coordinate option to ESRI/ArcGIS geo(point)picker.
-- Auto-record current coordinates in ESRI/ArcGIS geo(point)picker.
+- UTM coordinate option to Esri/ArcGIS geo(point)picker.
+- Auto-record current coordinates in Esri/ArcGIS geo(point)picker.
 - Ability to easily test UI in right-to-left script.
 
 ##### Changed
-- Styling of ESRI/ArcGIS geo(point)picker.
+- Styling of Esri/ArcGIS geo(point)picker.
 
 ##### Fixed
-- No error shown when setting coordinates that are outside of Earth's boundaries in the ESRI/ArcGIS geo(point)picker. Picker reaches unrecoverable map state.
+- No error shown when setting coordinates that are outside of Earth's boundaries in the Esri/ArcGIS geo(point)picker. Picker reaches unrecoverable map state.
 - Min() and max() get stuck in infinite loop when called with multiple nodeset arguments.
 
 [4.13.1] - 2016-10-31
@@ -85,7 +86,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.12.0] - 2016-10-17
 ---------------------
 ##### Added
-- Initial version of ESRI/ArcGIS geopicker (geopoint only). See [README.md](https://github.com/enketo/enketo-core/blob/master/src/widget/geo-esri/README.md.
+- Initial version of Esri/ArcGIS geopicker (geopoint only). See [README.md](https://github.com/enketo/enketo-core/blob/master/src/widget/geo-esri/README.md.
 
 [4.11.0] - 2016-10-13
 ---------------------
