@@ -34,7 +34,9 @@ define( function( require, exports, module ) {
         this.$commentQuestion = $( this.element ).closest( '.question' );
 
         if ( this.$linkedQuestion.length === 1 ) {
-            this.$commentQuestion.addClass( 'hide' );
+            // Adding role='comment' is for now only used to make sure that role is not 'page' as that messes things up
+            this.$commentQuestion.addClass( 'hide' ).attr( 'role', 'comment' );
+
             // Any <button> inside a <label> receives click events if the <label> is clicked!
             // See http://codepen.io/MartijnR/pen/rWJeOG?editors=1111
             this.$commentButton = $( '<a class="btn-icon-only btn-comment" type="button" href="#"><i class="icon"> </i></a>' );
@@ -107,7 +109,7 @@ define( function( require, exports, module ) {
         var $closeButton = $( '<button class="btn-icon-only or-comment-widget__content__btn-close-x" type="button">&times;</button>' );
 
         $input = $comment
-            .removeClass( 'or-appearance-comment hide' )
+            .removeClass( 'hide' )
             .find( 'input, textarea' )
             .addClass( 'ignore' )
             .removeAttr( 'name data-for data-type-xml' )

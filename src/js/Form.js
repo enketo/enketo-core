@@ -310,7 +310,7 @@ define( function( require, exports, module ) {
             init: function() {
 
                 if ( $form.hasClass( 'pages' ) ) {
-                    var $allPages = $form.find( ' .question, .or-appearance-field-list' )
+                    var $allPages = $form.find( ' .question:not([role="comment"]), .or-appearance-field-list' )
                         .filter( function() {
                             // something tells me there is a more efficient way to doing this
                             // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
