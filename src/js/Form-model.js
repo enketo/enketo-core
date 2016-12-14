@@ -791,7 +791,6 @@ define( function( require, exports, module ) {
      * @param  {string} expr        the XPath expression
      * @param  {string} selector    of the (context) node on which expression is evaluated
      * @param  {number} index       of the instance node with that selector
-     * @return {string} modified    expression with injected positions (1-based!)
      */
     FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
         var i;
@@ -818,10 +817,8 @@ define( function( require, exports, module ) {
             if ( nodeName.toLowerCase() !== 'instance' && nodeName.toLowerCase() !== 'model' && $siblings.length > 0 ) {
                 parentSelector = this.getXPath( $node.get( 0 ), 'instance' );
                 parentIndex = $siblings.add( $node ).index( $node );
-                // Add position to segments that do not have an XPath predicate. This is where it gets very messy.
-                if ( !new RegExp( parentSelector + '\\[' ).test( expr ) ) {
-                    expr = expr.replace( new RegExp( parentSelector, 'g' ), parentSelector + '[' + ( parentIndex + 1 ) + ']' );
-                }
+                // Add position to segments that do not have an XPath predicate.
+                expr = expr.replace( new RegExp( parentSelector + '/', 'g' ), parentSelector + '[' + ( parentIndex + 1 ) + ']/' );
             }
         }
         return expr;

@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.16.2] - 2016-12-14
 ---------------------
 ##### Fixed
 - Comment widget in pages mode without field-list has hidden comment field and shows empty page.
+- Repeat position injection gets confused if there is sibling of a repeat whose nodename is equal to the start of the repeat nodename.
 
 [4.16.1] - 2016-12-05
 ---------------------

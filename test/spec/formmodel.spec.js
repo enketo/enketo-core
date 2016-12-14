@@ -953,3 +953,24 @@ describe( 'getting XML fragments', function() {
     } );
 
 } );
+
+describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct incorrect XPath expressions', function() {
+    var modelStr = '<model><instance><abcabce id="abcabce"><n/><ab><ynab/></ab><a><ynaa>1</ynaa><c/></a><a><ynaa>2</ynaa><c/></a><meta><instanceID/></meta></abcabce></instance></model>';
+
+    it( 'as designed', function() {
+        var model = new Model( modelStr );
+        model.init();
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 0 ) ).toEqual( '/model/instance[1]/abcabce/a[1]/c = 1' );
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 1 ) ).toEqual( '/model/instance[1]/abcabce/a[2]/c = 1' );
+    } );
+
+    // https://github.com/kobotoolbox/enketo-express/issues/594
+    it( ' without getting confused by /path/to/node/a/ab/node', function() {
+        var model = new Model( modelStr );
+        model.init();
+
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/ab/ynab = 1', '/abcabce/a/ynaa', 0 ) ).toEqual( '/model/instance[1]/abcabce/ab/ynab = 1' );
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/ab/ynab = 1', '/abcabce/a/ynaa', 1 ) ).toEqual( '/model/instance[1]/abcabce/ab/ynab = 1' );
+    } );
+
+} );
