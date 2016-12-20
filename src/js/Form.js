@@ -27,6 +27,7 @@ define( function( require, exports, module ) {
     var Promise = require( 'lie' );
     var utils = require( './utils' );
     var t = require( './fake-translator' ).t;
+    var pkg = require( '../../package' );
     require( './plugins' );
     require( './extend' );
     require( 'jquery-touchswipe' );
@@ -2162,6 +2163,13 @@ define( function( require, exports, module ) {
                 } );
         };
     }
+
+    /** 
+     * Static method to obtain required enketo-transform version direct from class.
+     */
+    Form.getRequiredTransformerVersion = function() {
+        return pkg.devDependencies ? pkg.devDependencies[ 'enketo-transformer' ] : '';
+    };
 
     module.exports = Form;
 } );

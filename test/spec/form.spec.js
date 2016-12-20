@@ -903,3 +903,10 @@ describe( 'form status', function() {
         expect( form.getEditStatus() ).toBe( true );
     } );
 } );
+
+describe( 'required enketo-transformer version', function() {
+
+    it( 'can be obtained', function() {
+        expect( Form.getRequiredTransformerVersion() ).toBeGreaterThan( '1.11.99' );
+    } );
+} );
