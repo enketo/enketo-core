@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Clearing of irrelevant fields</h:title>
+    <model>
+      <instance>
+        <relevant-default id="relevant-default">
+          <one/>
+          <two>two</two>
+          <grp>
+            <three>three</three>
+          </grp>
+          <meta>
+            <instanceID/>
+          </meta>
+        </relevant-default>
+      </instance>
+      <bind nodeset="/relevant-default/one" type="string"/>
+      <bind nodeset="/relevant-default/two" relevant="string-length( /relevant-default/one ) &gt; 0" type="string"/>
+      <bind nodeset="/relevant-default/grp" relevant="string-length( /relevant-default/one ) &gt; 0"/>
+      <bind nodeset="/relevant-default/grp/three" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/relevant-default/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/relevant-default/one">
+      <label>Enter text</label>
+    </input>
+    <input ref="/relevant-default/two">
+      <label>Enter text</label>
+    </input>
+    <group ref="/relevant-default/grp">
+      <input ref="/relevant-default/grp/three">
+        <label>Enter number</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>

@@ -3,12 +3,12 @@ var Form = require( '../../src/js/Form' );
 var $ = require( 'jquery' );
 var forms = require( '../mock/forms' );
 
-var loadForm = function( filename, editStr ) {
+var loadForm = function( filename, editStr, options ) {
     var strings = forms[ filename ];
     return new Form( strings.html_form, {
         modelStr: strings.xml_model,
         instanceStr: editStr
-    } );
+    }, options );
 };
 
 describe( 'Output functionality ', function() {
@@ -473,12 +473,82 @@ describe( 'branching functionality', function() {
             expect( $nestedBranch.hasClass( 'pre-init' ) ).toBe( false );
             expect( $nestedBranch.hasClass( 'disabled' ) ).toBe( false );
         } );
+    } );
 
+    describe( 'handles clearing of values in irrelevant branches', function() {
+        var name = 'relevant-default.xml';
+        var one = '/relevant-default/one'
+        var two = '/relevant-default/two';
+        var three = '/relevant-default/grp/three';
+
+        it( 'by not clearing UPON LOAD', function() {
+            var form = loadForm( name );
+            form.init();
+            expect( form.getView().$.find( '[name="' + two + '"]' ).closest( '.disabled' ).length ).toEqual( 1 );
+            expect( form.getView().$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 1 );
+            expect( form.getModel().node( two ).getVal()[ 0 ] ).toEqual( 'two' );
+            expect( form.getModel().node( three ).getVal()[ 0 ] ).toEqual( 'three' );
+        } );
+
+        it( 'by not clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantsImmediately is set to false', function() {
+            var form = loadForm( name, null, {
+                clearIrrelevantImmediately: false
+            } );
+            form.init();
+            var $one = form.getView().$.find( '[name="' + one + '"]' );
+            // enable
+            $one.val( 'text' ).trigger( 'change' );
+            expect( form.getView().$.find( '[name="' + two + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            expect( form.getView().$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            // disable
+            $one.val( '' ).trigger( 'change' );
+            expect( form.getModel().node( two ).getVal()[ 0 ] ).toEqual( 'two' );
+            expect( form.getModel().node( three ).getVal()[ 0 ] ).toEqual( 'three' );
+        } );
+
+        it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is set to true', function() {
+            var form = loadForm( name, null, {
+                clearIrrelevantImmediately: true
+            } );
+            form.init();
+            var $one = form.getView().$.find( '[name="' + one + '"]' );
+            // enable
+            $one.val( 'text' ).trigger( 'change' );
+            expect( form.getView().$.find( '[name="' + two + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            expect( form.getView().$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            // disable
+            $one.val( '' ).trigger( 'change' );
+            expect( form.getModel().node( two ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.getModel().node( three ).getVal()[ 0 ] ).toEqual( '' );
+        } );
+
+        it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is not set', function() {
+            var form = loadForm( name );
+            form.init();
+            var $one = form.getView().$.find( '[name="' + one + '"]' );
+            // enable
+            $one.val( 'text' ).trigger( 'change' );
+            expect( form.getView().$.find( '[name="' + two + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            expect( form.getView().$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            // disable
+            $one.val( '' ).trigger( 'change' );
+            expect( form.getModel().node( two ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.getModel().node( three ).getVal()[ 0 ] ).toEqual( '' );
+        } );
+
+        it( 'by clearing values of irrelevant questions when form.clearIrrelevant() is called', function() {
+            var form = loadForm( name );
+            form.init();
+            expect( form.getModel().node( two ).getVal()[ 0 ] ).toEqual( 'two' );
+            expect( form.getModel().node( three ).getVal()[ 0 ] ).toEqual( 'three' );
+            form.clearIrrelevant();
+            expect( form.getModel().node( two ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.getModel().node( three ).getVal()[ 0 ] ).toEqual( '' );
+        } );
 
     } );
 
 } );
-
 
 describe( 'validation', function() {
 

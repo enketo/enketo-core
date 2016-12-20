@@ -38,6 +38,9 @@ if ( getURLParameter( 'xform' ) !== 'null' ) {
 
 // validate handler for validate button
 $( '#validate-form' ).on( 'click', function() {
+    // clear data from all irrelevant fields (only necessary when form is instantiated with option `clearIrrelevantImmediately: false`)
+    form.clearIrrelevant();
+    // validate form
     form.validate()
         .then( function( valid ) {
             if ( !valid ) {
@@ -60,6 +63,7 @@ function initializeForm() {
             webMapId: 'f2e9b762544945f390ca4ac3671cfa72',
             hasZ: true
         }
+        "clearIrrelevantImmediately": false
     } );
     // for debugging
     window.form = form;

@@ -53,7 +53,7 @@ define( function( require, exports, module ) {
         var $form;
         var $formClone;
         var repeatsPresent;
-        var fixExpr;
+        var replaceChoiceNameFn;
         var loadErrors = [];
 
         /**
@@ -75,11 +75,11 @@ define( function( require, exports, module ) {
 
             loadErrors = loadErrors.concat( model.init() );
 
-            form = new FormView( formSelector );
+            form = new FormView( formSelector, options );
 
             repeatsPresent = ( $( formSelector ).find( '.or-repeat' ).length > 0 );
 
-            loadErrors = loadErrors.concat( form.init( options ) );
+            loadErrors = loadErrors.concat( form.init() );
 
             document.querySelector( 'body' ).scrollIntoView();
 
@@ -147,6 +147,12 @@ define( function( require, exports, module ) {
         this.getSurveyName = function() {
             return $form.find( '#form-title' ).text();
         };
+        /**
+         * Clears the values of all irrelevant questions in the model (and view).
+         */
+        this.clearIrrelevant = function() {
+            return form.branchUpdate( null, true );
+        };
 
         /**
          * Restores HTML form to pre-initialized state. It is meant to be called before re-initializing with
@@ -184,7 +190,7 @@ define( function( require, exports, module ) {
 
         /**
          * Implements jr:choice-name
-         * TODO: this needs to work for all expressions (relevants, constraints), now it only works for calulated items
+         * TODO: this needs to work for all expressions (relevants, constraints), now it only works for calculated items
          * Ideally this belongs in the form Model, but unfortunately it needs access to the view
          * 
          * @param  {[type]} expr       [description]
@@ -194,7 +200,7 @@ define( function( require, exports, module ) {
          * @param  {[type]} tryNative  [description]
          * @return {[type]}            [description]
          */
-        fixExpr = function( expr, resTypeStr, selector, index, tryNative ) {
+        replaceChoiceNameFn = function( expr, resTypeStr, selector, index, tryNative ) {
             var value;
             var name;
             var $input;
@@ -225,15 +231,19 @@ define( function( require, exports, module ) {
          * @extends Form
          */
 
-        function FormView( selector ) {
+        function FormView( selector, options ) {
             //there will be only one instance of FormView
             $form = $( selector );
             //used for testing
             this.$ = $form;
             this.$nonRepeats = {};
+            this.options = typeof options !== 'object' ? {} : options;
+            if ( typeof this.options.clearIrrelevantImmediately === 'undefined' ) {
+                this.options.clearIrrelevantImmediately = true;
+            }
         }
 
-        FormView.prototype.init = function( options ) {
+        FormView.prototype.init = function() {
             var that = this;
 
             if ( typeof model === 'undefined' || !( model instanceof FormModel ) ) {
@@ -268,12 +278,12 @@ define( function( require, exports, module ) {
                 this.setAllVals();
 
                 // after setAllVals(), after repeat.init()
-                options = typeof options !== 'object' ? {} : options;
-                options.input = this.input;
-                options.pathToAbsolute = this.pathToAbsolute;
-                options.evaluate = model.evaluate.bind( model );
-                options.formClasses = utils.toArray( $form.get( 0 ).classList );
-                widgets.init( null, options );
+
+                this.options.input = this.input;
+                this.options.pathToAbsolute = this.pathToAbsolute;
+                this.options.evaluate = model.evaluate.bind( model );
+                this.options.formClasses = utils.toArray( $form.get( 0 ).classList );
+                widgets.init( null, this.options );
 
                 // after widgets.init(), and repeat.init()
                 this.branchUpdate();
@@ -937,7 +947,7 @@ define( function( require, exports, module ) {
          *
          * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
          */
-        FormView.prototype.branchUpdate = function( updated ) {
+        FormView.prototype.branchUpdate = function( updated, forceClearIrrelevant ) {
             var p;
             var $branchNode;
             var result;
@@ -1108,13 +1118,15 @@ define( function( require, exports, module ) {
                 var type = $branchNode.prop( 'nodeName' ).toLowerCase();
                 var virgin = $branchNode.hasClass( 'pre-init' );
 
-                if ( virgin || selfRelevant( $branchNode ) ) {
+                if ( virgin || selfRelevant( $branchNode ) || forceClearIrrelevant ) {
                     branchChange = true;
                     $branchNode.addClass( 'disabled' );
                     widgets.disable( $branchNode );
                     // if the branch was previously enabled
                     if ( !virgin ) {
-                        $branchNode.clearInputs( 'change' );
+                        if ( that.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
+                            $branchNode.clearInputs( 'change' );
+                        }
                         // all remaining fields marked as invalid can now be marked as valid
                         $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
                             that.setValid( $( this ) );
@@ -1422,7 +1434,7 @@ define( function( require, exports, module ) {
                 function updateCalc( index ) {
 
                     //not sure if using 'string' is always correct
-                    expr = fixExpr( expr, 'string', name, index );
+                    expr = replaceChoiceNameFn( expr, 'string', name, index );
 
                     // it is possible that the fixed expr is '' which causes an error in XPath
                     result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index ) : '';

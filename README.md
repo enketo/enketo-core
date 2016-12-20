@@ -41,14 +41,20 @@ var data = {
 	external: []
 };
 
+// form-specific configuration
+var options = {
+    clearIrrelevantImmediately: true
+}
+
 // instantiate a form, with 2 parameters
-var form = new Form( formSelector, data);
+var form = new Form( formSelector, data, options);
 
 // initialize the form and capture any load errors
 var loadErrors = form.init();
 
 // submit button handler for validate button
 $( '#submit' ).on( 'click', function() {
+    form.clearIrrelevant();
     form.validate()
     	.then(function (valid){
     		if ( !valid ) {
@@ -83,9 +89,9 @@ The following browsers are officially supported:
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 Note that some applications using Enketo Core (e.g. Enketo Express) may have more limited browser support. 
 
-### Configuration
+### Global Configuration
 
-Configuration is done in [config.json](./config.json). 
+Global configuration (per app) is done in [config.json](./config.json) which is meant to be overriden by a config file in your own application (e.g. by using aliasify).
 
 #### maps
 The `maps` configuration can include an array of Mapbox TileJSON objects (or a subset of these with at least a `name`,  `tiles` (array) and an `attribution` property, and optionally `maxzoom` and `minzoom`). You can also mix and match Google Maps layers. Below is an example of a mix of two map layers provided by OSM (in TileJSON format) and Google maps.
@@ -106,6 +112,22 @@ For GMaps layers you have the four options as tiles values: `"GOOGLE_SATELLITE"`
 #### googleApiKey
 The Google API key that is used for geolocation (in the geo widgets' search box). Can be obtained [here](https://console.developers.google.com/project). Make sure to enable the _GeoCoding API_ service. If you are using Google Maps layers, the same API key is used. Make sure to enable the _Google Maps JavaScript API v3_ service as well in that case (see next item).
 
+
+### Form Configuration
+
+Per-form configuration is done by adding an (optional) options object as 3rd parameter when instantiating a form.
+
+#### Behaviour of skip logic
+
+```
+    new Form(formselector, data, { 
+        clearIrrelevantImmediately: false
+    });
+```
+
+If clearIrrelevantImmediately is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
+
+In the second case you have to manually call form.clearIrrelevant() to empty irrelevant values (e.g. when the user marks a record as complete). This would not be necessary in the first case.
 
 ### How to develop Enketo Core
 

@@ -6,7 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ---------------------
 ##### Added
-- Static method to obtain required enketo-transformer version (Form.getRequiredTransformerVersion)
+- Static method to obtain required enketo-transformer version (Form.getRequiredTransformerVersion).
+- Option to let engine keep irrelevant values until new function `clearIrrelevant` is called.
 
 [4.16.2] - 2016-12-14
 ---------------------
