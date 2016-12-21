@@ -114,7 +114,7 @@ module.exports = function( grunt ) {
         uglify: {
             standalone: {
                 files: {
-                    'build/js/enketo-bundle.min.js': [ 'build/js/enketo-bundle.js' ]
+                    'build/js/enketo-bundle.js': [ 'build/js/enketo-bundle.js' ]
                 },
             },
         },
