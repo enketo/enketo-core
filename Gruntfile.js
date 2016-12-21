@@ -156,6 +156,6 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'transforms', 'karma:headless', 'style' ] );
     grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
-    grunt.registerTask( 'develop', [ 'browserify', 'concurrent:develop' ] );
+    grunt.registerTask( 'develop', [ 'style', 'browserify', 'concurrent:develop' ] );
     grunt.registerTask( 'default', [ 'style', 'compile' ] );
 };
