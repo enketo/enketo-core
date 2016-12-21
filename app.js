@@ -24,7 +24,7 @@ if ( getURLParameter( 'touch' ) === 'true' ) {
 // check if HTML form is hardcoded or needs to be retrieved
 if ( getURLParameter( 'xform' ) !== 'null' ) {
     $( '.guidance' ).remove();
-    $.getJSON( 'http://xslt-dev.enketo.org/transform?xform=' + getURLParameter( 'xform' ), function( survey ) {
+    $.getJSON( 'http://localhost:8085/transform?xform=' + getURLParameter( 'xform' ), function( survey ) {
         formStr = survey.form;
         modelStr = survey.model;
         $( '.form-header' ).after( formStr );

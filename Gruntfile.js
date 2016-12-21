@@ -18,7 +18,7 @@ module.exports = function( grunt ) {
         pkg: grunt.file.readJSON( 'package.json' ),
         concurrent: {
             develop: {
-                tasks: [ 'connect:server:keepalive', 'watch' ],
+                tasks: [ 'shell:transformer', 'connect:server:keepalive', 'watch' ],
                 options: {
                     logConcurrentOutput: true
                 }
@@ -118,6 +118,11 @@ module.exports = function( grunt ) {
                 },
             },
         },
+        shell: {
+            transformer: {
+                command: 'node node_modules/enketo-transformer/app.js'
+            },
+        }
     } );
 
     grunt.loadNpmTasks( 'grunt-sass' );
