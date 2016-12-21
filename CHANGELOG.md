@@ -3,11 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.17.0] - 2016-12-22
 ---------------------
 ##### Added
 - Static method to obtain required enketo-transformer version (Form.getRequiredTransformerVersion).
 - Option to let engine keep irrelevant values until new function `clearIrrelevant` is called.
+
+##### Fixed
+- Various issues with grunt that made it harder to start developing on enketo-core.
 
 [4.16.2] - 2016-12-14
 ---------------------

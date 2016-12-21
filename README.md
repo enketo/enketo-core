@@ -11,7 +11,7 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 ### Usage as a library
 
 1. Install with `npm install enketo-core --save` or include as a git submodule.
-2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example. For development purposes you may also use the free (and slow, not robust at all) API provided by Enketo LLC at [http://xslt-dev.enketo.org/transform](http://xslt-dev.enketo.org/transform/) (add `?xform=http://myforms.com/myform.xml` to use API).
+2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example.
 3. Add [themes](./src/sass) to your stylesheet build system (2 stylesheets per theme, 1 is for `media="print"`).
 4. Override [config.json](./config.json) and optionally [widgets.js](./src/js/widgets.js) with your app-specific versions.
 5. Main methods illustrated in code below:
