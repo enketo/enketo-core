@@ -28,7 +28,7 @@ module.exports = function( grunt ) {
             server: {
                 options: {
                     port: 8005,
-                    base: ['forms', 'build']
+                    base: [ 'forms', 'build' ]
                 }
             },
             test: {
