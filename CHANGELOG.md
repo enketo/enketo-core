@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.17.1] - 2016-12-22
+---------------------
+##### Fixed 
+- Enketo transformer version in getRequiredTransformerVersion not up to date.
+
 [4.17.0] - 2016-12-22
 ---------------------
 ##### Added
