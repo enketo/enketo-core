@@ -1,9 +1,6 @@
 /node_modules/
 /build/css/
-/build/fetch/
 /build/js/
-/build/lib/
-/lib/bower-components/
 /test/mock/forms.json
 temp
 .sass-cache
@@ -11,7 +8,6 @@ temp
 .grunt
 *.sublime-project
 *.sublime-workspace
-_site
 _SpecRunner.html
 npm-debug.log
 /src/widget/geo-esri/esri/**/*.js
