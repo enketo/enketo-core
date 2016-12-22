@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.17.2] - 2016-12-23
+---------------------
+##### Changed
+- No longer need to call function `clearIrrelevant`. The form.validate() call will automatically clear them.
+
 [4.17.1] - 2016-12-22
 ---------------------
 ##### Fixed 

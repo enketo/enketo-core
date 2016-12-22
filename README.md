@@ -54,7 +54,7 @@ var loadErrors = form.init();
 
 // submit button handler for validate button
 $( '#submit' ).on( 'click', function() {
-    form.clearIrrelevant();
+    // clear irrelevant questions and validate
     form.validate()
     	.then(function (valid){
     		if ( !valid ) {
@@ -127,7 +127,7 @@ Per-form configuration is done by adding an (optional) options object as 3rd par
 
 If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
 
-In the second case you have to manually call `form.clearIrrelevant()` to empty irrelevant values (e.g. when the user marks a record as complete). This would not be necessary in the first case.
+In the second case the irrelevant values will not be cleared until `form.validate()` is called (usually when the user marks a record as complete).
 
 ### How to develop Enketo Core
 

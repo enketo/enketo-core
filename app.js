@@ -38,8 +38,6 @@ if ( getURLParameter( 'xform' ) !== 'null' ) {
 
 // validate handler for validate button
 $( '#validate-form' ).on( 'click', function() {
-    // clear data from all irrelevant fields (only necessary when form is instantiated with option `clearIrrelevantImmediately: false`)
-    form.clearIrrelevant();
     // validate form
     form.validate()
         .then( function( valid ) {

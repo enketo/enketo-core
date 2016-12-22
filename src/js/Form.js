@@ -151,7 +151,7 @@ define( function( require, exports, module ) {
          * Clears the values of all irrelevant questions in the model (and view).
          */
         this.clearIrrelevant = function() {
-            return form.branchUpdate( null, true );
+            return form.clearIrrelevant();
         };
 
         /**
@@ -1985,11 +1985,22 @@ define( function( require, exports, module ) {
             this.input.getWrapNodes( $node ).addClass( 'invalid-' + type ).find( '.required-subtle' ).attr( 'style', 'color: transparent;' );
         };
 
+        FormView.prototype.clearIrrelevant = function() {
+            this.branchUpdate( null, true );
+        };
+
         /**
-         * Validates all enabled input fields after first resetting everything as valid.
+         * Clears all irrelevant question values if necessary and then 
+         * validates all enabled input fields after first resetting everything as valid.
+         * 
          * @return {Promise} wrapping {boolean} whether the form contains any errors
          */
         FormView.prototype.validateAll = function() {
+            // to not delay validation unneccessarily we only clear irrelevants if necessary
+            if ( this.options.clearIrrelevantImmediately === false ) {
+                this.clearIrrelevant();
+            }
+
             return this.validateContent( $form )
                 .then( function( valid ) {
                     $form.trigger( 'validated.enketo' );
