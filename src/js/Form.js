@@ -1908,23 +1908,30 @@ define( function( require, exports, module ) {
             //using fakefocus because hidden (by widget) elements won't get focus
             $form.on( 'focus blur fakefocus fakeblur', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
                 var $input = $( this );
-                var props = that.input.getProps( $input );
+                var props = {
+                    path: that.input.getName( $input ),
+                    val: that.input.getVal( $input ),
+                    required: that.input.getRequired( $input ),
+                    index: that.input.getIndex( $input )
+                };
                 var $question = $input.closest( '.question' );
                 var $legend = $question.find( 'legend' ).eq( 0 );
                 var loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' );
                 var insideTable = ( $input.parentsUntil( '.or', '.or-appearance-list-nolabel' ).length > 0 );
                 var $reqSubtle = $question.find( '.required-subtle' );
                 var reqSubtleTxt = t( 'form.required' );
+                var requiredCheck = ( props.required ) ? model.node( props.path, props.index ).validateRequired( props.required ) : null;
 
                 if ( event.type === 'focusin' || event.type === 'fakefocus' ) {
                     $question.addClass( 'focus' );
-                    if ( props.required && $reqSubtle.length === 0 && !insideTable ) {
+                    if ( requiredCheck && $reqSubtle.length === 0 && !insideTable ) {
                         $reqSubtle = $( '<span class="required-subtle" style="color: transparent;">' + reqSubtleTxt + '</span>' );
-
+                        requiredCheck.then( function( passed ) {
+                            if ( passed === false ) {
                         if ( $legend.length > 0 ) {
                             $legend.append( $reqSubtle );
                         } else {
-                            $reqSubtle.insertBefore( this );
+                                    $reqSubtle.insertBefore( $input );
                         }
 
                         if ( !loudErrorShown ) {
@@ -1932,13 +1939,19 @@ define( function( require, exports, module ) {
                                 $( this ).removeAttr( 'style' );
                             } );
                         }
+                            }
+                        } );
                     } else if ( !loudErrorShown ) {
                         //$question.addClass( 'focus' );
                     }
                 } else if ( event.type === 'focusout' || event.type === 'fakeblur' ) {
                     $question.removeClass( 'focus' );
-                    if ( props.required && props.val.length > 0 ) {
+                    if ( requiredCheck ) {
+                        requiredCheck.then( function( passed ) {
+                            if ( passed === true ) {
                         $reqSubtle.remove();
+                            }
+                        } );
                     } else if ( !loudErrorShown ) {
                         $reqSubtle.removeAttr( 'style' );
                     }
