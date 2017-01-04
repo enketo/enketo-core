@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Subtle ‘required’ message remains visible for empty questions with dynamic required expressions that evaluate to false().
+
 [4.17.2] - 2016-12-23
 ---------------------
 ##### Changed

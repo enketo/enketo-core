@@ -1928,17 +1928,17 @@ define( function( require, exports, module ) {
                         $reqSubtle = $( '<span class="required-subtle" style="color: transparent;">' + reqSubtleTxt + '</span>' );
                         requiredCheck.then( function( passed ) {
                             if ( passed === false ) {
-                        if ( $legend.length > 0 ) {
-                            $legend.append( $reqSubtle );
-                        } else {
+                                if ( $legend.length > 0 ) {
+                                    $legend.append( $reqSubtle );
+                                } else {
                                     $reqSubtle.insertBefore( $input );
-                        }
+                                }
 
-                        if ( !loudErrorShown ) {
-                            $reqSubtle.show( function() {
-                                $( this ).removeAttr( 'style' );
-                            } );
-                        }
+                                if ( !loudErrorShown ) {
+                                    $reqSubtle.show( function() {
+                                        $( this ).removeAttr( 'style' );
+                                    } );
+                                }
                             }
                         } );
                     } else if ( !loudErrorShown ) {
@@ -1949,7 +1949,7 @@ define( function( require, exports, module ) {
                     if ( requiredCheck ) {
                         requiredCheck.then( function( passed ) {
                             if ( passed === true ) {
-                        $reqSubtle.remove();
+                                $reqSubtle.remove();
                             }
                         } );
                     } else if ( !loudErrorShown ) {
