@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.17.3] - 2017-01-05
 ---------------------
 ##### Fixed
 - Subtle ‘required’ message remains visible for empty questions with dynamic required expressions that evaluate to false().
+- When question has a comment widget and is in an invalid state, this state is not removed when the comment value changes and makes the question valid.
 
 [4.17.2] - 2016-12-23
 ---------------------

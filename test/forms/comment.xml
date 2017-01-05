@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:enk="http://enketo.org/xforms">
+  <h:head>
+    <h:title>Comment Demo</h:title>
+    <model>
+      <instance>
+        <comment id="comment">
+          <one/>
+          <one_comment/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </comment>
+      </instance>
+      <bind nodeset="/comment/one" required=" /comment/one_comment  = ''" type="int"/>
+      <bind nodeset="/comment/one_comment" enk:for=" /comment/one " type="string"/>
+      <bind nodeset="/comment/meta/instanceID" jr:preload="uid" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/comment/one">
+      <label>Enter number</label>
+    </input>
+    <input appearance="multiline comment" ref="/comment/one_comment">
+      <label>Enter a comment</label>
+    </input>
+  </h:body>
+</h:html>

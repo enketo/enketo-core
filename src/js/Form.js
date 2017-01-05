@@ -739,6 +739,9 @@ define( function( require, exports, module ) {
                 $inputNodes.val( value ).trigger( 'inputupdate.enketo' );
 
                 return;
+            },
+            validate: function( $input ) {
+                return form.validateInput( $input );
             }
         };
 
@@ -1990,7 +1993,7 @@ define( function( require, exports, module ) {
 
         FormView.prototype.setValid = function( $node, type ) {
             var classes = ( type ) ? 'invalid-' + type : 'invalid-constraint invalid-required';
-            this.input.getWrapNodes( $node ).removeClass( classes );
+            this.input.getWrapNodes( $node ).removeClass( classes ).find( '.required-subtle' ).remove();
         };
 
         FormView.prototype.setInvalid = function( $node, type ) {

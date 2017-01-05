@@ -945,6 +945,29 @@ describe( 'Itemset functionality', function() {
     } );
 } );
 
+describe( 're-validating inputs and updating user feedback', function() {
+    var form = loadForm( 'comment.xml' );
+    var $one;
+    form.init();
+    $one = form.getView().$.find( '[name="/comment/one"]' );
+    $oneComment = form.getView().$.find( '[name="/comment/one_comment"]' );
+    it( 'works', function( done ) {
+        // set question "one" in invalid state (automatic)
+        $one.val( '3' ).trigger( 'change' ).val( '' ).trigger( 'change' );
+        // validation is asynchronous
+        setTimeout( function() {
+            expect( $one.closest( '.question' ).hasClass( 'invalid-required' ) ).toBe( true );
+            // test relates to https://github.com/kobotoolbox/enketo-express/issues/608
+            // input.validate is called by a comment widget on the linked question when the comment value changes
+            // set question in valid state (not automatic, but by calling input.validate)
+            $oneComment.val( 'comment' ).trigger( 'change' );
+            form.getView().input.validate( $one ).then( function() {
+                expect( $one.closest( '.question' ).hasClass( 'invalid-required' ) ).toBe( false );
+                done();
+            } );
+        }, 500 );
+    } );
+} );
 
 describe( 'clearing inputs', function() {
     var $fieldset = $( '<fieldset><input type="number" value="23" /><input type="text" value="abc" /><textarea>abcdef</textarea></fieldset>"' );
