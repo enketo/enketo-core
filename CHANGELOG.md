@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Horizontal analog scale label and slider overlap on small screens.
+
 [4.17.3] - 2017-01-05
 ---------------------
 ##### Fixed

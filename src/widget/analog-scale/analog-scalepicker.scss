@@ -321,10 +321,12 @@ $q-pad-right: 0px !default;
 // corrections for small screens
 @media screen and (max-width: 500px) {
     .or-appearance-analog-scale {
+        .slider-horizontal:not(.or-comment-widget) {
+            margin-top: 35px;
+        }
+
         .slider-horizontal {
             @include flex-wrap(wrap);
-
-            margin-top: 45px;
 
             .slider {
                 @include flex(100%);
