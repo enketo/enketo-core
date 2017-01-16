@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.18.0] - 2017-01-18
 ---------------------
+##### Changed
+- Valuechange.enketo event not fires *after* validation and passes a boolean representing the combined validation result.
+
 ##### Fixed
 - Horizontal analog scale label and slider overlap on small screens.
 

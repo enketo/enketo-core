@@ -1896,10 +1896,13 @@ define( function( require, exports, module ) {
                     updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr );
                     validCheck = ( updated ) ? updated.validCheck : Promise.resolve( null );
                     requiredCheck = ( updated ) ? updated.requiredCheck : Promise.resolve( null );
-                    that.validationFeedback( $( this ), validCheck, requiredCheck );
+                    that.validationFeedback( $input, validCheck, requiredCheck )
+                        .then( function( valid ) {
+                            // propagate event externally after internal processing is completed
+                            $input.trigger( 'valuechange.enketo', valid );
+                        } );
 
-                    // propagate event externally after internal processing is completed
-                    $form.trigger( 'valuechange.enketo' );
+
                 } );
 
             // doing this on the focus event may have little effect on performance, because nothing else is happening :)
@@ -2177,6 +2180,14 @@ define( function( require, exports, module ) {
             return this.validationFeedback( $input, validCheck, requiredCheck );
         };
 
+        /**
+         * Provide validation feedback to user.
+         *
+         * @param  {jQuery} $input         jQuery collection containing an input element
+         * @param  {Promise} validCheck    Promise returning boolean indicating result of constraint/type check
+         * @param  {Promise} requiredCheck Promise returning boolean indicating result of required check
+         * @return {boolean}               boolean to indicate whether the value is valid
+         */
         FormView.prototype.validationFeedback = function( $input, validCheck, requiredCheck ) {
             var that = this;
             return requiredCheck
@@ -2192,9 +2203,12 @@ define( function( require, exports, module ) {
                 } ).then( function( passed ) {
                     if ( passed === false ) {
                         that.setInvalid( $input, 'constraint' );
+                        return false;
                     } else if ( passed !== null ) {
                         that.setValid( $input, 'constraint' );
+                        return true;
                     }
+                    return false;
                 } )
                 .catch( function( e ) {
                     that.setInvalid( $input, 'constraint' );
