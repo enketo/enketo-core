@@ -156,7 +156,7 @@ $media-margin: 10px;
 // The only remaining difference between .question and .note.
 // All other differences are triggered by the readonly attribute on an input/select/textarea.
 .question:not(.note) {
-    @include font-bold;
+    font-weight: bold;
 }
 
 .question {
@@ -478,8 +478,7 @@ legend .required {
 }
 
 .or-required-msg.active, .or-constraint-msg.active {
-    @include font-bold;
-
+    font-weight: bold;
     padding-top: 5px;
     font-size: 0.85em;
     color: $state-danger-text;

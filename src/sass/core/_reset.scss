@@ -14,6 +14,7 @@ html {
 
 body {
     @include font-normal;
+
     font-size: $font-size-base;
     line-height: $line-height-base;
     color: $text-color;
@@ -31,10 +32,12 @@ textarea {
 
 a {
     color: $link-color;
+
     &:hover,
     &:focus {
         color: $link-hover-color;
     }
+
     &:focus {
         @include tab-focus;
     }
@@ -56,7 +59,7 @@ hr {
 }
 
 strong {
-    @include font-bold;
+    font-weight: bold;
 }
 
 h1 {
@@ -84,9 +87,9 @@ h6 {
 }
 
 h2, h3, h4 {
-    @include font-bold;
+    font-weight: bold;
 }
 
 input, select, textarea {
-    @include font-normal;
+    font-weight: normal;
 }

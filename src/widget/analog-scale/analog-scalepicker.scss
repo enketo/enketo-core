@@ -151,8 +151,7 @@ $q-pad-right: 0px !default;
     }
 
     .show-value__value {
-        @include font-bold;
-
+        font-weight: bold;
         font-size: $font-size-base * 1.25;
         padding: 8px;
         display: block;
