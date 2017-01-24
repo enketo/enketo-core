@@ -91,6 +91,17 @@ module.exports = function( grunt ) {
             }
         },
         sass: {
+            options: {
+                sourceMap: false,
+                // this importer should be removed (npm 3+) or changed(npm 2) in the gruntFile of the app that is using enketo-core
+                importer: function( url, prev, done ) {
+                    // fixes enketo-core submodule references
+                    url = ( /\.\.\/\.\.\/node_modules\//.test( url ) ) ? url.replace( '../../node_modules/', 'node_modules/' ) : url;
+                    done( {
+                        file: url
+                    } );
+                }
+            },
             compile: {
                 cwd: 'src/sass',
                 dest: 'build/css',

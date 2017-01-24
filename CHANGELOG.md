@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.19.0] - 2017-01-24
+---------------------
+##### Changed
+- Sass build now working out-of-box with npm 3.x and npm 4.x. **Warning: check the sass build config in your app. You may need to simplify it and/or upgrade npm.**
+
 [4.18.0] - 2017-01-18
 ---------------------
 ##### Changed
