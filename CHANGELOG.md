@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Date, time and datetime pickers on non-touch screens now allow manual input as well.
+
 [4.19.0] - 2017-01-24
 ---------------------
 ##### Changed

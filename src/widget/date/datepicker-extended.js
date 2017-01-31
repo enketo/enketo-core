@@ -103,7 +103,7 @@ define( function( require, exports, module ) {
     DatepickerExtended.prototype._createFakeDateInput = function( format ) {
         var $dateI = $( this.element ),
             $fakeDate = $(
-                '<div class="widget date"><input class="ignore input-small" readonly="readonly" type="text" value="' +
+                '<div class="widget date"><input class="ignore input-small" type="text" value="' +
                 $dateI.val() + '" placeholder="' + format + '" />' +
                 '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button></div>' ),
             //$fakeDateReset = $fakeDate.find( '.btn-reset' ),

@@ -132,7 +132,7 @@ define( function( require, exports, module ) {
     DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
         var $fakeDate = $(
                 '<div class="date">' +
-                '<input class="ignore input-small" type="text" readonly="readonly" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
+                '<input class="ignore input-small" type="text" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
                 '</div>' ),
             $fakeDateI = $fakeDate.find( 'input' );
 
@@ -147,7 +147,7 @@ define( function( require, exports, module ) {
     DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
         var $fakeTime = $(
                 '<div class="bootstrap-timepicker">' +
-                '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' +
+                '<input class="ignore timepicker-default input-small" type="text" value="' +
                 timeVal + '" placeholder="hh:mm"/>' +
                 '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button>' +
                 '</div>' ),

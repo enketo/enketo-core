@@ -58,7 +58,7 @@ define( function( require, exports, module ) {
         var $timeI = $( this.element ),
             timeVal = $( this.element ).val(),
             $fakeTime = $( '<div class="widget bootstrap-timepicker">' +
-                '<input class="ignore timepicker-default input-small" readonly="readonly" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
+                '<input class="ignore timepicker-default input-small" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
                 '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button></div>' ),
             $fakeTimeReset = $fakeTime.find( '.btn-reset' ),
             $fakeTimeI = $fakeTime.find( 'input' );
