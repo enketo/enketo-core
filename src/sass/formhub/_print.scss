@@ -1,36 +1,25 @@
-/** FORMHUB THEME **/
-@mixin fancy-radio-check-print($pos: before) {
-    label {
-        input[type=checkbox] {
-            &:not(:checked) ~ .option-label::#{$pos} {
-                content: '\e60b' !important;
-                color: black;
-            }
-            &:checked ~ .option-label::#{$pos} {
-                content: '\e60c' !important;
-                color: black;
-            }
-        }
-        input[type=radio] {
-            &:not(:checked) ~ .option-label::#{$pos} {
-                content: '\e607' !important;
-                color: black;
-            }
-            &:checked ~ .option-label::#{$pos} {
-                content: '\e606' !important;
-                color: black;
-            }
-        }
-    }
-}
-
 .question {
-    @include fancy-radio-check-print(before);
-}
+    input {
+        &[type=radio], &[type=checkbox] {
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            border-color: black;
+            border-width: 1px;
 
-.or[dir="rtl"] {
-    .question:not(.or-appearance-label):not(.appearance-likert):not(.or-appearance-list-nolabel):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
-        @include fancy-radio-check-print(after);
+            &:checked {
+                border-color: black;
+            }
+        }
+
+        &[type=checkbox]:checked {
+            @include checkbox-checked-style(black, transparent);
+
+            background-position: -1px;
+        }
+
+        &[type=radio]:checked {
+            @include radio-checked-style(black);
+        }
     }
 }
 

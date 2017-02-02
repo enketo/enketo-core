@@ -40,8 +40,21 @@
     }
 }
 
-.or-appearance-likert .option-wrapper > label .option-label {
-    border-top-width: 1.5px;
+.or-appearance-likert .option-wrapper {
+    // Not clear to me why all these likert fixes are necessary
+    margin-top: 20px;
+
+    > label {
+        margin-bottom: 30px;
+
+        input[type=radio], input[type=checkbox] {
+            margin-top: -45px;
+        }
+
+        .option-label {
+            border-top-width: 1.5px;
+        }
+    }
 }
 
 // tables
@@ -223,7 +236,7 @@ legend .btn-comment {
 
 // select picker
 .bootstrap-select {
-    .dropdown-toggle {
+    .dropdown-toggle, .dropdown-menu {
         width: 100%;
     }
 }

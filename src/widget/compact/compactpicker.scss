@@ -23,14 +23,10 @@
 
         .option-label {
             padding: 2px;
-
-            &::before, &::after {
-                display: none;
-            }
         }
 
         .active {
-            display: block;
+            display: inline-block;
             margin-left: 0;
             margin-right: 0;
 
@@ -42,7 +38,12 @@
         }
 
         input {
-            display: none;
+            width: 1px;
+            height: 1px;
+            position: relative;
+            top: 15px;
+            left: 15px;
+            z-index: -1;
 
             &:not([disabled]):not([readonly]) ~ .active:hover {
                 border-color: lighten($brand-primary-color, 30%);
@@ -56,6 +57,10 @@
 
             &:checked ~ .active, &:checked ~ .active:hover {
                 border-color: $brand-primary-color;
+            }
+
+            &:focus ~ .active {
+                @include focus-shadow;
             }
         }
     }

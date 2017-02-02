@@ -1,19 +1,7 @@
 @mixin font-normal {
+    font-family: 'OpenSans', Arial, sans-serif;
     font-weight: normal;
-}
-
-@mixin enketo-icon {
-    font-family: 'enketo-icons';
-    speak: none;
     font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 @mixin transition-simple($transition...) {
@@ -154,9 +142,10 @@
 }
 
 @mixin appearance-none {
+    appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
-    appearance: none;
+    -ms-appearance: none;
 }
 
 @mixin display-flex {
@@ -238,7 +227,9 @@
     align-content: $val;
 }
 
-@mixin form-control {}
+@mixin form-control {
+    // just a placeholder
+}
 
 // Creates two color stops, start and end, by specifying a color and position for each color stop.
 // Color stops are not available in IE9 and below.
@@ -272,4 +263,8 @@
     margin-left: -$padding;
     margin-right: -$padding;
     width: calc(100% + ( 2 * #{$padding}));
+}
+
+@mixin focus-shadow {
+    // just a placeholder
 }

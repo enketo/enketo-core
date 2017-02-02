@@ -1,239 +1,88 @@
-$line-h: 20px;
-
-@mixin icon-size {
-    font-size: $line-h;
-    width: $line-h;
-    margin-right: 10px;
-
-    // for non-white backgrounds, round this thing
-    border-radius: 10px;
-}
-
-@mixin option-padding($dir: left) {
-    $opp-dir: right;
-
-    @if $dir == right {
-        $opp-dir: left;
-    }
-
-    .option-wrapper {
-        label {
-            padding-#{$opp-dir}: 10px;
-            padding-#{$dir}: 35px;
-        }
-
-        .option-label::before {
-            margin-#{$opp-dir}: 10px;
-            margin-#{$dir}: -30px;
-            vertical-align: bottom;
-        }
-    }
-}
-
 @mixin disabled {
     &:disabled, &[readonly] {
-        ~ .option-label::before {
-            @include disabled-radiocheck-style;
-        }
+        @include disabled-radiocheck-style;
     }
 }
 
-/* fancy radio buttons / checkboxes */
+@mixin radiocheck-setup {
+    @include appearance-none;
+
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-bottom: 0;
+    margin-top: 0;
+    border-width: 3px;
+    border-style: solid;
+}
+
+.option-wrapper {
+    line-height: 20px;
+}
+
 .question {
-    @include option-padding(left);
+    input[type=radio] {
+        @include radiocheck-setup;
 
-    label {
-        line-height: $line-h;
-        outline: 0;
+        @include radio-unchecked-style;
 
-        .option-label:not(img):not(video):not(audio) {
-            margin-left: 0;
+        @include disabled;
+
+        @include radiocheck-focus;
+
+        border-radius: 10px;
+
+        &:checked {
+            @include radio-checked-style;
+
+            @include radiocheck-focus;
         }
+    }
 
-        .option-label::before {
-            @include icon-size;
-        }
+    input[type=checkbox] {
+        @include radiocheck-setup;
 
-        input[type=radio] {
-            display: none;
+        @include checkbox-unchecked-style;
 
-            &:not(:checked) ~ .option-label::before {
-                @include radio-unchecked-icon;
-            }
+        @include disabled;
 
-            &:checked ~ .option-label::before {
-                @include radio-checked-icon;
-            }
+        @include radiocheck-focus;
 
-            @include disabled;
-        }
+        &:checked {
+            @include checkbox-checked-style;
 
-        input[type=checkbox] {
-            display: none;
-
-            &:not(:checked) ~ .option-label::before {
-                @include checkbox-unchecked-icon;
-            }
-
-            &:checked ~ .option-label::before {
-                @include checkbox-checked-icon;
-            }
-
-            @include disabled;
+            @include radiocheck-focus;
         }
     }
 }
 
 // tweak for touchscreens
 .touch .question.simple-select {
-    .option-wrapper > label {
-        padding-left: 40px;
-    }
-}
-
-.touch .or[dir="rtl"] .question.simple-select {
-    .option-wrapper > label {
-        padding-right: 40px;
-        padding-left: 10px;
+    .option-wrapper {
+        .option-label {
+            //TODO: do not yet know why this correction is necessary
+            margin-left: 35px;
+        }
     }
 }
 
 // tweaks for rtl display
-// It's actually easier to override the ltr values here because they shouldn't apply to likert and table widgets
-
 .or[dir="rtl"],
 [dir="rtl"] .form-footer {
-    .question.simple-select {
-        @include option-padding(right);
-
-        label {
-            .option-label:not(img):not(video):not(audio) {
-                margin-right: 0;
-            }
-        }
-    }
-}
-
-// triggers are odd, because of the hardcoded 'OK' in ltr characters.
-.or[dir="rtl"] {
-    .question.simple-select.trigger {
-        .option-wrapper label {
+    .question {
+        input[type=checkbox], input[type=radio] {
             margin-right: 0;
-            padding-right: 10px;
-
-            .option-label::after {
-                @include icon-size;
-
-                padding-left: 10px;
-            }
-        }
-
-        input[type=radio] {
-            &:not(:checked) ~ .option-label::before {
-                display: none;
-            }
-
-            &:checked ~ .option-label::before {
-                display: none;
-            }
-
-            &:not(:checked) ~ .option-label::after {
-                @include radio-unchecked-icon;
-            }
-
-            &:checked ~ .option-label::after {
-                @include radio-checked-icon;
-            }
-        }
-    }
-}
-
-.question.or-appearance-list-nolabel {
-    .option-wrapper {
-        .option-label.active {
-            visibility: visible;
-
-            // if important is not added below, the text shows up in prints in Chrome
-            color: transparent !important;
-
-            // IE11 requires further hacks for the actual prints
-            -ms-overflow-x: hidden !important;
-            -ms-overflow-y: hidden !important;
-            width: 22px;
-            height: 22px;
-            display: inline-block;
-
-            &::before {
-                display: inline-block;
-                margin-left: 0;
-                margin-right: 0;
-            }
-        }
-    }
-
-    input[type=radio],
-    input[type=checkbox] {
-        display: none;
-    }
-}
-
-.or-appearance-label {
-    label {
-        input[type=radio],
-        input[type=checkbox] {
-            ~ .option-label::before {
-                display: none;
-            }
+            margin-left: 10px;
         }
     }
 }
 
 // tweaks for likert widget
 .or-appearance-likert .option-wrapper {
-    padding-top: 20px;
-
     > label {
-        padding-right: 0;
-
-        input[type=radio] ~ .option-label::before,
-        input[type=checkbox] ~ .option-label::before {
-            position: absolute;
-            top: -11.5px;
-            left: 50%;
-            padding: 0;
-            margin-left: -10px;
-            background-color: white;
-            z-index: 10;
-        }
-
         .option-label {
             margin-top: -11.5px;
         }
-    }
-}
-
-.disabled .option-wrapper {
-    input[type=radio],
-    input[type=checkbox] {
-        &.option-wrapper::before {
-            cursor: default;
-            opacity: 0.5;
-        }
-    }
-}
-
-.bootstrap-select .dropdown-toggle ~ .dropdown-menu {
-    @include option-padding(left);
-}
-
-.or[dir="rtl"] .bootstrap-select .dropdown-toggle ~ .dropdown-menu {
-    @include option-padding(right);
-
-    .option-wrapper {
-        padding-right: 5px;
-    }
-
-    .option-label {
-        margin-right: 0;
     }
 }

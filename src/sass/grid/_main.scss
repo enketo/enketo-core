@@ -18,6 +18,18 @@ body {
     box-shadow: 0 0 5px #888;
 }
 
+.question {
+    input[type=radio], input[type=checkbox] {
+        border-width: 1px;
+    }
+
+    input[type=checkbox]:checked {
+        @include checkbox-checked-style($radiocheck-checked-color, transparent);
+
+        background-position: -1px;
+    }
+}
+
 /** core/main **/
 .or-group {
     margin: 0;

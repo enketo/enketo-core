@@ -1,41 +1,30 @@
-@mixin font-normal {
-    font-family: 'OpenSans', Arial, sans-serif;
-    font-weight: normal;
-    font-style: normal;
-}
+/** The next styles are meant to easily customize the background and border of radiobuttons and checkboxes, not their size! */
 
 @mixin disabled-radiocheck-style {
-    color: lighten($radiocheck-unchecked-color, 5%);
+    border-color: lighten($radiocheck-unchecked-color, 5%);
 }
 
-// !important is added to make sure a clearfix doesn't override it
-@mixin checkbox-unchecked-icon {
-    @include enketo-icon;
-
-    content: '\e601' !important;
-    color: $radiocheck-unchecked-color;
+@mixin checkbox-unchecked-style {
+    border-color: $radiocheck-unchecked-color;
 }
 
-@mixin checkbox-checked-icon {
-    @include enketo-icon;
-
-    content: '\e600' !important;
-    color: $radiocheck-checked-color;
+@mixin checkbox-checked-style($color-fill: $radiocheck-checked-color, $color-stroke: $radiocheck-checked-color) {
+    border-color: $color-fill;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' stroke='#{$color-stroke}' fill='#{$color-fill}' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M25.1 12.5l-3.4-3.3-8 8-2.9-3-3.4 3.4 6.3 6.3z'/%3E%3C/svg%3E");
+    background-size: 20px 20px;
+    background-position: -3px;
 }
 
-@mixin radio-unchecked-icon {
-    @include enketo-icon;
-
-    content: '\e60f' !important;
-    color: $radiocheck-unchecked-color;
+@mixin radio-unchecked-style {
+    border-color: $radiocheck-unchecked-color;
 }
 
-@mixin radio-checked-icon {
-    @include enketo-icon;
-
-    content: '\e603' !important;
-    color: $radiocheck-checked-color;
+@mixin radio-checked-style($color: $radiocheck-checked-color) {
+    border-color: $color;
+    background-image: radial-gradient(4px, $color 0%, $color 99%, transparent 100%);
 }
+
+/** end radiobuttons and checkboxes */
 
 @mixin placeholder($color: $input-color-placeholder) {
     &::-moz-placeholder {
@@ -58,14 +47,28 @@
     // Safari and Chrome
 }
 
-@mixin form-control-focus($color: $input-border-focus) {
-    $color-rgba: rgba(red($color), green($color), blue($color), 0.6);
+@mixin focus-shadow-border {
+    border-color: $input-border-focus;
+    outline: 0;
 
+    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px $input-border-focus-shadow);
+}
+
+@mixin focus-shadow {
+    outline: 0;
+
+    @include box-shadow(0 0 0 1px $input-border-focus, 0 0 8px $input-border-focus-shadow);
+}
+
+@mixin form-control-focus {
     &:focus {
-        border-color: $color;
-        outline: 0;
+        @include focus-shadow-border;
+    }
+}
 
-        @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px $color-rgba);
+@mixin radiocheck-focus {
+    &:focus {
+        @include focus-shadow;
     }
 }
 

@@ -37,16 +37,17 @@
                 label {
                     @include font-normal;
 
-                    padding-top: 0px;
+                    padding-top: 2px;
+                    padding-bottom: 2px;
                     padding-left: 0px;
                     font-size: $font-size-base;
 
-                    input[type="checkbox"], input[type="radio"] {
-                        margin: 4px 10px 1px 0;
-                    }
-
                     &:hover {
                         background: transparent;
+                    }
+
+                    .option-label {
+                        margin-top: 1px;
                     }
                 }
             }

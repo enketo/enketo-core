@@ -5,18 +5,19 @@
 .or-appearance-horizontal {
     .option-wrapper {
         @include display-flex;
+
         @include flex-wrap(wrap);
+
         @include flex-direction(row);
     }
+
     label, .filler {
         @include flex(1 0 30%);
     }
+
     .filler, .filler:hover, .filler:focus {
         border: none !important;
         background: transparent !important;
-    }
-    [type="radio"], [type="checkbox"] {
-        width: auto;
     }
 }
 
@@ -24,14 +25,14 @@
     // the flexiness is only for appearance=random
     .option-wrapper {
         @include display-flex;
+
         @include flex-wrap(wrap);
+
         @include flex-direction(row);
     }
+
     label {
         display: inline-block;
-    }
-    [type="radio"], [type="checkbox"] {
-        width: auto;
     }
 }
 
@@ -44,12 +45,14 @@
             }
         }
     }
+
     .or[dir=rtl] {
         // this ridiculous not:() specificity is required to combat an aggressive rule in _main.scss
         .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
             &.or-appearance-horizontal, &.or-appearance-horizontal-compact {
                 .option-wrapper > label {
                     @include margin(left);
+
                     margin-right: inherit;
                 }
             }

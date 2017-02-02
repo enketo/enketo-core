@@ -255,7 +255,7 @@ legend {
         display: block;
         margin: 0;
         cursor: pointer;
-        padding: 4px 0 4px 0;
+        padding: 4px;
         margin: 0 10px 1px 10px;
 
         // TODO: remove hover rule for tables (in likert already done)
@@ -314,8 +314,6 @@ legend {
             padding: 10px 10px 10px 10px;
 
             input[type="radio"], input[type="checkbox"] {
-                margin-top: 4px;
-
                 //slight variation between grid and fh theme for default radio/checkbox
                 margin-left: 5px;
             }
@@ -367,6 +365,7 @@ select {
         // input is floated to deal with multi-line labels
         float: left;
         display: block;
+        margin-top: 2px;
     }
 }
 
