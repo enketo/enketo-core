@@ -86,7 +86,7 @@ define( function( require, exports, module ) {
 
     Comment.prototype._setValidationHandler = function() {
         var that = this;
-        $( 'form.or' ).on( 'validated.enketo', function( evt ) {
+        $( 'form.or' ).on( 'validationcomplete.enketo', function( evt ) {
             var error = that._commentHasError();
             var value = that.element.value;
             that._setCommentButtonState( value, error );
@@ -145,6 +145,8 @@ define( function( require, exports, module ) {
              * Since a linked question and a comment belong so closely together, and likely have 
              * a `required` or `constraint` dependency, it makes sense to 
              * separately call a validate method on the linked question to update the error state if necessary.
+             *
+             * Note that with setting "validateContinously" set to "true" this means it will be validated twice.
              */
             that.options.helpers.input.validate( $( that.$linkedQuestion.get( 0 ).querySelector( 'input, select, textarea' ) ) );
             return false;

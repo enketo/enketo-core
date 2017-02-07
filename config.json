@@ -9,6 +9,7 @@
     } ],
     "googleApiKey": "",
     "repeatOrdinals": false,
+    "validateContinuously": false,
     "arcGis": {
         "jsUrl": "",
         "webMapId": "",

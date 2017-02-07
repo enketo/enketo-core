@@ -746,31 +746,6 @@ define( function( require, exports, module ) {
         } );
     };
 
-    FormModel.prototype.getXmlFragmentStr = function( node ) {
-        var clone;
-        var n;
-        var dataStr;
-        var tempAttrName = 'temp-id';
-        var id = Math.floor( Math.random() * 100000000 );
-        node.setAttribute( tempAttrName, id );
-        clone = this.rootElement.cloneNode( true );
-        node.removeAttribute( tempAttrName );
-        n = clone.querySelector( '[temp-id="' + id + '"]' );
-        n.removeAttribute( tempAttrName );
-
-        $( n ).children().remove();
-
-        while ( n !== clone ) {
-            $( n ).siblings().remove();
-            n = n.parentNode;
-        }
-
-        dataStr = ( new XMLSerializer() ).serializeToString( clone, 'text/xml' );
-        // restore default namespaces
-        dataStr = dataStr.replace( /\s(data-)(xmlns\=("|')[^\s\>]+("|'))/g, ' $2' );
-        return dataStr;
-    };
-
     /**
      * There is a huge bug in JavaRosa that has resulted in the usage of incorrect formulae on nodes inside repeat nodes.
      * Those formulae use absolute paths when relative paths should have been used. See more here:
@@ -1273,11 +1248,13 @@ define( function( require, exports, module ) {
      * @param {(string|Array.<string>)=} newVals    The new value of the node.
      * @param {?string=} expr  XPath expression to validate the node.
      * @param {?string=} xmlDataType XML data type of the node
+     * @param {?string=} requiredExpr XPath expression to determine where value is required
+     * @param {?boolean} noValidate Whether to skip validation
      *
      * @return {Promise} wrapping {?boolean}; null is returned when the node is not found or multiple nodes were selected,
      *                            otherwise the constraint evaluation result true/false is returned.
      */
-    Nodeset.prototype.setVal = function( newVals, constraintExpr, xmlDataType, requiredExpr ) {
+    Nodeset.prototype.setVal = function( newVals, constraintExpr, xmlDataType, requiredExpr, noValidate ) {
         var $target;
         var curVal;
         var /**@type {string}*/ newVal;
@@ -1300,14 +1277,14 @@ define( function( require, exports, module ) {
             // then return validation result
             updated = this.getClosestRepeat();
             updated.nodes = [ $target.prop( 'nodeName' ) ];
-            updated.validCheck = this.validateConstraintAndType( constraintExpr, xmlDataType );
-            updated.requiredCheck = this.validateRequired( requiredExpr );
-            updated.fullPath = this.model.getXPath( $target.get( 0 ), 'instance', true );
-            updated.xmlFragment = this.model.getXmlFragmentStr( $target.get( 0 ) );
-            updated.file = ( xmlDataType === 'binary' ) ? newVal.toString() : false;
-            updated.empty = !newVal.toString();
+            //updated.file = ( xmlDataType === 'binary' ) ? newVal.toString() : false;
 
             this.model.$events.trigger( 'dataupdate', updated );
+
+            if ( config.validateContinuously && noValidate !== true ) {
+                this.validate( constraintExpr, requiredExpr, xmlDataType );
+            }
+
             //add type="file" attribute for file references
             if ( xmlDataType === 'binary' ) {
                 if ( newVal.length > 0 ) {
@@ -1429,7 +1406,7 @@ define( function( require, exports, module ) {
         var $this;
         var repeatPath;
         var repeatIndex;
-        var xmlFragmentStr;
+        var removalEventData;
 
         $dataNode = this.get();
 
@@ -1444,18 +1421,21 @@ define( function( require, exports, module ) {
 
             repeatPath = this.model.getXPath( $dataNode.get( 0 ), 'instance' );
             repeatIndex = this.determineIndex( $dataNode );
-            xmlFragmentStr = this.model.getXmlFragmentStr( $dataNode.get( 0 ) );
+            removalEventData = this.model.getRemovalEventData( $dataNode.get( 0 ) );
 
             $dataNode.remove();
             this.nodes = null;
 
+            // For internal use
             this.model.$events.trigger( 'dataupdate', {
-                updatedNodes: allRemovedNodeNames,
+                nodes: allRemovedNodeNames,
                 repeatPath: repeatPath,
-                repeatIndex: repeatIndex,
-                xmlFragment: xmlFragmentStr,
-                removed: true
+                repeatIndex: repeatIndex
             } );
+
+            // For external use, if required with custom data.
+            this.model.$events.trigger( 'removed', removalEventData );
+
         } else {
             console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );
         }
@@ -1477,6 +1457,27 @@ define( function( require, exports, module ) {
             return types[ xmlDataType.toLowerCase() ].convert( x );
         }
         return x;
+    };
+
+    Nodeset.prototype.validate = function( constraintExpr, requiredExpr, xmlDataType ) {
+        var that = this;
+        var result = {};
+
+        // Avoid checking constraint if required is invalid
+        return this.validateRequired( requiredExpr )
+            .then( function( passed ) {
+                result.requiredValid = passed;
+                return ( passed === false ) ? null : that.validateConstraintAndType( constraintExpr, xmlDataType );
+            } )
+            .then( function( passed ) {
+                result.constraintValid = passed;
+
+                if ( result.requiredValid !== false && result.constraintValid !== false ) {
+                    that.model.$events.trigger( 'validated', that.model.getValidationEventData( that.get().get( 0 ), xmlDataType ) );
+                }
+
+                return result;
+            } );
     };
 
     /**
@@ -1688,6 +1689,12 @@ define( function( require, exports, module ) {
             }
         }
     };
+
+    // Placeholder function meant to be overwritten
+    FormModel.prototype.getValidationEventData = function( node, type ) {};
+
+    // Placeholder function meant to be overwritten
+    FormModel.prototype.getRemovalEventData = function( node ) {};
 
     // Expose types to facilitate extending with custom types
     FormModel.prototype.types = types;

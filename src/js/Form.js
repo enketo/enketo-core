@@ -28,6 +28,7 @@ define( function( require, exports, module ) {
     var utils = require( './utils' );
     var t = require( './fake-translator' ).t;
     var pkg = require( '../../package' );
+    var config = require( 'text!enketo-config' );
     require( './plugins' );
     require( './extend' );
     require( 'jquery-touchswipe' );
@@ -71,6 +72,12 @@ define( function( require, exports, module ) {
             // Before initializing form view, passthrough dataupdate event externally
             model.$events.on( 'dataupdate', function( event, updated ) {
                 $( formSelector ).trigger( 'dataupdate.enketo', updated );
+            } );
+            model.$events.on( 'validated', function( event, updated ) {
+                $( formSelector ).trigger( 'validated.enketo', updated );
+            } );
+            model.$events.on( 'removed', function( event, updated ) {
+                $( formSelector ).trigger( 'removed.enketo', updated );
             } );
 
             loadErrors = loadErrors.concat( model.init() );
@@ -571,6 +578,7 @@ define( function( require, exports, module ) {
                     constraint: this.getConstraint( $node ),
                     calculation: this.getCalculation( $node ),
                     relevant: this.getRelevant( $node ),
+                    readonly: this.getReadonly( $node ),
                     val: this.getVal( $node ),
                     required: this.getRequired( $node ),
                     enabled: this.isEnabled( $node ),
@@ -610,6 +618,9 @@ define( function( require, exports, module ) {
             },
             getRelevant: function( $node ) {
                 return $node.attr( 'data-relevant' );
+            },
+            getReadonly: function( $node ) {
+                return $node.is( '[readonly]' );
             },
             getCalculation: function( $node ) {
                 return $node.attr( 'data-calculate' );
@@ -1374,8 +1385,6 @@ define( function( require, exports, module ) {
          * Updates calculated items
          *
          * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
-         * @param { jQuery=}         $repeat        The repeat that triggered the update
-         * @param {Array<string>=}  updatedNodes    Array of updated nodes
          */
         FormView.prototype.calcUpdate = function( updated ) {
             var $nodes;
@@ -1455,6 +1464,22 @@ define( function( require, exports, module ) {
                 }
             } );
         };
+
+
+        FormView.prototype.validationUpdate = function( updated ) {
+            var $nodes;
+            var that = this;
+
+            updated = updated || {};
+
+            $nodes = this.getNodesToUpdate( 'data-constraint', '', updated )
+                .add( this.getNodesToUpdate( 'data-required', '', updated ) );
+
+            $nodes.each( function() {
+                that.validateInput( $( this ) );
+            } );
+        };
+
 
         /*
          * Note that preloaders may be deprecated in the future and be handled as metadata without bindings at all, in which
@@ -1869,8 +1894,6 @@ define( function( require, exports, module ) {
                 'input:not([readonly]):not(.ignore), select:not([readonly]):not(.ignore), textarea:not([readonly]):not(.ignore)',
                 function( event ) {
                     var updated;
-                    var validCheck;
-                    var requiredCheck;
                     var requiredExpr;
                     var $input = $( this );
                     var n = {
@@ -1893,16 +1916,13 @@ define( function( require, exports, module ) {
                         n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
                     }
 
-                    updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr );
-                    validCheck = ( updated ) ? updated.validCheck : Promise.resolve( null );
-                    requiredCheck = ( updated ) ? updated.requiredCheck : Promise.resolve( null );
-                    that.validationFeedback( $input, validCheck, requiredCheck )
+                    updated = model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr, true );
+
+                    that.validateInput( $input )
                         .then( function( valid ) {
                             // propagate event externally after internal processing is completed
                             $input.trigger( 'valuechange.enketo', valid );
                         } );
-
-
                 } );
 
             // doing this on the focus event may have little effect on performance, because nothing else is happening :)
@@ -1969,6 +1989,9 @@ define( function( require, exports, module ) {
                 that.branchUpdate( updated );
                 that.outputUpdate( updated );
                 that.itemsetUpdate( updated );
+                if ( config.validateContinuously === true ) {
+                    that.validationUpdate( updated );
+                }
                 // edit is fired when the model changes after the form has been initialized
                 that.editStatus.set( true );
             } );
@@ -2022,7 +2045,7 @@ define( function( require, exports, module ) {
 
             return this.validateContent( $form )
                 .then( function( valid ) {
-                    $form.trigger( 'validated.enketo' );
+                    $form.trigger( 'validationcomplete.enketo' );
                     return valid;
                 } );
         };
@@ -2138,7 +2161,6 @@ define( function( require, exports, module ) {
             return model.getXPath( target, 'instance', false );
         };
 
-
         /**
          * Validates question values.
          * 
@@ -2147,70 +2169,70 @@ define( function( require, exports, module ) {
          */
         FormView.prototype.validateInput = function( $input ) {
             var that = this;
-            var validCheck = Promise.resolve( true );
-            var requiredCheck = Promise.resolve( true );
-            var _dataNodeObj;
-            // all relevant properties, except for the **very expensive** index property
+            var getValidationResult;
+            // All relevant properties, except for the **very expensive** index property
+            // There is some scope for performance improvement by determining other properties when they 
+            // are needed, but that may not be so significant.
             var n = {
                 path: that.input.getName( $input ),
                 inputType: that.input.getInputType( $input ),
                 xmlType: that.input.getXmlType( $input ),
                 enabled: that.input.isEnabled( $input ),
                 constraint: that.input.getConstraint( $input ),
-                required: that.input.getRequired( $input )
+                calculation: that.input.getCalculation( $input ),
+                required: that.input.getRequired( $input ),
+                readonly: that.input.getReadonly( $input ),
+                val: that.input.getVal( $input )
             };
-            var getDataNodeObj = function() {
-                if ( !_dataNodeObj ) {
-                    // Only now, will we determine the index.
-                    n.ind = that.input.getIndex( $input );
-                    _dataNodeObj = model.node( n.path, n.ind );
-                }
-                return _dataNodeObj;
-            };
+            // No need to validate, **nor send validation events**. Meant for simple empty "notes" only.
+            if ( n.readonly && !n.val && !n.required && !n.constraint && !n.calculation ) {
+                return Promise.resolve();
+            }
 
             // The enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not.
             // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
             if ( n.enabled && n.inputType !== 'hidden' ) {
-                validCheck = getDataNodeObj().validateConstraintAndType( n.constraint, n.xmlType );
-                if ( n.required ) {
-                    requiredCheck = getDataNodeObj().validateRequired( n.required );
-                }
+                // Only now, will we determine the index.
+                n.ind = that.input.getIndex( $input );
+                getValidationResult = model.node( n.path, n.ind ).validate( n.constraint, n.required, n.xmlType );
+            } else {
+                // The purpose of this is to send validated.enketo events for these fields (OC).
+                getValidationResult = Promise.resolve( {
+                    requiredValid: true,
+                    constraintValid: true
+                } );
             }
 
-            return this.validationFeedback( $input, validCheck, requiredCheck );
-        };
-
-        /**
-         * Provide validation feedback to user.
-         *
-         * @param  {jQuery} $input         jQuery collection containing an input element
-         * @param  {Promise} validCheck    Promise returning boolean indicating result of constraint/type check
-         * @param  {Promise} requiredCheck Promise returning boolean indicating result of required check
-         * @return {boolean}               boolean to indicate whether the value is valid
-         */
-        FormView.prototype.validationFeedback = function( $input, validCheck, requiredCheck ) {
-            var that = this;
-            return requiredCheck
-                .then( function( passed ) {
-                    if ( passed === false ) {
-                        that.setValid( $input, 'constraint' );
-                        that.setInvalid( $input, 'required' );
-                        return null;
-                    } else {
-                        that.setValid( $input, 'required' );
-                        return validCheck;
+            return getValidationResult
+                .then( function( result ) {
+                    var previouslyInvalid = false;
+                    var passed = result.requiredValid !== false && result.constraintValid !== false;
+                    // Check current UI state
+                    if ( n.inputType !== 'hidden' ) {
+                        n.$q = that.input.getWrapNodes( $input );
+                        previouslyInvalid = n.$q.hasClass( 'invalid-required' ) || n.$q.hasClass( 'invalid-constraint' );
                     }
-                } ).then( function( passed ) {
-                    if ( passed === false ) {
-                        that.setInvalid( $input, 'constraint' );
-                        return false;
-                    } else if ( passed !== null ) {
-                        that.setValid( $input, 'constraint' );
-                        return true;
+                    // Update UI
+                    if ( n.inputType !== 'hidden' ) {
+                        if ( result.requiredValid === false ) {
+                            that.setValid( $input, 'constraint' );
+                            that.setInvalid( $input, 'required' );
+                        } else if ( result.constraintValid === false ) {
+                            that.setValid( $input, 'required' );
+                            that.setInvalid( $input, 'constraint' );
+                        } else {
+                            that.setValid( $input, 'constraint' );
+                            that.setValid( $input, 'required' );
+                        }
                     }
-                    return false;
+                    // Send invalidated event
+                    if ( !passed && !previouslyInvalid ) {
+                        $input.trigger( 'invalidated.enketo' );
+                    }
+                    return passed;
                 } )
                 .catch( function( e ) {
+                    console.error( 'validation error', e );
                     that.setInvalid( $input, 'constraint' );
                     throw e;
                 } );

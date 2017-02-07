@@ -146,89 +146,89 @@ describe( 'Date node (&) value getter', function() {
 } );
 
 describe( 'Data node XML data type conversion & validation', function() {
-    var i, data, result,
-        t = [
-            [ '/thedata/nodeA', null, null, 'val1', null, true ],
-            [ '/thedata/nodeA', null, null, 'val3', 'somewrongtype', true ], //default type is string
+    var i;
+    var t = [
+        [ '/thedata/nodeA', null, null, 'val1', null, true ],
+        [ '/thedata/nodeA', null, null, 'val3', 'somewrongtype', true ], //default type is string
 
-            [ '/thedata/nodeA', 0, null, '4', 'double', true ], //double is a non-existing xml data type so turned into string
-            [ '/thedata/nodeA', 0, null, 5, 'double', true ],
+        [ '/thedata/nodeA', 0, null, '4', 'double', true ], //double is a non-existing xml data type so turned into string
+        [ '/thedata/nodeA', 0, null, 5, 'double', true ],
 
-            [ '/thedata/nodeA', null, null, 'val2', 'string', true ],
-            [ '/thedata/nodeA', 0, null, [ 'a', 'b', 'c' ], 'string', true ],
-            [ '/thedata/nodeA', 0, null, [ 'd', 'e', 'f', '' ], 'string', true ],
-            [ '/thedata/nodeA', 0, null, 'val12', 'string', true ],
-            [ '/thedata/nodeA', 0, null, '14', 'string', true ],
-            [ '/thedata/nodeA', 0, null, 1, 'string', true ],
+        [ '/thedata/nodeA', null, null, 'val2', 'string', true ],
+        [ '/thedata/nodeA', 0, null, [ 'a', 'b', 'c' ], 'string', true ],
+        [ '/thedata/nodeA', 0, null, [ 'd', 'e', 'f', '' ], 'string', true ],
+        [ '/thedata/nodeA', 0, null, 'val12', 'string', true ],
+        [ '/thedata/nodeA', 0, null, '14', 'string', true ],
+        [ '/thedata/nodeA', 0, null, 1, 'string', true ],
 
-            [ '/thedata/nodeA', null, null, 'val11', 'decimal', false ],
+        [ '/thedata/nodeA', null, null, 'val11', 'decimal', false ],
 
-            [ '/thedata/nodeA', null, null, 'val4', 'int', false ],
-            [ '/thedata/nodeA', 0, null, '2', 'int', true ],
-            [ '/thedata/nodeA', 0, null, 3, 'int', true ],
-            [ '/thedata/nodeA', 0, null, '2.', 'int', false ],
-            [ '/thedata/nodeA', 0, null, '2.0', 'int', false ],
+        [ '/thedata/nodeA', null, null, 'val4', 'int', false ],
+        [ '/thedata/nodeA', 0, null, '2', 'int', true ],
+        [ '/thedata/nodeA', 0, null, 3, 'int', true ],
+        [ '/thedata/nodeA', 0, null, '2.', 'int', false ],
+        [ '/thedata/nodeA', 0, null, '2.0', 'int', false ],
 
-            [ '/thedata/nodeA', null, null, 'val5565ghgyuyuy', 'date', false ], //Chrome turns val5 into a valid date...
-            [ '/thedata/nodeA', null, null, '2012-01-01', 'date', true ],
-            [ '/thedata/nodeA', null, null, '2012-12-32', 'date', false ],
-            //['/thedata/nodeA', null, null, 324, 'date', true], //fails in phantomjs
+        [ '/thedata/nodeA', null, null, 'val5565ghgyuyuy', 'date', false ], //Chrome turns val5 into a valid date...
+        [ '/thedata/nodeA', null, null, '2012-01-01', 'date', true ],
+        [ '/thedata/nodeA', null, null, '2012-12-32', 'date', false ],
+        //['/thedata/nodeA', null, null, 324, 'date', true], //fails in phantomjs
 
-            [ '/thedata/nodeA', null, null, 'val5565ghgyuyua', 'datetime', false ], //Chrome turns val10 into a valid date..
-            [ '/thedata/nodeA', null, null, '2012-01-01T00:00:00-06', 'datetime', true ],
-            [ '/thedata/nodeA', null, null, '2012-12-32T00:00:00-06', 'datetime', false ],
-            [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06', 'datetime', true ],
-            [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06:30', 'datetime', true ],
-            [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59Z', 'datetime', true ],
-            [ '/thedata/nodeA', null, null, '2012-01-01T30:00:00-06', 'datetime', false ],
-            //['/thedata/nodeA', null, null, '2013-05-31T07:00-02', 'datetime', true],fails in phantomJSs
+        [ '/thedata/nodeA', null, null, 'val5565ghgyuyua', 'datetime', false ], //Chrome turns val10 into a valid date..
+        [ '/thedata/nodeA', null, null, '2012-01-01T00:00:00-06', 'datetime', true ],
+        [ '/thedata/nodeA', null, null, '2012-12-32T00:00:00-06', 'datetime', false ],
+        [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06', 'datetime', true ],
+        [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06:30', 'datetime', true ],
+        [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59Z', 'datetime', true ],
+        [ '/thedata/nodeA', null, null, '2012-01-01T30:00:00-06', 'datetime', false ],
+        //['/thedata/nodeA', null, null, '2013-05-31T07:00-02', 'datetime', true],fails in phantomJSs
 
-            [ '/thedata/nodeA', null, null, 'a', 'time', false ],
-            [ '/thedata/nodeA', null, null, 'aa:bb', 'time', false ],
-            [ '/thedata/nodeA', null, null, '0:0', 'time', true ],
-            [ '/thedata/nodeA', null, null, '00:00', 'time', true ],
-            [ '/thedata/nodeA', null, null, '23:59', 'time', true ],
-            [ '/thedata/nodeA', null, null, '23:59:59', 'time', true ],
-            [ '/thedata/nodeA', null, null, '24:00', 'time', false ],
-            [ '/thedata/nodeA', null, null, '00:60', 'time', false ],
-            [ '/thedata/nodeA', null, null, '00:00:60', 'time', false ],
-            [ '/thedata/nodeA', null, null, '-01:00', 'time', false ],
-            [ '/thedata/nodeA', null, null, '00:-01', 'time', false ],
-            [ '/thedata/nodeA', null, null, '00:00:-01', 'time', false ],
-            [ '/thedata/nodeA', null, null, '13:17:00.000-07', 'time', true ],
+        [ '/thedata/nodeA', null, null, 'a', 'time', false ],
+        [ '/thedata/nodeA', null, null, 'aa:bb', 'time', false ],
+        [ '/thedata/nodeA', null, null, '0:0', 'time', true ],
+        [ '/thedata/nodeA', null, null, '00:00', 'time', true ],
+        [ '/thedata/nodeA', null, null, '23:59', 'time', true ],
+        [ '/thedata/nodeA', null, null, '23:59:59', 'time', true ],
+        [ '/thedata/nodeA', null, null, '24:00', 'time', false ],
+        [ '/thedata/nodeA', null, null, '00:60', 'time', false ],
+        [ '/thedata/nodeA', null, null, '00:00:60', 'time', false ],
+        [ '/thedata/nodeA', null, null, '-01:00', 'time', false ],
+        [ '/thedata/nodeA', null, null, '00:-01', 'time', false ],
+        [ '/thedata/nodeA', null, null, '00:00:-01', 'time', false ],
+        [ '/thedata/nodeA', null, null, '13:17:00.000-07', 'time', true ],
 
-            [ '/thedata/nodeA', null, null, 'val2', 'barcode', true ],
+        [ '/thedata/nodeA', null, null, 'val2', 'barcode', true ],
 
-            [ '/thedata/nodeA', null, null, '0 0 0 0', 'geopoint', true ],
-            [ '/thedata/nodeA', null, null, '10 10', 'geopoint', true ],
-            [ '/thedata/nodeA', null, null, '10 10 10', 'geopoint', true ],
-            [ '/thedata/nodeA', null, null, '-90 -180', 'geopoint', true ],
-            [ '/thedata/nodeA', null, null, '90 180', 'geopoint', true ],
-            [ '/thedata/nodeA', null, null, '-91 -180', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, '-90 -181', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, '91 180', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, '90 -181', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, 'a -180', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, '0 a', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, '0', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, '0 0 a', 'geopoint', false ],
-            [ '/thedata/nodeA', null, null, '0 0 0 a', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '0 0 0 0', 'geopoint', true ],
+        [ '/thedata/nodeA', null, null, '10 10', 'geopoint', true ],
+        [ '/thedata/nodeA', null, null, '10 10 10', 'geopoint', true ],
+        [ '/thedata/nodeA', null, null, '-90 -180', 'geopoint', true ],
+        [ '/thedata/nodeA', null, null, '90 180', 'geopoint', true ],
+        [ '/thedata/nodeA', null, null, '-91 -180', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '-90 -181', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '91 180', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '90 -181', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, 'a -180', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '0 a', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '0', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '0 0 a', 'geopoint', false ],
+        [ '/thedata/nodeA', null, null, '0 0 0 a', 'geopoint', false ],
 
-            [ '/thedata/nodeA', null, null, 'NaN', 'int', false ],
-            [ '/thedata/nodeA', null, null, 'NaN', 'decimal', false ],
-            [ '/thedata/nodeA', null, null, 'Infinity', 'int', true ],
-            [ '/thedata/nodeA', null, null, 'Infinity', 'decimal', true ],
-            [ '/thedata/nodeA', null, null, '-Infinity', 'int', true ],
-            [ '/thedata/nodeA', null, null, '-Infinity', 'decimal', true ]
+        [ '/thedata/nodeA', null, null, 'NaN', 'int', false ],
+        [ '/thedata/nodeA', null, null, 'NaN', 'decimal', false ],
+        [ '/thedata/nodeA', null, null, 'Infinity', 'int', true ],
+        [ '/thedata/nodeA', null, null, 'Infinity', 'decimal', true ],
+        [ '/thedata/nodeA', null, null, '-Infinity', 'int', true ],
+        [ '/thedata/nodeA', null, null, '-Infinity', 'decimal', true ]
 
-            //TO DO binary (?)
-        ];
+        //TO DO binary (?)
+    ];
 
     function test( n ) {
         it( 'converts and validates xml-type ' + n.type + ' with value: ' + n.value, function( done ) {
-            data = getModel( 'thedata.xml' ); //dataStr1);
-            result = data.node( n.selector, n.index, n.filter ).setVal( n.value, null, n.type );
-            result.validCheck.then( function( passed ) {
+            var node = getModel( 'thedata.xml' ).node( n.selector, n.index, n.filter );
+            node.setVal( n.value, null, n.type );
+            node.validateConstraintAndType( null, n.type ).then( function( passed ) {
                     expect( passed ).toEqual( n.result );
                 } )
                 .then( done )
@@ -260,8 +260,8 @@ describe( 'Data node XML data type conversion & validation', function() {
     it( 'sets a non-empty value to empty', function( done ) {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         node.setVal( 'value', null, 'string' );
-        var result = node.setVal( '' );
-        result.validCheck
+        node.setVal( '' );
+        node.validateConstraintAndType( null, 'string' )
             .then( function( passed ) {
                 expect( passed ).toBe( true );
             } )
@@ -914,45 +914,6 @@ describe( 'Ordinals in repeats', function() {
 } );
 
 
-describe( 'getting XML fragments', function() {
-
-    it( 'works for simple models', function() {
-        var x = '<model><instance><data><a>a</a><b/><c><c1>1</c1><c2>2</c2></c><meta><instanceID/></meta></data></instance></model>';
-        var model = new Model( x );
-        model.init();
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'b' ) ) ).toEqual( '<data><b/></data>' );
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'c2' ) ) ).toEqual( '<data><c><c2>2</c2></c></data>' );
-    } );
-
-    it( 'works for primary instances with a default namespace', function() {
-        var x = '<model><instance><data xmlns="https://some.namespace.com/"><a>a</a><b/><c><c1>1</c1><c2>2</c2></c><meta><instanceID/></meta></data></instance></model>';
-        var model = new Model( x );
-        model.init();
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'b' ) ) ).toEqual( '<data xmlns="https://some.namespace.com/"><b/></data>' );
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'c2' ) ) ).toEqual( '<data xmlns="https://some.namespace.com/"><c><c2>2</c2></c></data>' );
-    } );
-
-    it( 'works for models that include namespaced attributes and repeats', function() {
-        var x = '<model><instance><data xmlns:enk="http://enketo.org/xforms"><a>a</a><b/>' +
-            '<r enk:last-used-ordinal="3" enk:ordinal="1"><n>n</n></r><r enk:ordinal="3"><n>n</n></r>' +
-            '<meta><instanceID/></meta></data></instance></model>';
-        var model = new Model( x );
-        model.init();
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'b' ) ) ).toEqual( '<data xmlns:enk="http://enketo.org/xforms"><b/></data>' );
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'r' ) ) ).toEqual( '<data xmlns:enk="http://enketo.org/xforms"><r enk:last-used-ordinal="3" enk:ordinal="1"/></data>' );
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'n' ) ) ).toEqual( '<data xmlns:enk="http://enketo.org/xforms"><r enk:last-used-ordinal="3" enk:ordinal="1"><n>n</n></r></data>' );
-        expect( model.getXmlFragmentStr( model.xml.querySelectorAll( 'n' )[ 1 ] ) ).toEqual( '<data xmlns:enk="http://enketo.org/xforms"><r enk:ordinal="3"><n>n</n></r></data>' );
-        expect( model.getXmlFragmentStr( model.xml.querySelectorAll( 'r' )[ 1 ] ) ).toEqual( '<data xmlns:enk="http://enketo.org/xforms"><r enk:ordinal="3"/></data>' );
-    } );
-
-    it( 'works for models that include tricky text nodes with carriage returns', function() {
-        var model = getModel( 'nested_repeats.xml' );
-        model.init();
-        expect( model.getXmlFragmentStr( model.xml.querySelector( 'kids_details' ) ).replace( />\s+</g, '><' ) ).toEqual(
-            '<nested_repeats xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" id="nested_repeats"><kids><kids_details></kids_details></kids></nested_repeats>' );
-    } );
-
-} );
 
 describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct incorrect XPath expressions', function() {
     var modelStr = '<model><instance><abcabce id="abcabce"><n/><ab><ynab/></ab><a><ynaa>1</ynaa><c/></a><a><ynaa>2</ynaa><c/></a><meta><instanceID/></meta></abcabce></instance></model>';

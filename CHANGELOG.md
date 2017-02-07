@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.21.0] - 2017-02-10
+---------------------
+##### Added
+- a validateContinuously mode,
+- send _validated.enketo_ and _invalidated.enketo_ events with extensible/custom data
+
 [4.20.0] - 2017-02-03
 ---------------------
 ##### Changed
@@ -19,7 +25,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.18.0] - 2017-01-18
 ---------------------
 ##### Changed
-- Valuechange.enketo event not fires *after* validation and passes a boolean representing the combined validation result.
+- Valuechange.enketo event now fires *after* validation and passes a boolean representing the combined validation result.
 
 ##### Fixed
 - Horizontal analog scale label and slider overlap on small screens.
