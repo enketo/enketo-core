@@ -794,34 +794,43 @@ define( function( require, exports, module ) {
             init: function() {
                 var lang;
                 var that = this;
-                var $formLanguages = $form.find( '#form-languages' );
                 var $langSelector = $( '.form-language-selector' );
-                var defaultLang = $formLanguages.attr( 'data-default-lang' ) || $formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
-                var defaultDirectionality = $formLanguages.find( '[value="' + defaultLang + '"]' ).attr( 'data-dir' ) || 'ltr';
+                var currentDirectionality;
 
-                $formLanguages
+                this.$formLanguages = $form.find( '#form-languages' );
+                this.currentLang = this.$formLanguages.attr( 'data-default-lang' ) || this.$formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
+                currentDirectionality = this.$formLanguages.find( '[value="' + this.currentLang + '"]' ).attr( 'data-dir' ) || 'ltr';
+
+
+                this.$formLanguages
                     .detach()
                     .appendTo( $langSelector )
-                    .val( defaultLang );
+                    .val( this.currentLang );
 
                 $form
-                    .attr( 'dir', defaultDirectionality );
+                    .attr( 'dir', currentDirectionality );
 
-                if ( $formLanguages.find( 'option' ).length < 2 ) {
+                if ( this.$formLanguages.find( 'option' ).length < 2 ) {
                     return;
                 }
 
                 $langSelector.removeClass( 'hide' );
 
-                $formLanguages.change( function( event ) {
+                this.$formLanguages.change( function( event ) {
                     event.preventDefault();
-                    lang = $( this ).val();
-                    that.setAll( lang );
+                    that.currentLang = $( this ).val();
+                    that.setAll( that.currentLang );
                 } );
+            },
+            getCurrentLang: function() {
+                return this.currentLang;
+            },
+            getCurrentLangDesc: function() {
+                return this.$formLanguages.find( '[value="' + this.currentLang + '"]' ).text();
             },
             setAll: function( lang ) {
                 var that = this;
-                var dir = $( '#form-languages' ).find( '[value="' + lang + '"]' ).attr( 'data-dir' ) || 'ltr';
+                var dir = this.$formLanguages.find( '[value="' + lang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
                 $form
                     .attr( 'dir', dir )
@@ -1241,39 +1250,82 @@ define( function( require, exports, module ) {
                 /**
                  * Remove current items before rebuilding a new itemset from scratch.
                  */
+                // the current <option> and <input> elements
                 $template.closest( '.question' )
                     .find( templateNodeName ).not( $template ).remove();
+                // labels for current <option> elements
                 $template.parent( 'select' ).siblings( '.or-option-translations' ).empty();
 
                 $instanceItems.each( function() {
                     var $item = $( this );
-                    labelRefValue = $item.children( labelRef ).text();
+                    var $labelRefs;
+                    var labelRefNodename;
+                    var matches;
+
                     $htmlItem = $( '<root/>' );
+
+                    // Create a single <option> or <input> element for the (single) instance item.
                     $template
                         .clone().appendTo( $htmlItem )
                         .removeClass( 'itemset-template' )
                         .addClass( 'itemset' )
                         .removeAttr( 'data-items-path' );
 
-                    $htmlItemLabels = ( labelType === 'itext' && $labels.find( '[data-itext-id="' + labelRefValue + '"]' ).length > 0 ) ?
-                        $labels.find( '[data-itext-id="' + labelRefValue + '"]' ).clone() :
-                        $( '<span class="option-label active" lang="">' + labelRefValue + '</span>' );
+                    // Determine which labels belong to the <option> or <input> element.
+                    matches = utils.parseFunctionFromExpression( labelRef, 'translate' );
+                    labelRefNodename = matches.length ? matches[ 0 ][ 1 ][ 0 ] : labelRef + ':eq(0)';
+                    $labelRefs = $item.children( labelRefNodename );
+                    /** 
+                     * Note: $labelRefs could either be
+                     * - a single itext reference
+                     * - a collection of labels with different lang attributes
+                     * - a single label
+                     */
+                    if ( labelType !== 'itext' && $labelRefs.length > 0 ) {
+                        // labels with different lang attributes
+                        labelType = 'langs';
+                    }
+                    switch ( labelType ) {
+                        case 'itext':
+                            // Search in the special .itemset-labels created in enketo-transformer for labels with itext ref.
+                            $htmlItemLabels = $labels.find( '[data-itext-id="' + $labelRefs.eq( 0 ).text() + '"]' ).clone();
+                            break;
+                        case 'langs':
+                            $htmlItemLabels = $();
+                            // Turn the item elements into label spans that <option> and <input> uses.
+                            $labelRefs.each( function() {
+                                var lang = this.getAttribute( 'lang' );
+                                var langAttr = lang ? ' lang="' + this.getAttribute( 'lang' ) + '"' : '';
+                                var active = !lang || lang === that.langs.getCurrentLang() ? ' active' : '';
+                                var span = '<span class="option-label' + active + '"' + langAttr + '>' + this.textContent + '</span>';
+                                $htmlItemLabels = $htmlItemLabels.add( span );
+                            } );
+                            break;
+                        default:
+                            // Create a single span without language.
+                            $htmlItemLabels = $( '<span class="option-label active" lang="">' + $labelRefs.eq( 0 ).text() + '</span>' );
+                    }
 
+                    // Obtain the value of the secondary instance item found.
                     value = $item.children( valueRef ).text();
+
+                    // Set the value of the new <option> or <input>.
                     $htmlItem.find( '[value]' ).attr( 'value', value );
 
                     if ( templateNodeName === 'label' ) {
                         $htmlItem.find( 'input' )
                             .after( $htmlItemLabels );
+                        // Add the <input> (which is the first child of <root>).
                         $labels.before( $htmlItem.find( ':first' ) );
                     } else if ( templateNodeName === 'option' ) {
-                        if ( $htmlItemLabels.length === 1 ) {
-                            $htmlItem.find( 'option' ).text( $htmlItemLabels.text() );
-                        }
+                        //if ( $htmlItemLabels.length === 1 ) {
+                        $htmlItem.find( 'option' ).text( $htmlItemLabels.filter( '.active' ).eq( 0 ).text() );
+                        //}
                         $htmlItemLabels
                             .attr( 'data-option-value', value )
                             .attr( 'data-itext-id', '' )
                             .appendTo( $labels.siblings( '.or-option-translations' ) );
+                        // Add the <option> (which is the first child of <root>).
                         $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
                     }
                 } );

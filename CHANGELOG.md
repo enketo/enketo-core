@@ -3,6 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.22.0] - 2017-02-17
+##### Added
+- Support for lang attributes on choice labels in secondary instances.
+
 [4.21.0] - 2017-02-10
 ---------------------
 ##### Added
