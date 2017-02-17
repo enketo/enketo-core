@@ -40,7 +40,7 @@
         "grunt-concurrent": "2.x.x",
         "grunt-contrib-connect": "1.0.x",
         "grunt-contrib-jshint": "1.1.x",
-        "grunt-contrib-uglify": "2.0.x",
+        "grunt-contrib-uglify": "2.1.x",
         "grunt-contrib-watch": "1.x.x",
         "grunt-jsbeautifier": "0.x.x",
         "grunt-karma": "2.0.0",
