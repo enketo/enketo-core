@@ -258,7 +258,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
     } );
 
-    it( 'data update events for instanceID and deprecatedID fire on model.$events', function() {
+    it( 'and fires dataupdate events for instanceID and deprecatedID on model.$events', function() {
         var model = new Model( {
             modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
             instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>',
@@ -270,8 +270,8 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         } );
         model.init();
         expect( eventObjects.length ).toEqual( 2 );
-        expect( eventObjects[ 0 ].fullPath ).toEqual( '/a/meta/instanceID' );
-        expect( eventObjects[ 1 ].fullPath ).toEqual( '/a/meta/deprecatedID' );
+        expect( eventObjects[ 0 ].nodes ).toEqual( [ 'instanceID' ] );
+        expect( eventObjects[ 1 ].nodes ).toEqual( [ 'deprecatedID' ] );
 
     } );
 } );
