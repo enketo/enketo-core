@@ -1251,8 +1251,8 @@ define( function( require, exports, module ) {
      * @param {?string=} requiredExpr XPath expression to determine where value is required
      * @param {?boolean} noValidate Whether to skip validation
      *
-     * @return {Promise} wrapping {?boolean}; null is returned when the node is not found or multiple nodes were selected,
-     *                            otherwise the constraint evaluation result true/false is returned.
+     * @return {?*} wrapping {?boolean}; null is returned when the node is not found or multiple nodes were selected,
+     *                            otherwise an object with update information is returned.
      */
     Nodeset.prototype.setVal = function( newVals, constraintExpr, xmlDataType, requiredExpr, noValidate ) {
         var $target;
@@ -1557,13 +1557,31 @@ define( function( require, exports, module ) {
             }
         },
         'decimal': {
+            convert: function( x ) {
+                var num = Number( x );
+                if ( isNaN( num ) || num === Number.POSITIVE_INFINITY || num === Number.NEGATIVE_INFINITY ) {
+                    // Comply with XML schema decimal type that has no special values. '' is our only option.
+                    return '';
+                }
+                return num;
+            },
             validate: function( x ) {
-                return ( !isNaN( x - 0 ) && x !== null ) ? true : false;
+                var num = Number( x );
+                return ( !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY ) ? true : false;
             }
         },
         'int': {
+            convert: function( x ) {
+                var num = Number( x );
+                if ( isNaN( num ) || num === Number.POSITIVE_INFINITY || num === Number.NEGATIVE_INFINITY ) {
+                    // Comply with XML schema int type that has no special values. '' is our only option.
+                    return '';
+                }
+                return Math.floor( num );
+            },
             validate: function( x ) {
-                return ( !isNaN( x - 0 ) && x !== null && Math.round( x ).toString() === x.toString() ) ? true : false;
+                var num = Number( x );
+                return ( !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY && Math.round( num ) === num ) ? true : false;
             }
         },
         'date': {
@@ -1585,7 +1603,8 @@ define( function( require, exports, module ) {
                 }
                 //date.setUTCHours(0,0,0,0);
                 //return date.toUTCString();//.getUTCFullYear(), datetime.getUTCMonth(), datetime.getUTCDate());
-                return date.getUTCFullYear().toString().pad( 4 ) + '-' + ( date.getUTCMonth() + 1 ).toString().pad( 2 ) + '-' + date.getUTCDate().toString().pad( 2 );
+                return new Date( x ).toString() === 'Invalid Date' ?
+                    '' : date.getUTCFullYear().toString().pad( 4 ) + '-' + ( date.getUTCMonth() + 1 ).toString().pad( 2 ) + '-' + date.getUTCDate().toString().pad( 2 );
             }
         },
         'datetime': {
@@ -1609,7 +1628,7 @@ define( function( require, exports, module ) {
                     return x + ':00';
                 }
                 date = new Date( x );
-                return ( date.toString() !== 'Invalid Date' ) ? date.toISOLocalString() : date.toString();
+                return ( date.toString() !== 'Invalid Date' ) ? date.toISOLocalString() : '';
             }
         },
         'time': {
@@ -1636,12 +1655,14 @@ define( function( require, exports, module ) {
                 }
 
                 // add padding
-                return x.toString()
+                x = x.toString()
                     .split( ':' )
                     .map( function( segment ) {
                         return segment.toString().pad( 2 );
                     } )
                     .join( ':' );
+
+                return this.validate( x ) ? x : '';
             }
         },
         'barcode': {
@@ -1658,7 +1679,7 @@ define( function( require, exports, module ) {
                     ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
             },
             convert: function( x ) {
-                return $.trim( x.toString() );
+                return x.toString().trim();
             }
         },
         'geotrace': {

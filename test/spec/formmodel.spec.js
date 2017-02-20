@@ -72,7 +72,7 @@ describe( 'Data node getter', function() {
                 },
                 10 //instanceID is populated by model
             ],
-            [ '/thedata/nodeA', null, null, 1 ],
+            //[ 1 ],
             [ '/thedata/nodeA', 1, null, 0 ],
             [ '/thedata/nodeA', null, {
                     noEmpty: true
@@ -145,91 +145,108 @@ describe( 'Date node (&) value getter', function() {
     } );
 } );
 
-describe( 'Data node XML data type conversion & validation', function() {
+describe( 'Data node XML data type', function() {
     var i;
     var t = [
-        [ '/thedata/nodeA', null, null, 'val1', null, true ],
-        [ '/thedata/nodeA', null, null, 'val3', 'somewrongtype', true ], //default type is string
+        [ 'val1', null, true ],
+        [ 'val3', 'somewrongtype', true ], //default type is string
 
-        [ '/thedata/nodeA', 0, null, '4', 'double', true ], //double is a non-existing xml data type so turned into string
-        [ '/thedata/nodeA', 0, null, 5, 'double', true ],
+        [ '4', 'double', true ], //double is a non-existing xml data type so turned into string
+        [ 5, 'double', true, '5' ],
 
-        [ '/thedata/nodeA', null, null, 'val2', 'string', true ],
-        [ '/thedata/nodeA', 0, null, [ 'a', 'b', 'c' ], 'string', true ],
-        [ '/thedata/nodeA', 0, null, [ 'd', 'e', 'f', '' ], 'string', true ],
-        [ '/thedata/nodeA', 0, null, 'val12', 'string', true ],
-        [ '/thedata/nodeA', 0, null, '14', 'string', true ],
-        [ '/thedata/nodeA', 0, null, 1, 'string', true ],
+        [ 'val2', 'string', true ],
+        [
+            [ 'a', 'b', 'c' ], 'string', true, 'a b c'
+        ],
+        [
+            [ 'd', 'e', 'f', '' ], 'string', true, 'd e f '
+        ],
+        [ 'val12', 'string', true ],
+        [ '14', 'string', true ],
+        [ 1, 'string', true, '1' ],
 
-        [ '/thedata/nodeA', null, null, 'val11', 'decimal', false ],
+        [ 'val4', 'int', false, '' ],
+        [ '2', 'int', true ],
+        [ 3, 'int', true, '3' ],
+        [ '2.', 'int', false, '2' ],
+        [ '2.22', 'int', false, '2' ],
+        [ '2.0', 'int', false, '2' ],
+        [ 'NaN', 'int', false, '' ],
+        [ 'Infinity', 'int', false, '' ],
+        [ '-Infinity', 'int', false, '' ],
 
-        [ '/thedata/nodeA', null, null, 'val4', 'int', false ],
-        [ '/thedata/nodeA', 0, null, '2', 'int', true ],
-        [ '/thedata/nodeA', 0, null, 3, 'int', true ],
-        [ '/thedata/nodeA', 0, null, '2.', 'int', false ],
-        [ '/thedata/nodeA', 0, null, '2.0', 'int', false ],
+        [ 'val11', 'decimal', false, '' ],
+        [ '2', 'decimal', false ],
+        [ '2.22', 'decimal', false ],
+        [ 'NaN', 'decimal', false, '' ],
+        [ 'Infinity', 'decimal', true, '' ],
+        [ '-Infinity', 'decimal', true, '' ],
 
-        [ '/thedata/nodeA', null, null, 'val5565ghgyuyuy', 'date', false ], //Chrome turns val5 into a valid date...
-        [ '/thedata/nodeA', null, null, '2012-01-01', 'date', true ],
-        [ '/thedata/nodeA', null, null, '2012-12-32', 'date', false ],
-        //['/thedata/nodeA', null, null, 324, 'date', true], //fails in phantomjs
+        [ 'val5565ghgyuyuy', 'date', false, '' ], //Chrome turns val5 into a valid date...
+        [ '2012-01-01', 'date', true ],
+        [ '2012-12-32', 'date', false, '' ],
+        //[324, 'date', true], //fails in phantomjs
 
-        [ '/thedata/nodeA', null, null, 'val5565ghgyuyua', 'datetime', false ], //Chrome turns val10 into a valid date..
-        [ '/thedata/nodeA', null, null, '2012-01-01T00:00:00-06', 'datetime', true ],
-        [ '/thedata/nodeA', null, null, '2012-12-32T00:00:00-06', 'datetime', false ],
-        [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06', 'datetime', true ],
-        [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59-06:30', 'datetime', true ],
-        [ '/thedata/nodeA', null, null, '2012-12-31T23:59:59Z', 'datetime', true ],
-        [ '/thedata/nodeA', null, null, '2012-01-01T30:00:00-06', 'datetime', false ],
-        //['/thedata/nodeA', null, null, '2013-05-31T07:00-02', 'datetime', true],fails in phantomJSs
+        [ 'val5565ghgyuyua', 'datetime', false, '' ], //Chrome turns val10 into a valid date..
+        [ '2012-01-01T00:00:00-06', 'datetime', true, '2012-01-01T00:00:00-06:00' ],
+        [ '2012-12-32T00:00:00-06', 'datetime', false, '2012-12-32T00:00:00-06:00' ], //?
+        [ '2012-12-31T23:59:59-06', 'datetime', true, '2012-12-31T23:59:59-06:00' ],
+        [ '2012-12-31T23:59:59-06:30', 'datetime', true ],
+        // the test below is dependent on OS time zone of test machine
+        //[ '2012-12-31T23:59:59Z', 'datetime', true, '2012-12-31T16:59:59.000-07:00' ],
+        [ '2012-01-01T30:00:00-06', 'datetime', false, '2012-01-01T30:00:00-06:00' ],
+        //['2013-05-31T07:00-02', 'datetime', true],fails in phantomJSs
 
-        [ '/thedata/nodeA', null, null, 'a', 'time', false ],
-        [ '/thedata/nodeA', null, null, 'aa:bb', 'time', false ],
-        [ '/thedata/nodeA', null, null, '0:0', 'time', true ],
-        [ '/thedata/nodeA', null, null, '00:00', 'time', true ],
-        [ '/thedata/nodeA', null, null, '23:59', 'time', true ],
-        [ '/thedata/nodeA', null, null, '23:59:59', 'time', true ],
-        [ '/thedata/nodeA', null, null, '24:00', 'time', false ],
-        [ '/thedata/nodeA', null, null, '00:60', 'time', false ],
-        [ '/thedata/nodeA', null, null, '00:00:60', 'time', false ],
-        [ '/thedata/nodeA', null, null, '-01:00', 'time', false ],
-        [ '/thedata/nodeA', null, null, '00:-01', 'time', false ],
-        [ '/thedata/nodeA', null, null, '00:00:-01', 'time', false ],
-        [ '/thedata/nodeA', null, null, '13:17:00.000-07', 'time', true ],
+        [ 'a', 'time', false, '' ],
+        [ 'aa:bb', 'time', false, '' ],
+        [ '0:0', 'time', true, '00:00' ],
+        [ '00:00', 'time', true ],
+        [ '23:59', 'time', true ],
+        [ '23:59:59', 'time', true ],
+        [ '24:00', 'time', false, '' ],
+        [ '00:60', 'time', false, '' ],
+        [ '00:00:60', 'time', false, '' ],
+        [ '-01:00', 'time', false, '' ],
+        [ '00:-01', 'time', false, '' ],
+        [ '00:00:-01', 'time', false, '' ],
+        [ '13:17:00.000-07', 'time', true ],
 
-        [ '/thedata/nodeA', null, null, 'val2', 'barcode', true ],
+        [ 'val2', 'barcode', true ],
 
-        [ '/thedata/nodeA', null, null, '0 0 0 0', 'geopoint', true ],
-        [ '/thedata/nodeA', null, null, '10 10', 'geopoint', true ],
-        [ '/thedata/nodeA', null, null, '10 10 10', 'geopoint', true ],
-        [ '/thedata/nodeA', null, null, '-90 -180', 'geopoint', true ],
-        [ '/thedata/nodeA', null, null, '90 180', 'geopoint', true ],
-        [ '/thedata/nodeA', null, null, '-91 -180', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, '-90 -181', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, '91 180', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, '90 -181', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, 'a -180', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, '0 a', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, '0', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, '0 0 a', 'geopoint', false ],
-        [ '/thedata/nodeA', null, null, '0 0 0 a', 'geopoint', false ],
+        [ '0 0 0 0', 'geopoint', true ],
+        [ '10 10', 'geopoint', true ],
+        [ '10 10 10', 'geopoint', true ],
+        [ '-90 -180', 'geopoint', true ],
+        [ '90 180', 'geopoint', true ],
+        [ '-91 -180', 'geopoint', false ],
+        [ '-90 -181', 'geopoint', false ],
+        [ '91 180', 'geopoint', false ],
+        [ '90 -181', 'geopoint', false ],
+        [ 'a -180', 'geopoint', false ],
+        [ '0 a', 'geopoint', false ],
+        [ '0', 'geopoint', false ],
+        [ '0 0 a', 'geopoint', false ],
+        [ '0 0 0 a', 'geopoint', false ],
 
-        [ '/thedata/nodeA', null, null, 'NaN', 'int', false ],
-        [ '/thedata/nodeA', null, null, 'NaN', 'decimal', false ],
-        [ '/thedata/nodeA', null, null, 'Infinity', 'int', true ],
-        [ '/thedata/nodeA', null, null, 'Infinity', 'decimal', true ],
-        [ '/thedata/nodeA', null, null, '-Infinity', 'int', true ],
-        [ '/thedata/nodeA', null, null, '-Infinity', 'decimal', true ]
-
-        //TO DO binary (?)
     ];
 
-    function test( n ) {
-        it( 'converts and validates xml-type ' + n.type + ' with value: ' + n.value, function( done ) {
-            var node = getModel( 'thedata.xml' ).node( n.selector, n.index, n.filter );
+    function typeConversionTest( n ) {
+        it( 'is converted for XML type: ' + n.type + ' with value: ' + n.value, function() {
+            var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
+            var expected = typeof n.converted !== 'undefined' ? n.converted : n.value;
             node.setVal( n.value, null, n.type );
-            node.validateConstraintAndType( null, n.type ).then( function( passed ) {
-                    expect( passed ).toEqual( n.result );
+            expect( node.getVal()[ 0 ] ).toEqual( expected );
+        } );
+    }
+
+    function typeValidationTest( n ) {
+        it( 'is (in)validated for XML type: ' + n.type + ' with value:' + n.value, function( done ) {
+            var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
+            // set the value without conversion (as string)
+            node.setVal( n.value );
+            node.validateConstraintAndType( null, n.type )
+                .then( function( result ) {
+                    expect( result ).toEqual( valid );
                 } )
                 .then( done )
                 .catch( done );
@@ -237,13 +254,17 @@ describe( 'Data node XML data type conversion & validation', function() {
     }
 
     for ( i = 0; i < t.length; i++ ) {
-        test( {
-            selector: t[ i ][ 0 ],
-            index: t[ i ][ 1 ],
-            filter: t[ i ][ 2 ],
-            value: t[ i ][ 3 ],
-            type: t[ i ][ 4 ],
-            result: t[ i ][ 5 ]
+        typeConversionTest( {
+            value: t[ i ][ 0 ],
+            type: t[ i ][ 1 ],
+            valid: t[ i ][ 2 ],
+            converted: t[ i ][ 3 ]
+        } );
+
+        typeValidationTest( {
+            value: t[ i ][ 0 ],
+            type: t[ i ][ 1 ],
+            valid: t[ i ][ 2 ]
         } );
     }
 
@@ -330,7 +351,7 @@ describe( 'getRepeatSeries', function() {
         expect( model.node( '/a/r/nR', 1 ).getRepeatSeries().length ).toEqual( 2 );
         expect( model.node( '/a/r/nR', 3 ).getRepeatSeries().length ).toEqual( 3 );
     } );
-} )
+} );
 
 
 describe( 'getXPath', function() {

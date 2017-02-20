@@ -992,7 +992,7 @@ describe( 'form status', function() {
 
     it( 'correctly maintains edit status', function() {
         expect( form.getEditStatus() ).toBe( false );
-        form.getView().$.find( 'input[name="/thedata/nodeA"]' ).val( 'this' ).trigger( 'change' );
+        form.getView().$.find( 'input[name="/thedata/nodeA"]' ).val( '2010-10-01T11:12:00+06:00' ).trigger( 'change' );
         expect( form.getEditStatus() ).toBe( true );
     } );
 } );
