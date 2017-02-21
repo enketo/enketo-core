@@ -1458,6 +1458,7 @@ define( function( require, exports, module ) {
                 var name;
                 var dataNodeName;
                 var expr;
+                var newExpr;
                 var dataType;
                 var constraintExpr;
                 var relevantExpr;
@@ -1498,10 +1499,10 @@ define( function( require, exports, module ) {
                     relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name, index ) : true;
 
                     // not sure if using 'string' is always correct
-                    expr = replaceChoiceNameFn( expr, 'string', name, index );
+                    newExpr = replaceChoiceNameFn( expr, 'string', name, index );
 
                     // it is possible that the fixed expr is '' which causes an error in XPath
-                    result = ( relevant && expr ) ? model.evaluate( expr, 'string', name, index ) : '';
+                    result = ( relevant && newExpr ) ? model.evaluate( newExpr, 'string', name, index ) : '';
 
                     // filter the result set to only include the target node
                     dataNodesObj.setIndex( index );
