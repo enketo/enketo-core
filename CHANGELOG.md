@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.22.1] - 2017-02-21
 ---------------------
 ##### Fixed
 - Incomplete type conversion of int, decimal, time, date and datetime.
+- Calculation with relevant on readonly field inside repeat not evaluated when it should be.
 
 [4.22.0] - 2017-02-17
 ---------------------

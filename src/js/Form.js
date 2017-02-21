@@ -1459,7 +1459,7 @@ define( function( require, exports, module ) {
                 var dataNodeName;
                 var expr;
                 var dataType;
-                var constraint;
+                var constraintExpr;
                 var relevantExpr;
                 var relevant;
                 var $this;
@@ -1470,9 +1470,8 @@ define( function( require, exports, module ) {
                 expr = that.input.getCalculation( $this );
                 dataType = that.input.getXmlType( $this );
                 // for inputs that have a calculation and need to be validated
-                constraint = that.input.getConstraint( $this );
+                constraintExpr = that.input.getConstraint( $this );
                 relevantExpr = that.input.getRelevant( $this );
-                relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name ) : true;
 
                 dataNodesObj = model.node( name );
                 dataNodes = dataNodesObj.get();
@@ -1496,8 +1495,9 @@ define( function( require, exports, module ) {
                 }
 
                 function updateCalc( index ) {
+                    relevant = ( relevantExpr ) ? model.evaluate( relevantExpr, 'boolean', name, index ) : true;
 
-                    //not sure if using 'string' is always correct
+                    // not sure if using 'string' is always correct
                     expr = replaceChoiceNameFn( expr, 'string', name, index );
 
                     // it is possible that the fixed expr is '' which causes an error in XPath
@@ -1507,7 +1507,7 @@ define( function( require, exports, module ) {
                     dataNodesObj.setIndex( index );
 
                     // set the value
-                    dataNodesObj.setVal( result, constraint, dataType );
+                    dataNodesObj.setVal( result, constraintExpr, dataType );
 
                     // Not the most efficient to use input.setVal here as it will do another lookup
                     // of the node, that we already have...
