@@ -424,5 +424,6 @@ $( document )
 
 module.exports = {
     'name': pluginName,
+    'list': true,
     'selector': 'select:not(#form-languages)'
 };

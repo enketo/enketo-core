@@ -32,7 +32,7 @@ $printBaseFontSize: 10px;
 }
 
 .question {
-    &.non-select::after {
+    &.non-select::after, &.or-appearance-search:after, &.or-appearance-autocomplete:after {
         content: ' ';
         display: block;
         height: 1px;

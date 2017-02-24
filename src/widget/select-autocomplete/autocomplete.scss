@@ -1,0 +1,16 @@
+//@import "../../../../../node_modules/select2/dist/css/select2";
+
+input[type=text].autocomplete {
+    // width of input same as width of regular select
+    width: $input-min-width * $golden-ratio - 14px;
+
+    &.notfound {
+        color: $gray-light;
+    }
+}
+
+.touch {
+    input[type=text].autocomplete {
+        width: 100%;
+    }
+}

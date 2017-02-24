@@ -843,22 +843,22 @@ define( function( require, exports, module ) {
                     } )
                     .addClass( 'active' );
 
-                $form.find( 'select' ).each( function() {
+                $form.find( 'select, datalist' ).each( function() {
                     that.setSelect( $( this ) );
                 } );
 
                 $form.trigger( 'changelanguage' );
             },
-            // swap language of <select> <option>s
+            // swap language of <select> and <datalist> <option>s
             setSelect: function( $select ) {
                 var value;
                 var /** @type {string} */ curLabel;
                 var /** @type {string} */ newLabel;
-                $select.children( 'option' ).not( '[value=""]' ).each( function() {
+                $select.children( 'option' ).not( '[value=""], [data-value=""]' ).each( function() {
                     var $option = $( this );
                     curLabel = $option.text();
-                    value = $option.attr( 'value' );
-                    newLabel = $option.parent( 'select' ).siblings( '.or-option-translations' )
+                    value = $option.attr( 'value' ) || $option[ 0 ].dataset.value;
+                    newLabel = $option.closest( '.question' ).find( '.or-option-translations' )
                         .children( '.active[data-option-value="' + value + '"]' ).text().trim();
                     newLabel = ( typeof newLabel !== 'undefined' && newLabel.length > 0 ) ? newLabel : curLabel;
                     $option.text( newLabel );
@@ -1190,6 +1190,7 @@ define( function( require, exports, module ) {
             $nodes.each( function() {
                 var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, currentValue, $instanceItems, index, context, labelRefValue,
                     $template, newItems, prevItems, templateNodeName, $input, $labels, itemsXpath, labelType, labelRef, valueRef;
+                var $list;
 
                 $template = $( this );
 
@@ -1201,8 +1202,16 @@ define( function( require, exports, module ) {
                 newItems = {};
                 prevItems = $template.data();
                 templateNodeName = $template.prop( 'nodeName' ).toLowerCase();
-                $input = ( templateNodeName === 'label' ) ? $template.children( 'input' ).eq( 0 ) : $template.parent( 'select' );
-                $labels = $template.closest( 'label, select' ).siblings( '.itemset-labels' );
+                $list = $template.parent( 'select, datalist' );
+
+                if ( templateNodeName === 'label' ) {
+                    $input = $template.children( 'input' ).eq( 0 );
+                } else if ( $list.prop( 'nodeName' ).toLowerCase() === 'select' ) {
+                    $input = $list;
+                } else if ( $list.prop( 'nodeName' ).toLowerCase() === 'datalist' ) {
+                    $input = $list.siblings( 'input:not(.widget)' );
+                }
+                $labels = $template.closest( 'label, select, datalist' ).siblings( '.itemset-labels' );
                 itemsXpath = $template.attr( 'data-items-path' );
                 labelType = $labels.attr( 'data-label-type' );
                 labelRef = $labels.attr( 'data-label-ref' );
@@ -1342,10 +1351,11 @@ define( function( require, exports, module ) {
                     $input.trigger( 'change' );
                 }
 
-                if ( $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
-                    //populate labels (with current language)
-                    that.langs.setSelect( $input );
-                    //update widget
+                if ( $list.length > 0 ) {
+                    // populate labels (with current language) 
+                    // TODO: is this actually required?
+                    // that.langs.setSelect( $list );
+                    // update widget
                     $input.trigger( 'changeoption' );
                 }
 
