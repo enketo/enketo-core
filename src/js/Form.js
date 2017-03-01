@@ -1401,7 +1401,7 @@ define( function( require, exports, module ) {
                  * or the parent with a name attribute
                  * or the whole document
                  */
-                $context = $output.closest( '.question, .or-group' ).find( '[name]' ).eq( 0 );
+                $context = $output.closest( '.question, .note, .or-group' ).find( '[name]' ).eq( 0 );
                 context = ( $context.length ) ? that.input.getName( $context ) : undefined;
 
                 insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
