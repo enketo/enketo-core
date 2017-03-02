@@ -335,6 +335,37 @@ describe( 'repeat functionality', function() {
         } );
     } );
 
+    describe( 'supports repeat count', function() {
+        it( 'to dynamically remove/add repeats', function() {
+            var f = loadForm( 'repeat-count.xml' );
+            var rep = '.or-repeat[name="/dynamic-repeat-count/rep"]';
+            var cnt = '[name="/dynamic-repeat-count/count"]';
+            var $form;
+            f.init();
+            $form = f.getView().$;
+            $model = f.getModel().$;
+            // check that repeat count is evaluated upon load for default values
+            expect( $form.find( rep ).length ).toEqual( 2 );
+            expect( $model.find( 'rep' ).length ).toEqual( 2 );
+            // increase
+            $form.find( cnt ).val( 10 ).trigger( 'change' );
+            expect( $form.find( rep ).length ).toEqual( 10 );
+            expect( $model.find( 'rep' ).length ).toEqual( 10 );
+            // decrease
+            $form.find( cnt ).val( 5 ).trigger( 'change' );
+            expect( $form.find( rep ).length ).toEqual( 5 );
+            expect( $model.find( 'rep' ).length ).toEqual( 5 );
+            // decrease too much
+            $form.find( cnt ).val( 0 ).trigger( 'change' );
+            expect( $form.find( rep ).length ).toEqual( 1 );
+            expect( $model.find( 'rep' ).length ).toEqual( 1 );
+            // decrease way too much
+            $form.find( cnt ).val( -10 ).trigger( 'change' );
+            expect( $form.find( rep ).length ).toEqual( 1 );
+            expect( $model.find( 'rep' ).length ).toEqual( 1 );
+        } );
+    } );
+
 } );
 
 describe( 'calculations', function() {

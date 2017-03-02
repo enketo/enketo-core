@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>dynamic-repeat-count</h:title>
+    <model>
+      <instance>
+        <dynamic-repeat-count id="dynamic-repeat-count">
+          <count>2</count>
+          <rep_count/>
+          <rep jr:template="">
+            <txt/>
+            <num>5</num>
+          </rep>
+          <sum_note/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </dynamic-repeat-count>
+      </instance>
+      <bind nodeset="/dynamic-repeat-count/count" type="int"/>
+      <bind calculate=" /dynamic-repeat-count/count " nodeset="/dynamic-repeat-count/rep_count" readonly="true()" type="string"/>
+      <bind nodeset="/dynamic-repeat-count/rep/txt" type="string"/>
+      <bind nodeset="/dynamic-repeat-count/rep/num" type="int"/>
+      <bind calculate="count( /dynamic-repeat-count/rep )" nodeset="/dynamic-repeat-count/sum_note" readonly="true()" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/dynamic-repeat-count/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/dynamic-repeat-count/count">
+      <label>How many repeats?</label>
+    </input>
+    <group ref="/dynamic-repeat-count/rep">
+      <label>Repeat with count</label>
+      <repeat jr:count=" /dynamic-repeat-count/rep_count " nodeset="/dynamic-repeat-count/rep">
+        <input ref="/dynamic-repeat-count/rep/txt">
+          <label>Enter text</label>
+        </input>
+        <input ref="/dynamic-repeat-count/rep/num">
+          <label>Enter number</label>
+        </input>
+      </repeat>
+    </group>
+    <input ref="/dynamic-repeat-count/sum_note">
+      <label>Number of repeats present</label>
+    </input>
+  </h:body>
+</h:html>
