@@ -167,7 +167,6 @@ define( function( require, exports, module ) {
             } );
 
         this.$fakeInput.on( 'click', function( e ) {
-            console.log( 'click on fakeINput' );
             e.preventDefault();
             $( that.element ).click();
         } );

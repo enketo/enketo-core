@@ -12,6 +12,7 @@ define( function( require, exports, module ) {
     var disable;
     var destroy;
     var initialized = false;
+    var hasInitialized;
     var _getElements;
     var _instantiate;
     var _setLangChangeListener;
@@ -43,7 +44,12 @@ define( function( require, exports, module ) {
         widgets.forEach( function( widget ) {
             _instantiate( widget, $group );
         } );
+
         initialized = true;
+    };
+
+    hasInitialized = function() {
+        return initialized;
     };
 
     /**
@@ -210,7 +216,7 @@ define( function( require, exports, module ) {
         enable: enable,
         disable: disable,
         destroy: destroy,
-        initialized: initialized
+        hasInitialized: hasInitialized
     };
 
 } );

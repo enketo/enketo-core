@@ -1859,7 +1859,7 @@ define( function( require, exports, module ) {
                     $clone.find( '.option-wrapper' ).each( this.fixRadioNames );
 
                     // Destroy widgets before inserting the clone
-                    if ( widgets.initialized ) {
+                    if ( widgets.hasInitialized() ) {
                         widgets.destroy( $clone );
                     }
 
@@ -1883,7 +1883,7 @@ define( function( require, exports, module ) {
                     $radiocheckbox.filter( ':checked' ).parent( 'label' ).attr( 'data-checked', 'true' );
 
                     // Re-initiatalize widgets in clone after default values have been set
-                    if ( widgets.initialized ) {
+                    if ( widgets.hasInitialized() ) {
                         widgets.init( $clone );
                     } else {
                         // Upon inital formload the eventhandlers for calculated items have not yet been set.
