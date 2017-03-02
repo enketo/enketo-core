@@ -159,11 +159,8 @@ DesktopSelectpicker.prototype._createSelectedStr = function() {
 DesktopSelectpicker.prototype._clickListener = function() {
     var _this = this;
 
-
-
     this.$picker
         .on( 'click', 'li:not(.disabled)', function( e ) {
-            //console.debug( 'click' );
             e.preventDefault();
             var $li = $( this ),
                 $input = $li.find( 'input' ),
@@ -195,6 +192,20 @@ DesktopSelectpicker.prototype._clickListener = function() {
             _this.$picker.find( '.selected' ).html( _this._createSelectedStr() );
 
             $select.trigger( 'change' );
+        } )
+        // Enter/Space keys
+        .on( 'keydown', 'li:not(.disabled)', function( e ) {
+            if ( /(13|32)/.test( e.keyCode.toString( 10 ) ) ) {
+                if ( !/(32)/.test( e.keyCode.toString( 10 ) ) ) {
+                    e.preventDefault();
+                }
+                var elem = $( ':focus' );
+                elem.click();
+                // Bring back focus for multiselects
+                elem.focus();
+                // Prevent screen from scrolling if the user hit the spacebar
+                e.preventDefault();
+            }
         } )
         .on( 'click', 'li.disabled', function( e ) {
             e.stopPropagation();

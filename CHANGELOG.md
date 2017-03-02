@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Support for truly dynamic repeat count (jr:count attribute).
 
+##### Fixed
+- Select desktop picker options cannot be selected by pressing spacebar.
+
 [4.23.0] - 2017-03-01
 ---------------------
 ##### Added
