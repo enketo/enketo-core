@@ -1,18 +1,25 @@
 .file-picker {
     .fake-file-input {
         @include form-control;
+
         width: $input-max-width;
+        text-align: start;
     }
+
     .file-feedback, .file-preview {
         @include font-normal;
     }
+
     .file-feedback.error {
         @extend .or-constraint-msg.active;
     }
+
     .file-feedback.warning {
         @extend .or-required-msg.active;
+
         color: $state-warning-text;
     }
+
     .file-preview {
         margin-top: 10px;
     }

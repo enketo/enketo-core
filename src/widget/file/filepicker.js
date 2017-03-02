@@ -55,7 +55,7 @@ define( function( require, exports, module ) {
 
         this.$widget = $(
                 '<div class="widget file-picker">' +
-                '<div class="fake-file-input"></div>' +
+                '<input class="ignore fake-file-input" type="button"/>' +
                 '<div class="file-feedback"></div>' +
                 '<div class="file-preview"></div>' +
                 '</div>' )
@@ -115,61 +115,66 @@ define( function( require, exports, module ) {
     Filepicker.prototype._changeListener = function() {
         var that = this;
 
-        $( this.element ).on( 'click', function( event ) {
-            if ( that.props.readonly ) {
-                event.stopImmediatePropagation();
-                return false;
-            }
-        } );
+        $( this.element )
+            .on( 'click', function( event ) {
+                if ( that.props.readonly ) {
+                    event.stopImmediatePropagation();
+                    return false;
+                }
+            } ).on( 'change.propagate.' + this.namespace, function( event ) {
+                var file;
+                var fileName;
+                var postfix;
+                var $input = $( this );
+                var loadedFileName = $input.attr( 'data-loaded-file-name' );
+                var now = new Date();
 
-        $( this.element ).on( 'change.propagate.' + this.namespace, function( event ) {
-            var file;
-            var fileName;
-            var postfix;
-            var $input = $( this );
-            var loadedFileName = $input.attr( 'data-loaded-file-name' );
-            var now = new Date();
+                if ( event.namespace === 'propagate' ) {
+                    // trigger eventhandler to update instance value
+                    $input.trigger( 'change.file' );
+                    return false;
+                } else {
+                    event.stopImmediatePropagation();
+                }
 
-            if ( event.namespace === 'propagate' ) {
-                // trigger eventhandler to update instance value
-                $input.trigger( 'change.file' );
-                return false;
-            } else {
-                event.stopImmediatePropagation();
-            }
+                // get the file
+                file = this.files[ 0 ];
+                postfix = '-' + now.getHours() + '_' + now.getMinutes() + '_' + now.getSeconds();
+                this.dataset.filenamePostfix = postfix;
+                fileName = utils.getFilename( file, postfix );
 
-            // get the file
-            file = this.files[ 0 ];
-            postfix = '-' + now.getHours() + '_' + now.getMinutes() + '_' + now.getSeconds();
-            this.dataset.filenamePostfix = postfix;
-            fileName = utils.getFilename( file, postfix );
+                // process the file
+                fileManager.getFileUrl( file, fileName )
+                    .then( function( url ) {
+                        // update UI
+                        that._showPreview( url, that.props.mediaType );
+                        that._showFeedback( '' );
+                        that._showFileName( fileName );
+                        if ( loadedFileName && loadedFileName !== fileName ) {
+                            $input.removeAttr( 'data-loaded-file-name' );
+                        }
+                        // update record
+                        $input.trigger( 'change.propagate' );
+                    } )
+                    .catch( function( error ) {
+                        // update record to clear any existing valid value
+                        $input.val( '' ).trigger( 'change.propagate' );
+                        // update UI
+                        that._showFileName( '' );
+                        that._showPreview( null );
+                        that._showFeedback( error.message, 'error' );
+                    } );
+            } );
 
-            // process the file
-            fileManager.getFileUrl( file, fileName )
-                .then( function( url ) {
-                    // update UI
-                    that._showPreview( url, that.props.mediaType );
-                    that._showFeedback( '' );
-                    that._showFileName( fileName );
-                    if ( loadedFileName && loadedFileName !== fileName ) {
-                        $input.removeAttr( 'data-loaded-file-name' );
-                    }
-                    // update record
-                    $input.trigger( 'change.propagate' );
-                } )
-                .catch( function( error ) {
-                    // update record to clear any existing valid value
-                    $input.val( '' ).trigger( 'change.propagate' );
-                    // update UI
-                    that._showFileName( '' );
-                    that._showPreview( null );
-                    that._showFeedback( error.message, 'error' );
-                } );
+        this.$fakeInput.on( 'click', function( e ) {
+            console.log( 'click on fakeINput' );
+            e.preventDefault();
+            $( that.element ).click();
         } );
     };
 
     Filepicker.prototype._showFileName = function( fileName ) {
-        this.$fakeInput.text( fileName );
+        this.$fakeInput.val( fileName );
     };
 
     Filepicker.prototype._showFeedback = function( message, status ) {

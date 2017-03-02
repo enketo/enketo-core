@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.24.0] - 2017-03-02
 ---------------------
 ##### Added
 - Support for truly dynamic repeat count (jr:count attribute).
 
 ##### Fixed
 - Select desktop picker options cannot be selected by pressing spacebar.
+- Accessibility issue with file input picker (tab traversal, focus).
 
 [4.23.0] - 2017-03-01
 ---------------------
