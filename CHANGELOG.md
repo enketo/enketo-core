@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.24.2] - 2017-03-03
+---------------------
+##### Fixed
+- XPath number results not converted to date and datetime when stored.
+
 [4.24.1] - 2017-03-02
 ---------------------
 ##### Fixed

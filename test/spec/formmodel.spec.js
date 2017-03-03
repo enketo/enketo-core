@@ -185,17 +185,19 @@ describe( 'Data node XML data type', function() {
         [ 'val5565ghgyuyuy', 'date', false, '' ], //Chrome turns val5 into a valid date...
         [ '2012-01-01', 'date', true ],
         [ '2012-12-32', 'date', false, '' ],
-        //[324, 'date', true], //fails in phantomjs
+        // The tests below are dependent on OS time zone of test machine
+        [ 324, 'date', true, '1970-11-21' ],
 
         [ 'val5565ghgyuyua', 'datetime', false, '' ], //Chrome turns val10 into a valid date..
         [ '2012-01-01T00:00:00-06', 'datetime', true, '2012-01-01T00:00:00-06:00' ],
         [ '2012-12-32T00:00:00-06', 'datetime', false, '2012-12-32T00:00:00-06:00' ], //?
         [ '2012-12-31T23:59:59-06', 'datetime', true, '2012-12-31T23:59:59-06:00' ],
         [ '2012-12-31T23:59:59-06:30', 'datetime', true ],
-        // the test below is dependent on OS time zone of test machine
-        //[ '2012-12-31T23:59:59Z', 'datetime', true, '2012-12-31T16:59:59.000-07:00' ],
         [ '2012-01-01T30:00:00-06', 'datetime', false, '2012-01-01T30:00:00-06:00' ],
-        //['2013-05-31T07:00-02', 'datetime', true],fails in phantomJSs
+        // The tests below are dependent on OS time zone of test machine
+        [ '2012-12-31T23:59:59Z', 'datetime', true, '2012-12-31T16:59:59.000-07:00' ],
+        [ 324, 'datetime', true, '1970-11-20T17:00:00.000-07:00' ],
+        [ '2013-05-31T07:00-02', 'datetime', true, '2013-05-31T07:00-02:00' ], //fails in phantomJSs
 
         [ 'a', 'time', false, '' ],
         [ 'aa:bb', 'time', false, '' ],

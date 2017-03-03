@@ -12,3 +12,6 @@ addons:
       - g++-4.8
 before_script:
   - npm install -g grunt-cli
+before_install:
+  - export TZ=America/Denver
+  - date

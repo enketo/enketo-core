@@ -94,10 +94,15 @@ define( function( require, exports, module ) {
         return array;
     }
 
+    function isNumber( n ) {
+        return !isNaN( parseFloat( n ) ) && isFinite( n );
+    }
+
     module.exports = {
         parseFunctionFromExpression: parseFunctionFromExpression,
         stripQuotes: stripQuotes,
         getFilename: getFilename,
-        toArray: toArray
+        toArray: toArray,
+        isNumber: isNumber
     };
 } );
