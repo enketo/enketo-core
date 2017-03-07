@@ -3,11 +3,12 @@ var Form = require( '../../src/js/Form' );
 var $ = require( 'jquery' );
 var forms = require( '../mock/forms' );
 
-var loadForm = function( filename, editStr, options ) {
+var loadForm = function( filename, editStr, options, session ) {
     var strings = forms[ filename ];
     return new Form( strings.html_form, {
         modelStr: strings.xml_model,
-        instanceStr: editStr
+        instanceStr: editStr,
+        session: session || {}
     }, options );
 };
 
@@ -133,6 +134,23 @@ describe( 'Preload and MetaData functionality', function() {
         [ '/dynamic-default/two', '/dynamic-default/four', '/dynamic-default/six' ].forEach( function( path ) {
             expect( form.getView().$.find( '[name="' + path + '"]' ).val().length > 9 ).toBe( true );
             expect( form.getModel().node( path ).getVal()[ 0 ].length > 9 ).toBe( true );
+        } );
+    } );
+
+    it( 'some session context can be passed to the data.session property when instantiating form', function() {
+        var session = {
+            deviceid: 'a',
+            username: 'b',
+            email: 'c',
+            phonenumber: 'd',
+            simserial: 'e',
+            subscriberid: 'f'
+        };
+        form = loadForm( 'preload.xml', undefined, undefined, session );
+        form.init();
+
+        [ 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid' ].forEach( function( prop ) {
+            expect( form.getModel().node( '/preload/' + prop ).getVal()[ 0 ] ).toEqual( session[ prop ] );
         } );
     } );
 

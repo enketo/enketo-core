@@ -1619,48 +1619,16 @@ define( function( require, exports, module ) {
                 return o.curVal;
             },
             'property': function( o ) {
-                var readCookie;
-                var noSupportMsg;
-                var response;
-
-                readCookie = function( name, c, C, i ) {
-                    if ( cookies ) {
-                        return cookies[ name ];
-                    }
-
-                    c = document.cookie.split( '; ' );
-                    cookies = {};
-
-                    for ( i = c.length - 1; i >= 0; i-- ) {
-                        C = c[ i ].split( '=' );
-                        // decode URI
-                        C[ 1 ] = decodeURIComponent( C[ 1 ] );
-                        // if cookie is signed (using expressjs/cookie-parser/), extract value
-                        if ( C[ 1 ].substr( 0, 2 ) === 's:' ) {
-                            C[ 1 ] = C[ 1 ].slice( 2 );
-                            C[ 1 ] = C[ 1 ].slice( 0, C[ 1 ].lastIndexOf( '.' ) );
-                        }
-                        cookies[ C[ 0 ] ] = decodeURIComponent( C[ 1 ] );
-                    }
-
-                    return cookies[ name ];
-                };
+                var node;
 
                 // 'deviceid', 'subscriberid', 'simserial', 'phonenumber'
                 if ( o.curVal.length === 0 ) {
-                    noSupportMsg = 'no ' + o.param + ' property in enketo';
-                    switch ( o.param ) {
-                        case 'deviceid':
-                            response = readCookie( '__enketo_meta_deviceid' ) || 'Error: could not determine deviceID';
-                            break;
-                        case 'username':
-                            response = readCookie( '__enketo_meta_uid' );
-                            break;
-                        default:
-                            response = noSupportMsg;
-                            break;
+                    node = model.node( 'instance("__session")/session/context/' + o.param );
+                    if ( node.get().length ) {
+                        return node.getVal()[ 0 ];
+                    } else {
+                        return 'no ' + o.param + ' property in enketo';
                     }
-                    return response;
                 }
                 return o.curVal;
             },

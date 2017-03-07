@@ -38,7 +38,10 @@ var data = {
 	submitted: false,
 	// optional array of external data objects containing: 
 	// {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
-	external: []
+	external: [],
+    // optional object of session properties 
+    // 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid'
+    session: {}
 };
 
 // form-specific configuration

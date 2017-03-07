@@ -98,6 +98,10 @@ define( function( require, exports, module ) {
                 }
                 instanceDoc.appendChild( $.parseXML( instance.xmlStr ).firstChild );
             } );
+
+            // TODO: in the future, we should search for jr://instance/session and 
+            // populate that one. This is just moving in that direction to implement preloads.
+            this.createSession( '__session', this.data.session );
         } catch ( e ) {
             console.error( 'parseXML error' );
             this.loadErrors.push( 'Error trying to parse XML ' + id + '. ' + e.message );
@@ -111,7 +115,7 @@ define( function( require, exports, module ) {
                 this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
                 this.setNamespaces();
 
-                // check if instanceID is present
+                // Check if instanceID is present
                 if ( !this.getMetaNode( 'instanceID' ).get().get( 0 ) ) {
                     that.loadErrors.push( 'Invalid primary instance. Missing instanceID node.' );
                 }
@@ -143,6 +147,41 @@ define( function( require, exports, module ) {
         }
 
         return this.loadErrors;
+    };
+
+    FormModel.prototype.createSession = function( id, sessObj ) {
+        var instance;
+        var session;
+        var model = this.xml.querySelector( 'model' );
+        var fixedProps = [ 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid' ];
+        if ( !model ) {
+            return;
+        }
+
+        sessObj = ( typeof sessObj === 'object' ) ? sessObj : {};
+        instance = model.querySelector( 'instance[id="' + id + '"]' );
+
+        if ( !instance ) {
+            instance = $.parseXML( '<instance id="' + id + '"/>' ).documentElement;
+            this.xml.adoptNode( instance );
+            model.appendChild( instance );
+        }
+
+        // fixed: /sesssion/context properties
+        fixedProps.forEach( function( prop ) {
+            sessObj[ prop ] = sessObj[ prop ] || utils.readCookie( '__enketo_meta_' + prop ) || prop + ' not found';
+        } );
+
+        session = $.parseXML( '<session><context>' +
+            fixedProps.map( function( prop ) {
+                return '<' + prop + '>' + sessObj[ prop ] + '</' + prop + '>';
+            } ) +
+            '</context></session>' ).documentElement;
+
+        // TODO: custom properties could be added to /session/user/data or to /session/data
+
+        this.xml.adoptNode( session );
+        instance.appendChild( session );
     };
 
     /**

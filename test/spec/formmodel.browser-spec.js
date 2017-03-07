@@ -68,6 +68,8 @@ describe( 'merging an instance into the model', function() {
             model.init();
             model.mergeXml( test[ 0 ] );
 
+            // remove __session instance
+            model.xml.querySelector( 'instance[id="__session"]' ).remove();
             result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
             expected = test[ 2 ];
 

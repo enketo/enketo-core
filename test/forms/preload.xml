@@ -11,6 +11,8 @@
           <deviceid/>
           <subscriberid/>
           <imei/>
+          <email/>
+          <simserial/>
           <phonenumber/>
           <username/>
           <start_note/>
@@ -32,6 +34,8 @@
       <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/preload/deviceid" type="string"/>
       <bind jr:preload="property" jr:preloadParams="subscriberid" nodeset="/preload/subscriberid" type="string"/>
       <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/preload/imei" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="email" nodeset="/preload/email" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="simserial" nodeset="/preload/simserial" type="string"/>
       <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/preload/phonenumber" type="string"/>
       <bind jr:preload="property" jr:preloadParams="username" nodeset="/preload/username" type="string"/>
       <bind nodeset="/preload/start_note" readonly="true()" type="string"/>
