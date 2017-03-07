@@ -1,5 +1,5 @@
 /**
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0( the "License" );
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,11 @@ var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 var t = require( 'translator' ).t;
 var pluginName = 'autocomplete';
+var sadExcuseForABrowser = !( 'list' in document.createElement( 'input' ) &&
+    'options' in document.createElement( 'datalist' ) &&
+    typeof window.HTMLDataListElement !== 'undefined' );
 
+require( './jquery.relevant-dropdown' );
 
 /**
  *  Autocomplete select1 picker for modern browsers.
@@ -54,10 +58,16 @@ Selectpicker.prototype._init = function() {
     // This value -> data-value change is not slow, so no need to move to enketo-xslt as that would 
     // increase itemset complexity even further.
     this.$options.each( function( index, item ) {
-        // We're changing the original datalist here, so have to make sure we don't do anything
-        // if dataset.value is already populated.
-        if ( !item.classList.contains( 'itemset-template' ) && !item.dataset.value ) {
-            item.dataset.value = item.value;
+        var value = item.getAttribute( 'value' );
+        /**
+         * We're changing the original datalist here, so have to make sure we don't do anything
+         * if dataset.value is already populated.
+         * 
+         * However, for some reason !item.dataset.value is failing in Safari, which as a result sets all dataset.value attributes to "null" 
+         * To workaround this, we check for the value attribute instead.
+         */
+        if ( !item.classList.contains( 'itemset-template' ) && value !== undefined && value !== null ) {
+            item.dataset.value = value;
             item.removeAttribute( 'value' );
         }
     } );
@@ -71,6 +81,11 @@ Selectpicker.prototype._init = function() {
     }
 
     $input.hide().after( this.$fakeInput );
+
+    if ( sadExcuseForABrowser ) {
+        console.debug( 'Polyfill required' );
+        this.$fakeInput.relevantDropdown();
+    }
 
     this._setFakeInputListener();
     this._setFocusListener();
@@ -173,9 +188,9 @@ Selectpicker.prototype.update = function() {
      * 2. The language changed. (just this._showCurrentLabel() would be more efficient)
      * 3. The value of the underlying original input changed due a calculation. (same as #2?)
      * 
-     * For now we just dumbly reinstantiate it.
+     * For now we just dumbly reinstantiate it (including the polyfill).
      */
-    $( this.element ).next( '.widget' ).remove();
+    $( this.element ).siblings( '.widget' ).remove();
     this._init();
 };
 

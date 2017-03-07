@@ -1,4 +1,4 @@
-//@import "../../../../../node_modules/select2/dist/css/select2";
+@import "./jquery.relevant-dropdown";
 
 input[type=text].autocomplete {
     // width of input same as width of regular select
@@ -14,3 +14,5 @@ input[type=text].autocomplete {
         width: 100%;
     }
 }
+
+// to remove caret: http://stackoverflow.com/questions/20937475/remove-datalist-dropdown-arrow-in-chrome

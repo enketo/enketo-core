@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Added
+- Safari and iOS browser support for autocomplete widget.
+
 [4.26.2] - 2017-03-16
 ---------------------
 ##### Fixed

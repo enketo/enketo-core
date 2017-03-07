@@ -267,6 +267,10 @@ label, legend, .trigger, .note {
     }
 }
 
+.datalist.widget {
+    display: none;
+}
+
 .or-appearance-likert .option-wrapper > label .option-label {
     border-top: 1.5px solid black;
 }

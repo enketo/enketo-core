@@ -1,0 +1,32 @@
+/*
+	 CSS-Tricks Example
+	 by Chris Coyier
+	 http://css-tricks.com
+*/
+
+.datalist {
+    list-style: none;
+    display: none;
+    background: white;
+    position: absolute;
+    left: 0;
+    top: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 10;
+    padding: 0;
+    border: 1px solid $gray;
+}
+
+.datalist:empty {
+    display: none !important;
+}
+
+.datalist li {
+    padding: 5px;
+}
+
+.datalist li.active {
+    background: #3875d7;
+    color: white;
+}
