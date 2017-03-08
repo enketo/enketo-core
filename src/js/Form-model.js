@@ -1298,6 +1298,7 @@ define( function( require, exports, module ) {
         var curVal;
         var /**@type {string}*/ newVal;
         var updated;
+        var customData;
 
         curVal = this.getVal()[ 0 ];
 
@@ -1316,7 +1317,9 @@ define( function( require, exports, module ) {
             // then return validation result
             updated = this.getClosestRepeat();
             updated.nodes = [ $target.prop( 'nodeName' ) ];
-            //updated.file = ( xmlDataType === 'binary' ) ? newVal.toString() : false;
+
+            customData = this.model.getUpdateEventData( $target.get( 0 ), xmlDataType );
+            updated = ( customData ) ? $.extend( {}, updated, customData ) : updated;
 
             this.model.$events.trigger( 'dataupdate', updated );
 
@@ -1758,6 +1761,9 @@ define( function( require, exports, module ) {
             }
         }
     };
+
+    // Placeholder function meant to be overwritten
+    FormModel.prototype.getUpdateEventData = function( node, type ) {};
 
     // Placeholder function meant to be overwritten
     FormModel.prototype.getValidationEventData = function( node, type ) {};

@@ -3,7 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[2.25.0]
+[2.26.0] - 2017-03-09
+---------------------
+##### Added
+- Ability to add custom data to dataupdate event.
+
+[2.25.0] - 2017-03-07
 ---------------------
 ##### Added
 - Ability to pass session properties (metadata) when instantiating form.
@@ -53,8 +58,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.21.0] - 2017-02-10
 ---------------------
 ##### Added
-- a validateContinuously mode,
-- send _validated.enketo_ and _invalidated.enketo_ events with extensible/custom data
+- A validateContinuously mode.
+- Send _validated.enketo_ and _invalidated.enketo_ events with extensible/custom data.
 
 [4.20.0] - 2017-02-03
 ---------------------
