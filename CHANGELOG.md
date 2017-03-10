@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Styling issues with readonly questions.
+
 [2.26.0] - 2017-03-09
 ---------------------
 ##### Added

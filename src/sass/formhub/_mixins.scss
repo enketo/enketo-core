@@ -109,7 +109,7 @@
     // disabled if the fieldset is disabled. Due to implementation difficulty, we
     // don't honor that edge case; we style them as disabled anyway
     &[disabled],
-    &[readonly]
+    &[readonly],
     fieldset[disabled] & {
         cursor: not-allowed;
         background-color: $input-bg-disabled;
