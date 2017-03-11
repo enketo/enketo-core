@@ -3,18 +3,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[2.26.1] - 2017-03-10
+[4.26.1] - 2017-03-10
 ---------------------
 ##### Fixed
 - Styling issues with readonly questions.
 - Grid theme does not print complete textarea if text requires scrolling.
 
-[2.26.0] - 2017-03-09
+[4.26.0] - 2017-03-09
 ---------------------
 ##### Added
 - Ability to add custom data to dataupdate event.
 
-[2.25.0] - 2017-03-07
+[4.25.0] - 2017-03-07
 ---------------------
 ##### Added
 - Ability to pass session properties (metadata) when instantiating form.
