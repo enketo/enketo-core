@@ -12,6 +12,7 @@ define( function( require, exports, module ) {
         require( '../widget/select-autocomplete/autocomplete' ),
         //require( '../widget/geo-esri/geopicker' ),
         require( '../widget/geo/geopicker' ),
+        require( '../widget/textarea/textarea' ),
         require( '../widget/table/tablewidget' ),
         require( '../widget/radio/radiopicker' ),
         require( '../widget/date/datepicker-extended' ),

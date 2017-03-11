@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[2.26.1] - 2017-03-10
 ---------------------
 ##### Fixed
 - Styling issues with readonly questions.
+- Grid theme does not print complete textarea if text requires scrolling.
 
 [2.26.0] - 2017-03-09
 ---------------------
