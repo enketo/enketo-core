@@ -1208,13 +1208,13 @@ define( function( require, exports, module ) {
                     for ( j = 0; j < result.snapshotLength; j++ ) {
                         response.push( result.snapshotItem( j ) );
                     }
-                } catch(e) {
+                } catch ( e ) {
                     console.log( 'WARN', e );
                     try {
-                        while( j = result.iterateNext() ) {
+                        while ( j = result.iterateNext() ) {
                             response.push( j );
                         }
-                    } catch(f) {
+                    } catch ( f ) {
                         console.log( 'WARN', f );
                     }
                 }
