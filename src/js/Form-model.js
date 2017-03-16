@@ -1619,7 +1619,7 @@ define( function( require, exports, module ) {
                     // Comply with XML schema int type that has no special values. '' is our only option.
                     return '';
                 }
-                return Math.floor( num );
+                return ( num >= 0 ) ? Math.floor( num ) : -Math.floor( Math.abs( num ) );
             },
             validate: function( x ) {
                 var num = Number( x );

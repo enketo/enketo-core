@@ -3,11 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.26.2] - 2017-03-16
 ---------------------
 ##### Fixed
 - Exception occurs when forms contains no textarea (multiline text widget).
-- Repeat count updates in pages mode cause unexpected page flipping behavior.
+- Repeat count updates in pages mode causes unhelpful page flipping behaviour if the repeat has _field-list_ appearance.
+- Negative decimal numbers not converted correctly to integers.
 
 [4.26.1] - 2017-03-10
 ---------------------
