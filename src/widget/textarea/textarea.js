@@ -8,9 +8,6 @@ define( function( require, exports, module ) {
     'use strict';
     var Widget = require( '../../js/Widget' );
     var $ = require( 'jquery' );
-    require( '../../js/plugins' );
-
-    var $lastFocused = null;
     var pluginName = 'textareaWidget';
 
     /**
@@ -46,7 +43,8 @@ define( function( require, exports, module ) {
      */
     TextareaWidget.prototype._setDelegatedHandlers = function() {
         var $form = $( this.element );
-        var defaultHeight = $form[ 0 ].querySelector( 'textarea' ).clientHeight || 20;
+        var textarea = $form[ 0 ].querySelector( 'textarea' );
+        var defaultHeight = textarea ? textarea.clientHeight : 20;
         $form.on( 'input', 'textarea', function( event ) {
             if ( this.scrollHeight > this.clientHeight && this.scrollHeight > defaultHeight ) {
                 // setting min-height instead of height, as height doesn't work in Grid Theme.

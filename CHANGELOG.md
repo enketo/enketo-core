@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Exception occurs when forms contains no textarea (multiline text widget).
+
 [4.26.1] - 2017-03-10
 ---------------------
 ##### Fixed
