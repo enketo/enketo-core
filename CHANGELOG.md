@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Exception occurs when forms contains no textarea (multiline text widget).
+- Repeat count updates in pages mode cause unexpected page flipping behavior.
 
 [4.26.1] - 2017-03-10
 ---------------------

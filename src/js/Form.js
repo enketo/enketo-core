@@ -397,11 +397,15 @@ define( function( require, exports, module ) {
                 // TODO: can be optimized by smartly updating the active pages
                 $form
                     .off( 'addrepeat.pagemode' )
-                    .on( 'addrepeat.pagemode', function( event ) {
+                    .on( 'addrepeat.pagemode', function( event, index, byCountUpdate ) {
                         that.updateAllActive();
-                        // removing the class in effect avoids the animation
+                        // Removing the class in effect avoids the animation
+                        // It also prevents multiple .or-repeat[role="page"] to be shown on the same page
                         $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
-                        that.flipToPageContaining( $( event.target ) );
+                        // Don't flip if the user didn't create the repeat with the + button.
+                        if ( !byCountUpdate ) {
+                            that.flipToPageContaining( $( event.target ) );
+                        }
                     } )
                     .off( 'removerepeat.pagemode' )
                     .on( 'removerepeat.pagemode', function( event ) {
@@ -1789,6 +1793,7 @@ define( function( require, exports, module ) {
                 var total;
                 var path;
                 var that = this;
+                var byCountUpdate = !!count;
 
                 count = count || 1;
 
@@ -1840,8 +1845,8 @@ define( function( require, exports, module ) {
                         model.cloneRepeat( path, index );
                     }
 
-                    // This will trigger setting default values and other stuff
-                    $clone.trigger( 'addrepeat', index + 1 );
+                    // This will trigger setting default values and automatic page flips.
+                    $clone.trigger( 'addrepeat', [ index + 1, byCountUpdate ] );
 
                     // Remove data-checked attributes for non-checked radio buttons and checkboxes
                     // Add data-checked attributes for checked ones.
