@@ -459,10 +459,12 @@ define( function( require, exports, module ) {
             next: function() {
                 var that = this;
                 var currentIndex;
+                var validate;
                 this.updateAllActive();
                 currentIndex = this.getCurrentIndex();
+                validate = ( config.validatePage === false ) ? Promise.resolve( true ) : form.validateContent( this.$current );
 
-                return form.validateContent( this.$current )
+                return validate
                     .then( function( valid ) {
                         var next, newIndex;
 

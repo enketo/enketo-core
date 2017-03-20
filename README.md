@@ -118,6 +118,9 @@ The Google API key that is used for geolocation (in the geo widgets' search box)
 #### validateContinuously
 This setting with the default `false` value determines whether Enketo should validate questions immediately if a related value changes. E.g. if question A has a constraint that depends on question B, this mode would re-validate question A if the value for question B changes. **This mode will slow down form traversal.** When set to `false` that type of validation is only done at the end when the Submit button is clicked or in Pages mode when the user clicks Next.
 
+#### validatePage
+This setting with default `true` value determines whether the Next button should trigger validation of the current page and block the user from moving to the next page if validation fails.
+
 ### Form Configuration
 
 Per-form configuration is done by adding an (optional) options object as 3rd parameter when instantiating a form.

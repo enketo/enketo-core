@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Added
 - Safari and iOS browser support for autocomplete widget.
+- Ability to disable page validation (default is unchanged).
 
 [4.26.2] - 2017-03-16
 ---------------------
