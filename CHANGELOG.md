@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Reduced vertical whitespace between label and radiobuttons/checkboxes.
+
 ##### Added
 - Safari and iOS browser support for autocomplete widget.
 
