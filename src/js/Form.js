@@ -1164,6 +1164,7 @@ define( function( require, exports, module ) {
                     if ( type === 'label' ) {
                         $branchNode.children( 'input, select, textarea' ).prop( 'disabled', true );
                     } else if ( type === 'fieldset' || type === 'section' ) {
+                        // TODO: a <section> cannot be disabled like this
                         $branchNode.prop( 'disabled', true );
                     } else {
                         $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', true );

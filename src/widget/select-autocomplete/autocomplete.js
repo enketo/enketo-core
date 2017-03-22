@@ -172,12 +172,12 @@ Selectpicker.prototype._setFocusListener = function() {
 
 // override super method
 Selectpicker.prototype.disable = function() {
-    this.$picker.find( 'li' ).addClass( 'disabled' );
+    this.$fakeInput.find( 'li' ).addClass( 'disabled' );
 };
 
 // override super method
 Selectpicker.prototype.enable = function() {
-    this.$picker.find( 'li' ).removeClass( 'disabled' );
+    this.$fakeInput.find( 'li' ).removeClass( 'disabled' );
 };
 
 // override super method
