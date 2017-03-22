@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Label of readonly question with a calculate expression is styled as regular question.
+- Input field of readonly question with a calculate expression is now always visible to user.
+
 ##### Fixed
 - ArcGIS geopicker fails to initialize inside a repeat.
 

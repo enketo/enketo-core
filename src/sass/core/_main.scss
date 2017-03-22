@@ -200,10 +200,6 @@ $media-margin: 10px;
     // Unfortunately, this might now be too late as it would not be appreciated by existing users.
     input[readonly]:not([type=radio]):not([type=checkbox]):not(.widget), textarea[readonly] {
         display: none;
-
-        &.has-value {
-            display: block;
-        }
     }
 
     strong {

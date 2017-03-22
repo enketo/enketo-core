@@ -745,11 +745,6 @@ define( function( require, exports, module ) {
                     value = [ value ];
                 }
 
-                // the has-value class enables hiding empty readonly inputs for prettier notes
-                if ( $inputNodes.is( '[readonly]' ) ) {
-                    $inputNodes.toggleClass( 'has-value', !!value );
-                }
-
                 // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
                 // original input element has changed **programmatically**.
                 // TODO: should only trigger if the value is actually changed.
