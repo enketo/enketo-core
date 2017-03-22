@@ -967,18 +967,19 @@ define( function( require, exports, module ) {
      * Enables a disabled widget
      */
     Geopicker.prototype.enable = function( element ) {
-        if ( !this.props.readonly ) {
-            // Due to async initialization, it is possible enable is called before it has initialized.
-            this._loadEsriArcGisJs()
-                .then( function() {
+        var that = this;
+        // Due to async initialization, it is possible enable is called before it has initialized.
+        this._loadEsriArcGisJs()
+            .then( function() {
+                if ( !that.props.readonly ) {
                     $( element )
                         .next( '.widget' )
                         .removeClass( 'readonly' )
                         .find( 'input, select, textarea' ).prop( 'disabled', false )
                         .end()
                         .find( '.btn' ).prop( 'disabled', false );
-                } );
-        }
+                }
+            } );
     };
 
     Geopicker.prototype.destroy = function( element ) {

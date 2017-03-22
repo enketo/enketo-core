@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- ArcGIS geopicker fails to initialize inside a repeat.
+
 [4.27.0] - 2017-03-20
 ---------------------
 ##### Changed
