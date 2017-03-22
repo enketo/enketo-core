@@ -1149,7 +1149,9 @@ define( function( require, exports, module ) {
                     // if the branch was previously enabled
                     if ( !virgin ) {
                         if ( that.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
-                            $branchNode.clearInputs( 'change' );
+                            // A change event ensures the model is updated
+                            // An inputupdate event is required to update widgets
+                            $branchNode.clearInputs( 'change', 'inputupdate.enketo' );
                         }
                         // all remaining fields marked as invalid can now be marked as valid
                         $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {

@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.27.1] - 2017-03-22
 ---------------------
 ##### Changed
 - Label of readonly question with a calculate expression is styled as regular question.
@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - ArcGIS geopicker fails to initialize inside a repeat.
+- Value not cleared from widget UI when it becomes irrelevant and clearIrrelevantImmediately is set to `true`.
 
 [4.27.0] - 2017-03-20
 ---------------------
