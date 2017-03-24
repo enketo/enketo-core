@@ -1032,9 +1032,6 @@ define( function( require, exports, module ) {
                  * expression, which may prove to be incorrect.
                  */
                 if ( p.relevant.indexOf( '..' ) === -1 ) {
-                    /*
-                     * For now, let's just not cache relevants inside a repeat.
-                     */
                     if ( !insideRepeat ) {
                         cacheIndex = p.relevant;
                     } else {
@@ -1080,8 +1077,6 @@ define( function( require, exports, module ) {
              * @param  {boolean} result      [description]
              */
             function process( $branchNode, result ) {
-                // for mysterious reasons '===' operator fails after Advanced Compilation even though result has value true
-                // and type boolean
                 if ( result === true ) {
                     enable( $branchNode );
                 } else {
@@ -1966,7 +1961,10 @@ define( function( require, exports, module ) {
                 }
             } );
 
-            // Why is the file namespace added?
+            /*
+             * The .file namespace is used in the filepicker to avoid an infinite loop. 
+             * The listener below catches both change and change.file events.
+             */
             $form.on( 'change.file',
                 'input:not([readonly]):not(.ignore), select:not([readonly]):not(.ignore), textarea:not([readonly]):not(.ignore)',
                 function( event ) {
