@@ -515,7 +515,6 @@ describe( 'branching functionality', function() {
         it( 'works correctly when an ancestor branch gets enabled', function() {
             expect( $nestedBranch.closest( '.disabled' ).length ).toEqual( 1 );
             // enable parent branch
-            //expect( form.getModel().getStr() ).toEqual( 'wut' );
             form.getModel().node( '/nested-branches/a', 0 ).setVal( '1' );
             expect( $nestedBranch.closest( '.disabled' ).length ).toEqual( 0 );
             // check if nested branch has been initialized and is enabled
@@ -526,7 +525,7 @@ describe( 'branching functionality', function() {
 
     describe( 'handles clearing of values in irrelevant branches', function() {
         var name = 'relevant-default.xml';
-        var one = '/relevant-default/one'
+        var one = '/relevant-default/one';
         var two = '/relevant-default/two';
         var three = '/relevant-default/grp/three';
 
@@ -597,6 +596,62 @@ describe( 'branching functionality', function() {
 
     } );
 
+} );
+
+describe( 'obtaining XML string from form without irrelevant nodes', function() {
+    it( 'works for calcs that are irrelevant upon load', function() {
+        var form = loadForm( 'calcs.xml' );
+        var match = '<calc1';
+        form.init();
+
+        expect( form.getDataStr() ).toMatch( match );
+        expect( form.getDataStr( {
+            irrelevant: false
+        } ) ).not.toMatch( match );
+    } );
+
+    it( 'works for calcs that become irrelevant after load', function() {
+        var $node;
+        var form = loadForm( 'calcs.xml' );
+        var match = '<calc1';
+        form.init();
+        $node = form.getView().$.find( '[name="/calcs/cond1"]' );
+
+        $node.val( 'yes' ).trigger( 'change' );
+        expect( form.getDataStr( {
+            irrelevant: false
+        } ) ).toMatch( match );
+
+        $node.val( 'nope' ).trigger( 'change' );
+        expect( form.getDataStr( {
+            irrelevant: false
+        } ) ).not.toMatch( match );
+    } );
+
+    it( 'works for a nested branch where there is an relevant descendant of an irrelevant ancestor', function() {
+        var form = loadForm( 'nested-branches.xml' );
+        var match = '<c/>';
+        form.init();
+
+        expect( form.getDataStr( {
+            irrelevant: false
+        } ) ).not.toMatch( match );
+
+    } );
+
+    // This test also checks that no exception occurs when an attempt is made to remove the <c> node 
+    // when it no longer exists because its parent has already been removed.
+    it( 'works for a nested branch where there is an irrelevant descendant of an irrelevant ancestor', function() {
+        var form = loadForm( 'nested-branches.xml' );
+        var match = '<c/>';
+        form.init();
+        form.getView().$.find( '[name="/nested-branches/b"]' ).val( 0 ).trigger( 'change' );
+
+        expect( form.getDataStr( {
+            irrelevant: false
+        } ) ).not.toMatch( match );
+
+    } );
 } );
 
 describe( 'validation', function() {
