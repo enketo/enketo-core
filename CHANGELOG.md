@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Added
+- Method to obtain primary instance without irrelevant nodes.
+
 ##### Fixed
 - In pages mode, if page (group) is relevant but only includes irrelevant questions, it is displayed as an empty page.
 

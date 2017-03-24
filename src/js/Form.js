@@ -125,11 +125,17 @@ define( function( require, exports, module ) {
         };
 
         /**
-         * @param {boolean=} incTempl
-         * @param {boolean=} incNs
-         * @param {boolean=} all
+         * Obtains a string of primary instance.
+         * 
+         * @param  {!{include: boolean}=} include optional object items to exclude if false
+         * @return {string}        XML string of primary instance
          */
-        this.getDataStr = function() {
+        this.getDataStr = function( include ) {
+            include = ( typeof include !== 'object' || include === null ) ? {} : include;
+            // By default everything is included
+            if ( include.irrelevant === false ) {
+                return form.getDataStrWithoutIrrelevantNodes();
+            }
             return model.getStr();
         };
 
@@ -892,14 +898,14 @@ define( function( require, exports, module ) {
         };
 
         /**
-         * Crafts an optimized jQuery selector for element attributes that contain an expression with a target node name.
+         * Finds nodes that have attributes with XPath expressions that refer to particular XML elements.
          *
          * @param  {string} attribute The attribute name to search for
          * @param  {?string} filter   The optional filter to append to each selector
          * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
          * @return {jQuery}           A jQuery collection of elements
          */
-        FormView.prototype.getNodesToUpdate = function( attr, filter, updated ) {
+        FormView.prototype.getRelatedNodes = function( attr, filter, updated ) {
             var $collection;
             var $repeat = null;
             var selector = [];
@@ -951,6 +957,14 @@ define( function( require, exports, module ) {
             return $collection.find( selector.join() );
         };
 
+        /**
+         * Crafts an optimized jQuery selector for element attributes that contain an expression with a target node name.
+         * 
+         * @param  {string} filter   The filter to use
+         * @param  {string} attr     The attribute to target
+         * @param  {string} nodeName The XML nodeName to find
+         * @return {string}          The selector
+         */
         FormView.prototype.getQuerySelectorsForLogic = function( filter, attr, nodeName ) {
             return [
                 // The target node name is ALWAYS at the END of a path inside the expression.
@@ -965,6 +979,40 @@ define( function( require, exports, module ) {
                 // #5: followed by ] (used in itemset filters)
                 filter + '[' + attr + '*="/' + nodeName + ']"]'
             ];
+        };
+
+        /**
+         * Obtains the XML primary instance as string without nodes that have a relevant
+         * that evaluates to false.
+         *
+         * Though this function may be slow it is slow when it doesn't matter much (upon saving). The
+         * alternative is to add some logic to branchUpdate to mark irrelevant nodes in the model
+         * but that would slow down form loading and form traversal when it does matter.
+         * 
+         * @return {string} [description]
+         */
+        FormView.prototype.getDataStrWithoutIrrelevantNodes = function() {
+            var that = this;
+            var modelClone = new FormModel( model.getStr() );
+            modelClone.init();
+
+            this.getRelatedNodes( 'data-relevant' ).each( function() {
+                var $node = $( this );
+                var relevant = that.input.getRelevant( $node );
+                var index = that.input.getIndex( $node );
+                var context = that.input.getName( $node );
+                /*
+                 * If performance becomes an issue, some opportunities are:
+                 * - check if ancestor is relevant
+                 * - use cache of branchUpdate
+                 * - check for repeatClones to avoid calculating index (as in branchUpdate)
+                 */
+                if ( !model.evaluate( relevant, 'boolean', context, index ) ) {
+                    modelClone.node( context, index ).remove();
+                }
+            } );
+
+            return modelClone.getStr();
         };
 
         /**
@@ -986,7 +1034,7 @@ define( function( require, exports, module ) {
             var that = this;
             var clonedRepeatsPresent;
 
-            $nodes = this.getNodesToUpdate( 'data-relevant', '', updated );
+            $nodes = this.getRelatedNodes( 'data-relevant', '', updated );
 
             clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
@@ -1183,7 +1231,7 @@ define( function( require, exports, module ) {
             var that = this;
             var itemsCache = {};
 
-            $nodes = this.getNodesToUpdate( 'data-items-path', '.itemset-template', updated );
+            $nodes = this.getRelatedNodes( 'data-items-path', '.itemset-template', updated );
 
             clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
@@ -1381,7 +1429,7 @@ define( function( require, exports, module ) {
             var val = '';
             var that = this;
 
-            $nodes = this.getNodesToUpdate( 'data-value', '.or-output', updated );
+            $nodes = this.getRelatedNodes( 'data-value', '.or-output', updated );
 
             clonedRepeatsPresent = ( repeatsPresent && $form.find( '.or-repeat.clone' ).length > 0 );
 
@@ -1454,10 +1502,10 @@ define( function( require, exports, module ) {
 
             updated = updated || {};
 
-            $nodes = this.getNodesToUpdate( 'data-calculate', '', updated );
+            $nodes = this.getRelatedNodes( 'data-calculate', '', updated );
 
             // add relevant items that have a (any) calculation
-            $nodes = $nodes.add( this.getNodesToUpdate( 'data-relevant', '[data-calculate]', updated ) );
+            $nodes = $nodes.add( this.getRelatedNodes( 'data-relevant', '[data-calculate]', updated ) );
 
             $nodes.each( function() {
                 var result;
@@ -1535,8 +1583,8 @@ define( function( require, exports, module ) {
 
             updated = updated || {};
 
-            $nodes = this.getNodesToUpdate( 'data-constraint', '', updated )
-                .add( this.getNodesToUpdate( 'data-required', '', updated ) );
+            $nodes = this.getRelatedNodes( 'data-constraint', '', updated )
+                .add( this.getRelatedNodes( 'data-required', '', updated ) );
 
             $nodes.each( function() {
                 that.validateInput( $( this ) );
@@ -1767,7 +1815,7 @@ define( function( require, exports, module ) {
                 var that = this;
 
                 updated = updated || {};
-                $nodes = this.formO.getNodesToUpdate( 'data-repeat-count', '.or-repeat:not(.clone)', updated );
+                $nodes = this.formO.getRelatedNodes( 'data-repeat-count', '.or-repeat:not(.clone)', updated );
 
                 $nodes.each( function() {
                     that.updateRepeatInstancesFromCount( $( this ) );
