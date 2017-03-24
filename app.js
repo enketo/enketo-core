@@ -14,6 +14,7 @@ var loadErrors;
 var form;
 var formStr;
 var modelStr;
+var xform = getURLParameter( 'xform' );
 
 // if querystring touch=true is added, override detected touchscreen presence
 if ( getURLParameter( 'touch' ) === 'true' ) {
@@ -22,9 +23,10 @@ if ( getURLParameter( 'touch' ) === 'true' ) {
 }
 
 // check if HTML form is hardcoded or needs to be retrieved
-if ( getURLParameter( 'xform' ) !== 'null' ) {
+if ( xform ) {
     $( '.guidance' ).remove();
-    $.getJSON( 'http://localhost:8085/transform?xform=' + getURLParameter( 'xform' ), function( survey ) {
+    xform = /^https?:\/\//.test( xform ) ? xform : location.origin + '/' + xform;
+    $.getJSON( 'http://localhost:8085/transform?xform=' + xform, function( survey ) {
         formStr = survey.form;
         modelStr = survey.model;
         $( '.form-header' ).after( formStr );
