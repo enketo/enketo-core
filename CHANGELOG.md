@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- In pages mode, if page (group) is relevant but only includes irrelevant questions, it is displayed as an empty page.
+
 [4.27.2] - 2017-03-23
 ---------------------
 ##### Fixed

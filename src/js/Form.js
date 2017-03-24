@@ -434,7 +434,8 @@ define( function( require, exports, module ) {
             updateAllActive: function( $all ) {
                 $all = $all || $( '.or [role="page"]' );
                 this.$activePages = $all.filter( function() {
-                    return $( this ).closest( '.disabled' ).length === 0;
+                    return $( this ).closest( '.disabled' ).length === 0 &&
+                        ( $( this ).is( '.question' ) || $( this ).find( '.question:not(.disabled)' ).length > 0 );
                 } );
             },
             getAllActive: function() {
