@@ -125,11 +125,17 @@ define( function( require, exports, module ) {
         };
 
         /**
-         * @param {boolean=} incTempl
-         * @param {boolean=} incNs
-         * @param {boolean=} all
+         * Obtains a string of primary instance.
+         * 
+         * @param  {!{include: boolean}=} include optional object items to exclude if false
+         * @return {string}        XML string of primary instance
          */
-        this.getDataStr = function() {
+        this.getDataStr = function( include ) {
+            include = ( typeof include !== 'object' || include === null ) ? {} : include;
+            // By default everything is included
+            if ( include.irrelevant === false ) {
+                return form.getDataStrWithoutIrrelevantNodes();
+            }
             return model.getStr();
         };
 
@@ -965,6 +971,40 @@ define( function( require, exports, module ) {
                 // #5: followed by ] (used in itemset filters)
                 filter + '[' + attr + '*="/' + nodeName + ']"]'
             ];
+        };
+
+        /**
+         * Obtains the XML primary instance as string without nodes that have a relevant
+         * that evaluates to false.
+         *
+         * Though this function may be slow it is slow when it doesn't matter much (upon saving). The
+         * alternative is to add some logic to branchUpdate to mark irrelevant nodes in the model
+         * but that would slow down form loading and form traversal when it does matter.
+         * 
+         * @return {string} [description]
+         */
+        FormView.prototype.getDataStrWithoutIrrelevantNodes = function() {
+            var that = this;
+            var modelClone = new FormModel( model.getStr() );
+            modelClone.init();
+
+            this.getNodesToUpdate( 'data-relevant' ).each( function() {
+                var $node = $( this );
+                var relevant = that.input.getRelevant( $node );
+                var index = that.input.getIndex( $node );
+                var context = that.input.getName( $node );
+                /*
+                 * If performance becomes an issue, some opportunities are:
+                 * - check if ancestor is relevant
+                 * - use cache of branchUpdate
+                 * - check for repeatClones to avoid calculating index (as in branchUpdate)
+                 */
+                if ( !model.evaluate( relevant, 'boolean', context, index ) ) {
+                    modelClone.node( context, index ).remove();
+                }
+            } );
+
+            return modelClone.getStr();
         };
 
         /**
