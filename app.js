@@ -22,8 +22,9 @@ if ( getURLParameter( 'touch' ) === 'true' ) {
     $( 'html' ).addClass( 'touch' );
 }
 
-// check if HTML form is hardcoded or needs to be retrieved
-if ( xform ) {
+// Check if HTML form is hardcoded or needs to be retrieved
+// note: when running this file in enketo-core-performance-monitor xform = 'null'
+if ( xform && xform !== 'null' ) {
     $( '.guidance' ).remove();
     xform = /^https?:\/\//.test( xform ) ? xform : location.origin + '/' + xform;
     $.getJSON( 'http://localhost:8085/transform?xform=' + xform, function( survey ) {
