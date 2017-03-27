@@ -26,7 +26,7 @@ define( function( require, exports, module ) {
     var $ = require( 'jquery' );
     var Promise = require( 'lie' );
     var utils = require( './utils' );
-    var t = require( './fake-translator' ).t;
+    var t = require( 'translator' ).t;
     var pkg = require( '../../package' );
     var config = require( 'text!enketo-config' );
     require( './plugins' );
