@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.28.0] - 2017-03-30
 ---------------------
 ##### Added
 - Method to obtain primary instance without irrelevant nodes.
 
 ##### Fixed
 - In pages mode, if page (group) is relevant but only includes irrelevant questions, it is displayed as an empty page.
+- Inputupdate.enketo event fires even if value hasn't changed.
 
 [4.27.2] - 2017-03-23
 ---------------------

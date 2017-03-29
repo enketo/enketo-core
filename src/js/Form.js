@@ -721,6 +721,7 @@ define( function( require, exports, module ) {
             setVal: function( name, index, value ) {
                 var $inputNodes;
                 var type;
+                var curVal;
 
                 index = index || 0;
 
@@ -754,8 +755,14 @@ define( function( require, exports, module ) {
 
                 // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
                 // original input element has changed **programmatically**.
-                // TODO: should only trigger if the value is actually changed.
-                $inputNodes.val( value ).trigger( 'inputupdate.enketo' );
+                if ( $inputNodes.length ) {
+                    curVal = $inputNodes.val();
+                    if ( curVal === undefined || curVal.toString() !== value.toString() ) {
+                        $inputNodes.val( value );
+                        // don't trigger on all radiobuttons/checkboxes
+                        $inputNodes.eq( 0 ).trigger( 'inputupdate.enketo' );
+                    }
+                }
 
                 return;
             },
