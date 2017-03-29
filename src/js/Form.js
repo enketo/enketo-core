@@ -1418,6 +1418,13 @@ define( function( require, exports, module ) {
                 }
                 if ( $output.text() !== val ) {
                     $output.text( val );
+
+                    // For <output>s that are children of choice-groups, trigger
+                    // dependent calculations in case one is using a jr:choice-name.
+                    var owName = $output.closest( '.option-wrapper' ).find( 'input' ).attr( 'name' );
+                    if ( owName ) {
+                        that.calcUpdate( owName.substring( owName.indexOf( '/', 1 ) ) );
+                    }
                 }
             } );
         };
