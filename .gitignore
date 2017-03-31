@@ -1,3 +1,4 @@
+.idea
 /node_modules/
 /build/css/
 /build/js/
@@ -10,6 +11,7 @@ temp
 *.sublime-workspace
 _SpecRunner.html
 npm-debug.log
+.DS_Store
 /src/widget/geo-esri/esri/**/*.js
 /src/widget/geo-esri/esri/**/*.gif
 /src/widget/geo-esri/esri/**/*.jpg
