@@ -143,6 +143,7 @@ In the second case the irrelevant values will not be cleared until `form.validat
 3. build with `grunt`
 4. start built-in auto-reloading development server with `grunt develop` 
 5. browse to [http://localhost:8005/forms/index.html](http://localhost:8005/forms/index.html)
+6. run tests with `npm test`
 
 ### How to create or extend widgets
 
