@@ -90,18 +90,6 @@ module.exports = function( grunt ) {
                 browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', /*'Opera',*/ 'Safari' ]
             }
         },
-        replace: {
-            transformer_version: {
-                src: [ 'build/js/enketo-bundle.js' ],
-                overwrite: true,
-                replacements: [ {
-                    from: '__ENKETO_TRANSFORMER_VERSION__',
-                    to: function() {
-                        return require( './package' ).devDependencies[ 'enketo-transformer' ];
-                    }
-                } ]
-            }
-        },
         sass: {
             options: {
                 sourceMap: false,
@@ -181,10 +169,10 @@ module.exports = function( grunt ) {
             } );
     } );
 
-    grunt.registerTask( 'compile', [ 'browserify', 'replace', 'uglify' ] );
+    grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
     grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'transforms', 'karma:headless', 'style' ] );
     grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
-    grunt.registerTask( 'develop', [ 'style', 'browserify', 'replace', 'concurrent:develop' ] );
+    grunt.registerTask( 'develop', [ 'style', 'browserify', 'concurrent:develop' ] );
     grunt.registerTask( 'default', [ 'style', 'compile' ] );
 };
