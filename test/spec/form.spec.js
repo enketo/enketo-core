@@ -1102,8 +1102,14 @@ describe( 'form status', function() {
 } );
 
 describe( 'required enketo-transformer version', function() {
+    var pkg = require( '../../package' );
 
     it( 'can be obtained', function() {
-        expect( Form.getRequiredTransformerVersion() ).toBeGreaterThan( '1.11.99' );
+        var expected = pkg.devDependencies[ 'enketo-transformer' ];
+        var actual = Form.getRequiredTransformerVersion();
+
+        expect( actual ).toBe( expected,
+                'It looks like enketo-transformer has been updated in package.json from ' + actual + ' to ' + expected + '.  ' +
+                'You also need to update the value returned by From.getRequiredTransformerVersion() to the new version number.');
     } );
 } );
