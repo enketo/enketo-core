@@ -2338,22 +2338,32 @@ define( function( require, exports, module ) {
                 .then( function( result ) {
                     var previouslyInvalid = false;
                     var passed = result.requiredValid !== false && result.constraintValid !== false;
-                    // Check current UI state
+
                     if ( n.inputType !== 'hidden' ) {
+                        // Check current UI state
                         n.$q = that.input.getWrapNodes( $input );
+                        n.$asterisk = n.$q.find( '.required' );
                         previouslyInvalid = n.$q.hasClass( 'invalid-required' ) || n.$q.hasClass( 'invalid-constraint' );
-                    }
-                    // Update UI
-                    if ( n.inputType !== 'hidden' ) {
+
+                        // Update UI
                         if ( result.requiredValid === false ) {
                             that.setValid( $input, 'constraint' );
                             that.setInvalid( $input, 'required' );
-                        } else if ( result.constraintValid === false ) {
-                            that.setValid( $input, 'required' );
-                            that.setInvalid( $input, 'constraint' );
+                            n.$asterisk.removeClass( 'hide' );
                         } else {
-                            that.setValid( $input, 'constraint' );
-                            that.setValid( $input, 'required' );
+                            // Show/hide the asterisk of dynamic required expressions
+                            // This is only 'realtime' with `validateContinuously: true`
+                            if ( n.required ) {
+                                n.$asterisk.toggleClass( 'hide', !model.node( n.path, n.ind ).isRequired( n.required ) );
+                            }
+
+                            if ( result.constraintValid === false ) {
+                                that.setValid( $input, 'required' );
+                                that.setInvalid( $input, 'constraint' );
+                            } else {
+                                that.setValid( $input, 'constraint' );
+                                that.setValid( $input, 'required' );
+                            }
                         }
                     }
                     // Send invalidated event

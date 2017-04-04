@@ -1559,6 +1559,9 @@ define( function( require, exports, module ) {
             } );
     };
 
+    Nodeset.prototype.isRequired = function( expr ) {
+        return !expr || expr.trim() === 'false()' ? false : expr.trim() === 'true()' || this.model.evaluate( expr, 'boolean', this.originalSelector, this.index );
+    };
 
     Nodeset.prototype.validateRequired = function( expr ) {
         var that = this;
@@ -1573,7 +1576,7 @@ define( function( require, exports, module ) {
         return Promise.resolve()
             .then( function() {
                 // if the expression evaluates to true, the field is required, and the function returns false.
-                return !that.model.evaluate( expr, 'boolean', that.originalSelector, that.index );
+                return !that.isRequired( expr );
             } );
     };
 

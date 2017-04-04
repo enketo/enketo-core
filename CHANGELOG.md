@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Hide required “*” when dynamic required expression evaluating to false at the time the input field is validated.
+
 [4.28.0] - 2017-03-30
 ---------------------
 ##### Added
