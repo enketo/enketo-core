@@ -1069,7 +1069,7 @@ define( function( require, exports, module ) {
                 }
                 /*
                  * Determining ancestry is expensive. Using the knowledge most forms don't use repeats and
-                 * if they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
+                 * if they do, they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
                  * The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
                  * (6-7 seconds of loading time on the bench6 form)
                  */
@@ -1716,12 +1716,12 @@ define( function( require, exports, module ) {
         /**
          * Variable: repeat
          *
-         * This can perhaps be simplified and improved by:
-         * - adding a function repeat.update() that looks at the instance whether to add repeat form fields
-         * - calling update from init() (model.init() is called before form.init() so the initial repeats have been added already)
-         * - when button is clicked model.node().clone() or model.node().remove() is called first and then repeat.update()
-         * - watch out though when repeats in the middle are removed... or just disable that possibility
+         * Two important concepts are used:
+         * 1. The first XLST-added repeat view is cloned to serve as a template of that repeat.
+         * 2. Each repeat series has a sibling .or-repeat-info element that stores info that is relevant to that series.
          *
+         * Note that with nested repeats you may have many more series of repeats than templates, because a nested repeat
+         * may have multiple series.
          */
         FormView.prototype.repeat = {
             /**
@@ -1730,14 +1730,38 @@ define( function( require, exports, module ) {
              */
             init: function( formO ) {
                 var that = this;
-                var $repeats = $form.find( '.or-repeat' );
+                var $repeatInfos;
 
+                $repeatInfos = $form.find( '.or-repeat-info' );
+                this.templates = {};
                 this.formO = formO;
-                $repeats.prepend( '<span class="repeat-number"></span>' );
-                $repeats.filter( '*:not([data-repeat-fixed]):not([data-repeat-count])' )
+                $repeatInfos.siblings( '.or-repeat' )
+                    .prepend( '<span class="repeat-number"></span>' );
+                $repeatInfos.filter( '*:not([data-repeat-fixed]):not([data-repeat-count])' ).siblings( '.or-repeat' )
                     .append( '<div class="repeat-buttons"><button type="button" class="btn btn-default repeat"><i class="icon icon-plus"> </i></button>' +
                         '<button type="button" disabled class="btn btn-default remove"><i class="icon icon-minus"> </i></button></div>' );
-                $repeats.filter( '*:not([data-repeat-count])' ).each( function() {
+
+                /**
+                 * The model also requires storing repeat templates for repeats that do not have a jr:template.
+                 * Since the model has no knowledge of which node is a repeat, we do this here.
+                 */
+                model.extractFakeTemplates( $repeatInfos.map( function() {
+                    return this.dataset.name;
+                } ).get() );
+
+                /**
+                 * Clone all repeats to serve as templates
+                 * in reverse document order to properly deal with nested repeat templates
+                 *
+                 * Widgets not yet initialized. Values not yet set.
+                 */
+                $repeatInfos.siblings( '.or-repeat' ).clone().reverse().each( function() {
+                    var $templateEl = $( this );
+                    var xPath = $templateEl.attr( 'name' );
+                    that.templates[ xPath ] = $templateEl;
+                } );
+
+                $repeatInfos.filter( '*:not([data-repeat-count])' ).each( function() {
                     // If there is no repeat-count attribute, check how many repeat instances 
                     // are in the model, and update view if necessary.
                     that.updateViewInstancesFromModel( $( this ) );
@@ -1747,7 +1771,7 @@ define( function( require, exports, module ) {
                 // delegated handlers (strictly speaking not required, but checked for doubling of events -> OK)
                 $form.on( 'click', 'button.repeat:enabled', function() {
                     // Create a clone
-                    that.clone( $( this ).closest( '.or-repeat' ) );
+                    that.clone( $( this ).closest( '.or-repeat' ).siblings( '.or-repeat-info' ).eq( 0 ) );
                     // Prevent default
                     return false;
                 } );
@@ -1760,51 +1784,56 @@ define( function( require, exports, module ) {
 
                 this.countUpdate();
             },
-            updateViewInstancesFromModel: function( $repeat ) {
+            updateViewInstancesFromModel: function( $repeatInfo ) {
                 var that = this;
-                var name = $repeat.attr( 'name' );
-                var index = $form.find( '.or-repeat[name="' + name + '"]' ).index( $repeat );
-                var repInModelSeries = model.node( name, index ).getRepeatSeries();
+                var repeatPath = $repeatInfo.data( 'name' );
+                // All we need is to find out in which series we are.
+                var repeatSeriesIndex = $form.find( '.or-repeat-info[data-name="' + repeatPath + '"]' ).index( $repeatInfo );
+                var repInModelSeries = model.getRepeatSeries( repeatPath, repeatSeriesIndex );
+                var repInViewSeries = $repeatInfo.siblings( '.or-repeat' );
                 // First rep is already included (by XSLT transformation)
-                if ( repInModelSeries.length > 1 ) {
-                    this.clone( $repeat, repInModelSeries.length - 1 );
+                if ( repInModelSeries.length > repInViewSeries.length ) {
+                    this.clone( $repeatInfo, repInModelSeries.length - repInViewSeries.length );
                     // Now check the repeat counts of all the descendants of this repeat and its new siblings, level-by-level.
                     // TODO: this does not find .or-repeat > .or-repeat (= unusual syntax)
-                    $repeat.siblings( '.or-repeat' ).addBack()
+                    $repeatInfo.siblings( '.or-repeat' )
                         .children( '.or-group, .or-group-data' )
-                        .children( '.or-repeat:not([data-repeat-count])' )
+                        .children( '.or-repeat-info:not([data-repeat-count])' )
                         .each( function() {
                             that.updateViewInstancesFromModel( $( this ) );
                         } );
                 }
             },
-            updateRepeatInstancesFromCount: function( $repeat ) {
+            updateRepeatInstancesFromCount: function( $info ) {
                 var that = this;
-                var $last;
-                var repCountPath = $repeat.attr( 'data-repeat-count' ) || '';
-                var name = $repeat.attr( 'name' );
-                var index = $form.find( '.or-repeat[name="' + name + '"]' ).index( $repeat );
+                var $last = $info.siblings( '.or-repeat' ).last();
+                var repCountPath = $info.data( 'repeatCount' ) || '';
+                var name = $info.data( 'name' );
+                var index = $form.find( '.or-repeat[name="' + name + '"]' ).index( $last );
+                var numRepsInView = $info.siblings( '.or-repeat[name="' + name + '"]' ).length;
+                // Don't pass context if the context is gone because all repeats in a series have been deleted.
+                if ( index === -1 ) {
+                    name = null;
+                    index = null;
+                }
                 var numRepsInCount = ( repCountPath.length > 0 ) ? model.evaluate( repCountPath, 'number', name, index, true ) : 0;
-                var numRepsInView = $repeat.siblings( '.or-repeat[name="' + name + '"]' ).length + 1;
                 var toCreate = numRepsInCount - numRepsInView;
 
-                // First rep is already included (by XSLT transformation)
                 if ( toCreate > 0 ) {
-                    $last = $repeat.siblings().addBack().last();
-                    that.clone( $last, toCreate );
+                    that.clone( $info, toCreate );
                 } else if ( toCreate < 0 ) {
-                    // We cannot remove the first repeat (yet)
-                    toCreate = Math.abs( toCreate ) > ( numRepsInView - 1 ) ? -numRepsInView + 1 : toCreate;
+                    // temporary undocumented way to disable ability to remove first repeat
+                    toCreate = Math.abs( toCreate ) >= numRepsInView ? -numRepsInView + ( config.firstRepeatRemovable === false ? 1 : 0 ) : toCreate;
                     for ( ; toCreate < 0; toCreate++ ) {
-                        $last = $repeat.siblings( '.or-repeat[name="' + name + '"]' ).addBack().last();
+                        $last = $info.siblings( '.or-repeat' ).last();
                         this.remove( $last, 0 );
                     }
                 }
                 // Now check the repeat counts of all the descendants of this repeat and its new siblings, level-by-level.
                 // TODO: this does not find .or-repeat > .or-repeat (= unusual syntax)
-                $repeat.siblings( '.or-repeat' ).addBack()
+                $info.siblings( '.or-repeat' )
                     .children( '.or-group, .or-group-data' )
-                    .children( '.or-repeat[data-repeat-count]' )
+                    .children( '.or-repeat-info[data-repeat-count]' )
                     .each( function() {
                         that.updateRepeatInstancesFromCount( $( this ) );
                     } );
@@ -1817,13 +1846,13 @@ define( function( require, exports, module ) {
              * @return {[type]}         [description]
              */
             countUpdate: function( updated ) {
-                var $nodes;
+                var $repeatInfos;
                 var that = this;
 
                 updated = updated || {};
-                $nodes = this.formO.getRelatedNodes( 'data-repeat-count', '.or-repeat:not(.clone)', updated );
+                $repeatInfos = this.formO.getRelatedNodes( 'data-repeat-count', '.or-repeat-info', updated );
 
-                $nodes.each( function() {
+                $repeatInfos.each( function() {
                     that.updateRepeatInstancesFromCount( $( this ) );
                 } );
             },
@@ -1833,79 +1862,54 @@ define( function( require, exports, module ) {
              * @param   {number=} count number of clones to create
              * @return  {boolean}       [description]
              */
-            clone: function( $node, count ) {
-                var $siblings;
+            clone: function( $info, count ) {
+                var $repeats;
                 var $master;
                 var $clone;
                 var $repeatsToUpdate;
-                var $radiocheckbox;
-                var index;
+                var repeatIndex;
+                var repeatSeriesIndex;
                 var total;
-                var path;
+                var repeatPath;
+                var i;
                 var that = this;
                 var byCountUpdate = !!count;
+                var modelRepeatSeries;
 
                 count = count || 1;
 
-                if ( $node.length !== 1 ) {
+                if ( $info.length !== 1 ) {
                     console.error( 'Nothing to clone' );
                     return false;
                 }
 
-                $siblings = $node.siblings( '.or-repeat' );
-                $master = ( $node.hasClass( 'clone' ) ) ? $siblings.not( '.clone' ).eq( 0 ) : $node;
-                $clone = $master.clone( true, true );
-                path = $master.attr( 'name' );
-
-                // Add clone class and remove any child clones.. (cloned repeats within repeats..)
-                $clone.addClass( 'clone' ).find( '.clone' ).remove();
-
-                // Mark all cloned fields as valid
-                $clone.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
-                    that.formO.setValid( $( this ) );
-                } );
-
-                // Note: in http://formhub.org/formhub_u/forms/hh_polio_survey_cloned/form.xml a parent group of a repeat
-                // has the same ref attribute as the nodeset attribute of the repeat. This would cause a problem determining
-                // the proper index if .or-repeat was not included in the selector
-                index = $form.find( '.or-repeat[name="' + path + '"]' ).index( $node );
-
-                // clear the inputs before adding clone
-                $clone.clearInputs( '' );
-
-                total = count + index;
+                repeatPath = $info.data( 'name' );
+                $repeats = $info.siblings( '.or-repeat' );
+                // Add clone class to allow some simplistic performance optimization elsewhere.
+                $clone = this.templates[ repeatPath ].clone().addClass( 'clone' );
+                // Determine the index of the repeat series.
+                repeatSeriesIndex = $form.find( '.or-repeat-info[data-name="' + repeatPath + '"]' ).index( $info );
 
                 // Add required number of repeats
-                for ( ; index < total; index++ ) {
-
+                for ( i = 0; i < count; i++ ) {
                     // Fix names of radio button groups
                     $clone.find( '.option-wrapper' ).each( this.fixRadioNames );
-
-                    // Destroy widgets before inserting the clone
-                    if ( widgets.hasInitialized() ) {
-                        widgets.destroy( $clone );
+                    // Insert the clone
+                    $clone.insertBefore( $info );
+                    // Update the variable containing the view repeats in the current series.
+                    $repeats = $repeats.add( $clone );
+                    // TODO: not efficient, could be incremental
+                    modelRepeatSeries = model.getRepeatSeries( repeatPath, repeatSeriesIndex );
+                    // Create a repeat in the model if it doesn't already exist
+                    if ( $repeats.length > modelRepeatSeries.length ) {
+                        model.cloneRepeat( repeatPath, repeatSeriesIndex );
                     }
-
-                    // Insert the clone after values and widgets have been reset
-                    $clone.insertAfter( $node );
-
-                    // Create a new data point in <instance> by cloning the template node
-                    // and clone data node if it doesn't already exist
-                    if ( path.length > 0 && index >= 0 ) {
-                        model.cloneRepeat( path, index );
-                    }
-
+                    // This is the index of the new repeat in relation to all other repeats of the same name,
+                    // even if they are in different series.
+                    repeatIndex = repeatIndex || $form.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $clone );
                     // This will trigger setting default values and automatic page flips.
-                    $clone.trigger( 'addrepeat', [ index + 1, byCountUpdate ] );
-
-                    // Remove data-checked attributes for non-checked radio buttons and checkboxes
-                    // Add data-checked attributes for checked ones.
-                    // This actually belongs in the radio widget
-                    $radiocheckbox = $clone.find( '[type="radio"],[type="checkbox"]' );
-                    $radiocheckbox.parent( 'label' ).removeAttr( 'data-checked' );
-                    $radiocheckbox.filter( ':checked' ).parent( 'label' ).attr( 'data-checked', 'true' );
-
-                    // Re-initiatalize widgets in clone after default values have been set
+                    $clone.trigger( 'addrepeat', [ repeatIndex, byCountUpdate ] );
+                    // Initialize widgets in clone after default values have been set
                     if ( widgets.hasInitialized() ) {
                         widgets.init( $clone );
                     } else {
@@ -1913,17 +1917,16 @@ define( function( require, exports, module ) {
                         // Calculations have already been initialized before the repeat clone(s) were created.
                         // Therefore, we manually trigger a calculation update for the cloned repeat.
                         that.formO.calcUpdate( {
-                            repeatPath: path,
-                            repeatIndex: index + 1
+                            repeatPath: repeatPath,
+                            repeatIndex: repeatIndex
                         } );
                     }
 
-                    $siblings = $siblings.add( $clone );
-                    $clone = $clone.clone();
+                    $clone = this.templates[ repeatPath ].clone().addClass( 'clone' );
+                    repeatIndex++;
                 }
 
-                $repeatsToUpdate = $siblings.add( $node ).add( $siblings.find( '.or-repeat' ) );
-
+                $repeatsToUpdate = $repeats.add( $repeats.find( '.or-repeat' ) );
                 // number the repeats
                 this.numberRepeats( $repeatsToUpdate );
                 // enable or disable + and - buttons
@@ -1944,10 +1947,10 @@ define( function( require, exports, module ) {
                     $repeat.remove();
                     that.numberRepeats( $siblings );
                     that.toggleButtons( $siblings );
-                    // trigger the removerepeat on the previous repeat (always present)
+                    // Trigger the removerepeat on the previous repeat (always present)
                     // so that removerepeat handlers know where the repeat was removed
                     $prev.trigger( 'removerepeat' );
-                    // now remove the data node
+                    // Now remove the data node
                     model.node( repeatPath, repeatIndex ).remove();
                 } );
             },
@@ -2384,7 +2387,7 @@ define( function( require, exports, module ) {
      * Static method to obtain required enketo-transform version direct from class.
      */
     Form.getRequiredTransformerVersion = function() {
-        return '1.15.2';
+        return '1.16.0';
     };
 
     module.exports = Form;

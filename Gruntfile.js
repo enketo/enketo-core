@@ -87,7 +87,7 @@ module.exports = function( grunt ) {
             },
             browsers: {
                 configFile: 'test/browser-karma.conf.js',
-                browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', /*'Opera',*/ 'Safari' ]
+                browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', /*'Opera','Safari' */ ]
             }
         },
         sass: {

@@ -306,12 +306,13 @@ describe( 'repeat functionality', function() {
         //note that this form contains multiple repeats in the instance
         form = loadForm( 'nested_repeats.xml' );
         form.init();
-        var formH = form.getView(),
-            $1stLevelTargetRepeat = formH.$.find( '.or-repeat[name="/nested_repeats/kids/kids_details"]' ).eq( 1 ),
-            $2ndLevelTargetRepeats = $1stLevelTargetRepeat.find( '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]' );
-
-        expect( $1stLevelTargetRepeat.length ).toEqual( 1 );
-        expect( $2ndLevelTargetRepeats.length ).toEqual( 3 );
+        var formH = form.getView();
+        var $1stLevelTargetRepeat = formH.$.find( '.or-repeat[name="/nested_repeats/kids/kids_details"]' );
+        var $2ndLevelTargetRepeats1 = $1stLevelTargetRepeat.eq( 0 ).find( '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]' );
+        var $2ndLevelTargetRepeats2 = $1stLevelTargetRepeat.eq( 1 ).find( '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]' );
+        expect( $1stLevelTargetRepeat.length ).toEqual( 2 );
+        expect( $2ndLevelTargetRepeats1.length ).toEqual( 2 );
+        expect( $2ndLevelTargetRepeats2.length ).toEqual( 3 );
     } );
 
     xit( 'doesn\'t duplicate date widgets in a cloned repeat', function() {
@@ -337,7 +338,8 @@ describe( 'repeat functionality', function() {
         } );
         // this test is only interested in the model, but adding ordinals to default repeat instances is directed
         // by Form.js
-        it( 'initialize correctly with ordinals if more than one top-level repeat is included in model', function() {
+        // // Very theoretical. Situation will never occur with OC.
+        xit( 'initialize correctly with ordinals if more than one top-level repeat is included in model', function() {
             var f = loadForm( 'nested_repeats.xml' );
             f.init();
             var model = f.getModel();
@@ -375,12 +377,16 @@ describe( 'repeat functionality', function() {
             expect( $model.find( 'rep' ).length ).toEqual( 5 );
             // decrease too much
             $form.find( cnt ).val( 0 ).trigger( 'change' );
-            expect( $form.find( rep ).length ).toEqual( 1 );
-            expect( $model.find( 'rep' ).length ).toEqual( 1 );
+            expect( $form.find( rep ).length ).toEqual( 0 );
+            expect( $model.find( 'rep' ).length ).toEqual( 0 );
             // decrease way too much
             $form.find( cnt ).val( -10 ).trigger( 'change' );
-            expect( $form.find( rep ).length ).toEqual( 1 );
-            expect( $model.find( 'rep' ).length ).toEqual( 1 );
+            expect( $form.find( rep ).length ).toEqual( 0 );
+            expect( $model.find( 'rep' ).length ).toEqual( 0 );
+            // go back up after reducing to 0
+            $form.find( cnt ).val( 5 ).trigger( 'change' );
+            expect( $form.find( rep ).length ).toEqual( 5 );
+            expect( $model.find( 'rep' ).length ).toEqual( 5 );
         } );
     } );
 
@@ -1109,7 +1115,7 @@ describe( 'required enketo-transformer version', function() {
         var actual = Form.getRequiredTransformerVersion();
 
         expect( actual ).toBe( expected,
-                'It looks like enketo-transformer has been updated in package.json from ' + actual + ' to ' + expected + '.  ' +
-                'You also need to update the value returned by From.getRequiredTransformerVersion() to the new version number.');
+            'It looks like enketo-transformer has been updated in package.json from ' + actual + ' to ' + expected + '.  ' +
+            'You also need to update the value returned by From.getRequiredTransformerVersion() to the new version number.' );
     } );
 } );

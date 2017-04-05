@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.29.0] - 2017-04-12
 ---------------------
 ##### Changed
 - Hide required “*” when dynamic required expression evaluating to false at the time the input field is validated.
+- First repeat in a series has become removable when repeat-count is zero.
 
 [4.28.0] - 2017-03-30
 ---------------------

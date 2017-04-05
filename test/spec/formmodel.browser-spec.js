@@ -23,6 +23,10 @@ describe( 'merging an instance into the model', function() {
             [ '<a><c><d>record</d></c><c/></a>', '<model><instance><a><c><d>model</d></c></a></instance></model>',
                 '<model><instance><a><c><d>record</d></c><c><d/></c></a></instance></model>'
             ],
+            // nested repeated nodes in record (both c and d ar repeats)
+            [ '<a><c><d>record</d></c><c><d>one</d><d>two</d></c></a>', '<model><instance><a><c><d>model</d></c></a></instance></model>',
+                '<model><instance><a><c><d>record</d></c><c><d>one</d><d>two</d></c></a></instance></model>'
+            ],
             // repeated nodes in record get added in the right order
             [ '<a><r/><r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><r/><r/><meta/></a></instance></model>' ],
             // same as above but there are text nodes as siblings of repeats
@@ -70,12 +74,34 @@ describe( 'merging an instance into the model', function() {
 
             // remove __session instance
             model.xml.querySelector( 'instance[id="__session"]' ).remove();
-            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
+            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' ).replace( /<!--[^>]*-->/g, '' );
             expected = test[ 2 ];
 
             it( 'produces the expected result for instance: ' + test[ 0 ], function() {
                 expect( result ).toEqual( expected );
             } );
+        } );
+    } );
+
+    describe( 'when the record contains a repeat comment', function() {
+        // This test covers a case where for some reason the record includes a repeat comment.
+        it( 'does not create duplicate repeat comment', function() {
+            var result;
+            var instanceStr = '<a><!--repeat://a/r--><r><node/></r><b>2</b></a>';
+            var model = new Model( {
+                modelStr: '<model><instance><a><r><node/></r><b/></a></instance></model>',
+                instanceStr: instanceStr
+            } );
+            model.init();
+
+            // remove __session instance
+            model.xml.querySelector( 'instance[id="__session"]' ).remove();
+
+            // Now we specifically force Enketo to go through its repeat initialization routine for /a/r,
+            // which includes the creation of special repeat comments.
+            model.extractFakeTemplates( [ '/a/r' ] );
+            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
+            expect( result ).toEqual( '<model><instance>' + instanceStr + '</instance></model>' );
         } );
     } );
 
@@ -151,7 +177,7 @@ describe( 'merging an instance into the model', function() {
 
             model.init();
 
-            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' );
+            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /<!--[^>]*-->/g, '' );
             expected = test[ 2 ];
 
             it( 'the initialization will merge the repeat values correctly and remove the templates', function() {
