@@ -1811,13 +1811,16 @@ define( function( require, exports, module ) {
                 var name = $info.data( 'name' );
                 var index = $form.find( '.or-repeat[name="' + name + '"]' ).index( $last );
                 var numRepsInView = $info.siblings( '.or-repeat[name="' + name + '"]' ).length;
+                var numRepsInCount;
+                var toCreate;
                 // Don't pass context if the context is gone because all repeats in a series have been deleted.
                 if ( index === -1 ) {
                     name = null;
                     index = null;
                 }
-                var numRepsInCount = ( repCountPath.length > 0 ) ? model.evaluate( repCountPath, 'number', name, index, true ) : 0;
-                var toCreate = numRepsInCount - numRepsInView;
+                numRepsInCount = ( repCountPath.length > 0 ) ? model.evaluate( repCountPath, 'number', name, index, true ) : 0;
+                numRepsInCount = isNaN( numRepsInCount ) ? 0 : numRepsInCount;
+                toCreate = numRepsInCount - numRepsInView;
 
                 if ( toCreate > 0 ) {
                     that.clone( $info, toCreate );

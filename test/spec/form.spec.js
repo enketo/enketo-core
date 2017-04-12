@@ -387,6 +387,10 @@ describe( 'repeat functionality', function() {
             $form.find( cnt ).val( 5 ).trigger( 'change' );
             expect( $form.find( rep ).length ).toEqual( 5 );
             expect( $model.find( 'rep' ).length ).toEqual( 5 );
+            // empty value should be considered as 0
+            $form.find( cnt ).val( '' ).trigger( 'change' );
+            expect( $form.find( rep ).length ).toEqual( 0 );
+            expect( $model.find( 'rep' ).length ).toEqual( 0 );
         } );
     } );
 
