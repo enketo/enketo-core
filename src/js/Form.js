@@ -280,6 +280,9 @@ define( function( require, exports, module ) {
                 // before itemsetUpdate
                 this.langs.init();
 
+                // after repeat.init() so that template contain role="page" when applicable
+                this.pages.init();
+
                 // after radio button data-name setting
                 this.repeat.init( this );
 
@@ -299,9 +302,6 @@ define( function( require, exports, module ) {
 
                 // after widgets.init(), and repeat.init()
                 this.branchUpdate();
-
-                // after branch.init();
-                this.pages.init();
 
                 // after repeat.init()
                 this.outputUpdate();
