@@ -755,7 +755,7 @@ define( function( require, exports, module ) {
                 // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
                 // original input element has changed **programmatically**.
                 if ( $inputNodes.length ) {
-                    curVal = $inputNodes.val();
+                    curVal = this.getVal( $inputNodes.eq( 0 ) );
                     if ( curVal === undefined || curVal.toString() !== value.toString() ) {
                         $inputNodes.val( value );
                         // don't trigger on all radiobuttons/checkboxes
