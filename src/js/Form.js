@@ -1826,7 +1826,7 @@ define( function( require, exports, module ) {
                     that.clone( $info, toCreate );
                 } else if ( toCreate < 0 ) {
                     // temporary undocumented way to disable ability to remove first repeat
-                    toCreate = Math.abs( toCreate ) >= numRepsInView ? -numRepsInView + ( config.firstRepeatRemovable === false ? 1 : 0 ) : toCreate;
+                    toCreate = Math.abs( toCreate ) >= numRepsInView ? -numRepsInView + ( config.repeatOrdinals === true ? 1 : 0 ) : toCreate;
                     for ( ; toCreate < 0; toCreate++ ) {
                         $last = $info.siblings( '.or-repeat' ).last();
                         this.remove( $last, 0 );
