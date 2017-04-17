@@ -3,6 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Removed
+- AMD remnants (was already incompatible). **WARNING: use 'enketo-config' instead of 'text!enketo-config' now.
+
+##### Added
+- Ability to customize more.
+
+
 [4.29.2] - 2017-04-14
 ---------------------
 ##### Fixed

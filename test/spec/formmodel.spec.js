@@ -753,7 +753,7 @@ describe( 'Repeat without ordinals', function() {
 } );
 
 describe( 'Ordinals in repeats', function() {
-    var config = require( 'text!enketo-config' );
+    var config = require( 'enketo-config' );
     var dflt = config[ 'repeat ordinals' ];
     var wr = '<root xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
     var wrt = '<root xmlns:jr="http://openrosa.org/javarosa" xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
@@ -777,7 +777,7 @@ describe( 'Ordinals in repeats', function() {
         var m2 = start + r + r + end;
         var m3 = start + '<repeat>' + r.replace( /repeat/g, 'nr' ) + '</repeat>' + end;
         var m4 = start + '<repeat>' + r.replace( /repeat/g, 'nr' ) + r.replace( /repeat/g, 'nr' ) + '</repeat>' + end;
-        var paths = [ '/root/repeat', '/root/repeat/nr' ];
+        //var paths = [ '/root/repeat', '/root/repeat/nr' ];
 
         it( 'get added to newly cloned repeats', function() {
             var model = new Model( m1 );

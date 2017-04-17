@@ -238,9 +238,9 @@ See [graphs](https://github.com/enketo/enketo-core-performance-monitor#live-resu
 
 ### License
 
-See [license](./LICENSE) document. 
+See [license](./LICENSE) document and additional clause below: 
 
-In addition, any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/#about](https://enketo.org/#about) and on [this page](#sponsors) are exempted from this requirements and so are contributors listed in [package.json](./package.json).
+Any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/#about](https://enketo.org/#about) and on [this page](#sponsors) are exempted from this requirements and so are contributors listed in [package.json](./package.json).
 
 The aim of this requirement is to force adopters to give something back to the Enketo project, by at least spreading the word and thereby encouraging further adoption.
 

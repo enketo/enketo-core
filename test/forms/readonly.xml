@@ -5,7 +5,7 @@
     <model>
       <instance>
         <readonly id="readonly">
-          <a>martijn</a>
+          <a></a>
           <b>is</b>
           <c>nuts</c>
           <meta>
@@ -13,7 +13,7 @@
           </meta>
         </readonly>
       </instance>
-      <bind nodeset="/readonly/a" readonly="true()" type="string"/>
+      <bind nodeset="/readonly/a" readonly="true()" calculate="'martijn'" type="string"/>
       <bind nodeset="/readonly/b" readonly="true()" type="string"/>
       <bind nodeset="/readonly/c" readonly="true()" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/readonly/meta/instanceID" readonly="true()" type="string"/>

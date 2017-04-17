@@ -60,7 +60,7 @@
         "time-grunt": "1.x.x"
     },
     "browser": {
-        "text!enketo-config": "./config.json",
+        "enketo-config": "./config.json",
         "widgets": "./src/js/widgets.js",
         "translator": "./src/js/fake-translator"
     },

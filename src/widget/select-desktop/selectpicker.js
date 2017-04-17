@@ -1,5 +1,7 @@
+'use strict';
+
 /**
- * @preserve Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
+ * Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +16,6 @@
  * limitations under the License.
  */
 
-'use strict';
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 var t = require( 'translator' ).t;

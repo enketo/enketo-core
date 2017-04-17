@@ -200,7 +200,6 @@ describe( 'merging an instance into the model', function() {
                 '<model><instance><a><r jr:template=""><b>5</b></r><meta/></a></instance></model>'
             ]
         ].forEach( function( test ) {
-            var result;
             var model = new Model( {
                 modelStr: test[ 1 ],
                 instanceStr: test[ 0 ]

@@ -1,13 +1,7 @@
-if ( typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function' ) {
-    var define = function( factory ) {
-        factory( require, exports, module );
-    };
-}
+'use strict';
 
 var pluginName = 'notewidget';
 
-define( function( require, exports, module ) {
-    module.exports = {
-        'name': pluginName
-    };
-} );
+module.exports = {
+    'name': pluginName
+};
