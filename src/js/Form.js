@@ -563,8 +563,8 @@ define( function( require, exports, module ) {
                 var i = index || this.getCurrentIndex(),
                     next = this.getNext( i ),
                     prev = this.getPrev( i );
-                this.$btnNext.add( this.$btnLast ).toggleClass( 'disabled', !next );
-                this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
+                this.$btnNext.add( this.$btnLast ).prop( 'disabled', !next );
+                this.$btnPrev.add( this.$btnFirst ).prop( 'disabled', !prev );
                 this.$formFooter.toggleClass( 'end', !next );
             }
         };
