@@ -1326,8 +1326,19 @@ define( function( require, exports, module ) {
             } else if ( resTypeNum === 7 ) {
                 // response is an array of Elements
                 response = [];
-                for ( j = 0; j < result.snapshotLength; j++ ) {
-                    response.push( result.snapshotItem( j ) );
+                try {
+                    for ( j = 0; j < result.snapshotLength; j++ ) {
+                        response.push( result.snapshotItem( j ) );
+                    }
+                } catch ( e ) {
+                    console.log( 'WARN', e );
+                    try {
+                        while ( j = result.iterateNext() ) {
+                            response.push( j );
+                        }
+                    } catch ( f ) {
+                        console.log( 'WARN', f );
+                    }
                 }
             } else {
                 response = result[ resultTypes[ resTypeNum ][ 2 ] ];
