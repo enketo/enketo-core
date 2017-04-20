@@ -50,6 +50,24 @@ function Form( formSelector, data, options ) {
     this.widgetsInitialized = false;
 }
 
+/**
+ * Getter and setter functions
+ * @type {Object}
+ */
+Form.prototype = {
+    evaluationCascadeAdditions: [],
+    get evaluationCascade() {
+        return [
+            this.calc.update.bind( this.calc ),
+            this.repeats.countUpdate.bind( this.repeats ),
+            this.branch.update.bind( this.branch ),
+            this.output.update.bind( this.output ),
+            this.itemset.update.bind( this.itemset ),
+            this.validationUpdate
+        ].concat( this.evaluationCascadeAdditions );
+    },
+};
+
 Form.prototype.addModule = function( module ) {
     return Object.create( module, {
         form: {
@@ -225,12 +243,14 @@ Form.prototype.getEditStatus = function() {
 Form.prototype.getSurveyName = function() {
     return this.view.$.find( '#form-title' ).text();
 };
+
 /**
  * Obtains a string of primary instance.
  * 
  * @param  {!{include: boolean}=} include optional object items to exclude if false
  * @return {string}        XML string of primary instance
  */
+
 Form.prototype.getDataStr = function( include ) {
     include = ( typeof include !== 'object' || include === null ) ? {} : include;
     // By default everything is included
@@ -239,6 +259,7 @@ Form.prototype.getDataStr = function( include ) {
     }
     return this.model.getStr();
 };
+
 /**
  * Restores HTML form to pre-initialized state. It is meant to be called before re-initializing with
  * new Form ( .....) and form.init()
@@ -258,6 +279,7 @@ Form.prototype.resetView = function() {
 Form.prototype.isValid = function() {
     return this.view.$.find( '.invalid-required, .invalid-constraint' ).length > 0;
 };
+
 /**
  * Implements jr:choice-name
  * TODO: this needs to work for all expressions (relevants, constraints), now it only works for calculated items
@@ -470,20 +492,20 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
     }
 };
 
-
-
 Form.prototype.validationUpdate = function( updated ) {
     var $nodes;
     var that = this;
 
-    updated = updated || {};
+    if ( config.validateContinuously === true ) {
+        updated = updated || {};
 
-    $nodes = this.getRelatedNodes( 'data-constraint', '', updated )
-        .add( this.getRelatedNodes( 'data-required', '', updated ) );
+        $nodes = this.getRelatedNodes( 'data-constraint', '', updated )
+            .add( this.getRelatedNodes( 'data-required', '', updated ) );
 
-    $nodes.each( function() {
-        that.validateInput( $( this ) );
-    } );
+        $nodes.each( function() {
+            that.validateInput( $( this ) );
+        } );
+    }
 };
 
 Form.prototype.setEventHandlers = function() {
@@ -603,14 +625,9 @@ Form.prototype.setEventHandlers = function() {
     } );
 
     this.model.$events.on( 'dataupdate', function( event, updated ) {
-        that.calc.update( updated ); //EACH CALCUPDATE THAT CHANGES A VALUE TRIGGERS ANOTHER CALCUPDATE => INEFFICIENT
-        that.repeats.countUpdate( updated );
-        that.branch.update( updated );
-        that.output.update( updated );
-        that.itemset.update( updated );
-        if ( config.validateContinuously === true ) {
-            that.validationUpdate( updated );
-        }
+        that.evaluationCascade.forEach( function( fn ) {
+            fn.call( that, updated );
+        } );
         // edit is fired when the model changes after the form has been initialized
         that.setEditStatus( true );
     } );
@@ -771,7 +788,6 @@ Form.prototype.validateInput = function( $input ) {
         n.ind = this.input.getIndex( $input );
         getValidationResult = this.model.node( n.path, n.ind ).validate( n.constraint, n.required, n.xmlType );
     } else {
-        // The purpose of this is to send validated.enketo events for these fields (OC).
         getValidationResult = Promise.resolve( {
             requiredValid: true,
             constraintValid: true
