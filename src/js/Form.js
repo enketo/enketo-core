@@ -66,6 +66,46 @@ Form.prototype = {
             this.validationUpdate
         ].concat( this.evaluationCascadeAdditions );
     },
+    get recordName() {
+        return this.view.$.attr( 'name' );
+    },
+    set recordName( name ) {
+        this.view.$.attr( 'name', name );
+    },
+    get editStatus() {
+        return !!this.view.$.data( 'edited' );
+    },
+    set editStatus( status ) {
+        // only trigger edit event once
+        if ( status && status !== this.view.$.data( 'edited' ) ) {
+            this.view.$.trigger( 'edited.enketo' );
+        }
+        this.view.$.data( 'edited', status );
+    },
+    get surveyName() {
+        return this.view.$.find( '#form-title' ).text();
+    },
+    get instanceID() {
+        return this.model.instanceID;
+    },
+    get deprecatedID() {
+        return this.model.deprecatedID;
+    },
+    get instanceName() {
+        return this.model.instanceName;
+    },
+    get version() {
+        return this.model.version;
+    },
+    get encryptionKey() {
+        return this.view.$.data( 'base64rsapublickey' );
+    },
+    get action() {
+        return this.view.$.attr( 'action' );
+    },
+    get method() {
+        return this.view.$.attr( 'method' );
+    },
 };
 
 Form.prototype.addModule = function( module ) {
@@ -122,7 +162,7 @@ Form.prototype.init = function() {
         // before widgets.init (as instanceID used in offlineFilepicker widget)
         // store the current instanceID as data on the form element so it can be easily accessed by e.g. widgets
         this.view.$.data( {
-            instanceID: this.model.getInstanceID()
+            instanceID: this.model.instanceID
         } );
 
         // before calc.update!
@@ -167,7 +207,7 @@ Form.prototype.init = function() {
         // field values are calculated
         this.calc.update();
 
-        this.setEditStatus( false );
+        this.editStatus = false;
 
         setTimeout( function() {
             that.progress.update();
@@ -182,66 +222,6 @@ Form.prototype.init = function() {
     document.querySelector( 'body' ).scrollIntoView();
     console.debug( 'loadErrors', loadErrors );
     return loadErrors;
-};
-
-Form.prototype.getInstanceID = function() {
-    return this.model.getInstanceID();
-};
-Form.prototype.getDeprecatedID = function() {
-    return this.model.getDeprecatedID();
-};
-Form.prototype.getInstanceName = function() {
-    return this.model.getInstanceName();
-};
-Form.prototype.getVersion = function() {
-    return this.model.getVersion();
-};
-Form.prototype.getEncryptionKey = function() {
-    return this.view.$.data( 'base64rsapublickey' );
-};
-Form.prototype.getAction = function() {
-    return this.view.$.attr( 'action' );
-};
-Form.prototype.getMethod = function() {
-    return this.view.$.attr( 'method' );
-};
-/**
- * @deprecated
- */
-Form.prototype.getModel = function() {
-    console.warn( 'form.getModel() is deprecated, use form.model instead' );
-    return this.model;
-};
-/**
- * @deprecated
- */
-Form.prototype.getView = function() {
-    console.warn( 'form.getView() is deprecated, use form.view instead' );
-    return this.view;
-};
-
-Form.prototype.getRecordName = function() {
-    return this.view.$.attr( 'name' );
-};
-
-Form.prototype.setRecordName = function( name ) {
-    this.view.$.attr( 'name', name );
-};
-
-Form.prototype.setEditStatus = function( status ) {
-    // only trigger edit event once
-    if ( status && status !== this.view.$.data( 'edited' ) ) {
-        this.view.$.trigger( 'edited.enketo' );
-    }
-    this.view.$.data( 'edited', status );
-};
-
-Form.prototype.getEditStatus = function() {
-    return !!this.view.$.data( 'edited' );
-};
-
-Form.prototype.getSurveyName = function() {
-    return this.view.$.find( '#form-title' ).text();
 };
 
 /**
@@ -629,7 +609,7 @@ Form.prototype.setEventHandlers = function() {
             fn.call( that, updated );
         } );
         // edit is fired when the model changes after the form has been initialized
-        that.setEditStatus( true );
+        that.editStatus = true;
     } );
 
     this.view.$.on( 'addrepeat', function( event, index ) {
@@ -844,7 +824,109 @@ Form.prototype.validateInput = function( $input ) {
  * Static method to obtain required enketo-transform version direct from class.
  */
 Form.getRequiredTransformerVersion = function() {
-    return '1.16.0';
+    console.warn( 'Form.getRequiredTransformerVersion() is deprecated, use Form.requiredTransformerVersion' );
+    return Form.requiredTransformerVersion;
 };
+Form.requiredTransformerVersion = '1.16.0';
 
 module.exports = Form;
+
+// The deprecated methods below to be removed for version 5.0.0:
+/**
+ * @deprecated
+ */
+Form.prototype.getInstanceID = function() {
+    console.warn( 'form.getInstanceID() is deprecated, use form.instanceID instead' );
+    return this.instanceID;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getDeprecatedID = function() {
+    console.warn( 'form.getDeprecatedID() is deprecated, use form.deprecatedID instead' );
+    return this.deprecatedID;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getInstanceName = function() {
+    console.warn( 'form.getModel() is deprecated, use form.instanceName instead' );
+    return this.instanceName;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getVersion = function() {
+    console.warn( 'form.getVersion() is deprecated, use form.version instead' );
+    return this.version;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getEncryptionKey = function() {
+    console.warn( 'form.getEncryptionKey() is deprecated, use form.encryptionKey instead' );
+    return this.encryptionKey;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getAction = function() {
+    console.warn( 'form.getAction() is deprecated, use form.action instead' );
+    return this.action;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getMethod = function() {
+    console.warn( 'form.getMethod() is deprecated, use form.method instead' );
+    return this.method;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getModel = function() {
+    console.warn( 'form.getModel() is deprecated, use form.model instead' );
+    return this.model;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getView = function() {
+    console.warn( 'form.getView() is deprecated, use form.view instead' );
+    return this.view;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getRecordName = function() {
+    console.warn( 'form.getRecordName() is deprecated, use form.recordName instead' );
+    return this.recordName;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.setRecordName = function( name ) {
+    console.warn( 'form.setRecordName() is deprecated, use form.recordName="val" instead' );
+    this.recordName = name;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.setEditStatus = function( status ) {
+    console.warn( 'form.setEditStatus() is deprecated, use form.editStatus="val" instead' );
+    this.editStatus = status;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getEditStatus = function() {
+    console.warn( 'form.getEditStatus() is deprecated, use form.editStatus instead' );
+    return this.editStatus;
+};
+/**
+ * @deprecated
+ */
+Form.prototype.getSurveyName = function() {
+    console.warn( 'form.getSurveyName() is deprecated, use form.editStatus instead' );
+    return this.surveyName;
+};

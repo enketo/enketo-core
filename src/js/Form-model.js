@@ -53,6 +53,40 @@ FormModel = function( data, options ) {
 };
 
 /**
+ * Getter and setter functions
+ * @type {Object}
+ */
+FormModel.prototype = {
+    get version() {
+        return this.evaluate( '/node()/@version', 'string', null, null, true );
+    },
+    /**
+     * Gets the instance ID
+     *
+     * @return {string} instanceID
+     */
+    get instanceID() {
+        return this.getMetaNode( 'instanceID' ).getVal()[ 0 ];
+    },
+    /**
+     * Gets the deprecated ID
+     *
+     * @return {string} deprecatedID
+     */
+    get deprecatedID() {
+        return this.getMetaNode( 'deprecatedID' ).getVal()[ 0 ] || '';
+    },
+    /**
+     * Gets the instance Name
+     *
+     * @return {string} instanceID
+     */
+    get instanceName() {
+        return this.getMetaNode( 'instanceName' ).getVal()[ 0 ];
+    },
+};
+
+/**
  * Initializes FormModel
  */
 FormModel.prototype.init = function() {
@@ -201,9 +235,7 @@ FormModel.prototype.getSecondaryInstance = function( id ) {
     return instanceEl;
 };
 
-FormModel.prototype.getVersion = function() {
-    return this.evaluate( '/node()/@version', 'string', null, null, true );
-};
+
 
 /**
  * Returns a new Nodeset instance
@@ -514,33 +546,6 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
  */
 FormModel.prototype.bindJsEvaluator = require( './xpath-evaluator-binding' );
 
-/**
- * Gets the instance ID
- *
- * @return {string} instanceID
- */
-FormModel.prototype.getInstanceID = function() {
-    return this.getMetaNode( 'instanceID' ).getVal()[ 0 ];
-};
-
-/**
- * Gets the deprecated ID
- *
- * @return {string} deprecatedID
- */
-FormModel.prototype.getDeprecatedID = function() {
-    return this.getMetaNode( 'deprecatedID' ).getVal()[ 0 ] || '';
-};
-
-/**
- * Gets the instance Name
- *
- * @return {string} instanceID
- */
-FormModel.prototype.getInstanceName = function() {
-    return this.getMetaNode( 'instanceName' ).getVal()[ 0 ];
-};
-
 FormModel.prototype.getMetaNode = function( localName ) {
     var orPrefix = this.getNamespacePrefix( OPENROSA_XFORMS_NS );
     var n = this.node( '/*/' + orPrefix + ':meta/' + orPrefix + ':' + localName );
@@ -848,25 +853,6 @@ FormModel.prototype.cloneAllTemplates = function() {
                 .get( 0 ).removeAttributeNS( JAVAROSA_XFORMS_NS, 'template' );
         }
     } );
-};
-
-/**
- * See Also:
- * Returns jQuery Data Object (obsolete?)
- * See also: <nodes.get()>, which is always (?) preferred except for debugging.
- *
- * @return {jQuery} JQuery Data Object
- */
-FormModel.prototype.get = function() {
-    return this.$ || null;
-};
-
-/**
- *
- * @return {Element} data XML object (not sure if type is element actually)
- */
-FormModel.prototype.getXML = function() {
-    return this.xml || null;
 };
 
 /**
@@ -1837,3 +1823,55 @@ FormModel.prototype.getRemovalEventData = function( node ) {};
 FormModel.prototype.types = types;
 
 module.exports = FormModel;
+
+
+// The deprecated methods below to be removed for version 5.0.0:
+/**
+ * @deprecated
+ */
+FormModel.prototype.getVersion = function() {
+    console.warn( 'FormModel.getVersion() is deprecated, use model.version' );
+    return this.version;
+};
+/**
+ * @deprecated
+ * 
+ * See Also:
+ * Returns jQuery Data Object (obsolete?)
+ * See also: <nodes.get()>, which is always (?) preferred except for debugging.
+ *
+ * @return {jQuery} JQuery Data Object
+ */
+FormModel.prototype.get = function() {
+    console.warn( 'model.get() is deprecated, use model.$' );
+    return this.$ || null;
+};
+/**
+ * @deprecated
+ * @return {Element} data XML object (not sure if type is element actually)
+ */
+FormModel.prototype.getXML = function() {
+    console.warn( 'model.getXML() is deprecated, use model.xml' );
+    return this.xml || null;
+};
+/**
+ * @deprecated
+ */
+FormModel.prototype.getInstanceID = function() {
+    console.warn( 'model.getInstanceID() is deprecated, use model.instanceID' );
+    return this.instanceID;
+};
+/**
+ * @deprecated
+ */
+FormModel.prototype.getDeprecatedID = function() {
+    console.warn( 'model.getDeprecatedID() is deprecated, use model.deprecatedID' );
+    return this.deprecatedID;
+};
+/**
+ * @deprecated
+ */
+FormModel.prototype.getInstanceName = function() {
+    console.warn( 'model.getInstanceName() is deprecated, use model.instanceName' );
+    return this.instanceName;
+};
