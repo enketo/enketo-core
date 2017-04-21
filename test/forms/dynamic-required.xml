@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Dynamic Required Fields</h:title>
+    <model>
+      <instance>
+        <dynamic-required id="dynamic-required" version="2015012901">
+          <txt/>
+          <num/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </dynamic-required>
+      </instance>
+      <bind nodeset="/dynamic-required/txt" required="true()" type="string"/>
+      <bind jr:requiredMsg="jr:itext('/dynamic-required/num:jr:requiredMsg')" nodeset="/dynamic-required/num" required="string-length( /dynamic-required/txt ) &gt; 0" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/dynamic-required/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/dynamic-required/txt">
+      <label>Enter text</label>
+      <hint>always required</hint>
+    </input>
+    <input ref="/dynamic-required/num">
+      <label>Enter number</label>
+      <hint>required if first question has value</hint>
+    </input>
+  </h:body>
+</h:html>

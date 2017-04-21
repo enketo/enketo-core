@@ -782,20 +782,16 @@ Form.prototype.validateInput = function( $input ) {
             if ( n.inputType !== 'hidden' ) {
                 // Check current UI state
                 n.$q = that.input.getWrapNodes( $input );
-                n.$asterisk = n.$q.find( '.required' );
+                n.$required = n.$q.find( '.required' );
                 previouslyInvalid = n.$q.hasClass( 'invalid-required' ) || n.$q.hasClass( 'invalid-constraint' );
 
                 // Update UI
                 if ( result.requiredValid === false ) {
                     that.setValid( $input, 'constraint' );
                     that.setInvalid( $input, 'required' );
-                    n.$asterisk.removeClass( 'hide' );
+                    n.$required.removeClass( 'hide' );
                 } else {
-                    // Show/hide the asterisk of dynamic required expressions
-                    // This is only 'realtime' with `validateContinuously: true`
-                    if ( n.required ) {
-                        n.$asterisk.toggleClass( 'hide', !that.model.node( n.path, n.ind ).isRequired( n.required ) );
-                    }
+                    that.updateRequiredVisibility( n );
 
                     if ( result.constraintValid === false ) {
                         that.setValid( $input, 'required' );
@@ -819,6 +815,17 @@ Form.prototype.validateInput = function( $input ) {
         } );
 };
 
+/**
+ * Extracted as separate function for the purpose of overriding it in custom apps.
+ * @param  {{$required: jQuery collection, path: string, ind: number, required: string}} n [description]
+ */
+Form.prototype.updateRequiredVisibility = function( n ) {
+    // Show/hide the asterisk of dynamic required expressions
+    // This is only 'realtime' with `validateContinuously: true`
+    if ( n.required ) {
+        n.$required.toggleClass( 'hide', !this.model.node( n.path, n.ind ).isRequired( n.required ) );
+    }
+};
 
 /** 
  * Static method to obtain required enketo-transform version direct from class.

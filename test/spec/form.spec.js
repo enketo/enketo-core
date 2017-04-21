@@ -727,6 +727,18 @@ describe( 'validation', function() {
                     done();
                 } );
         } );
+
+        it( 'hides a required "*" if the expression is dynamic and evaluates to false', function( done ) {
+            form = loadForm( 'dynamic-required.xml' );
+            form.init();
+            var $dynReq = form.view.$.find( '.required' );
+
+            expect( $dynReq.eq( 0 ).hasClass( 'hide' ) ).toBe( false );
+            form.validateInput( form.view.$.find( '[name="/dynamic-required/num"]' ) ).then( function() {
+                expect( $dynReq.eq( 1 ).hasClass( 'hide' ) ).toBe( true );
+                done();
+            } );
+        } );
     } );
 
     describe( 'public validate method', function() {
