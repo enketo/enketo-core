@@ -48,6 +48,7 @@ function Form( formSelector, data, options ) {
     this.model = new FormModel( data );
     this.repeatsPresent = this.view.$.find( '.or-repeat' ).length > 0;
     this.widgetsInitialized = false;
+    this.pageNavigationBlocked = false;
 }
 
 /**
@@ -247,14 +248,6 @@ Form.prototype.resetView = function() {
     //form language selector was moved outside of <form> so has to be separately removed
     $( '#form-languages' ).remove();
     this.view.$.replaceWith( this.view.$clone );
-};
-
-/**
- * Returns true is form is valid and false if not. Needs to be called AFTER (or by) validateAll()
- * @return {!boolean} whether the form is valid
- */
-Form.prototype.isValid = function() {
-    return this.view.$.find( '.invalid-required, .invalid-constraint' ).length > 0;
 };
 
 /**
@@ -637,7 +630,41 @@ Form.prototype.setValid = function( $node, type ) {
 
 Form.prototype.setInvalid = function( $node, type ) {
     type = type || 'constraint';
+
+    if ( config.validatePage === false && this.isValid( $node ) ) {
+        this.blockPageNavigation();
+    }
+
     this.input.getWrapNodes( $node ).addClass( 'invalid-' + type ).find( '.required-subtle' ).attr( 'style', 'color: transparent;' );
+};
+
+/**
+ * Blocks page navigation for a short period.
+ * This can be used to ensure that the user sees a new error message before moving to another page.
+ * 
+ * @return {[type]} [description]
+ */
+Form.prototype.blockPageNavigation = function() {
+    var that = this;
+    this.pageNavigationBlocked = true;
+    window.clearTimeout( this.blockPageNavigationTimeout );
+    this.blockPageNavigationTimeout = window.setTimeout( function() {
+        that.pageNavigationBlocked = false;
+    }, 600 );
+};
+
+/**
+ * Checks whether the question is not currently marked as invalid. If no argument is provided, it checks the whole form.
+ * 
+ * @return {!boolean} whether the question/form is not marked as invalid.
+ */
+Form.prototype.isValid = function( $node ) {
+    var $question;
+    if ( $node ) {
+        $question = this.input.getWrapNodes( $node );
+        return !$question.hasClass( 'invalid-required' ) && !$question.hasClass( 'invalid-constraint' );
+    }
+    return this.view.$.find( '.invalid-required, .invalid-constraint' ).length === 0;
 };
 
 Form.prototype.clearIrrelevant = function() {

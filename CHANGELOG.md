@@ -11,6 +11,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Ends-with() and abs() XPath support.
 
+##### Changed
+- If validatePage is set to `false`, block page navigation for some milliseconds if required to ensure that user sees new error message.
+
 ##### Fixed
 - XPath int() conversion incorrect for negative values.
 - A repeat with a relevant and a repeat-count of 0, throws exception.

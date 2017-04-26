@@ -52,19 +52,27 @@ module.exports = {
         var that = this;
         // Make sure eventhandlers are not duplicated after resetting form.
         this.$btnFirst.off( '.pagemode' ).on( 'click.pagemode', function() {
-            that.flipToFirst();
+            if ( !that.form.pageNavigationBlocked ) {
+                that.flipToFirst();
+            }
             return false;
         } );
         this.$btnPrev.off( '.pagemode' ).on( 'click.pagemode', function() {
-            that.prev();
+            if ( !that.form.pageNavigationBlocked ) {
+                that.prev();
+            }
             return false;
         } );
         this.$btnNext.off( '.pagemode' ).on( 'click.pagemode', function() {
-            that.next();
+            if ( !that.form.pageNavigationBlocked ) {
+                that.next();
+            }
             return false;
         } );
         this.$btnLast.off( '.pagemode' ).on( 'click.pagemode', function() {
-            that.flipToLast();
+            if ( !that.form.pageNavigationBlocked ) {
+                that.flipToLast();
+            }
             return false;
         } );
     },
