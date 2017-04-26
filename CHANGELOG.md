@@ -3,6 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Added
+- Ends-with() and abs() XPath support.
+
+##### Fixed
+- XPath int() conversion incorrect for negative values.
+
 [4.30.0] - 2017-04-21
 ---------------------
 ##### Removed
