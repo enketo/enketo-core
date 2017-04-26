@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.31.0] - 2017-04-26
 ---------------------
 ##### Removed
 - "validated.enketo" event.
+- Subtle "required" text on focus.
 
 ##### Added
 - Ends-with() and abs() XPath support.
@@ -16,7 +17,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - XPath int() conversion incorrect for negative values.
-- A repeat with a relevant and a repeat-count of 0, throws exception.
+- A repeat with a relevant and a repeat-count of 0, throws exception upon load.
 
 [4.30.0] - 2017-04-21
 ---------------------

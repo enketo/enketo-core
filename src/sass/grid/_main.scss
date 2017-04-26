@@ -157,13 +157,6 @@ h4 + .or-repeat {
         margin-right: 3px;
     }
 
-    .required-subtle {
-        position: absolute;
-        bottom: 0;
-        right: 2px;
-        font-size: 9px;
-    }
-
     &.invalid-constraint, &.invalid-required {
         border-radius: 0;
         margin: $question-margin;
@@ -216,11 +209,6 @@ h4 + .or-repeat {
     .required {
         right: auto;
         left: 0;
-    }
-
-    .required-subtle {
-        right: auto;
-        left: 2px;
     }
 }
 

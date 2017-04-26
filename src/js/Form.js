@@ -541,59 +541,6 @@ Form.prototype.setEventHandlers = function() {
         that.progress.update( event.target );
     } );
 
-    //using fakefocus because hidden (by widget) elements won't get focus
-    this.view.$.on( 'focus blur fakefocus fakeblur', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', function( event ) {
-        var $input = $( this );
-        var props = {
-            path: that.input.getName( $input ),
-            val: that.input.getVal( $input ),
-            required: that.input.getRequired( $input ),
-            index: that.input.getIndex( $input )
-        };
-        var $question = $input.closest( '.question' );
-        var $legend = $question.find( 'legend' ).eq( 0 );
-        var loudErrorShown = $question.hasClass( 'invalid-required' ) || $question.hasClass( 'invalid-constraint' );
-        var insideTable = ( $input.parentsUntil( '.or', '.or-appearance-list-nolabel' ).length > 0 );
-        var $reqSubtle = $question.find( '.required-subtle' );
-        var reqSubtleTxt = t( 'form.required' );
-        var requiredCheck = ( props.required ) ? that.model.node( props.path, props.index ).validateRequired( props.required ) : null;
-
-        if ( event.type === 'focusin' || event.type === 'fakefocus' ) {
-            $question.addClass( 'focus' );
-            if ( requiredCheck && $reqSubtle.length === 0 && !insideTable ) {
-                $reqSubtle = $( '<span class="required-subtle" style="color: transparent;">' + reqSubtleTxt + '</span>' );
-                requiredCheck.then( function( passed ) {
-                    if ( passed === false ) {
-                        if ( $legend.length > 0 ) {
-                            $legend.append( $reqSubtle );
-                        } else {
-                            $reqSubtle.insertBefore( $input );
-                        }
-
-                        if ( !loudErrorShown ) {
-                            $reqSubtle.show( function() {
-                                $( this ).removeAttr( 'style' );
-                            } );
-                        }
-                    }
-                } );
-            } else if ( !loudErrorShown ) {
-                //$question.addClass( 'focus' );
-            }
-        } else if ( event.type === 'focusout' || event.type === 'fakeblur' ) {
-            $question.removeClass( 'focus' );
-            if ( requiredCheck ) {
-                requiredCheck.then( function( passed ) {
-                    if ( passed === true ) {
-                        $reqSubtle.remove();
-                    }
-                } );
-            } else if ( !loudErrorShown ) {
-                $reqSubtle.removeAttr( 'style' );
-            }
-        }
-    } );
-
     this.model.$events.on( 'dataupdate', function( event, updated ) {
         that.evaluationCascade.forEach( function( fn ) {
             fn.call( that, updated );
@@ -625,7 +572,7 @@ Form.prototype.setEventHandlers = function() {
 
 Form.prototype.setValid = function( $node, type ) {
     var classes = ( type ) ? 'invalid-' + type : 'invalid-constraint invalid-required';
-    this.input.getWrapNodes( $node ).removeClass( classes ).find( '.required-subtle' ).remove();
+    this.input.getWrapNodes( $node ).removeClass( classes );
 };
 
 Form.prototype.setInvalid = function( $node, type ) {
@@ -635,7 +582,7 @@ Form.prototype.setInvalid = function( $node, type ) {
         this.blockPageNavigation();
     }
 
-    this.input.getWrapNodes( $node ).addClass( 'invalid-' + type ).find( '.required-subtle' ).attr( 'style', 'color: transparent;' );
+    this.input.getWrapNodes( $node ).addClass( 'invalid-' + type );
 };
 
 /**

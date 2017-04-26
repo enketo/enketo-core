@@ -62,7 +62,7 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
     } );
 
     // New radiobutton/checkbox icons don't trigger focus event, which is necessary for 
-    // progress update and subtle "required" message
+    // progress update 
     // we need to unfocus the previously focused element
     $form.on( 'click', 'input[type="radio"], input[type="checkbox"]', function() {
         if ( $lastFocused ) {
