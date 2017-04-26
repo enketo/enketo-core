@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Removed
+- "validated.enketo" event.
+
 ##### Added
 - Ends-with() and abs() XPath support.
 

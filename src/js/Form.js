@@ -133,12 +133,9 @@ Form.prototype.init = function() {
         return loadErrors;
     }
 
-    // Before initializing form view, passthrough dataupdate event externally
+    // Before initializing form view, passthrough some model events externally
     this.model.$events.on( 'dataupdate', function( event, updated ) {
         that.view.$.trigger( 'dataupdate.enketo', updated );
-    } );
-    this.model.$events.on( 'validated', function( event, updated ) {
-        that.view.$.trigger( 'validated.enketo', updated );
     } );
     this.model.$events.on( 'removed', function( event, updated ) {
         that.view.$.trigger( 'removed.enketo', updated );

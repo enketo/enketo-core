@@ -1561,10 +1561,6 @@ Nodeset.prototype.validate = function( constraintExpr, requiredExpr, xmlDataType
         .then( function( passed ) {
             result.constraintValid = passed;
 
-            if ( result.requiredValid !== false && result.constraintValid !== false ) {
-                that.model.$events.trigger( 'validated', that.model.getValidationEventData( that.get().get( 0 ), xmlDataType ) );
-            }
-
             return result;
         } );
 };
@@ -1628,9 +1624,6 @@ Nodeset.prototype.validateRequired = function( expr ) {
 
 // Placeholder function meant to be overwritten
 FormModel.prototype.getUpdateEventData = function( node, type ) {};
-
-// Placeholder function meant to be overwritten
-FormModel.prototype.getValidationEventData = function( node, type ) {};
 
 // Placeholder function meant to be overwritten
 FormModel.prototype.getRemovalEventData = function( node ) {};
