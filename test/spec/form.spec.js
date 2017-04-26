@@ -396,6 +396,15 @@ describe( 'repeat functionality', function() {
             expect( $form.find( rep ).length ).toEqual( 0 );
             expect( $model.find( 'rep' ).length ).toEqual( 0 );
         } );
+
+        it( 'and works nicely with relevant even if repeat count is 0', function() {
+            // When repeat count is zero there is no context node to pass to evaluator.
+            var f = loadForm( 'repeat-count-relevant.xml' );
+            var errors = f.init();
+            expect( errors.length ).toEqual( 0 );
+            expect( f.view.$.find( '.or-repeat[name="/data/rep"]' ).length ).toEqual( 0 );
+            expect( f.view.$.find( '.or-group.or-branch[name="/data/rep"]' ).hasClass( 'disabled' ) ).toBe( true );
+        } );
     } );
 
 } );

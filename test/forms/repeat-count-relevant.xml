@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Repeat Count 0 with relevant</h:title>
+    <model>
+      <instance>
+        <data id="repeat-count-relevant">
+          <q1/>
+          <rep jr:template="">
+            <q2/>
+          </rep>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <bind nodeset="/data/q1" required="true()" type="int"/>
+      <bind nodeset="/data/rep" relevant=" /data/q1 &gt;0"/>
+      <bind nodeset="/data/rep/q2" required="true()" type="string"/>
+      <bind nodeset="/data/meta/instanceID" preload="uid" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/q1">
+      <label>Number:</label>
+    </input>
+    <group ref="/data/rep">
+      <label>label</label>
+      <repeat jr:count=" /data/q1 " nodeset="/data/rep">
+        <input ref="/data/rep/q2">
+          <label>Name:</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

@@ -33,6 +33,7 @@ module.exports = {
 
         $nodes.each( function() {
             var $node = $( this );
+            var context;
 
             //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
             if ( $.inArray( $node.attr( 'name' ), alreadyCovered ) !== -1 ) {
@@ -62,11 +63,20 @@ module.exports = {
              */
             insideRepeat = ( clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
             insideRepeatClone = ( clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
+            /* 
+             * If the relevant is placed on a group and that group contains repeats with the same name,
+             * but currently has 0 repeats, the context will not be available.
+             */
+            if ( $node.children( '.or-repeat-info[data-name="' + p.path + '"]' ).length && !$node.children( '.or-repeat[name="' + p.path + '"]' ).length ) {
+                context = null;
+            } else {
+                context = p.path;
+            }
             /*
              * Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
              * It can be safely set to 0 for other branches.
              */
-            p.ind = ( insideRepeatClone ) ? that.form.input.getIndex( $node ) : 0;
+            p.ind = ( context && insideRepeatClone ) ? that.form.input.getIndex( $node ) : 0;
             /*
              * Caching is only possible for expressions that do not contain relative paths to nodes.
              * So, first do a *very* aggresive check to see if the expression contains a relative path.
@@ -77,14 +87,16 @@ module.exports = {
                 if ( !insideRepeat ) {
                     cacheIndex = p.relevant;
                 } else {
-                    // the path is stripped of the last nodeName to record the context.
+                    // The path is stripped of the last nodeName to record the context.
+                    // This might be dangerous, but until we find a bug, it helps in those forms where one group contains
+                    // many sibling questions that each have the same relevant.
                     cacheIndex = p.relevant + '__' + p.path.substring( 0, p.path.lastIndexOf( '/' ) ) + '__' + p.ind;
                 }
             }
             if ( cacheIndex && typeof relevantCache[ cacheIndex ] !== 'undefined' ) {
                 result = relevantCache[ cacheIndex ];
             } else {
-                result = that.evaluate( p.relevant, p.path, p.ind );
+                result = that.evaluate( p.relevant, context, p.ind );
                 relevantCache[ cacheIndex ] = result;
             }
 

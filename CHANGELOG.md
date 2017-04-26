@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - XPath int() conversion incorrect for negative values.
+- A repeat with a relevant and a repeat-count of 0, throws exception.
 
 [4.30.0] - 2017-04-21
 ---------------------
