@@ -340,7 +340,8 @@ FormModel.prototype.mergeXml = function( recordStr ) {
     templateEls = record.querySelectorAll( '[*|template]' );
 
     for ( var i = 0; i < templateEls.length; i++ ) {
-        templateEls[ i ].remove();
+        // IE11 has no remove method, so we use jQuery
+        $( templateEls[ i ] ).remove();
     }
 
     /**
@@ -771,7 +772,8 @@ FormModel.prototype.extractTemplates = function() {
          * The template of the repeat ancestor of the nested repeat contains the correct comment.
          * However, since the ancestor repeat (template)
          */
-        templateEl.remove();
+        // IE11 has no remove() method so we use jQuery
+        $( templateEl ).remove();
     } );
 };
 

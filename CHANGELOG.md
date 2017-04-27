@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- IE11 exception upon loading forms with repeat templates.
+
 [4.31.1] - 2017-04-27
 ---------------------
 ##### Changed
