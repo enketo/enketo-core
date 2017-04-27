@@ -3,10 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.31.1] - 2017-04-27
 ---------------------
 ##### Changed
 - Always lock scrolling of ArcGIS geo widget until user clicks the map (previously only on touchscreens).
+
+##### Fixed
+- Selectpicker (non-touch) does not show checked status if radiobuttons/checkboxes themselves are clicked.
 
 [4.31.0] - 2017-04-26
 ---------------------

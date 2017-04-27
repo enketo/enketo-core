@@ -1,4 +1,7 @@
 'use strict';
+/**
+ * This widget is one gigantic mess. It should be replaced entirely.
+ */
 
 /**
  * Copyright 2012 Silvio Moreto, Martijn van de Rijdt & Modilabs
@@ -162,12 +165,18 @@ DesktopSelectpicker.prototype._clickListener = function() {
 
     this.$picker
         .on( 'click', 'li:not(.disabled)', function( e ) {
-            e.preventDefault();
-            var $li = $( this ),
-                $input = $li.find( 'input' ),
-                $select = $( _this.element ),
-                $option = $select.find( 'option[value="' + $input.val() + '"]' ),
-                selectedBefore = $option.is( ':selected' );
+            var $li = $( this );
+            var $input = $li.find( 'input' );
+            var $select = $( _this.element );
+            var $option = $select.find( 'option[value="' + $input.val() + '"]' );
+            var selectedBefore = $option.is( ':selected' );
+
+            // We need to prevent default unless click was on on input
+            // Without this 'fix', clicks on radiobuttons/checkboxes themselves will update the value
+            // but will not show checked status.
+            if ( e.target.nodeName.toLowerCase() !== 'input' ) {
+                e.preventDefault();
+            }
 
             if ( !_this.multiple ) {
                 _this.$picker.find( 'li' ).removeClass( 'active' );
