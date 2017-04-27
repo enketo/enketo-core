@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Always lock scrolling of ArcGIS geo widget until user clicks the map (previously only on touchscreens).
+
 [4.31.0] - 2017-04-26
 ---------------------
 ##### Removed

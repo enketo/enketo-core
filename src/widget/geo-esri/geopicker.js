@@ -201,9 +201,9 @@ Geopicker.prototype._init = function() {
                 that._updateInputs( {} );
             } );
 
-            // disable map navigation on touchscreens until user clicks map
+            // disable map navigation until user clicks map
             // using a hack until the ARCGis JS API has a way to do this programmatically.
-            if ( that.props.touch && that.mapSupported && !that.props.readonly ) {
+            if ( that.mapSupported && !that.props.readonly ) {
                 that.$widget.addClass( 'no-scroll' );
                 //that.mapNavigationDisabled = true;
                 that.$map.find( '.interaction-blocker' ).one( 'click', function() {
