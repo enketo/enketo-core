@@ -46,7 +46,7 @@
         "grunt-karma": "2.0.0",
         "grunt-sass": "2.0.x",
         "grunt-shell": "2.1.0",
-        "jasmine-core": "2.5.x",
+        "jasmine-core": "2.6.x",
         "json-pretty": "0.0.1",
         "karma": "1.6.x",
         "karma-browserify": "5.1.x",
