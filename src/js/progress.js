@@ -15,7 +15,7 @@ module.exports = {
     lastChanged: null,
     $all: null,
     updateTotal: function() {
-        this.$all = this.form.view.$.find( '.question' ).not( '.disabled' ).filter( function() {
+        this.$all = this.form.view.$.find( '.question' ).not( '.disabled, .or-appearance-comment, .or-appearance-dn' ).filter( function() {
             return $( this ).parentsUntil( '.or', '.disabled' ).length === 0;
         } );
     },
