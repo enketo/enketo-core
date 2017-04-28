@@ -22,7 +22,8 @@ The global configuration is done in config.json (in your own app's replacement o
 ```jsons
 {
     "arcGis": {
-    	"jsUrl" : "/static/js/esri-arcgis-4-0.js",
+    	"jsUrl" : "/static/js/esri-arcgis-4-3.js",
+    	"cssUrl" : "/static/js/esri-argis-4-3.css",
 	    "webMapId": "45ded9b3e0e145139cc433b503a8f5ab",
 	    "hasZ": false, 
 	    "basemaps": [ "streets", "topo", "satellite", "osm" ] 
@@ -32,6 +33,9 @@ The global configuration is done in config.json (in your own app's replacement o
 
 #### arcGis.jsUrl
 By default this picker will load a large JS file from a CDN. You can improve performance by serving the much smaller customized build [to follow].js file in /src/widget/geo-esri/ instead by copying it to your static js assets folder and adding the path to (your own app's) config.json. This cumbersome solution is required because Enketo is using CommonJS modules and the Esri ArcGIS for JS library is using AMD modules. This item is optional but recommended. This item can only be set as a global configuration.
+
+#### arcGis.cssUrl
+Same as previous item for for CSS resource.
 
 #### arcGis.webMapId
 Optionally, provide the default ArcGIS webmap ID to use. There is no default value in Enketo, but it will default to the ArcGIS JS API default.

@@ -13,6 +13,7 @@
     "validatePage": true,
     "arcGis": {
         "jsUrl": "",
+        "cssUrl": "",
         "webMapId": "",
         "hasZ": true,
         "basemaps": [ "streets" ]

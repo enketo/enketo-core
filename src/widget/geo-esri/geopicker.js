@@ -11,7 +11,8 @@ var OVERRIDE_PLUGIN_NAME = 'geopicker';
 var DEFAULT_BASEMAPS = typeof config.arcGis === 'object' && Array.isArray( config.arcGis.basemaps ) ? config.arcGis.basemaps : [ 'streets', 'satellite', 'topo' ];
 var DEFAULT_HAS_Z = typeof config.arcGis === 'object' && typeof config.arcGis.hasZ === 'boolean' ? config.arcGis.hasZ : true;
 var DEFAULT_WEBMAP_ID = typeof config.arcGis === 'object' && config.arcGis.webMapId ? config.arcGis.webMapId : undefined;
-var ESRI_ARGIS_JS_URL = typeof config.arcGis === 'object' && config.arcGis.jsUrl ? config.arcGis.jsUrl : 'https://js.arcgis.com/4.0/';
+var ESRI_ARCGIS_JS_URL = typeof config.arcGis === 'object' && config.arcGis.jsUrl ? config.arcGis.jsUrl : 'https://js.arcgis.com/4.3/';
+var ESRI_ARCGIS_CSS_URL = typeof config.arcGis === 'object' && config.arcGis.cssUrl ? config.arcGis.cssUrl : ESRI_ARCGIS_JS_URL + 'esri/css/main.css';
 var PRECISION = 10;
 var NORTHING_OFFSET = 10000000.0;
 var esriArcGisJsRequest;
@@ -44,8 +45,10 @@ Geopicker.prototype._loadEsriArcGisJs = function() {
     // in case multiple widgets exist in the same form
     if ( !esriArcGisJsRequest ) {
         esriArcGisJsRequest = new Promise( function( resolve, reject ) {
+            // append CSS
+            $( 'head' ).append( '<link type="text/css" rel="stylesheet" href="' + ESRI_ARCGIS_CSS_URL + '">' );
             // make the request for the Esri script asynchronously
-            $.getScript( ESRI_ARGIS_JS_URL )
+            $.getScript( ESRI_ARCGIS_JS_URL )
                 .done( function() {
                     // TODO: is it 100% sure that window.require is available at this point?
                     // The script has has loaded, but has it executed?
@@ -599,7 +602,7 @@ Geopicker.prototype._addEsriSearch = function( mapView ) {
         autoSelect: false
     } );
 
-    searchWidget.startup();
+    searchWidget.renderNow();
 
     searchWidget.on( 'search-complete', function( evt ) {
         var p;
@@ -629,7 +632,7 @@ Geopicker.prototype._addEsriLocate = function( mapView ) {
         goToLocationEnabled: false
     } );
 
-    locateBtn.startup();
+    locateBtn.renderNow();
 
     locateBtn.on( 'locate', function( evt ) {
         that._updateInputs( evt.position.coords );
@@ -648,7 +651,7 @@ Geopicker.prototype._addBasemapToggle = function( mapView, basemapList ) {
         nextBasemap: that._getNextBasemap( mapView.map.basemap.id, basemapList )
     } );
 
-    basemapToggle.startup();
+    basemapToggle.renderNow();
 
     basemapToggle.on( 'toggle', function( evt ) {
         // If the supplied basemap is not valid, the evt on the next toggle returns null

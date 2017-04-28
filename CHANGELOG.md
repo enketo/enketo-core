@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- ArcGIS API for JS updated to 4.3 in ArcGIS geo widget.
+
 ##### Fixed
 - IE11 exception upon loading forms with repeat templates.
 
