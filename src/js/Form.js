@@ -186,7 +186,7 @@ Form.prototype.init = function() {
         // after setAllVals, after repeats.init
 
         this.options.input = this.input;
-        this.options.pathToAbsolute = this.pathToAbsolute;
+        this.options.pathToAbsolute = this.pathToAbsolute.bind( this );
         this.options.evaluate = this.model.evaluate.bind( this.model );
         this.options.formClasses = utils.toArray( this.view.html.classList );
         this.widgetsInitialized = this.widgets.init( null, this.options );
@@ -380,6 +380,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     }
 
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
+    // TODO: should we exclude 'sibling' radiobuttons and checkboxes?
     return $collection.find( selector.join() );
 };
 
