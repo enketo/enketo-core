@@ -427,14 +427,28 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
         var $node = $( this );
         var relevant = that.input.getRelevant( $node );
         var index = that.input.getIndex( $node );
-        var context = that.input.getName( $node );
+        var path = that.input.getName( $node );
+        var context;
+
+        /* 
+         * Copied from branch.js:
+         * 
+         * If the relevant is placed on a group and that group contains repeats with the same name,
+         * but currently has 0 repeats, the context will not be available.
+         */
+        if ( $node.children( '.or-repeat-info[data-name="' + path + '"]' ).length && !$node.children( '.or-repeat[name="' + path + '"]' ).length ) {
+            context = null;
+        } else {
+            context = path;
+        }
+
         /*
          * If performance becomes an issue, some opportunities are:
          * - check if ancestor is relevant
          * - use cache of branch.update
          * - check for repeatClones to avoid calculating index (as in branch.update)
          */
-        if ( !that.model.evaluate( relevant, 'boolean', context, index ) ) {
+        if ( context && !that.model.evaluate( relevant, 'boolean', context, index ) ) {
             modelClone.node( context, index ).remove();
         }
     } );

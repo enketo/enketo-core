@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.31.4] - 2017-05-03
+---------------------
+##### Fixed
+- Exception occurs when obtaining cleaned-of-irrelevants model string if repeat has a relevant and a repeat-count of 0.
+
 [4.31.3] - 2017-05-01
 ---------------------
 ##### Fixed

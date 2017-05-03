@@ -673,6 +673,21 @@ describe( 'obtaining XML string from form without irrelevant nodes', function() 
         } ) ).not.toMatch( match );
 
     } );
+
+
+    it( 'works if repeat count is 0', function() {
+        // When repeat count is zero there is no context node to pass to evaluator.
+        var form = loadForm( 'repeat-count-relevant.xml' );
+        var errors = form.init();
+        var getFn = function() {
+            return form.getDataStr( {
+                irrelevant: false
+            } );
+        };
+        expect( getFn ).not.toThrow();
+        expect( getFn() ).not.toMatch( '<rep>' );
+        expect( getFn() ).toMatch( '<q1/>' );
+    } );
 } );
 
 describe( 'validation', function() {
