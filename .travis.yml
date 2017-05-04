@@ -1,4 +1,5 @@
 sudo: false
+dist: trusty
 language: node_js
 node_js:
   - "6"
@@ -10,7 +11,10 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+      - google-chrome-stable
 before_script:
   - npm install -g grunt-cli
-before_install:
-  - date
+  # next 3 lines temporary until google-chrome-stable is 59+
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start &
+  - sleep 3

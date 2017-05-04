@@ -79,14 +79,13 @@ module.exports = function( grunt ) {
         karma: {
             options: {
                 singleRun: true,
-                reporters: [ 'dots' ]
+                reporters: [ 'dots' ],
+                configFile: 'test/karma.conf.js',
             },
             headless: {
-                configFile: 'test/karma.conf.js',
-                browsers: [ 'PhantomJS' ]
+                browsers: [ 'ChromeHeadless' ]
             },
             browsers: {
-                configFile: 'test/browser-karma.conf.js',
                 browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', /*'Opera','Safari' */ ]
             }
         },
