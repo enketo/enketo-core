@@ -42,7 +42,7 @@ $input-button-border: 2px solid #aaaaaa;
 
     .geo-inputs {
         position: relative;
-        margin: 25px $separator-width 0 0;
+        margin: 25px $separator-width 10px 0;
         width: 100%;
 
         @include display-flex;
@@ -109,7 +109,7 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
-    .toggle-map-visibility-btn {
+    .toggle-map-visibility-btn, .toggle-input-visibility-btn {
         position: absolute;
         margin-top: 8px;
         left: calc(50% - 15px);
@@ -122,6 +122,35 @@ $input-button-border: 2px solid #aaaaaa;
         width: 30px;
         padding: 0;
         z-index: 10;
+    }
+
+    .toggle-input-visibility-btn {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    &.hide-input {
+        .geo-inputs {
+            justify-content: flex-end;
+
+            label:not(.acc-empty) {
+                display: none;
+            }
+
+            .acc-empty {
+                flex-direction: row-reverse;
+                margin-top: 0;
+
+                .geo-label, [name="acc"][type="number"] {
+                    display: none;
+                }
+            }
+        }
+
+        .toggle-input-visibility-btn {
+            border-bottom: 3px solid #aaaaaa;
+            border-top: none;
+        }
     }
 
     .map-canvas-wrapper {
@@ -164,6 +193,7 @@ $input-button-border: 2px solid #aaaaaa;
         float: right;
         display: none;
         margin: 0 0 0 15px;
+        line-height: 0.9em;
     }
 
     .btn-icon-only[name=empty] {

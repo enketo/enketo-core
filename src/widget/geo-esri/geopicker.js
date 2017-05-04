@@ -199,6 +199,14 @@ Geopicker.prototype._init = function() {
                 return false;
             } );
 
+            // handle show/hide input switcher and set initial state
+            // copy hide-input class from question to widget and add show/hide input controller
+            that.$widget
+                .toggleClass( 'hide-input', that.$question.hasClass( 'or-appearance-hide-input' ) )
+                .find( '.toggle-input-visibility-btn' ).on( 'click', function() {
+                    that.$widget.toggleClass( 'hide-input' );
+                } );
+
             // handle click of "empty" button
             that.$widget.find( '[name="empty"]' ).on( 'click', function() {
                 that._updateInputs( {} );
@@ -319,6 +327,7 @@ Geopicker.prototype._getProps = function() {
 Geopicker.prototype._addDomElements = function() {
     var centerMark = '<span class="center-mark esri-geopoint-marker" style="display:none;"> </span>';
     var toggleMapBtn = this.props.compact ? '<button type="button" class="toggle-map-visibility-btn"> </button>' : '';
+    var toggleInputVisibilityBtn = '<button type="button" class="toggle-input-visibility-btn"> </button>';
     var locateBtn = this.props.detect ? '<button name="geodetect" type="button" tabindex="0" class="btn btn-default esri-locate esri-widget-button esri-widget esri-component">' +
         '<span aria-hidden="true" class="esri-icon esri-icon-locate" title="Find my location"></span></button>' : '';
     var map = '<div class="map-canvas-wrapper' + ( this.props.compact ? ' hide-map' : '' ) +
@@ -378,7 +387,7 @@ Geopicker.prototype._addDomElements = function() {
         '<label class="geo alt">' + altTxt + '<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
         '<label class="geo acc-empty"><span class="geo-label">' + accTxt + '</span><input class="ignore" readonly name="acc" type="number" step="0.1" placeholder="' + notAvTxt + '"/>' +
         '<button type="button" class="btn btn-icon-only" name="empty"><span class="icon icon-trash"> </span></button></label>' +
-        '</div>' +
+        '</div>' + toggleInputVisibilityBtn +
         '</div>'
     );
 
