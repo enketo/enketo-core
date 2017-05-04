@@ -50,7 +50,7 @@
         "json-pretty": "0.0.1",
         "karma": "1.6.x",
         "karma-browserify": "5.1.x",
-        "karma-chrome-launcher": "2.0.x",
+        "karma-chrome-launcher": "2.1.x",
         "karma-firefox-launcher": "1.0.x",
         "karma-jasmine": "1.1.x",
         "karma-phantomjs-launcher": "1.0.x",

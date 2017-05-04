@@ -1115,7 +1115,7 @@ describe( 're-validating inputs and updating user feedback', function() {
                 expect( $one.closest( '.question' ).hasClass( 'invalid-required' ) ).toBe( false );
                 done();
             } );
-        }, 500 );
+        }, 100 );
     } );
 } );
 
@@ -1141,9 +1141,9 @@ describe( 'form status', function() {
     form.init();
 
     it( 'correctly maintains edit status', function() {
-        expect( form.getEditStatus() ).toBe( false );
+        expect( form.editStatus ).toBe( false );
         form.view.$.find( 'input[name="/thedata/nodeA"]' ).val( '2010-10-01T11:12:00+06:00' ).trigger( 'change' );
-        expect( form.getEditStatus() ).toBe( true );
+        expect( form.editStatus ).toBe( true );
     } );
 } );
 
