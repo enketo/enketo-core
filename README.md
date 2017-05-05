@@ -1,22 +1,21 @@
-Enketo Core [![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core#type=dev) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
+Enketo Core [![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core?type=dev) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
 ===============
 
-The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [these](https://enketo.org/#tools).
+The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [these](https://enketo.org/about/adoption/).
 
-This repo is meant to use as a building block for any enketo-powered application.
+This repo is meant to use as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of an Enketo-powered application and how Enketo Core fits into this.
 
 Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
 ### Usage as a library
 
 1. Install with `npm install enketo-core --save` or include as a git submodule.
-2. Develop a way to perform an XSL Transformation on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an example.
+2. Develop a way to perform an [XSL Transformation](https://enketo.org/develop/#transformation) on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an available library/app to use or develop your own.
 3. Add [themes](./src/sass) to your stylesheet build system (2 stylesheets per theme, 1 is for `media="print"`).
 4. Override [config.json](./config.json) and optionally [widgets.js](./src/js/widgets.js) with your app-specific versions.
 5. Main methods illustrated in code below:
 
 ```javascript 
-	
 var Form = require('enketo-core');
 
 // The XSL transformation result contains a HTML Form and XML instance.
@@ -29,23 +28,23 @@ var formSelector = 'form.or:eq(0)';
 
 // required object containing data for the form
 var data = {
-	// required string of the default instance defined in the XForm
-	modelStr: globalXMLInstance,
-	// optional string of an existing instance to be edited
-	instanceStr: null,
-	// optional boolean whether this instance has ever been submitted before
-	submitted: false,
-	// optional array of external data objects containing: 
-	// {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
-	external: [],
-    // optional object of session properties 
-    // 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid'
-    session: {}
+  // required string of the default instance defined in the XForm
+  modelStr: globalXMLInstance,
+  // optional string of an existing instance to be edited
+  instanceStr: null,
+  // optional boolean whether this instance has ever been submitted before
+  submitted: false,
+  // optional array of external data objects containing: 
+  // {id: 'someInstanceId', xmlStr: '<root>external instance content</root>'}
+  external: [],
+  // optional object of session properties 
+  // 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid'
+  session: {}
 };
 
 // form-specific configuration
 var options = {
-    clearIrrelevantImmediately: true  // this is the default, it can be omitted
+  clearIrrelevantImmediately: true  // this is the default, it can be omitted
 }
 
 // instantiate a form, with 2 parameters
@@ -56,24 +55,24 @@ var loadErrors = form.init();
 
 // submit button handler for validate button
 $( '#submit' ).on( 'click', function() {
-    // clear irrelevant questions and validate
-    form.validate()
-    	.then(function (valid){
-    		if ( !valid ) {
-       			alert( 'Form contains errors. Please see fields marked in red.' );
-    		} else {
-        		// Record is valid! 
-        		var record = form.getDataStr();
+  // clear irrelevant questions and validate
+  form.validate()
+    .then(function (valid){
+      if ( !valid ) {
+        alert( 'Form contains errors. Please see fields marked in red.' );
+      } else {
+        // Record is valid! 
+        var record = form.getDataStr();
 
-        		// reset the form view
-        		form.resetView();
+        // reset the form view
+        form.resetView();
+            
+        // reinstantiate a new form with the default model and no options
+        form = new Form( formSelector, { modelStr: modelStr }, {} );
 
-        		// reinstantiate a new form with the default model and no options
-        		form = new Form( formSelector, { modelStr: modelStr }, {} );
-
-        		// do what you want with the record
-    		}
-    	});
+        // do what you want with the record
+      }
+    });
 } );
 
 ```
@@ -99,14 +98,17 @@ Global configuration (per app) is done in [config.json](./config.json) which is 
 The `maps` configuration can include an array of Mapbox TileJSON objects (or a subset of these with at least a `name`,  `tiles` (array) and an `attribution` property, and optionally `maxzoom` and `minzoom`). You can also mix and match Google Maps layers. Below is an example of a mix of two map layers provided by OSM (in TileJSON format) and Google maps.
 
 ```
-[ {
-        "name": "street",
-        "tiles": [ "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
-        "attribution": "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
-    }, {
-        "name": "satellite",
-        "tiles": "GOOGLE_SATELLITE"
-} ]
+[ 
+  {
+    "name": "street",
+    "tiles": [ "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
+    "attribution": "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
+  }, 
+  {
+    "name": "satellite",
+    "tiles": "GOOGLE_SATELLITE"
+  } 
+]
 ```
 
 For GMaps layers you have the four options as tiles values: `"GOOGLE_SATELLITE"`, `"GOOGLE_ROADMAP"`, `"GOOGLE_HYBRID"`, `"GOOGLE_TERRAIN"`. You can also add other TileJSON properties, such as minZoom, maxZoom, id to all layers. 
@@ -127,9 +129,9 @@ Per-form configuration is done by adding an (optional) options object as 3rd par
 #### Behaviour of skip logic
 
 ```
-    new Form(formselector, data, { 
-        clearIrrelevantImmediately: false
-    });
+new Form(formselector, data, { 
+  clearIrrelevantImmediately: false
+});
 ```
 
 If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
@@ -142,8 +144,9 @@ In the second case the irrelevant values will not be cleared until `form.validat
 2. install dependencies with `npm install`
 3. build with `grunt`
 4. start built-in auto-reloading development server with `grunt develop` 
-5. browse to [http://localhost:8005/forms/index.html](http://localhost:8005/forms/index.html)
+5. browse to [http://localhost:8005](http://localhost:8005/) and load an XForm url with the `xform` queryparameter or load a local from from the /tests/forms folder in this repo
 6. run tests with `npm test`
+7. adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
 
 ### How to create or extend widgets
 
@@ -151,38 +154,29 @@ To create new widgets, we recommend using this [plugin template](https://gist.gi
 
 Each widget needs to fulfill following requirements:
 
-* be an CommonJS/AMD-compliant jQuery plugin
+* be a CommonJS jQuery plugin
 * it needs to return an object with its own name and selector-to-instantiate with
 * path to stylesheet scss file relative to the widget's own folder to be added in [_widgets.scss](./src/sass/core/_widgets.scss) (this will be automated in the future)
 * be responsive up to a minimum window width of 320px
-* use JSDoc style documentation for the purpose of passing the Google Closure Compiler without warnings and errors
+* use JSDoc style documentation
 * if hiding the original input element, it needs to load the default value from that input element into the widget
 * if hiding the original input element, it needs to keep it synchronized and trigger a change event on the original whenever it updates
 * it is recommended to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
 * new input/select/textarea elements inside widgets need to get the `ignore` class
 * it requires the following methods (which can be automatically obtained by extending the Widget base class as demonstrated in the [plugin template](https://gist.github.com/MartijnR/6943281)
-	* `destroy(element)` to totally destroy widgets in *repeat* groups/questions when these groups/questions are cloned This may be an empty function if:
-		* a deep `$.clone(true, true)` of the widget (incl data and eventhandlers) works without problems (problems are likely!)
-	* `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
-	* `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when its branch becomes irrelevant.
-	* `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest form this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
+  * `destroy(element)` to totally destroy widgets in *repeat* groups/questions when these groups/questions are cloned This may be an empty function if:
+    * a deep `$.clone(true, true)` of the widget (incl data and eventhandlers) works without problems (problems are likely!)
+  * `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
+  * `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when its branch becomes irrelevant.
+  * `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest form this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
 * any eventhandlers added to the original input should be namespaced (if extending the Widget base class, the namespace is available as `this.namespace`)
 * if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option `{ touch: [boolean] }` is passed to the plugin by default. If your widget requires tweaks for mobile, you could create an all-in-one widget using the `options.touch` check or you could create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow clearing of the original input (i.e. setting value to '')
 * send a `fakefocus` and `fakeblur` event to the original input when the widget gets focus or looses it (see select-desktop)
-* please write test specs in the widget's /test folder.....(yeah, need to do that for the existing widgets too...)
-
-### Notes for All Developers
-
-* build with grunt
-* helpful to use `grunt develop` to automatically compile (sass and js) when a source file changes, serve, and refresh
-* adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
+* please write test specs in the widget's /test folder.....(yeah, we need to do that for the existing widgets too...)
 
 ### Notes for JavaScript Developers
 
-* The JS library uses CommonJS modules, but all the modules are still AMD-compliant. It may be quite a bit of work to get them working properly using requirejs though (AMD-specific issues won't be fixed by us, but AMD-specific patches/PRs are welcome)
-* Will be moving back to Google Closure (Advanced Mode) in future (hence JSDoc comments should be maintained)
-* Still trying to find a JS Documentation system to use that likes Closure-style JSDoc
 * JavaScript style see [JsBeautifier](./.jsbeautifyrc) config file, the jsbeautifier check is added to the grunt `test` task. You can also manually run `grunt jsbeautifier:fix` to fix style issues.
 * Testing is done with Jasmine and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
 * When making a pull request, please add tests where relevant
@@ -217,17 +211,6 @@ The development of this app and [enketo-core](https://github.com/enketo/enketo-c
 * [Medic Mobile](http://medicmobile.org/)
 * [Enketo LLC](https://enketo.org)
 
-### Related Projects
-
-* [Enketo Express](https://github.com/enketo/enketo-express) - The modern node.js Enketo Smart Paper app
-* [Enketo Legacy](https://github.com/enketo/enketo-legacy) - The old PHP Enketo Smart Paper app 
-* [Enketo XpathJS](https://github.com/enketo/enketo-xpathjs) - The XPath evaluator used in the form engine (enketo-core)
-* [Enketo Transformer](https://github.com/enketo/enketo-transformer) - Node.js XSL Transformer module for Enketo.
-* [Enketo XSLT](https://github.com/enketo/enketo-xslt) - The XSLT sheets used to transform OpenRosa XForms into Enketo HTML forms
-* [Enketo XSLT Transformer PHP](https://github.com/enketo/enketo-xslt-transformer-php) - A minimalistic example in PHP of an XSLT transformer
-* [Enketo Dristhi](https://github.com/enketo/enketo-dristhi) - used inside an Android app around enketo
-* [Enketo JSON](https://github.com/enketo/enketo-json) - XML-JSON instance convertor used inside e.g. Dristhi
-
 ### Change log
 
 See [change log](./CHANGELOG.md)
@@ -240,7 +223,7 @@ See [graphs](https://github.com/enketo/enketo-core-performance-monitor#live-resu
 
 See [license](./LICENSE) document and additional clause below: 
 
-Any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/#about](https://enketo.org/#about) and on [this page](#sponsors) are exempted from this requirements and so are contributors listed in [package.json](./package.json).
+Any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/about/sponsors/](https://enketo.org/about/sponsors/) and on [this page](#sponsors) are exempted from this requirements and so are contributors listed in [package.json](./package.json).
 
 The aim of this requirement is to force adopters to give something back to the Enketo project, by at least spreading the word and thereby encouraging further adoption.
 
