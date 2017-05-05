@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Added
+- Image Map select widget.
+
 [4.32.1] - 2017-05-09
 ---------------------
 ##### Fixed

@@ -1,0 +1,47 @@
+.or-appearance-image-map{
+    img {
+        // avoid image flickering caused by initializing widget upon img load event
+        visibility: hidden;
+    }
+    .option-wrapper {
+        // avoid showing regular radiobuttons/checkboxes while image is loading
+        display: none;
+    }
+}
+.image-map {
+    svg {
+        width: 100%;
+        height: auto;
+        &[or-readonly]{
+            opacity: 0.75;
+        }
+        &:not([or-readonly]) {
+            path[id] {
+                &:hover {
+                    opacity: 0.5;
+                }
+            }
+        }
+        path[id] {
+            &[or-selected] {
+                fill: $brand-primary-color;
+            }
+        }
+    }
+    &__ui {
+        height: 2em;
+        width: 100%;
+        text-align: center;
+        font-weight: normal;
+        &__tooltip{
+            display: inline-block;
+            background: lighten($brand-primary-color, 50%);
+            padding: 2px 8px;
+            color: $gray;
+            border-radius: 2px;
+            &:empty {
+                padding: 0;
+            }
+        }
+    }
+}
