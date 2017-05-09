@@ -318,6 +318,25 @@ describe( 'Data node XML data type', function() {
 
 } );
 
+describe( 'dataupdate event, is fired on model.$events and includes', function() {
+    it( 'object with repeatPath and repeatIndex for a node inside a repeatSeries of more than 1 instance', function() {
+        var model = new Model( {
+            modelStr: '<model><instance><a><b><c/></b><b><c/></b><meta><instanceID/></meta></a></instance></model>'
+        } );
+        var eventObjects = [];
+        model.$events.on( 'dataupdate', function( event, updated ) {
+            eventObjects.push( updated );
+        } );
+        model.init();
+        model.node( '/a/b/c', 1 ).setVal( 'boo' );
+        // the first event is for /meta/instanceID
+        expect( eventObjects.length ).toEqual( 2 );
+        expect( eventObjects[ 1 ].repeatPath ).toEqual( '/a/b' );
+        expect( eventObjects[ 1 ].repeatIndex ).toEqual( 1 );
+        expect( eventObjects[ 1 ].nodes ).toEqual( [ 'c' ] );
+    } );
+} );
+
 describe( 'Data node remover', function() {
     it( 'has removed a data node', function() {
         var data = getModel( 'thedata.xml' ),

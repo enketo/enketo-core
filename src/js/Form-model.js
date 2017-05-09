@@ -1471,7 +1471,7 @@ Nodeset.prototype.getClosestRepeat = function() {
     var el = this.get().get( 0 );
     var nodeName = el.nodeName;
 
-    while ( nodeName !== 'instance' && ( ( el.nextSibling && el.nextSibling.nodeName !== nodeName ) || ( el.previousSibling && el.previousSibling.nodeName !== nodeName ) ) ) {
+    while ( nodeName !== 'instance' && !( el.nextSibling && el.nextSibling.nodeName === nodeName ) && !( el.previousSibling && el.previousSibling.nodeName === nodeName ) ) {
         el = el.parentNode;
         nodeName = el.nodeName;
     }

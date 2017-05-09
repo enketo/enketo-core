@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.32.1] - 2017-05-09
+---------------------
+##### Fixed
+- Dataupdate event does not include correct repeatPath and repeatIndex properties (fix may significantly improve performance of forms with repeats).
+
 [4.32.0] - 2017-05-05
 ---------------------
 ##### Added

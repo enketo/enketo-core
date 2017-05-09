@@ -356,9 +356,9 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     /**
      * If the update was triggered from a repeat, it improves performance (a lot)
      * to exclude all those repeats that did not trigger it...
-     * However, this would break if people are referring to nodes in other
-     * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node /path/to/repeat, 3)
-     * so we add those (in a very inefficient way)
+     * However, this will break if people are referring to nodes in other
+     * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node, /path/to/repeat, 3).
+     * We accept that for now.
      **/
     if ( $repeat ) {
         // the non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
