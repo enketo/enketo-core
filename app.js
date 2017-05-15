@@ -27,7 +27,7 @@ if ( getURLParameter( 'touch' ) === 'true' ) {
 if ( xform && xform !== 'null' ) {
     $( '.guidance' ).remove();
     xform = /^https?:\/\//.test( xform ) ? xform : location.origin + '/' + xform;
-    $.getJSON( 'http://localhost:8085/transform?xform=' + xform, function( survey ) {
+    $.getJSON( 'http://' + location.hostname + ':8085/transform?xform=' + xform, function( survey ) {
         formStr = survey.form;
         modelStr = survey.model;
         $( '.form-header' ).after( formStr );
