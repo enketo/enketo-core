@@ -8,7 +8,7 @@ module.exports = {
     // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
     getWrapNodes: function( $inputNodes ) {
         var type = this.getInputType( $inputNodes.eq( 0 ) );
-        return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question' );
+        return ( type === 'fieldset' ) ? $inputNodes : $inputNodes.closest( '.question, .calculation' );
     },
     /** very inefficient, should actually not be used **/
     getProps: function( $node ) {
