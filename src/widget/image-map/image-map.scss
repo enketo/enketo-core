@@ -1,3 +1,4 @@
+// These rules are specific only to this particular widget
 .or-appearance-image-map{
     img {
         // avoid image flickering caused by initializing widget upon img load event
@@ -7,24 +8,28 @@
         // avoid showing regular radiobuttons/checkboxes while image is loading
         display: none;
     }
-}
-.image-map {
-    svg {
-        width: 100%;
-        height: 100%;
-        &[or-readonly]{
-            opacity: 0.75;
-        }
-        &:not([or-readonly]) {
+    .image-map {
+        svg:not([or-readonly]) {
             path[id] {
                 &:hover {
                     opacity: 0.5;
                 }
             }
         }
+    }
+}
+// These rules are used in custom SVG widgets as well.
+.image-map {
+    svg {
+        width: 100%;
+        height: auto;
+        &[or-readonly]{
+            opacity: 0.75;
+        }
         path[id] {
             &[or-selected] {
                 fill: $brand-primary-color;
+                stroke: $brand-primary-color;
             }
         }
     }
