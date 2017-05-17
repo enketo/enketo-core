@@ -183,15 +183,6 @@ Analogscalepicker.prototype._stretchHeight = function() {
     }
 };
 
-Analogscalepicker.prototype.destroy = function( element ) {
-    $( element )
-        .before( $( element ).siblings( '.label-content' ).find( '.question-label:not(.widget), .or-hint, .or-required-msg, .or-constraint-msg' ) )
-        .removeData( this.namespace )
-        .off( '.' + this.namespace )
-        .show()
-        .siblings( '.widget' ).remove();
-};
-
 Analogscalepicker.prototype.disable = function() {
     var value = ( this.element.value !== '' ) ? Number( this.element.value ) : 0;
     $( this.element )

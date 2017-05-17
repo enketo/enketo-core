@@ -5,7 +5,6 @@ var $form;
 var init;
 var enable;
 var disable;
-var destroy;
 var _getElements;
 var _instantiate;
 var _setLangChangeListener;
@@ -77,26 +76,6 @@ disable = function( $group ) {
         if ( widget.name ) {
             $els = _getElements( $group, widget.selector );
             $els[ widget.name ]( 'disable' );
-        }
-    }
-};
-
-/**
- * Fixes deeply cloned widgets, if necessary. This function is only called with the repeat clone as a parameter.
- * Many eventhandlers inside widgets get messed up when they are cloned. If so this function will have to fix
- * that. The init function is called programmatically immediately afterwards.
- *
- * @param  {jQuery} $group The element inside which all widgets need to be fixed.
- */
-destroy = function( $group ) {
-    var widget, $els;
-
-    for ( var i = 0; i < widgets.length; i++ ) {
-
-        widget = widgets[ i ];
-        if ( widget.name ) {
-            $els = _getElements( $group, widget.selector );
-            $els[ widget.name ]( 'destroy' );
         }
     }
 };
@@ -201,6 +180,5 @@ _setValChangeListener = function( widget, $els ) {
 module.exports = {
     init: init,
     enable: enable,
-    disable: disable,
-    destroy: destroy
+    disable: disable
 };

@@ -157,19 +157,6 @@ Comment.prototype._hideCommentModal = function( $linkedQuestion ) {
         .prev( '.or-comment-widget__overlay' ).remove();
 };
 
-Comment.prototype.destroy = function( element ) {
-    var $linkedQuestion = this._getLinkedQuestion( element );
-    var $commentButton = $linkedQuestion.find( '.btn-comment' );
-
-    this._hideCommentModal( $linkedQuestion );
-    $commentButton.remove();
-
-    $( element )
-        .removeData( this.namespace )
-        .off( '.' + this.namespace )
-        .closest( '.question' ).removeClass( 'hide' );
-};
-
 $.fn[ pluginName ] = function( options, event ) {
 
     options = options || {};

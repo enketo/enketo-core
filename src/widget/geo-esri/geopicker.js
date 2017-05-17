@@ -972,17 +972,6 @@ Geopicker.prototype.enable = function( element ) {
         } );
 };
 
-Geopicker.prototype.destroy = function( element ) {
-    // It is possible for the destroy method to be called before he Esri script has loaded.
-    // E.g. if a form contains multiple instances of a repeat, it will be cloned upon loading.
-    // However, since in that case, the widget is not yet there, it should be safe to go through this.
-    $( element )
-        .removeData( OVERRIDE_PLUGIN_NAME )
-        .off( '.' + this.namespace )
-        .show()
-        .next( '.widget' ).remove();
-};
-
 Geopicker.prototype.update = function( element ) {
     var that = this;
     this._loadEsriArcGisJs()

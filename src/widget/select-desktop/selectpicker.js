@@ -49,10 +49,8 @@ function DesktopSelectpicker( element, options, e ) {
     this._init();
 }
 
-//copy the prototype functions from the Widget super class
 DesktopSelectpicker.prototype = Object.create( Widget.prototype );
 
-//ensure the constructor is the new one
 DesktopSelectpicker.prototype.constructor = DesktopSelectpicker;
 
 DesktopSelectpicker.prototype._init = function() {

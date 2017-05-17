@@ -21,6 +21,7 @@ function ImageMap( element, options, event ) {
 }
 
 ImageMap.prototype = Object.create( Widget.prototype );
+
 ImageMap.prototype.constructor = ImageMap;
 
 ImageMap.prototype._init = function() {
@@ -170,16 +171,6 @@ ImageMap.prototype._updateImage = function() {
             that.$svg.find( 'path#' + value ).attr( 'or-selected', '' );
         }
     } );
-};
-
-/**
- * @param  {Element} element The element the widget is applied on
- */
-ImageMap.prototype.destroy = function( element ) {
-    $( element )
-        .removeData( this.namespace )
-        .off( '.' + this.namespace )
-        .find( '.widget' ).remove();
 };
 
 ImageMap.prototype.disable = function() {

@@ -21,10 +21,8 @@ function Radiopicker( element, options ) {
     this._init();
 }
 
-// Copy the prototype functions from the Widget super class
 Radiopicker.prototype = Object.create( Widget.prototype );
 
-// Ensure the constructor is the new one
 Radiopicker.prototype.constructor = Radiopicker;
 
 /**
@@ -88,14 +86,6 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
     } );
 };
 
-/**
- * Override default destroy method to do nothing
- *
- * @param  {Element} element The element (not) to destroy the widget on ;)
- */
-Radiopicker.prototype.destroy = function( element ) {
-    //all handlers are global and deep copies of repeats should keep functionality intact
-};
 
 
 $.fn[ pluginName ] = function( options, event ) {

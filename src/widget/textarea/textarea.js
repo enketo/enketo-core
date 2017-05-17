@@ -19,10 +19,8 @@ function TextareaWidget( element, options ) {
     this._init();
 }
 
-// Copy the prototype functions from the Widget super class
 TextareaWidget.prototype = Object.create( Widget.prototype );
 
-// Ensure the constructor is the new one
 TextareaWidget.prototype.constructor = TextareaWidget;
 
 /**
@@ -47,16 +45,6 @@ TextareaWidget.prototype._setDelegatedHandlers = function() {
     } );
 
 };
-
-/**
- * Override default destroy method to do nothing
- *
- * @param  {Element} element The element (not) to destroy the widget on ;)
- */
-TextareaWidget.prototype.destroy = function() {
-    //all handlers are global and deep copies of repeats should keep functionality intact
-};
-
 
 $.fn[ pluginName ] = function( options, event ) {
     //this widget works globally, and only needs to be instantiated once per form

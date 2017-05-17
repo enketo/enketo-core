@@ -23,11 +23,11 @@ var Widget = function( element, options, event ) {
 
 Widget.prototype = {
     /**
-     * Destroys (a deeply cloned) widget (inside a repeat)
-     * The sole purpose of this function in Enketo is to ensure a widget inside a cloned repeat stays
-     * fully functional. The most robust way of doing this is to destroy the copy and then reinitialize it.
-     * This is what the repeat controller does. It calls $input.mywidget('destroy') and $input.mywidget({}) in succession.
-     * In some rare cases, this may simply be an empty function (e.g. see note widget).
+     * Destroys a widget in order the reinstiate it. It is used by some widgets as a crude 'update' function.
+     * It can be removed once all widgets are able to update elegantly.
+     *
+     * Known widgets that still use this:
+     * - geopicker
      *
      * @param  {Element} element The element the widget is applied on. Note that if element was clone this.element applies to the origin.
      */
@@ -41,7 +41,6 @@ Widget.prototype = {
             .show()
             //remove elements immediately after the target that have the widget class
             .next( '.widget' ).remove();
-        //console.debug( this.namespace, 'destroy' );
     },
     /**
      * Do whatever necessary to ensure that the widget does not allow user input if its parent branch is disabled.
@@ -51,7 +50,6 @@ Widget.prototype = {
     disable: function( element ) {
         $( element )
             .next( '.widget' ).addClass( 'readonly' );
-        //console.debug( this.namespace, 'disable' );
     },
     /**
      * Does whatever necessary to enable the widget if its parent branch is enabled.
@@ -62,15 +60,12 @@ Widget.prototype = {
             $( element )
                 .next( '.widget' ).removeClass( 'readonly' );
         }
-        //console.debug( this.namespace, 'enable' );
     },
     /**
-     * Updates languages and <option>s (cascading selects.
-     * Most of the times this function can remain empty
+     * Updates languages, <option>s (cascading selects, and (calculated) values.
+     * Most of the times, this function needs to be overridden in the widget.
      */
-    update: function() {
-        //console.debug( this.namespace, 'update' );
-    }
+    update: function() {}
 
 };
 

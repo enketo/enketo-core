@@ -28,13 +28,10 @@ function HorizontalChoices( element, options ) {
     this._init();
 }
 
-// copy the prototype functions from the Widget super class
 HorizontalChoices.prototype = Object.create( Widget.prototype );
 
-//ensure the constructor is the new one
 HorizontalChoices.prototype.constructor = HorizontalChoices;
 
-//add your widget functions
 HorizontalChoices.prototype._init = function() {
     $( this.element ).find( '.option-wrapper' ).each( function() {
         var $wrapper = $( this ),
@@ -45,13 +42,6 @@ HorizontalChoices.prototype._init = function() {
         }
     } );
 };
-
-/**
- * Override the super's destroy method
- *
- * @param  {Element} element The element the widget is applied on
- */
-HorizontalChoices.prototype.destroy = function() {};
 
 
 $.fn[ pluginName ] = function( options, event ) {

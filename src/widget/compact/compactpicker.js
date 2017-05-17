@@ -37,14 +37,6 @@ CompactPicker.prototype._init = function() {
     } );
 };
 
-/**
- * Override the super's destroy method
- *
- * @param  {Element} element The element the widget is applied on
- */
-CompactPicker.prototype.destroy = function() {};
-
-
 $.fn[ pluginName ] = function( options, event ) {
 
     options = options || {};

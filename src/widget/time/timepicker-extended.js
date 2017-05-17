@@ -24,10 +24,8 @@ function TimepickerExtended( element, options ) {
     this._init();
 }
 
-//copy the prototype functions from the Widget super class
 TimepickerExtended.prototype = Object.create( Widget.prototype );
 
-//ensure the constructor is the new one
 TimepickerExtended.prototype.constructor = TimepickerExtended;
 
 /**

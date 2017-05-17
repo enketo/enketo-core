@@ -28,10 +28,8 @@ function Selectpicker( element, options, e ) {
     this._init();
 }
 
-//copy the prototype functions from the Widget super class
 Selectpicker.prototype = Object.create( Widget.prototype );
 
-//ensure the constructor is the new one
 Selectpicker.prototype.constructor = Selectpicker;
 
 Selectpicker.prototype._init = function() {

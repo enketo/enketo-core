@@ -160,16 +160,14 @@ Each widget needs to fulfill following requirements:
 * be responsive up to a minimum window width of 320px
 * use JSDoc style documentation
 * if hiding the original input element, it needs to load the default value from that input element into the widget
-* if hiding the original input element, it needs to keep it synchronized and trigger a change event on the original whenever it updates
+* if hiding the original input element, it needs to stay synchronized with the widget and a `change` event should be triggered on the original whenever it changes value
+* if hiding the original input element, the widget value needs to update when the original input updates due to a calculation
 * it is recommended to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
 * new input/select/textarea elements inside widgets need to get the `ignore` class
 * it requires the following methods (which can be automatically obtained by extending the Widget base class as demonstrated in the [plugin template](https://gist.github.com/MartijnR/6943281)
-  * `destroy(element)` to totally destroy widgets in *repeat* groups/questions when these groups/questions are cloned This may be an empty function if:
-    * a deep `$.clone(true, true)` of the widget (incl data and eventhandlers) works without problems (problems are likely!)
   * `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
   * `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when its branch becomes irrelevant.
   * `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest form this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
-* any eventhandlers added to the original input should be namespaced (if extending the Widget base class, the namespace is available as `this.namespace`)
 * if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option `{ touch: [boolean] }` is passed to the plugin by default. If your widget requires tweaks for mobile, you could create an all-in-one widget using the `options.touch` check or you could create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow clearing of the original input (i.e. setting value to '')
 * send a `fakefocus` and `fakeblur` event to the original input when the widget gets focus or looses it (see select-desktop)
