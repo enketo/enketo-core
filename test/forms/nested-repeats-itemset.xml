@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>bug747</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="default">
+          <text id="static_instance-region-0">
+            <value>Tigray</value>
+          </text>
+          <text id="static_instance-zone-0">
+            <value>Central</value>
+          </text>
+          <text id="static_instance-zone-2">
+            <value>Zone 1</value>
+          </text>
+          <text id="static_instance-zone-3">
+            <value>Zone 2</value>
+          </text>
+          <text id="static_instance-zone-1">
+            <value>Southern</value>
+          </text>
+          <text id="static_instance-region-1">
+            <value>Afar</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <bug747 id="bug747">
+          <name_of_region jr:template="">
+            <region/>
+            <name_of_zone jr:template="">
+              <zone/>
+            </name_of_zone>
+          </name_of_region>
+          <meta>
+            <instanceID/>
+          </meta>
+        </bug747>
+      </instance>
+      <instance id="zone">
+        <root>
+          <item>
+            <itextId>static_instance-zone-0</itextId>
+            <region>tigray</region>
+            <name>central</name>
+          </item>
+          <item>
+            <itextId>static_instance-zone-1</itextId>
+            <region>tigray</region>
+            <name>southern</name>
+          </item>
+          <item>
+            <itextId>static_instance-zone-2</itextId>
+            <region>afar</region>
+            <name>Zone 1</name>
+          </item>
+          <item>
+            <itextId>static_instance-zone-3</itextId>
+            <region>afar</region>
+            <name>Zone 2</name>
+          </item>
+        </root>
+      </instance>
+      <instance id="region">
+        <root>
+          <item>
+            <itextId>static_instance-region-0</itextId>
+            <name>tigray</name>
+          </item>
+          <item>
+            <itextId>static_instance-region-1</itextId>
+            <name>afar</name>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/bug747/name_of_region/region" type="select1"/>
+      <bind nodeset="/bug747/name_of_region/name_of_zone/zone" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/bug747/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/bug747/name_of_region">
+      <label>Section-Project location</label>
+      <repeat nodeset="/bug747/name_of_region">
+        <select1 appearance="field_list" ref="/bug747/name_of_region/region">
+          <label>24.Region</label>
+          <item>
+            <label>Tigray</label>
+            <value>tigray</value>
+          </item>
+          <item>
+            <label>Afar</label>
+            <value>afar</value>
+          </item>
+        </select1>
+        <group ref="/bug747/name_of_region/name_of_zone">
+          <label>Section-Name</label>
+          <repeat nodeset="/bug747/name_of_region/name_of_zone">
+            <select1 appearance="minimal" ref="/bug747/name_of_region/name_of_zone/zone">
+              <label>33.Zone name</label>
+              <itemset nodeset="instance('zone')/root/item[region= /bug747/name_of_region/region ]">
+                <value ref="name"/>
+                <label ref="jr:itext(itextId)"/>
+              </itemset>
+            </select1>
+          </repeat>
+        </group>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

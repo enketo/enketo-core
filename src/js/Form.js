@@ -369,6 +369,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     }
 
     // add selectors based on specific changed nodes
+    // Add selectors based on specific changed nodes
     if ( !updated.nodes || updated.nodes.length === 0 ) {
         selector = selector.concat( [ filter + '[' + attr + ']' ] );
     } else {
@@ -566,13 +567,17 @@ Form.prototype.setEventHandlers = function() {
 
     this.view.$.on( 'addrepeat', function( event, index ) {
         var $clone = $( event.target );
-        // Set defaults of added repeats in Form, setAllVals does not trigger change event
-        that.setAllVals( $clone, index );
-        // for a NEW repeat ALL calculations inside that repeat have to be initialized
-        that.calc.update( {
+        var updated = {
             repeatPath: $clone.attr( 'name' ),
             repeatIndex: index
-        } );
+        };
+        // Set defaults of added repeats in Form, setAllVals does not trigger change event
+        that.setAllVals( $clone, index );
+        // For a NEW repeat ALL calculations inside that repeat have to be initialized
+        that.calc.update( updated );
+        // For a NEW repeat ALL itemsets inside that repeat have to be initialized,
+        // see e.g. https://github.com/kobotoolbox/enketo-express/issues/747
+        that.itemset.update( updated );
         that.progress.update();
     } );
 

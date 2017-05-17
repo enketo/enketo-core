@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Image Map select widget.
 
+##### Fixed
+- Itemsets inside a repeat with a choice_filter (predicate) dependency outside the repeat are not initialized when repeat is cloned.
+
 [4.32.1] - 2017-05-09
 ---------------------
 ##### Fixed

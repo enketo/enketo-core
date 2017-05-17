@@ -1063,7 +1063,7 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( 'in a cloned repeat that includes a cascading select, ', function() {
+    describe( 'in a cloned repeat with dependencies inside repeat, ', function() {
         var countrySelector = '[data-name="/new_cascading_selections_inside_repeats/group1/country"]',
             citySelector = 'label:not(.itemset-template) [data-name="/new_cascading_selections_inside_repeats/group1/city"]',
             form, $masterRepeat, $clonedRepeat;
@@ -1091,6 +1091,18 @@ describe( 'Itemset functionality', function() {
             expect( $masterRepeat.find( citySelector ).eq( 0 ).attr( 'value' ) ).toEqual( 'den' );
             expect( $clonedRepeat.find( citySelector ).length ).toEqual( 3 );
             expect( $clonedRepeat.find( citySelector ).eq( 0 ).attr( 'value' ) ).toEqual( 'ams' );
+        } );
+    } );
+
+    describe( 'in a cloned repeat with dependencies outside the repeat', function() {
+        it( 'initializes the itemset', function() {
+            var form = loadForm( 'nested-repeats-itemset.xml' );
+            var selector = '[name="/bug747/name_of_region/name_of_zone/zone"]';
+            form.init();
+            form.view.$.find( '[name="/bug747/name_of_region/region"][value="tigray"]' ).prop('checked', true).trigger( 'change' );
+            form.view.$.find( '.or-repeat[name="/bug747/name_of_region/name_of_zone"] .btn.repeat' ).click();
+            expect( form.view.$.find( selector ).eq( 0 ).find( 'option:not(.itemset-template)' ).text() ).toEqual( 'CentralSouthern' );
+            expect( form.view.$.find( selector ).eq( 1 ).find( 'option:not(.itemset-template)' ).text() ).toEqual( 'CentralSouthern' );
         } );
     } );
 } );
