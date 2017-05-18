@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>bug748m</h:title>
+    <model>
+      <instance>
+        <bug748m id="bug748m">
+          <nested jr:template="">
+            <txt/>
+            <cal/>
+          </nested>
+          <meta>
+            <instanceID/>
+          </meta>
+        </bug748m>
+      </instance>
+      <bind nodeset="/bug748m/nested/txt" relevant="1 = 1" type="string"/>
+      <bind nodeset="/bug748m/nested/cal" calculate="1 + 1" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/bug748m/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/bug748m/nested">
+      <label>Repeat</label>
+      <repeat nodeset="/bug748m/nested">
+        <input ref="/bug748m/nested/txt">
+          <label>Name</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

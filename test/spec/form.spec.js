@@ -420,6 +420,7 @@ describe( 'calculations', function() {
         expect( form.model.node( '/calcs_in_repeats/rep1/calc3', 0 ).getVal()[ 0 ] ).toEqual( '200' );
         expect( form.model.node( '/calcs_in_repeats/rep1/calc3', 1 ).getVal()[ 0 ] ).toEqual( '400' );
     } );
+
 } );
 
 describe( 'branching functionality', function() {
@@ -615,6 +616,16 @@ describe( 'branching functionality', function() {
             expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( '' );
         } );
 
+    } );
+
+    describe( 'in a cloned repeat with dependencies outside the repeat', function() {
+        it( 'initializes the relevants', function() {
+            var form = loadForm( 'repeat-child-relevant.xml' );
+            form.init();
+            form.view.$.find( '.btn.repeat' ).click();
+            expect( form.view.$.find( '.or-branch' ).length ).toEqual( 2 );
+            expect( form.view.$.find( '.or-branch.pre-init' ).length ).toEqual( 0 );
+        } );
     } );
 
 } );
@@ -1099,7 +1110,7 @@ describe( 'Itemset functionality', function() {
             var form = loadForm( 'nested-repeats-itemset.xml' );
             var selector = '[name="/bug747/name_of_region/name_of_zone/zone"]';
             form.init();
-            form.view.$.find( '[name="/bug747/name_of_region/region"][value="tigray"]' ).prop('checked', true).trigger( 'change' );
+            form.view.$.find( '[name="/bug747/name_of_region/region"][value="tigray"]' ).prop( 'checked', true ).trigger( 'change' );
             form.view.$.find( '.or-repeat[name="/bug747/name_of_region/name_of_zone"] .btn.repeat' ).click();
             expect( form.view.$.find( selector ).eq( 0 ).find( 'option:not(.itemset-template)' ).text() ).toEqual( 'CentralSouthern' );
             expect( form.view.$.find( selector ).eq( 1 ).find( 'option:not(.itemset-template)' ).text() ).toEqual( 'CentralSouthern' );

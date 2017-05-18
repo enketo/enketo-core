@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.33.1] - 2017-05-18
+---------------------
+##### Fixed
+- Branches and Outputs not initialized when repeat is cloned.
+
 [4.33.0] - 2017-05-17
 ---------------------
 ##### Added

@@ -573,11 +573,10 @@ Form.prototype.setEventHandlers = function() {
         };
         // Set defaults of added repeats in Form, setAllVals does not trigger change event
         that.setAllVals( $clone, index );
-        // For a NEW repeat ALL calculations inside that repeat have to be initialized
-        that.calc.update( updated );
-        // For a NEW repeat ALL itemsets inside that repeat have to be initialized,
-        // see e.g. https://github.com/kobotoolbox/enketo-express/issues/747
-        that.itemset.update( updated );
+        // Initialize calculations, branch, itemset, output inside that repeat
+        that.evaluationCascade.forEach( function( fn ) {
+            fn.call( that, updated );
+        } );
         that.progress.update();
     } );
 
