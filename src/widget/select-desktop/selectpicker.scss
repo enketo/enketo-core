@@ -1,20 +1,15 @@
 .bootstrap-select {
     margin-top: 15px;
-
     .dropdown-toggle {
         width: $input-min-width * $golden-ratio - 14px;
-
         @include font-normal;
-
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         text-align: left;
-
         .caret {
             position: absolute;
             top: 14px;
             right: 12px;
         }
-
         .selected {
             width: calc(100% - 12px);
             display: inline-block;
@@ -22,30 +17,24 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-
         ~ .dropdown-menu {
             max-height: 200px;
             max-width: 100%;
             overflow: auto;
-
             .option-wrapper {
                 padding-left: 5px;
                 background-color: transparent;
                 color: black;
                 text-decoration: none;
-
                 label {
                     @include font-normal;
-
                     padding-top: 2px;
                     padding-bottom: 2px;
                     padding-left: 0px;
                     font-size: $font-size-base;
-
                     &:hover {
                         background: transparent;
                     }
-
                     .option-label {
                         margin-top: 1px;
                     }
@@ -62,7 +51,6 @@
 .or[dir="rtl"] .bootstrap-select {
     .dropdown-toggle {
         text-align: right;
-
         .caret {
             margin-left: 0;
             margin-right: 10px;
@@ -80,14 +68,11 @@
 // Make the div behave like a button
 .btn-group {
     position: relative;
-
     //display: inline-block;
     vertical-align: middle;
-
     // match .btn alignment given font-size hack above
     > .btn {
         position: relative;
-
         // Bring the "active" button to the front
         &:hover,
         &:focus,
@@ -95,10 +80,10 @@
         &.active {
             z-index: 2;
         }
-
         &:focus {
             // Remove focus outline when dropdown JS adds it after closing the menu
-            outline: none;
+            //outline: none;
+       
         }
     }
 }
@@ -114,7 +99,6 @@
 // Remove the gradient and set the same inset shadow as the :active state
 .btn-group.open .dropdown-toggle {
     @include box-shadow(inset 0 3px 5px rgba(0, 0, 0, 0.125));
-
     // Show no shadow for `.btn-link` since it has no other button styles.
     &.btn-link {
         @include box-shadow(none);
@@ -149,7 +133,7 @@ $dropdown-link-disabled-color: $gray-light !default;
 
 @mixin nav-divider($color: #e5e5e5) {
     height: 1px;
-    margin: ($line-height-computed / 2 - 1) 0;
+    margin: $line-height-computed / 2 - 1 0;
     overflow: hidden;
     background-color: $color;
 }
@@ -172,7 +156,7 @@ $dropdown-link-disabled-color: $gray-light !default;
 
 // Prevent the focus on the dropdown toggle when closing dropdowns
 .dropdown-toggle:focus {
-    outline: 0;
+    //outline: 0;
 }
 
 // The dropdown menu (ul)
@@ -182,24 +166,19 @@ $dropdown-link-disabled-color: $gray-light !default;
     left: 0;
     z-index: $zindex-dropdown;
     display: none;
-
     // none by default, but block on "open" of the menu
     float: left;
     min-width: 160px;
     padding: 5px 0;
     margin: 2px 0 0;
-
     // override default ul
     list-style: none;
     font-size: $font-size-base;
     background-color: $dropdown-bg;
     border: 1px solid $dropdown-border;
     border-radius: $border-radius-base;
-
     @include box-shadow(0 6px 12px rgba(0, 0, 0, 0.175));
-
     background-clip: padding-box;
-
     // Aligns the dropdown menu to right
     //
     // Deprecated as of 3.1.0 in favor of `.dropdown-menu-[dir]`
@@ -207,12 +186,10 @@ $dropdown-link-disabled-color: $gray-light !default;
         right: 0;
         left: auto;
     }
-
     // Dividers (basically an hr) within the dropdown
     .divider {
         @include nav-divider($dropdown-divider-bg);
     }
-
     // Links within the dropdown menu
     > li > a {
         display: block;
@@ -222,7 +199,6 @@ $dropdown-link-disabled-color: $gray-light !default;
         line-height: $line-height-base;
         color: $dropdown-link-color;
         white-space: nowrap;
-
         // prevent links from randomly breaking onto new lines
    
     }
@@ -275,10 +251,8 @@ $dropdown-link-disabled-color: $gray-light !default;
         text-decoration: none;
         background-color: transparent;
         background-image: none;
-
         // Remove CSS gradient
         @include reset-filter;
-
         cursor: not-allowed;
     }
 }
@@ -289,7 +263,6 @@ $dropdown-link-disabled-color: $gray-light !default;
     > .dropdown-menu {
         display: block;
     }
-
     // Remove the outline when :focus is triggered
     > a {
         outline: 0;

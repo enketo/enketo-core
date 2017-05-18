@@ -37,6 +37,7 @@ Comment.prototype._init = function() {
         this.$linkedQuestion.find( '.question-label' ).last().after( this.$commentButton );
         this._setCommentButtonHandler();
         this._setValidationHandler();
+        this._setFocusHandler();
     }
 };
 
@@ -83,6 +84,13 @@ Comment.prototype._setValidationHandler = function() {
         var error = that._commentHasError();
         var value = that.element.value;
         that._setCommentButtonState( value, error );
+    } );
+};
+
+Comment.prototype._setFocusHandler = function() {
+    var that = this;
+    $( this.element ).on( 'applyfocus', function() {
+        that.$commentButton.click();
     } );
 };
 

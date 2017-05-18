@@ -56,6 +56,8 @@ Filepicker.prototype._init = function() {
     this.$feedback = this.$widget.find( '.file-feedback' );
     this.$preview = this.$widget.find( '.file-preview' );
     this.$fakeInput = this.$widget.find( '.fake-file-input' );
+    // Focus listener needs to be added synchronously
+    that._focusListener();
 
     // show loaded file name regardless of whether widget is supported
     if ( existingFileName ) {
@@ -162,6 +164,20 @@ Filepicker.prototype._changeListener = function() {
     this.$fakeInput.on( 'click', function( e ) {
         e.preventDefault();
         $( that.element ).click();
+    } );
+};
+
+Filepicker.prototype._focusListener = function() {
+    var that = this;
+
+    // Handle focus on widget input
+    this.$fakeInput.on( 'focus', function( event ) {
+        $( that.element ).trigger( 'fakefocus' );
+    } );
+
+    // Handle focus on original input (goTo functionality)
+    $( this.element ).on( 'applyfocus', function() {
+        that.$fakeInput.focus();
     } );
 };
 

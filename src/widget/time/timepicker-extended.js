@@ -60,14 +60,21 @@ TimepickerExtended.prototype._init = function() {
         return false;
     } );
 
-    //reset button
+    // reset button
     $fakeTimeReset.on( 'click', function() {
         $fakeTimeI.val( '' ).trigger( 'change' );
     } );
 
-    $fakeTimeI.on( 'focus blur', function( event ) {
-        $timeI.trigger( 'fake' + event.type );
+    // pass widget focus event
+    $fakeTimeI.on( 'focus', function() {
+        $timeI.trigger( 'fakefocus' );
     } );
+
+    // handle original input focus
+    $( this.element ).on( 'applyfocus', function() {
+        $fakeTimeI.focus();
+    } );
+
 };
 
 $.fn[ pluginName ] = function( options, event ) {

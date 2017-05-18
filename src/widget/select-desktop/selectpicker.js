@@ -224,11 +224,14 @@ DesktopSelectpicker.prototype._clickListener = function() {
 DesktopSelectpicker.prototype._focusListener = function() {
     var _this = this;
 
+    // Focus on original element (form.goTo functionality)
+    $( this.element ).on( 'applyfocus', function() {
+        _this.$picker.find( '.dropdown-toggle' ).focus();
+    } );
+
+    // focus on widget
     this.$picker.on( 'shown.bs.dropdown', function() {
         $( _this.element ).trigger( 'fakefocus' );
-        return true;
-    } ).on( 'hidden.bs.dropdown', function() {
-        $( _this.element ).trigger( 'fakeblur' );
         return true;
     } );
 };

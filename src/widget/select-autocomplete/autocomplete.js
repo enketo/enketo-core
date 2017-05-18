@@ -145,12 +145,15 @@ Selectpicker.prototype._findLabel = function( value ) {
 Selectpicker.prototype._setFocusListener = function() {
     var _this = this;
 
+    // Handle widget focus
     this.$fakeInput.on( 'focus', function() {
         $( _this.element ).trigger( 'fakefocus' );
         return true;
-    } ).on( 'blur', function() {
-        $( _this.element ).trigger( 'fakeblur' );
-        return true;
+    } );
+
+    // Handle original input focus
+    $( this.element ).on( 'applyfocus', function() {
+        $( _this.$fakeInput ).focus();
     } );
 };
 

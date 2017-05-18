@@ -70,7 +70,7 @@ DatepickerExtended.prototype._init = function() {
         } else if ( settings.startView === 'year' && value.length < 8 ) {
             value += '-01';
         }
-        $( that.element ).val( value ).trigger( 'change' ).blur();
+        $( that.element ).val( value ).trigger( 'change' ); //.blur();
     } );
 };
 
@@ -126,15 +126,20 @@ DatepickerExtended.prototype._setResetHandler = function( $fakeDateI ) {
 };
 
 /**
- * Handler for focus and blur events.
+ * Handler for focus events.
  * These events on the original input are used to check whether to display the 'required' message
  *
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatepickerExtended.prototype._setFocusHandler = function( $fakeDateI ) {
     var that = this;
-    $fakeDateI.on( 'focus blur', function( event ) {
-        $( that.element ).trigger( 'fake' + event.type );
+    // Handle focus on widget
+    $fakeDateI.on( 'focus', function() {
+        $( that.element ).trigger( 'fakefocus' );
+    } );
+    // Handle focus on original input (goTo functionality)
+    $( this.element ).on( 'applyfocus', function() {
+        $fakeDateI.focus();
     } );
 };
 

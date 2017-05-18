@@ -138,6 +138,22 @@ If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will 
 
 In the second case the irrelevant values will not be cleared until `form.validate()` is called (usually when the user marks a record as complete).
 
+#### Go to specific question upon load
+
+```
+  new Form(formselector, data, { 
+  goTo: true
+});
+```
+
+This feature is designed for views that show an existing record (e.g. edit views) and want to jump to a specific question upon load. This can be done with a hash (fragment identifier) in the URL. The hash contains a valid XPath to the XML model node. It could have any valid format eg:
+
+* http://example.org/form#/path/to/node
+* http://example.org/form#//node
+* http://example.org/form#//repeat[3]/node
+* http://example.org/form#//repeat[enk:ordinal="3"]/node
+
+
 ### How to develop Enketo Core
 
 1. install [node](http://nodejs.org/) and [grunt-cli](http://gruntjs.com/getting-started)
@@ -161,16 +177,17 @@ Each widget needs to fulfill following requirements:
 * use JSDoc style documentation
 * if hiding the original input element, it needs to load the default value from that input element into the widget
 * if hiding the original input element, it needs to stay synchronized with the widget and a `change` event should be triggered on the original whenever it changes value
+* if hiding the original input element, it needs to listen for the 'applyfocus' event on the original input and focus the widget
 * if hiding the original input element, the widget value needs to update when the original input updates due to a calculation
 * it is recommended to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
 * new input/select/textarea elements inside widgets need to get the `ignore` class
 * it requires the following methods (which can be automatically obtained by extending the Widget base class as demonstrated in the [plugin template](https://gist.github.com/MartijnR/6943281)
   * `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
   * `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when its branch becomes irrelevant.
-  * `update()` to update the widget when called after the content used to instantiate it has changed (language or options). In its simplest form this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
+  * `update()` to update the widget when called after the content used to instantiate it has changed (language, options or calculated value). In its simplest form this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
 * if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option `{ touch: [boolean] }` is passed to the plugin by default. If your widget requires tweaks for mobile, you could create an all-in-one widget using the `options.touch` check or you could create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
 * allow clearing of the original input (i.e. setting value to '')
-* send a `fakefocus` and `fakeblur` event to the original input when the widget gets focus or looses it (see select-desktop)
+* send a `fakefocus` event to the original input when the widget gets focus
 * please write test specs in the widget's /test folder.....(yeah, we need to do that for the existing widgets too...)
 
 ### Notes for JavaScript Developers

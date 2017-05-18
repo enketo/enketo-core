@@ -96,9 +96,9 @@ DatetimepickerExtended.prototype._init = function() {
         if ( $fakeDateI.val().length > 0 && $fakeTimeI.val().length > 0 ) {
             var d = $fakeDateI.val().split( '-' ),
                 t = $fakeTimeI.val().split( ':' );
-            $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' ).blur();
+            $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' ); //.blur();
         } else {
-            $dateTimeI.val( '' ).trigger( 'change' ).blur();
+            $dateTimeI.val( '' ).trigger( 'change' ); //.blur();
         }
     }
 };
@@ -143,15 +143,20 @@ DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
 DatetimepickerExtended.prototype._setManualHandler = function() {};
 
 /**
- * Handler for focus and blur events.
+ * Handler for focus events.
  * These events on the original input are used to check whether to display the 'required' message
  *
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatetimepickerExtended.prototype._setFocusHandler = function( $els ) {
     var that = this;
-    $els.on( 'focus blur', function( event ) {
-        $( that.element ).trigger( 'fake' + event.type );
+    // Handle focus on widget.
+    $els.on( 'focus', function() {
+        $( that.element ).trigger( 'fakefocus' );
+    } );
+    // Handle focus on original input (goTo functionality)
+    $( this.element ).on( 'applyfocus', function() {
+        $els.eq( 0 ).focus();
     } );
 };
 

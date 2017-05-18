@@ -207,6 +207,10 @@ Form.prototype.init = function() {
 
         this.editStatus = false;
 
+        if ( this.options.goTo === true ) {
+            this.goTo( this.getGoToTarget( location.hash ) );
+        }
+
         setTimeout( function() {
             that.progress.update();
         }, 0 );
@@ -218,6 +222,7 @@ Form.prototype.init = function() {
     }
 
     document.querySelector( 'body' ).scrollIntoView();
+
     console.debug( 'loadErrors', loadErrors );
     return loadErrors;
 };
@@ -694,12 +699,7 @@ Form.prototype.validateContent = function( $container ) {
                 .eq( 0 );
 
             if ( $firstError.length > 0 ) {
-                if ( that.pages.active ) {
-                    // move to the first page with an error
-                    that.pages.flipToPageContaining( $firstError );
-                }
-
-                $firstError[ 0 ].scrollIntoView();
+                that.goTo( $firstError[ 0 ] );
             }
             return $firstError.length === 0;
         } )
@@ -814,6 +814,74 @@ Form.prototype.updateRequiredVisibility = function( n ) {
     // This is only 'realtime' with `validateContinuously: true`
     if ( n.required ) {
         n.$required.toggleClass( 'hide', !this.model.node( n.path, n.ind ).isRequired( n.required ) );
+    }
+};
+
+
+Form.prototype.getGoToTarget = function( hash ) {
+    var path;
+    var hits;
+    var modelNode;
+    var target;
+    var intermediateTarget;
+    var selector = '';
+    var repeatRegEx = /([^\[]+)\[(\d+)\]([^\[]*$)?/g;
+
+    if ( !hash ) {
+        return;
+    }
+
+    path = hash.substr( 1 );
+    modelNode = this.model.node( path ).get().get( 0 );
+
+    if ( !modelNode ) {
+        return;
+    }
+
+    // Convert to absolute path, while maintaining positions.
+    path = this.model.getXPath( modelNode, 'instance', true );
+
+    // Not inside a cloned repeat.
+    target = this.view.html.querySelector( '[name="' + path + '"]' );
+
+    // If inside a cloned repeat (i.e. a repeat that is not first-in-series)
+    if ( !target ) {
+        intermediateTarget = this.view.html;
+        while ( ( hits = repeatRegEx.exec( path ) ) !== null && intermediateTarget ) {
+            selector += hits[ 1 ];
+            intermediateTarget = intermediateTarget
+                .querySelectorAll( '[name="' + selector + '"], [data-name="' + selector + '"]' )[ hits[ 2 ] ];
+            if ( intermediateTarget && hits[ 3 ] ) {
+                selector += hits[ 3 ];
+                intermediateTarget = intermediateTarget
+                    .querySelector( '[name="' + selector + '"],[data-name="' + selector + '"]' );
+            }
+            target = intermediateTarget;
+        }
+    }
+
+    return target ? this.input.getWrapNodes( $( target ) ).get( 0 ) : target;
+};
+
+
+/**
+ * Scrolls to a HTML Element, flips to the page it is on and focuses on the nearest form control.
+ * 
+ * @param  {HTMLElement} target A HTML element to scroll to
+ */
+Form.prototype.goTo = function( target ) {
+    if ( target ) {
+        if ( this.pages.active ) {
+            // Flip to page
+            this.pages.flipToPageContaining( $( target ) );
+        }
+        // Scroll to element
+        target.scrollIntoView();
+        // Focus on the first non .ignore form control
+        // If the element is hidden (e.g. because it's been replaced by a widget), 
+        // the focus event will not fire, so we also trigger an applyfocus event that widgets can listen for.
+        $( target.querySelector( 'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)' ) )
+            .trigger( 'focus' ).trigger( 'applyfocus' );
     }
 };
 

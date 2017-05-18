@@ -142,9 +142,13 @@ Geopicker.prototype._init = function() {
     } );
 
     // handle original input changes
-    $( this.element ).on( 'change', function() {
-        that.$kmlInput.prop( 'disabled', !!this.value );
-    } );
+    $( this.element )
+        .on( 'change', function() {
+            that.$kmlInput.prop( 'disabled', !!this.value );
+        } )
+        .on( 'applyfocus', function() {
+            that.$widget[ 0 ].querySelector( 'input' ).focus();
+        } );
 
     // handle point switcher
     this.$points.on( 'click', '.point', function() {
@@ -221,9 +225,9 @@ Geopicker.prototype._init = function() {
         return false;
     } );
 
-    // pass blur and focus events back to original input
-    this.$widget.on( 'focus blur', 'input', function( event ) {
-        $( that.element ).trigger( event.type );
+    // pass focus events on widget elements back to original input
+    this.$widget.on( 'focus', 'input', function( event ) {
+        $( that.element ).trigger( 'fakefocus' );
     } );
 
     // enable search

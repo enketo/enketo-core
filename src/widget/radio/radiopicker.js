@@ -2,8 +2,6 @@
 var Widget = require( '../../js/Widget' );
 var $ = require( 'jquery' );
 require( '../../js/plugins' );
-
-var $lastFocused = null;
 var pluginName = 'radiopicker';
 
 /**
@@ -57,24 +55,6 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
         } else {
             $label.removeAttr( 'data-checked' );
         }
-    } );
-
-    // New radiobutton/checkbox icons don't trigger focus event, which is necessary for 
-    // progress update 
-    // we need to unfocus the previously focused element
-    $form.on( 'click', 'input[type="radio"], input[type="checkbox"]', function() {
-        if ( $lastFocused ) {
-            $lastFocused.trigger( 'fakeblur' );
-        }
-        $lastFocused = $( this ).trigger( 'fakefocus' );
-    } );
-
-    // Clear last focused element when a non-radio/checkbox element gets focus
-    $form.on( 'focusin fakefocus', 'input:not([type="radio"], [type="checkbox"]), textarea, select', function() {
-        if ( $lastFocused ) {
-            $lastFocused.trigger( 'fakeblur' );
-        }
-        $lastFocused = null;
     } );
 
     // Defaults
