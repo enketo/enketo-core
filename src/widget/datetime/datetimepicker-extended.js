@@ -7,6 +7,7 @@ var pluginName = 'datetimepickerExtended';
 require( '../../js/extend' );
 require( 'bootstrap-datepicker' );
 require( '../time/timepicker' );
+require( '../../js/dropdown.jquery' );
 
 /**
  *
