@@ -58,7 +58,7 @@ DatetimepickerExtended.prototype._init = function() {
 
     $fakeTimeI
         .timepicker( {
-            defaultTime: ( timeVal.length > 0 ) ? 'value' : 'current',
+            defaultTime: ( timeVal.length > 0 ) ? 'value' : false,
             showMeridian: false
         } )
         .val( timeVal )
@@ -85,12 +85,12 @@ DatetimepickerExtended.prototype._init = function() {
     } );
 
     function changeVal() {
-        if ( $fakeDateI.val().length > 0 && $fakeTimeI.val().length > 0 ) {
-            var d = $fakeDateI.val().split( '-' ),
-                t = $fakeTimeI.val().split( ':' );
-            $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' ); //.blur();
+        if ( $fakeDateI.val().length > 0 && $fakeTimeI.val().length > 3 ) {
+            var d = $fakeDateI.val().split( '-' );
+            var t = $fakeTimeI.val().split( ':' );
+            $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' );
         } else {
-            $dateTimeI.val( '' ).trigger( 'change' ); //.blur();
+            $dateTimeI.val( '' ).trigger( 'change' );
         }
     }
 };
@@ -103,7 +103,7 @@ DatetimepickerExtended.prototype._init = function() {
 DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
     var $fakeDate = $(
             '<div class="date">' +
-            '<input class="ignore input-small" type="text" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
+            '<input class="ignore" type="text" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
             '</div>' ),
         $fakeDateI = $fakeDate.find( 'input' );
 
@@ -117,12 +117,12 @@ DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
  */
 DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
     var $fakeTime = $(
-            '<div class="timepicker">' +
-            '<input class="ignore timepicker-default input-small" type="text" value="' +
-            timeVal + '" placeholder="hh:mm"/>' +
-            '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button>' +
-            '</div>' ),
-        $fakeTimeI = $fakeTime.find( 'input' );
+        '<div class="timepicker">' +
+        '<input class="ignore timepicker-default" type="text" value="' +
+        timeVal + '" placeholder="hh:mm"/>' +
+        '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button>' +
+        '</div>' );
+    var $fakeTimeI = $fakeTime.find( 'input' );
 
     return $fakeTimeI;
 };

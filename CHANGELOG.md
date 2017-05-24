@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Timepicker and Datetime Picker issues around empty and default values.
+
 [4.34.0] - 2017-05-22
 ---------------------
 ##### Added

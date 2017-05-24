@@ -122,6 +122,12 @@
         },
 
         decrementHour: function() {
+            // If value is empty, make sure that first shown value is current hour.
+            if ( this.hour === '' ) {
+                this.hour = this.getCurrentHour();
+                this.incrementHour();
+            }
+
             if ( this.showMeridian ) {
                 if ( this.hour === 1 ) {
                     this.hour = 12;
@@ -147,6 +153,12 @@
 
         decrementMinute: function( step ) {
             var newVal;
+
+            // If value is empty, make sure that first shown value is current minutes.
+            if ( this.minute === '' ) {
+                this.minute = this.getCurrentMinute();
+                this.incrementMinute();
+            }
 
             if ( step ) {
                 newVal = this.minute - step;
@@ -338,8 +350,8 @@
             if ( this.hour === '' ) {
                 return '';
             }
-            return this.hour + ':' + ( this.minute.toString().length === 1 ? '0' + this.minute : this.minute ) + ( this.showSeconds ? ':' + ( this.second.toString().length === 1 ? '0' + this.second : this.second ) : '' ) + ( this.showMeridian ? ' ' + this.meridian : '' );
-            //return ( this.hour.toString().length === 1 ? '0' + this.hour : this.hour ) + ':' + ( this.minute.toString().length === 1 ? '0' + this.minute : this.minute ) + ( this.showSeconds ? ':' + ( this.second.toString().length === 1 ? '0' + this.second : this.second ) : '' ) + ( this.showMeridian ? ' ' + this.meridian : '' );
+            //return this.hour +                                                           ':' + ( this.minute.toString().length === 1 ? '0' + this.minute : this.minute ) + ( this.showSeconds ? ':' + ( this.second.toString().length === 1 ? '0' + this.second : this.second ) : '' ) + ( this.showMeridian ? ' ' + this.meridian : '' );
+            return ( this.hour.toString().length === 1 ? '0' + this.hour : this.hour ) + ':' + ( this.minute.toString().length === 1 ? '0' + this.minute : this.minute ) + ( this.showSeconds ? ':' + ( this.second.toString().length === 1 ? '0' + this.second : this.second ) : '' ) + ( this.showMeridian ? ' ' + this.meridian : '' );
         },
 
         hideWidget: function() {
@@ -516,7 +528,23 @@
             }
         },
 
+        getCurrentHour: function() {
+            var h24 = new Date().getHours();
+            return ( this.showMeridian ) ? h24 % 12 : h24;
+        },
+
+        getCurrentMinute: function() {
+            return new Date().getMinutes();
+        },
+
         incrementHour: function() {
+            // If value is empty, make sure that first shown value is current hour.
+            if ( this.hour === '' ) {
+                this.hour = this.getCurrentHour();
+                this.decrementHour();
+            }
+
+            // if this.hour is empty string
             if ( this.showMeridian ) {
                 if ( this.hour === 11 ) {
                     this.hour++;
@@ -535,6 +563,12 @@
 
         incrementMinute: function( step ) {
             var newVal;
+
+            // If value is empty, make sure that first shown value is current minutes.
+            if ( this.minute === '' ) {
+                this.minute = this.getCurrentMinute();
+                this.decrementMinute();
+            }
 
             if ( step ) {
                 newVal = this.minute + step;
@@ -905,6 +939,10 @@
                 return;
             }
 
+            // make sure the widget is in sync with input
+            this.setTime( this.$element.val() );
+            this.updateWidget();
+
             // show/hide approach taken by datepicker
             this.$widget.appendTo( this.appendWidgetTo );
             $( document ).on( 'mousedown.timepicker, touchend.timepicker', {
@@ -927,12 +965,9 @@
                 this.$element.blur();
             }
 
-            // widget shouldn't be empty on open
             if ( this.hour === '' ) {
                 if ( this.defaultTime ) {
                     this.setDefaultTime( this.defaultTime );
-                } else {
-                    this.setTime( '0:0:0' );
                 }
             }
 
