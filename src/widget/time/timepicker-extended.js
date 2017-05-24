@@ -3,15 +3,12 @@
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var $ = require( 'jquery' );
-require( 'bootstrap-timepicker' );
+var types = require( '../../js/types' );
+require( './timepicker' );
 
 var pluginName = 'timepickerExtended';
 
 /**
- * Extends jdewit's bootstrap-timepicker without changing the original
- * https://github.com/jdewit/bootstrap-timepicker
- * TODO: find a replacement for jdewit's widget
- *
  * @constructor
  * @param {Element}                       element   Element to apply widget to.
  * @param {(boolean|{touch: boolean})}    options   options
@@ -32,15 +29,14 @@ TimepickerExtended.prototype.constructor = TimepickerExtended;
  * Initialize timepicker widget
  */
 TimepickerExtended.prototype._init = function() {
-    var $timeI = $( this.element ),
-        timeVal = $( this.element ).val(),
-        $fakeTime = $( '<div class="widget bootstrap-timepicker">' +
-            '<input class="ignore timepicker-default input-small" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
-            '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button></div>' ),
-        $fakeTimeReset = $fakeTime.find( '.btn-reset' ),
-        $fakeTimeI = $fakeTime.find( 'input' );
+    var $timeI = $( this.element );
+    var timeVal = $( this.element ).val();
+    var $fakeTime = $( '<div class="widget timepicker">' +
+        '<input class="ignore timepicker-default input-small" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
+        '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button></div>' );
+    var $resetBtn = $fakeTime.find( '.btn-reset' );
+    var $fakeTimeI = $fakeTime.find( 'input' );
 
-    $timeI.next( '.widget.bootstrap-timepicker-component' ).remove();
     $timeI.hide().after( $fakeTime );
 
     $fakeTimeI.timepicker( {

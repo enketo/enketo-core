@@ -1,10 +1,9 @@
 //assuming the datepicker and timepickers are used this can remain largely empty.
 .datetimepicker {
-    .date, .bootstrap-timepicker {
+    .date, .timepicker {
         margin-right: 10px;
         display: inline-block;
     }
-
     .date {
         margin-right: 10px;
     }
@@ -16,7 +15,7 @@
     }
 }
 
-.touch .bootstrap-timepicker-widget {
+.touch .timepicker-widget {
     &.dropdown-menu {
         input {
             width: 50px;

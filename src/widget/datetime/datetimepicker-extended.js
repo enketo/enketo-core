@@ -3,20 +3,12 @@
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var $ = require( 'jquery' );
+var pluginName = 'datetimepickerExtended';
 require( '../../js/extend' );
 require( 'bootstrap-datepicker' );
-require( 'bootstrap-timepicker' );
-
-var pluginName = 'datetimepickerExtended';
+require( '../time/timepicker' );
 
 /**
- * This thing is hacked together with little love, because nobody used datetime inputs. Needs to be rewritten.
- *
- * Extends eternicode's bootstrap-datepicker without changing the original.
- * https://github.com/eternicode/bootstrap-datepicker
- *
- * Extends jdewit's bootstrap-timepicker without changing the original
- * https://github.com/jdewit/bootstrap-timepicker
  *
  * @constructor
  * @param {Element}                       element   Element to apply widget to.
@@ -56,7 +48,7 @@ DatetimepickerExtended.prototype._init = function() {
         $fakeTimeI = this._createFakeTimeInput( timeVal );
 
     $dateTimeI.hide().after( '<div class="datetimepicker widget" />' );
-    $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDateI.closest( '.date' ) ).append( $fakeTimeI.closest( '.bootstrap-timepicker' ) );
+    $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDateI.closest( '.date' ) ).append( $fakeTimeI.closest( '.timepicker' ) );
 
     $fakeDateI.datepicker( {
         format: 'yyyy-mm-dd',
@@ -125,7 +117,7 @@ DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
  */
 DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
     var $fakeTime = $(
-            '<div class="bootstrap-timepicker">' +
+            '<div class="timepicker">' +
             '<input class="ignore timepicker-default input-small" type="text" value="' +
             timeVal + '" placeholder="hh:mm"/>' +
             '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button>' +
