@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head><!-- ODK Aggregate upload time: 2017-05-24T16:21:10.655+0000 on https://enketo-aggregate.appspot.com -->
+    <h:title>Test2</h:title>
+    <model>
+      <instance>
+        <q id="Test2" >
+          <PROGRAMME>
+            <PROJECT>
+              <Partner jr:template="">
+                <INFORMATION>
+                  <Partner_Name/>
+                  <Camp jr:template="">
+                    <P_Camps/>
+                  </Camp>
+                  <PO1_Intervention_budget/>
+                </INFORMATION>
+              </Partner>
+            </PROJECT>
+          </PROGRAMME>
+          <meta>
+            <instanceID/>
+          </meta>
+        </q>
+      </instance>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/q/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/q/PROGRAMME">
+      <group ref="/q/PROGRAMME/PROJECT">
+        <group ref="/q/PROGRAMME/PROJECT/Partner">
+          <label></label>
+          <repeat nodeset="/q/PROGRAMME/PROJECT/Partner">
+            <group ref="/q/PROGRAMME/PROJECT/Partner/INFORMATION">
+              <label>PARTNER PROJECT INFORMATION: <output value=" /q/PROGRAMME/PROJECT/Partner/INFORMATION/Partner_Name "/></label>
+              <group ref="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp">
+                <label></label>
+                <repeat appearance="W1" nodeset="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp">
+                  <input ref="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp/P_Camps">
+                    <label>Camp/Site/Village(s): <output value=" /q/PROGRAMME/PROJECT/Partner/INFORMATION/Partner_Name "/></label>
+                  </input>
+                </repeat>
+              </group>
+            </group>
+          </repeat>
+        </group>
+      </group>
+    </group>
+  </h:body>
+</h:html>

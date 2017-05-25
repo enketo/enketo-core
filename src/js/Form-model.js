@@ -360,9 +360,10 @@ FormModel.prototype.mergeXml = function( recordStr ) {
         var repeatParts;
         try {
             if ( that.getRepeatIndex( node ) > 0 ) {
+
                 repeatPath = that.getXPath( node, 'instance', false );
                 positionedPath = that.getXPath( node, 'instance', true );
-                console.debug( 'non-0 repeat found', positionedPath );
+
                 if ( !that.evaluate( positionedPath, 'node', null, null, true ) ) {
                     repeatParts = positionedPath.match( /([^\[]+)\[(\d+)\]/g );
                     // if the positionedPath has two non-0 repeat indices, avoid cloning out of order

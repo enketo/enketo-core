@@ -320,6 +320,21 @@ describe( 'repeat functionality', function() {
         expect( $2ndLevelTargetRepeats2.length ).toEqual( 3 );
     } );
 
+    //https://github.com/kobotoolbox/enketo-express/issues/754
+    it( 'shows the correct number of nested repeats in the view if a record is loaded', function() {
+        var instanceStr = '<q><PROGRAMME><PROJECT><Partner><INFORMATION><Partner_Name>a</Partner_Name><Camp><P_Camps>a1</P_Camps></Camp><Camp><P_Camps>a2</P_Camps></Camp></INFORMATION></Partner><Partner><INFORMATION><Partner_Name>b</Partner_Name><Camp><P_Camps>b1</P_Camps></Camp><Camp><P_Camps>b2</P_Camps></Camp><Camp><P_Camps>b3</P_Camps></Camp></INFORMATION></Partner></PROJECT></PROGRAMME><meta><instanceID>a</instanceID></meta></q>';
+        var a = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner"]';
+        var b = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp"]';
+        form = loadForm( 'nested-repeats-nasty.xml', instanceStr );
+        form.init();
+
+        expect( form.view.$.find( a ).length ).toEqual( 2 );
+        expect( form.view.$.find( a ).eq( 0 ).find( b ).length ).toEqual( 2 );
+        expect( form.view.$.find( a ).eq( 1 ).find( b ).length ).toEqual( 3 );
+
+    } );
+
+
     it( 'doesn\'t duplicate date widgets in a cloned repeat', function() {
         form = loadForm( 'nested_repeats.xml' );
         form.init();

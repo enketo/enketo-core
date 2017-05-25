@@ -88,11 +88,11 @@ module.exports = {
         // First rep is already included (by XSLT transformation)
         if ( repInModelSeries.length > repInViewSeries.length ) {
             this.clone( $repeatInfo, repInModelSeries.length - repInViewSeries.length );
-            // Now check the repeat counts of all the descendants of this repeat and its new siblings, level-by-level.
-            // TODO: this does not find .or-repeat > .or-repeat (= unusual syntax)
+            // Now check the repeat counts of all the descendants of this repeat and its new siblings
+            // Note: not tested with triple-nested repeats, but probably taking the better safe-than-sorry approach,
+            // so should be okay except for performance.
             $repeatInfo.siblings( '.or-repeat' )
-                .children( '.or-group, .or-group-data' )
-                .children( '.or-repeat-info:not([data-repeat-count])' )
+                .find( '.or-repeat-info:not([data-repeat-count])' )
                 .each( function() {
                     that.updateViewInstancesFromModel( $( this ) );
                 } );
