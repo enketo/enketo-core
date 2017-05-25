@@ -1008,9 +1008,15 @@ describe( 'merging an instance into the model', function() {
             [ '<a><c><d>record</d></c><c/></a>', '<model><instance><a><c><d>model</d></c></a></instance></model>',
                 '<model><instance><a><c><d>record</d></c><c><d/></c></a></instance></model>'
             ],
-            // nested repeated nodes in record (both c and d ar repeats)
+            // nested repeated nodes in record (both c and d are repeats)
             [ '<a><c><d>record</d></c><c><d>one</d><d>two</d></c></a>', '<model><instance><a><c><d>model</d></c></a></instance></model>',
                 '<model><instance><a><c><d>record</d></c><c><d>one</d><d>two</d></c></a></instance></model>'
+            ],
+            // nested repeated nodes in record special difficult case that may result in out-of-order repeat insertion (but not sure why)
+            [
+                '<q><P><I><Partner><pi><pn>a</pn><Camp><cn>a1</cn></Camp><Camp><cn>a2</cn></Camp></pi></Partner><Partner><pi><pn>b</pn><Camp><cn>b1</cn></Camp><Camp><cn>b2</cn></Camp><Camp><cn>b3</cn></Camp></pi></Partner></I></P><meta><instanceID>a</instanceID></meta></q>',
+                '<model><instance><q id="Test2" ><P><I><Partner><pi><pn/><Camp><cn/></Camp><bud/></pi></Partner></I></P><meta><instanceID/></meta></q></instance></model>',
+                '<model><instance><q id="Test2"><P><I><Partner><pi><pn>a</pn><Camp><cn>a1</cn></Camp><Camp><cn>a2</cn></Camp><bud/></pi></Partner><Partner><pi><pn>b</pn><Camp><cn>b1</cn></Camp><Camp><cn>b2</cn></Camp><Camp><cn>b3</cn></Camp><bud/></pi></Partner></I></P><meta><instanceID>a</instanceID></meta></q></instance></model>'
             ],
             // repeated nodes in record get added in the right order
             [ '<a><r/><r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><r/><r/><meta/></a></instance></model>' ],

@@ -355,17 +355,22 @@ FormModel.prototype.mergeXml = function( recordStr ) {
     $record.find( '*' ).each( function() {
         var node = this;
         var repeatPath;
+        var repeatIndex = 0;
         var positionedPath;
+        var repeatParts;
         try {
             if ( that.getRepeatIndex( node ) > 0 ) {
                 repeatPath = that.getXPath( node, 'instance', false );
                 positionedPath = that.getXPath( node, 'instance', true );
+                console.debug( 'non-0 repeat found', positionedPath );
                 if ( !that.evaluate( positionedPath, 'node', null, null, true ) ) {
-                    if ( positionedPath.split( '[' ).length > 2 ) {
-                        // TODO: nested, determine repeatSeriesIndex, although I cannot seem to get it to fail
-                    } else {
-                        that.cloneRepeat( repeatPath, 0, true );
+                    repeatParts = positionedPath.match( /([^\[]+)\[(\d+)\]/g );
+                    // if the positionedPath has two non-0 repeat indices, avoid cloning out of order
+                    if ( repeatParts && repeatParts.length > 1 ) {
+                        // repeatIndex of immediate parent repeat of deepest nested repeat in positionedPath
+                        repeatIndex = repeatParts[ repeatParts.length - 2 ].match( /\[(\d+)\]/ )[ 1 ] - 1;
                     }
+                    that.cloneRepeat( repeatPath, repeatIndex, true );
                 }
             }
         } catch ( e ) {
