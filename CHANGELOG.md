@@ -3,10 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.34.1] - 2017-05-25
 ---------------------
 ##### Fixed
-- Timepicker and Datetime Picker issues around empty and default values.
+- Timepicker and Datetimepicker issues around empty and default values.
 - When loading a record with nested repeats the second+ series gets inserted out-of-order in the model.
 - When loading a record with nested repeats and additional nested groups, the nested repeats are not cloned in the view.
 
