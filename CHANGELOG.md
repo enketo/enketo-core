@@ -3,6 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.35.0] - 2017-05-26
+---------------------
+##### Added
+- Count-non-empty() support.
+
+##### Changed
+- Localize %a and $b in format-date() to form locale at time of calculation.
+
 [4.34.1] - 2017-05-25
 ---------------------
 ##### Fixed

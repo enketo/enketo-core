@@ -61,6 +61,10 @@ module.exports = {
             } )
             .addClass( 'active' );
 
+        // For use in locale-sensitive XPath functions.
+        // Don't even check whether it's a proper subtag or not. It will revert to client locale if it is not recognized.
+        window.enketoFormLocale = lang;
+
         this.form.view.$.find( 'select, datalist' ).each( function() {
             that.setSelect( $( this ) );
         } );
