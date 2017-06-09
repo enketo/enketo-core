@@ -140,7 +140,7 @@ FormModel.prototype.init = function() {
     if ( this.xml ) {
         try {
             this.$ = $( this.xml );
-            this.hasInstance = !!this.xml.querySelector( 'model > instance' ) || false;
+            this.hasInstance = !!this.xml.querySelector( 'model > instance' );
             this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
             this.setNamespaces();
 
