@@ -207,15 +207,18 @@ Form.prototype.init = function() {
 
         this.editStatus = false;
 
-        if ( this.options.goTo === true ) {
-            this.goTo( this.getGoToTarget( location.hash ) );
+        if ( this.options.goTo === true && location.hash ) {
+            // if goTo fails (not found), it will return false
+            if ( !this.goTo( this.getGoToTarget( location.hash ) ) ) {
+                loadErrors.push( 'Failed to find question "' + location.hash.substring( 1 ) + '" in form. Is it a valid path?' );
+            }
         }
 
         setTimeout( function() {
             that.progress.update();
         }, 0 );
 
-        return [];
+        return loadErrors;
     } catch ( e ) {
         console.error( e );
         loadErrors.push( e.name + ': ' + e.message );
@@ -875,6 +878,11 @@ Form.prototype.goTo = function( target ) {
             // Flip to page
             this.pages.flipToPageContaining( $( target ) );
         }
+        // check if the nearest question or group is hidden after page flip (e.g. by being irrelevant)
+        if ( $( target ).closest( '.question, .or-group, .or-group-data' ).is( ':hidden' ) ) {
+            // It is up to the apps to decide what to do with this event.
+            $( target ).trigger( 'gotohidden.enketo' );
+        }
         // Scroll to element
         target.scrollIntoView();
         // Focus on the first non .ignore form control
@@ -883,6 +891,7 @@ Form.prototype.goTo = function( target ) {
         $( target.querySelector( 'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)' ) )
             .trigger( 'focus' ).trigger( 'applyfocus' );
     }
+    return !!target;
 };
 
 /** 
