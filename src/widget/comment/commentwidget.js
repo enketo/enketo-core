@@ -90,7 +90,11 @@ Comment.prototype._setValidationHandler = function() {
 Comment.prototype._setFocusHandler = function() {
     var that = this;
     $( this.element ).on( 'applyfocus', function() {
-        that.$commentButton.click();
+        if ( that.$commentButton.is( ':visible' ) ) {
+            that.$commentButton.click();
+        } else {
+            console.log( 'The linked question is not visible. Cannot apply focus to ' + that.element.getAttribute( 'name' ) );
+        }
     } );
 };
 

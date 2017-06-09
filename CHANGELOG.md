@@ -3,11 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.35.1] - 2017-06-09
 ---------------------
 ##### Changed
 - Add loadError if "go to" field cannot be found.
 - Fire "gotohidden.enketo" event if "go to" field is hidden.
+
+##### Fixed
+- Frozen UI if "go to" field is a comment field whose linked question is hidden.
 
 [4.35.0] - 2017-05-26
 ---------------------
