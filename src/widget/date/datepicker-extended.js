@@ -36,28 +36,29 @@ DatepickerExtended.prototype.constructor = DatepickerExtended;
  * Initialize datepicker widget
  */
 DatepickerExtended.prototype._init = function() {
-    var that = this,
-        $p = $( this.element ).parent( 'label' ),
-        settings = ( $p.hasClass( 'or-appearance-year' ) ) ? {
-            format: 'yyyy',
-            startView: 'decade',
-            minViewMode: 'years'
-        } : ( $p.hasClass( 'or-appearance-month-year' ) ) ? {
-            format: 'yyyy-mm',
-            startView: 'year',
-            minViewMode: 'months'
-        } : {
-            format: 'yyyy-mm-dd',
-            startView: 'month',
-            minViewMode: 'day'
-        },
-        $fakeDateI = this._createFakeDateInput( settings.format );
+    var that = this;
+    var $p = $( this.element ).parent( 'label' );
+    var settings = ( $p.hasClass( 'or-appearance-year' ) ) ? {
+        format: 'yyyy',
+        startView: 'decade',
+        minViewMode: 'years'
+    } : ( $p.hasClass( 'or-appearance-month-year' ) ) ? {
+        format: 'yyyy-mm',
+        startView: 'year',
+        minViewMode: 'months'
+    } : {
+        format: 'yyyy-mm-dd',
+        startView: 'month',
+        minViewMode: 'day'
+    };
 
-    this._setManualHandler( $fakeDateI );
-    this._setFocusHandler( $fakeDateI );
-    this._setResetHandler( $fakeDateI );
+    this.$fakeDateI = this._createFakeDateInput( settings.format );
 
-    $fakeDateI.datepicker( {
+    this._setManualHandler( this.$fakeDateI );
+    this._setFocusHandler( this.$fakeDateI );
+    this._setResetHandler( this.$fakeDateI );
+
+    this.$fakeDateI.datepicker( {
         format: settings.format,
         autoclose: true,
         todayHighlight: true,
@@ -81,15 +82,13 @@ DatepickerExtended.prototype._init = function() {
  * @return {jQuery}        the jQuery-wrapped fake date input element
  */
 DatepickerExtended.prototype._createFakeDateInput = function( format ) {
-    var $dateI = $( this.element ),
-        $fakeDate = $(
-            '<div class="widget date"><input class="ignore input-small" type="text" value="' +
-            $dateI.val() + '" placeholder="' + format + '" />' +
-            '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button></div>' ),
-        //$fakeDateReset = $fakeDate.find( '.btn-reset' ),
-        $fakeDateI = $fakeDate.find( 'input' );
+    var $dateI = $( this.element );
+    var $fakeDate = $(
+        '<div class="widget date"><input class="ignore input-small" type="text" value="' +
+        $dateI.val() + '" placeholder="' + format + '" />' +
+        '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button></div>' );
+    var $fakeDateI = $fakeDate.find( 'input' );
 
-    //$dateI.next( '.widget.date' ).remove( );
     $dateI.hide().after( $fakeDate );
 
     return $fakeDateI;
@@ -142,6 +141,10 @@ DatepickerExtended.prototype._setFocusHandler = function( $fakeDateI ) {
     $( this.element ).on( 'applyfocus', function() {
         $fakeDateI.focus();
     } );
+};
+
+DatepickerExtended.prototype.update = function() {
+    this.$fakeDateI.val( this.element.value ).datepicker( 'update' );
 };
 
 $.fn[ pluginName ] = function( options, event ) {

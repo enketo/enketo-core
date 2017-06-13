@@ -34,61 +34,62 @@ DatetimepickerExtended.prototype.constructor = DatetimepickerExtended;
  * Initialize timepicker widget
  */
 DatetimepickerExtended.prototype._init = function() {
-    var $dateTimeI = $( this.element ),
-        /*
-          Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
-          the timezone information (especially for instances-to-edit) if the values are not edited (the
-          original entry may have been done in a different time zone than the edit). However, 
-          values shown in the widget should reflect the local time representation of that value.
-         */
-        val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '',
-        vals = val.split( 'T' ),
-        dateVal = vals[ 0 ],
-        timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '',
-        $fakeDateI = this._createFakeDateInput( dateVal ),
-        $fakeTimeI = this._createFakeTimeInput( timeVal );
+    var that = this;
+    var $dateTimeI = $( this.element );
+    /*
+      Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
+      the timezone information (especially for instances-to-edit) if the values are not edited (the
+      original entry may have been done in a different time zone than the edit). However, 
+      values shown in the widget should reflect the local time representation of that value.
+     */
+    var val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
+    var vals = val.split( 'T' );
+    var dateVal = vals[ 0 ];
+    var timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
+    this.$fakeDateI = this._createFakeDateInput( dateVal );
+    this.$fakeTimeI = this._createFakeTimeInput( timeVal );
 
     $dateTimeI.hide().after( '<div class="datetimepicker widget" />' );
-    $dateTimeI.siblings( '.datetimepicker' ).append( $fakeDateI.closest( '.date' ) ).append( $fakeTimeI.closest( '.timepicker' ) );
+    $dateTimeI.siblings( '.datetimepicker' ).append( this.$fakeDateI.closest( '.date' ) ).append( this.$fakeTimeI.closest( '.timepicker' ) );
 
-    $fakeDateI.datepicker( {
+    this.$fakeDateI.datepicker( {
         format: 'yyyy-mm-dd',
         autoclose: true,
         todayHighlight: true
     } );
 
-    $fakeTimeI
+    this.$fakeTimeI
         .timepicker( {
             defaultTime: ( timeVal.length > 0 ) ? 'value' : false,
             showMeridian: false
         } )
-        .val( timeVal )
+        //.val( timeVal )
         //the time picker itself has input elements
         .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
-    this._setManualHandler( $fakeDateI );
-    this._setFocusHandler( $fakeDateI.add( $fakeTimeI ) );
+    this._setManualHandler( this.$fakeDateI );
+    this._setFocusHandler( this.$fakeDateI.add( this.$fakeTimeI ) );
 
-    $fakeDateI.on( 'change changeDate', function() {
+    this.$fakeDateI.on( 'change changeDate', function() {
         changeVal();
         return false;
     } );
 
-    $fakeTimeI.on( 'change', function() {
+    this.$fakeTimeI.on( 'change', function() {
         changeVal();
         return false;
     } );
 
     //reset button
-    $fakeTimeI.next( '.btn-reset' ).on( 'click', function() {
-        $fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
-        $fakeTimeI.val( '' ).trigger( 'change' );
+    this.$fakeTimeI.next( '.btn-reset' ).on( 'click', function() {
+        that.$fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
+        that.$fakeTimeI.val( '' ).trigger( 'change' );
     } );
 
     function changeVal() {
-        if ( $fakeDateI.val().length > 0 && $fakeTimeI.val().length > 3 ) {
-            var d = $fakeDateI.val().split( '-' );
-            var t = $fakeTimeI.val().split( ':' );
+        if ( that.$fakeDateI.val().length > 0 && that.$fakeTimeI.val().length > 3 ) {
+            var d = that.$fakeDateI.val().split( '-' );
+            var t = that.$fakeTimeI.val().split( ':' );
             $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' );
         } else {
             $dateTimeI.val( '' ).trigger( 'change' );
@@ -103,10 +104,10 @@ DatetimepickerExtended.prototype._init = function() {
  */
 DatetimepickerExtended.prototype._createFakeDateInput = function( dateVal ) {
     var $fakeDate = $(
-            '<div class="date">' +
-            '<input class="ignore" type="text" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
-            '</div>' ),
-        $fakeDateI = $fakeDate.find( 'input' );
+        '<div class="date">' +
+        '<input class="ignore" type="text" value="' + dateVal + '" placeholder="yyyy-mm-dd"/>' +
+        '</div>' );
+    var $fakeDateI = $fakeDate.find( 'input' );
 
     return $fakeDateI;
 };
@@ -134,6 +135,19 @@ DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatetimepickerExtended.prototype._setManualHandler = function() {};
+
+
+DatetimepickerExtended.prototype.update = function() {
+    var $dateTimeI = $( this.element );
+    var val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
+    var vals = val.split( 'T' );
+    var dateVal = vals[ 0 ];
+    var timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
+
+    this.$fakeDateI.val( dateVal );
+    this.$fakeTimeI.val( timeVal );
+
+};
 
 /**
  * Handler for focus events.
