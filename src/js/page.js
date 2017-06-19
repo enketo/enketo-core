@@ -27,7 +27,7 @@ module.exports = {
                 } )
                 .attr( 'role', 'page' );
 
-            if ( $allPages.length > 1 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
+            if ( $allPages.length > 0 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
                 this.$formFooter = $( '.form-footer' );
                 this.$btnFirst = this.$formFooter.find( '.first-page' );
                 this.$btnPrev = this.$formFooter.find( '.previous-page' );
