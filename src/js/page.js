@@ -83,7 +83,7 @@ module.exports = {
         $main.swipe( 'destroy' );
         $main.swipe( {
             allowPageScroll: 'vertical',
-            threshold: 150,
+            threshold: 250,
             swipeLeft: function() {
                 that.$btnNext.click();
             },
@@ -96,7 +96,7 @@ module.exports = {
                      * Triggering blur will fire a change event on the currently focused form control
                      * This will trigger validation and is required to block page navigation on swipe 
                      * with form.pageNavigationBlocked
-                     * The only potential problem with this approach is that the threshold (150ms)
+                     * The only potential problem with this approach is that the threshold (250ms)
                      * may theoretically not be sufficient to ensure validation is completed to 
                      * set form.pageNavigationBlocked to true. The edge case will be very slow devices
                      * and/or amazingly complex constraint expressions.

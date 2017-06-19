@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Reduced swipe sensitivity to avoid accidental "click-swiping" with a mouse.
+
 ##### Fixed
 - Page swipe bypasses block-page-navigation-on-new-constraint-error feature.
 
