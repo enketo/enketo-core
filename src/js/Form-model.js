@@ -585,7 +585,6 @@ FormModel.prototype.getRepeatCommentEl = function( repeatPath, repeatSeriesIndex
  */
 FormModel.prototype.cloneRepeat = function( repeatPath, repeatSeriesIndex, merge ) {
     var $insertAfterNode;
-    var allClonedNodeNames;
     var $templateClone;
     var repeatSeries;
     var $template;
@@ -629,21 +628,7 @@ FormModel.prototype.cloneRepeat = function( repeatPath, repeatSeriesIndex, merge
             } ).text( '' );
         }
 
-        // publish the changes
-        if ( !merge ) {
-            allClonedNodeNames = [ $template.prop( 'nodeName' ) ];
-
-            $template.find( '*' ).each( function() {
-                allClonedNodeNames.push( $( this ).prop( 'nodeName' ) );
-            } );
-
-            this.$events.trigger( 'dataupdate', {
-                nodes: allClonedNodeNames,
-                repeatPath: repeatPath,
-                repeatIndex: that.determineIndex( $templateClone ),
-                cloned: true
-            } );
-        }
+        // Note: the addrepeat eventhandler in Form.js takes care of initializing branches etc, so no need to fire an event here.
     } else {
         console.error( 'Could not find template node and/or node to insert the clone after' );
     }

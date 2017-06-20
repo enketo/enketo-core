@@ -577,11 +577,12 @@ Form.prototype.setEventHandlers = function() {
         var $clone = $( event.target );
         var updated = {
             repeatPath: $clone.attr( 'name' ),
-            repeatIndex: index
+            repeatIndex: index,
+            cloned: true
         };
         // Set defaults of added repeats in Form, setAllVals does not trigger change event
         that.setAllVals( $clone, index );
-        // Initialize calculations, branch, itemset, output inside that repeat
+        // Initialize calculations, branch, itemset, output inside that repeat. 
         that.evaluationCascade.forEach( function( fn ) {
             fn.call( that, updated );
         } );

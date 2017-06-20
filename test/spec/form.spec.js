@@ -436,6 +436,19 @@ describe( 'calculations', function() {
         expect( form.model.node( '/calcs_in_repeats/rep1/calc3', 1 ).getVal()[ 0 ] ).toEqual( '400' );
     } );
 
+    it( 'outside a repeat are updated if they are dependent on a repeat node', function() {
+        var f = loadForm( 'repeat-count.xml' );
+        var cnt = '[name="/dynamic-repeat-count/count"]';
+        var $form;
+        f.init();
+        $form = f.view.$;
+        $model = f.model.$;
+        // increase count to 10
+        $form.find( cnt ).val( 10 ).trigger( 'change' );
+        expect( $model.find( 'sum_note' ).text() ).toEqual( '10' );
+        expect( $model.find( 'txtsum_note' ).text() ).toEqual( '10' );
+    } );
+
 } );
 
 describe( 'branching functionality', function() {

@@ -12,6 +12,7 @@
             <num>5</num>
           </rep>
           <sum_note/>
+          <txtsum_note/>
           <meta>
             <instanceID/>
           </meta>
@@ -22,6 +23,7 @@
       <bind nodeset="/dynamic-repeat-count/rep/txt" type="string"/>
       <bind nodeset="/dynamic-repeat-count/rep/num" type="int"/>
       <bind calculate="count( /dynamic-repeat-count/rep )" nodeset="/dynamic-repeat-count/sum_note" readonly="true()" type="string"/>
+      <bind calculate="count( /dynamic-repeat-count/rep/txt )" nodeset="/dynamic-repeat-count/txtsum_note" readonly="true()" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/dynamic-repeat-count/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -42,6 +44,9 @@
     </group>
     <input ref="/dynamic-repeat-count/sum_note">
       <label>Number of repeats present</label>
+    </input>
+    <input ref="/dynamic-repeat-count/txtsum_note">
+      <label>Number text inputs present</label>
     </input>
   </h:body>
 </h:html>
