@@ -49,7 +49,7 @@ DatepickerExtended.prototype._init = function() {
     } : {
         format: 'yyyy-mm-dd',
         startView: 'month',
-        minViewMode: 'day'
+        minViewMode: 'days'
     };
 
     this.$fakeDateI = this._createFakeDateInput( settings.format );

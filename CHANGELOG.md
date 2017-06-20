@@ -3,9 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.35.4] - 2017-06-20
 ---------------------
-##### Removed
+##### Changed
+- Updated datepicker module.
+
+##### Fixed
 - Duplicate logic evaluation when a repeat is added.
 
 [4.35.3] - 2017-06-19
