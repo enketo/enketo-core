@@ -57,6 +57,13 @@
     }
 }
 
+// Until FF supports url() as background, we need a workaround.
+@-moz-document url-prefix() { 
+  .question input[type=checkbox]:checked {
+     background-image: radial-gradient(4px, $radiocheck-checked-color 0%, $radiocheck-checked-color 99%, transparent 100%);
+  }
+}
+
 // tweak for touchscreens
 .touch .question.simple-select {
     .option-wrapper {

@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Emergency temporary workaround for checked state of checkbox in Firefox.
+
 [4.36.0] - 2017-07-03
 ---------------------
 ##### Added
