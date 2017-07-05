@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>radio</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="default">
+          <text id="static_instance-settlement-2">
+            <value>Settlement 2</value>
+          </text>
+          <text id="static_instance-settlement-3">
+            <value>Settlement 3</value>
+          </text>
+          <text id="static_instance-settlement-1">
+            <value>Settlement 1</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <radio id="radio">
+          <activity_type/>
+          <region/>
+          <district/>
+          <sites/>
+          <mobile_sites_count/>
+          <mobile_sites jr:template="">
+            <settlement/>
+          </mobile_sites>
+          <settlement_name/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </radio>
+      </instance>
+      <instance id="settlement">
+        <root>
+          <item>
+            <itextId>static_instance-settlement-1</itextId>
+            <name>settlement1</name>
+            <cf>North_North</cf>
+          </item>
+          <item>
+            <itextId>static_instance-settlement-2</itextId>
+            <name>settlement2</name>
+            <cf>North_North</cf>
+          </item>
+          <item>
+            <itextId>static_instance-settlement-3</itextId>
+            <name>settlement3</name>
+            <cf>North_North</cf>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/radio/settlement_name" relevant=" true()" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/radio/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 ref="/radio/settlement_name">
+      <label>Settlement</label>
+      <itemset nodeset="instance('settlement')/root/item[cf= 'North_North' ]">
+        <value ref="name"/>
+        <label ref="jr:itext(itextId)"/>
+      </itemset>
+    </select1>
+  </h:body>
+</h:html>

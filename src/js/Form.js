@@ -344,6 +344,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     var $repeat = null;
     var selector = [];
     var that = this;
+    var radioCheckNames = [];
 
     updated = updated || {};
     filter = filter || '';
@@ -389,8 +390,18 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     }
 
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
-    // TODO: should we exclude 'sibling' radiobuttons and checkboxes?
-    return $collection.find( selector.join() );
+    return $collection.find( selector.join() )
+        .filter( function() {
+            var radioCheckName = this.dataset.name;
+            // Filter out duplicate radiobuttons and checkboxes
+            if ( radioCheckName ) {
+                if ( radioCheckNames.indexOf( radioCheckName ) !== -1 ) {
+                    return false;
+                }
+                radioCheckNames.push( radioCheckName );
+            }
+            return true;
+        } );
 };
 
 /**

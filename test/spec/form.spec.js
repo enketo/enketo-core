@@ -1170,6 +1170,15 @@ describe( 're-validating inputs and updating user feedback', function() {
     } );
 } );
 
+describe( 'getting related nodes', function() {
+
+    it( 'excludes radiobuttons that are part of the same group', function() {
+        var form = loadForm( 'radio.xml' );
+        form.init();
+        expect( form.getRelatedNodes( 'data-relevant' ).length ).toEqual( 1 );
+    } );
+} )
+
 describe( 'clearing inputs', function() {
     var $fieldset = $( '<fieldset><input type="number" value="23" /><input type="text" value="abc" /><textarea>abcdef</textarea></fieldset>"' );
 

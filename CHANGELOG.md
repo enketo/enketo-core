@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.36.1] - 2017-07-05
 ---------------------
 ##### Fixed
 - Emergency temporary workaround for checked state of checkbox in Firefox.
+- Error message when removing irrelevant nodes because the node cannot be found.
 
 [4.36.0] - 2017-07-03
 ---------------------
