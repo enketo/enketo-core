@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Made branch module more extensible.
+
 [4.36.1] - 2017-07-05
 ---------------------
 ##### Fixed

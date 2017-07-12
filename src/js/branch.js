@@ -10,24 +10,28 @@ var $ = require( 'jquery' );
 
 module.exports = {
     update: function( updated, forceClearIrrelevant ) {
+        var $nodes;
+
+        if ( !this.form ) {
+            throw new Error( 'Branch module not correctly instantiated with form property.' );
+        }
+
+        $nodes = this.form.getRelatedNodes( 'data-relevant', '', updated );
+
+        this.updateNodes( $nodes, forceClearIrrelevant );
+    },
+    updateNodes: function( $nodes, forceClearIrrelevant ) {
         var p;
         var $branchNode;
         var result;
         var insideRepeat;
         var insideRepeatClone;
         var cacheIndex;
-        var $nodes;
         var relevantCache = {};
         var alreadyCovered = [];
         var branchChange = false;
         var that = this;
         var clonedRepeatsPresent;
-
-        if ( !this.form ) {
-            throw new Error( 'Branch module not correctlsy instantiated with form property.' );
-        }
-
-        $nodes = this.form.getRelatedNodes( 'data-relevant', '', updated );
 
         clonedRepeatsPresent = ( this.form.repeatsPresent && this.form.view.$.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
@@ -155,7 +159,6 @@ module.exports = {
      * @param  {jQuery} $branchNode The jQuery object to reveal and enable
      */
     enable: function( $branchNode ) {
-        var type;
         var change = false;
 
         if ( !this.selfRelevant( $branchNode ) ) {
@@ -163,36 +166,20 @@ module.exports = {
             $branchNode.removeClass( 'disabled pre-init' );
 
             this.form.widgets.enable( $branchNode );
-
-            type = $branchNode.prop( 'nodeName' ).toLowerCase();
-
-            if ( type === 'label' ) {
-                $branchNode.children( 'input, select, textarea' ).prop( 'disabled', false );
-            } else if ( type === 'fieldset' || type === 'section' ) {
-                $branchNode.prop( 'disabled', false );
-                /*
-                 * A temporary workaround for a Chrome bug described in https://github.com/modilabs/enketo/issues/503
-                 * where the file inputs end up in a weird partially enabled state.
-                 * Refresh the state by disabling and enabling the file inputs again.
-                 */
-                $branchNode.find( '*:not(.or-branch) input[type="file"]:not([data-relevant])' )
-                    .prop( 'disabled', true )
-                    .prop( 'disabled', false );
-            } else {
-                $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', false );
-            }
+            this.activate( $branchNode );
         }
         return change;
     },
+
     /**
      * Disables and hides a branch node/group
      *
      * @param  {jQuery} $branchNode The jQuery object to hide and disable
      */
     disable: function( $branchNode, forceClearIrrelevant ) {
-        var type = $branchNode.prop( 'nodeName' ).toLowerCase();
         var virgin = $branchNode.hasClass( 'pre-init' );
         var change = false;
+        var that = this;
 
         if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
             change = true;
@@ -201,28 +188,58 @@ module.exports = {
             // if the branch was previously enabled
             if ( !virgin ) {
                 if ( this.form.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
-                    // A change event ensures the model is updated
-                    // An inputupdate event is required to update widgets
-                    $branchNode.clearInputs( 'change', 'inputupdate.enketo' );
+                    this.clear( $branchNode );
                 }
-                // all remaining fields marked as invalid can now be marked as valid
-                $branchNode.find( '.invalid-required, .invalid-constraint' ).find( 'input, select, textarea' ).each( function() {
-                    this.setValid( $( this ) );
-                } );
             } else {
                 $branchNode.removeClass( 'pre-init' );
             }
 
-            if ( type === 'label' ) {
-                $branchNode.children( 'input, select, textarea' ).prop( 'disabled', true );
-            } else if ( type === 'fieldset' || type === 'section' ) {
-                // TODO: a <section> cannot be disabled like this
-                $branchNode.prop( 'disabled', true );
-            } else {
-                $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', true );
-            }
+            this.deactivate( $branchNode );
         }
         return change;
-    }
+    },
+    /**
+     * Clears values from branchnode. 
+     * This function is separated so it can be overriden in custom apps.
+     * 
+     * @param  {[type]} $branchNode [description]
+     * @return {boolean}             [description]
+     */
+    clear: function( $branchNode ) {
+        // A change event ensures the model is updated
+        // An inputupdate event is required to update widgets
+        $branchNode.clearInputs( 'change', 'inputupdate.enketo' );
+    },
+    setDisabledProperty: function( $branchNode, bool ) {
+        var type = $branchNode.prop( 'nodeName' ).toLowerCase();
 
+        if ( type === 'label' ) {
+            $branchNode.children( 'input, select, textarea' ).prop( 'disabled', bool );
+        } else if ( type === 'fieldset' || type === 'section' ) {
+            // TODO: a <section> cannot be disabled like this
+            $branchNode.prop( 'disabled', bool );
+        } else {
+            $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', bool );
+        }
+    },
+    /**
+     * Activates form controls.
+     * This function is separated so it can be overridden in custom apps.
+     * 
+     * @param  {[type]} $brancNode [description]
+     * @return {[type]}            [description]
+     */
+    activate: function( $branchNode ) {
+        this.setDisabledProperty( $branchNode, false );
+    },
+    /**
+     * Deactivates form controls.
+     * This function is separated so it can be overridden in custom apps.
+     * 
+     * @param  {[type]} $branchNode [description]
+     * @return {[type]}             [description]
+     */
+    deactivate: function( $branchNode ) {
+        this.setDisabledProperty( $branchNode, true );
+    }
 };

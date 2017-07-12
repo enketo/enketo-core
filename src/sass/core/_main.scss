@@ -3,7 +3,7 @@ $media-margin: 10px;
 /** hide stuff **/
 
 .or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,
-.option-wrapper .itemset-template, .itemset-labels, .or-hint.or-form-print, .or-hint.or-form-print.active {
+.or-relevant-msg, .option-wrapper .itemset-template, .itemset-labels, .or-hint.or-form-print, .or-hint.or-form-print.active {
     display: none;
 }
 
@@ -428,7 +428,7 @@ legend .required {
     opacity: 0.5;
 }
 
-.invalid-constraint, .invalid-required {
+.invalid-constraint, .invalid-required, .invalid-relevant{
     @include transition-fast;
 
     background-color: $state-danger-bg;
@@ -445,11 +445,12 @@ legend .required {
 }
 
 .invalid-constraint .or-constraint-msg.active,
-.invalid-required .or-required-msg.active {
+.invalid-required .or-required-msg.active,
+.invalid-relevant .or-relevant-msg.active {
     display: block;
 }
 
-.or-required-msg.active, .or-constraint-msg.active {
+.or-required-msg.active, .or-constraint-msg.active, .or-relevant-msg.active{
     font-weight: bold;
     padding-top: 5px;
     font-size: 0.85em;

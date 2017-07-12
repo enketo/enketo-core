@@ -610,7 +610,7 @@ Form.prototype.setEventHandlers = function() {
 };
 
 Form.prototype.setValid = function( $node, type ) {
-    var classes = ( type ) ? 'invalid-' + type : 'invalid-constraint invalid-required';
+    var classes = ( type ) ? 'invalid-' + type : 'invalid-constraint invalid-required invalid-relevant';
     this.input.getWrapNodes( $node ).removeClass( classes );
 };
 
@@ -648,9 +648,9 @@ Form.prototype.isValid = function( $node ) {
     var $question;
     if ( $node ) {
         $question = this.input.getWrapNodes( $node );
-        return !$question.hasClass( 'invalid-required' ) && !$question.hasClass( 'invalid-constraint' );
+        return !$question.hasClass( 'invalid-required' ) && !$question.hasClass( 'invalid-constraint' ) && !$question.hasClass( 'invalid-relevant' );
     }
-    return this.view.$.find( '.invalid-required, .invalid-constraint' ).length === 0;
+    return this.view.$.find( '.invalid-required, .invalid-constraint, .invalid-relevant' ).length === 0;
 };
 
 Form.prototype.clearIrrelevant = function() {
@@ -913,7 +913,7 @@ Form.getRequiredTransformerVersion = function() {
     console.warn( 'Form.getRequiredTransformerVersion() is deprecated, use Form.requiredTransformerVersion' );
     return Form.requiredTransformerVersion;
 };
-Form.requiredTransformerVersion = '1.17.2';
+Form.requiredTransformerVersion = '1.18.0';
 
 module.exports = Form;
 
