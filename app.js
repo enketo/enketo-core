@@ -6,7 +6,6 @@
  */
 
 var $ = require( 'jquery' );
-window.jQuery = $; // required for bootstrap-timepicker
 var support = require( './src/js/support' );
 var Form = require( './src/js/Form' );
 var fileManager = require( './src/js/file-manager' );

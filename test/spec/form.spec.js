@@ -251,7 +251,7 @@ describe( 'repeat functionality', function() {
     var form;
 
     //turn jQuery animations off
-    jQuery.fx.off = true;
+    $.fx.off = true;
 
     describe( 'cloning', function() {
         beforeEach( function() {
@@ -735,7 +735,7 @@ describe( 'validation', function() {
         var form, $numberInput, $numberLabel;
 
         beforeEach( function() {
-            jQuery.fx.off = true; //turn jQuery animations off
+            $.fx.off = true; //turn jQuery animations off
             form = loadForm( 'group_branch.xml' );
             form.init();
             $numberInput = form.view.$.find( '[name="/data/group/nodeB"]' );
@@ -1061,7 +1061,7 @@ describe( 'Itemset functionality', function() {
             sel3Radio = ':not(.itemset-template) > input:radio[data-name="/form/city"]';
 
         beforeEach( function() {
-            jQuery.fx.off = true; //turn jQuery animations off
+            $.fx.off = true; //turn jQuery animations off
             form = loadForm( 'cascading_mixture_itext_noitext.xml' );
             form.init();
 

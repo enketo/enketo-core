@@ -1196,4 +1196,4 @@
         }
     );
 
-} )( jQuery, window, document );
+} )( require( 'jquery' ), window, document );
