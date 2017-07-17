@@ -179,7 +179,6 @@ module.exports = {
     disable: function( $branchNode, forceClearIrrelevant ) {
         var virgin = $branchNode.hasClass( 'pre-init' );
         var change = false;
-        var that = this;
 
         if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
             change = true;

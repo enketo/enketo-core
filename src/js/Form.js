@@ -709,8 +709,8 @@ Form.prototype.validateContent = function( $container ) {
     return Promise.all( validations )
         .then( function() {
             $firstError = $container
-                .find( '.invalid-required, .invalid-constraint' )
-                .addBack( '.invalid-required, .invalid-constraint' )
+                .find( '.invalid-required, .invalid-constraint, .invalid-relevant' )
+                .addBack( '.invalid-required, .invalid-constraint, .invalid-relevant' )
                 .eq( 0 );
 
             if ( $firstError.length > 0 ) {
