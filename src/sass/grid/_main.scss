@@ -159,7 +159,7 @@ h4 + .or-repeat {
     input:not(.ignore), textarea, select, .widget, .option-wrapper {
         order: 4;
     }
-    .or-constraint-msg, .or-required-msg {
+    .or-constraint-msg, .or-required-msg, .or-relevant-msg {
         order: 5;
     }
     .btn-comment {
