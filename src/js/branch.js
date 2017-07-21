@@ -182,8 +182,6 @@ module.exports = {
 
         if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
             change = true;
-            $branchNode.addClass( 'disabled' );
-            this.form.widgets.disable( $branchNode );
             // if the branch was previously enabled
             if ( !virgin ) {
                 if ( this.form.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
@@ -239,6 +237,8 @@ module.exports = {
      * @return {[type]}             [description]
      */
     deactivate: function( $branchNode ) {
+        $branchNode.addClass( 'disabled' );
+        this.form.widgets.disable( $branchNode );
         this.setDisabledProperty( $branchNode, true );
     }
 };
