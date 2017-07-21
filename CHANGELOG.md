@@ -3,10 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.36.2] - 2017-07-21
 ---------------------
 ##### Changed
 - Made branch module more extensible.
+
+##### Fixed
+- A readonly select minimal (desktop) widget becomes editable when it has a "relevant" expression that evaluates to true.
 
 [4.36.1] - 2017-07-05
 ---------------------

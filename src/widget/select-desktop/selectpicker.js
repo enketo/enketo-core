@@ -244,7 +244,9 @@ DesktopSelectpicker.prototype.disable = function() {
 
 //override super method
 DesktopSelectpicker.prototype.enable = function() {
-    this.$picker.find( 'li' ).removeClass( 'disabled' );
+    if ( !this.readonly ) {
+        this.$picker.find( 'li' ).removeClass( 'disabled' );
+    }
 };
 
 //override super method
