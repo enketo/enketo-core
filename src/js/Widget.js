@@ -17,7 +17,6 @@ var Widget = function( element, options, event ) {
     // Determining the namespace automatically from the name of the constructor will not work 
     // in conjunction with function renaming by uglify2
     this.namespace = this.namespace || 'somewidget';
-    this.options.touch = ( typeof this.options.touch !== 'undefined' ) ? this.options.touch : false;
     this.event = event || null;
 };
 

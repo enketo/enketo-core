@@ -10,7 +10,6 @@ var _instantiate;
 var _setLangChangeListener;
 var _setOptionChangeListener;
 var _setValChangeListener;
-var support = require( './support' );
 var $ = require( 'jquery' );
 var widgets = require( 'widgets' ).filter( function( widget ) {
     return widget.selector;
@@ -100,7 +99,6 @@ _getElements = function( $group, selector ) {
 _instantiate = function( widget, $group ) {
     var $elements;
     widget.options = widget.options || {};
-    widget.options.touch = support.touch;
 
     if ( !widget.name ) {
         return console.error( 'widget doesn\'t have a name' );

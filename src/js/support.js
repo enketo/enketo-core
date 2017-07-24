@@ -1,27 +1,41 @@
 'use strict';
 
 /**
- * Detects features. Replacement for Modernizr.
+ * Detects features.
  */
 
-var features = {
-        inputtypes: {}
-    },
-    inputTypesToTest = [ 'date', 'datetime', 'time' ];
+var os = require( './sniffer' ).os;
+var inputTypes = {};
+var mobile = false;
 
 // test input types
-inputTypesToTest.forEach( function( inputType ) {
+[ 'date', 'datetime', 'time' ].forEach( function( inputType ) {
     var input = document.createElement( 'input' );
     input.setAttribute( 'type', inputType );
-    features.inputtypes[ inputType ] = input.type !== 'text';
+    inputTypes[ inputType ] = input.type !== 'text';
 } );
 
-// test touchscreen presence
-if ( ( 'ontouchstart' in window ) || window.DocumentTouch && document instanceof window.DocumentTouch ) {
-    features.touch = true;
+// The word 'touch' has become misleading. It should be considered 'small mobile' including tablets.
+if ( os.ios || os.android ) {
+    mobile = true;
     document.documentElement.classList.add( 'touch' );
-} else {
-    features.touch = false;
 }
 
-module.exports = features;
+module.exports = {
+    /**
+     * @deprecated
+     */
+    get inputtypes() {
+        console.deprecate( 'support.inputtypes', 'support.inputTypes' );
+        return inputTypes;
+    },
+    get inputTypes() {
+        return inputTypes;
+    },
+    get touch() {
+        return mobile;
+    },
+    set touch( val ) {
+        mobile = val;
+    }
+};

@@ -41,5 +41,5 @@ Date.prototype.toISOLocalString = function() {
 if ( typeof console.deprecate === 'undefined' ) {
     console.deprecate = function( bad, good ) {
         console.warn( bad + ' is deprecated. Use ' + good + ' instead.' );
-    }
+    };
 }

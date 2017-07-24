@@ -15,7 +15,7 @@ var pluginName = 'datepickerExtended';
  *
  * @constructor
  * @param {Element}                       element   Element to apply widget to.
- * @param {(boolean|{touch: boolean})}    options   options
+ * @param {*}    options   options
  * @param {*=}                            event     event
  */
 
@@ -167,7 +167,7 @@ $.fn[ pluginName ] = function( options, event ) {
          * webview: "Mozilla/5.0 (Linux; U; Android 4.1.2; en-us; GT-P3100 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30"
          */
 
-        if ( !data && typeof options === 'object' && ( !options.touch || !support.inputtypes.date || badSamsung.test( navigator.userAgent ) ) ) {
+        if ( !data && typeof options === 'object' && ( !support.touch || !support.inputTypes.date || badSamsung.test( navigator.userAgent ) ) ) {
             $this.data( pluginName, new DatepickerExtended( this, options, event ) );
         }
         //only call method if widget was instantiated before

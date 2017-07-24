@@ -2,6 +2,7 @@
 
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
+var support = require( '../../js/support' );
 var config = require( 'enketo-config' );
 var convertor = require( './usng.js' );
 var Promise = require( 'lie' );
@@ -22,7 +23,7 @@ var esri;
  * Geopicker widget Class
  * @constructor
  * @param {Element} element [description]
- * @param {(boolean|{touch: boolean, repeat: boolean})} options options
+ * @param {*} options options
  * @param {*=} e     event
  */
 
@@ -313,7 +314,7 @@ Geopicker.prototype._getProps = function() {
         detect: !!navigator.geolocation,
         compact: compact === true || that.mapSupported === false,
         type: this.element.attributes[ 'data-type-xml' ].value,
-        touch: this.options.touch,
+        touch: support.touch,
         readonly: this.element.readOnly,
         hasZ: typeof arcGisOptions.hasZ === 'boolean' ? arcGisOptions.hasZ : DEFAULT_HAS_Z,
         basemaps: Array.isArray( arcGisOptions.basemaps ) && arcGisOptions.basemaps.length > 0 ? arcGisOptions.basemaps : DEFAULT_BASEMAPS,

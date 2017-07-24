@@ -11,7 +11,7 @@ var pluginName = 'filepicker';
  *
  * @constructor
  * @param {Element} element [description]
- * @param {(boolean|{touch: boolean, maxlength:number})} options options
+ * @param {*} options options
  * @param {*=} e     event
  */
 
@@ -97,7 +97,6 @@ Filepicker.prototype._init = function() {
 Filepicker.prototype._getProps = function() {
     return {
         mediaType: this.element.getAttribute( 'accept' ),
-        touch: this.options.touch,
         readonly: this.element.readOnly,
     };
 };

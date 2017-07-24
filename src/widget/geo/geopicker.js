@@ -6,7 +6,7 @@ var config = require( 'enketo-config' );
 var L = require( 'leaflet' );
 var Promise = require( 'lie' );
 var t = require( 'translator' ).t;
-
+var support = require( '../../js/support' );
 var googleMapsScriptRequest;
 var pluginName = 'geopicker';
 var defaultZoom = 15;
@@ -36,7 +36,7 @@ var iconMultiActive = L.divIcon( {
  * Geotrace widget Class
  * @constructor
  * @param {Element} element [description]
- * @param {(boolean|{touch: boolean, repeat: boolean})} options options
+ * @param {*} options options
  * @param {*=} e     event
  */
 
@@ -285,7 +285,7 @@ Geopicker.prototype._switchInputType = function( type ) {
  */
 Geopicker.prototype._getProps = function() {
     var appearances = [];
-    var map = this.options.touch !== true || ( this.options.touch === true && $( this.element ).closest( '.or-appearance-maps' ).length > 0 );
+    var map = support.touch !== true || ( support.touch === true && $( this.element ).closest( '.or-appearance-maps' ).length > 0 );
 
     if ( map ) {
         appearances = $( this.element ).closest( '.question' ).attr( 'class' ).split( ' ' )
@@ -303,7 +303,7 @@ Geopicker.prototype._getProps = function() {
         search: map,
         appearances: appearances,
         type: this.element.attributes[ 'data-type-xml' ].value,
-        touch: this.options.touch,
+        touch: support.touch,
         wide: ( this.$question.width() / this.$question.closest( 'form.or' ).width() > 0.8 ),
         readonly: this.element.readOnly
     };

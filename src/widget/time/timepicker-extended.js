@@ -77,7 +77,7 @@ $.fn[ pluginName ] = function( options, event ) {
         var $this = $( this ),
             data = $this.data( pluginName );
 
-        if ( !data && typeof options === 'object' && ( !options.touch || !support.inputtypes.time ) ) {
+        if ( !data && typeof options === 'object' && ( !support.touch || !support.inputTypes.time ) ) {
             $this.data( pluginName, new TimepickerExtended( this, options, event ) );
         }
         //only call method if widget was instantiated before

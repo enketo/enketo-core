@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Touchscreen detection to change widgets and appearance has been tweaked and is now only considering iOS and Android browsers.
+
 [4.36.2] - 2017-07-21
 ---------------------
 ##### Changed

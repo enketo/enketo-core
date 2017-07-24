@@ -166,7 +166,7 @@ This feature is designed for views that show an existing record (e.g. edit views
 
 ### How to create or extend widgets
 
-To create new widgets, we recommend using this [plugin template](https://gist.github.com/MartijnR/6943281). The option {touch: [boolean]}, is added automatically to all widgets to indicate whether the client is using a touchscreen device.
+To create new widgets, we recommend using this [plugin template](https://gist.github.com/MartijnR/6943281).
 
 Each widget should fulfill the following requirements:
 
@@ -185,7 +185,7 @@ Each widget should fulfill the following requirements:
   * `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
   * `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when its branch becomes irrelevant.
   * `update()` to update the widget when called after the content used to instantiate it has changed (language, options or calculated value). In its simplest form this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
-* if the widget needs tweaks or needs to be disabled for mobile (touchscreen) use, build this in. The option `{ touch: [boolean] }` is passed to the plugin by default. If your widget requires tweaks for mobile, you could create an all-in-one widget using the `options.touch` check or you could create separate widgets for desktop and mobile (as done with select-desktop and select-mobile widgets)
+* if the widget needs tweaks or needs to be disabled for mobile use, use support.js to detect this.
 * allow clearing of the original input (i.e. setting value to '')
 * send a `fakefocus` event to the original input when the widget gets focus
 * please write test specs in the widget's /test folder.....(yeah, we need to do that for the existing widgets too...)

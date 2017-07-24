@@ -21,6 +21,7 @@
 
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
+var support = require( '../../js/support' );
 var t = require( 'translator' ).t;
 var pluginName = 'desktopSelectpicker';
 require( '../../js/dropdown.jquery' );
@@ -31,7 +32,7 @@ require( '../../js/dropdown.jquery' );
  *
  * @constructor
  * @param {Element} element [description]
- * @param {(boolean|{touch: boolean, btnStyle: string, noneSelectedText: string, maxlength:number})} options options
+ * @param {*} options options
  * @param {*=} e     event
  */
 
@@ -269,8 +270,8 @@ $.fn[ pluginName ] = function( options, event ) {
         var $this = $( this ),
             data = $this.data( pluginName );
 
-        //only instantiate if options is an object AND if options.touch is falsy
-        if ( !data && typeof options === 'object' && !options.touch ) {
+        //only instantiate if options is an object AND if support.touch is falsy
+        if ( !data && typeof options === 'object' && !support.touch ) {
             $this.data( pluginName, ( data = new DesktopSelectpicker( this, options, event ) ) );
         } else if ( data && typeof options === 'string' ) {
             data[ options ]( this );
