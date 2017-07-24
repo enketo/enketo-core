@@ -51,12 +51,12 @@ DatepickerMobile.prototype._init = function() {
 DatepickerMobile.prototype.mask = function( el ) {
     el.type = 'text';
     el.classList.add( 'mask-date' );
-}
+};
 
 DatepickerMobile.prototype.unmask = function( el ) {
     el.type = 'date';
     el.classList.remove( 'mask-date' );
-}
+};
 
 $.fn[ pluginName ] = function( options, event ) {
 

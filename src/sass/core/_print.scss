@@ -61,7 +61,7 @@ body {
         display: none;
     }
 
-    .or-branch.disabled {
+    &:not(.print-relevant-only) .or-branch.disabled {
         opacity: 1;
         display: block;
     }
@@ -333,6 +333,11 @@ label, legend, .trigger, .note {
 
 // pages mode
 .pages.or {
+    
+    &.print-relevant-only .disabled[role="page"]{
+        display: none;
+    }
+
     [role="page"] {
         display: inherit;
     }

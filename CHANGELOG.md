@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Added
+- Ability to hide irrelevant questions from print out if 'print-relevant-only' class is added to form element.
+ 
 ##### Changed
 - Touchscreen detection to change widgets and appearance has been tweaked and is now only considering iOS and Android browsers.
 - Native date inputs (touchscreen or readonly) do not show 'yyyy-mm-dd' placeholder text anymore when empty and unfocused,

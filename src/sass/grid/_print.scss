@@ -20,15 +20,17 @@ $printBaseFontSize: 10px;
     background: #cccccc;
 }
 
-.or .or-branch.disabled {
-    // warning: took me hours to find this, default is set to block...
-    /* override inline style */
-    @include display-flex;
-}
-
 .or-repeat .repeat-number {
     top: -20px;
     font-size: 12px;
+}
+
+.or.print-relevant-only {
+    // targeting is getting a little weird here
+    .question.or-branch.disabled,
+    .or-branch.disabled {
+        display: none;
+    }
 }
 
 .question {
@@ -193,10 +195,6 @@ $printBaseFontSize: 10px;
     &:not(.invalid-required):not(.invalid-constraint) {
         border-top: $grid-border;
     }
-}
-
-.or .or-branch.disabled {
-    @include display-inline-flex;
 }
 
 @media print, screen and (min-width: 700px) {
