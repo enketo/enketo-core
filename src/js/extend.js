@@ -37,3 +37,9 @@ Date.prototype.toISOLocalString = function() {
     return new Date( this.getTime() - ( offset.minstotal * 60 * 1000 ) ).toISOString()
         .replace( 'Z', offset.direction + offset.hrspart + ':' + offset.minspart );
 };
+
+if ( typeof console.deprecate === 'undefined' ) {
+    console.deprecate = function( bad, good ) {
+        console.warn( bad + ' is deprecated. Use ' + good + ' instead.' );
+    }
+}

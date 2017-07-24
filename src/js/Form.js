@@ -910,7 +910,7 @@ Form.prototype.goTo = function( target ) {
  * Static method to obtain required enketo-transform version direct from class.
  */
 Form.getRequiredTransformerVersion = function() {
-    console.warn( 'Form.getRequiredTransformerVersion() is deprecated, use Form.requiredTransformerVersion' );
+    console.deprecate( 'Form.getRequiredTransformerVersion()', 'Form.requiredTransformerVersion' );
     return Form.requiredTransformerVersion;
 };
 Form.requiredTransformerVersion = '1.18.0';
@@ -922,97 +922,97 @@ module.exports = Form;
  * @deprecated
  */
 Form.prototype.getInstanceID = function() {
-    console.warn( 'form.getInstanceID() is deprecated, use form.instanceID instead' );
+    console.deprecate( 'form.getInstanceID()', 'form.instanceID' );
     return this.instanceID;
 };
 /**
  * @deprecated
  */
 Form.prototype.getDeprecatedID = function() {
-    console.warn( 'form.getDeprecatedID() is deprecated, use form.deprecatedID instead' );
+    console.deprecate( 'form.getDeprecatedID()', 'form.deprecatedID' );
     return this.deprecatedID;
 };
 /**
  * @deprecated
  */
 Form.prototype.getInstanceName = function() {
-    console.warn( 'form.getModel() is deprecated, use form.instanceName instead' );
+    console.deprecate( 'form.getModel()', 'form.instanceName' );
     return this.instanceName;
 };
 /**
  * @deprecated
  */
 Form.prototype.getVersion = function() {
-    console.warn( 'form.getVersion() is deprecated, use form.version instead' );
+    console.deprecate( 'form.getVersion()', 'form.version' );
     return this.version;
 };
 /**
  * @deprecated
  */
 Form.prototype.getEncryptionKey = function() {
-    console.warn( 'form.getEncryptionKey() is deprecated, use form.encryptionKey instead' );
+    console.deprecate( 'form.getEncryptionKey()', 'form.encryptionKey' );
     return this.encryptionKey;
 };
 /**
  * @deprecated
  */
 Form.prototype.getAction = function() {
-    console.warn( 'form.getAction() is deprecated, use form.action instead' );
+    console.deprecate( 'form.getAction()', 'form.action' );
     return this.action;
 };
 /**
  * @deprecated
  */
 Form.prototype.getMethod = function() {
-    console.warn( 'form.getMethod() is deprecated, use form.method instead' );
+    console.deprecate( 'form.getMethod()', 'form.method ' );
     return this.method;
 };
 /**
  * @deprecated
  */
 Form.prototype.getModel = function() {
-    console.warn( 'form.getModel() is deprecated, use form.model instead' );
+    console.deprecate( 'form.getModel()', 'form.model' );
     return this.model;
 };
 /**
  * @deprecated
  */
 Form.prototype.getView = function() {
-    console.warn( 'form.getView() is deprecated, use form.view instead' );
+    console.deprecate( 'form.getView()', 'form.view' );
     return this.view;
 };
 /**
  * @deprecated
  */
 Form.prototype.getRecordName = function() {
-    console.warn( 'form.getRecordName() is deprecated, use form.recordName instead' );
+    console.deprecate( 'form.getRecordName()', 'form.recordName' );
     return this.recordName;
 };
 /**
  * @deprecated
  */
 Form.prototype.setRecordName = function( name ) {
-    console.warn( 'form.setRecordName() is deprecated, use form.recordName="val" instead' );
+    console.deprecate( 'form.setRecordName()', 'form.recordName="val"' );
     this.recordName = name;
 };
 /**
  * @deprecated
  */
 Form.prototype.setEditStatus = function( status ) {
-    console.warn( 'form.setEditStatus() is deprecated, use form.editStatus="val" instead' );
+    console.deprecate( 'form.setEditStatus()', 'form.editStatus="val"' );
     this.editStatus = status;
 };
 /**
  * @deprecated
  */
 Form.prototype.getEditStatus = function() {
-    console.warn( 'form.getEditStatus() is deprecated, use form.editStatus instead' );
+    console.deprecate( 'form.getEditStatus()', 'form.editStatus' );
     return this.editStatus;
 };
 /**
  * @deprecated
  */
 Form.prototype.getSurveyName = function() {
-    console.warn( 'form.getSurveyName() is deprecated, use form.editStatus instead' );
+    console.deprecate( 'form.getSurveyName()', 'form.editStatus' );
     return this.surveyName;
 };
