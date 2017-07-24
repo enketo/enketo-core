@@ -152,9 +152,9 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this ),
-            data = $this.data( pluginName ),
-            badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
+        var $this = $( this );
+        var data = $this.data( pluginName );
+        var badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
 
         /*
          * Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field

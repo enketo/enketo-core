@@ -21,5 +21,6 @@ module.exports = [
     require( '../widget/analog-scale/analog-scalepicker' ),
     require( '../widget/big-image/image-viewer' ),
     require( '../widget/comment/commentwidget' ),
-    require( '../widget/image-map/image-map' )
+    require( '../widget/image-map/image-map' ),
+    require( '../widget/date-mobile/datepicker-mobile' ),
 ];

@@ -353,7 +353,7 @@ select {
         width: $input-max-width;
     }
 
-    &[type="date"], &[type="number"], &[type="time"], &[type="datetime"] {
+    &[type="date"], &[type="number"], &[type="time"], &[type="datetime"], &[type="text"].mask-date {
         width: $input-min-width;
     }
 
