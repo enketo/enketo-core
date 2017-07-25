@@ -223,8 +223,9 @@ For custom themes that go beyond just changing colors and fonts, keep in mind al
 
 ### Sponsors
 
-The development of this app and [enketo-core](https://github.com/enketo/enketo-core) was sponsored by:
+The development of this library was sponsored by:
 
+* [OpenClinica](https://www.openclinica.com/)
 * [Sustainable Engineering Lab at Columbia University](http://modi.mech.columbia.edu/)
 * [WHO - HRP project](http://www.who.int/reproductivehealth/topics/mhealth/en/index.html)
 * [Santa Fe Insitute & Slum/Shack Dwellers International](http://www.santafe.edu/)
