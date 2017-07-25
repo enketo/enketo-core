@@ -214,6 +214,10 @@ Form.prototype.init = function() {
             }
         }
 
+        if ( this.options.printRelevantOnly !== false ) {
+            this.view.$.addClass( 'print-relevant-only' );
+        }
+
         setTimeout( function() {
             that.progress.update();
         }, 0 );

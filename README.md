@@ -141,7 +141,7 @@ In the second case the irrelevant values will not be cleared until `form.validat
 #### Go to specific question upon load
 
 ```
-  new Form(formselector, data, { 
+new Form(formselector, data, { 
   goTo: true
 });
 ```
@@ -153,6 +153,15 @@ This feature is designed for views that show an existing record (e.g. edit views
 * http://example.org/form#//repeat[3]/node
 * http://example.org/form#//repeat[enk:ordinal="3"]/node
 
+#### Print only the "relevant" parts of the form
+
+If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
+
+```
+new Form(formselector, data, { 
+  printRelevantOnly: false
+});
+```
 
 ### How to develop Enketo Core
 

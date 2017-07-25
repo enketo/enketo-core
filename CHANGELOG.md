@@ -3,10 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.37.0] - 2017-07-25
 ---------------------
 ##### Added
-- Ability to hide irrelevant questions from print out if 'print-relevant-only' class is added to form element.
+- Ability to hide irrelevant questions from printout (now the default) with a setting.
  
 ##### Changed
 - Touchscreen detection to change widgets and appearance has been tweaked and is now only considering iOS and Android browsers.
