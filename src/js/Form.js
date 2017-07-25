@@ -560,9 +560,14 @@ Form.prototype.setEventHandlers = function() {
             if ( n.enabled && n.inputType !== 'hidden' && n.required ) {
                 requiredExpr = n.required;
             }
-            // set file input values to the actual name of file (without c://fakepath or anything like that)
+            // set file input values to the uniqified actual name of file (without c://fakepath or anything like that)
             if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
                 n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
+            }
+            if ( n.val.length > 0 && n.inputType === 'drawing' ) {
+                n.val = utils.getFilename( {
+                    name: n.val
+                }, $input[ 0 ].dataset.filenamePostfix );
             }
 
             that.model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr, true );

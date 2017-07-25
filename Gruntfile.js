@@ -138,7 +138,7 @@ module.exports = function( grunt ) {
 
     grunt.loadNpmTasks( 'grunt-sass' );
 
-    grunt.registerTask( 'transforms', 'Creating forms.json', function( task ) {
+    grunt.registerTask( 'transforms', 'Creating forms.json', function() {
         var forms = {};
         var done = this.async();
         var jsonStringify = require( 'json-pretty' );

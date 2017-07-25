@@ -58,6 +58,7 @@ function getFileUrl( subject ) {
             resolve( null );
         } else if ( typeof subject === 'string' ) {
             // TODO obtain from storage
+            reject( 'no!' );
         } else if ( typeof subject === 'object' ) {
             if ( _isTooLarge( subject ) ) {
                 error = new Error( 'File too large' );
@@ -68,7 +69,7 @@ function getFileUrl( subject ) {
                     resolve( e.target.result );
                 };
                 reader.onerror = function( e ) {
-                    reject( error );
+                    reject( e );
                 };
                 reader.readAsDataURL( subject );
             }
@@ -83,13 +84,23 @@ function getFileUrl( subject ) {
  * @return {[File]} array of files
  */
 function getCurrentFiles() {
-    var file;
-    var newFilename;
     var files = [];
 
-    // first get any files inside file input elements
-    $( 'form.or input[type="file"]' ).each( function() {
-        file = this.files[ 0 ];
+    // Get any files inside file input elements or text input elements for drawings.
+    $( 'form.or' ).find( 'input[type="file"]:not(.ignore), input[type="text"][data-drawing="true"]' ).each( function() {
+        var newFilename;
+        var file = null;
+        var canvas = null;
+        if ( this.type === 'file' ) {
+            file = this.files[ 0 ]; // Why doesn't this fail for empty file inputs?
+        } else if ( this.value ) {
+            canvas = $( this ).closest( '.question' )[ 0 ].querySelector( '.draw-widget canvas' );
+            if ( canvas ) {
+                // TODO: In the future, we could do canvas.toBlob()
+                file = _dataUriToBlob( canvas.toDataURL() );
+                file.name = this.value;
+            }
+        }
         if ( file && file.name ) {
             // Correct file names by adding a unique-ish postfix
             // First create a clone, because the name property is immutable
@@ -103,7 +114,42 @@ function getCurrentFiles() {
             files.push( file );
         }
     } );
+
     return files;
+}
+
+function _dataUriToBlob( dataURI ) {
+    var byteString;
+    var mimeString;
+    var buffer;
+    var array;
+    var blob;
+
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    byteString = atob( dataURI.split( ',' )[ 1 ] );
+    // separate out the mime component
+    mimeString = dataURI.split( ',' )[ 0 ].split( ':' )[ 1 ].split( ';' )[ 0 ];
+
+    // write the bytes of the string to an ArrayBuffer
+    buffer = new ArrayBuffer( byteString.length );
+    array = new Uint8Array( buffer );
+
+    for ( var i = 0; i < byteString.length; i++ ) {
+        array[ i ] = byteString.charCodeAt( i );
+    }
+
+    /*if ( !hasArrayBufferView ) {
+        array = buffer;
+    }*/
+
+    // write the ArrayBuffer to a blob
+    blob = new Blob( [ array ], {
+        type: mimeString
+    } );
+
+    return blob;
+
 }
 
 /**

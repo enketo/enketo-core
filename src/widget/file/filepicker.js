@@ -238,5 +238,6 @@ $.fn[ pluginName ] = function( options, event ) {
 
 module.exports = {
     'name': pluginName,
-    'selector': 'input[type="file"]'
+    // If this selector becomes too complex we can create a 'filepicker' class with XSL
+    'selector': '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"]'
 };

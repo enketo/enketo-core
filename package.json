@@ -70,6 +70,7 @@
         "jquery-touchswipe": "1.6.x",
         "leaflet": "0.7.x",
         "lie": "3.1.x",
-        "mergexml": "1.1.2"
+        "mergexml": "1.1.2",
+        "signature_pad": "2.2.x"
     }
 }

@@ -37,11 +37,14 @@ module.exports = {
         }
         nodeName = $node.prop( 'nodeName' ).toLowerCase();
         if ( nodeName === 'input' ) {
+            if ( $node.data( 'drawing' ) ) {
+                return 'drawing';
+            }
             if ( $node.attr( 'type' ).length > 0 ) {
                 return $node.attr( 'type' ).toLowerCase();
-            } else {
-                return console.error( '<input> node has no type' );
             }
+            return console.error( '<input> node has no type' );
+
         } else if ( nodeName === 'select' ) {
             return 'select';
         } else if ( nodeName === 'textarea' ) {

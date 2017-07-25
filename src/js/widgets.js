@@ -11,10 +11,12 @@ module.exports = [
     require( '../widget/table/tablewidget' ),
     require( '../widget/radio/radiopicker' ),
     require( '../widget/date/datepicker-extended' ),
+    require( '../widget/date-mobile/datepicker-mobile' ),
     require( '../widget/time/timepicker-extended' ),
     require( '../widget/datetime/datetimepicker-extended' ),
     require( '../widget/compact/compactpicker' ),
     require( '../widget/file/filepicker' ),
+    require( '../widget/draw/draw-widget' ),
     require( '../widget/select-likert/likertitem' ),
     require( '../widget/distress/distresspicker' ),
     require( '../widget/horizontal-choices/horizontalchoices' ),
@@ -22,5 +24,5 @@ module.exports = [
     require( '../widget/big-image/image-viewer' ),
     require( '../widget/comment/commentwidget' ),
     require( '../widget/image-map/image-map' ),
-    require( '../widget/date-mobile/datepicker-mobile' ),
+
 ];
