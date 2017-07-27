@@ -4,6 +4,7 @@
  * When using enketo-core as a library inside your app, it is recommended to just **ignore** this file.
  * Place a replacement for this controller elsewhere in your app.
  */
+'use strict';
 
 var $ = require( 'jquery' );
 var support = require( './src/js/support' );
@@ -34,7 +35,7 @@ if ( xform && xform !== 'null' ) {
     } );
 } else if ( $( 'form.or' ).length > 0 ) {
     $( '.guidance' ).remove();
-    modelStr = globalModelStr;
+    modelStr = window.globalModelStr;
     initializeForm();
 }
 
@@ -72,7 +73,7 @@ function initializeForm() {
     //initialize form and check for load errors
     loadErrors = form.init();
     if ( loadErrors.length > 0 ) {
-        alert( 'loadErrors: ' + loadErrors.join( ', ' ) );
+        window.alert( 'loadErrors: ' + loadErrors.join( ', ' ) );
     }
 }
 
