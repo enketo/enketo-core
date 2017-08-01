@@ -45,62 +45,70 @@ DrawWidget.prototype._init = function() {
     this._handleResize( canvas );
     this._resizeCanvas( canvas );
 
-    this.pad = new SignaturePad( canvas, {
-        onEnd: this._updateValue.bind( this ),
-        penColor: this.props.colors[ 0 ] || 'black'
-    } );
+    fileManager.init()
+        .then( function() {
+            that.pad = new SignaturePad( canvas, {
+                onEnd: that._updateValue.bind( that ),
+                penColor: that.props.colors[ 0 ] || 'black'
+            } );
+            if ( existingFilename ) {
+                that.pad.off();
+                return that._loadFileIntoPad( existingFilename );
+            }
+            return true;
+        } )
+        .then( function() {
+            that.pad.on();
+            that.$widget
+                .find( '.draw-widget__btn-reset' ).on( 'click', that._reset.bind( that ) )
+                .end().find( '.draw-widget__load' ).on( 'change', function() {
+                    if ( this.files[ 0 ] ) {
+                        that.pad.clear();
+                        that._loadFileIntoPad( this.files[ 0 ] );
+                        that._updateValue.call( that );
+                    }
+                } )
+                .end().find( '.draw-widget__colorpicker' )
+                .on( 'click', '.current', function() {
+                    $( this ).parent().toggleClass( 'reveal' );
+                } ).on( 'click', '[data-color]:not(.current)', function() {
+                    $( this ).siblings().removeClass( 'current' ).end().addClass( 'current' )
+                        .parent().removeClass( 'reveal' );
+                    that.pad.penColor = this.dataset.color;
+                } )
+                .end().find( '.show-canvas-btn' ).on( 'click', function() {
+                    that.$widget.addClass( 'full-screen' );
+                    that._resizeCanvas( canvas );
+                    if ( !that.props.readonly ) {
+                        that.pad.on();
+                    }
+                    return false;
+                } )
+                .end().find( '.hide-canvas-btn' ).on( 'click', function() {
+                    that.$widget.removeClass( 'full-screen' );
+                    that.pad.off();
+                    that._resizeCanvas( canvas );
+                    return false;
+                } ).click();
 
-    if ( existingFilename ) {
-        this._loadFileIntoPad( existingFilename );
-    }
+            $( canvas )
+                .on( 'canvasreload.' + that.namespace, function() {
+                    if ( that.cache ) {
+                        that.pad.fromDataURL( that.cache );
+                    }
+                } );
+
+            if ( that.props.readonly ) {
+                that.disable( that.element );
+            }
+        } )
+        .catch( function( error ) {
+            that._showFeedback( error.message );
+        } );
 
     $( this.element ).on( 'applyfocus', function() {
         canvas.focus();
     } );
-
-    this.$widget
-        .find( '.draw-widget__btn-reset' ).on( 'click', this._reset.bind( this ) )
-        .end().find( '.draw-widget__load' ).on( 'change', function() {
-            if ( this.files[ 0 ] ) {
-                that.pad.clear();
-                that._loadFileIntoPad( this.files[ 0 ] );
-                that._updateValue.call( that );
-            }
-        } )
-        .end().find( '.draw-widget__colorpicker' )
-        .on( 'click', '.current', function() {
-            $( this ).parent().toggleClass( 'reveal' );
-        } ).on( 'click', '[data-color]:not(.current)', function() {
-            $( this ).siblings().removeClass( 'current' ).end().addClass( 'current' )
-                .parent().removeClass( 'reveal' );
-            that.pad.penColor = this.dataset.color;
-        } )
-        .end().find( '.show-canvas-btn' ).on( 'click', function() {
-            that.$widget.addClass( 'full-screen' );
-            that._resizeCanvas( canvas );
-            if ( !that.props.readonly ) {
-                that.pad.on();
-            }
-            return false;
-        } )
-        .end().find( '.hide-canvas-btn' ).on( 'click', function() {
-            that.$widget.removeClass( 'full-screen' );
-            that.pad.off();
-            that._resizeCanvas( canvas );
-            return false;
-        } ).click();
-
-    $( canvas )
-        .on( 'canvasreload.' + this.namespace, function() {
-            if ( that.cache ) {
-                that.pad.fromDataURL( that.cache );
-            }
-        } );
-
-    if ( this.props.readonly ) {
-        this.disable( this.element );
-    }
-
 };
 
 DrawWidget.prototype._getProps = function( el ) {
@@ -156,14 +164,12 @@ DrawWidget.prototype._reset = function() {
 
 DrawWidget.prototype._loadFileIntoPad = function( filename ) {
     var that = this;
-    console.log( 'gonna try to load', filename );
-    fileManager.getFileUrl( filename )
+    return fileManager.getFileUrl( filename )
         .then( function( url ) {
             that.pad.fromDataURL( url, {} );
             that.cache = url;
         } )
         .catch( function() {
-            console.log( 'catch!' );
             that._showFeedback( 'File "' + filename + '" could not be found (leave unchanged if already submitted and you want to preserve it).', 'error' );
         } );
 };
@@ -186,7 +192,6 @@ DrawWidget.prototype._handleResize = function( canvas ) {
 // to make it look crisp on mobile devices.
 // This also causes canvas to be cleared.
 DrawWidget.prototype._resizeCanvas = function( canvas ) {
-    console.log( 'draw widget resize handling' );
     // When zoomed out to less than 100%, for some very strange reason,
     // some browsers report devicePixelRatio as less than 1
     // and only part of the canvas is cleared then.
