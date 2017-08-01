@@ -143,6 +143,7 @@ DrawWidget.prototype._updateValue = function() {
     // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
     this.cache = this.pad.toDataURL();
     this.element.dataset.filenamePostfix = postfix;
+    delete this.element.dataset.loadedFileName;
     $( this.element ).val( this.props.filename ).trigger( 'change' );
 };
 
