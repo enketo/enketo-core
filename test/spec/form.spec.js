@@ -1,4 +1,7 @@
-/* global describe, require, it, beforeEach, afterEach*/
+/* global describe, require, it, xit, beforeEach, expect, spyOn, beforeAll, afterAll*/
+
+'use strict';
+
 var Form = require( '../../src/js/Form' );
 var $ = require( 'jquery' );
 var forms = require( '../mock/forms' );
@@ -380,6 +383,7 @@ describe( 'repeat functionality', function() {
             var rep = '.or-repeat[name="/dynamic-repeat-count/rep"]';
             var cnt = '[name="/dynamic-repeat-count/count"]';
             var $form;
+            var $model;
             f.init();
             $form = f.view.$;
             $model = f.model.$;
@@ -440,6 +444,7 @@ describe( 'calculations', function() {
         var f = loadForm( 'repeat-count.xml' );
         var cnt = '[name="/dynamic-repeat-count/count"]';
         var $form;
+        var $model;
         f.init();
         $form = f.view.$;
         $model = f.model.$;
@@ -713,16 +718,15 @@ describe( 'obtaining XML string from form without irrelevant nodes', function() 
 
     } );
 
-
     it( 'works if repeat count is 0', function() {
         // When repeat count is zero there is no context node to pass to evaluator.
         var form = loadForm( 'repeat-count-relevant.xml' );
-        var errors = form.init();
         var getFn = function() {
             return form.getDataStr( {
                 irrelevant: false
             } );
         };
+        form.init();
         expect( getFn ).not.toThrow();
         expect( getFn() ).not.toMatch( '<rep>' );
         expect( getFn() ).toMatch( '<q1/>' );
@@ -1149,6 +1153,7 @@ describe( 'Itemset functionality', function() {
 describe( 're-validating inputs and updating user feedback', function() {
     var form = loadForm( 'comment.xml' );
     var $one;
+    var $oneComment;
     form.init();
     $one = form.view.$.find( '[name="/comment/one"]' );
     $oneComment = form.view.$.find( '[name="/comment/one_comment"]' );
@@ -1177,7 +1182,7 @@ describe( 'getting related nodes', function() {
         form.init();
         expect( form.getRelatedNodes( 'data-relevant' ).length ).toEqual( 1 );
     } );
-} )
+} );
 
 describe( 'clearing inputs', function() {
     var $fieldset = $( '<fieldset><input type="number" value="23" /><input type="text" value="abc" /><textarea>abcdef</textarea></fieldset>"' );

@@ -3,6 +3,7 @@
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var $ = require( 'jquery' );
+var types = require( '../../js/types' );
 require( 'bootstrap-datepicker' );
 require( '../../js/dropdown.jquery' );
 
@@ -38,7 +39,8 @@ DatepickerExtended.prototype.constructor = DatepickerExtended;
 DatepickerExtended.prototype._init = function() {
     var that = this;
     var $p = $( this.element ).parent( 'label' );
-    var settings = ( $p.hasClass( 'or-appearance-year' ) ) ? {
+
+    this.settings = ( $p.hasClass( 'or-appearance-year' ) ) ? {
         format: 'yyyy',
         startView: 'decade',
         minViewMode: 'years'
@@ -52,24 +54,24 @@ DatepickerExtended.prototype._init = function() {
         minViewMode: 'days'
     };
 
-    this.$fakeDateI = this._createFakeDateInput( settings.format );
+    this.$fakeDateI = this._createFakeDateInput( this.settings.format );
 
     this._setManualHandler( this.$fakeDateI );
     this._setFocusHandler( this.$fakeDateI );
     this._setResetHandler( this.$fakeDateI );
 
     this.$fakeDateI.datepicker( {
-        format: settings.format,
+        format: this.settings.format,
         autoclose: true,
         todayHighlight: true,
-        startView: settings.startView,
-        minViewMode: settings.minViewMode
+        startView: this.settings.startView,
+        minViewMode: this.settings.minViewMode
     } ).on( 'changeDate', function() {
         // copy changes made by datepicker to original input field
         var value = $( this ).val();
-        if ( settings.startView === 'decade' && value.length === 4 ) {
+        if ( that.settings.startView === 'decade' && value.length === 4 ) {
             value += '-01-01';
-        } else if ( settings.startView === 'year' && value.length < 8 ) {
+        } else if ( that.settings.startView === 'year' && value.length < 8 ) {
             value += '-01';
         }
         $( that.element ).val( value ).trigger( 'change' ); //.blur();
@@ -95,23 +97,27 @@ DatepickerExtended.prototype._createFakeDateInput = function( format ) {
 };
 
 /**
- * copy manual changes to original date input field
+ * Copy manual changes that were not detected by bootstrap-datepicker (one without pressing Enter) to original date input field
  *
  * @param { jQuery } $fakeDateI Fake date input element
  */
-DatepickerExtended.prototype._setManualHandler = function( /* $fakeDateI*/) {
-    //$fakeDateI.on( 'change', function( ) {
-    //  var date,
-    //    value = $dateI.val( );
-    //  if ( value.length > 0 ) {
-    //    value = ( format === 'yyyy-mm' ) ? value + '-01' : ( format === 'yyyy' ) ? value + '-01-01' : value;
-    //    value = data.node( ).convert( value, 'date' );
-    //  }
-    //  if ( $dateI.val( ) !== value ) {
-    //    $dateI.val( value ).trigger( 'change' ).blur( );
-    //  }
-    //  return false;
-    //} );
+DatepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {
+    var $dateI = $( this.element );
+    var settings = this.settings;
+
+    $fakeDateI.on( 'change', function() {
+        var value = $fakeDateI.val();
+
+        if ( value.length > 0 ) {
+            value = ( settings.format === 'yyyy-mm' ) ? value + '-01' : ( settings.format === 'yyyy' ) ? value + '-01-01' : value;
+            value = types.date.convert( value );
+        }
+        if ( $dateI.val() !== value ) {
+            $dateI.val( value ).trigger( 'change' ).blur();
+        }
+
+        return false;
+    } );
 };
 
 /**
