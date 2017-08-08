@@ -21,10 +21,9 @@ $grid-border: 1px solid black;
 // leave px unit for value 0, as it is used in calcs
 $question-margin: 0px;
 $q-pad-top: 6px;
-$q-pad-right: 6px;
+$q-pad-side: 6px;
 $q-pad-bottom: 13px;
-$q-pad-left: 6px;
-$question-padding: $q-pad-top $q-pad-right $q-pad-bottom $q-pad-left;
+$question-padding: $q-pad-top $q-pad-side $q-pad-bottom $q-pad-side;
 
 // notes
 $note-border-radius: 0;

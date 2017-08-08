@@ -43,7 +43,7 @@ h4 + .or-repeat {
 .or-group > h4 {
     background: #ffffff;
     margin: 0 -1px 0 0;
-    padding: 12px $q-pad-right $q-pad-right $q-pad-left;
+    padding: 12px $q-pad-side $q-pad-side $q-pad-side;
 }
 
 // flexboxes
@@ -103,9 +103,16 @@ h4 + .or-repeat {
     padding: $question-padding;
 }
 
-// display: flex messes up img size so apply it sparingly only to questions
-// and not to notes. We loose the ability to display image labels nicely in 
-// questions (though fine in tables)
+/*
+ * display: flex messes up img size so apply it sparingly only to questions
+ * and not to notes. We loose the ability to display image labels nicely in 
+ * questions (though fine in tables). It also unfortunately prevents us from 
+ * displaying comment icons inline with labels.
+ * 
+ * display: flex is used to:
+ * - display error messages at the bottom of cells
+ * - ... (other things probably)
+ */
 .question {
     @include display-flex;
     @include flex-wrap(nowrap);
@@ -125,8 +132,7 @@ h4 + .or-repeat {
         top: -2px;
         left: auto;
         right: 0;
-        margin-left: 3px;
-        margin-right: 3px;
+        margin: 0 3px;
     }
     &.invalid-constraint, &.invalid-required {
         border-radius: 0;
@@ -137,6 +143,7 @@ h4 + .or-repeat {
         text-transform: uppercase;
         font-weight: normal;
         font-size: 12px;
+        width: calc(100% - 25px);
         order: 1;
     }
     .or-hint.active {
@@ -163,6 +170,8 @@ h4 + .or-repeat {
         order: 5;
     }
     .btn-comment {
+        margin: 0 12px;
+        top: 3px;
         order: 1;
     }
 }
@@ -176,6 +185,12 @@ h4 + .or-repeat {
     .required {
         right: auto;
         left: 0;
+    }
+    legend {
+        .required, .btn-comment {
+            left: -($q-pad-side);
+            right: auto;
+        }
     }
 }
 
@@ -231,13 +246,29 @@ h4 + .or-repeat {
     }
 }
 
-//wrappers around questions
+// wrappers around questions
 .or-group, .or-group-data, .or-repeat {
     @include flex(1, 1);
 }
 
-legend {
+// fix for radiobuttons/checkboxes
+.question legend {
+    line-height: 1.1em;
     margin-bottom: 8px;
+    .question-label {
+        // to allow width to be adjusted to fit required/comment icons
+        display: block;
+    }
+    .required, .btn-comment {
+        right: -($q-pad-side);
+    }
+    .btn-comment {
+        top: 0;
+        .icon {
+            // undo a hack in the widget itself
+            position: static;
+        }
+    }
 }
 
 #form-title {
