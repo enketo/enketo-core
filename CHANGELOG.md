@@ -3,12 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.38.1] - 2017-08-10
 ---------------------
 ##### Fixed
 - Manual date edits do not get propagated to model if Enter key is not pressed.
 - When loading record with repeats, any select/select1 questions (without appearance "minimal") in non-first repeats are not initialized properly.
 - Comment icon and required asterisk overlapping with each other and with label in Grid theme.
+- Timepicker styling issues in Grid theme.
 
 [4.38.0] - 2017-08-03
 ---------------------

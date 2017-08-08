@@ -9,36 +9,26 @@
 }
 
 .widget.date,
-.widget.bootstrap-timepicker,
+.widget.timepicker,
 .widget.datetimepicker {
     @include display-flex;
 
-    @include flex-wrap(no-wrap);
+    @include flex-wrap(nowrap);
 
     @include flex-direction(row);
 }
 
 .question .widget.datetimepicker {
-    .date, .bootstrap-timepicker {
+    .date, .timepicker {
+        @include display-flex;
         @include flex(1);
-
-        input {
-            width: auto;
-        }
-
-        .btn-reset {
-            float: right;
-        }
+    }
+    .timepicker {
+        margin-left: 0;
+        margin-right: 0;
     }
 }
 
-.or[dir="rtl"] .question .widget.datetimepicker {
-    .date, .bootstrap-timepicker {
-        .btn-reset {
-            float: left;
-        }
-    }
-}
 
 .or-appearance-likert .option-wrapper {
     // Not clear to me why all these likert fixes are necessary
