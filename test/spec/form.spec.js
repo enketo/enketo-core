@@ -549,16 +549,31 @@ describe( 'branching functionality', function() {
         } );
     } );
 
-    describe( 'inside repeats when multiple repeats are present upon loading (issue #507)', function() {
-        var form = loadForm( 'multiple_repeats_relevant.xml' );
-        form.init();
-        var $relNodes = form.view.$.find( '[name="/multiple_repeats_relevant/rep/skipq"]' ).parent( '.or-branch' );
-        it( 'correctly evaluates the relevant logic of each question inside all repeats', function() {
+    describe( 'inside repeats when multiple repeats are present upon loading', function() {
+
+        it( 'correctly evaluates the relevant logic of each question inside all repeats (issue #507)', function() {
+            var form = loadForm( 'multiple_repeats_relevant.xml' );
+            form.init();
+            var $relNodes = form.view.$.find( '[name="/multiple_repeats_relevant/rep/skipq"]' ).parent( '.or-branch' );
             expect( $relNodes.length ).toEqual( 2 );
             //check if both questions with 'relevant' attributes in the 2 repeats are disabled
             expect( $relNodes.eq( 0 ).hasClass( 'disabled' ) ).toBe( true );
             expect( $relNodes.eq( 1 ).hasClass( 'disabled' ) ).toBe( true );
         } );
+
+        it( 'correctly evaluates the relevant logic of each simple select question inside all repeats (issue #442 core)', function() {
+            var form = loadForm( 'repeat-relevant-select.xml', '<Enketo_tests><details><fruits>pear</fruits><location></location></details><details><fruits>mango</fruits><location>kisumu</location></details><details><fruits>mango</fruits><location>kisumu</location></details><meta><instanceID>a</instanceID></meta></Enketo_tests>' );
+            form.init();
+            var $relNodes = form.view.$.find( '[data-name="/Enketo_tests/details/location"]' ).closest( '.or-branch' );
+            expect( $relNodes.length ).toEqual( 3 );
+            //check if radiobuttons with 'relevant' attributes in the second and third repeats are initialized and enabled
+            expect( $relNodes.eq( 0 ).hasClass( 'disabled' ) ).toBe( true );
+            expect( $relNodes.eq( 1 ).hasClass( 'pre-init' ) ).toBe( false );
+            expect( $relNodes.eq( 1 ).hasClass( 'disabled' ) ).toBe( false );
+            expect( $relNodes.eq( 2 ).hasClass( 'pre-init' ) ).toBe( false );
+            expect( $relNodes.eq( 2 ).hasClass( 'disabled' ) ).toBe( false );
+        } );
+
     } );
 
     describe( 'in nested branches ', function() {

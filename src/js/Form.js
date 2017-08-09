@@ -396,7 +396,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
     return $collection.find( selector.join() )
         .filter( function() {
-            var radioCheckName = this.dataset.name;
+            var radioCheckName = this.dataset.name ? this.name : null;
             // Filter out duplicate radiobuttons and checkboxes
             if ( radioCheckName ) {
                 if ( radioCheckNames.indexOf( radioCheckName ) !== -1 ) {

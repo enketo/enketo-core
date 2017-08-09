@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Enketo_tests</h:title>
+    <model>
+      <instance>
+        <Enketo_tests id="Enketo_tests" version="201708091944">
+          <formhub>
+            <uuid/>
+          </formhub>
+          <details jr:template="">
+            <fruits/>
+            <location/>
+          </details>
+          <meta>
+            <instanceID/>
+          </meta>
+        </Enketo_tests>
+      </instance>
+      <bind nodeset="/Enketo_tests/details" required="true()"/>
+      <bind nodeset="/Enketo_tests/details/fruits" required="true()" type="select1"/>
+      <bind nodeset="/Enketo_tests/details/location" relevant="selected( /Enketo_tests/details/fruits ,'mango')" required="true()" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/Enketo_tests/meta/instanceID" readonly="true()" type="string"/>
+      <bind calculate="'65b585404b4c47cc921d142d219c5368'" nodeset="/Enketo_tests/formhub/uuid" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/Enketo_tests/details">
+      <label>Details</label>
+      <repeat nodeset="/Enketo_tests/details">
+        <select1 ref="/Enketo_tests/details/fruits">
+          <label>Fruits</label>
+          <item>
+            <label>mango</label>
+            <value>mango</value>
+          </item>
+          <item>
+            <label>pear</label>
+            <value>pear</value>
+          </item>
+          <item>
+            <label>banana</label>
+            <value>banana</value>
+          </item>
+          <item>
+            <label>passion</label>
+            <value>passion</value>
+          </item>
+        </select1>
+        <select1 ref="/Enketo_tests/details/location">
+          <label>Location</label>
+          <item>
+            <label>nairobi</label>
+            <value>nairobi</value>
+          </item>
+          <item>
+            <label>kisumu</label>
+            <value>kisumu</value>
+          </item>
+          <item>
+            <label>kisii</label>
+            <value>kisii</value>
+          </item>
+          <item>
+            <label>kakamega</label>
+            <value>kakamega</value>
+          </item>
+        </select1>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>
