@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Manual date edits do not get propagated to model if Enter key is not pressed.
+- When loading record with repeats, any select/select1 questions (without appearance "minimal") in non-first repeats are not initialized properly.
 
 [4.38.0] - 2017-08-03
 ---------------------
