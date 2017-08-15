@@ -446,7 +446,8 @@ legend .required {
 
 .invalid-constraint .or-constraint-msg.active,
 .invalid-required .or-required-msg.active,
-.invalid-relevant .or-relevant-msg.active {
+// only question-level not group-level relevant errors
+.question.invalid-relevant .or-relevant-msg.active {
     display: block;
 }
 
