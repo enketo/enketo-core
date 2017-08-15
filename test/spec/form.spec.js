@@ -746,6 +746,25 @@ describe( 'obtaining XML string from form without irrelevant nodes', function() 
         expect( getFn() ).not.toMatch( '<rep>' );
         expect( getFn() ).toMatch( '<q1/>' );
     } );
+
+    // Issue https://github.com/enketo/enketo-core/issues/443: The incorrect nested repeat nodes are removed.
+    it( 'works for nested repeats where some children are irrelevant', function() {
+        // instanceStr is in this case just used to conveniently create 2 parent repeats with each 2 child repeats and certain values.
+        // The second child repeat in each parent repeat with name 'type_other' is irrelevant.
+        var instanceStr = '<data><region><livestock><type>d</type><type_other/></livestock><livestock><type>other</type><type_other>one</type_other></livestock></region><region><livestock><type>d</type><type_other/></livestock><livestock><type>other</type><type_other>two</type_other></livestock></region><meta><instanceID>a</instanceID></meta></data>';
+        var form = loadForm( 'nested-repeat-v5.xml', instanceStr );
+        form.init();
+
+        // check setup
+        expect( form.getDataStr( {
+            irrelevant: true
+        } ).replace( />\s+</g, '><' ) ).toMatch( '<region><livestock><type>d</type><type_other/></livestock><livestock><type>other</type><type_other>one</type_other></livestock></region><region><livestock><type>d</type><type_other/></livestock><livestock><type>other</type><type_other>two</type_other></livestock></region>' );
+
+        // perform actual tests
+        expect( form.getDataStr( {
+            irrelevant: false
+        } ).replace( />\s+</g, '><' ) ).toMatch( '<region><livestock><type>d</type></livestock><livestock><type>other</type><type_other>one</type_other></livestock></region><region><livestock><type>d</type></livestock><livestock><type>other</type><type_other>two</type_other></livestock></region>' );
+    } );
 } );
 
 describe( 'validation', function() {

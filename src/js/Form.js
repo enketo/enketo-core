@@ -447,7 +447,9 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
     var modelClone = new FormModel( this.model.getStr() );
     modelClone.init();
 
-    this.getRelatedNodes( 'data-relevant' ).each( function() {
+    // Since we are removing nodes, we need to go in reverse order to make sure 
+    // the indices are still correct!
+    this.getRelatedNodes( 'data-relevant' ).reverse().each( function() {
         var $node = $( this );
         var relevant = that.input.getRelevant( $node );
         var index = that.input.getIndex( $node );
