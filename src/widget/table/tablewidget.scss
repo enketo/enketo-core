@@ -5,7 +5,7 @@
         float: left;
         border: none;
         line-height: 17px;
-        width: 40%;
+        width: 35%;
         min-height: 1px;
     }
 
@@ -19,9 +19,9 @@
         label {
             @include flex(1);
 
-            max-width: 100px;
             text-align: center;
             padding-left: 0;
+            word-break: break-word;
 
             .active {
                 margin: 0 auto;

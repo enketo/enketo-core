@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Fixed
 - In some occasions, nested repeat nodes that are relevant are removed from the record string as if they were irrelevant.
+- In tables, the heading row (appearance=label) can be misaligned with the lower rows.
 
 [4.38.1] - 2017-08-10
 ---------------------
