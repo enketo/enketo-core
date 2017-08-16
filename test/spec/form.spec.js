@@ -350,7 +350,7 @@ describe( 'repeat functionality', function() {
 
     describe( 'ordinals are set for default repeat instances in the default model upon initialization', function() {
         var config = require( 'enketo-config' );
-        var dflt = config[ 'repeat ordinals' ];
+        var dflt = config.repeatOrdinals;
         beforeAll( function() {
             config.repeatOrdinals = true;
         } );
@@ -878,6 +878,56 @@ describe( 'validation', function() {
                 } );
         } );
 
+    } );
+
+    // These tests were a real pain to write because of the need to change a global config property.
+    describe( 'with validateContinuously', function() {
+        var form;
+        var B = '[name="/data/b"]';
+        var C = '[name="/data/c"]';
+        var config = require( 'enketo-config' );
+        var dflt = config.validateContinuously;
+
+        var setValue = function( selector, val ) {
+            return new Promise( function( resolve ) {
+                // violate constraint for c
+                form.view.$.find( selector ).val( val ).trigger( 'change' );
+                setTimeout( function() {
+                    resolve();
+                }, 800 );
+            } );
+        };
+
+        afterAll( function() {
+            // reset to default
+            config.validateContinuously = dflt;
+        } );
+
+
+        it( '=true will immediately re-evaluate a constraint if its dependent value changes', function( done ) {
+            form = loadForm( 'constraint-dependency.xml' );
+            form.init();
+            setValue( C, '12' )
+                .then( function() {
+                    config.validateContinuously = false;
+                    // violate
+                    return setValue( B, 'a' );
+                } )
+                .then( function() {
+                    expect( form.view.$.find( C ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toEqual( false );
+                    // pass
+                    return setValue( B, 'b' );
+                } )
+                .then( function() {
+                    config.validateContinuously = true;
+                    //violate
+                    return setValue( B, 'a' );
+                } )
+                .then( function() {
+                    expect( form.view.$.find( C ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toEqual( true );
+                    done();
+                } );
+        } );
     } );
 
 } );
