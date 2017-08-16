@@ -174,7 +174,7 @@ Form.prototype.init = function() {
         // after repeats.init so that template contain role="page" when applicable
         this.pages.init();
 
-        // after radio button data-name setting
+        // after radio button data-name setting (now done in XLST)
         this.repeats.init();
 
         // after repeats.init
@@ -396,7 +396,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
     return $collection.find( selector.join() )
         .filter( function() {
-            var radioCheckName = this.dataset.name ? this.name : null;
+            var radioCheckName = this.type === 'radio' && this.dataset.name ? this.name : null;
             // Filter out duplicate radiobuttons and checkboxes
             if ( radioCheckName ) {
                 if ( radioCheckNames.indexOf( radioCheckName ) !== -1 ) {
@@ -729,7 +729,7 @@ Form.prototype.validateContent = function( $container ) {
             }
             return $firstError.length === 0;
         } )
-        .catch( function( e ) {
+        .catch( function() {
             // fail whole-form validation if any of the question
             // validations threw.
             return false;

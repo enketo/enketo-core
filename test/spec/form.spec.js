@@ -593,6 +593,19 @@ describe( 'branching functionality', function() {
         } );
     } );
 
+    // https://github.com/enketo/enketo-core/issues/444
+    describe( 'in nested repeats with a <select> that has a relevant', function() {
+        // instanceStr is in this case just used to conveniently create 2 parent repeats with each 1 child repeat (<select> with relevant).
+        // The second child repeat in each parent repeat with name 'type_other' is irrelevant.
+        var instanceStr = '<data><region><livestock><type>d</type><type_other/></livestock></region><region><livestock><type>d</type></livestock></region><meta><instanceID>a</instanceID></meta></data>';
+        var form = loadForm( 'nested-repeat-v5.xml', instanceStr );
+        form.init();
+        it( 'initializes all nested repeat questions', function() {
+            expect( form.view.$.find( '.or-branch' ).length ).toEqual( 4 );
+            expect( form.view.$.find( '.or-branch.pre-init' ).length ).toEqual( 0 );
+        } );
+    } );
+
     describe( 'handles clearing of values in irrelevant branches', function() {
         var name = 'relevant-default.xml';
         var one = '/relevant-default/one';

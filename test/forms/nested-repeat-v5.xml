@@ -16,7 +16,8 @@
           </meta>
         </data>
       </instance>
-      <bind nodeset="/data/region/livestock/type" required="true()" type="select1"/>
+      <!-- the relevant expression 1+1 is important to test https://github.com/enketo/enketo-core/issues/444-->
+      <bind nodeset="/data/region/livestock/type" required="true()" type="select1" relevant="1+1" />
       <bind nodeset="/data/region/livestock/type_other" relevant="selected( /data/region/livestock/type ,'other')" type="string"/>
       <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
     </model>
