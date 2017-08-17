@@ -239,5 +239,5 @@ $.fn[ pluginName ] = function( options, event ) {
 
 module.exports = {
     'name': pluginName,
-    'selector': '.or-appearance-draw input[type="file"], .or-appearance-signature input[type="file"], .or-appearance-annotate input[type="file"]'
+    'selector': '.or-appearance-draw input[type="file"][accept^="image"], .or-appearance-signature input[type="file"][accept^="image"], .or-appearance-annotate input[type="file"][accept^="image"]'
 };

@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - In some occasions, nested repeat nodes that are relevant are removed from the record string as if they were irrelevant.
 - In tables, the heading row (appearance=label) can be misaligned with the lower rows.
 - Cloned select minimal question with relevant inside repeat is hidden when loading record with multiple repeats.
+- Draw/signature widget is instantiated for file input types other than "image".
 
 [4.38.1] - 2017-08-10
 ---------------------
