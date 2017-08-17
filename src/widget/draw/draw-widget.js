@@ -158,6 +158,7 @@ DrawWidget.prototype._updateValue = function() {
 DrawWidget.prototype._reset = function() {
     this.pad.clear();
     this.cache = null;
+    delete this.element.dataset.loadedFileName;
     this.element.dataset.filenamePostfix = '';
     $( this.element ).val( '' ).trigger( 'change' );
 };
@@ -168,6 +169,7 @@ DrawWidget.prototype._loadFileIntoPad = function( filename ) {
         .then( function( url ) {
             that.pad.fromDataURL( url, {} );
             that.cache = url;
+            that.element.value = filename;
         } )
         .catch( function() {
             that._showFeedback( 'File "' + filename + '" could not be found (leave unchanged if already submitted and you want to preserve it).', 'error' );
@@ -215,8 +217,6 @@ DrawWidget.prototype.disable = function( element ) {
         } );
 };
 
-
-
 DrawWidget.prototype.enable = function( element ) {
     var that = this;
 
@@ -237,6 +237,20 @@ DrawWidget.prototype.enable = function( element ) {
             // sure the canvas is rendered properly.
             that._resizeCanvas( $( element ).closest( '.question' )[ 0 ].querySelector( '.draw-widget__body__canvas' ) );
         } );
+};
+
+/** 
+ * Updates value when it is programmatically cleared.
+ * There is no way to programmatically update a file input other than clearing it, so that's all
+ * we need to do.
+ * 
+ * @param  {[type]} element [description]
+ * @return {[type]}         [description]
+ */
+DrawWidget.prototype.update = function( element ) {
+    if ( element.value === '' ) {
+        this._reset();
+    }
 };
 
 $.fn[ pluginName ] = function( options, event ) {

@@ -18,8 +18,10 @@ $.fn.clearInputs = function( ev1, ev2 ) {
         $( this ).find( '.file-preview' ).remove();
         //remove input values
         $( this ).find( 'input, select, textarea' ).not( '.ignore' ).each( function() {
-            var $node = $( this ),
-                type = $node.attr( 'type' );
+            var $node = $( this );
+            var type = $node.attr( 'type' );
+            var loadedFilename;
+
             if ( $node.prop( 'nodeName' ).toUpperCase() === 'SELECT' ) {
                 type = 'select';
             }
@@ -28,7 +30,8 @@ $.fn.clearInputs = function( ev1, ev2 ) {
             }
             switch ( type ) {
                 case 'file':
-                    $node.removeAttr( 'data-previous-file-name data-loaded-file-name' );
+                    loadedFilename = this.dataset.loadedFileName;
+                    delete this.dataset.loadedFileName;
                     /* falls through */
                 case 'date':
                 case 'datetime':
@@ -44,7 +47,7 @@ $.fn.clearInputs = function( ev1, ev2 ) {
                 case 'tel':
                 case 'hidden':
                 case 'textarea':
-                    if ( $node.val() !== '' ) {
+                    if ( $node.val() !== '' || loadedFilename ) {
                         $node.val( '' ).trigger( ev1 ).trigger( ev2 );
                     }
                     break;

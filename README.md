@@ -187,7 +187,7 @@ Each widget should fulfill the following requirements:
 * if hiding the original input element, it needs to load the default value from that input element into the widget
 * if hiding the original input element, it needs to stay synchronized with the widget and a `change` event should be triggered on the original whenever it changes value
 * if hiding the original input element, it needs to listen for the `applyfocus` event on the original input and focus the widget
-* if hiding the original input element, the widget value needs to update when the original input updates due to a calculation
+* if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming irrelevant (implement update() method)
 * it is recommended to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
 * new input/select/textarea elements inside widgets should have the `ignore` class
 * it requires the following methods (which can be automatically obtained by extending the Widget base class as demonstrated in the [plugin template](https://gist.github.com/MartijnR/6943281)
