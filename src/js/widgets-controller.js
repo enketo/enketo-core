@@ -92,8 +92,8 @@ _getElements = function( $group, selector ) {
             return $form;
         }
         // e.g. if the widget selector starts at .question level (e.g. ".or-appearance-draw input")
-        if ( $group.is( selector ) ) {
-            return $group;
+        if ( $group.is( '.question' ) ) {
+            return $group.find( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ).filter( selector );
         }
         return $group.find( selector );
     }

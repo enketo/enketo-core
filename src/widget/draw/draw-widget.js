@@ -45,7 +45,7 @@ DrawWidget.prototype._init = function() {
     this._handleResize( canvas );
     this._resizeCanvas( canvas );
 
-    fileManager.init()
+    this.initialize = fileManager.init()
         .then( function() {
             that.pad = new SignaturePad( canvas, {
                 onEnd: that._updateValue.bind( that ),
@@ -203,21 +203,40 @@ DrawWidget.prototype._resizeCanvas = function( canvas ) {
 };
 
 DrawWidget.prototype.disable = function( element ) {
-    this.pad.off();
-    $( element )
-        .next( '.widget' )
-        .find( '.draw-widget__btn-reset' )
-        .prop( 'disabled', true );
+    var that = this;
+
+    this.initialize
+        .then( function() {
+            that.pad.off();
+            $( element )
+                .next( '.widget' )
+                .find( '.draw-widget__btn-reset' )
+                .prop( 'disabled', true );
+        } );
 };
 
+
+
 DrawWidget.prototype.enable = function( element ) {
-    this.pad.on();
-    if ( !element.readOnly ) {
-        $( element )
-            .next( '.widget' )
-            .find( '.draw-widget__btn-reset' )
-            .prop( 'disabled', false );
-    }
+    var that = this;
+
+    this.initialize
+        .then( function() {
+            that.pad.on();
+            if ( !element.readOnly ) {
+                $( element )
+                    .next( '.widget' )
+                    .find( '.draw-widget__btn-reset' )
+                    .prop( 'disabled', false );
+            }
+            // https://github.com/enketo/enketo-core/issues/450
+            // When loading a question with a relevant, it is invisible 
+            // until branch.js removes the "pre-init" class. The rendering of the 
+            // canvas may therefore still be ongoing when this widget is instantiated.
+            // For that reason we call _resizeCanvas when enable is called to make
+            // sure the canvas is rendered properly.
+            that._resizeCanvas( $( element ).closest( '.question' )[ 0 ].querySelector( '.draw-widget__body__canvas' ) );
+        } );
 };
 
 $.fn[ pluginName ] = function( options, event ) {
@@ -239,5 +258,6 @@ $.fn[ pluginName ] = function( options, event ) {
 
 module.exports = {
     'name': pluginName,
-    'selector': '.or-appearance-draw input[type="file"][accept^="image"], .or-appearance-signature input[type="file"][accept^="image"], .or-appearance-annotate input[type="file"][accept^="image"]'
+    // note that the selector needs to match both the pre-instantiated form and the post-instantiate form (type attribute changes)
+    'selector': '.or-appearance-draw input[data-type-xml="binary"][accept^="image"], .or-appearance-signature input[data-type-xml="binary"][accept^="image"], .or-appearance-annotate input[data-type-xml="binary"][accept^="image"]'
 };

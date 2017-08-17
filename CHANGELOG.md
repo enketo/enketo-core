@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - In tables, the heading row (appearance=label) can be misaligned with the lower rows.
 - Cloned select minimal question with relevant inside repeat is hidden when loading record with multiple repeats.
 - Draw/signature widget is instantiated for file input types other than "image".
+- Draw/signature widget is never enabled if it has a relevant expression.
 
 [4.38.1] - 2017-08-10
 ---------------------
