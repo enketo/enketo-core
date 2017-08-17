@@ -27,6 +27,9 @@ $.fn.clearInputs = function( ev1, ev2 ) {
                 type = 'textarea';
             }
             switch ( type ) {
+                case 'file':
+                    $node.removeAttr( 'data-previous-file-name data-loaded-file-name' );
+                    /* falls through */
                 case 'date':
                 case 'datetime':
                 case 'time':
@@ -38,9 +41,6 @@ $.fn.clearInputs = function( ev1, ev2 ) {
                 case 'email':
                 case 'password':
                 case 'text':
-                case 'file':
-                    $node.removeAttr( 'data-previous-file-name data-loaded-file-name' );
-                    /* falls through */
                 case 'hidden':
                 case 'textarea':
                     if ( $node.val() !== '' ) {
