@@ -38,6 +38,7 @@ $.fn.clearInputs = function( ev1, ev2 ) {
                 case 'email':
                 case 'password':
                 case 'text':
+                case 'tel':
                 case 'file':
                     $node.removeAttr( 'data-previous-file-name data-loaded-file-name' );
                     /* falls through */
