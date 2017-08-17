@@ -87,7 +87,18 @@ disable = function( $group ) {
  * @return {jQuery}          a jQuery collection
  */
 _getElements = function( $group, selector ) {
-    return ( selector ) ? ( selector === 'form' ? $form : $group.find( selector ) ) : $();
+    if ( selector ) {
+        if ( selector === 'form' ) {
+            return $form;
+        }
+        // e.g. if the widget selector starts at .question level (e.g. ".or-appearance-draw input")
+        if ( $group.is( selector ) ) {
+            return $group;
+        }
+        return $group.find( selector );
+    }
+
+    return $();
 };
 
 /**
