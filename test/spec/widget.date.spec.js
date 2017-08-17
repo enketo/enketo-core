@@ -3,7 +3,7 @@
 'use strict';
 
 var $ = require( 'jquery' );
-require( '../../src/widget/date/datepicker-extended' );
+var widget = require( '../../src/widget/date/datepicker-extended' );
 
 var FORM1 = '<form class="or"><label class="question"><input type="date" data-type-xml="date"/></label><input /></form>';
 var FORM2 = '<form class="or"><label class="question or-appearance-month-year"><input type="date" data-type-xml="date"/></label></form>';
@@ -14,7 +14,7 @@ describe( 'datepicker widget', function() {
     function initForm( form ) {
         var $form = $( form );
         $( 'body' ).find( 'form.or' ).append( $form );
-        $form.find( 'input[type="date"]' ).datepickerExtended();
+        $form.find( widget.selector )[ widget.name ]();
         return $form;
     }
 
@@ -28,7 +28,7 @@ describe( 'datepicker widget', function() {
             var desc = t[ 0 ];
             var newVal = t[ 2 ];
             var $form = initForm( t[ 1 ] );
-            var input = $form[ 0 ].querySelector( 'input[type="date"]' );
+            var input = $form[ 0 ].querySelector( widget.selector );
             var fakeInput = $form[ 0 ].querySelector( '.widget input' );
 
             it( 'is propagated correctly for ' + desc + ' fields', function() {
@@ -39,7 +39,7 @@ describe( 'datepicker widget', function() {
                 fakeInput.value = newVal;
                 fakeInput.dispatchEvent( new Event( 'change' ) );
 
-                expect( $( input ).data( 'datepickerExtended' ) ).not.toBeUndefined();
+                expect( $( input ).data( widget.name ) ).not.toBeUndefined();
                 expect( input.value ).toEqual( '2012-01-01' );
                 expect( input.onchange.calls.count() ).toEqual( 1 );
 
