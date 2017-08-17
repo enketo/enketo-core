@@ -103,8 +103,9 @@ Selectpicker.prototype._setFakeInputListener = function() {
         var input = e.target;
         var label = input.value.trim();
         var value = that._findValue( label ) || '';
-
-        $( that.element ).val( value ).trigger( 'change' );
+        if ( that.element.value !== value ) {
+            $( that.element ).val( value ).trigger( 'change' );
+        }
         $( input ).toggleClass( 'notfound', label && !value );
     } );
 };
