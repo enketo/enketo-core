@@ -320,13 +320,13 @@ legend {
         }
     }
 
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
+    input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
         //@include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
     }
 
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
+    input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
         border: 1px solid #ddd8ce;
     }
 
@@ -335,7 +335,7 @@ legend {
     }
 }
 
-input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select, .widget {
+input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select, .widget {
     display: block;
     margin: 8px 0 8px 0;
 }
@@ -349,7 +349,7 @@ select {
 }
 
 .question input {
-    &[type="text"], &[type="password"], &[type="url"], &[type="email"], &[type="file"] {
+    &[type="text"], &[type="tel"], &[type="password"], &[type="url"], &[type="email"], &[type="file"] {
         width: $input-max-width;
     }
 
@@ -428,7 +428,7 @@ legend .required {
     opacity: 0.5;
 }
 
-.invalid-constraint, .invalid-required, .invalid-relevant{
+.invalid-constraint, .invalid-required, .invalid-relevant {
     @include transition-fast;
 
     background-color: $state-danger-bg;
@@ -446,12 +446,11 @@ legend .required {
 
 .invalid-constraint .or-constraint-msg.active,
 .invalid-required .or-required-msg.active,
-// only question-level not group-level relevant errors
 .question.invalid-relevant .or-relevant-msg.active {
     display: block;
 }
 
-.or-required-msg.active, .or-constraint-msg.active, .or-relevant-msg.active{
+.or-required-msg.active, .or-constraint-msg.active, .or-relevant-msg.active {
     font-weight: bold;
     padding-top: 5px;
     font-size: 0.85em;

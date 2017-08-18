@@ -135,7 +135,7 @@ label, legend, .trigger, .note {
         background: none;
     }
 
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], select, textarea {
+    input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], select, textarea {
         @include border-radius(0px);
 
         @include box-shadow-none;
@@ -333,8 +333,7 @@ label, legend, .trigger, .note {
 
 // pages mode
 .pages.or {
-    
-    &.print-relevant-only .disabled[role="page"]{
+    &.print-relevant-only .disabled[role="page"] {
         display: none;
     }
 
