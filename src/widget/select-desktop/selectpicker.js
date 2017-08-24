@@ -24,7 +24,7 @@ var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var t = require( 'translator' ).t;
 var pluginName = 'desktopSelectpicker';
-require( '../../js/dropdown.jquery' );
+require( 'bootstrap/js/dropdown' );
 
 /**
  * Bootstrap Select picker that supports single and multiple selects
