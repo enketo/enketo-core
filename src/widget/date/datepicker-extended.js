@@ -5,7 +5,7 @@ var support = require( '../../js/support' );
 var $ = require( 'jquery' );
 var types = require( '../../js/types' );
 require( 'bootstrap-datepicker' );
-require( '../../js/dropdown.jquery' );
+require( 'bootstrap/js/dropdown' );
 
 //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
 var pluginName = 'datepickerExtended';
