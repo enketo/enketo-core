@@ -210,7 +210,9 @@ Form.prototype.init = function() {
         if ( this.options.goTo === true && location.hash ) {
             // if goTo fails (not found), it will return false
             if ( !this.goTo( this.getGoToTarget( location.hash ) ) ) {
-                loadErrors.push( 'Failed to find question "' + location.hash.substring( 1 ) + '" in form. Is it a valid path?' );
+                loadErrors.push( t( 'alert.gotonotfound.msg', {
+                    path: location.hash.substring( 1 )
+                } ) );
             }
         }
 

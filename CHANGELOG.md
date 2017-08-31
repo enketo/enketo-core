@@ -5,8 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
-##### Addeds
+##### Added
 - Support for appearance="numbers" on text inputs.
+
+##### Changed
+- Make goto-target-not-found error translatable.
 
 [4.38.2] - 2017-08-17
 ----------------------

@@ -45,6 +45,11 @@ var SOURCE_STRINGS = {
         "comment": {
             "update": "Update"
         }
+    },
+    "alert": {
+        "gotonotfound": {
+            "msg": "Failed to find question \"__path__\" in form. Is it a valid path?"
+        }
     }
 };
 
@@ -65,7 +70,7 @@ var SOURCE_STRINGS = {
 function t( key, options ) {
     var str = '';
     var target = SOURCE_STRINGS;
-    var AR = 'العربية ';
+
     // crude string getter
     key.split( '.' ).forEach( function( part ) {
         target = target ? target[ part ] : '';
@@ -78,7 +83,7 @@ function t( key, options ) {
     } );
 
     // Enable line below to switch to fake Arabic, very useful for testing RTL
-    // return str.split( "" ).map( function( char, i ) { return AR[ i % AR.length ];} ).join( "" );
+    // var AR = 'العربية '; return str.split( "" ).map( function( char, i ) { return AR[ i % AR.length ];} ).join( "" );
     return str;
 }
 
