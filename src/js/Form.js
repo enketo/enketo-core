@@ -17,6 +17,7 @@ var languageModule = require( './language' );
 var preloadModule = require( './preload' );
 var outputModule = require( './output' );
 var calculationModule = require( './calculation' );
+var maskModule = require( './mask' );
 require( './plugins' );
 require( './extend' );
 
@@ -153,6 +154,7 @@ Form.prototype.init = function() {
     this.output = this.addModule( outputModule );
     this.itemset = this.addModule( itemsetModule );
     this.calc = this.addModule( calculationModule );
+    this.mask = this.addModule( maskModule );
 
     try {
         this.preloads.init();
@@ -204,6 +206,8 @@ Form.prototype.init = function() {
         // update field calculations again to make sure that dependent
         // field values are calculated
         this.calc.update();
+
+        this.mask.init();
 
         this.editStatus = false;
 
@@ -526,19 +530,6 @@ Form.prototype.setEventHandlers = function() {
 
     //first prevent default submission, e.g. when text field is filled in and Enter key is pressed
     this.view.$.attr( 'onsubmit', 'return false;' );
-
-    /*
-     * workaround for Chrome to clear invalid values right away
-     * issue: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178437)
-     * a workaround was chosen instead of replacing the change event listener to a blur event listener
-     * because I'm guessing that Google will bring back the old behaviour.
-     */
-    this.view.$.on( 'blur', 'input:not([type="text"], [type="radio"], [type="checkbox"])', function() {
-        var $input = $( this );
-        if ( typeof $input.prop( 'validity' ).badInput !== 'undefined' && $input.prop( 'validity' ).badInput ) {
-            $input.val( '' );
-        }
-    } );
 
     /*
      * The .file namespace is used in the filepicker to avoid an infinite loop. 

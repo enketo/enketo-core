@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.39.0]
 ----------------------
 ##### Added
 - Support for appearance="numbers" on text inputs.
+- Fixed input masks for integer and decimal inputs.
 
 ##### Changed
 - Make goto-target-not-found error translatable.
