@@ -9,7 +9,7 @@ function init() {
      * ever add complex user-defined input masks.
      */
     _setNumberMask( '[data-type-xml="int"]', /^(-?[0-9]+$)/, '-0123456789' );
-    _setNumberMask( '[data-type-xml="decimal', /^(-?[0-9]+[.,]?[0-9]*$)/, '-0123456789.,' );
+    _setNumberMask( '[data-type-xml="decimal"]', /^(-?[0-9]+[.,]?[0-9]*$)/, '-0123456789.,' );
 }
 
 function _setNumberMask( selector, validRegex, allowedChars ) {

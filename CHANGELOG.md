@@ -3,7 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[4.39.0]
+[4.39.1] - 2017-09-13
+----------------------
+##### Fixed
+- Form loading error with new decimal input mask. 
+ 
+[4.39.0] - 2017-09-06
 ----------------------
 ##### Added
 - Support for appearance="numbers" on text inputs.
