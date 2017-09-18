@@ -65,7 +65,7 @@ function initializeForm() {
             webMapId: 'f2e9b762544945f390ca4ac3671cfa72',
             hasZ: true
         },
-        'clearIrrelevantImmediately': false,
+        'clearIrrelevantImmediately': true,
         'goTo': true
     } );
     // for debugging

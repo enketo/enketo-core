@@ -9,6 +9,7 @@
           <two>two</two>
           <grp>
             <three>three</three>
+            <four/>
           </grp>
           <meta>
             <instanceID/>
@@ -19,6 +20,7 @@
       <bind nodeset="/relevant-default/two" relevant="string-length( /relevant-default/one ) &gt; 0" type="string"/>
       <bind nodeset="/relevant-default/grp" relevant="string-length( /relevant-default/one ) &gt; 0"/>
       <bind nodeset="/relevant-default/grp/three" type="string"/>
+      <bind nodeset="/relevant-default/grp/four" calculate="concat('fo', 'ur')" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/relevant-default/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>

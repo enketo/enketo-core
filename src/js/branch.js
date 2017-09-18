@@ -108,7 +108,7 @@ module.exports = {
                 alreadyCovered.push( $( this ).attr( 'name' ) );
             }
 
-            if ( that.process( $branchNode, result, forceClearIrrelevant ) === true ) {
+            if ( that.process( $branchNode, p.path, result, forceClearIrrelevant ) === true ) {
                 branchChange = true;
             }
         } );
@@ -132,14 +132,16 @@ module.exports = {
     /**
      * Processes the evaluation result for a branch
      *
-     * @param  {jQuery} $branchNode [description]
-     * @param  {boolean} result      [description]
+     * @param { jQuery } $branchNode [description]
+     * @param { string } path Path of branch node
+     * @param { boolean } result      result of relevant evaluation
+     * @param { =boolean } forceClearIrrelevant Whether to force clearing of irrelevant nodes and descendants
      */
-    process: function( $branchNode, result, forceClearIrrelevant ) {
+    process: function( $branchNode, path, result, forceClearIrrelevant ) {
         if ( result === true ) {
-            return this.enable( $branchNode );
+            return this.enable( $branchNode, path );
         } else {
-            return this.disable( $branchNode, forceClearIrrelevant );
+            return this.disable( $branchNode, path, forceClearIrrelevant );
         }
     },
 
@@ -158,13 +160,16 @@ module.exports = {
      *
      * @param  {jQuery} $branchNode The jQuery object to reveal and enable
      */
-    enable: function( $branchNode ) {
+    enable: function( $branchNode, path ) {
         var change = false;
 
         if ( !this.selfRelevant( $branchNode ) ) {
             change = true;
             $branchNode.removeClass( 'disabled pre-init' );
-
+            // Update calculated items, both individual question or descendants of group
+            this.form.calc.update( {
+                relevantPath: path
+            } );
             this.form.widgets.enable( $branchNode );
             this.activate( $branchNode );
         }
@@ -176,16 +181,16 @@ module.exports = {
      *
      * @param  {jQuery} $branchNode The jQuery object to hide and disable
      */
-    disable: function( $branchNode, forceClearIrrelevant ) {
+    disable: function( $branchNode, path, forceClearIrrelevant ) {
         var virgin = $branchNode.hasClass( 'pre-init' );
         var change = false;
 
         if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
             change = true;
-            // if the branch was previously enabled
+            // if the branch was previously enabled, keep any default values
             if ( !virgin ) {
                 if ( this.form.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
-                    this.clear( $branchNode );
+                    this.clear( $branchNode, path );
                 }
             } else {
                 $branchNode.removeClass( 'pre-init' );
@@ -197,15 +202,22 @@ module.exports = {
     },
     /**
      * Clears values from branchnode. 
-     * This function is separated so it can be overriden in custom apps.
+     * This function is separated so it can be overridden in custom apps.
      * 
      * @param  {[type]} $branchNode [description]
      * @return {boolean}             [description]
      */
-    clear: function( $branchNode ) {
+    clear: function( $branchNode, path ) {
         // A change event ensures the model is updated
         // An inputupdate event is required to update widgets
         $branchNode.clearInputs( 'change', 'inputupdate.enketo' );
+        // Update calculated items if branch is a group
+        // We exclude question branches here because those will have been cleared already in the previous line.
+        if ( $branchNode.is( '.or-group, .or-group-data' ) ) {
+            this.form.calc.update( {
+                relevantPath: path
+            } );
+        }
     },
     setDisabledProperty: function( $branchNode, bool ) {
         var type = $branchNode.prop( 'nodeName' ).toLowerCase();

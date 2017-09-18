@@ -429,15 +429,30 @@ describe( 'repeat functionality', function() {
 } );
 
 describe( 'calculations', function() {
-    var form = loadForm( 'calcs_in_repeats.xml' );
-    form.init();
 
     it( 'also work inside repeats', function() {
+        var form = loadForm( 'calcs_in_repeats.xml' );
+        form.init();
         form.view.$.find( 'button.repeat' ).click();
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(0)' ).val( '10' ).trigger( 'change' );
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '20' ).trigger( 'change' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/calc3', 0 ).getVal()[ 0 ] ).toEqual( '200' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/calc3', 1 ).getVal()[ 0 ] ).toEqual( '400' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal()[ 0 ] ).toEqual( '200' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal()[ 0 ] ).toEqual( '400' );
+    } );
+
+    it( 'are not performed if the calculation is not relevant', function() {
+        var form = loadForm( 'calcs_in_repeats.xml' );
+        form.init();
+        form.view.$.find( 'button.repeat' ).click();
+        form.view.$.find( 'button.repeat' ).last().click();
+
+        form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(0)' ).val( '20' ).trigger( 'change' );
+        form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '5' ).trigger( 'change' );
+        form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(2)' ).val( '40' ).trigger( 'change' );
+
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal()[ 0 ] ).toEqual( '400' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal()[ 0 ] ).toEqual( '' );
+        //sexpect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 2 ).getVal()[ 0 ] ).toEqual( '800' );
     } );
 
     it( 'outside a repeat are updated if they are dependent on a repeat node', function() {
@@ -532,13 +547,20 @@ describe( 'branching functionality', function() {
         var dataO = form.model;
 
         it( 'evaluates a calculated item only when it becomes relevant', function() {
-            //node without relevant attribute:
-            expect( dataO.node( '/calcs/calc2' ).getVal()[ 0 ] ).toEqual( '12' );
-            //node that is irrelevant
+            // node without relevant attribute:
+            expect( dataO.node( '/calcs/calc11' ).getVal()[ 0 ] ).toEqual( '12' );
+            // node that is irrelevant
             expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '' );
             $node.val( 'yes' ).trigger( 'change' );
-            //node that has become relevant
+            // node that has become relevant
             expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '3' );
+            // make irrelevant again (was a bug)
+            $node.val( 'no' ).trigger( 'change' );
+            // double-check that calc11 is unaffected (was a bug)
+            expect( dataO.node( '/calcs/calc11' ).getVal()[ 0 ] ).toEqual( '12' );
+            // node that is irrelevant
+            expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '' );
+
         } );
 
         it( 'empties an already calculated item once it becomes irrelevant', function() {
@@ -606,11 +628,12 @@ describe( 'branching functionality', function() {
         } );
     } );
 
-    describe( 'handles clearing of values in irrelevant branches', function() {
+    describe( 'handles clearing of form control values in irrelevant branches', function() {
         var name = 'relevant-default.xml';
         var one = '/relevant-default/one';
         var two = '/relevant-default/two';
         var three = '/relevant-default/grp/three';
+        var four = '/relevant-default/grp/four';
 
         it( 'by not clearing UPON LOAD', function() {
             var form = loadForm( name );
@@ -677,6 +700,58 @@ describe( 'branching functionality', function() {
             expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( '' );
         } );
 
+        it( 'by not conducting calculations upon load if the calc node is not relevant', function() {
+            var form = loadForm( name );
+            form.init();
+            expect( form.model.node( four ).getVal()[ 0 ] ).toEqual( '' );
+        } );
+
+    } );
+
+
+    describe( 'handles calculated values in irrelevant/relevant branches with default settings', function() {
+        var name = 'calc-in-group-with-relevant.xml';
+        var cond = '/calc-in-group-with-relevant/cond';
+        var groupCalc = '/calc-in-group-with-relevant/grp/groupCalc';
+        var groupReadonlyCalc = '/calc-in-group-with-relevant/grp/groupReadonlyCalc';
+        var readonlyCalc = '/calc-in-group-with-relevant/readonlyCalc';
+        var calc = '/calc-in-group-with-relevant/calc';
+
+        it( 'by not clearing when relevant upon load', function() {
+            var form = loadForm( name );
+            form.init();
+            expect( form.model.node( groupCalc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( groupReadonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( readonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( calc ).getVal()[ 0 ] ).toEqual( '34' );
+        } );
+
+        it( 'by clearing calculations when parent group of calculation itself becomes irrelevant', function() {
+            var form = loadForm( name );
+            form.init();
+            form.view.$.find( '[name="' + cond + '"]' ).val( 'hide' ).trigger( 'change' );
+            expect( form.model.node( groupCalc ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( groupReadonlyCalc ).getVal()[ 0 ] ).toEqual( '' );
+
+            // bonus, questions outside group but also irrelevant
+            expect( form.model.node( readonlyCalc ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( calc ).getVal()[ 0 ] ).toEqual( '' );
+        } );
+
+        it( 'by re-populating calculations when parent group of calculation itself becomes relevant', function() {
+            var form = loadForm( name );
+            form.init();
+            // make irrelevant -> clear (see previous test)
+            form.view.$.find( '[name="' + cond + '"]' ).val( 'hide' ).trigger( 'change' );
+            // make relevant again
+            form.view.$.find( '[name="' + cond + '"]' ).val( '' ).trigger( 'change' );
+            expect( form.model.node( groupCalc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( groupReadonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
+            // bonus, questions outside group but also irrelevant
+            expect( form.model.node( readonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( calc ).getVal()[ 0 ] ).toEqual( '34' );
+        } );
+
     } );
 
     describe( 'in a cloned repeat with dependencies outside the repeat', function() {
@@ -694,7 +769,7 @@ describe( 'branching functionality', function() {
 describe( 'obtaining XML string from form without irrelevant nodes', function() {
     it( 'works for calcs that are irrelevant upon load', function() {
         var form = loadForm( 'calcs.xml' );
-        var match = '<calc1';
+        var match = '<calc1/>';
         form.init();
 
         expect( form.getDataStr() ).toMatch( match );
@@ -706,19 +781,21 @@ describe( 'obtaining XML string from form without irrelevant nodes', function() 
     it( 'works for calcs that become irrelevant after load', function() {
         var $node;
         var form = loadForm( 'calcs.xml' );
-        var match = '<calc1';
         form.init();
         $node = form.view.$.find( '[name="/calcs/cond1"]' );
 
         $node.val( 'yes' ).trigger( 'change' );
         expect( form.getDataStr( {
             irrelevant: false
-        } ) ).toMatch( match );
+        } ) ).toMatch( '<calc1>3</calc1>' );
 
         $node.val( 'nope' ).trigger( 'change' );
-        expect( form.getDataStr( {
+
+        var res = form.getDataStr( {
             irrelevant: false
-        } ) ).not.toMatch( match );
+        } );
+        expect( res ).not.toMatch( '<calc1/>' );
+        expect( res ).not.toMatch( '<calc1>' );
     } );
 
     it( 'works for a nested branch where there is an relevant descendant of an irrelevant ancestor', function() {

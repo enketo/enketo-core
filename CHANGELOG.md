@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Readonly fields with calculation are not cleared in model when they become irrelevant if clearIrrelevantImmediately is set to `true`.
+- Calculated items without form control were calculated even if they were inside an irrelevant group.
+
 [4.39.1] - 2017-09-13
 ----------------------
 ##### Fixed

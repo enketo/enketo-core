@@ -534,9 +534,14 @@ Form.prototype.setEventHandlers = function() {
     /*
      * The .file namespace is used in the filepicker to avoid an infinite loop. 
      * The listener below catches both change and change.file events.
+     *
+     * Readonly fields are not excluded because of this scenario:
+     * 1. readonly field has a calculation
+     * 2. readonly field becomes irrelevant (e.g. parent group with relevant)
+     * 3. this clears value in view, which should propagate to model via 'change' event
      */
     this.view.$.on( 'change.file',
-        'input:not([readonly]):not(.ignore), select:not([readonly]):not(.ignore), textarea:not([readonly]):not(.ignore)',
+        'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)',
         function() {
             var requiredExpr;
             var $input = $( this );
@@ -917,7 +922,7 @@ Form.getRequiredTransformerVersion = function() {
     console.deprecate( 'Form.getRequiredTransformerVersion()', 'Form.requiredTransformerVersion' );
     return Form.requiredTransformerVersion;
 };
-Form.requiredTransformerVersion = '1.19.0';
+Form.requiredTransformerVersion = '1.20.0';
 
 module.exports = Form;
 

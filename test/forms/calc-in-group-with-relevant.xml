@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>calc-in-group-with-relevant</h:title>
+    <model>
+      <instance>
+        <calc-in-group-with-relevant id="calc-in-group-with-relevant">
+          <cond/>
+          <grp>
+            <groupCalc/>
+            <groupReadonlyCalc/>
+            <num1/>
+          </grp>
+          <calc/>
+          <readonlyCalc/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </calc-in-group-with-relevant>
+      </instance>
+      <bind nodeset="/calc-in-group-with-relevant/cond" type="string"/>
+      <bind nodeset="/calc-in-group-with-relevant/grp" relevant=" /calc-in-group-with-relevant/cond  != 'hide'"/>
+      <bind calculate="concat('3', '4')" nodeset="/calc-in-group-with-relevant/grp/groupCalc" type="string"/>
+      <bind calculate="concat('3', '4')" nodeset="/calc-in-group-with-relevant/grp/groupReadonlyCalc" readonly="true()" type="string"/>
+      <bind nodeset="/calc-in-group-with-relevant/grp/num1" type="int"/>
+      <bind calculate="concat('3', '4')" nodeset="/calc-in-group-with-relevant/calc" readonly="true()" relevant=" /calc-in-group-with-relevant/cond  != 'hide'" type="string"/>
+      <bind calculate="concat('3', '4')" nodeset="/calc-in-group-with-relevant/readonlyCalc" readonly="true()" relevant=" /calc-in-group-with-relevant/cond  != 'hide'" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/calc-in-group-with-relevant/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/calc-in-group-with-relevant/cond">
+      <label>Enter 'hide' to make group irrelevant</label>
+    </input>
+    <group ref="/calc-in-group-with-relevant/grp">
+      <input ref="/calc-in-group-with-relevant/grp/groupReadonlyCalc">
+        <label>This is a calculation result:</label>
+      </input>
+      <input ref="/calc-in-group-with-relevant/grp/num1">
+        <label>enter a number</label>
+      </input>
+    </group>
+    <input ref="/calc-in-group-with-relevant/readonlyCalc">
+      <label>This is a calculation result:</label>
+    </input>
+  </h:body>
+</h:html>

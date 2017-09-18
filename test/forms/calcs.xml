@@ -6,7 +6,7 @@
       <instance>
         <calcs id="calcs">
           <calc1/>
-          <calc2/>
+          <calc11/><!-- this nodeName deliberately starts with "calc1" -->
           <cond1/>
           <meta>
             <instanceID/>
@@ -14,7 +14,7 @@
         </calcs>
       </instance>
       <bind calculate="1 + 2" nodeset="/calcs/calc1" relevant=" /calcs/cond1  = 'yes'" type="string"/>
-      <bind calculate="concat('1', '2')" nodeset="/calcs/calc2" type="string"/>
+      <bind calculate="concat('1', '2')" nodeset="/calcs/calc11" type="string"/>
       <bind nodeset="/calcs/cond1" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/calcs/meta/instanceID" readonly="true()" type="string"/>
     </model>

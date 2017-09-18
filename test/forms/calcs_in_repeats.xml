@@ -13,7 +13,10 @@
           <cond1/>
           <rep1 jr:template="">
             <num1/>
-            <calc3/>
+            <grp>
+              <note/>
+              <calc3/>
+            </grp>
           </rep1>
           <note1/>
           <meta>
@@ -25,7 +28,8 @@
       <bind calculate="concat('1', '2')" nodeset="/calcs_in_repeats/calc2" type="string"/>
       <bind nodeset="/calcs_in_repeats/cond1" type="string"/>
       <bind nodeset="/calcs_in_repeats/rep1/num1" type="int"/>
-      <bind calculate=" /calcs_in_repeats/rep1/num1  * 20" nodeset="/calcs_in_repeats/rep1/calc3" type="string"/>
+      <bind nodeset="/calcs_in_repeats/rep1/grp" relevant=" /calcs_in_repeats/rep1/num1 > 5 "/>
+      <bind calculate=" /calcs_in_repeats/rep1/num1  * 20" nodeset="/calcs_in_repeats/rep1/grp/calc3" type="string"/>
       <bind nodeset="/calcs_in_repeats/note1" readonly="true()" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/calcs_in_repeats/meta/instanceID" readonly="true()" type="string"/>
       <bind calculate="'47eed988240249948e42aadfa6bcdb86'" nodeset="/calcs_in_repeats/formhub/uuid" type="string"/>
@@ -41,9 +45,16 @@
         <input ref="/calcs_in_repeats/rep1/num1">
           <label>enter a number</label>
         </input>
+        <group ref="/calcs_in_repeats/rep1/grp">
+          <label/>
+          <input ref="/calcs_in_repeats/rep1/grp/note">
+            <label>just a note</label>
+          </input>
+        </group>
       </repeat>
     </group>
     <input ref="/calcs_in_repeats/note1">
-      <label>value of num1 inside (first) repeat is: <output value=" /calcs_in_repeats/rep1/num1 "/></label></input>
+      <label>value of num1 inside (first) repeat is: <output value=" /calcs_in_repeats/rep1/grp/num1 "/></label>
+    </input>
   </h:body>
 </h:html>
