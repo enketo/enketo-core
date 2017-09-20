@@ -204,7 +204,7 @@ FormModel.prototype.createSession = function( id, sessObj ) {
     session = $.parseXML( '<session><context>' +
         fixedProps.map( function( prop ) {
             return '<' + prop + '>' + sessObj[ prop ] + '</' + prop + '>';
-        } ) +
+        } ).join( '' ) +
         '</context></session>' ).documentElement;
 
     // TODO: custom properties could be added to /session/user/data or to /session/data
