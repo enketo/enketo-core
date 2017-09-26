@@ -36,17 +36,17 @@
     "devDependencies": {
         "enketo-transformer": "1.20.0",
         "grunt": "1.0.x",
-        "grunt-browserify": "5.0.x",
+        "grunt-browserify": "5.2.x",
         "grunt-concurrent": "2.x.x",
         "grunt-contrib-connect": "1.0.x",
         "grunt-contrib-jshint": "1.1.x",
-        "grunt-contrib-uglify": "3.0.x",
+        "grunt-contrib-uglify": "3.1.x",
         "grunt-contrib-watch": "1.x.x",
         "grunt-jsbeautifier": "0.x.x",
         "grunt-karma": "2.0.0",
         "grunt-sass": "2.0.x",
         "grunt-shell": "2.1.0",
-        "jasmine-core": "2.7.x",
+        "jasmine-core": "2.8.x",
         "json-pretty": "0.0.1",
         "karma": "1.7.x",
         "karma-browserify": "5.1.x",
@@ -71,6 +71,6 @@
         "leaflet": "0.7.x",
         "lie": "3.1.x",
         "mergexml": "1.1.2",
-        "signature_pad": "2.2.x"
+        "signature_pad": "2.3.x"
     }
 }
