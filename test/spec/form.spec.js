@@ -584,7 +584,7 @@ describe( 'branching functionality', function() {
         } );
 
         it( 'correctly evaluates the relevant logic of each simple select question inside all repeats (issue #442 core)', function() {
-            var form = loadForm( 'repeat-relevant-select.xml', '<Enketo_tests><details><fruits>pear</fruits><location></location></details><details><fruits>mango</fruits><location>kisumu</location></details><details><fruits>mango</fruits><location>kisumu</location></details><meta><instanceID>a</instanceID></meta></Enketo_tests>' );
+            var form = loadForm( 'repeat-relevant-select1.xml', '<Enketo_tests><details><fruits>pear</fruits><location></location></details><details><fruits>mango</fruits><location>kisumu</location></details><details><fruits>mango</fruits><location>kisumu</location></details><meta><instanceID>a</instanceID></meta></Enketo_tests>' );
             form.init();
             var $relNodes = form.view.$.find( '[data-name="/Enketo_tests/details/location"]' ).closest( '.or-branch' );
             expect( $relNodes.length ).toEqual( 3 );
@@ -855,6 +855,27 @@ describe( 'obtaining XML string from form without irrelevant nodes', function() 
             irrelevant: false
         } ).replace( />\s+</g, '><' ) ).toMatch( '<region><livestock><type>d</type></livestock><livestock><type>other</type><type_other>one</type_other></livestock></region><region><livestock><type>d</type></livestock><livestock><type>other</type><type_other>two</type_other></livestock></region>' );
     } );
+
+    // https://github.com/kobotoolbox/enketo-express/issues/824
+    it( 'works for simple "select" (checkbox) questions inside repeats', function() {
+        var form = loadForm( 'repeat-relevant-select.xml' );
+        var repeat = '.or-repeat[name="/data/details"]';
+        var fruit = '[name="/data/details/fruits"]';
+        var location = '[name="/data/details/location"]';
+        form.init();
+        form.view.$.find( '.btn.repeat' ).click();
+        form.view.$.find( '.btn.repeat' ).last().click();
+        form.view.$.find( repeat ).eq( 0 ).find( fruit + '[value="pear"]' ).prop( 'checked', true ).trigger( 'change' );
+        form.view.$.find( repeat ).eq( 1 ).find( fruit + '[value="mango"]' ).prop( 'checked', true ).trigger( 'change' );
+        form.view.$.find( repeat ).eq( 2 ).find( fruit + '[value="pear"]' ).prop( 'checked', true ).trigger( 'change' );
+        form.view.$.find( repeat ).eq( 1 ).find( location + '[value="nairobi"]' ).prop( 'checked', true ).trigger( 'change' );
+
+        expect( form.getDataStr( {
+            irrelevant: false
+        } ).replace( />\s+</g, '><' ) ).toMatch( '<details><fruits>pear</fruits></details><details><fruits>mango</fruits><location>nairobi</location></details><details><fruits>pear</fruits></details>' );
+
+    } );
+
 } );
 
 describe( 'validation', function() {

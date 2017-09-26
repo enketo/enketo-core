@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <h:head>
-    <h:title>data</h:title>
+    <h:title>Enketo_tests</h:title>
     <model>
       <instance>
-        <data id="data" version="201708091944">
+        <Enketo_tests id="Enketo_tests" version="201708091944">
           <formhub>
             <uuid/>
           </formhub>
@@ -15,20 +15,20 @@
           <meta>
             <instanceID/>
           </meta>
-        </data>
+        </Enketo_tests>
       </instance>
-      <bind nodeset="/data/details" required="true()"/>
-      <bind nodeset="/data/details/fruits" required="true()" type="select"/>
-      <bind nodeset="/data/details/location" relevant="selected( /data/details/fruits ,'mango')" required="true()" type="select"/>
-      <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
-      <bind calculate="'65b585404b4c47cc921d142d219c5368'" nodeset="/data/formhub/uuid" type="string"/>
+      <bind nodeset="/Enketo_tests/details" required="true()"/>
+      <bind nodeset="/Enketo_tests/details/fruits" required="true()" type="select1"/>
+      <bind nodeset="/Enketo_tests/details/location" relevant="selected( /Enketo_tests/details/fruits ,'mango')" required="true()" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/Enketo_tests/meta/instanceID" readonly="true()" type="string"/>
+      <bind calculate="'65b585404b4c47cc921d142d219c5368'" nodeset="/Enketo_tests/formhub/uuid" type="string"/>
     </model>
   </h:head>
   <h:body>
-    <group ref="/data/details">
+    <group ref="/Enketo_tests/details">
       <label>Details</label>
-      <repeat nodeset="/data/details">
-        <select ref="/data/details/fruits">
+      <repeat nodeset="/Enketo_tests/details">
+        <select1 ref="/Enketo_tests/details/fruits">
           <label>Fruits</label>
           <item>
             <label>mango</label>
@@ -46,8 +46,8 @@
             <label>passion</label>
             <value>passion</value>
           </item>
-        </select>
-        <select ref="/data/details/location">
+        </select1>
+        <select1 ref="/Enketo_tests/details/location">
           <label>Location</label>
           <item>
             <label>nairobi</label>
@@ -65,7 +65,7 @@
             <label>kakamega</label>
             <value>kakamega</value>
           </item>
-        </select>
+        </select1>
       </repeat>
     </group>
   </h:body>

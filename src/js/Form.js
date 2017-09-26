@@ -354,7 +354,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     var $repeat = null;
     var selector = [];
     var that = this;
-    var radioCheckNames = [];
+    var wrappers = [];
 
     updated = updated || {};
     filter = filter || '';
@@ -402,13 +402,14 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
     return $collection.find( selector.join() )
         .filter( function() {
-            var radioCheckName = this.type === 'radio' && this.dataset.name ? this.name : null;
+            // TODO: can this be further performance-optimized?
+            var wrapper = this.type === 'radio' || this.type === 'checkbox' ? $( this.parentNode ).parent( '.option-wrapper' )[ 0 ] : null;
             // Filter out duplicate radiobuttons and checkboxes
-            if ( radioCheckName ) {
-                if ( radioCheckNames.indexOf( radioCheckName ) !== -1 ) {
+            if ( wrapper ) {
+                if ( wrappers.indexOf( wrapper ) !== -1 ) {
                     return false;
                 }
-                radioCheckNames.push( radioCheckName );
+                wrappers.push( wrapper );
             }
             return true;
         } );
