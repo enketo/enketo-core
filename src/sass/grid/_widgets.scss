@@ -23,12 +23,12 @@
         @include display-flex;
         @include flex(1);
     }
+
     .timepicker {
         margin-left: 0;
         margin-right: 0;
     }
 }
-
 
 .or-appearance-likert .option-wrapper {
     // Not clear to me why all these likert fixes are necessary
@@ -189,7 +189,7 @@ html:not(.touch) .question .geopoint.widget {
 .btn-comment {
     position: absolute;
     top: $q-pad-top;
-    right: $q-pad-left;
+    right: $q-pad-side;
 
     //left: $q-pad-right;
     margin: 0;
@@ -207,7 +207,7 @@ legend .btn-comment {
 
 .or[dir="rtl"] {
     .btn-comment {
-        left: $q-pad-left;
+        left: $q-pad-side;
         right: auto;
     }
 
