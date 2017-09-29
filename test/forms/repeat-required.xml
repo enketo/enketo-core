@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>repeat-required</h:title>
+    <model>
+      <instance>
+        <repeat-required id="repeat-required">
+          <rep jr:template="">
+            <a/>
+          </rep>
+          <d>a</d>
+          <meta>
+            <instanceID/>
+          </meta>
+        </repeat-required>
+      </instance>
+      <bind nodeset="/repeat-required/rep/a" required="true()" type="string"/>
+      <bind constraint="count( /repeat-required/rep ) mod 2 = 0" nodeset="/repeat-required/d" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/repeat-required/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/repeat-required/rep">
+      <label></label>
+      <repeat nodeset="/repeat-required/rep">
+        <input ref="/repeat-required/rep/a">
+          <label>enter text</label>
+        </input>
+      </repeat>
+    </group>
+    <input ref="/repeat-required/d">
+      <label>invalid if number of repeats is not even</label>
+    </input>
+  </h:body>
+</h:html>

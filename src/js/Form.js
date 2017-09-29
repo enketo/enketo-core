@@ -513,12 +513,26 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
 Form.prototype.validationUpdate = function( updated ) {
     var $nodes;
     var that = this;
+    var upd;
 
     if ( config.validateContinuously === true ) {
-        updated = updated || {};
+        upd = updated || {};
+        if ( updated.cloned ) {
+            /*
+             * We don't want requireds and constraints of questions in a newly created
+             * repeat to be evaluated immediately after the repeat is created.
+             * However, we do want constraints and requireds outside the repeat that
+             * depend on e.g. the count() of repeats to be re-evaluated.
+             * To achieve this we use a dirty trick and convert the "cloned" updated object
+             * to a regular "node" updated object.
+             */
+            upd = {
+                nodes: updated.repeatPath.split( '/' ).reverse().slice( 0, 1 )
+            };
+        }
 
-        $nodes = this.getRelatedNodes( 'data-constraint', '', updated )
-            .add( this.getRelatedNodes( 'data-required', '', updated ) );
+        $nodes = this.getRelatedNodes( 'data-constraint', '', upd )
+            .add( this.getRelatedNodes( 'data-required', '', upd ) );
 
         $nodes.each( function() {
             that.validateInput( $( this ) );

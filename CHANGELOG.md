@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Fixed
 - CSS build issue with Grid Theme.
+- With validateContinuously=true, a new repeat instance should not be evaluated as soon as it is created.
 
 [4.39.2] - 2017-09-26
 ----------------------

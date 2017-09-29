@@ -1026,6 +1026,33 @@ describe( 'validation', function() {
                     done();
                 } );
         } );
+
+        it( '=true, will not immediate validate a brand new repeat but will validate nodes that depend on that repeat', function( done ) {
+            var rep = '[name="/repeat-required/rep"]';
+            var d = '[name="/repeat-required/d"]';
+            form = loadForm( 'repeat-required.xml' );
+            form.init();
+            form.view.$.find( '.or-repeat .btn.repeat' ).last().click();
+
+            // an ugly test, I don't care
+            setTimeout( function() {
+                // new repeat should not show errors
+                expect( form.view.$.find( rep ).eq( 1 ).find( '.invalid-required, .invalid-constraint' ).length ).toEqual( 0 );
+                // we now have two repeats so node d should not be marked as invalid
+                expect( form.view.$.find( d ).closest( '.question' ).is( '.invalid-constraint' ) ).toBe( false );
+
+                form.view.$.find( '.or-repeat .btn.repeat' ).last().click();
+
+                setTimeout( function() {
+                    // new repeat should not show errors
+                    expect( form.view.$.find( rep ).eq( 2 ).find( '.invalid-required, .invalid-constraint' ).length ).toEqual( 0 );
+                    // we now have three repeats so node d should be marked as invalid
+                    expect( form.view.$.find( d ).closest( '.question' ).is( '.invalid-constraint' ) ).toBe( true );
+
+                    done();
+                }, 800 )
+            }, 800 );
+        } );
     } );
 
 } );
