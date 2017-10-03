@@ -3,11 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.39.3] - 2017-10-03
 ----------------------
 ##### Fixed
 - CSS build issue with Grid Theme.
 - With validateContinuously=true, a new repeat instance should not be evaluated as soon as it is created.
+- Pesky "error" message that sourcemap for bootstrap-datepicker.css is not found (when dev tools are open in browser).
 
 [4.39.2] - 2017-09-26
 ----------------------
