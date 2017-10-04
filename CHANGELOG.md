@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Max() and min() fail if nodeset is empty (0 repeats).
+
 [4.39.3] - 2017-10-03
 ----------------------
 ##### Fixed

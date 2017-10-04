@@ -65,7 +65,7 @@
     "dependencies": {
         "bootstrap-datepicker": "1.7.x",
         "bootstrap-slider-basic": "3.3.x",
-        "enketo-xpathjs": "1.6.0",
+        "enketo-xpathjs": "1.6.1",
         "jquery": "3.2.x",
         "jquery-touchswipe": "1.6.x",
         "leaflet": "0.7.x",
