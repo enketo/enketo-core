@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.39.4] - 2017-10-06
 ----------------------
 ##### Fixed
 - Max() and min() fail if nodeset is empty (0 repeats).
+- If first page is not relevant it is still displayed upon load.
 
 [4.39.3] - 2017-10-03
 ----------------------

@@ -110,6 +110,9 @@ Form.prototype = {
     },
 };
 
+/**
+ * Returns a module and adds the form property to it.
+ */
 Form.prototype.addModule = function( module ) {
     return Object.create( module, {
         form: {
@@ -173,8 +176,6 @@ Form.prototype.init = function() {
         // before itemset.update
         this.langs.init();
 
-        // after repeats.init so that template contain role="page" when applicable
-        this.pages.init();
 
         // after radio button data-name setting (now done in XLST)
         this.repeats.init();
@@ -206,6 +207,10 @@ Form.prototype.init = function() {
         // update field calculations again to make sure that dependent
         // field values are calculated
         this.calc.update();
+
+        // after repeats.init so that template contains role="page" when applicable
+        // after branch.update to make sure page-relevancy has already been determined
+        this.pages.init();
 
         this.mask.init();
 

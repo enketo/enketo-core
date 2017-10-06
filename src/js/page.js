@@ -33,7 +33,6 @@ module.exports = {
                 this.$btnPrev = this.$formFooter.find( '.previous-page' );
                 this.$btnNext = this.$formFooter.find( '.next-page' );
                 this.$btnLast = this.$formFooter.find( '.last-page' );
-
                 this.updateAllActive( $allPages );
                 this.toggleButtons( 0 );
                 this.setButtonHandlers();
@@ -175,7 +174,7 @@ module.exports = {
         var that = this;
         var currentIndex;
         var validate;
-        this.updateAllActive();
+
         currentIndex = this.getCurrentIndex();
         validate = ( config.validatePage === false ) ? Promise.resolve( true ) : this.form.validateContent( this.$current );
 
@@ -201,7 +200,7 @@ module.exports = {
     prev: function() {
         var prev;
         var currentIndex;
-        this.updateAllActive();
+
         currentIndex = this.getCurrentIndex();
         prev = this.getPrev( currentIndex );
 
@@ -234,11 +233,9 @@ module.exports = {
         }
     },
     flipToFirst: function() {
-        this.updateAllActive();
         this.flipTo( this.$activePages[ 0 ] );
     },
     flipToLast: function() {
-        this.updateAllActive();
         this.flipTo( this.$activePages.last()[ 0 ] );
     },
     // flips to the page provided as jQueried parameter or the page containing
@@ -247,10 +244,10 @@ module.exports = {
     // it flips to the page contained with the jQueried parameter;
     flipToPageContaining: function( $e ) {
         var $closest;
+
         $closest = $e.closest( '[role="page"]' );
         $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
 
-        //this.updateAllActive();
         this.flipTo( $closest[ 0 ] );
     },
     focusOnFirstQuestion: function( pageEl ) {
