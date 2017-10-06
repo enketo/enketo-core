@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Datepicker not available on iOS browsers.
+
 [4.39.4] - 2017-10-06
 ----------------------
 ##### Fixed

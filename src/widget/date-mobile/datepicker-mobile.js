@@ -3,6 +3,7 @@
 var Widget = require( '../../js/Widget' );
 var $ = require( 'jquery' );
 var pluginName = 'datepickerMobile';
+var support = require( '../../js/support' );
 
 /**
  * The whole purpose of this widget is to hide the placeholder text on native date inputs.
@@ -68,7 +69,7 @@ $.fn[ pluginName ] = function( options, event ) {
         var data = $this.data( pluginName );
 
         // If no datepickerExtended widget is present on the same element
-        if ( !dp && !data ) {
+        if ( !dp && !data && !support.touch ) {
             $this.data( pluginName, new DatepickerMobile( this, options, event ) );
         }
     } );
