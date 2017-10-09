@@ -149,6 +149,55 @@ $media-margin: 10px;
     }
 }
 
+// collapse icon for group labels
+.or-group{ 
+    > h4 {
+        position: relative; 
+        pointer-events: none;
+        &::before { 
+            width: 0; 
+            height: 0; 
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 12px solid  $brand-primary-color;
+            border-bottom: 0;
+            display: block;
+            position:absolute;
+            content: '';
+            top: 5px;
+            left: -30px;
+            right: -30px;
+            pointer-events: all;
+        }
+    }
+    &.or-appearance-compact{
+        > h4 {
+            &::before {
+                width: 0; 
+                height: 0; 
+                border-top: 12px solid transparent;
+                border-bottom: 12px solid transparent;
+                border-left: 12px solid $brand-primary-color;
+                border-right: 0;
+                left: -22px;
+                right: -22px;
+                top: 0;
+            }
+            ~ * {
+                display: none;
+            }
+        }
+    }
+}
+
+[dir="rtl"]{
+    .or-group.or-appearance-compact > h4::before{ 
+        border-left: 0;
+        border-right: 12px solid $brand-primary-color;
+    }
+}
+
+
 #stats + .or-group, #or-preload-items + .or-group, #form-languages + .or-group {
     border-top: none;
 }

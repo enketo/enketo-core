@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Added
+- Make all label groups collapsible.
+- Let appearance "compact" on a group collapse this group by default.
+
 [4.39.5] - 2017-10-09
 ----------------------
 ##### Fixed

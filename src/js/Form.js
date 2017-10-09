@@ -636,6 +636,10 @@ Form.prototype.setEventHandlers = function() {
     this.view.$.on( 'changelanguage', function() {
         that.output.update();
     } );
+
+    this.view.$.find( '.or-group > h4' ).on( 'click', function() {
+        $( this ).closest( '.or-group' ).toggleClass( 'or-appearance-compact' );
+    } );
 };
 
 Form.prototype.setValid = function( $node, type ) {
