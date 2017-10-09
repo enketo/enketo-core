@@ -100,20 +100,41 @@ module.exports = {
     },
     updateRepeatInstancesFromCount: function( $info ) {
         var that = this;
-        var $last = $info.siblings( '.or-repeat' ).last();
-        var repCountPath = $info.data( 'repeatCount' ) || '';
-        var name = $info.data( 'name' );
-        var index = this.form.view.$.find( '.or-repeat[name="' + name + '"]' ).index( $last );
-        var numRepsInView = $info.siblings( '.or-repeat[name="' + name + '"]' ).length;
+        var $last;
+        var repCountNodes;
         var numRepsInCount;
+        var numRepsInView;
         var toCreate;
-        // Don't pass context if the context is gone because all repeats in a series have been deleted.
-        if ( index === -1 ) {
-            name = null;
-            index = null;
+        var repPath;
+        var repIndex;
+        var repCountPath = $info.data( 'repeatCount' ) || '';
+
+        if ( !repCountPath ) {
+            return;
         }
-        numRepsInCount = ( repCountPath.length > 0 ) ? this.form.model.evaluate( repCountPath, 'number', name, index, true ) : 0;
+
+        /*
+         * We cannot pass a context to model.evaluate() if the number or repeats in a series is zero.
+         * However, but we do still need a context for nested repeats where the count of the nested repeat
+         * is determined in a node inside the parent repeat. To do so we use this method:
+         *
+         * 1. determine the index from the view (always 0 for not-nested-repeats)
+         * 2. obtain ALL repCount nodes from the model
+         * 3. select the correct node from the result array
+         * 
+         */
+        repPath = $info.data( 'name' );
+        repIndex = this.form.view.$.find( '.or-repeat-info[data-name="' + repPath + '"]' ).index( $info );
+        repCountNodes = this.form.model.evaluate( repCountPath, 'nodes', null, null, true );
+
+        if ( repCountNodes.length && repCountNodes[ repIndex ] ) {
+            numRepsInCount = Number( repCountNodes[ repIndex ].textContent );
+        } else {
+            console.error( 'Unexpectedly, could not obtain repeat count node' );
+        }
+
         numRepsInCount = isNaN( numRepsInCount ) ? 0 : numRepsInCount;
+        numRepsInView = $info.siblings( '.or-repeat[name="' + repPath + '"]' ).length;
         toCreate = numRepsInCount - numRepsInView;
 
         if ( toCreate > 0 ) {

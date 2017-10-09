@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.39.5] - 2017-10-09
 ----------------------
 ##### Fixed
 - Datepicker not available on iOS browsers.
+- In nested repeats a user-entered repeat count is always taken from the first repeat if current repeat instances in the series are zero.
 
 [4.39.4] - 2017-10-06
 ----------------------

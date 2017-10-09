@@ -424,6 +424,18 @@ describe( 'repeat functionality', function() {
             expect( f.view.$.find( '.or-repeat[name="/data/rep"]' ).length ).toEqual( 0 );
             expect( f.view.$.find( '.or-group.or-branch[name="/data/rep"]' ).hasClass( 'disabled' ) ).toBe( true );
         } );
+
+        it( 'and correctly deals with nested repeats that have a repeat count', function() {
+            var f = loadForm( 'repeat-count-nested-2.xml' );
+            var schools = '[name="/data/repeat_A/schools"]';
+            var a = '.or-repeat[name="/data/repeat_A"]';
+            var b = '.or-repeat[name="/data/repeat_A/repeat_B"]';
+            f.init();
+
+            f.view.$.find( schools ).eq( 1 ).val( '2' ).trigger( 'change' );
+
+            expect( f.view.$.find( a ).eq( 1 ).find( b ).length ).toEqual( 2 );
+        } );
     } );
 
 } );

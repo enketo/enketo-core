@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Repeat count in nested repeats</h:title>
+    <model>
+      <instance>
+        <data id="data">
+          <number>2</number>
+          <repeat_A jr:template="">
+            <schools/>
+            <repeat_B jr:template="">
+              <name_school/>
+            </repeat_B>
+          </repeat_A>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <bind nodeset="/data/number" type="int"/>
+      <bind nodeset="/data/repeat_A/schools" type="int"/>
+      <bind nodeset="/data/repeat_A/repeat_B/name_school" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/number">
+      <label>How many members stay in this household?</label>
+    </input>
+    <group ref="/data/repeat_A">
+      <repeat jr:count=" /data/number" nodeset="/data/repeat_A">
+        <input ref="/data/repeat_A/schools">
+          <label>How many schools have you attended all your life?</label>
+        </input>
+        <group ref="/data/repeat_A/repeat_B">
+          <repeat jr:count=" /data/repeat_A/schools" nodeset="/data/repeat_A/repeat_B">
+            <input ref="/data/repeat_A/repeat_B/name_school">
+              <label>Enter name of school</label>
+            </input>
+          </repeat>
+        </group>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>
