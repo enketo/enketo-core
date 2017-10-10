@@ -1,4 +1,7 @@
-/* global describe, require, beforeAll, afterAll, it */
+/* global describe, require, beforeAll, afterAll, it, expect */
+
+'use strict';
+
 var Model = require( '../../src/js/Form-model' );
 var mockForms1 = require( '../mock/forms' );
 
@@ -273,12 +276,12 @@ describe( 'Data node XML data type', function() {
     }
 
     it( 'returns a null result for a non-existing node', function() {
-        data = getModel( 'thedata.xml' );
+        var data = getModel( 'thedata.xml' );
         expect( data.node( '/thedata/nodeA', 1, null ).setVal( 'val13', null, 'string' ) ).toEqual( null );
     } );
 
     it( 'returns a null result when attempting to set the value of multiple nodes', function() {
-        data = getModel( 'thedata.xml' );
+        var data = getModel( 'thedata.xml' );
         expect( data.node( '/thedata/repeatGroup/nodeC', null, null ).setVal( 'val', null, null ) ).toEqual( null );
     } );
 
@@ -456,13 +459,13 @@ describe( 'functionality to obtain string of the primary XML instance for storag
     it( 'returns primary instance without templates - A', function() {
         var model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' );
         model.init();
-        expect( model.getStr() ).toEqual( '<data><group><a/></group></data>' );
+        expect( model.getStr() ).toEqual( '<data></data>' );
     } );
 
     it( 'returns primary instance without templates - B', function() {
         var model = new Model( '<model><instance><data><group    template=""><a/></group></data></instance></model>' );
         model.init();
-        expect( model.getStr() ).toEqual( '<data><group><a/></group></data>' );
+        expect( model.getStr() ).toEqual( '<data></data>' );
     } );
 
     it( 'returns primary instance and leaves namespaces intact', function() {
@@ -678,12 +681,14 @@ describe( 'external instances functionality', function() {
     } );
 } );
 
-describe( 'auto-cloning repeats in empty model', function() {
+describe( 'cloning repeats in empty model', function() {
     require( '../../config' ).repeatOrdinals = false;
     var model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
         '<rep3 jr:template=""><three/></rep3></rep2></rep1></data></instance></model>' );
     model.init();
-
+    model.addRepeat( '/data/rep1', 0 );
+    model.addRepeat( '/data/rep1/rep2', 0 );
+    model.addRepeat( '/data/rep1/rep2/rep3', 0 );
     it( 'works for nested repeats', function() {
         expect( model.getStr() ).toEqual( '<data><rep1><one/><rep2><two/><rep3><three/></rep3></rep2></rep1></data>' );
     } );
@@ -740,7 +745,7 @@ describe( 'Repeat without ordinals', function() {
         //model.extractFakeTemplates( [ '/a/rep.dot' ] );
 
         expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
-        model.cloneRepeat( '/a/rep.dot', 0, false );
+        model.addRepeat( '/a/rep.dot', 0, false );
         expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 3 );
     } );
 
@@ -749,14 +754,14 @@ describe( 'Repeat without ordinals', function() {
         model.init();
 
         expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
-        model.cloneRepeat( '/a/rep.dot', 0, false );
+        model.addRepeat( '/a/rep.dot', 0, false );
         expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 3 );
     } );
 
     it( 'will use the first repeat instance as template and empty the leaf nodes', function() {
         var model = new Model( '<model><instance><data><repeat><n>1</n></repeat></data></instance></model>' );
         model.init();
-        model.cloneRepeat( '/data/repeat', 0, false );
+        model.addRepeat( '/data/repeat', 0, false );
         expect( model.getStr() ).toEqual( '<data><repeat><n>1</n></repeat><repeat><n/></repeat></data>' );
     } );
 
@@ -765,7 +770,7 @@ describe( 'Repeat without ordinals', function() {
         model.init();
         model.node( '/data/repeat', 0 ).remove();
         expect( model.getStr() ).toEqual( '<data></data>' ); // not self-closing because comment was removed with regex replace
-        model.cloneRepeat( '/data/repeat', 0, false );
+        model.addRepeat( '/data/repeat', 0, false );
         expect( model.getStr() ).toEqual( '<data><repeat><n/></repeat></data>' );
     } );
 
@@ -802,7 +807,7 @@ describe( 'Ordinals in repeats', function() {
             var model = new Model( m1 );
             model.init();
             //model.extractFakeTemplates( paths );
-            model.cloneRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
             expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>' ) );
         } );
@@ -811,7 +816,7 @@ describe( 'Ordinals in repeats', function() {
             var model = new Model( m2 );
             model.init();
             //model.extractFakeTemplates( paths );
-            model.cloneRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
             expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>' +
                 '<repeat enk:ordinal="3"><node/></repeat>' ) );
@@ -821,9 +826,9 @@ describe( 'Ordinals in repeats', function() {
             var model = new Model( m3 );
             model.init();
             //model.extractFakeTemplates( paths );
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
             expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
@@ -835,9 +840,9 @@ describe( 'Ordinals in repeats', function() {
             var model = new Model( m4 );
             model.init();
             //model.extractFakeTemplates( paths );
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
-            //model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
             expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
@@ -848,10 +853,10 @@ describe( 'Ordinals in repeats', function() {
             var model = new Model( m3 );
             model.init();
             //model.extractFakeTemplates( paths );
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
             model.node( '/root/repeat', 1 ).remove();
             model.node( '/root/repeat/nr', 1 ).remove();
             expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
@@ -864,12 +869,12 @@ describe( 'Ordinals in repeats', function() {
             var model = new Model( m3 );
             model.init();
             //model.extractFakeTemplates( paths );
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
             model.node( '/root/repeat', 1 ).remove();
             model.node( '/root/repeat/nr', 1 ).remove();
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
             expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
@@ -887,7 +892,8 @@ describe( 'Ordinals in repeats', function() {
         it( 'get added to newly cloned repeats', function() {
             var model = new Model( m1 );
             model.init();
-            model.cloneRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
             expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>'
             ) );
@@ -896,8 +902,8 @@ describe( 'Ordinals in repeats', function() {
         it( 'get added to newly cloned repeats if multiple instances are present in default model', function() {
             var model = new Model( m2 );
             model.init();
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
             expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>' +
                 '<repeat enk:ordinal="3"><node/></repeat>' ) );
@@ -906,22 +912,24 @@ describe( 'Ordinals in repeats', function() {
         it( 'get added to newly cloned NESTED repeats', function() {
             var model = new Model( m3 );
             model.init();
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 1 );
             expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
-                '</repeat><repeat enk:ordinal="2"><nr><node/></nr></repeat>' ) );
+                '</repeat><repeat enk:ordinal="2"><nr enk:last-used-ordinal="1" enk:ordinal="1"><node/></nr></repeat>' ) );
         } );
 
         // Very theoretical. Situation will never occur with OC.
         xit( 'get added to newly cloned NESTED repeats if multiple instances of the nested repeat are present in default model', function() {
             var model = new Model( m4 );
             model.init();
-            model.cloneRepeat( '/root/repeat', 0 );
-            //model.cloneRepeat( '/root/repeat/nr', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 1 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 1 );
             expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="2" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr>' +
@@ -932,38 +940,43 @@ describe( 'Ordinals in repeats', function() {
         it( 'retains original ordinals when a repeat or NESTED repeat instance in between is removed', function() {
             var model = new Model( m3 );
             model.init();
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 2 );
             model.node( '/root/repeat', 1 ).remove();
             model.node( '/root/repeat/nr', 1 ).remove();
             expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
-                '</repeat><repeat enk:ordinal="3"><nr><node/></nr></repeat>' ) );
+                '</repeat><repeat enk:ordinal="3"><nr enk:last-used-ordinal="1" enk:ordinal="1"><node/></nr></repeat>' ) );
         } );
 
         it( 'continues ordinal numbering when the last repeat or NESTED repeat instance is removed and a new repeat is created', function() {
             var model = new Model( m3 );
             model.init();
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 1 );
             model.node( '/root/repeat', 1 ).remove();
             model.node( '/root/repeat/nr', 1 ).remove();
-            model.cloneRepeat( '/root/repeat', 0 );
-            model.cloneRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat', 0 );
+            model.addRepeat( '/root/repeat/nr', 0 );
+            model.addRepeat( '/root/repeat/nr', 1 );
             expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
-                '</repeat><repeat enk:ordinal="3"><nr><node/></nr></repeat>' ) );
+                '</repeat><repeat enk:ordinal="3"><nr enk:last-used-ordinal="1" enk:ordinal="1"><node/></nr></repeat>' ) );
         } );
 
     } );
 
 } );
-
-
 
 describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct incorrect XPath expressions', function() {
     var modelStr = '<model><instance><abcabce id="abcabce"><n/><ab><ynab/></ab><a><ynaa>1</ynaa><c/></a><a><ynaa>2</ynaa><c/></a><meta><instanceID/></meta></abcabce></instance></model>';

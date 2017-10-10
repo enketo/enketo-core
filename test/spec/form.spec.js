@@ -37,7 +37,7 @@ describe( 'Output functionality within repeats', function() {
     var $o = [];
     var form = loadForm( 'outputs_in_repeats.xml' );
     form.init();
-    form.view.$.find( 'button.repeat' ).click();
+    form.view.$.find( '.add-repeat-btn' ).click();
 
     $o = form.view.$.find( '.or-output' );
 
@@ -245,7 +245,7 @@ describe( 'Loading instance values into html input fields functionality', functi
         form = loadForm( 'issue208.xml' );
         form.init();
         form.input.setVal( '/issue208/rep/nodeA', 0, 'yes' );
-        expect( form.view.$.find( '[name="/issue208/rep/nodeA"]' ).eq( 0 ).is( ':checked' ) ).toBe( true );
+        expect( form.view.$.find( '[data-name="/issue208/rep/nodeA"]' ).eq( 0 ).is( ':checked' ) ).toBe( true );
     } );
 
 } );
@@ -286,6 +286,7 @@ describe( 'repeat functionality', function() {
 
         it( 'marks cloned invalid fields as valid', function() {
             var repeatSelector = '.or-repeat[name="/thedata/repeatGroup"]',
+                repeatButton = '.add-repeat-btn',
                 nodeSelector = 'input[name="/thedata/repeatGroup/nodeC"]',
                 $node3 = form.view.$.find( nodeSelector ).eq( 2 ),
                 $node4;
@@ -296,7 +297,7 @@ describe( 'repeat functionality', function() {
             expect( $node3.parent().hasClass( 'invalid-constraint' ) ).toBe( true );
             expect( form.view.$.find( nodeSelector ).eq( 3 ).length ).toEqual( 0 );
 
-            form.view.$.find( repeatSelector ).eq( 2 ).find( 'button.repeat' ).click();
+            form.view.$.find( repeatButton ).click();
 
             $node4 = form.view.$.find( nodeSelector ).eq( 3 );
             expect( form.view.$.find( repeatSelector ).length ).toEqual( 4 );
@@ -337,6 +338,49 @@ describe( 'repeat functionality', function() {
 
     } );
 
+    it( 'ignores the "minimal" appearance when an existing record is loaded (almost same as previous test)', function() {
+        var form;
+        var instanceStr = '<q><PROGRAMME><PROJECT><Partner><INFORMATION><Partner_Name>a</Partner_Name><Camp><P_Camps>a1</P_Camps></Camp><Camp><P_Camps>a2</P_Camps></Camp></INFORMATION></Partner><Partner><INFORMATION><Partner_Name>b</Partner_Name><Camp><P_Camps>b1</P_Camps></Camp><Camp><P_Camps>b2</P_Camps></Camp><Camp><P_Camps>b3</P_Camps></Camp></INFORMATION></Partner></PROJECT></PROGRAMME><meta><instanceID>a</instanceID></meta></q>';
+        var a = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner"]';
+        var b = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp"]';
+        forms[ 'nested-repeats-nastier' ] = {
+            xml_model: forms[ 'nested-repeats-nasty.xml' ].xml_model
+        };
+        // both repeats get the 'minimal appearance'
+        forms[ 'nested-repeats-nastier' ].html_form = forms[ 'nested-repeats-nasty.xml' ].html_form.replace( "class=\"or-repeat ", "class=\"or-repeat or-appearance-minimal " );
+        form = loadForm( 'nested-repeats-nastier', instanceStr );
+        form.init();
+
+        expect( form.view.$.find( a ).length ).toEqual( 2 );
+        expect( form.view.$.find( a ).hasClass( 'or-appearance-minimal' ) ).toEqual( true );
+        expect( form.view.$.find( a ).eq( 0 ).find( b ).length ).toEqual( 2 );
+        expect( form.view.$.find( a ).eq( 1 ).find( b ).length ).toEqual( 3 );
+    } );
+
+    it( 'uses the "minimal" appearance for an empty form to create 0 repeats', function() {
+        var form;
+        var a = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner"]';
+        forms[ 'nested-repeats-nastier' ] = {
+            xml_model: forms[ 'nested-repeats-nasty.xml' ].xml_model
+        };
+        // both repeats get the 'minimal appearance'
+        forms[ 'nested-repeats-nastier' ].html_form = forms[ 'nested-repeats-nasty.xml' ].html_form.replace( "class=\"or-repeat ", "class=\"or-repeat or-appearance-minimal " );
+        form = loadForm( 'nested-repeats-nastier' );
+        form.init();
+
+        expect( form.view.$.find( a ).length ).toEqual( 0 );
+    } );
+
+    it( 'In an empty form it creates the first repeat instance automatically (almost same as previous test)', function() {
+        var form = loadForm( 'nested-repeats-nasty.xml' );
+        var a = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner"]';
+        var b = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp"]';
+        form.init();
+
+        expect( form.view.$.find( a ).length ).toEqual( 1 );
+        expect( form.view.$.find( a ).hasClass( 'or-appearance-minimal' ) ).toEqual( false );
+        expect( form.view.$.find( a ).eq( 0 ).find( b ).length ).toEqual( 1 );
+    } );
 
     it( 'doesn\'t duplicate date widgets in a cloned repeat', function() {
         form = loadForm( 'nested_repeats.xml' );
@@ -438,6 +482,49 @@ describe( 'repeat functionality', function() {
         } );
     } );
 
+
+    describe( 'creates 0 repeats', function() {
+
+        it( ' if a record is loaded with 0 repeats (simple)', function() {
+            var repeat = '.or-repeat[name="/repeat-required/rep"]';
+            var f = loadForm( 'repeat-required.xml', '<repeat-required><d>b</d><meta><instanceID>a</instanceID></meta></repeat-required>' );
+            f.init();
+            expect( f.view.$.find( repeat ).length ).toEqual( 0 );
+        } );
+
+        it( ' if a record is loaded with 0 nested repeats (simple)', function() {
+            var repeat1 = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner"]';
+            var repeat2 = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp"]';
+            var f = loadForm( 'nested-repeats-nasty.xml', '<q><PROGRAMME><PROJECT>' +
+                '<Partner><INFORMATION><Partner_Name>MSF</Partner_Name></INFORMATION></Partner>' +
+                '</PROJECT></PROGRAMME><meta><instanceID>a</instanceID></meta></q>' );
+            f.init();
+            expect( f.view.$.find( repeat1 ).length ).toEqual( 1 );
+            expect( f.view.$.find( repeat2 ).length ).toEqual( 0 );
+        } );
+
+        it( ' if a record is loaded with 0 nested repeats (advanced)', function() {
+            var repeat1 = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner"]';
+            var repeat2 = '.or-repeat[name="/q/PROGRAMME/PROJECT/Partner/INFORMATION/Camp"]';
+            var f = loadForm( 'nested-repeats-nasty.xml', '<q><PROGRAMME><PROJECT>' +
+                '<Partner><INFORMATION><Partner_Name>MSF</Partner_Name></INFORMATION></Partner>' +
+                '<Partner><INFORMATION><Partner_Name>MSF</Partner_Name><Camp><P_Camps/></Camp></INFORMATION></Partner>' +
+                '</PROJECT></PROGRAMME><meta><instanceID>a</instanceID></meta></q>' );
+            f.init();
+            expect( f.view.$.find( repeat1 ).length ).toEqual( 2 );
+            expect( f.view.$.find( repeat1 ).eq( 0 ).find( repeat2 ).length ).toEqual( 0 );
+            expect( f.view.$.find( repeat1 ).eq( 1 ).find( repeat2 ).length ).toEqual( 1 );
+        } );
+
+        // This is a VERY special case, because the form contains a template as well as multiple repeat instances
+        xit( ' if a record is loaded with 0 repeats (very advanced)', function() {
+            var repeat = '.or-repeat[name="/repeat-dot/rep.dot"]';
+            var f = loadForm( 'repeat-dot.xml', '<repeat-dot><meta><instanceID>a</instanceID></meta></repeat-dot>' );
+            f.init();
+            expect( f.view.$.find( repeat ).length ).toEqual( 0 );
+        } );
+    } );
+
 } );
 
 describe( 'calculations', function() {
@@ -445,7 +532,7 @@ describe( 'calculations', function() {
     it( 'also work inside repeats', function() {
         var form = loadForm( 'calcs_in_repeats.xml' );
         form.init();
-        form.view.$.find( 'button.repeat' ).click();
+        form.view.$.find( '.add-repeat-btn' ).click();
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(0)' ).val( '10' ).trigger( 'change' );
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '20' ).trigger( 'change' );
         expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal()[ 0 ] ).toEqual( '200' );
@@ -455,8 +542,7 @@ describe( 'calculations', function() {
     it( 'are not performed if the calculation is not relevant', function() {
         var form = loadForm( 'calcs_in_repeats.xml' );
         form.init();
-        form.view.$.find( 'button.repeat' ).click();
-        form.view.$.find( 'button.repeat' ).last().click();
+        form.view.$.find( '.add-repeat-btn' ).click().click();
 
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(0)' ).val( '20' ).trigger( 'change' );
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '5' ).trigger( 'change' );
@@ -524,7 +610,7 @@ describe( 'branching functionality', function() {
         var form = loadForm( 'issue208.xml' );
         form.init();
 
-        form.view.$.find( repeatSelector ).eq( 0 ).find( 'button.repeat' ).click();
+        form.view.$.find( '.add-repeat-btn' ).click();
         expect( form.view.$.find( repeatSelector ).length ).toEqual( 2 );
         //check if initial state of 2nd question in 2nd repeat is disabled
         expect( form.view.$.find( repeatSelector ).eq( 1 )
@@ -770,7 +856,7 @@ describe( 'branching functionality', function() {
         it( 'initializes the relevants', function() {
             var form = loadForm( 'repeat-child-relevant.xml' );
             form.init();
-            form.view.$.find( '.btn.repeat' ).click();
+            form.view.$.find( '.add-repeat-btn' ).click();
             expect( form.view.$.find( '.or-branch' ).length ).toEqual( 2 );
             expect( form.view.$.find( '.or-branch.pre-init' ).length ).toEqual( 0 );
         } );
@@ -875,8 +961,7 @@ describe( 'obtaining XML string from form without irrelevant nodes', function() 
         var fruit = '[name="/data/details/fruits"]';
         var location = '[name="/data/details/location"]';
         form.init();
-        form.view.$.find( '.btn.repeat' ).click();
-        form.view.$.find( '.btn.repeat' ).last().click();
+        form.view.$.find( '.add-repeat-btn' ).click().click();
         form.view.$.find( repeat ).eq( 0 ).find( fruit + '[value="pear"]' ).prop( 'checked', true ).trigger( 'change' );
         form.view.$.find( repeat ).eq( 1 ).find( fruit + '[value="mango"]' ).prop( 'checked', true ).trigger( 'change' );
         form.view.$.find( repeat ).eq( 2 ).find( fruit + '[value="pear"]' ).prop( 'checked', true ).trigger( 'change' );
@@ -885,7 +970,6 @@ describe( 'obtaining XML string from form without irrelevant nodes', function() 
         expect( form.getDataStr( {
             irrelevant: false
         } ).replace( />\s+</g, '><' ) ).toMatch( '<details><fruits>pear</fruits></details><details><fruits>mango</fruits><location>nairobi</location></details><details><fruits>pear</fruits></details>' );
-
     } );
 
 } );
@@ -1044,7 +1128,7 @@ describe( 'validation', function() {
             var d = '[name="/repeat-required/d"]';
             form = loadForm( 'repeat-required.xml' );
             form.init();
-            form.view.$.find( '.or-repeat .btn.repeat' ).last().click();
+            form.view.$.find( '.add-repeat-btn' ).click();
 
             // an ugly test, I don't care
             setTimeout( function() {
@@ -1053,7 +1137,7 @@ describe( 'validation', function() {
                 // we now have two repeats so node d should not be marked as invalid
                 expect( form.view.$.find( d ).closest( '.question' ).is( '.invalid-constraint' ) ).toBe( false );
 
-                form.view.$.find( '.or-repeat .btn.repeat' ).last().click();
+                form.view.$.find( '.add-repeat-btn' ).click();
 
                 setTimeout( function() {
                     // new repeat should not show errors
@@ -1062,7 +1146,7 @@ describe( 'validation', function() {
                     expect( form.view.$.find( d ).closest( '.question' ).is( '.invalid-constraint' ) ).toBe( true );
 
                     done();
-                }, 800 )
+                }, 800 );
             }, 800 );
         } );
     } );
@@ -1341,9 +1425,11 @@ describe( 'Itemset functionality', function() {
     } );
 
     describe( 'in a cloned repeat with dependencies inside repeat, ', function() {
-        var countrySelector = '[data-name="/new_cascading_selections_inside_repeats/group1/country"]',
-            citySelector = 'label:not(.itemset-template) [data-name="/new_cascading_selections_inside_repeats/group1/city"]',
-            form, $masterRepeat, $clonedRepeat;
+        var countrySelector = '[data-name="/new_cascading_selections_inside_repeats/group1/country"]';
+        var citySelector = 'label:not(.itemset-template) [data-name="/new_cascading_selections_inside_repeats/group1/city"]';
+        var form;
+        var $masterRepeat;
+        var $clonedRepeat;
 
         beforeEach( function() {
             form = loadForm( 'new_cascading_selections_inside_repeats.xml' );
@@ -1352,7 +1438,7 @@ describe( 'Itemset functionality', function() {
             //select usa in master repeat
             $masterRepeat.find( countrySelector + '[value="usa"]' ).prop( 'checked', true ).trigger( 'change' );
             //add repeat
-            $masterRepeat.find( 'button.repeat' ).click();
+            form.view.$.find( '.add-repeat-btn' ).click();
             $clonedRepeat = form.view.$.find( '.or-repeat.clone' );
         } );
 
@@ -1376,8 +1462,8 @@ describe( 'Itemset functionality', function() {
             var form = loadForm( 'nested-repeats-itemset.xml' );
             var selector = '[name="/bug747/name_of_region/name_of_zone/zone"]';
             form.init();
-            form.view.$.find( '[name="/bug747/name_of_region/region"][value="tigray"]' ).prop( 'checked', true ).trigger( 'change' );
-            form.view.$.find( '.or-repeat[name="/bug747/name_of_region/name_of_zone"] .btn.repeat' ).click();
+            form.view.$.find( '[data-name="/bug747/name_of_region/region"][value="tigray"]' ).prop( 'checked', true ).trigger( 'change' );
+            form.view.$.find( '.or-repeat-info[data-name="/bug747/name_of_region/name_of_zone"] .add-repeat-btn' ).click();
             expect( form.view.$.find( selector ).eq( 0 ).find( 'option:not(.itemset-template)' ).text() ).toEqual( 'CentralSouthern' );
             expect( form.view.$.find( selector ).eq( 1 ).find( 'option:not(.itemset-template)' ).text() ).toEqual( 'CentralSouthern' );
         } );

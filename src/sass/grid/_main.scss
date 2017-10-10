@@ -260,26 +260,23 @@ h4 + .or-repeat {
 
     .repeat-buttons {
         width: calc(100% + 1px);
-        position: relative;
         margin-top: 0;
         height: 0px;
     }
 
-    .repeat, .remove {
+    .remove {
         padding: 0;
         border: none;
         margin-top: -20px;
+        margin-right: -20px;
     }
+}
 
-    .repeat {
-        float: right;
-        margin-right: -25px;
-    }
-
-    .remove {
-        float: left;
-        margin-left: -20px;
-    }
+.or-repeat-info {
+    flex: 100%;
+    margin-right: -1px;
+    margin-left: -1px;
+    border-right: 1px solid $question-bg;
 }
 
 // wrappers around questions

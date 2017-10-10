@@ -155,7 +155,6 @@ FormModel.prototype.init = function() {
             } );
 
             this.trimValues();
-            this.cloneAllTemplates();
             this.extractTemplates();
         } catch ( e ) {
             console.error( e );
@@ -354,24 +353,25 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      */
     $record.find( '*' ).each( function() {
         var node = this;
-        var repeatPath;
+        var path;
         var repeatIndex = 0;
         var positionedPath;
         var repeatParts;
         try {
-            if ( that.getRepeatIndex( node ) > 0 ) {
-
-                repeatPath = that.getXPath( node, 'instance', false );
+            path = that.getXPath( node, 'instance', false );
+            // If this is a templated repeat (check templates)
+            // or a repeat without templates
+            if ( typeof that.templates[ path ] !== 'undefined' || that.getRepeatIndex( node ) > 0 ) {
                 positionedPath = that.getXPath( node, 'instance', true );
-
                 if ( !that.evaluate( positionedPath, 'node', null, null, true ) ) {
-                    repeatParts = positionedPath.match( /([^\[]+)\[(\d+)\]/g );
-                    // if the positionedPath has two non-0 repeat indices, avoid cloning out of order
-                    if ( repeatParts && repeatParts.length > 1 ) {
+                    repeatParts = positionedPath.match( /([^\[]+)\[(\d+)\]\//g );
+                    // If the positionedPath has a non-0 repeat index followed by (at least) 1 node, avoid cloning out of order.
+                    if ( repeatParts && repeatParts.length > 0 ) {
+                        // TODO: Does this work for triple-nested repeats. I don't really care though.
                         // repeatIndex of immediate parent repeat of deepest nested repeat in positionedPath
-                        repeatIndex = repeatParts[ repeatParts.length - 2 ].match( /\[(\d+)\]/ )[ 1 ] - 1;
+                        repeatIndex = repeatParts[ repeatParts.length - 1 ].match( /\[(\d+)\]/ )[ 1 ] - 1;
                     }
-                    that.cloneRepeat( repeatPath, repeatIndex, true );
+                    that.addRepeat( path, repeatIndex, true );
                 }
             }
         } catch ( e ) {
@@ -415,6 +415,17 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      * into a proper XML document by parsing the XML string instead.
      */
     mergeResultDoc = $.parseXML( merger.Get( 1 ) );
+
+
+    /** 
+     * To properly show 0 repeats, if the form definition contains multiple default instances
+     * and the record contains none, we have to iterate trough the templates object, and
+     * 1. check for each template path, whether the record contained more than 0 of these nodes
+     * 2. remove all nodes on that path if the answer was no.
+     *
+     * Since this requires complex handcoded XForms it is unlikely to ever be needed, so I left this
+     * functionality out.
+     */
 
     // remove the primary instance  childnode from the original model
     this.xml.querySelector( 'instance' ).removeChild( modelInstanceChildEl );
@@ -576,27 +587,27 @@ FormModel.prototype.getRepeatCommentEl = function( repeatPath, repeatSeriesIndex
 };
 
 /**
- * Clones a <repeat>able instance node in a particular series of a repeat.
+ * Adds a <repeat>able instance node in a particular series of a repeat.
  *
  * @param  {string} repeatPath absolute path of a repeat 
  * @param  {number} repeatSeriesIndex    index of the repeat series that gets a new repeat (this is always 0 for non-nested repeats)
  * @param  {boolean} merge   whether this operation is part of a merge operation (won't send dataupdate event, clears all values and 
  *                           will not add ordinal attributes as these should be provided in the record)
  */
-FormModel.prototype.cloneRepeat = function( repeatPath, repeatSeriesIndex, merge ) {
+FormModel.prototype.addRepeat = function( repeatPath, repeatSeriesIndex, merge ) {
     var $insertAfterNode;
     var $templateClone;
     var repeatSeries;
-    var $template;
+    var template;
     var that = this;
 
     if ( !this.templates[ repeatPath ] ) {
         // This allows the model itself without requiring the controller to cal call .extractFakeTemplates()
-        // to extract non-jr:templates by assuming that cloneRepeat would only called for a repeat.
+        // to extract non-jr:templates by assuming that addRepeat would only called for a repeat.
         this.extractFakeTemplates( [ repeatPath ] );
     }
 
-    $template = this.templates[ repeatPath ];
+    template = this.templates[ repeatPath ];
     repeatSeries = this.getRepeatSeries( repeatPath, repeatSeriesIndex );
     $insertAfterNode = ( repeatSeries.length ) ? $( repeatSeries[ repeatSeries.length - 1 ] ) : $( this.getRepeatCommentEl( repeatPath, repeatSeriesIndex ) );
 
@@ -610,8 +621,8 @@ FormModel.prototype.cloneRepeat = function( repeatPath, repeatSeriesIndex, merge
     /**
      * If templatenodes and insertAfterNode(s) have been identified 
      */
-    if ( $template[ 0 ] && $insertAfterNode.length === 1 ) {
-        $templateClone = $template.clone()
+    if ( template && $insertAfterNode.length === 1 ) {
+        $templateClone = $( template ).clone()
             .insertAfter( $insertAfterNode );
 
         this.removeOrdinalAttributes( $templateClone[ 0 ] );
@@ -672,20 +683,28 @@ FormModel.prototype.removeOrdinalAttributes = function( el ) {
  * @return {<Element>}                Array of all repeat elements in a series.
  */
 FormModel.prototype.getRepeatSeries = function( repeatPath, repeatSeriesIndex ) {
+    var pathSegments;
+    var nodeName;
+    var checkEl;
     var repeatCommentEl = this.getRepeatCommentEl( repeatPath, repeatSeriesIndex );
-    var pathSegments = repeatCommentEl.textContent.substr( REPEAT_COMMENT_PREFIX.length ).split( '/' );
-    var nodeName = pathSegments[ pathSegments.length - 1 ];
     var result = [];
-    var checkEl = repeatCommentEl.nextSibling;
 
-    // then add all subsequent repeats
-    while ( checkEl ) {
-        // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
-        // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
-        if ( checkEl.nodeName && checkEl.nodeName === nodeName ) {
-            result.push( checkEl );
+    // RepeatCommentEl is null if the requested repeatseries is a nested repeat and its ancestor repeat
+    // has 0 instances.
+    if ( repeatCommentEl ) {
+        pathSegments = repeatCommentEl.textContent.substr( REPEAT_COMMENT_PREFIX.length ).split( '/' );
+        nodeName = pathSegments[ pathSegments.length - 1 ];
+        checkEl = repeatCommentEl.nextSibling;
+
+        // then add all subsequent repeats
+        while ( checkEl ) {
+            // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+            // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
+            if ( checkEl.nodeName && checkEl.nodeName === nodeName ) {
+                result.push( checkEl );
+            }
+            checkEl = checkEl.nextSibling;
         }
-        checkEl = checkEl.nextSibling;
     }
 
     return result;
@@ -807,7 +826,7 @@ FormModel.prototype.addTemplate = function( repeatPath, repeat, empty ) {
             } ).text( '' );
         }
         // Add to templates object.
-        this.templates[ repeatPath ] = $clone;
+        this.templates[ repeatPath ] = $clone[ 0 ];
     }
 };
 
@@ -818,35 +837,6 @@ FormModel.prototype.getTemplateNodes = function() {
     // to switch back once the Edge bug is fixed. The bug results in not finding any templates.
     // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/9544701/
     return this.evaluate( '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@' + jrPrefix + ':template]', 'nodes', null, null, false );
-};
-
-/**
- * Initialization function that creates <repeat>able data nodes with the defaults from the template if no repeats have been created yet.
- * Strictly speaking creating the first repeat automatically is not "according to the spec" as the user should be asked first whether it
- * has any data for this question.
- * However, it seems usually always better to assume at least one 'repeat' (= 1 question). It doesn't make use of the Nodeset subclass (CHANGE?)
- *
- * See also: In JavaRosa, the documentation on the jr:template attribute.
- */
-FormModel.prototype.cloneAllTemplates = function() {
-    var jrPrefix = this.getNamespacePrefix( JAVAROSA_XFORMS_NS );
-    var that = this;
-
-    // for now we support both the official namespaced template and the hacked non-namespaced template attributes
-    this.getTemplateNodes().forEach( function( templateEl ) {
-        var nodeName = templateEl.nodeName;
-        var selector = that.getXPath( templateEl, 'instance' );
-        var ancestorTemplateNodes = that.evaluate( 'ancestor::' + nodeName + '[@template] | ancestor::' + nodeName + '[@' + jrPrefix + ':template]', 'nodes', selector, 0, true );
-        if ( ancestorTemplateNodes.length === 0 && $( templateEl ).siblings( nodeName.replace( /\./g, '\\.' ) ).length === 0 ) {
-            $( templateEl ).clone().insertAfter( $( templateEl ) )
-                // for backwards compatibility
-                .find( '*' ).addBack().removeAttr( 'template' )
-                // just to be sure, but could be omitted
-                .removeAttr( jrPrefix + ':template' )
-                // the proper way of doing this
-                .get( 0 ).removeAttributeNS( JAVAROSA_XFORMS_NS, 'template' );
-        }
-    } );
 };
 
 /**
@@ -1184,7 +1174,7 @@ FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
 FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
     var j, context, doc, resTypeNum, resultTypes, result, $collection, response, repeats, cacheKey, original, cacheable;
 
-    // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
+    //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
     //    index + ' and result type: ' + resTypeStr );
     original = expr;
     tryNative = tryNative || false;

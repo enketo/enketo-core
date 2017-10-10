@@ -47,8 +47,12 @@ module.exports = {
              * or the parent with a name attribute
              * or the whole document
              */
-            $context = $output.closest( '.question, .note, .or-group' ).find( '[name]' ).eq( 0 );
-            context = ( $context.length ) ? that.form.input.getName( $context ) : undefined;
+            $context = $output.closest( '.question, .note, .or-group' );
+            if ( !$context.is( '.or-group' ) ) {
+                $context = $context.find( '[name]' ).eq( 0 );
+            }
+
+            context = that.form.input.getName( $context );
 
             insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
             insideRepeatClone = ( insideRepeat && $output.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 );
