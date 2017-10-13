@@ -1,4 +1,4 @@
-/* global describe, require, beforeAll, afterAll, it, expect */
+/* global describe, require, beforeAll, afterAll, xit, it, expect */
 
 'use strict';
 
@@ -181,17 +181,17 @@ describe( 'Data node XML data type', function() {
         [ '-Infinity', 'int', false, '' ],
 
         [ 'val11', 'decimal', false, '' ],
-        [ '2', 'decimal', false ],
-        [ '2.22', 'decimal', false ],
+        [ '2', 'decimal', true ],
+        [ '2.22', 'decimal', true ],
         [ 'NaN', 'decimal', false, '' ],
-        [ 'Infinity', 'decimal', true, '' ],
-        [ '-Infinity', 'decimal', true, '' ],
+        [ 'Infinity', 'decimal', false, '' ],
+        [ '-Infinity', 'decimal', false, '' ],
 
         [ 'val5565ghgyuyuy', 'date', false, '' ], //Chrome turns val5 into a valid date...
         [ '2012-01-01', 'date', true ],
         [ '2012-12-32', 'date', false, '' ],
         // The tests below are dependent on OS time zone of test machine
-        [ 324, 'date', true, '1970-11-21' ],
+        [ 324, 'date', false, '1970-11-21' ],
 
         [ 'val5565ghgyuyua', 'datetime', false, '' ], //Chrome turns val10 into a valid date..
         [ '2012-01-01T00:00:00-06', 'datetime', true, '2012-01-01T00:00:00-06:00' ],
@@ -253,7 +253,7 @@ describe( 'Data node XML data type', function() {
             node.setVal( n.value );
             node.validateConstraintAndType( null, n.type )
                 .then( function( result ) {
-                    expect( result ).toEqual( valid );
+                    expect( result ).toEqual( n.valid );
                 } )
                 .then( done )
                 .catch( done );

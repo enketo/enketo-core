@@ -3,13 +3,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.40.0] - 2017-10-16
 ----------------------
 ##### Added
 - Make all label groups collapsible.
 - Let appearance "compact" on a group collapse this group by default.
 - Make first repeat removable with button if repeat-count is not used.
 - Let appearance "minimal" on a repeat prevent automatic creation of the first repeat instance.
+
+#### Fixed
+- Data type conversion issues for integers and dates.
 
 [4.39.5] - 2017-10-09
 ----------------------

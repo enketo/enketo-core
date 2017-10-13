@@ -43,7 +43,7 @@ var types = {
         },
         validate: function( x ) {
             var num = Number( x );
-            return ( !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY && Math.round( num ) === num ) ? true : false;
+            return ( !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY && Math.round( num ) === num && num.toString() === x.toString() ) ? true : false;
         }
     },
     'date': {
@@ -51,7 +51,7 @@ var types = {
             var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/;
             var segments = pattern.exec( x );
 
-            return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ), Number( segments[ 3 ] ) - 1, Number( segments[ 5 ] ) ).toString() !== 'Invalid Date' ) : false;
+            return ( segments && segments.length === 6 ) ? ( new Date( Number( segments[ 1 ] ) + '-' + Number( segments[ 3 ] ) + '-' + Number( segments[ 5 ] ) ).toString() !== 'Invalid Date' ) : false;
         },
         convert: function( x ) {
             var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/;
