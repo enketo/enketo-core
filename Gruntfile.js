@@ -86,7 +86,7 @@ module.exports = function( grunt ) {
                 browsers: [ 'ChromeHeadless' ]
             },
             browsers: {
-                browsers: [ 'Chrome', 'ChromeCanary', 'Firefox', /*'Opera','Safari' */ ]
+                browsers: [ 'Chrome', 'Firefox', 'Safari' ]
             }
         },
         sass: {

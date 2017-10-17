@@ -104,16 +104,24 @@ var types = {
     },
     'time': {
         validate: function( x ) {
-            var segments = x.toString().split( ':' );
-            if ( segments.length < 2 ) {
+            var m = x.match( /^(\d\d):(\d\d):(\d\d)\.\d\d\d(\+|-)(\d\d):(\d\d)$/ );
+
+            if ( !m ) {
                 return false;
             }
-            segments[ 2 ] = ( segments[ 2 ] ) ? Number( segments[ 2 ].toString().split( '.' )[ 0 ] ) : 0;
 
-            return ( segments[ 0 ] < 24 && segments[ 0 ] >= 0 && segments[ 1 ] < 60 && segments[ 1 ] >= 0 && segments[ 2 ] < 60 && segments[ 2 ] >= 0 );
+            // no need to convert to numbers since we now they are number strings
+            return m[ 1 ] < 24 && m[ 1 ] >= 0 &&
+                m[ 2 ] < 60 && m[ 2 ] >= 0 &&
+                m[ 3 ] < 60 && m[ 3 ] >= 0 &&
+                m[ 5 ] < 24 && m[ 5 ] >= 0 && // this could be tighter
+                m[ 6 ] < 60 && m[ 6 ] >= 0; // this is probably either 0 or 30
         },
         convert: function( x ) {
             var date;
+            var o = {};
+            var parts;
+            var offset;
             var timeAppearsCorrect = /^[0-9]{2}:[0-9]{2}(:[0-9.]*)?$/;
 
             if ( !timeAppearsCorrect.test( x ) ) {
@@ -121,17 +129,31 @@ var types = {
                 // We can test this by trying to convert to a date.
                 date = new Date( x );
                 if ( date.toString() !== 'Invalid Date' ) {
-                    x = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+                    x = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '.' + date.getMilliseconds() + date.getTimezoneOffsetAsTime();
                 }
             }
 
-            // add padding
-            x = x.toString()
-                .split( ':' )
-                .map( function( segment ) {
-                    return segment.toString().pad( 2 );
-                } )
-                .join( ':' );
+            parts = x.toString().split( ':' );
+
+            if ( parts.length < 2 ) {
+                return '';
+            }
+
+            o.hours = parts[ 0 ].pad( 2 );
+            o.minutes = parts[ 1 ].pad( 2 );
+            parts = ( parts[ 2 ] || '00' ).split( '.' );
+            o.seconds = parts[ 0 ].pad( 2 );
+            parts = ( parts[ 1 ] || '000' ).split( /(\+|-)/ );
+            o.milliseconds = parts[ 0 ].pad( 3 );
+            if ( parts.length === 1 ) {
+                offset = new Date().getTimezoneOffsetAsTime();
+                parts[ 1 ] = offset.substring( 0, 1 );
+                parts[ 2 ] = offset.substring( 1 );
+            }
+            o.offsetDirection = parts[ 1 ];
+            o.offsetTime = parts[ 2 ].length > 2 ? parts[ 2 ] : parts[ 2 ].pad( 2 ) + ':00';
+
+            x = o.hours + ':' + o.minutes + ':' + o.seconds + '.' + o.milliseconds + o.offsetDirection + o.offsetTime;
 
             return this.validate( x ) ? x : '';
         }

@@ -157,6 +157,8 @@ module.exports = {
         var $inputNodes;
         var type;
         var curVal;
+        var d;
+        var ds;
 
         index = index || 0;
 
@@ -179,6 +181,27 @@ module.exports = {
                 // convert current value (loaded from instance) to a value that a native datepicker understands
                 // TODO test for IE, FF, Safari when those browsers start including native datepickers
                 value = this.form.model.node( name, index ).convert( value, type );
+            }
+
+            if ( type === 'time' ) {
+                // convert to a local time value that HTML time inputs and the JS widget understand (01:02)
+                if ( /(\+|-)/.test( value ) ) {
+                    // Use today's date to incorporate daylight savings changes,
+                    // Strip the thousands of a second, because most browsers fail to parse such a time.
+                    // Add a space before the timezone offset to satisfy some browsers.
+                    // For IE11, we also need to strip the Left-to-Right marks \u200E...
+                    ds = new Date().toLocaleDateString( 'en', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    } ).replace( /\u200E/g, '' ) + ' ' + value.replace( /(\d\d:\d\d:\d\d)(\.\d{1,3})(\s?((\+|-)\d\d))(:)?(\d\d)?/, '$1 GMT$3$7' );
+                    d = new Date( ds );
+                    if ( d.toString() !== 'Invalid Date' ) {
+                        value = d.getHours().toString().pad( 2 ) + ':' + d.getMinutes().toString().pad( 2 );
+                    } else {
+                        console.error( 'could not parse time:', value );
+                    }
+                }
             }
         }
 
