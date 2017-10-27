@@ -176,6 +176,8 @@ Form.prototype.init = function() {
         // before itemset.update
         this.langs.init();
 
+        // before repeats.init so that template contains role="page" when applicable
+        this.pages.init();
 
         // after radio button data-name setting (now done in XLST)
         this.repeats.init();
@@ -208,7 +210,6 @@ Form.prototype.init = function() {
         // field values are calculated
         this.calc.update();
 
-        // after repeats.init so that template contains role="page" when applicable
         // after branch.update to make sure page-relevancy has already been determined
         this.pages.init();
 

@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.41.1] - 2017-10-27
+----------------------
+##### Fixed
+- If repeat = page in Pages mode, the second+ repeat is now shown.
+
 [4.41.0] - 2017-10-18
 ----------------------
 ##### Changed
