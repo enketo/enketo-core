@@ -151,7 +151,7 @@ module.exports = {
             } );
             return values;
         }
-        return ( !$node.val() ) ? '' : $node.val();
+        return $node.val() || '';
     },
     setVal: function( name, index, value ) {
         var $inputNodes;
