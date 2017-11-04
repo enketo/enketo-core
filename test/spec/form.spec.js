@@ -1576,3 +1576,32 @@ describe( 'required enketo-transformer version', function() {
             'You also need to update the value returned by From.getRequiredTransformerVersion() to the new version number.' );
     } );
 } );
+
+describe( 'jr:choice-name regex', function() {
+    var form = loadForm( 'jr-choice-name.xml' );
+
+    form.init();
+
+    it( 'should match when there are spaces in arg strings', function() {
+        // given
+        expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[Default Value] Area' );
+
+        // when
+        form.view.$.find( '[name="/choice-regex/input"]' ).val( 'abc' ).trigger( 'change' );
+
+        // then
+        expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[abc] Area' );
+
+        // and
+        // We don't expect the value change to cascade to a label until the choice value itself is changed.
+        // See: https://github.com/enketo/enketo-core/issues/412
+        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[Default Value] Area' );
+
+        // when
+        form.view.$.find( '[name="/choice-regex/translator"][value=health_center]' ).click().trigger('change');
+
+        // then
+        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[abc] Health Center' );
+    } );
+} );

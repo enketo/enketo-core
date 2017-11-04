@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Printing: Various Analog Scale widget styling issues.
 - Grid Theme: A table-list/list-no-label question does not have a bottom border.
 - Grid Theme: Top of page sometimes does not have a border.
+- jr:choice-name() function can not handle syntax with more complex XPaths.
 
 [4.41.6] - 2017-11-29
 ---------------------
