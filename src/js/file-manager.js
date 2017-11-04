@@ -11,12 +11,11 @@
 var Promise = require( 'lie' );
 var $ = require( 'jquery' );
 var utils = require( './utils' );
+var TranslatedError = require( './translated-error' );
 
 var fileManager = {};
 
 var supported = typeof FileReader !== 'undefined';
-
-fileManager.notSupportedAdvisoryMsg = '';
 
 /**
  * Initialize the file manager .
@@ -26,7 +25,7 @@ fileManager.init = function() {
     if ( fileManager.isSupported() ) {
         return Promise.resolve( true );
     } else {
-        return Promise.reject( new Error( 'FileReader not supported.' ) );
+        return Promise.reject( new TranslatedError( 'FileReader not supported', 'filemanager.notSupportedAdvisoryMsg' ) );
     }
 };
 
