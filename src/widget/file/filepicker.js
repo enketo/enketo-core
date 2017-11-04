@@ -138,7 +138,7 @@ Filepicker.prototype._changeListener = function() {
             fileName = utils.getFilename( file, postfix );
 
             // process the file
-            fileManager.getFileUrl( file, fileName )
+            fileManager.getFileUrl( file )
                 .then( function( url ) {
                     // update UI
                     that._showPreview( url, that.props.mediaType );
