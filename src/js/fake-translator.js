@@ -23,6 +23,14 @@ var SOURCE_STRINGS = {
         "utm-south": "South",
         "utm-zone": "zone"
     },
+    "filemanager": {
+        "notSupportedAdvisoryMsg": "FileReader not supported.",
+    },
+    "filepicker": {
+        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "unsupported": "Media questions are not supported in this browser. __advice__",
+        "waitingForPermissions": "Waiting for user permissions."
+    },
     "form": {
         "required": "required"
     },

@@ -11,9 +11,9 @@
 var Promise = require( 'lie' );
 var $ = require( 'jquery' );
 var utils = require( './utils' );
+var TranslatedError = require( './translated-error' );
 
-var supported = typeof FileReader !== 'undefined',
-    notSupportedAdvisoryMsg = '';
+var supported = typeof FileReader !== 'undefined';
 
 /**
  * Initialize the file manager .
@@ -21,9 +21,9 @@ var supported = typeof FileReader !== 'undefined',
  */
 function init() {
     if ( supported ) {
-        return Promise.resolve( true );
+        return Promise.resolve();
     } else {
-        return Promise.reject( new Error( 'FileReader not supported.' ) );
+        return Promise.reject( new TranslatedError( 'FileReader not supported', 'filemanager.notSupportedAdvisoryMsg' ) );
     }
 }
 
@@ -164,7 +164,6 @@ function _isTooLarge( file ) {
 
 module.exports = {
     isSupported: isSupported,
-    notSupportedAdvisoryMsg: notSupportedAdvisoryMsg,
     isWaitingForPermissions: isWaitingForPermissions,
     init: init,
     getFileUrl: getFileUrl,
