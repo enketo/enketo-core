@@ -60,7 +60,7 @@ function getFileUrl( subject ) {
             // TODO obtain from storage
             reject( 'no!' );
         } else if ( typeof subject === 'object' ) {
-            if ( _isTooLarge( subject ) ) {
+            if ( module.exports.isTooLarge( subject ) ) {
                 error = new Error( 'File too large' );
                 reject( error );
             } else {
@@ -158,7 +158,7 @@ function _dataUriToBlob( dataURI ) {
  * @param  {Blob}  file [description]
  * @return {Boolean}      [description]
  */
-function _isTooLarge( file ) {
+function isTooLarge( file ) {
     return false;
 }
 
@@ -168,5 +168,6 @@ module.exports = {
     isWaitingForPermissions: isWaitingForPermissions,
     init: init,
     getFileUrl: getFileUrl,
-    getCurrentFiles: getCurrentFiles
+    getCurrentFiles: getCurrentFiles,
+    isTooLarge: isTooLarge
 };
