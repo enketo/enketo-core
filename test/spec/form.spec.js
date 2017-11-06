@@ -696,6 +696,15 @@ describe( 'branching functionality', function() {
 
     } );
 
+    // https://github.com/kobotoolbox/enketo-express/issues/846
+    describe( 'inside repeats for a calculation without a form control when no repeats exist', function() {
+        var form = loadForm( 'calcs_in_repeats_2.xml' );
+        var loadErrors = form.init();
+        it( 'does not throw an error', function() {
+            expect( loadErrors.length ).toEqual( 0 );
+        } );
+    } );
+
     describe( 'in nested branches ', function() {
         var form = loadForm( 'nested-branches.xml' );
 

@@ -84,7 +84,7 @@ module.exports = {
                  *
                  * Then get all the group parents of that node.
                  * 
-                 * TODO: determine index at every level to proerly support repeats and nested repeats
+                 * TODO: determine index at every level to properly support repeats and nested repeats
                  * 
                  * Note: getting the parents of $this wouldn't work for nodes inside #calculated-items!
                  */

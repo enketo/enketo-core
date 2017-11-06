@@ -38,6 +38,9 @@ module.exports = {
         $nodes.each( function() {
             var $node = $( this );
             var context;
+            var $parentGroups;
+            var pathParts;
+            var parentPath;
 
             //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
             if ( $.inArray( $node.attr( 'name' ), alreadyCovered ) !== -1 ) {
@@ -59,14 +62,36 @@ module.exports = {
                 }
                 return;
             }
+
+            /*
+             * Check if the (calculate without form control) node is part of a repeat that has no instances
+             */
+            pathParts = p.path.split( '/' );
+            if ( pathParts.length > 3 ) {
+                parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
+                $parentGroups = that.form.view.$.find( '.or-group[name="' + parentPath + '"],.or-group-data[name="' + parentPath + '"]' )
+                    // now remove the groups that have a repeat-info child without repeat instance siblings
+                    .filter( function() {
+                        var $g = $( this );
+                        return $g.children( '.or-repeat' ).length > 0 || $g.children( '.or-repeat-info' ).length === 0;
+                    } ); //.eq( index )
+                // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
+                // Hence that relevant does not need to be evaluated (and would fail otherwise because the context doesn't exist).
+                if ( $parentGroups.length === 0 ) {
+                    return;
+                }
+            }
+
             /*
              * Determining ancestry is expensive. Using the knowledge most forms don't use repeats and
              * if they do, they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
              * The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
              * (6-7 seconds of loading time on the bench6 form)
              */
-            insideRepeat = ( clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
-            insideRepeatClone = ( clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
+            // TODO: these checks fail miserably for calculated items that do not have a form control
+            insideRepeat = clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat' ).length > 0;
+            insideRepeatClone = clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat.clone' ).length > 0;
+
             /* 
              * If the relevant is placed on a group and that group contains repeats with the same name,
              * but currently has 0 repeats, the context will not be available.
