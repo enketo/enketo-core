@@ -12,36 +12,39 @@ var Promise = require( 'lie' );
 var $ = require( 'jquery' );
 var utils = require( './utils' );
 
-var supported = typeof FileReader !== 'undefined',
-    notSupportedAdvisoryMsg = '';
+var fileManager = {};
+
+var supported = typeof FileReader !== 'undefined';
+
+fileManager.notSupportedAdvisoryMsg = '';
 
 /**
  * Initialize the file manager .
  * @return {[type]} promise boolean or rejection with Error
  */
-function init() {
-    if ( supported ) {
+fileManager.init = function() {
+    if ( fileManager.isSupported() ) {
         return Promise.resolve( true );
     } else {
         return Promise.reject( new Error( 'FileReader not supported.' ) );
     }
-}
+};
 
 /**
  * Whether filemanager is supported in browser
  * @return {Boolean}
  */
-function isSupported() {
+fileManager.isSupported = function() {
     return supported;
-}
+};
 
 /**
  * Whether the filemanager is waiting for user permissions
  * @return {Boolean} [description]
  */
-function isWaitingForPermissions() {
+fileManager.isWaitingForPermissions = function() {
     return false;
-}
+};
 
 /**
  * Obtains a url that can be used to show a preview of the file when used
@@ -50,7 +53,7 @@ function isWaitingForPermissions() {
  * @param  {?string|Object} subject File or filename
  * @return {[type]}         promise url string or rejection with Error
  */
-function getFileUrl( subject ) {
+fileManager.getFileUrl = function( subject ) {
     return new Promise( function( resolve, reject ) {
         var error, reader;
 
@@ -60,7 +63,7 @@ function getFileUrl( subject ) {
             // TODO obtain from storage
             reject( 'no!' );
         } else if ( typeof subject === 'object' ) {
-            if ( _isTooLarge( subject ) ) {
+            if ( fileManager.isTooLarge( subject ) ) {
                 error = new Error( 'File too large' );
                 reject( error );
             } else {
@@ -77,13 +80,13 @@ function getFileUrl( subject ) {
             reject( new Error( 'Unknown error occurred' ) );
         }
     } );
-}
+};
 
 /**
  * Obtain files currently stored in file input elements of open record
  * @return {[File]} array of files
  */
-function getCurrentFiles() {
+fileManager.getCurrentFiles = function() {
     var files = [];
 
     // Get any files inside file input elements or text input elements for drawings.
@@ -116,7 +119,7 @@ function getCurrentFiles() {
     } );
 
     return files;
-}
+};
 
 function _dataUriToBlob( dataURI ) {
     var byteString;
@@ -158,15 +161,8 @@ function _dataUriToBlob( dataURI ) {
  * @param  {Blob}  file [description]
  * @return {Boolean}      [description]
  */
-function _isTooLarge( file ) {
+fileManager.isTooLarge = function( file ) {
     return false;
-}
-
-module.exports = {
-    isSupported: isSupported,
-    notSupportedAdvisoryMsg: notSupportedAdvisoryMsg,
-    isWaitingForPermissions: isWaitingForPermissions,
-    init: init,
-    getFileUrl: getFileUrl,
-    getCurrentFiles: getCurrentFiles
 };
+
+module.exports = fileManager;
