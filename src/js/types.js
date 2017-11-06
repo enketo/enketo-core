@@ -29,7 +29,7 @@ var types = {
         },
         validate: function( x ) {
             var num = Number( x );
-            return ( !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY ) ? true : false;
+            return !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY;
         }
     },
     'int': {
@@ -43,7 +43,7 @@ var types = {
         },
         validate: function( x ) {
             var num = Number( x );
-            return ( !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY && Math.round( num ) === num && num.toString() === x.toString() ) ? true : false;
+            return !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY && Math.round( num ) === num && num.toString() === x.toString();
         }
     },
     'date': {

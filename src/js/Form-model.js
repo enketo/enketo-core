@@ -999,7 +999,7 @@ FormModel.prototype.shiftRoot = function( expr ) {
         // Encode all string literals in order to exclude them, without creating a monsterly regex
         expr = expr.replace( LITERALS, function( m, p1, p2, p3, p4 ) {
             var encoded = typeof p1 !== 'undefined' ? encodeURIComponent( p1 ) : encodeURIComponent( p3 );
-            var quote = p2 ? p2 : p4;
+            var quote = p2 || p4;
             return quote + encoded + quote;
         } );
         // Insert /model/instance[1]
@@ -1008,7 +1008,7 @@ FormModel.prototype.shiftRoot = function( expr ) {
         // Decode string literals
         expr = expr.replace( LITERALS, function( m, p1, p2, p3, p4 ) {
             var decoded = typeof p1 !== 'undefined' ? decodeURIComponent( p1 ) : decodeURIComponent( p3 );
-            var quote = p2 ? p2 : p4;
+            var quote = p2 || p4;
             return quote + decoded + quote;
         } );
     }

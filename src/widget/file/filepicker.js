@@ -65,7 +65,7 @@ Filepicker.prototype._init = function() {
     }
 
     if ( !fileManager || !fileManager.isSupported() ) {
-        var advice = ( fileManager.notSupportedAdvisoryMsg ) ? fileManager.notSupportedAdvisoryMsg : '';
+        var advice = fileManager.notSupportedAdvisoryMsg || '';
         this._showFeedback( 'Media questions are not supported in this browser. ' + advice, 'warning' );
         return;
     }
