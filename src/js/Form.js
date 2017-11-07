@@ -291,11 +291,11 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
     var name;
     var $input;
     var label = '';
-    var matches = expr.match( /jr:choice-name\(([^,]+),\s?'(.*?)'\)/ );
+    var matches = expr.match( /jr:choice-name\(\s*([^,]*[^,\s])\s*,\s*'([^']*)'\s*\)/ );
 
     if ( matches ) {
         value = this.model.evaluate( matches[ 1 ], resTypeStr, selector, index, tryNative );
-        name = matches[ 2 ].trim();
+        name = matches[ 2 ];
         $input = this.view.$.find( '[name="' + name + '"]' );
 
         if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
