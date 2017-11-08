@@ -3,23 +3,26 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
-----------------------
+[4.41.2] - 2017-11-08
+---------------------
+##### Changed
+- More customization options of the file manager module.
+
 ##### Fixed
 - A calculated item (without form control) and with a relevant inside a repeat throws an exception when there are 0 repeats and the relevant is evaluated.
 
 [4.41.1] - 2017-10-27
-----------------------
+---------------------
 ##### Fixed
 - If repeat = page in Pages mode, the second+ repeat is now shown.
 
 [4.41.0] - 2017-10-18
-----------------------
+---------------------
 ##### Changed
 - Time format according to ODK XForms Specification (10:12 -> 10:12.00.000-06:00). **WARNING: Make sure your backend is ready for this.**
 
 [4.40.0] - 2017-10-16
-----------------------
+---------------------
 ##### Added
 - Make all label groups collapsible.
 - Let appearance "compact" on a group collapse this group by default.
