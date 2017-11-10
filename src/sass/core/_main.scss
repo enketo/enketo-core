@@ -150,7 +150,7 @@ $media-margin: 10px;
 }
 
 // collapse icon for group labels
-.or-group{ 
+.or-group:not(.or-appearance-no-collapse){ 
     > h4 {
         position: relative; 
         pointer-events: none;
@@ -191,7 +191,7 @@ $media-margin: 10px;
 }
 
 [dir="rtl"]{
-    .or-group.or-appearance-compact > h4::before{ 
+    .or-group:not(.or-appearance-no-collapse).or-appearance-compact > h4::before{ 
         border-left: 0;
         border-right: 12px solid $brand-primary-color;
     }
