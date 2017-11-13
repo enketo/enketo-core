@@ -126,8 +126,11 @@ DatepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatepickerExtended.prototype._setResetHandler = function( $fakeDateI ) {
+    var that = this;
     $fakeDateI.next( '.btn-reset' ).on( 'click', function() {
-        $fakeDateI.val( '' ).trigger( 'changeDate' ).datepicker( 'update' );
+        if ( $( that.element ).val() ) {
+            $fakeDateI.val( '' ).trigger( 'changeDate' ).datepicker( 'update' );
+        }
     } );
 };
 

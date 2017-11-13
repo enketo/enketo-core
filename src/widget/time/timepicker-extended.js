@@ -54,7 +54,10 @@ TimepickerExtended.prototype._init = function() {
 
     // reset button
     $resetBtn.on( 'click', function() {
-        $fakeTimeI.val( '' ).trigger( 'change' );
+        var event = $timeI.val() ? 'change' : '';
+        if ( event || $fakeTimeI.val() ) {
+            $fakeTimeI.val( '' ).trigger( event );
+        }
     } );
 
     // pass widget focus event

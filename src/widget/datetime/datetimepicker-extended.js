@@ -82,8 +82,11 @@ DatetimepickerExtended.prototype._init = function() {
 
     //reset button
     this.$fakeTimeI.next( '.btn-reset' ).on( 'click', function() {
-        that.$fakeDateI.val( '' ).trigger( 'change' ).datepicker( 'update' );
-        that.$fakeTimeI.val( '' ).trigger( 'change' );
+        var event = $dateTimeI.val() ? 'change' : '';
+        if ( event || that.$fakeDateI.val() || that.$fakeTimeI.val() ) {
+            that.$fakeDateI.val( '' ).trigger( event ).datepicker( 'update' );
+            that.$fakeTimeI.val( '' ).trigger( event );
+        }
     } );
 
     function changeVal() {

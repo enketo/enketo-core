@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.41.3] - 2017-11-13
 ---------------------
 ##### Changed
 - Styling of repeat + button in Grid Theme.
 
 ##### Fixed
 - Various issues with repeat + button in Pages Mode when repeat=page.
+- Excessive change events fired by datepicker, timepicker, and datetimepicker when reset button is clicked when value is empty.
 
 [4.41.2] - 2017-11-08
 ---------------------
