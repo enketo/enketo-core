@@ -25,6 +25,7 @@ module.exports = {
                     // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
                     return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
                 } )
+                .add( '.or-repeat.or-appearance-field-list + .or-repeat-info' )
                 .attr( 'role', 'page' );
 
             if ( $allPages.length > 0 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
@@ -126,8 +127,12 @@ module.exports = {
                 // note that that.$current will have length 1 even if it was removed from DOM!
                 if ( that.$current.closest( 'html' ).length === 0 ) {
                     that.updateAllActive();
+                    var $target = $( event.target ).prev();
+                    if ( $target.length === 0 ) {
+                        $target = $( event.target );
+                    }
                     // is it best to go to previous page always?
-                    that.flipToPageContaining( $( event.target ) );
+                    that.flipToPageContaining( $target );
                 }
             } );
     },
@@ -147,8 +152,13 @@ module.exports = {
     updateAllActive: function( $all ) {
         $all = $all || $( '.or [role="page"]' );
         this.$activePages = $all.filter( function() {
-            return $( this ).closest( '.disabled' ).length === 0 &&
-                ( $( this ).is( '.question' ) || $( this ).find( '.question:not(.disabled)' ).length > 0 );
+            var $this = $( this );
+            return $this.closest( '.disabled' ).length === 0 &&
+                ( $this.is( '.question' ) || $this.find( '.question:not(.disabled)' ).length > 0 ||
+                    // or-repeat-info is only considered a page by itself if it has no sibling repeats
+                    // When there are siblings repeats, we use CSS trickery to show the + button underneath the last 
+                    // repeat.
+                    ( $this.is( '.or-repeat-info' ) && $this.siblings( '.or-repeat' ).length === 0 ) );
         } );
     },
     getAllActive: function() {

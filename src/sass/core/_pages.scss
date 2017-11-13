@@ -8,6 +8,10 @@
         }
     }
 
+    .or-repeat[role="page"].current + .or-repeat-info{
+        display: block;
+    }
+
     [role="page"] {
         display: none;
 

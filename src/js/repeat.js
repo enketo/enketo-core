@@ -302,7 +302,7 @@ module.exports = {
     },
     remove: function( $repeat, delay ) {
         var that = this;
-        var $prev = $repeat.prev( '.or-repeat' );
+        var $next = $repeat.next( '.or-repeat, .or-repeat-info' );
         var repeatPath = $repeat.attr( 'name' );
         var repeatIndex = this.form.view.$.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $repeat );
         var repeatInfo = $repeat.siblings( '.or-repeat-info' )[ 0 ];
@@ -313,9 +313,9 @@ module.exports = {
             $repeat.remove();
             that.numberRepeats( repeatInfo );
             that.toggleButtons( repeatInfo );
-            // Trigger the removerepeat on the previous repeat (always present)
+            // Trigger the removerepeat on the next repeat or repeat-info(always present)
             // so that removerepeat handlers know where the repeat was removed
-            $prev.trigger( 'removerepeat' );
+            $next.trigger( 'removerepeat' );
             // Now remove the data node
             that.form.model.node( repeatPath, repeatIndex ).remove();
         } );
