@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Styling of repeat + button in Grid Theme.
+
 ##### Fixed
 - Various issues with repeat + button in Pages Mode when repeat=page.
 

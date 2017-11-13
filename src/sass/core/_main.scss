@@ -443,9 +443,13 @@ select {
     }
 }
 
+.or-repeat-info {
+    padding-top: 10px;
+}
+
 .add-repeat-btn {
     display: block;
-    margin: 10px auto;
+    margin: 0 auto 10px auto;
     min-width: 150px;
 }
 

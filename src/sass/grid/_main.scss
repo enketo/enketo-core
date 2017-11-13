@@ -275,8 +275,8 @@ h4 + .or-repeat {
 .or-repeat-info {
     flex: 100%;
     margin-right: -1px;
-    margin-left: -1px;
-    border-right: 1px solid $question-bg;
+    border-bottom: $grid-border;
+    border-left: $grid-border;
 }
 
 // wrappers around questions
