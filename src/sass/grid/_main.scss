@@ -99,6 +99,11 @@ h4 + .or-repeat {
     margin-top: -1px;
 }
 
+// repeat border to differentiate between repeat instances
+.or-repeat {
+    border-bottom: 2px solid black;
+}
+
 // griddable elements - ie. wrappers around questions and notes
 .question {
     @include flex(1, 1);
