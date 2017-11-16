@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>repeat</h:title>
+    <model>
+      <instance>
+        <repeat id="repeat">
+          <rep jr:template="">
+            <a/>
+            <b/>
+          </rep>
+          <meta>
+            <instanceID/>
+          </meta>
+        </repeat>
+      </instance>
+      <bind nodeset="/repeat/rep/a" type="string"/>
+      <bind nodeset="/repeat/rep/b" type="date" relevant="string-length(/repeat/rep/a) > 0"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/repeat/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/repeat/rep">
+      <label></label>
+      <repeat nodeset="/repeat/rep">
+        <input ref="/repeat/rep/a">
+          <label>Enter text to make next question relevant</label>
+        </input>
+        <input ref="/repeat/rep/b" appearance="year">
+          <label>Enter date</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

@@ -525,6 +525,17 @@ describe( 'repeat functionality', function() {
         } );
     } );
 
+    describe( 'initializes date widgets', function() {
+        it( 'in a new repeat instance if the date widget is not relevant by default', function() {
+            var form = loadForm( 'repeat-irrelevant-date.xml' );
+            form.init();
+            form.view.$.find( '.add-repeat-btn' ).click();
+            // make date field in second repeat relevant
+            form.view.$.find( '[name="/repeat/rep/a"]' ).eq( 1 ).val( 'a' ).trigger( 'change' );
+            expect( form.view.$.find( '[name="/repeat/rep/b"]' ).eq( 1 ).closest( '.question' ).find( '.widget' ).length ).toEqual( 1 );
+        } );
+    } );
+
 } );
 
 describe( 'calculations', function() {

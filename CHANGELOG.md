@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased] 
+---------------------
+##### Fixed
+- A new repeat with a date field that is not relevant by default does not get the date widget on non-touchscreen devices.
+
 [4.41.3] - 2017-11-13
 ---------------------
 ##### Changed

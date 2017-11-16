@@ -69,7 +69,7 @@ $.fn[ pluginName ] = function( options, event ) {
         var data = $this.data( pluginName );
 
         // If no datepickerExtended widget is present on the same element
-        if ( !dp && !data && !support.touch ) {
+        if ( !dp && !data && support.touch ) {
             $this.data( pluginName, new DatepickerMobile( this, options, event ) );
         }
     } );
