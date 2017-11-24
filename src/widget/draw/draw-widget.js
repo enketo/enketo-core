@@ -39,7 +39,6 @@ DrawWidget.prototype._init = function() {
     this.$widget = this._getMarkup();
     canvas = this.$widget[ 0 ].querySelector( '.draw-widget__body__canvas' );
 
-
     $( this.element ).after( this.$widget );
 
     this._handleResize( canvas );
@@ -92,6 +91,13 @@ DrawWidget.prototype._init = function() {
                 } ).click();
 
             $( canvas )
+                .on( 'focus', function() {
+                    // Workaround issue in pages mode where the canvas needs to be resized,
+                    // if the page has never been shown before
+                    if ( this.width === 0 || this.height === 0 ) {
+                        that._resizeCanvas( this );
+                    }
+                } )
                 .on( 'canvasreload.' + that.namespace, function() {
                     if ( that.cache ) {
                         that.pad.fromDataURL( that.cache );

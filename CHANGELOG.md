@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.41.5] - 2017-11-24
+---------------------
+##### Fixed
+- Draw/signature widget not working in pages mode sometimes, if it is not on the first page.
+
 [4.41.4] - 2017-11-16 
 ---------------------
 ##### Changed

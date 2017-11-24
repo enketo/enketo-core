@@ -24,7 +24,7 @@ var widgets = require( 'widgets' ).filter( function( widget ) {
 
 init = function( $group, opts ) {
     if ( !this.form ) {
-        throw new Error( 'Widgets module not correclty instantiated with form property.' );
+        throw new Error( 'Widgets module not correctly instantiated with form property.' );
     }
     $form = this.form.view.$;
     $group = $group || $form;
