@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>RepeatGroupTest</h:title>
+    <model>
+      <instance>
+        <RepeatGroupTest id="RepeatGroupTest">
+          <P jr:template="">
+            <pos/>
+            <pos_note/>
+          </P>
+          <cnt/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </RepeatGroupTest>
+      </instance>
+      <bind nodeset="/RepeatGroupTest/P/G/Name" type="string"/>
+      <bind nodeset="/RepeatGroupTest/P/pos" type="string" calculate="position(..)"/>
+      <bind nodeset="/RepeatGroupTest/P/pos_note" type="string" readonly="true()"/>
+      <bind nodeset="/RepeatGroupTest/cnt" type="string" calculate="count( /RepeatGroupTest/P)" readonly="true()"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/RepeatGroupTest/P">
+      <label></label>
+      <repeat nodeset="/RepeatGroupTest/P">
+        <input ref="/RepeatGroupTest/P/pos_note">
+          <label>position(..) = <output value="/RepeatGroupTest/P/pos"/></label>      
+        </input>
+      </repeat>
+      <input ref="/RepeatGroupTest/cnt">
+        <label>number of repeats:</label>      
+      </input>
+    </group>
+  </h:body>
+</h:html>

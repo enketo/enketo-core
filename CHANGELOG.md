@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- When a repeat is removed any logic that depends on repeat position changes is not updated when it should be.
+
 [4.41.5] - 2017-11-24
 ---------------------
 ##### Fixed

@@ -578,6 +578,18 @@ describe( 'calculations', function() {
         expect( $model.find( 'txtsum_note' ).text() ).toEqual( '10' );
     } );
 
+    // https://github.com/enketo/enketo-core/issues/479
+    it( 'inside a repeat using the position(..) function are updated if the position changes due to repeat removal', function() {
+        var form = loadForm( 'repeat-position.xml' );
+        form.init();
+        form.view.$.find( '.add-repeat-btn' ).click().click().click();
+        form.view.$.find( '.remove' ).eq( 1 ).click();
+        expect( form.model.xml.querySelectorAll( 'pos' )[ 1 ].textContent ).toEqual( '2' );
+        expect( form.view.$.find( '.or-output[data-value="/RepeatGroupTest/P/pos"]' ).eq( 1 ).text() ).toEqual( '2' );
+        expect( form.model.xml.querySelectorAll( 'pos' )[ 2 ].textContent ).toEqual( '3' );
+        expect( form.view.$.find( '.or-output[data-value="/RepeatGroupTest/P/pos"]' ).eq( 2 ).text() ).toEqual( '3' );
+    } );
+
 } );
 
 describe( 'branching functionality', function() {

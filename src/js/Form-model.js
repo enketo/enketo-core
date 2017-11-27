@@ -1468,42 +1468,49 @@ Nodeset.prototype.getClosestRepeat = function() {
  */
 Nodeset.prototype.remove = function() {
     var $dataNode;
-    var allRemovedNodeNames;
-    var $this;
+    var nodeName;
     var repeatPath;
     var repeatIndex;
     var removalEventData;
+    var $next;
 
     $dataNode = this.get();
 
     if ( $dataNode.length > 0 ) {
 
-        allRemovedNodeNames = [ $dataNode.prop( 'nodeName' ) ];
-
-        $dataNode.find( '*' ).each( function() {
-            $this = $( this );
-            allRemovedNodeNames.push( $this.prop( 'nodeName' ) );
-        } );
-
+        nodeName = $dataNode.prop( 'nodeName' );
         repeatPath = this.model.getXPath( $dataNode.get( 0 ), 'instance' );
         repeatIndex = this.model.determineIndex( $dataNode );
         removalEventData = this.model.getRemovalEventData( $dataNode.get( 0 ) );
 
         if ( !this.model.templates[ repeatPath ] ) {
-            // This allows the model itself without requiring the controller to cal call .extractFakeTemplates()
+            // This allows the model itself without requiring the controller to call .extractFakeTemplates()
             // to extract non-jr:templates by assuming that node.remove() would only called for a repeat.
             this.model.extractFakeTemplates( [ repeatPath ] );
         }
+
+        $next = $dataNode.next( nodeName );
 
         $dataNode.remove();
         this.nodes = null;
 
         // For internal use
         this.model.$events.trigger( 'dataupdate', {
-            nodes: allRemovedNodeNames,
+            nodes: null,
             repeatPath: repeatPath,
             repeatIndex: repeatIndex
         } );
+
+        // For all next sibling repeats to update formulas that use e.g. position(..)
+        // For internal use
+        while ( $next[ 0 ] ) {
+            $next = $next.next( nodeName );
+            this.model.$events.trigger( 'dataupdate', {
+                nodes: null,
+                repeatPath: repeatPath,
+                repeatIndex: repeatIndex++
+            } );
+        }
 
         // For external use, if required with custom data.
         this.model.$events.trigger( 'removed', removalEventData );
