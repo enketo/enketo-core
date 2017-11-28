@@ -13,6 +13,7 @@ body {
 
     .main {
         overflow: visible;
+        display: block;
         margin: 0;
         padding: 0;
 
@@ -347,7 +348,7 @@ label, legend, .trigger, .note {
 }
 
 // pagebreak management
-*:not(.or-appearance-field-list) .question, .note, .trigger, .or-appearance-field-list {
+*:not(.or-appearance-field-list) .question, .or-appearance-field-list {
     page-break-inside: avoid;
 }
 
@@ -356,7 +357,7 @@ label, legend, .trigger, .note {
 h3, h4 {
     page-break-after: avoid;
 
-    + .trigger, + .question, + .note {
+    + .question {
         page-break-before: avoid;
     }
 }
