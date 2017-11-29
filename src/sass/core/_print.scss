@@ -72,6 +72,13 @@ h4::before {
         // still let it take up space
         visibility: hidden;
     }
+
+    input[type="number"]{
+        appearance: textfield !important;
+        -moz-appearance: textfield !important;
+        -webkit-appearance: textfield !important;
+        -ms-appearance: textfield !important;
+    }
 }
 
 // font sizes  & line heights
