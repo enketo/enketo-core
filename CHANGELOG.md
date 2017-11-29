@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Removed
+- Temporary touch swipe handling in Pages mode as it was breaking things.
+
 ##### Fixed
 - When a repeat is removed any logic that depends on repeat position changes is not updated when it should be.
 - Printing: only first page printed in Firefox.

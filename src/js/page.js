@@ -8,7 +8,7 @@ var $ = require( 'jquery' );
 var Promise = require( 'lie' );
 var config = require( 'enketo-config' );
 
-require( 'jquery-touchswipe' );
+//require( 'jquery-touchswipe' );
 
 module.exports = {
     active: false,
@@ -39,7 +39,7 @@ module.exports = {
                 this.setButtonHandlers();
                 this.setRepeatHandlers();
                 this.setBranchHandlers();
-                this.setSwipeHandlers();
+                //this.setSwipeHandlers();
                 this.active = true;
                 this.flipToFirst();
             }
