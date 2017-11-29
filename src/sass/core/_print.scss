@@ -42,7 +42,8 @@ body {
 .form-footer,
 .or-appearance-no-print,
 .ad,
-.paper #submit-form {
+.paper #submit-form,
+h4::before {
     display: none !important;
 }
 
