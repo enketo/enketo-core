@@ -246,31 +246,31 @@ label, legend, .trigger, .note {
 
     .dropdown-toggle {
         display: none;
-    }
+         ~ .dropdown-menu {
+            @include display-flex;
 
-    .dropdown-menu {
-        @include display-flex;
+            @include flex-wrap(wrap);
 
-        @include flex-wrap(wrap);
+            @include flex-direction(row);
 
-        @include flex-direction(row);
+            display: block;
+            position: static;
+            border: none;
+            box-shadow: none;
+            list-style-type: circle;
+            max-height: none;
 
-        display: block;
-        position: static;
-        border: none;
-        box-shadow: none;
-        list-style-type: circle;
+            li, li.active {
+                flex: 1;
+                min-width: 30%;
+                display: inline-block;
+                margin-right: 20px;
+            }
 
-        li, li.active {
-            flex: 1;
-            min-width: 30%;
-            display: inline-block;
-            margin-right: 20px;
-        }
-
-        a {
-            background: none;
-            color: black;
+            a {
+                background: none;
+                color: black;
+            }
         }
     }
 }
@@ -280,7 +280,7 @@ label, legend, .trigger, .note {
 }
 
 .or-appearance-likert .option-wrapper > label .option-label {
-    border-top: 1.5px solid black;
+    border-top: 1px solid black;
 }
 
 .question.or-appearance-compact input:checked ~ img,
@@ -289,26 +289,20 @@ label, legend, .trigger, .note {
 }
 
 .or-appearance-distress {
-    .slider.slider-vertical {
-        border: 1px solid black;
-        border-bottom: none;
+    .slider-vertical .slider {
+        border: none;
     }
 
     .bulb {
-        border: 1px solid black;
-
-        .inner {
-            border: 1px solid black;
-        }
+        display: none;
     }
 
     .slider-handle {
         border: 1px solid black;
     }
 
-    .slider.slider-vertical .slider-track {
+    .slider-vertical .slider-track {
         border: 1px solid black;
-        border-bottom: none;
     }
 }
 
@@ -334,6 +328,10 @@ label, legend, .trigger, .note {
     .slider-handle {
         display: none;
     }
+}
+
+.draw-widget__colorpicker {
+    display: none;
 }
 
 .or-appearance-comment.hide {
