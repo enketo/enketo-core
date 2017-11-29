@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Printing: group collapse carets shown.
 - Printing: number input up/down buttons shown in Firefox.
 - Repeat with relevants and parent group without `ref` attribute is not revealed when relevant becomes true.
+- In pages mode, text and number inputs can no longer get focus.
 
 [4.41.5] - 2017-11-24
 ---------------------
