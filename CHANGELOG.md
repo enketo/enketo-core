@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Printing: only first page printed in Firefox.
 - Printing: group collapse carets shown.
 - Printing: number input up/down buttons shown in Firefox.
+- Repeat with relevants and parent group without `ref` attribute is not revealed when relevant becomes true,
 
 [4.41.5] - 2017-11-24
 ---------------------
