@@ -3,7 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[4.41.6] - 2017-11-30 
+[Unreleased]
+---------------------
+##### Fixed
+- Printing: Non-relevant non-select fields are not greyed out.
+
+[4.41.6] - 2017-11-29
 ---------------------
 ##### Fixed
 - When a repeat is removed any logic that depends on repeat position changes is not updated when it should be.
