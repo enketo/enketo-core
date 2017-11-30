@@ -50,7 +50,6 @@ h4::before {
 .or {
     .hint,
     .or-appearance-no-print,
-    .question:not(.or-appearance-maps) .map-canvas-wrapper,
     .geopoint .search-bar,
     .or-constraint-msg,
     .add-on,
@@ -218,6 +217,10 @@ label, legend, .trigger, .note {
     }
 
     .search-bar {
+        display: none;
+    }
+
+    .leaflet-popup-pane, .leaflet-control {
         display: none;
     }
 }
