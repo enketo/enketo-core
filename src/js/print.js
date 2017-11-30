@@ -187,7 +187,7 @@ function confirmPaperSettingsAndPrint( confirm ) {
     };
 
     // TODO: would be nice if fixGrid can become synchronous again or
-    // a progress is shown when it is churning away.
+    // a progress bar is shown when it is churning away.
 
     confirm( texts, options );
 }
@@ -195,8 +195,8 @@ function confirmPaperSettingsAndPrint( confirm ) {
 /**
  * Prints the form after first setting page breaks (every time it is called)
  */
-function printForm( confirm ) {
-    if ( isGrid() ) {
+function printForm( confirm, theme ) {
+    if ( theme === 'grid' || ( !theme && isGrid() ) ) {
         styleToAll();
         // add temp reset button, just in case somebody gets stuck in print view
         $( '<button class="btn back-to-screen-view">Back to Normal View</button>' ).prependTo( $( 'form.or' ) ).on( 'click', function() {
