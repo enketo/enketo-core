@@ -51,7 +51,8 @@
 .question.or-appearance-list-nolabel, .question.or-appearance-label {
     margin: 0;
 
-    &:not(:last-child) {
+    // TODO: still a problem if the list-nolabel is followed by a regular select
+    &:not(:last-of-type) {
         border-bottom: none;
     }
 }

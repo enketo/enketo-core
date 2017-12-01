@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Printing: Geo widget without "maps" appearance is shown on screen but not on printout.
 - Printing: Geo widget map/zoom selector buttons are shown on printouts.
 - Printing: Various Analog Scale widget styling issues.
+- Sometimes a table-list/list-no-label question does not have a bottom border in the Grid Theme.
 
 [4.41.6] - 2017-11-29
 ---------------------
