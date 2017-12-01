@@ -309,10 +309,12 @@ label, legend, .trigger, .note {
 }
 
 .or-appearance-analog-scale {
-    .show-value {
-        display: none;
+    // if analog-scale widget is a non-current page the display is set to block
+    // which moves the vertical widget below the label instead of next to it.
+    &:not(.or-appearance-horizontal){
+        display: flex !important; 
     }
-
+    
     .scale__ticks {
         display: none;
     }
@@ -328,7 +330,19 @@ label, legend, .trigger, .note {
     }
 
     .slider-handle {
-        display: none;
+        border: 1px solid black;
+    }
+
+    .slider-vertical .slider-handle {  
+        margin-left: -1px;
+    }
+
+    .slider-horizontal .slider-handle {  
+        margin-top: -1px;
+    }
+
+    .slider-vertical .min-label {
+        margin-top: 10px;
     }
 }
 
