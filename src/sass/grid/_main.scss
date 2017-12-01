@@ -89,6 +89,11 @@ h4 + .or-repeat {
     border-top: $grid-border;
 }
 
+// anything that is a page
+.or [role="page"]{
+    border-top: $grid-border;
+}
+
 // top-level questions border
 .or > .question {
     border: $grid-border;
