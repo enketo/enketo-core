@@ -1472,7 +1472,7 @@ Nodeset.prototype.remove = function() {
     var repeatPath;
     var repeatIndex;
     var removalEventData;
-    var $next;
+    var nextNode;
 
     $dataNode = this.get();
 
@@ -1488,9 +1488,8 @@ Nodeset.prototype.remove = function() {
             // to extract non-jr:templates by assuming that node.remove() would only called for a repeat.
             this.model.extractFakeTemplates( [ repeatPath ] );
         }
-
-        $next = $dataNode.next( nodeName );
-
+        // warning: jQuery.next() to be avoided to support dots in the nodename
+        nextNode = $dataNode.get( 0 ).nextSibling;
         $dataNode.remove();
         this.nodes = null;
 
@@ -1503,8 +1502,8 @@ Nodeset.prototype.remove = function() {
 
         // For all next sibling repeats to update formulas that use e.g. position(..)
         // For internal use
-        while ( $next[ 0 ] ) {
-            $next = $next.next( nodeName );
+        while ( nextNode && nextNode.nodeName == nodeName ) {
+            nextNode = nextNode.nextSibling;
             this.model.$events.trigger( 'dataupdate', {
                 nodes: null,
                 repeatPath: repeatPath,

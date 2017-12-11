@@ -355,6 +355,19 @@ describe( 'Data node remover', function() {
         expect( node.get().length ).toEqual( 0 );
         expect( data.node( '/thedata/nodeA' ).get().length ).toEqual( 0 );
     } );
+
+    it( 'can remove nodes with a . in the nodeName', function() {
+        var model = new Model( '<model><instance><data><F27./></data></instance></model>' );
+        var path = '/data/F27.';
+        var node;
+
+        model.init();
+        node = model.node( path );
+
+        expect( node.get().length ).toEqual( 1 );
+        node.remove();
+        expect( model.node( path ).get().length ).toEqual( 0 );
+    } );
 } );
 
 

@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.41.7] - 2017-12-11
 ---------------------
 ##### Fixed
 - Printing: Non-relevant non-select fields are not greyed out.
@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Grid Theme: A table-list/list-no-label question does not have a bottom border.
 - Grid Theme: Top of page sometimes does not have a border.
 - jr:choice-name() function can not handle syntax with more complex XPaths.
+- Nodenames with dots cause an exception during extraction of a serialized model without irrelevant nodes.
 
 [4.41.6] - 2017-11-29
 ---------------------
