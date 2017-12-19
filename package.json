@@ -24,9 +24,11 @@
         "email": "martijn@enketo.org",
         "url": "https://www.linkedin.com/in/martijnvanderijdt"
     },
-    "contributors": [ {
-        "name": "Alex Anderson"
-    } ],
+    "contributors": [
+        {
+            "name": "Alex Anderson"
+        }
+    ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/Form.js",
     "scripts": {
