@@ -14,7 +14,7 @@ var OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coales
 var OPENROSA_XFORMS_NS = 'http://openrosa.org/xforms';
 var JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
 var ENKETO_XFORMS_NS = 'http://enketo.org/xforms';
-require( './plugins' );
+//require( './plugins' );
 require( './extend' );
 var FormModel;
 var Nodeset;
