@@ -2,7 +2,7 @@
 
 var Widget = require( '../../js/Widget' );
 var $ = require( 'jquery' );
-var pluginName = 'datepickerMobile';
+var pluginName = 'datepickerNative';
 var support = require( '../../js/support' );
 
 /**
@@ -16,19 +16,19 @@ var support = require( '../../js/support' );
  * @param {*=}                            event     event
  */
 
-function DatepickerMobile( element, options ) {
+function DatepickerNative( element, options ) {
     this.namespace = pluginName;
     Widget.call( this, element, options );
     this._init();
 }
 
-DatepickerMobile.prototype = Object.create( Widget.prototype );
-DatepickerMobile.prototype.constructor = DatepickerMobile;
+DatepickerNative.prototype = Object.create( Widget.prototype );
+DatepickerNative.prototype.constructor = DatepickerNative;
 
 /**
  * Initialize datepicker widget
  */
-DatepickerMobile.prototype._init = function() {
+DatepickerNative.prototype._init = function() {
     var $input = $( this.element );
     var that = this;
 
@@ -49,12 +49,12 @@ DatepickerMobile.prototype._init = function() {
         } );
 };
 
-DatepickerMobile.prototype.mask = function( el ) {
+DatepickerNative.prototype.mask = function( el ) {
     el.type = 'text';
     el.classList.add( 'mask-date' );
 };
 
-DatepickerMobile.prototype.unmask = function( el ) {
+DatepickerNative.prototype.unmask = function( el ) {
     el.type = 'date';
     el.classList.remove( 'mask-date' );
 };
@@ -69,8 +69,8 @@ $.fn[ pluginName ] = function( options, event ) {
         var data = $this.data( pluginName );
 
         // If no datepickerExtended widget is present on the same element
-        if ( !dp && !data && support.touch ) {
-            $this.data( pluginName, new DatepickerMobile( this, options, event ) );
+        if ( !dp && typeof options === 'object' && !data && !support.touch ) {
+            $this.data( pluginName, new DatepickerNative( this, options, event ) );
         }
     } );
 };

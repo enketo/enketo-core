@@ -11,7 +11,7 @@ module.exports = [
     require( '../widget/table/tablewidget' ),
     require( '../widget/radio/radiopicker' ),
     require( '../widget/date/datepicker-extended' ),
-    require( '../widget/date-mobile/datepicker-mobile' ),
+    require( '../widget/date-native/datepicker-native' ),
     require( '../widget/time/timepicker-extended' ),
     require( '../widget/datetime/datetimepicker-extended' ),
     require( '../widget/compact/compactpicker' ),
