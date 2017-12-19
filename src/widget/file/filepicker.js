@@ -43,7 +43,7 @@ Filepicker.prototype._init = function() {
 
     $input
         .prop( 'disabled', true )
-        .addClass( 'transparent' )
+        .addClass( 'hide' )
         .parent().addClass( 'with-media clearfix' );
 
     this.$widget = $(
@@ -111,7 +111,8 @@ Filepicker.prototype._changeListener = function() {
 
     $( this.element )
         .on( 'click', function( event ) {
-            if ( that.props.readonly ) {
+            if ( that.props.readonly || that.props.namespace !== 'propagate' ) {
+                that.$fakeInput.focus();
                 event.stopImmediatePropagation();
                 return false;
             }
@@ -162,7 +163,7 @@ Filepicker.prototype._changeListener = function() {
 
     this.$fakeInput.on( 'click', function( e ) {
         e.preventDefault();
-        $( that.element ).click();
+        $( that.element ).trigger( 'click.propagate' );
     } );
 };
 
