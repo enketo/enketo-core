@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.41.9] - 2017-12-20
+---------------------
+##### Fixed
+- Npm refuses to install previous version with enketo-xslt 1.15.2, since December 19th 2017 or before. 
+
 [4.41.8] - 2017-12-19
 ---------------------
 ##### Changed
