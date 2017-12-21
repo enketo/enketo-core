@@ -4,6 +4,8 @@ var Widget = require( '../../js/Widget' );
 var fileManager = require( '../../js/file-manager' );
 var utils = require( '../../js/utils' );
 var pluginName = 'filepicker';
+var t = require( 'translator' ).t;
+var TranslatedError = require( '../../js/translated-error' );
 
 /**
  * FilePicker that works both offline and online. It abstracts the file storage/cache away
@@ -65,13 +67,15 @@ Filepicker.prototype._init = function() {
     }
 
     if ( !fileManager || !fileManager.isSupported() ) {
-        var advice = fileManager.notSupportedAdvisoryMsg || '';
-        this._showFeedback( 'Media questions are not supported in this browser. ' + advice, 'warning' );
+        var advice = t( 'fileManager.notSupportedAdvisoryMsg' );
+        this._showFeedback( t( 'filepicker.unsupported', {
+            advice: advice
+        } ), 'warning' );
         return;
     }
 
     if ( fileManager.isWaitingForPermissions() ) {
-        this._showFeedback( 'Waiting for user permissions.', 'warning' );
+        this._showFeedback( t( 'filepicker.waitingForPermissions' ), 'warning' );
     }
 
     fileManager.init()
@@ -85,12 +89,14 @@ Filepicker.prototype._init = function() {
                         that._showPreview( url, that.props.mediaType );
                     } )
                     .catch( function() {
-                        that._showFeedback( 'File "' + existingFileName + '" could not be found (leave unchanged if already submitted and you want to preserve it).', 'error' );
+                        that._showFeedback( t( 'filepicker.notFound', {
+                            existing: existingFileName
+                        } ), 'error' );
                     } );
             }
         } )
         .catch( function( error ) {
-            that._showFeedback( error.message, 'error' );
+            that._showFeedback( error, 'error' );
         } );
 };
 
@@ -143,7 +149,7 @@ Filepicker.prototype._changeListener = function() {
                 .then( function( url ) {
                     // update UI
                     that._showPreview( url, that.props.mediaType );
-                    that._showFeedback( '' );
+                    that._showFeedback();
                     that._showFileName( fileName );
                     if ( loadedFileName && loadedFileName !== fileName ) {
                         $input.removeAttr( 'data-loaded-file-name' );
@@ -157,7 +163,7 @@ Filepicker.prototype._changeListener = function() {
                     // update UI
                     that._showFileName( '' );
                     that._showPreview( null );
-                    that._showFeedback( error.message, 'error' );
+                    that._showFeedback( error, 'error' );
                 } );
         } );
 
@@ -185,8 +191,10 @@ Filepicker.prototype._showFileName = function( fileName ) {
     this.$fakeInput.val( fileName );
 };
 
-Filepicker.prototype._showFeedback = function( message, status ) {
-    message = message || '';
+Filepicker.prototype._showFeedback = function( fb, status ) {
+    var message = fb instanceof TranslatedError ? t( fb.translationKey, fb.translationOptions ) :
+        fb instanceof Error ? fb.message :
+        fb || '';
     status = status || '';
     // replace text and replace all existing classes with the new status class
     this.$feedback.text( message ).attr( 'class', 'file-feedback ' + status );
