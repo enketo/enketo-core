@@ -27,12 +27,17 @@ if ( getURLParameter( 'touch' ) === 'true' ) {
 if ( xform && xform !== 'null' ) {
     $( '.guidance' ).remove();
     xform = /^https?:\/\//.test( xform ) ? xform : location.origin + '/' + xform;
-    $.getJSON( 'http://' + location.hostname + ':8085/transform?xform=' + xform, function( survey ) {
-        formStr = survey.form;
-        modelStr = survey.model;
-        $( '.form-header' ).after( formStr );
-        initializeForm();
-    } );
+    var transformerUrl = 'http://' + location.hostname + ':8085/transform?xform=' + xform;
+    $.getJSON( transformerUrl )
+        .done( function( survey ) {
+            formStr = survey.form;
+            modelStr = survey.model;
+            $( '.form-header' ).after( formStr );
+            initializeForm();
+        } )
+        .fail( function() {
+            window.alert( 'Error fetching form from enketo-transformer at:\n\n' + transformerUrl + '.\n\nPlease check that enketo-transformer has been started.' );
+        } );
 } else if ( $( 'form.or' ).length > 0 ) {
     $( '.guidance' ).remove();
     modelStr = window.globalModelStr;
