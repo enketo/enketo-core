@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Changed
 - Error messages in filepicker are now translatable.
+- Start development server with `npm start`.
 
 [4.41.9] - 2017-12-20
 ---------------------
