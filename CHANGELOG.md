@@ -9,6 +9,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Error messages in filepicker are now translatable.
 - Start development server with `npm start`.
 
+##### Fixed
+- jr:choicename() is causing an exception when wrapped inside other functions.
+
 [4.41.9] - 2017-12-20
 ---------------------
 ##### Fixed
