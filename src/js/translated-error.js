@@ -1,18 +1,12 @@
 'use strict';
 
-var t = require( 'translator' ).t;
-
 // Error to be translated
-function TranslatedError( message, translationKey ) {
-    this.message = '';
+function TranslatedError( message, translationKey, translationOptions ) {
+    this.message = message;
     this.translationKey = translationKey;
-    this.translationOptions = Array.prototype.slice.call( arguments, 2 );
+    this.translationOptions = translationOptions;
 }
 TranslatedError.prototype = Object.create( Error.prototype );
 TranslatedError.prototype.name = 'TranslatedError';
-
-TranslatedError.prototype.toTranslatedString = function() {
-    t.apply( this, this.translationKey, this.translationOptions );
-};
 
 module.exports = TranslatedError;
