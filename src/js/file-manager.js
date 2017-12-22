@@ -37,10 +37,13 @@ fileManager.isWaitingForPermissions = function() {
  * Obtains a url that can be used to show a preview of the file when used
  * as a src attribute.
  *
- * @param  {?string|Object} subject File or filename
+ * @param  {?string|Object} subject File or filename in local storage
+ * @param  {?string}        fileNameOverride value to override filename with in
+ *                          generated URL.  This is not used in the default
+ *                          implementation.
  * @return {[type]}         promise url string or rejection with Error
  */
-fileManager.getFileUrl = function( subject ) {
+fileManager.getFileUrl = function( subject, fileNameOverride ) {
     return new Promise( function( resolve, reject ) {
         var error, reader;
 
