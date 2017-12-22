@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Error messages in filepicker are now translatable.
 - Start development server with `npm start`.
+- Firefox checkboxes now styled properly. **WARNING: Make sure to [update your css build task](https://github.com/enketo/enketo-core/commit/9575559c015514dcec1942c30582a52bafb149f7)!**
 
 ##### Fixed
 - jr:choicename() is causing an exception when wrapped inside other functions.
