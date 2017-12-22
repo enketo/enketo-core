@@ -7,6 +7,8 @@
  */
 'use strict';
 
+var nodeSass = require( 'node-sass' );
+
 module.exports = function( grunt ) {
     // show elapsed time at the end
     require( 'time-grunt' )( grunt );
@@ -99,6 +101,13 @@ module.exports = function( grunt ) {
                     done( {
                         file: url
                     } );
+                },
+                functions: {
+                    'base64-url($mimeType, $data)': function( mimeType, data ) {
+                        var base64 = new Buffer( data.getValue() ).toString( 'base64' );
+                        var urlString = 'url("data:' + mimeType.getValue() + ';base64,' + base64 + '")';
+                        return nodeSass.types.String( urlString );
+                    }
                 }
             },
             compile: {
