@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <h:head>
+    <h:title>Test Issue 490 - jr:choice-name()</h:title>
+    <model>
+      <instance>
+        <embedded-choice delimiter="#" id="issue_490" prefix="J1!issue_490!" version="2017-12-22">
+          <translator></translator><output/><debug/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </embedded-choice>
+      </instance>
+      <bind nodeset="/embedded-choice/translator" type="select1"/>
+      <bind calculate="if(string-length( /embedded-choice/translator ) !=0, jr:choice-name( /embedded-choice/translator ,' /embedded-choice/translator '),'unspecified')" nodeset="/embedded-choice/output" type="string"/>
+      <bind nodeset="/embedded-choice/debug" readonly="true()" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/embedded-choice/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 ref="/embedded-choice/translator">
+      <label>Translator</label>
+      <item>
+        <label>District</label>
+        <value>district_hospital</value>
+      </item>
+      <item>
+        <label>Health Center</label>
+        <value>health_center</value>
+      </item>
+      <item>
+        <label>Area</label>
+        <value>clinic</value>
+      </item>
+    </select1>
+    <input ref="/embedded-choice/debug">
+      <label><output value=" /embedded-choice/output "/></label>
+    </input>
+  </h:body>
+</h:html>

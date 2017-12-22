@@ -1577,13 +1577,13 @@ describe( 'required enketo-transformer version', function() {
     } );
 } );
 
-describe( 'jr:choice-name regex', function() {
-    var form = loadForm( 'jr-choice-name.xml' );
-
-    form.init();
+describe( 'jr:choice-name', function() {
 
     it( 'should match when there are spaces in arg strings', function() {
         // given
+        var form = loadForm( 'jr-choice-name.xml' );
+        form.init();
+
         expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[Default Value] Area' );
         expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[Default Value] Area' );
 
@@ -1604,4 +1604,72 @@ describe( 'jr:choice-name regex', function() {
         // then
         expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[abc] Health Center' );
     } );
+
+    /** @see https://github.com/enketo/enketo-core/issues/490 */
+    it( 'should handle regression reported in issue #490', function() {
+        // given
+        var form = loadForm( 'jr-choice-name.issue-490.xml' );
+        form.init();
+
+        // then
+        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( 'unspecified' );
+
+        // when
+        form.view.$.find( '[name="/embedded-choice/translator"][value=clinic]' ).click().trigger( 'change' );
+
+        // then
+        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( 'Area' );
+    } );
 } );
+
+describe( 'Form.prototype', function() {
+
+    describe( '#replaceChoiceNameFn()', function() {
+
+        $.each( {
+            'jr:choice-name( /choice-regex/translator, " /choice-regex/translator ")': '"__MOCK_VIEW_VALUE__"',
+            '     jr:choice-name(       /choice-regex/translator     ,  " /choice-regex/translator "   )    ': '     "__MOCK_VIEW_VALUE__"    ',
+            "if(string-length( /embedded-choice/translator ) !=0, jr:choice-name( /embedded-choice/translator ,' /embedded-choice/translator '),'unspecified')": "if(string-length( /embedded-choice/translator ) !=0, \"__MOCK_VIEW_VALUE__\",'unspecified')",
+        }, function( initial, expected ) {
+            it( 'should replace ' + initial + ' with ' + expected, function() {
+                // given
+                var form = mockChoiceNameForm();
+
+                // when
+                var actual = Form.prototype.replaceChoiceNameFn.call( form, initial );
+
+                // then
+                expect( actual ).toEqual( expected );
+            } );
+        } );
+    });
+});
+
+function mockChoiceNameForm() {
+    return {
+        model: {
+            evaluate: function() {
+                return '__MOCK_MODEL_VALUE__';
+            },
+        },
+        view: {
+            '$': {
+                find: function() {
+                    return {
+                        length: 1,
+                        prop: function() {
+                            return 'select';
+                        },
+                        find: function() {
+                            return {
+                                text: function() {
+                                    return '__MOCK_VIEW_VALUE__';
+                                },
+                            };
+                        },
+                    };
+                },
+            },
+        },
+    };
+}

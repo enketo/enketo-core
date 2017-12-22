@@ -292,8 +292,8 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
     var $input;
     var label = '';
     var matches = expr.match( new RegExp( 'jr:choice-name\\(([^,]+),\\s*(?:' +
-        '"(.*)"|' +
-        "'(.*)'" +
+        '"([^"]*)"|' +
+        "'([^']*)'" +
         ')\\s*\\)' ) );
 
     if ( matches ) {
