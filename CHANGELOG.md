@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.42.0] - 2017-12-22
 ---------------------
 ##### Changed
 - Error messages in filepicker are now translatable.
@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - jr:choicename() is causing an exception when wrapped inside other functions.
+- Workaround for an XLSForm limitation by moving "no-collapse" appearance of repeat to its parent group.
 
 [4.41.9] - 2017-12-20
 ---------------------
