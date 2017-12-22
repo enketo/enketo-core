@@ -22,19 +22,7 @@ var supported = typeof FileReader !== 'undefined';
  * @return {[type]} promise boolean or rejection with Error
  */
 fileManager.init = function() {
-    if ( fileManager.isSupported() ) {
-        return Promise.resolve( true );
-    } else {
-        return Promise.reject( new TranslatedError( 'FileReader not supported', 'filemanager.notSupportedAdvisoryMsg' ) );
-    }
-};
-
-/**
- * Whether filemanager is supported in browser
- * @return {Boolean}
- */
-fileManager.isSupported = function() {
-    return supported;
+    return Promise.resolve( true );
 };
 
 /**

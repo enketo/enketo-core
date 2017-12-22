@@ -66,14 +66,6 @@ Filepicker.prototype._init = function() {
         this._showFileName( existingFileName, this.props.mediaType );
     }
 
-    if ( !fileManager || !fileManager.isSupported() ) {
-        var advice = t( 'fileManager.notSupportedAdvisoryMsg' );
-        this._showFeedback( t( 'filepicker.unsupported', {
-            advice: advice
-        } ), 'warning' );
-        return;
-    }
-
     if ( fileManager.isWaitingForPermissions() ) {
         this._showFeedback( t( 'filepicker.waitingForPermissions' ), 'warning' );
     }
