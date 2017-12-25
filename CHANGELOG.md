@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Image scaling by Image Map widget is more sensitive to screen size to avoid scrolling.
+
 ##### Fixed
 - The advertised required transformer version fails to build on Windows 10.
 - In Signature/Draw widget a line can be detected as a page-swipe in Pages mode.

@@ -21,7 +21,10 @@
 // These rules are used in custom SVG widgets as well.
 .image-map {
     svg {
-        width: 100%;
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        width: 100 vmin;
         height: auto;
         &[or-readonly]{
             opacity: 0.75;
