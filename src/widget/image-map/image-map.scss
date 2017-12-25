@@ -12,7 +12,7 @@
         svg:not([or-readonly]) {
             path[id] {
                 &:hover {
-                    opacity: 0.5;
+                    opacity: 0.5 !important;
                 }
             }
         }
@@ -27,12 +27,12 @@
         width: 100 vmin;
         height: auto;
         &[or-readonly]{
-            opacity: 0.75;
+            opacity: 0.75 !important;
         }
         path[id] {
             &[or-selected] {
-                fill: $brand-primary-color;
-                stroke: $brand-primary-color;
+                fill: $brand-primary-color !important;
+                stroke: $brand-primary-color !important;
             }
         }
     }
