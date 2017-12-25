@@ -15,8 +15,6 @@ var TranslatedError = require( './translated-error' );
 
 var fileManager = {};
 
-var supported = typeof FileReader !== 'undefined';
-
 /**
  * Initialize the file manager .
  * @return {[type]} promise boolean or rejection with Error
