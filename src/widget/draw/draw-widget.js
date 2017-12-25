@@ -91,13 +91,6 @@ DrawWidget.prototype._init = function() {
                 } ).click();
 
             $( canvas )
-                .on( 'focus', function() {
-                    // Workaround issue in pages mode where the canvas needs to be resized,
-                    // if the page has never been shown before
-                    if ( this.width === 0 || this.height === 0 ) {
-                        that._resizeCanvas( this );
-                    }
-                } )
                 .on( 'canvasreload.' + that.namespace, function() {
                     if ( that.cache ) {
                         that.pad.fromDataURL( that.cache );
@@ -112,9 +105,19 @@ DrawWidget.prototype._init = function() {
             that._showFeedback( error.message );
         } );
 
-    $( this.element ).on( 'applyfocus', function() {
-        canvas.focus();
-    } );
+    $( this.element )
+        .on( 'applyfocus', function() {
+            canvas.focus();
+        } )
+        .closest( '[role="page"]' ).on( 'pageflip.enketo', function() {
+            // When an existing value is loaded into the canvas and is not 
+            // the first page, it won't become visible until the canvas is clicked
+            // or the window is resized:
+            // https://github.com/kobotoolbox/enketo-express/issues/895
+            // This also fixes a similar issue with an empty canvas:
+            // https://github.com/kobotoolbox/enketo-express/issues/844
+            that._resizeCanvas( canvas );
+        } );
 };
 
 DrawWidget.prototype._getProps = function( el ) {
