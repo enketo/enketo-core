@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - The advertised required transformer version fails to build on Windows 10.
+- In Signature/Draw widget a line can be detected as a page-swipe in Pages mode.
 
 [4.42.0] - 2017-12-22
 ---------------------

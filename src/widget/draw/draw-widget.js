@@ -134,7 +134,7 @@ DrawWidget.prototype._getMarkup = function() {
         '<button type="button" class="hide-canvas-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' : '';
     var $widget = $( '<div class="widget draw-widget">' +
         '<div class="draw-widget__body">' + fullscreenBtns + load +
-        '<canvas class="draw-widget__body__canvas" tabindex="1"></canvas><div class="draw-widget__colorpicker"></div></div>' +
+        '<canvas class="draw-widget__body__canvas noSwipe" tabindex="1"></canvas><div class="draw-widget__colorpicker"></div></div>' +
         '<div class="draw-widget__footer">' +
         '<button type="button" class="btn-icon-only draw-widget__btn-reset" ><i class="icon icon-refresh"> </i></button>' +
         '<div class="draw-widget__feedback"></div>' +
