@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.42.2] - 2017-12-28
 ---------------------
+##### Changed
+- Added optional workarounds for IE11 to match regular checkbox and radiobutton styling.
+
 ##### Fixed
 - Collapse icon overlaps border on small screens.
 - Black background shown behind radiobuttons and checkboxes on iOS browsers.

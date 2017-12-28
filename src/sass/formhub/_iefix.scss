@@ -1,0 +1,92 @@
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    input[type=radio], 
+    input[type=checkbox]{
+        opacity: 0;
+        + .option-label::before {
+            display: inline-block;
+            content: '';
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            margin-left: -30px;
+            margin-right: 10px;
+            margin-bottom: 0;
+            margin-top: 0;
+            border-width: 3px;
+            border-style: solid;
+            background-color: transparent;
+        }
+    }
+    input[type=checkbox] + .option-label::before {
+        border-radius: 0;
+        @include checkbox-unchecked-style;
+    }
+    input[type=checkbox]:checked + .option-label::before {
+        @include checkbox-checked-style;
+    }
+    input[type=radio] + .option-label::before {
+        border-radius: 10px;
+        @include radio-unchecked-style;
+    }
+    input[type=radio]:checked + .option-label::before {
+        @include radio-checked-style;
+    }
+    input[type=checkbox]:focus,
+    input[type=radio]:focus {
+        + .option-label::before {
+            @include focus-shadow;;
+        }
+    }
+    input[type=checkbox]:disabled,
+    input[type=checkbox][readonly],
+    input[type=radio]:disabled,
+    input[type=radio][readonly]{
+        + .option-label::before{
+            @include disabled-radiocheck-style;
+        }
+    }
+
+    .or-appearance-likert {
+        input[type=radio],
+        input[type=checkbox] {
+            + .option-label::before {
+                display: block;
+                position: relative;
+                left: 50%;
+                padding: 0;
+                margin-left: -11px;
+                background-color: white;
+                z-index: 10;
+                top: -27px;
+                margin-bottom: -23px;
+            }
+        }
+    }
+
+    .question.or-appearance-label { 
+        input[type=checkbox],
+        input[type=radio]{
+            + .option-label::before {
+                display: none;
+            }
+        }
+    }
+    .question.or-appearance-list-nolabel { 
+        input[type=checkbox],
+        input[type=radio]{
+            + .option-label {
+                display: block;
+                position:relative;
+                text-indent: -500%;
+                color: transparent;
+                white-space: nowrap;
+                overflow: hidden;
+                &::before {
+                    position:absolute;
+                    left: 50%;
+                    margin-left: -11px;
+                }
+            }
+        }
+    }
+}

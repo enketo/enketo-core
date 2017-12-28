@@ -88,7 +88,8 @@ The following browsers are officially supported:
 * latest version of Microsoft Edge
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
-Note that some applications using Enketo Core (e.g. Enketo Express) may have more limited browser support. 
+
+You can enable some support for Internet Explorer 11 by importing the `_iefix.scss` files where appropriate. These are commented out in the default CSS builds for the 3 themes.
 
 ### Global Configuration
 
