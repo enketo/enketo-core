@@ -60,6 +60,10 @@
         margin-left: 8px;
     }
 
+    .touch .question.simple-select .option-wrapper > label {
+        padding: 10px 5px;
+    }
+
     .main {
         .paper {
             padding: 0 $form-padding $form-padding $form-padding;
