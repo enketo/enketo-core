@@ -162,7 +162,7 @@ $media-margin: 10px;
             border-top: 12px solid  $brand-primary-color;
             border-bottom: 0;
             display: block;
-            position:absolute;
+            position: absolute;
             content: '';
             top: 5px;
             left: -30px;
@@ -170,7 +170,7 @@ $media-margin: 10px;
             pointer-events: all;
         }
     }
-    &.or-appearance-compact{
+    &.or-appearance-compact {
         > h4 {
             &::before {
                 width: 0; 

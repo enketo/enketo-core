@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ---------------------
 ##### Fixed
+- Collapse icon overlaps border on small screens.
 - Black background shown behind radiobuttons and checkboxes on iOS browsers.
 
 [4.42.1] - 2017-12-25
