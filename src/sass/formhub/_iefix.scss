@@ -80,6 +80,8 @@
                 text-indent: -500%;
                 color: transparent;
                 white-space: nowrap;
+                min-width: 25px;
+                min-height: 25px;
                 overflow: hidden;
                 &::before {
                     position:absolute;

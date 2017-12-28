@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- The IE11 (optional) workaround does not work when a table has image labels.
+
 [4.42.2] - 2017-12-28
 ---------------------
 ##### Changed
