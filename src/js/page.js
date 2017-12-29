@@ -20,12 +20,12 @@ module.exports = {
         }
         if ( this.form.view.$.hasClass( 'pages' ) ) {
             var $allPages = this.form.view.$.find( ' .question:not([role="comment"]), .or-appearance-field-list' )
+                .add( '.or-repeat.or-appearance-field-list + .or-repeat-info' )
                 .filter( function() {
                     // something tells me there is a more efficient way to doing this
                     // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
                     return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
                 } )
-                .add( '.or-repeat.or-appearance-field-list + .or-repeat-info' )
                 .attr( 'role', 'page' );
 
             if ( $allPages.length > 0 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {

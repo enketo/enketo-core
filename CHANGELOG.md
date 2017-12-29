@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Repeat with field-list and parent group with field-list does not show "+" button and both groups fail to collapse.
+
 [4.42.3] - 2017-12-29
 ---------------------
 ##### Changed

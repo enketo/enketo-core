@@ -184,7 +184,8 @@ $media-margin: 10px;
                 top: 0;
             }
             ~ * {
-                display: none;
+                // !important is added to battle pages rules
+                display: none !important;
             }
         }
     }
