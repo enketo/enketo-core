@@ -42,6 +42,13 @@
             float: right;
         }
     }
+    // fight the general main.scss rule
+    .question.or-appearance-list-nolabel {
+        input[type=radio],
+        input[type=checkbox] {
+            float: none
+        }
+    }
 }
 
 .question.or-appearance-list-nolabel {
@@ -55,7 +62,7 @@
     // center the checkboxes, radiobuttons
     input[type=radio],
     input[type=checkbox] {
-        float: none;
+        float: none; 
         text-align: center;
         display: inline-block;
     }

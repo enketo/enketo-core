@@ -6,7 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ---------------------
 ##### Fixed
-- The IE11 (optional) workaround does not work when a table has image labels.
+- The IE11 (optional) workaround for checkboxes/radiobuttons does not work when a table has image labels.
+- RTL scripts do not have centered checkboxes/radiobuttons in tables.
 
 [4.42.2] - 2017-12-28
 ---------------------
