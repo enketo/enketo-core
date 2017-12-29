@@ -254,8 +254,6 @@ h4 + .or-repeat {
     padding: 0;
     background: $repeat-bg;
 
-    &.clone {}
-
     .repeat-number {
         position: absolute;
         left: 100%;
@@ -279,6 +277,20 @@ h4 + .or-repeat {
         border: none;
         margin-top: -20px;
         margin-right: -20px;
+    }
+}
+
+.or[dir="rtl"]{
+    .or-repeat {
+        .repeat-number {
+            right: 100%;
+            left: auto;
+            padding-left: 0;
+            padding-right: 4px;
+        }
+        .remove {
+            margin-left: -20px;
+        }
     }
 }
 

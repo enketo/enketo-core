@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.42.3] - 2017-12-29
 ---------------------
 ##### Changed
 - Modest performance improvement with large repeat counts.
@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - RTL scripts not supported for the (optional) IE11 radiobutton/checkbox workaround.
 - RTL scripts do not have centered checkboxes/radiobuttons in tables.
 - If preload item is placed inside a repeat with a repeat-count of 0, an exception occurs.
+- RTL scripts with Grid Theme have mislocated repeat numbers and repeat removal button.
 
 [4.42.2] - 2017-12-28
 ---------------------
