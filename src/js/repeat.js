@@ -209,10 +209,8 @@ module.exports = {
      */
     countUpdate: function( updated ) {
         var $repeatInfos;
-
         updated = updated || {};
         $repeatInfos = this.form.getRelatedNodes( 'data-repeat-count', '.or-repeat-info', updated );
-
         $repeatInfos.each( this.updateRepeatInstancesFromCount.bind( this ) );
     },
     /**s
@@ -231,7 +229,7 @@ module.exports = {
         var that = this;
         var $repeatInfo = $( repeatInfo );
         var byCountUpdate = !!count;
-        var modelRepeatSeries;
+        var modelRepeatSeriesLength;
 
         count = count || 1;
 
@@ -247,6 +245,7 @@ module.exports = {
 
         // Determine the index of the repeat series.
         repeatSeriesIndex = this.form.view.$.find( '.or-repeat-info[data-name="' + repeatPath + '"]' ).index( repeatInfo );
+        modelRepeatSeriesLength = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex ).length;
 
         // Add required number of repeats
         for ( i = 0; i < count; i++ ) {
@@ -262,11 +261,11 @@ module.exports = {
             }
             // Update the variable containing the view repeats in the current series.
             $repeats = $repeats.add( $clone );
-            // TODO: not efficient, could be incremental
-            modelRepeatSeries = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex );
+
             // Create a repeat in the model if it doesn't already exist
-            if ( $repeats.length > modelRepeatSeries.length ) {
+            if ( $repeats.length > modelRepeatSeriesLength ) {
                 this.form.model.addRepeat( repeatPath, repeatSeriesIndex );
+                modelRepeatSeriesLength++;
             }
             // This is the index of the new repeat in relation to all other repeats of the same name,
             // even if they are in different series.
