@@ -91,4 +91,25 @@
             }
         }
     }
+
+    .or[dir="rtl"]{
+        input[type=radio], 
+        input[type=checkbox]{
+            + .option-label::before {
+                margin-left: 10px;
+                margin-right: -30px;
+            }
+        }
+
+         .or-appearance-likert,
+         .question.or-appearance-list-nolabel {
+            input[type=radio],
+            input[type=checkbox] {
+                + .option-label::before {
+                    right: 50%;
+                    margin-right: -11px;
+            }
+        }
+    }
+    }
 }
