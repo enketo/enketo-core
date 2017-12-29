@@ -34,14 +34,18 @@ module.exports = {
 
             if ( typeof that[ item ] !== 'undefined' ) {
                 dataNode = that.form.model.node( props.path, props.index );
-                curVal = dataNode.getVal()[ 0 ];
-                newVal = that[ item ]( {
-                    param: param,
-                    curVal: curVal,
-                    dataNode: dataNode
-                } );
+                // If a preload item is placed inside a repeat with repeat-count 0, the node
+                // doesn't exist and will never get a value (which is correct behavior)
+                if ( dataNode.get().length ) {
+                    curVal = dataNode.getVal()[ 0 ];
+                    newVal = that[ item ]( {
+                        param: param,
+                        curVal: curVal,
+                        dataNode: dataNode
+                    } );
 
-                dataNode.setVal( newVal, null, props.xmlType );
+                    dataNode.setVal( newVal, null, props.xmlType );
+                }
             } else {
                 console.log( 'Preload "' + item + '" not supported. May or may not be a big deal.' );
             }

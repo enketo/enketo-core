@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The IE11 (optional) workaround for checkboxes/radiobuttons does not work when a table has image labels.
 - RTL scripts not supported for the (optional) IE11 radiobutton/checkbox workaround.
 - RTL scripts do not have centered checkboxes/radiobuttons in tables.
+- If preload item is placed inside a repeat with repeat-count 0, an exception occurs.
 
 [4.42.2] - 2017-12-28
 ---------------------
