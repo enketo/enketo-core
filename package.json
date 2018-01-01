@@ -24,9 +24,11 @@
         "email": "martijn@enketo.org",
         "url": "https://www.linkedin.com/in/martijnvanderijdt"
     },
-    "contributors": [ {
-        "name": "Alex Anderson"
-    } ],
+    "contributors": [
+        {
+            "name": "Alex Anderson"
+        }
+    ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/Form.js",
     "scripts": {
@@ -34,7 +36,7 @@
         "test": "grunt test"
     },
     "devDependencies": {
-        "enketo-transformer": "1.21.5",
+        "enketo-transformer": "1.22.0",
         "grunt": "1.0.x",
         "grunt-browserify": "5.2.x",
         "grunt-concurrent": "2.x.x",
