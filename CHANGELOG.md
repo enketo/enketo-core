@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Repeat with field-list and parent group with field-list does not show "+" button and both groups fail to collapse.
+- Printing: datetime picker inputs print below each other in Chrome.
 
 [4.42.3] - 2017-12-29
 ---------------------

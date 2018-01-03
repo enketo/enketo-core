@@ -145,11 +145,4 @@
     }
 }
 
-@media (max-width: 767px) {
-    .timepicker {
-        width: 100%;
-        .dropdown-menu {
-            width: 100%;
-        }
-    }
-}
+/** Removed media query adjustment here to fix print issue (MvdR) */
