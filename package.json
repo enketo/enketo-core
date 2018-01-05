@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "4.42.3",
+    "version": "4.43.0",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -24,11 +24,9 @@
         "email": "martijn@enketo.org",
         "url": "https://www.linkedin.com/in/martijnvanderijdt"
     },
-    "contributors": [
-        {
-            "name": "Alex Anderson"
-        }
-    ],
+    "contributors": [ {
+        "name": "Alex Anderson"
+    } ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/Form.js",
     "scripts": {

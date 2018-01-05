@@ -3,11 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.43.0] - 2018-01-05
 ---------------------
+##### Changed
+- Invalid dates (and datetimes) such as 2018-12-35 are no longer automically converted to a valid date. They convert to empty now.
+
 ##### Fixed
 - Repeat with field-list and parent group with field-list does not show "+" button and both groups fail to collapse.
 - Printing: datetime picker inputs print below each other in Chrome.
+- Safari invalidates any valid date (and datetime) with segments < 10, e.g. 2018-01-06.
 
 [4.42.3] - 2017-12-29
 ---------------------

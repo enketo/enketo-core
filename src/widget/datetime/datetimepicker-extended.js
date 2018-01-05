@@ -3,6 +3,7 @@
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var $ = require( 'jquery' );
+var types = require( '../../js/types' );
 var pluginName = 'datetimepickerExtended';
 require( '../../js/extend' );
 require( 'bootstrap-datepicker' );
@@ -55,7 +56,8 @@ DatetimepickerExtended.prototype._init = function() {
     this.$fakeDateI.datepicker( {
         format: 'yyyy-mm-dd',
         autoclose: true,
-        todayHighlight: true
+        todayHighlight: true,
+        forceParse: false
     } );
 
     this.$fakeTimeI
@@ -67,10 +69,13 @@ DatetimepickerExtended.prototype._init = function() {
         //the time picker itself has input elements
         .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
 
-    this._setManualHandler( this.$fakeDateI );
+    //this._setManualHandler( this.$fakeDateI );
     this._setFocusHandler( this.$fakeDateI.add( this.$fakeTimeI ) );
 
     this.$fakeDateI.on( 'change changeDate', function() {
+        if ( !types.date.validate( this.value ) ) {
+            that.$fakeDateI.val( '' ).datepicker( 'update' );
+        }
         changeVal();
         return false;
     } );
@@ -137,7 +142,7 @@ DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
  *
  * @param { jQuery } $fakeDateI Fake date input element
  */
-DatetimepickerExtended.prototype._setManualHandler = function() {};
+//DatetimepickerExtended.prototype._setManualHandler = function() {};
 
 
 DatetimepickerExtended.prototype.update = function() {

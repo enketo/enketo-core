@@ -65,7 +65,8 @@ DatepickerExtended.prototype._init = function() {
         autoclose: true,
         todayHighlight: true,
         startView: this.settings.startView,
-        minViewMode: this.settings.minViewMode
+        minViewMode: this.settings.minViewMode,
+        forceParse: false
     } ).on( 'changeDate', function() {
         // copy changes made by datepicker to original input field
         var value = $( this ).val();
@@ -106,15 +107,20 @@ DatepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {
     var settings = this.settings;
 
     $fakeDateI.on( 'change', function() {
+        var convertedValue = '';
         var value = $fakeDateI.val();
 
         if ( value.length > 0 ) {
             value = ( settings.format === 'yyyy-mm' ) ? value + '-01' : ( settings.format === 'yyyy' ) ? value + '-01-01' : value;
-            value = types.date.convert( value );
+            convertedValue = types.date.convert( value );
         }
-        if ( $dateI.val() !== value ) {
-            $dateI.val( value ).trigger( 'change' ).blur();
+        // Here we have to do something unusual to prevent native inputs from automatically 
+        // changing 2012-12-32 into 2013-01-01
+        if ( $dateI.val() !== convertedValue ) {
+            // convertedValue is '' for invalid 2012-12-32
+            $dateI.val( convertedValue ).trigger( 'change' ).blur();
         }
+        $fakeDateI.val( convertedValue ).datepicker( 'update' );
 
         return false;
     } );
@@ -129,7 +135,7 @@ DatepickerExtended.prototype._setResetHandler = function( $fakeDateI ) {
     var that = this;
     $fakeDateI.next( '.btn-reset' ).on( 'click', function() {
         if ( $( that.element ).val() ) {
-            $fakeDateI.val( '' ).trigger( 'changeDate' ).datepicker( 'update' );
+            $fakeDateI.val( '' ).datepicker( 'update' );
         }
     } );
 };

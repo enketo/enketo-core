@@ -189,24 +189,27 @@ describe( 'Data node XML data type', function() {
 
         [ 'val5565ghgyuyuy', 'date', false, '' ], //Chrome turns val5 into a valid date...
         [ '2012-01-01', 'date', true ],
-        [ '2012-12-32', 'date', false, '' ],
+        [ '2012-11-31', 'date', false, '' ],
         // The tests below are dependent on OS time zone of test machine
         [ 324, 'date', false, '1970-11-21' ],
 
         [ 'val5565ghgyuyua', 'datetime', false, '' ], //Chrome turns val10 into a valid date..
-        [ '2012-01-01T00:00:00-06', 'datetime', true, '2012-01-01T00:00:00-06:00' ],
-        [ '2012-12-32T00:00:00-06', 'datetime', false, '2012-12-32T00:00:00-06:00' ], //?
-        [ '2012-12-31T23:59:59-06', 'datetime', true, '2012-12-31T23:59:59-06:00' ],
+        [ '2012-01-01T00:00:00-06', 'datetime', false, '2012-01-01T00:00:00-06:00' ],
+        [ '2012-01-01T00:00:00-06:00', 'datetime', true ],
+        [ '2012-01-01T00:00:00.123-06:00', 'datetime', true, '2012-01-01T00:00:00.123-06:00' ],
+        [ '2012-12-32T00:00:00-06:00', 'datetime', false, '' ],
+        [ '2012-12-31T23:59:59-06', 'datetime', false, '2012-12-31T23:59:59-06:00' ],
         [ '2012-12-31T23:59:59-06:30', 'datetime', true ],
-        [ '2012-01-01T30:00:00-06', 'datetime', false, '2012-01-01T30:00:00-06:00' ],
+        [ '2012-01-01T30:00:00-06', 'datetime', false, '' ],
         // The tests below are dependent on OS time zone of test machine
-        [ '2012-12-31T23:59:59Z', 'datetime', true, '2012-12-31T16:59:59.000-07:00' ],
-        [ 324, 'datetime', true, '1970-11-20T17:00:00.000-07:00' ],
-        [ '2013-05-31T07:00-02', 'datetime', true, '2013-05-31T07:00-02:00' ], //fails in phantomJSs
+        [ '2012-12-31T23:59:59Z', 'datetime', false, '2012-12-31T23:59:59+00:00' ],
+        [ 324, 'datetime', false, '1970-11-20T17:00:00.000-07:00' ],
+        [ '2013-05-31T07:00-02', 'datetime', false, '2013-05-31T07:00:00-02:00' ],
 
         [ 'a', 'time', false, '' ],
         [ 'aa:bb', 'time', false, '' ],
         [ '0:0', 'time', false, '00:00:00.000-07:00' ],
+        [ '00:00:00+03', 'time', false, '00:00:00.000+03:00' ],
         [ '00:00:00.000+03', 'time', false, '00:00:00.000+03:00' ],
         [ '00:00', 'time', false, '00:00:00.000-07:00' ],
         [ '23:59', 'time', false, '23:59:00.000-07:00' ],
@@ -218,7 +221,7 @@ describe( 'Data node XML data type', function() {
         [ '00:00:60', 'time', false, '' ],
         [ '-01:00', 'time', false, '' ],
         [ '00:-01', 'time', false, '' ],
-        [ '00:00:-01', 'time', false, '' ],
+        //[ '00:00:-01', 'time', false, '' ],
         [ '13:17:00.000-07:00', 'time', true ],
         [ '01:02:03.123+04:00', 'time', true ],
 
