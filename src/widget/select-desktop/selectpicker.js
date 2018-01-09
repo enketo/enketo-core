@@ -86,7 +86,6 @@ DesktopSelectpicker.prototype._createLi = function( template ) {
     var li = [];
     var liHtml = '';
     var inputAttr = ( this.multiple ) ? 'type="checkbox"' : 'type="radio" name="' + Math.random() * 100000 + '"';
-    var _this = this;
     var readonlyAttr = ( this.readonly ) ? ' readonly="readonly"' : '';
     var disabledAttr = ( this.readonly ) ? ' disabled="disabled"' : '';
     var disabledClass = ( this.readonly ) ? ' class="disabled"' : '';
@@ -105,8 +104,8 @@ DesktopSelectpicker.prototype._createLi = function( template ) {
         template = template.replace( '__SELECTED_OPTIONS', this._createSelectedStr() );
         for ( var i = 0; i < li.length; i++ ) {
             if ( li[ i ].value ) {
-                checkedInputAttr = ( li[ i ].selected ) ? ' checked="checked"' : '';
-                checkedLiAttr = ( li[ i ].selected && !_this.multiple ) ? 'class="active"' : '';
+                checkedInputAttr = li[ i ].selected ? ' checked="checked"' : '';
+                checkedLiAttr = li[ i ].selected ? 'class="active"' : '';
                 /**
                  * e.g.:
                  * <li checked="checked">
@@ -192,9 +191,7 @@ DesktopSelectpicker.prototype._clickListener = function() {
                 $input.prop( 'checked', false );
                 $option.prop( 'selected', false );
             } else {
-                if ( !_this.multiple ) {
-                    $li.addClass( 'active' );
-                }
+                $li.addClass( 'active' );
                 $input.prop( 'checked', true );
                 $option.prop( 'selected', true );
             }
