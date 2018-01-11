@@ -123,6 +123,9 @@ This setting with the default `false` value determines whether Enketo should val
 #### validatePage
 This setting with default `true` value determines whether the Next button should trigger validation of the current page and block the user from moving to the next page if validation fails.
 
+#### swipePage 
+This setting with default `true` value determines whether to enable support for _swiping_ to the next and previous page for forms that are divided into pages.
+
 ### Form Configuration
 
 Per-form configuration is done by adding an (optional) options object as 3rd parameter when instantiating a form.

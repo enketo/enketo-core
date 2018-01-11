@@ -77,6 +77,9 @@ module.exports = {
         } );
     },
     setSwipeHandlers: function() {
+        if ( config.swipePage === false ) {
+            return;
+        }
         var that = this;
         var $main = $( '.main' );
 

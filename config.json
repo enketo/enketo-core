@@ -11,6 +11,7 @@
     "repeatOrdinals": false,
     "validateContinuously": false,
     "validatePage": true,
+    "swipePage": true,
     "arcGis": {
         "jsUrl": "",
         "cssUrl": "",

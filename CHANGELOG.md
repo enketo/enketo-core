@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Added
+- Option to turn of page-swipe support.
+
+
 [4.43.0] - 2018-01-05
 ---------------------
 ##### Changed
