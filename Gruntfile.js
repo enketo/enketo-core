@@ -83,9 +83,15 @@ module.exports = function( grunt ) {
                 singleRun: true,
                 reporters: [ 'dots' ],
                 configFile: 'test/karma.conf.js',
+                customLaunchers: {
+                    ChromeHeadlessNoSandbox: {
+                        base: 'ChromeHeadless',
+                        flags: [ '--no-sandbox' ]
+                    }
+                }
             },
             headless: {
-                browsers: [ 'ChromeHeadless' ]
+                browsers: [ 'ChromeHeadlessNoSandbox' ]
             },
             browsers: {
                 browsers: [ 'Chrome', 'Firefox', 'Safari' ]
