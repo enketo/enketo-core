@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.44.0] - 2018-01-16
 ---------------------
 ##### Added
 - Option to turn off page-swipe support.
 
 ##### Fixed
 - An output inside a group label that is the parent of a repeat with 0 instances, causes a loading exception.
+- (In Enketo Transformer) Readonly question does not show constraint message.
 
 [4.43.0] - 2018-01-05
 ---------------------
