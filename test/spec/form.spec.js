@@ -460,13 +460,23 @@ describe( 'repeat functionality', function() {
             expect( $model.find( 'rep' ).length ).toEqual( 0 );
         } );
 
-        it( 'and works nicely with relevant even if repeat count is 0', function() {
+        it( 'and works nicely with relevant even if repeat count is 0 (with relevant on group)', function() {
             // When repeat count is zero there is no context node to pass to evaluator.
             var f = loadForm( 'repeat-count-relevant.xml' );
             var errors = f.init();
             expect( errors.length ).toEqual( 0 );
             expect( f.view.$.find( '.or-repeat[name="/data/rep"]' ).length ).toEqual( 0 );
             expect( f.view.$.find( '.or-group.or-branch[name="/data/rep"]' ).hasClass( 'disabled' ) ).toBe( true );
+        } );
+
+        it( 'and works nicely with relevant even if repeat count is 0 (with output in group label)', function() {
+            // When repeat count is zero there is no context node to pass to evaluator.
+            var f = loadForm( 'repeat-count-relevant.xml' );
+            var errors = f.init();
+            expect( errors.length ).toEqual( 0 );
+            expect( f.view.$.find( '.or-repeat[name="/data/rep"]' ).length ).toEqual( 0 );
+            f.view.$.find( 'input[name="/data/q1"]' ).val( 2 ).trigger( 'change' );
+            expect( f.view.$.find( '.or-group.or-branch[name="/data/rep"]>h4 .or-output' ).text() ).toEqual( '2' );
         } );
 
         it( 'and correctly deals with nested repeats that have a repeat count', function() {
@@ -1599,7 +1609,7 @@ describe( 'jr:choice-name', function() {
         expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[Default Value] Area' );
 
         // when
-        form.view.$.find( '[name="/choice-regex/translator"][value=health_center]' ).click().trigger('change');
+        form.view.$.find( '[name="/choice-regex/translator"][value=health_center]' ).click().trigger( 'change' );
 
         // then
         expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[abc] Health Center' );
@@ -1642,8 +1652,8 @@ describe( 'Form.prototype', function() {
                 expect( actual ).toEqual( expected );
             } );
         } );
-    });
-});
+    } );
+} );
 
 function mockChoiceNameForm() {
     return {

@@ -25,7 +25,7 @@
       <label>Number:</label>
     </input>
     <group ref="/data/rep">
-      <label>label</label>
+      <label>label (count: <output value=" /data/q1 "/>)</label>
       <repeat jr:count=" /data/q1 " nodeset="/data/rep">
         <input ref="/data/rep/q2">
           <label>Name:</label>

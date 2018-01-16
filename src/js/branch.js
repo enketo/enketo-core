@@ -94,7 +94,7 @@ module.exports = {
 
             /* 
              * If the relevant is placed on a group and that group contains repeats with the same name,
-             * but currently has 0 repeats, the context will not be available.
+             * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
              */
             if ( $node.children( '.or-repeat-info[data-name="' + p.path + '"]' ).length && !$node.children( '.or-repeat[name="' + p.path + '"]' ).length ) {
                 context = null;

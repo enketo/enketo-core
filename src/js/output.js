@@ -48,15 +48,25 @@ module.exports = {
              * or the whole document
              */
             $context = $output.closest( '.question, .note, .or-group' );
+
             if ( !$context.is( '.or-group' ) ) {
                 $context = $context.find( '[name]' ).eq( 0 );
             }
 
             context = that.form.input.getName( $context );
 
+            /* 
+             * If the output is part of a group label and that group contains repeats with the same name,
+             * but currently has 0 repeats, the context will not be available. See issue 502. 
+             * This same logic is applied in branch.js.
+             */
+            if ( $context.children( '.or-repeat-info[data-name="' + context + '"]' ).length && !$context.children( '.or-repeat[name="' + context + '"]' ).length ) {
+                context = null;
+            }
+
             insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
             insideRepeatClone = ( insideRepeat && $output.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 );
-            index = ( insideRepeatClone ) ? that.form.input.getIndex( $context ) : 0;
+            index = ( insideRepeatClone && context ) ? that.form.input.getIndex( $context ) : 0;
 
             if ( typeof outputCache[ expr ] !== 'undefined' ) {
                 val = outputCache[ expr ];

@@ -1183,7 +1183,6 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
     doc = this.xml;
     repeats = null;
 
-    // path corrections for repeated nodes: http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms
     if ( selector ) {
         $collection = this.node( selector ).get();
         repeats = $collection.length;
@@ -1213,6 +1212,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         expr = this.replaceCurrentFn( expr, selector );
         // shiftRoot should come after replaceCurrentFn
         expr = this.shiftRoot( expr );
+        // path corrections for repeated nodes: http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms
         if ( repeats && repeats > 1 ) {
             expr = this.makeBugCompliant( expr, selector, index );
         }

@@ -6,8 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ---------------------
 ##### Added
-- Option to turn of page-swipe support.
+- Option to turn off page-swipe support.
 
+##### Fixed
+- An output inside a group label that is the parent of a repeat with 0 instances, causes a loading exception.
 
 [4.43.0] - 2018-01-05
 ---------------------
