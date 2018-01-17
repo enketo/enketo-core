@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- A top-level group with a relevant that refers to a node inside a repeat may not get re-evaluated when the node changes and multiple repeats exist.
+
 [4.44.0] - 2018-01-16
 ---------------------
 ##### Added

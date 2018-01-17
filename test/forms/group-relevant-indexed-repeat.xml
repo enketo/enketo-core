@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><h:html xmlns="http://www.w3.org/2002/xforms" xmlns:enk="http://enketo.org/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Post Surgery Summary Form</h:title>
+    <model>
+      <instance>
+        <data id="PSS" version="1">
+          <PROCEDURE>
+            <PROC_NOTE/>
+            <PROC_GRID jr:template="">
+              <PROC/>
+            </PROC_GRID>
+          </PROCEDURE>
+          <SPEC>
+            <GPT>
+              <TUMTYP/>
+            </GPT>
+          </SPEC>
+          <LYMPHNODES>
+            <LYMNDISS/>
+          </LYMPHNODES>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <bind nodeset="/data/PROCEDURE/PROC_NOTE" readonly="true()" type="string"/>
+      <bind nodeset="/data/PROCEDURE/PROC_GRID/PROC"  required="true()  " type="select1"/>
+      <bind nodeset="/data/SPEC/GPT/TUMTYP"  required="true()  " type="select1"/>
+      <bind nodeset="/data/LYMPHNODES" relevant="indexed-repeat( /data/PROCEDURE/PROC_GRID/PROC ,  /data/PROCEDURE/PROC_GRID , 1) = 6 or indexed-repeat( /data/PROCEDURE/PROC_GRID/PROC ,  /data/PROCEDURE/PROC_GRID , 2) = 6"/>
+      <bind nodeset="/data/LYMPHNODES/LYMNDISS"  type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+   </model>
+  </h:head>
+  <h:body class="pages theme-grid">
+    <group appearance="w4 field-list" ref="/data/PROCEDURE">
+      <label>Procedure(s)</label>
+      <input appearance="w4" ref="/data/PROCEDURE/PROC_NOTE">
+        <label>#####Surgical Procedures#####</label>
+      </input>
+      <group ref="/data/PROCEDURE/PROC_GRID">
+        <label/>
+        <repeat appearance="w4" nodeset="/data/PROCEDURE/PROC_GRID">
+          <select1 appearance="w1 minimal" ref="/data/PROCEDURE/PROC_GRID/PROC">
+            <label>######Procedure:######</label>
+            <item>
+              <label>Partial Mastectomy</label>
+              <value>1</value>
+            </item>
+            <item>
+              <label>Sentinel Lymph Node Dissection</label>
+              <value>6</value>
+            </item>
+          </select1>
+        </repeat>
+      </group>
+    </group>
+    <group appearance="field-list" ref="/data/SPEC">
+      <label>Specimens</label>
+      <group appearance="w6 no-collapse" ref="/data/SPEC/GPT">
+        <label>Gross Pathology: Tumor</label>
+        <select1 appearance="w6 minimal" ref="/data/SPEC/GPT/TUMTYP">
+          <label>######Tumor Type:######</label>
+          <item>
+            <label>None Present</label>
+            <value>1</value>
+          </item>
+        </select1>
+      </group>
+    </group>
+    <group appearance="no-collapse" ref="/data/LYMPHNODES">
+      <label>Lymph Nodes</label>
+      <select1 appearance="minimal" ref="/data/LYMPHNODES/LYMNDISS">
+        <label>Lymph node dissection done?</label>
+        <item>
+          <label>Yes</label>
+          <value>1</value>
+        </item>
+      </select1>
+    </group>
+  </h:body>
+</h:html>

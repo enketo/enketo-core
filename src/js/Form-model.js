@@ -1447,7 +1447,7 @@ Nodeset.prototype.getVal = function() {
     return vals;
 };
 
-// if repeats have not been cloned yet, they are not considered a repeat by this function
+// If repeats have not been cloned yet, they are not considered a repeat by this function
 Nodeset.prototype.getClosestRepeat = function() {
     var el = this.get().get( 0 );
     var nodeName = el.nodeName;

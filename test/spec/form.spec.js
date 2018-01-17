@@ -904,6 +904,21 @@ describe( 'branching functionality', function() {
         } );
     } );
 
+    // This (fixed) issue is not related to indexed-repeat function. In native XPath it is the same.
+    describe( 'on a group with an expression that refers to a repeat node value', function() {
+        it( 're-evaluates when the referred node changes', function() {
+            var form = loadForm( 'group-relevant-indexed-repeat.xml' );
+            form.init();
+            expect( form.view.$.find( '[name="/data/LYMPHNODES/LYMNDISS"]' ).closest( '.disabled' ).length ).toEqual( 1 );
+            form.view.$.find( '[name="/data/PROCEDURE/PROC_GRID/PROC"]' ).val( '6' ).trigger( 'change' );
+            expect( form.view.$.find( '[name="/data/LYMPHNODES/LYMNDISS"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            form.view.$.find( '.add-repeat-btn' ).click();
+            expect( form.view.$.find( '[name="/data/LYMPHNODES/LYMNDISS"]' ).closest( '.disabled' ).length ).toEqual( 0 );
+            form.view.$.find( '[name="/data/PROCEDURE/PROC_GRID/PROC"]' ).val( '1' ).trigger( 'change' );
+            expect( form.view.$.find( '[name="/data/LYMPHNODES/LYMNDISS"]' ).closest( '.disabled' ).length ).toEqual( 1 );
+        } );
+    } );
+
 } );
 
 describe( 'obtaining XML string from form without irrelevant nodes', function() {

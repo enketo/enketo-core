@@ -368,10 +368,11 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     updated = updated || {};
     filter = filter || '';
 
-    // The collection of non-repeat inputs is cached (unchangeable)
+    // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
     if ( !this.$nonRepeats[ attr ] ) {
         this.$nonRepeats[ attr ] = this.view.$.find( filter + '[' + attr + ']' )
-            .parentsUntil( '.or', '.calculation, .question' ).filter( function() {
+            .parent()
+            .filter( function() {
                 return $( this ).closest( '.or-repeat' ).length === 0;
             } );
     }
