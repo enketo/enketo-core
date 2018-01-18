@@ -919,16 +919,6 @@ describe( 'branching functionality', function() {
         } );
     } );
 
-    describe( 'group with default element fails on edit if branch is empty in the edit instance', function() {
-
-        var editStr = "<?xml version='1.0' ?><data id=\"Empty-branch-relevant\" version=\"201801180931\"><age>7</age><details /><meta><instanceID>uuid:8e6a1495-59a5-4a43-8269-a3c5f7709cb7</instanceID></meta></data>";
-        var form = loadForm( 'empty-branch-relevant.xml', editStr );
-        var loadErrors = form.init();
-        it( 'does not throw an error', function() {
-            expect( loadErrors.length, loadErrors ).toEqual( 0 );
-        } );
-    } );
-
 } );
 
 describe( 'obtaining XML string from form without irrelevant nodes', function() {

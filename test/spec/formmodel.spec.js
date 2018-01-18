@@ -1086,6 +1086,10 @@ describe( 'merging an instance into the model', function() {
             [ '<a><r template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><meta/></a></instance></model>' ],
             [ '<a xmlns:jr="http://someth.ing"><r jr:template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>',
                 '<model><instance><a xmlns:jr="http://someth.ing"><r><b/></r><meta/></a></instance></model>'
+            ],
+            // empty group in record
+            [ '<data><age>7</age><details/></data>', '<model><instance><data><age/><details><name>Baby ...</name></details></data></instance></model>',
+                '<model><instance><data><age>7</age><details><name/></details></data></instance></model>'
             ]
         ].forEach( function( test ) {
             var result, expected,

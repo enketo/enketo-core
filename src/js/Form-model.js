@@ -385,13 +385,23 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      */
     // first find all empty leaf nodes in record
     $record.find( '*' ).filter( function() {
-        var node = this;
-        var val = node.textContent;
-        return node.childNodes.length === 0 && val.trim().length === 0;
+        var recordNode = this;
+        var val = recordNode.textContent;
+        return recordNode.childNodes.length === 0 && val.trim().length === 0;
     } ).each( function() {
         var path = that.getXPath( this, 'instance', true );
-        // find the corresponding node in the model, and set value to empty
-        that.node( path, 0 ).setVal( '' );
+        var instanceNode = that.node( path, 0 ).get()[ 0 ];
+        if ( instanceNode ) {
+            if ( instanceNode.childNodes.length === 0 ) {
+                instanceNode.textContent = '';
+            } else {
+                // If the node in the default instance is a group (empty in record, so appears to be a leaf node
+                // but isn't), empty all true leaf node descendants.
+                that.evaluate( '//*[not(*)]', 'nodes', path, 0, true ).forEach( function( node ) {
+                    node.textContent = '';
+                } );
+            }
+        }
     } );
 
     merger = new MergeXML( {
