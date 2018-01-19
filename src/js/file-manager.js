@@ -1,3 +1,4 @@
+/* global ArrayBuffer, Uint8Array */
 'use strict';
 /**
  * Simple file manager with cross-browser support. That uses the FileReader
@@ -11,8 +12,6 @@
 var Promise = require( 'lie' );
 var $ = require( 'jquery' );
 var utils = require( './utils' );
-var TranslatedError = require( './translated-error' );
-
 var fileManager = {};
 
 /**
@@ -41,7 +40,7 @@ fileManager.isWaitingForPermissions = function() {
  *                          implementation.
  * @return {[type]}         promise url string or rejection with Error
  */
-fileManager.getFileUrl = function( subject, fileNameOverride ) {
+fileManager.getFileUrl = function( subject /*, fileNameOverride*/ ) {
     return new Promise( function( resolve, reject ) {
         var error, reader;
 
@@ -149,7 +148,7 @@ function _dataUriToBlob( dataURI ) {
  * @param  {Blob}  file [description]
  * @return {Boolean}      [description]
  */
-fileManager.isTooLarge = function( file ) {
+fileManager.isTooLarge = function( /*file*/) {
     return false;
 };
 

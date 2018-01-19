@@ -77,5 +77,5 @@ $.fn[ pluginName ] = function( options, event ) {
 
 module.exports = {
     'name': pluginName,
-    'selector': 'input[type=\"date\"]'
+    'selector': 'input[type="date"]'
 };

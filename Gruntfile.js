@@ -1,6 +1,4 @@
-/* jshint node:true */
 /* global Promise */
-
 /**
  * When using enketo-core in your own app, you'd want to replace
  * this build file with one of your own in your project root.
@@ -54,11 +52,8 @@ module.exports = function( grunt ) {
                 }
             }
         },
-        jshint: {
-            options: {
-                jshintrc: '.jshintrc'
-            },
-            all: [ '*.js', 'src/**/*.js', '!esri/**/*.js' ]
+        eslint: {
+            all: [ '*.js', 'src/**/*.js' ]
         },
         watch: {
             sass: {
@@ -167,9 +162,7 @@ module.exports = function( grunt ) {
                 return prevPromise.then( function() {
                     var xformStr = grunt.file.read( filePath );
                     grunt.log.writeln( 'Transforming ' + filePath + '...' );
-                    return transformer.transform( {
-                            xform: xformStr
-                        } )
+                    return transformer.transform( { xform: xformStr } )
                         .then( function( result ) {
                             forms[ filePath.substring( filePath.lastIndexOf( '/' ) + 1 ) ] = {
                                 html_form: result.form,
@@ -177,7 +170,6 @@ module.exports = function( grunt ) {
                             };
                         } );
                 } );
-
             }, Promise.resolve() )
             .then( function() {
                 grunt.file.write( formsJsonPath, jsonStringify( forms ) );
@@ -186,7 +178,7 @@ module.exports = function( grunt ) {
     } );
 
     grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'jshint', 'compile', 'transforms', 'karma:headless', 'style' ] );
+    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'eslint', 'compile', 'transforms', 'karma:headless', 'style' ] );
     grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'style', 'browserify', 'concurrent:develop' ] );

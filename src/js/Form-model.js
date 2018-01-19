@@ -9,8 +9,8 @@ var FormLogicError = require( './Form-logic-error' );
 var config = require( 'enketo-config' );
 var types = require( './types' );
 var REPEAT_COMMENT_PREFIX = 'repeat:/';
-var INSTANCE = /instance\([\'|\"]([^\/:\s]+)[\'|\"]\)/g;
-var OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^\)])/;
+var INSTANCE = /instance\(['|"]([^/:\s]+)['|"]\)/g;
+var OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^)])/;
 var OPENROSA_XFORMS_NS = 'http://openrosa.org/xforms';
 var JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
 var ENKETO_XFORMS_NS = 'http://enketo.org/xforms';
@@ -103,7 +103,7 @@ FormModel.prototype.init = function() {
      *
      * If the regex is later deemed too aggressive, it could target the model, primary instance and primary instance child only, after creating an XML Document.
      */
-    this.data.modelStr = this.data.modelStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, ' data-$1' );
+    this.data.modelStr = this.data.modelStr.replace( /\s(xmlns=("|')[^\s>]+("|'))/g, ' data-$1' );
 
     if ( !this.options.full ) {
         // Strip all secondary instances from string before parsing
@@ -315,7 +315,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      * A Namespace merge problem occurs when ODK decides to invent a new namespace for a submission
      * that is different from the XForm model namespace... So we just remove this nonsense.
      */
-    recordStr = recordStr.replace( /\s(xmlns\=("|')[^\s\>]+("|'))/g, '' );
+    recordStr = recordStr.replace( /\s(xmlns=("|')[^\s>]+("|'))/g, '' );
     /**
      * Comments aren't merging in document order (which would be impossible also). 
      * This may mess up repeat functionality, so until we actually need
@@ -364,7 +364,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
             if ( typeof that.templates[ path ] !== 'undefined' || that.getRepeatIndex( node ) > 0 ) {
                 positionedPath = that.getXPath( node, 'instance', true );
                 if ( !that.evaluate( positionedPath, 'node', null, null, true ) ) {
-                    repeatParts = positionedPath.match( /([^\[]+)\[(\d+)\]\//g );
+                    repeatParts = positionedPath.match( /([^[]+)\[(\d+)\]\//g );
                     // If the positionedPath has a non-0 repeat index followed by (at least) 1 node, avoid cloning out of order.
                     if ( repeatParts && repeatParts.length > 0 ) {
                         // TODO: Does this work for triple-nested repeats. I don't really care though.
@@ -857,9 +857,9 @@ FormModel.prototype.getTemplateNodes = function() {
 FormModel.prototype.getStr = function() {
     var dataStr = ( new XMLSerializer() ).serializeToString( this.xml.querySelector( 'instance > *' ) || this.xml.documentElement, 'text/xml' );
     // restore default namespaces
-    dataStr = dataStr.replace( /\s(data-)(xmlns\=("|')[^\s\>]+("|'))/g, ' $2' );
+    dataStr = dataStr.replace( /\s(data-)(xmlns=("|')[^\s>]+("|'))/g, ' $2' );
     // remove repeat comments
-    dataStr = dataStr.replace( new RegExp( '<!--' + REPEAT_COMMENT_PREFIX + '\/[^>]+-->', 'g' ), '' );
+    dataStr = dataStr.replace( new RegExp( '<!--' + REPEAT_COMMENT_PREFIX + '\\/[^>]+-->', 'g' ), '' );
     // If not IE, strip duplicate namespace declarations. IE doesn't manage to add a namespace declaration to the root element.
     if ( navigator.userAgent.indexOf( 'Trident/' ) === -1 ) {
         dataStr = this.removeDuplicateEnketoNsDeclarations( dataStr );
@@ -870,7 +870,7 @@ FormModel.prototype.getStr = function() {
 FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
     var i = 0;
     var declarationExp = new RegExp( '( xmlns:' + this.getNamespacePrefix( ENKETO_XFORMS_NS ) + '="' + ENKETO_XFORMS_NS + '")', 'g' );
-    return xmlStr.replace( declarationExp, function( match, p1 ) {
+    return xmlStr.replace( declarationExp, function( match ) {
         i++;
         if ( i > 1 ) {
             return '';
@@ -1013,8 +1013,8 @@ FormModel.prototype.shiftRoot = function( expr ) {
             return quote + encoded + quote;
         } );
         // Insert /model/instance[1]
-        expr = expr.replace( /^(\/(?!model\/)[^\/][^\/\s,"']*\/)/g, '/model/instance[1]$1' );
-        expr = expr.replace( /([^a-zA-Z0-9\.\]\)\/\*_-])(\/(?!model\/)[^\/][^\/\s,"']*\/)/g, '$1/model/instance[1]$2' );
+        expr = expr.replace( /^(\/(?!model\/)[^/][^/\s,"']*\/)/g, '/model/instance[1]$1' );
+        expr = expr.replace( /([^a-zA-Z0-9.\])/*_-])(\/(?!model\/)[^/][^/\s,"']*\/)/g, '$1/model/instance[1]$2' );
         // Decode string literals
         expr = expr.replace( LITERALS, function( m, p1, p2, p3, p4 ) {
             var decoded = typeof p1 !== 'undefined' ? decodeURIComponent( p1 ) : decodeURIComponent( p3 );
@@ -1216,7 +1216,6 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
 
     // if no cached conversion exists
     if ( !this.convertedExpressions[ cacheKey ] ) {
-        expr = expr;
         expr = expr.trim();
         expr = this.replaceInstanceFn( expr );
         expr = this.replaceCurrentFn( expr, selector );
@@ -1622,10 +1621,10 @@ Nodeset.prototype.validateRequired = function( expr ) {
 };
 
 // Placeholder function meant to be overwritten
-FormModel.prototype.getUpdateEventData = function( node, type ) {};
+FormModel.prototype.getUpdateEventData = function( /*node, type*/) {};
 
 // Placeholder function meant to be overwritten
-FormModel.prototype.getRemovalEventData = function( node ) {};
+FormModel.prototype.getRemovalEventData = function( /* node */) {};
 
 // Expose types to facilitate extending with custom types
 FormModel.prototype.types = types;

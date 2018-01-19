@@ -15,7 +15,7 @@ var maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps : [
     'name': 'streets',
     'maxzoom': 24,
     'tiles': [ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' ],
-    'attribution': '© <a href=\"http://openstreetmap.org\">OpenStreetMap</a> | <a href=\"www.openstreetmap.org/copyright\">Terms</a>'
+    'attribution': '© <a href="http://openstreetmap.org">OpenStreetMap</a> | <a href="www.openstreetmap.org/copyright">Terms</a>'
 } ];
 var searchSource = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
 var googleApiKey = config.googleApiKey || config.google_api_key;
@@ -226,7 +226,7 @@ Geopicker.prototype._init = function() {
     } );
 
     // pass focus events on widget elements back to original input
-    this.$widget.on( 'focus', 'input', function( event ) {
+    this.$widget.on( 'focus', 'input', function() {
         $( that.element ).trigger( 'fakefocus' );
     } );
 
@@ -623,8 +623,6 @@ Geopicker.prototype._enableSearch = function() {
                     .always( function() {
 
                     } );
-            } else {
-
             }
         } );
 };
@@ -856,7 +854,7 @@ Geopicker.prototype._loadGoogleMapsScript = function() {
     // in case multiple widgets exist in the same form
     if ( !googleMapsScriptRequest ) {
         // create deferred object, also outside of the scope of the current widget
-        googleMapsScriptRequest = new Promise( function( resolve, reject ) {
+        googleMapsScriptRequest = new Promise( function( resolve ) {
             var apiKeyQueryParam, loadUrl;
 
             // create a global callback to be called by the Google Maps script once this has loaded

@@ -169,7 +169,7 @@ Filepicker.prototype._focusListener = function() {
     var that = this;
 
     // Handle focus on widget input
-    this.$fakeInput.on( 'focus', function( event ) {
+    this.$fakeInput.on( 'focus', function() {
         $( that.element ).trigger( 'fakefocus' );
     } );
 

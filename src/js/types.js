@@ -48,7 +48,7 @@ var types = {
     },
     'date': {
         validate: function( x ) {
-            var pattern = /([0-9]{4})([\-]|[\/])([0-9]{2})([\-]|[\/])([0-9]{2})/;
+            var pattern = /([0-9]{4})([-]|[/])([0-9]{2})([-]|[/])([0-9]{2})/;
             var segments = pattern.exec( x );
             if ( segments && segments.length === 6 ) {
                 var year = Number( segments[ 1 ] );
@@ -137,7 +137,6 @@ var types = {
             var secs;
             var tz;
             var offset;
-            var noMillis = false;
             var timeAppearsCorrect = /^[0-9]{1,2}:[0-9]{1,2}(:[0-9.]*)?/;
 
             requireMillis = typeof requireMillis !== 'boolean' ? true : requireMillis;
@@ -151,10 +150,6 @@ var types = {
                 } else {
                     return '';
                 }
-            }
-
-            if ( /^([0-9]{2}:[0-9]{2}:[0-9]{2})([+-][0-9]{2}.*)$/.test( x ) ) {
-                noMillis = true;
             }
 
             parts = x.toString().split( /(\+|-|Z)/ );

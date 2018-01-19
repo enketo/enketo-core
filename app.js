@@ -66,7 +66,7 @@ function initializeForm() {
         modelStr: modelStr
     }, {
         arcGis: {
-            basemaps: [ "streets", "topo", "satellite", "osm" ],
+            basemaps: [ 'streets', 'topo', 'satellite', 'osm' ],
             webMapId: 'f2e9b762544945f390ca4ac3671cfa72',
             hasZ: true
         },

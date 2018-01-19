@@ -15,7 +15,7 @@ var pluginName = 'mobileSelectpicker';
  * @param {*=} e     event
  */
 
-function MobileSelectpicker( element, options, e ) {
+function MobileSelectpicker( element, options /*, e*/ ) {
     this.namespace = pluginName;
     Widget.call( this, element, options );
     this._init();

@@ -37,7 +37,7 @@ TextareaWidget.prototype._setDelegatedHandlers = function() {
     var $form = $( this.element );
     var textarea = $form[ 0 ].querySelector( 'textarea' );
     var defaultHeight = textarea ? textarea.clientHeight : 20;
-    $form.on( 'input', 'textarea', function( event ) {
+    $form.on( 'input', 'textarea', function() {
         if ( this.scrollHeight > this.clientHeight && this.scrollHeight > defaultHeight ) {
             // setting min-height instead of height, as height doesn't work in Grid Theme.
             this.style[ 'min-height' ] = this.scrollHeight + 'px';

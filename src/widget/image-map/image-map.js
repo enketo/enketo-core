@@ -13,7 +13,7 @@ var pluginName = 'imageMap';
  * @param {(boolean|{touch: boolean})}    options   options
  * @param {*=}                            event     event
  */
-function ImageMap( element, options, event ) {
+function ImageMap( element, options /*, event*/ ) {
     this.namespace = pluginName;
     Widget.call( this, element, options );
     this.options = options;
@@ -142,7 +142,7 @@ ImageMap.prototype._setHoverHandler = function() {
             var optionLabel = $( that._getInput( event.target.id ) ).siblings( '.option-label.active' ).text();
             that.$tooltip.text( optionLabel );
         } )
-        .on( 'mouseleave', 'path[id]', function( event ) {
+        .on( 'mouseleave', 'path[id]', function() {
             that.$tooltip.text( '' );
         } );
 };

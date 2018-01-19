@@ -64,7 +64,7 @@ Analogscalepicker.prototype._init = function() {
 
 Analogscalepicker.prototype._getProps = function( $question ) {
     var appearances = $question.attr( 'class' ).split( ' ' )
-        .map( function( appearance, index ) {
+        .map( function( appearance ) {
             return appearance.substring( 14 );
         } );
     var type = this.element.attributes[ 'data-type-xml' ].value;

@@ -836,7 +836,7 @@
                     return;
                 }
 
-                timeArray = time.replace( /[^0-9\:]/g, '' ).split( ':' );
+                timeArray = time.replace( /[^0-9:]/g, '' ).split( ':' );
 
                 hour = timeArray[ 0 ] ? timeArray[ 0 ].toString() : timeArray.toString();
 

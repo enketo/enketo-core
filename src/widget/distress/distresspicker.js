@@ -15,7 +15,7 @@ var pluginName = 'distresspicker';
  * @param {*=} event     event
  */
 
-function Distresspicker( element, options, event ) {
+function Distresspicker( element, options /*, event*/ ) {
     this.namespace = pluginName;
     Widget.call( this, element, options );
     this._init();

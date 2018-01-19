@@ -3,7 +3,6 @@
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var $ = require( 'jquery' );
-var types = require( '../../js/types' );
 require( './timepicker' );
 require( '../../js/dropdown.jquery' );
 

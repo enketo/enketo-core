@@ -195,5 +195,5 @@ $.fn[ pluginName ] = function( options, event ) {
 
 module.exports = {
     'name': pluginName,
-    'selector': 'input[type=\"date\"]:not([readonly])'
+    'selector': 'input[type="date"]:not([readonly])'
 };

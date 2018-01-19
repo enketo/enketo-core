@@ -12,7 +12,7 @@ var pluginName = 'imageViewer';
  * @param {(boolean|{touch: boolean})}    options   options
  * @param {*=}                            event     event
  */
-function ImageViewer( element, options, event ) {
+function ImageViewer( element, options /*, event*/ ) {
     this.namespace = pluginName;
     Widget.call( this, element, options );
     this._init();

@@ -13,7 +13,7 @@ var t = require( 'translator' ).t;
  * @param {(boolean|{touch: boolean})}    options   options
  * @param {*=}                            event     event
  */
-function Comment( element, options, event ) {
+function Comment( element, options /*, event */ ) {
     this.namespace = pluginName;
     Widget.call( this, element, options );
     this._init();

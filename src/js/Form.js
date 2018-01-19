@@ -293,7 +293,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
     var label = '';
     var matches = expr.match( new RegExp( 'jr:choice-name\\(([^,]+),\\s*(?:' +
         '"([^"]*)"|' +
-        "'([^']*)'" +
+        '\'([^\']*)\'' +
         ')\\s*\\)' ) );
 
     if ( matches ) {
@@ -878,7 +878,7 @@ Form.prototype.getGoToTarget = function( hash ) {
     var target;
     var intermediateTarget;
     var selector = '';
-    var repeatRegEx = /([^\[]+)\[(\d+)\]([^\[]*$)?/g;
+    var repeatRegEx = /([^[]+)\[(\d+)\]([^[]*$)?/g;
 
     if ( !hash ) {
         return;

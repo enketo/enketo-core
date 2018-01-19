@@ -45,7 +45,7 @@ Geopicker.prototype._loadEsriArcGisJs = function() {
     // Request Esri ArcGIS JS script only once, using a variable outside of the scope of the current widget
     // in case multiple widgets exist in the same form
     if ( !esriArcGisJsRequest ) {
-        esriArcGisJsRequest = new Promise( function( resolve, reject ) {
+        esriArcGisJsRequest = new Promise( function( resolve ) {
             // append CSS
             $( 'head' ).append( '<link type="text/css" rel="stylesheet" href="' + ESRI_ARCGIS_CSS_URL + '">' );
             // make the request for the Esri script asynchronously
@@ -305,7 +305,7 @@ Geopicker.prototype._getProps = function() {
     var appearances = this.$question.attr( 'class' ).split( ' ' )
         .filter( function( item ) {
             return item !== 'or-appearance-maps' && /or-appearance-/.test( item );
-        } ).map( function( appearance, index ) {
+        } ).map( function( appearance ) {
             return appearance.substring( 14 );
         } );
     var compact = appearances.indexOf( 'compact' ) !== -1;
@@ -673,7 +673,7 @@ Geopicker.prototype._addBasemapToggle = function( mapView, basemapList ) {
     } );
 
     mapView.ui.add( basemapToggle, {
-        position: "bottom-left"
+        position: 'bottom-left'
     } );
 };
 
