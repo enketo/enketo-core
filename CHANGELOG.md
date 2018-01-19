@@ -3,8 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.44.1] - 2018-01-18
 ---------------------
+##### Changed
+- Reduced margins around markdown headers.
+- (In Enketo Transformer) better markdown headers with escaping and inline hashtag use.
+
 ##### Fixed
 - A top-level group with a relevant that refers to a node inside a repeat may not get re-evaluated when the node changes and multiple repeats exist.
 - Editing a record with an empty group fails miserably.

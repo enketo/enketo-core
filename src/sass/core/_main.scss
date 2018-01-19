@@ -2,20 +2,29 @@ $media-margin: 10px;
 
 /** hide stuff **/
 
-.or [lang]:not(.active), .or-option-translations, .or-appearance-page-break, .or-constraint-msg, .or-required-msg,
-.or-relevant-msg, .option-wrapper .itemset-template, .itemset-labels, .or-hint.or-form-print, .or-hint.or-form-print.active {
+.or [lang]:not(.active),
+.or-option-translations,
+.or-appearance-page-break,
+.or-constraint-msg,
+.or-required-msg,
+.or-relevant-msg,
+.option-wrapper .itemset-template,
+.itemset-labels,
+.or-hint.or-form-print,
+.or-hint.or-form-print.active {
     display: none;
 }
 
-.or, .or-group {
-    > h3 {
+.or,
+.or-group {
+    >h3 {
         padding: 5px 0 15px 0;
         word-wrap: break-word;
         color: $brand-primary-color;
         text-align: center;
     }
 
-    > h4 {
+    >h4 {
         text-align: inherit;
         margin-top: 9px;
         margin-bottom: 9px;
@@ -32,16 +41,30 @@ $media-margin: 10px;
 }
 
 .or {
-    .question-label, .or-hint {
-        h1, h2, h3, h4, h5, h6 {
+    .question-label,
+    .or-hint {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin-top: 10px;
+            margin-bottom: 10px;
             &:first-child {
                 margin-top: 0;
+            }
+            &:last-child {
+                margin-bottom: 0;
             }
         }
     }
 }
 
+
+
 /** hints **/
+
 .or-hint.active {
     @include font-normal;
 
@@ -53,7 +76,7 @@ $media-margin: 10px;
     font-style: italic;
     padding-top: 5px;
 
-    ~ br {
+    ~br {
         display: none;
     }
 }
@@ -84,7 +107,7 @@ $media-margin: 10px;
         right: 10px;
         color: $brand-primary-color;
 
-        + .or-group {
+        +.or-group {
             border-top: none;
         }
     }
@@ -109,7 +132,7 @@ $media-margin: 10px;
     .or-group {
         margin: 1.5em 0 0.5em 0;
 
-        > h4 .active {
+        >h4 .active {
             &::before {
                 content: "\00BB  ";
             }
@@ -118,27 +141,27 @@ $media-margin: 10px;
         }
 
         .or-group {
-            > h4 .active::before {
+            >h4 .active::before {
                 content: "\00BB  \00BB  ";
             }
 
             .or-group {
-                > h4 .active::before {
+                >h4 .active::before {
                     content: "\00BB  \00BB  \00BB  ";
                 }
 
                 .or-group {
-                    > h4 .active::before {
+                    >h4 .active::before {
                         content: "\00BB  \00BB  \00BB  \00BB";
                     }
 
                     .or-group {
-                        > h4 .active::before {
+                        >h4 .active::before {
                             content: "\00BB  \00BB  \00BB  \00BB  \00BB";
                         }
 
                         .or-group {
-                            > h4 .active::before {
+                            >h4 .active::before {
                                 content: "\00BB  \00BB  \00BB  \00BB  \00BB  \00BB";
                             }
                         }
@@ -150,16 +173,16 @@ $media-margin: 10px;
 }
 
 // collapse icon for group labels
-.or-group:not(.or-appearance-no-collapse){ 
-    > h4 {
-        position: relative; 
+.or-group:not(.or-appearance-no-collapse) {
+    >h4 {
+        position: relative;
         pointer-events: none;
-        &::before { 
-            width: 0; 
-            height: 0; 
+        &::before {
+            width: 0;
+            height: 0;
             border-left: 12px solid transparent;
             border-right: 12px solid transparent;
-            border-top: 12px solid  $brand-primary-color;
+            border-top: 12px solid $brand-primary-color;
             border-bottom: 0;
             display: block;
             position: absolute;
@@ -171,10 +194,10 @@ $media-margin: 10px;
         }
     }
     &.or-appearance-compact {
-        > h4 {
+        >h4 {
             &::before {
-                width: 0; 
-                height: 0; 
+                width: 0;
+                height: 0;
                 border-top: 12px solid transparent;
                 border-bottom: 12px solid transparent;
                 border-left: 12px solid $brand-primary-color;
@@ -183,7 +206,7 @@ $media-margin: 10px;
                 right: -22px;
                 top: 0;
             }
-            ~ * {
+            ~* {
                 // !important is added to battle pages rules
                 display: none !important;
             }
@@ -191,15 +214,17 @@ $media-margin: 10px;
     }
 }
 
-[dir="rtl"]{
-    .or-group:not(.or-appearance-no-collapse).or-appearance-compact > h4::before{ 
+[dir="rtl"] {
+    .or-group:not(.or-appearance-no-collapse).or-appearance-compact>h4::before {
         border-left: 0;
         border-right: 12px solid $brand-primary-color;
     }
 }
 
 
-#stats + .or-group, #or-preload-items + .or-group, #form-languages + .or-group {
+#stats+.or-group,
+#or-preload-items+.or-group,
+#form-languages+.or-group {
     border-top: none;
 }
 
@@ -216,7 +241,7 @@ $media-margin: 10px;
     border: none;
     position: relative;
 
-    > fieldset {
+    >fieldset {
         padding: 0;
         margin: 0;
         border: none;
@@ -230,14 +255,18 @@ $media-margin: 10px;
 }
 
 .question {
-    > img, > video, > audio {
+    >img,
+    >video,
+    >audio {
         margin: $media-margin 0 $media-margin $media-margin;
     }
 }
 
 .or[dir="rtl"] {
     .question {
-        > img, > video, > audio {
+        >img,
+        >video,
+        >audio {
             margin: $media-margin $media-margin $media-margin 0;
         }
     }
@@ -248,7 +277,8 @@ $media-margin: 10px;
     // for geo/select/distress etc. It would have been better if we had
     // always shown the input field except if appearance 'label' was used (and pyxform added this to notes)
     // Unfortunately, this might now be too late as it would not be appreciated by existing users.
-    input[readonly]:not([type=radio]):not([type=checkbox]):not(.widget), textarea[readonly] {
+    input[readonly]:not([type=radio]):not([type=checkbox]):not(.widget),
+    textarea[readonly] {
         display: none;
     }
 
@@ -257,12 +287,16 @@ $media-margin: 10px;
     }
 }
 
-label, legend, .note {
+label,
+legend,
+.note {
     font-size: $font-size-base;
 }
 
 .or {
-    img, audio, video {
+    img,
+    audio,
+    video {
         display: block;
         max-height: 300px;
         max-width: 70%;
@@ -280,10 +314,8 @@ legend {
     border: none;
     width: 100%;
     padding: 0;
-    margin-bottom: 12px;
-
-    //works in Chrome
-    > span {
+    margin-bottom: 12px; //works in Chrome
+    >span {
         vertical-align: 12px;
     }
 }
@@ -295,22 +327,19 @@ legend {
 
     @include flex-direction(column);
 
-    > label {
+    >label {
         @include font-normal;
 
         display: block;
         margin: 0;
         cursor: pointer;
         padding: 4px;
-        margin: 0 10px 1px 10px;
-
-        // TODO: remove hover rule for tables (in likert already done)
+        margin: 0 10px 1px 10px; // TODO: remove hover rule for tables (in likert already done)
         &:hover:not(.filler) {
             background-color: $brand-secondary-color;
-        }
-
-        // clearfix with small adjustments to not mess up radio buttons.
-        &:before, &:after {
+        } // clearfix with small adjustments to not mess up radio buttons.
+        &:before,
+        &:after {
             content: " ";
             display: table;
         }
@@ -321,13 +350,13 @@ legend {
     }
 
     .option-label {
-        margin-left: 30px;
-
-        // input is floated to deal with multi-line labels
+        margin-left: 30px; // input is floated to deal with multi-line labels
         display: block;
     }
 
-    img, video, audio {
+    img,
+    video,
+    audio {
         float: right;
         margin: $media-margin 0 $media-margin $media-margin;
     }
@@ -339,7 +368,9 @@ legend {
             margin-right: 30px;
         }
 
-        img, video, audio {
+        img,
+        video,
+        audio {
             float: left;
             margin: $media-margin $media-margin $media-margin 0;
         }
@@ -349,7 +380,7 @@ legend {
 .touch {
     .question.simple-select {
         // touch radio buttons and checkboxes
-        .option-wrapper > label {
+        .option-wrapper>label {
             background-color: transparent;
             border: 1px solid #ccc;
 
@@ -359,24 +390,48 @@ legend {
             margin: 0 0 6.4px 0;
             padding: 10px;
 
-            input[type="radio"], input[type="checkbox"] {
+            input[type="radio"],
+            input[type="checkbox"] {
                 //slight variation between grid and fh theme for default radio/checkbox
                 margin-left: 5px;
             }
 
-            &:focus, &:hover, &:active {
+            &:focus,
+            &:hover,
+            &:active {
                 background-color: $brand-secondary-color;
             }
         }
     }
 
-    input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select {
+    input[type=text],
+    input[type=tel],
+    input[type=password],
+    input[type=url],
+    input[type=email],
+    input[type=file],
+    input[type=date],
+    input[type=time],
+    input[type=datetime],
+    input[type=number],
+    textarea,
+    select {
         //@include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
     }
 
-    input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea {
+    input[type=text],
+    input[type=tel],
+    input[type=password],
+    input[type=url],
+    input[type=email],
+    input[type=file],
+    input[type=date],
+    input[type=time],
+    input[type=datetime],
+    input[type=number],
+    textarea {
         border: 1px solid #ddd8ce;
     }
 
@@ -385,12 +440,25 @@ legend {
     }
 }
 
-input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], textarea, select, .widget {
+input[type=text],
+input[type=tel],
+input[type=password],
+input[type=url],
+input[type=email],
+input[type=file],
+input[type=date],
+input[type=time],
+input[type=datetime],
+input[type=number],
+textarea,
+select,
+.widget {
     display: block;
     margin: 8px 0 8px 0;
 }
 
-input:not([type="radio"]):not([type="checkbox"]), textarea {
+input:not([type="radio"]):not([type="checkbox"]),
+textarea {
     height: $input-height;
 }
 
@@ -399,15 +467,25 @@ select {
 }
 
 .question input {
-    &[type="text"], &[type="tel"], &[type="password"], &[type="url"], &[type="email"], &[type="file"] {
+    &[type="text"],
+    &[type="tel"],
+    &[type="password"],
+    &[type="url"],
+    &[type="email"],
+    &[type="file"] {
         width: $input-max-width;
     }
 
-    &[type="date"], &[type="number"], &[type="time"], &[type="datetime"], &[type="text"].mask-date {
+    &[type="date"],
+    &[type="number"],
+    &[type="time"],
+    &[type="datetime"],
+    &[type="text"].mask-date {
         width: $input-min-width;
     }
 
-    &[type="radio"], &[type=checkbox] {
+    &[type="radio"],
+    &[type=checkbox] {
         // input is floated to deal with multi-line labels
         float: left;
         display: block;
@@ -417,7 +495,8 @@ select {
 
 .or[dir="rtl"] {
     .question input {
-        &[type="radio"], &[type=checkbox] {
+        &[type="radio"],
+        &[type=checkbox] {
             // input is floated to deal with multi-line labels
             float: right;
         }
@@ -486,7 +565,9 @@ legend .required {
     opacity: 0.5;
 }
 
-.invalid-constraint, .invalid-required, .invalid-relevant {
+.invalid-constraint,
+.invalid-required,
+.invalid-relevant {
     @include transition-fast;
 
     background-color: $state-danger-bg;
@@ -508,7 +589,9 @@ legend .required {
     display: block;
 }
 
-.or-required-msg.active, .or-constraint-msg.active, .or-relevant-msg.active {
+.or-required-msg.active,
+.or-constraint-msg.active,
+.or-relevant-msg.active {
     font-weight: bold;
     padding-top: 5px;
     font-size: 0.85em;
@@ -517,7 +600,8 @@ legend .required {
 
 // this may have a very significant positive impact on performance
 .or-branch {
-    &.disabled, &.or-branch.pre-init {
+    &.disabled,
+    &.or-branch.pre-init {
         display: none;
     }
 }
