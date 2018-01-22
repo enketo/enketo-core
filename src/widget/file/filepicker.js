@@ -50,7 +50,9 @@ Filepicker.prototype._init = function() {
 
     this.$widget = $(
             '<div class="widget file-picker">' +
-            '<input class="ignore fake-file-input" type="button"/>' +
+            '<input class="ignore fake-file-input" placeholder="' + t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) + '"/>' +
+            '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button>' +
+            '<a class="btn-icon-only btn-download" download href=""><i class="icon icon-download"> </i></a>' +
             '<div class="file-feedback"></div>' +
             '<div class="file-preview"></div>' +
             '</div>' )
@@ -58,13 +60,21 @@ Filepicker.prototype._init = function() {
     this.$feedback = this.$widget.find( '.file-feedback' );
     this.$preview = this.$widget.find( '.file-preview' );
     this.$fakeInput = this.$widget.find( '.fake-file-input' );
-    // Focus listener needs to be added synchronously
+    this.$downloadLink = this.$widget.find( '.btn-download' );
+
+    this.$widget
+        .find( '.btn-reset' ).on( 'click', function() {
+            if ( $input.val() && window.confirm( t( 'filepicker.resetWarning' ) ) ) {
+                $input.val( '' ).trigger( 'change' );
+            }
+        } )
+        .end();
+
+    // Focus listener needs to be added synchronouslys
     that._focusListener();
 
-    // show loaded file name regardless of whether widget is supported
-    if ( existingFileName ) {
-        this._showFileName( existingFileName, this.props.mediaType );
-    }
+    // show loaded file name or placeholder regardless of whether widget is supported
+    this._showFileName( existingFileName, this.props.mediaType );
 
     if ( fileManager.isWaitingForPermissions() ) {
         this._showFeedback( t( 'filepicker.waitingForPermissions' ), 'warning' );
@@ -109,12 +119,15 @@ Filepicker.prototype._changeListener = function() {
 
     $( this.element )
         .on( 'click', function( event ) {
-            if ( that.props.readonly || that.props.namespace !== 'propagate' ) {
+            // The purpose of this handler is to block the filepicker window
+            // when the label is clicked outside of the input.
+            if ( that.props.readonly || event.namespace !== 'propagate' ) {
                 that.$fakeInput.focus();
                 event.stopImmediatePropagation();
                 return false;
             }
-        } ).on( 'change.propagate.' + this.namespace, function( event ) {
+        } )
+        .on( 'change.propagate.' + this.namespace, function( event ) {
             var file;
             var fileName;
             var postfix;
@@ -123,46 +136,65 @@ Filepicker.prototype._changeListener = function() {
             var now = new Date();
 
             if ( event.namespace === 'propagate' ) {
-                // trigger eventhandler to update instance value
+                // Trigger eventhandler to update instance value
                 $input.trigger( 'change.file' );
                 return false;
             } else {
                 event.stopImmediatePropagation();
             }
 
-            // get the file
+            // Get the file
             file = this.files[ 0 ];
             postfix = '-' + now.getHours() + '_' + now.getMinutes() + '_' + now.getSeconds();
             this.dataset.filenamePostfix = postfix;
             fileName = utils.getFilename( file, postfix );
 
-            // process the file
+            // Process the file
             fileManager.getFileUrl( file, fileName )
                 .then( function( url ) {
-                    // update UI
+                    // Update UI
                     that._showPreview( url, that.props.mediaType );
                     that._showFeedback();
                     that._showFileName( fileName );
                     if ( loadedFileName && loadedFileName !== fileName ) {
                         $input.removeAttr( 'data-loaded-file-name' );
                     }
-                    // update record
+                    that._updateDownloadLink( url, fileName );
+                    // Update record
                     $input.trigger( 'change.propagate' );
                 } )
                 .catch( function( error ) {
-                    // update record to clear any existing valid value
+                    // Update record to clear any existing valid value
                     $input.val( '' ).trigger( 'change.propagate' );
-                    // update UI
+                    // Update UI
                     that._showFileName( '' );
                     that._showPreview( null );
                     that._showFeedback( error, 'error' );
+                    that._updateDownloadLink( '', '' );
                 } );
         } );
 
-    this.$fakeInput.on( 'click', function( e ) {
-        e.preventDefault();
-        $( that.element ).trigger( 'click.propagate' );
-    } );
+    this.$fakeInput
+        .on( 'click', function( event ) {
+            /* 
+                The purpose of this handler is to selectively propagate clicks on the fake
+                input to the underlying file input (to show the file picker window).
+                It blocks propagation if the filepicker has a value to avoid accidentally
+                clearing files in a loaded record, hereby blocking native browser file input behavior
+                to clear values. Instead the reset button is the only way to clear a value.
+            */
+            if ( that.props.readonly || that.element.value || that.$fakeInput[ 0 ].value ) {
+                $( this ).focus();
+                event.stopImmediatePropagation();
+                return false;
+            }
+            event.preventDefault();
+            $( that.element ).trigger( 'click.propagate' );
+        } )
+        .on( 'change', function() {
+            // For robustness, avoid any editing of filenames by user.
+            return false;
+        } );
 };
 
 Filepicker.prototype._focusListener = function() {
@@ -180,7 +212,7 @@ Filepicker.prototype._focusListener = function() {
 };
 
 Filepicker.prototype._showFileName = function( fileName ) {
-    this.$fakeInput.val( fileName );
+    this.$fakeInput.val( fileName ).prop( 'readonly', !!fileName );
 };
 
 Filepicker.prototype._showFeedback = function( fb, status ) {
@@ -208,13 +240,20 @@ Filepicker.prototype._showPreview = function( url, mediaType ) {
             $el = $( '<video controls="controls"/>' );
             break;
         default:
-            $el = $( '<span>No preview for this mediatype</span>' );
+            $el = $( '<span>No preview for this file type</span>' );
             break;
     }
 
     if ( url ) {
         this.$preview.append( $el.attr( 'src', url ) );
     }
+};
+
+Filepicker.prototype._updateDownloadLink = function( url, fileName ) {
+    this.$downloadLink.attr( {
+        'href': url || '',
+        'download': fileName || ''
+    } );
 };
 
 $.fn[ pluginName ] = function( options, event ) {

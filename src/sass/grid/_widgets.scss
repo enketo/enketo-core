@@ -1,8 +1,9 @@
 //widget scss overrides
-
 .question .geopoint.widget {
-    input[type=number], input[type=text] {
-        &[name=alt], &[name=acc] {
+    input[type=number],
+    input[type=text] {
+        &[name=alt],
+        &[name=acc] {
             width: 40%;
         }
     }
@@ -19,7 +20,8 @@
 }
 
 .question .widget.datetimepicker {
-    .date, .timepicker {
+    .date,
+    .timepicker {
         @include display-flex;
         @include flex(1);
     }
@@ -34,10 +36,11 @@
     // Not clear to me why all these likert fixes are necessary
     margin-top: 20px;
 
-    > label {
+    >label {
         margin-bottom: 30px;
 
-        input[type=radio], input[type=checkbox] {
+        input[type=radio],
+        input[type=checkbox] {
             margin-top: -45px;
         }
 
@@ -48,10 +51,9 @@
 }
 
 // tables
-.question.or-appearance-list-nolabel, .question.or-appearance-label {
-    margin: 0;
-
-    // TODO: still a problem if the list-nolabel is followed by a regular select
+.question.or-appearance-list-nolabel,
+.question.or-appearance-label {
+    margin: 0; // TODO: still a problem if the list-nolabel is followed by a regular select
     &:not(:last-of-type) {
         border-bottom: none;
     }
@@ -64,7 +66,7 @@
 .touch {
     .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
         // touch radio buttons and checkboxes
-        .option-wrapper > label {
+        .option-wrapper>label {
             border: none;
 
             @include border-radius(0);
@@ -78,7 +80,9 @@
 
 // geopoint widget
 .question .geopicker.widget {
-    input[type=text], input[type=number], textarea {
+    input[type=text],
+    input[type=number],
+    textarea {
         @include border-radius(0);
 
         @include box-shadow-none;
@@ -110,7 +114,8 @@
         }
     }
 
-    .map-canvas-wrapper, .search-bar {
+    .map-canvas-wrapper,
+    .search-bar {
         border-left: none;
     }
 
@@ -138,7 +143,10 @@
         font-weight: bolder;
     }
 
-    input[type=text], input[type=number], textarea, select {
+    input[type=text],
+    input[type=number],
+    textarea,
+    select {
         border-bottom: 1px dotted #cccccc;
     }
 
@@ -161,7 +169,7 @@ html:not(.touch) .question .geopoint.widget {
             }
         }
 
-        [name=search] ~ .input-group-btn .btn {
+        [name=search]~.input-group-btn .btn {
             border-bottom: 1px dotted #cccccc;
         }
     }
@@ -173,7 +181,7 @@ html:not(.touch) .question .geopoint.widget {
         padding-top: 60px;
     }
 
-    &__overlay + .question {
+    &__overlay+.question {
         margin-left: 0;
         margin-right: 0;
     }
@@ -181,7 +189,8 @@ html:not(.touch) .question .geopoint.widget {
     .question {
         border: $grid-border;
 
-        input, textarea {
+        input,
+        textarea {
             order: 4;
         }
     }
@@ -190,17 +199,13 @@ html:not(.touch) .question .geopoint.widget {
 .btn-comment {
     position: absolute;
     top: $q-pad-top;
-    right: $q-pad-side;
-
-    //left: $q-pad-right;
+    right: $q-pad-side; //left: $q-pad-right;
     margin: 0;
 }
 
 legend .btn-comment {
     right: 0;
-    top: 0;
-
-    // undo legend hack
+    top: 0; // undo legend hack
     .icon {
         position: static;
     }
@@ -227,11 +232,30 @@ legend .btn-comment {
 
 // select picker
 .bootstrap-select {
-    .dropdown-toggle, .dropdown-menu {
+    .dropdown-toggle,
+    .dropdown-menu {
         width: 100%;
     }
 }
 
 .draw-widget__body__canvas {
     border: 1px solid $gray-light;
+}
+
+.file-picker {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .file-feedback,
+    .file-preview {
+        width: 100%;
+    }
+    .btn-download {
+        margin-right: 10px;
+        .icon {
+            vertical-align: middle;
+            margin-top: 1px;
+        }
+    }
+
 }

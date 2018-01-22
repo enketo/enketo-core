@@ -152,4 +152,11 @@ fileManager.isTooLarge = function( /*file*/) {
     return false;
 };
 
+/**
+ * Replace with function that determines max size published in OpenRosa server response header.
+ */
+fileManager.getMaxSizeReadable = function() {
+    return 5 + 'MB';
+};
+
 module.exports = fileManager;

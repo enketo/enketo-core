@@ -63,7 +63,7 @@ function stripQuotes( str ) {
 // See https://github.com/kobotoolbox/enketo-express/issues/374
 function getFilename( file, postfix ) {
     var filenameParts;
-    if ( typeof file === 'object' && file.name ) {
+    if ( typeof file === 'object' && file !== null && file.name ) {
         postfix = postfix || '';
         filenameParts = file.name.split( '.' );
         if ( filenameParts.length > 1 ) {

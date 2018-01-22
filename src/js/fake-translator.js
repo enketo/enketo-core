@@ -24,8 +24,10 @@ var SOURCE_STRINGS = {
         'utm-zone': 'zone'
     },
     'filepicker': {
+        'placeholder': 'Click here to upload file. (< __maxSize__)',
         'notFound': 'File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).',
-        'waitingForPermissions': 'Waiting for user permissions.'
+        'waitingForPermissions': 'Waiting for user permissions.',
+        'resetWarning': 'This will remove the file. Are you sure you want to do this?'
     },
     'form': {
         'required': 'required'

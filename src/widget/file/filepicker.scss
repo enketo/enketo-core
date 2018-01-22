@@ -1,12 +1,14 @@
 .file-picker {
+
     .fake-file-input {
         @include form-control;
-
+        display: inline-block;
         width: $input-max-width;
         text-align: start;
     }
 
-    .file-feedback, .file-preview {
+    .file-feedback,
+    .file-preview {
         @include font-normal;
     }
 
@@ -22,5 +24,22 @@
 
     .file-preview {
         margin-top: 10px;
+    }
+
+    .btn-download {
+        margin-right: 0;
+        &[href=""] {
+            display: none;
+        }
+    }
+
+}
+
+// MS Edge bug: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/4282810/
+@supports (-ms-ime-align: auto) {
+    .file-picker {
+        .btn-download {
+            display: none;
+        }
     }
 }

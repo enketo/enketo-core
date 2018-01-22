@@ -5,8 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Added
+- File pickers can now (only) be reset by reset button
+- Download functionality to file pickers
+
 ##### Changed
 - If repeat is completely empty it no longer takes up any visual space.
+- Show upload placeholder with max file size.
 
 [4.44.4] - 2018-03-31
 ---------------------
