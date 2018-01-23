@@ -57,8 +57,7 @@ describe( 'Instantiating a model', function() {
 } );
 
 describe( 'Data node getter', function() {
-    var i, t =
-        [
+    var i, t = [
             [ '', null, null, 20 ],
             [ '', null, {},
                 20
@@ -472,6 +471,25 @@ describe( 'XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for compreh
         expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4]/name', 'string' ) ).toEqual( 'den' );
         expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and 1<2]', 'nodes' ).length ).toEqual( 3 );
         expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and name=/new_cascading_selections/group4/city4]', 'nodes' ).length ).toEqual( 1 );
+    } );
+} );
+
+// This test makes sure that whatever date strings are returned by the XPath evaluator can be dealt with by the form engine
+describe( 'dates returned by the XPath evaluator ', function() {
+    var model = new Model( '<model><instance><data></data></instance></model>' );
+    model.init();
+    [
+        [ 'date("2018-01-01")', '2018-01-01', 'date' ],
+        [ 'date("2018-01-01")', '2017-12-31T17:00:00.000-07:00', 'datetime' ],
+        [ 'date(decimal-date-time( "2018-01-01" ) + 14)', '2018-01-15', 'date' ],
+        [ 'date(decimal-date-time( "2018-01-01" ) + 14)', '2018-01-14T17:00:00.000-07:00', 'datetime' ],
+        [ 'date("2018-01-01"  + 14)', '2018-01-15', 'date' ],
+        [ 'date("2018-01-01" + 14)', '2018-01-14T17:00:00.000-07:00', 'datetime' ],
+        [ 'date("2018-10-35")', '', 'date' ]
+    ].forEach( function( test ) {
+        it( 'are recognized and converted, if necessary by the type convertor: ' + test[ 0 ], function() {
+            expect( model.types[ test[ 2 ] ].convert( model.evaluate( test[ 0 ], 'string' ) ) ).toEqual( test[ 1 ] );
+        } );
     } );
 } );
 

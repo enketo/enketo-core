@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Date strings returned by XPath evaluator for question with type 'date' are not considered valid dates and set to ''.
+
 [4.44.1] - 2018-01-18
 ---------------------
 ##### Changed

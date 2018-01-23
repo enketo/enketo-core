@@ -67,6 +67,7 @@ var types = {
                 // The XPath expression "2012-01-01" + 2 returns a number of days in XPath.
                 date = new Date( x * 24 * 60 * 60 * 1000 );
             } else {
+                // for both dates and datetimes
                 date = this.validate( x ) ? new Date( x ) : 'Invalid Date';
             }
 
@@ -96,10 +97,6 @@ var types = {
                 if ( convertedDate && convertedTime ) {
                     return convertedDate + 'T' + convertedTime;
                 }
-            } else {
-                // XPath returns a string like this: "Mon, 08 Jan 2018 18:46:36 GMT".
-                // Until we fix this in the XPath evaluator to return an ISOLocal string, we should deal with this.
-                date = new Date( x );
             }
 
             return date.toString() !== 'Invalid Date' ? date.toISOLocalString() : '';
