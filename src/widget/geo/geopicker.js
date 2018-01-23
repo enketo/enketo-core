@@ -173,7 +173,7 @@ Geopicker.prototype._init = function() {
     this.$widget.find( '.btn-remove' ).on( 'click', function() {
         if ( that.points.length < 2 ) {
             that._updateInputs( [] );
-        } else if ( window.confirm( 'This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?' ) ) {
+        } else if ( window.confirm( t( 'geopicker.removePoint' ) ) ) {
             that._removePoint();
         }
     } );

@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - If repeat is completely empty it no longer takes up any visual space.
 - Show upload placeholder with max file size.
+- Error messages in geopicker are now translatable.
 
 [4.44.4] - 2018-03-31
 ---------------------

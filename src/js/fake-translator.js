@@ -41,7 +41,8 @@ var SOURCE_STRINGS = {
         'latitude': 'latitude (x.y °)',
         'longitude': 'longitude (x.y °)',
         'points': 'points',
-        'searchPlaceholder': 'search for place or address'
+        'searchPlaceholder': 'search for place or address',
+        'removePoint': 'This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?'
     },
     'selectpicker': {
         'noneselected': 'none selected',
