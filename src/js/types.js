@@ -48,12 +48,12 @@ var types = {
     },
     'date': {
         validate: function( x ) {
-            var pattern = /([0-9]{4})([-]|[/])([0-9]{2})([-]|[/])([0-9]{2})/;
+            var pattern = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
             var segments = pattern.exec( x );
-            if ( segments && segments.length === 6 ) {
+            if ( segments && segments.length === 4 ) {
                 var year = Number( segments[ 1 ] );
-                var month = Number( segments[ 3 ] ) - 1;
-                var day = Number( segments[ 5 ] );
+                var month = Number( segments[ 2 ] ) - 1;
+                var day = Number( segments[ 3 ] );
                 var date = new Date( year, month, day );
                 // Do not approve automatic JavaScript conversion of invalid dates such as 2017-12-32
                 return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
