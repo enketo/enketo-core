@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [4.44.2] - 2018-01-23
 ---------------------
+##### Changed
+- Upgraded to jQuery 3.3.x. **Warning: Likely requires the app that uses enketo-core to also upgrade to jQuery 3.3.x!**
+
 ##### Fixed
 - Date strings returned by XPath evaluator for question with type 'date' are not considered valid dates and set to ''.
 
