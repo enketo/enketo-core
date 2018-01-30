@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Instance('id' )/path/to/node does not work if 'id' is surrounded by whitespace.
+
 [4.44.2] - 2018-01-23
 ---------------------
 ##### Changed

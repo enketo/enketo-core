@@ -9,7 +9,7 @@ var FormLogicError = require( './Form-logic-error' );
 var config = require( 'enketo-config' );
 var types = require( './types' );
 var REPEAT_COMMENT_PREFIX = 'repeat:/';
-var INSTANCE = /instance\(['|"]([^/:\s]+)['|"]\)/g;
+var INSTANCE = /instance\(\s*(["'])((?:(?!\1)\w+))\1\s*\)/g;
 var OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^)])/;
 var OPENROSA_XFORMS_NS = 'http://openrosa.org/xforms';
 var JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
@@ -1038,7 +1038,7 @@ FormModel.prototype.replaceInstanceFn = function( expr ) {
     var that = this;
 
     // TODO: would be more consistent to use utls.parseFunctionFromExpression() and utils.stripQuotes
-    return expr.replace( INSTANCE, function( match, id ) {
+    return expr.replace( INSTANCE, function( match, quote, id ) {
         prefix = '/model/instance[@id="' + id + '"]';
         // check if referred instance exists in model
         if ( that.evaluate( prefix, 'nodes', null, null, true ).length ) {

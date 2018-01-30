@@ -567,8 +567,12 @@ describe( 'converting absolute paths', function() {
 
 describe( 'converting instance("id") to absolute paths', function() {
     [
-        [ 'instance("a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ]
-
+        [ 'instance("a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
+        [ 'instance( "a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
+        [ 'instance( "a"   )/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
+        [ 'instance(\'a\')/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
+        [ 'instance( \'a\')/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
+        [ 'instance( \'a\'   )/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
     ].forEach( function( test ) {
         it( 'happens correctly', function() {
             var model = new Model( '<model><instance><root/></instance><instance id="a"/></model>' );
