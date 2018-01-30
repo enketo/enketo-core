@@ -37,7 +37,6 @@ DatepickerExtended.prototype.constructor = DatepickerExtended;
  * Initialize datepicker widget
  */
 DatepickerExtended.prototype._init = function() {
-    var that = this;
     var $p = $( this.element ).parent( 'label' );
 
     this.settings = ( $p.hasClass( 'or-appearance-year' ) ) ? {
