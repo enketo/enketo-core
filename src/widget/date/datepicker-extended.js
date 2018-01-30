@@ -56,7 +56,7 @@ DatepickerExtended.prototype._init = function() {
 
     this.$fakeDateI = this._createFakeDateInput( this.settings.format );
 
-    this._setManualHandler( this.$fakeDateI );
+    this._setChangeHandler( this.$fakeDateI );
     this._setFocusHandler( this.$fakeDateI );
     this._setResetHandler( this.$fakeDateI );
 
@@ -67,15 +67,6 @@ DatepickerExtended.prototype._init = function() {
         startView: this.settings.startView,
         minViewMode: this.settings.minViewMode,
         forceParse: false
-    } ).on( 'changeDate', function() {
-        // copy changes made by datepicker to original input field
-        var value = $( this ).val();
-        if ( that.settings.startView === 'decade' && value.length === 4 ) {
-            value += '-01-01';
-        } else if ( that.settings.startView === 'year' && value.length < 8 ) {
-            value += '-01';
-        }
-        $( that.element ).val( value ).trigger( 'change' ); //.blur();
     } );
 };
 
@@ -102,13 +93,14 @@ DatepickerExtended.prototype._createFakeDateInput = function( format ) {
  *
  * @param { jQuery } $fakeDateI Fake date input element
  */
-DatepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {
+DatepickerExtended.prototype._setChangeHandler = function( $fakeDateI ) {
     var $dateI = $( this.element );
     var settings = this.settings;
 
     $fakeDateI.on( 'change', function() {
         var convertedValue = '';
         var value = $fakeDateI.val();
+        var showValue = '';
 
         if ( value.length > 0 ) {
             value = ( settings.format === 'yyyy-mm' ) ? value + '-01' : ( settings.format === 'yyyy' ) ? value + '-01-01' : value;
@@ -120,7 +112,15 @@ DatepickerExtended.prototype._setManualHandler = function( $fakeDateI ) {
             // convertedValue is '' for invalid 2012-12-32
             $dateI.val( convertedValue ).trigger( 'change' ).blur();
         }
-        $fakeDateI.val( convertedValue ).datepicker( 'update' );
+
+        if ( settings.format === 'yyyy-mm' ) {
+            showValue = convertedValue.substring( 0, convertedValue.lastIndexOf( '-' ) );
+        } else if ( settings.format === 'yyyy' ) {
+            showValue = convertedValue.substring( 0, convertedValue.indexOf( '-' ) );
+        } else {
+            showValue = convertedValue;
+        }
+        $fakeDateI.val( showValue ).datepicker( 'update' );
 
         return false;
     } );

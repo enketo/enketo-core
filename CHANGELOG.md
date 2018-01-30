@@ -3,11 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.44.3] - 2018-01-30
 ---------------------
 ##### Fixed
 - Instance('id' )/path/to/node does not work if 'id' is surrounded by whitespace.
 - (In Enketo Transformer) Markdown headers preceded by whitespace fail to render as header and whitespace trimming is to aggresive.
+- Datepicker with "month-year" and "year" appearance shows full value.
 
 [4.44.2] - 2018-01-23
 ---------------------
