@@ -776,6 +776,32 @@ describe( 'Using XPath with default namespace', function() {
 
 } );
 
+describe( 'Using XPath with non-default namespaces', function() {
+
+    describe( 'on secondary instances', function() {
+        var SEC_INSTANCE_CONTENT = '<sec xmlns:this="a"><this:b this:at="that">3</this:b></sec>';
+
+        [ {
+            modelStr: '<model><instance><data/></instance><instance id="s">' + SEC_INSTANCE_CONTENT + '</instance></model>'
+        }, {
+            modelStr: '<model><instance><data/></instance><instance id="s" src="something"/></model>',
+            external: [ { id: 's', xmlStr: SEC_INSTANCE_CONTENT } ]
+        } ].forEach( function( testObj ) {
+            var model = new Model( testObj );
+            var type = testObj.external ? 'external' : 'internal';
+            model.init();
+            it( 'works for simple namespaced node retrieval on ' + type + ' instances', function() {
+                expect( model.evaluate( 'instance("s")/sec/this:b', 'string' ) ).toEqual( '3' );
+            } );
+
+            it( 'works for simple namespaced attribute retrieval on ' + type + ' instances', function() {
+                expect( model.evaluate( 'instance("s")/sec/this:b/@this:at', 'string' ) ).toEqual( 'that' );
+            } );
+        } );
+
+    } );
+
+} );
 
 describe( 'Repeat without ordinals', function() {
     var modelStr = '<model><instance><a><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';

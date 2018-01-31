@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.44.4] - 2018-03-31
 ---------------------
 ##### Fixed
 - Instances with special characters in instance id attributes fail to be queried.
+- Namespaces not resolved for secondary instances.
 
 [4.44.3] - 2018-01-30
 ---------------------

@@ -938,21 +938,21 @@ FormModel.prototype.setNamespaces = function() {
      * Passing through all nodes would be very slow with an XForms model that contains lots of nodes such as large secondary instances. 
      * (The namespace XPath axis is not support in native browser XPath evaluators unfortunately).
      * 
-     * For now it has therefore been restricted to only look at the top-level node in the primary instance.
+     * For now it has therefore been restricted to only look at the top-level node in the primary instance and in the secondary instances.
      * We can always expand that later.
      */
-    var start = this.hasInstance ? '/model/instance[1]' : '';
-    var node = this.evaluate( start + '/*', 'node', null, null, true );
+    var start = this.hasInstance ? '/model/instance' : '';
+    var nodes = this.evaluate( start + '/*', 'nodes', null, null, true );
     var that = this;
     var prefix;
 
-    if ( node ) {
+    nodes.forEach( function( node ) {
         if ( node.hasAttributes() ) {
             for ( var i = 0; i < node.attributes.length; i++ ) {
                 var attribute = node.attributes[ i ];
 
                 if ( attribute.name.indexOf( 'xmlns:' ) === 0 ) {
-                    this.namespaces[ attribute.name.substring( 6 ) ] = attribute.value;
+                    that.namespaces[ attribute.name.substring( 6 ) ] = attribute.value;
                 }
             }
         }
@@ -972,7 +972,8 @@ FormModel.prototype.setNamespaces = function() {
                 }
             }
         } );
-    }
+    } );
+
 };
 
 FormModel.prototype.getNamespacePrefix = function( namespace ) {
