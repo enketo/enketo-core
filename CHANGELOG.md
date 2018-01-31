@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Instances with special characters in instance id attributes fail to be queried.
+
 [4.44.3] - 2018-01-30
 ---------------------
 ##### Fixed

@@ -568,6 +568,7 @@ describe( 'converting absolute paths', function() {
 describe( 'converting instance("id") to absolute paths', function() {
     [
         [ 'instance("a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
+        [ 'instance("a.-_")/path/to/node', '/model/instance[@id="a.-_"]/path/to/node' ],
         [ 'instance( "a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
         [ 'instance( "a"   )/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
         [ 'instance(\'a\')/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
@@ -575,7 +576,7 @@ describe( 'converting instance("id") to absolute paths', function() {
         [ 'instance( \'a\'   )/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
     ].forEach( function( test ) {
         it( 'happens correctly', function() {
-            var model = new Model( '<model><instance><root/></instance><instance id="a"/></model>' );
+            var model = new Model( '<model><instance><root/></instance><instance id="a"/><instance id="a.-_"/></model>' );
             var expected = test[ 1 ];
             model.init();
             expect( model.replaceInstanceFn( test[ 0 ] ) ).toEqual( expected );
