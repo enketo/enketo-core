@@ -99,6 +99,10 @@ $media-margin: 10px;
     margin: 0 0 3px 0;
     padding: 20px 10px 10px 10px;
     position: relative;
+    &:empty {
+        // calculation-only repeats
+        padding: 0;
+    }
 
     .repeat-number {
         display: block;
@@ -523,7 +527,7 @@ select {
     }
 }
 
-.or-repeat-info {
+.or-repeat:not(:empty)+.or-repeat-info {
     padding-top: 10px;
 }
 

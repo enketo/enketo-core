@@ -30,8 +30,15 @@ module.exports = {
 
         $repeatInfos = this.form.view.$.find( '.or-repeat-info' );
         this.templates = {};
-        // Add repeat numbering elements
+        // Add repeat numbering elements, if repeat has form controls (not just calculations)
         $repeatInfos.siblings( '.or-repeat' )
+            .filter( function() {
+                // remove whitespace so we can use :empty css selector
+                if ( this.firstChild && this.firstChild.nodeType === 3 ) {
+                    this.firstChild.textContent = '';
+                }
+                return !!this.querySelector( '.question' );
+            } )
             .prepend( '<span class="repeat-number"></span>' );
         // Add repeat buttons
         $repeatInfos.filter( '*:not([data-repeat-fixed]):not([data-repeat-count])' )

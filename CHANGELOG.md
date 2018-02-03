@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- If repeat is completely empty it no longer takes up any visual space.
+
 [4.44.4] - 2018-03-31
 ---------------------
 ##### Fixed
