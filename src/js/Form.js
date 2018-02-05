@@ -370,7 +370,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
 
     // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
     if ( !this.$nonRepeats[ attr ] ) {
-        this.$nonRepeats[ attr ] = this.view.$.find( filter + '[' + attr + ']' )
+        this.$nonRepeats[ attr ] = this.view.$.find( ':not(.or-repeat-info)[' + attr + ']' )
             .parent()
             .filter( function() {
                 return $( this ).closest( '.or-repeat' ).length === 0;
