@@ -37,6 +37,7 @@ function Form( formSelector, data, options ) {
     var $form = $( formSelector );
 
     this.$nonRepeats = {};
+    this.$all = {};
     this.options = typeof options !== 'object' ? {} : options;
     if ( typeof this.options.clearIrrelevantImmediately === 'undefined' ) {
         this.options.clearIrrelevantImmediately = true;
@@ -360,26 +361,35 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     var $collection;
-    var $repeat = null;
+    var $repeatControls = null;
+    var $controls;
     var selector = [];
     var that = this;
-    var wrappers = [];
 
     updated = updated || {};
     filter = filter || '';
 
     // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
     if ( !this.$nonRepeats[ attr ] ) {
-        this.$nonRepeats[ attr ] = this.view.$.find( ':not(.or-repeat-info)[' + attr + ']' )
-            .parent()
+        $controls = this.view.$.find( ':not(.or-repeat-info)[' + attr + ']' )
             .filter( function() {
                 return $( this ).closest( '.or-repeat' ).length === 0;
             } );
+        this.$nonRepeats[ attr ] = this.filterRadioCheckSiblings( $controls );
     }
 
     // If the updated node is inside a repeat (and there are multiple repeats present)
     if ( typeof updated.repeatPath !== 'undefined' && updated.repeatIndex >= 0 ) {
-        $repeat = this.view.$.find( '.or-repeat[name="' + updated.repeatPath + '"]' ).eq( updated.repeatIndex );
+        $controls = this.view.$.find( '.or-repeat[name="' + updated.repeatPath + '"]' ).eq( updated.repeatIndex )
+            .find( '[' + attr + ']' );
+        $repeatControls = this.filterRadioCheckSiblings( $controls );
+    }
+
+    // If a new repeat was created, update the cached collection of all form controls with that attribute
+    if ( !this.$all[ attr ] ) {
+        this.$all[ attr ] = this.filterRadioCheckSiblings( this.view.$.find( '[' + attr + ']' ) );
+    } else if ( updated.cloned && $repeatControls ) {
+        this.$all[ attr ] = this.$all[ attr ].add( $repeatControls );
     }
 
     /**
@@ -389,18 +399,16 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
      * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node, /path/to/repeat, 3).
      * We accept that for now.
      **/
-    if ( $repeat ) {
-        // the non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
-        $collection = this.$nonRepeats[ attr ]
-            .add( $repeat );
+    if ( $repeatControls ) {
+        // The non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
+        $collection = this.$nonRepeats[ attr ].add( $repeatControls );
     } else {
-        $collection = this.view.$;
+        $collection = this.$all[ attr ];
     }
 
-    // add selectors based on specific changed nodes
     // Add selectors based on specific changed nodes
     if ( !updated.nodes || updated.nodes.length === 0 ) {
-        selector = selector.concat( [ filter + '[' + attr + ']' ] );
+        selector = selector.concat( [ filter ] );
     } else {
         updated.nodes.forEach( function( node ) {
             selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, node ) );
@@ -409,20 +417,28 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
         selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, '*' ) );
     }
 
+    var selectorStr = selector.join( ', ' );
+
+    $collection = selectorStr ? $collection.filter( selectorStr ) : $collection;
+
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
-    return $collection.find( selector.join() )
-        .filter( function() {
-            // TODO: can this be further performance-optimized?
-            var wrapper = this.type === 'radio' || this.type === 'checkbox' ? $( this.parentNode ).parent( '.option-wrapper' )[ 0 ] : null;
-            // Filter out duplicate radiobuttons and checkboxes
-            if ( wrapper ) {
-                if ( wrappers.indexOf( wrapper ) !== -1 ) {
-                    return false;
-                }
-                wrappers.push( wrapper );
+    return $collection;
+};
+
+Form.prototype.filterRadioCheckSiblings = function( $controls ) {
+    var wrappers = [];
+    return $controls.filter( function() {
+        // TODO: can this be further performance-optimized?
+        var wrapper = this.type === 'radio' || this.type === 'checkbox' ? $( this.parentNode ).parent( '.option-wrapper' )[ 0 ] : null;
+        // Filter out duplicate radiobuttons and checkboxes
+        if ( wrapper ) {
+            if ( wrappers.indexOf( wrapper ) !== -1 ) {
+                return false;
             }
-            return true;
-        } );
+            wrappers.push( wrapper );
+        }
+        return true;
+    } );
 };
 
 /**
