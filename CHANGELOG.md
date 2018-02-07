@@ -3,18 +3,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.45.0] - 2018-02-08
 ---------------------
 ##### Added
-- File pickers can now (only) be reset by reset button
-- Download functionality to file pickers
+- File pickers can now (only) be reset by reset button.
+- Download functionality to file pickers.
 
 ##### Changed
 - If repeat is completely empty it no longer takes up any visual space.
 - Show upload placeholder with max file size.
 - Error messages in geopicker are now translatable.
 
-[4.44.4] - 2018-03-31
+[4.44.4] - 2018-01-31
 ---------------------
 ##### Fixed
 - Instances with special characters in instance id attributes fail to be queried.

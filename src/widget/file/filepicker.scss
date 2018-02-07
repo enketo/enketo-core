@@ -34,12 +34,3 @@
     }
 
 }
-
-// MS Edge bug: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/4282810/
-@supports (-ms-ime-align: auto) {
-    .file-picker {
-        .btn-download {
-            display: none;
-        }
-    }
-}

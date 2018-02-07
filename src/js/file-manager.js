@@ -31,7 +31,7 @@ fileManager.isWaitingForPermissions = function() {
 };
 
 /**
- * Obtains a url that can be used to show a preview of the file when used
+ * Obtains a an ObjectURL that can be used to show a preview of the file when used
  * as a src attribute.
  *
  * @param  {?string|Object} subject File or filename in local storage
@@ -42,7 +42,7 @@ fileManager.isWaitingForPermissions = function() {
  */
 fileManager.getFileUrl = function( subject /*, fileNameOverride*/ ) {
     return new Promise( function( resolve, reject ) {
-        var error, reader;
+        var error;
 
         if ( !subject ) {
             resolve( null );
@@ -54,14 +54,7 @@ fileManager.getFileUrl = function( subject /*, fileNameOverride*/ ) {
                 error = new Error( 'File too large' );
                 reject( error );
             } else {
-                reader = new FileReader();
-                reader.onload = function( e ) {
-                    resolve( e.target.result );
-                };
-                reader.onerror = function( e ) {
-                    reject( e );
-                };
-                reader.readAsDataURL( subject );
+                resolve( URL.createObjectURL( subject ) );
             }
         } else {
             reject( new Error( 'Unknown error occurred' ) );

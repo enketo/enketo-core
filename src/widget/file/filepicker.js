@@ -50,7 +50,7 @@ Filepicker.prototype._init = function() {
 
     this.$widget = $(
             '<div class="widget file-picker">' +
-            '<input class="ignore fake-file-input" placeholder="' + t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) + '"/>' +
+            '<input class="ignore fake-file-input"/>' +
             '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button>' +
             '<a class="btn-icon-only btn-download" download href=""><i class="icon icon-download"> </i></a>' +
             '<div class="file-feedback"></div>' +
@@ -64,7 +64,7 @@ Filepicker.prototype._init = function() {
 
     this.$widget
         .find( '.btn-reset' ).on( 'click', function() {
-            if ( $input.val() && window.confirm( t( 'filepicker.resetWarning' ) ) ) {
+            if ( ( $input.val() || that.$fakeInput.val() ) && window.confirm( t( 'filepicker.resetWarning' ) ) ) {
                 $input.val( '' ).trigger( 'change' );
             }
         } )
@@ -80,6 +80,11 @@ Filepicker.prototype._init = function() {
         this._showFeedback( t( 'filepicker.waitingForPermissions' ), 'warning' );
     }
 
+    // Monitor maxSize changes to update placeholder text. This facilitates asynchronous 
+    // obtaining of max size from server without slowing down form loading.
+    this._updatePlaceholder();
+    $input.closest( 'form.or' ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
+
     fileManager.init()
         .then( function() {
             that._showFeedback();
@@ -89,6 +94,7 @@ Filepicker.prototype._init = function() {
                 fileManager.getFileUrl( existingFileName )
                     .then( function( url ) {
                         that._showPreview( url, that.props.mediaType );
+                        that._updateDownloadLink( url, existingFileName );
                     } )
                     .catch( function() {
                         that._showFeedback( t( 'filepicker.notFound', {
@@ -109,9 +115,8 @@ Filepicker.prototype._getProps = function() {
     };
 };
 
-Filepicker.prototype._getMaxSubmissionSize = function() {
-    var maxSize = $( document ).data( 'maxSubmissionSize' );
-    return maxSize || 5 * 1024 * 1024;
+Filepicker.prototype._updatePlaceholder = function() {
+    this.$fakeInput.attr( 'placeholder', t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) );
 };
 
 Filepicker.prototype._changeListener = function() {
