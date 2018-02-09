@@ -6,6 +6,7 @@ var pluginName = 'drawWidget';
 var support = require( '../../js/support' );
 var fileManager = require( '../../js/file-manager' );
 var SignaturePad = require( 'signature_pad' );
+var t = require( 'translator' ).t;
 
 /**
  * Widget to obtain user-provided drawings or signature.
@@ -44,6 +45,10 @@ DrawWidget.prototype._init = function() {
     this._handleResize( canvas );
     this._resizeCanvas( canvas );
 
+    if ( this.props.load ) {
+        this._handleFiles( existingFilename );
+    }
+
     this.initialize = fileManager.init()
         .then( function() {
             that.pad = new SignaturePad( canvas, {
@@ -60,13 +65,6 @@ DrawWidget.prototype._init = function() {
             that.pad.on();
             that.$widget
                 .find( '.draw-widget__btn-reset' ).on( 'click', that._reset.bind( that ) )
-                .end().find( '.draw-widget__load' ).on( 'change', function() {
-                    if ( this.files[ 0 ] ) {
-                        that.pad.clear();
-                        that._loadFileIntoPad( this.files[ 0 ] );
-                        that._updateValue.call( that );
-                    }
-                } )
                 .end().find( '.draw-widget__colorpicker' )
                 .on( 'click', '.current', function() {
                     $( this ).parent().toggleClass( 'reveal' );
@@ -131,8 +129,90 @@ DrawWidget.prototype._getProps = function( el ) {
     };
 };
 
+// All this is copied from the file-picker widget
+DrawWidget.prototype._handleFiles = function( loadedFileName ) {
+    // Monitor maxSize changes to update placeholder text in annotate widget. This facilitates asynchronous 
+    // obtaining of max size from server without slowing down form loading.
+    this._updatePlaceholder();
+    this.$widget.closest( 'form.or' ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
+
+    var that = this;
+
+    var $input = this.$widget.find( 'input[type=file]' );
+    var $fakeInput = this.$widget.find( '.fake-file-input' );
+
+    // show loaded file name or placeholder regardless of whether widget is supported
+    this._showFileName( loadedFileName );
+
+    $input
+        .on( 'click.' + this.namespace, function( event ) {
+            // The purpose of this handler is to block the filepicker window
+            // when the label is clicked outside of the input.
+            if ( that.props.readonly || event.namespace !== 'propagate' ) {
+                that.$fakeInput.focus();
+                event.stopImmediatePropagation();
+                return false;
+            }
+        } )
+        .on( 'change.' + this.namespace, function() {
+            // Get the file
+            var file = this.files[ 0 ];
+
+            if ( file ) {
+                // Process the file
+                if ( !fileManager.isTooLarge( file ) ) {
+                    // Update UI
+                    that.pad.clear();
+                    that._loadFileIntoPad( this.files[ 0 ] );
+                    that._updateValue.call( that );
+                    that._showFileName( file.name );
+                    // that._updateDownloadLink( url, fileName );
+                } else {
+                    that._showFeedback( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
+                }
+            } else {
+                that._showFileName( null );
+            }
+        } );
+
+    $fakeInput
+        .on( 'click.' + this.namespace, function( event ) {
+            /* 
+                The purpose of this handler is to selectively propagate clicks on the fake
+                input to the underlying file input (to show the file picker window).
+                It blocks propagation if the filepicker has a value to avoid accidentally
+                clearing files in a loaded record, hereby blocking native browser file input behavior
+                to clear values. Instead the reset button is the only way to clear a value.
+            */
+            if ( that.props.readonly || $input[ 0 ].value || $fakeInput[ 0 ].value ) {
+                $( this ).focus();
+                event.stopImmediatePropagation();
+                return false;
+            }
+            event.preventDefault();
+            $input.trigger( 'click.propagate' );
+        } )
+        .on( 'change.' + this.namespace, function() {
+            // For robustness, avoid any editing of filenames by user.
+            return false;
+        } );
+};
+
+DrawWidget.prototype._showFileName = function( fileName ) {
+    this.$widget.find( '.fake-file-input' ).val( fileName ).prop( 'readonly', !!fileName );
+};
+
+DrawWidget.prototype._updatePlaceholder = function() {
+    this.$widget.find( '.fake-file-input' ).attr( 'placeholder', t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) );
+};
+
 DrawWidget.prototype._getMarkup = function() {
-    var load = this.props.load ? '<input type="file" accept="image/*" class="ignore draw-widget__load"/>' : '';
+    // HTML syntax copied from filepicker widget
+    var load = this.props.load ? '<input type="file" accept="image/*" class="ignore draw-widget__load"/>' +
+        '<div class="widget file-picker">' +
+        '<input class="ignore fake-file-input"/>' +
+        '<div class="file-feedback"></div>' +
+        '</div>' : '';
     var fullscreenBtns = this.props.touch ? '<button type="button" class="show-canvas-btn btn btn-default">Draw/Sign</button>' +
         '<button type="button" class="hide-canvas-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' : '';
     var $widget = $( '<div class="widget draw-widget">' +
@@ -161,15 +241,20 @@ DrawWidget.prototype._updateValue = function() {
     this.cache = this.pad.toDataURL();
     this.element.dataset.filenamePostfix = postfix;
     delete this.element.dataset.loadedFileName;
+    // Note that this.element has become a text input.
     $( this.element ).val( this.props.filename ).trigger( 'change' );
 };
 
 DrawWidget.prototype._reset = function() {
-    this.pad.clear();
-    this.cache = null;
-    delete this.element.dataset.loadedFileName;
-    this.element.dataset.filenamePostfix = '';
-    $( this.element ).val( '' ).trigger( 'change' );
+    if ( this.element.value && window.confirm( t( 'drawwidget.resetWarning' ) ) ) {
+        this.pad.clear();
+        this.cache = null;
+        delete this.element.dataset.loadedFileName;
+        this.element.dataset.filenamePostfix = '';
+        $( this.element ).val( '' ).trigger( 'change' );
+        // annotate file input
+        this.$widget.find( 'input[type=file]' ).val( '' ).trigger( 'change' );
+    }
 };
 
 DrawWidget.prototype._loadFileIntoPad = function( filename ) {

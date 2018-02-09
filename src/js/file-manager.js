@@ -13,6 +13,7 @@ var Promise = require( 'lie' );
 var $ = require( 'jquery' );
 var utils = require( './utils' );
 var fileManager = {};
+var t = require( 'translator' ).t;
 
 /**
  * Initialize the file manager .
@@ -51,7 +52,7 @@ fileManager.getFileUrl = function( subject /*, fileNameOverride*/ ) {
             reject( 'no!' );
         } else if ( typeof subject === 'object' ) {
             if ( fileManager.isTooLarge( subject ) ) {
-                error = new Error( 'File too large' );
+                error = new Error( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
                 reject( error );
             } else {
                 resolve( URL.createObjectURL( subject ) );

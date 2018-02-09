@@ -46,9 +46,13 @@ $fullscreen-margin-h: 15px;
             height: 100%;
         }
         input[type=file]{
+            display: none;
+        }
+        .file-picker {
             position: absolute;
             top: -($fullscreen-margin-v);
             left: 0; // TODO: RTL
+            width: 100%;
         }
         .show-canvas-btn {
             position: absolute;

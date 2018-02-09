@@ -70,11 +70,11 @@ Filepicker.prototype._init = function() {
         } )
         .end();
 
-    // Focus listener needs to be added synchronouslys
+    // Focus listener needs to be added synchronously
     that._focusListener();
 
     // show loaded file name or placeholder regardless of whether widget is supported
-    this._showFileName( existingFileName, this.props.mediaType );
+    this._showFileName( existingFileName );
 
     if ( fileManager.isWaitingForPermissions() ) {
         this._showFeedback( t( 'filepicker.waitingForPermissions' ), 'warning' );
