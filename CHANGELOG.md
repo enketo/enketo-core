@@ -11,6 +11,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Draw/signature widget requires confirmation before reset.
 
+##### Fixed
+- Printing: geo widget with appearance "maps" does not show coordinate fields.
+
 [4.45.0] - 2018-02-08
 ---------------------
 ##### Added
