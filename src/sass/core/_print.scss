@@ -71,7 +71,7 @@ h4::before {
         visibility: hidden;
     }
 
-    input[type="number"]{
+    input[type="number"] {
         appearance: textfield !important;
         -moz-appearance: textfield !important;
         -webkit-appearance: textfield !important;
@@ -88,11 +88,16 @@ h4 {
     font-size: 1.3 * $printBaseFontSize;
 }
 
-label, legend, .trigger, .note {
+label,
+legend,
+.trigger,
+.note {
     font-size: $printBaseFontSize;
 }
 
-.question-label, .option-label, label.geo {
+.question-label,
+.option-label,
+label.geo {
     font-size: $printBaseFontSize;
 }
 
@@ -101,11 +106,15 @@ label, legend, .trigger, .note {
 }
 
 .or {
-    h2, h3, h4, .required {
+    h2,
+    h3,
+    h4,
+    .required {
         color: black;
     }
 
-    h3, h4 {
+    h3,
+    h4 {
         margin: 0;
     }
 
@@ -118,7 +127,7 @@ label, legend, .trigger, .note {
     legend {
         margin-bottom: 5px;
 
-        ~ label {
+        ~label {
             padding: 0;
         }
 
@@ -127,7 +136,8 @@ label, legend, .trigger, .note {
         }
     }
 
-    .note, .trigger {
+    .note,
+    .trigger {
         font-weight: normal;
         background: none;
         color: black;
@@ -142,7 +152,18 @@ label, legend, .trigger, .note {
         background: none;
     }
 
-    input[type=text], input[type=tel], input[type=password], input[type=url], input[type=email], input[type=file], input[type=date], input[type=time], input[type=datetime], input[type=number], select, textarea {
+    input[type=text],
+    input[type=tel],
+    input[type=password],
+    input[type=url],
+    input[type=email],
+    input[type=file],
+    input[type=date],
+    input[type=time],
+    input[type=datetime],
+    input[type=number],
+    select,
+    textarea {
         @include border-radius(0px);
 
         @include box-shadow-none;
@@ -158,7 +179,8 @@ label, legend, .trigger, .note {
         display: none !important;
     }
 
-    .or-hint.active, .or-hint.or-form-print.active {
+    .or-hint.active,
+    .or-hint.or-form-print.active {
         color: black;
         display: block;
         padding-top: 5px;
@@ -174,7 +196,8 @@ label, legend, .trigger, .note {
     }
 }
 
-.invalid-constraint, .invalid-required {
+.invalid-constraint,
+.invalid-required {
     background: none;
     border: 1px solid red;
 }
@@ -191,7 +214,8 @@ label, legend, .trigger, .note {
             padding: 0 !important;
             margin: 7px 0 0 0 !important;
 
-            &:nth-of-type(3), &:nth-of-type(4) {
+            &:nth-of-type(3),
+            &:nth-of-type(4) {
                 vertical-align: top;
                 margin-top: 0;
                 padding-top: 12px;
@@ -220,7 +244,8 @@ label, legend, .trigger, .note {
         display: none;
     }
 
-    .leaflet-popup-pane, .leaflet-control {
+    .leaflet-popup-pane,
+    .leaflet-control {
         display: none;
     }
 }
@@ -248,7 +273,7 @@ label, legend, .trigger, .note {
 
     .dropdown-toggle {
         display: none;
-         ~ .dropdown-menu {
+        ~.dropdown-menu {
             @include display-flex;
 
             @include flex-wrap(wrap);
@@ -262,7 +287,8 @@ label, legend, .trigger, .note {
             list-style-type: circle;
             max-height: none;
 
-            li, li.active {
+            li,
+            li.active {
                 flex: 1;
                 min-width: 30%;
                 display: inline-block;
@@ -281,12 +307,12 @@ label, legend, .trigger, .note {
     display: none;
 }
 
-.or-appearance-likert .option-wrapper > label .option-label {
+.or-appearance-likert .option-wrapper>label .option-label {
     border-top: 1px solid black;
 }
 
-.question.or-appearance-compact input:checked ~ img,
-.question.or-appearance-quickcompact input:checked ~ img {
+.question.or-appearance-compact input:checked~img,
+.question.or-appearance-quickcompact input:checked~img {
     border-color: black;
 }
 
@@ -311,10 +337,11 @@ label, legend, .trigger, .note {
 .or-appearance-analog-scale {
     // if analog-scale widget is a non-current page the display is set to block
     // which moves the vertical widget below the label instead of next to it.
-    &:not(.or-appearance-horizontal){
-        display: flex !important; 
+    &:not(.or-appearance-horizontal) {
+        display: flex !important;
+        flex-wrap: wrap;
     }
-    
+
     .scale__ticks {
         display: none;
     }
@@ -333,11 +360,11 @@ label, legend, .trigger, .note {
         border: 1px solid black;
     }
 
-    .slider-vertical .slider-handle {  
+    .slider-vertical .slider-handle {
         margin-left: -1px;
     }
 
-    .slider-horizontal .slider-handle {  
+    .slider-horizontal .slider-handle {
         margin-top: -1px;
     }
 
@@ -364,22 +391,26 @@ label, legend, .trigger, .note {
         display: inherit;
     }
 
-    .or-group, .or-group-data, .or-repeat {
+    .or-group,
+    .or-group-data,
+    .or-repeat {
         display: inherit;
     }
 }
 
 // pagebreak management
-*:not(.or-appearance-field-list) .question, .or-appearance-field-list {
+*:not(.or-appearance-field-list) .question,
+.or-appearance-field-list {
     page-break-inside: avoid;
 }
 
 // the below rules do not have an effect in Chrome and Opera
 // but work fine in IE10, IE11 and Safari
-h3, h4 {
+h3,
+h4 {
     page-break-after: avoid;
 
-    + .question {
+    +.question {
         page-break-before: avoid;
     }
 }
