@@ -12,7 +12,7 @@
  */
 
 var $ = require( 'jquery' );
-var config = require( 'enketo-config' );
+var config = require( 'enketo/config' );
 var disableFirstRepeatRemoval = config.repeatOrdinals === true;
 
 module.exports = {

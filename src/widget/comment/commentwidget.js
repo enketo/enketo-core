@@ -3,7 +3,7 @@
 var Widget = require( '../../js/Widget' );
 var $ = require( 'jquery' );
 var pluginName = 'comment';
-var t = require( 'translator' ).t;
+var t = require( 'enketo/translator' ).t;
 
 /**
  * Visually transforms a question into a comment modal that can be shown on its linked question.

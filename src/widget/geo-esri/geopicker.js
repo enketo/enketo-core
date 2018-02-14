@@ -3,10 +3,10 @@
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
-var config = require( 'enketo-config' );
+var config = require( 'enketo/config' );
 var convertor = require( './usng.js' );
 var Promise = require( 'lie' );
-var t = require( 'translator' ).t;
+var t = require( 'enketo/translator' ).t;
 var PLUGIN_NAME = 'esriGeopicker';
 var OVERRIDE_PLUGIN_NAME = 'geopicker';
 var DEFAULT_BASEMAPS = typeof config.arcGis === 'object' && Array.isArray( config.arcGis.basemaps ) ? config.arcGis.basemaps : [ 'streets', 'satellite', 'topo' ];

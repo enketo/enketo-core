@@ -1,4 +1,4 @@
-Enketo Core [![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core?type=dev) [![Codacy Badge](https://www.codacy.com/project/badge/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijn_1548/enketo-core)
+Enketo Core [![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core?type=dev) [[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijnr/enketo-core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=enketo/enketo-core&amp;utm_campaign=Badge_Grade)
 ===============
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [these](https://enketo.org/about/adoption/).
@@ -12,7 +12,7 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 1. Install with `npm install enketo-core --save` or include as a git submodule.
 2. Develop a way to perform an [XSL Transformation](https://enketo.org/develop/#transformation) on OpenRosa-flavoured XForms inside your app. The transformation will output an XML instance and a HTML form. See [enketo-transformer](https://github.com/enketo/enketo-transformer) for an available library/app to use or develop your own.
 3. Add [themes](./src/sass) to your stylesheet build system (2 stylesheets per theme, 1 is for `media="print"`).
-4. Override [config.json](./config.json) and optionally [widgets.js](./src/js/widgets.js) with your app-specific versions.
+4. Override [the files under "browser"](./package.json), e.g. using [aliasify](https://www.npmjs.com/package/aliasify) with your app-specific versions.
 5. Main methods illustrated in code below:
 
 ```javascript 

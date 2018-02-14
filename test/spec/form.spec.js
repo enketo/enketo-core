@@ -393,7 +393,7 @@ describe( 'repeat functionality', function() {
     } );
 
     describe( 'ordinals are set for default repeat instances in the default model upon initialization', function() {
-        var config = require( 'enketo-config' );
+        var config = require( 'enketo/config' );
         var dflt = config.repeatOrdinals;
         beforeAll( function() {
             config.repeatOrdinals = true;
@@ -1136,7 +1136,7 @@ describe( 'validation', function() {
         var form;
         var B = '[name="/data/b"]';
         var C = '[name="/data/c"]';
-        var config = require( 'enketo-config' );
+        var config = require( 'enketo/config' );
         var dflt = config.validateContinuously;
 
         var setValue = function( selector, val ) {

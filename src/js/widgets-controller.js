@@ -11,7 +11,7 @@ var _setLangChangeListener;
 var _setOptionChangeListener;
 var _setValChangeListener;
 var $ = require( 'jquery' );
-var widgets = require( 'widgets' ).filter( function( widget ) {
+var widgets = require( 'enketo/widgets' ).filter( function( widget ) {
     return widget.selector;
 } );
 

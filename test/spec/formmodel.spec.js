@@ -846,7 +846,7 @@ describe( 'Repeat without ordinals', function() {
 } );
 
 describe( 'Ordinals in repeats', function() {
-    var config = require( 'enketo-config' );
+    var config = require( 'enketo/config' );
     var dflt = config[ 'repeat ordinals' ];
     var wr = '<root xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
     var wrt = '<root xmlns:jr="http://openrosa.org/javarosa" xmlns:enk="http://enketo.org/xforms">{{c}}</root>';

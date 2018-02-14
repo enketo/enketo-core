@@ -13,7 +13,7 @@ var Promise = require( 'lie' );
 var $ = require( 'jquery' );
 var utils = require( './utils' );
 var fileManager = {};
-var t = require( 'translator' ).t;
+var t = require( 'enketo/translator' ).t;
 
 /**
  * Initialize the file manager .

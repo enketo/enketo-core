@@ -6,7 +6,7 @@
 
 var $ = require( 'jquery' );
 var Promise = require( 'lie' );
-var config = require( 'enketo-config' );
+var config = require( 'enketo/config' );
 
 require( 'jquery-touchswipe' );
 

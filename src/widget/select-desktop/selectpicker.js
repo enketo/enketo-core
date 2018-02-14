@@ -22,7 +22,7 @@
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
-var t = require( 'translator' ).t;
+var t = require( 'enketo/translator' ).t;
 var pluginName = 'desktopSelectpicker';
 require( '../../js/dropdown.jquery' );
 

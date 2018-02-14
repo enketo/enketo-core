@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo core containing the form logic engine and responsive form styling",
     "homepage": "https://enketo.org",
-    "version": "4.45.0",
+    "version": "4.46.0",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -58,9 +58,11 @@
         "time-grunt": "1.x.x"
     },
     "browser": {
-        "enketo-config": "./config.json",
-        "widgets": "./src/js/widgets.js",
-        "translator": "./src/js/fake-translator"
+        "enketo/config": "./config.json",
+        "enketo/widgets": "./src/js/widgets.js",
+        "enketo/translator": "./src/js/fake-translator",
+        "enketo/dialog": "./src/js/fake-dialog",
+        "enketo/file-manager": "./src/js/file-manager"
     },
     "dependencies": {
         "bootstrap-datepicker": "1.7.x",

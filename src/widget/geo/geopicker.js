@@ -2,11 +2,12 @@
 
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
-var config = require( 'enketo-config' );
+var config = require( 'enketo/config' );
 var L = require( 'leaflet' );
 var Promise = require( 'lie' );
-var t = require( 'translator' ).t;
+var t = require( 'enketo/translator' ).t;
 var support = require( '../../js/support' );
+var dialog = require( 'enketo/dialog' );
 var googleMapsScriptRequest;
 var pluginName = 'geopicker';
 var defaultZoom = 15;
@@ -173,8 +174,11 @@ Geopicker.prototype._init = function() {
     this.$widget.find( '.btn-remove' ).on( 'click', function() {
         if ( that.points.length < 2 ) {
             that._updateInputs( [] );
-        } else if ( window.confirm( t( 'geopicker.removePoint' ) ) ) {
-            that._removePoint();
+        } else {
+            dialog.confirm( t( 'geopicker.removePoint' ) )
+                .then( function() {
+                    that._removePoint();
+                } );
         }
     } );
 
@@ -763,7 +767,7 @@ Geopicker.prototype._updateDynamicMapView = function( latLng, zoom ) {
 };
 
 Geopicker.prototype._showIntersectError = function() {
-    window.alert( 'Borders cannot intersect!' );
+    dialog.alert( 'Borders cannot intersect!' );
 };
 
 /**

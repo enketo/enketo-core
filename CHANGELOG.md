@@ -3,13 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.46.0]
 ---------------------
 ##### Added
 - Full support for annotate widget.
 
 ##### Changed
 - Draw/signature widget requires confirmation before reset.
+- Modal dialogs can now be overridden in app
+- Renamed 'enketo-config', 'translator', '../path/to/file-manager', and 'widgets' modules to 'enketo/config', 'enketo/translator', 'enketo/file-manager', 'enketo/widgets'. **WARNING: update overrides for these modules in your app!**
 
 ##### Fixed
 - Printing: geo widget with appearance "maps" does not show coordinate fields.

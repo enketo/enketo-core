@@ -4,9 +4,10 @@ var Widget = require( '../../js/Widget' );
 var $ = require( 'jquery' );
 var pluginName = 'drawWidget';
 var support = require( '../../js/support' );
-var fileManager = require( '../../js/file-manager' );
+var fileManager = require( 'enketo/file-manager' );
 var SignaturePad = require( 'signature_pad' );
-var t = require( 'translator' ).t;
+var t = require( 'enketo/translator' ).t;
+var dialog = require( 'enketo/dialog' );
 
 /**
  * Widget to obtain user-provided drawings or signature.
@@ -246,14 +247,19 @@ DrawWidget.prototype._updateValue = function() {
 };
 
 DrawWidget.prototype._reset = function() {
-    if ( this.element.value && window.confirm( t( 'drawwidget.resetWarning' ) ) ) {
-        this.pad.clear();
-        this.cache = null;
-        delete this.element.dataset.loadedFileName;
-        this.element.dataset.filenamePostfix = '';
-        $( this.element ).val( '' ).trigger( 'change' );
-        // annotate file input
-        this.$widget.find( 'input[type=file]' ).val( '' ).trigger( 'change' );
+    var that = this;
+
+    if ( this.element.value ) {
+        dialog.confirm( t( 'drawwidget.resetWarning' ) )
+            .then( function() {
+                that.pad.clear();
+                that.cache = null;
+                delete that.element.dataset.loadedFileName;
+                that.element.dataset.filenamePostfix = '';
+                $( that.element ).val( '' ).trigger( 'change' );
+                // annotate file input
+                that.$widget.find( 'input[type=file]' ).val( '' ).trigger( 'change' );
+            } );
     }
 };
 

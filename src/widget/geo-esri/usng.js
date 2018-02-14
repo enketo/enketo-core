@@ -1,6 +1,7 @@
 if ( typeof console.warn === 'undefined' ) {
     console.warn = console.log;
 }
+var dialog = require( 'enketo/dialog' );
 
 //// ***************************************************************************
 // *  usng.js  (U.S. National Grid functions)
@@ -341,7 +342,6 @@ var theClass = {
     ***************************************************************************/
 
     LLtoUSNG: function( lat, lon, precision ) {
-        //alert("here");
         lat = parseFloat( lat );
         lon = parseFloat( lon );
 
@@ -804,7 +804,7 @@ var theClass = {
         }
 
         if ( usngStr.length < 7 ) {
-            alert( usngStr + " Appears to be a USNG string, but this application requires precision of at least 10,000 meters" );
+            dialog.alert( usngStr + " Appears to be a USNG string, but this application requires precision of at least 10,000 meters" );
             return 0;
         }
 

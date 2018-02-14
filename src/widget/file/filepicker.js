@@ -1,11 +1,12 @@
 'use strict';
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
-var fileManager = require( '../../js/file-manager' );
+var fileManager = require( 'enketo/file-manager' );
 var utils = require( '../../js/utils' );
 var pluginName = 'filepicker';
-var t = require( 'translator' ).t;
+var t = require( 'enketo/translator' ).t;
 var TranslatedError = require( '../../js/translated-error' );
+var dialog = require( 'enketo/dialog' );
 
 /**
  * FilePicker that works both offline and online. It abstracts the file storage/cache away
@@ -64,8 +65,11 @@ Filepicker.prototype._init = function() {
 
     this.$widget
         .find( '.btn-reset' ).on( 'click', function() {
-            if ( ( $input.val() || that.$fakeInput.val() ) && window.confirm( t( 'filepicker.resetWarning' ) ) ) {
-                $input.val( '' ).trigger( 'change' );
+            if ( ( $input.val() || that.$fakeInput.val() ) ) {
+                dialog.confirm( t( 'filepicker.resetWarning' ) )
+                    .then( function() {
+                        $input.val( '' ).trigger( 'change' );
+                    } );
             }
         } )
         .end();
