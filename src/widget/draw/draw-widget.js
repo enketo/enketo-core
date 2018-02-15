@@ -8,6 +8,7 @@ var fileManager = require( 'enketo/file-manager' );
 var SignaturePad = require( 'signature_pad' );
 var t = require( 'enketo/translator' ).t;
 var dialog = require( 'enketo/dialog' );
+var utils = require( '../../js/utils' );
 
 /**
  * Widget to obtain user-provided drawings or signature.
@@ -164,9 +165,11 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
                 if ( !fileManager.isTooLarge( file ) ) {
                     // Update UI
                     that.pad.clear();
-                    that._loadFileIntoPad( this.files[ 0 ] );
-                    that._updateValue.call( that );
-                    that._showFileName( file.name );
+                    that._loadFileIntoPad( this.files[ 0 ] )
+                        .then( function() {
+                            that._updateValue.call( that );
+                            that._showFileName( file.name );
+                        } );
                     // that._updateDownloadLink( url, fileName );
                 } else {
                     that._showFeedback( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
@@ -221,6 +224,7 @@ DrawWidget.prototype._getMarkup = function() {
         '<canvas class="draw-widget__body__canvas noSwipe" tabindex="1"></canvas><div class="draw-widget__colorpicker"></div></div>' +
         '<div class="draw-widget__footer">' +
         '<button type="button" class="btn-icon-only draw-widget__btn-reset" ><i class="icon icon-refresh"> </i></button>' +
+        '<a class="btn-icon-only btn-download" download href=""><i class="icon icon-download"> </i></a>' +
         '<div class="draw-widget__feedback"></div>' +
         '</div>' +
         '</div>' );
@@ -244,6 +248,7 @@ DrawWidget.prototype._updateValue = function() {
     delete this.element.dataset.loadedFileName;
     // Note that this.element has become a text input.
     $( this.element ).val( this.props.filename ).trigger( 'change' );
+    this._updateDownloadLink( this.cache, this.props.filename );
 };
 
 DrawWidget.prototype._reset = function() {
@@ -259,6 +264,7 @@ DrawWidget.prototype._reset = function() {
                 $( that.element ).val( '' ).trigger( 'change' );
                 // annotate file input
                 that.$widget.find( 'input[type=file]' ).val( '' ).trigger( 'change' );
+                that._updateDownloadLink( '', '' );
             } );
     }
 };
@@ -268,8 +274,11 @@ DrawWidget.prototype._loadFileIntoPad = function( filename ) {
     return fileManager.getFileUrl( filename )
         .then( function( url ) {
             that.pad.fromDataURL( url, {} );
-            that.cache = url;
             that.element.value = filename;
+            // Update the download link for:
+            // - files that were loaded from the record
+            // - an annotate file that was uploaded within the session before an annotation was added by the user
+            that._updateDownloadLink( url, that.props.filename );
         } )
         .catch( function() {
             that._showFeedback( 'File "' + filename + '" could not be found (leave unchanged if already submitted and you want to preserve it).', 'error' );
@@ -281,6 +290,16 @@ DrawWidget.prototype._showFeedback = function( message ) {
 
     // replace text and replace all existing classes with the new status class
     this.$widget.find( '.draw-widget__feedback' ).text( message );
+};
+
+DrawWidget.prototype._updateDownloadLink = function( url, fileName ) {
+    if ( url && url.substring( 0, 5 ) !== 'blob:' ) {
+        url = URL.createObjectURL( utils.dataUriToBlobSync( url ) );
+    }
+    this.$widget.find( '.btn-download' ).attr( {
+        'href': url || '',
+        'download': fileName || ''
+    } );
 };
 
 DrawWidget.prototype._handleResize = function( canvas ) {

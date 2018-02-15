@@ -139,6 +139,12 @@ $fullscreen-margin-h: 15px;
             margin: -($fullscreen-margin-v - 10px) auto 0 auto;
         }
     }
+    .btn-download {
+        margin-right: 0;
+        &[href=""] {
+            display: none;
+        }
+    }
 }
 
 .touch .draw-widget:not(.full-screen) .draw-widget__colorpicker {

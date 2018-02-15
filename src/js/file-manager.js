@@ -1,4 +1,3 @@
-/* global ArrayBuffer, Uint8Array */
 'use strict';
 /**
  * Simple file manager with cross-browser support. That uses the FileReader
@@ -80,8 +79,8 @@ fileManager.getCurrentFiles = function() {
         } else if ( this.value ) {
             canvas = $( this ).closest( '.question' )[ 0 ].querySelector( '.draw-widget canvas' );
             if ( canvas ) {
-                // TODO: In the future, we could do canvas.toBlob()
-                file = _dataUriToBlob( canvas.toDataURL() );
+                // TODO: In the future, we could simply do canvas.toBlob() insteadU
+                file = utils.dataUriToBlobSync( canvas.toDataURL() );
                 file.name = this.value;
             }
         }
@@ -101,40 +100,6 @@ fileManager.getCurrentFiles = function() {
 
     return files;
 };
-
-function _dataUriToBlob( dataURI ) {
-    var byteString;
-    var mimeString;
-    var buffer;
-    var array;
-    var blob;
-
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    byteString = atob( dataURI.split( ',' )[ 1 ] );
-    // separate out the mime component
-    mimeString = dataURI.split( ',' )[ 0 ].split( ':' )[ 1 ].split( ';' )[ 0 ];
-
-    // write the bytes of the string to an ArrayBuffer
-    buffer = new ArrayBuffer( byteString.length );
-    array = new Uint8Array( buffer );
-
-    for ( var i = 0; i < byteString.length; i++ ) {
-        array[ i ] = byteString.charCodeAt( i );
-    }
-
-    /*if ( !hasArrayBufferView ) {
-        array = buffer;
-    }*/
-
-    // write the ArrayBuffer to a blob
-    blob = new Blob( [ array ], {
-        type: mimeString
-    } );
-
-    return blob;
-
-}
 
 /**
  * Placeholder function to check if file size is acceptable. 
