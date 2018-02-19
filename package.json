@@ -34,7 +34,7 @@
         "test": "grunt test"
     },
     "devDependencies": {
-        "enketo-transformer": "1.24.1",
+        "enketo-transformer": "1.25.0",
         "grunt": "1.0.x",
         "grunt-browserify": "5.2.x",
         "grunt-concurrent": "2.x.x",
