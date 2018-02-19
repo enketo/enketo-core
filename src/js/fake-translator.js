@@ -52,6 +52,9 @@ var SOURCE_STRINGS = {
         'noneselected': 'none selected',
         'numberselected': '__number__ selected'
     },
+    'imagemap': {
+        'svgNotFound': 'SVG image could not be found'
+    },
     'widget': {
         'comment': {
             'update': 'Update'

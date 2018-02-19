@@ -1,5 +1,5 @@
 // These rules are specific only to this particular widget
-.or-appearance-image-map{
+.or-appearance-image-map {
     img {
         // avoid image flickering caused by initializing widget upon img load event
         visibility: hidden;
@@ -18,6 +18,7 @@
         }
     }
 }
+
 // These rules are used in custom SVG widgets as well.
 .image-map {
     svg {
@@ -26,7 +27,7 @@
         max-width: 100%;
         width: 100 vmin;
         height: auto;
-        &[or-readonly]{
+        &[or-readonly] {
             opacity: 0.75 !important;
         }
         path[id] {
@@ -41,7 +42,7 @@
         width: 100%;
         text-align: center;
         font-weight: normal;
-        &__tooltip{
+        &__tooltip {
             display: inline-block;
             background: lighten($brand-primary-color, 50%);
             padding: 2px 8px;
@@ -51,5 +52,8 @@
                 padding: 0;
             }
         }
+    }
+    &__error {
+        @extend .or-constraint-msg.active;
     }
 }

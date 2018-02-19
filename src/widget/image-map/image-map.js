@@ -3,6 +3,7 @@
 var Widget = require( '../../js/Widget' );
 var $ = require( 'jquery' );
 var pluginName = 'imageMap';
+var t = require( 'enketo/translator' ).t;
 
 /**
  * Image Map widget that turns an SVG image into a clickable map 
@@ -37,15 +38,17 @@ ImageMap.prototype._init = function() {
      *
      * We could use the same with online-only forms, but that would cause a loading delay.
      */
-    if ( img.getAttribute( 'src' ) ) {
+    if ( !img ) {
+        return this._showSvgNotFoundError();
+    } else if ( img.getAttribute( 'src' ) ) {
         this._addMarkup( img ).then( this._addFunctionality.bind( this ) );
     } else {
         $( img )
             .on( 'load', function() {
                 that._addMarkup( img ).then( that._addFunctionality.bind( that ) );
-            } );
+            } )
+            .on( 'error', this._showSvgNotFoundError.bind( this ) );
     }
-
 };
 
 ImageMap.prototype._addFunctionality = function( $widget ) {
@@ -74,28 +77,36 @@ ImageMap.prototype._addMarkup = function( img ) {
      * For translated forms, we now discard everything except the first image,
      * since we're assuming the images will be the same in all languages.
      */
-    return $.get( src ).then( function( data ) {
-        var $svg;
-        var $widget;
-        var width;
-        var height;
-        if ( that._isSvgDoc( data ) ) {
-            $svg = that._removeUnmatchedIds( $( data.querySelector( 'svg' ) ) );
-            $widget = $( '<div class="widget image-map"/>' )
-                .append( '<div class="image-map__ui"><span class="image-map__ui__tooltip"></span></div>' )
-                .append( $svg );
-            // remove images in all languages
-            $( that.element ).find( 'img' ).remove();
-            $( that.element ).find( '.option-wrapper' ).before( $widget );
-            // Resize, using original unscaled SVG dimensions
-            // svg.getBBox() only works after SVG has been added to DOM.
-            width = $svg.attr( 'width' ) || $svg[ 0 ].getBBox().width;
-            height = $svg.attr( 'height' ) || $svg[ 0 ].getBBox().height;
-            $svg.attr( 'viewBox', [ 0, 0, width, height ].join( ' ' ) );
+    return $.get( src )
+        .then( function( data ) {
+            var $svg;
+            var $widget;
+            var width;
+            var height;
+            if ( that._isSvgDoc( data ) ) {
+                $svg = that._removeUnmatchedIds( $( data.querySelector( 'svg' ) ) );
+                $widget = $( '<div class="widget image-map"/>' )
+                    .append( '<div class="image-map__ui"><span class="image-map__ui__tooltip"></span></div>' )
+                    .append( $svg );
+                // remove images in all languages
+                $( that.element ).find( 'img' ).remove();
+                $( that.element ).find( '.option-wrapper' ).before( $widget );
+                // Resize, using original unscaled SVG dimensions
+                // svg.getBBox() only works after SVG has been added to DOM.
+                width = $svg.attr( 'width' ) || $svg[ 0 ].getBBox().width;
+                height = $svg.attr( 'height' ) || $svg[ 0 ].getBBox().height;
+                $svg.attr( 'viewBox', [ 0, 0, width, height ].join( ' ' ) );
 
-            return $widget;
-        }
-    } );
+                return $widget;
+            } else {
+                throw ( 'Image is not an SVG doc' );
+            }
+        } )
+        .catch( this._showSvgNotFoundError.bind( that ) );
+};
+
+ImageMap.prototype._showSvgNotFoundError = function() {
+    $( this.element ).find( '.option-wrapper' ).before( '<div class="widget image-map"><div class="image-map__error">' + t( 'imagemap.svgNotFound' ) + '</div></div>' );
 };
 
 /**
