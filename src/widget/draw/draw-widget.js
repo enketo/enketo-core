@@ -128,6 +128,8 @@ DrawWidget.prototype._getProps = function( el ) {
         load: $q.hasClass( 'or-appearance-annotate' ),
         colors: $q.hasClass( 'or-appearance-signature' ) ? [] : [ 'black', 'lightblue', 'blue', 'red', 'orange', 'cyan', 'yellow', 'lightgreen', 'green', 'pink', 'purple', 'lightgray', 'darkgray' ],
         touch: support.touch,
+        accept: el.getAttribute( 'accept' ),
+        capture: el.getAttribute( 'capture' )
     };
 };
 
@@ -212,7 +214,8 @@ DrawWidget.prototype._updatePlaceholder = function() {
 
 DrawWidget.prototype._getMarkup = function() {
     // HTML syntax copied from filepicker widget
-    var load = this.props.load ? '<input type="file" accept="image/*" class="ignore draw-widget__load"/>' +
+    var load = this.props.load ? '<input type="file" class="ignore draw-widget__load"' +
+        ( this.props.capture !== null ? ' capture="' + this.props.capture + '"' : '' ) + ' accept="' + this.props.accept + '"/>' +
         '<div class="widget file-picker">' +
         '<input class="ignore fake-file-input"/>' +
         '<div class="file-feedback"></div>' +
