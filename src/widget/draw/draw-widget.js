@@ -9,6 +9,33 @@ var SignaturePad = require( 'signature_pad' );
 var t = require( 'enketo/translator' ).t;
 var dialog = require( 'enketo/dialog' );
 var utils = require( '../../js/utils' );
+var Promise = require( 'lie' );
+
+/**
+ * SignaturePad.prototype.fromDataURL is asynchronous and does not return a 
+ * Promise. This is a rewrite returning a promise and the objectUrl.
+ * @param {*} objectUrl 
+ * @param {*} options 
+ */
+SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
+    var image = new Image();
+    options = options || {};
+    var ratio = options.ratio || window.devicePixelRatio || 1;
+    var width = options.width || ( this._canvas.width / ratio );
+    var height = options.height || ( this._canvas.height / ratio );
+    var that = this;
+
+    this._reset();
+
+    return new Promise( function( resolve ) {
+        image.src = objectUrl;
+        image.onload = () => {
+            that._ctx.drawImage( image, 0, 0, width, height );
+            resolve( objectUrl );
+        };
+        that._isEmpty = false;
+    } );
+};
 
 /**
  * Widget to obtain user-provided drawings or signature.
@@ -275,8 +302,8 @@ DrawWidget.prototype._reset = function() {
 DrawWidget.prototype._loadFileIntoPad = function( filename ) {
     var that = this;
     return fileManager.getFileUrl( filename )
+        .then( that.pad.fromObjectURL.bind( that.pad ) )
         .then( function( url ) {
-            that.pad.fromDataURL( url, {} );
             that.element.value = filename;
             // Update the download link for:
             // - files that were loaded from the record
