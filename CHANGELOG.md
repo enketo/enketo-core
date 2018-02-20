@@ -13,7 +13,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Show helpful error message if SVG image cannot be found with Image Map widget.
 
 ##### Fixed
-- In annotate widget loaded file disappears when screen is resized or full-screen button is clicked on touchscreens.
+- In annotate widget loaded file disappears when screen is resized.
+- Annotate widget not working on touchscreen devices.
 
 [4.46.0]
 ---------------------

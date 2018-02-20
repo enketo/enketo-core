@@ -11,31 +11,29 @@ $fullscreen-margin-h: 15px;
 .or-appearance-draw,
 .or-appearance-signature,
 .or-appearance-annotate {
-    input[type="text"]{
+    input[type="text"] {
         display: none;
     }
 }
 
-.or-appearance-signature{
-    .draw-widget__body{
+.or-appearance-signature {
+    .draw-widget__body {
         padding-top: $ratio2 * 100%;
     }
 }
 
 .draw-widget {
     width: 100%;
-    &__body{
+    &__body {
         position: relative;
-        width: 100%;
-        // trick to fix aspect ratio with width of 100% to 4:3
+        width: 100%; // trick to fix aspect ratio with width of 100% to 4:3
         // combined with absolutely positioned canvas child
         padding-top: $ratio1 * 100%;
         &__canvas {
             // for plain theme:
-            border: 1px solid $gray-lighter;
-            // override border:
+            border: 1px solid $gray-lighter; // override border:
             @include form-control;
-            
+
             position: absolute;
             top: 0;
             left: 0;
@@ -45,7 +43,7 @@ $fullscreen-margin-h: 15px;
             width: 100%;
             height: 100%;
         }
-        input[type=file]{
+        input[type=file] {
             display: none;
         }
         .file-picker {
@@ -70,7 +68,7 @@ $fullscreen-margin-h: 15px;
         margin-top: 10px;
     }
     &__feedback {
-         @extend .or-constraint-msg.active;
+        @extend .or-constraint-msg.active;
     }
     &__colorpicker {
         position: absolute;
@@ -89,7 +87,7 @@ $fullscreen-margin-h: 15px;
             border: none;
             padding: 0;
         }
-        &.reveal div{
+        &.reveal div {
             display: block;
         }
         .current {
@@ -117,10 +115,14 @@ $fullscreen-margin-h: 15px;
 
         .draw-widget__body {
             width: calc(100vmin - 2 * #{$fullscreen-margin-h});
-            padding-top: calc(#{$ratio1} * 100vmin);// - 2 * #{$fullscreen-margin});
+            padding-top: calc(#{$ratio1} * 100vmin); // - 2 * #{$fullscreen-margin});
             margin: $fullscreen-margin-v auto;
-            input[type=file]{ 
+            input[type=file] {
                 left: 90px; // TODO: RTL
+            }
+            .file-picker {
+                left: 80px;
+                width: calc(100% - 18px);
             }
         }
         .hide-canvas-btn {
@@ -134,8 +136,8 @@ $fullscreen-margin-h: 15px;
         .show-canvas-btn {
             display: none;
         }
-        .draw-widget__footer{
-            width: calc(100vmin -  2 * #{$fullscreen-margin-h} );
+        .draw-widget__footer {
+            width: calc(100vmin - 2 * #{$fullscreen-margin-h});
             margin: -($fullscreen-margin-v - 10px) auto 0 auto;
         }
     }
@@ -150,18 +152,19 @@ $fullscreen-margin-h: 15px;
 .touch .draw-widget:not(.full-screen) .draw-widget__colorpicker {
     display: none;
 }
-.or-appearance-signature{
+
+.or-appearance-signature {
     .draw-widget.full-screen {
-        .draw-widget__body{
+        .draw-widget__body {
             width: calc(100% - 2 * #{$fullscreen-margin-h});
             padding-top: calc(#{$ratio2} * (100% - 2 * #{$fullscreen-margin-h}));
         }
-        .draw-widget__footer{
-            width: calc(100% - 2 * #{$fullscreen-margin-h});
-            //margin: -($fullscreen-margin-v - 10px) auto 0 auto;
+        .draw-widget__footer {
+            width: calc(100% - 2 * #{$fullscreen-margin-h}); //margin: -($fullscreen-margin-v - 10px) auto 0 auto;
         }
     }
 }
+
 .or-appearance-annotate {
     .draw-widget__body {
         margin-top: $fullscreen-margin-v;
