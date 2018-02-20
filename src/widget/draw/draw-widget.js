@@ -14,23 +14,42 @@ var Promise = require( 'lie' );
 /**
  * SignaturePad.prototype.fromDataURL is asynchronous and does not return a 
  * Promise. This is a rewrite returning a promise and the objectUrl.
+ * In addition it also fixes a bug where a loaded image is stretched to fit
+ * the canvas.
+ * 
  * @param {*} objectUrl 
  * @param {*} options 
  */
 SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
     var image = new Image();
     options = options || {};
-    var ratio = options.ratio || window.devicePixelRatio || 1;
-    var width = options.width || ( this._canvas.width / ratio );
-    var height = options.height || ( this._canvas.height / ratio );
+    var deviceRatio = options.ratio || window.devicePixelRatio || 1;
+    var width = options.width || ( this._canvas.width / deviceRatio );
+    var height = options.height || ( this._canvas.height / deviceRatio );
     var that = this;
 
     this._reset();
 
     return new Promise( function( resolve ) {
         image.src = objectUrl;
-        image.onload = () => {
-            that._ctx.drawImage( image, 0, 0, width, height );
+        image.onload = function() {
+            var imgWidth = image.width;
+            var imgHeight = image.height;
+            var hRatio = width / imgWidth;
+            var vRatio = height / imgHeight;
+            var left;
+            var top;
+
+            if ( hRatio < 1 || vRatio < 1 ) { //if image is bigger than canvas then fit within the canvas
+                var ratio = Math.min( hRatio, vRatio );
+                left = ( width - imgWidth * ratio ) / 2;
+                top = ( height - imgHeight * ratio ) / 2;
+                that._ctx.drawImage( image, 0, 0, imgWidth, imgHeight, left, top, imgWidth * ratio, imgHeight * ratio );
+            } else { // if image is smaller than canvas then show it in the center and don't stretch it
+                left = ( width - imgWidth ) / 2;
+                top = ( height - imgHeight ) / 2;
+                that._ctx.drawImage( image, left, top, imgWidth, imgHeight );
+            }
             resolve( objectUrl );
         };
         that._isEmpty = false;

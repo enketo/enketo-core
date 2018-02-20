@@ -15,8 +15,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - In annotate widget loaded file disappears when screen is resized.
 - Annotate widget not working on touchscreen devices.
+- Annotate widget stretches uploaded image.
 
-[4.46.0]
+[4.46.0] - 2018-02-14
 ---------------------
 ##### Added
 - Full support for annotate widget.
