@@ -18,6 +18,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Annotate widget not working on touchscreen devices.
 - Annotate widget stretches uploaded image.
 - Downloaded drawings have a different filename from the one stored in the record.
+- Imagemap widget does not work for a group `<g>` of `<path>`s.
+- Imagemap scaling issue when width and height defined in SVG file have units (pt).
 
 [4.46.0] - 2018-02-14
 ---------------------

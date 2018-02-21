@@ -93,9 +93,9 @@ ImageMap.prototype._addMarkup = function( img ) {
                 $( that.element ).find( '.option-wrapper' ).before( $widget );
                 // Resize, using original unscaled SVG dimensions
                 // svg.getBBox() only works after SVG has been added to DOM.
-                width = $svg.attr( 'width' ) || $svg[ 0 ].getBBox().width;
-                height = $svg.attr( 'height' ) || $svg[ 0 ].getBBox().height;
-                $svg.attr( 'viewBox', [ 0, 0, width, height ].join( ' ' ) );
+                width = $svg[ 0 ].getBBox().width || $svg.attr( 'width' );
+                height = $svg[ 0 ].getBBox().height || $svg.attr( 'height' );
+                $svg.attr( 'viewBox', [ 0, 0, parseInt( width, 10 ), parseInt( height, 10 ) ].join( ' ' ) );
 
                 return $widget;
             } else {
@@ -116,7 +116,7 @@ ImageMap.prototype._showSvgNotFoundError = function() {
  */
 ImageMap.prototype._removeUnmatchedIds = function( $svg ) {
     var that = this;
-    $svg.find( 'path[id]' ).each( function() {
+    $svg.find( 'path[id], g[id]' ).each( function() {
         if ( !that._getInput( this.id ) ) {
             this.removeAttribute( 'id' );
         }
@@ -132,9 +132,9 @@ ImageMap.prototype._getInput = function( id ) {
 ImageMap.prototype._setSvgClickHandler = function() {
     var that = this;
 
-    this.$svg.not( '[or-readonly]' ).on( 'click', 'path[id]', function( event ) {
-
-        var input = that._getInput( event.target.id );
+    this.$svg.not( '[or-readonly]' ).on( 'click', 'path[id], g[id]', function( event ) {
+        var id = event.target.id || $( event.target ).closest( 'g[id]' )[ 0 ].id;
+        var input = that._getInput( id );
         if ( input ) {
             $( input ).prop( 'checked', !input.checked ).trigger( 'change' );
         }
@@ -149,11 +149,12 @@ ImageMap.prototype._setHoverHandler = function() {
     var that = this;
 
     this.$svg
-        .on( 'mouseenter', 'path[id]', function( event ) {
-            var optionLabel = $( that._getInput( event.target.id ) ).siblings( '.option-label.active' ).text();
+        .on( 'mouseenter', 'path[id], g[id]', function( event ) {
+            var id = event.target.id || $( event.target ).closest( 'g[id]' )[ 0 ].id;
+            var optionLabel = $( that._getInput( id ) ).siblings( '.option-label.active' ).text();
             that.$tooltip.text( optionLabel );
         } )
-        .on( 'mouseleave', 'path[id]', function() {
+        .on( 'mouseleave', 'path[id], g[id]', function() {
             that.$tooltip.text( '' );
         } );
 };
@@ -170,7 +171,7 @@ ImageMap.prototype._updateImage = function() {
     var that = this;
     var values = this.options.helpers.input.getVal( this.$inputs.eq( 0 ) );
 
-    this.$svg.find( 'path[or-selected]' ).removeAttr( 'or-selected' );
+    this.$svg.find( 'path[or-selected], g[or-selected]' ).removeAttr( 'or-selected' );
 
     if ( typeof values === 'string' ) {
         values = [ values ];
@@ -179,7 +180,7 @@ ImageMap.prototype._updateImage = function() {
     values.forEach( function( value ) {
         if ( value ) {
             // if multiple values have the same id, change all of them (e.g. a province that is not contiguous)
-            that.$svg.find( 'path#' + value ).attr( 'or-selected', '' );
+            that.$svg.find( 'path#' + value + ',g#' + value ).attr( 'or-selected', '' );
         }
     } );
 };

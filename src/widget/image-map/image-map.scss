@@ -10,7 +10,8 @@
     }
     .image-map {
         svg:not([or-readonly]) {
-            path[id] {
+            path[id],
+            g[id] {
                 &:hover {
                     opacity: 0.5 !important;
                 }
@@ -30,7 +31,8 @@
         &[or-readonly] {
             opacity: 0.75 !important;
         }
-        path[id] {
+        path[id],
+        g[id] {
             &[or-selected] {
                 fill: $brand-primary-color !important;
                 stroke: $brand-primary-color !important;
