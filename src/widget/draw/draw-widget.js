@@ -122,6 +122,7 @@ DrawWidget.prototype._init = function() {
             } );
             if ( existingFilename ) {
                 that.pad.off();
+                that.element.value = existingFilename;
                 return that._loadFileIntoPad( existingFilename )
                     .then( that._updateDownloadLink.bind( that ) );
             }
@@ -379,9 +380,10 @@ DrawWidget.prototype._updateDownloadLink = function( url ) {
     if ( url && url.substring( 0, 5 ) !== 'blob:' ) {
         url = URL.createObjectURL( utils.dataUriToBlobSync( url ) );
     }
+
     this.$widget.find( '.btn-download' ).attr( {
         'href': url || '',
-        'download': url ? this.props.filename : ''
+        'download': url ? utils.getFilename( { name: this.element.value }, this.element.dataset.filenamePostfix ) : ''
     } );
 };
 

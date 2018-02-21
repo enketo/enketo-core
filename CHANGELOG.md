@@ -17,6 +17,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - In annotate widget loaded file disappears when screen is resized.
 - Annotate widget not working on touchscreen devices.
 - Annotate widget stretches uploaded image.
+- Downloaded drawings have a different filename from the one stored in the record.
 
 [4.46.0] - 2018-02-14
 ---------------------
