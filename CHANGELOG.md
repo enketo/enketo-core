@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Download functionality to draw widgets.
 - Support for "new", "new-front", "new-rear" on media inputs.
+- Feature to undo drawing strokes in draw and annotate widgets.
 
 ##### Changed
 - Show helpful error message if SVG image cannot be found with Image Map widget.

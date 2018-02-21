@@ -57,6 +57,23 @@ SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
 };
 
 /**
+ * Similar to SignaturePad.prototype.fromData except that it doesn't clear the canvas.
+ * This is to facilitate undoing a drawing stroke over a background (bitmap) image.
+ * 
+ * @param {*} pointGroups 
+ */
+SignaturePad.prototype.updateData = function( pointGroups ) {
+    var that = this;
+    this._fromData(
+        pointGroups,
+        function( curve, widths ) { that._drawCurve( curve, widths.start, widths.end ); },
+        function( rawPoint ) { that._drawDot( rawPoint ); }
+    );
+
+    this._data = pointGroups;
+};
+
+/**
  * Widget to obtain user-provided drawings or signature.
  * 
  * @constructor
@@ -105,7 +122,8 @@ DrawWidget.prototype._init = function() {
             } );
             if ( existingFilename ) {
                 that.pad.off();
-                return that._loadFileIntoPad( existingFilename );
+                return that._loadFileIntoPad( existingFilename )
+                    .then( that._updateDownloadLink.bind( that ) );
             }
             return true;
         } )
@@ -120,6 +138,18 @@ DrawWidget.prototype._init = function() {
                     $( this ).siblings().removeClass( 'current' ).end().addClass( 'current' )
                         .parent().removeClass( 'reveal' );
                     that.pad.penColor = this.dataset.color;
+                } )
+                .end().find( '.draw-widget__undo' ).on( 'click', function() {
+                    var data = that.pad.toData();
+                    that.pad.clear();
+                    var fileInput = that.$widget[ 0 ].querySelector( 'input[type=file]' );
+                    // that.element.dataset.loadedFileName will have been removed only after resetting 
+                    var fileToLoad = fileInput && fileInput.files[ 0 ] ? fileInput.files[ 0 ] : that.element.dataset.loadedFileName;
+                    that._loadFileIntoPad( fileToLoad )
+                        .then( function() {
+                            that.pad.updateData( data.slice( 0, -1 ) );
+                            that._updateValue();
+                        } );
                 } )
                 .end().find( '.show-canvas-btn' ).on( 'click', function() {
                     that.$widget.addClass( 'full-screen' );
@@ -170,6 +200,7 @@ DrawWidget.prototype._getProps = function( el ) {
     var $q = $( el ).closest( '.question' );
     return {
         readonly: el.readOnly,
+        signature: $q.hasClass( 'or-appearance-signature' ),
         filename: $q.hasClass( 'or-appearance-draw' ) ? 'drawing.png' : ( $q.hasClass( 'or-appearance-signature' ) ? 'signature.png' : 'annotation.png' ),
         load: $q.hasClass( 'or-appearance-annotate' ),
         colors: $q.hasClass( 'or-appearance-signature' ) ? [] : [ 'black', 'lightblue', 'blue', 'red', 'orange', 'cyan', 'yellow', 'lightgreen', 'green', 'pink', 'purple', 'lightgray', 'darkgray' ],
@@ -218,7 +249,6 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
                             that._updateValue.call( that );
                             that._showFileName( file.name );
                         } );
-                    // that._updateDownloadLink( url, fileName );
                 } else {
                     that._showFeedback( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
                 }
@@ -270,7 +300,10 @@ DrawWidget.prototype._getMarkup = function() {
         '<button type="button" class="hide-canvas-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' : '';
     var $widget = $( '<div class="widget draw-widget">' +
         '<div class="draw-widget__body">' + fullscreenBtns + load +
-        '<canvas class="draw-widget__body__canvas noSwipe" tabindex="1"></canvas><div class="draw-widget__colorpicker"></div></div>' +
+        '<canvas class="draw-widget__body__canvas noSwipe" tabindex="1"></canvas>' +
+        '<div class="draw-widget__colorpicker"></div>' +
+        ( this.props.signature ? '' : '<button class="btn-icon-only draw-widget__undo" type=button><i class="icon icon-undo"> </i></button>' ) +
+        '</div>' +
         '<div class="draw-widget__footer">' +
         '<button type="button" class="btn-icon-only draw-widget__btn-reset" ><i class="icon icon-refresh"> </i></button>' +
         '<a class="btn-icon-only btn-download" download href=""><i class="icon icon-download"> </i></a>' +
@@ -294,10 +327,9 @@ DrawWidget.prototype._updateValue = function() {
     // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
     this.cache = this.pad.toDataURL();
     this.element.dataset.filenamePostfix = postfix;
-    delete this.element.dataset.loadedFileName;
     // Note that this.element has become a text input.
     $( this.element ).val( this.props.filename ).trigger( 'change' );
-    this._updateDownloadLink( this.cache, this.props.filename );
+    this._updateDownloadLink( this.cache );
 };
 
 DrawWidget.prototype._reset = function() {
@@ -308,29 +340,31 @@ DrawWidget.prototype._reset = function() {
             .then( function() {
                 that.pad.clear();
                 that.cache = null;
+                // Only upon reset is loadedFileName removed, so that "undo" will work
+                // for drawings loaded from storage.
                 delete that.element.dataset.loadedFileName;
                 that.element.dataset.filenamePostfix = '';
                 $( that.element ).val( '' ).trigger( 'change' );
-                // annotate file input
+                // Annotate file input
                 that.$widget.find( 'input[type=file]' ).val( '' ).trigger( 'change' );
-                that._updateDownloadLink( '', '' );
+                that._updateDownloadLink( '' );
             } );
     }
 };
 
-DrawWidget.prototype._loadFileIntoPad = function( filename ) {
+/**
+ * 
+ * @param {*} file Either a filename or a file.
+ */
+DrawWidget.prototype._loadFileIntoPad = function( file ) {
     var that = this;
-    return fileManager.getFileUrl( filename )
+    if ( !file ) {
+        return Promise.resolve( '' );
+    }
+    return fileManager.getFileUrl( file )
         .then( that.pad.fromObjectURL.bind( that.pad ) )
-        .then( function( url ) {
-            that.element.value = filename;
-            // Update the download link for:
-            // - files that were loaded from the record
-            // - an annotate file that was uploaded within the session before an annotation was added by the user
-            that._updateDownloadLink( url, that.props.filename );
-        } )
         .catch( function() {
-            that._showFeedback( 'File "' + filename + '" could not be found (leave unchanged if already submitted and you want to preserve it).', 'error' );
+            that._showFeedback( 'File could not be loaded (leave unchanged if already submitted and you want to preserve it).', 'error' );
         } );
 };
 
@@ -341,13 +375,13 @@ DrawWidget.prototype._showFeedback = function( message ) {
     this.$widget.find( '.draw-widget__feedback' ).text( message );
 };
 
-DrawWidget.prototype._updateDownloadLink = function( url, fileName ) {
+DrawWidget.prototype._updateDownloadLink = function( url ) {
     if ( url && url.substring( 0, 5 ) !== 'blob:' ) {
         url = URL.createObjectURL( utils.dataUriToBlobSync( url ) );
     }
     this.$widget.find( '.btn-download' ).attr( {
         'href': url || '',
-        'download': fileName || ''
+        'download': url ? this.props.filename : ''
     } );
 };
 

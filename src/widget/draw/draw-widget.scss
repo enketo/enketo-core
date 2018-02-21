@@ -7,6 +7,7 @@ $ratio1: 0.75;
 $ratio2: 0.45;
 $fullscreen-margin-v: 50px;
 $fullscreen-margin-h: 15px;
+$picker-border: 2px solid grey;
 
 .or-appearance-draw,
 .or-appearance-signature,
@@ -70,6 +71,15 @@ $fullscreen-margin-h: 15px;
     &__feedback {
         @extend .or-constraint-msg.active;
     }
+    &__undo {
+        position: absolute;
+        top: 37px;
+        right: 7px;
+        width: 20px;
+        height: 20px;
+        margin: 2px;
+        border: $picker-border;
+    }
     &__colorpicker {
         position: absolute;
         display: flex;
@@ -92,7 +102,7 @@ $fullscreen-margin-h: 15px;
         }
         .current {
             display: block;
-            border: 2px solid gray;
+            border: $picker-border;
         }
     }
     &.full-screen {
