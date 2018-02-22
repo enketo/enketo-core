@@ -9,7 +9,7 @@ var inputTypes = {};
 var mobile = false;
 
 // test input types
-[ 'date', 'datetime', 'time' ].forEach( function( inputType ) {
+[ 'date', 'datetime', 'time', 'month' ].forEach( function( inputType ) {
     var input = document.createElement( 'input' );
     input.setAttribute( 'type', inputType );
     inputTypes[ inputType ] = input.type !== 'text';

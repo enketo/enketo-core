@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.47.0] - 2018-02-21
 ---------------------
 ##### Added
 - Download functionality to draw widgets.
@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Changed
 - Show helpful error message if SVG image cannot be found with Image Map widget.
+- Native month-year datepicker used on mobile devices when available.
 
 ##### Fixed
 - In annotate widget loaded file disappears when screen is resized.

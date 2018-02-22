@@ -415,6 +415,7 @@ legend {
     input[type=email],
     input[type=file],
     input[type=date],
+    input[type=month],
     input[type=time],
     input[type=datetime],
     input[type=number],
@@ -432,6 +433,7 @@ legend {
     input[type=email],
     input[type=file],
     input[type=date],
+    input[type=month],
     input[type=time],
     input[type=datetime],
     input[type=number],
@@ -451,6 +453,7 @@ input[type=url],
 input[type=email],
 input[type=file],
 input[type=date],
+input[type=month],
 input[type=time],
 input[type=datetime],
 input[type=number],
@@ -471,20 +474,21 @@ select {
 }
 
 .question input {
-    &[type="text"],
-    &[type="tel"],
-    &[type="password"],
-    &[type="url"],
-    &[type="email"],
-    &[type="file"] {
+    &[type=text],
+    &[type=tel],
+    &[type=password],
+    &[type=url],
+    &[type=email],
+    &[type=file] {
         width: $input-max-width;
     }
 
-    &[type="date"],
-    &[type="number"],
-    &[type="time"],
-    &[type="datetime"],
-    &[type="text"].mask-date {
+    &[type=date],
+    &[type=month],
+    &[type=number],
+    &[type=time],
+    &[type=datetime],
+    &[type=text].mask-date {
         width: $input-min-width;
     }
 
@@ -499,7 +503,7 @@ select {
 
 .or[dir="rtl"] {
     .question input {
-        &[type="radio"],
+        &[type=radio],
         &[type=checkbox] {
             // input is floated to deal with multi-line labels
             float: right;

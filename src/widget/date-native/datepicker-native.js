@@ -6,7 +6,8 @@ var pluginName = 'datepickerNative';
 var support = require( '../../js/support' );
 
 /**
- * The whole purpose of this widget is to hide the placeholder text on native date inputs.
+ * The whole purpose of this widget is to hide the placeholder text on native date inputs
+ * in READONLY question on NON-MOBILE devices.
  * The placeholder is considered unhelpful for month-year and year appearances. 
  * For consistency it's also removed from regular date inputs.
  * 
