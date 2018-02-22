@@ -7,8 +7,10 @@ var support = require( '../../js/support' );
 
 /**
  * The whole purpose of this widget is to hide the placeholder text on native date inputs
- * in READONLY question on NON-MOBILE devices.
- * The placeholder is considered unhelpful for month-year and year appearances. 
+ * and show a consistent date format between readonly and non-readonly questions. This widget
+ * is only activated for READONLY questions on NON-MOBILE devices.
+ * 
+ * The placeholder is considered particarly unhelpful for month-year and year appearances. 
  * For consistency it's also removed from regular date inputs.
  * 
  * @constructor
@@ -30,34 +32,8 @@ DatepickerNative.prototype.constructor = DatepickerNative;
  * Initialize datepicker widget
  */
 DatepickerNative.prototype._init = function() {
-    var $input = $( this.element );
-    var that = this;
-
-    if ( !$input.val() ) {
-        this.mask( this.element );
-    }
-
-    $input
-        .on( 'focus', function() {
-            that.unmask( this );
-            return true;
-        } )
-        .on( 'blur', function() {
-            if ( !this.value ) {
-                that.mask( this );
-            }
-            return true;
-        } );
-};
-
-DatepickerNative.prototype.mask = function( el ) {
-    el.type = 'text';
-    el.classList.add( 'mask-date' );
-};
-
-DatepickerNative.prototype.unmask = function( el ) {
-    el.type = 'date';
-    el.classList.remove( 'mask-date' );
+    this.element.type = 'text';
+    this.element.classList.add( 'mask-date' );
 };
 
 $.fn[ pluginName ] = function( options, event ) {
