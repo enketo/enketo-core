@@ -52,7 +52,8 @@ Selectpicker.prototype._init = function() {
          */
         if ( !item.classList.contains( 'itemset-template' ) && value !== undefined && value !== null ) {
             item.dataset.value = value;
-            item.removeAttribute( 'value' );
+            item.setAttribute( 'value', item.textContent );
+            item.textContent = '';
         }
     } );
 
@@ -101,7 +102,7 @@ Selectpicker.prototype._setFakeInputListener = function() {
 
     this.$fakeInput.on( 'input.' + this.namespace, function( e ) {
         var input = e.target;
-        var label = input.value.trim();
+        var label = input.value;
         var value = that._findValue( label ) || '';
         if ( that.element.value !== value ) {
             $( that.element ).val( value ).trigger( 'change' );
@@ -118,7 +119,7 @@ Selectpicker.prototype._findValue = function( label ) {
     }
 
     this.$options.each( function( i, option ) {
-        if ( option.innerText === label ) {
+        if ( option.value === label ) {
             value = option.getAttribute( 'data-value' );
             return false;
         }

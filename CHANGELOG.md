@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Date format shown to user in readonly field is different from non-readonly field.
+- Autocomplete widget does not accept options that have multiple subsequent spaces in their label.
 
 [4.47.0] - 2018-02-21
 ---------------------
