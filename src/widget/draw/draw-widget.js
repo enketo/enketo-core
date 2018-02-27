@@ -150,6 +150,7 @@ DrawWidget.prototype._init = function() {
                         .then( function() {
                             that.pad.updateData( data.slice( 0, -1 ) );
                             that._updateValue();
+                            that.pad.penColor = that.$widget.find( '.draw-widget__colorpicker .current' )[ 0 ].dataset.color;
                         } );
                 } )
                 .end().find( '.show-canvas-btn' ).on( 'click', function() {
