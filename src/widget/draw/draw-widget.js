@@ -201,8 +201,8 @@ DrawWidget.prototype._getProps = function( el ) {
     var $q = $( el ).closest( '.question' );
     return {
         readonly: el.readOnly,
-        signature: $q.hasClass( 'or-appearance-signature' ),
-        filename: $q.hasClass( 'or-appearance-draw' ) ? 'drawing.png' : ( $q.hasClass( 'or-appearance-signature' ) ? 'signature.png' : 'annotation.png' ),
+        type: $q.hasClass( 'or-appearance-draw' ) ? 'drawing' : ( $q.hasClass( 'or-appearance-signature' ) ? 'signature' : 'annotation' ),
+        filename: this.type + '.png',
         load: $q.hasClass( 'or-appearance-annotate' ),
         colors: $q.hasClass( 'or-appearance-signature' ) ? [] : [ 'black', 'lightblue', 'blue', 'red', 'orange', 'cyan', 'yellow', 'lightgreen', 'green', 'pink', 'purple', 'lightgray', 'darkgray' ],
         touch: support.touch,
@@ -303,7 +303,7 @@ DrawWidget.prototype._getMarkup = function() {
         '<div class="draw-widget__body">' + fullscreenBtns + load +
         '<canvas class="draw-widget__body__canvas noSwipe" tabindex="1"></canvas>' +
         '<div class="draw-widget__colorpicker"></div>' +
-        ( this.props.signature ? '' : '<button class="btn-icon-only draw-widget__undo" type=button><i class="icon icon-undo"> </i></button>' ) +
+        ( this.props.type === 'signature' ? '' : '<button class="btn-icon-only draw-widget__undo" type=button><i class="icon icon-undo"> </i></button>' ) +
         '</div>' +
         '<div class="draw-widget__footer">' +
         '<button type="button" class="btn-icon-only draw-widget__btn-reset" ><i class="icon icon-refresh"> </i></button>' +
@@ -337,7 +337,7 @@ DrawWidget.prototype._reset = function() {
     var that = this;
 
     if ( this.element.value ) {
-        dialog.confirm( t( 'drawwidget.resetWarning' ) )
+        dialog.confirm( t( 'filepicker.resetWarning', { item: t( 'drawwidget.' + this.props.type ) } ) )
             .then( function() {
                 that.pad.clear();
                 that.cache = null;

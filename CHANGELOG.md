@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Show separate custom reset messages for drawing, signature and annotation widgets.
+
 ##### Fixed
 - Date format shown to user in readonly field is different from non-readonly field.
 - Autocomplete widget does not accept options that have multiple subsequent spaces in their label.
