@@ -152,8 +152,6 @@ h4+.or-repeat {
     @include flex-wrap(nowrap);
     @include flex-direction(column);
 
-    cursor: text;
-
     &:not(.note):not(.focus):hover {
         background: $question-hover-bg;
     }
