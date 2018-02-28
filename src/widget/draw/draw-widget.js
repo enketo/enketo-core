@@ -338,7 +338,10 @@ DrawWidget.prototype._reset = function() {
     var that = this;
 
     if ( this.element.value ) {
-        dialog.confirm( t( 'filepicker.resetWarning', { item: t( 'drawwidget.' + this.props.type ) } ) )
+        // This discombulated line is to help the i18next parser pick up all 3 keys.
+        var item = this.props.type === 'signature' ?
+            t( 'drawwidget.signature' ) : ( this.props.type === 'drawing' ? t( 'drawwidget.drawing' ) : t( 'drawwidget.annotation' ) );
+        dialog.confirm( t( 'filepicker.resetWarning', { item: item } ) )
             .then( function() {
                 that.pad.clear();
                 that.cache = null;
