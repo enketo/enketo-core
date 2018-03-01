@@ -249,7 +249,7 @@ Filepicker.prototype._showPreview = function( url, mediaType ) {
             $el = $( '<video controls="controls"/>' );
             break;
         default:
-            $el = $( '<span>No preview for this file type</span>' );
+            $el = $( '' );
             break;
     }
 

@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Removed:
+- File upload "no preview for this file type" message.
+
 ##### Fixed
 - Cursor in Grid theme set to text for no seemingly good reason.
 
