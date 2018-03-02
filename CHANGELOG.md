@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.47.2] - 2018-03-02
 ---------------------
 ##### Removed:
 - File upload "no preview for this file type" message.
 
 ##### Fixed
 - Cursor in Grid theme set to text for no seemingly good reason.
+- Markdown headers not limited from h1-h6 as they should be (in Enketo Transformer)
 
 [4.47.1] - 2018-02-27
 ---------------------
