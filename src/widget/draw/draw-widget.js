@@ -381,7 +381,7 @@ DrawWidget.prototype._showFeedback = function( message ) {
 };
 
 DrawWidget.prototype._updateDownloadLink = function( url ) {
-    if ( url && url.substring( 0, 5 ) !== 'blob:' ) {
+    if ( url && url.indexOf( 'data:' ) === 0 ) {
         url = URL.createObjectURL( utils.dataUriToBlobSync( url ) );
     }
 
