@@ -34,7 +34,6 @@ Radiopicker.prototype._init = function() {
  * Set delegated event handlers
  */
 Radiopicker.prototype._setDelegatedHandlers = function() {
-    var $label, $input;
     var $form = $( this.element );
     // Applies a data-checked attribute to the parent label of a checked checkbox and radio button
     $form.on( 'click', 'input[type="radio"]:checked', function() {
@@ -48,12 +47,10 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
     } );
 
     $form.on( 'click', 'input[type="checkbox"]', function() {
-        $input = $( this );
-        $label = $input.parent( 'label' );
-        if ( $input.is( ':checked' ) ) {
-            $label.attr( 'data-checked', 'true' );
+        if ( this.checked ) {
+            this.parentNode.dataset.checked = 'true';
         } else {
-            $label.removeAttr( 'data-checked' );
+            delete this.parentNode.dataset.checked;
         }
     } );
 
@@ -64,9 +61,12 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
     $form.on( 'click', '[data-checked]>input[type="radio"]:not(.no-unselect)', function() {
         $( this ).prop( 'checked', false ).trigger( 'change' ).parent().removeAttr( 'data-checked' );
     } );
+
+    // Detect programmatic clearing to remove data-checked attribute
+    $form.on( 'change', '[data-checked] > input:not(:checked)', function() {
+        delete this.parentNode.dataset.checked;
+    } );
 };
-
-
 
 $.fn[ pluginName ] = function( options, event ) {
     //this widget works globally, and only needs to be instantiated once per form

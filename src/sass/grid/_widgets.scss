@@ -70,10 +70,6 @@
             border: none;
 
             @include border-radius(0);
-
-            &[data-checked] {
-                background-color: transparent;
-            }
         }
     }
 }

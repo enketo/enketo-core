@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed:
 - If existing drawing/signature/annotion is loaded from a http URL, an exception occurs.
+- When radiobutton or checkbox is cleared programmatically the `data-checked` attribute is not updated.
 
 [4.47.2] - 2018-03-02
 ---------------------
