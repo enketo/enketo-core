@@ -200,10 +200,11 @@ DrawWidget.prototype._init = function() {
 
 DrawWidget.prototype._getProps = function( el ) {
     var $q = $( el ).closest( '.question' );
+    var type = $q.hasClass( 'or-appearance-draw' ) ? 'drawing' : ( $q.hasClass( 'or-appearance-signature' ) ? 'signature' : 'annotation' );
     return {
         readonly: el.readOnly,
-        type: $q.hasClass( 'or-appearance-draw' ) ? 'drawing' : ( $q.hasClass( 'or-appearance-signature' ) ? 'signature' : 'annotation' ),
-        filename: this.type + '.png',
+        type: type,
+        filename: type + '.png',
         load: $q.hasClass( 'or-appearance-annotate' ),
         colors: $q.hasClass( 'or-appearance-signature' ) ? [] : [ 'black', 'lightblue', 'blue', 'red', 'orange', 'cyan', 'yellow', 'lightgreen', 'green', 'pink', 'purple', 'lightgray', 'darkgray' ],
         touch: support.touch,

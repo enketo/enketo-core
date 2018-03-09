@@ -3,11 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.47.3] - 2018-03-09
 ---------------------
 ##### Fixed:
 - If existing drawing/signature/annotion is loaded from a http URL, an exception occurs.
 - When radiobutton or checkbox is cleared programmatically the `data-checked` attribute is not updated.
+- Filenames of signature, annotation and drawing inputs are set to undefined-xx.png.
 
 [4.47.2] - 2018-03-02
 ---------------------
