@@ -44,7 +44,7 @@
         "grunt-eslint": "^20.1.0",
         "grunt-jsbeautifier": "0.x.x",
         "grunt-karma": "2.0.0",
-        "grunt-sass": "2.0.x",
+        "grunt-sass": "2.1.x",
         "grunt-shell": "2.1.0",
         "jasmine-core": "^2.9.1",
         "json-pretty": "0.0.1",
@@ -71,7 +71,7 @@
         "jquery": "3.3.x",
         "jquery-touchswipe": "^1.6.18",
         "leaflet": "0.7.x",
-        "lie": "3.2.x",
+        "lie": "3.3.x",
         "mergexml": "1.1.2",
         "signature_pad": "2.3.x"
     }
