@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed:
+- Image Map widget inside repeat sometimes shows 'SVG image cannot be loaded' message when all is okay.
+
 [4.47.3] - 2018-03-09
 ---------------------
 ##### Fixed:

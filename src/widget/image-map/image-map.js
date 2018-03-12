@@ -46,8 +46,9 @@ ImageMap.prototype._init = function() {
         $( img )
             .on( 'load', function() {
                 that._addMarkup( img ).then( that._addFunctionality.bind( that ) );
-            } )
-            .on( 'error', this._showSvgNotFoundError.bind( this ) );
+            } );
+        // Ignore errors, because and img element without source may throw one.
+        // E.g. in Enketo Express inside a repeat: https://github.com/kobotoolbox/enketo-express/issues/961
     }
 };
 
