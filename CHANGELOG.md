@@ -3,10 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.47.4] - 2018-03-14
 ---------------------
+##### Changed
+- Enketo Transformer: In Markdown, make a distinction between paragraphs (2+ subsequent new lines) and simple new lines.
+
 ##### Fixed:
 - Image Map widget inside repeat sometimes shows 'SVG image cannot be loaded' message when all is okay.
+- Enketo Transformer: In Markdown, newline characters are not converted if they follow a heading.
 
 [4.47.3] - 2018-03-09
 ---------------------
