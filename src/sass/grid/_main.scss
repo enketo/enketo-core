@@ -252,8 +252,7 @@ h4+.or-repeat {
     }
 
     legend {
-        .required,
-        .btn-comment {
+        .required {
             left: -$q-pad-side;
             right: auto;
         }
@@ -355,8 +354,7 @@ h4+.or-repeat {
         display: block;
     }
 
-    .required,
-    .btn-comment {
+    .required {
         right: -$q-pad-side;
     }
 

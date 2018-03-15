@@ -1,18 +1,18 @@
 $padding: 30px;
 
-.or-comment-widget {    
+.or-comment-widget {
     display: block;
     position: absolute;
     z-index: 1001;
     top: 100%;
     left: 0;
     width: 100%;
-    &__overlay  {
+    &__overlay {
         background: rgba(0, 0, 0, 0.3);
     }
 
     &__content {
-        position:relative;
+        position: relative;
         border: 1px solid $gray;
         background: white;
         padding: $padding;
@@ -22,7 +22,7 @@ $padding: 30px;
             right: $padding;
             bottom: $padding;
         }
-        &__btn-close-x{
+        &__btn-close-x {
             top: 20px;
             right: 13px;
             position: absolute;
@@ -45,7 +45,8 @@ $padding: 30px;
         bottom: 0;
         left: 0;
     }
-    &__question-label, &__question-value {
+    &__question-label,
+    &__question-value {
         @include font-normal;
         font-style: italic;
         padding-right: 35px;
@@ -54,18 +55,18 @@ $padding: 30px;
         margin-left: 20px;
         margin-top: 10px;
     }
-    .question textarea, 
+    .question textarea,
     .question input[type="text"] {
         width: 100%;
-    }
-    // Avoid artefacts of linkedQuestion that contains widget
+    } // Avoid artefacts of linkedQuestion that contains widget
     // If linked question is invalid, but the widget is not, the message
     // should stay hidden.
-    .or-required-msg.active, .or-constraint-msg.active {
+    .or-required-msg.active,
+    .or-constraint-msg.active {
         display: none;
     }
-    .invalid-required > .or-required-msg,
-    .invalid-constraint > .or-constraint-msg {
+    .invalid-required>.or-required-msg,
+    .invalid-constraint>.or-constraint-msg {
         display: block;
     }
 }
@@ -102,20 +103,21 @@ legend .btn-comment .icon {
     }
     .or-comment-widget {
         &__content {
-            &__btn-update{
+            &__btn-update {
                 right: auto;
                 left: $padding;
             }
-            &__btn-close-x{
+            &__btn-close-x {
                 right: auto;
                 left: 13px;
             }
         }
-        &__question-label, &__question-value {
+        &__question-label,
+        &__question-value {
             padding-right: 0;
             padding-left: 35px;
         }
-         &__question-value {
+        &__question-value {
             margin-left: 0;
             margin-right: 20px;
         }

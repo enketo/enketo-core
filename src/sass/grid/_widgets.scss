@@ -195,13 +195,13 @@ html:not(.touch) .question .geopoint.widget {
 .btn-comment {
     position: absolute;
     top: $q-pad-top;
-    right: $q-pad-side; //left: $q-pad-right;
+    right: 0; //left: $q-pad-right;
     margin: 0;
 }
 
 legend .btn-comment {
-    right: 0;
     top: 0; // undo legend hack
+    right: -$q-pad-side;
     .icon {
         position: static;
     }
@@ -209,13 +209,11 @@ legend .btn-comment {
 
 .or[dir="rtl"] {
     .btn-comment {
-        left: $q-pad-side;
-        right: auto;
-    }
-
-    legend .btn-comment {
         left: 0;
         right: auto;
+    }
+    legend .btn-comment {
+        left: -$q-pad-side;
     }
 
     .esri-geopicker {
