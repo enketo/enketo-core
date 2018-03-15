@@ -265,17 +265,7 @@ $media-margin: 10px;
     >img,
     >video,
     >audio {
-        margin: $media-margin 0 $media-margin $media-margin;
-    }
-}
-
-.or[dir="rtl"] {
-    .question {
-        >img,
-        >video,
-        >audio {
-            margin: $media-margin $media-margin $media-margin 0;
-        }
+        margin: $media-margin auto $media-margin;
     }
 }
 

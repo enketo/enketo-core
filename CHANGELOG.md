@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Changed
 - Positioning of comment widget icon next to question label.
+- Center media inside labels.
 
 [4.47.4] - 2018-03-14
 ---------------------
