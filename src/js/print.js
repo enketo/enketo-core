@@ -130,9 +130,6 @@ function fixGrid( paper ) {
                 console.error( 'unexpected question top position: ', top, 'for element:', $el, 'expected >=', rowTop );
             }
         } );
-        // Chrome 34 doesn't like the fact that main has an inline fixed width (see issue #99)
-        // since we do not need it any more, after we have set the adjusted widths to a %-value, we can remove it. 
-        $( '.main' ).css( 'width', 'auto' ).removeClass( 'print-width-adjusted' );
 
         $( window ).trigger( 'printviewready' );
     }, 1000 );
@@ -143,18 +140,33 @@ function getPaperPixelWidth( paper ) {
     // the final margin is determined by the browser's print functionality
     // better too large than too small here
     var margin = 0.4;
-    var formats = {
-        A4: {
-            width: 8.27,
-            height: 11.69
-        },
-        letter: {
-            width: 8.5,
-            height: 11
-        }
+    var FORMATS = {
+        Letter: [ 8.5, 11 ],
+        Legal: [ 8.5, 14 ],
+        Tabloid: [ 11, 17 ],
+        Ledger: [ 17, 11 ],
+        A0: [ 33.1, 46.8 ],
+        A1: [ 23.4, 33.1 ],
+        A2: [ 16.5, 23.4 ],
+        A3: [ 11.7, 16.5 ],
+        A4: [ 8.27, 11.7 ],
+        A5: [ 5.83, 8.27 ],
+        A6: [ 4.13, 5.83 ],
     };
+    paper.landscape = typeof paper.landscape === 'boolean' ? paper.landscape : paper.orientation === 'landscape';
+    delete paper.orientation;
 
-    printWidth = ( paper.orientation === 'portrait' ) ? formats[ paper.format ].width : formats[ paper.format ].height;
+    if ( typeof paper.margin === 'undefined' ) {
+        paper.margin = 0.4;
+    } else if ( /^[\d.]+in$/.test( paper.margin.trim() ) ) {
+        paper.margin = parseFloat( paper.margin, 10 );
+    } else if ( /^[\d.]+cm$/.test( paper.margin.trim() ) ) {
+        paper.margin = parseFloat( paper.margin, 10 ) / 2.54;
+    } else if ( /^[\d.]+mm$/.test( paper.margin.trim() ) ) {
+        paper.margin = parseFloat( paper.margin, 10 ) / 25.4;
+    }
+
+    printWidth = ( paper.landscape === true ) ? FORMATS[ paper.format ][ 1 ] : FORMATS[ paper.format ][ 0 ];
 
     return ( ( printWidth - ( 2 * margin ) ) * dpi ) + 'px';
 }
@@ -208,4 +220,10 @@ function printForm( confirm, theme ) {
     }
 }
 
-module.exports = printForm;
+module.exports = {
+    printForm: printForm,
+    fixGrid: fixGrid,
+    styleToAll: styleToAll,
+    styleReset: styleReset,
+    isGrid: isGrid,
+};

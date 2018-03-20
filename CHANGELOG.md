@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Print script has been reorganized. **WARNING: If your app is using the print script (for Grid Theme forms), update your code!**
+
 [4.47.5] - 2018-03-21
 ---------------------
 ##### Changed
