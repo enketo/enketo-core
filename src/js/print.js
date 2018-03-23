@@ -86,7 +86,10 @@ function fixGrid( paper ) {
     setTimeout( function() {
         // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
         maxWidth = $( '#form-title' ).outerWidth() - 1;
-        $( '.question, .note, .trigger' ).not( '.draft' ).each( function() {
+        var $els = $( '.question, .note, .trigger' ).not( '.draft' );
+
+        $els.each( function( index ) {
+            var lastElement = index === $els.length - 1;
             $el = $( this );
             top = $el.offset().top;
             rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
@@ -94,7 +97,9 @@ function fixGrid( paper ) {
 
             if ( top === rowTop ) {
                 $row = $row.add( $el );
-            } else if ( top > rowTop ) {
+            }
+
+            if ( top > rowTop || lastElement ) {
                 var height,
                     widths = [],
                     cumulativeWidth = 0,
@@ -126,7 +131,7 @@ function fixGrid( paper ) {
                 // start a new row
                 $row = $el;
                 rowTop = $el.offset().top;
-            } else {
+            } else if ( rowTop < top ) {
                 console.error( 'unexpected question top position: ', top, 'for element:', $el, 'expected >=', rowTop );
             }
         } );
