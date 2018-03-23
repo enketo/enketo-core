@@ -72,20 +72,6 @@ $printBaseFontSize: 10px;
 .question {
     padding-bottom: 10px;
 
-    .question-label,
-    .option-label,
-    label.geo {
-        line-height: $printBaseFontSize;
-        font-size: $printBaseFontSize;
-    }
-
-    input:not([type=radio]):not([type=checkbox]),
-    .geopicker.widget input[type=number] {
-        font-size: $printBaseFontSize;
-        line-height: $printBaseFontSize;
-        height: 20px;
-    }
-
     textarea {
         height: 45px;
     }
