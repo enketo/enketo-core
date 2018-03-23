@@ -137,9 +137,6 @@ function fixGrid( paper ) {
 
 function getPaperPixelWidth( paper ) {
     var printWidth;
-    // the final margin is determined by the browser's print functionality
-    // better too large than too small here
-    var margin = 0.4;
     var FORMATS = {
         Letter: [ 8.5, 11 ],
         Legal: [ 8.5, 14 ],
@@ -166,9 +163,11 @@ function getPaperPixelWidth( paper ) {
         paper.margin = parseFloat( paper.margin, 10 ) / 25.4;
     }
 
+    paper.format = typeof paper.format === 'string' && typeof FORMATS[ paper.format ] !== 'undefined' ? paper.format : 'A4';
+
     printWidth = ( paper.landscape === true ) ? FORMATS[ paper.format ][ 1 ] : FORMATS[ paper.format ][ 0 ];
 
-    return ( ( printWidth - ( 2 * margin ) ) * dpi ) + 'px';
+    return ( ( printWidth - ( 2 * paper.margin ) ) * dpi ) + 'px';
 }
 
 /**

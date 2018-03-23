@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Print view of Grid Theme form in Pages mode doesn't properly stretch cells in the current page.
+- Print script for Grid Theme doesn't have a default for paper format and doesn't apply user-defined margin.
 
 [4.47.5] - 2018-03-21
 ---------------------
