@@ -193,6 +193,10 @@ $printBaseFontSize: 10px;
     }
 }
 
+.pages.or [role="page"].current:not(.question) {
+    display: inherit;
+}
+
 @media print,
 screen and (min-width: 700px) {
     @for $total from 1 through $max-columns {

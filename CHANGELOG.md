@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Print script has been reorganized. **WARNING: If your app is using the print script (for Grid Theme forms), update your code!**
 
+##### Fixed
+- Print view of Grid Theme form in Pages mode doesn't properly stretch cells in the current page.
+
 [4.47.5] - 2018-03-21
 ---------------------
 ##### Changed
