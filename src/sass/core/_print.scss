@@ -398,9 +398,8 @@ label.geo {
     }
 }
 
-// pagebreak management
-*:not(.or-appearance-field-list) .question,
-.or-appearance-field-list {
+// pagebreak management, keep it simple to avoid complex issues
+.question {
     page-break-inside: avoid;
 }
 
@@ -409,7 +408,6 @@ label.geo {
 h3,
 h4 {
     page-break-after: avoid;
-
     +.question {
         page-break-before: avoid;
     }

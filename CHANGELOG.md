@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- If the starts with a lengthy group, the print view shows only the form title on the first page.
+
 [4.47.6] - 2018-03-23
 ---------------------
 ##### Changed
