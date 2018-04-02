@@ -31,8 +31,10 @@ fileManager.isWaitingForPermissions = function() {
 };
 
 /**
- * Obtains a an ObjectURL that can be used to show a preview of the file when used
+ * Obtains a URL that can be used to show a preview of the file when used
  * as a src attribute.
+ * 
+ * It is meant for media previews and media downloads.
  *
  * @param  {?string|Object} subject File or filename in local storage
  * @param  {?string}        fileNameOverride value to override filename with in
@@ -59,6 +61,40 @@ fileManager.getFileUrl = function( subject /*, fileNameOverride*/ ) {
         } else {
             reject( new Error( 'Unknown error occurred' ) );
         }
+    } );
+};
+
+/**
+ * Similar to getFileURL, except that this one is guaranteed to return an objectURL
+ * 
+ * It is meant for loading images into a canvas.
+ * 
+ * @param  {?string|Object} subject File or filename in local storage
+ * @param  {?string}        fileNameOverride value to override filename with in
+ *                          generated URL.  This is not used in the default
+ *                          implementation.
+ * @return {[type]}         promise url string or rejection with Error
+ */
+fileManager.getObjectUrl = function( subject /*, fileNameOverride*/ ) {
+    return fileManager.getFileUrl( subject /*, fileNameOverride*/ )
+        .then( function( url ) {
+            if ( /https?:\/\//.test( url ) ) {
+                return fileManager.urlToBlob( url ).then( URL.createObjectURL );
+            }
+            return url;
+        } );
+};
+
+fileManager.urlToBlob = function( url ) {
+    var xhr = new XMLHttpRequest();
+
+    return new Promise( function( resolve ) {
+        xhr.open( 'GET', url );
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+            resolve( xhr.response );
+        };
+        xhr.send();
     } );
 };
 

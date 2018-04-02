@@ -6,7 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ---------------------
 ##### Fixed
-- If the starts with a lengthy group, the print view shows only the form title on the first page.
+- If the form starts with a lengthy group, the print view shows only the form title on the first page.
+- Loading drawings from existing records, results in blank canvas after window resizing. **WARNING: Requires adding a getObjectURL function to the file manager module (in case this is overridden your app)**
 
 [4.47.6] - 2018-03-23
 ---------------------

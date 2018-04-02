@@ -171,7 +171,7 @@ DrawWidget.prototype._init = function() {
             $( canvas )
                 .on( 'canvasreload.' + that.namespace, function() {
                     if ( that.cache ) {
-                        that.pad.fromDataURL( that.cache );
+                        that.pad.fromObjectURL( that.cache );
                     }
                 } );
 
@@ -367,8 +367,12 @@ DrawWidget.prototype._loadFileIntoPad = function( file ) {
     if ( !file ) {
         return Promise.resolve( '' );
     }
-    return fileManager.getFileUrl( file )
+    return fileManager.getObjectUrl( file )
         .then( that.pad.fromObjectURL.bind( that.pad ) )
+        .then( function( objectUrl ) {
+            that.cache = objectUrl;
+            return objectUrl;
+        } )
         .catch( function() {
             that._showFeedback( 'File could not be loaded (leave unchanged if already submitted and you want to preserve it).', 'error' );
         } );
