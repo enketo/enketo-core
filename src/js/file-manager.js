@@ -37,19 +37,16 @@ fileManager.isWaitingForPermissions = function() {
  * It is meant for media previews and media downloads.
  *
  * @param  {?string|Object} subject File or filename in local storage
- * @param  {?string}        fileNameOverride value to override filename with in
- *                          generated URL.  This is not used in the default
- *                          implementation.
  * @return {[type]}         promise url string or rejection with Error
  */
-fileManager.getFileUrl = function( subject /*, fileNameOverride*/ ) {
+fileManager.getFileUrl = function( subject ) {
     return new Promise( function( resolve, reject ) {
         var error;
 
         if ( !subject ) {
             resolve( null );
         } else if ( typeof subject === 'string' ) {
-            // TODO obtain from storage
+            // TODO obtain from storage as http URL or objectURL
             reject( 'no!' );
         } else if ( typeof subject === 'object' ) {
             if ( fileManager.isTooLarge( subject ) ) {
@@ -70,13 +67,10 @@ fileManager.getFileUrl = function( subject /*, fileNameOverride*/ ) {
  * It is meant for loading images into a canvas.
  * 
  * @param  {?string|Object} subject File or filename in local storage
- * @param  {?string}        fileNameOverride value to override filename with in
- *                          generated URL.  This is not used in the default
- *                          implementation.
  * @return {[type]}         promise url string or rejection with Error
  */
-fileManager.getObjectUrl = function( subject /*, fileNameOverride*/ ) {
-    return fileManager.getFileUrl( subject /*, fileNameOverride*/ )
+fileManager.getObjectUrl = function( subject ) {
+    return fileManager.getFileUrl( subject )
         .then( function( url ) {
             if ( /https?:\/\//.test( url ) ) {
                 return fileManager.urlToBlob( url ).then( URL.createObjectURL );
