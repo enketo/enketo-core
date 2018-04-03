@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.48.0] - 2018-04-03
 ---------------------
+##### Changed
+- Annotate widget will now no longer allow drawing until an image has been uploaded.
+
 ##### Fixed
 - If the form starts with a lengthy group, the print view shows only the form title on the first page.
 - Loading drawings from existing records, results in blank canvas after window resizing. **WARNING: Requires adding a getObjectURL function to the file manager module (in case this is overridden your app)**

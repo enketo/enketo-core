@@ -43,6 +43,13 @@ $picker-border: 2px solid grey;
             padding: 0;
             width: 100%;
             height: 100%;
+            &.disabled {
+                cursor: not-allowed;
+                ~.draw-widget__colorpicker,
+                ~.draw-widget__undo {
+                    display: none;
+                }
+            }
         }
         input[type=file] {
             display: none;
@@ -159,9 +166,7 @@ $picker-border: 2px solid grey;
     }
 }
 
-.touch .draw-widget:not(.full-screen) .draw-widget__colorpicker {
-    display: none;
-}
+
 
 .or-appearance-signature {
     .draw-widget.full-screen {

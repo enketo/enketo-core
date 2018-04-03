@@ -120,8 +120,8 @@ DrawWidget.prototype._init = function() {
                 onEnd: that._updateValue.bind( that ),
                 penColor: that.props.colors[ 0 ] || 'black'
             } );
+            that.pad.off();
             if ( existingFilename ) {
-                that.pad.off();
                 that.element.value = existingFilename;
                 return that._loadFileIntoPad( existingFilename )
                     .then( that._updateDownloadLink.bind( that ) );
@@ -129,13 +129,13 @@ DrawWidget.prototype._init = function() {
             return true;
         } )
         .then( function() {
-            that.pad.on();
             that.$widget
                 .find( '.draw-widget__btn-reset' ).on( 'click', that._reset.bind( that ) )
                 .end().find( '.draw-widget__colorpicker' )
                 .on( 'click', '.current', function() {
                     $( this ).parent().toggleClass( 'reveal' );
-                } ).on( 'click', '[data-color]:not(.current)', function() {
+                } )
+                .on( 'click', '[data-color]:not(.current)', function() {
                     $( this ).siblings().removeClass( 'current' ).end().addClass( 'current' )
                         .parent().removeClass( 'reveal' );
                     that.pad.penColor = this.dataset.color;
@@ -156,9 +156,7 @@ DrawWidget.prototype._init = function() {
                 .end().find( '.show-canvas-btn' ).on( 'click', function() {
                     that.$widget.addClass( 'full-screen' );
                     that._resizeCanvas( canvas );
-                    if ( !that.props.readonly ) {
-                        that.pad.on();
-                    }
+                    that.enable();
                     return false;
                 } )
                 .end().find( '.hide-canvas-btn' ).on( 'click', function() {
@@ -174,10 +172,7 @@ DrawWidget.prototype._init = function() {
                         that.pad.fromObjectURL( that.cache );
                     }
                 } );
-
-            if ( that.props.readonly ) {
-                that.disable( that.element );
-            }
+            that.enable();
         } )
         .catch( function( error ) {
             that._showFeedback( error.message );
@@ -251,6 +246,7 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
                         .then( function() {
                             that._updateValue.call( that );
                             that._showFileName( file.name );
+                            that.enable();
                         } );
                 } else {
                     that._showFeedback( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
@@ -303,7 +299,7 @@ DrawWidget.prototype._getMarkup = function() {
         '<button type="button" class="hide-canvas-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' : '';
     var $widget = $( '<div class="widget draw-widget">' +
         '<div class="draw-widget__body">' + fullscreenBtns + load +
-        '<canvas class="draw-widget__body__canvas noSwipe" tabindex="1"></canvas>' +
+        '<canvas class="draw-widget__body__canvas noSwipe disabled" tabindex="1"></canvas>' +
         '<div class="draw-widget__colorpicker"></div>' +
         ( this.props.type === 'signature' ? '' : '<button class="btn-icon-only draw-widget__undo" type=button><i class="icon icon-undo"> </i></button>' ) +
         '</div>' +
@@ -354,6 +350,8 @@ DrawWidget.prototype._reset = function() {
                 // Annotate file input
                 that.$widget.find( 'input[type=file]' ).val( '' ).trigger( 'change' );
                 that._updateDownloadLink( '' );
+                that.disable();
+                that.enable();
             } );
     }
 };
@@ -417,28 +415,32 @@ DrawWidget.prototype._resizeCanvas = function( canvas ) {
     $( canvas ).trigger( 'canvasreload.' + this.namespace );
 };
 
-DrawWidget.prototype.disable = function( element ) {
+DrawWidget.prototype.disable = function() {
     var that = this;
+    var canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
 
     this.initialize
         .then( function() {
             that.pad.off();
-            $( element )
-                .next( '.widget' )
+            canvas.classList.add( 'disabled' );
+            that.$widget
                 .find( '.draw-widget__btn-reset' )
                 .prop( 'disabled', true );
         } );
 };
 
-DrawWidget.prototype.enable = function( element ) {
+DrawWidget.prototype.enable = function() {
     var that = this;
+    var canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
+    var touchNotFull = this.props.touch && !this.$widget.is( '.full-screen' );
+    var needFile = this.props.load && !this.element.value;
 
     this.initialize
         .then( function() {
-            that.pad.on();
-            if ( !element.readOnly ) {
-                $( element )
-                    .next( '.widget' )
+            if ( !that.props.readonly && !needFile && !touchNotFull ) {
+                that.pad.on();
+                canvas.classList.remove( 'disabled' );
+                that.$widget
                     .find( '.draw-widget__btn-reset' )
                     .prop( 'disabled', false );
             }
@@ -448,7 +450,7 @@ DrawWidget.prototype.enable = function( element ) {
             // canvas may therefore still be ongoing when this widget is instantiated.
             // For that reason we call _resizeCanvas when enable is called to make
             // sure the canvas is rendered properly.
-            that._resizeCanvas( $( element ).closest( '.question' )[ 0 ].querySelector( '.draw-widget__body__canvas' ) );
+            that._resizeCanvas( canvas );
         } );
 };
 
