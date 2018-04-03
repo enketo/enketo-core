@@ -47,7 +47,7 @@ ImageMap.prototype._init = function() {
             .on( 'load', function() {
                 that._addMarkup( img ).then( that._addFunctionality.bind( that ) );
             } );
-        // Ignore errors, because and img element without source may throw one.
+        // Ignore errors, because an img element without source may throw one.
         // E.g. in Enketo Express inside a repeat: https://github.com/kobotoolbox/enketo-express/issues/961
     }
 };
@@ -94,8 +94,19 @@ ImageMap.prototype._addMarkup = function( img ) {
                 $( that.element ).find( '.option-wrapper' ).before( $widget );
                 // Resize, using original unscaled SVG dimensions
                 // svg.getBBox() only works after SVG has been added to DOM.
-                width = $svg[ 0 ].getBBox().width || $svg.attr( 'width' );
-                height = $svg[ 0 ].getBBox().height || $svg.attr( 'height' );
+                // In FF getBBox causes an "NS_ERROR_FAILURE" exception likely because the SVG
+                // image has not finished rendering. This doesn't always happen though.
+                // For now, we just log the FF error, and hope that resizing is done correctly via
+                // attributes.
+                var bbox = {};
+                try {
+                    bbox = $svg[ 0 ].getBBox();
+                } catch ( e ) {
+                    console.error( 'Could not obtain Boundary Box of SVG element', e );
+                }
+
+                width = bbox.width || $svg.attr( 'width' );
+                height = bbox.height || $svg.attr( 'height' );
                 $svg.attr( 'viewBox', [ 0, 0, parseInt( width, 10 ), parseInt( height, 10 ) ].join( ' ' ) );
 
                 return $widget;

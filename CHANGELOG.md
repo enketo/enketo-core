@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - If the form starts with a lengthy group, the print view shows only the form title on the first page.
 - Loading drawings from existing records, results in blank canvas after window resizing. **WARNING: Requires adding a getObjectURL function to the file manager module (in case this is overridden your app)**
+- The image map widget shows 'SVG not found error' in Firefox sometimes, and if so, it fails to scale the image.
 
 [4.47.6] - 2018-03-23
 ---------------------
