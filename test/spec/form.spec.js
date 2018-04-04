@@ -1525,6 +1525,24 @@ describe( 'Itemset functionality', function() {
             expect( form.view.$.find( selector ).eq( 1 ).find( 'option:not(.itemset-template)' ).text() ).toEqual( 'CentralSouthern' );
         } );
     } );
+
+    describe( ' in a cloned repeat with a predicate including current()/../', function() {
+        it( 'works', function() {
+            // This test is added to show that once the makeBugCompliant function has been removed
+            // itemsets with relative predicates still work.
+            var form = loadForm( 'reprelcur1.xml' );
+            form.init();
+            form.view.$.find( '[data-name="/repeat-relative-current/rep/crop"][value="banana"]' ).prop( 'checked', true ).trigger( 'change' );
+            form.view.$.find( '.add-repeat-btn' ).click();
+            form.view.$.find( '[data-name="/repeat-relative-current/rep/crop"][value="beans"]' ).eq( 1 ).prop( 'checked', true ).trigger( 'change' );
+            var sel1 = '.itemset > input[data-name="/repeat-relative-current/rep/sel_a"]';
+            var sel2 = '.itemset > input[data-name="/repeat-relative-current/rep/group/sel_b"]';
+            expect( form.view.$.find( sel1 ).eq( 0 ).val() ).toEqual( 'banana' );
+            expect( form.view.$.find( sel2 ).eq( 0 ).val() ).toEqual( 'banana' );
+            expect( form.view.$.find( sel1 ).eq( 1 ).val() ).toEqual( 'beans' );
+            expect( form.view.$.find( sel2 ).eq( 1 ).val() ).toEqual( 'beans' );
+        } );
+    } );
 } );
 
 describe( 're-validating inputs and updating user feedback', function() {

@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<h:html 
+  xmlns="http://www.w3.org/2002/xforms" 
+  xmlns:ev="http://www.w3.org/2001/xml-events" 
+  xmlns:h="http://www.w3.org/1999/xhtml" 
+  xmlns:jr="http://openrosa.org/javarosa" 
+  xmlns:odk="http://www.opendatakit.org/xforms" 
+  xmlns:orx="http://openrosa.org/xforms" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>repeat-relative-current</h:title>
+    <model>
+      <itext>
+        <translation lang="English">
+          <text id="/repeat-relative-current/rep/crop/beans:label">
+            <value>Beans</value>
+          </text>
+          <text id="/repeat-relative-current/rep/crop/banana:label">
+            <value>Banana</value>
+          </text>
+          <text id="/repeat-relative-current/rep/crop/coffee:label">
+            <value>Coffee</value>
+          </text>
+          <text id="static_instance-crop_list-2">
+            <value>Cacao</value>
+          </text>
+          <text id="static_instance-crop_list-3">
+            <value>Coffee</value>
+          </text>
+          <text id="static_instance-crop_list-0">
+            <value>Banana</value>
+          </text>
+          <text id="static_instance-crop_list-1">
+            <value>Beans</value>
+          </text>
+          <text id="/repeat-relative-current/rep/crop/cacao:label">
+            <value>Cacao</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <repeat-relative-current id="repeat-relative-current">
+          <rep jr:template="">
+            <crop/>
+            <sel_a/>
+            <group>
+              <sel_b/>
+            </group>
+          </rep>
+          <meta>
+            <instanceID/>
+          </meta>
+        </repeat-relative-current>
+      </instance>
+      <instance id="crop_list">
+        <root>
+          <item>
+            <itextId>static_instance-crop_list-0</itextId>
+            <name>banana</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-1</itextId>
+            <name>beans</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-2</itextId>
+            <name>cacao</name>
+          </item>
+          <item>
+            <itextId>static_instance-crop_list-3</itextId>
+            <name>coffee</name>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/repeat-relative-current/rep/crop" type="select1"/>
+      <bind nodeset="/repeat-relative-current/rep/sel_a" type="select1"/>
+      <bind nodeset="/repeat-relative-current/rep/group/sel_b" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/repeat-relative-current/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/repeat-relative-current/rep">
+      <label></label>
+      <repeat nodeset="/repeat-relative-current/rep">
+        <select1 ref="/repeat-relative-current/rep/crop">
+          <label>Select</label>
+          <item>
+            <label ref="jr:itext('/repeat-relative-current/rep/crop/banana:label')"/>
+            <value>banana</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/repeat-relative-current/rep/crop/beans:label')"/>
+            <value>beans</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/repeat-relative-current/rep/crop/cacao:label')"/>
+            <value>cacao</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/repeat-relative-current/rep/crop/coffee:label')"/>
+            <value>coffee</value>
+          </item>
+        </select1>
+        <select1 ref="/repeat-relative-current/rep/sel_a">
+          <label>Verify</label>
+          <itemset nodeset="instance('crop_list')/root/item[name =  current()/../crop ]">
+            <value ref="name"/>
+            <label ref="jr:itext(itextId)"/>
+          </itemset>
+        </select1>
+        <group ref="/repeat-relative-current/rep/group">
+          <select1 ref="/repeat-relative-current/rep/group/sel_b">
+            <label>Verify</label>
+            <itemset nodeset="instance('crop_list')/root/item[name =  current()/../../crop ]">
+              <value ref="name"/>
+              <label ref="jr:itext(itextId)"/>
+            </itemset>
+          </select1>
+        </group>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

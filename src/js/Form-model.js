@@ -881,7 +881,8 @@ FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
 };
 
 /**
- * There is a huge bug in JavaRosa that has resulted in the usage of incorrect formulae on nodes inside repeat nodes.
+ * There is a huge historic issue (stemming from JavaRosa) that has resulted in the usage of incorrect formulae 
+ * on nodes inside repeat nodes.
  * Those formulae use absolute paths when relative paths should have been used. See more here:
  * http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms
  *
@@ -894,8 +895,9 @@ FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
  * E.g. '/data/rep_a/node_a' could become '/data/rep_a[2]/node_a' if the context is inside
  * the second rep_a repeat.
  *
- * This function should be removed as soon as JavaRosa (or maybe just pyxform) fixes the way those formulae
- * are created (or evaluated).
+ * This function should be removed when we can reasonbly expect not many 'old XForms' to be in use any more.
+ * 
+ * Already it should leave proper XPaths untouched.
  *
  * @param  {string} expr        the XPath expression
  * @param  {string} selector    of the (context) node on which expression is evaluated
@@ -1219,7 +1221,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
     if ( !this.convertedExpressions[ cacheKey ] ) {
         expr = expr.trim();
         expr = this.replaceInstanceFn( expr );
-        expr = this.replaceCurrentFn( expr, selector );
+        expr = this.replaceCurrentFn( expr, this.getXPath( context, 'instance', true ) );
         // shiftRoot should come after replaceCurrentFn
         expr = this.shiftRoot( expr );
         // path corrections for repeated nodes: http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms
