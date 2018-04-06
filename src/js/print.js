@@ -5,6 +5,7 @@
  */
 
 var $ = require( 'jquery' );
+var Promise = require( 'lie' );
 var dpi, printStyleSheet;
 var $printStyleSheetLink;
 
@@ -78,66 +79,71 @@ function isGrid() {
 }
 
 function fixGrid( paper ) {
-    var $row, $el, top, rowTop, maxWidth, diff;
-
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
     $( '.main' ).css( 'width', getPaperPixelWidth( paper ) ).addClass( 'print-width-adjusted' );
     // wait for browser repainting after width change
-    setTimeout( function() {
-        // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
-        maxWidth = $( '#form-title' ).outerWidth() - 1;
-        var $els = $( '.question, .note, .trigger' ).not( '.draft' );
+    return new Promise( function( resolve ) {
+        setTimeout( function() {
+            var $row;
+            var rowTop;
+            // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
+            var maxWidth = $( '#form-title' ).outerWidth() - 1;
+            var $els = $( '.question, .note, .trigger' ).not( '.draft' );
 
-        $els.each( function( index ) {
-            var lastElement = index === $els.length - 1;
-            $el = $( this );
-            top = $el.offset().top;
-            rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
-            $row = $row || $el;
+            $els.each( function( index ) {
+                var lastElement = index === $els.length - 1;
+                var $el = $( this );
+                var top = $el.offset().top;
+                rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
+                $row = $row || $el;
 
-            if ( top === rowTop ) {
-                $row = $row.add( $el );
-            }
-
-            if ( top > rowTop || lastElement ) {
-                var height,
-                    widths = [],
-                    cumulativeWidth = 0,
-                    maxHeight = 0;
-
-                $row.each( function() {
-                    height = $( this ).outerHeight();
-                    maxHeight = ( height > maxHeight ) ? height : maxHeight;
-                    widths.push( Number( $( this ).css( 'width' ).replace( 'px', '' ) ) );
-                } );
-                $row.addClass( 'print-height-adjusted' ).css( 'height', maxHeight + 'px' );
-
-                // adjusts widths if w-values don't add up to 100%
-                widths.forEach( function( width ) {
-                    cumulativeWidth += width;
-                } );
-
-                if ( cumulativeWidth < maxWidth ) {
-
-                    diff = maxWidth - cumulativeWidth;
-                    $row.each( function( index ) {
-                        var width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
-                        // round down to 2 decimals to avoid 100.001% totals
-                        $( this )
-                            .css( 'width', ( Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100 ) + '%' )
-                            .addClass( 'print-width-adjusted' );
-                    } );
+                if ( top === rowTop ) {
+                    $row = $row.add( $el );
                 }
-                // start a new row
-                $row = $el;
-                rowTop = $el.offset().top;
-            } else if ( rowTop < top ) {
-                console.error( 'unexpected question top position: ', top, 'for element:', $el, 'expected >=', rowTop );
-            }
-        } );
 
-        $( window ).trigger( 'printviewready' );
-    }, 1000 );
+                if ( top > rowTop || lastElement ) {
+                    var widths = [];
+                    var cumulativeWidth = 0;
+                    var maxHeight = 0;
+
+                    $row.each( function() {
+                        var width = Number( $( this ).css( 'width' ).replace( 'px', '' ) );
+                        widths.push( width );
+                        cumulativeWidth += width;
+                    } );
+
+                    // adjusts widths if w-values don't add up to 100%
+                    if ( cumulativeWidth < maxWidth ) {
+                        var diff = maxWidth - cumulativeWidth;
+                        $row.each( function( index ) {
+                            var width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
+                            // round down to 2 decimals to avoid 100.001% totals
+                            $( this )
+                                .css( 'width', ( Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100 ) + '%' )
+                                .addClass( 'print-width-adjusted' );
+                        } );
+                    }
+
+                    $row.each( function() {
+                        var height = $( this ).outerHeight();
+                        maxHeight = ( height > maxHeight ) ? height : maxHeight;
+                    } );
+
+                    $row.addClass( 'print-height-adjusted' ).css( 'height', maxHeight + 'px' );
+
+                    // start a new row
+                    $row = $el;
+                    rowTop = $el.offset().top;
+                } else if ( rowTop < top ) {
+                    console.error( 'unexpected question top position: ', top, 'for element:', $el, 'expected >=', rowTop );
+                }
+            } );
+
+            // In case anybody is using this event.
+            $( window ).trigger( 'printviewready' );
+            resolve();
+        }, 300 );
+    } );
 }
 
 function getPaperPixelWidth( paper ) {
@@ -186,10 +192,11 @@ function confirmPaperSettingsAndPrint( confirm ) {
     var options = {
         posButton: 'Prepare',
         posAction: function( values ) {
-            fixGrid( values );
-            $( window ).one( 'printviewready', function() {
-                window.print();
-            } );
+            fixGrid( values )
+                .then( function() {
+                    window.print();
+                } )
+                .catch( console.error );
         },
         negButton: 'Close',
         negAction: function() {
