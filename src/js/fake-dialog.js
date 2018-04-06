@@ -27,7 +27,19 @@ function confirm( content ) {
     } );
 }
 
+function prompt( content, def ) {
+    return new Promise( function( resolve, reject ) {
+        var value = window.prompt( content, def );
+        if ( value ) {
+            resolve( value );
+        } else {
+            reject();
+        }
+    } );
+}
+
 module.exports = {
     alert: alert,
     confirm: confirm,
+    prompt: prompt
 };

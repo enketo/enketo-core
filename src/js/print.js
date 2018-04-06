@@ -8,6 +8,7 @@ var $ = require( 'jquery' );
 var Promise = require( 'lie' );
 var dpi, printStyleSheet;
 var $printStyleSheetLink;
+var dialog = require( 'enketo/dialog' );
 
 // make sure setDpi is not called until DOM is ready
 $( document ).ready( function() {
@@ -60,6 +61,7 @@ function styleToAll() {
     printStyleSheet.media.mediaText = 'all';
     // Firefox:
     $printStyleSheetLink.attr( 'media', 'all' );
+    return !!printStyleSheet;
 }
 
 /**
@@ -175,64 +177,44 @@ function getPaperPixelWidth( paper ) {
     }
 
     paper.format = typeof paper.format === 'string' && typeof FORMATS[ paper.format ] !== 'undefined' ? paper.format : 'A4';
-
     printWidth = ( paper.landscape === true ) ? FORMATS[ paper.format ][ 1 ] : FORMATS[ paper.format ][ 0 ];
 
     return ( ( printWidth - ( 2 * paper.margin ) ) * dpi ) + 'px';
 }
 
-/**
- * Show print setting dialog and proceed upon user's direction.
- */
-function confirmPaperSettingsAndPrint( confirm ) {
-    var texts = {
-        dialog: 'print',
-        heading: 'Select Print Settings'
-    };
-    var options = {
-        posButton: 'Prepare',
-        posAction: function( values ) {
-            fixGrid( values )
-                .then( function() {
-                    window.print();
-                } )
-                .catch( console.error );
-        },
-        negButton: 'Close',
-        negAction: function() {
-            styleReset();
-        },
-        afterAction: function() {
-            setTimeout( function() {
-                styleReset();
-            }, 1500 );
-        }
-    };
-
-    // TODO: would be nice if fixGrid can become synchronous again or
-    // a progress bar is shown when it is churning away.
-
-    confirm( texts, options );
-}
 
 /**
- * Prints the form after first setting page breaks (every time it is called)
+ * Prints the form after first preparing the Grid (every time it is called).
+ * 
+ * It's just demo function that only collects paper format and should be replaced
+ * in your app with a dialog that collects a complete paper format (size, margin, orientation);
  */
-function printForm( confirm, theme ) {
+function print( theme ) {
     if ( theme === 'grid' || ( !theme && isGrid() ) ) {
-        styleToAll();
-        // add temp reset button, just in case somebody gets stuck in print view
-        $( '<button class="btn back-to-screen-view">Back to Normal View</button>' ).prependTo( $( 'form.or' ) ).on( 'click', function() {
-            styleReset();
-        } );
-        confirmPaperSettingsAndPrint( confirm );
+        var swapped = false;
+        dialog.prompt( 'Enter valid paper format', 'A4' )
+            .then( function( format ) {
+                swapped = styleToAll();
+                return fixGrid( {
+                    format: format
+                } );
+            } )
+            .then( window.print )
+            .catch( console.error )
+            .then( function() {
+                if ( swapped ) {
+                    setTimeout( styleReset, 500 );
+                }
+            } );
     } else {
         window.print();
     }
 }
 
+//window.printthis = print;
+
 module.exports = {
-    printForm: printForm,
+    print: print,
     fixGrid: fixGrid,
     styleToAll: styleToAll,
     styleReset: styleReset,
