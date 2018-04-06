@@ -4,6 +4,7 @@
 
 var Form = require( '../../src/js/Form' );
 var $ = require( 'jquery' );
+var Promise = require( 'lie' );
 var forms = require( '../mock/forms' );
 
 var loadForm = function( filename, editStr, options, session ) {
@@ -393,6 +394,7 @@ describe( 'repeat functionality', function() {
     } );
 
     describe( 'ordinals are set for default repeat instances in the default model upon initialization', function() {
+        /*
         var config = require( 'enketo/config' );
         var dflt = config.repeatOrdinals;
         beforeAll( function() {
@@ -402,9 +404,10 @@ describe( 'repeat functionality', function() {
         afterAll( function() {
             config.repeatOrdinals = dflt;
         } );
+        */
         // this test is only interested in the model, but adding ordinals to default repeat instances is directed
         // by Form.js
-        // // Very theoretical. Situation will never occur with OC.
+        // Very theoretical. Situation will never occur with OC.
         xit( 'initialize correctly with ordinals if more than one top-level repeat is included in model', function() {
             var f = loadForm( 'nested_repeats.xml' );
             f.init();
