@@ -144,7 +144,7 @@ function fixGrid( paper ) {
             // In case anybody is using this event.
             $( window ).trigger( 'printviewready' );
             resolve();
-        }, 300 );
+        }, 800 );
     } );
 }
 
