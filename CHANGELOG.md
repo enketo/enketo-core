@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Removed
 - function `printForm` in print script **WARNING: Rewrite function call and use the `print` function as an example**.
 
+##### Fixed
+- Add-repeat (+) button not aligned properly in Grid theme when no repeats exist.
+
 [4.48.1] - 2018-04-06
 ---------------------
 ##### Fixed

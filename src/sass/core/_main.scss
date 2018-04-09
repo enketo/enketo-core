@@ -524,7 +524,7 @@ select {
     }
 }
 
-.or-repeat:not(:empty)+.or-repeat-info {
+.or-repeat-info:not(:empty) {
     padding-top: 10px;
 }
 

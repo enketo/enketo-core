@@ -330,8 +330,9 @@ h4+.or-repeat {
     }
 }
 
-.or-repeat:not(:empty)+.or-repeat-info {
+.or-repeat-info:not(:empty) {
     flex: 100%;
+    width: 100%;
     margin-right: -1px;
     border-bottom: $grid-border;
     border-left: $grid-border;
