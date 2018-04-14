@@ -4,6 +4,7 @@ var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var $ = require( 'jquery' );
 var types = require( '../../js/types' );
+var utils = require( '../../js/utils' );
 require( 'bootstrap-datepicker' );
 require( '../../js/dropdown.jquery' );
 
@@ -102,8 +103,15 @@ DatepickerExtended.prototype._setChangeHandler = function( $fakeDateI ) {
         var showValue = '';
 
         if ( value.length > 0 ) {
-            value = ( settings.format === 'yyyy-mm' ) ? value + '-01' : ( settings.format === 'yyyy' ) ? value + '-01-01' : value;
-            convertedValue = types.date.convert( value );
+            // Note: types.date.convert considers numbers to be a number of days since the epoch 
+            // as this is what the XPath evaluator may return.
+            // For user-entered input, we want to consider a Number value to be incorrect, expect for year input.
+            if ( utils.isNumber( value ) && settings.format !== 'yyyy' ) {
+                convertedValue = '';
+            } else {
+                value = settings.format === 'yyyy-mm' ? value + '-01' : ( settings.format === 'yyyy' ? value + '-01-01' : value );
+                convertedValue = types.date.convert( value );
+            }
         }
         // Here we have to do something unusual to prevent native inputs from automatically 
         // changing 2012-12-32 into 2013-01-01

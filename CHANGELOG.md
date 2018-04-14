@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.49.0] - 2018-04-14
 ---------------------
 ##### Removed
 - function `printForm` in print script **WARNING: Rewrite function call and use the `print` function as an example**.
 
 ##### Fixed
 - Add-repeat (+) button not aligned properly in Grid theme when no repeats exist.
+- Manual date input without hyphen (i.e. large number) is converted to non-sensible date.
 
 [4.48.1] - 2018-04-06
 ---------------------
