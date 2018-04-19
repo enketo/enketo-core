@@ -70,8 +70,7 @@ function initializeForm() {
             webMapId: 'f2e9b762544945f390ca4ac3671cfa72',
             hasZ: true
         },
-        'clearIrrelevantImmediately': true,
-        'goTo': true
+        'clearIrrelevantImmediately': true
     } );
     // for debugging
     window.form = form;

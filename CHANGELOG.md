@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased] 
+----------------------
+##### Changed
+- GoTo function separated from form.init and should now be called separately with form.goTo(xpath). **WARNING: Update app if GoTo functionality was used.**
+
 [4.49.0] - 2018-04-14
 ---------------------
 ##### Removed

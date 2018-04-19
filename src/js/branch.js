@@ -260,7 +260,7 @@ module.exports = {
      * Activates form controls.
      * This function is separated so it can be overridden in custom apps.
      * 
-     * @param  {[type]} $brancNode [description]
+     * @param  {[type]} $branchNode [description]
      * @return {[type]}            [description]
      */
     activate: function( $branchNode ) {

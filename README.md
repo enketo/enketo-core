@@ -42,16 +42,20 @@ var data = {
   session: {}
 };
 
-// form-specific configuration
+// Form-specific configuration
 var options = {
   clearIrrelevantImmediately: true  // this is the default, it can be omitted
 }
 
-// instantiate a form, with 2 parameters
+// Instantiate a form, with 2 parameters
 var form = new Form( formSelector, data, options);
 
-// initialize the form and capture any load errors
+// Initialize the form and capture any load errors
 var loadErrors = form.init();
+
+// If desired, scroll to a specific question with any XPath location expression,
+// and aggregate any loadErrors.
+loadErrors = loadErrors.concat( form.goTo( '//repeat[3]/node' ) );
 
 // submit button handler for validate button
 $( '#submit' ).on( 'click', function() {
@@ -141,21 +145,6 @@ new Form(formselector, data, {
 If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
 
 In the second case the irrelevant values will not be cleared until `form.validate()` is called (usually when the user marks a record as complete).
-
-#### Go to specific question upon load
-
-```
-new Form(formselector, data, { 
-  goTo: true
-});
-```
-
-This feature is designed for views that show an existing record (e.g. edit views) and want to jump to a specific question upon load. This can be done with a hash (fragment identifier) in the URL. The hash contains a valid XPath to the XML model node. It could have any valid format eg:
-
-* http://example.org/form#/path/to/node
-* http://example.org/form#//node
-* http://example.org/form#//repeat[3]/node
-* http://example.org/form#//repeat[enk:ordinal="3"]/node
 
 #### Print only the "relevant" parts of the form
 

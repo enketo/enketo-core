@@ -218,15 +218,6 @@ Form.prototype.init = function() {
 
         this.editStatus = false;
 
-        if ( this.options.goTo === true && location.hash ) {
-            // if goTo fails (not found), it will return false
-            if ( !this.goTo( this.getGoToTarget( location.hash ) ) ) {
-                loadErrors.push( t( 'alert.gotonotfound.msg', {
-                    path: location.hash.substring( 1 )
-                } ) );
-            }
-        }
-
         if ( this.options.printRelevantOnly !== false ) {
             this.view.$.addClass( 'print-relevant-only' );
         }
@@ -247,13 +238,22 @@ Form.prototype.init = function() {
     return loadErrors;
 };
 
+Form.prototype.goTo = function( xpath ) {
+    var errors = [];
+    if ( !this.goToTarget( this.getGoToTarget( xpath ) ) ) {
+        errors.push( t( 'alert.gotonotfound.msg', {
+            path: location.hash.substring( 1 )
+        } ) );
+    }
+    return errors;
+};
+
 /**
  * Obtains a string of primary instance.
  * 
  * @param  {!{include: boolean}=} include optional object items to exclude if false
  * @return {string}        XML string of primary instance
  */
-
 Form.prototype.getDataStr = function( include ) {
     include = ( typeof include !== 'object' || include === null ) ? {} : include;
     // By default everything is included
@@ -768,7 +768,7 @@ Form.prototype.validateContent = function( $container ) {
                 .eq( 0 );
 
             if ( $firstError.length > 0 ) {
-                that.goTo( $firstError[ 0 ] );
+                that.goToTarget( $firstError[ 0 ] );
             }
             return $firstError.length === 0;
         } )
@@ -887,8 +887,7 @@ Form.prototype.updateRequiredVisibility = function( n ) {
 };
 
 
-Form.prototype.getGoToTarget = function( hash ) {
-    var path;
+Form.prototype.getGoToTarget = function( path ) {
     var hits;
     var modelNode;
     var target;
@@ -896,11 +895,10 @@ Form.prototype.getGoToTarget = function( hash ) {
     var selector = '';
     var repeatRegEx = /([^[]+)\[(\d+)\]([^[]*$)?/g;
 
-    if ( !hash ) {
+    if ( !path ) {
         return;
     }
 
-    path = hash.substr( 1 );
     modelNode = this.model.node( path ).get().get( 0 );
 
     if ( !modelNode ) {
@@ -932,20 +930,19 @@ Form.prototype.getGoToTarget = function( hash ) {
     return target ? this.input.getWrapNodes( $( target ) ).get( 0 ) : target;
 };
 
-
 /**
  * Scrolls to a HTML Element, flips to the page it is on and focuses on the nearest form control.
  * 
  * @param  {HTMLElement} target A HTML element to scroll to
  */
-Form.prototype.goTo = function( target ) {
+Form.prototype.goToTarget = function( target ) {
     if ( target ) {
         if ( this.pages.active ) {
             // Flip to page
             this.pages.flipToPageContaining( $( target ) );
         }
-        // check if the nearest question or group is hidden after page flip (e.g. by being irrelevant)
-        if ( $( target ).closest( '.question, .or-group, .or-group-data' ).is( ':hidden' ) ) {
+        // check if the nearest question or group is irrelevant after page flip
+        if ( $( target ).closest( '.or-branch.disabled' ).length ) {
             // It is up to the apps to decide what to do with this event.
             $( target ).trigger( 'gotohidden.enketo' );
         }
