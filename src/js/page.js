@@ -262,7 +262,10 @@ module.exports = {
         $closest = $e.closest( '[role="page"]' );
         $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
 
-        this.flipTo( $closest[ 0 ] );
+        // If $e is a comment question, and it is not inside a group, there may be no $closest.
+        if ( $closest.length ) {
+            this.flipTo( $closest[ 0 ] );
+        }
     },
     focusOnFirstQuestion: function( pageEl ) {
         //triggering fake focus in case element cannot be focused (if hidden by widget)

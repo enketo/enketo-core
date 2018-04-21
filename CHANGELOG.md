@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Min() and max() ignore non-last arguments/nodes with value 0.
+- Goto functionality throws exception if target is a comment question that is not inside a group and the form is in Pages Mode.
 
 [4.49.0] - 2018-04-14
 ---------------------
