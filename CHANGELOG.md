@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - GoTo function separated from form.init and should now be called separately with form.goTo(xpath). **WARNING: Update app if GoTo functionality was used.**
 
+##### Fixed
+- Min() and max() ignore non-last arguments/nodes with value 0.
+
 [4.49.0] - 2018-04-14
 ---------------------
 ##### Removed
