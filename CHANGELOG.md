@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased] 
+[4.50.0] - 2018-04-22 
 ----------------------
+##### Added
+- Basic randomize() support to shuffle nodesets (no support for itemsets with itext labels).
+
 ##### Changed
 - GoTo function separated from form.init and should now be called separately with form.goTo(xpath). **WARNING: Update app if GoTo functionality was used.**
 - Increased linespacing for labels of "select" questions.
