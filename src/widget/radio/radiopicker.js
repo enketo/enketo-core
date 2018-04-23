@@ -80,7 +80,7 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
                  * Without this, is it still possible to check a readonly radio button (although it won't propagate to the model).
                  * I think this is the only remnant of the usage of data-checked in Enketo. However, it is
                  * also still relied upon by Esri/Survey123.
-                 */ 
+                 */
                 if ( this.checked && this.parentNode.dataset.checked !== 'true' ) {
                     this.checked = false;
                 }
