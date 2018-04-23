@@ -569,12 +569,15 @@ Form.prototype.validationUpdate = function( updated ) {
 Form.prototype.setEventHandlers = function() {
     var that = this;
 
-    //first prevent default submission, e.g. when text field is filled in and Enter key is pressed
+    // Prevent default submission, e.g. when text field is filled in and Enter key is pressed
     this.view.$.attr( 'onsubmit', 'return false;' );
 
     /*
-     * The .file namespace is used in the filepicker to avoid an infinite loop. 
      * The listener below catches both change and change.file events.
+     * The .file namespace is used in the filepicker to avoid an infinite loop. 
+     * 
+     * Fields with the "ignore" class are dynamically added to the DOM in a widget and are supposed to be handled
+     * by the widget itself, e.g. the search field in a geopoint widget. They should be ignored by the main engine.
      *
      * Readonly fields are not excluded because of this scenario:
      * 1. readonly field has a calculation
