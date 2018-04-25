@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.51.0] - 2018-04-25
 ----------------------
 ##### Added
 - Decimal-time() support.
@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - In Safari, readonly checkboxes and radiobuttons can still be manipulated and WILL modify the record, even if the UI doesn't update.
 - Decimal-date-time() not spec-compliant at all.
+- Filepicker and drawing widgets have functional reset button when they are readonly.
 
 [4.50.0] - 2018-04-22 
 ----------------------

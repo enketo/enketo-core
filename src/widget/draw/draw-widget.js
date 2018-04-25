@@ -127,7 +127,9 @@ DrawWidget.prototype._init = function() {
                     .then( that._updateDownloadLink.bind( that ) );
             }
             return true;
-        } )
+        } );
+    this.disable();
+    this.initialize
         .then( function() {
             that.$widget
                 .find( '.draw-widget__btn-reset' ).on( 'click', that._reset.bind( that ) )
