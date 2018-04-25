@@ -5,8 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Added
+- Decimal-time() support.
+- Distance() support.
+
 ##### Fixed
 - In Safari, readonly checkboxes and radiobuttons can still be manipulated and WILL modify the record, even if the UI doesn't update.
+- Decimal-date-time() not spec-compliant at all.
 
 [4.50.0] - 2018-04-22 
 ----------------------
