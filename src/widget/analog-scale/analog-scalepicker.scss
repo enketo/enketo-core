@@ -173,7 +173,11 @@ $q-pad-right: 0px !default;
 
         @include flex-direction(column);
 
-        width: $analog-picker-width;
+        width: $analog-picker-width; // weird rule to push down vertical slider
+        // so it doesn't interfere with comment icon
+        &.widget:not(.or-comment-widget) {
+            margin-top: 15px;
+        }
 
         .slider {
             @include flex(1);
