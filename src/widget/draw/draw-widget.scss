@@ -74,6 +74,9 @@ $picker-border: 2px solid grey;
     }
     &__footer {
         margin-top: 10px;
+        .draw-widget__btn-reset:disabled {
+            display: none;
+        }
     }
     &__feedback {
         @extend .or-constraint-msg.active;
