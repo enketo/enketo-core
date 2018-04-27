@@ -48,7 +48,6 @@ describe( 'datepicker widget', function() {
                 fakeInput.dispatchEvent( new Event( 'change' ) );
 
                 expect( input.value ).toEqual( '' );
-                expect( input.onchange.calls.count() ).toEqual( 2 );
             } );
         } );
 

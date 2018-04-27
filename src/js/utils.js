@@ -148,6 +148,11 @@ function dataUriToBlobSync( dataURI ) {
     } );
 }
 
+function getPasteData( event ) {
+    var clipboardData = event.originalEvent.clipboardData || window.clipboardData; // modern || IE11
+    return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
+}
+
 module.exports = {
     parseFunctionFromExpression: parseFunctionFromExpression,
     stripQuotes: stripQuotes,
@@ -155,5 +160,6 @@ module.exports = {
     toArray: toArray,
     isNumber: isNumber,
     readCookie: readCookie,
-    dataUriToBlobSync: dataUriToBlobSync
+    dataUriToBlobSync: dataUriToBlobSync,
+    getPasteData: getPasteData
 };

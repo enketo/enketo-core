@@ -97,9 +97,9 @@ DatepickerExtended.prototype._setChangeHandler = function( $fakeDateI ) {
     var $dateI = $( this.element );
     var settings = this.settings;
 
-    $fakeDateI.on( 'change', function() {
+    $fakeDateI.on( 'change paste', function( e ) {
         var convertedValue = '';
-        var value = $fakeDateI.val();
+        var value = e.type === 'paste' ? utils.getPasteData( e ) : $fakeDateI.val();
         var showValue = '';
 
         if ( value.length > 0 ) {
@@ -113,10 +113,15 @@ DatepickerExtended.prototype._setChangeHandler = function( $fakeDateI ) {
                 convertedValue = types.date.convert( value );
             }
         }
+
         // Here we have to do something unusual to prevent native inputs from automatically 
         // changing 2012-12-32 into 2013-01-01
-        if ( $dateI.val() !== convertedValue ) {
-            // convertedValue is '' for invalid 2012-12-32
+        // convertedValue is '' for invalid 2012-12-32
+        if ( convertedValue === '' || $dateI.val() !== convertedValue ) {
+            if ( e.type === 'paste' ) {
+                e.stopImmediatePropagation();
+            }
+
             $dateI.val( convertedValue ).trigger( 'change' ).blur();
         }
 

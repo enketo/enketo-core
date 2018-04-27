@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Comment icon overlaps long label in simple select/select1 questions.
+- Pasted incorrect date value converts to today's date.
 
 [4.51.0] - 2018-04-25
 ----------------------

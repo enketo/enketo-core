@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require( 'jquery' );
+var utils = require( './utils' );
 var KEYBOARD_CUT_PASTE = 'xvc';
 
 function init() {
@@ -25,7 +26,7 @@ function _setNumberMask( selector, validRegex, allowedChars ) {
             return false;
         } )
         .on( 'paste', function( e ) {
-            var val = _getPasteData( e );
+            var val = utils.getPasteData( e );
             // HTML number input fields will trim the pasted value automatically.
             if ( val && validRegex.test( val.trim() ) ) {
                 // Note that this.value will be empty if the pasted value is not a valid number (except in IE11).
@@ -65,11 +66,6 @@ function _isNotPrintableKey( e ) {
 
 function _isKeyboardCutPaste( e ) {
     return KEYBOARD_CUT_PASTE.indexOf( e.key ) !== -1 && ( e.metaKey || e.ctrlKey );
-}
-
-function _getPasteData( e ) {
-    var clipboardData = e.originalEvent.clipboardData || window.clipboardData; // modern || IE11
-    return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
 }
 
 module.exports = {
