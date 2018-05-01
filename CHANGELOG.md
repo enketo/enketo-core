@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.51.2] - 2018-05-01
+---------------------
+##### Changed
+- Added a hook for Enketo Validate to add custom XPath functions.
+
 [4.51.1] - 2018-04-27
 ---------------------
 ##### Changed
