@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<h:html 
+    xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>merge-empty-instance</h:title>
+        <model>
+            <instance>
+                <data id="merge-empty-instance">
+                    <A/>
+                    <B>ch1</B>
+                    <C>
+                        <CA>default</CA>
+                    </C>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="A">
+                <root>
+                    <item>
+                        <label>choice a</label>
+                        <Filter1>Filtered</Filter1>
+                        <name>a</name>
+                    </item>
+                    <item>
+                        <label>choice b</label>
+                        <Filter1>Filtered</Filter1>
+                        <name>b</name>
+                    </item>
+                    <item>
+                        <label>choice c</label>
+                        <name>c</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/A" type="select"/>
+            <bind nodeset="/data/B" type="select"/>
+            <bind nodeset="/data/C" />
+            <bind nodeset="/data/C/CA" relevant="false()"/>
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body class="theme-grid">
+        <select ref="/data/A">
+            <label>select A</label>
+            <itemset nodeset="instance('A')/root/item[Filter1=&quot;Filtered&quot;]">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select>
+        <select ref="/data/B">
+            <label>select B</label>
+            <item>
+                <label>choice 1</label>
+                <value>ch1</value>
+            </item>
+            <item>
+                <label>choice 2</label>
+                <value>ch2</value>
+            </item>
+        </select>
+    </h:body>
+</h:html>

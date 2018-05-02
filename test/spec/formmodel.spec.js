@@ -3,10 +3,10 @@
 'use strict';
 
 var Model = require( '../../src/js/Form-model' );
-var mockForms1 = require( '../mock/forms' );
+var forms = require( '../mock/forms' );
 
 var getModel = function( filename ) {
-    var model = new Model( mockForms1[ filename ].xml_model );
+    var model = new Model( forms[ filename ].xml_model );
     model.init();
     return model;
 };
@@ -1315,6 +1315,36 @@ describe( 'merging an instance into the model', function() {
             expect( loadErrors.length ).toEqual( 1 );
             expect( loadErrors[ 0 ] ).toEqual( 'Invalid primary instance. Missing instanceID node.' );
         } );
+    } );
+
+    describe( 'when the model contains secondary instance', function() {
+        var INSTANCE_A_CONTENT = 'choiceaFilteredachoicebFilteredbchoicecc';
+
+        it( 'leaves those secondary instances intact if empty leaf node in record with default value in XForm', function() {
+            var model = new Model( {
+                modelStr: forms[ 'merge-empty-instance.xml' ].xml_model,
+                instanceStr: '<data id="Problem_Reproducing_Form_retry"><A/><B/><C><CA>hey</CA></C><meta><instanceID>uuid:c</instanceID></meta></data>'
+            } );
+            model.init();
+            var instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
+            expect( instanceContent ).toEqual( INSTANCE_A_CONTENT );
+        } );
+
+        it( 'leaves those secondary instances intact if empty group node in record with childnodes with default value in XForm', function() {
+            var model = new Model( {
+                modelStr: forms[ 'merge-empty-instance.xml' ].xml_model,
+                instanceStr: '<data id="Problem_Reproducing_Form_retry"><A/><B/><C/><meta><instanceID>uuid:c</instanceID></meta></data>'
+            } );
+            model.init();
+            var instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
+            expect( instanceContent ).toEqual( INSTANCE_A_CONTENT );
+
+            // double-check primary instance too:
+            var ca = model.xml.querySelectorAll( 'CA' );
+            expect( ca.length ).toEqual( 1 );
+            expect( ca[ 0 ].textContent ).toEqual( '' );
+        } );
+
     } );
 } );
 

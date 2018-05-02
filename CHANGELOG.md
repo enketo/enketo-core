@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.51.3] - 2018-05-02
+---------------------
+##### Fixed
+- When a record is loaded with an empty value for a node that has a default value in the XForm, all secondary instance values are emptied. 
+
 [4.51.2] - 2018-05-01
 ---------------------
 ##### Changed

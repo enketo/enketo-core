@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<h:html 
+  xmlns="http://www.w3.org/2002/xforms" 
+  xmlns:ev="http://www.w3.org/2001/xml-events" 
+  xmlns:h="http://www.w3.org/1999/xhtml" 
+  xmlns:jr="http://openrosa.org/javarosa" 
+  xmlns:orx="http://openrosa.org/xforms" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>randomize</h:title>
+    <model>
+      <instance>
+        <randomize id="randomize">
+          <crop/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </randomize>
+      </instance>
+      <instance id="crop_list">
+        <root>
+          <item>
+            <label>Banana</label>
+            <name>banana</name>
+          </item>
+          <item>
+            <label>Beans</label>
+            <name>beans</name>
+          </item>
+          <item>
+            <label>Cacao</label>
+            <name>cacao</name>
+          </item>
+          <item>
+            <label>Coffee</label>
+            <name>coffee</name>
+          </item>
+          <item>
+            <label>Fodder Grass</label>
+            <name>foddergrass</name>
+          </item>
+          <item>
+            <label>Fodder Tree</label>
+            <name>foddertree</name>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/randomize/crop" type="select"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/randomize/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select ref="/randomize/crop" appearance="minimal">
+      <label>Select a crop from randomized list</label>
+      <itemset nodeset="randomize(instance('crop_list')/root/item)">
+        <value ref="name"/>
+        <label ref="label"/>
+      </itemset>
+    </select>
+  </h:body>
+</h:html>
