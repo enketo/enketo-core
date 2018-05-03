@@ -3,8 +3,6 @@
  * Horizontal Choices Widget
  *
  */
-
-
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 
@@ -34,11 +32,13 @@ HorizontalChoices.prototype.constructor = HorizontalChoices;
 
 HorizontalChoices.prototype._init = function() {
     $( this.element ).find( '.option-wrapper' ).each( function() {
-        var $wrapper = $( this ),
-            $options = $wrapper.find( 'label' );
+        var COLUMNS = 3;
+        var $wrapper = $( this );
+        var fillers = COLUMNS - $wrapper.find( 'label' ).length % COLUMNS;
 
-        if ( ( $options.length % 3 ) === 2 ) {
+        while ( fillers < COLUMNS && fillers > 0 ) {
             $wrapper.append( '<label class="filler"></label>' );
+            fillers--;
         }
     } );
 };
