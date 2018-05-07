@@ -39,7 +39,7 @@
         "grunt-browserify": "5.3.x",
         "grunt-concurrent": "2.x.x",
         "grunt-contrib-connect": "1.0.x",
-        "grunt-contrib-uglify": "3.2.x",
+        "grunt-contrib-uglify": "3.3.x",
         "grunt-contrib-watch": "1.x.x",
         "grunt-eslint": "^20.1.0",
         "grunt-jsbeautifier": "0.x.x",
@@ -54,7 +54,7 @@
         "karma-firefox-launcher": "1.1.x",
         "karma-jasmine": "1.1.x",
         "karma-safari-launcher": "1.0.x",
-        "load-grunt-tasks": "3.x.x",
+        "load-grunt-tasks": "4.x.x",
         "time-grunt": "1.x.x"
     },
     "browser": {
