@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[1.51.4] - 2018-05-14
 ---------------------
 ##### Fixed
 - Appearance "horizontal" enlarges the last option if the remainder of the options modulo 3 is 1.
+- If all repeats containing a question that has skip logic are removed, an exception occurs when obtaining the model as string without irrelevant nodes.
 
 [4.51.3] - 2018-05-02
 ---------------------

@@ -386,9 +386,12 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     }
 
     // If a new repeat was created, update the cached collection of all form controls with that attribute
-    if ( !this.$all[ attr ] ) {
+    // If a repeat was deleted ( update.repeatPath && !updated.cloned), rebuild cache
+    if ( !this.$all[ attr ] || ( updated.repeatPath && !updated.cloned ) ) {
+        // (re)build the cache
         this.$all[ attr ] = this.filterRadioCheckSiblings( this.view.$.find( '[' + attr + ']' ) );
     } else if ( updated.cloned && $repeatControls ) {
+        // update the cache
         this.$all[ attr ] = this.$all[ attr ].add( $repeatControls );
     }
 

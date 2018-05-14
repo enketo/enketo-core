@@ -922,6 +922,18 @@ describe( 'branching functionality', function() {
         } );
     } );
 
+    describe( 'on a question inside a REMOVED repeat', function() {
+        it( 'does not try to evaluate it', function() {
+            var form = loadForm( 'repeat-irrelevant-date.xml' );
+            form.init();
+            form.view.$.find( '[name="/repeat/rep"] button.remove' ).click();
+            // This is testing what happens inside getDataStrWithoutIrrelevantNodes
+            // It tests whether the cache is updated when a repeat is removed.s
+            // https://github.com/kobotoolbox/enketo-express/issues/1014
+            expect( form.getRelatedNodes( 'data-relevant' ).length ).toEqual( 0 );
+        } );
+    } );
+
 } );
 
 describe( 'obtaining XML string from form without irrelevant nodes', function() {
