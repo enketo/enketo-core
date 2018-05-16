@@ -1,4 +1,4 @@
-/* global describe, require, it, xit, beforeEach, expect, spyOn, beforeAll, afterAll*/
+/* global describe, require, it, xit, beforeEach, expect, spyOn, afterAll*/
 
 'use strict';
 
@@ -348,7 +348,7 @@ describe( 'repeat functionality', function() {
             xml_model: forms[ 'nested-repeats-nasty.xml' ].xml_model
         };
         // both repeats get the 'minimal appearance'
-        forms[ 'nested-repeats-nastier' ].html_form = forms[ 'nested-repeats-nasty.xml' ].html_form.replace( "class=\"or-repeat ", "class=\"or-repeat or-appearance-minimal " );
+        forms[ 'nested-repeats-nastier' ].html_form = forms[ 'nested-repeats-nasty.xml' ].html_form.replace( 'class="or-repeat ', 'class="or-repeat or-appearance-minimal ' );
         form = loadForm( 'nested-repeats-nastier', instanceStr );
         form.init();
 
@@ -365,7 +365,7 @@ describe( 'repeat functionality', function() {
             xml_model: forms[ 'nested-repeats-nasty.xml' ].xml_model
         };
         // both repeats get the 'minimal appearance'
-        forms[ 'nested-repeats-nastier' ].html_form = forms[ 'nested-repeats-nasty.xml' ].html_form.replace( "class=\"or-repeat ", "class=\"or-repeat or-appearance-minimal " );
+        forms[ 'nested-repeats-nastier' ].html_form = forms[ 'nested-repeats-nasty.xml' ].html_form.replace( 'class="or-repeat ', 'class="or-repeat or-appearance-minimal ' );
         form = loadForm( 'nested-repeats-nastier' );
         form.init();
 
@@ -1687,7 +1687,7 @@ describe( 'Form.prototype', function() {
         $.each( {
             'jr:choice-name( /choice-regex/translator, " /choice-regex/translator ")': '"__MOCK_VIEW_VALUE__"',
             '     jr:choice-name(       /choice-regex/translator     ,  " /choice-regex/translator "   )    ': '     "__MOCK_VIEW_VALUE__"    ',
-            "if(string-length( /embedded-choice/translator ) !=0, jr:choice-name( /embedded-choice/translator ,' /embedded-choice/translator '),'unspecified')": "if(string-length( /embedded-choice/translator ) !=0, \"__MOCK_VIEW_VALUE__\",'unspecified')",
+            'if(string-length( /embedded-choice/translator ) !=0, jr:choice-name( /embedded-choice/translator ,\' /embedded-choice/translator \'),\'unspecified\')': 'if(string-length( /embedded-choice/translator ) !=0, "__MOCK_VIEW_VALUE__",\'unspecified\')',
         }, function( initial, expected ) {
             it( 'should replace ' + initial + ' with ' + expected, function() {
                 // given
