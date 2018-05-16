@@ -9,9 +9,12 @@
 var $ = require( 'jquery' );
 
 module.exports = {
-    update: function( updated ) {
+    update: function( updated, filter ) {
         var $nodes;
         var that = this;
+
+        // Filter is used in custom applications that make a distinction between types of calculations.
+        filter = filter || '';
 
         if ( !this.form ) {
             throw new Error( 'Calculation module not correctly instantiated with form property.' );
@@ -21,13 +24,13 @@ module.exports = {
 
         if ( updated.relevantPath ) {
             // Questions that are descendants of a group:
-            $nodes = this.form.getRelatedNodes( 'data-calculate', '[name^="' + updated.relevantPath + '/"]' )
+            $nodes = this.form.getRelatedNodes( 'data-calculate', '[name^="' + updated.relevantPath + '/"]' + filter )
                 // Individual questions:
-                .add( this.form.getRelatedNodes( 'data-calculate', '[name="' + updated.relevantPath + '"]' ) )
+                .add( this.form.getRelatedNodes( 'data-calculate', '[name="' + updated.relevantPath + '"]' + filter ) )
                 // Individual radiobutton questions with a calculate....:
-                .add( this.form.getRelatedNodes( 'data-calculate', '[data-name="' + updated.relevantPath + '"]' ) );
+                .add( this.form.getRelatedNodes( 'data-calculate', '[data-name="' + updated.relevantPath + '"]' + filter ) );
         } else {
-            $nodes = this.form.getRelatedNodes( 'data-calculate', '', updated );
+            $nodes = this.form.getRelatedNodes( 'data-calculate', filter, updated );
         }
 
         $nodes.each( function() {
