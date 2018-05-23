@@ -32,7 +32,7 @@ Comment.prototype._init = function() {
 
         // Any <button> inside a <label> receives click events if the <label> is clicked!
         // See http://codepen.io/MartijnR/pen/rWJeOG?editors=1111
-        this.$commentButton = $( '<a class="btn-icon-only btn-comment" type="button" href="#"><i class="icon"> </i></a>' );
+        this.$commentButton = $( '<a class="btn-icon-only btn-comment aria-label="comment" type="button" href="#"><i class="icon"> </i></a>' );
         this._setCommentButtonState( this.element.value );
         this.$linkedQuestion.find( '.question-label' ).last().after( this.$commentButton );
         this._setCommentButtonHandler();

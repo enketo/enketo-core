@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Improved accessibility of buttons and links.
+
 [4.51.5] - 2018-05-23
 ---------------------
 ##### Changed

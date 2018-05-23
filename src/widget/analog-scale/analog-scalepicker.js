@@ -129,7 +129,7 @@ Analogscalepicker.prototype._getNumberHtml = function( num ) {
 Analogscalepicker.prototype._renderResetButton = function() {
     var that = this;
 
-    this.$resetBtn = $( '<button class="btn-icon-only btn-reset"><i class="icon icon-refresh"></i></button>' )
+    this.$resetBtn = $( '<button class="btn-icon-only btn-reset" aria-label="reset"><i class="icon icon-refresh"></i></button>' )
         .appendTo( this.$widget )
         .on( 'click', function() {
             $( that.element ).slider( 'setValue', 0, false );

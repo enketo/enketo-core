@@ -52,8 +52,8 @@ Filepicker.prototype._init = function() {
     this.$widget = $(
             '<div class="widget file-picker">' +
             '<input class="ignore fake-file-input"/>' +
-            ( this.props.readonly ? '' : '<button class="btn-icon-only btn-reset" type="button"><i class="icon icon-refresh"> </i></button>' ) +
-            '<a class="btn-icon-only btn-download" download href=""><i class="icon icon-download"> </i></a>' +
+            ( this.props.readonly ? '' : '<button class="btn-icon-only btn-reset" aria-label="reset" type="button"><i class="icon icon-refresh"> </i></button>' ) +
+            '<a class="btn-icon-only btn-download" aria-label="download" download href=""><i class="icon icon-download"> </i></a>' +
             '<div class="file-feedback"></div>' +
             '<div class="file-preview"></div>' +
             '</div>' )

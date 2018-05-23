@@ -321,7 +321,7 @@ Geopicker.prototype._getProps = function() {
  * Adds a point button in the point navigation bar
  */
 Geopicker.prototype._addPointBtn = function() {
-    this.$points.find( '.addpoint' ).before( '<a href="#" class="point"> </a>' );
+    this.$points.find( '.addpoint' ).before( '<a href="#" class="point" aria-label="point"> </a>' );
 };
 
 /**
@@ -364,7 +364,7 @@ Geopicker.prototype._addDomElements = function() {
         '<label class="geo long">' + lngTxt + '<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
         '<label class="geo alt">' + altTxt + '<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
         '<label class="geo acc">' + accTxt + '<input class="ignore" name="acc" type="number" step="0.1" /></label>' +
-        '<button type="button" class="btn-icon-only btn-remove"><span class="icon icon-trash"> </span></button>' +
+        '<button type="button" class="btn-icon-only btn-remove" aria-label="remove"><span class="icon icon-trash"> </span></button>' +
         '</div>' +
         '</div>'
     );
@@ -383,7 +383,7 @@ Geopicker.prototype._addDomElements = function() {
         this.$widget.find( '.search-bar' ).removeClass( 'no-map' ).after( map );
         this.$map = this.$widget.find( '.map-canvas' );
         // add the hide/show inputs button
-        this.$map.parent().append( '<button type="button" class="toggle-input-visibility-btn"> </button>' );
+        this.$map.parent().append( '<button type="button" class="toggle-input-visibility-btn" aria-label="toggle input"> </button>' );
     } else {
         this.$map = $();
     }

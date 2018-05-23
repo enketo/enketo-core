@@ -302,13 +302,13 @@ DrawWidget.prototype._getMarkup = function() {
         '<button type="button" class="hide-canvas-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' : '';
     var $widget = $( '<div class="widget draw-widget">' +
         '<div class="draw-widget__body">' + fullscreenBtns + load +
-        '<canvas class="draw-widget__body__canvas noSwipe disabled" tabindex="1"></canvas>' +
+        '<canvas class="draw-widget__body__canvas noSwipe disabled" tabindex="0"></canvas>' +
         '<div class="draw-widget__colorpicker"></div>' +
-        ( this.props.type === 'signature' ? '' : '<button class="btn-icon-only draw-widget__undo" type=button><i class="icon icon-undo"> </i></button>' ) +
+        ( this.props.type === 'signature' ? '' : '<button class="btn-icon-only draw-widget__undo" aria-label="undo" type=button><i class="icon icon-undo"> </i></button>' ) +
         '</div>' +
         '<div class="draw-widget__footer">' +
-        '<button type="button" class="btn-icon-only draw-widget__btn-reset" ><i class="icon icon-refresh"> </i></button>' +
-        '<a class="btn-icon-only btn-download" download href=""><i class="icon icon-download"> </i></a>' +
+        '<button type="button" class="btn-icon-only draw-widget__btn-reset" aria-label="reset"><i class="icon icon-refresh"> </i></button>' +
+        '<a class="btn-icon-only btn-download" aria-label="download" download href=""><i class="icon icon-download"> </i></a>' +
         '<div class="draw-widget__feedback"></div>' +
         '</div>' +
         '</div>' );
