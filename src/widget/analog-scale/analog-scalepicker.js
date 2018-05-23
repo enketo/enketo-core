@@ -29,7 +29,7 @@ Analogscalepicker.prototype.constructor = Analogscalepicker;
  * Initialize
  */
 Analogscalepicker.prototype._init = function() {
-    var $question = $( this.element ).closest( '.question' );
+    var $question = $( this.element ).closest( '.question' ).addClass( 'initialized' );
     var $input = $( this.element );
     var value = Number( this.element.value ) || -1;
 

@@ -5,7 +5,7 @@ $red: rgb(226, 4, 24);
 $yellow: rgb(253, 211, 3);
 $green: rgb(60, 182, 67);
 
-.or-appearance-distress {
+.or-appearance-distress.initialized {
     //background: green;
     .slider-vertical .slider {
         height: 210px;
@@ -15,8 +15,7 @@ $green: rgb(60, 182, 67);
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         border-bottom: none;
-        margin: 10px 10px 65px 35px;
-        //margin-top: 10px;
+        margin: 10px 10px 65px 35px; //margin-top: 10px;
         @include gradient-vertical-three-colors($red, $yellow, 50%, $green);
     }
     .slider-disabled {
@@ -78,8 +77,10 @@ $green: rgb(60, 182, 67);
 
 // corrections for rtl display
 .or[dir="rtl"] {
-    .slider-vertical .slider-handle {
-        margin-right: -4.5px;
-        margin-left: auto;
+    .or-appearance-distress.initialized {
+        .slider-vertical .slider-handle {
+            margin-right: -4.5px;
+            margin-left: auto;
+        }
     }
 }

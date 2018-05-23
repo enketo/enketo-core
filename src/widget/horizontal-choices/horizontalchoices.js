@@ -40,6 +40,8 @@ HorizontalChoices.prototype._init = function() {
             $wrapper.append( '<label class="filler"></label>' );
             fillers--;
         }
+        // if added to correct question type, add initialized class
+        $( this ).closest( '.question' ).addClass( 'initialized' );
     } );
 };
 

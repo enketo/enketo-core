@@ -30,7 +30,7 @@ ImageMap.prototype._init = function() {
     var img = this.element.querySelector( 'img' );
     this.$inputs = $( this.element ).find( 'input' );
     this.props = this._getProps();
-
+    this.element.classList.add( 'initialized' );
     /*
      * To facilitate Enketo Express' offline webforms,
      * where the img source is populated after form loading, we initialize upon image load

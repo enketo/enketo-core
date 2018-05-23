@@ -35,15 +35,18 @@ Distresspicker.prototype._init = function() {
 
     this.props = this._getProps();
 
-    $( this.element ).slider( {
-        reversed: true,
-        min: -1,
-        max: 10,
-        orientation: 'vertical',
-        step: this.props.step,
-        value: value,
-        enabled: !this.props.readonly
-    } );
+    $( this.element )
+        .slider( {
+            reversed: true,
+            min: -1,
+            max: 10,
+            orientation: 'vertical',
+            step: this.props.step,
+            value: value,
+            enabled: !this.props.readonly
+        } )
+        .closest( '.question' )
+        .addClass( 'initialized' );
     this.$widget = $( this.element ).next( '.widget' );
     this.$slider = this.$widget.find( '.slider' );
     this._addBulb();

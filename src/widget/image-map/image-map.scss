@@ -1,5 +1,5 @@
 // These rules are specific only to this particular widget
-.or-appearance-image-map {
+.or-appearance-image-map.initialized {
     img {
         // avoid image flickering caused by initializing widget upon img load event
         visibility: hidden;

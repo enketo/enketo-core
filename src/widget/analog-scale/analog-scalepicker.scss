@@ -8,7 +8,7 @@ $q-pad-left: 0px !default;
 $q-pad-right: 0px !default;
 
 @mixin ticks($orientation: "vertical") {
-    @if $orientation == "horizontal" {
+    @if $orientation=="horizontal" {
         .scale__number {
             position: relative;
             line-height: 16px;
@@ -66,10 +66,8 @@ $q-pad-right: 0px !default;
     }
 }
 
-.or-appearance-analog-scale {
-    position: relative;
-
-    // using a dirty trick, knowing that only only question-labels with a lang attribute
+.or-appearance-analog-scale.initialized {
+    position: relative; // using a dirty trick, knowing that only only question-labels with a lang attribute
     // are switched when the language changes
     .label-content {
         .question-label.active {
@@ -111,10 +109,7 @@ $q-pad-right: 0px !default;
 
     .slider-handle {
         background: $analog-picker-handle-color;
-        opacity: 0.9;
-
-        // outline: 0;
-   
+        opacity: 0.9; // outline: 0;
     }
 
     .slider--empty {
@@ -190,7 +185,7 @@ $q-pad-right: 0px !default;
         }
 
         .slider-handle {
-            margin-left: -6px;
+            margin-left: -5px;
         }
 
         .scale {
@@ -240,7 +235,7 @@ $q-pad-right: 0px !default;
         }
 
         .slider-handle {
-            margin-top: -5.5px;
+            margin-top: -4.5px;
         }
 
         .scale {
@@ -306,8 +301,10 @@ $q-pad-right: 0px !default;
         }
     }
 
-    &.invalid-constraint, &.invalid-required {
-        .or-constraint-msg.active, .or-required-msg.active {
+    &.invalid-constraint,
+    &.invalid-required {
+        .or-constraint-msg.active,
+        .or-required-msg.active {
             position: absolute;
             bottom: 10px;
         }
@@ -316,14 +313,14 @@ $q-pad-right: 0px !default;
 
 // corrections for pages mode
 .pages.or [role="page"].current {
-    &.or-appearance-analog-scale:not(.or-appearance-horizontal) {
+    &.or-appearance-analog-scale.initialized:not(.or-appearance-horizontal) {
         @include display-flex;
     }
 }
 
 // corrections for small screens
 @media screen and (max-width: 500px) {
-    .or-appearance-analog-scale {
+    .or-appearance-analog-scale.initialized {
         .slider-horizontal:not(.or-comment-widget) {
             margin-top: 35px;
         }
@@ -358,7 +355,7 @@ $q-pad-right: 0px !default;
 
 // corrections for rtl display
 .or[dir="rtl"] {
-    .or-appearance-analog-scale {
+    .or-appearance-analog-scale.initialized {
         .slider-vertical {
             .slider {
                 left: auto;

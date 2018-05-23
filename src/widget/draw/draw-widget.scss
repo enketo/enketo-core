@@ -12,8 +12,10 @@ $picker-border: 2px solid grey;
 .or-appearance-draw,
 .or-appearance-signature,
 .or-appearance-annotate {
-    input[type="text"] {
-        display: none;
+    &.initialized {
+        input[type="text"] {
+            display: none;
+        }
     }
 }
 
