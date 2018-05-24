@@ -970,7 +970,7 @@ Form.getRequiredTransformerVersion = function() {
     console.deprecate( 'Form.getRequiredTransformerVersion()', 'Form.requiredTransformerVersion' );
     return Form.requiredTransformerVersion;
 };
-Form.requiredTransformerVersion = '1.25.2';
+Form.requiredTransformerVersion = '1.26.0';
 
 module.exports = Form;
 
