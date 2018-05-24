@@ -9,17 +9,15 @@ $fullscreen-margin-v: 50px;
 $fullscreen-margin-h: 15px;
 $picker-border: 2px solid grey;
 
-.or-appearance-draw,
-.or-appearance-signature,
-.or-appearance-annotate {
-    &.initialized {
-        input[type="text"] {
-            display: none;
-        }
+.or-draw-initialized,
+.or-signature-initialized,
+.or-annotate-initialized {
+    input[type="text"] {
+        display: none;
     }
 }
 
-.or-appearance-signature {
+.or-signature-initialized {
     .draw-widget__body {
         padding-top: $ratio2 * 100%;
     }
@@ -171,9 +169,7 @@ $picker-border: 2px solid grey;
     }
 }
 
-
-
-.or-appearance-signature {
+.or-signature-initialized {
     .draw-widget.full-screen {
         .draw-widget__body {
             width: calc(100% - 2 * #{$fullscreen-margin-h});
@@ -185,7 +181,7 @@ $picker-border: 2px solid grey;
     }
 }
 
-.or-appearance-annotate {
+.or-annotate-initialized {
     .draw-widget__body {
         margin-top: $fullscreen-margin-v;
     }

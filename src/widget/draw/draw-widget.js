@@ -106,7 +106,7 @@ DrawWidget.prototype._init = function() {
     canvas = this.$widget[ 0 ].querySelector( '.draw-widget__body__canvas' );
 
     $( this.element ).after( this.$widget )
-        .closest( '.question' ).addClass( 'initialized' );
+        .closest( '.question' ).addClass( 'or-' + this.props.type + '-initialized' );
 
     this._handleResize( canvas );
     this._resizeCanvas( canvas );

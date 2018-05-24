@@ -5,7 +5,7 @@ $red: rgb(226, 4, 24);
 $yellow: rgb(253, 211, 3);
 $green: rgb(60, 182, 67);
 
-.or-appearance-distress.initialized {
+.or-distress-initialized {
     //background: green;
     .slider-vertical .slider {
         height: 210px;
@@ -77,7 +77,7 @@ $green: rgb(60, 182, 67);
 
 // corrections for rtl display
 .or[dir="rtl"] {
-    .or-appearance-distress.initialized {
+    .or-distress-initialized {
         .slider-vertical .slider-handle {
             margin-right: -4.5px;
             margin-left: auto;

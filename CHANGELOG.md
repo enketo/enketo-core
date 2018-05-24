@@ -3,18 +3,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.51.6] - 2018-05-24
 ---------------------
 ##### Changed
 - Improved accessibility of buttons and links.
+
+##### Fixed
+- Styling interference occurs when an appearance is added to a question type that doesn't support it.
 
 [4.51.5] - 2018-05-23
 ---------------------
 ##### Changed
 - Facilitate custom apps with different calculation _types_ by making calculation.update overwritable.
-
-##### Fixed
-- Styling interference occurs when an appearance is added to a question type that doesn't support it.
 
 [4.51.4] - 2018-05-14
 ---------------------

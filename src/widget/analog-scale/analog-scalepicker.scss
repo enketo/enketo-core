@@ -66,7 +66,7 @@ $q-pad-right: 0px !default;
     }
 }
 
-.or-appearance-analog-scale.initialized {
+.or-analog-scale-initialized {
     position: relative; // using a dirty trick, knowing that only only question-labels with a lang attribute
     // are switched when the language changes
     .label-content {
@@ -313,14 +313,14 @@ $q-pad-right: 0px !default;
 
 // corrections for pages mode
 .pages.or [role="page"].current {
-    &.or-appearance-analog-scale.initialized:not(.or-appearance-horizontal) {
+    &.or-analog-scale-initialized:not(.or-appearance-horizontal) {
         @include display-flex;
     }
 }
 
 // corrections for small screens
 @media screen and (max-width: 500px) {
-    .or-appearance-analog-scale.initialized {
+    .or-analog-scale-initialized {
         .slider-horizontal:not(.or-comment-widget) {
             margin-top: 35px;
         }
@@ -355,7 +355,7 @@ $q-pad-right: 0px !default;
 
 // corrections for rtl display
 .or[dir="rtl"] {
-    .or-appearance-analog-scale.initialized {
+    .or-analog-scale-initialized {
         .slider-vertical {
             .slider {
                 left: auto;

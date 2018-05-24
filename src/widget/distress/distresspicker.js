@@ -46,7 +46,7 @@ Distresspicker.prototype._init = function() {
             enabled: !this.props.readonly
         } )
         .closest( '.question' )
-        .addClass( 'initialized' );
+        .addClass( 'or-distress-initialized' );
     this.$widget = $( this.element ).next( '.widget' );
     this.$slider = this.$widget.find( '.slider' );
     this._addBulb();

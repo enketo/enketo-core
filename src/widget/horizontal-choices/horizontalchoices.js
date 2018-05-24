@@ -41,7 +41,7 @@ HorizontalChoices.prototype._init = function() {
             fillers--;
         }
         // if added to correct question type, add initialized class
-        $( this ).closest( '.question' ).addClass( 'initialized' );
+        $( this ).closest( '.question' ).addClass( 'or-horizontal-initialized' );
     } );
 };
 
