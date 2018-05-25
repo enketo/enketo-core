@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Added
+- Support to provide external data as XML Document. **Warning: providing an XML string is now considered deprecated usage.**
+
 [4.51.6] - 2018-05-24
 ---------------------
 ##### Changed

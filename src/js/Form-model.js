@@ -23,7 +23,7 @@ var Nodeset;
  * Class dealing with the XML Model of a form
  *
  * @constructor
- * @param {{modelStr: string, ?instanceStr: string, ?external: <{id: string, xmlStr: string }>, ?submitted: boolean }} data:
+ * @param {{modelStr: string, ?instanceStr: string, ?external: <{id: string, xml: ( string || xmlDocument) }>, ?submitted: boolean }} data:
  *                            data object containing XML model, 
  *                            (partial) XML instance to load, 
  *                            external data array
@@ -125,7 +125,22 @@ FormModel.prototype.init = function() {
             for ( i = secondaryInstanceChildren.length - 1; i >= 0; i-- ) {
                 instanceDoc.removeChild( secondaryInstanceChildren[ i ] );
             }
-            instanceDoc.appendChild( $.parseXML( instance.xmlStr ).firstChild );
+            var rootEl;
+            if ( typeof instance.xml === 'string' || instance.xmlStr ) {
+                console.deprecate( 'External instance provided as string', 'provide external instance as XML Document' );
+                rootEl = $.parseXML( instance.xml || instance.xmlStr ).firstChild;
+            } else if ( instance.xml instanceof XMLDocument ) {
+                if ( global.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
+                    // IE does not support adoptNode
+                    rootEl = that.importNode( instance.xml.documentElement, true );
+                } else {
+                    // Adopt the root node
+                    rootEl = that.xml.adoptNode( instance.xml.documentElement, true );
+                }
+            }
+            if ( rootEl ) {
+                instanceDoc.appendChild( rootEl );
+            }
         } );
 
         // TODO: in the future, we should search for jr://instance/session and 
@@ -427,7 +442,6 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      */
     mergeResultDoc = $.parseXML( merger.Get( 1 ) );
 
-
     /** 
      * To properly show 0 repeats, if the form definition contains multiple default instances
      * and the record contains none, we have to iterate trough the templates object, and
@@ -438,11 +452,11 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      * functionality out.
      */
 
-    // remove the primary instance  childnode from the original model
+    // Remove the primary instance childnode from the original model
     this.xml.querySelector( 'instance' ).removeChild( modelInstanceChildEl );
     // checking if IE
     if ( global.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
-        // IE not support adoptNode
+        // IE does not support adoptNode
         modelInstanceChildEl = this.importNode( mergeResultDoc.documentElement, true );
     } else {
         // adopt the merged instance childnode

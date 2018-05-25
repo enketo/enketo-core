@@ -651,6 +651,7 @@ describe( 'converting pulldata() ', function() {
 } );
 
 describe( 'external instances functionality', function() {
+    var parser = new DOMParser();
     var loadErrors, model,
         modelStr = '<model><instance><cascade_external id="cascade_external" version=""><country/><city/><neighborhood/><meta><instanceID/></meta></cascade_external></instance><instance id="cities" src="jr://file/cities.xml" /><instance id="neighborhoods" src="jr://file/neighbourhoods.xml" /><instance id="countries" src="jr://file/countries.xml" /></model>',
         citiesStr = '<root><item><itextId>static_instance-cities-0</itextId><country>nl</country><name>ams</name></item></root>';
@@ -664,18 +665,18 @@ describe( 'external instances functionality', function() {
         expect( loadErrors[ 2 ] ).toEqual( 'External instance "countries" is empty.' );
     } );
 
-    it( 'populates matching external instances', function() {
+    it( 'populates matching external instances provided as XML Document', function() {
         model = new Model( {
             modelStr: modelStr,
             external: [ {
                 id: 'cities',
-                xmlStr: citiesStr
+                xml: parser.parseFromString( citiesStr, 'text/xml' )
             }, {
                 id: 'neighborhoods',
-                xmlStr: '<root/>'
+                xml: parser.parseFromString( '<root/>', 'text/xml' )
             }, {
                 id: 'countries',
-                xmlStr: '<root/>'
+                xml: parser.parseFromString( '<root/>', 'text/xml' )
             } ]
         } );
         loadErrors = model.init();
@@ -683,18 +684,37 @@ describe( 'external instances functionality', function() {
         expect( model.$.find( 'instance#cities > root > item > country:eq(0)' ).text() ).toEqual( 'nl' );
     } );
 
-    it( 'outputs errors if an external instance is not valid XML', function() {
+    it( 'populates matching external instances provided as XML Strings (old usage)', function() {
         model = new Model( {
             modelStr: modelStr,
             external: [ {
                 id: 'cities',
-                xmlStr: '<root>'
+                xml: citiesStr
             }, {
                 id: 'neighborhoods',
-                xmlStr: '<root/>'
+                xml: '<root/>'
             }, {
                 id: 'countries',
-                xmlStr: '<root/>'
+                xml: '<root/>'
+            } ]
+        } );
+        loadErrors = model.init();
+        expect( loadErrors.length ).toEqual( 0 );
+        expect( model.$.find( 'instance#cities > root > item > country:eq(0)' ).text() ).toEqual( 'nl' );
+    } );
+
+    it( 'outputs errors if an external instance is not valid XML (string)', function() {
+        model = new Model( {
+            modelStr: modelStr,
+            external: [ {
+                id: 'cities',
+                xml: '<root>'
+            }, {
+                id: 'neighborhoods',
+                xml: '<root/>'
+            }, {
+                id: 'countries',
+                xml: '<root/>'
             } ]
         } );
         loadErrors = model.init();
@@ -708,13 +728,13 @@ describe( 'external instances functionality', function() {
             modelStr: modelStr.replace( '<instance id="cities" src="jr://file/cities.xml" />', populatedInstance ),
             external: [ {
                 id: 'cities',
-                xmlStr: citiesStr
+                xml: parser.parseFromString( citiesStr, 'text/xml' )
             }, {
                 id: 'neighborhoods',
-                xmlStr: '<root/>'
+                xml: parser.parseFromString( '<root/>', 'text/xml' )
             }, {
                 id: 'countries',
-                xmlStr: '<root/>'
+                xml: parser.parseFromString( '<root/>', 'text/xml' )
             } ]
         } );
         loadErrors = model.init();
@@ -785,7 +805,7 @@ describe( 'Using XPath with non-default namespaces', function() {
             modelStr: '<model><instance><data/></instance><instance id="s">' + SEC_INSTANCE_CONTENT + '</instance></model>'
         }, {
             modelStr: '<model><instance><data/></instance><instance id="s" src="something"/></model>',
-            external: [ { id: 's', xmlStr: SEC_INSTANCE_CONTENT } ]
+            external: [ { id: 's', xml: new DOMParser().parseFromString( SEC_INSTANCE_CONTENT, 'text/xml' ) } ]
         } ].forEach( function( testObj ) {
             var model = new Model( testObj );
             var type = testObj.external ? 'external' : 'internal';
