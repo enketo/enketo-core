@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Support to provide external data as XML Document. **Warning: providing an XML string is now considered deprecated usage.**
 
+##### Changed
+- Performance-optimized itemsets. Cutting-edge browsers can now deal well with 16,500 item documents.
+
 [4.51.6] - 2018-05-24
 ---------------------
 ##### Changed

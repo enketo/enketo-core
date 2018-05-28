@@ -27,34 +27,45 @@ module.exports = {
         clonedRepeatsPresent = ( this.form.repeatsPresent && this.form.view.$.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
 
         $nodes.each( function() {
-            var $htmlItem, $htmlItemLabels, /**@type {string}*/ value, currentValue, $instanceItems, index, context,
-                $template, newItems, prevItems, templateNodeName, $input, $labels, itemsXpath, labelType, labelRef, valueRef;
-            var $list;
+            var $input;
+            var $instanceItems;
+            var template = this;
+            var $template = $( this );
+            var radioCheckAttributes = {};
 
-            $template = $( this );
-
-            // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
+            // Nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
             if ( $template.parentsUntil( '.or', '.or-branch' ).parentsUntil( '.or', '.disabled' ).length ) {
                 return;
             }
 
-            newItems = {};
-            prevItems = $template.data();
-            templateNodeName = $template.prop( 'nodeName' ).toLowerCase();
-            $list = $template.parent( 'select, datalist' );
+            var newItems = {};
+            var prevItems = $template.data();
+            var templateNodeName = $template.prop( 'nodeName' ).toLowerCase();
+            var $list = $template.parent( 'select, datalist' );
 
             if ( templateNodeName === 'label' ) {
                 $input = $template.children( 'input' ).eq( 0 );
+                [].slice.call( $input[ 0 ].attributes ).forEach( function( attr ) {
+                    radioCheckAttributes[ attr.name ] = attr.value;
+                } );
             } else if ( $list.prop( 'nodeName' ).toLowerCase() === 'select' ) {
                 $input = $list;
             } else if ( $list.prop( 'nodeName' ).toLowerCase() === 'datalist' ) {
                 $input = $list.siblings( 'input:not(.widget)' );
             }
-            $labels = $template.closest( 'label, select, datalist' ).siblings( '.itemset-labels' );
-            itemsXpath = $template.attr( 'data-items-path' );
-            labelType = $labels.attr( 'data-label-type' );
-            labelRef = $labels.attr( 'data-label-ref' );
-            valueRef = $labels.attr( 'data-value-ref' );
+            var $labels = $template.closest( 'label, select, datalist' ).siblings( '.itemset-labels' );
+            var itemsXpath = $template.attr( 'data-items-path' );
+            var labelType = $labels.attr( 'data-label-type' );
+            var labelRef = $labels.attr( 'data-label-ref' );
+            // TODO: if translate() becomes official, move determination of labelType to enketo-xslt
+            // and set labelRef correct in enketo-xslt
+            var matches = utils.parseFunctionFromExpression( labelRef, 'translate' );
+            if ( matches.length ) {
+                labelRef = matches[ 0 ][ 1 ][ 0 ];
+                labelType = 'langs';
+            }
+
+            var valueRef = $labels.attr( 'data-value-ref' );
 
             /**
              * CommCare/ODK change the context to the *itemset* value (in the secondary instance), hence they need to use the current()
@@ -63,7 +74,7 @@ module.exports = {
              * I am not sure what is correct, but for now for XLSForm-style secondary instances with only one level underneath the <item>s that
              * the nodeset retrieves, Enketo's aproach works well.
              */
-            context = that.form.input.getName( $input );
+            var context = that.form.input.getName( $input );
 
             /*
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
@@ -72,7 +83,7 @@ module.exports = {
             insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
             insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
 
-            index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
+            var index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
 
             if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                 $instanceItems = itemsCache[ itemsXpath ];
@@ -86,7 +97,7 @@ module.exports = {
 
             // This property allows for more efficient 'itemschanged' detection
             newItems.length = $instanceItems.length;
-            // This may cause problems for large itemsets. Use md5 instead?
+            // TODO: This may cause problems for large itemsets. Use md5 instead?
             newItems.text = $instanceItems.text();
 
             if ( newItems.length === prevItems.length && newItems.text === prevItems.text ) {
@@ -99,84 +110,70 @@ module.exports = {
              * Remove current items before rebuilding a new itemset from scratch.
              */
             // the current <option> and <input> elements
-            $template.closest( '.question' )
-                .find( templateNodeName ).not( $template ).remove();
+            var $question = $template.closest( '.question' );
+            $question.find( templateNodeName ).not( $template ).remove();
             // labels for current <option> elements
-            $template.parent( 'select' ).siblings( '.or-option-translations' ).empty();
+            var optionsTranslations = $question.find( '.or-option-translations' ).empty()[ 0 ];
+            var optionsFragment = document.createDocumentFragment();
+            var optionsTranslationsFragment = document.createDocumentFragment();
+            var translations = [];
 
             $instanceItems.each( function() {
-                var $item = $( this );
-                var $labelRefs;
-                var labelRefNodename;
-                var matches;
-
-                $htmlItem = $( '<root/>' );
-
-                // Create a single <option> or <input> element for the (single) instance item.
-                $template
-                    .clone().appendTo( $htmlItem )
-                    .removeClass( 'itemset-template' )
-                    .addClass( 'itemset' )
-                    .removeAttr( 'data-items-path' );
-
-                // Determine which labels belong to the <option> or <input> element.
-                matches = utils.parseFunctionFromExpression( labelRef, 'translate' );
-                labelRefNodename = matches.length ? matches[ 0 ][ 1 ][ 0 ] : labelRef + ':eq(0)';
-                $labelRefs = $item.children( labelRefNodename );
-                /** 
+                var item = this;
+                /*
                  * Note: $labelRefs could either be
                  * - a single itext reference
                  * - a collection of labels with different lang attributes
                  * - a single label
                  */
-                if ( labelType !== 'itext' && $labelRefs.length > 0 ) {
-                    // labels with different lang attributes
-                    labelType = 'langs';
-                }
-                switch ( labelType ) {
-                    case 'itext':
-                        // Search in the special .itemset-labels created in enketo-transformer for labels with itext ref.
-                        $htmlItemLabels = $labels.find( '[data-itext-id="' + $labelRefs.eq( 0 ).text() + '"]' ).clone();
-                        break;
-                    case 'langs':
-                        $htmlItemLabels = $();
-                        // Turn the item elements into label spans that <option> and <input> uses.
-                        $labelRefs.each( function() {
-                            var lang = this.getAttribute( 'lang' );
-                            var langAttr = lang ? ' lang="' + this.getAttribute( 'lang' ) + '"' : '';
-                            var active = !lang || lang === that.form.langs.getCurrentLang() ? ' active' : '';
-                            var span = '<span class="option-label' + active + '"' + langAttr + '>' + this.textContent + '</span>';
-                            $htmlItemLabels = $htmlItemLabels.add( span );
-                        } );
-                        break;
-                    default:
-                        // Create a single span without language.
-                        $htmlItemLabels = $( '<span class="option-label active" lang="">' + $labelRefs.eq( 0 ).text() + '</span>' );
+                var labels = that.getNodesFromItem( labelRef, item );
+                if ( !labels || !labels.length ) {
+                    translations = [ { language: '', label: 'error', active: true } ];
+                } else {
+                    switch ( labelType ) {
+                        case 'itext':
+                            // Search in the special .itemset-labels created in enketo-transformer for labels with itext ref.
+                            translations = $labels.find( '[data-itext-id="' + labels[ 0 ].textContent + '"]' ).get().map( function( label ) {
+                                return { language: label.getAttribute( 'lang' ), label: label.textContent, active: label.classList.contains( 'active' ) };
+                            } );
+                            break;
+                        case 'langs':
+                            translations = translations.map( function( label ) {
+                                var lang = label.getAttribute( 'lang' );
+                                var active = lang === that.form.langs.getCurrentLang();
+                                return { language: lang, label: label.textContent, active: active };
+                            } );
+                            break;
+                        default:
+                            translations = [ { language: '', label: labels && labels.length ? labels[ 0 ].textContent : 'error', active: true } ];
+                    }
                 }
 
                 // Obtain the value of the secondary instance item found.
-                value = $item.children( valueRef ).text();
-
-                // Set the value of the new <option> or <input>.
-                $htmlItem.find( '[value]' ).attr( 'value', value );
+                var value = that.getNodeFromItem( valueRef, item ).textContent;
 
                 if ( templateNodeName === 'label' ) {
-                    $htmlItem.find( 'input' )
-                        .after( $htmlItemLabels );
-                    // Add the <input> (which is the first child of <root>).
-                    $labels.before( $htmlItem.find( ':first' ) );
+                    optionsFragment.appendChild( that.createInput( radioCheckAttributes, translations, value ) );
                 } else if ( templateNodeName === 'option' ) {
-                    //if ( $htmlItemLabels.length === 1 ) {
-                    $htmlItem.find( 'option' ).text( $htmlItemLabels.filter( '.active' ).eq( 0 ).text() );
-                    //}
-                    $htmlItemLabels
-                        .attr( 'data-option-value', value )
-                        .attr( 'data-itext-id', '' )
-                        .appendTo( $labels.siblings( '.or-option-translations' ) );
-                    // Add the <option> (which is the first child of <root>).
-                    $template.siblings().addBack().last().after( $htmlItem.find( ':first' ) );
+                    var activeLabel = '';
+                    if ( translations.length > 1 ) {
+                        translations.forEach( function( translation ) {
+                            if ( translation.active ) {
+                                activeLabel = translation.label;
+                            }
+                            optionsTranslationsFragment.appendChild( that.createOptionTranslation( translation.language, translation.label, value, !!translation.active ) );
+                        } );
+                    } else {
+                        activeLabel = translations[ 0 ].label;
+                    }
+                    optionsFragment.appendChild( that.createOption( activeLabel, value ) );
                 }
             } );
+
+            template.parentNode.appendChild( optionsFragment );
+            if ( optionsTranslations ) {
+                optionsTranslations.appendChild( optionsTranslationsFragment );
+            }
 
             /**
              * Attempt to populate inputs with current value in model.
@@ -184,7 +181,7 @@ module.exports = {
              * include (an) item(s) with this/se value(s), this will clear/update the model and
              * this will trigger a dataupdate event. This may call this update function again.
              */
-            currentValue = that.form.model.node( context, index ).getVal()[ 0 ];
+            var currentValue = that.form.model.node( context, index ).getVal()[ 0 ];
             if ( currentValue !== '' ) {
                 that.form.input.setVal( context, index, currentValue );
                 $input.trigger( 'change' );
@@ -199,5 +196,65 @@ module.exports = {
             }
 
         } );
+    },
+
+    /**
+     * Minimal XPath evaluation helper that queries from a single item context.
+     */
+    getNodesFromItem: function( expr, context, single ) {
+        if ( !expr || !context ) {
+            throw new Error( 'Error: could not query instance item, no expression and/or context provided' );
+        }
+        var type = single ? 9 : 7;
+        var evaluateFnName = typeof this.form.model.xml.evaluate !== 'undefined' ? 'evaluate' : 'jsEvaluate';
+        var result = this.form.model.xml[ evaluateFnName ]( expr, context, this.form.model.getNsResolver(), type, null );
+        var response = [];
+        if ( !single ) {
+            for ( var j = 0; j < result.snapshotLength; j++ ) {
+                response.push( result.snapshotItem( j ) );
+            }
+        } else {
+            response.push( result.singleNodeValue );
+        }
+        return response;
+    },
+
+    getNodeFromItem: function( expr, content ) {
+        var nodes = this.getNodesFromItem( expr, content, true );
+        return nodes.length ? nodes[ 0 ] : null;
+    },
+
+    createOption: function( label, value ) {
+        var option = document.createElement( 'option' );
+        option.textContent = label;
+        option.value = value;
+        return option;
+    },
+
+    createOptionTranslation: function( language, label, value, active ) {
+        var span = document.createElement( 'span' );
+        span.textContent = label;
+        span.classList.add( 'option-label' );
+        if ( active ) {
+            span.classList.add( 'active' );
+        }
+        span.lang = language;
+        span.dataset.optionValue = value;
+        return span;
+    },
+
+    createInput: function( attributes, translations, value ) {
+        var that = this;
+        var label = document.createElement( 'label' );
+        var input = document.createElement( 'input' );
+        Object.getOwnPropertyNames( attributes ).forEach( function( attr ) {
+            input.setAttribute( attr, attributes[ attr ] );
+        } );
+        input.value = value;
+        label.appendChild( input );
+        translations.forEach( function( translation ) {
+            label.appendChild( that.createOptionTranslation( translation.language, translation.label, value, translation.active ) );
+        } );
+        return label;
     }
 };

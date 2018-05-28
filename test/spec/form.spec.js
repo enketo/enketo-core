@@ -1550,8 +1550,8 @@ describe( 'Itemset functionality', function() {
             form.view.$.find( '[data-name="/repeat-relative-current/rep/crop"][value="banana"]' ).prop( 'checked', true ).trigger( 'change' );
             form.view.$.find( '.add-repeat-btn' ).click();
             form.view.$.find( '[data-name="/repeat-relative-current/rep/crop"][value="beans"]' ).eq( 1 ).prop( 'checked', true ).trigger( 'change' );
-            var sel1 = '.itemset > input[data-name="/repeat-relative-current/rep/sel_a"]';
-            var sel2 = '.itemset > input[data-name="/repeat-relative-current/rep/group/sel_b"]';
+            var sel1 = 'label:not(.itemset-template) > input[data-name="/repeat-relative-current/rep/sel_a"]';
+            var sel2 = 'label:not(.itemset-template) > input[data-name="/repeat-relative-current/rep/group/sel_b"]';
             expect( form.view.$.find( sel1 ).eq( 0 ).val() ).toEqual( 'banana' );
             expect( form.view.$.find( sel2 ).eq( 0 ).val() ).toEqual( 'banana' );
             expect( form.view.$.find( sel1 ).eq( 1 ).val() ).toEqual( 'beans' );
