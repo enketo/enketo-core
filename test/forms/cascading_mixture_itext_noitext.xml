@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+  xmlns:h="http://www.w3.org/1999/xhtml" 
+  xmlns:ev="http://www.w3.org/2001/xml-events" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns:jr="http://openrosa.org/javarosa">
   <h:head>
     <h:title>Cascading Triple Select Form</h:title>
     <model>
@@ -20,6 +24,9 @@
           <text id="douglas">
             <value>Douglas County</value>
           </text>
+          <text id="douglas-il">
+            <value>Douglas County</value>
+          </text>
           <text id="cook">
             <value>Cook County</value>
           </text>
@@ -36,6 +43,9 @@
           </text>
           <text id="pierce">
             <value>County Pierce</value>
+          </text>
+          <text id="douglas-il">
+            <value>County Douglas</value>
           </text>
           <text id="douglas">
             <value>County Douglas</value>
@@ -127,7 +137,7 @@
                 </cities>
               </county>
               <county>
-                <value>douglas</value>
+                <value>douglas-il</value>
                 <cities>
                   <city>
                     <name>Arcola</name>
