@@ -130,7 +130,7 @@ DatetimepickerExtended.prototype._createFakeTimeInput = function( timeVal ) {
         '<div class="timepicker">' +
         '<input class="ignore timepicker-default" type="text" value="' +
         timeVal + '" placeholder="hh:mm"/>' +
-        '<button class="btn-icon-only btn-reset" type="button" aria-label="reset"><i class="icon icon-refresh"> </i></button>' +
+        this.resetButtonHtml +
         '</div>' );
     var $fakeTimeI = $fakeTime.find( 'input' );
 

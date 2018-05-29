@@ -79,8 +79,7 @@ DatepickerExtended.prototype._createFakeDateInput = function( format ) {
     var $dateI = $( this.element );
     var $fakeDate = $(
         '<div class="widget date"><input class="ignore input-small" type="text" value="' +
-        $dateI.val() + '" placeholder="' + format + '" />' +
-        '<button class="btn-icon-only btn-reset" type="button" aria-label="comment"><i class="icon icon-refresh"> </i></button></div>' );
+        $dateI.val() + '" placeholder="' + format + '" />' + this.resetButtonHtml + '</div>' );
     var $fakeDateI = $fakeDate.find( 'input' );
 
     $dateI.hide().after( $fakeDate );

@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.52.0] - 2018-06-04
 ---------------------
 ##### Added
 - Support to provide external data as XML Document. **Warning: providing an XML string is now considered deprecated usage.**
+- Support for range widget (basic).
 
 ##### Changed
-- Performance-optimized itemsets. Cutting-edge browsers can now deal well with 16,500 item documents.
+- Performance-optimized itemsets. Cutting-edge browsers can now deal well with documents containging 16,500 items (!).
 
 [4.51.6] - 2018-05-24
 ---------------------

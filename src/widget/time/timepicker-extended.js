@@ -33,7 +33,7 @@ TimepickerExtended.prototype._init = function() {
     var timeVal = $( this.element ).val();
     var $fakeTime = $( '<div class="widget timepicker">' +
         '<input class="ignore timepicker-default" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
-        '<button class="btn-icon-only btn-reset" aria-label="reset" type="button"><i class="icon icon-refresh"> </i></button></div>' );
+        this.resetButtonHtml + '</div>' );
     var $resetBtn = $fakeTime.find( '.btn-reset' );
     var $fakeTimeI = $fakeTime.find( 'input' );
 

@@ -133,7 +133,7 @@ DrawWidget.prototype._init = function() {
     this.initialize
         .then( function() {
             that.$widget
-                .find( '.draw-widget__btn-reset' ).on( 'click', that._reset.bind( that ) )
+                .find( '.btn-reset' ).on( 'click', that._reset.bind( that ) )
                 .end().find( '.draw-widget__colorpicker' )
                 .on( 'click', '.current', function() {
                     $( this ).parent().toggleClass( 'reveal' );
@@ -307,8 +307,7 @@ DrawWidget.prototype._getMarkup = function() {
         ( this.props.type === 'signature' ? '' : '<button class="btn-icon-only draw-widget__undo" aria-label="undo" type=button><i class="icon icon-undo"> </i></button>' ) +
         '</div>' +
         '<div class="draw-widget__footer">' +
-        '<button type="button" class="btn-icon-only draw-widget__btn-reset" aria-label="reset"><i class="icon icon-refresh"> </i></button>' +
-        '<a class="btn-icon-only btn-download" aria-label="download" download href=""><i class="icon icon-download"> </i></a>' +
+        this.resetButtonHtml + this.downloadButtonHtml +
         '<div class="draw-widget__feedback"></div>' +
         '</div>' +
         '</div>' );
@@ -427,7 +426,7 @@ DrawWidget.prototype.disable = function() {
             that.pad.off();
             canvas.classList.add( 'disabled' );
             that.$widget
-                .find( '.draw-widget__btn-reset' )
+                .find( '.btn-reset' )
                 .prop( 'disabled', true );
         } );
 };
@@ -444,7 +443,7 @@ DrawWidget.prototype.enable = function() {
                 that.pad.on();
                 canvas.classList.remove( 'disabled' );
                 that.$widget
-                    .find( '.draw-widget__btn-reset' )
+                    .find( '.btn-reset' )
                     .prop( 'disabled', false );
             }
             // https://github.com/enketo/enketo-core/issues/450

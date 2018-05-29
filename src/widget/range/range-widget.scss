@@ -1,0 +1,324 @@
+// Many thanks to https://css-tricks.com/sliding-nightmare-understanding-range-input/
+$track-w: 100%;
+$track-h: 1px;
+$thumb-d: 20px;
+$margin: 10px;
+$height: 200px;
+$track-color: $gray-dark;
+$thick-w: 1px;
+$pad: 10px;
+$left: -85px;
+@mixin track($color:$track-color, $height: $track-h) {
+    box-sizing: border-box;
+    border: none;
+    width: $track-w;
+    height: $height;
+    background: $color;
+    border-radius: 0.5 * $height;
+}
+
+@mixin thumb($color: $brand-primary-color) {
+    box-sizing: border-box;
+    border: none;
+    width: $thumb-d;
+    height: $thumb-d;
+    border-radius: 50%;
+    background: $color;
+    cursor: pointer;
+    &.empty {
+        background: transparent;
+    }
+}
+
+@mixin thumb-focus() {
+    @include focus-shadow
+}
+
+[type=range] {
+    &,
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+    }
+    padding: 0.25*$margin;
+    width: $track-w;
+    background: transparent;
+    font: 1em/1 arial,
+    sans-serif;
+    z-index: 10;
+
+    &::-webkit-slider-runnable-track {
+        @include track
+    }
+    &::-moz-range-track {
+        @include track
+    }
+    &::-ms-track {
+        @include track
+    }
+
+    &::-webkit-slider-thumb {
+        margin-top: .5*($track-h - $thumb-d);
+        @include thumb
+    }
+    &::-moz-range-thumb {
+        @include thumb
+    }
+    &::-ms-thumb {
+        margin-top: 0;
+        @include thumb
+    }
+
+    &::-ms-tooltip {
+        display: none
+    }
+    &:focus {
+        outline: 0;
+        &::-webkit-slider-thumb {
+            @include thumb-focus
+        }
+        &::-moz-range-thumb {
+            @include thumb-focus
+        }
+        &::-ms-thumb {
+            @include thumb-focus
+        }
+    }
+    &.empty {
+        &::-webkit-slider-thumb {
+            background: transparent;
+        }
+        &::-moz-range-thumb {
+            background: transparent;
+        }
+        &::-ms-thumb {
+            background: transparent;
+        }
+    }
+    &[disabled] {
+        &::-webkit-slider-thumb {
+            opacity: 0.7
+        }
+        &::-moz-range-thumb {
+            opacity: 0.7;
+        }
+        &::-ms-thumb {
+            opacity: 0.7;
+        }
+    }
+}
+
+.range-widget {
+    position: relative;
+    &__wrap {
+        width: $track-w;
+        height: $height;
+        z-index: 0;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+    &__current {
+        flex: 1;
+        padding-bottom: $pad;
+        vertical-align: middle;
+        line-height: ($height - (3*$track-h)) / 2;
+    }
+    &__ticks {
+        height: 20px; //3 * $track-h;
+        box-sizing: border-box;
+        margin-left: 0.5 * $thumb-d;
+        margin-right: 0.5 * $thumb-d;
+        border-left: $thick-w solid $track-color;
+        border-right: $thick-w solid $track-color; //background-image: linear-gradient(90deg, $track-color, $thick-w, transparent 0px);
+        //background-repeat: repeat-x;
+    }
+    &__scale {
+        flex: 1;
+        display: flex;
+        padding-top: $pad;
+        justify-content: space-between;
+        &__start,
+        &__end,
+        &__between {
+            width: 2 * $margin;
+            opacity: 0.7;
+            font-weight: normal;
+        }
+    }
+    [type=range] {
+        position: absolute;
+        top: 92px;
+        left: 0;
+    }
+    .btn-reset {
+        padding: 7px;
+        margin: 15px;
+        height: 34px;
+        width: 34px;
+    }
+}
+
+$v-height: 350px;
+
+.or-appearance-vertical,
+.or-appearance-distress {
+    input[type=range] {
+        transform: rotate(-90deg);
+        width: $v-height;
+        margin: 0 $margin;
+        top: 158px;
+        left: $left;
+        right: $left;
+    }
+    .range-widget {
+        &__wrap {
+            flex-direction: row;
+            height: $v-height;
+            width: $height;
+            margin-top: 20px;
+        }
+        &__current {
+            padding-right: $pad;
+            padding-bottom: 0;
+            line-height: $v-height;
+        }
+        &__ticks {
+            width: 20px; //3 * $track-h;
+            height: auto; //background-image: linear-gradient( $track-color, $thick-w, transparent 0px);
+            //background-repeat: repeat-y;
+            border-bottom: $thick-w solid $track-color;
+            border-top: $thick-w solid $track-color;
+            border-right: none;
+            border-left: none;
+            margin-left: 0;
+            margin-right: 0;
+            margin-top: 0.5 * $thumb-d;
+            margin-bottom: 0.5 * $thumb-d;
+        }
+        &__scale {
+            padding-top: 0;
+            padding-left: $pad;
+            flex-direction: column-reverse;
+        }
+    }
+}
+
+.or[dir=rtl] {
+    .or-appearance-vertical,
+    .or-appearance-distress {
+        input[type=range] {
+            transform: rotate(90deg);
+        }
+    }
+}
+
+/* distress flavor of vertical range widget*/
+
+$border: 1px solid #aaaaaa;
+$bulb-w: 60px;
+$ds-thumb-color: #3a94a5;
+$ds-track-color: linear-gradient(to bottom, #f9f9f9 0%, whitesmoke 100%);
+$ds-track-h: 4px;
+$red: rgb(226, 4, 24);
+$yellow: rgb(253, 211, 3);
+$green: rgb(60, 182, 67);
+
+.or-appearance-distress {
+    $shift-top: 15px;
+    input[type=range] {
+        top: 158px + 15px;
+        left: $left - 42.5px;
+        right: $left - 42.5px;
+
+        &::-webkit-slider-runnable-track {
+            @include track( $ds-track-color, $ds-track-h);
+        }
+        &::-moz-range-track {
+            @include track( $ds-track-color, $ds-track-h);
+        }
+        &::-ms-track {
+            @include track( $ds-track-color, $ds-track-h);
+        }
+        &:not(.empty) {
+            &::-webkit-slider-thumb {
+                @include thumb($ds-thumb-color)
+            }
+            &::-moz-range-thumb {
+                @include thumb($ds-thumb-color)
+            }
+            &::-ms-thumb {
+                @include thumb($ds-thumb-color)
+            }
+        }
+    }
+    .range-widget {
+        >* {
+            //border: 1px red solid;
+        }
+        &__wrap {
+            width: 115px;
+            flex-direction: row-reverse;
+            flex-wrap: wrap;
+            padding-top: $shift-top;
+            height: $v-height + $bulb-w;
+        }
+        &__current {
+            visibility: hidden;
+            padding: 0 (5.5 + 0.5 * 1.5 * $ds-track-h);
+        }
+        &__ticks {
+            width: 6px;
+        }
+        &__bg {
+            width: $bulb-w / 2;
+            border-radius: $bulb-w / 4;
+            border: $border;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom: none;
+            margin-top: -15px;
+            @include gradient-vertical-three-colors($red, $yellow, 50%, $green);
+            z-index: 1;
+        }
+        &__scale {
+            position: relative;
+            text-align: end;
+            align-items: flex-end;
+            padding: 0 5.5px;
+        }
+        &__bulb {
+            $inner-width: 24px;
+            width: $bulb-w;
+            height: $bulb-w;
+            border: $border;
+            border-radius: $bulb-w / 2;
+            margin: -7px auto 10px auto;
+            background: $green;
+            position: relative;
+            &__inner {
+                width: $inner-width;
+                height: $inner-width;
+                border-radius: $inner-width / 2;
+                background: $ds-thumb-color;
+                margin: ($bulb-w - $inner-width - 2px) / 2;
+            }
+            &__mercury {
+                position: absolute;
+                left: calc(50% - #{$ds-track-h} / 2);
+                right: calc(50% - #{$ds-track-h} / 2);
+                bottom: $bulb-w / 2;
+                background: $ds-thumb-color;
+                min-height: ($bulb-w / 2) - 5px;
+                width: $ds-track-h;
+                z-index: 100;
+            }
+        }
+        .btn-reset {
+            position: absolute;
+            top: 140px;
+            left: 70px;
+            right: 70px;
+        }
+    }
+}

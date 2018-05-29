@@ -64,8 +64,9 @@ Widget.prototype = {
      * Updates languages, <option>s (cascading selects, and (calculated) values.
      * Most of the times, this function needs to be overridden in the widget.
      */
-    update: function() {}
-
+    update: function() {},
+    resetButtonHtml: '<button type="button" class="btn-icon-only btn-reset" aria-label="reset"><i class="icon icon-refresh"> </i></button>',
+    downloadButtonHtml: '<a class="btn-icon-only btn-download" aria-label="download" download href=""><i class="icon icon-download"> </i></a>'
 };
 
 module.exports = Widget;
