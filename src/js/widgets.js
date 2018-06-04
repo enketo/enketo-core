@@ -4,7 +4,6 @@ module.exports = [
     require( '../widget/note/notewidget' ),
     require( '../widget/select-desktop/selectpicker' ),
     require( '../widget/select-mobile/selectpicker' ),
-    require( '../widget/range/range-widget' ),
     require( '../widget/select-autocomplete/autocomplete' ),
     //require( '../widget/geo-esri/geopicker' ),
     require( '../widget/geo/geopicker' ),
@@ -25,5 +24,5 @@ module.exports = [
     require( '../widget/big-image/image-viewer' ),
     require( '../widget/comment/commentwidget' ),
     require( '../widget/image-map/image-map' ),
-
+    require( '../widget/range/range-widget' ),
 ];

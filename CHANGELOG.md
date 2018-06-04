@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.52.1] - 2018-06-04
+---------------------
+##### Fixed
+- Range widget turns geopoint coordinate inputs into rangepickers if initialized after geo widget.
+
 [4.52.0] - 2018-06-04
 ---------------------
 ##### Added

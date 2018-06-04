@@ -193,5 +193,6 @@ $.fn[ pluginName ] = function( options, event ) {
 
 module.exports = {
     'name': pluginName,
-    'selector': '.or-appearance-distress input[type="number"], input[type="number"][min][max][step]'
+    // avoid initizialing number inputs in geopoint widgets!
+    'selector': '.or-appearance-distress input[type="number"], .question > input[type="number"][min][max][step]'
 };
