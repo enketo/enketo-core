@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- IE11 hack in formhub theme is not focused enough (affecting EE modals).
+
 [4.52.1] - 2018-06-04
 ---------------------
 ##### Fixed
