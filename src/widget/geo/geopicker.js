@@ -7,6 +7,7 @@ var L = require( 'leaflet' );
 var Promise = require( 'lie' );
 var t = require( 'enketo/translator' ).t;
 var support = require( '../../js/support' );
+var types = require( '../../js/types' );
 var dialog = require( 'enketo/dialog' );
 var googleMapsScriptRequest;
 var pluginName = 'geopicker';
@@ -483,19 +484,7 @@ Geopicker.prototype._updateValue = function() {
  * @return {Boolean}          [description]
  */
 Geopicker.prototype._isValidGeopoint = function( geopoint ) {
-    var coords;
-
-    if ( !geopoint ) {
-        return false;
-    }
-
-    coords = geopoint.toString().split( ' ' );
-    return (
-        ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
-        ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
-        ( typeof coords[ 2 ] === 'undefined' || !isNaN( coords[ 2 ] ) ) &&
-        ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) )
-    );
+    return geopoint ? types.geopoint.validate( geopoint ) : false;
 };
 
 /**
@@ -525,13 +514,11 @@ Geopicker.prototype._cleanLatLng = function( latLng ) {
  * @return {Boolean}        Whether latLng is valid or not
  */
 Geopicker.prototype._isValidLatLng = function( latLng ) {
-    var lat;
-    var lng;
+    var lat = ( typeof latLng[ 0 ] === 'number' ) ? latLng[ 0 ] : ( typeof latLng.lat === 'number' ) ? latLng.lat : null;
+    var lng = ( typeof latLng[ 1 ] === 'number' ) ? latLng[ 1 ] : ( typeof latLng.lng === 'number' ) ? latLng.lng : null;
 
-    lat = ( typeof latLng[ 0 ] === 'number' ) ? latLng[ 0 ] : ( typeof latLng.lat === 'number' ) ? latLng.lat : null;
-    lng = ( typeof latLng[ 1 ] === 'number' ) ? latLng[ 1 ] : ( typeof latLng.lng === 'number' ) ? latLng.lng : null;
-
-    return ( lat !== null && lng !== null && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180 );
+    // This conversion seems backwards, but it is helpful to have only one place where geopoints are validated.
+    return types.geopoint.validate( [ lat, lng ].join( ' ' ) );
 };
 
 /**

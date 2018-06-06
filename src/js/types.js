@@ -185,8 +185,11 @@ var types = {
     'geopoint': {
         validate: function( x ) {
             var coords = x.toString().trim().split( ' ' );
+            // Note that longitudes from -180 to 180 are problematic when recording points close to the international
+            // dateline. They are therefore set from -360  to 360 (circumventing Earth twice, I think) which is 
+            // an arbitrary limit. https://github.com/kobotoolbox/enketo-express/issues/1033
             return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
-                ( coords[ 1 ] !== '' && coords[ 1 ] >= -180 && coords[ 1 ] <= 180 ) &&
+                ( coords[ 1 ] !== '' && coords[ 1 ] >= -360 && coords[ 1 ] <= 360 ) &&
                 ( typeof coords[ 2 ] === 'undefined' || !isNaN( coords[ 2 ] ) ) &&
                 ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
         },

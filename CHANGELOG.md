@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.52.2] - 2018-06-06
 ---------------------
 ##### Fixed
-- IE11 hack in formhub theme is not focused enough (affecting EE modals).
+- IE11 hack is not focused enough (affecting EE modals).
+- Coordinates around the international dateline (longitude < -180 degrees) are considered invalid in geo widgets. 
 
 [4.52.1] - 2018-06-04
 ---------------------
