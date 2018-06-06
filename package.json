@@ -72,7 +72,7 @@
         "jquery-touchswipe": "^1.6.18",
         "leaflet": "1.3.x",
         "leaflet-draw": "^1.0.2",
-        "leaflet.gridlayer.googlemutant": "^0.6.4",
+        "leaflet.gridlayer.googlemutant": "0.7.x",
         "lie": "3.3.x",
         "mergexml": "1.1.2",
         "signature_pad": "2.3.x"
