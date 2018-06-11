@@ -10,6 +10,15 @@ describe( 'Parsing expressions', function() {
         [ undefined, 'func', [] ],
         [ null, 'func', [] ],
         [ false, 'func', [] ],
+        [ 'func()', 'func', [
+            [ 'func()', [] ]
+        ] ],
+        [ 'concat("version: ", version())', 'version', [
+            [ 'version()', [] ]
+        ] ],
+        [ 'func(  )', 'func', [
+            [ 'func(  )', [ '' ] ]
+        ] ],
         [ 'func(b,c)', 'func', [
             [ 'func(b,c)', [ 'b', 'c' ] ]
         ] ],

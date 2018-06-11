@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.52.3] - 2018-06-11
 ---------------------
 ##### Fixed
 - Readonly text inputs with a default value are hidden.
+- Certain XPath function calls without parameters cause an infinite loop.
 
 [4.52.2] - 2018-06-06
 ---------------------

@@ -1099,10 +1099,6 @@ FormModel.prototype.replaceIndexedRepeatFn = function( expr, selector, index ) {
     var that = this;
     var indexedRepeats = utils.parseFunctionFromExpression( expr, 'indexed-repeat' );
 
-    if ( !indexedRepeats.length ) {
-        return expr;
-    }
-
     indexedRepeats.forEach( function( indexedRepeat ) {
         var i, positionedPath;
         var position;
@@ -1125,6 +1121,20 @@ FormModel.prototype.replaceIndexedRepeatFn = function( expr, selector, index ) {
         } else {
             throw new FormLogicError( 'indexed repeat with incorrect number of parameters found: ' + indexedRepeat[ 0 ] );
         }
+    } );
+
+    return expr;
+};
+
+FormModel.prototype.replaceVersionFn = function( expr ) {
+    var that = this;
+    var version;
+    var versions = utils.parseFunctionFromExpression( expr, 'version' );
+
+    versions.forEach( function( versionPart ) {
+        version = version || that.evaluate( '/node()/@version', 'string', null, 0, true );
+        // ignore arguments
+        expr = expr.replace( versionPart[ 0 ], '"' + version + '"' );
     } );
 
     return expr;
@@ -1236,6 +1246,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
     if ( !this.convertedExpressions[ cacheKey ] ) {
         expr = expr.trim();
         expr = this.replaceInstanceFn( expr );
+        expr = this.replaceVersionFn( expr );
         expr = this.replaceCurrentFn( expr, this.getXPath( context, 'instance', true ) );
         // shiftRoot should come after replaceCurrentFn
         expr = this.shiftRoot( expr );

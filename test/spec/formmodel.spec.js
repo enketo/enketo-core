@@ -600,6 +600,21 @@ describe( 'converting expressions with current() for context /data/node', functi
     } );
 } );
 
+describe( 'replacing version() calls', function() {
+    [
+        [ 'version()', '"123"' ],
+        [ 'version(  )', '"123"' ],
+        [ 'concat("version: ", version())', 'concat("version: ", "123")' ],
+    ].forEach( function( test ) {
+        it( 'happens correctly', function() {
+            var model = new Model( '<model><instance><root version="123"><a/></root></instance></model>' );
+            var expected = test[ 1 ];
+            model.init();
+            expect( model.replaceVersionFn( test[ 0 ] ) ).toEqual( expected );
+        } );
+    } );
+} );
+
 describe( 'converting indexed-repeat() ', function() {
     [
         [ 'indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '/path/to/repeat[position() = 2]/node' ],
