@@ -222,7 +222,7 @@ module.exports = {
             }
         }
 
-        return;
+        return $inputNodes[ 0 ];
     },
     validate: function( $input ) {
         return this.form.validateInput( $input );

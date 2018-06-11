@@ -270,11 +270,8 @@ $media-margin: 10px;
 }
 
 .note {
-    // Not very consistent to only do this for simple HTML inputs and not
-    // for geo/select/distress etc. It would have been better if we had
-    // always shown the input field except if appearance 'label' was used (and pyxform added this to notes)
-    // Unfortunately, this might now be too late as it would not be appreciated by existing users.
-    input[readonly]:not([type=radio]):not([type=checkbox]):not(.widget),
+    input[readonly],
+    select[readonly],
     textarea[readonly] {
         display: none;
     }

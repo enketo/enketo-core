@@ -1229,7 +1229,17 @@ describe( 'Readonly items', function() {
     it( 'show their calculated value', function() {
         var form = loadForm( 'readonly.xml' );
         form.init();
-        expect( form.view.$.find( '[name="/readonly/a"]' ).val() ).toEqual( 'martijn' );
+        var $input = form.view.$.find( '[name="/readonly/a"]' );
+        expect( $input.val() ).toEqual( 'martijn' );
+        expect( $input.closest( '.question' ).hasClass( 'note' ) ).toBe( false );
+    } );
+
+    it( 'show a default text input value', function() {
+        var form = loadForm( 'readonly.xml' );
+        form.init();
+        var $input = form.view.$.find( '[name="/readonly/b"]' );
+        expect( $input.val() ).toEqual( 'is' );
+        expect( $input.closest( '.question' ).hasClass( 'note' ) ).toBe( false );
     } );
 } );
 

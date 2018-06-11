@@ -320,9 +320,6 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
  *  we cycle through the HTML form elements and check for each form element whether data is available.
  */
 Form.prototype.setAllVals = function( $group, groupIndex ) {
-    var index;
-    var name;
-    var value;
     var that = this;
     var selector = ( $group && $group.attr( 'name' ) ) ? $group.attr( 'name' ) : null;
 
@@ -333,13 +330,15 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
         // only return non-empty leafnodes
         return $node.children().length === 0 && $node.text();
     } ).each( function() {
-        var $node = $( this );
-
         try {
-            value = $node.text();
-            name = that.model.getXPath( $node.get( 0 ), 'instance' );
-            index = that.model.node( name ).get().index( this );
-            that.input.setVal( name, index, value );
+            var $node = $( this );
+            var value = $node.text();
+            var name = that.model.getXPath( $node.get( 0 ), 'instance' );
+            var index = that.model.node( name ).get().index( this );
+            var input = that.input.setVal( name, index, value );
+            // Remove the note class from questions with a default value. This would be better done
+            // in enketo-xslt, but it's a lot harder to do.
+            $( input ).closest( '.question' ).removeClass( 'note' );
         } catch ( e ) {
             console.error( e );
             // TODO: Test if this correctly adds to loadErrors
