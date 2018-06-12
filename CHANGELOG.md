@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.53.0] - 2018-06-15
+---------------------
+##### Added
+- Support for ranking widget 
+
 [4.52.4] - 2018-06-12
 ---------------------
 ##### Fixed

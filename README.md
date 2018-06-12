@@ -95,7 +95,7 @@ The following browsers are officially supported:
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
-You can enable some support for Internet Explorer 11 by importing the `_iefix.scss` files where appropriate. These are commented out in the default CSS builds for the 3 themes.
+You can enable some support for Internet Explorer 11 by importing the `_iefix.scss` files where appropriate. These are commented out in the default CSS builds for the 3 themes. Also make sure to resolve the `enketo/polyfills-ie11` module to `/src/js/polyfills-ie11` (or an alternative polyfill service).
 
 ### Global Configuration
 

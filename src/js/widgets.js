@@ -25,4 +25,5 @@ module.exports = [
     require( '../widget/comment/commentwidget' ),
     require( '../widget/image-map/image-map' ),
     require( '../widget/range/range-widget' ),
+    require( '../widget/rank/rank-widget' ),
 ];

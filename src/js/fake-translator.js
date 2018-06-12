@@ -58,6 +58,10 @@ var SOURCE_STRINGS = {
     'imagemap': {
         'svgNotFound': 'SVG image could not be found'
     },
+    'rankwidget': {
+        'tapstart': 'Tap to start',
+        'clickstart': 'Click to start'
+    },
     'widget': {
         'comment': {
             'update': 'Update'

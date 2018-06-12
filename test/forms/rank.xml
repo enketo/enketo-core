@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:odk="http://opendatakit.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>rank</h:title>
+        <model>
+            <instance>
+                <rank id="rank">
+                    <s1/>
+                    <r1/>
+                    <r2/>
+                    <r3>foddertree beans cacao coffee foddergrass banana</r3>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </rank>
+            </instance>
+            <instance id="crop_list">
+                <root>
+                    <item>
+                        <label>Banana</label>
+                        <name>banana</name>
+                    </item>
+                    <item>
+                        <label>Beans</label>
+                        <name>beans</name>
+                    </item>
+                    <item>
+                        <label>Cacao</label>
+                        <name>cacao</name>
+                    </item>
+                    <item>
+                        <label>Coffee</label>
+                        <name>coffee</name>
+                    </item>
+                    <item>
+                        <label>Fodder Grass</label>
+                        <name>foddergrass</name>
+                    </item>
+                    <item>
+                        <label>Fodder Tree</label>
+                        <name>foddertree</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/rank/s1" type="string" required="true()" />
+            <bind nodeset="/rank/r1" type="string" required="true()" />
+            <bind nodeset="/rank/r2" type="string" />
+            <bind nodeset="/rank/r3" type="string"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/rank/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/rank/s1">
+            <label>Enter first letter to get options in next q that start with that letter</label>
+        </input>
+        <odk:rank ref="/rank/r1">
+            <label>Rank crops from list</label>
+            <hint>this is a hint</hint>
+            <itemset nodeset="instance('crop_list')/root/item[starts-with(name, current()/../s1)]">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </odk:rank>
+        <odk:rank ref="/rank/r2">
+            <label>Rank crops from list</label>
+            <itemset nodeset="randomize(instance('crop_list')/root/item)">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </odk:rank>
+        <odk:rank ref="/rank/r3">
+            <label>Rank crops from list</label>
+            <itemset nodeset="randomize(instance('crop_list')/root/item)">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </odk:rank>
+        <odk:rank ref="/rank/r4">
+            <label>Rank crops from list</label>
+            <item>
+                <label>option a</label>
+                <value>a</value>
+            </item>
+            <item>
+                <label>option b</label>
+                <value>b</value>
+            </item>
+            <item>
+                <label>option c</label>
+                <value>c</value>
+            </item>
+            <item>
+                <label>option d</label>
+                <value>d</value>
+            </item>
+        </odk:rank>
+    </h:body>
+</h:html>

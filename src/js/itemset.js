@@ -31,7 +31,7 @@ module.exports = {
             var $instanceItems;
             var template = this;
             var $template = $( this );
-            var radioCheckAttributes = {};
+            var inputAttributes = {};
 
             // Nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
             if ( $template.parentsUntil( '.or', '.or-branch' ).parentsUntil( '.or', '.disabled' ).length ) {
@@ -44,10 +44,12 @@ module.exports = {
             var $list = $template.parent( 'select, datalist' );
 
             if ( templateNodeName === 'label' ) {
-                $input = $template.children( 'input' ).eq( 0 );
-                [].slice.call( $input[ 0 ].attributes ).forEach( function( attr ) {
-                    radioCheckAttributes[ attr.name ] = attr.value;
+                var $optionInput = $template.children( 'input' ).eq( 0 );
+                [].slice.call( $optionInput[ 0 ].attributes ).forEach( function( attr ) {
+                    inputAttributes[ attr.name ] = attr.value;
                 } );
+                // If this is a ranking widget:
+                $input = $optionInput.hasClass( 'ignore' ) ? $optionInput.closest( '.option-wrapper' ).siblings( 'input.rank' ).eq( 0 ) : $optionInput;
             } else if ( $list.prop( 'nodeName' ).toLowerCase() === 'select' ) {
                 $input = $list;
             } else if ( $list.prop( 'nodeName' ).toLowerCase() === 'datalist' ) {
@@ -153,7 +155,7 @@ module.exports = {
                 var value = that.getNodeFromItem( valueRef, item ).textContent;
 
                 if ( templateNodeName === 'label' ) {
-                    optionsFragment.appendChild( that.createInput( radioCheckAttributes, translations, value ) );
+                    optionsFragment.appendChild( that.createInput( inputAttributes, translations, value ) );
                 } else if ( templateNodeName === 'option' ) {
                     var activeLabel = '';
                     if ( translations.length > 1 ) {
@@ -176,22 +178,21 @@ module.exports = {
             }
 
             /**
-             * Attempt to populate inputs with current value in model.
+             * Attempt to populate inputs with current value in model (except for ranking input)
              * Note that if the current value is not empty and the new itemset does not 
              * include (an) item(s) with this/se value(s), this will clear/update the model and
              * this will trigger a dataupdate event. This may call this update function again.
              */
             var currentValue = that.form.model.node( context, index ).getVal()[ 0 ];
             if ( currentValue !== '' ) {
+                if ( $input.hasClass( 'rank' ) ) {
+                    currentValue = '';
+                }
                 that.form.input.setVal( context, index, currentValue );
                 $input.trigger( 'change' );
             }
 
-            if ( $list.length > 0 ) {
-                // populate labels (with current language) 
-                // TODO: is this actually required?
-                // that.langs.setSelect( $list );
-                // update widget
+            if ( $list.length > 0 || $input.hasClass( 'rank' ) ) {
                 $input.trigger( 'changeoption' );
             }
 

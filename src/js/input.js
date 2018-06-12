@@ -162,12 +162,12 @@ module.exports = {
 
         index = index || 0;
 
-        if ( this.getInputType( this.form.view.$.find( '[data-name="' + name + '"]' ).eq( 0 ) ) === 'radio' ) {
+        if ( this.getInputType( this.form.view.$.find( '[data-name="' + name + '"]:not(.ignore)' ).eq( 0 ) ) === 'radio' ) {
             type = 'radio';
-            $inputNodes = this.getWrapNodes( this.form.view.$.find( '[data-name="' + name + '"]' ) ).eq( index ).find( '[data-name="' + name + '"]' );
+            $inputNodes = this.getWrapNodes( this.form.view.$.find( '[data-name="' + name + '"]' ) ).eq( index ).find( '[data-name="' + name + '"]:not(.ignore)' );
         } else {
             // why not use this.getIndex?
-            $inputNodes = this.getWrapNodes( this.form.view.$.find( '[name="' + name + '"]' ) ).eq( index ).find( '[name="' + name + '"]' );
+            $inputNodes = this.getWrapNodes( this.form.view.$.find( '[name="' + name + '"]' ) ).eq( index ).find( '[name="' + name + '"]:not(.ignore)' );
             type = this.getInputType( $inputNodes.eq( 0 ) );
 
             if ( type === 'file' ) {

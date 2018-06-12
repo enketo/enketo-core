@@ -71,7 +71,10 @@ button {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    &:focus, &:link, &:active, &:visited {
+    &:focus,
+    &:link,
+    &:active,
+    &:visited {
         text-decoration: none;
     }
 }
@@ -87,17 +90,26 @@ button {
 // special minimal icon-only buttons
 .btn-icon-only {
     margin: 0 10px 0 10px;
-    padding: 0;
+    padding: 7px;
     color: $text-color;
     background: none;
     border: none;
+    width: $input-height;
+    height: $input-height;
     @include box-shadow-none;
     opacity: 0.7;
-    &:hover, &:focus, &:active, &.active, &:disabled, &.disabled {
+    &:hover,
+    &:focus,
+    &:active,
+    &.active,
+    &:disabled,
+    &.disabled {
         background: none;
         @include box-shadow-none;
     }
-    &:hover, &:disabled, &.disabled {
+    &:hover,
+    &:disabled,
+    &.disabled {
         color: $text-color;
         opacity: 0.5;
     }
