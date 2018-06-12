@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.52.4] - 2018-06-12
+---------------------
+##### Fixed
+- Range widget loading error if relevant is used.
+
 [4.52.3] - 2018-06-11
 ---------------------
 ##### Fixed

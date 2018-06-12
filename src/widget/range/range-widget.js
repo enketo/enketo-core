@@ -21,7 +21,7 @@ RangeWidget.prototype.constructor = RangeWidget;
 
 RangeWidget.prototype._init = function() {
     var that = this;
-    var props = this._getProps();
+    this.props = this._getProps();
     var $widget = $(
         '<div class="widget range-widget">' +
         '<div class="range-widget__wrap">' +
@@ -30,18 +30,18 @@ RangeWidget.prototype._init = function() {
         '<div class="range-widget__ticks"/>' +
         '<div class="range-widget__scale">' +
         '<span class="range-widget__scale__start"/>' +
-        this._stepsBetweenHtml( props ) +
+        this._stepsBetweenHtml( this.props ) +
         this.resetButtonHtml +
         '<span class="range-widget__scale__end"/>' +
         '</div>' +
         '<div class="range-widget__bulb"><div class="range-widget__bulb__inner"/><div class="range-widget__bulb__mercury"/></div>' +
         '</div>' +
-        '<input type="range" class="ignore empty" min="' + props.min + '" max="' + props.max + '" step="' + props.step + '"/>' +
+        '<input type="range" class="ignore empty" min="' + this.props.min + '" max="' + this.props.max + '" step="' + this.props.step + '"/>' +
         '</div>'
     );
 
-    $widget.find( '.range-widget__scale__start' ).text( props.min );
-    $widget.find( '.range-widget__scale__end' ).text( props.max );
+    $widget.find( '.range-widget__scale__start' ).text( this.props.min );
+    $widget.find( '.range-widget__scale__end' ).text( this.props.max );
 
     this.$number = $( this.element );
     this.$range = $widget.find( 'input' );
@@ -54,7 +54,7 @@ RangeWidget.prototype._init = function() {
         } )
         .addClass( 'hide' );
 
-    if ( props.readonly ) {
+    if ( this.props.readonly ) {
         this.disable();
     }
 
@@ -63,7 +63,7 @@ RangeWidget.prototype._init = function() {
             console.log( 'cahnging text of ', that.$current, this.value );
             that.$current.text( this.value );
             that.$number.val( this.value ).trigger( 'change' );
-            that._updateMercury( ( this.value - this.min ) / ( props.max - props.min ) );
+            that._updateMercury( ( this.value - this.min ) / ( that.props.max - that.props.min ) );
         } )
         .on( 'focus', function() {
             that.$number.trigger( 'fakefocus' );
@@ -150,7 +150,7 @@ RangeWidget.prototype.disable = function() {
 };
 
 RangeWidget.prototype.enable = function() {
-    if ( !this.props.readonly ) {
+    if ( this.props && !this.props.readonly ) {
         $( this.element )
             .next( '.widget' )
             .find( 'input, button' )
