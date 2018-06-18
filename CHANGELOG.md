@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - When unfolding collapsed groups, the draw widgets are not functional until the window is resized.
+- Various styling degradations of geo widgets.
 
 [4.53.0] - 2018-06-15
 ---------------------
