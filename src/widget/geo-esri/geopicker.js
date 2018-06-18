@@ -5,7 +5,6 @@ var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var config = require( 'enketo/config' );
 var convertor = require( './usng.js' );
-var Promise = require( 'lie' );
 var t = require( 'enketo/translator' ).t;
 var PLUGIN_NAME = 'esriGeopicker';
 var OVERRIDE_PLUGIN_NAME = 'geopicker';

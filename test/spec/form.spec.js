@@ -1242,7 +1242,7 @@ describe( 're-validating inputs and updating user feedback', function() {
     $oneComment = form.view.$.find( '[name="/comment/one_comment"]' );
     it( 'works', function( done ) {
         // set question "one" in invalid state (automatic)
-        $one.val( '3' ).trigger( 'change' ).val( '' ).trigger( 'change' );
+        $one.val( '' ).trigger( 'change' );
         // validation is asynchronous
         setTimeout( function() {
             expect( $one.closest( '.question' ).hasClass( 'invalid-required' ) ).toBe( true );

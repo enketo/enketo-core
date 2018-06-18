@@ -9,7 +9,6 @@ var SignaturePad = require( 'signature_pad' );
 var t = require( 'enketo/translator' ).t;
 var dialog = require( 'enketo/dialog' );
 var utils = require( '../../js/utils' );
-var Promise = require( 'lie' );
 
 /**
  * SignaturePad.prototype.fromDataURL is asynchronous and does not return a 

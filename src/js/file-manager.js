@@ -8,7 +8,6 @@
  * types.
  */
 
-var Promise = require( 'lie' );
 var $ = require( 'jquery' );
 var utils = require( './utils' );
 var fileManager = {};

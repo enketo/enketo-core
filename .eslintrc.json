@@ -2,7 +2,10 @@
     "env": {
         "es6": false,
         "browser": true,
-        "node": true
+        "commonjs": true
+    },
+    "globals": {
+        "Promise": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {

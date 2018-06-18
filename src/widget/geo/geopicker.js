@@ -4,7 +4,6 @@ var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 var config = require( 'enketo/config' );
 var L = require( 'leaflet' );
-var Promise = require( 'lie' );
 var t = require( 'enketo/translator' ).t;
 var support = require( '../../js/support' );
 var types = require( '../../js/types' );

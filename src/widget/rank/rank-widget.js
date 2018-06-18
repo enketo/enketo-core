@@ -1,7 +1,5 @@
 'use strict';
 
-require( 'enketo/polyfills-ie11' );
-
 var pluginName = 'rankWidget';
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );

@@ -2,7 +2,6 @@
 
 var FormModel = require( './Form-model' );
 var $ = require( 'jquery' );
-var Promise = require( 'lie' );
 var utils = require( './utils' );
 var t = require( 'enketo/translator' ).t;
 var config = require( 'enketo/config' );

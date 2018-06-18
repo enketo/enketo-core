@@ -5,7 +5,6 @@
  */
 
 var $ = require( 'jquery' );
-var Promise = require( 'lie' );
 var dpi, printStyleSheet;
 var $printStyleSheetLink;
 var dialog = require( 'enketo/dialog' );

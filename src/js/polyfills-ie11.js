@@ -2,6 +2,8 @@ require( 'core-js/es6/object' );
 require( 'core-js/es6/array' );
 require( 'core-js/es7/array' );
 require( 'core-js/es6/map' );
+require( 'core-js/es6/promise' );
+require( 'core-js/es7/promise' );
 
 if ( !Object.entries ) {
     Object.entries = function( obj ) {

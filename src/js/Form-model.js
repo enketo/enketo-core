@@ -4,7 +4,6 @@
 var MergeXML = require( 'mergexml/mergexml' );
 var utils = require( './utils' );
 var $ = require( 'jquery' );
-var Promise = require( 'lie' );
 var FormLogicError = require( './Form-logic-error' );
 var config = require( 'enketo/config' );
 var types = require( './types' );

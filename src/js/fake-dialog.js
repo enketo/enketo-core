@@ -1,7 +1,5 @@
 'use strict';
 
-var Promise = require( 'lie' );
-
 /*
  * This file is meant to be overidden with one that uses the app's dialogs.
  */
