@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- When unfolding collapsed groups, the draw widgets are not functional until the window is resized.
+
 [4.53.0] - 2018-06-15
 ---------------------
 ##### Added

@@ -664,7 +664,8 @@ Form.prototype.setEventHandlers = function() {
     } );
 
     this.view.$.find( '.or-group > h4' ).on( 'click', function() {
-        $( this ).closest( '.or-group' ).toggleClass( 'or-appearance-compact' );
+        // The resize trigger is to make sure canvas widgets start working.
+        $( this ).closest( '.or-group' ).toggleClass( 'or-appearance-compact' ).trigger( 'resize' );
     } );
 };
 
