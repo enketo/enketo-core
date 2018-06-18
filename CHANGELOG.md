@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Added
+- URL widget
+
 ##### Fixed
 - When unfolding collapsed groups, the draw widgets are not functional until the window is resized.
 - Various styling degradations of geo widgets.

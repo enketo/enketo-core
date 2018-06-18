@@ -26,4 +26,5 @@ module.exports = [
     require( '../widget/image-map/image-map' ),
     require( '../widget/range/range-widget' ),
     require( '../widget/rank/rank-widget' ),
+    require( '../widget/url/url-widget' ),
 ];
