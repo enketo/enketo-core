@@ -24,6 +24,17 @@ describe( 'Output functionality ', function() {
     } );
 } );
 
+describe( 'Output functionality inside branches that irrelevan upon load', function() {
+    var form = loadForm( 'output-irrelevant.xml' );
+    form.init();
+
+    it( 'is evaluated after the branch becomes relevant', function() {
+        form.view.$.find( 'input[name="/data/consent"]' ).val( 'yes' ).trigger( 'change' );
+        expect( form.view.$.find( '.or-output' ).text() ).toEqual( 'mr' );
+    } );
+} );
+
+
 describe( 'Output functionality within repeats', function() {
     var $o = [];
     var form = loadForm( 'outputs_in_repeats.xml' );

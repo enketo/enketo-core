@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>output in irrelevant group</h:title>
+        <model>
+            <instance>
+                <data id="mera_follow_Enketo">
+                    <consent/>
+                    <name1>mr</name1>
+                    <age>
+                        <q8b_1/>
+                    </age>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/consent" type="string"/>
+            <bind nodeset="/data/name1" readonly="true()" type="string"/>
+            <bind nodeset="/data/age" relevant="/data/consent = 'yes'"/>
+            <bind nodeset="/data/age/q8b_1" relevant="not( /data/name1  = &quot;&quot;)" type="int"/>
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/consent">
+            <label>Enter "yes"</label>
+        </input>
+        <input ref="/data/name1">
+            <label>Name</label>
+        </input>
+        <group ref="/data/age">
+            <label>group</label>
+            <input ref="/data/age/q8b_1">
+                <label>hey                    <output value="/data/name1"/>
+                </label>
+            </input>
+        </group>
+    </h:body>
+</h:html>

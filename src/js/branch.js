@@ -195,6 +195,9 @@ module.exports = {
             this.form.calc.update( {
                 relevantPath: path
             } );
+            // Update outputs that are children of branch
+            // TODO this re-evaluates all outputs in the form which is not efficient!
+            this.form.output.update();
             this.form.widgets.enable( $branchNode );
             this.activate( $branchNode );
         }
