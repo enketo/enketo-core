@@ -60,7 +60,6 @@ RangeWidget.prototype._init = function() {
 
     this.$range
         .on( 'change', function() {
-            console.log( 'cahnging text of ', that.$current, this.value );
             that.$current.text( this.value );
             that.$number.val( this.value ).trigger( 'change' );
             that._updateMercury( ( this.value - this.min ) / ( that.props.max - that.props.min ) );
