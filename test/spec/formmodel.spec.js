@@ -1121,24 +1121,30 @@ describe( 'merging an instance into the model', function() {
             [ '<a><c/></a>', '<model><instance><a><c/><b/></a></instance></model>', '<model><instance><a><c/><b/></a></instance></model>' ],
             // repeated nodes in record get added (including repeat childnodes that are missing from record)
             [ '<a><c><d>record</d></c><c/></a>', '<model><instance><a><c><d>model</d></c></a></instance></model>',
-                '<model><instance><a><c><d>record</d></c><c><d/></c></a></instance></model>'
+                '<model><instance><a><!--repeat://a/c--><c><d>record</d></c><c><d/></c></a></instance></model>'
+            ],
+            // more difficult case, with empty group in record for instance where group contains nothing other than 1 repeat.
+            [
+                '<M><code>a</code><f1/><survey><MB></MB></survey><meta><instanceID/></meta></M>',
+                '<model xmlns:jr="http://openrosa.org/javarosa"><instance><M><code/><f1/><survey><MB><mBr1 jr:template=""><mem/><MBg1><name/></MBg1></mBr1></MB></survey><meta><instanceID/></meta></M></instance></model>',
+                '<model xmlns:jr="http://openrosa.org/javarosa"><instance><M><code>a</code><f1/><survey><MB><!--repeat://M/survey/MB/mBr1--></MB></survey><meta><instanceID/></meta></M></instance></model>'
             ],
             // nested repeated nodes in record (both c and d are repeats)
             [ '<a><c><d>record</d></c><c><d>one</d><d>two</d></c></a>', '<model><instance><a><c><d>model</d></c></a></instance></model>',
-                '<model><instance><a><c><d>record</d></c><c><d>one</d><d>two</d></c></a></instance></model>'
+                '<model><instance><a><!--repeat://a/c--><c><!--repeat://a/c/d--><d>record</d></c><c><!--repeat://a/c/d--><d>one</d><d>two</d></c></a></instance></model>'
             ],
             // nested repeated nodes in record special difficult case that may result in out-of-order repeat insertion (but not sure why)
             [
                 '<q><P><I><Partner><pi><pn>a</pn><Camp><cn>a1</cn></Camp><Camp><cn>a2</cn></Camp></pi></Partner><Partner><pi><pn>b</pn><Camp><cn>b1</cn></Camp><Camp><cn>b2</cn></Camp><Camp><cn>b3</cn></Camp></pi></Partner></I></P><meta><instanceID>a</instanceID></meta></q>',
                 '<model><instance><q id="Test2" ><P><I><Partner><pi><pn/><Camp><cn/></Camp><bud/></pi></Partner></I></P><meta><instanceID/></meta></q></instance></model>',
-                '<model><instance><q id="Test2"><P><I><Partner><pi><pn>a</pn><Camp><cn>a1</cn></Camp><Camp><cn>a2</cn></Camp><bud/></pi></Partner><Partner><pi><pn>b</pn><Camp><cn>b1</cn></Camp><Camp><cn>b2</cn></Camp><Camp><cn>b3</cn></Camp><bud/></pi></Partner></I></P><meta><instanceID>a</instanceID></meta></q></instance></model>'
+                '<model><instance><q id="Test2"><P><I><!--repeat://q/P/I/Partner--><Partner><pi><pn>a</pn><!--repeat://q/P/I/Partner/pi/Camp--><Camp><cn>a1</cn></Camp><Camp><cn>a2</cn></Camp><bud/></pi></Partner><Partner><pi><pn>b</pn><!--repeat://q/P/I/Partner/pi/Camp--><Camp><cn>b1</cn></Camp><Camp><cn>b2</cn></Camp><Camp><cn>b3</cn></Camp><bud/></pi></Partner></I></P><meta><instanceID>a</instanceID></meta></q></instance></model>'
             ],
             // repeated nodes in record get added in the right order
-            [ '<a><r/><r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><r/><r/><meta/></a></instance></model>' ],
+            [ '<a><r/><r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><!--repeat://a/r--><r/><r/><meta/></a></instance></model>' ],
             // same as above but there are text nodes as siblings of repeats
-            [ '<a><r/>\n<r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><r/><r/><meta/></a></instance></model>' ],
+            [ '<a><r/>\n<r/></a>', '<model><instance><a><r/><meta/></a></instance></model>', '<model><instance><a><!--repeat://a/r--><r/><r/><meta/></a></instance></model>' ],
             // repeated groups with missing template nodes in record get added
-            [ '<a><r/><r/></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><r><b/></r><meta/></a></instance></model>' ],
+            [ '<a><r/><r/></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><!--repeat://a/r--><r><b/></r><r><b/></r><meta/></a></instance></model>' ],
             // unused model namespaces preserved:
             [ '<a><c>record</c></a>', '<model xmlns:cc="http://cc.com"><instance><a><c/></a></instance></model>', '<model xmlns:cc="http://cc.com"><instance><a><c>record</c></a></instance></model>' ],
             // used model namespaces preserved (though interestingly the result includes a duplicate namespace declaration - probably a minor bug in merge-xml-js)
@@ -1184,7 +1190,7 @@ describe( 'merging an instance into the model', function() {
 
             // remove __session instance
             model.xml.querySelector( 'instance[id="__session"]' ).remove();
-            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' ).replace( /<!--[^>]*-->/g, '' );
+            result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
             expected = test[ 2 ];
 
             it( 'produces the expected result for instance: ' + test[ 0 ], function() {

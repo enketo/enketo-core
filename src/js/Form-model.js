@@ -406,9 +406,12 @@ FormModel.prototype.mergeXml = function( recordStr ) {
         var path = that.getXPath( this, 'instance', true );
         var instanceNode = that.node( path, 0 ).get()[ 0 ];
         if ( instanceNode ) {
-            // TODO: after dropping support for IE11, we can use instanceNode.children.length
-            if ( $( instanceNode ).children().length === 0 ) {
-                instanceNode.textContent = '';
+            // TODO: after dropping support for IE11, we can also use instanceNode.children.length
+            if ( that.evaluate( './*', 'nodes', path, 0, true ).length === 0 ) {
+                // Select all text nodes (excluding repeat COMMENT nodes!)
+                that.evaluate( './text()', 'nodes', path, 0, true ).forEach( function( node ) {
+                    node.textContent = '';
+                } );
             } else {
                 // If the node in the default instance is a group (empty in record, so appears to be a leaf node
                 // but isn't), empty all true leaf node descendants.
