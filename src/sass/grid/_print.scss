@@ -216,10 +216,6 @@ screen and (min-width: 700px) {
 }
 
 @media print {
-    #dialog-print {
-        display: none;
-    }
-
     .back-to-screen-view {
         display: none !important;
     }
