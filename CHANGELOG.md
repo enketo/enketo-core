@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Autocomplete question inside a non-first repeat shows list from first repeat.
+
 [4.54.1] - 2018-06-20
 ---------------------
 ##### Fixed

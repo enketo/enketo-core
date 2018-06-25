@@ -258,6 +258,7 @@ module.exports = {
         for ( i = 0; i < count; i++ ) {
             // Fix names of radio button groups
             $clone.find( '.option-wrapper' ).each( this.fixRadioNames );
+            $clone.find( 'datalist' ).each( this.fixDatalistIds );
             // Insert the clone
             $clone.insertBefore( repeatInfo );
 
@@ -329,6 +330,11 @@ module.exports = {
     fixRadioNames: function( index, element ) {
         $( element ).find( 'input[type="radio"]' )
             .attr( 'name', Math.floor( ( Math.random() * 10000000 ) + 1 ) );
+    },
+    fixDatalistIds: function( index, element ) {
+        var newId = element.id + Math.floor( ( Math.random() * 10000000 ) + 1 );
+        element.parentNode.querySelector( 'input[list="' + element.id + '"]' ).setAttribute( 'list', newId );
+        element.id = newId;
     },
     toggleButtons: function( repeatInfo ) {
         $( repeatInfo )

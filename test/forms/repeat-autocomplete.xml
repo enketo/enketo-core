@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:odk="http://opendatakit.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>autocomplete in repeat</h:title>
+        <model>
+            <instance>
+                <data id="a">
+                    <rep>
+                        <s1/>
+                        <r1/>
+                    </rep>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="crop_list">
+                <root>
+                    <item>
+                        <label>Banana</label>
+                        <name>banana</name>
+                    </item>
+                    <item>
+                        <label>Beans</label>
+                        <name>beans</name>
+                    </item>
+                    <item>
+                        <label>Cacao</label>
+                        <name>cacao</name>
+                    </item>
+                    <item>
+                        <label>Coffee</label>
+                        <name>coffee</name>
+                    </item>
+                    <item>
+                        <label>Fodder Grass</label>
+                        <name>foddergrass</name>
+                    </item>
+                    <item>
+                        <label>Fodder Tree</label>
+                        <name>foddertree</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/rep/s1" type="string" required="true()" />
+            <bind nodeset="/data/rep/r1" type="string" required="true()" />
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/rep">
+            <repeat nodeset="/data/rep">
+                <input ref="/data/rep/s1">
+                    <label>Enter first letter</label>
+                </input>
+                <select1 ref="/data/rep/r1" appearance="autocomplete">
+                    <label>Select</label>
+                    <itemset nodeset="instance('crop_list')/root/item[starts-with(name, current()/../s1)]">
+                        <value ref="name"/>
+                        <label ref="label"/>
+                    </itemset>
+                </select1>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
