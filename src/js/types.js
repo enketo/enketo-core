@@ -61,18 +61,20 @@ var types = {
             return false;
         },
         convert: function( x ) {
-            var date;
-
             if ( utils.isNumber( x ) ) {
                 // The XPath expression "2012-01-01" + 2 returns a number of days in XPath.
-                date = new Date( x * 24 * 60 * 60 * 1000 );
+                var date = new Date( x * 24 * 60 * 60 * 1000 );
+                return date.toString() === 'Invalid Date' ?
+                    '' : date.getFullYear().toString().pad( 4 ) + '-' + ( date.getMonth() + 1 ).toString().pad( 2 ) + '-' + date.getDate().toString().pad( 2 );
             } else {
-                // for both dates and datetimes
-                date = this.validate( x ) ? new Date( x ) : 'Invalid Date';
+                // For both dates and datetimes
+                // If it's a datetime, we can quite safely assume it's in the local timezone, and therefore we can simply chop off
+                // the time component.
+                if ( /[0-9]T[0-9]/.test( x ) ) {
+                    x = x.split( 'T' )[ 0 ];
+                }
+                return this.validate( x ) ? x : '';
             }
-
-            return date.toString() === 'Invalid Date' ?
-                '' : date.getUTCFullYear().toString().pad( 4 ) + '-' + ( date.getUTCMonth() + 1 ).toString().pad( 2 ) + '-' + date.getUTCDate().toString().pad( 2 );
         }
     },
     'datetime': {
