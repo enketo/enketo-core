@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.54.2] - 2018-06-27
 ---------------------
 ##### Fixed
 - Autocomplete question inside a non-first repeat shows list from first repeat.
+- Dates are now considered local to fix constraints such as ". < today()"
 
 [4.54.1] - 2018-06-20
 ---------------------
