@@ -13,7 +13,7 @@ module.exports = function( addExtensions ) {
      * 
      * In any case, you don't have to use it like this. It was done for 
      * Enketo Validate only. In an app that doesn't override enketo-xpathjs, 
-     * I'd recommend using `require('extension)(require('enketo-xpathjs'))` instead 
+     * I'd recommend using `require('extension')(require('enketo-xpathjs'))` instead
      * and leave the addExtensions parameter empty here.
      */
     if ( typeof addExtensions === 'function' ) {
