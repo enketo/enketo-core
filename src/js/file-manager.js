@@ -108,7 +108,7 @@ fileManager.getCurrentFiles = function() {
         } else if ( this.value ) {
             canvas = $( this ).closest( '.question' )[ 0 ].querySelector( '.draw-widget canvas' );
             if ( canvas ) {
-                // TODO: In the future, we could simply do canvas.toBlob() insteadU
+                // TODO: In the future, we could simply do canvas.toBlob() instead
                 file = utils.dataUriToBlobSync( canvas.toDataURL() );
                 file.name = this.value;
             }
