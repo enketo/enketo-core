@@ -1071,6 +1071,8 @@ describe( 'Form.prototype', function() {
             'jr:choice-name( /choice-regex/translator, " /choice-regex/translator ")': '"__MOCK_VIEW_VALUE__"',
             '     jr:choice-name(       /choice-regex/translator     ,  " /choice-regex/translator "   )    ': '     "__MOCK_VIEW_VALUE__"    ',
             'if(string-length( /embedded-choice/translator ) !=0, jr:choice-name( /embedded-choice/translator ,\' /embedded-choice/translator \'),\'unspecified\')': 'if(string-length( /embedded-choice/translator ) !=0, "__MOCK_VIEW_VALUE__",\'unspecified\')',
+            'jr:choice-name( selected-at( /energy_1/light/light_equip , 1), " /energy_1/light/light_equip " )': '"__MOCK_VIEW_VALUE__"',
+            'if( /data/C1 =01, jr:choice-name( /data/C2 ," /data/C2 "), jr:choice-name( /data/C3 ," /data/C3 " ) )': 'if( /data/C1 =01, "__MOCK_VIEW_VALUE__", "__MOCK_VIEW_VALUE__" )',
         }, function( initial, expected ) {
             it( 'should replace ' + initial + ' with ' + expected, function() {
                 // given

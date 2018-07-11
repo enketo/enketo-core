@@ -17,6 +17,7 @@ var preloadModule = require( './preload' );
 var outputModule = require( './output' );
 var calculationModule = require( './calculation' );
 var maskModule = require( './mask' );
+var FormLogicError = require( './Form-logic-error' );
 require( './plugins' );
 require( './extend' );
 
@@ -287,29 +288,31 @@ Form.prototype.resetView = function() {
  * @return {[type]}            [description]
  */
 Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index, tryNative ) {
-    var value;
-    var name;
-    var $input;
-    var label = '';
-    var matches = expr.match( new RegExp( 'jr:choice-name\\(([^,]+),\\s*(?:' +
-        '"([^"]*)"|' +
-        '\'([^\']*)\'' +
-        ')\\s*\\)' ) );
+    var that = this;
+    var choiceNames = utils.parseFunctionFromExpression( expr, 'jr:choice-name' );
 
-    if ( matches ) {
-        value = this.model.evaluate( matches[ 1 ], resTypeStr, selector, index, tryNative );
-        name = ( matches[ 2 ] || matches[ 3 ] || '' ).trim();
-        $input = this.view.$.find( '[name="' + name + '"]' );
+    choiceNames.forEach( function( choiceName ) {
+        var params = choiceName[ 1 ];
 
-        if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
-            label = $input.find( '[value="' + value + '"]' ).text();
-        } else if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'input' ) {
-            label = $input.filter( function() {
-                return $( this ).attr( 'value' ) === value;
-            } ).siblings( '.option-label.active' ).text();
+        if ( params.length % 2 === 0 ) {
+            var label = '';
+            var value = that.model.evaluate( params[ 0 ], resTypeStr, selector, index, tryNative );
+            var name = utils.stripQuotes( params[ 1 ] ).trim();
+            var $input = that.view.$.find( '[name="' + name + '"]' );
+
+            if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
+                label = $input.find( '[value="' + value + '"]' ).text();
+            } else if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'input' ) {
+                label = $input.filter( function() {
+                    return $( this ).attr( 'value' ) === value;
+                } ).siblings( '.option-label.active' ).text();
+            }
+            expr = expr.replace( choiceName[ 0 ], '"' + label + '"' );
+        } else {
+            throw new FormLogicError( 'jr:choice-name function has incorrect number of parameters: ' + choiceName[ 0 ] );
         }
-        return expr.replace( matches[ 0 ], '"' + label + '"' );
-    }
+
+    } );
     return expr;
 };
 

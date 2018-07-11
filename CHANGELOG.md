@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Exceptions thrown with complex jr:choice-name() usage.
+
 [4.54.2] - 2018-06-27
 ---------------------
 ##### Fixed
