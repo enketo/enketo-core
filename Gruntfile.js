@@ -94,6 +94,7 @@ module.exports = function( grunt ) {
         },
         sass: {
             options: {
+                implementation: nodeSass,
                 sourceMap: false,
                 // this importer should be removed (npm 3+) or changed(npm 2) in the gruntFile of the app that is using enketo-core
                 importer: function( url, prev, done ) {
