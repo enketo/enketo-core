@@ -1,9 +1,8 @@
 // These icons are just defaults with limitations (colour cannot be changed e.g.)
 // You should override this file using icons from your app.
 // icon source: http://andrew.hedges.name/experiments/glyphicons/
+// It is recommended to center the icons inside their container using flexbox.
 .icon {
-    position: relative;
-    top: 1px;
     width: 15px;
     height: 15px;
     display: inline-block;

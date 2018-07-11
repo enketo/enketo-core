@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
----------------------
+[4.54.3] - 2018-07-11
+---------------------s
 ##### Fixed
 - Exceptions thrown with complex jr:choice-name() usage.
+- Various Geo Widget styling issues with buttons, mobile (fullscreen) and RTL scripts.
 
 [4.54.2] - 2018-06-27
 ---------------------
