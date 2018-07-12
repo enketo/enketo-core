@@ -294,7 +294,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
     choiceNames.forEach( function( choiceName ) {
         var params = choiceName[ 1 ];
 
-        if ( params.length % 2 === 0 ) {
+        if ( params.length !== 2 ) {
             var label = '';
             var value = that.model.evaluate( params[ 0 ], resTypeStr, selector, index, tryNative );
             var name = utils.stripQuotes( params[ 1 ] ).trim();
