@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Support for 'no-ticks' appearance in range widget.
 
+##### Fixed
+- Range widget in FF, the ticks partially disappear when the widget has a value.
 
 [4.54.3] - 2018-07-11
 ---------------------

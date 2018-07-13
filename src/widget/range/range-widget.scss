@@ -114,18 +114,14 @@ $left: -85px;
         height: $height;
         z-index: 0;
         text-align: center;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
     }
     &__current {
-        flex: 1;
         padding-bottom: $pad;
         vertical-align: middle;
         line-height: ($height - (3*$track-h)) / 2;
     }
     &__ticks {
-        height: 20px; //3 * $track-h;
+        height: 20px;
         box-sizing: border-box;
         margin-left: 0.5 * $thumb-d + 2;
         margin-right: 0.5 * $thumb-d + 2;
@@ -141,7 +137,6 @@ $left: -85px;
         }
     }
     &__scale {
-        flex: 1;
         display: flex;
         padding-top: $pad;
         justify-content: space-between;
@@ -155,7 +150,7 @@ $left: -85px;
     }
     [type=range] {
         position: absolute;
-        top: 92px;
+        top: 93.5px;
         left: 0;
     }
     .btn-reset {
@@ -177,12 +172,15 @@ $v-height: 350px;
     }
     .range-widget {
         &__wrap {
+            display: flex;
+            flex-wrap: nowrap;
             flex-direction: row;
             height: $v-height;
             width: $height;
             margin-top: 20px;
         }
         &__current {
+            flex: 1;
             padding-right: $pad;
             padding-bottom: 0;
             line-height: $v-height;
@@ -206,6 +204,7 @@ $v-height: 350px;
             }
         }
         &__scale {
+            flex: 1;
             padding-top: 0;
             padding-left: $pad;
             flex-direction: column-reverse;
