@@ -127,11 +127,18 @@ $left: -85px;
     &__ticks {
         height: 20px; //3 * $track-h;
         box-sizing: border-box;
-        margin-left: 0.5 * $thumb-d;
-        margin-right: 0.5 * $thumb-d;
-        border-left: $thick-w solid $track-color;
-        border-right: $thick-w solid $track-color; //background-image: linear-gradient(90deg, $track-color, $thick-w, transparent 0px);
-        //background-repeat: repeat-x;
+        margin-left: 0.5 * $thumb-d + 2;
+        margin-right: 0.5 * $thumb-d + 2;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        span {
+            flex: 1;
+            border-left: $thick-w solid $track-color;
+            &:last-child {
+                border-right: $thick-w solid $track-color;
+            }
+        }
     }
     &__scale {
         flex: 1;
@@ -181,17 +188,22 @@ $v-height: 350px;
             line-height: $v-height;
         }
         &__ticks {
-            width: 20px; //3 * $track-h;
-            height: auto; //background-image: linear-gradient( $track-color, $thick-w, transparent 0px);
-            //background-repeat: repeat-y;
-            border-bottom: $thick-w solid $track-color;
-            border-top: $thick-w solid $track-color;
+            width: 20px;
+            height: auto;
             border-right: none;
-            border-left: none;
             margin-left: 0;
             margin-right: 0;
-            margin-top: 0.5 * $thumb-d;
-            margin-bottom: 0.5 * $thumb-d;
+            margin-top: 0.5 * $thumb-d + 2;
+            margin-bottom: 0.5 * $thumb-d + 2;
+            flex-direction: column;
+            span {
+                border-top: $thick-w solid $track-color;
+                border-left: none;
+                &:last-child {
+                    border-bottom: $thick-w solid $track-color;
+                    border-right: none;
+                }
+            }
         }
         &__scale {
             padding-top: 0;

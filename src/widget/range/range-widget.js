@@ -83,16 +83,17 @@ RangeWidget.prototype._init = function() {
     // loads the default value if exists, else resets
     this.update();
 
-    // The actual value to show all ticks
-    // var backgroundSizes = [ props.step * 100 / ( props.max - props.min ), '100' ];
-    // But don't show too many ticks
-    // backgroundSizes[ 0 ] = Math.ceil( 1 / ( backgroundSizes[ 0 ] / 10 ) ) * backgroundSizes[ 0 ];
-    // Round up to first decimal and cheat with +1 to work around Chrome background bug // REMOVE THIS WHEN CHROME IS FIXED
-    //backgroundSizes[ 0 ] = Math.ceil( 0.9 + backgroundSizes[ 0 ] * 10 ) / 10;
-    //if ( props.vertical ) {
-    //    backgroundSizes.reverse();
-    //}
-    //$widget.find( '.range-widget__ticks' ).css( 'background-size', backgroundSizes.map( function( size ) { return size + '%'; } ).join( ' ' ) );
+    var ticks = this.props.ticks ? Math.ceil( Math.abs( ( this.props.max - this.props.min ) / this.props.step ) ) : 1;
+    // Now reduce to a number < 50 to avoid showing a sold black tick line.
+    var divisor = Math.ceil( ticks / 50 );
+    while ( ticks % divisor && divisor < ticks ) {
+        divisor++;
+    }
+    ticks = ticks / divisor;
+
+    // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little 
+    // issues seemingly related to rounding or browser sloppiness. This is less elegant but robust:
+    $widget.find( '.range-widget__ticks' ).append( new Array( ticks ).fill( '<span/>' ).join( '' ) );
 };
 
 RangeWidget.prototype._getProps = function() {
@@ -107,6 +108,7 @@ RangeWidget.prototype._getProps = function() {
         step: Number( step ),
         readonly: this.element.readOnly,
         vertical: $q.hasClass( 'or-appearance-vertical' ) || distress,
+        ticks: !$q.hasClass( 'or-appearance-no-ticks' ),
         distress: distress,
     };
 };
