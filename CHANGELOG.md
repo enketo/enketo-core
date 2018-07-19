@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Support for 'no-ticks' appearance in range widget.
 
+##### Changed
+- ODK namespace for `<rank>` widget (in enketo-transformer) to http://www.opendatakit.org/xforms.
+
 ##### Fixed
 - Range widget in FF, the ticks partially disappear when the widget has a value.
 
