@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Range widget in FF, the ticks partially disappear when the widget has a value.
+- Randomize() doesn't work for itemsets that use itext() labels (in enketo-transformer)
 
 [4.54.3] - 2018-07-11
 ---------------------
