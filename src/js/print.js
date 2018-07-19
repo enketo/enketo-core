@@ -193,6 +193,9 @@ function print( theme ) {
         var swapped = false;
         dialog.prompt( 'Enter valid paper format', 'A4' )
             .then( function( format ) {
+                if ( !format ) {
+                    throw new Error( 'Print cancelled by user.' );
+                }
                 swapped = styleToAll();
                 return fixGrid( {
                     format: format

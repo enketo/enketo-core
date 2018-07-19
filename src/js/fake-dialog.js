@@ -16,24 +16,11 @@ function alert( content ) {
  * @param {String | {message: String, heading: String}} content Dialog content
  */
 function confirm( content ) {
-    return new Promise( function( resolve, reject ) {
-        if ( window.confirm( content ) ) {
-            resolve();
-        } else {
-            reject();
-        }
-    } );
+    return Promise.resolve( window.confirm( content ) );
 }
 
 function prompt( content, def ) {
-    return new Promise( function( resolve, reject ) {
-        var value = window.prompt( content, def );
-        if ( value ) {
-            resolve( value );
-        } else {
-            reject();
-        }
-    } );
+    return Promise.resolve( window.prompt( content, def ) );
 }
 
 module.exports = {

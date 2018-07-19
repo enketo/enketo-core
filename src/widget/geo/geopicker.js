@@ -180,9 +180,12 @@ Geopicker.prototype._init = function() {
             that._updateInputs( [] );
         } else {
             dialog.confirm( t( 'geopicker.removePoint' ) )
-                .then( function() {
-                    that._removePoint();
-                } );
+                .then( function( confirmed ) {
+                    if ( confirmed ) {
+                        that._removePoint();
+                    }
+                } )
+                .catch( function() {} );
         }
     } );
 

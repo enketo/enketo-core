@@ -66,9 +66,12 @@ Filepicker.prototype._init = function() {
         .find( '.btn-reset' ).on( 'click', function() {
             if ( ( $input.val() || that.$fakeInput.val() ) ) {
                 dialog.confirm( t( 'filepicker.resetWarning', { item: t( 'filepicker.file' ) } ) )
-                    .then( function() {
-                        $input.val( '' ).trigger( 'change' );
-                    } );
+                    .then( function( confirmed ) {
+                        if ( confirmed ) {
+                            $input.val( '' ).trigger( 'change' );
+                        }
+                    } )
+                    .catch( function() {} );
             }
         } )
         .end();

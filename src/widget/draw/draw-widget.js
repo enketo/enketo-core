@@ -340,7 +340,10 @@ DrawWidget.prototype._reset = function() {
         var item = this.props.type === 'signature' ?
             t( 'drawwidget.signature' ) : ( this.props.type === 'drawing' ? t( 'drawwidget.drawing' ) : t( 'drawwidget.annotation' ) );
         dialog.confirm( t( 'filepicker.resetWarning', { item: item } ) )
-            .then( function() {
+            .then( function( confirmed ) {
+                if ( !confirmed ) {
+                    return;
+                }
                 that.pad.clear();
                 that.cache = null;
                 // Only upon reset is loadedFileName removed, so that "undo" will work
