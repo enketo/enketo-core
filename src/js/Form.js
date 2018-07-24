@@ -17,6 +17,7 @@ var preloadModule = require( './preload' );
 var outputModule = require( './output' );
 var calculationModule = require( './calculation' );
 var maskModule = require( './mask' );
+var readonlyModule = require( './readonly' );
 var FormLogicError = require( './Form-logic-error' );
 require( './plugins' );
 require( './extend' );
@@ -159,6 +160,7 @@ Form.prototype.init = function() {
     this.itemset = this.addModule( itemsetModule );
     this.calc = this.addModule( calculationModule );
     this.mask = this.addModule( maskModule );
+    this.readonly = this.addModule( readonlyModule );
 
     try {
         this.preloads.init();
@@ -188,6 +190,8 @@ Form.prototype.init = function() {
 
         // after repeats.init
         this.setAllVals();
+
+        this.readonly.update(); /// after setAllVals();
 
         // after setAllVals, after repeats.init
 
@@ -337,10 +341,7 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
             var value = $node.text();
             var name = that.model.getXPath( $node.get( 0 ), 'instance' );
             var index = that.model.node( name ).get().index( this );
-            var input = that.input.setVal( name, index, value );
-            // Remove the note class from questions with a default value. This would be better done
-            // in enketo-xslt, but it's a lot harder to do.
-            $( input ).closest( '.question' ).removeClass( 'note' );
+            that.input.setVal( name, index, value );
         } catch ( e ) {
             console.error( e );
             // TODO: Test if this correctly adds to loadErrors
@@ -972,7 +973,7 @@ Form.getRequiredTransformerVersion = function() {
     console.deprecate( 'Form.getRequiredTransformerVersion()', 'Form.requiredTransformerVersion' );
     return Form.requiredTransformerVersion;
 };
-Form.requiredTransformerVersion = '1.28.2';
+Form.requiredTransformerVersion = '1.28.3';
 
 module.exports = Form;
 

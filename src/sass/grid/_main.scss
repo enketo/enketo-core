@@ -152,11 +152,11 @@ h4+.or-repeat {
     @include flex-wrap(nowrap);
     @include flex-direction(column);
 
-    &:not(.note):not(.focus):hover {
+    &:not(.readonly):not(.focus):hover {
         background: $question-hover-bg;
     }
 
-    &.note {
+    &.readonly {
         background: $input-bg-disabled;
     }
 

@@ -428,7 +428,7 @@ $input-button-border: 2px solid #aaaaaa;
 }
 
 // correct readonly input display in notes
-.note .esri-geopicker input[readonly]:not([type=radio]):not([type=checkbox]) {
+.readonly .esri-geopicker input[readonly]:not([type=radio]):not([type=checkbox]) {
     display: block;
 }
 

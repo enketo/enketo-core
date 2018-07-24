@@ -47,7 +47,7 @@ module.exports = {
              * or the parent with a name attribute
              * or the whole document
              */
-            $context = $output.closest( '.question, .note, .or-group' );
+            $context = $output.closest( '.question, .or-group' );
 
             if ( !$context.is( '.or-group' ) ) {
                 $context = $context.find( '[name]' ).eq( 0 );

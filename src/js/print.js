@@ -89,7 +89,7 @@ function fixGrid( paper ) {
             var rowTop;
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
             var maxWidth = $( '#form-title' ).outerWidth() - 1;
-            var $els = $( '.question, .note, .trigger' ).not( '.draft' );
+            var $els = $( '.question, .trigger' ).not( '.draft' );
 
             $els.each( function( index ) {
                 var lastElement = index === $els.length - 1;

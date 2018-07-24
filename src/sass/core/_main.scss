@@ -235,9 +235,7 @@ $media-margin: 10px;
     border-top: none;
 }
 
-// The only remaining difference between .question and .note.
-// All other differences are triggered by the readonly attribute on an input/select/textarea.
-.question:not(.note) {
+.question:not(.readonly) {
     font-weight: bold;
 }
 
@@ -269,10 +267,10 @@ $media-margin: 10px;
     }
 }
 
-.note {
-    input[readonly],
-    select[readonly],
-    textarea[readonly] {
+.question.readonly {
+    input[readonly].empty,
+    select[readonly].empty,
+    textarea[readonly].empty {
         display: none;
     }
 
@@ -282,8 +280,7 @@ $media-margin: 10px;
 }
 
 label,
-legend,
-.note {
+legend {
     font-size: $font-size-base;
 }
 

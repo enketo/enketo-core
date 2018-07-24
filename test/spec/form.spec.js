@@ -1026,7 +1026,7 @@ describe( 'jr:choice-name', function() {
         form.init();
 
         expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[Default Value] Area' );
-        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[Default Value] Area' );
 
         // when
         form.view.$.find( '[name="/choice-regex/input"]' ).val( 'abc' ).trigger( 'change' );
@@ -1037,13 +1037,13 @@ describe( 'jr:choice-name', function() {
         // and
         // We don't expect the value change to cascade to a label until the choice value itself is changed.
         // See: https://github.com/enketo/enketo-core/issues/412
-        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[Default Value] Area' );
 
         // when
         form.view.$.find( '[name="/choice-regex/translator"][value=health_center]' ).click().trigger( 'change' );
 
         // then
-        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( '[abc] Health Center' );
+        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[abc] Health Center' );
     } );
 
     /** @see https://github.com/enketo/enketo-core/issues/490 */
@@ -1053,13 +1053,13 @@ describe( 'jr:choice-name', function() {
         form.init();
 
         // then
-        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( 'unspecified' );
+        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( 'unspecified' );
 
         // when
         form.view.$.find( '[name="/embedded-choice/translator"][value=clinic]' ).click().trigger( 'change' );
 
         // then
-        expect( form.view.$.find( '.note .or-output' ).text() ).toEqual( 'Area' );
+        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( 'Area' );
     } );
 } );
 

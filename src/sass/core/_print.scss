@@ -91,7 +91,7 @@ h4 {
 label,
 legend,
 .trigger,
-.note {
+.readonly {
     font-size: $printBaseFontSize;
 }
 
@@ -136,7 +136,7 @@ label.geo {
         }
     }
 
-    .note,
+    .readonly,
     .trigger {
         font-weight: normal;
         background: none;
