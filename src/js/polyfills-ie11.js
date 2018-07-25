@@ -55,30 +55,31 @@ if ( !Element.prototype.matches ) {
     window.CustomEvent = CustomEvent;
 } )();
 
-
 // Replace download functionality for file upload and drawing widgets.
-if ( window.navigator.msSaveOrOpenBlob && window.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
-    var utils = require( './utils' );
-    var fileManager = require( 'enketo/file-manager' );
-    var $ = require( 'jquery' );
+( function() {
+    if ( window.navigator.msSaveOrOpenBlob && window.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
+        var utils = require( './utils' );
+        var fileManager = require( 'enketo/file-manager' );
+        var $ = require( 'jquery' );
 
-    utils.updateDownloadLink = function( anchor, objectUrl, fileName ) {
-        // Shut off / reset previous link
-        $( anchor ).off( 'click' );
-        if ( objectUrl ) {
-            fileManager.urlToBlob( objectUrl )
-                .then( function( blob ) {
-                    $( anchor ).off( 'click' ).on( 'click', function() {
-                        window.navigator.msSaveOrOpenBlob( blob, fileName );
-                        return false;
-                    } ).removeAttr( 'href' );
-                } )
-                .catch( function( e ) {
-                    console.error( e );
-                } );
-        } else {
-            // This wil hide the link with CSS
-            anchor.setAttribute( 'href', '' );
-        }
-    };
-}
+        utils.updateDownloadLink = function( anchor, objectUrl, fileName ) {
+            // Shut off / reset previous link
+            $( anchor ).off( 'click' );
+            if ( objectUrl ) {
+                fileManager.urlToBlob( objectUrl )
+                    .then( function( blob ) {
+                        $( anchor ).off( 'click' ).on( 'click', function() {
+                            window.navigator.msSaveOrOpenBlob( blob, fileName );
+                            return false;
+                        } ).removeAttr( 'href' );
+                    } )
+                    .catch( function( e ) {
+                        console.error( e );
+                    } );
+            } else {
+                // This wil hide the link with CSS
+                anchor.setAttribute( 'href', '' );
+            }
+        };
+    }
+} )();

@@ -249,8 +249,6 @@ FormModel.prototype.getSecondaryInstance = function( id ) {
     return instanceEl;
 };
 
-
-
 /**
  * Returns a new Nodeset instance
  *
@@ -297,7 +295,6 @@ FormModel.prototype.importNode = function( node, allChildren ) {
             return document.createTextNode( node.nodeValue );
     }
 };
-
 /**
  * Merges an XML instance string into the XML Model
  *
@@ -354,8 +351,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
     templateEls = record.querySelectorAll( '[*|template]' );
 
     for ( var i = 0; i < templateEls.length; i++ ) {
-        // IE11 has no remove method, so we use jQuery
-        $( templateEls[ i ] ).remove();
+        templateEls[ i ].remove;
     }
 
     /**
@@ -810,8 +806,7 @@ FormModel.prototype.extractTemplates = function() {
          * The template of the repeat ancestor of the nested repeat contains the correct comment.
          * However, since the ancestor repeat (template)
          */
-        // IE11 has no remove() method so we use jQuery
-        $( templateEl ).remove();
+        templateEl.remove();
     } );
 };
 
