@@ -130,11 +130,11 @@ FormModel.prototype.init = function() {
                 rootEl = $.parseXML( instance.xml || instance.xmlStr ).firstChild;
             } else if ( instance.xml instanceof XMLDocument ) {
                 if ( global.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
-                    // IE does not support adoptNode
+                    // IE does not support importNode
                     rootEl = that.importNode( instance.xml.documentElement, true );
                 } else {
-                    // Adopt the root node
-                    rootEl = that.xml.adoptNode( instance.xml.documentElement, true );
+                    // Create a clone of the root node
+                    rootEl = that.xml.importNode( instance.xml.documentElement, true );
                 }
             }
             if ( rootEl ) {
@@ -267,6 +267,7 @@ FormModel.prototype.node = function( selector, index, filter ) {
 
 /**
  * Alternative adoptNode on IE11 (http://stackoverflow.com/questions/1811116/ie-support-for-dom-importnode)
+ * TODO: remove to be replaced by separate IE11-only polyfill file/service
  */
 FormModel.prototype.importNode = function( node, allChildren ) {
     var i;

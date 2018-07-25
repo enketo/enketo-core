@@ -681,23 +681,30 @@ describe( 'external instances functionality', function() {
         expect( loadErrors[ 2 ] ).toEqual( 'External instance "countries" is empty.' );
     } );
 
-    it( 'populates matching external instances provided as XML Document', function() {
+    it( 'populates matching external instances provided as XML Document, and leaves original XML doc intact', function() {
+        const external = [ {
+            id: 'cities',
+            xml: parser.parseFromString( citiesStr, 'text/xml' )
+        }, {
+            id: 'neighborhoods',
+            xml: parser.parseFromString( '<root/>', 'text/xml' )
+        }, {
+            id: 'countries',
+            xml: parser.parseFromString( '<root/>', 'text/xml' )
+        } ];
+
         model = new Model( {
-            modelStr: modelStr,
-            external: [ {
-                id: 'cities',
-                xml: parser.parseFromString( citiesStr, 'text/xml' )
-            }, {
-                id: 'neighborhoods',
-                xml: parser.parseFromString( '<root/>', 'text/xml' )
-            }, {
-                id: 'countries',
-                xml: parser.parseFromString( '<root/>', 'text/xml' )
-            } ]
+            modelStr,
+            external
         } );
         loadErrors = model.init();
         expect( loadErrors.length ).toEqual( 0 );
         expect( model.$.find( 'instance#cities > root > item > country:eq(0)' ).text() ).toEqual( 'nl' );
+
+        // Now check that the orginal external XML docs are stil the same. Very important for e.g. 
+        // form reset functionality in apps.
+        // https://github.com/kobotoolbox/enketo-express/issues/1086
+        expect( external[ 0 ].xml.querySelector( 'country' ).textContent ).toEqual( 'nl' );
     } );
 
     it( 'populates matching external instances provided as XML Strings (old usage)', function() {
