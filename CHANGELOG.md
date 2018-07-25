@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Changed
+- In Grid Theme readonly questions with value now have the same whole-cell background color as readonly questions without a value.
+
 [4.55.0] - 2018-07-19
 ----------------------
 ##### Added
