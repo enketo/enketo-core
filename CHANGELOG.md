@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Download links in file input and draw widgets not working in IE11.
+
 [4.55.1] - 2018-07-25
 ----------------------
 ##### Changed

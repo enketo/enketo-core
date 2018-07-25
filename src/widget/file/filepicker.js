@@ -260,11 +260,8 @@ Filepicker.prototype._showPreview = function( url, mediaType ) {
     }
 };
 
-Filepicker.prototype._updateDownloadLink = function( url, fileName ) {
-    this.$downloadLink.attr( {
-        'href': url || '',
-        'download': fileName || ''
-    } );
+Filepicker.prototype._updateDownloadLink = function( objectUrl, fileName ) {
+    utils.updateDownloadLink( this.$downloadLink[ 0 ], objectUrl, fileName );
 };
 
 $.fn[ pluginName ] = function( options, event ) {

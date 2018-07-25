@@ -391,11 +391,8 @@ DrawWidget.prototype._updateDownloadLink = function( url ) {
     if ( url && url.indexOf( 'data:' ) === 0 ) {
         url = URL.createObjectURL( utils.dataUriToBlobSync( url ) );
     }
-
-    this.$widget.find( '.btn-download' ).attr( {
-        'href': url || '',
-        'download': url ? utils.getFilename( { name: this.element.value }, this.element.dataset.filenamePostfix ) : ''
-    } );
+    var fileName = url ? utils.getFilename( { name: this.element.value }, this.element.dataset.filenamePostfix ) : '';
+    utils.updateDownloadLink( this.$widget.find( '.btn-download' )[ 0 ], url, fileName );
 };
 
 DrawWidget.prototype._handleResize = function( canvas ) {

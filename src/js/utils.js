@@ -155,6 +155,18 @@ function getPasteData( event ) {
     return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
 }
 
+/**
+ * Update a HTML anchor to serve as a download or reset it if an empty objectUrl is provided.
+ * 
+ * @param {HTMLElement} anchor the anchor element
+ * @param {*} objectUrl the objectUrl to download
+ * @param {*} fileName  the filename of the file
+ */
+function updateDownloadLink( anchor, objectUrl, fileName ) {
+    anchor.setAttribute( 'href', objectUrl || '' );
+    anchor.setAttribute( 'download', fileName || '' );
+}
+
 module.exports = {
     parseFunctionFromExpression: parseFunctionFromExpression,
     stripQuotes: stripQuotes,
@@ -163,5 +175,6 @@ module.exports = {
     isNumber: isNumber,
     readCookie: readCookie,
     dataUriToBlobSync: dataUriToBlobSync,
-    getPasteData: getPasteData
+    getPasteData: getPasteData,
+    updateDownloadLink: updateDownloadLink
 };

@@ -22,11 +22,4 @@
         pointer-events: none;
     }
 
-    .file-picker,
-    .draw-widget {
-        // Downloading will never work in IE11
-        .btn-download {
-            display: none;
-        }
-    }
 }
