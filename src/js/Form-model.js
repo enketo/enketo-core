@@ -351,7 +351,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
     templateEls = record.querySelectorAll( '[*|template]' );
 
     for ( var i = 0; i < templateEls.length; i++ ) {
-        templateEls[ i ].remove;
+        templateEls[ i ].remove();
     }
 
     /**
