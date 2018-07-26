@@ -264,7 +264,7 @@ module.exports = {
 
             if ( $clone.prev( '.or-repeat' ).length ) {
                 // Also add the clone class for all 2+ numbers as this is
-                // use for performance optimization in several places.
+                // used for performance optimization in several places.
                 $clone.addClass( 'clone' );
             }
             // Update the variable containing the view repeats in the current series.

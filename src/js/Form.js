@@ -8,14 +8,15 @@ var config = require( 'enketo/config' );
 var inputHelper = require( './input' );
 var repeatModule = require( './repeat' );
 var pageModule = require( './page' );
-var branchModule = require( './branch' );
+var relevantModule = require( './relevant' );
 var itemsetModule = require( './itemset' );
 var progressModule = require( './progress' );
 var widgetModule = require( './widgets-controller' );
 var languageModule = require( './language' );
 var preloadModule = require( './preload' );
 var outputModule = require( './output' );
-var calculationModule = require( './calculation' );
+var calculationModule = require( './calculate' );
+var requiredModule = require( './required' );
 var maskModule = require( './mask' );
 var readonlyModule = require( './readonly' );
 var FormLogicError = require( './Form-logic-error' );
@@ -64,9 +65,10 @@ Form.prototype = {
         return [
             this.calc.update.bind( this.calc ),
             this.repeats.countUpdate.bind( this.repeats ),
-            this.branch.update.bind( this.branch ),
+            this.relevant.update.bind( this.relevant ),
             this.output.update.bind( this.output ),
             this.itemset.update.bind( this.itemset ),
+            this.required.update.bind( this.required ),
             this.validationUpdate
         ].concat( this.evaluationCascadeAdditions );
     },
@@ -153,12 +155,13 @@ Form.prototype.init = function() {
     this.progress = this.addModule( progressModule );
     this.widgets = this.addModule( widgetModule );
     this.preloads = this.addModule( preloadModule );
-    this.branch = this.addModule( branchModule );
+    this.relevant = this.addModule( relevantModule );
     this.repeats = this.addModule( repeatModule );
     this.input = this.addModule( inputHelper );
     this.output = this.addModule( outputModule );
     this.itemset = this.addModule( itemsetModule );
     this.calc = this.addModule( calculationModule );
+    this.required = this.addModule( requiredModule );
     this.mask = this.addModule( maskModule );
     this.readonly = this.addModule( readonlyModule );
 
@@ -202,7 +205,7 @@ Form.prototype.init = function() {
         this.widgetsInitialized = this.widgets.init( null, this.options );
 
         // after widgets.init(), and repeats.init()
-        this.branch.update();
+        this.relevant.update();
 
         // after repeats.init()
         this.output.update();
@@ -215,7 +218,9 @@ Form.prototype.init = function() {
         // field values are calculated
         this.calc.update();
 
-        // after branch.update to make sure page-relevancy has already been determined
+        this.required.update();
+
+        // after relevant.update to make sure page-relevancy has already been determined
         this.pages.init();
 
         this.mask.init();
@@ -475,7 +480,7 @@ Form.prototype.getQuerySelectorsForLogic = function( filter, attr, nodeName ) {
  * that evaluates to false.
  *
  * Though this function may be slow it is slow when it doesn't matter much (upon saving). The
- * alternative is to add some logic to branch.update to mark irrelevant nodes in the model
+ * alternative is to add some logic to relevant.update to mark irrelevant nodes in the model
  * but that would slow down form loading and form traversal when it does matter.
  * 
  * @return {string} [description]
@@ -495,7 +500,7 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
         var context;
 
         /* 
-         * Copied from branch.js:
+         * Copied from relevant.js:
          * 
          * If the relevant is placed on a group and that group contains repeats with the same name,
          * but currently has 0 repeats, the context will not be available.
@@ -509,8 +514,8 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
         /*
          * If performance becomes an issue, some opportunities are:
          * - check if ancestor is relevant
-         * - use cache of branch.update
-         * - check for repeatClones to avoid calculating index (as in branch.update)
+         * - use cache of relevant.update
+         * - check for repeatClones to avoid calculating index (as in relevant.update)
          */
         if ( context && !that.model.evaluate( relevant, 'boolean', context, index ) ) {
             modelClone.node( context, index ).remove();
@@ -651,7 +656,7 @@ Form.prototype.setEventHandlers = function() {
         };
         // Set defaults of added repeats in Form, setAllVals does not trigger change event
         that.setAllVals( $clone, index );
-        // Initialize calculations, branch, itemset, output inside that repeat. 
+        // Initialize calculations, relevant, itemset, required, output inside that repeat. 
         that.evaluationCascade.forEach( function( fn ) {
             fn.call( that, updated );
         } );
@@ -717,7 +722,7 @@ Form.prototype.isValid = function( $node ) {
 };
 
 Form.prototype.clearIrrelevant = function() {
-    this.branch.update( null, true );
+    this.relevant.update( null, true );
 };
 
 /**
@@ -739,11 +744,11 @@ Form.prototype.validateAll = function() {
             return valid;
         } );
 };
+
 /**
  * Alias of validateAll
  */
 Form.prototype.validate = Form.prototype.validateAll;
-
 
 /**
  * Validates all enabled input fields in the supplied container, after first resetting everything as valid.
@@ -850,24 +855,18 @@ Form.prototype.validateInput = function( $input ) {
             if ( n.inputType !== 'hidden' ) {
                 // Check current UI state
                 n.$q = that.input.getWrapNodes( $input );
-                n.$required = n.$q.find( '.required' );
                 previouslyInvalid = n.$q.hasClass( 'invalid-required' ) || n.$q.hasClass( 'invalid-constraint' );
 
                 // Update UI
                 if ( result.requiredValid === false ) {
                     that.setValid( $input, 'constraint' );
                     that.setInvalid( $input, 'required' );
-                    n.$required.removeClass( 'hide' );
+                } else if ( result.constraintValid === false ) {
+                    that.setValid( $input, 'required' );
+                    that.setInvalid( $input, 'constraint' );
                 } else {
-                    that.updateRequiredVisibility( n );
-
-                    if ( result.constraintValid === false ) {
-                        that.setValid( $input, 'required' );
-                        that.setInvalid( $input, 'constraint' );
-                    } else {
-                        that.setValid( $input, 'constraint' );
-                        that.setValid( $input, 'required' );
-                    }
+                    that.setValid( $input, 'constraint' );
+                    that.setValid( $input, 'required' );
                 }
             }
             // Send invalidated event
@@ -882,19 +881,6 @@ Form.prototype.validateInput = function( $input ) {
             throw e;
         } );
 };
-
-/**
- * Extracted as separate function for the purpose of overriding it in custom apps.
- * @param  {{$required: jQuery collection, path: string, ind: number, required: string}} n [description]
- */
-Form.prototype.updateRequiredVisibility = function( n ) {
-    // Show/hide the asterisk of dynamic required expressions
-    // This is only 'realtime' with `validateContinuously: true`
-    if ( n.required ) {
-        n.$required.toggleClass( 'hide', !this.model.node( n.path, n.ind ).isRequired( n.required ) );
-    }
-};
-
 
 Form.prototype.getGoToTarget = function( path ) {
     var hits;

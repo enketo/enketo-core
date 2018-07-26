@@ -33,7 +33,6 @@ describe( 'Output functionality inside branches that irrelevan upon load', funct
     } );
 } );
 
-
 describe( 'Output functionality within repeats', function() {
     var $o = [];
     var form = loadForm( 'outputs_in_repeats.xml' );
@@ -925,7 +924,7 @@ describe( 'validation', function() {
 
 } );
 
-describe( 'Readonly items', function() {
+describe( 'Readonly questions', function() {
     it( 'show their calculated value', function() {
         var form = loadForm( 'readonly.xml' );
         form.init();
@@ -940,6 +939,18 @@ describe( 'Readonly items', function() {
         var $input = form.view.$.find( '[name="/readonly/b"]' );
         expect( $input.val() ).toEqual( 'is' );
         expect( $input.closest( '.question' ).hasClass( 'note' ) ).toBe( false );
+    } );
+} );
+
+describe( 'Required questions', function() {
+    it( 'dynamically update the asterisk visibility in real-time', function() {
+        var form = loadForm( 'required.xml' );
+        form.init();
+        var $input = form.view.$.find( '[name="/required/a"]' );
+        var $asterisk = form.view.$.find( '[name="/required/b"]' ).closest( '.question' ).find( '.required' );
+        expect( $asterisk.hasClass( 'hide' ) ).toBe( true );
+        $input.val( 'yes' ).trigger( 'change' );
+        expect( $asterisk.hasClass( 'hide' ) ).toBe( false );
     } );
 } );
 
