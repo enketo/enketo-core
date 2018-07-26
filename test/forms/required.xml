@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:orx="http://openrosa.org/xforms/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>dynamic required</h:title>
+        <model>
+            <instance>
+                <required id="required">
+                    <a/>
+                    <b/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </required>
+            </instance>
+            <bind nodeset="/required/a" type="string"/>
+            <bind nodeset="/required/b" required="/required/a = 'yes'" type="string"/>
+            <bind nodeset="/required/meta/instanceID" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/required/a">
+            <label>yes?</label>
+        </input>
+        <input ref="/required/b">
+            <label>This q is required if previous q = yes</label>
+        </input>
+    </h:body>
+</h:html>
