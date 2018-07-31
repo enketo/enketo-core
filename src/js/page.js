@@ -15,7 +15,7 @@ module.exports = {
     $activePages: $(),
     init: function() {
         if ( !this.form ) {
-            throw new Error( 'Repeats module not correclty instantiated with form property.' );
+            throw new Error( 'Repeats module not correctly instantiated with form property.' );
         }
         if ( this.form.view.$.hasClass( 'pages' ) ) {
             var $allPages = this.form.view.$.find( ' .question:not([role="comment"]), .or-appearance-field-list' )
@@ -28,59 +28,78 @@ module.exports = {
                 .attr( 'role', 'page' );
 
             if ( $allPages.length > 0 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
-                this.$formFooter = $( '.form-footer' );
+                var formWrapper = this.form.view.html.parentNode;
+                this.$formFooter = $( formWrapper.querySelector( '.form-footer' ) );
                 this.$btnFirst = this.$formFooter.find( '.first-page' );
                 this.$btnPrev = this.$formFooter.find( '.previous-page' );
                 this.$btnNext = this.$formFooter.find( '.next-page' );
                 this.$btnLast = this.$formFooter.find( '.last-page' );
-                this.updateAllActive( $allPages );
-                this.toggleButtons( 0 );
-                this.setButtonHandlers();
-                this.setRepeatHandlers();
-                this.setBranchHandlers();
-                this.setSwipeHandlers();
+                this.$toc = $( formWrapper.querySelector( '.page-toc' ) );
+                this._updateAllActive( $allPages );
+                this._updateToc();
+                this._toggleButtons( 0 );
+                this._setButtonHandlers();
+                this._setRepeatHandlers();
+                this._setBranchHandlers();
+                this._setSwipeHandlers();
+                this._setLangChangeHandlers();
                 this.active = true;
-                this.flipToFirst();
+                this._flipToFirst();
             }
             /*else {
                 form.view.$.removeClass( 'pages' );
             }*/
         }
     },
-    setButtonHandlers: function() {
+    // flips to the page provided as jQueried parameter or the page containing
+    // the jQueried element provided as parameter
+    // alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
+    // it flips to the page contained with the jQueried parameter;
+    flipToPageContaining: function( $e ) {
+        var $closest;
+
+        $closest = $e.closest( '[role="page"]' );
+        $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
+
+        // If $e is a comment question, and it is not inside a group, there may be no $closest.
+        if ( $closest.length ) {
+            this._flipTo( $closest[ 0 ] );
+        }
+    },
+    _setButtonHandlers: function() {
         var that = this;
         // Make sure eventhandlers are not duplicated after resetting form.
         this.$btnFirst.off( '.pagemode' ).on( 'click.pagemode', function() {
             if ( !that.form.pageNavigationBlocked ) {
-                that.flipToFirst();
+                that._flipToFirst();
             }
             return false;
         } );
         this.$btnPrev.off( '.pagemode' ).on( 'click.pagemode', function() {
             if ( !that.form.pageNavigationBlocked ) {
-                that.prev();
+                that._prev();
             }
             return false;
         } );
         this.$btnNext.off( '.pagemode' ).on( 'click.pagemode', function() {
             if ( !that.form.pageNavigationBlocked ) {
-                that.next();
+                that._next();
             }
             return false;
         } );
         this.$btnLast.off( '.pagemode' ).on( 'click.pagemode', function() {
             if ( !that.form.pageNavigationBlocked ) {
-                that.flipToLast();
+                that._flipToLast();
             }
             return false;
         } );
     },
-    setSwipeHandlers: function() {
+    _setSwipeHandlers: function() {
         if ( config.swipePage === false ) {
             return;
         }
         var that = this;
-        var $main = $( '.main' );
+        var $main = this.form.view.$.closest( '.main' );
 
         $main.swipe( 'destroy' );
         $main.swipe( {
@@ -104,32 +123,33 @@ module.exports = {
                      * set form.pageNavigationBlocked to true. The edge case will be very slow devices
                      * and/or amazingly complex constraint expressions.
                      */
-                    that.getCurrent().find( ':focus' ).blur();
+                    that._getCurrent().find( ':focus' ).blur();
                 }
             }
         } );
     },
-    setRepeatHandlers: function() {
+    _setRepeatHandlers: function() {
         var that = this;
         // TODO: can be optimized by smartly updating the active pages
         this.form.view.$
-            .off( 'addrepeat.pagemode' )
+            //.off( 'addrepeat.pagemode' )
             .on( 'addrepeat.pagemode', function( event, index, byCountUpdate ) {
-                that.updateAllActive();
+                that._updateAllActive();
                 // Removing the class in effect avoids the animation
                 // It also prevents multiple .or-repeat[role="page"] to be shown on the same page
                 $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
                 // Don't flip if the user didn't create the repeat with the + button.
+                // or if is the default first instance created during loading.
                 if ( !byCountUpdate ) {
                     that.flipToPageContaining( $( event.target ) );
                 }
             } )
-            .off( 'removerepeat.pagemode' )
+            //.off( 'removerepeat.pagemode' )
             .on( 'removerepeat.pagemode', function( event ) {
                 // if the current page is removed
                 // note that that.$current will have length 1 even if it was removed from DOM!
                 if ( that.$current.closest( 'html' ).length === 0 ) {
-                    that.updateAllActive();
+                    that._updateAllActive();
                     var $target = $( event.target ).prev();
                     if ( $target.length === 0 ) {
                         $target = $( event.target );
@@ -139,21 +159,28 @@ module.exports = {
                 }
             } );
     },
-    setBranchHandlers: function() {
+    _setBranchHandlers: function() {
         var that = this;
         // TODO: can be optimized by smartly updating the active pages
         this.form.view.$
-            .off( 'changebranch.pagemode' )
+            //.off( 'changebranch.pagemode' )
             .on( 'changebranch.pagemode', function() {
-                that.updateAllActive();
-                that.toggleButtons();
+                that._updateAllActive();
+                that._toggleButtons();
             } );
     },
-    getCurrent: function() {
+    _setLangChangeHandlers: function() {
+        var that = this;
+        this.form.view.$
+            .on( 'changelanguage.pagemode', function() {
+                that._updateToc();
+            } );
+    },
+    _getCurrent: function() {
         return this.$current;
     },
-    updateAllActive: function( $all ) {
-        $all = $all || $( '.or [role="page"]' );
+    _updateAllActive: function( $all ) {
+        $all = $all || this.form.view.$.find( '[role="page"]' );
         this.$activePages = $all.filter( function() {
             var $this = $( this );
             return $this.closest( '.disabled' ).length === 0 &&
@@ -163,17 +190,15 @@ module.exports = {
                     // repeat.
                     ( $this.is( '.or-repeat-info' ) && $this.siblings( '.or-repeat' ).length === 0 ) );
         } );
+        this._updateToc();
     },
-    getAllActive: function() {
-        return this.$activePages;
-    },
-    getPrev: function( currentIndex ) {
+    _getPrev: function( currentIndex ) {
         return this.$activePages[ currentIndex - 1 ];
     },
-    getNext: function( currentIndex ) {
+    _getNext: function( currentIndex ) {
         return this.$activePages[ currentIndex + 1 ];
     },
-    getCurrentIndex: function() {
+    _getCurrentIndex: function() {
         return this.$activePages.index( this.$current );
     },
     /**
@@ -183,12 +208,12 @@ module.exports = {
      *         `$activePages` of the new current page; if a {boolean}, {false} means that validation
      *         failed, and {true} that validation passed, but the page did not change.
      */
-    next: function() {
+    _next: function() {
         var that = this;
         var currentIndex;
         var validate;
 
-        currentIndex = this.getCurrentIndex();
+        currentIndex = this._getCurrentIndex();
         validate = ( config.validatePage === false ) ? Promise.resolve( true ) : this.form.validateContent( this.$current );
 
         return validate
@@ -199,74 +224,60 @@ module.exports = {
                     return false;
                 }
 
-                next = that.getNext( currentIndex );
+                next = that._getNext( currentIndex );
 
                 if ( next ) {
                     newIndex = currentIndex + 1;
-                    that.flipTo( next, newIndex );
+                    that._flipTo( next, newIndex );
                     return newIndex;
                 }
 
                 return true;
             } );
     },
-    prev: function() {
+    _prev: function() {
         var prev;
         var currentIndex;
 
-        currentIndex = this.getCurrentIndex();
-        prev = this.getPrev( currentIndex );
+        currentIndex = this._getCurrentIndex();
+        prev = this._getPrev( currentIndex );
 
         if ( prev ) {
-            this.flipTo( prev, currentIndex - 1 );
+            this._flipTo( prev, currentIndex - 1 );
         }
     },
-    setToCurrent: function( pageEl ) {
+    _setToCurrent: function( pageEl ) {
         var $n = $( pageEl );
         $n.addClass( 'current hidden' );
         this.$current = $n.removeClass( 'hidden' )
             .parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
     },
-    flipTo: function( pageEl, newIndex ) {
+    _flipTo: function( pageEl, newIndex ) {
         // if there is a current page
         if ( this.$current.length > 0 && this.$current.closest( 'html' ).length === 1 ) {
             // if current page is not same as pageEl
             if ( this.$current[ 0 ] !== pageEl ) {
                 this.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
-                this.setToCurrent( pageEl );
-                this.focusOnFirstQuestion( pageEl );
-                this.toggleButtons( newIndex );
+                this._setToCurrent( pageEl );
+                this._focusOnFirstQuestion( pageEl );
+                this._toggleButtons( newIndex );
                 $( pageEl ).trigger( 'pageflip.enketo' );
             }
         } else {
-            this.setToCurrent( pageEl );
-            this.focusOnFirstQuestion( pageEl );
-            this.toggleButtons( newIndex );
+            this._setToCurrent( pageEl );
+            this._focusOnFirstQuestion( pageEl );
+            this._toggleButtons( newIndex );
             $( pageEl ).trigger( 'pageflip.enketo' );
         }
     },
-    flipToFirst: function() {
-        this.flipTo( this.$activePages[ 0 ] );
+    _flipToFirst: function() {
+        this._flipTo( this.$activePages[ 0 ] );
     },
-    flipToLast: function() {
-        this.flipTo( this.$activePages.last()[ 0 ] );
+    _flipToLast: function() {
+        this._flipTo( this.$activePages.last()[ 0 ] );
     },
-    // flips to the page provided as jQueried parameter or the page containing
-    // the jQueried element provided as parameter
-    // alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
-    // it flips to the page contained with the jQueried parameter;
-    flipToPageContaining: function( $e ) {
-        var $closest;
 
-        $closest = $e.closest( '[role="page"]' );
-        $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
-
-        // If $e is a comment question, and it is not inside a group, there may be no $closest.
-        if ( $closest.length ) {
-            this.flipTo( $closest[ 0 ] );
-        }
-    },
-    focusOnFirstQuestion: function( pageEl ) {
+    _focusOnFirstQuestion: function( pageEl ) {
         //triggering fake focus in case element cannot be focused (if hidden by widget)
         $( pageEl )
             .find( '.question:not(.disabled)' )
@@ -281,12 +292,39 @@ module.exports = {
 
         pageEl.scrollIntoView();
     },
-    toggleButtons: function( index ) {
-        var i = index || this.getCurrentIndex(),
-            next = this.getNext( i ),
-            prev = this.getPrev( i );
+    _toggleButtons: function( index ) {
+        var i = index || this._getCurrentIndex(),
+            next = this._getNext( i ),
+            prev = this._getPrev( i );
         this.$btnNext.add( this.$btnLast ).toggleClass( 'disabled', !next );
         this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
         this.$formFooter.toggleClass( 'end', !next );
+    },
+    _updateToc: function() {
+        if ( this.$toc.length ) {
+            // regenerate complete ToC from first enabled question/group label of each page
+            var tocItems = this.$activePages.get()
+                .filter( function( pageEl ) {
+                    return !pageEl.classList.contains( 'or-repeat-info' );
+                } ).map( function( pageEl ) {
+                    var labelEl = pageEl.querySelector( '.question-label.active' );
+                    if ( !labelEl ) {
+                        console.error( 'active page without label?', pageEl );
+                        return false;
+                    }
+                    var label = labelEl.textContent;
+                    return { pageEl: pageEl, label: label };
+                } );
+            this.$toc.empty()[ 0 ].append( this._getTocHtmlFragment( tocItems ) );
+        }
+    },
+    _getTocHtmlFragment: function( tocItems ) {
+        var items = document.createDocumentFragment();
+        tocItems.forEach( function( item ) {
+            var li = document.createElement( 'li' );
+            li.textContent = item.label.substr( 0, 20 );
+            items.appendChild( li );
+        } );
+        return items;
     }
 };

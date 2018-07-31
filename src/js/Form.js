@@ -194,7 +194,7 @@ Form.prototype.init = function() {
         // after repeats.init
         this.setAllVals();
 
-        this.readonly.update(); /// after setAllVals();
+        this.readonly.update(); // after setAllVals();
 
         // after setAllVals, after repeats.init
 
@@ -204,7 +204,7 @@ Form.prototype.init = function() {
         this.options.formClasses = utils.toArray( this.view.html.classList );
         this.widgetsInitialized = this.widgets.init( null, this.options );
 
-        // after widgets.init(), and repeats.init()
+        // after widgets.init(), and after repeats.init(), and after pages.init()
         this.relevant.update();
 
         // after repeats.init()
@@ -219,9 +219,6 @@ Form.prototype.init = function() {
         this.calc.update();
 
         this.required.update();
-
-        // after relevant.update to make sure page-relevancy has already been determined
-        this.pages.init();
 
         this.mask.init();
 

@@ -41,7 +41,7 @@ module.exports = {
             var parentPath;
 
             //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
-            if ( $.inArray( $node.attr( 'name' ), alreadyCovered ) !== -1 ) {
+            if ( alreadyCovered.indexOf( $node.attr( 'name' ) ) !== -1 ) {
                 return;
             }
 
@@ -56,7 +56,7 @@ module.exports = {
 
             if ( $branchNode.length !== 1 ) {
                 if ( $node.parentsUntil( '.or', '#or-calculated-items' ).length === 0 ) {
-                    console.error( 'could not find branch node for ', $( this ) );
+                    console.error( 'could not find branch node for ', this );
                 }
                 return;
             }
@@ -128,7 +128,7 @@ module.exports = {
             }
 
             if ( !insideRepeat ) {
-                alreadyCovered.push( $( this ).attr( 'name' ) );
+                alreadyCovered.push( this.getAttribute( 'name' ) );
             }
 
             if ( that.process( $branchNode, p.path, result, forceClearIrrelevant ) === true ) {

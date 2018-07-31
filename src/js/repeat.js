@@ -138,7 +138,8 @@ module.exports = {
             repeatSeriesIndex = this.form.view.$.find( '.or-repeat-info[data-name="' + repeatPath + '"]' ).index( repeatInfo );
             repeatSeriesInModel = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex );
             if ( repeatSeriesInModel.length === 0 ) {
-                this.add( repeatInfo );
+                // explicitly provide a count, so that byCountUpdate is passed to the addrepeat event
+                this.add( repeatInfo, 1 );
             }
             $repeatInfo.siblings( '.or-repeat' )
                 .find( '.or-repeat-info:not([data-repeat-count])' )

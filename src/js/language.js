@@ -9,21 +9,23 @@ var $ = require( 'jquery' );
 module.exports = {
     init: function() {
         var that = this;
-        var $langSelector = $( '.form-language-selector' );
-        var currentDirectionality;
 
         if ( !this.form ) {
             throw new Error( 'Language module not correctly instantiated with form property.' );
         }
-
-        this.$formLanguages = this.form.view.$.find( '#form-languages' );
+        var $langSelector = $( this.form.view.html.parentNode.querySelector( '.form-language-selector' ) );
+        this.$formLanguages = $( this.form.view.html.querySelector( '#form-languages' ) );
         this.currentLang = this.$formLanguages.attr( 'data-default-lang' ) || this.$formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
-        currentDirectionality = this.$formLanguages.find( '[value="' + this.currentLang + '"]' ).attr( 'data-dir' ) || 'ltr';
+        var currentDirectionality = this.$formLanguages.find( '[value="' + this.currentLang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
-        this.$formLanguages
-            .detach()
-            .appendTo( $langSelector )
-            .val( this.currentLang );
+        if ( $langSelector.length ) {
+            this.$formLanguages
+                .detach()
+                .appendTo( $langSelector );
+            $langSelector.removeClass( 'hide' );
+        }
+
+        this.$formLanguages.val( this.currentLang );
 
         this.form.view.$
             .attr( 'dir', currentDirectionality );
@@ -31,8 +33,6 @@ module.exports = {
         if ( this.$formLanguages.find( 'option' ).length < 2 ) {
             return;
         }
-
-        $langSelector.removeClass( 'hide' );
 
         this.$formLanguages.change( function( event ) {
             event.preventDefault();
