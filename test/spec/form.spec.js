@@ -952,6 +952,22 @@ describe( 'Required questions', function() {
         $input.val( 'yes' ).trigger( 'change' );
         expect( $asterisk.hasClass( 'hide' ) ).toBe( false );
     } );
+
+    it( 'fail validation if the value includes only whitespace', function( done ) {
+        var form = loadForm( 'required.xml' );
+        form.init();
+        form.view.$.find( '[name="/required/a"]' ).val( 'yes' ).trigger( 'change' );
+        var $input = form.view.$.find( '[name="/required/b"]' );
+        $input.val( ' a ' ).trigger( 'change' );
+
+        setTimeout( function() {
+            $input.val( '      ' ).trigger( 'change' );
+            setTimeout( function() {
+                expect( $input.closest( '.question' ).hasClass( 'invalid-required' ) ).toBe( true );
+                done();
+            }, 100 );
+        }, 100 );
+    } );
 } );
 
 describe( 're-validating inputs and updating user feedback', function() {

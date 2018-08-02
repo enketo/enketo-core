@@ -1432,7 +1432,7 @@ Nodeset.prototype.setVal = function( newVals, constraintExpr, xmlDataType, requi
     newVal = this.convert( newVal, xmlDataType );
     $target = this.get();
 
-    if ( $target.length === 1 && newVal.toString().trim() !== curVal.toString().trim() ) {
+    if ( $target.length === 1 && newVal.toString() !== curVal.toString() ) {
         // first change the value so that it can be evaluated in XPath (validated)
         $target.text( newVal.toString() );
         // then return validation result

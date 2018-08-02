@@ -3,6 +3,9 @@
 var utils = require( './utils' );
 var types = {
     'string': {
+        convert: function( x ) {
+            return x.replace( /^\s+$/, '' );
+        },
         //max length of type string is 255 chars.Convert( truncate ) silently ?
         validate: function() {
             return true;

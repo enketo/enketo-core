@@ -323,6 +323,27 @@ describe( 'Data node XML data type', function() {
         expect( node.getVal()[ 0 ] ).toEqual( value );
     } );
 
+    describe( 'does convert whitespace-only values', function() {
+        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
+
+        function whiteSpaceTest( whiteSpaceValue ) {
+            it( 'to ""', function() {
+                // first prime node a with some non-whitespace value
+                node.setVal( 'aa', null, 'string' );
+                expect( node.getVal()[ 0 ] ).toEqual( 'aa' );
+                node.setVal( whiteSpaceValue, null, 'string' );
+                expect( node.getVal()[ 0 ] ).toEqual( '' );
+            } );
+        }
+
+        [
+            '    ',
+            '\t',
+            '\n',
+            '  \t\n\r'
+        ].forEach( whiteSpaceTest );
+    } );
+
 } );
 
 describe( 'dataupdate event, is fired on model.$events and includes', function() {
