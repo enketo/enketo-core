@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Added
+- Enable/disable meridian in timepicker and datetimepicker based upon detected locale preferences.
+
 [4.55.2] - 2018-08-02
 ----------------------
 ##### Fixed

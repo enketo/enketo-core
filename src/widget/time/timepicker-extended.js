@@ -3,9 +3,10 @@
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var $ = require( 'jquery' );
+var timeFormat = require( '../../js/format' ).time;
+var types = require( '../../js/types' );
 require( './timepicker' );
 require( '../../js/dropdown.jquery' );
-
 var pluginName = 'timepickerExtended';
 
 /**
@@ -22,7 +23,6 @@ function TimepickerExtended( element, options ) {
 }
 
 TimepickerExtended.prototype = Object.create( Widget.prototype );
-
 TimepickerExtended.prototype.constructor = TimepickerExtended;
 
 /**
@@ -30,24 +30,28 @@ TimepickerExtended.prototype.constructor = TimepickerExtended;
  */
 TimepickerExtended.prototype._init = function() {
     var $timeI = $( this.element );
-    var timeVal = $( this.element ).val();
     var $fakeTime = $( '<div class="widget timepicker">' +
-        '<input class="ignore timepicker-default" type="text" value="' + timeVal + '" placeholder="hh:mm" />' +
+        '<input class="ignore timepicker-default" type="text" placeholder="hh:mm" />' +
         this.resetButtonHtml + '</div>' );
     var $resetBtn = $fakeTime.find( '.btn-reset' );
     var $fakeTimeI = $fakeTime.find( 'input' );
 
     $timeI.hide().after( $fakeTime );
 
-    $fakeTimeI.timepicker( {
-            defaultTime: ( timeVal.length > 0 ) ? timeVal : false,
-            showMeridian: false
-        } ).val( timeVal )
-        //the time picker itself has input elements
-        .closest( '.widget' ).find( 'input' ).addClass( 'ignore' );
+    $fakeTimeI
+        .timepicker( {
+            showMeridian: timeFormat.hour12,
+            meridianNotation: {
+                am: timeFormat.amNotation,
+                pm: timeFormat.pmNotation
+            }
+        } )
+        // using setTime ensures that the fakeInput shows the meridan when needed
+        .timepicker( 'setTime', this.element.value );
 
     $fakeTimeI.on( 'change', function() {
-        $timeI.val( this.value ).trigger( 'change' );
+        var modified = timeFormat.hour12 ? types.time.convertMeridian( this.value ) : this.value;
+        $timeI.val( modified ).trigger( 'change' );
         return false;
     } );
 
@@ -69,6 +73,13 @@ TimepickerExtended.prototype._init = function() {
         $fakeTimeI.focus();
     } );
 
+};
+
+TimepickerExtended.prototype.update = function() {
+    $( this.element )
+        .next( '.widget' )
+        .find( 'input' )
+        .timepicker( 'setTime', this.element.value );
 };
 
 $.fn[ pluginName ] = function( options, event ) {

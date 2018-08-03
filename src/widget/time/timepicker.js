@@ -28,6 +28,7 @@
         this.snapToStep = options.snapToStep;
         this.showInputs = options.showInputs;
         this.showMeridian = options.showMeridian;
+        this.meridianNotation = options.meridianNotation;
         this.showSeconds = options.showSeconds;
         this.template = options.template;
         this.appendWidgetTo = options.appendWidgetTo;
@@ -748,7 +749,7 @@
                         hours = dTime.getHours(),
                         minutes = dTime.getMinutes(),
                         seconds = dTime.getSeconds(),
-                        meridian = 'AM';
+                        meridian = this.meridianNotation.am;
 
                     if ( seconds !== 0 ) {
                         seconds = Math.ceil( dTime.getSeconds() / this.secondStep ) * this.secondStep;
@@ -773,9 +774,9 @@
                             if ( hours > 12 ) {
                                 hours = hours - 12;
                             }
-                            meridian = 'PM';
+                            meridian = this.meridianNotation.pm;
                         } else {
-                            meridian = 'AM';
+                            meridian = this.meridianNotation.am;
                         }
                     }
 
@@ -790,7 +791,7 @@
                     this.hour = 0;
                     this.minute = 0;
                     this.second = 0;
-                    this.meridian = 'AM';
+                    this.meridian = this.meridianNotation.am;
                 } else {
                     this.setTime( defaultTime );
                 }
@@ -819,14 +820,14 @@
                 second = time.getSeconds();
 
                 if ( this.showMeridian ) {
-                    meridian = 'AM';
+                    meridian = this.meridianNotation.am;
                     if ( hour > 12 ) {
-                        meridian = 'PM';
+                        meridian = this.meridianNotation.pm;
                         hour = hour % 12;
                     }
 
                     if ( hour === 12 ) {
-                        meridian = 'PM';
+                        meridian = this.meridianNotation.pm;
                     }
                 }
             } else {
@@ -905,7 +906,7 @@
                     if ( hour === 0 ) {
                         hour = 12; // AM or PM, reset to 12.  0 AM = 12 AM.  0 PM = 12 PM, etc.
                     }
-                    meridian = timeMode === 1 ? 'AM' : 'PM';
+                    meridian = timeMode === 1 ? this.meridianNotation.am : this.meridianNotation.pm;
                 } else if ( hour < 12 && timeMode === 2 ) {
                     hour += 12;
                 } else {
@@ -979,7 +980,7 @@
         },
 
         toggleMeridian: function() {
-            this.meridian = this.meridian === 'AM' ? 'PM' : 'AM';
+            this.meridian = this.meridian === this.meridianNotation.am ? this.meridianNotation.pm : this.meridianNotation.am;
         },
 
         update: function( ignoreWidget ) {
@@ -1169,6 +1170,10 @@
         showSeconds: false,
         showInputs: true,
         showMeridian: true,
+        meridianNotation: {
+            am: 'AM',
+            pm: 'PM'
+        },
         template: 'dropdown',
         appendWidgetTo: 'body',
         showWidgetOnAddonClick: true,

@@ -67,7 +67,7 @@ DatepickerExtended.prototype._init = function() {
         startView: this.settings.startView,
         minViewMode: this.settings.minViewMode,
         forceParse: false
-    } );
+    } ).datepicker( 'setDate', this.element.value );
 };
 
 /**
@@ -78,8 +78,8 @@ DatepickerExtended.prototype._init = function() {
 DatepickerExtended.prototype._createFakeDateInput = function( format ) {
     var $dateI = $( this.element );
     var $fakeDate = $(
-        '<div class="widget date"><input class="ignore input-small" type="text" value="' +
-        $dateI.val() + '" placeholder="' + format + '" />' + this.resetButtonHtml + '</div>' );
+        '<div class="widget date"><input class="ignore input-small" type="text" placeholder="' + format + '" />' +
+        this.resetButtonHtml + '</div>' );
     var $fakeDateI = $fakeDate.find( 'input' );
 
     $dateI.hide().after( $fakeDate );
@@ -170,7 +170,7 @@ DatepickerExtended.prototype._setFocusHandler = function( $fakeDateI ) {
 };
 
 DatepickerExtended.prototype.update = function() {
-    this.$fakeDateI.val( this.element.value ).datepicker( 'update' );
+    this.$fakeDateI.datepicker( 'setDate', this.element.value );
 };
 
 $.fn[ pluginName ] = function( options, event ) {
