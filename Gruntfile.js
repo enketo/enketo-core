@@ -96,9 +96,9 @@ module.exports = function( grunt ) {
             options: {
                 implementation: nodeSass,
                 sourceMap: false,
-                // this importer should be removed (npm 3+) or changed(npm 2) in the gruntFile of the app that is using enketo-core
                 importer: function( url, prev, done ) {
-                    // fixes enketo-core submodule references
+                    // Fixes enketo-core submodule references.
+                    // Those references are correct in apps that use enketo-core as a submodule.
                     url = ( /\.\.\/\.\.\/node_modules\//.test( url ) ) ? url.replace( '../../node_modules/', 'node_modules/' ) : url;
                     done( {
                         file: url
@@ -135,13 +135,6 @@ module.exports = function( grunt ) {
                 alias: {},
             },
         },
-        uglify: {
-            standalone: {
-                files: {
-                    'build/js/enketo-bundle.js': [ 'build/js/enketo-bundle.js' ]
-                },
-            },
-        },
         shell: {
             transformer: {
                 command: 'node node_modules/enketo-transformer/app.js'
@@ -159,7 +152,8 @@ module.exports = function( grunt ) {
         var xformsPaths = grunt.file.expand( {}, 'test/forms/*.xml' );
         var transformer = require( 'enketo-transformer' );
 
-        xformsPaths.reduce( function( prevPromise, filePath ) {
+        xformsPaths
+            .reduce( function( prevPromise, filePath ) {
                 return prevPromise.then( function() {
                     var xformStr = grunt.file.read( filePath );
                     grunt.log.writeln( 'Transforming ' + filePath + '...' );
@@ -178,7 +172,7 @@ module.exports = function( grunt ) {
             } );
     } );
 
-    grunt.registerTask( 'compile', [ 'browserify', 'uglify' ] );
+    grunt.registerTask( 'compile', [ 'browserify' ] );
     grunt.registerTask( 'test', [ 'jsbeautifier:test', 'eslint', 'compile', 'transforms', 'karma:headless', 'style' ] );
     grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
