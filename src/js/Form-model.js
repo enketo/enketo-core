@@ -1406,15 +1406,12 @@ Nodeset.prototype.setIndex = function( index ) {
  * Sets data node values.
  *
  * @param {(string|Array.<string>)=} newVals    The new value of the node.
- * @param {?string=} expr  XPath expression to validate the node.
  * @param {?string=} xmlDataType XML data type of the node
- * @param {?string=} requiredExpr XPath expression to determine where value is required
- * @param {?boolean} noValidate Whether to skip validation
  *
  * @return {?*} wrapping {?boolean}; null is returned when the node is not found or multiple nodes were selected,
  *                            otherwise an object with update information is returned.
  */
-Nodeset.prototype.setVal = function( newVals, constraintExpr, xmlDataType, requiredExpr, noValidate ) {
+Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
     var $target;
     var curVal;
     var /**@type {string}*/ newVal;
@@ -1443,10 +1440,6 @@ Nodeset.prototype.setVal = function( newVals, constraintExpr, xmlDataType, requi
         updated = ( customData ) ? $.extend( {}, updated, customData ) : updated;
 
         this.model.$events.trigger( 'dataupdate', updated );
-
-        if ( config.validateContinuously && noValidate !== true ) {
-            this.validate( constraintExpr, requiredExpr, xmlDataType );
-        }
 
         //add type="file" attribute for file references
         if ( xmlDataType === 'binary' ) {
@@ -1585,7 +1578,6 @@ Nodeset.prototype.validate = function( constraintExpr, requiredExpr, xmlDataType
         } )
         .then( function( passed ) {
             result.constraintValid = passed;
-
             return result;
         } );
 };

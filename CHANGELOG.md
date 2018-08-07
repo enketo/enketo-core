@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Questions with calculations do not re-validate immediately when the value is re-calculated (with `validateContinuously: true`).
+
 [4.56.0] - 2018-08-06
 ----------------------
 ##### Added

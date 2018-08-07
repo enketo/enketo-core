@@ -343,7 +343,10 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
             var value = $node.text();
             var name = that.model.getXPath( $node.get( 0 ), 'instance' );
             var index = that.model.node( name ).get().index( this );
-            that.input.setVal( name, index, value );
+            var $control = that.input.find( name, index );
+            if ( $control.length ) {
+                that.input.setVal( $control, value );
+            }
         } catch ( e ) {
             console.error( e );
             // TODO: Test if this correctly adds to loadErrors
@@ -543,6 +546,11 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
     }
 };
 
+/**   
+ * This re-validates questions that have a dependency on a question that has just been updated.
+ * 
+ * Note: it does not take care of re-validating a question itself after its value has changed due to a calculation update!
+ */
 Form.prototype.validationUpdate = function( updated ) {
     var $nodes;
     var that = this;
@@ -564,6 +572,7 @@ Form.prototype.validationUpdate = function( updated ) {
             };
         }
 
+        // Find all inputs that have a dependency on the changed node.
         $nodes = this.getRelatedNodes( 'data-constraint', '', upd )
             .add( this.getRelatedNodes( 'data-required', '', upd ) );
 
@@ -594,23 +603,15 @@ Form.prototype.setEventHandlers = function() {
     this.view.$.on( 'change.file',
         'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)',
         function() {
-            var requiredExpr;
             var $input = $( this );
             var n = {
                 path: that.input.getName( $input ),
                 inputType: that.input.getInputType( $input ),
                 xmlType: that.input.getXmlType( $input ),
-                enabled: that.input.isEnabled( $input ),
-                constraint: that.input.getConstraint( $input ),
                 val: that.input.getVal( $input ),
-                required: that.input.getRequired( $input ),
                 index: that.input.getIndex( $input )
             };
 
-            // determine 'required' check if applicable
-            if ( n.enabled && n.inputType !== 'hidden' && n.required ) {
-                requiredExpr = n.required;
-            }
             // set file input values to the uniqified actual name of file (without c://fakepath or anything like that)
             if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
                 n.val = utils.getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
@@ -621,7 +622,7 @@ Form.prototype.setEventHandlers = function() {
                 }, $input[ 0 ].dataset.filenamePostfix );
             }
 
-            that.model.node( n.path, n.index ).setVal( n.val, n.constraint, n.xmlType, requiredExpr, true );
+            that.model.node( n.path, n.index ).setVal( n.val, n.xmlType );
 
             that.validateInput( $input )
                 .then( function( valid ) {

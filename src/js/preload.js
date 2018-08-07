@@ -44,7 +44,7 @@ module.exports = {
                         dataNode: dataNode
                     } );
 
-                    dataNode.setVal( newVal, null, props.xmlType );
+                    dataNode.setVal( newVal, props.xmlType );
                 }
             } else {
                 console.log( 'Preload "' + item + '" not supported. May or may not be a big deal.' );
@@ -62,7 +62,7 @@ module.exports = {
             //set event handler for each save event (needs to be triggered!)
             this.form.view.$.on( 'beforesave', function() {
                 value = that.form.model.evaluate( 'now()', 'string' );
-                o.dataNode.setVal( value, null, 'datetime' );
+                o.dataNode.setVal( value, 'datetime' );
             } );
             //TODO: why populate this upon load?
             return this.form.model.evaluate( 'now()', 'string' );

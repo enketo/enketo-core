@@ -7,6 +7,7 @@
  */
 
 var $ = require( 'jquery' );
+var config = require( 'enketo/config' );
 
 module.exports = {
     update: function( updated, filter ) {
@@ -34,38 +35,22 @@ module.exports = {
         }
 
         $nodes.each( function() {
-            var result;
-            var dataNodesObj;
-            var dataNodes;
-            var $dataNode;
             var index;
-            var name;
-            var dataNodeName;
-            var expr;
-            var newExpr;
-            var dataType;
-            var constraintExpr;
-            var relevantExpr;
-            var relevant;
-            var $this;
-
-            $this = $( this );
-            name = that.form.input.getName( $this );
-            dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
-            expr = that.form.input.getCalculation( $this );
-            dataType = that.form.input.getXmlType( $this );
-            // for inputs that have a calculation and need to be validated
-            constraintExpr = that.form.input.getConstraint( $this );
-            relevantExpr = that.form.input.getRelevant( $this );
-            dataNodesObj = that.form.model.node( name );
-            dataNodes = dataNodesObj.get();
+            var $control = $( this );
+            var name = that.form.input.getName( $control );
+            var dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
+            var expr = that.form.input.getCalculation( $control );
+            var dataType = that.form.input.getXmlType( $control );
+            var relevantExpr = that.form.input.getRelevant( $control );
+            var dataNodesObj = that.form.model.node( name );
+            var dataNodes = dataNodesObj.get();
 
             /*
              * If the update was triggered by a datanode inside a repeat
              * and the dependent node is inside the same repeat
              */
             if ( dataNodes.length > 1 && updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
-                $dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
+                var $dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
                 index = $( dataNodes ).index( $dataNode );
                 updateCalc( index );
             } else if ( dataNodes.length === 1 ) {
@@ -89,7 +74,7 @@ module.exports = {
                  * 
                  * TODO: determine index at every level to properly support repeats and nested repeats
                  * 
-                 * Note: getting the parents of $this wouldn't work for nodes inside #calculated-items!
+                 * Note: getting the parents of $control wouldn't work for nodes inside #calculated-items!
                  */
                 var parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
                 var $parentGroups = that.form.view.$.find( '.or-group[name="' + parentPath + '"],.or-group-data[name="' + parentPath + '"]' ).eq( index )
@@ -97,7 +82,7 @@ module.exports = {
 
                 if ( $parentGroups.length ) {
                     // Start at the highest level, and traverse down to the DOM to the immediate parent group.
-                    relevant = $parentGroups.filter( '[data-relevant]' ).reverse().get().map( function( group ) {
+                    var relevant = $parentGroups.filter( '[data-relevant]' ).reverse().get().map( function( group ) {
                         var $group = $( group );
                         var nm = that.form.input.getName( $group );
 
@@ -119,21 +104,29 @@ module.exports = {
                 }
 
                 // not sure if using 'string' is always correct
-                newExpr = that.form.replaceChoiceNameFn( expr, 'string', name, index );
+                var newExpr = that.form.replaceChoiceNameFn( expr, 'string', name, index );
 
                 // it is possible that the fixed expr is '' which causes an error in XPath
-                result = ( relevant && newExpr ) ? that.form.model.evaluate( newExpr, 'string', name, index ) : '';
+                var result = ( relevant && newExpr ) ? that.form.model.evaluate( newExpr, 'string', name, index ) : '';
 
                 // filter the result set to only include the target node
                 dataNodesObj.setIndex( index );
 
                 // set the value
-                dataNodesObj.setVal( result, constraintExpr, dataType );
+                dataNodesObj.setVal( result, dataType );
 
                 // Not the most efficient to use input.setVal here as it will do another lookup
                 // of the node, that we already have...
                 // We should not use value "result" here because node.setVal() may have done a data type conversion
-                that.form.input.setVal( name, index, dataNodesObj.getVal()[ 0 ] );
+                that.form.input.setVal( $control, dataNodesObj.getVal()[ 0 ] );
+
+                /*
+                 * We need to specifically call validate on the question itself, because the validationUpdate
+                 * in the evaluation cascade only updates questions with a _dependency_ on this question.
+                 */
+                if ( config.validateContinuously === true ) {
+                    that.form.validateInput( $control );
+                }
             }
         } );
     }

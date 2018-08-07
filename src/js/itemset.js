@@ -188,7 +188,7 @@ module.exports = {
                 if ( $input.hasClass( 'rank' ) ) {
                     currentValue = '';
                 }
-                that.form.input.setVal( context, index, currentValue );
+                that.form.input.setVal( $input, currentValue );
                 $input.trigger( 'change' );
             }
 

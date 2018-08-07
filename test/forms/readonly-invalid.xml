@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>readonly-invalid</h:title>
+        <model>
+            <instance>
+                <readonly-invalid id="readonly-invalid">
+                    <txt>valid</txt>
+                    <n1/>
+                    <n2/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </readonly-invalid>
+            </instance>
+            <bind nodeset="/readonly-invalid/txt" type="string"/>
+            <bind calculate=" /readonly-invalid/txt " constraint=". != 'invalid'" nodeset="/readonly-invalid/n1" readonly="true()" type="string"/>
+            <bind calculate=" /readonly-invalid/txt " constraint=". != 'invalid'" nodeset="/readonly-invalid/n2" type="string"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/readonly-invalid/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/readonly-invalid/txt">
+            <label>Type "invalid" to make question below invalid.</label>
+        </input>
+        <input ref="/readonly-invalid/n1">
+            <label>The first note</label>
+        </input>
+        <input ref="/readonly-invalid/n2">
+            <label>The second note</label>
+        </input>
+    </h:body>
+</h:html>

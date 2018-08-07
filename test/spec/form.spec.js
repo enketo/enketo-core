@@ -242,10 +242,11 @@ describe( 'Loading instance values into html input fields functionality', functi
 
     // https://github.com/kobotoolbox/enketo-express/issues/718
     it( 'correctly populates if the first radiobutton or first checkbox only has a value', function() {
-        form = loadForm( 'issue208.xml' );
+        form = loadForm( 'issue208.xml', '<issue208><rep><nodeA>yes</nodeA></rep></issue208>' );
         form.init();
-        form.input.setVal( '/issue208/rep/nodeA', 0, 'yes' );
-        expect( form.view.$.find( '[data-name="/issue208/rep/nodeA"]' ).eq( 0 ).is( ':checked' ) ).toBe( true );
+        var $input = form.view.$.find( '[data-name="/issue208/rep/nodeA"]' ).eq( 0 );
+        //form.input.setVal( $input, 'yes' );
+        expect( $input.is( ':checked' ) ).toBe( true );
     } );
 
 } );
@@ -818,6 +819,7 @@ describe( 'validation', function() {
                 done();
             } );
         } );
+
     } );
 
     describe( 'public validate method', function() {
@@ -920,6 +922,28 @@ describe( 'validation', function() {
                 }, 800 );
             }, 800 );
         } );
+
+        it( 'immediately validates fields that get their values updated programmatically but have no constraint dependencies', function( done ) {
+            form = loadForm( 'readonly-invalid.xml' );
+            form.init();
+            config.validateContinuously = true;
+            var src = '[name="/readonly-invalid/txt"]';
+            var one = '[name="/readonly-invalid/n1"]';
+            var two = '[name="/readonly-invalid/n2"]';
+
+            setValue( src, 'invalid' )
+                .then( function() {
+                    expect( form.view.$.find( one ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( true );
+                    expect( form.view.$.find( two ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( true );
+                    return setValue( src, 'valid' );
+                } )
+                .then( function() {
+                    expect( form.view.$.find( one ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( false );
+                    expect( form.view.$.find( two ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( false );
+                    done();
+                } );
+        } );
+
     } );
 
 } );

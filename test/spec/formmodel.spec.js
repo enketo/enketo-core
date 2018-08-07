@@ -245,7 +245,7 @@ describe( 'Data node XML data type', function() {
         it( 'is converted for XML type: ' + n.type + ' with value: ' + n.value, function() {
             var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
             var expected = typeof n.converted !== 'undefined' ? n.converted : n.value;
-            node.setVal( n.value, null, n.type );
+            node.setVal( n.value, n.type );
             expect( node.getVal()[ 0 ] ).toEqual( expected );
         } );
     }
@@ -281,17 +281,17 @@ describe( 'Data node XML data type', function() {
 
     it( 'returns a null result for a non-existing node', function() {
         var data = getModel( 'thedata.xml' );
-        expect( data.node( '/thedata/nodeA', 1, null ).setVal( 'val13', null, 'string' ) ).toEqual( null );
+        expect( data.node( '/thedata/nodeA', 1, null ).setVal( 'val13', 'string' ) ).toEqual( null );
     } );
 
     it( 'returns a null result when attempting to set the value of multiple nodes', function() {
         var data = getModel( 'thedata.xml' );
-        expect( data.node( '/thedata/repeatGroup/nodeC', null, null ).setVal( 'val', null, null ) ).toEqual( null );
+        expect( data.node( '/thedata/repeatGroup/nodeC', null, null ).setVal( 'val' ) ).toEqual( null );
     } );
 
     it( 'sets a non-empty value to empty', function( done ) {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
-        node.setVal( 'value', null, 'string' );
+        node.setVal( 'value', 'string' );
         node.setVal( '' );
         node.validateConstraintAndType( null, 'string' )
             .then( function( passed ) {
@@ -304,22 +304,22 @@ describe( 'Data node XML data type', function() {
     it( 'adds a file attribute to data nodes with a value and with xml-type: binary', function() {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         expect( node.get().attr( 'type' ) ).toBe( undefined );
-        node.setVal( 'this.jpg', null, 'binary' );
+        node.setVal( 'this.jpg', 'binary' );
         expect( node.get().attr( 'type' ) ).toBe( 'file' );
     } );
 
     it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', function() {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
-        node.setVal( 'this.jpg', null, 'binary' );
+        node.setVal( 'this.jpg', 'binary' );
         expect( node.get().attr( 'type' ) ).toBe( 'file' );
-        node.setVal( '', null, 'binary' );
+        node.setVal( '', 'binary' );
         expect( node.get().attr( 'type' ) ).toBe( undefined );
     } );
 
     it( 'does not trim a string value', function() {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         var value = ' a  ';
-        node.setVal( value, null, 'string' );
+        node.setVal( value, 'string' );
         expect( node.getVal()[ 0 ] ).toEqual( value );
     } );
 
@@ -329,9 +329,9 @@ describe( 'Data node XML data type', function() {
         function whiteSpaceTest( whiteSpaceValue ) {
             it( 'to ""', function() {
                 // first prime node a with some non-whitespace value
-                node.setVal( 'aa', null, 'string' );
+                node.setVal( 'aa', 'string' );
                 expect( node.getVal()[ 0 ] ).toEqual( 'aa' );
-                node.setVal( whiteSpaceValue, null, 'string' );
+                node.setVal( whiteSpaceValue, 'string' );
                 expect( node.getVal()[ 0 ] ).toEqual( '' );
             } );
         }
