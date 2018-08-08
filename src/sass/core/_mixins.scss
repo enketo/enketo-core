@@ -43,10 +43,13 @@
     background-size: $size;
 }
 
-@mixin border-box {
-    -moz-box-sizing: border-box;
+@mixin paper-border($radius: 7px, $color:#ddd) {
+    border-radius: $radius;
+    border: $radius solid $color;
+}
 
-    //-webkit-box-sizing: border-box;
+@mixin border-box {
+    -moz-box-sizing: border-box; //-webkit-box-sizing: border-box;
     //-ms-box-sizing: border-box;
     box-sizing: border-box;
 }
@@ -63,29 +66,15 @@
     box-sizing: $boxmodel;
 }
 
-@mixin box-shadow-none {
-    //-moz-box-shadow: none;
-    //-webkit-box-shadow: none;
-    box-shadow: none;
-}
-
 @mixin box-shadow-touch {
     //-webkit-box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
     //-moz-box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
     box-shadow: inset 0 -1px 0 rgba(90, 90, 90, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-@mixin border-radius($radius) {
-    //-moz-border-radius: $radius;
-    //-webkit-border-radius: $radius;
-    border-radius: $radius;
-}
-
 @mixin tab-focus {
     // Default
-    outline: thin dotted;
-
-    // WebKit
+    outline: thin dotted; // WebKit
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
 }
@@ -93,13 +82,8 @@
 @mixin clearfix {
     &:before,
     &:after {
-        content: " ";
-
-        // 1
-        display: table;
-
-        // 2
-   
+        content: " "; // 1
+        display: table; // 2
     }
 
     &:after {
@@ -165,10 +149,10 @@
 @mixin flex($value, $total: null) {
     $flex: 100%;
 
-    @if $total == null {
+    @if $total==null {
         $flex: $value;
     }
-    @else if $total >= $value {
+    @else if $total>=$value {
         $flex: percentage($value / $total);
     }
 
@@ -180,29 +164,23 @@
 @mixin flex_IEhack($value, $total: null) {
     $flex: 100%;
 
-    @if $total == null {
+    @if $total==null {
         $flex: $value;
     }
-    @else if $total >= $value {
+    @else if $total>=$value {
         $flex: percentage($value / $total);
     }
 
     -webkit-flex-grow: 1;
     flex-grow: 1;
     -webkit-flex-shrink: 1;
-    flex-shrink: 1;
-
-    // Internet Explorer 10 and 11 have a box-sizing issue with multiline flexboxes
+    flex-shrink: 1; // Internet Explorer 10 and 11 have a box-sizing issue with multiline flexboxes
     // box-sizing: border-box is ignored
     // 2 x 6px padding + 1 border = 13px adjustment
-    -webkit-flex-basis: calc(#{$flex} - 13px);
-
-    // IE10:
+    -webkit-flex-basis: calc(#{$flex} - 13px); // IE10:
     -ms-flex-preferred-size: calc(#{$flex} - 13px);
     -ms-flex-positive: 1;
-    -ms-flex-negative: 1;
-
-    // unprefixed
+    -ms-flex-negative: 1; // unprefixed
     flex-basis: calc(#{$flex} - 13px);
 }
 
@@ -234,25 +212,17 @@
 // Creates two color stops, start and end, by specifying a color and position for each color stop.
 // Color stops are not available in IE9 and below.
 @mixin gradient-vertical($start-color: #555555, $end-color: #333333, $start-percent: 0%, $end-percent: 100%) {
-    background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);
-
-    // Safari 5.1-6, Chrome 10+
-    background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent);
-
-    // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent); // Safari 5.1-6, Chrome 10+
+    background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0);
-
-    // IE9 and down
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down
 }
 
 @mixin gradient-vertical-three-colors($start-color: #00b3ee, $mid-color: #7a43b6, $color-stop: 50%, $end-color: #c3325f) {
     background-image: -webkit-linear-gradient($start-color, $mid-color $color-stop, $end-color);
     background-image: linear-gradient($start-color, $mid-color $color-stop, $end-color);
     background-repeat: no-repeat;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0);
-
-    // IE9 and down, gets no color-stop at all for proper fallback
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down, gets no color-stop at all for proper fallback
 }
 
 @mixin form-footer-margin($padding) {

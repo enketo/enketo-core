@@ -34,7 +34,7 @@ module.exports = {
                 this.$btnPrev = this.$formFooter.find( '.previous-page' );
                 this.$btnNext = this.$formFooter.find( '.next-page' );
                 this.$btnLast = this.$formFooter.find( '.last-page' );
-                this.$toc = $( formWrapper.querySelector( '.page-toc' ) );
+                this.$toc = $( formWrapper.querySelector( '.pages-toc__list' ) );
                 this._updateAllActive( $allPages );
                 this._updateToc();
                 this._toggleButtons( 0 );
@@ -42,6 +42,7 @@ module.exports = {
                 this._setRepeatHandlers();
                 this._setBranchHandlers();
                 this._setSwipeHandlers();
+                this._setTocHandlers();
                 this._setLangChangeHandlers();
                 this.active = true;
                 this._flipToFirst();
@@ -65,6 +66,7 @@ module.exports = {
         if ( $closest.length ) {
             this._flipTo( $closest[ 0 ] );
         }
+        this.$toc.parent().find( '.pages-toc__overlay' ).click();
     },
     _setButtonHandlers: function() {
         var that = this;
@@ -127,6 +129,20 @@ module.exports = {
                 }
             }
         } );
+    },
+    _setTocHandlers: function() {
+        var that = this;
+        this.$toc
+            .on( 'click', 'a', function() {
+                if ( !that.form.pageNavigationBlocked ) {
+                    var index = $( this.parentNode ).prevAll().length;
+                    that.flipToPageContaining( $( that.tocItems[ index ].pageEl ) );
+                }
+                return false;
+            } )
+            .parent().find( '.pages-toc__overlay' ).on( 'click', function() {
+                that.$toc.parent().find( '#toc-toggle' ).prop( 'checked', false );
+            } );
     },
     _setRepeatHandlers: function() {
         var that = this;
@@ -303,26 +319,29 @@ module.exports = {
     _updateToc: function() {
         if ( this.$toc.length ) {
             // regenerate complete ToC from first enabled question/group label of each page
-            var tocItems = this.$activePages.get()
+            this.tocItems = this.$activePages.get()
                 .filter( function( pageEl ) {
                     return !pageEl.classList.contains( 'or-repeat-info' );
                 } ).map( function( pageEl ) {
                     var labelEl = pageEl.querySelector( '.question-label.active' );
                     if ( !labelEl ) {
-                        console.error( 'active page without label?', pageEl );
                         return false;
                     }
                     var label = labelEl.textContent;
                     return { pageEl: pageEl, label: label };
                 } );
-            this.$toc.empty()[ 0 ].append( this._getTocHtmlFragment( tocItems ) );
+            this.$toc.empty()[ 0 ].append( this._getTocHtmlFragment( this.tocItems ) );
+            this.$toc.closest( '.pages-toc' ).removeClass( 'hide' );
         }
     },
     _getTocHtmlFragment: function( tocItems ) {
         var items = document.createDocumentFragment();
         tocItems.forEach( function( item ) {
             var li = document.createElement( 'li' );
-            li.textContent = item.label.substr( 0, 20 );
+            var a = document.createElement( 'a' );
+            a.setAttribute( 'href', '#' + item.pageEl.querySelector( '[name]' ).getAttribute( 'name' ) );
+            a.textContent = item.label;
+            li.append( a );
             items.appendChild( li );
         } );
         return items;

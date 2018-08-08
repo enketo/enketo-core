@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Added
+- Table of Contents to Pages mode that allows jumping to any page.
+
 ##### Fixed
 - Questions with calculations do not re-validate immediately when the value is re-calculated (with `validateContinuously: true`).
 

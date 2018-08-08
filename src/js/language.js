@@ -18,7 +18,7 @@ module.exports = {
         this.currentLang = this.$formLanguages.attr( 'data-default-lang' ) || this.$formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
         var currentDirectionality = this.$formLanguages.find( '[value="' + this.currentLang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
-        if ( $langSelector.length ) {
+        if ( $langSelector.length && this.$formLanguages.find( 'option' ).length > 1 ) {
             this.$formLanguages
                 .detach()
                 .appendTo( $langSelector );

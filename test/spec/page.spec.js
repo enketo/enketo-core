@@ -31,7 +31,7 @@ describe( 'Pages mode', function() {
 
         it( 'builds a ToC using the first visible label on each page', function() {
             var form = loadForm( 'pages.xml' );
-            form.view.$.append( '<ol class="page-toc"/>' );
+            form.view.$.append( '<ol class="pages-toc__list"/>' );
             form.init();
             var $toc = form.pages.$toc;
 
@@ -43,7 +43,7 @@ describe( 'Pages mode', function() {
 
         it( 'updates a ToC when page relevancy changes', function() {
             var form = loadForm( 'pages.xml' );
-            form.view.$.append( '<ol class="page-toc"/>' );
+            form.view.$.append( '<ol class="pages-toc__list"/>' );
             form.init();
             var $toc = form.pages.$toc;
 
@@ -58,7 +58,7 @@ describe( 'Pages mode', function() {
 
         it( 'updates a ToC when the language changes', function() {
             var form = loadForm( 'pages.xml' );
-            form.view.$.append( '<ol class="page-toc"/>' );
+            form.view.$.append( '<ol class="pages-toc__list"/>' );
             form.init();
             var $toc = form.pages.$toc;
 

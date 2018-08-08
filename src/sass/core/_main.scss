@@ -370,9 +370,7 @@ legend {
         .option-wrapper>label {
             background-color: transparent;
             border: 1px solid #ccc;
-
-            @include border-radius(4px);
-
+            border-radius: 4px;
             width: auto;
             margin: 0 0 6.4px 0;
             padding: 10px;
@@ -404,7 +402,6 @@ legend {
     input[type=number],
     textarea,
     select {
-        //@include border-radius(2px);
         margin: 10px 0 10px 0;
         color: #104b66;
     }

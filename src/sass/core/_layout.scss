@@ -16,9 +16,8 @@ body {
 }
 
 .paper {
+    @include paper-border;
     background-color: #fff;
-    border-radius: 7px;
-    border: 7px solid #ddd;
     position: relative;
     min-height: 100%;
 }
@@ -62,17 +61,21 @@ body {
 .form-header {
     @include border-box;
 
-    left: 0;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
     position: absolute;
+    left: 0;
     top: -76px;
+
+    width: 100%;
     min-height: 69px;
-    border: none;
     padding: 16px 0;
 }
 
 .form-language-selector {
-    float: right;
     padding: 0;
     margin-left: 10px;
     font-size: 0.8em;

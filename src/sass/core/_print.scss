@@ -164,9 +164,8 @@ label.geo {
     input[type=number],
     select,
     textarea {
-        @include border-radius(0px);
-
-        @include box-shadow-none;
+        border-radius: 0px;
+        box-shadow: none;
 
         @include appearance-none;
 

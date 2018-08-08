@@ -19,11 +19,7 @@ body {
 }
 
 .paper {
-    border-width: 1px;
-
-    @include border-radius(0);
-
-    box-shadow: 0 0 5px #888;
+    @include paper-border;
 }
 
 .question {

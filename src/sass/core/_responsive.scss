@@ -17,12 +17,9 @@
     }
 
     .paper {
-        @include border-radius(0px);
-
+        border-radius: 0;
         padding-top: 0;
-    }
-
-    // When the form-header is absolutely positioned, we'd like the height to be 0,
+    } // When the form-header is absolutely positioned, we'd like the height to be 0,
     // if there is no visible content (e.g. no languages, no print button, no brand)
     // To do this we give the content a padding, but set padding, min-height and margin of form-header to 0.
     .form-header {
@@ -56,11 +53,11 @@
         line-height: 1.05 * $line-height-base;
     }
 
-    .or-group:not(.or-appearance-no-collapse) > h4 { 
+    .or-group:not(.or-appearance-no-collapse)>h4 {
         margin-left: 8px;
     }
 
-    .touch .question.simple-select .option-wrapper > label {
+    .touch .question.simple-select .option-wrapper>label {
         padding: 10px 5px;
     }
 
@@ -87,18 +84,26 @@
     }
 
     input {
-        &[type="text"], &[type="password"], &[type="url"], &[type="email"],
-        &[type="date"], &[type="number"], &[type="time"], &[type="datetime"], &[type="file"] {
+        &[type="text"],
+        &[type="password"],
+        &[type="url"],
+        &[type="email"],
+        &[type="date"],
+        &[type="number"],
+        &[type="time"],
+        &[type="datetime"],
+        &[type="file"] {
             width: 100%;
         }
     }
 
-    select, textarea {
+    select,
+    textarea {
         width: 100%;
     }
 
-    .or-group:not(.or-appearance-no-collapse) > h4 { 
-            margin-left: 15px;
+    .or-group:not(.or-appearance-no-collapse)>h4 {
+        margin-left: 15px;
     }
 
     .main {

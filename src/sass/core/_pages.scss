@@ -1,5 +1,7 @@
 .pages.or {
-    .or-group, .or-group-data, .or-repeat {
+    .or-group,
+    .or-group-data,
+    .or-repeat {
         // to hide group border and title if no or-appearance-pages class is set
         display: none;
 
@@ -8,7 +10,7 @@
         }
     }
 
-    .or-repeat[role="page"].current + .or-repeat-info{
+    .or-repeat[role="page"].current+.or-repeat-info {
         display: block;
     }
 
@@ -18,7 +20,9 @@
         &.current {
             display: block;
 
-            .or-group:not(.disabled), .or-group-data:not(.disabled), .or-repeat:not(.disabled) {
+            .or-group:not(.disabled),
+            .or-group-data:not(.disabled),
+            .or-repeat:not(.disabled) {
                 display: block;
             }
         }
@@ -32,15 +36,13 @@
 
             @include transition-fast;
         }
-    }
-
-    // reduce whitespace
+    } // reduce whitespace
     #form-title {
         margin: 0;
     }
 }
 
-.pages ~ .form-footer {
+.pages~.form-footer {
     // reduce whitespace
     margin-top: 0;
 
@@ -49,13 +51,12 @@
             display: inline-block;
         }
 
-        .previous-page {}
-
         .next-page {
             display: none;
         }
 
-        .logout, .draft {
+        .logout,
+        .draft {
             display: block;
         }
     }
@@ -68,7 +69,8 @@
         display: none;
     }
 
-    .previous-page, .next-page {
+    .previous-page,
+    .next-page {
         display: inline-block;
 
         &.disabled {
@@ -76,11 +78,91 @@
         }
     }
 
-    .first-page, .last-page {
+    .first-page,
+    .last-page {
         display: inline-block;
     }
 
-    .logout, .draft {
+    .logout,
+    .draft {
         display: none;
+    }
+}
+
+.pages-toc {
+    &__list {
+        border: 1px solid black;
+        @include paper-border(2px, $gray);
+
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 69px;
+        width: 320px;
+        height: 0; //hidden, with working animation
+        max-height: calc(100vh - 100px);
+        max-width: 100vw;
+        margin: 0 auto;
+        list-style: none;
+        padding: 0;
+        background: $question-bg;
+        z-index: 1000;
+        overflow: scroll;
+        transition: height 1s ease-out;
+        opacity: 0;
+        li {
+            border-bottom: 1px solid $gray;
+            padding: 0;
+            margin: 0;
+            &:hover {
+                background: $brand-secondary-color;
+            }
+        }
+        a,
+        a:link,
+        a:visited {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 8px 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    &__overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: $gray;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        opacity: 0.5;
+    }
+    #toc-toggle {
+        display: none;
+        &:checked {
+            &+.pages-toc__list {
+                height: auto;
+                opacity: 1;
+            }
+            &~.pages-toc__overlay {
+                display: block;
+            }
+        }
+    }
+    label[for="toc-toggle"] {
+        display: block;
+        width: 27px;
+        height: 27px;
+        margin: 5px 0 5px 20px;
+        background: repeating-linear-gradient($gray 2px, $gray 5px, transparent 5px, transparent 12px);
+        &:hover {
+            opacity: 0.7;
+        }
     }
 }

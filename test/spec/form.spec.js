@@ -88,9 +88,8 @@ describe( 'Preload and MetaData functionality', function() {
     it( 'generates an instanceID WITH a preload binding', function() {
         form = loadForm( 'preload.xml' );
         form.init();
-        expect( form.view.$
-                .find( 'fieldset#or-preload-items input[name="/preload/meta/instanceID"][data-preload="uid"]' ).length )
-            .toEqual( 1 );
+        var sel = 'fieldset#or-preload-items input[name="/preload/meta/instanceID"][data-preload="uid"]';
+        expect( form.view.$.find( sel ).length ).toEqual( 1 );
         expect( form.model.node( '/preload/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
     } );
 

@@ -1,5 +1,3 @@
-/* global describe, require, it, beforeEach, afterEach, expect*/
-
 'use strict';
 
 var $ = require( 'jquery' );

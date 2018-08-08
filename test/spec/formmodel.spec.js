@@ -1,5 +1,3 @@
-/* global describe, require, beforeAll, afterAll, xit, it, expect */
-
 'use strict';
 
 var Model = require( '../../src/js/Form-model' );
@@ -69,38 +67,18 @@ describe( 'Data node getter', function() {
             [ null, null, {},
                 20
             ],
-            [ null, null, {
-                    noEmpty: true
-                },
-                10 //instanceID is populated by model
-            ],
+            [ null, null, { noEmpty: true }, 10 ], //instanceID is populated by model
             //[ 1 ],
             [ '/thedata/nodeA', 1, null, 0 ],
-            [ '/thedata/nodeA', null, {
-                    noEmpty: true
-                },
-                0
-            ], //"int"
-            [ '/thedata/nodeA', null, {
-                    onlyleaf: true
-                },
-                1
-            ],
+            [ '/thedata/nodeA', null, { noEmpty: true }, 0 ], //"int"
+            [ '/thedata/nodeA', null, { onlyleaf: true }, 1 ],
             [ '/thedata/repeatGroup', null, null, 3 ],
 
             [ '//nodeC', null, null, 3 ],
             [ '/thedata/repeatGroup/nodeC', null, null, 3 ],
             [ '/thedata/repeatGroup/nodeC', 2, null, 1 ],
-            [ '/thedata/repeatGroup/nodeC', null, {
-                    noEmpty: true
-                },
-                2
-            ],
-            [ '/thedata/repeatGroup/nodeC', null, {
-                    onlyleaf: true
-                },
-                3
-            ]
+            [ '/thedata/repeatGroup/nodeC', null, { noEmpty: true }, 2 ],
+            [ '/thedata/repeatGroup/nodeC', null, { onlyleaf: true }, 3 ]
         ],
         model = new Model( '<model><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
             '<repeatGroup template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
@@ -549,12 +527,12 @@ describe( 'converting absolute paths', function() {
         [ 'concat(/output_in_repeats/to/node, "2")', 'concat(/model/instance[1]/output_in_repeats/to/node, "2")' ],
         [ 'concat(/path/to/node, "2")', 'concat(/model/instance[1]/path/to/node, "2")' ],
         [ 'concat( /path/to/node, "2" )', 'concat( /model/instance[1]/path/to/node, "2" )' ],
-        [ "join(' ', if( /r/a > 0, 'a', '-'), if( /r/o > 0, 'b', ''))",
-            "join(' ', if( /model/instance[1]/r/a > 0, 'a', '-'), if( /model/instance[1]/r/o > 0, 'b', ''))"
+        [ 'join(\' \', if( /r/a > 0, \'a\', \'-\'), if( /r/o > 0, \'b\', \'\'))',
+            'join(\' \', if( /model/instance[1]/r/a > 0, \'a\', \'-\'), if( /model/instance[1]/r/o > 0, \'b\', \'\'))'
         ],
-        [ "join(' ', if( /r/a > 0, 'a', ''), if( /r/o > 0, 'b', ''))",
+        [ 'join(\' \', if( /r/a > 0, \'a\', \'\'), if( /r/o > 0, \'b\', \'\'))',
             // note the 3rd arg of the first if() is emtpy string! https://github.com/kobotoolbox/enketo-express/issues/559
-            "join(' ', if( /model/instance[1]/r/a > 0, 'a', ''), if( /model/instance[1]/r/o > 0, 'b', ''))"
+            'join(\' \', if( /model/instance[1]/r/a > 0, \'a\', \'\'), if( /model/instance[1]/r/o > 0, \'b\', \'\'))'
         ],
 
 
@@ -566,11 +544,11 @@ describe( 'converting absolute paths', function() {
         [ '../path/to/node' + '../node' ],
         [ '/model/path/to/node' ],
         [ 'concat("/", "path/to/node")' ],
-        [ "concat('/path/to/node')" ],
+        [ 'concat(\'/path/to/node\')' ],
         [ 'concat("a", "[/path/to/node]")' ],
         [ 'concat("\'", "/path/to/node", "\'")' ],
         [ '""', '""' ],
-        [ "''", "''" ],
+        [ '\'\'', '\'\'' ],
         [ '', '' ]
 
     ].forEach( function( test ) {

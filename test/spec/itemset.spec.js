@@ -1,4 +1,3 @@
-/* global spyOn */
 var $ = require( 'jquery' );
 var loadForm = require( '../helpers/loadForm' );
 

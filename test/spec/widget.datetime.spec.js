@@ -1,5 +1,3 @@
-/*global describe, require, it, expect, spyOn*/
-
 'use strict';
 
 var $ = require( 'jquery' );

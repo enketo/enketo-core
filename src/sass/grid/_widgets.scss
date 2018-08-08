@@ -69,7 +69,7 @@
         .option-wrapper>label {
             border: none;
 
-            @include border-radius(0);
+            border-radius: 0;
         }
     }
 }
@@ -79,10 +79,8 @@
     input[type=text],
     input[type=number],
     textarea {
-        @include border-radius(0);
-
-        @include box-shadow-none;
-
+        border-radius: 0;
+        box-shadow: none;
         border: none;
         border-bottom: 1px dotted #cccccc;
         background-color: transparent;
@@ -156,8 +154,7 @@ html:not(.touch) .question .geopoint.widget {
         button.btn {
             border: none;
             background: transparent;
-
-            @include border-radius(0);
+            border-radius: 0;
 
             &:hover {
                 background: transparent;

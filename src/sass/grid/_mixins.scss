@@ -7,30 +7,28 @@
 // override form-control-focus from core
 @mixin form-control-focus {}
 
+@mixin paper-border($radius: 0, $color:#888) {
+    border-width: 1px;
+    box-shadow: 0 0 5px #888;
+}
+
 // override form-control from core
 @mixin form-control {
     @include flex(1);
 
     border: none;
-
-    @include box-shadow-none;
-
+    box-shadow: none;
     background: $input-bg;
     padding: 5px 0;
     margin: 0;
     width: 100%;
-    height: $input-height;
-
-    // hack: IE11 will give height 0, effectively hiding the input element without flex-basis
+    height: $input-height; // hack: IE11 will give height 0, effectively hiding the input element without flex-basis
     flex-basis: $input-height;
 
     &:focus {
         outline: none;
-
-        @include box-shadow-none;
-    }
-
-    // Placeholder
+        box-shadow: none;
+    } // Placeholder
     @include placeholder;
 
     &[disabled],
