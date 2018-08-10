@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Questions with calculations do not re-validate immediately when the value is re-calculated (with `validateContinuously: true`).
 - Labels with words longer the form width, overlap with other form elements.
+- Readonly questions in newly cloned repeats in Grid Theme do not get the proper readonly styling.
 
 [4.56.0] - 2018-08-06
 ----------------------

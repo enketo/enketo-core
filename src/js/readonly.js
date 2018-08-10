@@ -8,9 +8,8 @@ module.exports = {
      *
      * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
      */
-    update: function( /*updated, filter */) {
-        var $nodes = this.form.getRelatedNodes( 'readonly' );
-
+    update: function( updated ) {
+        var $nodes = this.form.getRelatedNodes( 'readonly', '', updated );
         $nodes.each( function() {
             $( this ).closest( '.question' ).addClass( 'readonly' );
             // TODO: radiobuttons, checkboxes

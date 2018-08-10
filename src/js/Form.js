@@ -69,6 +69,7 @@ Form.prototype = {
             this.output.update.bind( this.output ),
             this.itemset.update.bind( this.itemset ),
             this.required.update.bind( this.required ),
+            this.readonly.update.bind( this.readonly ),
             this.validationUpdate
         ].concat( this.evaluationCascadeAdditions );
     },

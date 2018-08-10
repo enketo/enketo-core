@@ -279,7 +279,7 @@ module.exports = {
             // This is the index of the new repeat in relation to all other repeats of the same name,
             // even if they are in different series.
             repeatIndex = repeatIndex || this.form.view.$.find( '.or-repeat[name="' + repeatPath + '"]' ).index( $clone );
-            // This will trigger setting default values and automatic page flips.
+            // This will trigger setting default values, calculations, readonly, relevancy, and automatic page flips.
             $clone.trigger( 'addrepeat', [ repeatIndex, byCountUpdate ] );
             // Initialize widgets in clone after default values have been set
             if ( this.form.widgetsInitialized ) {
