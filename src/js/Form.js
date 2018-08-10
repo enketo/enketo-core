@@ -623,13 +623,15 @@ Form.prototype.setEventHandlers = function() {
                 }, $input[ 0 ].dataset.filenamePostfix );
             }
 
-            that.model.node( n.path, n.index ).setVal( n.val, n.xmlType );
+            var updated = that.model.node( n.path, n.index ).setVal( n.val, n.xmlType );
 
-            that.validateInput( $input )
-                .then( function( valid ) {
-                    // propagate event externally after internal processing is completed
-                    $input.trigger( 'valuechange.enketo', valid );
-                } );
+            if ( updated ) {
+                that.validateInput( $input )
+                    .then( function( valid ) {
+                        // propagate event externally after internal processing is completed
+                        $input.trigger( 'valuechange.enketo', valid );
+                    } );
+            }
         } );
 
     // doing this on the focus event may have little effect on performance, because nothing else is happening :)

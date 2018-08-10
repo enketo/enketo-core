@@ -1044,6 +1044,47 @@ describe( 'clearing inputs', function() {
     } );
 } );
 
+describe( 'white-space-only input', function() {
+    // This is e.g. important for automatic value-change log creation in OpenClinica.
+    it( 'does not fire a valuechange event', function( done ) {
+        var form = loadForm( 'thedata.xml' );
+        form.init();
+        var $input = form.view.$.find( '[name="/thedata/nodeF"]' );
+        var counter = 0;
+        $input.on( 'valuechange.enketo', () => counter++ );
+
+        function inputVal( val ) {
+            return new Promise( function( resolve ) {
+                $input.val( val ).trigger( 'change' );
+                setTimeout( resolve, 500 );
+            } );
+        }
+        inputVal( '  ' )
+            .then( () => {
+                expect( counter ).toEqual( 0 );
+                return inputVal( ' a' );
+            } )
+            .then( () => {
+                expect( counter ).toEqual( 1 );
+                return inputVal( '   ' );
+            } )
+            .then( () => {
+                expect( counter ).toEqual( 2 );
+                return inputVal( ' ' );
+            } )
+            .then( () => {
+                expect( counter ).toEqual( 2 );
+                return inputVal( '' );
+            } )
+            .then( () => {
+                expect( counter ).toEqual( 2 );
+                done();
+            } );
+    } );
+
+} );
+
+
 describe( 'form status', function() {
     var form = loadForm( 'thedata.xml' );
     form.init();
