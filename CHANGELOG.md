@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Questions with calculations do not re-validate immediately when the value is re-calculated (with `validateContinuously: true`).
+- Labels with words longer the form width, overlap with other form elements.
 
 [4.56.0] - 2018-08-06
 ----------------------

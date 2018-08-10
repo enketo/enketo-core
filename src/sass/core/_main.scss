@@ -60,6 +60,7 @@ $media-margin: 10px;
         }
     }
     .question-label {
+        word-break: break-word;
         display: inline-block; // to ensure that comment icons are displayed next to multi-line labels and not below
     }
 }
