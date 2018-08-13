@@ -3,10 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.57.0] - 2018-08-13
 ----------------------
 ##### Added
-- Table of Contents to Pages mode that allows jumping to any page.
+- Table of Contents to Pages mode that enables jumping to any page.
 
 ##### Fixed
 - Questions with calculations do not re-validate immediately when the value is re-calculated (with `validateContinuously: true`).
