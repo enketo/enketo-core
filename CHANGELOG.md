@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Appearance "placement-map" not showing map in geowidgets. 
+
 [4.57.0] - 2018-08-13
 ----------------------
 ##### Added

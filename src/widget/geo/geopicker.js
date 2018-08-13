@@ -295,24 +295,20 @@ Geopicker.prototype._switchInputType = function( type ) {
  * @return {{search: boolean, detect: boolean, map: boolean, updateMapFn: string, type: string}} The widget properties object
  */
 Geopicker.prototype._getProps = function() {
-    var appearances = [];
-    var map = support.touch !== true || ( support.touch === true && $( this.element ).closest( '.or-appearance-maps' ).length > 0 );
-
-    if ( map ) {
-        appearances = $( this.element ).closest( '.question' ).attr( 'class' ).split( ' ' )
-            .filter( function( item ) {
-                return item !== 'or-appearance-maps' && /or-appearance-/.test( item );
-            } );
-        appearances.forEach( function( appearance, index ) {
-            appearances[ index ] = appearance.substring( 14 );
+    var appearances = $( this.element ).closest( '.question' ).attr( 'class' ).split( ' ' )
+        .filter( function( item ) {
+            return /or-appearance-/.test( item );
+        } )
+        .map( function( appearance ) {
+            return appearance.substring( 14 );
         } );
-    }
+    var map = !support.touch || appearances.indexOf( 'maps' ) !== -1 || appearances.indexOf( 'placement-map' ) !== -1;
 
     return {
         detect: !!navigator.geolocation,
         map: map,
         search: map,
-        appearances: appearances,
+        appearances: map ? appearances : [],
         type: this.element.attributes[ 'data-type-xml' ].value,
         touch: support.touch,
         wide: ( this.$question.width() / this.$question.closest( 'form.or' ).width() > 0.8 ),
@@ -608,7 +604,8 @@ Geopicker.prototype._enableSearch = function() {
 
             if ( address ) {
                 address = address.split( /\s+/ ).join( '+' );
-                $.get( searchSource.replace( '{address}', address ), function( response ) {
+                $
+                    .get( searchSource.replace( '{address}', address ), function( response ) {
                         var latLng;
                         if ( response.results && response.results.length > 0 && response.results[ 0 ].geometry && response.results[ 0 ].geometry.location ) {
                             latLng = response.results[ 0 ].geometry.location;
@@ -1078,7 +1075,8 @@ Geopicker.prototype._updateArea = function( points ) {
         area = L.GeometryUtil.geodesicArea( latLngs );
         readableArea = L.GeometryUtil.readableArea( area, true );
 
-        L.popup( {
+        L
+            .popup( {
                 className: 'enketo-area-popup'
             } )
             .setLatLng( this.polygon.getBounds().getCenter() )
