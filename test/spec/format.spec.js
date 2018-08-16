@@ -15,7 +15,7 @@ describe( 'Format', function() {
 
         function testMeridian( locale, expected ) {
             it( 'correctly identifies ' + locale + ' time meridian notation as ' + expected, function() {
-                format.language = locale;
+                format.locale = locale;
                 expect( format.time.hour12 ).toEqual( expected );
             } );
         }
@@ -26,7 +26,7 @@ describe( 'Format', function() {
 
         function testPm( locale, am, pm ) {
             it( 'correctly extracts the AM and PM notation for ' + locale + ' as: ' + am + ',' + pm, function() {
-                format.language = locale;
+                format.locale = locale;
                 expect( format.time.amNotation ).toEqual( am );
                 expect( format.time.pmNotation ).toEqual( pm );
             } );

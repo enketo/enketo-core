@@ -1,4 +1,4 @@
-var _language = navigator.language;
+var _locale = navigator.language;
 var NUMBER = '0-9\u0660-\u0669';
 var TIME_PART = '[:' + NUMBER + ']+';
 var MERIDIAN_PART = '[^: ' + NUMBER + ']+';
@@ -6,12 +6,16 @@ var HAS_MERIDIAN = new RegExp( '^(' + TIME_PART + ' ?(' + MERIDIAN_PART + '))|((
 
 module.exports = {
     set language( lang ) {
-        _language = lang;
+        console.deprecate( 'format.language', 'format.locale' );
+        _locale = lang;
+    },
+    set locale( locale ) {
+        _locale = locale;
     },
     time: {
         // For now we just look at a subset of numbers in Arabic and Latin. There are actually over 20 number scripts and :digit: doesn't work in browsers
         get hour12() {
-            return HAS_MERIDIAN.test( new Date().toLocaleTimeString( _language ) );
+            return HAS_MERIDIAN.test( new Date().toLocaleTimeString( _locale ) );
         },
         get pmNotation() {
             return this.meridianNotation( '01-01-1970 23:00:00' );
@@ -20,7 +24,7 @@ module.exports = {
             return this.meridianNotation( '01-01-1970 01:00:00' );
         },
         meridianNotation: function( dt ) {
-            var matches = new Date( dt ).toLocaleTimeString( _language ).match( HAS_MERIDIAN );
+            var matches = new Date( dt ).toLocaleTimeString( _locale ).match( HAS_MERIDIAN );
             if ( matches && matches.length ) {
                 matches = matches.filter( function( item ) { return !!item; } );
                 return matches[ matches.length - 1 ];
