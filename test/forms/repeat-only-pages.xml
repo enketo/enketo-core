@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Form in pages mode where first question is the repeat with field-list appearance</h:title>
+        <model>
+            <instance>
+                <data id="data">
+                    <rep jr:template="">
+                        <crop/>
+                    </rep>
+                    <b/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/rep/crop" type="select1"/>
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body class="pages">
+        <group ref="/data/rep">
+            <label></label>
+            <repeat appearance="field-list" nodeset="/data/rep">
+                <select1 ref="/data/rep/crop">
+                    <label>Select</label>
+                    <item>
+                        <label>Banana</label>
+                        <value>banana</value>
+                    </item>
+                </select1>
+            </repeat>
+        </group>
+        <input ref="/data/b">
+            <label>b</label>
+        </input>
+    </h:body>
+</h:html>

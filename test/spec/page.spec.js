@@ -12,6 +12,15 @@ describe( 'Pages mode', function() {
             expect( form.pages.$current[ 0 ] ).toEqual( form.view.html.querySelector( '.question' ) );
         } );
 
+        it( 'loads to the proper first page if the form contains only a repeat and nothing outside it', function() {
+            var form = loadForm( 'repeat-only-pages.xml' );
+            form.init();
+
+            expect( form.pages.$current.length ).toEqual( 1 );
+            expect( form.pages.$current.hasClass( 'current' ) ).toBe( true );
+            expect( form.pages.$current[ 0 ] ).toEqual( form.view.html.querySelector( '.or-repeat' ) );
+        } );
+
     } );
 
     describe( 'ToC generation', function() {

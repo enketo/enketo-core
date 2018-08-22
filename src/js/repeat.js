@@ -64,6 +64,7 @@ module.exports = {
         $repeatInfos.siblings( '.or-repeat' ).reverse().each( function() {
             var $templateEl = $( this ).remove();
             var xPath = $templateEl.attr( 'name' );
+            $templateEl.removeClass( 'contains-current current' ).find( '.current' ).removeClass( 'current' );
             that.templates[ xPath ] = $templateEl[ 0 ];
         } );
 

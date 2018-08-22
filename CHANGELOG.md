@@ -6,7 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ----------------------
 ##### Fixed
-- Appearance "placement-map" not showing map in geowidgets. 
+- Appearance "placement-map" not showing map in geowidgets.
+- If form in Pages Mode has a repeat as the first page (with field-list), a blank first page is shown.
 
 [4.57.0] - 2018-08-13
 ----------------------

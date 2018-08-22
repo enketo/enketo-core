@@ -148,19 +148,15 @@ module.exports = {
         var that = this;
         // TODO: can be optimized by smartly updating the active pages
         this.form.view.$
-            //.off( 'addrepeat.pagemode' )
             .on( 'addrepeat.pagemode', function( event, index, byCountUpdate ) {
                 that._updateAllActive();
-                // Removing the class in effect avoids the animation
-                // It also prevents multiple .or-repeat[role="page"] to be shown on the same page
-                $( event.target ).removeClass( 'current contains-current' ).find( '.current' ).removeClass( 'current' );
                 // Don't flip if the user didn't create the repeat with the + button.
                 // or if is the default first instance created during loading.
-                if ( !byCountUpdate ) {
+                // except if the new repeat is actually first page in the form.
+                if ( !byCountUpdate || that.$activePages[ 0 ] === event.target ) {
                     that.flipToPageContaining( $( event.target ) );
                 }
             } )
-            //.off( 'removerepeat.pagemode' )
             .on( 'removerepeat.pagemode', function( event ) {
                 // if the current page is removed
                 // note that that.$current will have length 1 even if it was removed from DOM!
