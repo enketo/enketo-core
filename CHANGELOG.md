@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.57.1] - 2018-08-23
 ----------------------
+##### Changed
+- Provide way to not apply 'empty' class to special readonly views.
+
 ##### Fixed
 - Appearance "placement-map" not showing map in geowidgets.
 - If form in Pages Mode has a repeat as the first page (with field-list), a blank first page is shown.

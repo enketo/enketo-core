@@ -12,8 +12,8 @@ module.exports = {
         var $nodes = this.form.getRelatedNodes( 'readonly', '', updated );
         $nodes.each( function() {
             $( this ).closest( '.question' ).addClass( 'readonly' );
-            // TODO: radiobuttons, checkboxes
-            if ( !this.value && !this.dataset.calculate ) {
+            // Note: the readonly-forced class is added for special readonly views of a form.
+            if ( !this.value && !this.dataset.calculate && !this.classList.contains( 'readonly-forced' ) ) {
                 this.classList.add( 'empty' );
             }
         } );
