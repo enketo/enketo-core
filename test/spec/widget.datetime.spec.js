@@ -3,9 +3,9 @@
 var $ = require( 'jquery' );
 var widget = require( '../../src/widget/datetime/datetimepicker-extended' );
 
-var FORM1 = '<form class="or"><label class="question "><input type="datetime" data-type-xml="datetime"/></label></form>';
+var FORM1 = '<form class="or"><label class="question "><input type="datetime" data-type-xml="datetime" value="" /></label></form>';
 
-describe( 'datepicker widget', function() {
+describe( 'datetimepicker widget', function() {
 
     function initForm( form ) {
         var $form = $( form );
@@ -16,7 +16,7 @@ describe( 'datepicker widget', function() {
 
     describe( 'manual input without Enter', function() {
 
-        it( 'is propagated correctly for plain datetime fields', function() {
+        it( 'is propagated correctly for datetime fields', function() {
             var $form = initForm( FORM1 );
             var input = $form[ 0 ].querySelector( widget.selector );
             var fakeDateInput = $form[ 0 ].querySelector( '.widget .date input' );
@@ -40,6 +40,42 @@ describe( 'datepicker widget', function() {
 
             expect( input.value ).toEqual( '' );
             expect( input.onchange.calls.count() ).toEqual( 2 );
+        } );
+
+    } );
+
+    describe( 'default values', function() {
+
+        var defaultVal = '2012-01-01T13:00:00.000-06:00';
+        var $form = initForm( FORM1.replace( 'value=""', 'value="' + defaultVal + '"' ) );
+        var input = $form[ 0 ].querySelector( widget.selector );
+        var fakeDateInput = $form[ 0 ].querySelector( '.widget .date input' );
+        var fakeTimeInput = $form[ 0 ].querySelector( '.widget .timepicker input' );
+
+        it( 'are shown correctly for datetime fields', function() {
+            expect( $( input ).data( widget.name ) ).not.toBeUndefined();
+            expect( input.value ).toEqual( defaultVal );
+            expect( fakeDateInput.value ).toEqual( defaultVal.split( 'T' )[ 0 ] );
+            expect( fakeTimeInput.value ).toEqual( '12:00 AM' ); // Arizona timezone and meridan preference
+        } );
+
+    } );
+
+    describe( 'calculated values', function() {
+
+        var calculatedVal = '2012-01-01T13:00:00.000-06:00';
+        var $form = initForm( FORM1 );
+        var input = $form[ 0 ].querySelector( widget.selector );
+        var fakeDateInput = $form[ 0 ].querySelector( '.widget .date input' );
+        var fakeTimeInput = $form[ 0 ].querySelector( '.widget .timepicker input' );
+
+        // simulate a change by a calculation
+        $( input ).val( calculatedVal )[ widget.name ]( 'update' );
+
+        it( 'are shown correctly for datetime fields', function() {
+            expect( $( input ).data( widget.name ) ).not.toBeUndefined();
+            expect( fakeDateInput.value ).toEqual( calculatedVal.split( 'T' )[ 0 ] );
+            expect( fakeTimeInput.value ).toEqual( '12:00 AM' ); // Arizona timezone and meridan preference
         } );
 
     } );

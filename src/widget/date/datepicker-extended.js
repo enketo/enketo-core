@@ -67,7 +67,14 @@ DatepickerExtended.prototype._init = function() {
         startView: this.settings.startView,
         minViewMode: this.settings.minViewMode,
         forceParse: false
-    } ).datepicker( 'setDate', this.element.value );
+    } );
+
+    this._setDate( this.element.value );
+};
+
+DatepickerExtended.prototype._setDate = function( date ) {
+    var valueToSet = date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
+    this.$fakeDateI.datepicker( 'setDate', valueToSet );
 };
 
 /**
@@ -170,7 +177,7 @@ DatepickerExtended.prototype._setFocusHandler = function( $fakeDateI ) {
 };
 
 DatepickerExtended.prototype.update = function() {
-    this.$fakeDateI.datepicker( 'setDate', this.element.value );
+    this._setDate( this.element.value );
 };
 
 $.fn[ pluginName ] = function( options, event ) {

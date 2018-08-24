@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.57.2] - 2018-08-24
+----------------------
+#### Fixed
+- Loaded year and month-year values not displayed correctly in date (desktop) widget.
+
 [4.57.1] - 2018-08-23
 ----------------------
 ##### Changed
