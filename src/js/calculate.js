@@ -45,22 +45,38 @@ module.exports = {
             var dataNodesObj = that.form.model.node( name );
             var dataNodes = dataNodesObj.get();
 
-            /*
-             * If the update was triggered by a datanode inside a repeat
-             * and the dependent node is inside the same repeat
-             */
-            if ( dataNodes.length > 1 && updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
-                var $dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
-                index = $( dataNodes ).index( $dataNode );
-                updateCalc( index );
+            if ( dataNodes.length > 1 ) {
+                if ( updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
+                    /*
+                     * If the update was triggered by a datanode inside a repeat
+                     * and the dependent node is inside the same repeat, we can prevent the expensive index determination
+                     */
+                    var $dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
+                    index = $( dataNodes ).index( $dataNode );
+                    updateCalc( index );
+                } else if ( $control[ 0 ].type === 'hidden' ) {
+                    /*
+                     * This case is the consequence of the unfortunate decision to place calculated items without a visible form control,
+                     * as a separate group (.or-calculated-items), instead of in the Form DOM in the locations where they belong.
+                     * This occurs when update is called with empty updated object and multiple repeats are present.
+                     */
+                    dataNodes.each( function( index ) {
+                        updateCalc( index );
+                    } );
+                } else {
+                    /* 
+                     * This occurs when the updated object contains a relevantPath that refers to a repeat and multiple repeats are 
+                     * present, without calculated items that HAVE a visible form control.
+                     */
+                    var $repeatSiblings = $control.closest( '.or-repeat' ).siblings( '.or-repeat' ).addBack();
+                    if ( $repeatSiblings.length === dataNodes.length ) {
+                        index = $repeatSiblings.index( $control.closest( '.or-repeat' ) );
+                        updateCalc( index );
+                    }
+                }
             } else if ( dataNodes.length === 1 ) {
                 index = 0;
                 updateCalc( index );
-            } else {
-                // This occurs when update is called with empty updated object and multiple repeats are present
-                dataNodes.each( function( index ) {
-                    updateCalc( index );
-                } );
             }
 
             function updateCalc( index ) {
