@@ -1518,7 +1518,8 @@ Nodeset.prototype.remove = function() {
             this.model.extractFakeTemplates( [ repeatPath ] );
         }
         // warning: jQuery.next() to be avoided to support dots in the nodename
-        nextNode = $dataNode.get( 0 ).nextSibling;
+        nextNode = $dataNode.get( 0 ).nextElementSibling;
+
         $dataNode.remove();
         this.nodes = null;
 
@@ -1532,7 +1533,8 @@ Nodeset.prototype.remove = function() {
         // For all next sibling repeats to update formulas that use e.g. position(..)
         // For internal use
         while ( nextNode && nextNode.nodeName == nodeName ) {
-            nextNode = nextNode.nextSibling;
+            nextNode = nextNode.nextElementSibling;
+
             this.model.$events.trigger( 'dataupdate', {
                 nodes: null,
                 repeatPath: repeatPath,
