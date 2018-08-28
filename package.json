@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "4.57.2",
+    "version": "4.58.0",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -62,8 +62,7 @@
         "enketo/widgets": "./src/js/widgets.js",
         "enketo/translator": "./src/js/fake-translator",
         "enketo/dialog": "./src/js/fake-dialog",
-        "enketo/file-manager": "./src/js/file-manager",
-        "enketo/polyfills-ie11": false
+        "enketo/file-manager": "./src/js/file-manager"
     },
     "dependencies": {
         "bootstrap-datepicker": "1.8.x",

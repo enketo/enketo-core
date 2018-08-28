@@ -6,7 +6,7 @@
  */
 'use strict';
 
-require( 'enketo/polyfills-ie11' );
+require( './src/js/workarounds-ie11' );
 
 var $ = require( 'jquery' );
 var support = require( './src/js/support' );

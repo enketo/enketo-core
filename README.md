@@ -95,7 +95,17 @@ The following browsers are officially supported:
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
-You can enable some support for Internet Explorer 11 by importing the `_iefix.scss` files where appropriate. These are commented out in the default CSS builds for the 3 themes. Also make sure to resolve the `enketo/polyfills-ie11` module to `/src/js/polyfills-ie11` (or an alternative polyfill service).
+#### Enabling support for Internet Explorer 11
+
+You can enable support for Internet Explorer 11 by:
+
+1. Importing the `_iefix.scss` files in the theme entry files. These are commented out in the default CSS builds for the 3 themes. 
+2. Including polyfills using a script tag with the `nomodule` attribute (which will prevent loading this file on modern browsers). See [/build/index.html](./build/index.html) for an example using a polyfill service that is regularly tested.
+3. Optionally, require [/src/js/workarounds-ie11.js](./src/js/workarounds-ie11.js) in your applications's JS entry point.
+
+**Heads up! In the near future, you will also have to create a special JS build for IE11 using Babel.**
+
+Note that forms will load extremely slowly in IE11 compared to modern browsers. This performance gap will become wider and wider as we move to modern JS syntax (Enketo on IE11 will become _slower_, whilst on modern browsers it will become _faster_).
 
 ### Global Configuration
 
