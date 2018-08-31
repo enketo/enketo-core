@@ -48,6 +48,7 @@ h4::before {
 }
 
 .or {
+
     .hint,
     .or-appearance-no-print,
     .geopoint .search-bar,
@@ -106,6 +107,7 @@ label.geo {
 }
 
 .or {
+
     h2,
     h3,
     h4,
@@ -272,6 +274,7 @@ label.geo {
 
     .dropdown-toggle {
         display: none;
+
         ~.dropdown-menu {
             @include display-flex;
 
@@ -334,6 +337,7 @@ label.geo {
 }
 
 .or-appearance-analog-scale {
+
     // if analog-scale widget is a non-current page the display is set to block
     // which moves the vertical widget below the label instead of next to it.
     &:not(.or-appearance-horizontal) {
@@ -407,6 +411,7 @@ label.geo {
 h3,
 h4 {
     page-break-after: avoid;
+
     +.question {
         page-break-before: avoid;
     }
@@ -421,3 +426,19 @@ h4 {
     border-bottom: none;
     page-break-after: always !important;
 }*/
+
+[type=range] {
+    &:not(.empty) {
+        &::-webkit-slider-thumb {
+            border-color: black !important;
+        }
+
+        &::-moz-range-thumb {
+            border-color: black !important;
+        }
+
+        &::-ms-thumb {
+            border-color: black !important;
+        }
+    }
+}

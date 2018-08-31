@@ -3,12 +3,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Range pickers not showing current value "thumb" on printouts.
+- Distresspicker thumb not centered on Chrome and Safari.
+
 [4.58.0] - 2018-08-28
 ----------------------
-#### Changed
+##### Changed
 - IE11 support is now enabled differently. See [readme.md](https://github.com/enketo/enketo-core#enabling-support-for-internet-explorer-11). **WARNING**
   
-#### Fixed
+##### Fixed
 - Calculation results inside repeats are shown incorrectly to user under certain conditions.
 - When a repeat is removed, calculations inside sibling repeats (e.g. using `position(..)`) are not always re-calculated.
 

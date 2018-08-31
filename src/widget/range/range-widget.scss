@@ -8,6 +8,7 @@ $track-color: $gray-dark;
 $thick-w: 1px;
 $pad: 10px;
 $left: -85px;
+
 @mixin track($color:$track-color, $height: $track-h) {
     box-sizing: border-box;
     border: none;
@@ -19,26 +20,30 @@ $left: -85px;
 
 @mixin thumb($color: $brand-primary-color) {
     box-sizing: border-box;
-    border: none;
+    border: 1px solid $color;
     width: $thumb-d;
     height: $thumb-d;
     border-radius: 50%;
     background: $color;
     cursor: pointer;
-    &.empty {
-        background: transparent;
-    }
 }
 
 @mixin thumb-focus() {
     @include focus-shadow
 }
 
+@mixin thumb-empty() {
+    background: transparent;
+    border-color: transparent;
+}
+
 [type=range] {
+
     &,
     &::-webkit-slider-thumb {
         -webkit-appearance: none;
     }
+
     padding: 0.25*$margin;
     width: $track-w;
     background: transparent;
@@ -49,9 +54,11 @@ $left: -85px;
     &::-webkit-slider-runnable-track {
         @include track
     }
+
     &::-moz-range-track {
         @include track
     }
+
     &::-ms-track {
         @include track
     }
@@ -60,9 +67,11 @@ $left: -85px;
         margin-top: .5*($track-h - $thumb-d);
         @include thumb
     }
+
     &::-moz-range-thumb {
         @include thumb
     }
+
     &::-ms-thumb {
         margin-top: 0;
         @include thumb
@@ -71,36 +80,46 @@ $left: -85px;
     &::-ms-tooltip {
         display: none
     }
+
     &:focus {
         outline: 0;
+
         &::-webkit-slider-thumb {
             @include thumb-focus
         }
+
         &::-moz-range-thumb {
             @include thumb-focus
         }
+
         &::-ms-thumb {
             @include thumb-focus
         }
     }
+
     &.empty {
         &::-webkit-slider-thumb {
-            background: transparent;
+            @include thumb-empty;
         }
+
         &::-moz-range-thumb {
-            background: transparent;
+            @include thumb-empty;
         }
+
         &::-ms-thumb {
-            background: transparent;
+            @include thumb-empty;
         }
     }
+
     &[disabled] {
         &::-webkit-slider-thumb {
             opacity: 0.7
         }
+
         &::-moz-range-thumb {
             opacity: 0.7;
         }
+
         &::-ms-thumb {
             opacity: 0.7;
         }
@@ -109,17 +128,20 @@ $left: -85px;
 
 .range-widget {
     position: relative;
+
     &__wrap {
         width: $track-w;
         height: $height;
         z-index: 0;
         text-align: center;
     }
+
     &__current {
         padding-bottom: $pad;
         vertical-align: middle;
         line-height: ($height - (3*$track-h)) / 2;
     }
+
     &__ticks {
         height: 20px;
         box-sizing: border-box;
@@ -128,18 +150,22 @@ $left: -85px;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
+
         span {
             flex: 1;
             border-left: $thick-w solid $track-color;
+
             &:last-child {
                 border-right: $thick-w solid $track-color;
             }
         }
     }
+
     &__scale {
         display: flex;
         padding-top: $pad;
         justify-content: space-between;
+
         &__start,
         &__end,
         &__between {
@@ -148,11 +174,13 @@ $left: -85px;
             font-weight: normal;
         }
     }
+
     [type=range] {
         position: absolute;
         top: 93.5px;
         left: 0;
     }
+
     .btn-reset {
         margin: 15px;
     }
@@ -170,6 +198,7 @@ $v-height: 350px;
         left: $left;
         right: $left;
     }
+
     .range-widget {
         &__wrap {
             display: flex;
@@ -179,12 +208,14 @@ $v-height: 350px;
             width: $height;
             margin-top: 20px;
         }
+
         &__current {
             flex: 1;
             padding-right: $pad;
             padding-bottom: 0;
             line-height: $v-height;
         }
+
         &__ticks {
             width: 20px;
             height: auto;
@@ -194,15 +225,18 @@ $v-height: 350px;
             margin-top: 0.5 * $thumb-d + 2;
             margin-bottom: 0.5 * $thumb-d + 2;
             flex-direction: column;
+
             span {
                 border-top: $thick-w solid $track-color;
                 border-left: none;
+
                 &:last-child {
                     border-bottom: $thick-w solid $track-color;
                     border-right: none;
                 }
             }
         }
+
         &__scale {
             flex: 1;
             padding-top: 0;
@@ -213,6 +247,7 @@ $v-height: 350px;
 }
 
 .or[dir=rtl] {
+
     .or-appearance-vertical,
     .or-appearance-distress {
         input[type=range] {
@@ -234,36 +269,46 @@ $green: rgb(60, 182, 67);
 
 .or-appearance-distress {
     $shift-top: 15px;
+
     input[type=range] {
-        top: 158px + 15px;
+        top: 158px + $shift-top;
         left: $left - 42.5px;
         right: $left - 42.5px;
 
         &::-webkit-slider-runnable-track {
-            @include track( $ds-track-color, $ds-track-h);
+            @include track($ds-track-color, $ds-track-h);
         }
+
         &::-moz-range-track {
-            @include track( $ds-track-color, $ds-track-h);
+            @include track($ds-track-color, $ds-track-h);
         }
+
         &::-ms-track {
-            @include track( $ds-track-color, $ds-track-h);
+            @include track($ds-track-color, $ds-track-h);
         }
+
         &:not(.empty) {
             &::-webkit-slider-thumb {
+                // The reason for the 1.5px correction in Chrome/Safari is unknown.
+                margin-top: 1.5 + .5*($track-h - $thumb-d);
                 @include thumb($ds-thumb-color)
             }
+
             &::-moz-range-thumb {
                 @include thumb($ds-thumb-color)
             }
+
             &::-ms-thumb {
                 @include thumb($ds-thumb-color)
             }
         }
     }
+
     .range-widget {
         >* {
             //border: 1px red solid;
         }
+
         &__wrap {
             width: 115px;
             flex-direction: row-reverse;
@@ -271,13 +316,16 @@ $green: rgb(60, 182, 67);
             padding-top: $shift-top;
             height: $v-height + $bulb-w;
         }
+
         &__current {
             visibility: hidden;
             padding: 0 (5.5 + 0.5 * 1.5 * $ds-track-h);
         }
+
         &__ticks {
             width: 6px;
         }
+
         &__bg {
             width: $bulb-w / 2;
             border-radius: $bulb-w / 4;
@@ -289,12 +337,14 @@ $green: rgb(60, 182, 67);
             @include gradient-vertical-three-colors($red, $yellow, 50%, $green);
             z-index: 1;
         }
+
         &__scale {
             position: relative;
             text-align: end;
             align-items: flex-end;
             padding: 0 5.5px;
         }
+
         &__bulb {
             $inner-width: 24px;
             width: $bulb-w;
@@ -304,6 +354,7 @@ $green: rgb(60, 182, 67);
             margin: -7px auto 10px auto;
             background: $green;
             position: relative;
+
             &__inner {
                 width: $inner-width;
                 height: $inner-width;
@@ -311,6 +362,7 @@ $green: rgb(60, 182, 67);
                 background: $ds-thumb-color;
                 margin: ($bulb-w - $inner-width - 2px) / 2;
             }
+
             &__mercury {
                 position: absolute;
                 left: calc(50% - #{$ds-track-h} / 2);
@@ -322,6 +374,7 @@ $green: rgb(60, 182, 67);
                 z-index: 100;
             }
         }
+
         .btn-reset {
             position: absolute;
             top: 140px;

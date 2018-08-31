@@ -7,6 +7,8 @@ $analog-picker-max-height: 800px !default;
 $q-pad-left: 0px !default;
 $q-pad-right: 0px !default;
 
+@import "../../sass/core/slider";
+
 @mixin ticks($orientation: "vertical") {
     @if $orientation=="horizontal" {
         .scale__number {
@@ -37,6 +39,7 @@ $q-pad-right: 0px !default;
             background-size: 10% 100%;
         }
     }
+
     @else {
         .scale__number {
             position: relative;
@@ -68,6 +71,7 @@ $q-pad-right: 0px !default;
 
 .or-analog-scale-initialized {
     position: relative; // using a dirty trick, knowing that only only question-labels with a lang attribute
+
     // are switched when the language changes
     .label-content {
         .question-label.active {
@@ -169,6 +173,7 @@ $q-pad-right: 0px !default;
         @include flex-direction(column);
 
         width: $analog-picker-width; // weird rule to push down vertical slider
+
         // so it doesn't interfere with comment icon
         &.widget:not(.or-comment-widget) {
             margin-top: 15px;
@@ -303,6 +308,7 @@ $q-pad-right: 0px !default;
 
     &.invalid-constraint,
     &.invalid-required {
+
         .or-constraint-msg.active,
         .or-required-msg.active {
             position: absolute;
