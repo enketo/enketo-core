@@ -90,38 +90,12 @@ module.exports = {
      * Used to retrieve the index of a question amidst all questions with the same name.
      * The index that can be used to find the corresponding node in the model.
      * NOTE: this function should be used sparingly, as it is CPU intensive!
-     * TODO: simplify this function by looking for nodes with same CLASS on wrapNode
-     *
-     * @param  {jQuery} $input The jQuery-wrapped input element
-     * @return {number}       The index
      */
     getIndex: function( $input ) {
-        var inputType;
-        var name;
-        var $wrapNode;
-        var $wrapNodesSameName;
-
         if ( $input.length !== 1 ) {
             return console.error( 'getIndex(): no input node provided or multiple' );
         }
-
-        inputType = this.getInputType( $input );
-        name = this.getName( $input );
-        $wrapNode = this.getWrapNodes( $input );
-
-        if ( inputType === 'radio' && name !== $input.attr( 'name' ) ) {
-            $wrapNodesSameName = this.getWrapNodes( this.form.view.$.find( '[data-name="' + name + '"]' ) );
-        }
-        // fieldset.or-group wraps fieldset.or-repeat and can have same name attribute!)
-        else if ( inputType === 'fieldset' && $input.hasClass( 'or-repeat' ) ) {
-            $wrapNodesSameName = this.getWrapNodes( this.form.view.$.find( '.or-repeat[name="' + name + '"]' ) );
-        } else if ( inputType === 'fieldset' && $input.hasClass( 'or-group' ) ) {
-            $wrapNodesSameName = this.getWrapNodes( this.form.view.$.find( '.or-group[name="' + name + '"]' ) );
-        } else {
-            $wrapNodesSameName = this.getWrapNodes( this.form.view.$.find( '[name="' + name + '"]' ) );
-        }
-
-        return $wrapNodesSameName.index( $wrapNode );
+        return this.form.repeats.getIndex( $input[ 0 ].closest( '.or-repeat' ) );
     },
     isMultiple: function( $input ) {
         return ( this.getInputType( $input ) === 'checkbox' || $input.attr( 'multiple' ) !== undefined ) ? true : false;

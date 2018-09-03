@@ -480,8 +480,8 @@ FormModel.prototype.getXPath = function( node, rootNodeName, includePosition ) {
     var steps = [];
     var position = '';
     var nodeName = node.nodeName;
-    var parent = node.parentNode;
-    var parentName = parent.nodeName;
+    var parent = node.parentElement;
+    var parentName = parent ? parent.nodeName : null;
 
     rootNodeName = rootNodeName || '#document';
     includePosition = includePosition || false;
@@ -501,8 +501,8 @@ FormModel.prototype.getXPath = function( node, rootNodeName, includePosition ) {
             position = ( index > 0 ) ? '[' + ( index + 1 ) + ']' : '';
         }
         steps.push( parentName + position );
-        parent = parent.parentNode;
-        parentName = parent.nodeName;
+        parent = parent.parentElement;
+        parentName = parent ? parent.nodeName : null;
     }
 
     return '/' + steps.reverse().join( '/' );
@@ -1228,6 +1228,10 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         context = this.rootElement;
     }
 
+    if ( !context ) {
+        console.error( 'no context element found', selector, index );
+    }
+
     // cache key includes the number of repeated context nodes, 
     // to force a new cache item if the number of repeated changes to > 0
     // TODO: these cache keys can get quite large. Would it be beneficial to get the md5 of the key?
@@ -1481,12 +1485,12 @@ Nodeset.prototype.getClosestRepeat = function() {
     var el = this.get().get( 0 );
     var nodeName = el.nodeName;
 
-    while ( nodeName !== 'instance' && !( el.nextSibling && el.nextSibling.nodeName === nodeName ) && !( el.previousSibling && el.previousSibling.nodeName === nodeName ) ) {
-        el = el.parentNode;
-        nodeName = el.nodeName;
+    while ( nodeName && nodeName !== 'instance' && !( el.nextElementSibling && el.nextElementSibling.nodeName === nodeName ) && !( el.previousElementSibling && el.previousElementSibling.nodeName === nodeName ) ) {
+        el = el.parentElement;
+        nodeName = el ? el.nodeName : null;
     }
 
-    return ( nodeName === 'instance' ) ? {} : {
+    return ( !nodeName || nodeName === 'instance' ) ? {} : {
         repeatPath: this.model.getXPath( el, 'instance' ),
         repeatIndex: this.model.determineIndex( $( el ) )
     };
@@ -1621,6 +1625,7 @@ Nodeset.prototype.validateConstraintAndType = function( expr, xmlDataType ) {
         } );
 };
 
+// TODO: rename to isTrue?
 Nodeset.prototype.isRequired = function( expr ) {
     return !expr || expr.trim() === 'false()' ? false : expr.trim() === 'true()' || this.model.evaluate( expr, 'boolean', this.originalSelector, this.index );
 };

@@ -317,4 +317,17 @@ describe( 'repeat functionality', function() {
         } );
     } );
 
+    describe( 'getIndex() function', function() {
+
+        const form = loadForm( 'nested_repeats.xml' );
+        form.init();
+        const repeats = form.view.html.querySelectorAll( '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]' );
+
+        [ 0, 1, 2, 3, 4 ].forEach( index => {
+            it( 'works with nested repeats to get the index of a nested repeat in respect to the whole form', () => {
+                expect( form.repeats.getIndex( repeats[ index ] ) ).toEqual( index );
+            } );
+        } );
+    } );
+
 } );
