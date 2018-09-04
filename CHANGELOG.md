@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Changed
+- Performance of engine (determining index).
+
 ##### Fixed
 - Range pickers not showing current value "thumb" on printouts.
 - Distresspicker thumb not centered on Chrome and Safari.
