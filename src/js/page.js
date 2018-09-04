@@ -241,7 +241,7 @@ module.exports = {
                 if ( next ) {
                     newIndex = currentIndex + 1;
                     that._flipTo( next, newIndex );
-                    return newIndex;
+                    //return newIndex;
                 }
 
                 return true;
