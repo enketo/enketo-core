@@ -203,6 +203,7 @@ Form.prototype.init = function() {
         this.options.pathToAbsolute = this.pathToAbsolute.bind( this );
         this.options.evaluate = this.model.evaluate.bind( this.model );
         this.options.formClasses = utils.toArray( this.view.html.classList );
+        this.options.getModelValue = this.getModelValue.bind( this );
         this.widgetsInitialized = this.widgets.init( null, this.options );
 
         // after widgets.init(), and after repeats.init(), and after pages.init()
@@ -358,6 +359,11 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
     return;
 };
 
+Form.prototype.getModelValue = function( $control ) {
+    var path = this.input.getName( $control );
+    var index = this.input.getIndex( $control );
+    return this.model.node( path, index ).getVal();
+};
 
 /**
  * Finds nodes that have attributes with XPath expressions that refer to particular XML elements.

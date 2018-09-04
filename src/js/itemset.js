@@ -179,7 +179,7 @@ module.exports = {
              * include (an) item(s) with this/se value(s), this will clear/update the model and
              * this will trigger a dataupdate event. This may call this update function again.
              */
-            var currentValue = that.form.model.node( context, index ).getVal()[ 0 ];
+            var currentValue = that.form.model.node( context, index ).getVal();
             if ( currentValue !== '' ) {
                 if ( $input.hasClass( 'rank' ) ) {
                     currentValue = '';

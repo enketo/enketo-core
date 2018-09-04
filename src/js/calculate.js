@@ -134,7 +134,7 @@ module.exports = {
                 // Not the most efficient to use input.setVal here as it will do another lookup
                 // of the node, that we already have...
                 // We should not use value "result" here because node.setVal() may have done a data type conversion
-                that.form.input.setVal( $control, dataNodesObj.getVal()[ 0 ] );
+                that.form.input.setVal( $control, dataNodesObj.getVal() );
 
                 /*
                  * We need to specifically call validate on the question itself, because the validationUpdate

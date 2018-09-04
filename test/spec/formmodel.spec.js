@@ -105,23 +105,23 @@ describe( 'Data node getter', function() {
 
 } );
 
-describe( 'Date node (&) value getter', function() {
+describe( 'Data node (&) value getter', function() {
     var data = getModel( 'thedata.xml' ); //dataStr1);
 
     it( 'returns an array of one node value', function() {
-        expect( data.node( '/thedata/nodeB' ).getVal() ).toEqual( [ 'b' ] );
+        expect( data.node( '/thedata/nodeB' ).getVal() ).toEqual( 'b' );
     } );
 
-    it( 'returns an array of multiple node values', function() {
-        expect( data.node( '/thedata/repeatGroup/nodeC' ).getVal() ).toEqual( [ '', 'c2', 'c3' ] );
+    it( 'returns the first node value of multiple nodes', function() {
+        expect( data.node( '/thedata/repeatGroup/nodeC' ).getVal() ).toEqual( '' );
     } );
 
-    it( 'returns an empty array', function() {
-        expect( data.node( '/thedata/nodeX' ).getVal() ).toEqual( [] );
+    it( 'returns null', function() {
+        expect( data.node( '/thedata/nodeX' ).getVal() ).toEqual( undefined );
     } );
 
     it( 'obtains a node value of a node with a . in the name', function() {
-        expect( data.node( '/thedata/someweights/w.3' ).getVal() ).toEqual( [ '5' ] );
+        expect( data.node( '/thedata/someweights/w.3' ).getVal() ).toEqual( '5' );
     } );
 } );
 
@@ -224,7 +224,7 @@ describe( 'Data node XML data type', function() {
             var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
             var expected = typeof n.converted !== 'undefined' ? n.converted : n.value;
             node.setVal( n.value, n.type );
-            expect( node.getVal()[ 0 ] ).toEqual( expected );
+            expect( node.getVal() ).toEqual( expected );
         } );
     }
 
@@ -298,7 +298,7 @@ describe( 'Data node XML data type', function() {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         var value = ' a  ';
         node.setVal( value, 'string' );
-        expect( node.getVal()[ 0 ] ).toEqual( value );
+        expect( node.getVal() ).toEqual( value );
     } );
 
     describe( 'does convert whitespace-only values', function() {
@@ -308,9 +308,9 @@ describe( 'Data node XML data type', function() {
             it( 'to ""', function() {
                 // first prime node a with some non-whitespace value
                 node.setVal( 'aa', 'string' );
-                expect( node.getVal()[ 0 ] ).toEqual( 'aa' );
+                expect( node.getVal() ).toEqual( 'aa' );
                 node.setVal( whiteSpaceValue, 'string' );
-                expect( node.getVal()[ 0 ] ).toEqual( '' );
+                expect( node.getVal() ).toEqual( '' );
             } );
         }
 
@@ -789,7 +789,7 @@ describe( 'Using XPath with default namespace', function() {
 
         it( 'works for Nodeset().get()', function() {
             expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
-            expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( '5' );
+            expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
         } );
 
         it( 'works for evaluate()', function() {
@@ -806,7 +806,7 @@ describe( 'Using XPath with default namespace', function() {
 
         it( 'works for Nodeset().get()', function() {
             expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
-            expect( model.node( '/data/nodeA' ).getVal()[ 0 ] ).toEqual( '5' );
+            expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
         } );
 
         it( 'works for evaluate()', function() {
@@ -1252,12 +1252,12 @@ describe( 'merging an instance into the model', function() {
         } );
 
         it( 'gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit', function() {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
         } );
 
         it( 'generates a new instanceID', function() {
-            expect( model.node( '/thedata/meta/instanceID' ).getVal()[ 0 ] ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
-            expect( model.node( '/thedata/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+            expect( model.node( '/thedata/meta/instanceID' ).getVal() ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            expect( model.node( '/thedata/meta/instanceID' ).getVal().length ).toEqual( 41 );
         } );
     } );
 
@@ -1282,7 +1282,7 @@ describe( 'merging an instance into the model', function() {
         } );
 
         it( 'gives the deprecatedID node the old value of the instanceID node of the instance-to-edit', function() {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getVal()[ 0 ] ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
         } );
     } );
 

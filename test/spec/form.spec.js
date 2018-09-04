@@ -65,14 +65,14 @@ describe( 'Preload and MetaData functionality', function() {
     it( 'ignores a calculate binding on /[ROOT]/meta/instanceID', function() {
         form = loadForm( 'random.xml' );
         form.init();
-        expect( form.model.node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+        expect( form.model.node( '/random/meta/instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on [ROOT]/orx:meta/orx:instanceID', function() {
         form = loadForm( 'meta-namespace.xml' );
         form.init();
-        expect( form.model.node( '/data/orx:meta/orx:instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+        expect( form.model.node( '/data/orx:meta/orx:instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
@@ -81,7 +81,7 @@ describe( 'Preload and MetaData functionality', function() {
         form.init();
         form.view.$.find( 'fieldset#or-preload-items' ).remove();
         expect( form.view.$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
-        expect( form.model.node( '/random/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+        expect( form.model.node( '/random/meta/instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
@@ -90,7 +90,7 @@ describe( 'Preload and MetaData functionality', function() {
         form.init();
         var sel = 'fieldset#or-preload-items input[name="/preload/meta/instanceID"][data-preload="uid"]';
         expect( form.view.$.find( sel ).length ).toEqual( 1 );
-        expect( form.model.node( '/preload/meta/instanceID' ).getVal()[ 0 ].length ).toEqual( 41 );
+        expect( form.model.node( '/preload/meta/instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with instanceID population. Test should still pass though.
@@ -99,13 +99,13 @@ describe( 'Preload and MetaData functionality', function() {
             modelStr: forms[ 'random.xml' ].xml_model.replace( '<instanceID/>', '<instanceID>existing</instanceID>' )
         } );
         form.init();
-        expect( form.model.node( '/random/meta/instanceID' ).getVal()[ 0 ] ).toEqual( 'existing' );
+        expect( form.model.node( '/random/meta/instanceID' ).getVal() ).toEqual( 'existing' );
     } );
 
     it( 'generates a timeStart on /[ROOT]/meta/timeStart WITH a preload binding', function() {
         form = loadForm( 'preload.xml' );
         form.init();
-        expect( form.model.node( '/preload/start' ).getVal()[ 0 ].length > 10 ).toBe( true );
+        expect( form.model.node( '/preload/start' ).getVal().length > 10 ).toBe( true );
     } );
 
     it( 'generates a timeEnd on init and updates this after a beforesave event WITH a preload binding', function( done ) {
@@ -114,14 +114,14 @@ describe( 'Preload and MetaData functionality', function() {
 
         form = loadForm( 'preload.xml' );
         form.init();
-        timeEnd = form.model.node( '/preload/end' ).getVal()[ 0 ];
+        timeEnd = form.model.node( '/preload/end' ).getVal();
 
         // populating upon initalization is not really a feature, could be removed perhaps
         expect( timeEnd.length > 10 ).toBe( true );
 
         setTimeout( function() {
             form.view.$.trigger( 'beforesave' );
-            timeEndNew = form.model.node( '/preload/end' ).getVal()[ 0 ];
+            timeEndNew = form.model.node( '/preload/end' ).getVal();
             expect( new Date( timeEndNew ) - new Date( timeEnd ) ).toBeGreaterThan( 1000 );
             expect( new Date( timeEndNew ) - new Date( timeEnd ) ).toBeLessThan( 1050 );
             done();
@@ -135,7 +135,7 @@ describe( 'Preload and MetaData functionality', function() {
 
         [ '/dynamic-default/two', '/dynamic-default/four', '/dynamic-default/six' ].forEach( function( path ) {
             expect( form.view.$.find( '[name="' + path + '"]' ).val().length > 9 ).toBe( true );
-            expect( form.model.node( path ).getVal()[ 0 ].length > 9 ).toBe( true );
+            expect( form.model.node( path ).getVal().length > 9 ).toBe( true );
         } );
     } );
 
@@ -152,7 +152,7 @@ describe( 'Preload and MetaData functionality', function() {
         form.init();
 
         [ 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid' ].forEach( function( prop ) {
-            expect( form.model.node( '/preload/' + prop ).getVal()[ 0 ] ).toEqual( session[ prop ] );
+            expect( form.model.node( '/preload/' + prop ).getVal() ).toEqual( session[ prop ] );
         } );
     } );
 
@@ -179,7 +179,7 @@ describe( 'Preload and MetaData functionality', function() {
                     '</preload>'
             } );
             form.init();
-            expect( form.model.node( node.selector ).getVal()[ 0 ] ).toEqual( node.result );
+            expect( form.model.node( node.selector ).getVal() ).toEqual( node.result );
         } );
     }
 
@@ -187,7 +187,7 @@ describe( 'Preload and MetaData functionality', function() {
         it( 'populates previously empty preload item (WITH preload binding): ' + node.selector + '', function() {
             form = loadForm( 'preload.xml' );
             form.init();
-            expect( form.model.node( node.selector ).getVal()[ 0 ].length > 0 ).toBe( true );
+            expect( form.model.node( node.selector ).getVal().length > 0 ).toBe( true );
         } );
     }
 
@@ -258,8 +258,8 @@ describe( 'calculations', function() {
         form.view.$.find( '.add-repeat-btn' ).click();
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(0)' ).val( '10' ).trigger( 'change' );
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '20' ).trigger( 'change' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal()[ 0 ] ).toEqual( '200' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal()[ 0 ] ).toEqual( '400' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal() ).toEqual( '200' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal() ).toEqual( '400' );
     } );
 
     it( 'are not performed if the calculation is not relevant', function() {
@@ -271,9 +271,9 @@ describe( 'calculations', function() {
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '5' ).trigger( 'change' );
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(2)' ).val( '40' ).trigger( 'change' );
 
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal()[ 0 ] ).toEqual( '400' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal()[ 0 ] ).toEqual( '' );
-        //sexpect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 2 ).getVal()[ 0 ] ).toEqual( '800' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal() ).toEqual( '400' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal() ).toEqual( '' );
+        //sexpect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 2 ).getVal() ).toEqual( '800' );
     } );
 
     it( 'outside a repeat are updated if they are dependent on a repeat node', function() {
@@ -354,7 +354,7 @@ describe( 'branching functionality', function() {
         //select 'yes' in first question of 2nd repeat
         form.model.node( '/issue208/rep/nodeA', 1 ).setVal( 'yes', null, 'string' );
         //doublecheck if new value was set
-        expect( form.model.node( '/issue208/rep/nodeA', 1 ).getVal()[ 0 ] ).toEqual( 'yes' );
+        expect( form.model.node( '/issue208/rep/nodeA', 1 ).getVal() ).toEqual( 'yes' );
         //check if 2nd question in 2nd repeat is now enabled
         expect( form.view.$.find( repeatSelector ).eq( 1 )
             .find( '[data-name="/issue208/rep/nodeB"]' ).closest( '.question' ).hasClass( 'disabled' ) ).toBe( false );
@@ -381,26 +381,26 @@ describe( 'branching functionality', function() {
 
         it( 'evaluates a calculated item only when it becomes relevant', function() {
             // node without relevant attribute:
-            expect( dataO.node( '/calcs/calc11' ).getVal()[ 0 ] ).toEqual( '12' );
+            expect( dataO.node( '/calcs/calc11' ).getVal() ).toEqual( '12' );
             // node that is irrelevant
-            expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '' );
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
             $node.val( 'yes' ).trigger( 'change' );
             // node that has become relevant
-            expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '3' );
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
             // make irrelevant again (was a bug)
             $node.val( 'no' ).trigger( 'change' );
             // double-check that calc11 is unaffected (was a bug)
-            expect( dataO.node( '/calcs/calc11' ).getVal()[ 0 ] ).toEqual( '12' );
+            expect( dataO.node( '/calcs/calc11' ).getVal() ).toEqual( '12' );
             // node that is irrelevant
-            expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '' );
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
 
         } );
 
         it( 'empties an already calculated item once it becomes irrelevant', function() {
             $node.val( 'yes' ).trigger( 'change' );
-            expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '3' );
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
             $node.val( 'no' ).trigger( 'change' );
-            expect( dataO.node( '/calcs/calc1' ).getVal()[ 0 ] ).toEqual( '' );
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
         } );
     } );
 
@@ -482,8 +482,8 @@ describe( 'branching functionality', function() {
             form.init();
             expect( form.view.$.find( '[name="' + two + '"]' ).closest( '.disabled' ).length ).toEqual( 1 );
             expect( form.view.$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 1 );
-            expect( form.model.node( two ).getVal()[ 0 ] ).toEqual( 'two' );
-            expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( 'three' );
+            expect( form.model.node( two ).getVal() ).toEqual( 'two' );
+            expect( form.model.node( three ).getVal() ).toEqual( 'three' );
         } );
 
         it( 'by not clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantsImmediately is set to false', function() {
@@ -498,8 +498,8 @@ describe( 'branching functionality', function() {
             expect( form.view.$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
             // disable
             $one.val( '' ).trigger( 'change' );
-            expect( form.model.node( two ).getVal()[ 0 ] ).toEqual( 'two' );
-            expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( 'three' );
+            expect( form.model.node( two ).getVal() ).toEqual( 'two' );
+            expect( form.model.node( three ).getVal() ).toEqual( 'three' );
         } );
 
         it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is set to true', function() {
@@ -514,8 +514,8 @@ describe( 'branching functionality', function() {
             expect( form.view.$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
             // disable
             $one.val( '' ).trigger( 'change' );
-            expect( form.model.node( two ).getVal()[ 0 ] ).toEqual( '' );
-            expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( two ).getVal() ).toEqual( '' );
+            expect( form.model.node( three ).getVal() ).toEqual( '' );
         } );
 
         it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is not set', function() {
@@ -528,24 +528,24 @@ describe( 'branching functionality', function() {
             expect( form.view.$.find( '[name="' + three + '"]' ).closest( '.disabled' ).length ).toEqual( 0 );
             // disable
             $one.val( '' ).trigger( 'change' );
-            expect( form.model.node( two ).getVal()[ 0 ] ).toEqual( '' );
-            expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( two ).getVal() ).toEqual( '' );
+            expect( form.model.node( three ).getVal() ).toEqual( '' );
         } );
 
         it( 'by clearing values of irrelevant questions when form.clearIrrelevant() is called', function() {
             var form = loadForm( name );
             form.init();
-            expect( form.model.node( two ).getVal()[ 0 ] ).toEqual( 'two' );
-            expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( 'three' );
+            expect( form.model.node( two ).getVal() ).toEqual( 'two' );
+            expect( form.model.node( three ).getVal() ).toEqual( 'three' );
             form.clearIrrelevant();
-            expect( form.model.node( two ).getVal()[ 0 ] ).toEqual( '' );
-            expect( form.model.node( three ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( two ).getVal() ).toEqual( '' );
+            expect( form.model.node( three ).getVal() ).toEqual( '' );
         } );
 
         it( 'by not conducting calculations upon load if the calc node is not relevant', function() {
             var form = loadForm( name );
             form.init();
-            expect( form.model.node( four ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( four ).getVal() ).toEqual( '' );
         } );
 
     } );
@@ -562,22 +562,22 @@ describe( 'branching functionality', function() {
         it( 'by not clearing when relevant upon load', function() {
             var form = loadForm( name );
             form.init();
-            expect( form.model.node( groupCalc ).getVal()[ 0 ] ).toEqual( '34' );
-            expect( form.model.node( groupReadonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
-            expect( form.model.node( readonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
-            expect( form.model.node( calc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( groupCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( groupReadonlyCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( readonlyCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( calc ).getVal() ).toEqual( '34' );
         } );
 
         it( 'by clearing calculations when parent group of calculation itself becomes irrelevant', function() {
             var form = loadForm( name );
             form.init();
             form.view.$.find( '[name="' + cond + '"]' ).val( 'hide' ).trigger( 'change' );
-            expect( form.model.node( groupCalc ).getVal()[ 0 ] ).toEqual( '' );
-            expect( form.model.node( groupReadonlyCalc ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( groupCalc ).getVal() ).toEqual( '' );
+            expect( form.model.node( groupReadonlyCalc ).getVal() ).toEqual( '' );
 
             // bonus, questions outside group but also irrelevant
-            expect( form.model.node( readonlyCalc ).getVal()[ 0 ] ).toEqual( '' );
-            expect( form.model.node( calc ).getVal()[ 0 ] ).toEqual( '' );
+            expect( form.model.node( readonlyCalc ).getVal() ).toEqual( '' );
+            expect( form.model.node( calc ).getVal() ).toEqual( '' );
         } );
 
         it( 'by re-populating calculations when parent group of calculation itself becomes relevant', function() {
@@ -587,11 +587,11 @@ describe( 'branching functionality', function() {
             form.view.$.find( '[name="' + cond + '"]' ).val( 'hide' ).trigger( 'change' );
             // make relevant again
             form.view.$.find( '[name="' + cond + '"]' ).val( '' ).trigger( 'change' );
-            expect( form.model.node( groupCalc ).getVal()[ 0 ] ).toEqual( '34' );
-            expect( form.model.node( groupReadonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( groupCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( groupReadonlyCalc ).getVal() ).toEqual( '34' );
             // bonus, questions outside group but also irrelevant
-            expect( form.model.node( readonlyCalc ).getVal()[ 0 ] ).toEqual( '34' );
-            expect( form.model.node( calc ).getVal()[ 0 ] ).toEqual( '34' );
+            expect( form.model.node( readonlyCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( calc ).getVal() ).toEqual( '34' );
         } );
 
     } );
@@ -1094,6 +1094,19 @@ describe( 'form status', function() {
         form.view.$.find( 'input[name="/thedata/nodeA"]' ).val( '2010-10-01T11:12:00+06:00' ).trigger( 'change' );
         expect( form.editStatus ).toBe( true );
     } );
+} );
+
+describe( 'Form.prototype.getModelValue', function() {
+    var form = loadForm( 'nested_repeats.xml' );
+    form.init();
+    it( 'returns the value of the corresponding model node for a given form control', function() {
+        var results = [];
+        for ( var input of form.view.html.querySelectorAll( '[name="/nested_repeats/kids/kids_details/immunization_info/vaccine"]' ) ) {
+            results.push( form.getModelValue( $( input ) ) );
+        }
+        expect( results ).toEqual( [ 'Polio', 'Rickets', 'Malaria', 'Flu', 'Polio' ] );
+    } );
+
 } );
 
 describe( 'required enketo-transformer version', function() {

@@ -25,12 +25,12 @@ describe( 'repeat functionality', function() {
             expect( formH.$.find( repeatSelector ).eq( index ).length ).toEqual( 1 );
             expect( formH.$.find( repeatSelector ).eq( index ).find( 'button.remove' ).length ).toEqual( 1 );
             expect( formH.$.find( nodeSelector ).eq( index ).val() ).toEqual( 'c3' );
-            expect( data.node( nodePath, index ).getVal()[ 0 ] ).toEqual( 'c3' );
+            expect( data.node( nodePath, index ).getVal() ).toEqual( 'c3' );
 
             formH.$.find( repeatSelector ).eq( index ).find( 'button.remove' ).click();
-            expect( data.node( nodePath, index ).getVal()[ 0 ] ).toEqual( undefined );
+            expect( data.node( nodePath, index ).getVal() ).toEqual( undefined );
             //check if it removed the correct data node
-            expect( data.node( nodePath, index - 1 ).getVal()[ 0 ] ).toEqual( 'c2' );
+            expect( data.node( nodePath, index - 1 ).getVal() ).toEqual( 'c2' );
             //check if it removed the correct html node
             expect( formH.$.find( repeatSelector ).eq( index ).length ).toEqual( 0 );
             expect( formH.$.find( nodeSelector ).eq( index - 1 ).val() ).toEqual( 'c2' );

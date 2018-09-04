@@ -66,7 +66,7 @@ FormModel.prototype = {
      * @return {string} instanceID
      */
     get instanceID() {
-        return this.getMetaNode( 'instanceID' ).getVal()[ 0 ];
+        return this.getMetaNode( 'instanceID' ).getVal();
     },
     /**
      * Gets the deprecated ID
@@ -74,7 +74,7 @@ FormModel.prototype = {
      * @return {string} deprecatedID
      */
     get deprecatedID() {
-        return this.getMetaNode( 'deprecatedID' ).getVal()[ 0 ] || '';
+        return this.getMetaNode( 'deprecatedID' ).getVal() || '';
     },
     /**
      * Gets the instance Name
@@ -82,7 +82,7 @@ FormModel.prototype = {
      * @return {string} instanceID
      */
     get instanceName() {
-        return this.getMetaNode( 'instanceName' ).getVal()[ 0 ];
+        return this.getMetaNode( 'instanceName' ).getVal();
     },
 };
 
@@ -555,7 +555,7 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
 
     instanceIdObj = this.getMetaNode( 'instanceID' );
     instanceIdEl = instanceIdObj.get().get( 0 );
-    instanceIdExistingVal = instanceIdObj.getVal()[ 0 ];
+    instanceIdExistingVal = instanceIdObj.getVal();
 
     if ( this.data.instanceStr && this.data.submitted ) {
         deprecatedIdEl = this.getMetaNode( 'deprecatedID' ).get().get( 0 );
@@ -572,7 +572,7 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
         }
     }
 
-    if ( !instanceIdObj.getVal()[ 0 ] ) {
+    if ( !instanceIdObj.getVal() ) {
         instanceIdObj.setVal( this.evaluate( 'concat("uuid:", uuid())', 'string' ) );
     }
 
@@ -1422,7 +1422,7 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
     var updated;
     var customData;
 
-    curVal = this.getVal()[ 0 ];
+    curVal = this.getVal();
 
     if ( typeof newVals !== 'undefined' && newVals !== null ) {
         newVal = ( Array.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
@@ -1468,16 +1468,13 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
 };
 
 /**
- * Obtains the data value if a JQuery or XPath selector for a single node is provided.
+ * Obtains the data value of the first node.
  *
- * @return {Array<string|number|boolean>} [description]
+ * @return {string} [description]
  */
 Nodeset.prototype.getVal = function() {
-    var vals = [];
-    this.get().each( function() {
-        vals.push( $( this ).text() );
-    } );
-    return vals;
+    var nodes = this.get();
+    return nodes.length ? nodes[ 0 ].textContent : undefined;
 };
 
 // If repeats have not been cloned yet, they are not considered a repeat by this function
@@ -1608,7 +1605,7 @@ Nodeset.prototype.validateConstraintAndType = function( expr, xmlDataType ) {
         return Promise.resolve( true );
     }
 
-    value = that.getVal()[ 0 ];
+    value = that.getVal();
 
     if ( value.toString() === '' ) {
         return Promise.resolve( true );
@@ -1634,7 +1631,7 @@ Nodeset.prototype.validateRequired = function( expr ) {
     var that = this;
 
     // if the node has a value or there is no required expression
-    if ( !expr || this.getVal()[ 0 ] ) {
+    if ( !expr || this.getVal() ) {
         return Promise.resolve( true );
     }
 

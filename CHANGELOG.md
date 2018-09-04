@@ -5,8 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Added
+- new `Form.prototype.getModelValue` function and made this available as a widget helper.
+
 ##### Changed
 - Performance of engine (determining index).
+- `FormModel.prototype.getVal` now returns a string. **WARNING: internal API change that may affect custom apps**
 
 ##### Fixed
 - Range pickers not showing current value "thumb" on printouts.
