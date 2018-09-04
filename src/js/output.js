@@ -10,15 +10,6 @@ var $ = require( 'jquery' );
 
 module.exports = {
     update: function( updated ) {
-        var expr;
-        var clonedRepeatsPresent;
-        var insideRepeat;
-        var insideRepeatClone;
-        var $context;
-        var $output;
-        var context;
-        var index;
-        var $nodes;
         var outputCache = {};
         var val = '';
         var that = this;
@@ -27,19 +18,19 @@ module.exports = {
             throw new Error( 'Output module not correctly instantiated with form property.' );
         }
 
-        $nodes = this.form.getRelatedNodes( 'data-value', '.or-output', updated );
+        var $nodes = this.form.getRelatedNodes( 'data-value', '.or-output', updated );
 
-        clonedRepeatsPresent = ( this.form.repeatsPresent && this.form.view.$.find( '.or-repeat.clone' ).length > 0 );
+        var clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
 
         $nodes.each( function() {
-            $output = $( this );
+            var $output = $( this );
 
             // nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
             if ( $output.closest( '.or-branch' ).parent().closest( '.disabled' ).length ) {
                 return;
             }
 
-            expr = $output.attr( 'data-value' );
+            var expr = $output.attr( 'data-value' );
             /*
              * Note that in XForms input is the parent of label and in HTML the other way around so an output inside a label
              * should look at the HTML input to determine the context.
@@ -47,13 +38,13 @@ module.exports = {
              * or the parent with a name attribute
              * or the whole document
              */
-            $context = $output.closest( '.question, .or-group' );
+            var $context = $output.closest( '.question, .or-group' );
 
             if ( !$context.is( '.or-group' ) ) {
                 $context = $context.find( '[name]' ).eq( 0 );
             }
 
-            context = that.form.input.getName( $context );
+            var context = that.form.input.getName( $context );
 
             /* 
              * If the output is part of a group label and that group contains repeats with the same name,
@@ -64,9 +55,9 @@ module.exports = {
                 context = null;
             }
 
-            insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
-            insideRepeatClone = ( insideRepeat && $output.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 );
-            index = ( insideRepeatClone && context ) ? that.form.input.getIndex( $context ) : 0;
+            var insideRepeat = ( clonedRepeatsPresent && $output.parentsUntil( '.or', '.or-repeat' ).length > 0 );
+            var insideRepeatClone = ( insideRepeat && $output.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 );
+            var index = ( insideRepeatClone && context ) ? that.form.input.getIndex( $context ) : 0;
 
             if ( typeof outputCache[ expr ] !== 'undefined' ) {
                 val = outputCache[ expr ];

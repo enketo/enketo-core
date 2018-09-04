@@ -50,7 +50,7 @@ function Form( formSelector, data, options ) {
         $clone: $form.clone()
     };
     this.model = new FormModel( data );
-    this.repeatsPresent = this.view.$.find( '.or-repeat' ).length > 0;
+    this.repeatsPresent = !!this.view.html.querySelector( '.or-repeat' );
     this.widgetsInitialized = false;
     this.pageNavigationBlocked = false;
 }

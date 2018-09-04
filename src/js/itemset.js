@@ -11,10 +11,6 @@ var utils = require( './utils' );
 
 module.exports = {
     update: function( updated ) {
-        var clonedRepeatsPresent;
-        var insideRepeat;
-        var insideRepeatClone;
-        var $nodes;
         var that = this;
         var itemsCache = {};
 
@@ -22,9 +18,9 @@ module.exports = {
             throw new Error( 'Output module not correctly instantiated with form property.' );
         }
 
-        $nodes = this.form.getRelatedNodes( 'data-items-path', '.itemset-template', updated );
+        var $nodes = this.form.getRelatedNodes( 'data-items-path', '.itemset-template', updated );
 
-        clonedRepeatsPresent = ( this.form.repeatsPresent && this.form.view.$.find( '.or-repeat.clone' ).length > 0 ) ? true : false;
+        var clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
 
         $nodes.each( function() {
             var $input;
@@ -82,8 +78,8 @@ module.exports = {
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
              * It can be safely set to 0 for other branches.
              */
-            insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
-            insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
+            var insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
+            var insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
 
             var index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
 

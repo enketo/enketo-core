@@ -18,7 +18,7 @@ module.exports = {
         }
 
         var $nodes = this.form.getRelatedNodes( 'data-required', '', updated );
-        var repeatClonesPresent = this.form.repeatsPresent && this.form.view.$.find( '.or-repeat.clone' ).length > 0;
+        var repeatClonesPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
 
         $nodes.each( function() {
             var $input = $( this );

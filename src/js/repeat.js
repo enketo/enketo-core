@@ -100,7 +100,7 @@ module.exports = {
      * The goal of this function is to make non-nested repeat index determination as fast as possible.
      */
     getIndex: function( el ) {
-        if ( !el ) {
+        if ( !el || !this.form.repeatsPresent ) {
             return 0;
         }
         var checkEl = el.parentElement.closest( '.or-repeat' );

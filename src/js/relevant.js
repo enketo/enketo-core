@@ -31,7 +31,7 @@ module.exports = {
         var alreadyCovered = [];
         var branchChange = false;
         var that = this;
-        var clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.$.find( '.or-repeat.clone' ).length > 0;
+        var clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
 
         $nodes.each( function() {
             var $node = $( this );
