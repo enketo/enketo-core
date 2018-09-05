@@ -1165,6 +1165,14 @@ describe( 'jr:choice-name', function() {
         // then
         expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( 'Area' );
     } );
+
+    it( 'should work with autocomplete select one questions', function() {
+        var form = loadForm( 'jr-choice-name-autocomplete.xml' );
+        form.init();
+        form.view.$.find( '[name="/Label.Test/choice"]' ).val( '3' ).trigger( 'change' ); // Doesn't update view, but changes model.
+
+        expect( form.view.$.find( '.or-output' ).text() ).toEqual( 'The Third Choice' );
+    } );
 } );
 
 describe( 'Form.prototype', function() {

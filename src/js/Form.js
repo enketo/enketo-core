@@ -308,12 +308,18 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
             var name = utils.stripQuotes( params[ 1 ] ).trim();
             var $input = that.view.$.find( '[name="' + name + '"]' );
 
-            if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
+            if ( !value ) {
+                label = '';
+            } else if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
                 label = $input.find( '[value="' + value + '"]' ).text();
             } else if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'input' ) {
-                label = $input.filter( function() {
-                    return $( this ).attr( 'value' ) === value;
-                } ).siblings( '.option-label.active' ).text();
+                if ( !$input.attr( 'list' ) ) {
+                    label = $input.filter( function() {
+                        return $( this ).attr( 'value' ) === value;
+                    } ).siblings( '.option-label.active' ).text();
+                } else {
+                    label = $input.siblings( 'datalist#' + $input.attr( 'list' ) ).find( '[data-value="' + value + '"]' ).attr( 'value' );
+                }
             }
             expr = expr.replace( choiceName[ 0 ], '"' + label + '"' );
         } else {
