@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.59.0] - 2018-09-11
 ----------------------
 ##### Added
 - new `Form.prototype.getModelValue` function and made this available as a widget helper.
@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Performance of engine (determining index).
 - `FormModel.prototype.getVal` now returns a string. **WARNING: internal API change that may affect custom apps**
+- Print hints are now guidance hints, and follow ODK XForms specification.
 
 ##### Fixed
 - Range pickers not showing current value "thumb" on printouts.

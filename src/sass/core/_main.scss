@@ -10,8 +10,8 @@ $media-margin: 10px;
 .or-relevant-msg,
 .option-wrapper .itemset-template,
 .itemset-labels,
-.or-hint.or-form-print,
-.or-hint.or-form-print.active {
+.or-hint.or-form-guidance,
+.or-hint.or-form-guidance.active {
     display: none;
 }
 
@@ -41,8 +41,10 @@ $media-margin: 10px;
 }
 
 .or {
+
     .question-label,
     .or-hint {
+
         h1,
         h2,
         h3,
@@ -51,14 +53,17 @@ $media-margin: 10px;
         h6 {
             margin-top: 10px;
             margin-bottom: 10px;
+
             &:first-child {
                 margin-top: 0;
             }
+
             &:last-child {
                 margin-bottom: 0;
             }
         }
     }
+
     .question-label {
         word-break: break-word;
         display: inline-block; // to ensure that comment icons are displayed next to multi-line labels and not below
@@ -103,6 +108,7 @@ $media-margin: 10px;
     margin: 0 0 3px 0;
     padding: 20px 10px 10px 10px;
     position: relative;
+
     &:empty {
         // calculation-only repeats
         padding: 0;
@@ -185,6 +191,7 @@ $media-margin: 10px;
     >h4 {
         position: relative;
         pointer-events: none;
+
         &::before {
             width: 0;
             height: 0;
@@ -201,6 +208,7 @@ $media-margin: 10px;
             pointer-events: all;
         }
     }
+
     &.or-appearance-compact {
         >h4 {
             &::before {
@@ -214,6 +222,7 @@ $media-margin: 10px;
                 right: -22px;
                 top: 0;
             }
+
             ~* {
                 // !important is added to battle pages rules
                 display: none !important;
@@ -261,6 +270,7 @@ $media-margin: 10px;
 }
 
 .question {
+
     >img,
     >video,
     >audio {
@@ -269,6 +279,7 @@ $media-margin: 10px;
 }
 
 .question.readonly {
+
     input[readonly].empty,
     select[readonly].empty,
     textarea[readonly].empty {
@@ -286,6 +297,7 @@ legend {
 }
 
 .or {
+
     img,
     audio,
     video {
@@ -323,9 +335,12 @@ legend {
         cursor: pointer;
         padding: 4px;
         margin: 0 10px 1px 10px; // TODO: remove hover rule for tables (in likert already done)
+
         &:hover:not(.filler) {
             background-color: $brand-secondary-color;
-        } // clearfix with small adjustments to not mess up radio buttons.
+        }
+
+        // clearfix with small adjustments to not mess up radio buttons.
         &:before,
         &:after {
             content: " ";
@@ -367,6 +382,7 @@ legend {
 
 .touch {
     .question.simple-select {
+
         // touch radio buttons and checkboxes
         .option-wrapper>label {
             background-color: transparent;
@@ -456,6 +472,7 @@ select {
 }
 
 .question input {
+
     &[type=text],
     &[type=tel],
     &[type=password],
@@ -485,6 +502,7 @@ select {
 
 .or[dir="rtl"] {
     .question input {
+
         &[type=radio],
         &[type=checkbox] {
             // input is floated to deal with multi-line labels
@@ -507,6 +525,7 @@ select {
         flex-wrap: nowrap;
         justify-content: flex-end;
     }
+
     .remove {
         margin-bottom: 0;
         margin-right: 0;
@@ -590,6 +609,7 @@ legend .required {
 
 // this may have a very significant positive impact on performance
 .or-branch {
+
     &.disabled,
     &.or-branch.pre-init {
         display: none;
