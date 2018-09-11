@@ -14,7 +14,7 @@ describe( 'repeat functionality', function() {
             form.init();
         } );
 
-        it( 'removes the correct instance and HTML node when the ' - ' button is clicked (issue 170)', function() {
+        it( 'removes the correct instance and HTML node when the "-" button is clicked (issue 170)', function() {
             var repeatSelector = '.or-repeat[name="/thedata/repeatGroup"]',
                 nodePath = '/thedata/repeatGroup/nodeC',
                 nodeSelector = 'input[name="' + nodePath + '"]',
