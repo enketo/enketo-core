@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Range pickers not showing current value "thumb" on printouts.
 - Distresspicker thumb not centered on Chrome and Safari.
 - `jr:choice-name()` function not working with autocomplete questions.
+- Language selector not populated in some Enketo-powered applications.
 
 [4.58.0] - 2018-08-28
 ----------------------
