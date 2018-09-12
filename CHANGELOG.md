@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Cascading selections with radiobuttons/checkboxes do not show image labels.
+
 [4.59.0] - 2018-09-11
 ----------------------
 ##### Added

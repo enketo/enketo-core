@@ -132,18 +132,24 @@ module.exports = {
                         case 'itext':
                             // Search in the special .itemset-labels created in enketo-transformer for labels with itext ref.
                             translations = $labels.find( '[data-itext-id="' + labels[ 0 ].textContent + '"]' ).get().map( function( label ) {
-                                return { language: label.getAttribute( 'lang' ), label: label.textContent, active: label.classList.contains( 'active' ) };
+                                var language = label.getAttribute( 'lang' );
+                                var type = label.nodeName;
+                                var src = label.src;
+                                var text = label.textContent;
+                                var active = label.classList.contains( 'active' );
+                                var alt = label.alt;
+                                return { language: language, type: type, text: text, active: active, src: src, alt: alt };
                             } );
                             break;
                         case 'langs':
                             translations = translations.map( function( label ) {
                                 var lang = label.getAttribute( 'lang' );
                                 var active = lang === that.form.langs.getCurrentLang();
-                                return { language: lang, label: label.textContent, active: active };
+                                return { language: lang, type: 'span', text: label.textContent, active: active };
                             } );
                             break;
                         default:
-                            translations = [ { language: '', label: labels && labels.length ? labels[ 0 ].textContent : 'error', active: true } ];
+                            translations = [ { language: '', type: 'span', text: labels && labels.length ? labels[ 0 ].textContent : 'error', active: true } ];
                     }
                 }
 
@@ -157,12 +163,12 @@ module.exports = {
                     if ( translations.length > 1 ) {
                         translations.forEach( function( translation ) {
                             if ( translation.active ) {
-                                activeLabel = translation.label;
+                                activeLabel = translation.text;
                             }
-                            optionsTranslationsFragment.appendChild( that.createOptionTranslation( translation.language, translation.label, value, !!translation.active ) );
+                            optionsTranslationsFragment.appendChild( that.createOptionTranslation( translation, value ) );
                         } );
                     } else {
-                        activeLabel = translations[ 0 ].label;
+                        activeLabel = translations[ 0 ].text;
                     }
                     optionsFragment.appendChild( that.createOption( activeLabel, value ) );
                 }
@@ -228,16 +234,20 @@ module.exports = {
         return option;
     },
 
-    createOptionTranslation: function( language, label, value, active ) {
-        var span = document.createElement( 'span' );
-        span.textContent = label;
-        span.classList.add( 'option-label' );
-        if ( active ) {
-            span.classList.add( 'active' );
+    createOptionTranslation: function( translation, value ) {
+        var el = document.createElement( translation.type || 'span' );
+        if ( translation.text ) {
+            el.textContent = translation.text;
+            el.classList.add( 'option-label' );
         }
-        span.lang = language;
-        span.dataset.optionValue = value;
-        return span;
+        el.classList.toggle( 'active', translation.active );
+        el.lang = translation.language;
+        el.dataset.optionValue = value;
+        if ( translation.src ) {
+            el.src = translation.src;
+            el.alt = translation.alt;
+        }
+        return el;
     },
 
     createInput: function( attributes, translations, value ) {
@@ -250,7 +260,7 @@ module.exports = {
         input.value = value;
         label.appendChild( input );
         translations.forEach( function( translation ) {
-            label.appendChild( that.createOptionTranslation( translation.language, translation.label, value, translation.active ) );
+            label.appendChild( that.createOptionTranslation( translation, value ) );
         } );
         return label;
     }
