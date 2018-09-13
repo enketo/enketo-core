@@ -36,7 +36,7 @@ module.exports = {
                 dataNode = that.form.model.node( props.path, props.index );
                 // If a preload item is placed inside a repeat with repeat-count 0, the node
                 // doesn't exist and will never get a value (which is correct behavior)
-                if ( dataNode.get().length ) {
+                if ( dataNode.getElements().length ) {
                     curVal = dataNode.getVal();
                     newVal = that[ item ]( {
                         param: param,
@@ -91,7 +91,7 @@ module.exports = {
         // 'deviceid', 'subscriberid', 'simserial', 'phonenumber'
         if ( o.curVal.length === 0 ) {
             node = this.form.model.node( 'instance("__session")/session/context/' + o.param );
-            if ( node.get().length ) {
+            if ( node.getElements().length ) {
                 return node.getVal();
             } else {
                 return 'no ' + o.param + ' property in enketo';

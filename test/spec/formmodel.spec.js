@@ -91,7 +91,7 @@ describe( 'Data node getter', function() {
 
     function test( node ) {
         it( 'obtains nodes (selector: ' + node.selector + ', index: ' + node.index + ', filter: ' + JSON.stringify( node.filter ) + ')', function() {
-            expect( model.node( node.selector, node.index, node.filter ).get().length ).toEqual( node.result );
+            expect( model.node( node.selector, node.index, node.filter ).getElements().length ).toEqual( node.result );
         } );
     }
     for ( i = 0; i < t.length; i++ ) {
@@ -281,17 +281,17 @@ describe( 'Data node XML data type', function() {
 
     it( 'adds a file attribute to data nodes with a value and with xml-type: binary', function() {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
-        expect( node.get().attr( 'type' ) ).toBe( undefined );
+        expect( node.getElement().getAttribute( 'type' ) ).toBe( null );
         node.setVal( 'this.jpg', 'binary' );
-        expect( node.get().attr( 'type' ) ).toBe( 'file' );
+        expect( node.getElement().getAttribute( 'type' ) ).toBe( 'file' );
     } );
 
     it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', function() {
         var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         node.setVal( 'this.jpg', 'binary' );
-        expect( node.get().attr( 'type' ) ).toBe( 'file' );
+        expect( node.getElement().getAttribute( 'type' ) ).toBe( 'file' );
         node.setVal( '', 'binary' );
-        expect( node.get().attr( 'type' ) ).toBe( undefined );
+        expect( node.getElement().getAttribute( 'type' ) ).toBe( null );
     } );
 
     it( 'does not trim a string value', function() {
@@ -348,11 +348,11 @@ describe( 'Data node remover', function() {
         var data = getModel( 'thedata.xml' ),
             node = data.node( '/thedata/nodeA' );
 
-        expect( node.get().length ).toEqual( 1 );
+        expect( node.getElements().length ).toEqual( 1 );
         /*data.node( '/thedata/nodeA' )*/
         node.remove();
-        expect( node.get().length ).toEqual( 0 );
-        expect( data.node( '/thedata/nodeA' ).get().length ).toEqual( 0 );
+        expect( node.getElements().length ).toEqual( 0 );
+        expect( data.node( '/thedata/nodeA' ).getElements().length ).toEqual( 0 );
     } );
 
     it( 'can remove nodes with a . in the nodeName', function() {
@@ -363,9 +363,9 @@ describe( 'Data node remover', function() {
         model.init();
         node = model.node( path );
 
-        expect( node.get().length ).toEqual( 1 );
+        expect( node.getElements().length ).toEqual( 1 );
         node.remove();
-        expect( model.node( path ).get().length ).toEqual( 0 );
+        expect( model.node( path ).getElements().length ).toEqual( 0 );
     } );
 } );
 
@@ -698,7 +698,7 @@ describe( 'external instances functionality', function() {
         } );
         loadErrors = model.init();
         expect( loadErrors.length ).toEqual( 0 );
-        expect( model.$.find( 'instance#cities > root > item > country:eq(0)' ).text() ).toEqual( 'nl' );
+        expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).toEqual( 'nl' );
 
         // Now check that the orginal external XML docs are stil the same. Very important for e.g. 
         // form reset functionality in apps.
@@ -722,7 +722,7 @@ describe( 'external instances functionality', function() {
         } );
         loadErrors = model.init();
         expect( loadErrors.length ).toEqual( 0 );
-        expect( model.$.find( 'instance#cities > root > item > country:eq(0)' ).text() ).toEqual( 'nl' );
+        expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).toEqual( 'nl' );
     } );
 
     it( 'outputs errors if an external instance is not valid XML (string)', function() {
@@ -761,8 +761,8 @@ describe( 'external instances functionality', function() {
         } );
         loadErrors = model.init();
         expect( loadErrors.length ).toEqual( 0 );
-        expect( model.$.find( 'instance#cities > existing' ).length ).toEqual( 0 );
-        expect( model.$.find( 'instance#cities > another' ).length ).toEqual( 0 );
+        expect( model.xml.querySelectorAll( 'instance#cities > existing' ).length ).toEqual( 0 );
+        expect( model.xml.querySelectorAll( 'instance#cities > another' ).length ).toEqual( 0 );
     } );
 } );
 
@@ -787,8 +787,8 @@ describe( 'Using XPath with default namespace', function() {
 
         model.init();
 
-        it( 'works for Nodeset().get()', function() {
-            expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
+        it( 'works for Nodeset().getElements()', function() {
+            expect( model.node( '/data/nodeA' ).getElements().length ).toEqual( 1 );
             expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
         } );
 
@@ -804,8 +804,8 @@ describe( 'Using XPath with default namespace', function() {
 
         model.init();
 
-        it( 'works for Nodeset().get()', function() {
-            expect( model.node( '/data/nodeA' ).get().length ).toEqual( 1 );
+        it( 'works for Nodeset().getElements()', function() {
+            expect( model.node( '/data/nodeA' ).getElements().length ).toEqual( 1 );
             expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
         } );
 
@@ -1243,7 +1243,7 @@ describe( 'merging an instance into the model', function() {
         } );
 
         it( 'adds a deprecatedID node', function() {
-            expect( model.node( '/thedata/meta/deprecatedID' ).get().length ).toEqual( 1 );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).toEqual( 1 );
         } );
 
         //this is an important test even though it may not seem to be...
@@ -1274,11 +1274,11 @@ describe( 'merging an instance into the model', function() {
         } );
 
         it( 'does not NOT add another instanceID node', function() {
-            expect( model.node( '/thedata/meta/instanceID' ).get().length ).toEqual( 1 );
+            expect( model.node( '/thedata/meta/instanceID' ).getElements().length ).toEqual( 1 );
         } );
 
         it( 'does not NOT add another deprecatedID node', function() {
-            expect( model.node( '/thedata/meta/deprecatedID' ).get().length ).toEqual( 1 );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).toEqual( 1 );
         } );
 
         it( 'gives the deprecatedID node the old value of the instanceID node of the instance-to-edit', function() {

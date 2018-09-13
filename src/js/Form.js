@@ -341,27 +341,23 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
 
     groupIndex = ( typeof groupIndex !== 'undefined' ) ? groupIndex : null;
 
-    this.model.node( selector, groupIndex ).get().find( '*' ).filter( function() {
-        var $node = $( this );
-        // only return non-empty leafnodes
-        return $node.children().length === 0 && $node.text();
-    } ).each( function() {
-        try {
-            var $node = $( this );
-            var value = $node.text();
-            var name = that.model.getXPath( $node.get( 0 ), 'instance' );
-            var index = that.model.node( name ).get().index( this );
-            var $control = that.input.find( name, index );
-            if ( $control.length ) {
-                that.input.setVal( $control, value );
+    this.model.node( selector, groupIndex, { onlyLeaf: true, noEmpty: true } ).getElements()
+        .forEach( function( element ) {
+            try {
+                var value = element.textContent;
+                var name = that.model.getXPath( element, 'instance' );
+                var index = that.model.node( name ).getElements().indexOf( element );
+                var $control = that.input.find( name, index );
+                if ( $control.length ) {
+                    that.input.setVal( $control, value );
+                }
+            } catch ( e ) {
+                console.error( e );
+                // TODO: Test if this correctly adds to loadErrors
+                //loadErrors.push( 'Could not load input field value with name: ' + name + ' and value: ' + value );
+                throw new Error( 'Could not load input field value with name: ' + name + ' and value: ' + value );
             }
-        } catch ( e ) {
-            console.error( e );
-            // TODO: Test if this correctly adds to loadErrors
-            //loadErrors.push( 'Could not load input field value with name: ' + name + ' and value: ' + value );
-            throw new Error( 'Could not load input field value with name: ' + name + ' and value: ' + value );
-        }
-    } );
+        } );
     return;
 };
 
@@ -907,7 +903,7 @@ Form.prototype.getGoToTarget = function( path ) {
         return;
     }
 
-    modelNode = this.model.node( path ).get().get( 0 );
+    modelNode = this.model.node( path ).getElement();
 
     if ( !modelNode ) {
         return;

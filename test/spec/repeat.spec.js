@@ -201,7 +201,7 @@ describe( 'repeat functionality', function() {
             var $model;
             f.init();
             $form = f.view.$;
-            $model = f.model.$;
+            $model = $( f.model.xml );
             // check that repeat count is evaluated upon load for default values
             expect( $form.find( rep ).length ).toEqual( 2 );
             expect( $model.find( 'rep' ).length ).toEqual( 2 );

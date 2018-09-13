@@ -43,7 +43,7 @@ module.exports = {
             var dataType = that.form.input.getXmlType( $control );
             var relevantExpr = that.form.input.getRelevant( $control );
             var dataNodesObj = that.form.model.node( name );
-            var dataNodes = dataNodesObj.get();
+            var dataNodes = dataNodesObj.getElements();
 
             if ( dataNodes.length > 1 ) {
                 if ( updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
@@ -51,8 +51,8 @@ module.exports = {
                      * If the update was triggered by a datanode inside a repeat
                      * and the dependent node is inside the same repeat, we can prevent the expensive index determination
                      */
-                    var $dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).get().find( dataNodeName );
-                    index = $( dataNodes ).index( $dataNode );
+                    var dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).getElement().querySelector( dataNodeName );
+                    index = dataNodes.indexOf( dataNode );
                     updateCalc( index );
                 } else if ( $control[ 0 ].type === 'hidden' ) {
                     /*
@@ -60,7 +60,7 @@ module.exports = {
                      * as a separate group (.or-calculated-items), instead of in the Form DOM in the locations where they belong.
                      * This occurs when update is called with empty updated object and multiple repeats are present.
                      */
-                    dataNodes.each( function( index ) {
+                    dataNodes.forEach( function( el, index ) {
                         updateCalc( index );
                     } );
                 } else {

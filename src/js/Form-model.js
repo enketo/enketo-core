@@ -4,6 +4,7 @@
 var MergeXML = require( 'mergexml/mergexml' );
 var utils = require( './utils' );
 var $ = require( 'jquery' );
+var domUtils = require( './dom-utils' );
 var FormLogicError = require( './Form-logic-error' );
 var config = require( 'enketo/config' );
 var types = require( './types' );
@@ -15,6 +16,7 @@ var JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
 var ENKETO_XFORMS_NS = 'http://enketo.org/xforms';
 //require( './plugins' );
 require( './extend' );
+var parser = new DOMParser();
 var FormModel;
 var Nodeset;
 
@@ -114,20 +116,22 @@ FormModel.prototype.init = function() {
     try {
         id = 'model';
         // the default model
-        this.xml = $.parseXML( this.data.modelStr );
+        this.xml = parser.parseFromString( this.data.modelStr, 'text/xml' );
+        this.throwParserErrors( this.xml, this.data.modelStr );
         // add external data to model 
         this.data.external.forEach( function( instance ) {
             id = 'instance "' + instance.id + '"' || 'instance unknown';
             instanceDoc = that.getSecondaryInstance( instance.id );
             // remove any existing content that is just an XLSForm hack to pass ODK Validate
-            secondaryInstanceChildren = instanceDoc.childNodes;
+            secondaryInstanceChildren = instanceDoc.children;
             for ( i = secondaryInstanceChildren.length - 1; i >= 0; i-- ) {
                 instanceDoc.removeChild( secondaryInstanceChildren[ i ] );
             }
             var rootEl;
             if ( typeof instance.xml === 'string' || instance.xmlStr ) {
                 console.deprecate( 'External instance provided as string', 'provide external instance as XML Document' );
-                rootEl = $.parseXML( instance.xml || instance.xmlStr ).firstChild;
+                rootEl = parser.parseFromString( instance.xml || instance.xmlStr, 'text/xml' ).firstChild;
+                that.throwParserErrors( rootEl, instance.xml || instance.xmlStr );
             } else if ( instance.xml instanceof XMLDocument ) {
                 if ( global.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
                     // IE does not support importNode
@@ -153,19 +157,18 @@ FormModel.prototype.init = function() {
     // Initialize/process the model
     if ( this.xml ) {
         try {
-            this.$ = $( this.xml );
             this.hasInstance = !!this.xml.querySelector( 'model > instance' );
             this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
             this.setNamespaces();
 
             // Check if instanceID is present
-            if ( !this.getMetaNode( 'instanceID' ).get().get( 0 ) ) {
+            if ( !this.getMetaNode( 'instanceID' ).getElement() ) {
                 that.loadErrors.push( 'Invalid primary instance. Missing instanceID node.' );
             }
 
             // Check if all secondary instances with an external source have been populated
-            this.$.find( 'model > instance[src]:empty' ).each( function( index, instance ) {
-                that.loadErrors.push( 'External instance "' + $( instance ).attr( 'id' ) + '" is empty.' );
+            Array.prototype.slice.call( this.xml.querySelectorAll( 'model > instance[src]:empty' ) ).forEach( function( instance ) {
+                that.loadErrors.push( 'External instance "' + instance.id + '" is empty.' );
             } );
 
             this.trimValues();
@@ -191,6 +194,13 @@ FormModel.prototype.init = function() {
     return this.loadErrors;
 };
 
+FormModel.prototype.throwParserErrors = function( xmlDoc, xmlStr ) {
+    var errorEl = xmlDoc.querySelector( 'parsererror' );
+    if ( errorEl ) {
+        throw new Error( 'Invalid XML: ' + xmlStr );
+    }
+};
+
 FormModel.prototype.createSession = function( id, sessObj ) {
     var instance;
     var session;
@@ -204,7 +214,7 @@ FormModel.prototype.createSession = function( id, sessObj ) {
     instance = model.querySelector( 'instance[id="' + id + '"]' );
 
     if ( !instance ) {
-        instance = $.parseXML( '<instance id="' + id + '"/>' ).documentElement;
+        instance = parser.parseFromString( '<instance id="' + id + '"/>', 'text/xml' ).documentElement;
         this.xml.adoptNode( instance );
         model.appendChild( instance );
     }
@@ -214,11 +224,11 @@ FormModel.prototype.createSession = function( id, sessObj ) {
         sessObj[ prop ] = sessObj[ prop ] || utils.readCookie( '__enketo_meta_' + prop ) || prop + ' not found';
     } );
 
-    session = $.parseXML( '<session><context>' +
+    session = parser.parseFromString( '<session><context>' +
         fixedProps.map( function( prop ) {
             return '<' + prop + '>' + sessObj[ prop ] + '</' + prop + '>';
         } ).join( '' ) +
-        '</context></session>' ).documentElement;
+        '</context></session>', 'text/xml' ).documentElement;
 
     // TODO: custom properties could be added to /session/user/data or to /session/data
 
@@ -283,9 +293,9 @@ FormModel.prototype.importNode = function( node, allChildren ) {
                     }
                 }
             }
-            if ( allChildren && node.childNodes && node.childNodes.length > 0 ) {
-                for ( i = 0, il = node.childNodes.length; i < il; i++ ) {
-                    newNode.appendChild( this.importNode( node.childNodes[ i ], allChildren ) );
+            if ( allChildren && node.children.length ) {
+                for ( i = 0, il = node.children.length; i < il; i++ ) {
+                    newNode.appendChild( this.importNode( node.children[ i ], allChildren ) );
                 }
             }
             return newNode;
@@ -310,7 +320,6 @@ FormModel.prototype.mergeXml = function( recordStr ) {
     var that = this;
     var templateEls;
     var record;
-    var $record;
 
     if ( !recordStr ) {
         return;
@@ -334,8 +343,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      * comments, we simply remove them (multiline comments are probably not removed, but we don't care about them).
      */
     recordStr = recordStr.replace( /<!--[^>]*-->/g, '' );
-    record = $.parseXML( recordStr );
-    $record = $( record );
+    record = parser.parseFromString( recordStr, 'text/xml' );
 
     /**
      * Normally records will not contain the special "jr:template" attribute. However, we should still be able to deal with
@@ -362,62 +370,64 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      *  b) If a repeat node is missing from a repeat instance (e.g. the 2nd) in a record, and that repeat instance is not 
      *     in the model, that node will be missing in the result.
      */
-    $record.find( '*' ).each( function() {
-        var node = this;
-        var path;
-        var repeatIndex = 0;
-        var positionedPath;
-        var repeatParts;
-        try {
-            path = that.getXPath( node, 'instance', false );
-            // If this is a templated repeat (check templates)
-            // or a repeat without templates
-            if ( typeof that.templates[ path ] !== 'undefined' || that.getRepeatIndex( node ) > 0 ) {
-                positionedPath = that.getXPath( node, 'instance', true );
-                if ( !that.evaluate( positionedPath, 'node', null, null, true ) ) {
-                    repeatParts = positionedPath.match( /([^[]+)\[(\d+)\]\//g );
-                    // If the positionedPath has a non-0 repeat index followed by (at least) 1 node, avoid cloning out of order.
-                    if ( repeatParts && repeatParts.length > 0 ) {
-                        // TODO: Does this work for triple-nested repeats. I don't really care though.
-                        // repeatIndex of immediate parent repeat of deepest nested repeat in positionedPath
-                        repeatIndex = repeatParts[ repeatParts.length - 1 ].match( /\[(\d+)\]/ )[ 1 ] - 1;
+    // TODO: ES6 for (var node of record.querySelectorAll('*')){}
+    Array.prototype.slice.call( record.querySelectorAll( '*' ) )
+        .forEach( function( node ) {
+            var path;
+            var repeatIndex = 0;
+            var positionedPath;
+            var repeatParts;
+            try {
+                path = that.getXPath( node, 'instance', false );
+                // If this is a templated repeat (check templates)
+                // or a repeat without templates
+                if ( typeof that.templates[ path ] !== 'undefined' || that.getRepeatIndex( node ) > 0 ) {
+                    positionedPath = that.getXPath( node, 'instance', true );
+                    if ( !that.evaluate( positionedPath, 'node', null, null, true ) ) {
+                        repeatParts = positionedPath.match( /([^[]+)\[(\d+)\]\//g );
+                        // If the positionedPath has a non-0 repeat index followed by (at least) 1 node, avoid cloning out of order.
+                        if ( repeatParts && repeatParts.length > 0 ) {
+                            // TODO: Does this work for triple-nested repeats. I don't really care though.
+                            // repeatIndex of immediate parent repeat of deepest nested repeat in positionedPath
+                            repeatIndex = repeatParts[ repeatParts.length - 1 ].match( /\[(\d+)\]/ )[ 1 ] - 1;
+                        }
+                        that.addRepeat( path, repeatIndex, true );
                     }
-                    that.addRepeat( path, repeatIndex, true );
                 }
+            } catch ( e ) {
+                console.log( 'Ignored error:', e );
             }
-        } catch ( e ) {
-            console.log( 'Ignored error:', e );
-        }
-    } );
+        } );
 
     /** 
      * Any default values in the model, may have been emptied in the record.
      * MergeXML will keep those default values, which would be bad, so we manually clear defaults before merging.
      */
     // first find all empty leaf nodes in record
-    $record.find( '*' ).filter( function() {
-        var recordNode = this;
-        var val = recordNode.textContent;
-        return recordNode.childNodes.length === 0 && val.trim().length === 0;
-    } ).each( function() {
-        var path = that.getXPath( this, 'instance', true );
-        var instanceNode = that.node( path, 0 ).get()[ 0 ];
-        if ( instanceNode ) {
-            // TODO: after dropping support for IE11, we can also use instanceNode.children.length
-            if ( that.evaluate( './*', 'nodes', path, 0, true ).length === 0 ) {
-                // Select all text nodes (excluding repeat COMMENT nodes!)
-                that.evaluate( './text()', 'nodes', path, 0, true ).forEach( function( node ) {
-                    node.textContent = '';
-                } );
-            } else {
-                // If the node in the default instance is a group (empty in record, so appears to be a leaf node
-                // but isn't), empty all true leaf node descendants.
-                that.evaluate( './/*[not(*)]', 'nodes', path, 0, true ).forEach( function( node ) {
-                    node.textContent = '';
-                } );
+    Array.prototype.slice.call( record.querySelectorAll( '*' ) )
+        .filter( function( recordNode ) {
+            var val = recordNode.textContent;
+            return recordNode.children.length === 0 && val.trim().length === 0;
+        } )
+        .forEach( function( leafNode ) {
+            var path = that.getXPath( leafNode, 'instance', true );
+            var instanceNode = that.node( path, 0 ).getElement();
+            if ( instanceNode ) {
+                // TODO: after dropping support for IE11, we can also use instanceNode.children.length
+                if ( that.evaluate( './*', 'nodes', path, 0, true ).length === 0 ) {
+                    // Select all text nodes (excluding repeat COMMENT nodes!)
+                    that.evaluate( './text()', 'nodes', path, 0, true ).forEach( function( node ) {
+                        node.textContent = '';
+                    } );
+                } else {
+                    // If the node in the default instance is a group (empty in record, so appears to be a leaf node
+                    // but isn't), empty all true leaf node descendants.
+                    that.evaluate( './/*[not(*)]', 'nodes', path, 0, true ).forEach( function( node ) {
+                        node.textContent = '';
+                    } );
+                }
             }
-        }
-    } );
+        } );
 
     merger = new MergeXML( {
         join: false
@@ -439,7 +449,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
      * Beware: merge.Get(0) returns an ActiveXObject in IE11. We turn this 
      * into a proper XML document by parsing the XML string instead.
      */
-    mergeResultDoc = $.parseXML( merger.Get( 1 ) );
+    mergeResultDoc = parser.parseFromString( merger.Get( 1 ), 'text/xml' );
 
     /** 
      * To properly show 0 repeats, if the form definition contains multiple default instances
@@ -537,8 +547,8 @@ FormModel.prototype.getRepeatIndex = function( node ) {
 FormModel.prototype.trimValues = function() {
     this.node( null, null, {
         noEmpty: true
-    } ).get().each( function() {
-        this.textContent = this.textContent.trim();
+    } ).getElements().forEach( function( element ) {
+        element.textContent = element.textContent.trim();
     } );
 };
 
@@ -554,18 +564,18 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
     var instanceIdExistingVal;
 
     instanceIdObj = this.getMetaNode( 'instanceID' );
-    instanceIdEl = instanceIdObj.get().get( 0 );
+    instanceIdEl = instanceIdObj.getElement();
     instanceIdExistingVal = instanceIdObj.getVal();
 
     if ( this.data.instanceStr && this.data.submitted ) {
-        deprecatedIdEl = this.getMetaNode( 'deprecatedID' ).get().get( 0 );
+        deprecatedIdEl = this.getMetaNode( 'deprecatedID' ).getElement();
 
         // set the instanceID value to empty
         instanceIdEl.textContent = '';
 
         // add deprecatedID node if necessary
         if ( !deprecatedIdEl ) {
-            deprecatedIdEl = $.parseXML( '<deprecatedID/>' ).documentElement;
+            deprecatedIdEl = parser.parseFromString( '<deprecatedID/>', 'text/xml' ).documentElement;
             this.xml.adoptNode( deprecatedIdEl );
             metaEl = this.xml.querySelector( '* > meta' );
             metaEl.appendChild( deprecatedIdEl );
@@ -593,7 +603,7 @@ FormModel.prototype.getMetaNode = function( localName ) {
     var orPrefix = this.getNamespacePrefix( OPENROSA_XFORMS_NS );
     var n = this.node( '/*/' + orPrefix + ':meta/' + orPrefix + ':' + localName );
 
-    if ( n.get().length === 0 ) {
+    if ( !n.getElement() ) {
         n = this.node( '/*/meta/' + localName );
     }
 
@@ -619,10 +629,7 @@ FormModel.prototype.getRepeatCommentEl = function( repeatPath, repeatSeriesIndex
  *                           will not add ordinal attributes as these should be provided in the record)
  */
 FormModel.prototype.addRepeat = function( repeatPath, repeatSeriesIndex, merge ) {
-    var $insertAfterNode;
-    var $templateClone;
-    var repeatSeries;
-    var template;
+    var templateClone;
     var that = this;
 
     if ( !this.templates[ repeatPath ] ) {
@@ -631,9 +638,9 @@ FormModel.prototype.addRepeat = function( repeatPath, repeatSeriesIndex, merge )
         this.extractFakeTemplates( [ repeatPath ] );
     }
 
-    template = this.templates[ repeatPath ];
-    repeatSeries = this.getRepeatSeries( repeatPath, repeatSeriesIndex );
-    $insertAfterNode = ( repeatSeries.length ) ? $( repeatSeries[ repeatSeries.length - 1 ] ) : $( this.getRepeatCommentEl( repeatPath, repeatSeriesIndex ) );
+    var template = this.templates[ repeatPath ];
+    var repeatSeries = this.getRepeatSeries( repeatPath, repeatSeriesIndex );
+    var insertAfterNode = repeatSeries.length ? repeatSeries[ repeatSeries.length - 1 ] : this.getRepeatCommentEl( repeatPath, repeatSeriesIndex );
 
     // if not exists and not a merge operation
     if ( !merge ) {
@@ -645,22 +652,24 @@ FormModel.prototype.addRepeat = function( repeatPath, repeatSeriesIndex, merge )
     /**
      * If templatenodes and insertAfterNode(s) have been identified 
      */
-    if ( template && $insertAfterNode.length === 1 ) {
-        $templateClone = $( template ).clone()
-            .insertAfter( $insertAfterNode );
+    if ( template && insertAfterNode ) {
+        templateClone = template.cloneNode( true );
+        insertAfterNode.after( templateClone );
 
-        this.removeOrdinalAttributes( $templateClone[ 0 ] );
+        this.removeOrdinalAttributes( templateClone );
         // We should not automatically add ordinal attributes for an existing record as the ordinal values cannot be determined. 
         // They should be provided in the instanceStr (record).
         if ( !merge ) {
-            this.addOrdinalAttribute( $templateClone[ 0 ], repeatSeries[ 0 ] );
+            this.addOrdinalAttribute( templateClone, repeatSeries[ 0 ] );
         }
 
         // If part of a merge operation (during form load) where the values will be populated from the record, defaults are not desired.
         if ( merge ) {
-            $templateClone.find( '*' ).filter( function() {
-                return $( this ).children().length === 0;
-            } ).text( '' );
+            Array.prototype.slice.call( templateClone.querySelectorAll( '*' ) )
+                .filter( function( node ) {
+                    return node.children.length === 0;
+                } )
+                .forEach( function( node ) { node.textContent = ''; } );
         }
 
         // Note: the addrepeat eventhandler in Form.js takes care of initializing branches etc, so no need to fire an event here.
@@ -768,22 +777,20 @@ FormModel.prototype.hasPreviousCommentSiblingWithContent = function( node, conte
 /**
  * Determines the index of a repeated node amongst all nodes with the same XPath selector
  *
- * @param  {} $node optional jquery element
+ * @param  {Element} element element
  * @return {number}       [description]
  */
-FormModel.prototype.determineIndex = function( $node ) {
-    var nodeName;
-    var path;
-    var $family;
+FormModel.prototype.determineIndex = function( element ) {
     var that = this;
 
-    if ( $node.length === 1 ) {
-        nodeName = $node.prop( 'nodeName' );
-        path = this.getXPath( $node.get( 0 ), 'instance' );
-        $family = this.$.find( nodeName.replace( /\./g, '\\.' ) ).filter( function() {
-            return path === that.getXPath( this, 'instance' );
-        } );
-        return ( $family.length === 1 ) ? null : $family.index( $node );
+    if ( element ) {
+        var nodeName = element.nodeName;
+        var path = this.getXPath( element, 'instance' );
+        var family = Array.prototype.slice.call( this.xml.querySelectorAll( nodeName.replace( /\./g, '\\.' ) ) )
+            .filter( function( node ) {
+                return path === that.getXPath( node, 'instance' );
+            } );
+        return family.length === 1 ? null : family.indexOf( element );
     } else {
         console.error( 'no node, or multiple nodes, provided to determineIndex function' );
         return -1;
@@ -831,25 +838,29 @@ FormModel.prototype.addRepeatComments = function( repeatPath ) {
     this.evaluate( repeatPath, 'nodes', null, null, true ).forEach( function( repeat ) {
         if ( !that.hasPreviousSiblingElementSameName( repeat ) && !that.hasPreviousCommentSiblingWithContent( repeat, comment ) ) {
             // Add a comment to the primary instance that serves as an insertion point for each repeat series,
-            $( repeat ).before( document.createComment( comment ) );
+            repeat.before( document.createComment( comment ) );
         }
     } );
 };
 
 FormModel.prototype.addTemplate = function( repeatPath, repeat, empty ) {
-    var $clone;
-
     this.addRepeatComments( repeatPath );
 
     if ( !this.templates[ repeatPath ] ) {
-        $clone = $( repeat ).clone().removeAttr( 'template' ).removeAttr( 'jr:template' );
+        var clone = repeat.cloneNode( true );
+        clone.removeAttribute( 'template' );
+        clone.removeAttribute( 'jr:template' );
         if ( empty ) {
-            $clone.find( '*' ).filter( function() {
-                return $( this ).children().length === 0;
-            } ).text( '' );
+            Array.prototype.slice.call( clone.querySelectorAll( '*' ) )
+                .filter( function( node ) {
+                    return node.children.length === 0;
+                } )
+                .forEach( function( node ) {
+                    node.textContent = '';
+                } );
         }
         // Add to templates object.
-        this.templates[ repeatPath ] = $clone[ 0 ];
+        this.templates[ repeatPath ] = clone;
     }
 };
 
@@ -917,34 +928,30 @@ FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
  * @param  {number} index       of the instance node with that selector
  */
 FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
-    var i;
-    var parentSelector;
-    var parentIndex;
-    var $target;
-    var $node;
-    var nodeName;
-    var $siblings;
-    var $parents;
+    var target = this.node( selector, index ).getElement();
+    var parents = [ target ];
+    var that = this;
 
-    // TODO: eliminate jQuery from this function.
+    while ( target && target.parentElement && target.nodeName.toLowerCase() !== 'instance' ) {
+        target = target.parentElement;
+        parents.push( target );
+    }
 
-    $target = this.node( selector, index ).get();
-    // add() sorts the resulting collection in document order
-    $parents = $target.parents().add( $target );
-    // traverse collection in reverse document order
-    for ( i = $parents.length - 1; i >= 0; i-- ) {
-        $node = $parents.eq( i );
+    // traverse collection in reverse
+    parents.forEach( function( element ) {
         // escape any dots in the node name
-        nodeName = $node.prop( 'nodeName' ).replace( /\./g, '\\.' );
-        $siblings = $node.siblings( nodeName ).not( '[template]' );
+        var nodeName = element.nodeName.replace( /\./g, '\\.' );
+        var siblingsAndSelf = domUtils.getSiblingElementsAndSelf( element, nodeName + ':not([template])' );
+
         // if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
-        if ( nodeName.toLowerCase() !== 'instance' && nodeName.toLowerCase() !== 'model' && $siblings.length > 0 ) {
-            parentSelector = this.getXPath( $node.get( 0 ), 'instance' );
-            parentIndex = $siblings.add( $node ).index( $node );
+        if ( siblingsAndSelf.length > 1 ) {
+            var parentSelector = that.getXPath( element, 'instance' );
+            var parentIndex = siblingsAndSelf.indexOf( element );
             // Add position to segments that do not have an XPath predicate.
             expr = expr.replace( new RegExp( parentSelector + '/', 'g' ), parentSelector + '[' + ( parentIndex + 1 ) + ']/' );
         }
-    }
+    } );
+
     return expr;
 };
 
@@ -1208,7 +1215,7 @@ FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
  * @return { ?(number|string|boolean|Array<element>) } the result
  */
 FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
-    var j, context, doc, resTypeNum, resultTypes, result, $collection, response, repeats, cacheKey, original, cacheable;
+    var j, context, doc, resTypeNum, resultTypes, result, collection, response, repeats, cacheKey, original, cacheable;
 
     //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
     //    index + ' and result type: ' + resTypeStr );
@@ -1220,9 +1227,9 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
     repeats = null;
 
     if ( selector ) {
-        $collection = this.node( selector ).get();
-        repeats = $collection.length;
-        context = $collection.eq( index )[ 0 ];
+        collection = this.node( selector ).getElements();
+        repeats = collection.length;
+        context = collection[ index ];
     } else {
         // either the first data child of the first instance or the first child (for loaded instances without a model)
         context = this.rootElement;
@@ -1368,33 +1375,47 @@ Nodeset = function( selector, index, filter, model ) {
  *
  * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
  */
+
 Nodeset.prototype.get = function() {
-    var $nodes;
+    console.deprecate( 'node.get()', 'node.getElement() or node.getElements()' );
+    return $( this.getElements() );
+};
+
+Nodeset.prototype.getElement = function() {
+    return this.getElements()[ 0 ];
+};
+
+Nodeset.prototype.getElements = function() {
+    var nodes;
     var /** @type {string} */ val;
 
     // cache evaluation result
-    if ( !this.nodes ) {
-        this.nodes = this.model.evaluate( this.selector, 'nodes', null, null, true );
+    if ( !this._nodes ) {
+        this._nodes = this.model.evaluate( this.selector, 'nodes', null, null, true );
+        // noEmpty automatically excludes non-leaf nodes
+        if ( this.filter.noEmpty === true ) {
+            this._nodes = this._nodes
+                .filter( function( node ) {
+                    val = node.textContent;
+                    return node.children.length === 0 && val.trim().length > 0;
+                } );
+        }
+        // this may still contain empty leaf nodes
+        else if ( this.filter.onlyLeaf === true ) {
+            this._nodes = this._nodes
+                .filter( function( node ) {
+                    return node.children.length === 0;
+                } );
+        }
     }
 
-    // noEmpty automatically excludes non-leaf nodes
-    if ( this.filter.noEmpty === true ) {
-        $nodes = $( this.nodes ).filter( function() {
-            var $node = $( this );
-            val = $node.text();
-            return $node.children().length === 0 && val.trim().length > 0;
-        } );
-    }
-    // this may still contain empty leaf nodes
-    else if ( this.filter.onlyLeaf === true ) {
-        $nodes = $( this.nodes ).filter( function() {
-            return $( this ).children().length === 0;
-        } );
-    } else {
-        $nodes = $( this.nodes );
+    nodes = this._nodes;
+
+    if ( typeof this.index !== 'undefined' && this.index !== null ) {
+        nodes = typeof nodes[ this.index ] === 'undefined' ? [] : [ nodes[ this.index ] ];
     }
 
-    return ( typeof this.index !== 'undefined' && this.index !== null ) ? $nodes.eq( this.index ) : $nodes;
+    return nodes;
 };
 
 /**
@@ -1416,13 +1437,11 @@ Nodeset.prototype.setIndex = function( index ) {
  *                            otherwise an object with update information is returned.
  */
 Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
-    var $target;
-    var curVal;
     var /**@type {string}*/ newVal;
     var updated;
     var customData;
 
-    curVal = this.getVal();
+    var curVal = this.getVal();
 
     if ( typeof newVals !== 'undefined' && newVals !== null ) {
         newVal = ( Array.isArray( newVals ) ) ? newVals.join( ' ' ) : newVals.toString();
@@ -1431,16 +1450,17 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
     }
 
     newVal = this.convert( newVal, xmlDataType );
-    $target = this.get();
+    var targets = this.getElements();
 
-    if ( $target.length === 1 && newVal.toString() !== curVal.toString() ) {
+    if ( targets.length === 1 && newVal.toString() !== curVal.toString() ) {
+        var target = targets[ 0 ];
         // first change the value so that it can be evaluated in XPath (validated)
-        $target.text( newVal.toString() );
+        target.textContent = newVal.toString();
         // then return validation result
         updated = this.getClosestRepeat();
-        updated.nodes = [ $target.prop( 'nodeName' ) ];
+        updated.nodes = [ target.nodeName ];
 
-        customData = this.model.getUpdateEventData( $target.get( 0 ), xmlDataType );
+        customData = this.model.getUpdateEventData( target, xmlDataType );
         updated = ( customData ) ? $.extend( {}, updated, customData ) : updated;
 
         this.model.$events.trigger( 'dataupdate', updated );
@@ -1448,18 +1468,18 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
         //add type="file" attribute for file references
         if ( xmlDataType === 'binary' ) {
             if ( newVal.length > 0 ) {
-                $target.attr( 'type', 'file' );
+                target.setAttribute( 'type', 'file' );
             } else {
-                $target.removeAttr( 'type' );
+                target.removeAttribute( 'type' );
             }
         }
         return updated;
     }
-    if ( $target.length > 1 ) {
+    if ( targets.length > 1 ) {
         console.error( 'nodeset.setVal expected nodeset with one node, but received multiple' );
         return null;
     }
-    if ( $target.length === 0 ) {
+    if ( targets.length === 0 ) {
         console.log( 'Data node: ' + this.selector + ' with null-based index: ' + this.index + ' not found. Ignored.' );
         return null;
     }
@@ -1473,13 +1493,13 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
  * @return {string} [description]
  */
 Nodeset.prototype.getVal = function() {
-    var nodes = this.get();
+    var nodes = this.getElements();
     return nodes.length ? nodes[ 0 ].textContent : undefined;
 };
 
 // If repeats have not been cloned yet, they are not considered a repeat by this function
 Nodeset.prototype.getClosestRepeat = function() {
-    var el = this.get().get( 0 );
+    var el = this.getElement();
     var nodeName = el.nodeName;
 
     while ( nodeName && nodeName !== 'instance' && !( el.nextElementSibling && el.nextElementSibling.nodeName === nodeName ) && !( el.previousElementSibling && el.previousElementSibling.nodeName === nodeName ) ) {
@@ -1489,7 +1509,7 @@ Nodeset.prototype.getClosestRepeat = function() {
 
     return ( !nodeName || nodeName === 'instance' ) ? {} : {
         repeatPath: this.model.getXPath( el, 'instance' ),
-        repeatIndex: this.model.determineIndex( $( el ) )
+        repeatIndex: this.model.determineIndex( el )
     };
 };
 
@@ -1497,32 +1517,24 @@ Nodeset.prototype.getClosestRepeat = function() {
  * Remove a repeat node
  */
 Nodeset.prototype.remove = function() {
-    var $dataNode;
-    var nodeName;
-    var repeatPath;
-    var repeatIndex;
-    var removalEventData;
-    var nextNode;
+    var dataNode = this.getElement();
 
-    $dataNode = this.get();
-
-    if ( $dataNode.length > 0 ) {
-
-        nodeName = $dataNode.prop( 'nodeName' );
-        repeatPath = this.model.getXPath( $dataNode.get( 0 ), 'instance' );
-        repeatIndex = this.model.determineIndex( $dataNode );
-        removalEventData = this.model.getRemovalEventData( $dataNode.get( 0 ) );
+    if ( dataNode ) {
+        var nodeName = dataNode.nodeName;
+        var repeatPath = this.model.getXPath( dataNode, 'instance' );
+        var repeatIndex = this.model.determineIndex( dataNode );
+        var removalEventData = this.model.getRemovalEventData( dataNode );
 
         if ( !this.model.templates[ repeatPath ] ) {
-            // This allows the model itself without requiring the controller to call .extractFakeTemplates()
+            // This allows the model itseldataNodeout requiring the controller to call .extractFakeTemplates()
             // to extract non-jr:templates by assuming that node.remove() would only called for a repeat.
             this.model.extractFakeTemplates( [ repeatPath ] );
         }
         // warning: jQuery.next() to be avoided to support dots in the nodename
-        nextNode = $dataNode.get( 0 ).nextElementSibling;
+        var nextNode = dataNode.nextElementSibling;
 
-        $dataNode.remove();
-        this.nodes = null;
+        dataNode.remove();
+        this._nodes = null;
 
         // For internal use
         this.model.$events.trigger( 'dataupdate', {
@@ -1660,7 +1672,7 @@ module.exports = FormModel;
  * @deprecated
  */
 FormModel.prototype.getVersion = function() {
-    console.warn( 'FormModel.getVersion() is deprecated, use model.version' );
+    console.deprecate( 'FormModel.getVersion()', 'model.version' );
     return this.version;
 };
 /**
@@ -1673,7 +1685,7 @@ FormModel.prototype.getVersion = function() {
  * @return {jQuery} JQuery Data Object
  */
 FormModel.prototype.get = function() {
-    console.warn( 'model.get() is deprecated, use model.$' );
+    console.deprecate( 'model.get()', 'model.xml' );
     return this.$ || null;
 };
 /**
@@ -1681,27 +1693,27 @@ FormModel.prototype.get = function() {
  * @return {Element} data XML object (not sure if type is element actually)
  */
 FormModel.prototype.getXML = function() {
-    console.warn( 'model.getXML() is deprecated, use model.xml' );
+    console.deprecate( 'model.getXML()', 'model.xml' );
     return this.xml || null;
 };
 /**
  * @deprecated
  */
 FormModel.prototype.getInstanceID = function() {
-    console.warn( 'model.getInstanceID() is deprecated, use model.instanceID' );
+    console.deprecate( 'model.getInstanceID()', 'model.instanceID' );
     return this.instanceID;
 };
 /**
  * @deprecated
  */
 FormModel.prototype.getDeprecatedID = function() {
-    console.warn( 'model.getDeprecatedID() is deprecated, use model.deprecatedID' );
+    console.deprecate( 'model.getDeprecatedID()', 'model.deprecatedID' );
     return this.deprecatedID;
 };
 /**
  * @deprecated
  */
 FormModel.prototype.getInstanceName = function() {
-    console.warn( 'model.getInstanceName() is deprecated, use model.instanceName' );
+    console.deprecate( 'model.getInstanceName()', 'model.instanceName' );
     return this.instanceName;
 };

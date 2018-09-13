@@ -279,11 +279,9 @@ describe( 'calculations', function() {
     it( 'outside a repeat are updated if they are dependent on a repeat node', function() {
         var f = loadForm( 'repeat-count.xml' );
         var cnt = '[name="/dynamic-repeat-count/count"]';
-        var $form;
-        var $model;
         f.init();
-        $form = f.view.$;
-        $model = f.model.$;
+        var $form = f.view.$;
+        var $model = $( f.model.xml );
         // increase count to 10
         $form.find( cnt ).val( 10 ).trigger( 'change' );
         expect( $model.find( 'sum_note' ).text() ).toEqual( '10' );

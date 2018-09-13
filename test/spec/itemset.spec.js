@@ -26,13 +26,13 @@ describe( 'Itemset functionality', function() {
             expect( $items2().length ).toEqual( 2 );
             expect( $items2().siblings().text() ).toEqual( 'BananaCacao' );
             // check model
-            expect( form.model.$.find( 'crops' ).text() ).toEqual( 'banana cacao' );
-            expect( form.model.$.find( 'crop' ).text() ).toEqual( '' );
+            expect( form.model.xml.querySelector( 'crops' ).textContent ).toEqual( 'banana cacao' );
+            expect( form.model.xml.querySelector( 'crop' ).textContent ).toEqual( '' );
             // select both items in itemset 2
             $items2().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
             // check model
-            expect( form.model.$.find( 'crops' ).text() ).toEqual( 'banana cacao' );
-            expect( form.model.$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+            expect( form.model.xml.querySelector( 'crops' ).textContent ).toEqual( 'banana cacao' );
+            expect( form.model.xml.querySelector( 'crop' ).textContent ).toEqual( 'banana cacao' );
             // select an additional item in itemset 1
             $items1().filter( '[value="maize"]' ).prop( 'checked', true ).trigger( 'change' );
             // check that the new item was added to itemset 2
@@ -44,18 +44,18 @@ describe( 'Itemset functionality', function() {
             // check that the new item is unselected
             expect( $items2().filter( '[value="maize"]' ).prop( 'checked' ) ).toEqual( false );
             // check model
-            expect( form.model.$.find( 'crops' ).text() ).toEqual( 'banana cacao maize' );
-            expect( form.model.$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+            expect( form.model.xml.querySelector( 'crops' ).textContent ).toEqual( 'banana cacao maize' );
+            expect( form.model.xml.querySelector( 'crop' ).textContent ).toEqual( 'banana cacao' );
         } );
 
         it( 'removes (unchecks) any current values that are no longer valid values', function() {
             $items1().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
             // select both items in itemset 2
             $items2().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
-            expect( form.model.$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+            expect( form.model.xml.querySelector( 'crop' ).textContent ).toEqual( 'banana cacao' );
             // add a third non-existing item to model for itemset 2
-            form.model.$.find( 'crop' ).text( 'banana fake cacao' );
-            expect( form.model.$.find( 'crop' ).text() ).toEqual( 'banana fake cacao' );
+            form.model.xml.querySelector( 'crop' ).textContent = 'banana fake cacao';
+            expect( form.model.xml.querySelector( 'crop' ).textContent ).toEqual( 'banana fake cacao' );
             // select an additional item in itemset 1, to trigger update of itemset 2
             $items1().filter( '[value="maize"]' ).prop( 'checked', true ).trigger( 'change' );
             // check that the new item was added to itemset 2
@@ -64,7 +64,7 @@ describe( 'Itemset functionality', function() {
             expect( $items2().filter( '[value="banana"]' ).prop( 'checked' ) ).toEqual( true );
             expect( $items2().filter( '[value="cacao"]' ).prop( 'checked' ) ).toEqual( true );
             // check model to see that the fake value was removed
-            expect( form.model.$.find( 'crop' ).text() ).toEqual( 'banana cacao' );
+            expect( form.model.xml.querySelector( 'crop' ).textContent ).toEqual( 'banana cacao' );
         } );
     } );
 
