@@ -128,7 +128,8 @@ module.exports = function( grunt ) {
         browserify: {
             standalone: {
                 files: {
-                    'build/js/enketo-bundle.js': [ 'app.js' ]
+                    'build/js/enketo-bundle.js': [ 'app.js' ],
+                    'build/js/obscure-ie11-polyfills.js': [ 'src/js/obscure-ie11-polyfills.js' ]
                 },
             },
             options: {
