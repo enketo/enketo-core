@@ -8,6 +8,7 @@ var domUtils = require( './dom-utils' );
 var FormLogicError = require( './Form-logic-error' );
 var config = require( 'enketo/config' );
 var types = require( './types' );
+var event = require( './event' );
 var REPEAT_COMMENT_PREFIX = 'repeat:/';
 var INSTANCE = /instance\(\s*(["'])((?:(?!\1)[A-z0-9.\-_]+))\1\s*\)/g;
 var OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^)])/;
@@ -44,7 +45,7 @@ FormModel = function( data, options ) {
     options = options || {};
     options.full = ( typeof options.full !== 'undefined' ) ? options.full : true;
 
-    this.$events = $( '<div/>' );
+    this.events = document.createElement( 'div' );
     this.convertedExpressions = {};
     this.templates = {};
     this.loadErrors = [];
@@ -195,8 +196,7 @@ FormModel.prototype.init = function() {
 };
 
 FormModel.prototype.throwParserErrors = function( xmlDoc, xmlStr ) {
-    var errorEl = xmlDoc.querySelector( 'parsererror' );
-    if ( errorEl ) {
+    if ( !xmlDoc || xmlDoc.querySelector( 'parsererror' ) ) {
         throw new Error( 'Invalid XML: ' + xmlStr );
     }
 };
@@ -1463,7 +1463,7 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
         customData = this.model.getUpdateEventData( target, xmlDataType );
         updated = ( customData ) ? $.extend( {}, updated, customData ) : updated;
 
-        this.model.$events.trigger( 'dataupdate', updated );
+        this.model.events.dispatchEvent( event.DataUpdate( updated ) );
 
         //add type="file" attribute for file references
         if ( xmlDataType === 'binary' ) {
@@ -1537,26 +1537,26 @@ Nodeset.prototype.remove = function() {
         this._nodes = null;
 
         // For internal use
-        this.model.$events.trigger( 'dataupdate', {
+        this.model.events.dispatchEvent( event.DataUpdate( {
             nodes: null,
             repeatPath: repeatPath,
             repeatIndex: repeatIndex
-        } );
+        } ) );
 
         // For all next sibling repeats to update formulas that use e.g. position(..)
         // For internal use
         while ( nextNode && nextNode.nodeName == nodeName ) {
             nextNode = nextNode.nextElementSibling;
 
-            this.model.$events.trigger( 'dataupdate', {
+            this.model.events.dispatchEvent( event.DataUpdate( {
                 nodes: null,
                 repeatPath: repeatPath,
                 repeatIndex: repeatIndex++
-            } );
+            } ) );
         }
 
         // For external use, if required with custom data.
-        this.model.$events.trigger( 'removed', removalEventData );
+        this.model.events.dispatchEvent( event.Removed( removalEventData ) );
 
     } else {
         console.error( 'could not find node ' + this.selector + ' with index ' + this.index + ' to remove ' );

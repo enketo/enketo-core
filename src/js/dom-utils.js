@@ -22,5 +22,5 @@ function getSiblingElementsAndSelf( element, selector ) {
 }
 
 module.exports = {
-    getSiblingElementsAndSelf
+    getSiblingElementsAndSelf: getSiblingElementsAndSelf
 };

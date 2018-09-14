@@ -330,8 +330,8 @@ describe( 'dataupdate event, is fired on model.$events and includes', function()
             modelStr: '<model><instance><a><b><c/></b><b><c/></b><meta><instanceID/></meta></a></instance></model>'
         } );
         var eventObjects = [];
-        model.$events.on( 'dataupdate', function( event, updated ) {
-            eventObjects.push( updated );
+        model.events.addEventListener( 'dataupdate', function( event ) {
+            eventObjects.push( event.detail );
         } );
         model.init();
         model.node( '/a/b/c', 1 ).setVal( 'boo' );
@@ -1447,8 +1447,8 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
             submitted: true
         } );
         var eventObjects = [];
-        model.$events.on( 'dataupdate', function( event, updated ) {
-            eventObjects.push( updated );
+        model.events.addEventListener( 'dataupdate', function( event ) {
+            eventObjects.push( event.detail );
         } );
         model.init();
         expect( eventObjects.length ).toEqual( 2 );

@@ -144,11 +144,11 @@ Form.prototype.init = function() {
     }
 
     // Before initializing form view, passthrough some model events externally
-    this.model.$events.on( 'dataupdate', function( event, updated ) {
-        that.view.$.trigger( 'dataupdate.enketo', updated );
+    this.model.events.addEventListener( 'dataupdate', function( event ) {
+        that.view.$.trigger( 'dataupdate.enketo', event.detail );
     } );
-    this.model.$events.on( 'removed', function( event, updated ) {
-        that.view.$.trigger( 'removed.enketo', updated );
+    this.model.events.addEventListener( 'removed', function( event ) {
+        that.view.$.trigger( 'removed.enketo', event.detail );
     } );
 
     this.pages = this.addModule( pageModule );
@@ -648,10 +648,10 @@ Form.prototype.setEventHandlers = function() {
         that.progress.update( event.target );
     } );
 
-    this.model.$events.on( 'dataupdate', function( event, updated ) {
+    this.model.events.addEventListener( 'dataupdate', function( event ) {
         that.evaluationCascade.forEach( function( fn ) {
-            fn.call( that, updated );
-        } );
+            fn.call( that, event.detail );
+        }, true );
         // edit is fired when the model changes after the form has been initialized
         that.editStatus = true;
     } );
