@@ -941,6 +941,18 @@ describe( 'validation', function() {
                 } );
         } );
 
+        // Calling validation before repeats are initialized causes repeats.getIndex to fail. Since default value aren't validated upon
+        // load, it makes sense to not evaluate calculations upon load either.
+        // https://github.com/OpenClinica/enketo-express-oc/issues/109#issuecomment-424084781
+        it( 'does not validate a calculation during initial load even if validateContinuously is set to true', function() {
+            config.validateContinuously = true;
+            var form = loadForm( 'repeat-calc.xml', '<repeat-calc><rep><num>1</num></rep><meta><instanceID>a</instanceID></meta></repeat-calc>' );
+            //spyOn( form, 'validateInput' ).and.callThrough();
+            var loadErrors = form.init();
+            expect( loadErrors ).toEqual( [] );
+            //expect( form.validateInput ).not.toHaveBeenCalled();
+        } );
+
     } );
 
 } );

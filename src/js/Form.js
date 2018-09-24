@@ -53,6 +53,7 @@ function Form( formSelector, data, options ) {
     this.repeatsPresent = !!this.view.html.querySelector( '.or-repeat' );
     this.widgetsInitialized = false;
     this.pageNavigationBlocked = false;
+    this.initialized = false;
 }
 
 /**
@@ -113,6 +114,9 @@ Form.prototype = {
     get method() {
         return this.view.$.attr( 'method' );
     },
+    get id() {
+        return this.view.html.id;
+    }
 };
 
 /**
@@ -234,6 +238,7 @@ Form.prototype.init = function() {
             that.progress.update();
         }, 0 );
 
+        this.initialized = true;
         return loadErrors;
     } catch ( e ) {
         console.error( e );
@@ -822,6 +827,9 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
  * @return {Promise}           [description]
  */
 Form.prototype.validateInput = function( $input ) {
+    if ( !this.initialized ) {
+        return Promise.resolve();
+    }
     var that = this;
     var getValidationResult;
     // All relevant properties, except for the **very expensive** index property

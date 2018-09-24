@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Count() and Sum() demo</h:title>
+        <model>
+            <instance>
+                <repeat-calc id="repeat-calc">
+                    <rep jr:template="">
+                        <num/>
+                    </rep>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </repeat-calc>
+            </instance>
+            <bind calculate="1+1" nodeset="/repeat-calc/rep/num" type="int"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/repeat-calc/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/repeat-calc/rep">
+            <label></label>
+            <repeat nodeset="/repeat-calc/rep">
+                <input ref="/repeat-calc/rep/num">
+                    <label>Enter a number</label>
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

@@ -3,10 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.60.0] - 2018-09-24
 ----------------------
+##### Changed
+- Form model was refactored to remove jQuery dependency.
+
 ##### Fixed
 - Cascading selections with radiobuttons/checkboxes do not show image labels.
+- Loading error when record with repeat calculation was loaded and validateContinously was set to `true`.
 
 [4.59.0] - 2018-09-11
 ----------------------
