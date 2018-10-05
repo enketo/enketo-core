@@ -282,6 +282,18 @@
             }
         },
 
+        getMeridianLength: function() {
+            var el = document.createElement( 'span' );
+            el.textContent = this.meridianNotation.am;
+            el.style.position = 'absolute';
+            document.querySelector( 'body' ).appendChild( el );
+            var amLength = el.scrollWidth;
+            el.textContent = this.meridianNotation.pm;
+            var pmLength = el.scrollWidth;
+            el.remove();
+            return amLength > pmLength ? amLength : pmLength;
+        },
+
         getTemplate: function() {
             var template,
                 hourTemplate,
@@ -291,10 +303,11 @@
                 templateContent;
 
             if ( this.showInputs ) {
-                hourTemplate = '<input type="text" class="timepicker-hour" maxlength="2"/>';
-                minuteTemplate = '<input type="text" class="timepicker-minute" maxlength="2"/>';
-                secondTemplate = '<input type="text" class="timepicker-second" maxlength="2"/>';
-                meridianTemplate = '<input type="text" class="timepicker-meridian" maxlength="2"/>';
+                var width = this.getMeridianLength() > 26 ? 'style="width: ' + ( this.getMeridianLength() + 24 ) + 'px"' : '';
+                hourTemplate = '<input type="text" class="timepicker-hour" ' + width + '/>';
+                minuteTemplate = '<input type="text" class="timepicker-minute" ' + width + '/>';
+                secondTemplate = '<input type="text" class="timepicker-second" ' + width + '/>';
+                meridianTemplate = '<input type="text" class="timepicker-meridian"' + width + '/>';
             } else {
                 hourTemplate = '<span class="timepicker-hour"></span>';
                 minuteTemplate = '<span class="timepicker-minute"></span>';

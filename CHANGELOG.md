@@ -3,6 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.60.1] - 2018-10-05
+----------------------
+##### Fixed
+- Timepicker meridian field not wide enough for Chinese AM/PM.
+- Timepicker meridian detection not working in IE11.
+- IE11 polyfill for .after not working on comment nodes.
+
 [4.60.0] - 2018-09-24
 ----------------------
 ##### Changed
