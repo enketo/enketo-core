@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.60.2] - 2018-10-05
+----------------------
+##### Fixed
+- Timepicker localized AM/PM strings not detected properly in Firefox and Safari.
+
 [4.60.1] - 2018-10-05
 ----------------------
 ##### Fixed
