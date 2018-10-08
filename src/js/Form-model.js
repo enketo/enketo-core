@@ -298,6 +298,9 @@ FormModel.prototype.importNode = function( node, allChildren ) {
                     newNode.appendChild( this.importNode( node.children[ i ], allChildren ) );
                 }
             }
+            if ( !node.children.length && node.textContent ) {
+                newNode.textContent = node.textContent;
+            }
             return newNode;
         case document.TEXT_NODE:
         case document.CDATA_SECTION_NODE:

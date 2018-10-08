@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Loading records not working in IE11. All node values are emptied when a record is supplied (and this has been the case for years...).
+
 [4.60.2] - 2018-10-05
 ----------------------
 ##### Fixed
