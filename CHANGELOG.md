@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[4.60.3] - 2018-10-16
 ----------------------
 ##### Fixed
-- Loading records not working in IE11. All node values are emptied when a record is supplied (and this has been the case for years...).
+- Loading records not working in IE11. All node values are emptied when a record is supplied.
+- In FF when a radiobutton or checkbox is clicked directly in a pulldown select, the URL fragment identifier is updated (and page scrolls to the top).
 
 [4.60.2] - 2018-10-05
 ----------------------

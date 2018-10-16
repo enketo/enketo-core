@@ -22,6 +22,7 @@
 var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
+var domUtils = require( '../../js/dom-utils' );
 var t = require( 'enketo/translator' ).t;
 var pluginName = 'desktopSelectpicker';
 require( '../../js/dropdown.jquery' );
@@ -164,13 +165,13 @@ DesktopSelectpicker.prototype._clickListener = function() {
 
     this.$picker
         .on( 'click', 'li:not(.disabled)', function( e ) {
-            var $li = $( this );
-            var $input = $li.find( 'input' );
-            var $select = $( _this.element );
-            var $option = $select.find( 'option[value="' + $input.val() + '"]' );
-            var selectedBefore = $option.is( ':selected' );
+            var li = this;
+            var input = li.querySelector( 'input' );
+            var select = _this.element;
+            var option = select.querySelector( 'option[value="' + input.value + '"]' );
+            var selectedBefore = option.matches( ':checked' );
 
-            // We need to prevent default unless click was on on input
+            // We need to prevent default unless click was on an input
             // Without this 'fix', clicks on radiobuttons/checkboxes themselves will update the value
             // but will not show checked status.
             if ( e.target.nodeName.toLowerCase() !== 'input' ) {
@@ -179,31 +180,42 @@ DesktopSelectpicker.prototype._clickListener = function() {
 
             if ( !_this.multiple ) {
                 _this.$picker.find( 'li' ).removeClass( 'active' );
-                $option.siblings( 'option' ).prop( 'selected', false );
+                domUtils.getSiblingElementsAndSelf( option, 'option' ).forEach( function( el ) { el.selected = false; } );
                 _this.$picker.find( 'input' ).prop( 'checked', false );
             } else {
                 //don't close dropdown for multiple select
                 e.stopPropagation();
             }
 
-            if ( selectedBefore ) {
-                $li.removeClass( 'active' );
-                $input.prop( 'checked', false );
-                $option.prop( 'selected', false );
-            } else {
-                $li.addClass( 'active' );
-                $input.prop( 'checked', true );
-                $option.prop( 'selected', true );
-            }
+            // For issue https://github.com/kobotoolbox/enketo-express/issues/1122 in FF,
+            // we had to use event.preventDefault() on <a> tag click events.
+            // This broke view updates when clicking on the radiobuttons and checkboxes directly
+            // although the underlying values did change correctly.
+            // 
+            // It has to do with event propagation. I could not figure out how to fix it.
+            // Therefore I used a workaround by slightly delaying the status changes.
+            setTimeout( function() {
+                if ( selectedBefore ) {
+                    li.classList.remove( 'active' );
+                    input.checked = false;
+                    option.selected = false;
+                } else {
+                    li.classList.add( 'active' );
+                    option.selected = true;
+                    input.checked = true;
+                }
 
-            _this.$picker.find( '.selected' ).html( _this._createSelectedStr() );
+                _this.$picker.find( '.selected' ).html( _this._createSelectedStr() );
 
-            $select.trigger( 'change' );
+                select.dispatchEvent( new Event( 'change' ) );
+            }, 10 );
+
         } )
-        // Enter/Space keys
         .on( 'keydown', 'li:not(.disabled)', function( e ) {
-            if ( /(13|32)/.test( e.keyCode.toString( 10 ) ) ) {
-                if ( !/(32)/.test( e.keyCode.toString( 10 ) ) ) {
+            var keyCode = e.keyCode.toString( 10 );
+            // Enter/Space keys
+            if ( /(13|32)/.test( keyCode ) ) {
+                if ( !/(32)/.test( keyCode ) ) {
                     e.preventDefault();
                 }
                 var elem = $( ':focus' );
@@ -217,6 +229,11 @@ DesktopSelectpicker.prototype._clickListener = function() {
         .on( 'click', 'li.disabled', function( e ) {
             e.stopPropagation();
             return false;
+        } )
+        .on( 'click', 'a', function( e ) {
+            // Prevent FF from adding empty anchor to URL if checkbox or radiobutton is clicked.
+            // https://github.com/kobotoolbox/enketo-express/issues/1122
+            e.preventDefault();
         } );
 };
 
