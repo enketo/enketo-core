@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- If grid form starts with a disabled question, the first question has no top border.
+
 [4.60.3] - 2018-10-16
 ----------------------
 ##### Fixed

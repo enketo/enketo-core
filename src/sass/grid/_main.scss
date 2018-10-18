@@ -23,6 +23,7 @@ body {
 }
 
 .question {
+
     input[type=radio],
     input[type=checkbox] {
         border-width: 1px;
@@ -55,6 +56,7 @@ h4+.or-repeat {
     background: #ffffff;
     margin: 0 -1px 0 0;
     padding: 12px $q-pad-side $q-pad-side $q-pad-side; // collapse icon positioning;
+
     &::before {
         margin-top: 14px;
     }
@@ -96,7 +98,9 @@ h4+.or-repeat {
 }
 
 // top-level data-group (without title) that is the first element after the form title
-.or>#form-title+.or-group-data {
+.or>#form-title+.or-group-data,
+.or>.disabled:first-of-type+.or-group-data,
+.or>.disabled:first-of-type~.disabled+.or-group-data {
     border-top: $grid-border;
 }
 
@@ -118,7 +122,7 @@ h4+.or-repeat {
     border-bottom: 2px solid black;
 }
 
-// griddable elements - ie. wrappers around questions and notes
+// gridable elements - ie. wrappers around questions and notes
 .question {
     @include flex(1, 1);
     @include border-box;
@@ -213,7 +217,9 @@ h4+.or-repeat {
 
     .file-feedback {
         order: 4;
-    } // the use of the :not(.ignore) selector may not work forever
+    }
+
+    // the use of the :not(.ignore) selector may not work forever
     // but so far only those input inside widgets have that class
     input:not(.ignore),
     textarea,
@@ -256,6 +262,7 @@ h4+.or-repeat {
 }
 
 .touch {
+
     input[type=text],
     input[type=tel],
     input[type=password],
@@ -321,6 +328,7 @@ h4+.or-repeat {
             padding-left: 0;
             padding-right: 4px;
         }
+
         .remove {
             margin-left: -20px;
         }
@@ -390,6 +398,7 @@ screen and (min-width: 600px) {
         .or-appearance-w#{$total} {
             //default total of 4 if not provided
             @include flex_IEhack($total, $default-grid-width); //the actual proper grid
+
             @for $width from 1 through $total {
                 .or-appearance-w#{$width} {
                     @include flex_IEhack($width, $total);
@@ -401,6 +410,7 @@ screen and (min-width: 600px) {
 
 @media print,
 screen and (min-width: 1100px) and (max-width: 1200px) {
+
     // correction
     .paper .or .form-logo {
         margin-top: 0;

@@ -430,7 +430,7 @@ describe( 'getXPath', function() {
     } );
 } );
 
-describe( 'XPath Evaluator (see github.com/MartijnR/xpathjs_javarosa for comprehensive tests!)', function() {
+describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensive tests!)', function() {
     var i, t = [
             [ '/thedata/nodeB', 'string', null, 0, 'b' ],
             [ '../nodeB', 'string', '/thedata/nodeA', 0, 'b' ],
