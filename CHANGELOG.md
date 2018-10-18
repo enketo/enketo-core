@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Fixed
 - If grid form starts with a disabled question, the first question has no top border.
+- If first page in form is irrelevant upon load, it is still shown (in grayscale).
 
 [4.60.3] - 2018-10-16
 ----------------------

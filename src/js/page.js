@@ -178,6 +178,10 @@ module.exports = {
             //.off( 'changebranch.pagemode' )
             .on( 'changebranch.pagemode', function() {
                 that._updateAllActive();
+                // If the current page has become inactive (e.g. a form whose first page during load becomes irrelevant)
+                if ( that.$activePages.get().indexOf( that.$current[ 0 ] ) === -1 ) {
+                    that._next();
+                }
                 that._toggleButtons();
             } );
     },
@@ -248,11 +252,8 @@ module.exports = {
             } );
     },
     _prev: function() {
-        var prev;
-        var currentIndex;
-
-        currentIndex = this._getCurrentIndex();
-        prev = this._getPrev( currentIndex );
+        var currentIndex = this._getCurrentIndex();
+        var prev = this._getPrev( currentIndex );
 
         if ( prev ) {
             this._flipTo( prev, currentIndex - 1 );
