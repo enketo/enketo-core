@@ -23,6 +23,7 @@ var $ = require( 'jquery' );
 var Widget = require( '../../js/Widget' );
 var support = require( '../../js/support' );
 var domUtils = require( '../../js/dom-utils' );
+var event = require( '../../js/event' );
 var t = require( 'enketo/translator' ).t;
 var pluginName = 'desktopSelectpicker';
 require( '../../js/dropdown.jquery' );
@@ -206,8 +207,7 @@ DesktopSelectpicker.prototype._clickListener = function() {
                 }
 
                 _this.$picker.find( '.selected' ).html( _this._createSelectedStr() );
-
-                select.dispatchEvent( new Event( 'change' ) );
+                select.dispatchEvent( new event.Change() );
             }, 10 );
 
         } )

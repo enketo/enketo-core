@@ -14,7 +14,12 @@ function Removed( detail ) {
     return new CustomEvent( 'removed', { detail: detail } );
 }
 
+function Change() {
+    return new Event( 'change', { bubbles: true } );
+}
+
 module.exports = {
     DataUpdate: DataUpdate,
-    Removed: Removed
+    Removed: Removed,
+    Change: Change
 };
