@@ -77,24 +77,26 @@ module.exports = {
     // swap language of <select> and <datalist> <option>s
     setSelect: function( select ) {
         var type = select.nodeName.toLowerCase();
+        var question = select.closest( '.question' );
+        var translations = question ? question.querySelector( '.or-option-translations' ) : null;
 
+        if ( !translations ) {
+            return;
+        }
         Array.prototype.slice.call( select.children )
             .filter( function( el ) {
                 return el.matches( 'option' ) && !el.matches( '[value=""], [data-value=""]' );
             } )
             .forEach( function( option ) {
-                var translations = option.closest( '.question' ).querySelector( '.or-option-translations' );
-                if ( translations ) {
-                    var curLabel = type === 'datalist' ? option.value : option.textContent;
-                    var value = type === 'datalist' ? option.dataset.value : option.value;
-                    var translatedOption = translations.querySelector( '.active[data-option-value="' + value + '"]' );
-                    var newLabel = curLabel;
-                    if ( translatedOption && translatedOption.textContent ) {
-                        newLabel = translatedOption.textContent;
-                    }
-                    option.value = value;
-                    option.textContent = newLabel;
+                var curLabel = type === 'datalist' ? option.value : option.textContent;
+                var value = type === 'datalist' ? option.dataset.value : option.value;
+                var translatedOption = translations.querySelector( '.active[data-option-value="' + value + '"]' );
+                var newLabel = curLabel;
+                if ( translatedOption && translatedOption.textContent ) {
+                    newLabel = translatedOption.textContent;
                 }
+                option.value = value;
+                option.textContent = newLabel;
             } );
     }
 };
