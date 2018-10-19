@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Autocomplete widget not updating when form language is changed.
+
 [4.60.4] - 2018-10-19
 ----------------------
 ##### Fixed

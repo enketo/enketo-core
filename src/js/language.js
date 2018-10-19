@@ -69,24 +69,32 @@ module.exports = {
         window.enketoFormLocale = lang;
 
         this.form.view.$.find( 'select, datalist' ).each( function() {
-            that.setSelect( $( this ) );
+            that.setSelect( this );
         } );
 
         this.form.view.$.trigger( 'changelanguage' );
     },
     // swap language of <select> and <datalist> <option>s
-    setSelect: function( $select ) {
-        var value;
-        var /** @type {string} */ curLabel;
-        var /** @type {string} */ newLabel;
-        $select.children( 'option' ).not( '[value=""], [data-value=""]' ).each( function() {
-            var $option = $( this );
-            curLabel = $option.text();
-            value = $option.attr( 'value' ) || $option[ 0 ].dataset.value;
-            newLabel = $option.closest( '.question' ).find( '.or-option-translations' )
-                .children( '.active[data-option-value="' + value + '"]' ).text().trim();
-            newLabel = ( typeof newLabel !== 'undefined' && newLabel.length > 0 ) ? newLabel : curLabel;
-            $option.text( newLabel );
-        } );
+    setSelect: function( select ) {
+        var type = select.nodeName.toLowerCase();
+
+        Array.prototype.slice.call( select.children )
+            .filter( function( el ) {
+                return el.matches( 'option' ) && !el.matches( '[value=""], [data-value=""]' );
+            } )
+            .forEach( function( option ) {
+                var translations = option.closest( '.question' ).querySelector( '.or-option-translations' );
+                if ( translations ) {
+                    var curLabel = type === 'datalist' ? option.value : option.textContent;
+                    var value = type === 'datalist' ? option.dataset.value : option.value;
+                    var translatedOption = translations.querySelector( '.active[data-option-value="' + value + '"]' );
+                    var newLabel = curLabel;
+                    if ( translatedOption && translatedOption.textContent ) {
+                        newLabel = translatedOption.textContent;
+                    }
+                    option.value = value;
+                    option.textContent = newLabel;
+                }
+            } );
     }
 };
