@@ -1,1 +1,259 @@
-<?xml version="1.0"?><h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><h:head><h:title>pages</h:title><model><itext><translation lang="Dutch (nl)"><text id="/pages/i:label"><value>Groep fl label</value></text><text id="/pages/c:label"><value>Groep</value></text><text id="/pages/f/g:label"><value>Int def</value></text><text id="/pages/f/h:label"><value>Tekst def</value></text><text id="/pages/c/d:label"><value>Tekst abc</value></text><text id="/pages/l/n:label"><value>Tekst ddd</value></text><text id="/pages/i/k:label"><value>Tekst dgg</value></text><text id="/pages/r/s:label"><value>Herhaal Groep label</value></text><text id="/pages/b:label"><value>Noot</value></text><text id="/pages/p/q:label"><value>Reeks ccc</value></text><text id="/pages/tr:label"><value>Trekker</value></text><text id="/pages/i/j:label"><value>int dgg</value></text><text id="/pages/r:label"><value>Herhaal fl label</value></text><text id="/pages/p:label"><value>Herhaal fl label</value></text><text id="/pages/l/o:label"><value>Tekst ddd</value></text><text id="/pages/z:label"><value>Laatste</value></text><text id="/pages/r/s/t:label"><value>Reeks ccc</value></text><text id="/pages/c/e:label"><value>Int abc</value></text><text id="/pages/l/m:label"><value>Reeks abc</value></text></translation><translation default="true()" lang="English (en)"><text id="/pages/i:label"><value>Group fl label</value></text><text id="/pages/c:label"><value>Group</value></text><text id="/pages/f/g:label"><value>Int def</value></text><text id="/pages/f/h:label"><value>Text def</value></text><text id="/pages/c/d:label"><value>Text abc</value></text><text id="/pages/l/n:label"><value>Text ddd</value></text><text id="/pages/i/k:label"><value>Text dgg</value></text><text id="/pages/r/s:label"><value>Repeat Group label</value></text><text id="/pages/b:label"><value>Note</value></text><text id="/pages/p/q:label"><value>Range ccc</value></text><text id="/pages/tr:label"><value>Trigger</value></text><text id="/pages/i/j:label"><value>Int dgg</value></text><text id="/pages/r:label"><value>Repeat fl label</value></text><text id="/pages/p:label"><value>Repeat fl label</value></text><text id="/pages/l/o:label"><value>Text eee</value></text><text id="/pages/z:label"><value>Last</value></text><text id="/pages/r/s/t:label"><value>Range ccc</value></text><text id="/pages/c/e:label"><value>Int abc</value></text><text id="/pages/l/m:label"><value>Range abc</value></text></translation></itext><instance><pages id="pages"><a/><b/><tr/><c><d/><e/></c><f><g/><h/></f><i><j/><k/></i><l jr:template=""><m/><n/><o/></l><p jr:template=""><q/></p><r jr:template=""><s><t/></s></r><z/><meta><instanceID/></meta></pages></instance><bind calculate="1 + 1" nodeset="/pages/a" type="string"/><bind nodeset="/pages/b" readonly="true()" relevant=" /pages/tr  != 'OK'" type="string"/><bind nodeset="/pages/c/d" relevant=" /pages/tr  != 'OK'" type="string"/><bind nodeset="/pages/c/e" type="int"/><bind nodeset="/pages/f" relevant=" /pages/tr  != 'OK'"/><bind nodeset="/pages/f/g" type="int"/><bind nodeset="/pages/f/h" type="string"/><bind nodeset="/pages/i" relevant=" /pages/tr  != 'OK'"/><bind nodeset="/pages/i/j" type="int"/><bind nodeset="/pages/i/k" type="string"/><bind nodeset="/pages/l/m" type="int"/><bind nodeset="/pages/l/n" type="string"/><bind nodeset="/pages/l/o" type="string"/><bind nodeset="/pages/p" relevant=" /pages/tr  != 'OK'"/><bind nodeset="/pages/p/q" type="int"/><bind nodeset="/pages/r" relevant=" /pages/tr  != 'OK'"/><bind nodeset="/pages/r/s/t" type="int"/><bind nodeset="/pages/z" relevant=" /pages/tr  != 'OK'" type="string"/><bind calculate="concat('uuid:', uuid())" nodeset="/pages/meta/instanceID" readonly="true()" type="string"/></model></h:head><h:body class="pages"><input ref="/pages/b"><label ref="jr:itext('/pages/b:label')"/></input><trigger ref="/pages/tr"><label ref="jr:itext('/pages/tr:label')"/></trigger><group ref="/pages/c"><label ref="jr:itext('/pages/c:label')"/><input ref="/pages/c/d"><label ref="jr:itext('/pages/c/d:label')"/></input><input ref="/pages/c/e"><label ref="jr:itext('/pages/c/e:label')"/></input></group><group appearance="field-list" ref="/pages/f"><input ref="/pages/f/g"><label ref="jr:itext('/pages/f/g:label')"/></input><input ref="/pages/f/h"><label ref="jr:itext('/pages/f/h:label')"/></input></group><group appearance="field-list" ref="/pages/i"><label ref="jr:itext('/pages/i:label')"/><input ref="/pages/i/j"><label ref="jr:itext('/pages/i/j:label')"/></input><input ref="/pages/i/k"><label ref="jr:itext('/pages/i/k:label')"/></input></group><group ref="/pages/l"><label></label><repeat appearance="field-list" nodeset="/pages/l"><range end="10" ref="/pages/l/m" start="1" step="1"><label ref="jr:itext('/pages/l/m:label')"/></range><input ref="/pages/l/n"><label ref="jr:itext('/pages/l/n:label')"/></input><input ref="/pages/l/o"><label ref="jr:itext('/pages/l/o:label')"/></input></repeat></group><group ref="/pages/p"><label ref="jr:itext('/pages/p:label')"/><repeat appearance="field-list" nodeset="/pages/p"><range end="10" ref="/pages/p/q" start="1" step="1"><label ref="jr:itext('/pages/p/q:label')"/></range></repeat></group><group ref="/pages/r"><label ref="jr:itext('/pages/r:label')"/><repeat appearance="field-list" nodeset="/pages/r"><group ref="/pages/r/s"><label ref="jr:itext('/pages/r/s:label')"/><range end="10" ref="/pages/r/s/t" start="1" step="1"><label ref="jr:itext('/pages/r/s/t:label')"/></range></group></repeat></group><input ref="/pages/z"><label ref="jr:itext('/pages/z:label')"/></input></h:body></h:html>
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>pages</h:title>
+        <model>
+            <itext>
+                <translation lang="Dutch (nl)">
+                    <text id="/pages/i:label">
+                        <value>Groep fl label</value>
+                    </text>
+                    <text id="/pages/c:label">
+                        <value>Groep</value>
+                    </text>
+                    <text id="/pages/f/g:label">
+                        <value>Int def</value>
+                    </text>
+                    <text id="/pages/f/h:label">
+                        <value>Tekst def</value>
+                    </text>
+                    <text id="/pages/c/d:label">
+                        <value>Tekst abc</value>
+                    </text>
+                    <text id="/pages/l/n:label">
+                        <value>Tekst ddd</value>
+                    </text>
+                    <text id="/pages/i/k:label">
+                        <value>Tekst dgg</value>
+                    </text>
+                    <text id="/pages/r/s:label">
+                        <value>Herhaal Groep label</value>
+                    </text>
+                    <text id="/pages/b:label">
+                        <value>Noot</value>
+                    </text>
+                    <text id="/pages/p/q:label">
+                        <value>Reeks ccc</value>
+                    </text>
+                    <text id="/pages/tr:label">
+                        <value>Trekker</value>
+                    </text>
+                    <text id="/pages/i/j:label">
+                        <value>int dgg</value>
+                    </text>
+                    <text id="/pages/r:label">
+                        <value>Herhaal fl label</value>
+                    </text>
+                    <text id="/pages/p:label">
+                        <value>Herhaal fl label</value>
+                    </text>
+                    <text id="/pages/l/o:label">
+                        <value>Tekst ddd</value>
+                    </text>
+                    <text id="/pages/z:label">
+                        <value>Laatste</value>
+                    </text>
+                    <text id="/pages/r/s/t:label">
+                        <value>Reeks ccc</value>
+                    </text>
+                    <text id="/pages/c/e:label">
+                        <value>Int abc</value>
+                    </text>
+                    <text id="/pages/l/m:label">
+                        <value>Reeks abc</value>
+                    </text>
+                </translation>
+                <translation default="true()" lang="English (en)">
+                    <text id="/pages/i:label">
+                        <value>Group fl label</value>
+                    </text>
+                    <text id="/pages/c:label">
+                        <value>Group</value>
+                    </text>
+                    <text id="/pages/f/g:label">
+                        <value>Int def</value>
+                    </text>
+                    <text id="/pages/f/h:label">
+                        <value>Text def</value>
+                    </text>
+                    <text id="/pages/c/d:label">
+                        <value>Text abc</value>
+                    </text>
+                    <text id="/pages/l/n:label">
+                        <value>Text ddd</value>
+                    </text>
+                    <text id="/pages/i/k:label">
+                        <value>Text dgg</value>
+                    </text>
+                    <text id="/pages/r/s:label">
+                        <value>Repeat Group label</value>
+                    </text>
+                    <text id="/pages/b:label">
+                        <value>Note</value>
+                    </text>
+                    <text id="/pages/p/q:label">
+                        <value>Range ccc</value>
+                    </text>
+                    <text id="/pages/tr:label">
+                        <value>Trigger</value>
+                    </text>
+                    <text id="/pages/i/j:label">
+                        <value>Int dgg</value>
+                    </text>
+                    <text id="/pages/r:label">
+                        <value>Repeat fl label</value>
+                    </text>
+                    <text id="/pages/p:label">
+                        <value>Repeat fl label</value>
+                    </text>
+                    <text id="/pages/l/o:label">
+                        <value>Text eee</value>
+                    </text>
+                    <text id="/pages/z:label">
+                        <value>Last</value>
+                    </text>
+                    <text id="/pages/r/s/t:label">
+                        <value>Range ccc</value>
+                    </text>
+                    <text id="/pages/c/e:label">
+                        <value>Int abc</value>
+                    </text>
+                    <text id="/pages/l/m:label">
+                        <value>Range abc</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <pages id="pages">
+                    <a/>
+                    <b/>
+                    <tr/>
+                    <c>
+                        <d/>
+                        <e/>
+                    </c>
+                    <f>
+                        <g/>
+                        <h/>
+                    </f>
+                    <i>
+                        <j/>
+                        <k/>
+                    </i>
+                    <l jr:template="">
+                        <m/>
+                        <n/>
+                        <o/>
+                    </l>
+                    <p jr:template="">
+                        <q/>
+                    </p>
+                    <r jr:template="">
+                        <s>
+                            <t/>
+                        </s>
+                    </r>
+                    <z/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </pages>
+            </instance>
+            <bind calculate="1 + 1" nodeset="/pages/a" type="string"/>
+            <bind nodeset="/pages/b" readonly="true()" relevant=" /pages/tr != 'OK'" type="string"/>
+            <bind nodeset="/pages/c/d" relevant=" /pages/tr != 'OK'" type="string"/>
+            <bind nodeset="/pages/c/e" type="int"/>
+            <bind nodeset="/pages/f" relevant=" /pages/tr != 'OK'"/>
+            <bind nodeset="/pages/f/g" type="int"/>
+            <bind nodeset="/pages/f/h" type="string"/>
+            <bind nodeset="/pages/i" relevant=" /pages/tr != 'OK'"/>
+            <bind nodeset="/pages/i/j" type="int"/>
+            <bind nodeset="/pages/i/k" type="string"/>
+            <bind nodeset="/pages/l/m" type="int"/>
+            <bind nodeset="/pages/l/n" type="string"/>
+            <bind nodeset="/pages/l/o" type="string"/>
+            <bind nodeset="/pages/p" relevant=" /pages/tr != 'OK'"/>
+            <bind nodeset="/pages/p/q" type="int"/>
+            <bind nodeset="/pages/r" relevant=" /pages/tr != 'OK'"/>
+            <bind nodeset="/pages/r/s/t" type="int"/>
+            <bind nodeset="/pages/z" relevant=" /pages/tr != 'OK'" type="string"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/pages/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body class="pages">
+        <input ref="/pages/b">
+            <label ref="jr:itext('/pages/b:label')"/>
+        </input>
+        <trigger ref="/pages/tr">
+            <label ref="jr:itext('/pages/tr:label')"/>
+        </trigger>
+        <group ref="/pages/c">
+            <label ref="jr:itext('/pages/c:label')"/>
+            <input ref="/pages/c/d">
+                <label ref="jr:itext('/pages/c/d:label')"/>
+            </input>
+            <input ref="/pages/c/e">
+                <label ref="jr:itext('/pages/c/e:label')"/>
+            </input>
+        </group>
+        <group appearance="field-list" ref="/pages/f">
+            <input ref="/pages/f/g">
+                <label ref="jr:itext('/pages/f/g:label')"/>
+            </input>
+            <input ref="/pages/f/h">
+                <label ref="jr:itext('/pages/f/h:label')"/>
+            </input>
+        </group>
+        <group appearance="field-list" ref="/pages/i">
+            <label ref="jr:itext('/pages/i:label')"/>
+            <input ref="/pages/i/j">
+                <label ref="jr:itext('/pages/i/j:label')"/>
+            </input>
+            <input ref="/pages/i/k">
+                <label ref="jr:itext('/pages/i/k:label')"/>
+            </input>
+        </group>
+        <group ref="/pages/l">
+            <label></label>
+            <repeat appearance="field-list" nodeset="/pages/l">
+                <range end="10" ref="/pages/l/m" start="1" step="1">
+                    <label ref="jr:itext('/pages/l/m:label')"/>
+                </range>
+                <input ref="/pages/l/n">
+                    <label ref="jr:itext('/pages/l/n:label')"/>
+                </input>
+                <input ref="/pages/l/o">
+                    <label ref="jr:itext('/pages/l/o:label')"/>
+                </input>
+            </repeat>
+        </group>
+        <group ref="/pages/p">
+            <label ref="jr:itext('/pages/p:label')"/>
+            <repeat appearance="field-list" nodeset="/pages/p">
+                <range end="10" ref="/pages/p/q" start="1" step="1">
+                    <label ref="jr:itext('/pages/p/q:label')"/>
+                </range>
+            </repeat>
+        </group>
+        <group ref="/pages/r">
+            <label ref="jr:itext('/pages/r:label')"/>
+            <repeat appearance="field-list" nodeset="/pages/r">
+                <group ref="/pages/r/s">
+                    <label ref="jr:itext('/pages/r/s:label')"/>
+                    <range end="10" ref="/pages/r/s/t" start="1" step="1">
+                        <label ref="jr:itext('/pages/r/s/t:label')"/>
+                    </range>
+                </group>
+            </repeat>
+        </group>
+        <input ref="/pages/z">
+            <label ref="jr:itext('/pages/z:label')"/>
+        </input>
+    </h:body>
+</h:html>
