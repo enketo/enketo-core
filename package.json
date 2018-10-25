@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "4.60.4",
+    "version": "4.60.5",
     "license": "Apache-2.0",
     "os": [
         "darwin",

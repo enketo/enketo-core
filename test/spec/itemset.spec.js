@@ -347,4 +347,21 @@ describe( 'Itemset functionality', function() {
             expect( $r1.val() ).toEqual( 'cacao coffee' );
         } );
     } );
+
+    describe( 'has experimental support for lang attributes on secondary instances', function() {
+        // As partially proposed here: https://github.com/opendatakit/xforms-spec/issues/88#issuecomment-284489005.
+        // The use case is translation support for external data in itemsets (though it automatically works for internal secondary instances as well)
+        // The reason for this test and experimental support is that this is used in Survey123.
+        // If the proposal does not go anywhere, this could be moved to Survey123 somehow.
+        it( 'translates labels defined with translate()', function() {
+            var form = loadForm( 'secondary-lang.xml' );
+            var loadErrors = form.init();
+            var options = form.view.html.querySelectorAll( 'datalist>option:not(.itemset-template' );
+
+            expect( loadErrors.length ).toEqual( 0 );
+            expect( options.length ).toEqual( 2 );
+            expect( options[ 0 ].value ).toEqual( 'één' );
+            expect( options[ 1 ].value ).toEqual( 'tweo' );
+        } );
+    } );
 } );

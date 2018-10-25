@@ -142,7 +142,7 @@ module.exports = {
                             } );
                             break;
                         case 'langs':
-                            translations = translations.map( function( label ) {
+                            translations = labels.map( function( label ) {
                                 var lang = label.getAttribute( 'lang' );
                                 var active = lang === that.form.langs.getCurrentLang();
                                 return { language: lang, type: 'span', text: label.textContent, active: active };
