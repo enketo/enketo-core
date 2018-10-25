@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Form to test experimental lang attribute on secondary instances (for external CSV)</h:title>
+        <model>
+            <itext>
+                <translation default="true()" lang="Dutch (nl)">
+                    <text id="label-1">
+                        <value>Kies</value>
+                    </text>
+                </translation>
+                <translation lang="English (en)">
+                    <text id="label-1">
+                        <value>Choose</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <secondary-lang id="secondary-lang">
+                    <num/>
+                    <one/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </secondary-lang>
+            </instance>
+            <instance id="ten">
+                <root>
+                    <item>
+                        <label lang="nl">één</label>
+                        <label lang="en">one</label>
+                        <name>1</name>
+                    </item>
+                    <item>
+                        <label>tweo</label>
+                        <name>2</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/secondary-lang/one" type="select1"/>
+            <bind nodeset="/secondary-lang/meta/instanceID" />
+        </model>
+    </h:head>
+    <h:body>
+        <select1 appearance="autocomplete" ref="/secondary-lang/one">
+            <label ref="jr:itext('label-1')"/>
+            <itemset nodeset="instance('ten')/root/item">
+                <value ref="name"/>
+                <label ref="translate(label)"/>
+            </itemset>
+        </select1>
+    </h:body>
+</h:html>
