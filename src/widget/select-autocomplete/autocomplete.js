@@ -1,13 +1,11 @@
-'use strict';
-
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
-var pluginName = 'autocomplete';
-var sadExcuseForABrowser = !( 'list' in document.createElement( 'input' ) &&
+import $ from 'jquery';
+import Widget from '../../js/Widget';
+const pluginName = 'autocomplete';
+const sadExcuseForABrowser = !( 'list' in document.createElement( 'input' ) &&
     'options' in document.createElement( 'datalist' ) &&
     typeof window.HTMLDataListElement !== 'undefined' );
 
-require( './jquery.relevant-dropdown' );
+import './jquery.relevant-dropdown';
 
 /**
  *  Autocomplete select1 picker for modern browsers.
@@ -33,16 +31,16 @@ Selectpicker.prototype = Object.create( Widget.prototype );
 Selectpicker.prototype.constructor = Selectpicker;
 
 Selectpicker.prototype._init = function() {
-    var $input = $( this.element );
-    var listId = $input.attr( 'list' );
+    const $input = $( this.element );
+    const listId = $input.attr( 'list' );
 
     this.props = this._getProps();
-    this.$options = $input.closest( '.question' ).find( 'datalist#' + listId + ' > option' );
+    this.$options = $input.closest( '.question' ).find( `datalist#${listId} > option` );
 
     // This value -> data-value change is not slow, so no need to move to enketo-xslt as that would 
     // increase itemset complexity even further.
-    this.$options.each( function( index, item ) {
-        var value = item.getAttribute( 'value' );
+    this.$options.each( ( index, item ) => {
+        const value = item.getAttribute( 'value' );
         /**
          * We're changing the original datalist here, so have to make sure we don't do anything
          * if dataset.value is already populated.
@@ -57,7 +55,7 @@ Selectpicker.prototype._init = function() {
         }
     } );
 
-    this.$fakeInput = $( '<input type="text" class="ignore widget autocomplete" list="' + listId + '" />' );
+    this.$fakeInput = $( `<input type="text" class="ignore widget autocomplete" list="${listId}" />` );
     if ( this.props.readonly ) {
         this.$fakeInput.attr( 'readonly', 'readonly' );
     }
@@ -85,8 +83,8 @@ Selectpicker.prototype._getProps = function() {
 };
 
 Selectpicker.prototype._showCurrentLabel = function() {
-    var value = this.element.value;
-    var label = this._findLabel( value );
+    const value = this.element.value;
+    const label = this._findLabel( value );
 
     this.$fakeInput.val( label );
 
@@ -98,12 +96,12 @@ Selectpicker.prototype._showCurrentLabel = function() {
 };
 
 Selectpicker.prototype._setFakeInputListener = function() {
-    var that = this;
+    const that = this;
 
-    this.$fakeInput.on( 'input.' + this.namespace, function( e ) {
-        var input = e.target;
-        var label = input.value;
-        var value = that._findValue( label ) || '';
+    this.$fakeInput.on( `input.${this.namespace}`, e => {
+        const input = e.target;
+        const label = input.value;
+        const value = that._findValue( label ) || '';
         if ( that.element.value !== value ) {
             $( that.element ).val( value ).trigger( 'change' );
         }
@@ -112,13 +110,13 @@ Selectpicker.prototype._setFakeInputListener = function() {
 };
 
 Selectpicker.prototype._findValue = function( label ) {
-    var value = '';
+    let value = '';
 
     if ( !label ) {
         return '';
     }
 
-    this.$options.each( function( i, option ) {
+    this.$options.each( ( i, option ) => {
         if ( option.value === label ) {
             value = option.getAttribute( 'data-value' );
             return false;
@@ -129,13 +127,13 @@ Selectpicker.prototype._findValue = function( label ) {
 };
 
 Selectpicker.prototype._findLabel = function( value ) {
-    var label = '';
+    let label = '';
 
     if ( !value ) {
         return '';
     }
 
-    this.$options.each( function( i, option ) {
+    this.$options.each( ( i, option ) => {
         if ( option.dataset.value === value ) {
             label = option.value;
             return false;
@@ -145,16 +143,16 @@ Selectpicker.prototype._findLabel = function( value ) {
 };
 
 Selectpicker.prototype._setFocusListener = function() {
-    var _this = this;
+    const _this = this;
 
     // Handle widget focus
-    this.$fakeInput.on( 'focus', function() {
+    this.$fakeInput.on( 'focus', () => {
         $( _this.element ).trigger( 'fakefocus' );
         return true;
     } );
 
     // Handle original input focus
-    $( this.element ).on( 'applyfocus', function() {
+    $( this.element ).on( 'applyfocus', () => {
         $( _this.$fakeInput ).focus();
     } );
 };
@@ -194,9 +192,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-
-        var $this = $( this ),
-            data = $this.data( pluginName );
+        const $this = $( this );
+        let data = $this.data( pluginName );
 
         //only instantiate if options is an object
         if ( !data && typeof options === 'object' ) {
@@ -208,7 +205,7 @@ $.fn[ pluginName ] = function( options, event ) {
 };
 
 
-module.exports = {
+export default {
     'name': pluginName,
     'list': true,
     'selector': 'input[list]'

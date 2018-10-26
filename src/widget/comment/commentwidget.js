@@ -1,9 +1,7 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var $ = require( 'jquery' );
-var pluginName = 'comment';
-var t = require( 'enketo/translator' ).t;
+import Widget from '../../js/Widget';
+import $ from 'jquery';
+const pluginName = 'comment';
+import { t } from 'enketo/translator';
 
 /**
  * Visually transforms a question into a comment modal that can be shown on its linked question.
@@ -42,17 +40,17 @@ Comment.prototype._init = function() {
 };
 
 Comment.prototype._getLinkedQuestion = function( element ) {
-    var $input = $( element );
-    var contextPath = this.options.helpers.input.getName( $input );
-    var targetPath = element.dataset.for.trim();
-    var absoluteTargetPath = this.options.helpers.pathToAbsolute( targetPath, contextPath );
+    const $input = $( element );
+    const contextPath = this.options.helpers.input.getName( $input );
+    const targetPath = element.dataset.for.trim();
+    const absoluteTargetPath = this.options.helpers.pathToAbsolute( targetPath, contextPath );
     // The root is nearest repeat or otherwise nearest form. This avoids having to calculate indices, without
     // diminishing the flexibility in any meaningful way, 
     // as it e.g. wouldn't make sense to place a comment node for a top-level question, inside a repeat.
-    var $root = $( element ).closest( 'form.or, .or-repeat' );
+    const $root = $( element ).closest( 'form.or, .or-repeat' );
 
     return this.options.helpers.input
-        .getWrapNodes( $root.find( '[name="' + absoluteTargetPath + '"], [data-name="' + absoluteTargetPath + '"]' ) )
+        .getWrapNodes( $root.find( `[name="${absoluteTargetPath}"], [data-name="${absoluteTargetPath}"]` ) )
         .eq( 0 );
 };
 
@@ -67,8 +65,8 @@ Comment.prototype._setCommentButtonState = function( value, error ) {
 };
 
 Comment.prototype._setCommentButtonHandler = function() {
-    var that = this;
-    this.$commentButton.click( function() {
+    const that = this;
+    this.$commentButton.click( () => {
         if ( that._isCommentModalShown( that.$linkedQuestion ) ) {
             that._hideCommentModal( that.$linkedQuestion );
         } else {
@@ -79,39 +77,37 @@ Comment.prototype._setCommentButtonHandler = function() {
 };
 
 Comment.prototype._setValidationHandler = function() {
-    var that = this;
-    $( 'form.or' ).on( 'validationcomplete.enketo', function() {
-        var error = that._commentHasError();
-        var value = that.element.value;
+    const that = this;
+    $( 'form.or' ).on( 'validationcomplete.enketo', () => {
+        const error = that._commentHasError();
+        const value = that.element.value;
         that._setCommentButtonState( value, error );
     } );
 };
 
 Comment.prototype._setFocusHandler = function() {
-    var that = this;
-    $( this.element ).on( 'applyfocus', function() {
+    const that = this;
+    $( this.element ).on( 'applyfocus', () => {
         if ( that.$commentButton.is( ':visible' ) ) {
             that.$commentButton.click();
         } else {
-            console.log( 'The linked question is not visible. Cannot apply focus to ' + that.element.getAttribute( 'name' ) );
+            console.log( `The linked question is not visible. Cannot apply focus to ${that.element.getAttribute( 'name' )}` );
         }
     } );
 };
 
-Comment.prototype._isCommentModalShown = function( $linkedQuestion ) {
-    return $linkedQuestion.find( '.or-comment-widget' ).length === 1;
-};
+Comment.prototype._isCommentModalShown = $linkedQuestion => $linkedQuestion.find( '.or-comment-widget' ).length === 1;
 
 Comment.prototype._showCommentModal = function() {
-    var $widget;
-    var $content;
-    var $input;
-    var $overlay;
-    var that = this;
-    var $comment = $( this.element ).closest( '.question' ).clone( false );
-    var updateText = t( 'widget.comment.update' ) || 'Update';
-    var $updateButton = $( '<button class="btn btn-primary or-comment-widget__content__btn-update" type="button">' + updateText + '</button>' );
-    var $closeButton = $( '<button class="btn-icon-only or-comment-widget__content__btn-close-x" type="button">&times;</button>' );
+    let $widget;
+    let $content;
+    let $input;
+    let $overlay;
+    const that = this;
+    const $comment = $( this.element ).closest( '.question' ).clone( false );
+    const updateText = t( 'widget.comment.update' ) || 'Update';
+    const $updateButton = $( `<button class="btn btn-primary or-comment-widget__content__btn-update" type="button">${updateText}</button>` );
+    const $closeButton = $( '<button class="btn-icon-only or-comment-widget__content__btn-close-x" type="button">&times;</button>' );
 
     $input = $comment
         .removeClass( 'hide' )
@@ -136,9 +132,9 @@ Comment.prototype._showCommentModal = function() {
 
     $widget.get( 0 ).scrollIntoView( false );
 
-    $updateButton.on( 'click', function() {
-        var error;
-        var value = $input.val();
+    $updateButton.on( 'click', () => {
+        let error;
+        const value = $input.val();
         $( that.element ).val( value ).trigger( 'change' );
         error = that._commentHasError();
         that._setCommentButtonState( value, error );
@@ -157,13 +153,13 @@ Comment.prototype._showCommentModal = function() {
         return false;
     } );
 
-    $closeButton.add( $overlay ).on( 'click', function() {
+    $closeButton.add( $overlay ).on( 'click', () => {
         that._hideCommentModal( that.$linkedQuestion );
         return false;
     } );
 };
 
-Comment.prototype._hideCommentModal = function( $linkedQuestion ) {
+Comment.prototype._hideCommentModal = $linkedQuestion => {
     $linkedQuestion
         .find( '.or-comment-widget' ).remove().end()
         .prev( '.or-comment-widget__overlay' ).remove();
@@ -174,8 +170,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
+        const $this = $( this );
+        const data = $this.data( pluginName );
 
         if ( !data && typeof options === 'object' ) {
             $this.data( pluginName, new Comment( this, options, event ) );
@@ -185,7 +181,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': '.or-appearance-comment input[type="text"][data-for], .or-appearance-comment textarea[data-for]',
     'helpersRequired': [ 'input', 'pathToAbsolute' ]

@@ -16,18 +16,19 @@ Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://
 5. Main methods illustrated in code below:
 
 ```javascript 
-var Form = require('enketo-core');
+// assumes the enketo-core package is mapped from the node_modules folder
+import { Form } from 'enketo-core';
 
 // The XSL transformation result contains a HTML Form and XML instance.
 // These can be obtained dynamically on the client, or at the server/
 // In this example we assume the HTML was injected at the server and modelStr 
 // was injected as a global variable inside a <script> tag.
 
-// required string of the jquery selector of the HTML Form DOM element
-var formSelector = 'form.or:eq(0)';
+// required string of the selector of the HTML Form DOM element
+const formSelector = 'form.or';
 
 // required object containing data for the form
-var data = {
+ const data = {
   // required string of the default instance defined in the XForm
   modelStr: globalXMLInstance,
   // optional string of an existing instance to be edited
@@ -45,15 +46,15 @@ var data = {
 };
 
 // Form-specific configuration
-var options = {
+const options = {
   clearIrrelevantImmediately: true  // this is the default, it can be omitted
 }
 
 // Instantiate a form, with 2 parameters
-var form = new Form( formSelector, data, options);
+const form = new Form( formSelector, data, options);
 
 // Initialize the form and capture any load errors
-var loadErrors = form.init();
+let loadErrors = form.init();
 
 // If desired, scroll to a specific question with any XPath location expression,
 // and aggregate any loadErrors.
@@ -68,7 +69,7 @@ $( '#submit' ).on( 'click', function() {
         alert( 'Form contains errors. Please see fields marked in red.' );
       } else {
         // Record is valid! 
-        var record = form.getDataStr();
+        const record = form.getDataStr();
 
         // reset the form view
         form.resetView();
@@ -83,7 +84,7 @@ $( '#submit' ).on( 'click', function() {
 
 ```
 
-### Browser support
+### Modern Browser support
 
 The following browsers are officially supported:
 * latest Android webview on latest Android OS
@@ -95,21 +96,20 @@ The following browsers are officially supported:
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
-#### Enabling support for Internet Explorer 11
+#### Internet Explorer 11
 
-You can enable support for Internet Explorer 11 by:
+Internet Explorer 11 is not supported and not tested. Until we completely let go of this ancient browser some time in 2019, you may have some success with running Enketo Core-powered forms in IE11 by:
 
 1. Importing the `_iefix.scss` files in the theme entry files. These are commented out in the default CSS builds for the 3 themes. 
-2. Including polyfills using a script tag with the `nomodule` attribute (which will prevent loading this file on modern browsers). See [/build/index.html](./build/index.html) for an example using a polyfill service + additional polyfill file(s) that is regularly tested.
-3. Optionally, require [/src/js/workarounds-ie11.js](./src/js/workarounds-ie11.js) in your applications's JS entry point if the (numbered) features in that file are important.
+2. Including polyfills using a script tag with the `nomodule` attribute (which will prevent loading this file on modern browsers). See [/build/index.html](./build/index.html) for an example using a polyfill service + additional polyfill file(s) that is tested occasionally.
+3. Creating a special IE11 build (using Babel) that transpiles Enketo Core's modern syntax to old syntax and (optionally) includes [js/src/workarounds-ie11.js](./sjs/src/workarounds-ie11). See the `compile-ie11` build task in the Gruntfile for an example.
+4. Use loading tricks to avoid loading the IE11 build in modern browsers and avoid executing the modern build in IE11. See [build/index.html](./build.index.html) for a possible approach.
 
-**Heads up! In the near future, you will also have to create a special JS build for IE11 using Babel.**
-
-Note that forms will load extremely slowly in IE11 compared to modern browsers. This performance gap will become wider and wider as we move to modern JS syntax (Enketo on IE11 will become _slower_, whilst on modern browsers it will become _faster_).
+Note that as we convert more and more code to modern syntax forms on IE11 will become progressively _slower_. For any issues specific to IE11, we encourage you to create a PR. We likely will not prioritize IE11 issues, even if we have funding, because of the psychological distress caused by working on such an old browser.
 
 ### Global Configuration
 
-Global configuration (per app) is done in [config.json](./config.json) which is meant to be overriden by a config file in your own application (e.g. by using aliasify).
+Global configuration (per app) is done in [config.json](./config.json) which is meant to be overridden by a config file in your own application (e.g. by using rollup).
 
 #### maps
 The `maps` configuration can include an array of Mapbox TileJSON objects (or a subset of these with at least a `name`,  `tiles` (array) and an `attribution` property, and optionally `maxzoom` and `minzoom`). You can also mix and match Google Maps layers. Below is an example of a mix of two map layers provided by OSM (in TileJSON format) and Google maps.

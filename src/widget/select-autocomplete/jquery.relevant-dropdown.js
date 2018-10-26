@@ -1,15 +1,12 @@
 // from: https://github.com/CSS-Tricks/Relevant-Dropdowns/blob/master/js/jquery.relevant-dropdown.js
 
-var $ = require( 'jquery' );
-var pluginName = 'relevantDropdown';
+import $ from 'jquery';
+
+const pluginName = 'relevantDropdown';
 
 // Make jQuery's :contains case insensitive (like HTML5 datalist)
 // Changed the name to prevent overriding original functionality
-$.expr[ ':' ].RD_contains = $.expr.createPseudo( function( arg ) {
-    return function( elem ) {
-        return $( elem ).text().toUpperCase().indexOf( arg.toUpperCase() ) >= 0;
-    };
-} );
+$.expr[ ':' ].RD_contains = $.expr.createPseudo( arg => elem => $( elem ).text().toUpperCase().indexOf( arg.toUpperCase() ) >= 0 );
 
 function RelevantDropdown( element, options, e ) {
     this.namespace = pluginName;
@@ -27,7 +24,7 @@ function RelevantDropdown( element, options, e ) {
 }
 
 RelevantDropdown.prototype._init = function() {
-    var $input = $( this.element );
+    const $input = $( this.element );
     this.listId = $input.attr( 'list' );
 
     // Insert home for new fake datalist
@@ -42,10 +39,10 @@ RelevantDropdown.prototype._init = function() {
 
 RelevantDropdown.prototype._updateFakeDatalist = function() {
     //console.log( 'changing options' );
-    var $datalist = $( '#' + this.listId );
+    const $datalist = $( `#${this.listId}` );
     // Used to prevent reflow
-    var tempItems = document.createDocumentFragment();
-    var tempitem = null;
+    const tempItems = document.createDocumentFragment();
+    const tempitem = null;
 
     this.$fakeDatalist.empty();
 
@@ -67,23 +64,23 @@ RelevantDropdown.prototype._updateFakeDatalist = function() {
 };
 
 RelevantDropdown.prototype._setEventListeners = function() {
-    var that = this;
-    var $input = $( this.element );
+    const that = this;
+    const $input = $( this.element );
 
-    var searchPosition;
-    var scrollValue = 0;
+    let searchPosition;
+    let scrollValue = 0;
     // Typey type type
     $input
-        .on( 'focus', function() {
+        .on( 'focus', () => {
             //console.debug( 'focus', this );
             // Reset scroll
             that.$fakeDatalist.scrollTop( 0 );
             scrollValue = 0;
         } )
-        .on( 'blur', function() {
+        .on( 'blur', () => {
             //console.debug( 'blur', this );
             // If this fires immediately, it prevents click-to-select from working
-            setTimeout( function() {
+            setTimeout( () => {
                 that.$fakeDatalist.fadeOut( that.options.fadeOutSpeed );
                 that.$fakeDatalistItems.removeClass( 'active' );
             }, 500 );
@@ -102,7 +99,7 @@ RelevantDropdown.prototype._setEventListeners = function() {
 
             that.$fakeDatalistItems.hide();
             // console.log( 'finding items containing', $input.val() ) );
-            that.$fakeDatalist.find( 'li:RD_contains("' + $input.val() + '")' ).show();
+            that.$fakeDatalist.find( `li:RD_contains("${$input.val()}")` ).show();
         } );
 
     // Don't want to use :hover in CSS so doing this instead
@@ -130,11 +127,11 @@ RelevantDropdown.prototype._setEventListeners = function() {
     } );
 
     // Watch arrow keys for up and down
-    $input.on( 'keydown', function( e ) {
+    $input.on( 'keydown', e => {
         // console.debug( 'keydown' );
-        var active = that.$fakeDatalist.find( 'li.active' );
-        var datalistHeight = that.$fakeDatalist.outerHeight();
-        var datalistItemsHeight = that.$fakeDatalistItems.outerHeight();
+        const active = that.$fakeDatalist.find( 'li.active' );
+        const datalistHeight = that.$fakeDatalist.outerHeight();
+        const datalistItemsHeight = that.$fakeDatalistItems.outerHeight();
 
         // up arrow
         if ( e.keyCode == 38 ) {
@@ -154,7 +151,7 @@ RelevantDropdown.prototype._setEventListeners = function() {
         // down arrow
         if ( e.keyCode == 40 ) {
             if ( active.length ) {
-                var nextAll = active.nextAll( 'li:visible' );
+                const nextAll = active.nextAll( 'li:visible' );
                 if ( nextAll.length > 0 ) {
                     active.removeClass( 'active' );
                     nextAll.eq( 0 ).addClass( 'active' );
@@ -196,7 +193,7 @@ RelevantDropdown.prototype._setEventListeners = function() {
     // When choosing from dropdown
     this.$fakeDatalist.on( 'click', 'li', function() {
         // console.debug( 'click', this );
-        var active = $( 'li.active' );
+        const active = $( 'li.active' );
         if ( active.length ) {
             $input.val( $( this ).text() ).trigger( 'input' );
         }
@@ -215,8 +212,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
+        const $this = $( this );
+        let data = $this.data( pluginName );
 
         //only instantiate if options is an object
         if ( !data && typeof options === 'object' ) {

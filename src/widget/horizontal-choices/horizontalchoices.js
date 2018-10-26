@@ -1,12 +1,12 @@
-'use strict';
 /**
  * Horizontal Choices Widget
  *
  */
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
+import $ from 'jquery';
 
-var pluginName = 'horizontalChoices';
+import Widget from '../../js/Widget';
+
+const pluginName = 'horizontalChoices';
 
 /**
  * Horizontal Choices Widgets. Adds a filler if the last row contains two elements.
@@ -32,9 +32,9 @@ HorizontalChoices.prototype.constructor = HorizontalChoices;
 
 HorizontalChoices.prototype._init = function() {
     $( this.element ).find( '.option-wrapper' ).each( function() {
-        var COLUMNS = 3;
-        var $wrapper = $( this );
-        var fillers = COLUMNS - $wrapper.find( 'label' ).length % COLUMNS;
+        const COLUMNS = 3;
+        const $wrapper = $( this );
+        let fillers = COLUMNS - $wrapper.find( 'label' ).length % COLUMNS;
 
         while ( fillers < COLUMNS && fillers > 0 ) {
             $wrapper.append( '<label class="filler"></label>' );
@@ -51,7 +51,7 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this ),
+        const $this = $( this ),
             data = $this.data( pluginName );
 
         //only instantiate if options is an object (i.e. not a string) and if it doesn't exist already
@@ -66,7 +66,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': '.or-appearance-horizontal'
 };

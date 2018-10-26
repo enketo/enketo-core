@@ -3,11 +3,9 @@
  * When using enketo-core in your own app, you'd want to replace
  * this build file with one of your own in your project root.
  */
-'use strict';
+const nodeSass = require( 'node-sass' );
 
-var nodeSass = require( 'node-sass' );
-
-module.exports = function( grunt ) {
+module.exports = grunt => {
     // show elapsed time at the end
     require( 'time-grunt' )( grunt );
     // load all grunt tasks
@@ -66,7 +64,7 @@ module.exports = function( grunt ) {
             },
             js: {
                 files: [ 'config.json', '*.js', 'src/**/*.js' ],
-                tasks: [ 'browserify' ],
+                tasks: [ 'shell:rollup' ],
                 options: {
                     spawn: false,
                     livereload: true
@@ -96,7 +94,7 @@ module.exports = function( grunt ) {
             options: {
                 implementation: nodeSass,
                 sourceMap: false,
-                importer: function( url, prev, done ) {
+                importer( url, prev, done ) {
                     // Fixes enketo-core submodule references.
                     // Those references are correct in apps that use enketo-core as a submodule.
                     url = ( /\.\.\/\.\.\/node_modules\//.test( url ) ) ? url.replace( '../../node_modules/', 'node_modules/' ) : url;
@@ -108,8 +106,8 @@ module.exports = function( grunt ) {
                 // See https://github.com/enketo/enketo-core/issues/439
                 functions: {
                     'base64-url($mimeType, $data)': function( mimeType, data ) {
-                        var base64 = new Buffer( data.getValue() ).toString( 'base64' );
-                        var urlString = 'url("data:' + mimeType.getValue() + ';base64,' + base64 + '")';
+                        const base64 = new Buffer( data.getValue() ).toString( 'base64' );
+                        const urlString = `url("data:${mimeType.getValue()};base64,${base64}")`;
                         return nodeSass.types.String( urlString );
                     }
                 }
@@ -125,58 +123,55 @@ module.exports = function( grunt ) {
                 extDot: 'last'
             }
         },
-        browserify: {
-            standalone: {
-                files: {
-                    'build/js/enketo-bundle.js': [ 'app.js' ],
-                    'build/js/obscure-ie11-polyfills.js': [ 'src/js/obscure-ie11-polyfills.js' ]
-                },
-            },
-            options: {
-                alias: {},
-            },
-        },
         shell: {
             transformer: {
                 command: 'node node_modules/enketo-transformer/app.js'
             },
+            rollup: {
+                command: 'npx rollup --config'
+            },
+            babel: {
+                command: 'npx babel build/js/enketo-bundle.js --out-file build/js/enketo-ie11-temp-bundle.js'
+            },
+            browserify: {
+                command: 'npx browserify src/js/workarounds-ie11.js build/js/enketo-ie11-temp-bundle.js -o build/js/enketo-ie11-bundle.js'
+            }
         }
     } );
 
     grunt.loadNpmTasks( 'grunt-sass' );
 
     grunt.registerTask( 'transforms', 'Creating forms.json', function() {
-        var forms = {};
-        var done = this.async();
-        var jsonStringify = require( 'json-pretty' );
-        var formsJsonPath = 'test/mock/forms.json';
-        var xformsPaths = grunt.file.expand( {}, 'test/forms/*.xml' );
-        var transformer = require( 'enketo-transformer' );
+        const forms = {};
+        const done = this.async();
+        const jsonStringify = require( 'json-pretty' );
+        const formsJsonPath = 'test/mock/forms.js';
+        const xformsPaths = grunt.file.expand( {}, 'test/forms/*.xml' );
+        const transformer = require( 'enketo-transformer' );
 
         xformsPaths
-            .reduce( function( prevPromise, filePath ) {
-                return prevPromise.then( function() {
-                    var xformStr = grunt.file.read( filePath );
-                    grunt.log.writeln( 'Transforming ' + filePath + '...' );
-                    return transformer.transform( { xform: xformStr } )
-                        .then( function( result ) {
-                            forms[ filePath.substring( filePath.lastIndexOf( '/' ) + 1 ) ] = {
-                                html_form: result.form,
-                                xml_model: result.model
-                            };
-                        } );
-                } );
-            }, Promise.resolve() )
-            .then( function() {
-                grunt.file.write( formsJsonPath, jsonStringify( forms ) );
+            .reduce( ( prevPromise, filePath ) => prevPromise.then( () => {
+                const xformStr = grunt.file.read( filePath );
+                grunt.log.writeln( `Transforming ${filePath}...` );
+                return transformer.transform( { xform: xformStr } )
+                    .then( result => {
+                        forms[ filePath.substring( filePath.lastIndexOf( '/' ) + 1 ) ] = {
+                            html_form: result.form,
+                            xml_model: result.model
+                        };
+                    } );
+            } ), Promise.resolve() )
+            .then( () => {
+                grunt.file.write( formsJsonPath, `export default ${jsonStringify( forms )};` );
                 done();
             } );
     } );
 
-    grunt.registerTask( 'compile', [ 'browserify' ] );
+    grunt.registerTask( 'compile', [ 'shell:rollup' ] );
+    grunt.registerTask( 'compile-ie11', [ 'shell:rollup', 'shell:babel', 'shell:browserify' ] );
     grunt.registerTask( 'test', [ 'jsbeautifier:test', 'eslint', 'compile', 'transforms', 'karma:headless', 'style' ] );
     grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
-    grunt.registerTask( 'develop', [ 'style', 'browserify', 'concurrent:develop' ] );
+    grunt.registerTask( 'develop', [ 'style', 'compile', 'concurrent:develop' ] );
     grunt.registerTask( 'default', [ 'style', 'compile' ] );
 };

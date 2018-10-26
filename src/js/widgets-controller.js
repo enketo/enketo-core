@@ -1,19 +1,16 @@
-'use strict';
-
-var options;
-var $form;
-var init;
-var enable;
-var disable;
-var _getElements;
-var _instantiate;
-var _setLangChangeListener;
-var _setOptionChangeListener;
-var _setValChangeListener;
-var $ = require( 'jquery' );
-var widgets = require( 'enketo/widgets' ).filter( function( widget ) {
-    return widget.selector;
-} );
+let options;
+let $form;
+let init;
+let enable;
+let disable;
+let _getElements;
+let _instantiate;
+let _setLangChangeListener;
+let _setOptionChangeListener;
+let _setValChangeListener;
+import $ from 'jquery';
+import _widgets from 'enketo/widgets';
+const widgets = _widgets.filter( widget => widget.selector );
 
 /**
  * Initializes widgets
@@ -30,7 +27,7 @@ init = function( $group, opts ) {
     $group = $group || $form;
     options = options || opts;
 
-    widgets.forEach( function( widget ) {
+    widgets.forEach( widget => {
         _instantiate( widget, $group );
     } );
 
@@ -47,10 +44,10 @@ init = function( $group, opts ) {
  *
  * @param  {jQuery} $group [description]
  */
-enable = function( $group ) {
-    var widget, $els;
+enable = $group => {
+    let widget, $els;
 
-    for ( var i = 0; i < widgets.length; i++ ) {
+    for ( let i = 0; i < widgets.length; i++ ) {
         widget = widgets[ i ];
         if ( widget.name ) {
             $els = _getElements( $group, widget.selector );
@@ -66,10 +63,10 @@ enable = function( $group ) {
  *
  * @param  { jQuery } $group The element inside which all widgets need to be disabled.
  */
-disable = function( $group ) {
-    var widget, $els;
+disable = $group => {
+    let widget, $els;
 
-    for ( var i = 0; i < widgets.length; i++ ) {
+    for ( let i = 0; i < widgets.length; i++ ) {
 
         widget = widgets[ i ];
         if ( widget.name ) {
@@ -86,7 +83,7 @@ disable = function( $group ) {
  * @param  {string} selector if the selector is null, the form element will be returned
  * @return {jQuery}          a jQuery collection
  */
-_getElements = function( $group, selector ) {
+_getElements = ( $group, selector ) => {
     if ( selector ) {
         if ( selector === 'form' ) {
             return $form;
@@ -107,8 +104,8 @@ _getElements = function( $group, selector ) {
  * @param  widget The widget to instantiate
  * @param  {jQuery} $group The elements inside which widgets need to be created.
  */
-_instantiate = function( widget, $group ) {
-    var $elements;
+_instantiate = ( widget, $group ) => {
+    let $elements;
     widget.options = widget.options || {};
 
     if ( !widget.name ) {
@@ -117,7 +114,7 @@ _instantiate = function( widget, $group ) {
 
     if ( widget.helpersRequired && widget.helpersRequired.length > 0 ) {
         widget.options.helpers = {};
-        widget.helpersRequired.forEach( function( helper ) {
+        widget.helpersRequired.forEach( helper => {
             widget.options.helpers[ helper ] = options[ helper ];
         } );
     }
@@ -143,10 +140,10 @@ _instantiate = function( widget, $group ) {
  * @param {{name: string}} widget The widget configuration object
  * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
  */
-_setLangChangeListener = function( widget, $els ) {
+_setLangChangeListener = ( widget, $els ) => {
     // call update for all widgets when language changes 
     if ( $els.length > 0 ) {
-        $form.on( 'changelanguage', function() {
+        $form.on( 'changelanguage', () => {
             $els[ widget.name ]( 'update' );
         } );
     }
@@ -160,7 +157,7 @@ _setLangChangeListener = function( widget, $els ) {
  * @param {{name: string}} widget The widget configuration object
  * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
  */
-_setOptionChangeListener = function( widget, $els ) {
+_setOptionChangeListener = ( widget, $els ) => {
     if ( $els.length > 0 && widget.list ) {
         $els.on( 'changeoption', function() {
             // update (itemselect) picker on which event was triggered because the options changed
@@ -176,8 +173,8 @@ _setOptionChangeListener = function( widget, $els ) {
  * @param {{name: string}} widget The widget configuration object
  * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
  */
-_setValChangeListener = function( widget, $els ) {
-    var nodeName = $els.prop( 'nodeName' ).toLowerCase();
+_setValChangeListener = ( widget, $els ) => {
+    const nodeName = $els.prop( 'nodeName' ).toLowerCase();
     // avoid adding eventhandlers on widgets that apply to the <form> element
     if ( $els.length > 0 && ( nodeName === 'input' || nodeName === 'select' || nodeName === 'textarea' ) ) {
         $els.on( 'inputupdate.enketo', function() {
@@ -186,8 +183,8 @@ _setValChangeListener = function( widget, $els ) {
     }
 };
 
-module.exports = {
-    init: init,
-    enable: enable,
-    disable: disable
+export default {
+    init,
+    enable,
+    disable
 };

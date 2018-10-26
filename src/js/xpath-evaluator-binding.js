@@ -1,7 +1,7 @@
-var XPathJS = require( 'enketo-xpathjs' );
+import XPathJS from 'enketo-xpathjs';
 
-module.exports = function( addExtensions ) {
-    var evaluator = new XPathJS.XPathEvaluator();
+export default function( addExtensions ) {
+    const evaluator = new XPathJS.XPathEvaluator();
 
     /*
      * Note: it's inefficient to extend XPathJS here (for every model instance)
@@ -29,15 +29,15 @@ module.exports = function( addExtensions ) {
             JsXPathNamespace: true
         },
         'document': {
-            jsCreateExpression: function() {
-                return evaluator.createExpression.apply( evaluator, arguments );
+            jsCreateExpression( ...args ) {
+                return evaluator.createExpression( ...args );
             },
-            jsCreateNSResolver: function() {
-                return evaluator.createNSResolver.apply( evaluator, arguments );
+            jsCreateNSResolver( ...args ) {
+                return evaluator.createNSResolver( ...args );
             },
-            jsEvaluate: function() {
-                return evaluator.evaluate.apply( evaluator, arguments );
+            jsEvaluate( ...args ) {
+                return evaluator.evaluate( ...args );
             }
         }
     } );
-};
+}

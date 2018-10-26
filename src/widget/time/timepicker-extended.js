@@ -1,13 +1,11 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var support = require( '../../js/support' );
-var $ = require( 'jquery' );
-var timeFormat = require( '../../js/format' ).time;
-var types = require( '../../js/types' );
-require( './timepicker' );
-require( '../../js/dropdown.jquery' );
-var pluginName = 'timepickerExtended';
+import Widget from '../../js/Widget';
+import support from '../../js/support';
+import $ from 'jquery';
+import { time as timeFormat } from '../../js/format';
+import types from '../../js/types';
+import './timepicker';
+import '../../js/dropdown.jquery';
+const pluginName = 'timepickerExtended';
 
 /**
  * @constructor
@@ -29,12 +27,10 @@ TimepickerExtended.prototype.constructor = TimepickerExtended;
  * Initialize timepicker widget
  */
 TimepickerExtended.prototype._init = function() {
-    var $timeI = $( this.element );
-    var $fakeTime = $( '<div class="widget timepicker">' +
-        '<input class="ignore timepicker-default" type="text" placeholder="hh:mm" />' +
-        this.resetButtonHtml + '</div>' );
-    var $resetBtn = $fakeTime.find( '.btn-reset' );
-    var $fakeTimeI = $fakeTime.find( 'input' );
+    const $timeI = $( this.element );
+    const $fakeTime = $( `<div class="widget timepicker"><input class="ignore timepicker-default" type="text" placeholder="hh:mm" />${this.resetButtonHtml}</div>` );
+    const $resetBtn = $fakeTime.find( '.btn-reset' );
+    const $fakeTimeI = $fakeTime.find( 'input' );
 
     $timeI.hide().after( $fakeTime );
 
@@ -50,26 +46,26 @@ TimepickerExtended.prototype._init = function() {
         .timepicker( 'setTime', this.element.value );
 
     $fakeTimeI.on( 'change', function() {
-        var modified = timeFormat.hour12 ? types.time.convertMeridian( this.value ) : this.value;
+        const modified = timeFormat.hour12 ? types.time.convertMeridian( this.value ) : this.value;
         $timeI.val( modified ).trigger( 'change' );
         return false;
     } );
 
     // reset button
-    $resetBtn.on( 'click', function() {
-        var event = $timeI.val() ? 'change' : '';
+    $resetBtn.on( 'click', () => {
+        const event = $timeI.val() ? 'change' : '';
         if ( event || $fakeTimeI.val() ) {
             $fakeTimeI.val( '' ).trigger( event );
         }
     } );
 
     // pass widget focus event
-    $fakeTimeI.on( 'focus', function() {
+    $fakeTimeI.on( 'focus', () => {
         $timeI.trigger( 'fakefocus' );
     } );
 
     // handle original input focus
-    $( this.element ).on( 'applyfocus', function() {
+    $( this.element ).on( 'applyfocus', () => {
         $fakeTimeI.focus();
     } );
 
@@ -87,7 +83,7 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this ),
+        const $this = $( this ),
             data = $this.data( pluginName );
 
         if ( !data && typeof options === 'object' && ( !support.touch || !support.inputTypes.time ) ) {
@@ -101,7 +97,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': 'input[type="time"]:not([readonly])'
 };

@@ -1,16 +1,15 @@
-'use strict';
-
 /**
  * Detects features.
  */
 
-var os = require( './sniffer' ).os;
-var inputTypes = {};
-var mobile = false;
+import { os } from './sniffer';
+
+const inputTypes = {};
+let mobile = false;
 
 // test input types
-[ 'date', 'datetime', 'time', 'month' ].forEach( function( inputType ) {
-    var input = document.createElement( 'input' );
+[ 'date', 'datetime', 'time', 'month' ].forEach( inputType => {
+    const input = document.createElement( 'input' );
     input.setAttribute( 'type', inputType );
     inputTypes[ inputType ] = input.type !== 'text';
 } );
@@ -21,7 +20,7 @@ if ( os.ios || os.android ) {
     document.documentElement.classList.add( 'touch' );
 }
 
-module.exports = {
+export default {
     /**
      * @deprecated
      */

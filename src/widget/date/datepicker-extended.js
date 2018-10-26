@@ -1,15 +1,13 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var support = require( '../../js/support' );
-var $ = require( 'jquery' );
-var types = require( '../../js/types' );
-var utils = require( '../../js/utils' );
-require( 'bootstrap-datepicker' );
-require( '../../js/dropdown.jquery' );
+import Widget from '../../js/Widget';
+import support from '../../js/support';
+import $ from 'jquery';
+import types from '../../js/types';
+import { isNumber, getPasteData } from '../../js/utils';
+import 'bootstrap-datepicker';
+import '../../js/dropdown.jquery';
 
 //It is very helpful to make this the same as widget class, except for converting the first character to lowercase.
-var pluginName = 'datepickerExtended';
+const pluginName = 'datepickerExtended';
 
 /**
  * Extends eternicode's bootstrap-datepicker without changing the original.
@@ -38,7 +36,7 @@ DatepickerExtended.prototype.constructor = DatepickerExtended;
  * Initialize datepicker widget
  */
 DatepickerExtended.prototype._init = function() {
-    var $p = $( this.element ).parent( 'label' );
+    const $p = $( this.element ).parent( 'label' );
 
     this.settings = ( $p.hasClass( 'or-appearance-year' ) ) ? {
         format: 'yyyy',
@@ -73,7 +71,7 @@ DatepickerExtended.prototype._init = function() {
 };
 
 DatepickerExtended.prototype._setDate = function( date ) {
-    var valueToSet = date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
+    const valueToSet = date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
     this.$fakeDateI.datepicker( 'setDate', valueToSet );
 };
 
@@ -83,11 +81,10 @@ DatepickerExtended.prototype._setDate = function( date ) {
  * @return {jQuery}        the jQuery-wrapped fake date input element
  */
 DatepickerExtended.prototype._createFakeDateInput = function( format ) {
-    var $dateI = $( this.element );
-    var $fakeDate = $(
-        '<div class="widget date"><input class="ignore input-small" type="text" placeholder="' + format + '" />' +
-        this.resetButtonHtml + '</div>' );
-    var $fakeDateI = $fakeDate.find( 'input' );
+    const $dateI = $( this.element );
+    const $fakeDate = $(
+        `<div class="widget date"><input class="ignore input-small" type="text" placeholder="${format}" />${this.resetButtonHtml}</div>` );
+    const $fakeDateI = $fakeDate.find( 'input' );
 
     $dateI.hide().after( $fakeDate );
 
@@ -100,22 +97,22 @@ DatepickerExtended.prototype._createFakeDateInput = function( format ) {
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatepickerExtended.prototype._setChangeHandler = function( $fakeDateI ) {
-    var $dateI = $( this.element );
-    var settings = this.settings;
+    const $dateI = $( this.element );
+    const settings = this.settings;
 
-    $fakeDateI.on( 'change paste', function( e ) {
-        var convertedValue = '';
-        var value = e.type === 'paste' ? utils.getPasteData( e ) : $fakeDateI.val();
-        var showValue = '';
+    $fakeDateI.on( 'change paste', e => {
+        let convertedValue = '';
+        let value = e.type === 'paste' ? getPasteData( e ) : $fakeDateI.val();
+        let showValue = '';
 
         if ( value.length > 0 ) {
             // Note: types.date.convert considers numbers to be a number of days since the epoch 
             // as this is what the XPath evaluator may return.
             // For user-entered input, we want to consider a Number value to be incorrect, expect for year input.
-            if ( utils.isNumber( value ) && settings.format !== 'yyyy' ) {
+            if ( isNumber( value ) && settings.format !== 'yyyy' ) {
                 convertedValue = '';
             } else {
-                value = settings.format === 'yyyy-mm' ? value + '-01' : ( settings.format === 'yyyy' ? value + '-01-01' : value );
+                value = settings.format === 'yyyy-mm' ? `${value}-01` : ( settings.format === 'yyyy' ? `${value}-01-01` : value );
                 convertedValue = types.date.convert( value );
             }
         }
@@ -150,8 +147,8 @@ DatepickerExtended.prototype._setChangeHandler = function( $fakeDateI ) {
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatepickerExtended.prototype._setResetHandler = function( $fakeDateI ) {
-    var that = this;
-    $fakeDateI.next( '.btn-reset' ).on( 'click', function() {
+    const that = this;
+    $fakeDateI.next( '.btn-reset' ).on( 'click', () => {
         if ( $( that.element ).val() ) {
             $fakeDateI.val( '' ).datepicker( 'update' );
         }
@@ -165,13 +162,13 @@ DatepickerExtended.prototype._setResetHandler = function( $fakeDateI ) {
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatepickerExtended.prototype._setFocusHandler = function( $fakeDateI ) {
-    var that = this;
+    const that = this;
     // Handle focus on widget
-    $fakeDateI.on( 'focus', function() {
+    $fakeDateI.on( 'focus', () => {
         $( that.element ).trigger( 'fakefocus' );
     } );
     // Handle focus on original input (goTo functionality)
-    $( this.element ).on( 'applyfocus', function() {
+    $( this.element ).on( 'applyfocus', () => {
         $fakeDateI.focus();
     } );
 };
@@ -185,9 +182,9 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
-        var badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
+        const $this = $( this );
+        const data = $this.data( pluginName );
+        const badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
 
         /*
          * Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field
@@ -211,7 +208,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': 'input[type="date"]:not([readonly])'
 };

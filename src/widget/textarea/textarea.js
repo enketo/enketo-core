@@ -1,8 +1,6 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var $ = require( 'jquery' );
-var pluginName = 'textareaWidget';
+import Widget from '../../js/Widget';
+import $ from 'jquery';
+const pluginName = 'textareaWidget';
 
 /**
  * Auto-resizes textarea elements.
@@ -34,13 +32,13 @@ TextareaWidget.prototype._init = function() {
  * Set delegated event handlers
  */
 TextareaWidget.prototype._setDelegatedHandlers = function() {
-    var $form = $( this.element );
-    var textarea = $form[ 0 ].querySelector( 'textarea' );
-    var defaultHeight = textarea ? textarea.clientHeight : 20;
+    const $form = $( this.element );
+    const textarea = $form[ 0 ].querySelector( 'textarea' );
+    const defaultHeight = textarea ? textarea.clientHeight : 20;
     $form.on( 'input', 'textarea', function() {
         if ( this.scrollHeight > this.clientHeight && this.scrollHeight > defaultHeight ) {
             // setting min-height instead of height, as height doesn't work in Grid Theme.
-            this.style[ 'min-height' ] = this.scrollHeight + 'px';
+            this.style[ 'min-height' ] = `${this.scrollHeight}px`;
         }
     } );
 
@@ -48,8 +46,8 @@ TextareaWidget.prototype._setDelegatedHandlers = function() {
 
 $.fn[ pluginName ] = function( options, event ) {
     //this widget works globally, and only needs to be instantiated once per form
-    var $this = $( this );
-    var data = $this.data( pluginName );
+    const $this = $( this );
+    const data = $this.data( pluginName );
 
     options = options || {};
 
@@ -62,7 +60,7 @@ $.fn[ pluginName ] = function( options, event ) {
     return this;
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': 'form'
 };

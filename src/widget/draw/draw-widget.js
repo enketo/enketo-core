@@ -1,14 +1,12 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var $ = require( 'jquery' );
-var pluginName = 'drawWidget';
-var support = require( '../../js/support' );
-var fileManager = require( 'enketo/file-manager' );
-var SignaturePad = require( 'signature_pad' );
-var t = require( 'enketo/translator' ).t;
-var dialog = require( 'enketo/dialog' );
-var utils = require( '../../js/utils' );
+import Widget from '../../js/Widget';
+import $ from 'jquery';
+const pluginName = 'drawWidget';
+import support from '../../js/support';
+import fileManager from 'enketo/file-manager';
+import SignaturePad from 'signature_pad';
+import { t } from 'enketo/translator';
+import dialog from 'enketo/dialog';
+import { updateDownloadLink, dataUriToBlobSync, getFilename } from '../../js/utils';
 
 /**
  * SignaturePad.prototype.fromDataURL is asynchronous and does not return a 
@@ -20,27 +18,27 @@ var utils = require( '../../js/utils' );
  * @param {*} options 
  */
 SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
-    var image = new Image();
+    const image = new Image();
     options = options || {};
-    var deviceRatio = options.ratio || window.devicePixelRatio || 1;
-    var width = options.width || ( this._canvas.width / deviceRatio );
-    var height = options.height || ( this._canvas.height / deviceRatio );
-    var that = this;
+    const deviceRatio = options.ratio || window.devicePixelRatio || 1;
+    const width = options.width || ( this._canvas.width / deviceRatio );
+    const height = options.height || ( this._canvas.height / deviceRatio );
+    const that = this;
 
     this._reset();
 
-    return new Promise( function( resolve ) {
+    return new Promise( resolve => {
         image.src = objectUrl;
-        image.onload = function() {
-            var imgWidth = image.width;
-            var imgHeight = image.height;
-            var hRatio = width / imgWidth;
-            var vRatio = height / imgHeight;
-            var left;
-            var top;
+        image.onload = () => {
+            const imgWidth = image.width;
+            const imgHeight = image.height;
+            const hRatio = width / imgWidth;
+            const vRatio = height / imgHeight;
+            let left;
+            let top;
 
             if ( hRatio < 1 || vRatio < 1 ) { //if image is bigger than canvas then fit within the canvas
-                var ratio = Math.min( hRatio, vRatio );
+                const ratio = Math.min( hRatio, vRatio );
                 left = ( width - imgWidth * ratio ) / 2;
                 top = ( height - imgHeight * ratio ) / 2;
                 that._ctx.drawImage( image, 0, 0, imgWidth, imgHeight, left, top, imgWidth * ratio, imgHeight * ratio );
@@ -62,11 +60,11 @@ SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
  * @param {*} pointGroups 
  */
 SignaturePad.prototype.updateData = function( pointGroups ) {
-    var that = this;
+    const that = this;
     this._fromData(
         pointGroups,
-        function( curve, widths ) { that._drawCurve( curve, widths.start, widths.end ); },
-        function( rawPoint ) { that._drawDot( rawPoint ); }
+        ( curve, widths ) => { that._drawCurve( curve, widths.start, widths.end ); },
+        rawPoint => { that._drawDot( rawPoint ); }
     );
 
     this._data = pointGroups;
@@ -94,9 +92,9 @@ DrawWidget.prototype.constructor = DrawWidget;
  * Initialize datepicker widget
  */
 DrawWidget.prototype._init = function() {
-    var canvas;
-    var that = this;
-    var existingFilename = this.element.dataset.loadedFileName;
+    let canvas;
+    const that = this;
+    const existingFilename = this.element.dataset.loadedFileName;
 
     this.element.type = 'text';
     this.element.dataset.drawing = true;
@@ -105,7 +103,7 @@ DrawWidget.prototype._init = function() {
     canvas = this.$widget[ 0 ].querySelector( '.draw-widget__body__canvas' );
 
     $( this.element ).after( this.$widget )
-        .closest( '.question' ).addClass( 'or-' + this.props.type + '-initialized' );
+        .closest( '.question' ).addClass( `or-${this.props.type}-initialized` );
 
     this._handleResize( canvas );
     this._resizeCanvas( canvas );
@@ -115,7 +113,7 @@ DrawWidget.prototype._init = function() {
     }
 
     this.initialize = fileManager.init()
-        .then( function() {
+        .then( () => {
             that.pad = new SignaturePad( canvas, {
                 onEnd: that._updateValue.bind( that ),
                 penColor: that.props.colors[ 0 ] || 'black'
@@ -130,7 +128,7 @@ DrawWidget.prototype._init = function() {
         } );
     this.disable();
     this.initialize
-        .then( function() {
+        .then( () => {
             that.$widget
                 .find( '.btn-reset' ).on( 'click', that._reset.bind( that ) )
                 .end().find( '.draw-widget__colorpicker' )
@@ -142,26 +140,26 @@ DrawWidget.prototype._init = function() {
                         .parent().removeClass( 'reveal' );
                     that.pad.penColor = this.dataset.color;
                 } )
-                .end().find( '.draw-widget__undo' ).on( 'click', function() {
-                    var data = that.pad.toData();
+                .end().find( '.draw-widget__undo' ).on( 'click', () => {
+                    const data = that.pad.toData();
                     that.pad.clear();
-                    var fileInput = that.$widget[ 0 ].querySelector( 'input[type=file]' );
+                    const fileInput = that.$widget[ 0 ].querySelector( 'input[type=file]' );
                     // that.element.dataset.loadedFileName will have been removed only after resetting 
-                    var fileToLoad = fileInput && fileInput.files[ 0 ] ? fileInput.files[ 0 ] : that.element.dataset.loadedFileName;
+                    const fileToLoad = fileInput && fileInput.files[ 0 ] ? fileInput.files[ 0 ] : that.element.dataset.loadedFileName;
                     that._loadFileIntoPad( fileToLoad )
-                        .then( function() {
+                        .then( () => {
                             that.pad.updateData( data.slice( 0, -1 ) );
                             that._updateValue();
                             that.pad.penColor = that.$widget.find( '.draw-widget__colorpicker .current' )[ 0 ].dataset.color;
                         } );
                 } )
-                .end().find( '.show-canvas-btn' ).on( 'click', function() {
+                .end().find( '.show-canvas-btn' ).on( 'click', () => {
                     that.$widget.addClass( 'full-screen' );
                     that._resizeCanvas( canvas );
                     that.enable();
                     return false;
                 } )
-                .end().find( '.hide-canvas-btn' ).on( 'click', function() {
+                .end().find( '.hide-canvas-btn' ).on( 'click', () => {
                     that.$widget.removeClass( 'full-screen' );
                     that.pad.off();
                     that._resizeCanvas( canvas );
@@ -169,22 +167,22 @@ DrawWidget.prototype._init = function() {
                 } ).click();
 
             $( canvas )
-                .on( 'canvasreload.' + that.namespace, function() {
+                .on( `canvasreload.${that.namespace}`, () => {
                     if ( that.cache ) {
                         that.pad.fromObjectURL( that.cache );
                     }
                 } );
             that.enable();
         } )
-        .catch( function( error ) {
+        .catch( error => {
             that._showFeedback( error.message );
         } );
 
     $( this.element )
-        .on( 'applyfocus', function() {
+        .on( 'applyfocus', () => {
             canvas.focus();
         } )
-        .closest( '[role="page"]' ).on( 'pageflip.enketo', function() {
+        .closest( '[role="page"]' ).on( 'pageflip.enketo', () => {
             // When an existing value is loaded into the canvas and is not 
             // the first page, it won't become visible until the canvas is clicked
             // or the window is resized:
@@ -195,13 +193,13 @@ DrawWidget.prototype._init = function() {
         } );
 };
 
-DrawWidget.prototype._getProps = function( el ) {
-    var $q = $( el ).closest( '.question' );
-    var type = $q.hasClass( 'or-appearance-draw' ) ? 'drawing' : ( $q.hasClass( 'or-appearance-signature' ) ? 'signature' : 'annotation' );
+DrawWidget.prototype._getProps = el => {
+    const $q = $( el ).closest( '.question' );
+    const type = $q.hasClass( 'or-appearance-draw' ) ? 'drawing' : ( $q.hasClass( 'or-appearance-signature' ) ? 'signature' : 'annotation' );
     return {
         readonly: el.readOnly,
-        type: type,
-        filename: type + '.png',
+        type,
+        filename: `${type}.png`,
         load: $q.hasClass( 'or-appearance-annotate' ),
         colors: $q.hasClass( 'or-appearance-signature' ) ? [] : [ 'black', 'lightblue', 'blue', 'red', 'orange', 'cyan', 'yellow', 'lightgreen', 'green', 'pink', 'purple', 'lightgray', 'darkgray' ],
         touch: support.touch,
@@ -217,16 +215,16 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
     this._updatePlaceholder();
     this.$widget.closest( 'form.or' ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
 
-    var that = this;
+    const that = this;
 
-    var $input = this.$widget.find( 'input[type=file]' );
-    var $fakeInput = this.$widget.find( '.fake-file-input' );
+    const $input = this.$widget.find( 'input[type=file]' );
+    const $fakeInput = this.$widget.find( '.fake-file-input' );
 
     // show loaded file name or placeholder regardless of whether widget is supported
     this._showFileName( loadedFileName );
 
     $input
-        .on( 'click.' + this.namespace, function( event ) {
+        .on( `click.${this.namespace}`, event => {
             // The purpose of this handler is to block the filepicker window
             // when the label is clicked outside of the input.
             if ( that.props.readonly || event.namespace !== 'propagate' ) {
@@ -235,9 +233,9 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
                 return false;
             }
         } )
-        .on( 'change.' + this.namespace, function() {
+        .on( `change.${this.namespace}`, function() {
             // Get the file
-            var file = this.files[ 0 ];
+            const file = this.files[ 0 ];
 
             if ( file ) {
                 // Process the file
@@ -245,7 +243,7 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
                     // Update UI
                     that.pad.clear();
                     that._loadFileIntoPad( this.files[ 0 ] )
-                        .then( function() {
+                        .then( () => {
                             that._updateValue.call( that );
                             that._showFileName( file.name );
                             that.enable();
@@ -259,7 +257,7 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
         } );
 
     $fakeInput
-        .on( 'click.' + this.namespace, function( event ) {
+        .on( `click.${this.namespace}`, function( event ) {
             /* 
                 The purpose of this handler is to selectively propagate clicks on the fake
                 input to the underlying file input (to show the file picker window).
@@ -275,10 +273,8 @@ DrawWidget.prototype._handleFiles = function( loadedFileName ) {
             event.preventDefault();
             $input.trigger( 'click.propagate' );
         } )
-        .on( 'change.' + this.namespace, function() {
-            // For robustness, avoid any editing of filenames by user.
-            return false;
-        } );
+        .on( `change.${this.namespace}`, () => // For robustness, avoid any editing of filenames by user.
+            false );
 };
 
 DrawWidget.prototype._showFileName = function( fileName ) {
@@ -291,38 +287,23 @@ DrawWidget.prototype._updatePlaceholder = function() {
 
 DrawWidget.prototype._getMarkup = function() {
     // HTML syntax copied from filepicker widget
-    var load = this.props.load ? '<input type="file" class="ignore draw-widget__load"' +
-        ( this.props.capture !== null ? ' capture="' + this.props.capture + '"' : '' ) + ' accept="' + this.props.accept + '"/>' +
-        '<div class="widget file-picker">' +
-        '<input class="ignore fake-file-input"/>' +
-        '<div class="file-feedback"></div>' +
-        '</div>' : '';
-    var fullscreenBtns = this.props.touch ? '<button type="button" class="show-canvas-btn btn btn-default">Draw/Sign</button>' +
+    const load = this.props.load ? `<input type="file" class="ignore draw-widget__load"${this.props.capture !== null ? ` capture="${this.props.capture}"` : ''} accept="${this.props.accept}"/><div class="widget file-picker"><input class="ignore fake-file-input"/><div class="file-feedback"></div></div>` : '';
+    const fullscreenBtns = this.props.touch ? '<button type="button" class="show-canvas-btn btn btn-default">Draw/Sign</button>' +
         '<button type="button" class="hide-canvas-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' : '';
-    var $widget = $( '<div class="widget draw-widget">' +
-        '<div class="draw-widget__body">' + fullscreenBtns + load +
-        '<canvas class="draw-widget__body__canvas noSwipe disabled" tabindex="0"></canvas>' +
-        '<div class="draw-widget__colorpicker"></div>' +
-        ( this.props.type === 'signature' ? '' : '<button class="btn-icon-only draw-widget__undo" aria-label="undo" type=button><i class="icon icon-undo"> </i></button>' ) +
-        '</div>' +
-        '<div class="draw-widget__footer">' +
-        this.resetButtonHtml + this.downloadButtonHtml +
-        '<div class="draw-widget__feedback"></div>' +
-        '</div>' +
-        '</div>' );
-    var $colorpicker = $widget.find( '.draw-widget__colorpicker' );
+    const $widget = $( `<div class="widget draw-widget"><div class="draw-widget__body">${fullscreenBtns}${load}<canvas class="draw-widget__body__canvas noSwipe disabled" tabindex="0"></canvas><div class="draw-widget__colorpicker"></div>${this.props.type === 'signature' ? '' : '<button class="btn-icon-only draw-widget__undo" aria-label="undo" type=button><i class="icon icon-undo"> </i></button>'}</div><div class="draw-widget__footer">${this.resetButtonHtml}${this.downloadButtonHtml}<div class="draw-widget__feedback"></div></div></div>` );
+    const $colorpicker = $widget.find( '.draw-widget__colorpicker' );
 
-    this.props.colors.forEach( function( color, index ) {
-        var current = index === 0 ? ' current' : '';
-        $colorpicker.append( '<div class="' + current + '"data-color="' + color + '" style="background: ' + color + ';" />' );
+    this.props.colors.forEach( ( color, index ) => {
+        const current = index === 0 ? ' current' : '';
+        $colorpicker.append( `<div class="${current}"data-color="${color}" style="background: ${color};" />` );
     } );
 
     return $widget;
 };
 
 DrawWidget.prototype._updateValue = function() {
-    var now = new Date();
-    var postfix = '-' + now.getHours() + '_' + now.getMinutes() + '_' + now.getSeconds();
+    const now = new Date();
+    const postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
     // pad.toData() doesn't seem to work when redrawing on a smaller canvas. Doesn't scale.
     // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
     this.cache = this.pad.toDataURL();
@@ -333,14 +314,14 @@ DrawWidget.prototype._updateValue = function() {
 };
 
 DrawWidget.prototype._reset = function() {
-    var that = this;
+    const that = this;
 
     if ( this.element.value ) {
         // This discombulated line is to help the i18next parser pick up all 3 keys.
-        var item = this.props.type === 'signature' ?
+        const item = this.props.type === 'signature' ?
             t( 'drawwidget.signature' ) : ( this.props.type === 'drawing' ? t( 'drawwidget.drawing' ) : t( 'drawwidget.annotation' ) );
-        dialog.confirm( t( 'filepicker.resetWarning', { item: item } ) )
-            .then( function( confirmed ) {
+        dialog.confirm( t( 'filepicker.resetWarning', { item } ) )
+            .then( confirmed => {
                 if ( !confirmed ) {
                     return;
                 }
@@ -365,17 +346,17 @@ DrawWidget.prototype._reset = function() {
  * @param {*} file Either a filename or a file.
  */
 DrawWidget.prototype._loadFileIntoPad = function( file ) {
-    var that = this;
+    const that = this;
     if ( !file ) {
         return Promise.resolve( '' );
     }
     return fileManager.getObjectUrl( file )
         .then( that.pad.fromObjectURL.bind( that.pad ) )
-        .then( function( objectUrl ) {
+        .then( objectUrl => {
             that.cache = objectUrl;
             return objectUrl;
         } )
-        .catch( function() {
+        .catch( () => {
             that._showFeedback( 'File could not be loaded (leave unchanged if already submitted and you want to preserve it).', 'error' );
         } );
 };
@@ -389,15 +370,15 @@ DrawWidget.prototype._showFeedback = function( message ) {
 
 DrawWidget.prototype._updateDownloadLink = function( url ) {
     if ( url && url.indexOf( 'data:' ) === 0 ) {
-        url = URL.createObjectURL( utils.dataUriToBlobSync( url ) );
+        url = URL.createObjectURL( dataUriToBlobSync( url ) );
     }
-    var fileName = url ? utils.getFilename( { name: this.element.value }, this.element.dataset.filenamePostfix ) : '';
-    utils.updateDownloadLink( this.$widget.find( '.btn-download' )[ 0 ], url, fileName );
+    const fileName = url ? getFilename( { name: this.element.value }, this.element.dataset.filenamePostfix ) : '';
+    updateDownloadLink( this.$widget.find( '.btn-download' )[ 0 ], url, fileName );
 };
 
 DrawWidget.prototype._handleResize = function( canvas ) {
-    var that = this;
-    $( window ).on( 'resize', function() {
+    const that = this;
+    $( window ).on( 'resize', () => {
         that._resizeCanvas( canvas );
     } );
 };
@@ -409,19 +390,19 @@ DrawWidget.prototype._resizeCanvas = function( canvas ) {
     // When zoomed out to less than 100%, for some very strange reason,
     // some browsers report devicePixelRatio as less than 1
     // and only part of the canvas is cleared then.
-    var ratio = Math.max( window.devicePixelRatio || 1, 1 );
+    const ratio = Math.max( window.devicePixelRatio || 1, 1 );
     canvas.width = canvas.offsetWidth * ratio;
     canvas.height = canvas.offsetHeight * ratio;
     canvas.getContext( '2d' ).scale( ratio, ratio );
-    $( canvas ).trigger( 'canvasreload.' + this.namespace );
+    $( canvas ).trigger( `canvasreload.${this.namespace}` );
 };
 
 DrawWidget.prototype.disable = function() {
-    var that = this;
-    var canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
+    const that = this;
+    const canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
 
     this.initialize
-        .then( function() {
+        .then( () => {
             that.pad.off();
             canvas.classList.add( 'disabled' );
             that.$widget
@@ -431,13 +412,13 @@ DrawWidget.prototype.disable = function() {
 };
 
 DrawWidget.prototype.enable = function() {
-    var that = this;
-    var canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
-    var touchNotFull = this.props.touch && !this.$widget.is( '.full-screen' );
-    var needFile = this.props.load && !this.element.value;
+    const that = this;
+    const canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
+    const touchNotFull = this.props.touch && !this.$widget.is( '.full-screen' );
+    const needFile = this.props.load && !this.element.value;
 
     this.initialize
-        .then( function() {
+        .then( () => {
             if ( !that.props.readonly && !needFile && !touchNotFull ) {
                 that.pad.on();
                 canvas.classList.remove( 'disabled' );
@@ -474,8 +455,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
+        const $this = $( this );
+        const data = $this.data( pluginName );
 
         if ( !data && typeof options === 'object' ) {
             $this.data( pluginName, new DrawWidget( this, options, event ) );
@@ -486,7 +467,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     // note that the selector needs to match both the pre-instantiated form and the post-instantiate form (type attribute changes)
     'selector': '.or-appearance-draw input[data-type-xml="binary"][accept^="image"], .or-appearance-signature input[data-type-xml="binary"][accept^="image"], .or-appearance-annotate input[data-type-xml="binary"][accept^="image"]'

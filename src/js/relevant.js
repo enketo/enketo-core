@@ -1,16 +1,14 @@
-'use strict';
-
 /**
  * Updates branches
  *
  * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
  */
 
-var $ = require( 'jquery' );
+import $ from 'jquery';
 
-module.exports = {
-    update: function( updated, forceClearIrrelevant ) {
-        var $nodes;
+export default {
+    update( updated, forceClearIrrelevant ) {
+        let $nodes;
 
         if ( !this.form ) {
             throw new Error( 'Branch module not correctly instantiated with form property.' );
@@ -20,25 +18,25 @@ module.exports = {
 
         this.updateNodes( $nodes, forceClearIrrelevant );
     },
-    updateNodes: function( $nodes, forceClearIrrelevant ) {
-        var p;
-        var $branchNode;
-        var result;
-        var insideRepeat;
-        var insideRepeatClone;
-        var cacheIndex;
-        var relevantCache = {};
-        var alreadyCovered = [];
-        var branchChange = false;
-        var that = this;
-        var clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
+    updateNodes( $nodes, forceClearIrrelevant ) {
+        let p;
+        let $branchNode;
+        let result;
+        let insideRepeat;
+        let insideRepeatClone;
+        let cacheIndex;
+        const relevantCache = {};
+        const alreadyCovered = [];
+        let branchChange = false;
+        const that = this;
+        const clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
 
         $nodes.each( function() {
-            var $node = $( this );
-            var context;
-            var $parentGroups;
-            var pathParts;
-            var parentPath;
+            const $node = $( this );
+            let context;
+            let $parentGroups;
+            let pathParts;
+            let parentPath;
 
             //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
             if ( alreadyCovered.indexOf( $node.attr( 'name' ) ) !== -1 ) {
@@ -67,10 +65,10 @@ module.exports = {
             pathParts = p.path.split( '/' );
             if ( pathParts.length > 3 ) {
                 parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
-                $parentGroups = that.form.view.$.find( '.or-group[name="' + parentPath + '"],.or-group-data[name="' + parentPath + '"]' )
+                $parentGroups = that.form.view.$.find( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` )
                     // now remove the groups that have a repeat-info child without repeat instance siblings
                     .filter( function() {
-                        var $g = $( this );
+                        const $g = $( this );
                         return $g.children( '.or-repeat' ).length > 0 || $g.children( '.or-repeat-info' ).length === 0;
                     } ); //.eq( index )
                 // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
@@ -94,7 +92,7 @@ module.exports = {
              * If the relevant is placed on a group and that group contains repeats with the same name,
              * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
              */
-            if ( $node.children( '.or-repeat-info[data-name="' + p.path + '"]' ).length && !$node.children( '.or-repeat[name="' + p.path + '"]' ).length ) {
+            if ( $node.children( `.or-repeat-info[data-name="${p.path}"]` ).length && !$node.children( `.or-repeat[name="${p.path}"]` ).length ) {
                 context = null;
             } else {
                 context = p.path;
@@ -117,7 +115,7 @@ module.exports = {
                     // The path is stripped of the last nodeName to record the context.
                     // This might be dangerous, but until we find a bug, it helps in those forms where one group contains
                     // many sibling questions that each have the same relevant.
-                    cacheIndex = p.relevant + '__' + p.path.substring( 0, p.path.lastIndexOf( '/' ) ) + '__' + p.ind;
+                    cacheIndex = `${p.relevant}__${p.path.substring( 0, p.path.lastIndexOf( '/' ) )}__${p.ind}`;
                 }
             }
             if ( cacheIndex && typeof relevantCache[ cacheIndex ] !== 'undefined' ) {
@@ -148,8 +146,8 @@ module.exports = {
      * @param  {number} index       [description]
      * @return {boolean}             [description]
      */
-    evaluate: function( expr, contextPath, index ) {
-        var result = this.form.model.evaluate( expr, 'boolean', contextPath, index );
+    evaluate( expr, contextPath, index ) {
+        const result = this.form.model.evaluate( expr, 'boolean', contextPath, index );
         return result;
     },
     /**
@@ -160,7 +158,7 @@ module.exports = {
      * @param { boolean } result      result of relevant evaluation
      * @param { =boolean } forceClearIrrelevant Whether to force clearing of irrelevant nodes and descendants
      */
-    process: function( $branchNode, path, result, forceClearIrrelevant ) {
+    process( $branchNode, path, result, forceClearIrrelevant ) {
         if ( result === true ) {
             return this.enable( $branchNode, path );
         } else {
@@ -174,7 +172,7 @@ module.exports = {
      * @param  {jQuery} $branchNode [description]
      * @return {boolean}             [description]
      */
-    selfRelevant: function( $branchNode ) {
+    selfRelevant( $branchNode ) {
         return !$branchNode.hasClass( 'disabled' ) && !$branchNode.hasClass( 'pre-init' );
     },
 
@@ -183,8 +181,8 @@ module.exports = {
      *
      * @param  {jQuery} $branchNode The jQuery object to reveal and enable
      */
-    enable: function( $branchNode, path ) {
-        var change = false;
+    enable( $branchNode, path ) {
+        let change = false;
 
         if ( !this.selfRelevant( $branchNode ) ) {
             change = true;
@@ -207,9 +205,9 @@ module.exports = {
      *
      * @param  {jQuery} $branchNode The jQuery object to hide and disable
      */
-    disable: function( $branchNode, path, forceClearIrrelevant ) {
-        var virgin = $branchNode.hasClass( 'pre-init' );
-        var change = false;
+    disable( $branchNode, path, forceClearIrrelevant ) {
+        const virgin = $branchNode.hasClass( 'pre-init' );
+        let change = false;
 
         if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
             change = true;
@@ -233,7 +231,7 @@ module.exports = {
      * @param  {[type]} $branchNode [description]
      * @return {boolean}             [description]
      */
-    clear: function( $branchNode, path ) {
+    clear( $branchNode, path ) {
         // A change event ensures the model is updated
         // An inputupdate event is required to update widgets
         $branchNode.clearInputs( 'change', 'inputupdate.enketo' );
@@ -245,8 +243,8 @@ module.exports = {
             } );
         }
     },
-    setDisabledProperty: function( $branchNode, bool ) {
-        var type = $branchNode.prop( 'nodeName' ).toLowerCase();
+    setDisabledProperty( $branchNode, bool ) {
+        const type = $branchNode.prop( 'nodeName' ).toLowerCase();
 
         if ( type === 'label' ) {
             $branchNode.children( 'input, select, textarea' ).prop( 'disabled', bool );
@@ -264,7 +262,7 @@ module.exports = {
      * @param  {[type]} $branchNode [description]
      * @return {[type]}            [description]
      */
-    activate: function( $branchNode ) {
+    activate( $branchNode ) {
         this.setDisabledProperty( $branchNode, false );
     },
     /**
@@ -274,7 +272,7 @@ module.exports = {
      * @param  {[type]} $branchNode [description]
      * @return {[type]}             [description]
      */
-    deactivate: function( $branchNode ) {
+    deactivate( $branchNode ) {
         $branchNode.addClass( 'disabled' );
         this.form.widgets.disable( $branchNode );
         this.setDisabledProperty( $branchNode, true );

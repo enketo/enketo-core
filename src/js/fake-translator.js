@@ -1,8 +1,6 @@
-'use strict';
-
 // This is NOT a complete list of all enketo-core UI strings. Use a parser to find 
 // all strings. E.g. https://github.com/i18next/i18next-parser
-var SOURCE_STRINGS = {
+const SOURCE_STRINGS = {
     'constraint': {
         'invalid': 'Value not allowed',
         'required': 'This field is required'
@@ -89,25 +87,21 @@ var SOURCE_STRINGS = {
  * @return {String} translation output
  */
 function t( key, options ) {
-    var str = '';
-    var target = SOURCE_STRINGS;
+    let str = '';
+    let target = SOURCE_STRINGS;
 
     // crude string getter
-    key.split( '.' ).forEach( function( part ) {
+    key.split( '.' ).forEach( part => {
         target = target ? target[ part ] : '';
         str = target;
     } );
     // crude interpolator
     options = options || {};
-    str = str.replace( /__([^_]+)__/, function( match, p1 ) {
-        return options[ p1 ];
-    } );
+    str = str.replace( /__([^_]+)__/, ( match, p1 ) => options[ p1 ] );
 
     // Enable line below to switch to fake Arabic, very useful for testing RTL
     // var AR = 'العربية '; return str.split( '' ).map( function( char, i ) { return AR[ i % AR.length ];} ).join( '' );
     return str;
 }
 
-module.exports = {
-    t: t
-};
+export { t };

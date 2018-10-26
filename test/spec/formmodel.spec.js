@@ -1,36 +1,35 @@
-'use strict';
+import { FormModel as Model } from '../../src/js/Form-model';
+import forms from '../mock/forms';
+import config from '../../config';
 
-var Model = require( '../../src/js/Form-model' );
-var forms = require( '../mock/forms' );
-
-var getModel = function( filename ) {
-    var model = new Model( forms[ filename ].xml_model );
+const getModel = filename => {
+    const model = new Model( forms[ filename ].xml_model );
     model.init();
     return model;
 };
 
 // I don't remember why this functionality exists
-describe( 'Primary instance node values', function() {
-    var model = new Model( '<model><instance><data><nodeA> 2  </nodeA><meta><instanceID/></meta></data></instance></model>' );
+describe( 'Primary instance node values', () => {
+    const model = new Model( '<model><instance><data><nodeA> 2  </nodeA><meta><instanceID/></meta></data></instance></model>' );
     model.init();
-    it( 'are trimmed during initialization', function() {
+    it( 'are trimmed during initialization', () => {
         expect( model.getStr() ).toContain( '<nodeA>2</nodeA>' );
     } );
 } );
 
-describe( 'Instantiating a model', function() {
-    var modelStr = '<model><instance><data id="data"><nodeA>2</nodeA></data></instance>' +
+describe( 'Instantiating a model', () => {
+    const modelStr = '<model><instance><data id="data"><nodeA>2</nodeA></data></instance>' +
         '<instance id="countries"><root><item><country>NL</country></item></root></instance></model>';
 
-    it( 'without options, it includes all instances', function() {
-        var model = new Model( modelStr );
+    it( 'without options, it includes all instances', () => {
+        const model = new Model( modelStr );
         model.init();
         expect( model.xml.querySelector( 'model > instance#countries' ) ).not.toBeNull();
         expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).toEqual( 'NL' );
     } );
 
-    it( 'with option.full = true, it includes all instances', function() {
-        var model = new Model( modelStr, {
+    it( 'with option.full = true, it includes all instances', () => {
+        const model = new Model( modelStr, {
             full: true
         } );
         model.init();
@@ -38,59 +37,62 @@ describe( 'Instantiating a model', function() {
         expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).toEqual( 'NL' );
     } );
 
-    it( 'with options.full = false, strips the secondary instances', function() {
-        var model = new Model( modelStr, {
+    it( 'with options.full = false, strips the secondary instances', () => {
+        const model = new Model( modelStr, {
             full: false
         } );
         model.init();
         expect( model.xml.querySelector( 'model > instance#countries' ) ).toBeNull();
     } );
 
-    it( 'without an instanceID node, returns an error', function() {
-        var result = new Model( modelStr ).init();
+    it( 'without an instanceID node, returns an error', () => {
+        const result = new Model( modelStr ).init();
 
         expect( result.length ).toEqual( 1 );
         expect( /Missing\sinstanceID/.test( result[ 0 ] ) ).toEqual( true );
     } );
 } );
 
-describe( 'Data node getter', function() {
-    var i, t = [
-            [ '', null, null, 20 ],
-            [ '', null, {},
-                20
-            ],
-            //["/", null, {}, 9], //issue with xfind, not important
-            [ false, null, {},
-                20
-            ],
-            [ null, null, {},
-                20
-            ],
-            [ null, null, { noEmpty: true }, 10 ], //instanceID is populated by model
-            //[ 1 ],
-            [ '/thedata/nodeA', 1, null, 0 ],
-            [ '/thedata/nodeA', null, { noEmpty: true }, 0 ], //"int"
-            [ '/thedata/nodeA', null, { onlyleaf: true }, 1 ],
-            [ '/thedata/repeatGroup', null, null, 3 ],
+describe( 'Data node getter', () => {
+    let i;
 
-            [ '//nodeC', null, null, 3 ],
-            [ '/thedata/repeatGroup/nodeC', null, null, 3 ],
-            [ '/thedata/repeatGroup/nodeC', 2, null, 1 ],
-            [ '/thedata/repeatGroup/nodeC', null, { noEmpty: true }, 2 ],
-            [ '/thedata/repeatGroup/nodeC', null, { onlyleaf: true }, 3 ]
+    const t = [
+        [ '', null, null, 20 ],
+        [ '', null, {},
+            20
         ],
-        model = new Model( '<model><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
-            '<repeatGroup template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
-            '<repeatGroup><nodeC>c2</nodeC></repeatGroup>' +
-            '<repeatGroup><nodeC>c3</nodeC></repeatGroup>' +
-            '<somenodes><A>one</A><B>one</B><C>one</C></somenodes><someweights><w1>1</w1><w2>3</w2><w.3>5</w.3></someweights><nodeF/>' +
-            '<meta><instanceID/></meta></thedata></instance></model>' );
+        //["/", null, {}, 9], //issue with xfind, not important
+        [ false, null, {},
+            20
+        ],
+        [ null, null, {},
+            20
+        ],
+        [ null, null, { noEmpty: true }, 10 ], //instanceID is populated by model
+        //[ 1 ],
+        [ '/thedata/nodeA', 1, null, 0 ],
+        [ '/thedata/nodeA', null, { noEmpty: true }, 0 ], //"int"
+        [ '/thedata/nodeA', null, { onlyleaf: true }, 1 ],
+        [ '/thedata/repeatGroup', null, null, 3 ],
+
+        [ '//nodeC', null, null, 3 ],
+        [ '/thedata/repeatGroup/nodeC', null, null, 3 ],
+        [ '/thedata/repeatGroup/nodeC', 2, null, 1 ],
+        [ '/thedata/repeatGroup/nodeC', null, { noEmpty: true }, 2 ],
+        [ '/thedata/repeatGroup/nodeC', null, { onlyleaf: true }, 3 ]
+    ];
+
+    const model = new Model( '<model><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
+        '<repeatGroup template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
+        '<repeatGroup><nodeC>c2</nodeC></repeatGroup>' +
+        '<repeatGroup><nodeC>c3</nodeC></repeatGroup>' +
+        '<somenodes><A>one</A><B>one</B><C>one</C></somenodes><someweights><w1>1</w1><w2>3</w2><w.3>5</w.3></someweights><nodeF/>' +
+        '<meta><instanceID/></meta></thedata></instance></model>' );
 
     model.init();
 
     function test( node ) {
-        it( 'obtains nodes (selector: ' + node.selector + ', index: ' + node.index + ', filter: ' + JSON.stringify( node.filter ) + ')', function() {
+        it( `obtains nodes (selector: ${node.selector}, index: ${node.index}, filter: ${JSON.stringify( node.filter )})`, () => {
             expect( model.node( node.selector, node.index, node.filter ).getElements().length ).toEqual( node.result );
         } );
     }
@@ -102,32 +104,31 @@ describe( 'Data node getter', function() {
             result: t[ i ][ 3 ]
         } );
     }
-
 } );
 
-describe( 'Data node (&) value getter', function() {
-    var data = getModel( 'thedata.xml' ); //dataStr1);
+describe( 'Data node (&) value getter', () => {
+    const data = getModel( 'thedata.xml' ); //dataStr1);
 
-    it( 'returns an array of one node value', function() {
+    it( 'returns an array of one node value', () => {
         expect( data.node( '/thedata/nodeB' ).getVal() ).toEqual( 'b' );
     } );
 
-    it( 'returns the first node value of multiple nodes', function() {
+    it( 'returns the first node value of multiple nodes', () => {
         expect( data.node( '/thedata/repeatGroup/nodeC' ).getVal() ).toEqual( '' );
     } );
 
-    it( 'returns null', function() {
+    it( 'returns null', () => {
         expect( data.node( '/thedata/nodeX' ).getVal() ).toEqual( undefined );
     } );
 
-    it( 'obtains a node value of a node with a . in the name', function() {
+    it( 'obtains a node value of a node with a . in the name', () => {
         expect( data.node( '/thedata/someweights/w.3' ).getVal() ).toEqual( '5' );
     } );
 } );
 
-describe( 'Data node XML data type', function() {
-    var i;
-    var t = [
+describe( 'Data node XML data type', () => {
+    let i;
+    const t = [
         [ 'val1', null, true ],
         [ 'val3', 'somewrongtype', true ], //default type is string
 
@@ -220,21 +221,21 @@ describe( 'Data node XML data type', function() {
     ];
 
     function typeConversionTest( n ) {
-        it( 'is converted for XML type: ' + n.type + ' with value: ' + n.value, function() {
-            var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
-            var expected = typeof n.converted !== 'undefined' ? n.converted : n.value;
+        it( `is converted for XML type: ${n.type} with value: ${n.value}`, () => {
+            const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
+            const expected = typeof n.converted !== 'undefined' ? n.converted : n.value;
             node.setVal( n.value, n.type );
             expect( node.getVal() ).toEqual( expected );
         } );
     }
 
     function typeValidationTest( n ) {
-        it( 'is (in)validated for XML type: ' + n.type + ' with value:' + n.value, function( done ) {
-            var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
+        it( `is (in)validated for XML type: ${n.type} with value:${n.value}`, done => {
+            const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
             // set the value without conversion (as string)
             node.setVal( n.value );
             node.validateConstraintAndType( null, n.type )
-                .then( function( result ) {
+                .then( result => {
                     expect( result ).toEqual( n.valid );
                 } )
                 .then( done )
@@ -257,55 +258,55 @@ describe( 'Data node XML data type', function() {
         } );
     }
 
-    it( 'returns a null result for a non-existing node', function() {
-        var data = getModel( 'thedata.xml' );
+    it( 'returns a null result for a non-existing node', () => {
+        const data = getModel( 'thedata.xml' );
         expect( data.node( '/thedata/nodeA', 1, null ).setVal( 'val13', 'string' ) ).toEqual( null );
     } );
 
-    it( 'returns a null result when attempting to set the value of multiple nodes', function() {
-        var data = getModel( 'thedata.xml' );
+    it( 'returns a null result when attempting to set the value of multiple nodes', () => {
+        const data = getModel( 'thedata.xml' );
         expect( data.node( '/thedata/repeatGroup/nodeC', null, null ).setVal( 'val' ) ).toEqual( null );
     } );
 
-    it( 'sets a non-empty value to empty', function( done ) {
-        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
+    it( 'sets a non-empty value to empty', done => {
+        const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         node.setVal( 'value', 'string' );
         node.setVal( '' );
         node.validateConstraintAndType( null, 'string' )
-            .then( function( passed ) {
+            .then( passed => {
                 expect( passed ).toBe( true );
             } )
             .then( done )
             .catch( done );
     } );
 
-    it( 'adds a file attribute to data nodes with a value and with xml-type: binary', function() {
-        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
+    it( 'adds a file attribute to data nodes with a value and with xml-type: binary', () => {
+        const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         expect( node.getElement().getAttribute( 'type' ) ).toBe( null );
         node.setVal( 'this.jpg', 'binary' );
         expect( node.getElement().getAttribute( 'type' ) ).toBe( 'file' );
     } );
 
-    it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', function() {
-        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
+    it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', () => {
+        const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         node.setVal( 'this.jpg', 'binary' );
         expect( node.getElement().getAttribute( 'type' ) ).toBe( 'file' );
         node.setVal( '', 'binary' );
         expect( node.getElement().getAttribute( 'type' ) ).toBe( null );
     } );
 
-    it( 'does not trim a string value', function() {
-        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
-        var value = ' a  ';
+    it( 'does not trim a string value', () => {
+        const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
+        const value = ' a  ';
         node.setVal( value, 'string' );
         expect( node.getVal() ).toEqual( value );
     } );
 
-    describe( 'does convert whitespace-only values', function() {
-        var node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
+    describe( 'does convert whitespace-only values', () => {
+        const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
 
         function whiteSpaceTest( whiteSpaceValue ) {
-            it( 'to ""', function() {
+            it( 'to ""', () => {
                 // first prime node a with some non-whitespace value
                 node.setVal( 'aa', 'string' );
                 expect( node.getVal() ).toEqual( 'aa' );
@@ -324,13 +325,13 @@ describe( 'Data node XML data type', function() {
 
 } );
 
-describe( 'dataupdate event, is fired on model.$events and includes', function() {
-    it( 'object with repeatPath and repeatIndex for a node inside a repeatSeries of more than 1 instance', function() {
-        var model = new Model( {
+describe( 'dataupdate event, is fired on model.$events and includes', () => {
+    it( 'object with repeatPath and repeatIndex for a node inside a repeatSeries of more than 1 instance', () => {
+        const model = new Model( {
             modelStr: '<model><instance><a><b><c/></b><b><c/></b><meta><instanceID/></meta></a></instance></model>'
         } );
-        var eventObjects = [];
-        model.events.addEventListener( 'dataupdate', function( event ) {
+        const eventObjects = [];
+        model.events.addEventListener( 'dataupdate', event => {
             eventObjects.push( event.detail );
         } );
         model.init();
@@ -343,9 +344,9 @@ describe( 'dataupdate event, is fired on model.$events and includes', function()
     } );
 } );
 
-describe( 'Data node remover', function() {
-    it( 'has removed a data node', function() {
-        var data = getModel( 'thedata.xml' ),
+describe( 'Data node remover', () => {
+    it( 'has removed a data node', () => {
+        const data = getModel( 'thedata.xml' ),
             node = data.node( '/thedata/nodeA' );
 
         expect( node.getElements().length ).toEqual( 1 );
@@ -355,10 +356,10 @@ describe( 'Data node remover', function() {
         expect( data.node( '/thedata/nodeA' ).getElements().length ).toEqual( 0 );
     } );
 
-    it( 'can remove nodes with a . in the nodeName', function() {
-        var model = new Model( '<model><instance><data><F27./></data></instance></model>' );
-        var path = '/data/F27.';
-        var node;
+    it( 'can remove nodes with a . in the nodeName', () => {
+        const model = new Model( '<model><instance><data><F27./></data></instance></model>' );
+        const path = '/data/F27.';
+        let node;
 
         model.init();
         node = model.node( path );
@@ -370,26 +371,26 @@ describe( 'Data node remover', function() {
 } );
 
 
-describe( 'DeprecatedID value getter', function() {
-    it( 'returns "" if deprecatedID node does not exist', function() {
-        var model = new Model( '<model><instance><data></data></instance></model>' );
+describe( 'DeprecatedID value getter', () => {
+    it( 'returns "" if deprecatedID node does not exist', () => {
+        const model = new Model( '<model><instance><data></data></instance></model>' );
         model.init();
         expect( model.getDeprecatedID() ).toEqual( '' );
     } );
-    it( 'returns value of deprecatedID node', function() {
-        var model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
+    it( 'returns value of deprecatedID node', () => {
+        const model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
         model.init();
         expect( model.getDeprecatedID() ).toEqual( 'a' );
     } );
 } );
 
 
-describe( 'getRepeatSeries', function() {
+describe( 'getRepeatSeries', () => {
     // Note the strategic placements of whitespace '\n'
-    var model = new Model( '<model><instance><a>\n<r><b/><nR/>\n<nR/></r>\n<r><b/><nR/><nR/>\n<nR/></r></a></instance></model>' );
+    const model = new Model( '<model><instance><a>\n<r><b/><nR/>\n<nR/></r>\n<r><b/><nR/><nR/>\n<nR/></r></a></instance></model>' );
     model.init();
     model.extractFakeTemplates( [ '/a/r', '/a/r/nR' ] );
-    it( 'returns the elements in one series of repeats', function() {
+    it( 'returns the elements in one series of repeats', () => {
         expect( model.getRepeatSeries( '/a/r', 0 ).length ).toEqual( 2 );
         expect( model.getRepeatSeries( '/a/r/nR', 0 ).length ).toEqual( 2 );
         expect( model.getRepeatSeries( '/a/r/nR', 1 ).length ).toEqual( 3 );
@@ -397,57 +398,60 @@ describe( 'getRepeatSeries', function() {
 } );
 
 
-describe( 'getXPath', function() {
-    var xmlStr = '<root><path><to><node/><repeat><number/></repeat><repeat><number/><number/></repeat></to></path></root>';
-    var model = new Model( xmlStr );
+describe( 'getXPath', () => {
+    const xmlStr = '<root><path><to><node/><repeat><number/></repeat><repeat><number/><number/></repeat></to></path></root>';
+    const model = new Model( xmlStr );
     model.init();
 
-    it( 'returns /root/path/to/node without parameters', function() {
-        var node = model.xml.querySelector( 'node' );
+    it( 'returns /root/path/to/node without parameters', () => {
+        const node = model.xml.querySelector( 'node' );
         expect( model.getXPath( node ) ).toEqual( '/root/path/to/node' );
     } );
 
-    it( 'returns same /root/path/to/node if first parameter is null', function() {
-        var node = model.xml.querySelector( 'node' );
+    it( 'returns same /root/path/to/node if first parameter is null', () => {
+        const node = model.xml.querySelector( 'node' );
         expect( model.getXPath( node, null ) ).toEqual( '/root/path/to/node' );
     } );
 
-    it( 'returns path from context first node provided as parameter', function() {
-        var node = model.xml.querySelector( 'node' );
+    it( 'returns path from context first node provided as parameter', () => {
+        const node = model.xml.querySelector( 'node' );
         expect( model.getXPath( node, 'root' ) ).toEqual( '/path/to/node' );
     } );
-    it( 'returned path includes no positions if there are no siblings with the same name along the path', function() {
-        var node = model.xml.querySelector( 'node' );
+    it( 'returned path includes no positions if there are no siblings with the same name along the path', () => {
+        const node = model.xml.querySelector( 'node' );
         expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/node' );
     } );
-    it( 'returned path includes positions when asked', function() {
-        var node = model.xml.querySelectorAll( 'number' )[ 1 ];
+    it( 'returned path includes positions when asked', () => {
+        const node = model.xml.querySelectorAll( 'number' )[ 1 ];
         expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number' );
     } );
-    it( 'returned path includes positions when asked (multiple levels)', function() {
-        var node = model.xml.querySelectorAll( 'number' )[ 2 ];
+    it( 'returned path includes positions when asked (multiple levels)', () => {
+        const node = model.xml.querySelectorAll( 'number' )[ 2 ];
         expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number[2]' );
     } );
 } );
 
-describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensive tests!)', function() {
-    var i, t = [
-            [ '/thedata/nodeB', 'string', null, 0, 'b' ],
-            [ '../nodeB', 'string', '/thedata/nodeA', 0, 'b' ],
-            [ '/thedata/nodeB', 'boolean', null, 0, true ],
-            [ '/thedata/notexist', 'boolean', null, 0, false ],
-            [ '/thedata/repeatGroup[2]/nodeC', 'string', null, 0, 'c2' ],
-            [ '/thedata/repeatGroup[position()=3]/nodeC', 'string', null, 0, 'c3' ],
-            [ 'coalesce(/thedata/nodeA, /thedata/nodeB)', 'string', null, 0, 'b' ],
-            [ 'coalesce(/thedata/nodeB, /thedata/nodeA)', 'string', null, 0, 'b' ],
-            [ 'weighted-checklist(3, 3, /thedata/somenodes/A, /thedata/someweights/w2)', 'boolean', null, 0, true ],
-            [ 'weighted-checklist(9, 9, /thedata/somenodes/*, /thedata/someweights/*)', 'boolean', null, 0, true ],
-            [ '"2012-07-24" > "2012-07-23"', 'boolean', null, 0, true ],
-        ],
-        data = getModel( 'thedata.xml' );
+describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensive tests!)', () => {
+    let i;
+
+    const t = [
+        [ '/thedata/nodeB', 'string', null, 0, 'b' ],
+        [ '../nodeB', 'string', '/thedata/nodeA', 0, 'b' ],
+        [ '/thedata/nodeB', 'boolean', null, 0, true ],
+        [ '/thedata/notexist', 'boolean', null, 0, false ],
+        [ '/thedata/repeatGroup[2]/nodeC', 'string', null, 0, 'c2' ],
+        [ '/thedata/repeatGroup[position()=3]/nodeC', 'string', null, 0, 'c3' ],
+        [ 'coalesce(/thedata/nodeA, /thedata/nodeB)', 'string', null, 0, 'b' ],
+        [ 'coalesce(/thedata/nodeB, /thedata/nodeA)', 'string', null, 0, 'b' ],
+        [ 'weighted-checklist(3, 3, /thedata/somenodes/A, /thedata/someweights/w2)', 'boolean', null, 0, true ],
+        [ 'weighted-checklist(9, 9, /thedata/somenodes/*, /thedata/someweights/*)', 'boolean', null, 0, true ],
+        [ '"2012-07-24" > "2012-07-23"', 'boolean', null, 0, true ],
+    ];
+
+    const data = getModel( 'thedata.xml' );
 
     function test( expr, resultType, contextSelector, index, result ) {
-        it( 'evaluates XPath: ' + expr, function() {
+        it( `evaluates XPath: ${expr}`, () => {
             expect( data.evaluate( expr, resultType, contextSelector, index ) ).toEqual( result );
         } );
     }
@@ -458,12 +462,12 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
 
     // this tests the makeBugCompliant() workaround that injects a position into an absolute path
     // for the issue described here: https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations
-    it( 'evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())', function() {
+    it( 'evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())', () => {
         expect( data.evaluate( '/thedata/repeatGroup/nodeC', 'string', '/thedata/repeatGroup/nodeC', 2 ) ).toEqual( 'c3' );
     } );
 
-    it( 'is able to address a secondary instance by id with the instance(id)/path/to/node syntax', function() {
-        var dataO = getModel( 'new_cascading_selections.xml' );
+    it( 'is able to address a secondary instance by id with the instance(id)/path/to/node syntax', () => {
+        const dataO = getModel( 'new_cascading_selections.xml' );
         expect( dataO.evaluate( 'instance("cities")/root/item/name', 'string' ) ).toEqual( 'ams' );
         expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4]/name', 'string' ) ).toEqual( 'den' );
         expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and 1<2]', 'nodes' ).length ).toEqual( 3 );
@@ -472,8 +476,8 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
 } );
 
 // This test makes sure that whatever date strings are returned by the XPath evaluator can be dealt with by the form engine
-describe( 'dates returned by the XPath evaluator ', function() {
-    var model = new Model( '<model><instance><data></data></instance></model>' );
+describe( 'dates returned by the XPath evaluator ', () => {
+    const model = new Model( '<model><instance><data></data></instance></model>' );
     model.init();
     [
         [ 'date("2018-01-01")', '2018-01-01', 'date' ],
@@ -485,35 +489,35 @@ describe( 'dates returned by the XPath evaluator ', function() {
         [ 'date("2018-01-01"  + 14)', '2018-01-15', 'date' ],
         [ 'date("2018-01-01" + 14)', '2018-01-15T00:00:00.000-07:00', 'datetime' ],
         [ 'date("2018-10-35")', '', 'date' ]
-    ].forEach( function( test ) {
-        it( 'are recognized and converted, if necessary by the type convertor: ' + test[ 0 ], function() {
+    ].forEach( test => {
+        it( `are recognized and converted, if necessary by the type convertor: ${test[ 0 ]}`, () => {
             expect( model.types[ test[ 2 ] ].convert( model.evaluate( test[ 0 ], 'string' ) ) ).toEqual( test[ 1 ] );
         } );
     } );
 
 } );
 
-describe( 'functionality to obtain string of the primary XML instance for storage or uploads)', function() {
-    it( 'returns primary instance without templates - A', function() {
-        var model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' );
+describe( 'functionality to obtain string of the primary XML instance for storage or uploads)', () => {
+    it( 'returns primary instance without templates - A', () => {
+        const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' );
         model.init();
         expect( model.getStr() ).toEqual( '<data></data>' );
     } );
 
-    it( 'returns primary instance without templates - B', function() {
-        var model = new Model( '<model><instance><data><group    template=""><a/></group></data></instance></model>' );
+    it( 'returns primary instance without templates - B', () => {
+        const model = new Model( '<model><instance><data><group    template=""><a/></group></data></instance></model>' );
         model.init();
         expect( model.getStr() ).toEqual( '<data></data>' );
     } );
 
-    it( 'returns primary instance and leaves namespaces intact', function() {
-        var model = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' );
+    it( 'returns primary instance and leaves namespaces intact', () => {
+        const model = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' );
         model.init();
         expect( model.getStr() ).toEqual( '<data xmlns="https://some.namespace.com/"><a/></data>' );
     } );
 } );
 
-describe( 'converting absolute paths', function() {
+describe( 'converting absolute paths', () => {
     [
         // to be converted
         [ '/path/to/node', '/model/instance[1]/path/to/node' ],
@@ -551,21 +555,21 @@ describe( 'converting absolute paths', function() {
         [ '\'\'', '\'\'' ],
         [ '', '' ]
 
-    ].forEach( function( test ) {
-        it( 'converts correctly when the model and instance node are included in the model', function() {
-            var model = new Model( '<model><instance><root/></instance></model>' );
-            var expected = test[ 1 ] || test[ 0 ];
+    ].forEach( test => {
+        it( 'converts correctly when the model and instance node are included in the model', () => {
+            const model = new Model( '<model><instance><root/></instance></model>' );
+            const expected = test[ 1 ] || test[ 0 ];
             model.init();
             expect( model.shiftRoot( test[ 0 ] ) ).toEqual( expected );
         } );
-        it( 'does nothing if model and instance node are absent in the model', function() {
-            var model = new Model( '<data><nodeA/></data>' );
+        it( 'does nothing if model and instance node are absent in the model', () => {
+            const model = new Model( '<data><nodeA/></data>' );
             expect( model.shiftRoot( test[ 0 ] ) ).toEqual( test[ 0 ] );
         } );
     } );
 } );
 
-describe( 'converting instance("id") to absolute paths', function() {
+describe( 'converting instance("id") to absolute paths', () => {
     [
         [ 'instance("a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
         [ 'instance("a.-_")/path/to/node', '/model/instance[@id="a.-_"]/path/to/node' ],
@@ -574,60 +578,60 @@ describe( 'converting instance("id") to absolute paths', function() {
         [ 'instance(\'a\')/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
         [ 'instance( \'a\')/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
         [ 'instance( \'a\'   )/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
-    ].forEach( function( test ) {
-        it( 'happens correctly', function() {
-            var model = new Model( '<model><instance><root/></instance><instance id="a"/><instance id="a.-_"/></model>' );
-            var expected = test[ 1 ];
+    ].forEach( test => {
+        it( 'happens correctly', () => {
+            const model = new Model( '<model><instance><root/></instance><instance id="a"/><instance id="a.-_"/></model>' );
+            const expected = test[ 1 ];
             model.init();
             expect( model.replaceInstanceFn( test[ 0 ] ) ).toEqual( expected );
         } );
     } );
 } );
 
-describe( 'converting expressions with current() for context /data/node', function() {
-    var context = '/data/node';
+describe( 'converting expressions with current() for context /data/node', () => {
+    const context = '/data/node';
 
     [
         [ 'instance("a")/path/to/node[filter = current()/data/some/node]', 'instance("a")/path/to/node[filter = /data/some/node]' ],
         [ 'instance("a")/path/to/node[filter = current()/.]', 'instance("a")/path/to/node[filter = /data/node/.]' ],
         [ 'instance("a")/path/to/node[filter = current()/../some/node]', 'instance("a")/path/to/node[filter = /data/node/../some/node]' ]
 
-    ].forEach( function( test ) {
-        it( 'happens correctly', function() {
-            var model = new Model( '<model><instance><root/></instance></model>' );
-            var expected = test[ 1 ];
+    ].forEach( test => {
+        it( 'happens correctly', () => {
+            const model = new Model( '<model><instance><root/></instance></model>' );
+            const expected = test[ 1 ];
             model.init();
             expect( model.replaceCurrentFn( test[ 0 ], context ) ).toEqual( expected );
         } );
     } );
 } );
 
-describe( 'replacing version() calls', function() {
+describe( 'replacing version() calls', () => {
     [
         [ 'version()', '"123"' ],
         [ 'version(  )', '"123"' ],
         [ 'concat("version: ", version())', 'concat("version: ", "123")' ],
-    ].forEach( function( test ) {
-        it( 'happens correctly', function() {
-            var model = new Model( '<model><instance><root version="123"><a/></root></instance></model>' );
-            var expected = test[ 1 ];
+    ].forEach( test => {
+        it( 'happens correctly', () => {
+            const model = new Model( '<model><instance><root version="123"><a/></root></instance></model>' );
+            const expected = test[ 1 ];
             model.init();
             expect( model.replaceVersionFn( test[ 0 ] ) ).toEqual( expected );
         } );
     } );
 } );
 
-describe( 'converting indexed-repeat() ', function() {
+describe( 'converting indexed-repeat() ', () => {
     [
         [ 'indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '/path/to/repeat[position() = 2]/node' ],
         [ ' indexed-repeat( /path/to/repeat/node , /path/to/repeat , 2 )', ' /path/to/repeat[position() = 2]/node' ],
         [ '1 + indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '1 + /path/to/repeat[position() = 2]/node' ],
         [ 'concat(indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2), "fluff")', 'concat(/path/to/repeat[position() = 2]/node, "fluff")' ],
         [ 'indexed-repeat(/p/t/r/ar/node, /p/t/r, 2, /p/t/r/ar, 3 )', '/p/t/r[position() = 2]/ar[position() = 3]/node' ]
-    ].forEach( function( test ) {
-        it( 'works, with a number as 3rd (5th, 7th) parameter', function() {
-            var model = new Model( '<model><instance><root/></instance></model>' );
-            var expected = test[ 1 ];
+    ].forEach( test => {
+        it( 'works, with a number as 3rd (5th, 7th) parameter', () => {
+            const model = new Model( '<model><instance><root/></instance></model>' );
+            const expected = test[ 1 ];
             model.init();
             expect( model.replaceIndexedRepeatFn( test[ 0 ] ) ).toEqual( expected );
         } );
@@ -636,10 +640,10 @@ describe( 'converting indexed-repeat() ', function() {
     [
         [ 'indexed-repeat( /p/t/r/node,  /p/t/r , position(..)    )', '/p/t/r[position() = 3]/node' ],
         [ 'indexed-repeat( /p/t/r/node,  /p/t/r , position(..) - 1)', '/p/t/r[position() = 2]/node' ],
-    ].forEach( function( test ) {
-        it( 'works, with an expresssion as 3rd (5th, 7th) parameter', function() {
-            var model = new Model( '<model><instance><p><t><r><node/></r><r><node/></r><r><node/></r></t></p></instance></model>' );
-            var expected = test[ 1 ];
+    ].forEach( test => {
+        it( 'works, with an expresssion as 3rd (5th, 7th) parameter', () => {
+            const model = new Model( '<model><instance><p><t><r><node/></r><r><node/></r><r><node/></r></t></p></instance></model>' );
+            const expected = test[ 1 ];
             model.init();
             expect( model.replaceIndexedRepeatFn( test[ 0 ], '/p/t/r/node', 2 ) ).toEqual( expected );
         } );
@@ -647,31 +651,32 @@ describe( 'converting indexed-repeat() ', function() {
 } );
 
 
-describe( 'converting pulldata() ', function() {
+describe( 'converting pulldata() ', () => {
     [
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', 2)', 'instance(\'hhplotdata\')/root/item[hhid_key = 2]/plot1size' ],
         [ 'pulldata( \'hhplotdata\', \'plot1size\', \'hhid_key\' , 2 )', 'instance(\'hhplotdata\')/root/item[hhid_key = 2]/plot1size' ],
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', \'two\')', 'instance(\'hhplotdata\')/root/item[hhid_key = \'two\']/plot1size' ],
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/a)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'aa\']/plot1size' ],
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/b)', 'instance(\'hhplotdata\')/root/item[hhid_key = 22]/plot1size' ],
-    ].forEach( function( test ) {
-        it( 'works', function() {
-            var model = new Model( '<model><instance><data><a>aa</a><b>22</b></data></instance></model>' );
-            var fn = test[ 0 ];
-            var expected = test[ 1 ];
+    ].forEach( test => {
+        it( 'works', () => {
+            const model = new Model( '<model><instance><data><a>aa</a><b>22</b></data></instance></model>' );
+            const fn = test[ 0 ];
+            const expected = test[ 1 ];
             model.init();
             expect( model.convertPullDataFn( fn )[ fn ] ).toEqual( expected );
         } );
     } );
 } );
 
-describe( 'external instances functionality', function() {
-    var parser = new DOMParser();
-    var loadErrors, model,
-        modelStr = '<model><instance><cascade_external id="cascade_external" version=""><country/><city/><neighborhood/><meta><instanceID/></meta></cascade_external></instance><instance id="cities" src="jr://file/cities.xml" /><instance id="neighborhoods" src="jr://file/neighbourhoods.xml" /><instance id="countries" src="jr://file/countries.xml" /></model>',
-        citiesStr = '<root><item><itextId>static_instance-cities-0</itextId><country>nl</country><name>ams</name></item></root>';
+describe( 'external instances functionality', () => {
+    const parser = new DOMParser();
+    let loadErrors;
+    let model;
+    const modelStr = '<model><instance><cascade_external id="cascade_external" version=""><country/><city/><neighborhood/><meta><instanceID/></meta></cascade_external></instance><instance id="cities" src="jr://file/cities.xml" /><instance id="neighborhoods" src="jr://file/neighbourhoods.xml" /><instance id="countries" src="jr://file/countries.xml" /></model>';
+    const citiesStr = '<root><item><itextId>static_instance-cities-0</itextId><country>nl</country><name>ams</name></item></root>';
 
-    it( 'outputs errors if external instances in the model are not provided upon instantiation', function() {
+    it( 'outputs errors if external instances in the model are not provided upon instantiation', () => {
         model = new Model( modelStr );
         loadErrors = model.init();
         expect( loadErrors.length ).toEqual( 3 );
@@ -680,7 +685,7 @@ describe( 'external instances functionality', function() {
         expect( loadErrors[ 2 ] ).toEqual( 'External instance "countries" is empty.' );
     } );
 
-    it( 'populates matching external instances provided as XML Document, and leaves original XML doc intact', function() {
+    it( 'populates matching external instances provided as XML Document, and leaves original XML doc intact', () => {
         const external = [ {
             id: 'cities',
             xml: parser.parseFromString( citiesStr, 'text/xml' )
@@ -706,9 +711,9 @@ describe( 'external instances functionality', function() {
         expect( external[ 0 ].xml.querySelector( 'country' ).textContent ).toEqual( 'nl' );
     } );
 
-    it( 'populates matching external instances provided as XML Strings (old usage)', function() {
+    it( 'populates matching external instances provided as XML Strings (old usage)', () => {
         model = new Model( {
-            modelStr: modelStr,
+            modelStr,
             external: [ {
                 id: 'cities',
                 xml: citiesStr
@@ -725,9 +730,9 @@ describe( 'external instances functionality', function() {
         expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).toEqual( 'nl' );
     } );
 
-    it( 'outputs errors if an external instance is not valid XML (string)', function() {
+    it( 'outputs errors if an external instance is not valid XML (string)', () => {
         model = new Model( {
-            modelStr: modelStr,
+            modelStr,
             external: [ {
                 id: 'cities',
                 xml: '<root>'
@@ -744,8 +749,8 @@ describe( 'external instances functionality', function() {
         expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML instance "cities". Invalid XML: <root>' );
     } );
 
-    it( 'removes existing (internal) content before adding external instances', function() {
-        var populatedInstance = '<instance id="cities" src="jr://file/cities.xml"><existing>existing</existing><another>something</another></instance>';
+    it( 'removes existing (internal) content before adding external instances', () => {
+        const populatedInstance = '<instance id="cities" src="jr://file/cities.xml"><existing>existing</existing><another>something</another></instance>';
         model = new Model( {
             modelStr: modelStr.replace( '<instance id="cities" src="jr://file/cities.xml" />', populatedInstance ),
             external: [ {
@@ -766,50 +771,50 @@ describe( 'external instances functionality', function() {
     } );
 } );
 
-describe( 'cloning repeats in empty model', function() {
-    require( '../../config' ).repeatOrdinals = false;
-    var model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
+describe( 'cloning repeats in empty model', () => {
+    config.repeatOrdinals = false;
+    const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
         '<rep3 jr:template=""><three/></rep3></rep2></rep1></data></instance></model>' );
     model.init();
     model.addRepeat( '/data/rep1', 0 );
     model.addRepeat( '/data/rep1/rep2', 0 );
     model.addRepeat( '/data/rep1/rep2/rep3', 0 );
-    it( 'works for nested repeats', function() {
+    it( 'works for nested repeats', () => {
         expect( model.getStr() ).toEqual( '<data><rep1><one/><rep2><two/><rep3><three/></rep3></rep2></rep1></data>' );
     } );
 
 } );
 
-describe( 'Using XPath with default namespace', function() {
+describe( 'Using XPath with default namespace', () => {
 
-    describe( 'on the primary instance child', function() {
-        var model = new Model( '<model><instance><data xmlns="http://unknown.namespace.com/34324sdagd"><nodeA>5</nodeA></data></instance></model>' );
+    describe( 'on the primary instance child', () => {
+        const model = new Model( '<model><instance><data xmlns="http://unknown.namespace.com/34324sdagd"><nodeA>5</nodeA></data></instance></model>' );
 
         model.init();
 
-        it( 'works for Nodeset().getElements()', function() {
+        it( 'works for Nodeset().getElements()', () => {
             expect( model.node( '/data/nodeA' ).getElements().length ).toEqual( 1 );
             expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
         } );
 
-        it( 'works for evaluate()', function() {
+        it( 'works for evaluate()', () => {
             expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
             expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( '5' );
         } );
 
     } );
 
-    describe( ' on the model', function() {
-        var model = new Model( '<model xmlns="http://www.w3.org/2002/xforms"><instance><data><nodeA>5</nodeA></data></instance></model>' );
+    describe( ' on the model', () => {
+        const model = new Model( '<model xmlns="http://www.w3.org/2002/xforms"><instance><data><nodeA>5</nodeA></data></instance></model>' );
 
         model.init();
 
-        it( 'works for Nodeset().getElements()', function() {
+        it( 'works for Nodeset().getElements()', () => {
             expect( model.node( '/data/nodeA' ).getElements().length ).toEqual( 1 );
             expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
         } );
 
-        it( 'works for evaluate()', function() {
+        it( 'works for evaluate()', () => {
             expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
             expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( '5' );
         } );
@@ -818,25 +823,25 @@ describe( 'Using XPath with default namespace', function() {
 
 } );
 
-describe( 'Using XPath with non-default namespaces', function() {
+describe( 'Using XPath with non-default namespaces', () => {
 
-    describe( 'on secondary instances', function() {
-        var SEC_INSTANCE_CONTENT = '<sec xmlns:this="a"><this:b this:at="that">3</this:b></sec>';
+    describe( 'on secondary instances', () => {
+        const SEC_INSTANCE_CONTENT = '<sec xmlns:this="a"><this:b this:at="that">3</this:b></sec>';
 
         [ {
-            modelStr: '<model><instance><data/></instance><instance id="s">' + SEC_INSTANCE_CONTENT + '</instance></model>'
+            modelStr: `<model><instance><data/></instance><instance id="s">${SEC_INSTANCE_CONTENT}</instance></model>`
         }, {
             modelStr: '<model><instance><data/></instance><instance id="s" src="something"/></model>',
             external: [ { id: 's', xml: new DOMParser().parseFromString( SEC_INSTANCE_CONTENT, 'text/xml' ) } ]
-        } ].forEach( function( testObj ) {
-            var model = new Model( testObj );
-            var type = testObj.external ? 'external' : 'internal';
+        } ].forEach( testObj => {
+            const model = new Model( testObj );
+            const type = testObj.external ? 'external' : 'internal';
             model.init();
-            it( 'works for simple namespaced node retrieval on ' + type + ' instances', function() {
+            it( `works for simple namespaced node retrieval on ${type} instances`, () => {
                 expect( model.evaluate( 'instance("s")/sec/this:b', 'string' ) ).toEqual( '3' );
             } );
 
-            it( 'works for simple namespaced attribute retrieval on ' + type + ' instances', function() {
+            it( `works for simple namespaced attribute retrieval on ${type} instances`, () => {
                 expect( model.evaluate( 'instance("s")/sec/this:b/@this:at', 'string' ) ).toEqual( 'that' );
             } );
         } );
@@ -845,13 +850,13 @@ describe( 'Using XPath with non-default namespaces', function() {
 
 } );
 
-describe( 'Repeat without ordinals', function() {
-    var modelStr = '<model><instance><a><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
-    var modelStrWithTemplate = '<model xmlns:jr="http://openrosa.org/javarosa">' +
+describe( 'Repeat without ordinals', () => {
+    const modelStr = '<model><instance><a><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
+    const modelStrWithTemplate = '<model xmlns:jr="http://openrosa.org/javarosa">' +
         '<instance><a><rep.dot jr:template=""><b/></rep.dot><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
 
-    it( 'are cloned when necessary when repeat has dot in nodeName without template', function() {
-        var model = new Model( modelStr );
+    it( 'are cloned when necessary when repeat has dot in nodeName without template', () => {
+        const model = new Model( modelStr );
         model.init();
         //model.extractFakeTemplates( [ '/a/rep.dot' ] );
 
@@ -860,8 +865,8 @@ describe( 'Repeat without ordinals', function() {
         expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 3 );
     } );
 
-    it( 'are cloned when necessary when repeat has dot in nodeName with template', function() {
-        var model = new Model( modelStrWithTemplate );
+    it( 'are cloned when necessary when repeat has dot in nodeName with template', () => {
+        const model = new Model( modelStrWithTemplate );
         model.init();
 
         expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
@@ -869,15 +874,15 @@ describe( 'Repeat without ordinals', function() {
         expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 3 );
     } );
 
-    it( 'will use the first repeat instance as template and empty the leaf nodes', function() {
-        var model = new Model( '<model><instance><data><repeat><n>1</n></repeat></data></instance></model>' );
+    it( 'will use the first repeat instance as template and empty the leaf nodes', () => {
+        const model = new Model( '<model><instance><data><repeat><n>1</n></repeat></data></instance></model>' );
         model.init();
         model.addRepeat( '/data/repeat', 0, false );
         expect( model.getStr() ).toEqual( '<data><repeat><n>1</n></repeat><repeat><n/></repeat></data>' );
     } );
 
-    it( 'adds the template also when node.remove is called, and removes a repeat even if it is the only instance', function() {
-        var model = new Model( '<model><instance><data><repeat><n>1</n></repeat></data></instance></model>' );
+    it( 'adds the template also when node.remove is called, and removes a repeat even if it is the only instance', () => {
+        const model = new Model( '<model><instance><data><repeat><n>1</n></repeat></data></instance></model>' );
         model.init();
         model.node( '/data/repeat', 0 ).remove();
         expect( model.getStr() ).toEqual( '<data></data>' ); // not self-closing because comment was removed with regex replace
@@ -887,35 +892,34 @@ describe( 'Repeat without ordinals', function() {
 
 } );
 
-describe( 'Ordinals in repeats', function() {
-    var config = require( 'enketo/config' );
-    var dflt = config[ 'repeat ordinals' ];
-    var wr = '<root xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
-    var wrt = '<root xmlns:jr="http://openrosa.org/javarosa" xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
-    var r = '<repeat><node/></repeat>';
-    var rt = '<repeat jr:template=""><node/></repeat>';
-    var start = '<model><instance><root>';
-    var startNs = '<model><instance><root xmlns:jr="http://openrosa.org/javarosa">';
-    var end = '</root></instance></model>';
+describe( 'Ordinals in repeats', () => {
+    const dflt = config[ 'repeat ordinals' ];
+    const wr = '<root xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
+    const wrt = '<root xmlns:jr="http://openrosa.org/javarosa" xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
+    const r = '<repeat><node/></repeat>';
+    const rt = '<repeat jr:template=""><node/></repeat>';
+    const start = '<model><instance><root>';
+    const startNs = '<model><instance><root xmlns:jr="http://openrosa.org/javarosa">';
+    const end = '</root></instance></model>';
 
 
-    beforeAll( function() {
+    beforeAll( () => {
         config.repeatOrdinals = true;
     } );
 
-    afterAll( function() {
+    afterAll( () => {
         config.repeatOrdinals = dflt;
     } );
 
-    describe( 'that have no jr:template', function() {
-        var m1 = start + r + end;
-        var m2 = start + r + r + end;
-        var m3 = start + '<repeat>' + r.replace( /repeat/g, 'nr' ) + '</repeat>' + end;
-        var m4 = start + '<repeat>' + r.replace( /repeat/g, 'nr' ) + r.replace( /repeat/g, 'nr' ) + '</repeat>' + end;
+    describe( 'that have no jr:template', () => {
+        const m1 = start + r + end;
+        const m2 = start + r + r + end;
+        const m3 = `${start}<repeat>${r.replace( /repeat/g, 'nr' )}</repeat>${end}`;
+        const m4 = `${start}<repeat>${r.replace( /repeat/g, 'nr' )}${r.replace( /repeat/g, 'nr' )}</repeat>${end}`;
         //var paths = [ '/root/repeat', '/root/repeat/nr' ];
 
-        it( 'get added to newly cloned repeats', function() {
-            var model = new Model( m1 );
+        it( 'get added to newly cloned repeats', () => {
+            const model = new Model( m1 );
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
@@ -923,8 +927,8 @@ describe( 'Ordinals in repeats', function() {
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>' ) );
         } );
 
-        it( 'get added to newly cloned repeats if multiple instances are present in default model', function() {
-            var model = new Model( m2 );
+        it( 'get added to newly cloned repeats if multiple instances are present in default model', () => {
+            const model = new Model( m2 );
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
@@ -933,8 +937,8 @@ describe( 'Ordinals in repeats', function() {
                 '<repeat enk:ordinal="3"><node/></repeat>' ) );
         } );
 
-        it( 'get added to newly cloned NESTED repeats', function() {
-            var model = new Model( m3 );
+        it( 'get added to newly cloned NESTED repeats', () => {
+            const model = new Model( m3 );
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
@@ -947,8 +951,8 @@ describe( 'Ordinals in repeats', function() {
         } );
 
         // Very theoretical. Situation will never occur with OC.
-        xit( 'get added to newly cloned NESTED repeats if multiple instances of the nested repeat are present in default model', function() {
-            var model = new Model( m4 );
+        xit( 'get added to newly cloned NESTED repeats if multiple instances of the nested repeat are present in default model', () => {
+            const model = new Model( m4 );
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
@@ -960,8 +964,8 @@ describe( 'Ordinals in repeats', function() {
                 '</repeat><repeat enk:ordinal="2"><nr enk:last-used-ordinal="2" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr></repeat>' ) );
         } );
 
-        it( 'retains original ordinals when a repeat or NESTED repeat instance in between is removed', function() {
-            var model = new Model( m3 );
+        it( 'retains original ordinals when a repeat or NESTED repeat instance in between is removed', () => {
+            const model = new Model( m3 );
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
@@ -976,8 +980,8 @@ describe( 'Ordinals in repeats', function() {
                 '</repeat><repeat enk:ordinal="3"><nr><node/></nr></repeat>' ) );
         } );
 
-        it( 'continues ordinal numbering when the last repeat or NESTED repeat instance is removed and a new repeat is created', function() {
-            var model = new Model( m3 );
+        it( 'continues ordinal numbering when the last repeat or NESTED repeat instance is removed and a new repeat is created', () => {
+            const model = new Model( m3 );
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
@@ -994,14 +998,14 @@ describe( 'Ordinals in repeats', function() {
 
     } );
 
-    describe( 'that have a jr:template', function() {
-        var m1 = startNs + rt + end;
-        var m2 = startNs + rt + r + end;
-        var m3 = startNs + rt.replace( '<node/>', rt.replace( /repeat/g, 'nr' ) ) + end;
-        var m4 = startNs + rt.replace( '<node/>', rt.replace( /repeat/g, 'nr' ) + r.replace( /repeat/g, 'nr' ) ) + end;
+    describe( 'that have a jr:template', () => {
+        const m1 = startNs + rt + end;
+        const m2 = startNs + rt + r + end;
+        const m3 = startNs + rt.replace( '<node/>', rt.replace( /repeat/g, 'nr' ) ) + end;
+        const m4 = startNs + rt.replace( '<node/>', rt.replace( /repeat/g, 'nr' ) + r.replace( /repeat/g, 'nr' ) ) + end;
 
-        it( 'get added to newly cloned repeats', function() {
-            var model = new Model( m1 );
+        it( 'get added to newly cloned repeats', () => {
+            const model = new Model( m1 );
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
@@ -1010,8 +1014,8 @@ describe( 'Ordinals in repeats', function() {
             ) );
         } );
 
-        it( 'get added to newly cloned repeats if multiple instances are present in default model', function() {
-            var model = new Model( m2 );
+        it( 'get added to newly cloned repeats if multiple instances are present in default model', () => {
+            const model = new Model( m2 );
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
@@ -1020,8 +1024,8 @@ describe( 'Ordinals in repeats', function() {
                 '<repeat enk:ordinal="3"><node/></repeat>' ) );
         } );
 
-        it( 'get added to newly cloned NESTED repeats', function() {
-            var model = new Model( m3 );
+        it( 'get added to newly cloned NESTED repeats', () => {
+            const model = new Model( m3 );
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
@@ -1036,8 +1040,8 @@ describe( 'Ordinals in repeats', function() {
         } );
 
         // Very theoretical. Situation will never occur with OC.
-        xit( 'get added to newly cloned NESTED repeats if multiple instances of the nested repeat are present in default model', function() {
-            var model = new Model( m4 );
+        xit( 'get added to newly cloned NESTED repeats if multiple instances of the nested repeat are present in default model', () => {
+            const model = new Model( m4 );
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat/nr', 1 );
@@ -1048,8 +1052,8 @@ describe( 'Ordinals in repeats', function() {
                 '<repeat enk:ordinal="2"><nr enk:last-used-ordinal="2" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr></repeat>' ) );
         } );
 
-        it( 'retains original ordinals when a repeat or NESTED repeat instance in between is removed', function() {
-            var model = new Model( m3 );
+        it( 'retains original ordinals when a repeat or NESTED repeat instance in between is removed', () => {
+            const model = new Model( m3 );
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
@@ -1066,8 +1070,8 @@ describe( 'Ordinals in repeats', function() {
                 '</repeat><repeat enk:ordinal="3"><nr enk:last-used-ordinal="1" enk:ordinal="1"><node/></nr></repeat>' ) );
         } );
 
-        it( 'continues ordinal numbering when the last repeat or NESTED repeat instance is removed and a new repeat is created', function() {
-            var model = new Model( m3 );
+        it( 'continues ordinal numbering when the last repeat or NESTED repeat instance is removed and a new repeat is created', () => {
+            const model = new Model( m3 );
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
@@ -1089,19 +1093,19 @@ describe( 'Ordinals in repeats', function() {
 
 } );
 
-describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct incorrect XPath expressions', function() {
-    var modelStr = '<model><instance><abcabce id="abcabce"><n/><ab><ynab/></ab><a><ynaa>1</ynaa><c/></a><a><ynaa>2</ynaa><c/></a><meta><instanceID/></meta></abcabce></instance></model>';
+describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct incorrect XPath expressions', () => {
+    const modelStr = '<model><instance><abcabce id="abcabce"><n/><ab><ynab/></ab><a><ynaa>1</ynaa><c/></a><a><ynaa>2</ynaa><c/></a><meta><instanceID/></meta></abcabce></instance></model>';
 
-    it( 'as designed', function() {
-        var model = new Model( modelStr );
+    it( 'as designed', () => {
+        const model = new Model( modelStr );
         model.init();
         expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 0 ) ).toEqual( '/model/instance[1]/abcabce/a[1]/c = 1' );
         expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 1 ) ).toEqual( '/model/instance[1]/abcabce/a[2]/c = 1' );
     } );
 
     // https://github.com/kobotoolbox/enketo-express/issues/594
-    it( ' without getting confused by /path/to/node/a/ab/node', function() {
-        var model = new Model( modelStr );
+    it( ' without getting confused by /path/to/node/a/ab/node', () => {
+        const model = new Model( modelStr );
         model.init();
 
         expect( model.makeBugCompliant( '/model/instance[1]/abcabce/ab/ynab = 1', '/abcabce/a/ynaa', 0 ) ).toEqual( '/model/instance[1]/abcabce/ab/ynab = 1' );
@@ -1110,11 +1114,11 @@ describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct i
 
 } );
 
-describe( 'merging an instance into the model', function() {
+describe( 'merging an instance into the model', () => {
 
-    require( '../../config' ).repeatOrdinals = false;
+    config.repeatOrdinals = false;
 
-    describe( '', function() {
+    describe( '', () => {
         [
             // partial record, empty
             [ '<a><b/></a>', '<model><instance><a><b/><c/></a></instance></model>', '<model><instance><a><b/><c/></a></instance></model>' ],
@@ -1188,11 +1192,13 @@ describe( 'merging an instance into the model', function() {
             [ '<data><age>7</age><details/></data>', '<model><instance><data><age/><details><name>Baby ...</name></details></data></instance></model>',
                 '<model><instance><data><age>7</age><details><name/></details></data></instance></model>'
             ]
-        ].forEach( function( test ) {
-            var result, expected,
-                model = new Model( {
-                    modelStr: test[ 1 ]
-                } );
+        ].forEach( test => {
+            let result;
+            let expected;
+
+            const model = new Model( {
+                modelStr: test[ 1 ]
+            } );
 
             model.init();
             model.mergeXml( test[ 0 ] );
@@ -1202,20 +1208,20 @@ describe( 'merging an instance into the model', function() {
             result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
             expected = test[ 2 ];
 
-            it( 'produces the expected result for instance: ' + test[ 0 ], function() {
+            it( `produces the expected result for instance: ${test[ 0 ]}`, () => {
                 expect( result ).toEqual( expected );
             } );
         } );
     } );
 
-    describe( 'when the record contains a repeat comment', function() {
+    describe( 'when the record contains a repeat comment', () => {
         // This test covers a case where for some reason the record includes a repeat comment.
-        it( 'does not create duplicate repeat comment', function() {
-            var result;
-            var instanceStr = '<a><!--repeat://a/r--><r><node/></r><b>2</b></a>';
-            var model = new Model( {
+        it( 'does not create duplicate repeat comment', () => {
+            let result;
+            const instanceStr = '<a><!--repeat://a/r--><r><node/></r><b>2</b></a>';
+            const model = new Model( {
                 modelStr: '<model><instance><a><r><node/></r><b/></a></instance></model>',
-                instanceStr: instanceStr
+                instanceStr
             } );
             model.init();
 
@@ -1226,112 +1232,114 @@ describe( 'merging an instance into the model', function() {
             // which includes the creation of special repeat comments.
             model.extractFakeTemplates( [ '/a/r' ] );
             result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
-            expect( result ).toEqual( '<model><instance>' + instanceStr + '</instance></model>' );
+            expect( result ).toEqual( `<model><instance>${instanceStr}</instance></model>` );
         } );
     } );
 
-    describe( 'when a deprecatedID node is not present in the form format', function() {
-        var model = new Model( {
+    describe( 'when a deprecatedID node is not present in the form format', () => {
+        const model = new Model( {
             modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
             instanceStr: '<thedata id="thedata"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>'
         } );
 
-        var loadErrors = model.init();
+        const loadErrors = model.init();
 
-        it( 'outputs no load errors', function() {
+        it( 'outputs no load errors', () => {
             expect( loadErrors.length ).toEqual( 0 );
         } );
 
-        it( 'adds a deprecatedID node', function() {
+        it( 'adds a deprecatedID node', () => {
             expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).toEqual( 1 );
         } );
 
         //this is an important test even though it may not seem to be...
-        it( 'includes the deprecatedID in the string to be submitted', function() {
+        it( 'includes the deprecatedID in the string to be submitted', () => {
             expect( model.getStr().indexOf( '<deprecatedID>' ) ).not.toEqual( -1 );
         } );
 
-        it( 'gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit', function() {
+        it( 'gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit', () => {
             expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
         } );
 
-        it( 'generates a new instanceID', function() {
+        it( 'generates a new instanceID', () => {
             expect( model.node( '/thedata/meta/instanceID' ).getVal() ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             expect( model.node( '/thedata/meta/instanceID' ).getVal().length ).toEqual( 41 );
         } );
     } );
 
-    describe( 'when instanceID and deprecatedID nodes are already present in the form format', function() {
-        var model = new Model( {
+    describe( 'when instanceID and deprecatedID nodes are already present in the form format', () => {
+        const model = new Model( {
             modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/><deprecatedID/></meta></thedata></instance></model>',
             instanceStr: '<thedata id="something"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>'
         } );
 
-        var loadErrors = model.init();
+        const loadErrors = model.init();
 
-        it( 'outputs no load errors', function() {
+        it( 'outputs no load errors', () => {
             expect( loadErrors.length ).toEqual( 0 );
         } );
 
-        it( 'does not NOT add another instanceID node', function() {
+        it( 'does not NOT add another instanceID node', () => {
             expect( model.node( '/thedata/meta/instanceID' ).getElements().length ).toEqual( 1 );
         } );
 
-        it( 'does not NOT add another deprecatedID node', function() {
+        it( 'does not NOT add another deprecatedID node', () => {
             expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).toEqual( 1 );
         } );
 
-        it( 'gives the deprecatedID node the old value of the instanceID node of the instance-to-edit', function() {
+        it( 'gives the deprecatedID node the old value of the instanceID node of the instance-to-edit', () => {
             expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
         } );
     } );
 
 
-    describe( 'when the model contains templates', function() {
+    describe( 'when the model contains templates', () => {
         [
             // with improper template=""
             [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model><instance><a><r template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<a><r><b>5</b></r><r><b>6</b></r>' ],
             // with proper jr:template="" and namespace definition
             [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<instance><a><r><b>5</b></r><r><b>6</b></r>' ],
-        ].forEach( function( test ) {
-            var result, expected,
-                model = new Model( {
-                    modelStr: test[ 1 ],
-                    instanceStr: test[ 0 ]
-                } );
+        ].forEach( test => {
+            let result;
+            let expected;
+
+            const model = new Model( {
+                modelStr: test[ 1 ],
+                instanceStr: test[ 0 ]
+            } );
 
             model.init();
 
             result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /<!--[^>]*-->/g, '' );
             expected = test[ 2 ];
 
-            it( 'the initialization will merge the repeat values correctly and remove the templates', function() {
+            it( 'the initialization will merge the repeat values correctly and remove the templates', () => {
                 expect( model.xml.querySelectorAll( 'a > r' ).length ).toEqual( 2 );
                 expect( result ).toContain( expected );
             } );
         } );
     } );
 
-    describe( 'when the record contains namespaced attributes, the merged result is CORRECTLY namespaced', function() {
-        var ns = 'http://enketo.org/xforms';
+    describe( 'when the record contains namespaced attributes, the merged result is CORRECTLY namespaced', () => {
+        const ns = 'http://enketo.org/xforms';
         // issue: https://github.com/kobotoolbox/enketo-express/issues/565
         [
             // with repeat template
-            [ '<a xmlns:enk="' + ns + '"><r enk:last-used-ordinal="2" enk:ordinal="1"><b>6</b></r></a>',
+            [ `<a xmlns:enk="${ns}"><r enk:last-used-ordinal="2" enk:ordinal="1"><b>6</b></r></a>`,
                 '<model><instance><a><r><b>5</b></r><meta/></a></instance></model>'
             ],
             // with repeat template
-            [ '<a xmlns:enk="' + ns + '"><r enk:last-used-ordinal="2" enk:ordinal="1"><b>6</b></r></a>',
+            [ `<a xmlns:enk="${ns}"><r enk:last-used-ordinal="2" enk:ordinal="1"><b>6</b></r></a>`,
                 '<model><instance><a><r jr:template=""><b>5</b></r><meta/></a></instance></model>'
             ]
-        ].forEach( function( test ) {
-            var model = new Model( {
+        ].forEach( test => {
+            const model = new Model( {
                 modelStr: test[ 1 ],
                 instanceStr: test[ 0 ]
             } );
             model.init();
 
-            it( 'namespaces are added correctly', function() {
+            it( 'namespaces are added correctly', () => {
                 // these tests assume a fix attribute order which is a bit fragile
                 expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'last-used-ordinal' ) ).toEqual( '2' );
                 expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'ordinal' ) ).toEqual( '1' );
@@ -1341,54 +1349,54 @@ describe( 'merging an instance into the model', function() {
         } );
     } );
 
-    describe( 'returns load errors upon initialization', function() {
-        it( 'when the instance-to-edit contains nodes that are not present in the default instance', function() {
-            var model = new Model( {
+    describe( 'returns load errors upon initialization', () => {
+        it( 'when the instance-to-edit contains nodes that are not present in the default instance', () => {
+            const model = new Model( {
                 modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
                 instanceStr: '<thedata_updated id="something"><meta><instanceID>7c99</instanceID></meta><nodeA>2012</nodeA></thedata_updated>'
             } );
-            var loadErrors = model.init();
+            const loadErrors = model.init();
 
             expect( loadErrors.length ).toEqual( 1 );
             expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML record. Different root nodes' );
         } );
 
-        it( 'when an instance-to-edit is provided with to a model that does not contain an instanceID node', function() {
-            var model = new Model( {
+        it( 'when an instance-to-edit is provided with to a model that does not contain an instanceID node', () => {
+            const model = new Model( {
                 modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta></meta></thedata></instance></model>',
                 instanceStr: '<thedata id="something"><meta><instanceID>7c99</instanceID></meta><nodeA>2012</nodeA></thedata>'
             } );
-            var loadErrors = model.init();
+            const loadErrors = model.init();
 
             expect( loadErrors.length ).toEqual( 1 );
             expect( loadErrors[ 0 ] ).toEqual( 'Invalid primary instance. Missing instanceID node.' );
         } );
     } );
 
-    describe( 'when the model contains secondary instance', function() {
-        var INSTANCE_A_CONTENT = 'choiceaFilteredachoicebFilteredbchoicecc';
+    describe( 'when the model contains secondary instance', () => {
+        const INSTANCE_A_CONTENT = 'choiceaFilteredachoicebFilteredbchoicecc';
 
-        it( 'leaves those secondary instances intact if empty leaf node in record with default value in XForm', function() {
-            var model = new Model( {
+        it( 'leaves those secondary instances intact if empty leaf node in record with default value in XForm', () => {
+            const model = new Model( {
                 modelStr: forms[ 'merge-empty-instance.xml' ].xml_model,
                 instanceStr: '<data id="Problem_Reproducing_Form_retry"><A/><B/><C><CA>hey</CA></C><meta><instanceID>uuid:c</instanceID></meta></data>'
             } );
             model.init();
-            var instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
+            const instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
             expect( instanceContent ).toEqual( INSTANCE_A_CONTENT );
         } );
 
-        it( 'leaves those secondary instances intact if empty group node in record with childnodes with default value in XForm', function() {
-            var model = new Model( {
+        it( 'leaves those secondary instances intact if empty group node in record with childnodes with default value in XForm', () => {
+            const model = new Model( {
                 modelStr: forms[ 'merge-empty-instance.xml' ].xml_model,
                 instanceStr: '<data id="Problem_Reproducing_Form_retry"><A/><B/><C/><meta><instanceID>uuid:c</instanceID></meta></data>'
             } );
             model.init();
-            var instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
+            const instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
             expect( instanceContent ).toEqual( INSTANCE_A_CONTENT );
 
             // double-check primary instance too:
-            var ca = model.xml.querySelectorAll( 'CA' );
+            const ca = model.xml.querySelectorAll( 'CA' );
             expect( ca.length ).toEqual( 1 );
             expect( ca[ 0 ].textContent ).toEqual( '' );
         } );
@@ -1398,9 +1406,9 @@ describe( 'merging an instance into the model', function() {
 
 
 // Runs fine headlessly locally, but not on Travis for some reason.
-describe( 'instanceID and deprecatedID are populated upon model initilization', function() {
-    it( 'for a new record', function() {
-        var model = new Model( {
+describe( 'instanceID and deprecatedID are populated upon model initilization', () => {
+    it( 'for a new record', () => {
+        const model = new Model( {
             modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>'
         } );
         model.init();
@@ -1408,8 +1416,8 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><\/meta><\/a>/ );
     } );
 
-    it( 'for an existing unsubmitted record', function() {
-        var model = new Model( {
+    it( 'for an existing unsubmitted record', () => {
+        const model = new Model( {
             modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
             instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>',
             submitted: false
@@ -1419,8 +1427,8 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( model.getStr() ).toEqual( '<a><meta><instanceID>abc</instanceID></meta></a>' );
     } );
 
-    it( 'for an existing previously-submitted record(1)', function() {
-        var model = new Model( {
+    it( 'for an existing previously-submitted record(1)', () => {
+        const model = new Model( {
             modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
             instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>'
         } );
@@ -1429,8 +1437,8 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
     } );
 
-    it( 'for an existing previously-submitted record (2)', function() {
-        var model = new Model( {
+    it( 'for an existing previously-submitted record (2)', () => {
+        const model = new Model( {
             modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
             instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>',
             submitted: true
@@ -1440,14 +1448,14 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
     } );
 
-    it( 'and fires dataupdate events for instanceID and deprecatedID on model.$events', function() {
-        var model = new Model( {
+    it( 'and fires dataupdate events for instanceID and deprecatedID on model.$events', () => {
+        const model = new Model( {
             modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>',
             instanceStr: '<a><meta><instanceID>abc</instanceID></meta></a>',
             submitted: true
         } );
-        var eventObjects = [];
-        model.events.addEventListener( 'dataupdate', function( event ) {
+        const eventObjects = [];
+        model.events.addEventListener( 'dataupdate', event => {
             eventObjects.push( event.detail );
         } );
         model.init();

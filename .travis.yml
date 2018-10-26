@@ -2,7 +2,7 @@ sudo: false
 dist: trusty
 language: node_js
 node_js:
-  - lts/*
+  - "8"
 addons:
   chrome: stable
 before_script:

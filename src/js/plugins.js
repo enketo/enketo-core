@@ -1,5 +1,4 @@
-'use strict';
-var $ = require( 'jquery' );
+import $ from 'jquery';
 
 /**
  * Clears form input fields and triggers events when doing this. If formelement is cloned but not yet added to DOM
@@ -18,9 +17,9 @@ $.fn.clearInputs = function( ev1, ev2 ) {
         $( this ).find( '.file-preview' ).remove();
         //remove input values
         $( this ).find( 'input, select, textarea' ).not( '.ignore' ).each( function() {
-            var $node = $( this );
-            var type = $node.attr( 'type' );
-            var loadedFilename;
+            const $node = $( this );
+            let type = $node.attr( 'type' );
+            let loadedFilename;
 
             if ( $node.prop( 'nodeName' ).toUpperCase() === 'SELECT' ) {
                 type = 'select';

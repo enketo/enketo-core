@@ -1,41 +1,40 @@
-'use strict';
-
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
-var config = require( 'enketo/config' );
-var L = require( 'leaflet' );
-var t = require( 'enketo/translator' ).t;
-var support = require( '../../js/support' );
-var types = require( '../../js/types' );
-var dialog = require( 'enketo/dialog' );
-var googleMapsScriptRequest;
-var pluginName = 'geopicker';
-var defaultZoom = 15;
+import $ from 'jquery';
+import Widget from '../../js/Widget';
+import config from 'enketo/config';
+import L from 'leaflet';
+import { t } from 'enketo/translator';
+import support from '../../js/support';
+import types from '../../js/types';
+import dialog from 'enketo/dialog';
+let googleMapsScriptRequest;
+const pluginName = 'geopicker';
+const defaultZoom = 15;
 // MapBox TileJSON format
-var maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps : [ {
+const maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps : [ {
     'name': 'streets',
     'maxzoom': 24,
     'tiles': [ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' ],
     'attribution': '© <a href="http://openstreetmap.org">OpenStreetMap</a> | <a href="www.openstreetmap.org/copyright">Terms</a>'
 } ];
-var searchSource = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
-var googleApiKey = config.googleApiKey || config.google_api_key;
-var iconSingle = L.divIcon( {
+let searchSource = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
+const googleApiKey = config.googleApiKey || config.google_api_key;
+const iconSingle = L.divIcon( {
     iconSize: 24,
     className: 'enketo-geopoint-marker'
 } );
-var iconMulti = L.divIcon( {
+const iconMulti = L.divIcon( {
     iconSize: 16,
     className: 'enketo-geopoint-circle-marker'
 } );
-var iconMultiActive = L.divIcon( {
+const iconMultiActive = L.divIcon( {
     iconSize: 16,
     className: 'enketo-geopoint-circle-marker-active'
 } );
 
 // Leaflet extensions. 
-require( 'leaflet-draw' );
-require( 'leaflet.gridlayer.googlemutant' );
+import 'leaflet-draw';
+
+import 'leaflet.gridlayer.googlemutant';
 
 /**
  * Geotrace widget Class
@@ -63,8 +62,8 @@ Geopicker.prototype.constructor = Geopicker;
  * Initializes the picker
  */
 Geopicker.prototype._init = function() {
-    var loadedVal = $( this.element ).val().trim();
-    var that = this;
+    const loadedVal = $( this.element ).val().trim();
+    const that = this;
 
     this.$form = $( this.element ).closest( 'form.or' );
     this.$question = $( this.element ).closest( '.question' );
@@ -78,25 +77,25 @@ Geopicker.prototype._init = function() {
 
     // load default value
     if ( loadedVal ) {
-        $( this.element ).val().trim().split( ';' ).forEach( function( el, i ) {
+        $( this.element ).val().trim().split( ';' ).forEach( ( el, i ) => {
             // console.debug( 'adding loaded point', el.trim().split( ' ' ) );
             that.points[ i ] = el.trim().split( ' ' );
-            that.points[ i ].forEach( function( str, i, arr ) {
+            that.points[ i ].forEach( ( str, i, arr ) => {
                 arr[ i ] = Number( str );
             } );
         } );
     }
 
     // handle point input changes
-    this.$widget.find( '[name="lat"], [name="long"], [name="alt"], [name="acc"]' ).on( 'change change.bymap change.bysearch', function( event ) {
-        var lat = that.$lat.val() ? Number( that.$lat.val() ) : '';
-        var lng = that.$lng.val() ? Number( that.$lng.val() ) : '';
+    this.$widget.find( '[name="lat"], [name="long"], [name="alt"], [name="acc"]' ).on( 'change change.bymap change.bysearch', event => {
+        const lat = that.$lat.val() ? Number( that.$lat.val() ) : '';
+        const lng = that.$lng.val() ? Number( that.$lng.val() ) : '';
         // we need to avoid a missing alt in case acc is not empty!
-        var alt = that.$alt.val() ? Number( that.$alt.val() ) : '';
-        var acc = that.$acc.val() ? Number( that.$acc.val() ) : '';
-        var latLng = {
-            lat: lat,
-            lng: lng
+        const alt = that.$alt.val() ? Number( that.$alt.val() ) : '';
+        const acc = that.$acc.val() ? Number( that.$acc.val() ) : '';
+        const latLng = {
+            lat,
+            lng
         };
 
         event.stopImmediatePropagation();
@@ -116,17 +115,17 @@ Geopicker.prototype._init = function() {
 
     // handle KML input changes
     this.$kmlInput.on( 'change', function( event ) {
-        var $addPointBtn = that.$points.find( '.addpoint' );
-        var $progress = $( this ).prev( '.paste-progress' ).removeClass( 'hide' );
-        var value = event.target.value;
-        var coords = that._convertKmlCoordinatesToLeafletCoordinates( value );
+        const $addPointBtn = that.$points.find( '.addpoint' );
+        const $progress = $( this ).prev( '.paste-progress' ).removeClass( 'hide' );
+        const value = event.target.value;
+        const coords = that._convertKmlCoordinatesToLeafletCoordinates( value );
 
         // reset textarea 
         event.target.value = '';
 
-        setTimeout( function() {
+        setTimeout( () => {
             // mimic manual input point-by-point
-            coords.forEach( function( latLng, index ) {
+            coords.forEach( ( latLng, index ) => {
                 that._updateInputs( latLng );
                 if ( index < coords.length - 1 ) {
                     $addPointBtn.click();
@@ -140,8 +139,8 @@ Geopicker.prototype._init = function() {
     } );
 
     // handle input switcher
-    this.$widget.find( '.toggle-input-type-btn' ).on( 'click', function() {
-        var type = that.$inputGroup.hasClass( 'kml-input-mode' ) ? 'points' : 'kml';
+    this.$widget.find( '.toggle-input-type-btn' ).on( 'click', () => {
+        const type = that.$inputGroup.hasClass( 'kml-input-mode' ) ? 'points' : 'kml';
         that._switchInputType( type );
         return false;
     } );
@@ -151,7 +150,7 @@ Geopicker.prototype._init = function() {
         .on( 'change', function() {
             that.$kmlInput.prop( 'disabled', !!this.value );
         } )
-        .on( 'applyfocus', function() {
+        .on( 'applyfocus', () => {
             that.$widget[ 0 ].querySelector( 'input' ).focus();
         } );
 
@@ -163,34 +162,34 @@ Geopicker.prototype._init = function() {
     } );
 
     // handle addpoint button click
-    this.$points.find( '.addpoint' ).on( 'click', function() {
+    this.$points.find( '.addpoint' ).on( 'click', () => {
         that._addPoint();
         return false;
     } );
 
     // handle polygon close button click
-    this.$widget.find( '.close-chain-btn' ).on( 'click', function() {
+    this.$widget.find( '.close-chain-btn' ).on( 'click', () => {
         that._closePolygon();
         return false;
     } );
 
     // handle point remove click
-    this.$widget.find( '.btn-remove' ).on( 'click', function() {
+    this.$widget.find( '.btn-remove' ).on( 'click', () => {
         if ( that.points.length < 2 ) {
             that._updateInputs( [] );
         } else {
             dialog.confirm( t( 'geopicker.removePoint' ) )
-                .then( function( confirmed ) {
+                .then( confirmed => {
                     if ( confirmed ) {
                         that._removePoint();
                     }
                 } )
-                .catch( function() {} );
+                .catch( () => {} );
         }
     } );
 
     // handle fullscreen map button click
-    this.$map.find( '.show-map-btn' ).on( 'click', function() {
+    this.$map.find( '.show-map-btn' ).on( 'click', () => {
         that.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
         that.$widget.addClass( 'full-screen' );
         that._updateMap();
@@ -199,10 +198,10 @@ Geopicker.prototype._init = function() {
 
     // ensure all tiles are displayed when revealing page, https://github.com/kobotoolbox/enketo-express/issues/188
     // remove handler once it has been used
-    this.$form.on( 'pageflip.enketo.map' + this.mapId, function( event ) {
+    this.$form.on( `pageflip.enketo.map${this.mapId}`, event => {
         if ( that.map && $.contains( event.target, that.element ) ) {
             that.map.invalidateSize();
-            that.$form.off( 'pageflip.enketo.map' + that.mapId );
+            that.$form.off( `pageflip.enketo.map${that.mapId}` );
         }
     } );
 
@@ -223,7 +222,7 @@ Geopicker.prototype._init = function() {
         } ).toggleClass( 'open', that.$widget.hasClass( 'hide-input' ) );
 
     // hide map controller
-    this.$widget.find( '.hide-map-btn' ).on( 'click', function() {
+    this.$widget.find( '.hide-map-btn' ).on( 'click', () => {
         that.$widget.find( '.search-bar' ).addClass( 'hide-search' );
         that.$widget.removeClass( 'full-screen' ).find( '.map-canvas' ).removeClass( 'leaflet-container' )
             .find( '.leaflet-google-layer' ).remove();
@@ -237,7 +236,7 @@ Geopicker.prototype._init = function() {
     } );
 
     // pass focus events on widget elements back to original input
-    this.$widget.on( 'focus', 'input', function() {
+    this.$widget.on( 'focus', 'input', () => {
         $( that.element ).trigger( 'fakefocus' );
     } );
 
@@ -257,7 +256,7 @@ Geopicker.prototype._init = function() {
 
     // create "point buttons"
     if ( loadedVal ) {
-        this.points.forEach( function() {
+        this.points.forEach( () => {
             that._addPointBtn();
         } );
     } else {
@@ -269,7 +268,7 @@ Geopicker.prototype._init = function() {
         // set worldview in case permissions take too long (e.g. in FF);
         this._updateMap( [ 0, 0 ], 1 );
         if ( this.props.detect ) {
-            navigator.geolocation.getCurrentPosition( function( position ) {
+            navigator.geolocation.getCurrentPosition( position => {
                 that._updateMap( [ position.coords.latitude, position.coords.longitude ], defaultZoom );
             } );
         }
@@ -295,18 +294,14 @@ Geopicker.prototype._switchInputType = function( type ) {
  * @return {{search: boolean, detect: boolean, map: boolean, updateMapFn: string, type: string}} The widget properties object
  */
 Geopicker.prototype._getProps = function() {
-    var appearances = $( this.element ).closest( '.question' ).attr( 'class' ).split( ' ' )
-        .filter( function( item ) {
-            return /or-appearance-/.test( item );
-        } )
-        .map( function( appearance ) {
-            return appearance.substring( 14 );
-        } );
-    var map = !support.touch || appearances.indexOf( 'maps' ) !== -1 || appearances.indexOf( 'placement-map' ) !== -1;
+    const appearances = $( this.element ).closest( '.question' ).attr( 'class' ).split( ' ' )
+        .filter( item => /or-appearance-/.test( item ) )
+        .map( appearance => appearance.substring( 14 ) );
+    const map = !support.touch || appearances.indexOf( 'maps' ) !== -1 || appearances.indexOf( 'placement-map' ) !== -1;
 
     return {
         detect: !!navigator.geolocation,
-        map: map,
+        map,
         search: map,
         appearances: map ? appearances : [],
         type: this.element.attributes[ 'data-type-xml' ].value,
@@ -327,45 +322,23 @@ Geopicker.prototype._addPointBtn = function() {
  * Adds the DOM elements
  */
 Geopicker.prototype._addDomElements = function() {
-    var map = '<div class="map-canvas-wrapper"><div class=map-canvas id="map' + this.mapId + '"></div></div>';
-    var points = '<div class="points"><button type="button" class="addpoint">+</button></div>';
-    var kmlPstTxt = t( 'geopicker.kmlpaste' );
-    var kmlCrdsTxt = t( 'geopicker.kmlcoords' );
-    var pntsTxt = t( 'geopicker.points' );
-    var kml = '<a href="#" class="toggle-input-type-btn"><span class="kml-input">KML</span><span class="points-input">' + pntsTxt + '</span></a>' +
-        '<label class="geo kml">' + kmlCrdsTxt +
-        '<progress class="paste-progress hide"></progress>' +
-        '<textarea class="ignore" name="kml" placeholder="' + kmlPstTxt + '"></textarea>' +
-        '<span class="disabled-msg">remove all points to enable</span>' +
-        '</label>';
-    var closePlgnTxt = t( 'geopicker.closepolygon' );
-    var close = '<button type="button" class="close-chain-btn btn btn-default btn-xs">' + closePlgnTxt + '</button>';
-    var mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
-    var latTxt = t( 'geopicker.latitude' );
-    var lngTxt = t( 'geopicker.longitude' );
-    var altTxt = t( 'geopicker.altitude' );
-    var accTxt = t( 'geopicker.accuracy' );
-    var srchTxt = t( 'geopicker.searchPlaceholder' );
+    const map = `<div class="map-canvas-wrapper"><div class=map-canvas id="map${this.mapId}"></div></div>`;
+    const points = '<div class="points"><button type="button" class="addpoint">+</button></div>';
+    const kmlPstTxt = t( 'geopicker.kmlpaste' );
+    const kmlCrdsTxt = t( 'geopicker.kmlcoords' );
+    const pntsTxt = t( 'geopicker.points' );
+    const kml = `<a href="#" class="toggle-input-type-btn"><span class="kml-input">KML</span><span class="points-input">${pntsTxt}</span></a><label class="geo kml">${kmlCrdsTxt}<progress class="paste-progress hide"></progress><textarea class="ignore" name="kml" placeholder="${kmlPstTxt}"></textarea><span class="disabled-msg">remove all points to enable</span></label>`;
+    const closePlgnTxt = t( 'geopicker.closepolygon' );
+    const close = `<button type="button" class="close-chain-btn btn btn-default btn-xs">${closePlgnTxt}</button>`;
+    const mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
+    const latTxt = t( 'geopicker.latitude' );
+    const lngTxt = t( 'geopicker.longitude' );
+    const altTxt = t( 'geopicker.altitude' );
+    const accTxt = t( 'geopicker.accuracy' );
+    const srchTxt = t( 'geopicker.searchPlaceholder' );
 
     this.$widget = $(
-        '<div class="geopicker widget">' +
-        '<div class="search-bar hide-search no-map no-detect">' +
-        '<button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>' +
-        '<button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top">' +
-        '<span class="icon icon-crosshairs"> </span></button>' +
-        '<div class="input-group">' +
-        '<input class="geo ignore" name="search" type="text" placeholder="' + srchTxt + '" disabled="disabled"/>' +
-        '<button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button>' +
-        '</div>' +
-        '</div>' +
-        '<div class="geo-inputs">' +
-        '<label class="geo lat">' + latTxt + '<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label>' +
-        '<label class="geo long">' + lngTxt + '<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label>' +
-        '<label class="geo alt">' + altTxt + '<input class="ignore" name="alt" type="number" step="0.1" /></label>' +
-        '<label class="geo acc">' + accTxt + '<input class="ignore" name="acc" type="number" step="0.1" /></label>' +
-        '<button type="button" class="btn-icon-only btn-remove" aria-label="remove"><span class="icon icon-trash"> </span></button>' +
-        '</div>' +
-        '</div>'
+        `<div class="geopicker widget"><div class="search-bar hide-search no-map no-detect"><button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button><button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top"><span class="icon icon-crosshairs"> </span></button><div class="input-group"><input class="geo ignore" name="search" type="text" placeholder="${srchTxt}" disabled="disabled"/><button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button></div></div><div class="geo-inputs"><label class="geo lat">${latTxt}<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label><label class="geo long">${lngTxt}<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label><label class="geo alt">${altTxt}<input class="ignore" name="alt" type="number" step="0.1" /></label><label class="geo acc">${accTxt}<input class="ignore" name="acc" type="number" step="0.1" /></label><button type="button" class="btn-icon-only btn-remove" aria-label="remove"><span class="icon icon-trash"> </span></button></div></div>`
     );
 
     // add the detection button
@@ -408,7 +381,7 @@ Geopicker.prototype._addDomElements = function() {
             this.$inputGroup.append( close );
         }
         // add KML paste textarea;
-        var $kml = $( kml );
+        const $kml = $( kml );
         this.$kmlInput = $kml.find( '[name="kml"]' );
         this.$inputGroup.prepend( $kml );
     } else {
@@ -431,21 +404,21 @@ Geopicker.prototype._addDomElements = function() {
  * @return {Boolean} Whether the value was changed.
  */
 Geopicker.prototype._updateValue = function() {
-    var oldValue = $( this.element ).val();
-    var newValue = '';
-    var that = this;
+    const oldValue = $( this.element ).val();
+    let newValue = '';
+    const that = this;
 
     this._markAsValid();
 
     // all points should be valid geopoints and only the last item may be empty
-    this.points.forEach( function( point, index, array ) {
-        var geopoint;
-        var lat = typeof point[ 0 ] === 'number' ? point[ 0 ] : ( typeof point.lat === 'number' ? point.lat : null );
-        var lng = typeof point[ 1 ] === 'number' ? point[ 1 ] : ( typeof point.lng === 'number' ? point.lng : null );
-        var alt = typeof point[ 2 ] === 'number' ? point[ 2 ] : 0.0;
-        var acc = typeof point[ 3 ] === 'number' ? point[ 3 ] : 0.0;
+    this.points.forEach( ( point, index, array ) => {
+        let geopoint;
+        const lat = typeof point[ 0 ] === 'number' ? point[ 0 ] : ( typeof point.lat === 'number' ? point.lat : null );
+        const lng = typeof point[ 1 ] === 'number' ? point[ 1 ] : ( typeof point.lng === 'number' ? point.lng : null );
+        const alt = typeof point[ 2 ] === 'number' ? point[ 2 ] : 0.0;
+        const acc = typeof point[ 3 ] === 'number' ? point[ 3 ] : 0.0;
 
-        geopoint = ( lat && lng ) ? lat + ' ' + lng + ' ' + alt + ' ' + acc : '';
+        geopoint = ( lat && lng ) ? `${lat} ${lng} ${alt} ${acc}` : '';
 
         // only last item may be empty
         if ( !that._isValidGeopoint( geopoint ) && !( geopoint === '' && index === array.length - 1 ) ) {
@@ -481,9 +454,7 @@ Geopicker.prototype._updateValue = function() {
  * @param  {string}  geopoint [description]
  * @return {Boolean}          [description]
  */
-Geopicker.prototype._isValidGeopoint = function( geopoint ) {
-    return geopoint ? types.geopoint.validate( geopoint ) : false;
-};
+Geopicker.prototype._isValidGeopoint = geopoint => geopoint ? types.geopoint.validate( geopoint ) : false;
 
 /**
  * Validates a list of latLng Arrays or Objects
@@ -491,15 +462,13 @@ Geopicker.prototype._isValidGeopoint = function( geopoint ) {
  * @return {Boolean}         Whether list is valid or not
  */
 Geopicker.prototype._isValidLatLngList = function( latLngs ) {
-    var that = this;
+    const that = this;
 
-    return latLngs.every( function( latLng, index, array ) {
-        return that._isValidLatLng( latLng ) || ( latLng.join() === '' && index === array.length - 1 );
-    } );
+    return latLngs.every( ( latLng, index, array ) => that._isValidLatLng( latLng ) || ( latLng.join() === '' && index === array.length - 1 ) );
 };
 
 
-Geopicker.prototype._cleanLatLng = function( latLng ) {
+Geopicker.prototype._cleanLatLng = latLng => {
     if ( Array.isArray( latLng ) ) {
         return [ latLng[ 0 ], latLng[ 1 ] ];
     }
@@ -511,9 +480,9 @@ Geopicker.prototype._cleanLatLng = function( latLng ) {
  * @param  {(Array.<number|string>|{lat: number, long:number})}  latLng latLng object or array
  * @return {Boolean}        Whether latLng is valid or not
  */
-Geopicker.prototype._isValidLatLng = function( latLng ) {
-    var lat = ( typeof latLng[ 0 ] === 'number' ) ? latLng[ 0 ] : ( typeof latLng.lat === 'number' ) ? latLng.lat : null;
-    var lng = ( typeof latLng[ 1 ] === 'number' ) ? latLng[ 1 ] : ( typeof latLng.lng === 'number' ) ? latLng.lng : null;
+Geopicker.prototype._isValidLatLng = latLng => {
+    const lat = ( typeof latLng[ 0 ] === 'number' ) ? latLng[ 0 ] : ( typeof latLng.lat === 'number' ) ? latLng.lat : null;
+    const lng = ( typeof latLng[ 1 ] === 'number' ) ? latLng[ 1 ] : ( typeof latLng.lng === 'number' ) ? latLng.lng : null;
 
     // This conversion seems backwards, but it is helpful to have only one place where geopoints are validated.
     return types.geopoint.validate( [ lat, lng ].join( ' ' ) );
@@ -552,15 +521,15 @@ Geopicker.prototype._setCurrent = function( index ) {
  * Enables geo detection using the built-in browser geoLocation functionality
  */
 Geopicker.prototype._enableDetection = function() {
-    var that = this;
-    var options = {
+    const that = this;
+    const options = {
         enableHighAccuracy: true,
         maximumAge: 0
     };
-    this.$detect.click( function( event ) {
+    this.$detect.click( event => {
         event.preventDefault();
-        navigator.geolocation.getCurrentPosition( function( position ) {
-            var latLng = {
+        navigator.geolocation.getCurrentPosition( position => {
+            const latLng = {
                 lat: Math.round( position.coords.latitude * 1000000 ) / 1000000,
                 lng: Math.round( position.coords.longitude * 1000000 ) / 1000000
             };
@@ -576,7 +545,7 @@ Geopicker.prototype._enableDetection = function() {
                     that._addPoint();
                 }
             }
-        }, function() {
+        }, () => {
             console.error( 'error occurred trying to obtain position' );
         }, options );
         return false;
@@ -588,7 +557,7 @@ Geopicker.prototype._enableDetection = function() {
  * This only changes the map view. It does not record geopoints.
  */
 Geopicker.prototype._enableSearch = function() {
-    var that = this;
+    const that = this;
 
     if ( googleApiKey ) {
         searchSource = searchSource.replace( '{api_key}', googleApiKey );
@@ -599,14 +568,14 @@ Geopicker.prototype._enableSearch = function() {
     this.$search
         .prop( 'disabled', false )
         .on( 'change', function( event ) {
-            var address = $( this ).val();
+            let address = $( this ).val();
             event.stopImmediatePropagation();
 
             if ( address ) {
                 address = address.split( /\s+/ ).join( '+' );
                 $
-                    .get( searchSource.replace( '{address}', address ), function( response ) {
-                        var latLng;
+                    .get( searchSource.replace( '{address}', address ), response => {
+                        let latLng;
                         if ( response.results && response.results.length > 0 && response.results[ 0 ].geometry && response.results[ 0 ].geometry.location ) {
                             latLng = response.results[ 0 ].geometry.location;
                             that._updateMap( [ latLng.lat, latLng.lng ], defaultZoom );
@@ -614,15 +583,15 @@ Geopicker.prototype._enableSearch = function() {
                         } else {
                             //TODO: add error message
                             that.$search.closest( '.input-group' ).addClass( 'has-error' );
-                            console.log( 'Location "' + address + '" not found' );
+                            console.log( `Location "${address}" not found` );
                         }
                     }, 'json' )
-                    .fail( function() {
+                    .fail( () => {
                         //TODO: add error message
                         that.$search.closest( '.input-group' ).addClass( 'has-error' );
                         console.log( 'Error. Geocoding service may not be available or app is offline' );
                     } )
-                    .always( function() {
+                    .always( () => {
 
                     } );
             }
@@ -649,7 +618,7 @@ Geopicker.prototype._inFullScreenMode = function() {
  * @return {Function} Returns call to function
  */
 Geopicker.prototype._updateMap = function( latLng, zoom ) {
-    var that = this;
+    const that = this;
 
     // check if the widget is supposed to have a map
     if ( !this.props.map ) {
@@ -676,7 +645,7 @@ Geopicker.prototype._updateMap = function( latLng, zoom ) {
     if ( !this.props.touch || this._inFullScreenMode() ) {
         if ( !this.map ) {
             this._addDynamicMap()
-                .then( function() {
+                .then( () => {
                     that._updateDynamicMapView( latLng, zoom );
                 } );
         } else {
@@ -686,18 +655,18 @@ Geopicker.prototype._updateMap = function( latLng, zoom ) {
 };
 
 Geopicker.prototype._addDynamicMap = function() {
-    var that = this;
+    const that = this;
 
     return this._getLayers()
-        .then( function( layers ) {
-            var options = {
+        .then( layers => {
+            const options = {
                 layers: that._getDefaultLayer( layers )
             };
 
-            that.map = L.map( 'map' + that.mapId, options )
-                .on( 'click', function( e ) {
-                    var latLng;
-                    var indexToPlacePoint;
+            that.map = L.map( `map${that.mapId}`, options )
+                .on( 'click', e => {
+                    let latLng;
+                    let indexToPlacePoint;
 
                     if ( that.props.readonly ) {
                         return false;
@@ -741,7 +710,7 @@ Geopicker.prototype._addDynamicMap = function() {
             // something weird seems to happen. It seems the layercontrol is added twice (second replacing first) 
             // which means the classes are not present in the final control. 
             // Using the baselayerchange event handler is a trick that seems to work.
-            that.map.on( 'baselayerchange', function() {
+            that.map.on( 'baselayerchange', () => {
                 that.$widget.find( '.leaflet-control-container input' ).addClass( 'ignore no-unselect' ).next( 'span' ).addClass( 'option-label' );
             } );
         } );
@@ -764,7 +733,7 @@ Geopicker.prototype._updateDynamicMapView = function( latLng, zoom ) {
     }
 };
 
-Geopicker.prototype._showIntersectError = function() {
+Geopicker.prototype._showIntersectError = () => {
     dialog.alert( 'Borders cannot intersect!' );
 };
 
@@ -774,10 +743,10 @@ Geopicker.prototype._showIntersectError = function() {
  * @return {Promise} [description]
  */
 Geopicker.prototype._getLayers = function() {
-    var that = this;
-    var tasks = [];
+    const that = this;
+    const tasks = [];
 
-    maps.forEach( function( map, index ) {
+    maps.forEach( ( map, index ) => {
         if ( typeof map.tiles === 'string' && /^GOOGLE_(SATELLITE|ROADMAP|HYBRID|TERRAIN)/.test( map.tiles ) ) {
             tasks.push( that._getGoogleTileLayer( map, index ) );
         } else
@@ -799,8 +768,8 @@ Geopicker.prototype._getLayers = function() {
  * @return {Promise}
  */
 Geopicker.prototype._getLeafletTileLayer = function( map, index ) {
-    var url;
-    var options = this._getTileOptions( map, index );
+    let url;
+    const options = this._getTileOptions( map, index );
 
     // randomly pick a tile source from the array and store it in the maps config
     // so it will be re-used when the form is reset or multiple geo widgets are created
@@ -817,14 +786,12 @@ Geopicker.prototype._getLeafletTileLayer = function( map, index ) {
  * @return {Promise}
  */
 Geopicker.prototype._getGoogleTileLayer = function( map, index ) {
-    var options = this._getTileOptions( map, index );
+    const options = this._getTileOptions( map, index );
     // valid values for type are 'roadmap', 'satellite', 'terrain' and 'hybrid'
     options.type = map.tiles.substring( 7 ).toLowerCase();
 
     return this._loadGoogleMapsScript()
-        .then( function() {
-            return L.gridLayer.googleMutant( options );
-        } );
+        .then( () => L.gridLayer.googleMutant( options ) );
 };
 
 /**
@@ -834,14 +801,14 @@ Geopicker.prototype._getGoogleTileLayer = function( map, index ) {
  * @param  {[type]} index the index of the layer
  * @return {{id: string, maxZoom: number, minZoom: number, name: string, attribution: string}}   Tilelayer options object
  */
-Geopicker.prototype._getTileOptions = function( map, index ) {
-    var name = map.name || 'map-' + ( index + 1 );
+Geopicker.prototype._getTileOptions = ( map, index ) => {
+    const name = map.name || `map-${index + 1}`;
 
     return {
         id: map.id || name,
         maxZoom: map.maxzoom || 18,
         minZoom: map.minzoom || 0,
-        name: name,
+        name,
         attribution: map.attribution || ''
     };
 };
@@ -852,24 +819,24 @@ Geopicker.prototype._getTileOptions = function( map, index ) {
  *
  * @return {Promise} [description]
  */
-Geopicker.prototype._loadGoogleMapsScript = function() {
+Geopicker.prototype._loadGoogleMapsScript = () => {
     // request Google maps script only once, using a variable outside of the scope of the current widget
     // in case multiple widgets exist in the same form
     if ( !googleMapsScriptRequest ) {
         // create deferred object, also outside of the scope of the current widget
-        googleMapsScriptRequest = new Promise( function( resolve ) {
-            var apiKeyQueryParam, loadUrl;
+        googleMapsScriptRequest = new Promise( resolve => {
+            let apiKeyQueryParam, loadUrl;
 
             // create a global callback to be called by the Google Maps script once this has loaded
-            window.gmapsLoaded = function() {
+            window.gmapsLoaded = () => {
                 // clean up the global function
                 delete window.gmapsLoaded;
                 // resolve the deferred object
                 resolve();
             };
             // make the request for the Google Maps script asynchronously
-            apiKeyQueryParam = ( googleApiKey ) ? '&key=' + googleApiKey : '';
-            loadUrl = 'https://maps.google.com/maps/api/js?v=3.exp' + apiKeyQueryParam + '&libraries=places&callback=gmapsLoaded';
+            apiKeyQueryParam = ( googleApiKey ) ? `&key=${googleApiKey}` : '';
+            loadUrl = `https://maps.google.com/maps/api/js?v=3.exp${apiKeyQueryParam}&libraries=places&callback=gmapsLoaded`;
             $.getScript( loadUrl );
         } );
     }
@@ -879,23 +846,21 @@ Geopicker.prototype._loadGoogleMapsScript = function() {
 };
 
 Geopicker.prototype._getDefaultLayer = function( layers ) {
-    var defaultLayer;
-    var that = this;
+    let defaultLayer;
+    const that = this;
 
-    layers.reverse().some( function( layer ) {
+    layers.reverse().some( layer => {
         defaultLayer = layer;
-        return that.props.appearances.some( function( appearance ) {
-            return appearance === layer.options.name;
-        } );
+        return that.props.appearances.some( appearance => appearance === layer.options.name );
     } );
 
     return defaultLayer;
 };
 
-Geopicker.prototype._getBaseLayers = function( layers ) {
-    var baseLayers = {};
+Geopicker.prototype._getBaseLayers = layers => {
+    const baseLayers = {};
 
-    layers.forEach( function( layer ) {
+    layers.forEach( layer => {
         baseLayers[ layer.options.name ] = layer;
     } );
 
@@ -906,9 +871,9 @@ Geopicker.prototype._getBaseLayers = function( layers ) {
  * Updates the markers on the dynamic map from the current list of points.
  */
 Geopicker.prototype._updateMarkers = function() {
-    var coords = [];
-    var markers = [];
-    var that = this;
+    const coords = [];
+    const markers = [];
+    const that = this;
 
     // console.debug( 'updating markers', this.points );
 
@@ -920,24 +885,24 @@ Geopicker.prototype._updateMarkers = function() {
         return;
     }
 
-    this.points.forEach( function( latLng, index ) {
-        var icon = that.props.type === 'geopoint' ? iconSingle : ( index === that.currentIndex ? iconMultiActive : iconMulti );
+    this.points.forEach( ( latLng, index ) => {
+        const icon = that.props.type === 'geopoint' ? iconSingle : ( index === that.currentIndex ? iconMultiActive : iconMulti );
         if ( that._isValidLatLng( latLng ) ) {
             coords.push( that._cleanLatLng( latLng ) );
             markers.push( L.marker( that._cleanLatLng( latLng ), {
-                icon: icon,
+                icon,
                 clickable: !that.props.readonly,
                 draggable: !that.props.readonly,
                 alt: index,
                 opacity: 0.9
-            } ).on( 'click', function( e ) {
+            } ).on( 'click', e => {
                 if ( e.target.options.alt === 0 && that.props.type === 'geoshape' ) {
                     that._closePolygon();
                 } else {
                     that._setCurrent( e.target.options.alt );
                 }
-            } ).on( 'dragend', function( e ) {
-                var latLng = e.target.getLatLng(),
+            } ).on( 'dragend', e => {
+                const latLng = e.target.getLatLng(),
                     index = e.target.options.alt;
 
                 // reduce precision to 6 decimals
@@ -976,8 +941,8 @@ Geopicker.prototype._updateMarkers = function() {
  * Updates the polyline on the dynamic map from the current list of points
  */
 Geopicker.prototype._updatePolyline = function() {
-    var polylinePoints;
-    var that = this;
+    let polylinePoints;
+    const that = this;
 
     if ( this.props.type === 'geopoint' ) {
         return;
@@ -1006,9 +971,7 @@ Geopicker.prototype._updatePolyline = function() {
 
     polylinePoints = ( this.points[ this.points.length - 1 ].join( '' ) !== '' ) ? this.points : this.points.slice( 0, this.points.length - 1 );
 
-    polylinePoints = polylinePoints.map( function( point ) {
-        return that._cleanLatLng( point );
-    } );
+    polylinePoints = polylinePoints.map( point => that._cleanLatLng( point ) );
 
     if ( !this.polyline ) {
         this.polyline = L.polyline( polylinePoints, {
@@ -1020,7 +983,7 @@ Geopicker.prototype._updatePolyline = function() {
     }
 
     // possible bug in Leaflet, using timeout to work around
-    setTimeout( function() {
+    setTimeout( () => {
         that.map.fitBounds( that.polyline.getBounds() );
     }, 0 );
 };
@@ -1031,8 +994,8 @@ Geopicker.prototype._updatePolyline = function() {
  * A polygon is a type of polyline. This function is ALWAYS called by _updatePolyline.
  */
 Geopicker.prototype._updatePolygon = function() {
-    var polygonPoints;
-    var that = this;
+    let polygonPoints;
+    const that = this;
 
     if ( this.props.type === 'geopoint' || this.props.type === 'geotrace' ) {
         return;
@@ -1041,9 +1004,7 @@ Geopicker.prototype._updatePolygon = function() {
     // console.log( 'updating polygon' );
     polygonPoints = ( this.points[ this.points.length - 1 ].join( '' ) !== '' ) ? this.points : this.points.slice( 0, this.points.length - 1 );
 
-    polygonPoints = polygonPoints.map( function( point ) {
-        return that._cleanLatLng( point );
-    } );
+    polygonPoints = polygonPoints.map( point => that._cleanLatLng( point ) );
 
     if ( !this.polygon ) {
         // console.log( 'creating new polygon' );
@@ -1065,13 +1026,14 @@ Geopicker.prototype._updatePolygon = function() {
  * @type {[type]}
  */
 Geopicker.prototype._updateArea = function( points ) {
-    var area;
-    var readableArea;
+    let area;
+    let readableArea;
 
     if ( points.length > 2 ) {
-        var latLngs = points.map( function( point ) {
-            return { lat: point[ 0 ], lng: point[ 1 ] };
-        } );
+        const latLngs = points.map( point => ( {
+            lat: point[ 0 ],
+            lng: point[ 1 ]
+        } ) );
         area = L.GeometryUtil.geodesicArea( latLngs );
         readableArea = L.GeometryUtil.readableArea( area, true );
 
@@ -1101,7 +1063,7 @@ Geopicker.prototype._addPoint = function() {
  * @return {Boolean]}        Whether point changed.
  */
 Geopicker.prototype._editPoint = function( latLng ) {
-    var changed;
+    let changed;
 
     this.points[ this.currentIndex ] = latLng;
 
@@ -1118,7 +1080,7 @@ Geopicker.prototype._editPoint = function( latLng ) {
  * Removes the current point
  */
 Geopicker.prototype._removePoint = function() {
-    var newIndex = this.currentIndex;
+    let newIndex = this.currentIndex;
     this.points.splice( this.currentIndex, 1 );
     this._updateValue();
     this.$points.find( '.point' ).eq( this.currentIndex ).remove();
@@ -1131,7 +1093,7 @@ Geopicker.prototype._removePoint = function() {
 };
 
 Geopicker.prototype._closePolygon = function() {
-    var lastPoint = this.points[ this.points.length - 1 ];
+    const lastPoint = this.points[ this.points.length - 1 ];
     // console.debug( 'closing polygon' );
 
     // check if chain can be closed
@@ -1165,10 +1127,10 @@ Geopicker.prototype._closePolygon = function() {
  * @param  {string=} ev  [description]
  */
 Geopicker.prototype._updateInputs = function( coords, ev ) {
-    var lat = coords[ 0 ] || coords.lat || '';
-    var lng = coords[ 1 ] || coords.lng || '';
-    var alt = coords[ 2 ] || coords.alt || '';
-    var acc = coords[ 3 ] || coords.acc || '';
+    const lat = coords[ 0 ] || coords.lat || '';
+    const lng = coords[ 1 ] || coords.lng || '';
+    const alt = coords[ 2 ] || coords.alt || '';
+    const acc = coords[ 3 ] || coords.acc || '';
 
     ev = ( typeof ev !== 'undefined' ) ? ev : 'change';
 
@@ -1187,17 +1149,17 @@ Geopicker.prototype._updateInputs = function( coords, ev ) {
  * @param  {string} kmlCoordinates [description]
  * @return {Array.<Array<Number>>} Array of geopoint coordinates
  */
-Geopicker.prototype._convertKmlCoordinatesToLeafletCoordinates = function( kmlCoordinates ) {
-    var coordinates = [];
-    var reg = /<\s?coordinates>(([^<]|\n)*)<\/\s?coordinates\s?>/;
-    var tags = reg.test( kmlCoordinates );
+Geopicker.prototype._convertKmlCoordinatesToLeafletCoordinates = kmlCoordinates => {
+    const coordinates = [];
+    const reg = /<\s?coordinates>(([^<]|\n)*)<\/\s?coordinates\s?>/;
+    const tags = reg.test( kmlCoordinates );
 
     kmlCoordinates = ( tags ) ? kmlCoordinates.match( reg )[ 1 ] : kmlCoordinates;
-    kmlCoordinates.trim().split( /\s+/ ).forEach( function( item ) {
-        var coordinate = [];
+    kmlCoordinates.trim().split( /\s+/ ).forEach( item => {
+        const coordinate = [];
 
-        item.split( ',' ).forEach( function( c, index ) {
-            var value = Number( c );
+        item.split( ',' ).forEach( ( c, index ) => {
+            const value = Number( c );
             if ( index === 0 ) {
                 coordinate[ 1 ] = value;
             } else if ( index === 1 ) {
@@ -1221,11 +1183,11 @@ Geopicker.prototype._convertKmlCoordinatesToLeafletCoordinates = function( kmlCo
  * @return {[type]} [description]
  */
 Geopicker.prototype.updatedPolylineWouldIntersect = function( latLng, index ) {
-    var pointsToTest = [];
-    var polylinePoints;
-    var polylineToTest;
-    var intersects;
-    var that = this;
+    const pointsToTest = [];
+    let polylinePoints;
+    let polylineToTest;
+    let intersects;
+    const that = this;
 
     if ( this.points < 3 ) {
         return false;
@@ -1248,9 +1210,7 @@ Geopicker.prototype.updatedPolylineWouldIntersect = function( latLng, index ) {
         polylinePoints = polylinePoints.slice( 0, polylinePoints.length - 1 );
     }
 
-    polylinePoints = polylinePoints.map( function( point ) {
-        return that._cleanLatLng( point );
-    } );
+    polylinePoints = polylinePoints.map( point => that._cleanLatLng( point ) );
 
     // create polyline
     polylineToTest = L.polyline( polylinePoints, {
@@ -1275,17 +1235,13 @@ Geopicker.prototype.updatedPolylineWouldIntersect = function( latLng, index ) {
  * @allowedIndex {number=} The index in which an empty value is allowed
  * @return {[type]} [description]
  */
-Geopicker.prototype.containsEmptyPoints = function( points, allowedIndex ) {
-    return points.some( function( point, index ) {
-        return index !== allowedIndex && ( !point[ 0 ] || !point[ 1 ] );
-    } );
-};
+Geopicker.prototype.containsEmptyPoints = ( points, allowedIndex ) => points.some( ( point, index ) => index !== allowedIndex && ( !point[ 0 ] || !point[ 1 ] ) );
 
 
 /**
  * Disables the widget
  */
-Geopicker.prototype.disable = function( element ) {
+Geopicker.prototype.disable = element => {
     $( element )
         .next( '.widget' )
         .addClass( 'readonly' )
@@ -1328,8 +1284,8 @@ $.fn[ pluginName ] = function( options, event ) {
 
     return this.each( function() {
         try {
-            var $this = $( this );
-            var data = $( this ).data( pluginName );
+            const $this = $( this );
+            const data = $( this ).data( pluginName );
 
             options = options || {};
 
@@ -1340,12 +1296,12 @@ $.fn[ pluginName ] = function( options, event ) {
                 data[ options ]( this );
             }
         } catch ( e ) {
-            console.log( 'Failed to initialise geopicker for ' + this + ': ' + e );
+            console.log( `Failed to initialise geopicker for ${this}: ${e}` );
         }
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': 'input[data-type-xml="geopoint"], input[data-type-xml="geotrace"], input[data-type-xml="geoshape"]'
 };

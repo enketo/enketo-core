@@ -1,30 +1,28 @@
-'use strict';
+import a from '../widget/note/notewidget';
+import b from '../widget/select-desktop/selectpicker';
+import c from '../widget/select-mobile/selectpicker';
+import e from '../widget/select-autocomplete/autocomplete';
+//import f from '../widget/geo-esri/geopicker'   ;
+import f from '../widget/geo/geopicker';
+import g from '../widget/textarea/textarea';
+import h from '../widget/table/tablewidget';
+import i from '../widget/radio/radiopicker';
+import j from '../widget/date/datepicker-extended';
+import k from '../widget/date-native/datepicker-native';
+import l from '../widget/date-mobile/datepicker-mobile';
+import m from '../widget/time/timepicker-extended';
+import n from '../widget/datetime/datetimepicker-extended';
+import o from '../widget/compact/compactpicker';
+import p from '../widget/file/filepicker';
+import q from '../widget/draw/draw-widget';
+import r from '../widget/select-likert/likertitem';
+import s from '../widget/horizontal-choices/horizontalchoices';
+import t from '../widget/analog-scale/analog-scalepicker';
+import u from '../widget/big-image/image-viewer';
+import v from '../widget/comment/commentwidget';
+import w from '../widget/image-map/image-map';
+import x from '../widget/range/range-widget';
+import y from '../widget/rank/rank-widget';
+import z from '../widget/url/url-widget';
 
-module.exports = [
-    require( '../widget/note/notewidget' ),
-    require( '../widget/select-desktop/selectpicker' ),
-    require( '../widget/select-mobile/selectpicker' ),
-    require( '../widget/select-autocomplete/autocomplete' ),
-    //require( '../widget/geo-esri/geopicker' ),
-    require( '../widget/geo/geopicker' ),
-    require( '../widget/textarea/textarea' ),
-    require( '../widget/table/tablewidget' ),
-    require( '../widget/radio/radiopicker' ),
-    require( '../widget/date/datepicker-extended' ),
-    require( '../widget/date-native/datepicker-native' ),
-    require( '../widget/date-mobile/datepicker-mobile' ),
-    require( '../widget/time/timepicker-extended' ),
-    require( '../widget/datetime/datetimepicker-extended' ),
-    require( '../widget/compact/compactpicker' ),
-    require( '../widget/file/filepicker' ),
-    require( '../widget/draw/draw-widget' ),
-    require( '../widget/select-likert/likertitem' ),
-    require( '../widget/horizontal-choices/horizontalchoices' ),
-    require( '../widget/analog-scale/analog-scalepicker' ),
-    require( '../widget/big-image/image-viewer' ),
-    require( '../widget/comment/commentwidget' ),
-    require( '../widget/image-map/image-map' ),
-    require( '../widget/range/range-widget' ),
-    require( '../widget/rank/rank-widget' ),
-    require( '../widget/url/url-widget' ),
-];
+export default [ a, b, c, /*d,*/ e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z ];

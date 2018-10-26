@@ -1,5 +1,5 @@
 node_modules/
 build/css/
 build/js/
-test/mock/forms.json
+test/mock/forms.js
 temp

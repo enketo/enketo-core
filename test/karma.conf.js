@@ -1,7 +1,10 @@
 // Karma configuration
 // Generated on Mon Mar 16 2015 13:42:33 GMT-0600 (MDT)
+const resolve = require( 'rollup-plugin-node-resolve' );
+const commonjs = require( 'rollup-plugin-commonjs' );
+const json = require( 'rollup-plugin-json' );
 
-module.exports = function( config ) {
+module.exports = config => {
 
     // Force timezone for tests, so that datetime conversion results are predictable
     // Use timezone that doesn't have Daylight Savings Time.
@@ -15,7 +18,7 @@ module.exports = function( config ) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: [ 'browserify', 'jasmine' ],
+        frameworks: [ 'jasmine' ],
 
 
         // list of files / patterns to load in the browser
@@ -28,7 +31,7 @@ module.exports = function( config ) {
                 pattern: 'src/widget/*/*.*',
                 included: false
             }, {
-                pattern: 'config.json',
+                pattern: 'config.js',
                 included: false
             }
         ],
@@ -41,9 +44,28 @@ module.exports = function( config ) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'test/**/*.js': [ 'browserify' ],
+            'test/**/*.js': [ 'rollup' ],
         },
 
+        rollupPreprocessor: {
+            output: {
+                format: 'iife',
+                name: 'test'
+            },
+            plugins: [
+                resolve( {
+                    module: true, // Default: true
+                    main: true, // Default: true
+                    browser: true, // Default: false
+                } ),
+                commonjs( {
+                    include: 'node_modules/**', // Default: undefined
+                    sourceMap: false, // Default: true
+                } ),
+                json() // still used for importing package.json
+
+            ]
+        },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'

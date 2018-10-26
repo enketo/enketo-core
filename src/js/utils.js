@@ -1,7 +1,5 @@
 /* global ArrayBuffer, Uint8Array */
-'use strict';
-
-var cookies;
+let cookies;
 
 /**
  * Parses an Expression to extract all function calls and theirs argument arrays.
@@ -11,14 +9,14 @@ var cookies;
  * @return {<String, <String*>>} The result array, where each result is an array containing the function call and array of arguments.
  */
 function parseFunctionFromExpression( expr, func ) {
-    var index;
-    var result;
-    var openBrackets;
-    var start;
-    var argStart;
-    var args;
-    var findFunc = new RegExp( func + '\\s*\\(', 'g' );
-    var results = [];
+    let index;
+    let result;
+    let openBrackets;
+    let start;
+    let argStart;
+    let args;
+    const findFunc = new RegExp( `${func}\\s*\\(`, 'g' );
+    const results = [];
 
     if ( !expr || !func ) {
         return results;
@@ -65,7 +63,7 @@ function stripQuotes( str ) {
 // 
 // See https://github.com/kobotoolbox/enketo-express/issues/374
 function getFilename( file, postfix ) {
-    var filenameParts;
+    let filenameParts;
     if ( typeof file === 'object' && file !== null && file.name ) {
         postfix = postfix || '';
         filenameParts = file.name.split( '.' );
@@ -85,9 +83,9 @@ function getFilename( file, postfix ) {
  * @return {[type]}      [description]
  */
 function toArray( list ) {
-    var array = [];
+    const array = [];
     // iterate backwards ensuring that length is an UInt32
-    for ( var i = list.length >>> 0; i--; ) {
+    for ( let i = list.length >>> 0; i--; ) {
         array[ i ] = list[ i ];
     }
     return array;
@@ -98,9 +96,9 @@ function isNumber( n ) {
 }
 
 function readCookie( name ) {
-    var c;
-    var C;
-    var i;
+    let c;
+    let C;
+    let i;
 
     if ( cookies ) {
         return cookies[ name ];
@@ -125,10 +123,10 @@ function readCookie( name ) {
 }
 
 function dataUriToBlobSync( dataURI ) {
-    var byteString;
-    var mimeString;
-    var buffer;
-    var array;
+    let byteString;
+    let mimeString;
+    let buffer;
+    let array;
 
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
@@ -140,7 +138,7 @@ function dataUriToBlobSync( dataURI ) {
     buffer = new ArrayBuffer( byteString.length );
     array = new Uint8Array( buffer );
 
-    for ( var i = 0; i < byteString.length; i++ ) {
+    for ( let i = 0; i < byteString.length; i++ ) {
         array[ i ] = byteString.charCodeAt( i );
     }
 
@@ -151,7 +149,7 @@ function dataUriToBlobSync( dataURI ) {
 }
 
 function getPasteData( event ) {
-    var clipboardData = event.originalEvent.clipboardData || window.clipboardData; // modern || IE11
+    const clipboardData = event.originalEvent.clipboardData || window.clipboardData; // modern || IE11
     return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
 }
 
@@ -163,18 +161,21 @@ function getPasteData( event ) {
  * @param {*} fileName  the filename of the file
  */
 function updateDownloadLink( anchor, objectUrl, fileName ) {
+    if ( window.updateDownloadLinkIe11 ) {
+        return window.updateDownloadLinkIe11( ...arguments );
+    }
     anchor.setAttribute( 'href', objectUrl || '' );
     anchor.setAttribute( 'download', fileName || '' );
 }
 
-module.exports = {
-    parseFunctionFromExpression: parseFunctionFromExpression,
-    stripQuotes: stripQuotes,
-    getFilename: getFilename,
-    toArray: toArray,
-    isNumber: isNumber,
-    readCookie: readCookie,
-    dataUriToBlobSync: dataUriToBlobSync,
-    getPasteData: getPasteData,
-    updateDownloadLink: updateDownloadLink
+export {
+    parseFunctionFromExpression,
+    stripQuotes,
+    getFilename,
+    toArray,
+    isNumber,
+    readCookie,
+    dataUriToBlobSync,
+    getPasteData,
+    updateDownloadLink
 };

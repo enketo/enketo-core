@@ -1,8 +1,7 @@
-'use strict';
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
+import $ from 'jquery';
+import Widget from '../../js/Widget';
 
-var pluginName = 'compactpicker';
+const pluginName = 'compactpicker';
 
 /**
  * Compact Picker. Hides text labels if a media label is present.
@@ -30,7 +29,7 @@ CompactPicker.prototype.constructor = CompactPicker;
 //add your widget functions
 CompactPicker.prototype._init = function() {
     $( this.element ).find( '.option-label' ).each( function() {
-        var $optionLabel = $( this );
+        const $optionLabel = $( this );
         if ( $optionLabel.siblings( 'img, video, audio' ).length > 0 ) {
             $optionLabel.css( 'display', 'none' );
         }
@@ -42,7 +41,7 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this ),
+        const $this = $( this ),
             data = $this.data( pluginName );
 
         //only instantiate if options is an object (i.e. not a string) and if it doesn't exist already
@@ -58,7 +57,7 @@ $.fn[ pluginName ] = function( options, event ) {
 };
 
 
-module.exports = {
+export default {
     'name': 'compactpicker',
     'selector': '.or-appearance-compact, .or-appearance-quickcompact, [class*="or-appearance-compact-"]'
 };

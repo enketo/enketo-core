@@ -1,7 +1,7 @@
 function getSiblingElementsAndSelf( element, selector ) {
-    var siblings = [ element ];
-    var prev = element.previousElementSibling;
-    var next = element.nextElementSibling;
+    const siblings = [ element ];
+    let prev = element.previousElementSibling;
+    let next = element.nextElementSibling;
 
     selector = typeof selector === 'undefined' ? '*' : selector;
 
@@ -21,6 +21,6 @@ function getSiblingElementsAndSelf( element, selector ) {
     return siblings;
 }
 
-module.exports = {
-    getSiblingElementsAndSelf: getSiblingElementsAndSelf
+export {
+    getSiblingElementsAndSelf
 };

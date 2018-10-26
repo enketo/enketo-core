@@ -1,10 +1,10 @@
-var format = require( '../../src/js/format' );
+import { format, time } from '../../src/js/format';
 
-describe( 'Format', function() {
+describe( 'Format', () => {
 
-    describe( 'for time determination', function() {
-        var i;
-        var t = [
+    describe( 'for time determination', () => {
+        let i;
+        const t = [
             [ 'en-US', true, 'AM', 'PM' ],
             [ 'zh', true, '上午', '下午' ],
             [ 'ar-EG', true, 'ص', 'م' ],
@@ -14,9 +14,10 @@ describe( 'Format', function() {
         ];
 
         function testMeridian( locale, expected ) {
-            it( 'correctly identifies ' + locale + ' time meridian notation as ' + expected, function() {
+            it( `correctly identifies ${locale} time meridian notation as ${expected}`, () => {
                 format.locale = locale;
-                expect( format.time.hour12 ).toEqual( expected );
+                expect( format.locale ).toEqual( locale );
+                expect( time.hour12 ).toEqual( expected );
             } );
         }
 
@@ -25,10 +26,10 @@ describe( 'Format', function() {
         }
 
         function testPm( locale, am, pm ) {
-            it( 'correctly extracts the AM and PM notation for ' + locale + ' as: ' + am + ',' + pm, function() {
+            it( `correctly extracts the AM and PM notation for ${locale} as: ${am},${pm}`, () => {
                 format.locale = locale;
-                expect( format.time.amNotation ).toEqual( am );
-                expect( format.time.pmNotation ).toEqual( pm );
+                expect( time.amNotation ).toEqual( am );
+                expect( time.pmNotation ).toEqual( pm );
             } );
         }
 

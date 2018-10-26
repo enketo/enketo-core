@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Simple file manager with cross-browser support. That uses the FileReader
  * to create previews. Can be replaced with a more advanced version that
@@ -8,26 +7,23 @@
  * types.
  */
 
-var $ = require( 'jquery' );
-var utils = require( './utils' );
-var fileManager = {};
-var t = require( 'enketo/translator' ).t;
+import $ from 'jquery';
+
+import { getFilename, dataUriToBlobSync } from './utils';
+const fileManager = {};
+import { t } from 'enketo/translator';
 
 /**
  * Initialize the file manager .
  * @return {[type]} promise boolean or rejection with Error
  */
-fileManager.init = function() {
-    return Promise.resolve( true );
-};
+fileManager.init = () => Promise.resolve( true );
 
 /**
  * Whether the filemanager is waiting for user permissions
  * @return {Boolean} [description]
  */
-fileManager.isWaitingForPermissions = function() {
-    return false;
-};
+fileManager.isWaitingForPermissions = () => false;
 
 /**
  * Obtains a URL that can be used to show a preview of the file when used
@@ -38,27 +34,25 @@ fileManager.isWaitingForPermissions = function() {
  * @param  {?string|Object} subject File or filename in local storage
  * @return {[type]}         promise url string or rejection with Error
  */
-fileManager.getFileUrl = function( subject ) {
-    return new Promise( function( resolve, reject ) {
-        var error;
+fileManager.getFileUrl = subject => new Promise( ( resolve, reject ) => {
+    let error;
 
-        if ( !subject ) {
-            resolve( null );
-        } else if ( typeof subject === 'string' ) {
-            // TODO obtain from storage as http URL or objectURL
-            reject( 'no!' );
-        } else if ( typeof subject === 'object' ) {
-            if ( fileManager.isTooLarge( subject ) ) {
-                error = new Error( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
-                reject( error );
-            } else {
-                resolve( URL.createObjectURL( subject ) );
-            }
+    if ( !subject ) {
+        resolve( null );
+    } else if ( typeof subject === 'string' ) {
+        // TODO obtain from storage as http URL or objectURL
+        reject( 'no!' );
+    } else if ( typeof subject === 'object' ) {
+        if ( fileManager.isTooLarge( subject ) ) {
+            error = new Error( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
+            reject( error );
         } else {
-            reject( new Error( 'Unknown error occurred' ) );
+            resolve( URL.createObjectURL( subject ) );
         }
-    } );
-};
+    } else {
+        reject( new Error( 'Unknown error occurred' ) );
+    }
+} );
 
 /**
  * Similar to getFileURL, except that this one is guaranteed to return an objectURL
@@ -68,23 +62,21 @@ fileManager.getFileUrl = function( subject ) {
  * @param  {?string|Object} subject File or filename in local storage
  * @return {[type]}         promise url string or rejection with Error
  */
-fileManager.getObjectUrl = function( subject ) {
-    return fileManager.getFileUrl( subject )
-        .then( function( url ) {
-            if ( /https?:\/\//.test( url ) ) {
-                return fileManager.urlToBlob( url ).then( URL.createObjectURL );
-            }
-            return url;
-        } );
-};
+fileManager.getObjectUrl = subject => fileManager.getFileUrl( subject )
+    .then( url => {
+        if ( /https?:\/\//.test( url ) ) {
+            return fileManager.urlToBlob( url ).then( URL.createObjectURL );
+        }
+        return url;
+    } );
 
-fileManager.urlToBlob = function( url ) {
-    var xhr = new XMLHttpRequest();
+fileManager.urlToBlob = url => {
+    const xhr = new XMLHttpRequest();
 
-    return new Promise( function( resolve ) {
+    return new Promise( resolve => {
         xhr.open( 'GET', url );
         xhr.responseType = 'blob';
-        xhr.onload = function() {
+        xhr.onload = () => {
             resolve( xhr.response );
         };
         xhr.send();
@@ -95,21 +87,21 @@ fileManager.urlToBlob = function( url ) {
  * Obtain files currently stored in file input elements of open record
  * @return {[File]} array of files
  */
-fileManager.getCurrentFiles = function() {
-    var files = [];
+fileManager.getCurrentFiles = () => {
+    const files = [];
 
     // Get any files inside file input elements or text input elements for drawings.
     $( 'form.or' ).find( 'input[type="file"]:not(.ignore), input[type="text"][data-drawing="true"]' ).each( function() {
-        var newFilename;
-        var file = null;
-        var canvas = null;
+        let newFilename;
+        let file = null;
+        let canvas = null;
         if ( this.type === 'file' ) {
             file = this.files[ 0 ]; // Why doesn't this fail for empty file inputs?
         } else if ( this.value ) {
             canvas = $( this ).closest( '.question' )[ 0 ].querySelector( '.draw-widget canvas' );
             if ( canvas ) {
                 // TODO: In the future, we could simply do canvas.toBlob() instead
-                file = utils.dataUriToBlobSync( canvas.toDataURL() );
+                file = dataUriToBlobSync( canvas.toDataURL() );
                 file.name = this.value;
             }
         }
@@ -118,7 +110,7 @@ fileManager.getCurrentFiles = function() {
             // First create a clone, because the name property is immutable
             // TODO: in the future, when browser support increase we can invoke
             // the File constructor to do this.
-            newFilename = utils.getFilename( file, this.dataset.filenamePostfix );
+            newFilename = getFilename( file, this.dataset.filenamePostfix );
             file = new Blob( [ file ], {
                 type: file.type
             } );
@@ -136,15 +128,11 @@ fileManager.getCurrentFiles = function() {
  * @param  {Blob}  file [description]
  * @return {Boolean}      [description]
  */
-fileManager.isTooLarge = function( /*file*/) {
-    return false;
-};
+fileManager.isTooLarge = () => false;
 
 /**
  * Replace with function that determines max size published in OpenRosa server response header.
  */
-fileManager.getMaxSizeReadable = function() {
-    return 5 + 'MB';
-};
+fileManager.getMaxSizeReadable = () => `${5}MB`;
 
-module.exports = fileManager;
+export default fileManager;

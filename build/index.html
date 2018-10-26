@@ -90,7 +90,16 @@
     <!-- <script src="//localhost:35729/livereload.js"></script> -->
 
     <!-- all the scripts -->
-    <script type="text/javascript" src="./js/enketo-bundle.js" charset="utf-8"></script>
+    <script id="main-script" defer module type="text/javascript" src="./js/enketo-bundle.js" charset="utf-8"></script>
+    <script nomodule>
+        document.querySelector( '#main-script' ).remove();
+        c = "./js/enketo-ie11-bundle.js";
+        var script = document.createElement( 'script' );
+        script.type = 'text/javascript';
+        script.src = './js/enketo-ie11-bundle.js';
+        document.body.appendChild( script );
+
+    </script>
 </body>
 
 </html>

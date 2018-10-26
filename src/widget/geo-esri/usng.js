@@ -1,7 +1,7 @@
 if ( typeof console.warn === 'undefined' ) {
     console.warn = console.log;
 }
-var dialog = require( 'enketo/dialog' );
+import dialog from 'enketo/dialog';
 
 //// ***************************************************************************
 // *  usng.js  (U.S. National Grid functions)
@@ -137,39 +137,39 @@ var dialog = require( 'enketo/dialog' );
 
 //define(["dojo/_base/declare", "dojo/string"], function (declare, string) {
 
-var USNGSqEast = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+const USNGSqEast = "ABCDEFGHJKLMNPQRSTUVWXYZ";
 
 //*****************************************************************************
 
-var UNDEFINED_STR = "undefined";
-var UTMEasting;
-var UTMNorthing;
-var UTMZone; // 3 chars...two digits and letter
-var zoneNumber; // integer...two digits
+const UNDEFINED_STR = "undefined";
+let UTMEasting;
+let UTMNorthing;
+let UTMZone; // 3 chars...two digits and letter
+let zoneNumber; // integer...two digits
 
 
 /********************************* Constants ********************************/
 
-var DEG_2_RAD = Math.PI / 180;
-var RAD_2_DEG = 180.0 / Math.PI;
-var BLOCK_SIZE = 100000; // size of square identifier (within grid zone designation),
+const DEG_2_RAD = Math.PI / 180;
+const RAD_2_DEG = 180.0 / Math.PI;
+const BLOCK_SIZE = 100000; // size of square identifier (within grid zone designation),
 // (meters)
 
-var IS_NAD83_DATUM = true; // if false, assumes NAD27 datum
+const IS_NAD83_DATUM = true; // if false, assumes NAD27 datum
 
 // For diagram of zone sets, please see the "United States National Grid" white paper.
-var GRIDSQUARE_SET_COL_SIZE = 8; // column width of grid square set  
-var GRIDSQUARE_SET_ROW_SIZE = 20; // row height of grid square set
+const GRIDSQUARE_SET_COL_SIZE = 8; // column width of grid square set  
+const GRIDSQUARE_SET_ROW_SIZE = 20; // row height of grid square set
 
 // UTM offsets
-var EASTING_OFFSET = 500000.0; // (meters)
-var NORTHING_OFFSET = 10000000.0; // (meters)
+const EASTING_OFFSET = 500000.0; // (meters)
+const NORTHING_OFFSET = 10000000.0; // (meters)
 
 // scale factor of central meridian
-var k0 = 0.9996;
+const k0 = 0.9996;
 
-var EQUATORIAL_RADIUS;
-var ECC_SQUARED;
+let EQUATORIAL_RADIUS;
+let ECC_SQUARED;
 
 // check for NAD83
 if ( IS_NAD83_DATUM ) {
@@ -182,10 +182,10 @@ else {
     ECC_SQUARED = 0.006768658;
 }
 
-var ECC_PRIME_SQUARED = ECC_SQUARED / ( 1 - ECC_SQUARED );
+const ECC_PRIME_SQUARED = ECC_SQUARED / ( 1 - ECC_SQUARED );
 
 // variable used in inverse formulas (UTMtoLL function)
-var E1 = ( 1 - Math.sqrt( 1 - ECC_SQUARED ) ) / ( 1 + Math.sqrt( 1 - ECC_SQUARED ) );
+const E1 = ( 1 - Math.sqrt( 1 - ECC_SQUARED ) ) / ( 1 + Math.sqrt( 1 - ECC_SQUARED ) );
 
 // Number of digits to display for x,y coords 
 //  One digit:    10 km precision      eg. "18S UJ 2 1"
@@ -200,8 +200,8 @@ var E1 = ( 1 - Math.sqrt( 1 - ECC_SQUARED ) ) / ( 1 + Math.sqrt( 1 - ECC_SQUARED
     [-80 to +84] latitude zone.
 *************************************************************************/
 
-var theClass = {
-    getZoneNumber: function( lat, lon ) {
+const theClass = {
+    getZoneNumber( lat, lon ) {
 
         lat = parseFloat( lat );
         lon = parseFloat( lon );
@@ -209,13 +209,13 @@ var theClass = {
         // sanity check on input
         ////////////////////////////////   /*
         if ( lon > 360 || lon < -180 || lat > 90 || lat < -90 ) {
-            console.warn( 'Bad input. lat: ' + lat + ' lon: ' + lon );
+            console.warn( `Bad input. lat: ${lat} lon: ${lon}` );
         }
         ////////////////////////////////  */
 
         // convert 0-360 to [-180 to 180] range
-        var lonTemp = ( lon + 180 ) - parseInt( ( lon + 180 ) / 360 ) * 360 - 180;
-        var zoneNumber = parseInt( ( lonTemp + 180 ) / 6 ) + 1;
+        const lonTemp = ( lon + 180 ) - parseInt( ( lon + 180 ) / 360 ) * 360 - 180;
+        let zoneNumber = parseInt( ( lonTemp + 180 ) / 6 ) + 1;
 
         // Handle special case of west coast of Norway
         if ( lat >= 56.0 && lat < 64.0 && lonTemp >= 3.0 && lonTemp < 12.0 ) {
@@ -252,7 +252,7 @@ var theClass = {
             utmcoords[1] = northing (NEGATIVE value in southern hemisphere)
             utmcoords[2] = zone
     ***************************************************************************/
-    LLtoUTM: function( lat, lon, utmcoords, zone ) {
+    LLtoUTM( lat, lon, utmcoords, zone ) {
         // utmcoords is a 2-D array declared by the calling routine
 
         lat = parseFloat( lat );
@@ -268,15 +268,15 @@ var theClass = {
         // sanity check on input - turned off when testing with Generic Viewer
         /////////////////////  /*
         if ( lon > 360 || lon < -180 || lat > 90 || lat < -90 ) {
-            console.warn( 'Bad input. lat: ' + lat + ' lon: ' + lon );
+            console.warn( `Bad input. lat: ${lat} lon: ${lon}` );
         }
         //////////////////////  */
 
         // Make sure the longitude is between -180.00 .. 179.99..
         // Convert values on 0-360 range to this range.
-        var lonTemp = ( lon + 180 ) - parseInt( ( lon + 180 ) / 360 ) * 360 - 180;
-        var latRad = lat * DEG_2_RAD;
-        var lonRad = lonTemp * DEG_2_RAD;
+        const lonTemp = ( lon + 180 ) - parseInt( ( lon + 180 ) / 360 ) * 360 - 180;
+        const latRad = lat * DEG_2_RAD;
+        const lonRad = lonTemp * DEG_2_RAD;
 
         // user-supplied zone number will force coordinates to be computed in a particular zone
         if ( !zone ) {
@@ -285,23 +285,23 @@ var theClass = {
             zoneNumber = zone;
         }
 
-        var lonOrigin = ( zoneNumber - 1 ) * 6 - 180 + 3; // +3 puts origin in middle of zone
-        var lonOriginRad = lonOrigin * DEG_2_RAD;
+        const lonOrigin = ( zoneNumber - 1 ) * 6 - 180 + 3; // +3 puts origin in middle of zone
+        const lonOriginRad = lonOrigin * DEG_2_RAD;
 
         // compute the UTM Zone from the latitude and longitude
         // comment by Martijn: Nothing is done with this variable.
-        UTMZone = zoneNumber + "" + this.UTMLetterDesignator( lat ) + " ";
+        UTMZone = `${zoneNumber}${this.UTMLetterDesignator( lat )} `;
 
-        var N = EQUATORIAL_RADIUS / Math.sqrt( 1 - ECC_SQUARED *
+        const N = EQUATORIAL_RADIUS / Math.sqrt( 1 - ECC_SQUARED *
             Math.sin( latRad ) * Math.sin( latRad ) );
-        var T = Math.tan( latRad ) * Math.tan( latRad );
-        var C = ECC_PRIME_SQUARED * Math.cos( latRad ) * Math.cos( latRad );
-        var A = Math.cos( latRad ) * ( lonRad - lonOriginRad );
+        const T = Math.tan( latRad ) * Math.tan( latRad );
+        const C = ECC_PRIME_SQUARED * Math.cos( latRad ) * Math.cos( latRad );
+        const A = Math.cos( latRad ) * ( lonRad - lonOriginRad );
 
         // Note that the term Mo drops out of the "M" equation, because phi 
         // (latitude crossing the central meridian, lambda0, at the origin of the
         //  x,y coordinates), is equal to zero for UTM.
-        var M = EQUATORIAL_RADIUS * ( ( 1 - ECC_SQUARED / 4 -
+        const M = EQUATORIAL_RADIUS * ( ( 1 - ECC_SQUARED / 4 -
                 3 * ( ECC_SQUARED * ECC_SQUARED ) / 64 -
                 5 * ( ECC_SQUARED * ECC_SQUARED * ECC_SQUARED ) / 256 ) * latRad -
             ( 3 * ECC_SQUARED / 8 + 3 * ECC_SQUARED * ECC_SQUARED / 32 +
@@ -341,15 +341,15 @@ var theClass = {
           to a 10-meter precision.
     ***************************************************************************/
 
-    LLtoUSNG: function( lat, lon, precision ) {
+    LLtoUSNG( lat, lon, precision ) {
         lat = parseFloat( lat );
         lon = parseFloat( lon );
 
         // convert lat/lon to UTM coordinates
-        var coords = [];
+        const coords = [];
         this.LLtoUTM( lat, lon, coords );
-        var UTMEasting = coords[ 0 ];
-        var UTMNorthing = coords[ 1 ];
+        const UTMEasting = coords[ 0 ];
+        let UTMNorthing = coords[ 1 ];
 
         // ...then convert UTM to USNG
 
@@ -359,22 +359,22 @@ var theClass = {
             UTMNorthing += NORTHING_OFFSET;
         }
 
-        var USNGLetters = this.findGridLetters( zoneNumber, UTMNorthing, UTMEasting );
-        var USNGNorthing = Math.round( UTMNorthing ) % BLOCK_SIZE;
-        var USNGEasting = Math.round( UTMEasting ) % BLOCK_SIZE;
+        const USNGLetters = this.findGridLetters( zoneNumber, UTMNorthing, UTMEasting );
+        let USNGNorthing = Math.round( UTMNorthing ) % BLOCK_SIZE;
+        let USNGEasting = Math.round( UTMEasting ) % BLOCK_SIZE;
 
         // added... truncate digits to achieve specified precision
-        USNGNorthing = Math.floor( USNGNorthing / Math.pow( 10, ( 5 - precision ) ) );
-        USNGEasting = Math.floor( USNGEasting / Math.pow( 10, ( 5 - precision ) ) );
-        var USNG = this.getZoneNumber( lat, lon ) + this.UTMLetterDesignator( lat ) + " " + USNGLetters + " ";
+        USNGNorthing = Math.floor( USNGNorthing / ( 10 ** ( 5 - precision ) ) );
+        USNGEasting = Math.floor( USNGEasting / ( 10 ** ( 5 - precision ) ) );
+        let USNG = `${this.getZoneNumber( lat, lon ) + this.UTMLetterDesignator( lat )} ${USNGLetters} `;
 
         // REVISIT: Modify to incorporate dynamic precision ?
-        var i;
+        let i;
         for ( i = String( USNGEasting ).length; i < precision; i++ ) {
             USNG += "0";
         }
 
-        USNG += USNGEasting + " ";
+        USNG += `${USNGEasting} `;
 
         for ( i = String( USNGNorthing ).length; i < precision; i++ ) {
             USNG += "0";
@@ -395,10 +395,10 @@ var theClass = {
         8 degrees of latitude.
     ***************************************************************************/
 
-    UTMLetterDesignator: function( lat ) {
+    UTMLetterDesignator( lat ) {
         lat = parseFloat( lat );
 
-        var letterDesignator;
+        let letterDesignator;
         if ( ( 84 >= lat ) && ( lat >= 72 ) )
             letterDesignator = 'X';
         else if ( ( 72 > lat ) && ( lat >= 64 ) )
@@ -454,7 +454,7 @@ var theClass = {
         See p. 10 of the "United States National Grid" white paper.
     ***************************************************************************/
 
-    findSet: function( zoneNum ) {
+    findSet( zoneNum ) {
 
         zoneNum = parseInt( zoneNum );
         zoneNum = zoneNum % 6;
@@ -490,15 +490,15 @@ var theClass = {
       See "lettersHelper" function documentation for more details.
     ***************************************************************************/
 
-    findGridLetters: function( zoneNum, northing, easting ) {
+    findGridLetters( zoneNum, northing, easting ) {
 
         zoneNum = parseInt( zoneNum );
         northing = parseFloat( northing );
         easting = parseFloat( easting );
-        var row = 1;
+        let row = 1;
 
         // northing coordinate to single-meter precision
-        var north_1m = Math.round( northing );
+        let north_1m = Math.round( northing );
 
         // Get the row position for the square identifier that contains the point
         while ( north_1m >= BLOCK_SIZE ) {
@@ -508,10 +508,10 @@ var theClass = {
 
         // cycle repeats (wraps) after 20 rows
         row = row % GRIDSQUARE_SET_ROW_SIZE;
-        var col = 0;
+        let col = 0;
 
         // easting coordinate to single-meter precision
-        var east_1m = Math.round( easting );
+        let east_1m = Math.round( easting );
 
         // Get the column position for the square identifier that contains the point
         while ( east_1m >= BLOCK_SIZE ) {
@@ -538,7 +538,7 @@ var theClass = {
         of the zone sets.
     ***************************************************************************/
 
-    lettersHelper: function( set, row, col ) {
+    lettersHelper( set, row, col ) {
 
         // handle case of last row
         if ( row === 0 ) {
@@ -557,8 +557,8 @@ var theClass = {
         switch ( set ) {
 
             case 1:
-                var l1 = "ABCDEFGH"; // column ids
-                var l2 = "ABCDEFGHJKLMNPQRSTUV"; // row ids
+                let l1 = "ABCDEFGH"; // column ids
+                let l2 = "ABCDEFGHJKLMNPQRSTUV"; // row ids
                 return l1.charAt( col ) + l2.charAt( row );
 
             case 2:
@@ -603,46 +603,46 @@ var theClass = {
         lat-lon coordinates are turned in the object 'ret' : ret.lat and ret.lon
     ***************************************************************************/
 
-    UTMtoLL: function( UTMNorthing, UTMEasting, UTMZoneNumber, ret ) {
+    UTMtoLL( UTMNorthing, UTMEasting, UTMZoneNumber, ret ) {
 
         // remove 500,000 meter offset for longitude
-        var xUTM = parseFloat( UTMEasting ) - EASTING_OFFSET;
-        var yUTM = parseFloat( UTMNorthing );
-        var zoneNumber = parseInt( UTMZoneNumber );
+        const xUTM = parseFloat( UTMEasting ) - EASTING_OFFSET;
+        const yUTM = parseFloat( UTMNorthing );
+        const zoneNumber = parseInt( UTMZoneNumber );
 
         // origin longitude for the zone (+3 puts origin in zone center) 
-        var lonOrigin = ( zoneNumber - 1 ) * 6 - 180 + 3;
+        const lonOrigin = ( zoneNumber - 1 ) * 6 - 180 + 3;
 
         // M is the "true distance along the central meridian from the Equator to phi
         // (latitude)
-        var M = yUTM / k0;
-        var mu = M / ( EQUATORIAL_RADIUS * ( 1 - ECC_SQUARED / 4 - 3 * ECC_SQUARED *
+        const M = yUTM / k0;
+        const mu = M / ( EQUATORIAL_RADIUS * ( 1 - ECC_SQUARED / 4 - 3 * ECC_SQUARED *
             ECC_SQUARED / 64 - 5 * ECC_SQUARED * ECC_SQUARED * ECC_SQUARED / 256 ) );
 
         // phi1 is the "footprint latitude" or the latitude at the central meridian which
         // has the same y coordinate as that of the point (phi (lat), lambda (lon) ).
-        var phi1Rad = mu + ( 3 * E1 / 2 - 27 * E1 * E1 * E1 / 32 ) * Math.sin( 2 * mu ) +
+        const phi1Rad = mu + ( 3 * E1 / 2 - 27 * E1 * E1 * E1 / 32 ) * Math.sin( 2 * mu ) +
             ( 21 * E1 * E1 / 16 - 55 * E1 * E1 * E1 * E1 / 32 ) * Math.sin( 4 * mu ) +
             ( 151 * E1 * E1 * E1 / 96 ) * Math.sin( 6 * mu );
 
         // Terms used in the conversion equations
-        var N1 = EQUATORIAL_RADIUS / Math.sqrt( 1 - ECC_SQUARED * Math.sin( phi1Rad ) *
+        const N1 = EQUATORIAL_RADIUS / Math.sqrt( 1 - ECC_SQUARED * Math.sin( phi1Rad ) *
             Math.sin( phi1Rad ) );
-        var T1 = Math.tan( phi1Rad ) * Math.tan( phi1Rad );
-        var C1 = ECC_PRIME_SQUARED * Math.cos( phi1Rad ) * Math.cos( phi1Rad );
-        var R1 = EQUATORIAL_RADIUS * ( 1 - ECC_SQUARED ) / Math.pow( 1 - ECC_SQUARED *
-            Math.sin( phi1Rad ) * Math.sin( phi1Rad ), 1.5 );
-        var D = xUTM / ( N1 * k0 );
+        const T1 = Math.tan( phi1Rad ) * Math.tan( phi1Rad );
+        const C1 = ECC_PRIME_SQUARED * Math.cos( phi1Rad ) * Math.cos( phi1Rad );
+        const R1 = EQUATORIAL_RADIUS * ( 1 - ECC_SQUARED ) / ( ( 1 - ECC_SQUARED *
+            Math.sin( phi1Rad ) * Math.sin( phi1Rad ) ) ** 1.5 );
+        const D = xUTM / ( N1 * k0 );
 
         // Calculate latitude, in decimal degrees
-        var lat = phi1Rad - ( N1 * Math.tan( phi1Rad ) / R1 ) * ( D * D / 2 - ( 5 + 3 * T1 + 10 *
+        let lat = phi1Rad - ( N1 * Math.tan( phi1Rad ) / R1 ) * ( D * D / 2 - ( 5 + 3 * T1 + 10 *
                 C1 - 4 * C1 * C1 - 9 * ECC_PRIME_SQUARED ) * D * D * D * D / 24 + ( 61 + 90 *
                 T1 + 298 * C1 + 45 * T1 * T1 - 252 * ECC_PRIME_SQUARED - 3 * C1 * C1 ) * D * D *
             D * D * D * D / 720 );
         lat = lat * RAD_2_DEG;
 
         // Calculate longitude, in decimal degrees
-        var lon = ( D - ( 1 + 2 * T1 + C1 ) * D * D * D / 6 + ( 5 - 2 * C1 + 28 * T1 - 3 *
+        let lon = ( D - ( 1 + 2 * T1 + C1 ) * D * D * D / 6 + ( 5 - 2 * C1 + 28 * T1 - 3 *
                 C1 * C1 + 8 * ECC_PRIME_SQUARED + 24 * T1 * T1 ) * D * D * D * D * D / 120 ) /
             Math.cos( phi1Rad );
 
@@ -671,32 +671,32 @@ var theClass = {
           ret:  saves zone,let,Easting and Northing as properties ret 
     ***********************************************************************************/
 
-    USNGtoUTM: function( zone, lett, sq1, sq2, east, north, ret ) {
+    USNGtoUTM( zone, lett, sq1, sq2, east, north, ret ) {
 
         //Starts (southern edge) of N-S zones in millons of meters
-        var zoneBase = [ 1.1, 2.0, 2.9, 3.8, 4.7, 5.6, 6.5, 7.3, 8.2, 9.1, 0, 0.8, 1.7, 2.6, 3.5, 4.4, 5.3, 6.2, 7.0, 7.9 ];
+        const zoneBase = [ 1.1, 2.0, 2.9, 3.8, 4.7, 5.6, 6.5, 7.3, 8.2, 9.1, 0, 0.8, 1.7, 2.6, 3.5, 4.4, 5.3, 6.2, 7.0, 7.9 ];
 
-        var segBase = [ 0, 2, 2, 2, 4, 4, 6, 6, 8, 8, 0, 0, 0, 2, 2, 4, 4, 6, 6, 6 ]; //Starts of 2 million meter segments, indexed by zone 
+        const segBase = [ 0, 2, 2, 2, 4, 4, 6, 6, 8, 8, 0, 0, 0, 2, 2, 4, 4, 6, 6, 6 ]; //Starts of 2 million meter segments, indexed by zone 
 
         // convert easting to UTM
-        var eSqrs = USNGSqEast.indexOf( sq1 );
-        var appxEast = 1 + eSqrs % 8;
+        const eSqrs = USNGSqEast.indexOf( sq1 );
+        const appxEast = 1 + eSqrs % 8;
 
         // convert northing to UTM
-        var letNorth = "CDEFGHJKLMNPQRSTUVWX".indexOf( lett );
-        var nSqrs;
+        const letNorth = "CDEFGHJKLMNPQRSTUVWX".indexOf( lett );
+        let nSqrs;
         if ( zone % 2 ) //odd number zone
             nSqrs = "ABCDEFGHJKLMNPQRSTUV".indexOf( sq2 );
         else // even number zone
             nSqrs = "FGHJKLMNPQRSTUVABCDE".indexOf( sq2 );
 
-        var zoneStart = zoneBase[ letNorth ];
-        var appxNorth = Number( segBase[ letNorth ] ) + nSqrs / 10;
+        const zoneStart = zoneBase[ letNorth ];
+        let appxNorth = Number( segBase[ letNorth ] ) + nSqrs / 10;
         if ( appxNorth < zoneStart )
             appxNorth += 2;
 
-        ret.N = appxNorth * 1000000 + Number( north ) * Math.pow( 10, 5 - north.length );
-        ret.E = appxEast * 100000 + Number( east ) * Math.pow( 10, 5 - east.length );
+        ret.N = appxNorth * 1000000 + Number( north ) * ( 10 ** ( 5 - north.length ) );
+        ret.E = appxEast * 100000 + Number( east ) * ( 10 ** ( 5 - east.length ) );
         ret.zone = zone;
         ret.letter = lett;
 
@@ -707,13 +707,13 @@ var theClass = {
 
     // parse a USNG string and feed results to USNGtoUTM, then the results of that to UTMtoLL
 
-    USNGtoLL: function( usngStr_input, latlon ) {
+    USNGtoLL( usngStr_input, latlon ) {
         // latlon is a 2-element array declared by calling routine
 
-        var usngp = {};
+        const usngp = {};
 
         this.parseUSNG_str( usngStr_input, usngp );
-        var coords = {};
+        const coords = {};
 
         // convert USNG coords to UTM; this routine counts digits and sets precision
         this.USNGtoUTM( usngp.zone, usngp.let, usngp.sq1, usngp.sq2, usngp.east, usngp.north, coords );
@@ -731,16 +731,16 @@ var theClass = {
 
 
     // convert lower-case characters to upper case, remove space delimeters, separate string into parts
-    parseUSNG_str: function( usngStr_input, parts ) {
-        var j = 0;
-        var k;
-        var usngStr = [];
-        var usngStr_temp = [];
+    parseUSNG_str( usngStr_input, parts ) {
+        let j = 0;
+        let k;
+        let usngStr = [];
+        let usngStr_temp = [];
 
         usngStr_temp = usngStr_input.toUpperCase();
 
         // put usgn string in 'standard' form with no space delimiters
-        var regexp = /%20/g;
+        let regexp = /%20/g;
         usngStr = usngStr_temp.replace( regexp, "" );
         regexp = / /g;
         usngStr = usngStr_temp.replace( regexp, "" );
@@ -775,15 +775,15 @@ var theClass = {
     // checks a string to see if it is valid USNG;
     //    if so, returns the string in all upper case, no delimeters
     //    if not, returns 0
-    isUSNG: function( inputStr ) {
-        var usngStr = [];
-        var strregexp;
+    isUSNG( inputStr ) {
+        let usngStr = [];
+        let strregexp;
 
         // convert all letters to upper case
         usngStr = inputStr.toUpperCase();
 
         // get rid of space delimeters
-        var regexp = /%20/g;
+        let regexp = /%20/g;
         usngStr = usngStr.replace( regexp, "" );
         regexp = / /g;
         usngStr = usngStr.replace( regexp, "" );
@@ -804,7 +804,7 @@ var theClass = {
         }
 
         if ( usngStr.length < 7 ) {
-            dialog.alert( usngStr + " Appears to be a USNG string, but this application requires precision of at least 10,000 meters" );
+            dialog.alert( `${usngStr} Appears to be a USNG string, but this application requires precision of at least 10,000 meters` );
             return 0;
         }
 
@@ -817,19 +817,19 @@ var theClass = {
     // create a Military Grid Reference System string.  this is the same as a USNG string, but
     //    with no spaces.  space delimiters are optional but allowed in USNG, but are not allowed
     //    in MGRS notation.  but the numbers are the same.
-    LLtoMGRS: function( lat, lon, precision ) {
-        var mgrs_str = "";
-        var usng_str = this.LLtoUSNG( lat, lon, precision );
+    LLtoMGRS( lat, lon, precision ) {
+        let mgrs_str = "";
+        const usng_str = this.LLtoUSNG( lat, lon, precision );
 
         // remove space delimiters to conform to mgrs spec
-        var regexp = / /g;
+        const regexp = / /g;
         mgrs_str = usng_str.replace( regexp, "" );
 
         return ( mgrs_str );
     },
 
-    LLtoUSNG_nad27: function( lat, lon, precision ) {
-        var usngstr;
+    LLtoUSNG_nad27( lat, lon, precision ) {
+        let usngstr;
 
         // set ellipsoid to Clarke 1866 (meters)
         EQUATORIAL_RADIUS = 6378206.4;
@@ -841,9 +841,10 @@ var theClass = {
         EQUATORIAL_RADIUS = 6378137.0;
         ECC_SQUARED = 0.006694380023;
 
-        return usngstr + " (NAD27)";
+        return `${usngstr} (NAD27)`;
     }
 };
+
 //});
 
-module.exports = theClass;
+export default theClass;

@@ -1,5 +1,3 @@
-'use strict';
-
 /*
  * This file is meant to be overidden with one that uses the app's dialogs.
  */
@@ -23,8 +21,8 @@ function prompt( content, def ) {
     return Promise.resolve( window.prompt( content, def ) );
 }
 
-module.exports = {
-    alert: alert,
-    confirm: confirm,
-    prompt: prompt
+export default {
+    alert,
+    confirm,
+    prompt
 };

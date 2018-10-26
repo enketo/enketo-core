@@ -1,16 +1,15 @@
-'use strict';
-
 /**
  * Deals with printing
  */
 
-var $ = require( 'jquery' );
-var dpi, printStyleSheet;
-var $printStyleSheetLink;
-var dialog = require( 'enketo/dialog' );
+import $ from 'jquery';
+
+let dpi, printStyleSheet;
+let $printStyleSheetLink;
+import dialog from 'enketo/dialog';
 
 // make sure setDpi is not called until DOM is ready
-$( document ).ready( function() {
+$( document ).ready( () => {
     setDpi();
 } );
 
@@ -18,8 +17,8 @@ $( document ).ready( function() {
  * Calculates the dots per inch and sets the dpi property
  */
 function setDpi() {
-    var dpiO = {};
-    var e = document.body.appendChild( document.createElement( 'DIV' ) );
+    const dpiO = {};
+    const e = document.body.appendChild( document.createElement( 'DIV' ) );
     e.style.width = '1in';
     e.style.padding = '0';
     dpiO.v = e.offsetWidth;
@@ -32,9 +31,9 @@ function setDpi() {
  * @return {Element} [description]
  */
 function getPrintStyleSheet() {
-    var sheet;
+    let sheet;
     // document.styleSheets is an Object not an Array!
-    for ( var i in document.styleSheets ) {
+    for ( const i in document.styleSheets ) {
         if ( document.styleSheets.hasOwnProperty( i ) ) {
             sheet = document.styleSheets[ i ];
             if ( sheet.media.mediaText === 'print' ) {
@@ -83,18 +82,18 @@ function fixGrid( paper ) {
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
     $( '.main' ).css( 'width', getPaperPixelWidth( paper ) ).addClass( 'print-width-adjusted' );
     // wait for browser repainting after width change
-    return new Promise( function( resolve ) {
-        setTimeout( function() {
-            var $row;
-            var rowTop;
+    return new Promise( resolve => {
+        setTimeout( () => {
+            let $row;
+            let rowTop;
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
-            var maxWidth = $( '#form-title' ).outerWidth() - 1;
-            var $els = $( '.question, .trigger' ).not( '.draft' );
+            const maxWidth = $( '#form-title' ).outerWidth() - 1;
+            const $els = $( '.question, .trigger' ).not( '.draft' );
 
             $els.each( function( index ) {
-                var lastElement = index === $els.length - 1;
-                var $el = $( this );
-                var top = $el.offset().top;
+                const lastElement = index === $els.length - 1;
+                const $el = $( this );
+                const top = $el.offset().top;
                 rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
                 $row = $row || $el;
 
@@ -103,34 +102,34 @@ function fixGrid( paper ) {
                 }
 
                 if ( top > rowTop || lastElement ) {
-                    var widths = [];
-                    var cumulativeWidth = 0;
-                    var maxHeight = 0;
+                    const widths = [];
+                    let cumulativeWidth = 0;
+                    let maxHeight = 0;
 
                     $row.each( function() {
-                        var width = Number( $( this ).css( 'width' ).replace( 'px', '' ) );
+                        const width = Number( $( this ).css( 'width' ).replace( 'px', '' ) );
                         widths.push( width );
                         cumulativeWidth += width;
                     } );
 
                     // adjusts widths if w-values don't add up to 100%
                     if ( cumulativeWidth < maxWidth ) {
-                        var diff = maxWidth - cumulativeWidth;
+                        const diff = maxWidth - cumulativeWidth;
                         $row.each( function( index ) {
-                            var width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
+                            const width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
                             // round down to 2 decimals to avoid 100.001% totals
                             $( this )
-                                .css( 'width', ( Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100 ) + '%' )
+                                .css( 'width', `${Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100}%` )
                                 .addClass( 'print-width-adjusted' );
                         } );
                     }
 
                     $row.each( function() {
-                        var height = $( this ).outerHeight();
+                        const height = $( this ).outerHeight();
                         maxHeight = ( height > maxHeight ) ? height : maxHeight;
                     } );
 
-                    $row.addClass( 'print-height-adjusted' ).css( 'height', maxHeight + 'px' );
+                    $row.addClass( 'print-height-adjusted' ).css( 'height', `${maxHeight}px` );
 
                     // start a new row
                     $row = $el;
@@ -148,8 +147,8 @@ function fixGrid( paper ) {
 }
 
 function getPaperPixelWidth( paper ) {
-    var printWidth;
-    var FORMATS = {
+    let printWidth;
+    const FORMATS = {
         Letter: [ 8.5, 11 ],
         Legal: [ 8.5, 14 ],
         Tabloid: [ 11, 17 ],
@@ -178,7 +177,7 @@ function getPaperPixelWidth( paper ) {
     paper.format = typeof paper.format === 'string' && typeof FORMATS[ paper.format ] !== 'undefined' ? paper.format : 'A4';
     printWidth = ( paper.landscape === true ) ? FORMATS[ paper.format ][ 1 ] : FORMATS[ paper.format ][ 0 ];
 
-    return ( ( printWidth - ( 2 * paper.margin ) ) * dpi ) + 'px';
+    return `${( printWidth - ( 2 * paper.margin ) ) * dpi}px`;
 }
 
 
@@ -190,20 +189,20 @@ function getPaperPixelWidth( paper ) {
  */
 function print( theme ) {
     if ( theme === 'grid' || ( !theme && isGrid() ) ) {
-        var swapped = false;
+        let swapped = false;
         dialog.prompt( 'Enter valid paper format', 'A4' )
-            .then( function( format ) {
+            .then( format => {
                 if ( !format ) {
                     throw new Error( 'Print cancelled by user.' );
                 }
                 swapped = styleToAll();
                 return fixGrid( {
-                    format: format
+                    format
                 } );
             } )
             .then( window.print )
             .catch( console.error )
-            .then( function() {
+            .then( () => {
                 if ( swapped ) {
                     setTimeout( styleReset, 500 );
                 }
@@ -215,10 +214,4 @@ function print( theme ) {
 
 //window.printthis = print;
 
-module.exports = {
-    print: print,
-    fixGrid: fixGrid,
-    styleToAll: styleToAll,
-    styleReset: styleReset,
-    isGrid: isGrid,
-};
+export { print, fixGrid, styleToAll, styleReset, isGrid };

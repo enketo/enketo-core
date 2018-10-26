@@ -1,6 +1,4 @@
-'use strict';
-
-var $ = require( 'jquery' );
+import $ from 'jquery';
 
 /*
  * Preloader module.
@@ -10,16 +8,16 @@ var $ = require( 'jquery' );
  *
  * Functions are designed to fail silently if unknown preloaders are called.
  */
-module.exports = {
-    init: function() {
-        var item;
-        var param;
-        var curVal;
-        var newVal;
-        var dataNode;
-        var props;
-        var $preload;
-        var that = this;
+export default {
+    init() {
+        let item;
+        let param;
+        let curVal;
+        let newVal;
+        let dataNode;
+        let props;
+        let $preload;
+        const that = this;
 
         if ( !this.form ) {
             throw new Error( 'Preload module not correctly instantiated with form property.' );
@@ -39,28 +37,28 @@ module.exports = {
                 if ( dataNode.getElements().length ) {
                     curVal = dataNode.getVal();
                     newVal = that[ item ]( {
-                        param: param,
-                        curVal: curVal,
-                        dataNode: dataNode
+                        param,
+                        curVal,
+                        dataNode
                     } );
 
                     dataNode.setVal( newVal, props.xmlType );
                 }
             } else {
-                console.log( 'Preload "' + item + '" not supported. May or may not be a big deal.' );
+                console.log( `Preload "${item}" not supported. May or may not be a big deal.` );
             }
         } );
     },
     'timestamp': function( o ) {
-        var value;
-        var that = this;
+        let value;
+        const that = this;
         // when is 'start' or 'end'
         if ( o.param === 'start' ) {
             return ( o.curVal.length > 0 ) ? o.curVal : this.form.model.evaluate( 'now()', 'string' );
         }
         if ( o.param === 'end' ) {
             //set event handler for each save event (needs to be triggered!)
-            this.form.view.$.on( 'beforesave', function() {
+            this.form.view.$.on( 'beforesave', () => {
                 value = that.form.model.evaluate( 'now()', 'string' );
                 o.dataNode.setVal( value, 'datetime' );
             } );
@@ -70,10 +68,10 @@ module.exports = {
         return 'error - unknown timestamp parameter';
     },
     'date': function( o ) {
-        var today;
-        var year;
-        var month;
-        var day;
+        let today;
+        let year;
+        let month;
+        let day;
 
         if ( o.curVal.length === 0 ) {
             today = new Date( this.form.model.evaluate( 'today()', 'string' ) );
@@ -81,20 +79,20 @@ module.exports = {
             month = ( today.getMonth() + 1 ).toString().pad( 2 );
             day = today.getDate().toString().pad( 2 );
 
-            return year + '-' + month + '-' + day;
+            return `${year}-${month}-${day}`;
         }
         return o.curVal;
     },
     'property': function( o ) {
-        var node;
+        let node;
 
         // 'deviceid', 'subscriberid', 'simserial', 'phonenumber'
         if ( o.curVal.length === 0 ) {
-            node = this.form.model.node( 'instance("__session")/session/context/' + o.param );
+            node = this.form.model.node( `instance("__session")/session/context/${o.param}` );
             if ( node.getElements().length ) {
                 return node.getVal();
             } else {
-                return 'no ' + o.param + ' property in enketo';
+                return `no ${o.param} property in enketo`;
             }
         }
         return o.curVal;
@@ -102,7 +100,7 @@ module.exports = {
     'context': function( o ) {
         // 'application', 'user'??
         if ( o.curVal.length === 0 ) {
-            return ( o.param === 'application' ) ? 'enketo' : o.param + ' not supported in enketo';
+            return ( o.param === 'application' ) ? 'enketo' : `${o.param} not supported in enketo`;
         }
         return o.curVal;
     },

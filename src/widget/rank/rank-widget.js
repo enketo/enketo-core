@@ -1,11 +1,9 @@
-'use strict';
-
-var pluginName = 'rankWidget';
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
-var support = require( '../../js/support' );
-var sortable = require( 'html5sortable/dist/html5sortable.cjs' );
-var t = require( 'enketo/translator' ).t;
+const pluginName = 'rankWidget';
+import $ from 'jquery';
+import Widget from '../../js/Widget';
+import support from '../../js/support';
+import sortable from 'html5sortable/dist/html5sortable.cjs';
+import { t } from 'enketo/translator';
 
 /*
  * @constructor
@@ -22,22 +20,22 @@ RankWidget.prototype = Object.create( Widget.prototype );
 RankWidget.prototype.constructor = RankWidget;
 
 RankWidget.prototype._init = function() {
-    var that = this;
-    var loadedValue = this.element.value;
+    const that = this;
+    const loadedValue = this.element.value;
     this.props = this._getProps();
     this.itemSelector = 'label:not(.itemset-template)';
 
     this.list = $( this.element ).next( '.option-wrapper' ).addClass( 'widget rank-widget' )[ 0 ];
-    var $reset = $( this.resetButtonHtml ).on( 'click', function() {
+    const $reset = $( this.resetButtonHtml ).on( 'click', () => {
         that._reset();
         return false;
     } );
-    var startText = support.touch ? t( 'rankwidget.tapstart' ) : t( 'rankwidget.clickstart' );
+    const startText = support.touch ? t( 'rankwidget.tapstart' ) : t( 'rankwidget.clickstart' );
 
     $( this.list )
         .toggleClass( 'rank-widget--empty', !loadedValue )
         .append( $reset )
-        .append( '<div class="rank-widget__overlay"><span class="rank-widget__overlay__content">' + startText + '</span></div>' )
+        .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content">${startText}</span></div>` )
         .on( 'click', function() {
             if ( !that.element.disabled ) {
                 this.classList.remove( 'rank-widget--empty' );
@@ -53,14 +51,12 @@ RankWidget.prototype._init = function() {
     sortable( this.list, {
         items: this.itemSelector,
         //hoverClass: 'rank-widget__item--hover',
-        containerSerializer: function( container ) {
+        containerSerializer( container ) {
             return {
-                value: [].slice.call( container.node.querySelectorAll( that.itemSelector + ' input' ) ).map( function( input ) {
-                    return input.value;
-                } ).join( ' ' )
+                value: [].slice.call( container.node.querySelectorAll( `${that.itemSelector} input` ) ).map( input => input.value ).join( ' ' )
             };
         }
-    } )[ 0 ].addEventListener( 'sortupdate', function() {
+    } )[ 0 ].addEventListener( 'sortupdate', () => {
         that._updateOriginalInput( that._getValueFromWidget() );
     } );
 
@@ -76,7 +72,7 @@ RankWidget.prototype._getProps = function() {
 };
 
 RankWidget.prototype._getValueFromWidget = function() {
-    var result = sortable( this.list, 'serialize' );
+    const result = sortable( this.list, 'serialize' );
     return result[ 0 ].container.value;
 };
 
@@ -84,9 +80,9 @@ RankWidget.prototype._setValueInWidget = function( value ) {
     if ( !value ) {
         return this._reset();
     }
-    var that = this;
-    var values = value.split( ' ' );
-    var items = [].slice.call( this.list.querySelectorAll( this.itemSelector + ' input' ) );
+    const that = this;
+    const values = value.split( ' ' );
+    const items = [].slice.call( this.list.querySelectorAll( `${this.itemSelector} input` ) );
 
     // Basic error check
     if ( values.length !== items.length ) {
@@ -94,16 +90,16 @@ RankWidget.prototype._setValueInWidget = function( value ) {
     }
 
     // Don't even attempt to rectify a mismatch between the value and the available items.
-    items.sort( function( a, b ) {
-        var aIndex = values.indexOf( a.value );
-        var bIndex = values.indexOf( b.value );
+    items.sort( ( a, b ) => {
+        const aIndex = values.indexOf( a.value );
+        const bIndex = values.indexOf( b.value );
         if ( aIndex === -1 || bIndex === -1 ) {
             throw new Error( 'Could not load rank widget value. Mismatch in item values.' );
         }
         return aIndex > bIndex;
     } );
 
-    items.forEach( function( item ) {
+    items.forEach( item => {
         $( that.list ).find( '.btn-reset' ).before( $( item.parentNode ).detach() );
     } );
 };
@@ -143,7 +139,7 @@ RankWidget.prototype.enable = function() {
 };
 
 RankWidget.prototype.update = function() {
-    var value = this.element.value;
+    const value = this.element.value;
     // re-initalize sortable because the options may have changed
     sortable( this.list );
 
@@ -161,8 +157,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
+        const $this = $( this );
+        const data = $this.data( pluginName );
 
         if ( !data && typeof options === 'object' ) {
             $this.data( pluginName, new RankWidget( this, options, event ) );
@@ -172,7 +168,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'list': true,
     // avoid initizialing number inputs in geopoint widgets!

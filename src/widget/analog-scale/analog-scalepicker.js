@@ -1,10 +1,8 @@
-'use strict';
-var Widget = require( '../../js/Widget' );
-var $ = require( 'jquery' );
-var pluginName = 'analogscalepicker';
-var support = require( '../../js/support' );
-
-require( 'bootstrap-slider-basic' );
+import Widget from '../../js/Widget';
+import $ from 'jquery';
+import support from '../../js/support';
+import 'bootstrap-slider-basic';
+const pluginName = 'analogscalepicker';
 
 /**
  * Creates an analog scale picker
@@ -29,9 +27,9 @@ Analogscalepicker.prototype.constructor = Analogscalepicker;
  * Initialize
  */
 Analogscalepicker.prototype._init = function() {
-    var $question = $( this.element ).closest( '.question' ).addClass( 'or-analog-scale-initialized' );
-    var $input = $( this.element );
-    var value = Number( this.element.value ) || -1;
+    const $question = $( this.element ).closest( '.question' ).addClass( 'or-analog-scale-initialized' );
+    const $input = $( this.element );
+    const value = Number( this.element.value ) || -1;
 
     this.props = this._getProps( $question );
 
@@ -42,7 +40,7 @@ Analogscalepicker.prototype._init = function() {
             max: 100,
             orientation: this.props.orientation,
             step: this.props.step,
-            value: value,
+            value,
             enabled: !this.props.readonly
         } );
 
@@ -59,15 +57,13 @@ Analogscalepicker.prototype._init = function() {
     this._setResizeListener();
 
     // update reset button and slider "empty" state
-    $input.trigger( 'programmaticChange' + this.namespace );
+    $input.trigger( `programmaticChange${this.namespace}` );
 };
 
 Analogscalepicker.prototype._getProps = function( $question ) {
-    var appearances = $question.attr( 'class' ).split( ' ' )
-        .map( function( appearance ) {
-            return appearance.substring( 14 );
-        } );
-    var type = this.element.attributes[ 'data-type-xml' ].value;
+    const appearances = $question.attr( 'class' ).split( ' ' )
+        .map( appearance => appearance.substring( 14 ) );
+    const type = this.element.attributes[ 'data-type-xml' ].value;
 
     return {
         touch: support.touch,
@@ -81,10 +77,8 @@ Analogscalepicker.prototype._getProps = function( $question ) {
  * (re-)Renders the widget labels based on the current content of .question-label.active
  */
 Analogscalepicker.prototype._renderLabels = function() {
-    var $labelEl = this.$labelContent.find( '.question-label.active' );
-    var labels = $labelEl.html().split( /\|/ ).map( function( label ) {
-        return label.trim();
-    } );
+    const $labelEl = this.$labelContent.find( '.question-label.active' );
+    const labels = $labelEl.html().split( /\|/ ).map( label => label.trim() );
 
     this.$mainLabel = this.$mainLabel || $( '<span class="question-label widget active" />' ).insertAfter( $labelEl );
     this.$mainLabel.empty().append( labels[ 0 ] );
@@ -97,8 +91,7 @@ Analogscalepicker.prototype._renderLabels = function() {
 
     if ( labels[ 3 ] ) {
         this.$showValue = this.$showValue || $( '<div class="widget show-value" />' ).appendTo( this.$labelContent );
-        this.$showValue.empty().append( '<div class="show-value__box">' + labels[ 3 ] +
-            '<span class="show-value__value">' + this.element.value + '</span></div>' );
+        this.$showValue.empty().append( `<div class="show-value__box">${labels[ 3 ]}<span class="show-value__value">${this.element.value}</span></div>` );
     } else if ( this.$showValue ) {
         this.$showValue.remove();
         this.$showValue = undefined;
@@ -106,8 +99,8 @@ Analogscalepicker.prototype._renderLabels = function() {
 };
 
 Analogscalepicker.prototype._renderScale = function() {
-    var i;
-    var $scale = $( '<div class="scale"></div>' );
+    let i;
+    const $scale = $( '<div class="scale"></div>' );
 
     if ( this.props.orientation === 'vertical' ) {
         for ( i = 100; i >= 0; i -= 10 ) {
@@ -122,18 +115,16 @@ Analogscalepicker.prototype._renderScale = function() {
     this.$slider.prepend( $scale );
 };
 
-Analogscalepicker.prototype._getNumberHtml = function( num ) {
-    return '<div class="scale__number"><div class="scale__ticks"></div><div class="scale__value">' + num + '</div></div>';
-};
+Analogscalepicker.prototype._getNumberHtml = num => `<div class="scale__number"><div class="scale__ticks"></div><div class="scale__value">${num}</div></div>`;
 
 Analogscalepicker.prototype._renderResetButton = function() {
-    var that = this;
+    const that = this;
 
     this.$resetBtn = $( this.resetButtonHtml )
         .appendTo( this.$widget )
-        .on( 'click', function() {
+        .on( 'click', () => {
             $( that.element ).slider( 'setValue', 0, false );
-            $( that.element ).val( '' ).trigger( 'programmaticChange' + that.namespace );
+            $( that.element ).val( '' ).trigger( `programmaticChange${that.namespace}` );
             return false;
         } )
         .prop( 'disabled', that.props.readonly );
@@ -146,10 +137,10 @@ Analogscalepicker.prototype._updateCurrentValueShown = function() {
 };
 
 Analogscalepicker.prototype._setChangeListener = function() {
-    var that = this;
+    const that = this;
 
-    $( this.element ).on( 'slideStop.' + this.namespace + ' programmaticChange' + this.namespace, function() {
-        var empty = ( this.value === '' );
+    $( this.element ).on( `slideStop.${this.namespace} programmaticChange${this.namespace}`, function() {
+        const empty = ( this.value === '' );
         $( this ).trigger( 'change' );
         that.$resetBtn.prop( 'disabled', empty || that.props.readonly );
         that.$slider.toggleClass( 'slider--empty', empty );
@@ -163,7 +154,7 @@ Analogscalepicker.prototype._setChangeListener = function() {
  * because that theme relies on flexbox with "flex-direction: row".
  */
 Analogscalepicker.prototype._setResizeListener = function() {
-    var $question = $( this.element ).closest( '.question' );
+    const $question = $( this.element ).closest( '.question' );
 
     if ( !$question.hasClass( 'or-appearance-horizontal' ) ) {
         // Will only be triggered if question by itself constitutes a page.
@@ -173,19 +164,19 @@ Analogscalepicker.prototype._setResizeListener = function() {
 };
 
 Analogscalepicker.prototype._stretchHeight = function() {
-    var $question = $( this ).closest( '.question' ).css( 'min-height', 'auto' );
-    var height = $question.outerHeight();
-    var $form = $question.closest( '.or' );
-    var diff = ( $form.offset().top + $form.height() ) - ( $question.offset().top + height ) - 10;
+    const $question = $( this ).closest( '.question' ).css( 'min-height', 'auto' );
+    const height = $question.outerHeight();
+    const $form = $question.closest( '.or' );
+    const diff = ( $form.offset().top + $form.height() ) - ( $question.offset().top + height ) - 10;
     if ( diff ) {
         // To somewhat avoid problems when a repeat is clone and height is set while the widget is detached
         // we use min-height instead of height.
-        $question.css( 'min-height', height + diff + 'px' );
+        $question.css( 'min-height', `${height + diff}px` );
     }
 };
 
 Analogscalepicker.prototype.disable = function() {
-    var value = ( this.element.value !== '' ) ? Number( this.element.value ) : 0;
+    const value = ( this.element.value !== '' ) ? Number( this.element.value ) : 0;
     $( this.element )
         .slider( 'disable' )
         .slider( 'setValue', value, false );
@@ -198,14 +189,14 @@ Analogscalepicker.prototype.enable = function() {
 
 Analogscalepicker.prototype.update = function() {
     // in case input value was changed (due to calculation update)
-    var that = this;
-    var value = ( this.element.value !== '' ) ? Number( this.element.value ) : 0;
-    var $el = $( this.element );
-    var sliderValue = $el.slider( 'getValue' );
+    const that = this;
+    const value = ( this.element.value !== '' ) ? Number( this.element.value ) : 0;
+    const $el = $( this.element );
+    const sliderValue = $el.slider( 'getValue' );
     if ( value !== sliderValue ) {
         $( this.element )
             .slider( 'setValue', value, false )
-            .trigger( 'programmaticChange' + that.namespace );
+            .trigger( `programmaticChange${that.namespace}` );
     }
     // in case language was changed
     this._renderLabels();
@@ -213,7 +204,7 @@ Analogscalepicker.prototype.update = function() {
 
 $.fn[ pluginName ] = function( options, event ) {
     return this.each( function() {
-        var $this = $( this ),
+        const $this = $( this ),
             data = $( this ).data( pluginName );
 
         options = options || {};
@@ -227,7 +218,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': '.or-appearance-analog-scale input[type="number"]'
 };

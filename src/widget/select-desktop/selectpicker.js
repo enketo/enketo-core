@@ -1,4 +1,3 @@
-'use strict';
 /**
  * This widget is one gigantic mess. It should be replaced entirely.
  */
@@ -18,15 +17,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
-var support = require( '../../js/support' );
-var domUtils = require( '../../js/dom-utils' );
-var event = require( '../../js/event' );
-var t = require( 'enketo/translator' ).t;
-var pluginName = 'desktopSelectpicker';
-require( '../../js/dropdown.jquery' );
+import $ from 'jquery';
+import Widget from '../../js/Widget';
+import support from '../../js/support';
+import { getSiblingElementsAndSelf } from '../../js/dom-utils';
+import event from '../../js/event';
+import { t } from 'enketo/translator';
+import '../../js/dropdown.jquery';
+const pluginName = 'desktopSelectpicker';
 
 /**
  * Bootstrap Select picker that supports single and multiple selects
@@ -58,8 +56,8 @@ DesktopSelectpicker.prototype = Object.create( Widget.prototype );
 DesktopSelectpicker.prototype.constructor = DesktopSelectpicker;
 
 DesktopSelectpicker.prototype._init = function() {
-    var $template = this._getTemplate();
-    var $select = $( this.element );
+    let $template = this._getTemplate();
+    const $select = $( this.element );
     // beware readonly is not a property on a <select>!
     this.readonly = !!$select.attr( 'readonly' );
     $select.css( 'display', 'none' );
@@ -70,8 +68,8 @@ DesktopSelectpicker.prototype._init = function() {
     this._focusListener();
 };
 
-DesktopSelectpicker.prototype._getTemplate = function() {
-    var template =
+DesktopSelectpicker.prototype._getTemplate = () => {
+    const template =
         '<div class="btn-group bootstrap-select widget clearfix">' +
         '<button type="button" class="btn btn-default dropdown-toggle clearfix" data-toggle="dropdown">' +
         '<span class="selected">__SELECTED_OPTIONS</span><span class="caret"></span>' +
@@ -85,14 +83,14 @@ DesktopSelectpicker.prototype._getTemplate = function() {
 };
 
 DesktopSelectpicker.prototype._createLi = function( template ) {
-    var li = [];
-    var liHtml = '';
-    var inputAttr = ( this.multiple ) ? 'type="checkbox"' : 'type="radio" name="' + Math.random() * 100000 + '"';
-    var readonlyAttr = ( this.readonly ) ? ' readonly="readonly"' : '';
-    var disabledAttr = ( this.readonly ) ? ' disabled="disabled"' : '';
-    var disabledClass = ( this.readonly ) ? ' class="disabled"' : '';
-    var checkedInputAttr;
-    var checkedLiAttr;
+    const li = [];
+    let liHtml = '';
+    const inputAttr = ( this.multiple ) ? 'type="checkbox"' : `type="radio" name="${Math.random() * 100000}"`;
+    const readonlyAttr = ( this.readonly ) ? ' readonly="readonly"' : '';
+    const disabledAttr = ( this.readonly ) ? ' disabled="disabled"' : '';
+    const disabledClass = ( this.readonly ) ? ' class="disabled"' : '';
+    let checkedInputAttr;
+    let checkedLiAttr;
 
     $( this.element ).find( 'option' ).each( function() {
         li.push( {
@@ -104,7 +102,7 @@ DesktopSelectpicker.prototype._createLi = function( template ) {
 
     if ( li.length > 0 ) {
         template = template.replace( '__SELECTED_OPTIONS', this._createSelectedStr() );
-        for ( var i = 0; i < li.length; i++ ) {
+        for ( let i = 0; i < li.length; i++ ) {
             if ( li[ i ].value ) {
                 checkedInputAttr = li[ i ].selected ? ' checked="checked"' : '';
                 checkedLiAttr = li[ i ].selected ? 'class="active"' : '';
@@ -119,13 +117,7 @@ DesktopSelectpicker.prototype._createLi = function( template ) {
                  *    </li>
                  */
                 liHtml +=
-                    '<li ' + disabledClass + checkedLiAttr + '>' +
-                    '<a class="option-wrapper" tabindex="-1" href="#">' +
-                    '<label>' +
-                    '<input class="ignore" ' + inputAttr + checkedInputAttr + readonlyAttr + disabledAttr + ' value="' + li[ i ].value + '" />' +
-                    '<span class="option-label">' + li[ i ].label + '</span></label>' +
-                    '</a>' +
-                    '</li>';
+                    `<li ${disabledClass}${checkedLiAttr}><a class="option-wrapper" tabindex="-1" href="#"><label><input class="ignore" ${inputAttr}${checkedInputAttr}${readonlyAttr}${disabledAttr} value="${li[ i ].value}" /><span class="option-label">${li[ i ].label}</span></label></a></li>`;
             }
         }
     }
@@ -142,8 +134,8 @@ DesktopSelectpicker.prototype._createLi = function( template ) {
  * @return {string}
  */
 DesktopSelectpicker.prototype._createSelectedStr = function() {
-    var selectedLabels = [];
-    var $select = $( this.element );
+    const selectedLabels = [];
+    const $select = $( this.element );
     $select.find( 'option:selected' ).each( function() {
         if ( $( this ).attr( 'value' ).length > 0 ) {
             selectedLabels.push( $( this ).text() );
@@ -162,15 +154,15 @@ DesktopSelectpicker.prototype._createSelectedStr = function() {
 };
 
 DesktopSelectpicker.prototype._clickListener = function() {
-    var _this = this;
+    const _this = this;
 
     this.$picker
         .on( 'click', 'li:not(.disabled)', function( e ) {
-            var li = this;
-            var input = li.querySelector( 'input' );
-            var select = _this.element;
-            var option = select.querySelector( 'option[value="' + input.value + '"]' );
-            var selectedBefore = option.matches( ':checked' );
+            const li = this;
+            const input = li.querySelector( 'input' );
+            const select = _this.element;
+            const option = select.querySelector( `option[value="${input.value}"]` );
+            const selectedBefore = option.matches( ':checked' );
 
             // We need to prevent default unless click was on an input
             // Without this 'fix', clicks on radiobuttons/checkboxes themselves will update the value
@@ -181,7 +173,7 @@ DesktopSelectpicker.prototype._clickListener = function() {
 
             if ( !_this.multiple ) {
                 _this.$picker.find( 'li' ).removeClass( 'active' );
-                domUtils.getSiblingElementsAndSelf( option, 'option' ).forEach( function( el ) { el.selected = false; } );
+                getSiblingElementsAndSelf( option, 'option' ).forEach( el => { el.selected = false; } );
                 _this.$picker.find( 'input' ).prop( 'checked', false );
             } else {
                 //don't close dropdown for multiple select
@@ -195,7 +187,7 @@ DesktopSelectpicker.prototype._clickListener = function() {
             // 
             // It has to do with event propagation. I could not figure out how to fix it.
             // Therefore I used a workaround by slightly delaying the status changes.
-            setTimeout( function() {
+            setTimeout( () => {
                 if ( selectedBefore ) {
                     li.classList.remove( 'active' );
                     input.checked = false;
@@ -211,14 +203,14 @@ DesktopSelectpicker.prototype._clickListener = function() {
             }, 10 );
 
         } )
-        .on( 'keydown', 'li:not(.disabled)', function( e ) {
-            var keyCode = e.keyCode.toString( 10 );
+        .on( 'keydown', 'li:not(.disabled)', e => {
+            const keyCode = e.keyCode.toString( 10 );
             // Enter/Space keys
             if ( /(13|32)/.test( keyCode ) ) {
                 if ( !/(32)/.test( keyCode ) ) {
                     e.preventDefault();
                 }
-                var elem = $( ':focus' );
+                const elem = $( ':focus' );
                 elem.click();
                 // Bring back focus for multiselects
                 elem.focus();
@@ -226,11 +218,11 @@ DesktopSelectpicker.prototype._clickListener = function() {
                 e.preventDefault();
             }
         } )
-        .on( 'click', 'li.disabled', function( e ) {
+        .on( 'click', 'li.disabled', e => {
             e.stopPropagation();
             return false;
         } )
-        .on( 'click', 'a', function( e ) {
+        .on( 'click', 'a', e => {
             // Prevent FF from adding empty anchor to URL if checkbox or radiobutton is clicked.
             // https://github.com/kobotoolbox/enketo-express/issues/1122
             e.preventDefault();
@@ -238,15 +230,15 @@ DesktopSelectpicker.prototype._clickListener = function() {
 };
 
 DesktopSelectpicker.prototype._focusListener = function() {
-    var _this = this;
+    const _this = this;
 
     // Focus on original element (form.goTo functionality)
-    $( this.element ).on( 'applyfocus', function() {
+    $( this.element ).on( 'applyfocus', () => {
         _this.$picker.find( '.dropdown-toggle' ).focus();
     } );
 
     // focus on widget
-    this.$picker.on( 'shown.bs.dropdown', function() {
+    this.$picker.on( 'shown.bs.dropdown', () => {
         $( _this.element ).trigger( 'fakefocus' );
         return true;
     } );
@@ -280,9 +272,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-
-        var $this = $( this ),
-            data = $this.data( pluginName );
+        const $this = $( this );
+        let data = $this.data( pluginName );
 
         //only instantiate if options is an object AND if support.touch is falsy
         if ( !data && typeof options === 'object' && !support.touch ) {
@@ -294,7 +285,7 @@ $.fn[ pluginName ] = function( options, event ) {
 };
 
 
-module.exports = {
+export default {
     'name': pluginName,
     'list': true,
     'selector': 'select:not(#form-languages)'

@@ -1,9 +1,7 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var $ = require( 'jquery' );
-var pluginName = 'datepickerNative';
-var support = require( '../../js/support' );
+import Widget from '../../js/Widget';
+import $ from 'jquery';
+const pluginName = 'datepickerNative';
+import support from '../../js/support';
 
 /**
  * The whole purpose of this widget is to hide the placeholder text on native date inputs
@@ -41,9 +39,9 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var dp = $this.data( 'datepickerExtended' );
-        var data = $this.data( pluginName );
+        const $this = $( this );
+        const dp = $this.data( 'datepickerExtended' );
+        const data = $this.data( pluginName );
 
         // If no datepickerExtended widget is present on the same element
         if ( !dp && typeof options === 'object' && !data && !support.touch ) {
@@ -52,7 +50,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': 'input[type="date"]'
 };

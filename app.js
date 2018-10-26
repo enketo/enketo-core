@@ -6,12 +6,10 @@
  */
 'use strict';
 
-require( './src/js/workarounds-ie11' );
-
-var $ = require( 'jquery' );
-var support = require( './src/js/support' );
-var Form = require( './src/js/Form' );
-var fileManager = require( './src/js/file-manager' );
+import $ from 'jquery';
+import support from './src/js/support';
+import { Form } from './src/js/Form';
+import fileManager from './src/js/file-manager';
 var loadErrors;
 var form;
 var formStr;

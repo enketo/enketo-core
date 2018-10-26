@@ -1,47 +1,46 @@
-'use strict';
-
 /**
  * Updates itemsets
  *
  * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
  */
 
-var $ = require( 'jquery' );
-var utils = require( './utils' );
+import $ from 'jquery';
 
-module.exports = {
-    update: function( updated ) {
-        var that = this;
-        var itemsCache = {};
+import { parseFunctionFromExpression } from './utils';
+
+export default {
+    update( updated ) {
+        const that = this;
+        const itemsCache = {};
 
         if ( !this.form ) {
             throw new Error( 'Output module not correctly instantiated with form property.' );
         }
 
-        var $nodes = this.form.getRelatedNodes( 'data-items-path', '.itemset-template', updated );
+        const $nodes = this.form.getRelatedNodes( 'data-items-path', '.itemset-template', updated );
 
-        var clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
+        const clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
 
         $nodes.each( function() {
-            var $input;
-            var $instanceItems;
-            var template = this;
-            var $template = $( this );
-            var inputAttributes = {};
+            let $input;
+            let $instanceItems;
+            const template = this;
+            const $template = $( this );
+            const inputAttributes = {};
 
             // Nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
             if ( $template.parentsUntil( '.or', '.or-branch' ).parentsUntil( '.or', '.disabled' ).length ) {
                 return;
             }
 
-            var newItems = {};
-            var prevItems = $template.data();
-            var templateNodeName = $template.prop( 'nodeName' ).toLowerCase();
-            var $list = $template.parent( 'select, datalist' );
+            const newItems = {};
+            const prevItems = $template.data();
+            const templateNodeName = $template.prop( 'nodeName' ).toLowerCase();
+            const $list = $template.parent( 'select, datalist' );
 
             if ( templateNodeName === 'label' ) {
-                var $optionInput = $template.children( 'input' ).eq( 0 );
-                [].slice.call( $optionInput[ 0 ].attributes ).forEach( function( attr ) {
+                const $optionInput = $template.children( 'input' ).eq( 0 );
+                [].slice.call( $optionInput[ 0 ].attributes ).forEach( attr => {
                     inputAttributes[ attr.name ] = attr.value;
                 } );
                 // If this is a ranking widget:
@@ -51,19 +50,19 @@ module.exports = {
             } else if ( $list.prop( 'nodeName' ).toLowerCase() === 'datalist' ) {
                 $input = $list.siblings( 'input:not(.widget)' );
             }
-            var $labels = $template.closest( 'label, select, datalist' ).siblings( '.itemset-labels' );
-            var itemsXpath = $template.attr( 'data-items-path' );
-            var labelType = $labels.attr( 'data-label-type' );
-            var labelRef = $labels.attr( 'data-label-ref' );
+            const $labels = $template.closest( 'label, select, datalist' ).siblings( '.itemset-labels' );
+            const itemsXpath = $template.attr( 'data-items-path' );
+            let labelType = $labels.attr( 'data-label-type' );
+            let labelRef = $labels.attr( 'data-label-ref' );
             // TODO: if translate() becomes official, move determination of labelType to enketo-xslt
             // and set labelRef correct in enketo-xslt
-            var matches = utils.parseFunctionFromExpression( labelRef, 'translate' );
+            const matches = parseFunctionFromExpression( labelRef, 'translate' );
             if ( matches.length ) {
                 labelRef = matches[ 0 ][ 1 ][ 0 ];
                 labelType = 'langs';
             }
 
-            var valueRef = $labels.attr( 'data-value-ref' );
+            const valueRef = $labels.attr( 'data-value-ref' );
 
             /**
              * CommCare/ODK change the context to the *itemset* value (in the secondary instance), hence they need to use the current()
@@ -72,21 +71,21 @@ module.exports = {
              * I am not sure what is correct, but for now for XLSForm-style secondary instances with only one level underneath the <item>s that
              * the nodeset retrieves, Enketo's aproach works well.
              */
-            var context = that.form.input.getName( $input );
+            const context = that.form.input.getName( $input );
 
             /*
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
              * It can be safely set to 0 for other branches.
              */
-            var insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
-            var insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
+            const insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
+            const insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
 
-            var index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
+            const index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
 
             if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                 $instanceItems = itemsCache[ itemsXpath ];
             } else {
-                var safeToTryNative = true;
+                const safeToTryNative = true;
                 $instanceItems = $( that.form.model.evaluate( itemsXpath, 'nodes', context, index, safeToTryNative ) );
                 if ( !insideRepeat ) {
                     itemsCache[ itemsXpath ] = $instanceItems;
@@ -108,45 +107,45 @@ module.exports = {
              * Remove current items before rebuilding a new itemset from scratch.
              */
             // the current <option> and <input> elements
-            var $question = $template.closest( '.question' );
+            const $question = $template.closest( '.question' );
             $question.find( templateNodeName ).not( $template ).remove();
             // labels for current <option> elements
-            var optionsTranslations = $question.find( '.or-option-translations' ).empty()[ 0 ];
-            var optionsFragment = document.createDocumentFragment();
-            var optionsTranslationsFragment = document.createDocumentFragment();
-            var translations = [];
+            const optionsTranslations = $question.find( '.or-option-translations' ).empty()[ 0 ];
+            const optionsFragment = document.createDocumentFragment();
+            const optionsTranslationsFragment = document.createDocumentFragment();
+            let translations = [];
 
             $instanceItems.each( function() {
-                var item = this;
+                const item = this;
                 /*
                  * Note: $labelRefs could either be
                  * - a single itext reference
                  * - a collection of labels with different lang attributes
                  * - a single label
                  */
-                var labels = that.getNodesFromItem( labelRef, item );
+                const labels = that.getNodesFromItem( labelRef, item );
                 if ( !labels || !labels.length ) {
                     translations = [ { language: '', label: 'error', active: true } ];
                 } else {
                     switch ( labelType ) {
                         case 'itext':
                             // Search in the special .itemset-labels created in enketo-transformer for labels with itext ref.
-                            translations = $labels.find( '[data-itext-id="' + labels[ 0 ].textContent + '"]' ).get().map( function( label ) {
-                                var language = label.getAttribute( 'lang' );
-                                var type = label.nodeName;
-                                var src = label.src;
-                                var text = label.textContent;
-                                var active = label.classList.contains( 'active' );
-                                var alt = label.alt;
-                                return { language: language, type: type, text: text, active: active, src: src, alt: alt };
+                            translations = $labels.find( `[data-itext-id="${labels[ 0 ].textContent}"]` ).get().map( label => {
+                                const language = label.getAttribute( 'lang' );
+                                const type = label.nodeName;
+                                const src = label.src;
+                                const text = label.textContent;
+                                const active = label.classList.contains( 'active' );
+                                const alt = label.alt;
+                                return { language, type, text, active, src, alt };
                             } );
                             break;
                         case 'langs':
-                            translations = labels.map( function( label ) {
-                                var lang = label.getAttribute( 'lang' );
+                            translations = labels.map( label => {
+                                const lang = label.getAttribute( 'lang' );
                                 // Two falsy values should set active to true.
-                                var active = ( !lang && !that.form.langs.currentLang ) || ( lang === that.form.langs.currentLang );
-                                return { language: lang, type: 'span', text: label.textContent, active: active };
+                                const active = ( !lang && !that.form.langs.currentLang ) || ( lang === that.form.langs.currentLang );
+                                return { language: lang, type: 'span', text: label.textContent, active };
                             } );
                             break;
                         default:
@@ -154,14 +153,14 @@ module.exports = {
                     }
                 }
                 // Obtain the value of the secondary instance item found.
-                var value = that.getNodeFromItem( valueRef, item ).textContent;
+                const value = that.getNodeFromItem( valueRef, item ).textContent;
 
                 if ( templateNodeName === 'label' ) {
                     optionsFragment.appendChild( that.createInput( inputAttributes, translations, value ) );
                 } else if ( templateNodeName === 'option' ) {
-                    var activeLabel = '';
+                    let activeLabel = '';
                     if ( translations.length > 1 ) {
-                        translations.forEach( function( translation ) {
+                        translations.forEach( translation => {
                             if ( translation.active ) {
                                 activeLabel = translation.text;
                             }
@@ -185,7 +184,7 @@ module.exports = {
              * include (an) item(s) with this/se value(s), this will clear/update the model and
              * this will trigger a dataupdate event. This may call this update function again.
              */
-            var currentValue = that.form.model.node( context, index ).getVal();
+            let currentValue = that.form.model.node( context, index ).getVal();
             if ( currentValue !== '' ) {
                 if ( $input.hasClass( 'rank' ) ) {
                     currentValue = '';
@@ -204,16 +203,16 @@ module.exports = {
     /**
      * Minimal XPath evaluation helper that queries from a single item context.
      */
-    getNodesFromItem: function( expr, context, single ) {
+    getNodesFromItem( expr, context, single ) {
         if ( !expr || !context ) {
             throw new Error( 'Error: could not query instance item, no expression and/or context provided' );
         }
-        var type = single ? 9 : 7;
-        var evaluateFnName = typeof this.form.model.xml.evaluate !== 'undefined' ? 'evaluate' : 'jsEvaluate';
-        var result = this.form.model.xml[ evaluateFnName ]( expr, context, this.form.model.getNsResolver(), type, null );
-        var response = [];
+        const type = single ? 9 : 7;
+        const evaluateFnName = typeof this.form.model.xml.evaluate !== 'undefined' ? 'evaluate' : 'jsEvaluate';
+        const result = this.form.model.xml[ evaluateFnName ]( expr, context, this.form.model.getNsResolver(), type, null );
+        const response = [];
         if ( !single ) {
-            for ( var j = 0; j < result.snapshotLength; j++ ) {
+            for ( let j = 0; j < result.snapshotLength; j++ ) {
                 response.push( result.snapshotItem( j ) );
             }
         } else {
@@ -222,20 +221,20 @@ module.exports = {
         return response;
     },
 
-    getNodeFromItem: function( expr, content ) {
-        var nodes = this.getNodesFromItem( expr, content, true );
+    getNodeFromItem( expr, content ) {
+        const nodes = this.getNodesFromItem( expr, content, true );
         return nodes.length ? nodes[ 0 ] : null;
     },
 
-    createOption: function( label, value ) {
-        var option = document.createElement( 'option' );
+    createOption( label, value ) {
+        const option = document.createElement( 'option' );
         option.textContent = label;
         option.value = value;
         return option;
     },
 
-    createOptionTranslation: function( translation, value ) {
-        var el = document.createElement( translation.type || 'span' );
+    createOptionTranslation( translation, value ) {
+        const el = document.createElement( translation.type || 'span' );
         if ( translation.text ) {
             el.textContent = translation.text;
             el.classList.add( 'option-label' );
@@ -252,16 +251,16 @@ module.exports = {
         return el;
     },
 
-    createInput: function( attributes, translations, value ) {
-        var that = this;
-        var label = document.createElement( 'label' );
-        var input = document.createElement( 'input' );
-        Object.getOwnPropertyNames( attributes ).forEach( function( attr ) {
+    createInput( attributes, translations, value ) {
+        const that = this;
+        const label = document.createElement( 'label' );
+        const input = document.createElement( 'input' );
+        Object.getOwnPropertyNames( attributes ).forEach( attr => {
             input.setAttribute( attr, attributes[ attr ] );
         } );
         input.value = value;
         label.appendChild( input );
-        translations.forEach( function( translation ) {
+        translations.forEach( translation => {
             label.appendChild( that.createOptionTranslation( translation, value ) );
         } );
         return label;

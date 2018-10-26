@@ -1,8 +1,7 @@
-'use strict';
-var Widget = require( '../../js/Widget' );
-var $ = require( 'jquery' );
-require( '../../js/plugins' );
-var pluginName = 'radiopicker';
+import Widget from '../../js/Widget';
+import $ from 'jquery';
+import '../../js/plugins';
+const pluginName = 'radiopicker';
 
 /**
  * Enhances radio buttons
@@ -34,7 +33,7 @@ Radiopicker.prototype._init = function() {
  * Set delegated event handlers
  */
 Radiopicker.prototype._setDelegatedHandlers = function() {
-    var $form = $( this.element );
+    const $form = $( this.element );
 
     $form
         // Applies a data-checked attribute to the parent label of a checked checkbox and radio button.
@@ -54,7 +53,7 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
             delete this.parentNode.dataset.checked;
         } )
         // Readonly buttons/checkboxes will not respond to clicks.
-        .on( 'click', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', function( event ) {
+        .on( 'click', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', event => {
             event.stopImmediatePropagation();
             return false;
         } )
@@ -72,7 +71,7 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
          * See more at https://github.com/enketo/enketo-core/issues/516
          */
         .on( 'change', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', function( event ) {
-            var byProgram = typeof event.originalEvent === 'undefined';
+            const byProgram = typeof event.originalEvent === 'undefined';
             if ( !byProgram ) {
                 event.stopImmediatePropagation();
                 /*               
@@ -99,7 +98,7 @@ Radiopicker.prototype._setDelegatedHandlers = function() {
 
 $.fn[ pluginName ] = function( options, event ) {
     //this widget works globally, and only needs to be instantiated once per form
-    var $this = $( this ),
+    const $this = $( this ),
         data = $this.data( pluginName );
 
     options = options || {};
@@ -113,7 +112,7 @@ $.fn[ pluginName ] = function( options, event ) {
     return this;
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': 'form'
 };

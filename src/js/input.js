@@ -1,16 +1,15 @@
-'use strict';
 /**
  * Form control (input, select, textarea) helper functions.
  */
 
-module.exports = {
+export default {
     // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
-    getWrapNodes: function( $inputs ) {
-        var type = this.getInputType( $inputs.eq( 0 ) );
+    getWrapNodes( $inputs ) {
+        const type = this.getInputType( $inputs.eq( 0 ) );
         return ( type === 'fieldset' ) ? $inputs : $inputs.closest( '.question, .calculation' );
     },
     /** very inefficient, should actually not be used **/
-    getProps: function( $input ) {
+    getProps( $input ) {
         if ( $input.length !== 1 ) {
             return console.error( 'getProps(): no input node provided or multiple' );
         }
@@ -29,8 +28,8 @@ module.exports = {
             multiple: this.isMultiple( $input )
         };
     },
-    getInputType: function( $input ) {
-        var nodeName;
+    getInputType( $input ) {
+        let nodeName;
         if ( $input.length !== 1 ) {
             return ''; //console.error('getInputType(): no input node provided or multiple');
         }
@@ -54,32 +53,32 @@ module.exports = {
             return console.error( 'unexpected input node type provided' );
         }
     },
-    getConstraint: function( $input ) {
+    getConstraint( $input ) {
         return $input.attr( 'data-constraint' );
     },
-    getRequired: function( $input ) {
+    getRequired( $input ) {
         // only return value if input is not a table heading input
         if ( $input.parentsUntil( '.or', '.or-appearance-label' ).length === 0 ) {
             return $input.attr( 'data-required' );
         }
     },
-    getRelevant: function( $input ) {
+    getRelevant( $input ) {
         return $input.attr( 'data-relevant' );
     },
-    getReadonly: function( $input ) {
+    getReadonly( $input ) {
         return $input.is( '[readonly]' );
     },
-    getCalculation: function( $input ) {
+    getCalculation( $input ) {
         return $input.attr( 'data-calculate' );
     },
-    getXmlType: function( $input ) {
+    getXmlType( $input ) {
         if ( $input.length !== 1 ) {
             return console.error( 'getXMLType(): no input node provided or multiple' );
         }
         return $input.attr( 'data-type-xml' );
     },
-    getName: function( $input ) {
-        var name;
+    getName( $input ) {
+        let name;
         if ( $input.length !== 1 ) {
             return console.error( 'getName(): no input node provided or multiple' );
         }
@@ -91,22 +90,22 @@ module.exports = {
      * The index that can be used to find the corresponding node in the model.
      * NOTE: this function should be used sparingly, as it is CPU intensive!
      */
-    getIndex: function( $input ) {
+    getIndex( $input ) {
         if ( $input.length !== 1 ) {
             return console.error( 'getIndex(): no input node provided or multiple' );
         }
         return this.form.repeats.getIndex( $input[ 0 ].closest( '.or-repeat' ) );
     },
-    isMultiple: function( $input ) {
+    isMultiple( $input ) {
         return ( this.getInputType( $input ) === 'checkbox' || $input.attr( 'multiple' ) !== undefined ) ? true : false;
     },
-    isEnabled: function( $input ) {
+    isEnabled( $input ) {
         return !( $input.prop( 'disabled' ) || $input.parentsUntil( '.or', '.disabled' ).length > 0 );
     },
-    getVal: function( $input ) {
-        var inputType;
-        var values = [];
-        var name;
+    getVal( $input ) {
+        let inputType;
+        const values = [];
+        let name;
 
         if ( $input.length !== 1 ) {
             return console.error( 'getVal(): no inputNode provided or multiple' );
@@ -119,31 +118,31 @@ module.exports = {
         }
         // checkbox values bug in jQuery as (node.val() should work)
         if ( inputType === 'checkbox' ) {
-            this.getWrapNodes( $input ).find( 'input[name="' + name + '"]:checked' ).each( function() {
+            this.getWrapNodes( $input ).find( `input[name="${name}"]:checked` ).each( function() {
                 values.push( this.value );
             } );
             return values;
         }
         return $input.val() || '';
     },
-    find: function( name, index ) {
-        var attr = 'name';
-        if ( this.getInputType( this.form.view.$.find( '[data-name="' + name + '"]:not(.ignore)' ).eq( 0 ) ) === 'radio' ) {
+    find( name, index ) {
+        let attr = 'name';
+        if ( this.getInputType( this.form.view.$.find( `[data-name="${name}"]:not(.ignore)` ).eq( 0 ) ) === 'radio' ) {
             attr = 'data-name';
         }
-        return this.getWrapNodes( this.form.view.$.find( '[' + attr + '="' + name + '"]' ) ).eq( index ).find( '[' + attr + '="' + name + '"]:not(.ignore)' ).eq( 0 );
+        return this.getWrapNodes( this.form.view.$.find( `[${attr}="${name}"]` ) ).eq( index ).find( `[${attr}="${name}"]:not(.ignore)` ).eq( 0 );
     },
-    setVal: function( $input, value ) {
-        var $inputs;
-        var type = this.getInputType( $input );
-        var $question = this.getWrapNodes( $input );
-        var name = this.getName( $input );
+    setVal( $input, value ) {
+        let $inputs;
+        const type = this.getInputType( $input );
+        const $question = this.getWrapNodes( $input );
+        const name = this.getName( $input );
 
         if ( type === 'radio' ) {
-            $inputs = $question.find( '[data-name="' + name + '"]:not(.ignore)' );
+            $inputs = $question.find( `[data-name="${name}"]:not(.ignore)` );
         } else {
             // why not use this.getIndex?
-            $inputs = $question.find( '[name="' + name + '"]:not(.ignore)' );
+            $inputs = $question.find( `[name="${name}"]:not(.ignore)` );
 
             if ( type === 'file' ) {
                 $input.attr( 'data-loaded-file-name', value );
@@ -165,14 +164,14 @@ module.exports = {
                     // Strip the thousands of a second, because most browsers fail to parse such a time.
                     // Add a space before the timezone offset to satisfy some browsers.
                     // For IE11, we also need to strip the Left-to-Right marks \u200E...
-                    var ds = new Date().toLocaleDateString( 'en', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                    } ).replace( /\u200E/g, '' ) + ' ' + value.replace( /(\d\d:\d\d:\d\d)(\.\d{1,3})(\s?((\+|-)\d\d))(:)?(\d\d)?/, '$1 GMT$3$7' );
-                    var d = new Date( ds );
+                    const ds = `${new Date().toLocaleDateString( 'en', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+} ).replace( /\u200E/g, '' )} ${value.replace( /(\d\d:\d\d:\d\d)(\.\d{1,3})(\s?((\+|-)\d\d))(:)?(\d\d)?/, '$1 GMT$3$7' )}`;
+                    const d = new Date( ds );
                     if ( d.toString() !== 'Invalid Date' ) {
-                        value = d.getHours().toString().pad( 2 ) + ':' + d.getMinutes().toString().pad( 2 );
+                        value = `${d.getHours().toString().pad( 2 )}:${d.getMinutes().toString().pad( 2 )}`;
                     } else {
                         console.error( 'could not parse time:', value );
                     }
@@ -189,7 +188,7 @@ module.exports = {
         // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
         // original input element has changed **programmatically**.
         if ( $inputs.length ) {
-            var curVal = this.getVal( $input );
+            const curVal = this.getVal( $input );
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
                 $inputs.val( value );
                 // don't trigger on all radiobuttons/checkboxes
@@ -199,7 +198,7 @@ module.exports = {
 
         return $inputs[ 0 ];
     },
-    validate: function( $input ) {
+    validate( $input ) {
         return this.form.validateInput( $input );
     }
 };

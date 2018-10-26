@@ -1,8 +1,8 @@
-var loadForm = require( '../helpers/loadForm' );
+import loadForm from '../helpers/loadForm';
 
-describe( 'input helper', function() {
+describe( 'input helper', () => {
 
-    describe( 'getIndex() function', function() {
+    describe( 'getIndex() function', () => {
 
         const form = loadForm( 'nested_repeats.xml' );
         form.init();

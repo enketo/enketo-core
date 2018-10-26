@@ -1,27 +1,25 @@
-'use strict';
-
 /**
  * Progress module.
  */
 
-var $ = require( 'jquery' );
+import $ from 'jquery';
 
 /**
  * Maintains progress state of user traversing through form, using
  * currently focused input || last changed input as current location.
  */
-module.exports = {
+export default {
     status: 0,
     lastChanged: null,
     $all: null,
-    updateTotal: function() {
+    updateTotal() {
         this.$all = this.form.view.$.find( '.question' ).not( '.disabled, .or-appearance-comment, .or-appearance-dn' ).filter( function() {
             return $( this ).parentsUntil( '.or', '.disabled' ).length === 0;
         } );
     },
     // updates rounded % value of progress and triggers event if changed
-    update: function( el ) {
-        var status;
+    update( el ) {
+        let status;
 
         if ( !this.$all || !el ) {
             this.updateTotal();
@@ -36,7 +34,7 @@ module.exports = {
             this.form.view.$.trigger( 'progressupdate.enketo', status );
         }
     },
-    get: function() {
+    get() {
         return this.status;
     }
 };

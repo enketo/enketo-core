@@ -1,7 +1,7 @@
-var utils = require( '../../src/js/utils' );
+import * as utils from '../../src/js/utils';
 
-describe( 'Parsing expressions', function() {
-    var t = [
+describe( 'Parsing expressions', () => {
+    const t = [
         [ 'func(b,c)', '', [] ],
         [ 'func(b,c)', undefined, [] ],
         [ 'func(b,c)', null, [] ],
@@ -47,19 +47,19 @@ describe( 'Parsing expressions', function() {
     ];
 
     function test( expr, func, expected ) {
-        it( 'extracts the calls to ' + func + ' and their parameters as a string from ' + expr, function() {
-            var result = utils.parseFunctionFromExpression( expr, func );
+        it( `extracts the calls to ${func} and their parameters as a string from ${expr}`, () => {
+            const result = utils.parseFunctionFromExpression( expr, func );
             expect( result ).toEqual( expected );
         } );
     }
 
-    for ( var i = 0; i < t.length; i++ ) {
+    for ( let i = 0; i < t.length; i++ ) {
         test( t[ i ][ 0 ], t[ i ][ 1 ], t[ i ][ 2 ] );
     }
 
 } );
 
-describe( 'return postfixed filenames', function() {
+describe( 'return postfixed filenames', () => {
 
     [
         [ 'myname', '-mypostfix', 'myname-mypostfix' ],
@@ -72,15 +72,15 @@ describe( 'return postfixed filenames', function() {
         [ 'myname', undefined, 'myname' ],
         [ 'myname', null, 'myname' ],
         [ 'myname', false, 'myname' ]
-    ].forEach( function( test ) {
-        var file = new Blob( [ 'a' ], {
+    ].forEach( test => {
+        const file = new Blob( [ 'a' ], {
             type: 'text'
         } );
         file.name = test[ 0 ];
-        var postfix = test[ 1 ];
-        var expected = test[ 2 ];
+        const postfix = test[ 1 ];
+        const expected = test[ 2 ];
 
-        it( 'returns the filename ' + expected + ' from ' + file.name + ' and ' + postfix, function() {
+        it( `returns the filename ${expected} from ${file.name} and ${postfix}`, () => {
             expect( utils.getFilename( file, postfix ) ).toEqual( expected );
         } );
     } );

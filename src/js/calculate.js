@@ -1,18 +1,17 @@
-'use strict';
-
 /**
  * Updates calculated items
  *
  * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
  */
 
-var $ = require( 'jquery' );
-var config = require( 'enketo/config' );
+import $ from 'jquery';
 
-module.exports = {
-    update: function( updated, filter ) {
-        var $nodes;
-        var that = this;
+import config from 'enketo/config';
+
+export default {
+    update( updated, filter ) {
+        let $nodes;
+        const that = this;
 
         // Filter is used in custom applications that make a distinction between types of calculations.
         filter = filter || '';
@@ -25,25 +24,25 @@ module.exports = {
 
         if ( updated.relevantPath ) {
             // Questions that are descendants of a group:
-            $nodes = this.form.getRelatedNodes( 'data-calculate', '[name^="' + updated.relevantPath + '/"]' + filter )
+            $nodes = this.form.getRelatedNodes( 'data-calculate', `[name^="${updated.relevantPath}/"]${filter}` )
                 // Individual questions:
-                .add( this.form.getRelatedNodes( 'data-calculate', '[name="' + updated.relevantPath + '"]' + filter ) )
+                .add( this.form.getRelatedNodes( 'data-calculate', `[name="${updated.relevantPath}"]${filter}` ) )
                 // Individual radiobutton questions with a calculate....:
-                .add( this.form.getRelatedNodes( 'data-calculate', '[data-name="' + updated.relevantPath + '"]' + filter ) );
+                .add( this.form.getRelatedNodes( 'data-calculate', `[data-name="${updated.relevantPath}"]${filter}` ) );
         } else {
             $nodes = this.form.getRelatedNodes( 'data-calculate', filter, updated );
         }
 
         $nodes.each( function() {
-            var index;
-            var $control = $( this );
-            var name = that.form.input.getName( $control );
-            var dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
-            var expr = that.form.input.getCalculation( $control );
-            var dataType = that.form.input.getXmlType( $control );
-            var relevantExpr = that.form.input.getRelevant( $control );
-            var dataNodesObj = that.form.model.node( name );
-            var dataNodes = dataNodesObj.getElements();
+            let index;
+            const $control = $( this );
+            const name = that.form.input.getName( $control );
+            const dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
+            const expr = that.form.input.getCalculation( $control );
+            const dataType = that.form.input.getXmlType( $control );
+            const relevantExpr = that.form.input.getRelevant( $control );
+            const dataNodesObj = that.form.model.node( name );
+            const dataNodes = dataNodesObj.getElements();
 
             if ( dataNodes.length > 1 ) {
                 if ( updated.repeatPath && name.indexOf( updated.repeatPath ) !== -1 ) {
@@ -51,7 +50,7 @@ module.exports = {
                      * If the update was triggered by a datanode inside a repeat
                      * and the dependent node is inside the same repeat, we can prevent the expensive index determination
                      */
-                    var dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).getElement().querySelector( dataNodeName );
+                    const dataNode = that.form.model.node( updated.repeatPath, updated.repeatIndex ).getElement().querySelector( dataNodeName );
                     index = dataNodes.indexOf( dataNode );
                     updateCalc( index );
                 } else if ( $control[ 0 ].type === 'hidden' ) {
@@ -60,7 +59,7 @@ module.exports = {
                      * as a separate group (.or-calculated-items), instead of in the Form DOM in the locations where they belong.
                      * This occurs when update is called with empty updated object and multiple repeats are present.
                      */
-                    dataNodes.forEach( function( el, index ) {
+                    dataNodes.forEach( ( el, index ) => {
                         updateCalc( index );
                     } );
                 } else {
@@ -68,7 +67,7 @@ module.exports = {
                      * This occurs when the updated object contains a relevantPath that refers to a repeat and multiple repeats are 
                      * present, without calculated items that HAVE a visible form control.
                      */
-                    var $repeatSiblings = $control.closest( '.or-repeat' ).siblings( '.or-repeat' ).addBack();
+                    const $repeatSiblings = $control.closest( '.or-repeat' ).siblings( '.or-repeat' ).addBack();
                     if ( $repeatSiblings.length === dataNodes.length ) {
                         index = $repeatSiblings.index( $control.closest( '.or-repeat' ) );
                         updateCalc( index );
@@ -80,7 +79,7 @@ module.exports = {
             }
 
             function updateCalc( index ) {
-                var pathParts = name.split( '/' );
+                const pathParts = name.split( '/' );
                 /*
                  * First determine immediate group parent of node, which will always be in correct location in DOM. This is where
                  * we can use the index to be guaranteed to get the correct node.
@@ -92,38 +91,36 @@ module.exports = {
                  * 
                  * Note: getting the parents of $control wouldn't work for nodes inside #calculated-items!
                  */
-                var parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
-                var $parentGroups = that.form.view.$.find( '.or-group[name="' + parentPath + '"],.or-group-data[name="' + parentPath + '"]' ).eq( index )
+                const parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
+                const $parentGroups = that.form.view.$.find( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` ).eq( index )
                     .parents( '.or-group, .or-group-data' ).addBack();
 
                 if ( $parentGroups.length ) {
                     // Start at the highest level, and traverse down to the DOM to the immediate parent group.
-                    var relevant = $parentGroups.filter( '[data-relevant]' ).reverse().get().map( function( group ) {
-                        var $group = $( group );
-                        var nm = that.form.input.getName( $group );
+                    var relevant = $parentGroups.filter( '[data-relevant]' ).reverse().get().map( group => {
+                        const $group = $( group );
+                        const nm = that.form.input.getName( $group );
 
                         return {
                             context: nm,
                             // thankfully relevants on repeats are not possible with XLSForm-produced forms
-                            index: that.form.view.$.find( '.or-group[name="' + nm + '"], .or-group-data[name="' + nm + '"]' ).index( $group ), // performance....
+                            index: that.form.view.$.find( `.or-group[name="${nm}"], .or-group-data[name="${nm}"]` ).index( $group ), // performance....
                             expr: that.form.input.getRelevant( $group )
                         };
                     } ).concat( [ {
                         context: name,
-                        index: index,
+                        index,
                         expr: relevantExpr
-                    } ] ).every( function( item ) {
-                        return ( item.expr ) ? that.form.model.evaluate( item.expr, 'boolean', item.context, item.index ) : true;
-                    } );
+                    } ] ).every( item => ( item.expr ) ? that.form.model.evaluate( item.expr, 'boolean', item.context, item.index ) : true );
                 } else {
                     relevant = ( relevantExpr ) ? that.form.model.evaluate( relevantExpr, 'boolean', name, index ) : true;
                 }
 
                 // not sure if using 'string' is always correct
-                var newExpr = that.form.replaceChoiceNameFn( expr, 'string', name, index );
+                const newExpr = that.form.replaceChoiceNameFn( expr, 'string', name, index );
 
                 // it is possible that the fixed expr is '' which causes an error in XPath
-                var result = ( relevant && newExpr ) ? that.form.model.evaluate( newExpr, 'string', name, index ) : '';
+                const result = ( relevant && newExpr ) ? that.form.model.evaluate( newExpr, 'string', name, index ) : '';
 
                 // filter the result set to only include the target node
                 dataNodesObj.setIndex( index );

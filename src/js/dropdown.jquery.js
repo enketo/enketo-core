@@ -2,22 +2,23 @@
 
 // DROPDOWN CLASS DEFINITION
 // =========================
-var $ = require( 'jquery' );
-var backdrop = '.dropdown-backdrop';
-var toggle = '[data-toggle=dropdown]';
-var Dropdown = function( element ) {
+import $ from 'jquery';
+
+const backdrop = '.dropdown-backdrop';
+const toggle = '[data-toggle=dropdown]';
+const Dropdown = function( element ) {
     $( element ).on( 'click.bs.dropdown', this.toggle );
 };
 
 Dropdown.prototype.toggle = function( e ) {
-    var $this = $( this );
+    const $this = $( this );
 
     if ( $this.is( '.disabled, :disabled' ) ) {
         return;
     }
 
-    var $parent = getParent( $this );
-    var isActive = $parent.hasClass( 'open' );
+    const $parent = getParent( $this );
+    const isActive = $parent.hasClass( 'open' );
 
     clearMenus();
 
@@ -27,7 +28,7 @@ Dropdown.prototype.toggle = function( e ) {
             $( '<div class="dropdown-backdrop"/>' ).insertAfter( $( this ) ).on( 'click', clearMenus );
         }
 
-        var relatedTarget = {
+        const relatedTarget = {
             relatedTarget: this
         };
         $parent.trigger( e = $.Event( 'show.bs.dropdown', relatedTarget ) );
@@ -51,7 +52,7 @@ Dropdown.prototype.keydown = function( e ) {
         return;
     }
 
-    var $this = $( this );
+    const $this = $( this );
 
     e.preventDefault();
     e.stopPropagation();
@@ -60,8 +61,8 @@ Dropdown.prototype.keydown = function( e ) {
         return;
     }
 
-    var $parent = getParent( $this );
-    var isActive = $parent.hasClass( 'open' );
+    const $parent = getParent( $this );
+    const isActive = $parent.hasClass( 'open' );
 
     if ( !isActive || ( isActive && e.keyCode === 27 ) ) {
         if ( e.which === 27 ) {
@@ -70,14 +71,14 @@ Dropdown.prototype.keydown = function( e ) {
         return $this.click();
     }
 
-    var desc = ' li:not(.divider):visible a';
-    var $items = $parent.find( '[role=menu]' + desc + ', [role=listbox]' + desc );
+    const desc = ' li:not(.divider):visible a';
+    const $items = $parent.find( `[role=menu]${desc}, [role=listbox]${desc}` );
 
     if ( !$items.length ) {
         return;
     }
 
-    var index = $items.index( $items.filter( ':focus' ) );
+    let index = $items.index( $items.filter( ':focus' ) );
 
     if ( e.keyCode === 38 && index > 0 ) {
         index--; // up
@@ -95,8 +96,8 @@ Dropdown.prototype.keydown = function( e ) {
 function clearMenus( e ) {
     $( backdrop ).remove();
     $( toggle ).each( function() {
-        var $parent = getParent( $( this ) );
-        var relatedTarget = {
+        const $parent = getParent( $( this ) );
+        const relatedTarget = {
             relatedTarget: this
         };
         if ( !$parent.hasClass( 'open' ) ) {
@@ -111,14 +112,14 @@ function clearMenus( e ) {
 }
 
 function getParent( $this ) {
-    var selector = $this.attr( 'data-target' );
+    let selector = $this.attr( 'data-target' );
 
     if ( !selector ) {
         selector = $this.attr( 'href' );
         selector = selector && /#[A-Za-z]/.test( selector ) && selector.replace( /.*(?=#[^\s]*$)/, '' ); //strip for ie7
     }
 
-    var $parent = selector && $( selector );
+    const $parent = selector && $( selector );
 
     return $parent && $parent.length ? $parent : $this.parent();
 }
@@ -127,12 +128,12 @@ function getParent( $this ) {
 // DROPDOWN PLUGIN DEFINITION
 // ==========================
 
-var old = $.fn.dropdown;
+const old = $.fn.dropdown;
 
 $.fn.dropdown = function( option ) {
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( 'bs.dropdown' );
+        const $this = $( this );
+        const data = $this.data( 'bs.dropdown' );
 
         if ( !data ) {
             $this.data( 'bs.dropdown', new Dropdown( this ) );
@@ -160,8 +161,8 @@ $.fn.dropdown.noConflict = function() {
 
 $( document )
     .on( 'click.bs.dropdown.data-api', clearMenus )
-    .on( 'click.bs.dropdown.data-api', '.dropdown form', function( e ) {
+    .on( 'click.bs.dropdown.data-api', '.dropdown form', e => {
         e.stopPropagation();
     } )
     .on( 'click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle )
-    .on( 'keydown.bs.dropdown.data-api', toggle + ', [role=menu], [role=listbox]', Dropdown.prototype.keydown );
+    .on( 'keydown.bs.dropdown.data-api', `${toggle}, [role=menu], [role=listbox]`, Dropdown.prototype.keydown );

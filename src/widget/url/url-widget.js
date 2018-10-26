@@ -1,8 +1,7 @@
-'use strict';
+import $ from 'jquery';
+import Widget from '../../js/Widget';
+const pluginName = 'urlWidget';
 
-var pluginName = 'urlWidget';
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
 
 /*
  * @constructor
@@ -35,9 +34,9 @@ UrlWidget.prototype._setValueInWidget = function( value ) {
         .text( value );
 };
 
-UrlWidget.prototype.disable = function() {};
+UrlWidget.prototype.disable = () => {};
 
-UrlWidget.prototype.enable = function() {};
+UrlWidget.prototype.enable = () => {};
 
 UrlWidget.prototype.update = function() {
     this._setValueInWidget( this.element.value );
@@ -48,8 +47,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
+        const $this = $( this );
+        const data = $this.data( pluginName );
 
         if ( !data && typeof options === 'object' ) {
             $this.data( pluginName, new UrlWidget( this, options, event ) );
@@ -59,7 +58,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': '.or-appearance-url input[type="text"]'
 };

@@ -1,9 +1,7 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var $ = require( 'jquery' );
-var pluginName = 'imageMap';
-var t = require( 'enketo/translator' ).t;
+import Widget from '../../js/Widget';
+import $ from 'jquery';
+const pluginName = 'imageMap';
+import { t } from 'enketo/translator';
 
 /**
  * Image Map widget that turns an SVG image into a clickable map 
@@ -26,8 +24,8 @@ ImageMap.prototype = Object.create( Widget.prototype );
 ImageMap.prototype.constructor = ImageMap;
 
 ImageMap.prototype._init = function() {
-    var that = this;
-    var img = this.element.querySelector( 'img' );
+    const that = this;
+    const img = this.element.querySelector( 'img' );
     this.$inputs = $( this.element ).find( 'input' );
     this.props = this._getProps();
     this.element.classList.add( 'or-image-map-initialized' );
@@ -44,7 +42,7 @@ ImageMap.prototype._init = function() {
         this._addMarkup( img ).then( this._addFunctionality.bind( this ) );
     } else {
         $( img )
-            .on( 'load', function() {
+            .on( 'load', () => {
                 that._addMarkup( img ).then( that._addFunctionality.bind( that ) );
             } );
         // Ignore errors, because an img element without source may throw one.
@@ -71,19 +69,19 @@ ImageMap.prototype._getProps = function() {
 };
 
 ImageMap.prototype._addMarkup = function( img ) {
-    var that = this;
-    var src = img.getAttribute( 'src' );
+    const that = this;
+    const src = img.getAttribute( 'src' );
 
     /**
      * For translated forms, we now discard everything except the first image,
      * since we're assuming the images will be the same in all languages.
      */
     return $.get( src )
-        .then( function( data ) {
-            var $svg;
-            var $widget;
-            var width;
-            var height;
+        .then( data => {
+            let $svg;
+            let $widget;
+            let width;
+            let height;
             if ( that._isSvgDoc( data ) ) {
                 $svg = that._removeUnmatchedIds( $( data.querySelector( 'svg' ) ) );
                 $widget = $( '<div class="widget image-map"/>' )
@@ -98,7 +96,7 @@ ImageMap.prototype._addMarkup = function( img ) {
                 // image has not finished rendering. This doesn't always happen though.
                 // For now, we just log the FF error, and hope that resizing is done correctly via
                 // attributes.
-                var bbox = {};
+                let bbox = {};
                 try {
                     bbox = $svg[ 0 ].getBBox();
                 } catch ( e ) {
@@ -118,7 +116,7 @@ ImageMap.prototype._addMarkup = function( img ) {
 };
 
 ImageMap.prototype._showSvgNotFoundError = function() {
-    $( this.element ).find( '.option-wrapper' ).before( '<div class="widget image-map"><div class="image-map__error">' + t( 'imagemap.svgNotFound' ) + '</div></div>' );
+    $( this.element ).find( '.option-wrapper' ).before( `<div class="widget image-map"><div class="image-map__error">${t( 'imagemap.svgNotFound' )}</div></div>` );
 };
 
 /**
@@ -127,7 +125,7 @@ ImageMap.prototype._showSvgNotFoundError = function() {
  * @return {jQuery} [description]
  */
 ImageMap.prototype._removeUnmatchedIds = function( $svg ) {
-    var that = this;
+    const that = this;
     $svg.find( 'path[id], g[id]' ).each( function() {
         if ( !that._getInput( this.id ) ) {
             this.removeAttribute( 'id' );
@@ -138,15 +136,15 @@ ImageMap.prototype._removeUnmatchedIds = function( $svg ) {
 };
 
 ImageMap.prototype._getInput = function( id ) {
-    return this.element.querySelector( 'input[value="' + id + '"]' );
+    return this.element.querySelector( `input[value="${id}"]` );
 };
 
 ImageMap.prototype._setSvgClickHandler = function() {
-    var that = this;
+    const that = this;
 
-    this.$svg.not( '[or-readonly]' ).on( 'click', 'path[id], g[id]', function( event ) {
-        var id = event.target.id || $( event.target ).closest( 'g[id]' )[ 0 ].id;
-        var input = that._getInput( id );
+    this.$svg.not( '[or-readonly]' ).on( 'click', 'path[id], g[id]', event => {
+        const id = event.target.id || $( event.target ).closest( 'g[id]' )[ 0 ].id;
+        const input = that._getInput( id );
         if ( input ) {
             $( input ).prop( 'checked', !input.checked ).trigger( 'change' );
         }
@@ -158,30 +156,28 @@ ImageMap.prototype._setChangeHandler = function() {
 };
 
 ImageMap.prototype._setHoverHandler = function() {
-    var that = this;
+    const that = this;
 
     this.$svg
-        .on( 'mouseenter', 'path[id], g[id]', function( event ) {
-            var id = event.target.id || $( event.target ).closest( 'g[id]' )[ 0 ].id;
-            var optionLabel = $( that._getInput( id ) ).siblings( '.option-label.active' ).text();
+        .on( 'mouseenter', 'path[id], g[id]', event => {
+            const id = event.target.id || $( event.target ).closest( 'g[id]' )[ 0 ].id;
+            const optionLabel = $( that._getInput( id ) ).siblings( '.option-label.active' ).text();
             that.$tooltip.text( optionLabel );
         } )
-        .on( 'mouseleave', 'path[id], g[id]', function() {
+        .on( 'mouseleave', 'path[id], g[id]', () => {
             that.$tooltip.text( '' );
         } );
 };
 
-ImageMap.prototype._isSvgDoc = function( data ) {
-    return typeof data === 'object' && data.querySelector( 'svg' );
-};
+ImageMap.prototype._isSvgDoc = data => typeof data === 'object' && data.querySelector( 'svg' );
 
 /**
  * Updates 'selected' attributes in SVG
  * Always update the map after the value has changed in the original input elements
  */
 ImageMap.prototype._updateImage = function() {
-    var that = this;
-    var values = this.options.helpers.input.getVal( this.$inputs.eq( 0 ) );
+    const that = this;
+    let values = this.options.helpers.input.getVal( this.$inputs.eq( 0 ) );
 
     this.$svg.find( 'path[or-selected], g[or-selected]' ).removeAttr( 'or-selected' );
 
@@ -189,10 +185,10 @@ ImageMap.prototype._updateImage = function() {
         values = [ values ];
     }
 
-    values.forEach( function( value ) {
+    values.forEach( value => {
         if ( value ) {
             // if multiple values have the same id, change all of them (e.g. a province that is not contiguous)
-            that.$svg.find( 'path#' + value + ',g#' + value ).attr( 'or-selected', '' );
+            that.$svg.find( `path#${value},g#${value}` ).attr( 'or-selected', '' );
         }
     } );
 };
@@ -212,8 +208,8 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
+        const $this = $( this );
+        const data = $this.data( pluginName );
 
         if ( !data && typeof options === 'object' ) {
             $this.data( pluginName, new ImageMap( this, options, event ) );
@@ -223,7 +219,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': '.simple-select.or-appearance-image-map',
     'helpersRequired': [ 'input' ]

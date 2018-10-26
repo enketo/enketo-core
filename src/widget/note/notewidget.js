@@ -1,7 +1,5 @@
-'use strict';
+const pluginName = 'notewidget';
 
-var pluginName = 'notewidget';
-
-module.exports = {
+export default {
     'name': pluginName
 };

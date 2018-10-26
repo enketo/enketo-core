@@ -1,12 +1,11 @@
-'use strict';
-var $ = require( 'jquery' );
-var Widget = require( '../../js/Widget' );
-var fileManager = require( 'enketo/file-manager' );
-var utils = require( '../../js/utils' );
-var pluginName = 'filepicker';
-var t = require( 'enketo/translator' ).t;
-var TranslatedError = require( '../../js/translated-error' );
-var dialog = require( 'enketo/dialog' );
+import $ from 'jquery';
+import Widget from '../../js/Widget';
+import fileManager from 'enketo/file-manager';
+import { getFilename, updateDownloadLink } from '../../js/utils';
+const pluginName = 'filepicker';
+import { t } from 'enketo/translator';
+import TranslatedError from '../../js/translated-error';
+import dialog from 'enketo/dialog';
 
 /**
  * FilePicker that works both offline and online. It abstracts the file storage/cache away
@@ -38,9 +37,9 @@ Filepicker.prototype.constructor = Filepicker;
  * Initialize
  */
 Filepicker.prototype._init = function() {
-    var $input = $( this.element );
-    var existingFileName = $input.attr( 'data-loaded-file-name' );
-    var that = this;
+    const $input = $( this.element );
+    const existingFileName = $input.attr( 'data-loaded-file-name' );
+    const that = this;
 
     this.props = this._getProps();
 
@@ -50,12 +49,7 @@ Filepicker.prototype._init = function() {
         .parent().addClass( 'with-media clearfix' );
 
     this.$widget = $(
-            '<div class="widget file-picker">' +
-            '<input class="ignore fake-file-input"/>' +
-            ( this.props.readonly ? '' : this.resetButtonHtml ) + this.downloadButtonHtml +
-            '<div class="file-feedback"></div>' +
-            '<div class="file-preview"></div>' +
-            '</div>' )
+            `<div class="widget file-picker"><input class="ignore fake-file-input"/>${this.props.readonly ? '' : this.resetButtonHtml}${this.downloadButtonHtml}<div class="file-feedback"></div><div class="file-preview"></div></div>` )
         .insertAfter( $input );
     this.$feedback = this.$widget.find( '.file-feedback' );
     this.$preview = this.$widget.find( '.file-preview' );
@@ -63,15 +57,15 @@ Filepicker.prototype._init = function() {
     this.$downloadLink = this.$widget.find( '.btn-download' );
 
     this.$widget
-        .find( '.btn-reset' ).on( 'click', function() {
+        .find( '.btn-reset' ).on( 'click', () => {
             if ( ( $input.val() || that.$fakeInput.val() ) ) {
                 dialog.confirm( t( 'filepicker.resetWarning', { item: t( 'filepicker.file' ) } ) )
-                    .then( function( confirmed ) {
+                    .then( confirmed => {
                         if ( confirmed ) {
                             $input.val( '' ).trigger( 'change' );
                         }
                     } )
-                    .catch( function() {} );
+                    .catch( () => {} );
             }
         } )
         .end();
@@ -92,24 +86,24 @@ Filepicker.prototype._init = function() {
     $input.closest( 'form.or' ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
 
     fileManager.init()
-        .then( function() {
+        .then( () => {
             that._showFeedback();
             that._changeListener();
             $input.prop( 'disabled', false );
             if ( existingFileName ) {
                 fileManager.getFileUrl( existingFileName )
-                    .then( function( url ) {
+                    .then( url => {
                         that._showPreview( url, that.props.mediaType );
                         that._updateDownloadLink( url, existingFileName );
                     } )
-                    .catch( function() {
+                    .catch( () => {
                         that._showFeedback( t( 'filepicker.notFound', {
                             existing: existingFileName
                         } ), 'error' );
                     } );
             }
         } )
-        .catch( function( error ) {
+        .catch( error => {
             that._showFeedback( error, 'error' );
         } );
 };
@@ -126,10 +120,10 @@ Filepicker.prototype._updatePlaceholder = function() {
 };
 
 Filepicker.prototype._changeListener = function() {
-    var that = this;
+    const that = this;
 
     $( this.element )
-        .on( 'click', function( event ) {
+        .on( 'click', event => {
             // The purpose of this handler is to block the filepicker window
             // when the label is clicked outside of the input.
             if ( that.props.readonly || event.namespace !== 'propagate' ) {
@@ -138,13 +132,13 @@ Filepicker.prototype._changeListener = function() {
                 return false;
             }
         } )
-        .on( 'change.propagate.' + this.namespace, function( event ) {
-            var file;
-            var fileName;
-            var postfix;
-            var $input = $( this );
-            var loadedFileName = $input.attr( 'data-loaded-file-name' );
-            var now = new Date();
+        .on( `change.propagate.${this.namespace}`, function( event ) {
+            let file;
+            let fileName;
+            let postfix;
+            const $input = $( this );
+            const loadedFileName = $input.attr( 'data-loaded-file-name' );
+            const now = new Date();
 
             if ( event.namespace === 'propagate' ) {
                 // Trigger eventhandler to update instance value
@@ -156,13 +150,13 @@ Filepicker.prototype._changeListener = function() {
 
             // Get the file
             file = this.files[ 0 ];
-            postfix = '-' + now.getHours() + '_' + now.getMinutes() + '_' + now.getSeconds();
+            postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
             this.dataset.filenamePostfix = postfix;
-            fileName = utils.getFilename( file, postfix );
+            fileName = getFilename( file, postfix );
 
             // Process the file
             fileManager.getFileUrl( file, fileName )
-                .then( function( url ) {
+                .then( url => {
                     // Update UI
                     that._showPreview( url, that.props.mediaType );
                     that._showFeedback();
@@ -174,7 +168,7 @@ Filepicker.prototype._changeListener = function() {
                     // Update record
                     $input.trigger( 'change.propagate' );
                 } )
-                .catch( function( error ) {
+                .catch( error => {
                     // Update record to clear any existing valid value
                     $input.val( '' ).trigger( 'change.propagate' );
                     // Update UI
@@ -202,22 +196,20 @@ Filepicker.prototype._changeListener = function() {
             event.preventDefault();
             $( that.element ).trigger( 'click.propagate' );
         } )
-        .on( 'change', function() {
-            // For robustness, avoid any editing of filenames by user.
-            return false;
-        } );
+        .on( 'change', () => // For robustness, avoid any editing of filenames by user.
+            false );
 };
 
 Filepicker.prototype._focusListener = function() {
-    var that = this;
+    const that = this;
 
     // Handle focus on widget input
-    this.$fakeInput.on( 'focus', function() {
+    this.$fakeInput.on( 'focus', () => {
         $( that.element ).trigger( 'fakefocus' );
     } );
 
     // Handle focus on original input (goTo functionality)
-    $( this.element ).on( 'applyfocus', function() {
+    $( this.element ).on( 'applyfocus', () => {
         that.$fakeInput.focus();
     } );
 };
@@ -227,16 +219,16 @@ Filepicker.prototype._showFileName = function( fileName ) {
 };
 
 Filepicker.prototype._showFeedback = function( fb, status ) {
-    var message = fb instanceof TranslatedError ? t( fb.translationKey, fb.translationOptions ) :
+    const message = fb instanceof TranslatedError ? t( fb.translationKey, fb.translationOptions ) :
         fb instanceof Error ? fb.message :
         fb || '';
     status = status || '';
     // replace text and replace all existing classes with the new status class
-    this.$feedback.text( message ).attr( 'class', 'file-feedback ' + status );
+    this.$feedback.text( message ).attr( 'class', `file-feedback ${status}` );
 };
 
 Filepicker.prototype._showPreview = function( url, mediaType ) {
-    var $el;
+    let $el;
 
     this.$widget.find( '.file-preview' ).empty();
 
@@ -261,7 +253,7 @@ Filepicker.prototype._showPreview = function( url, mediaType ) {
 };
 
 Filepicker.prototype._updateDownloadLink = function( objectUrl, fileName ) {
-    utils.updateDownloadLink( this.$downloadLink[ 0 ], objectUrl, fileName );
+    updateDownloadLink( this.$downloadLink[ 0 ], objectUrl, fileName );
 };
 
 $.fn[ pluginName ] = function( options, event ) {
@@ -269,7 +261,7 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this ),
+        const $this = $( this ),
             data = $this.data( pluginName );
 
         //only instantiate if options is an object (i.e. not a string) and if it doesn't exist already
@@ -284,7 +276,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     // If this selector becomes too complex we can create a 'filepicker' class with XSL
     'selector': '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"]'

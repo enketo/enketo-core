@@ -1,27 +1,23 @@
-var $ = require( 'jquery' );
-var loadForm = require( '../helpers/loadForm' );
+import $ from 'jquery';
+import loadForm from '../helpers/loadForm';
 
-describe( 'Itemset functionality', function() {
-    var form;
+describe( 'Itemset functionality', () => {
+    let form;
 
-    describe( 'in a cascading multi-select after an itemset update', function() {
-        var $items1;
-        var $items2;
-        var items1 = ':not(.itemset-template) > input:checkbox[name="/select-from-selected/crops"]';
-        var items2 = ':not(.itemset-template) > input:checkbox[name="/select-from-selected/crop"]';
+    describe( 'in a cascading multi-select after an itemset update', () => {
+        let $items1;
+        let $items2;
+        const items1 = ':not(.itemset-template) > input:checkbox[name="/select-from-selected/crops"]';
+        const items2 = ':not(.itemset-template) > input:checkbox[name="/select-from-selected/crop"]';
 
-        beforeEach( function() {
+        beforeEach( () => {
             form = loadForm( 'select-from-selected.xml' );
             form.init();
-            $items1 = function() {
-                return form.view.$.find( items1 );
-            };
-            $items2 = function() {
-                return form.view.$.find( items2 );
-            };
+            $items1 = () => form.view.$.find( items1 );
+            $items2 = () => form.view.$.find( items2 );
         } );
 
-        it( 'retains (checks) any current values that are still valid values', function() {
+        it( 'retains (checks) any current values that are still valid values', () => {
             $items1().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
             expect( $items2().length ).toEqual( 2 );
             expect( $items2().siblings().text() ).toEqual( 'BananaCacao' );
@@ -48,7 +44,7 @@ describe( 'Itemset functionality', function() {
             expect( form.model.xml.querySelector( 'crop' ).textContent ).toEqual( 'banana cacao' );
         } );
 
-        it( 'removes (unchecks) any current values that are no longer valid values', function() {
+        it( 'removes (unchecks) any current values that are no longer valid values', () => {
             $items1().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
             // select both items in itemset 2
             $items2().filter( '[value="banana"], [value="cacao"]' ).prop( 'checked', true ).trigger( 'change' );
@@ -68,55 +64,46 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( 'in a cascading select using itext for all labels', function() {
-        var $items1Radio, $items2Radio, $items3Radio, $items1Select, $items2Select, $items3Select,
-            sel1Radio = ':not(.itemset-template) > input:radio[data-name="/new_cascading_selections/group1/country"]',
-            sel2Radio = ':not(.itemset-template) > input:radio[data-name="/new_cascading_selections/group1/city"]',
-            sel3Radio = ':not(.itemset-template) > input:radio[data-name="/new_cascading_selections/group1/neighborhood"]',
-            sel1Select = 'select[name="/new_cascading_selections/group2/country2"]',
-            sel2Select = 'select[name="/new_cascading_selections/group2/city2"]',
-            sel3Select = 'select[name="/new_cascading_selections/group2/neighborhood2"]';
+    describe( 'in a cascading select using itext for all labels', () => {
+        let $items1Radio;
+        let $items2Radio;
+        let $items3Radio;
+        let $items1Select;
+        let $items2Select;
+        let $items3Select;
+        const sel1Radio = ':not(.itemset-template) > input:radio[data-name="/new_cascading_selections/group1/country"]';
+        const sel2Radio = ':not(.itemset-template) > input:radio[data-name="/new_cascading_selections/group1/city"]';
+        const sel3Radio = ':not(.itemset-template) > input:radio[data-name="/new_cascading_selections/group1/neighborhood"]';
+        const sel1Select = 'select[name="/new_cascading_selections/group2/country2"]';
+        const sel2Select = 'select[name="/new_cascading_selections/group2/city2"]';
+        const sel3Select = 'select[name="/new_cascading_selections/group2/neighborhood2"]';
 
-        beforeEach( function() {
+        beforeEach( () => {
             form = loadForm( 'new_cascading_selections.xml' );
             form.init();
 
             spyOn( form.itemset, 'update' ).and.callThrough();
 
-            $items1Radio = function() {
-                return form.view.$.find( sel1Radio );
-            };
-            $items2Radio = function() {
-                return form.view.$.find( sel2Radio );
-            };
-            $items3Radio = function() {
-                return form.view.$.find( sel3Radio );
-            };
-            $items1Select = function() {
-                return form.view.$.find( sel1Select + ' > option:not(.itemset-template)' );
-            };
-            $items2Select = function() {
-                return form.view.$.find( sel2Select + ' > option:not(.itemset-template)' );
-            };
-            $items3Select = function() {
-                return form.view.$.find( sel3Select + ' > option:not(.itemset-template)' );
-            };
+            $items1Radio = () => form.view.$.find( sel1Radio );
+            $items2Radio = () => form.view.$.find( sel2Radio );
+            $items3Radio = () => form.view.$.find( sel3Radio );
+            $items1Select = () => form.view.$.find( `${sel1Select} > option:not(.itemset-template)` );
+            $items2Select = () => form.view.$.find( `${sel2Select} > option:not(.itemset-template)` );
+            $items3Select = () => form.view.$.find( `${sel3Select} > option:not(.itemset-template)` );
         } );
 
-        it( 'level 1: with <input type="radio"> elements has the expected amount of options', function() {
+        it( 'level 1: with <input type="radio"> elements has the expected amount of options', () => {
             expect( $items1Radio().length ).toEqual( 2 );
             expect( $items1Radio().siblings().text() ).toEqual( 'NederlandThe NetherlandsVerenigde StatenUnited States' );
             expect( $items2Radio().length ).toEqual( 0 );
             expect( $items3Radio().length ).toEqual( 0 );
         } );
 
-        it( 'level 2: with <input type="radio"> elements has the expected amount of options', function() {
+        it( 'level 2: with <input type="radio"> elements has the expected amount of options', () => {
             //select first option in cascade
-            form.view.$.find( sel1Radio + '[value="nl"]' ).prop( 'checked', true ).trigger( 'change' );
+            form.view.$.find( `${sel1Radio}[value="nl"]` ).prop( 'checked', true ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'country';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'country' ) ).toEqual( true );
 
             expect( $items1Radio().length ).toEqual( 2 );
             expect( $items2Radio().length ).toEqual( 3 );
@@ -124,20 +111,16 @@ describe( 'Itemset functionality', function() {
             expect( $items3Radio().length ).toEqual( 0 );
         } );
 
-        it( 'level 3: with <input type="radio"> elements has the expected amount of options', function() {
+        it( 'level 3: with <input type="radio"> elements has the expected amount of options', () => {
             //select first option
-            form.view.$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', true ).trigger( 'change' );
+            form.view.$.find( `${sel1Radio}[value="nl"]` ).attr( 'checked', true ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'country';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'country' ) ).toEqual( true );
 
             //select second option
-            form.view.$.find( sel2Radio + '[value="ams"]' ).attr( 'checked', true ).trigger( 'change' );
+            form.view.$.find( `${sel2Radio}[value="ams"]` ).attr( 'checked', true ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'city';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'city' ) ).toEqual( true );
 
             expect( $items1Radio().length ).toEqual( 2 );
             expect( $items2Radio().length ).toEqual( 3 );
@@ -145,12 +128,10 @@ describe( 'Itemset functionality', function() {
             expect( $items3Radio().siblings().text() ).toEqual( 'WesterparkWesterparkDe DamDam' );
 
             //select other first option to change itemset
-            form.view.$.find( sel1Radio + '[value="nl"]' ).attr( 'checked', false );
-            form.view.$.find( sel1Radio + '[value="usa"]' ).attr( 'checked', true ).trigger( 'change' );
+            form.view.$.find( `${sel1Radio}[value="nl"]` ).attr( 'checked', false );
+            form.view.$.find( `${sel1Radio}[value="usa"]` ).attr( 'checked', true ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'city';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'city' ) ).toEqual( true );
 
             expect( $items1Radio().length ).toEqual( 2 );
             expect( $items2Radio().length ).toEqual( 3 );
@@ -158,20 +139,18 @@ describe( 'Itemset functionality', function() {
             expect( $items3Radio().length ).toEqual( 0 );
         } );
 
-        it( 'level 1: with <select> <option> elements has the expected amount of options', function() {
+        it( 'level 1: with <select> <option> elements has the expected amount of options', () => {
             expect( $items1Select().length ).toEqual( 2 );
             expect( $items1Select().eq( 0 ).attr( 'value' ) ).toEqual( 'nl' );
             expect( $items1Select().eq( 1 ).attr( 'value' ) ).toEqual( 'usa' );
             expect( $items2Select().length ).toEqual( 0 );
         } );
 
-        it( 'level 2: with <select> <option> elements has the expected amount of options', function() {
+        it( 'level 2: with <select> <option> elements has the expected amount of options', () => {
             //select first option in cascade
             form.view.$.find( sel1Select ).val( 'nl' ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'country2';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'country2' ) ).toEqual( true );
 
             expect( $items1Select().length ).toEqual( 2 );
             expect( $items2Select().length ).toEqual( 3 );
@@ -180,20 +159,16 @@ describe( 'Itemset functionality', function() {
             expect( $items3Select().length ).toEqual( 0 );
         } );
 
-        it( 'level 3: with <select> <option> elements has the expected amount of options', function() {
+        it( 'level 3: with <select> <option> elements has the expected amount of options', () => {
             //select first option in cascade
             form.view.$.find( sel1Select ).val( 'nl' ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'country2';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'country2' ) ).toEqual( true );
 
             //select second option
             form.view.$.find( sel2Select ).val( 'ams' ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'city2';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'city2' ) ).toEqual( true );
 
             expect( $items1Select().length ).toEqual( 2 );
             expect( $items2Select().length ).toEqual( 3 );
@@ -204,9 +179,7 @@ describe( 'Itemset functionality', function() {
             //select other first option to change itemset
             form.view.$.find( sel1Select ).val( 'usa' ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'city2';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'city2' ) ).toEqual( true );
 
             expect( $items1Select().length ).toEqual( 2 );
             expect( $items2Select().length ).toEqual( 3 );
@@ -216,46 +189,38 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( 'in a cascading select that includes labels without itext', function() {
-        var $items1Radio, $items2Radio, $items3Radio,
-            sel1Radio = ':not(.itemset-template) > input:radio[data-name="/form/state"]',
-            sel2Radio = ':not(.itemset-template) > input:radio[data-name="/form/county"]',
-            sel3Radio = ':not(.itemset-template) > input:radio[data-name="/form/city"]';
+    describe( 'in a cascading select that includes labels without itext', () => {
+        let $items1Radio;
+        let $items2Radio;
+        let $items3Radio;
+        const sel1Radio = ':not(.itemset-template) > input:radio[data-name="/form/state"]';
+        const sel2Radio = ':not(.itemset-template) > input:radio[data-name="/form/county"]';
+        const sel3Radio = ':not(.itemset-template) > input:radio[data-name="/form/city"]';
 
-        beforeEach( function() {
+        beforeEach( () => {
             $.fx.off = true; //turn jQuery animations off
             form = loadForm( 'cascading_mixture_itext_noitext.xml' );
             form.init();
 
             spyOn( form.itemset, 'update' ).and.callThrough();
 
-            $items1Radio = function() {
-                return form.view.$.find( sel1Radio );
-            };
-            $items2Radio = function() {
-                return form.view.$.find( sel2Radio );
-            };
-            $items3Radio = function() {
-                return form.view.$.find( sel3Radio );
-            };
+            $items1Radio = () => form.view.$.find( sel1Radio );
+            $items2Radio = () => form.view.$.find( sel2Radio );
+            $items3Radio = () => form.view.$.find( sel3Radio );
         } );
 
-        it( 'level 3: with <input type="radio"> elements using direct references to instance labels without itext has the expected amount of options', function() {
+        it( 'level 3: with <input type="radio"> elements using direct references to instance labels without itext has the expected amount of options', () => {
             //select first option
-            form.view.$.find( sel1Radio + '[value="washington"]' )
+            form.view.$.find( `${sel1Radio}[value="washington"]` )
                 .attr( 'checked', true ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'state';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'state' ) ).toEqual( true );
 
             //select second option
-            form.view.$.find( sel2Radio + '[value="king"]' )
+            form.view.$.find( `${sel2Radio}[value="king"]` )
                 .attr( 'checked', true ).trigger( 'change' );
 
-            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( function( node ) {
-                return node === 'county';
-            } ) ).toEqual( true );
+            expect( form.itemset.update.calls.mostRecent().args[ 0 ].nodes.some( node => node === 'county' ) ).toEqual( true );
 
             expect( $items1Radio().length ).toEqual( 2 );
             expect( $items2Radio().length ).toEqual( 3 );
@@ -264,32 +229,32 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( 'in a cloned repeat with dependencies inside repeat, ', function() {
-        var countrySelector = '[data-name="/new_cascading_selections_inside_repeats/group1/country"]';
-        var citySelector = 'label:not(.itemset-template) [data-name="/new_cascading_selections_inside_repeats/group1/city"]';
-        var form;
-        var $masterRepeat;
-        var $clonedRepeat;
+    describe( 'in a cloned repeat with dependencies inside repeat, ', () => {
+        const countrySelector = '[data-name="/new_cascading_selections_inside_repeats/group1/country"]';
+        const citySelector = 'label:not(.itemset-template) [data-name="/new_cascading_selections_inside_repeats/group1/city"]';
+        let form;
+        let $masterRepeat;
+        let $clonedRepeat;
 
-        beforeEach( function() {
+        beforeEach( () => {
             form = loadForm( 'new_cascading_selections_inside_repeats.xml' );
             form.init();
             $masterRepeat = form.view.$.find( '.or-repeat' );
             //select usa in master repeat
-            $masterRepeat.find( countrySelector + '[value="usa"]' ).prop( 'checked', true ).trigger( 'change' );
+            $masterRepeat.find( `${countrySelector}[value="usa"]` ).prop( 'checked', true ).trigger( 'change' );
             //add repeat
             form.view.$.find( '.add-repeat-btn' ).click();
             $clonedRepeat = form.view.$.find( '.or-repeat.clone' );
         } );
 
-        it( 'the itemset of the cloned repeat is correct (and not a cloned copy of the master repeat)', function() {
+        it( 'the itemset of the cloned repeat is correct (and not a cloned copy of the master repeat)', () => {
             expect( $masterRepeat.find( citySelector ).length ).toEqual( 3 );
-            expect( $clonedRepeat.find( countrySelector + ':selected' ).val() ).toBeUndefined();
+            expect( $clonedRepeat.find( `${countrySelector}:selected` ).val() ).toBeUndefined();
             expect( $clonedRepeat.find( citySelector ).length ).toEqual( 0 );
         } );
 
-        it( 'the itemset of the master repeat is not affected if the cloned repeat is changed', function() {
-            $clonedRepeat.find( countrySelector + '[value="nl"]' ).prop( 'checked', true ).trigger( 'change' );
+        it( 'the itemset of the master repeat is not affected if the cloned repeat is changed', () => {
+            $clonedRepeat.find( `${countrySelector}[value="nl"]` ).prop( 'checked', true ).trigger( 'change' );
             expect( $masterRepeat.find( citySelector ).length ).toEqual( 3 );
             expect( $masterRepeat.find( citySelector ).eq( 0 ).attr( 'value' ) ).toEqual( 'den' );
             expect( $clonedRepeat.find( citySelector ).length ).toEqual( 3 );
@@ -297,10 +262,10 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( 'in a cloned repeat with dependencies outside the repeat', function() {
-        it( 'initializes the itemset', function() {
-            var form = loadForm( 'nested-repeats-itemset.xml' );
-            var selector = '[name="/bug747/name_of_region/name_of_zone/zone"]';
+    describe( 'in a cloned repeat with dependencies outside the repeat', () => {
+        it( 'initializes the itemset', () => {
+            const form = loadForm( 'nested-repeats-itemset.xml' );
+            const selector = '[name="/bug747/name_of_region/name_of_zone/zone"]';
             form.init();
             form.view.$.find( '[data-name="/bug747/name_of_region/region"][value="tigray"]' ).prop( 'checked', true ).trigger( 'change' );
             form.view.$.find( '.or-repeat-info[data-name="/bug747/name_of_region/name_of_zone"] .add-repeat-btn' ).click();
@@ -309,17 +274,17 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( ' in a cloned repeat with a predicate including current()/../', function() {
-        it( 'works', function() {
+    describe( ' in a cloned repeat with a predicate including current()/../', () => {
+        it( 'works', () => {
             // This test is added to show that once the makeBugCompliant function has been removed
             // itemsets with relative predicates still work.
-            var form = loadForm( 'reprelcur1.xml' );
+            const form = loadForm( 'reprelcur1.xml' );
             form.init();
             form.view.$.find( '[data-name="/repeat-relative-current/rep/crop"][value="banana"]' ).prop( 'checked', true ).trigger( 'change' );
             form.view.$.find( '.add-repeat-btn' ).click();
             form.view.$.find( '[data-name="/repeat-relative-current/rep/crop"][value="beans"]' ).eq( 1 ).prop( 'checked', true ).trigger( 'change' );
-            var sel1 = 'label:not(.itemset-template) > input[data-name="/repeat-relative-current/rep/sel_a"]';
-            var sel2 = 'label:not(.itemset-template) > input[data-name="/repeat-relative-current/rep/group/sel_b"]';
+            const sel1 = 'label:not(.itemset-template) > input[data-name="/repeat-relative-current/rep/sel_a"]';
+            const sel2 = 'label:not(.itemset-template) > input[data-name="/repeat-relative-current/rep/group/sel_b"]';
             expect( form.view.$.find( sel1 ).eq( 0 ).val() ).toEqual( 'banana' );
             expect( form.view.$.find( sel2 ).eq( 0 ).val() ).toEqual( 'banana' );
             expect( form.view.$.find( sel1 ).eq( 1 ).val() ).toEqual( 'beans' );
@@ -327,12 +292,12 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( 'with a rank widget', function() {
-        it( 'works', function() {
-            var form = loadForm( 'rank.xml' );
+    describe( 'with a rank widget', () => {
+        it( 'works', () => {
+            const form = loadForm( 'rank.xml' );
             form.init();
-            var $s1 = form.view.$.find( 'input[name="/rank/s1"]' );
-            var $r1 = form.view.$.find( 'input.rank[name="/rank/r1"]' );
+            const $s1 = form.view.$.find( 'input[name="/rank/s1"]' );
+            const $r1 = form.view.$.find( 'input.rank[name="/rank/r1"]' );
             $r1.next( '.widget' ).click();
 
             expect( $r1.val() ).toEqual( 'banana beans cacao coffee foddergrass foddertree' );
@@ -348,15 +313,15 @@ describe( 'Itemset functionality', function() {
         } );
     } );
 
-    describe( 'has experimental support for lang attributes on secondary instances', function() {
+    describe( 'has experimental support for lang attributes on secondary instances', () => {
         // As partially proposed here: https://github.com/opendatakit/xforms-spec/issues/88#issuecomment-284489005.
         // The use case is translation support for external data in itemsets (though it automatically works for internal secondary instances as well)
         // The reason for this test and experimental support is that this is used in Survey123.
         // If the proposal does not go anywhere, this could be moved to Survey123 somehow.
-        it( 'translates labels defined with translate()', function() {
-            var form = loadForm( 'secondary-lang.xml' );
-            var loadErrors = form.init();
-            var options = form.view.html.querySelectorAll( 'datalist>option:not(.itemset-template' );
+        it( 'translates labels defined with translate()', () => {
+            const form = loadForm( 'secondary-lang.xml' );
+            const loadErrors = form.init();
+            const options = form.view.html.querySelectorAll( 'datalist>option:not(.itemset-template' );
 
             expect( loadErrors.length ).toEqual( 0 );
             expect( options.length ).toEqual( 2 );
@@ -364,10 +329,10 @@ describe( 'Itemset functionality', function() {
             expect( options[ 1 ].value ).toEqual( 'tweo' );
         } );
 
-        it( 'shows external data labels in untranslated forms if those labels have a falsy lang attribute', function() {
-            var form = loadForm( 'secondary-lang-form-nolang.xml' );
-            var loadErrors = form.init();
-            var options = form.view.html.querySelectorAll( '.option-label.active' );
+        it( 'shows external data labels in untranslated forms if those labels have a falsy lang attribute', () => {
+            const form = loadForm( 'secondary-lang-form-nolang.xml' );
+            const loadErrors = form.init();
+            const options = form.view.html.querySelectorAll( '.option-label.active' );
 
             expect( loadErrors.length ).toEqual( 0 );
             expect( options.length ).toEqual( 2 );

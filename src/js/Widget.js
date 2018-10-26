@@ -1,6 +1,4 @@
-'use strict';
-
-var $ = require( 'jquery' );
+import $ from 'jquery';
 
 /**
  * A Widget class that can be extended to provide some of the basic widget functionality out of the box.
@@ -11,7 +9,7 @@ var $ = require( 'jquery' );
  * @param {(boolean|{touch: boolean})} options Options passed to the widget during instantiation
  * @param {string} event Not sure, this may not be necessary but the desktopSelectpicker does something with it
  */
-var Widget = function( element, options, event ) {
+const Widget = function( element, options, event ) {
     this.element = element;
     this.options = options || {};
     // Determining the namespace automatically from the name of the constructor will not work 
@@ -30,12 +28,12 @@ Widget.prototype = {
      *
      * @param  {Element} element The element the widget is applied on. Note that if element was clone this.element applies to the origin.
      */
-    destroy: function( element ) {
+    destroy( element ) {
         $( element )
             //data is not used elsewhere by enketo
             .removeData( this.namespace )
             //remove all the event handlers that used this.namespace as the namespace
-            .off( '.' + this.namespace )
+            .off( `.${this.namespace}` )
             //show the original element
             .show()
             //remove elements immediately after the target that have the widget class
@@ -46,7 +44,7 @@ Widget.prototype = {
      * Most of the times this branch can remain empty.
      * Check with $('.or-branch').show() whether input is disabled in a disabled branch.
      */
-    disable: function( element ) {
+    disable( element ) {
         $( element )
             .next( '.widget' ).addClass( 'readonly' );
     },
@@ -54,7 +52,7 @@ Widget.prototype = {
      * Does whatever necessary to enable the widget if its parent branch is enabled.
      * Most of the times this function can remain empty.
      */
-    enable: function( element ) {
+    enable( element ) {
         if ( !element.readOnly ) {
             $( element )
                 .next( '.widget' ).removeClass( 'readonly' );
@@ -64,9 +62,9 @@ Widget.prototype = {
      * Updates languages, <option>s (cascading selects, and (calculated) values.
      * Most of the times, this function needs to be overridden in the widget.
      */
-    update: function() {},
+    update() {},
     resetButtonHtml: '<button type="button" class="btn-icon-only btn-reset" aria-label="reset"><i class="icon icon-refresh"> </i></button>',
     downloadButtonHtml: '<a class="btn-icon-only btn-download" aria-label="download" download href=""><i class="icon icon-download"> </i></a>'
 };
 
-module.exports = Widget;
+export default Widget;

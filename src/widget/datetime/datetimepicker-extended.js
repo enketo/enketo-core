@@ -1,15 +1,13 @@
-'use strict';
-
-var Widget = require( '../../js/Widget' );
-var support = require( '../../js/support' );
-var $ = require( 'jquery' );
-var timeFormat = require( '../../js/format' ).time;
-var types = require( '../../js/types' );
-var pluginName = 'datetimepickerExtended';
-require( '../../js/extend' );
-require( 'bootstrap-datepicker' );
-require( '../time/timepicker' );
-require( '../../js/dropdown.jquery' );
+import Widget from '../../js/Widget';
+import support from '../../js/support';
+import $ from 'jquery';
+import { time as timeFormat } from '../../js/format';
+import types from '../../js/types';
+import '../../js/extend';
+import 'bootstrap-datepicker';
+import '../time/timepicker';
+import '../../js/dropdown.jquery';
+const pluginName = 'datetimepickerExtended';
 
 /**
  *
@@ -33,18 +31,18 @@ DatetimepickerExtended.prototype.constructor = DatetimepickerExtended;
  * Initialize timepicker widget
  */
 DatetimepickerExtended.prototype._init = function() {
-    var that = this;
-    var $dateTimeI = $( this.element );
+    const that = this;
+    const $dateTimeI = $( this.element );
     /*
       Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
       the timezone information (especially for instances-to-edit) if the values are not edited (the
       original entry may have been done in a different time zone than the edit). However, 
       values shown in the widget should reflect the local time representation of that value.
      */
-    var val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
-    var vals = val.split( 'T' );
-    var dateVal = vals[ 0 ];
-    var timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
+    const val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
+    const vals = val.split( 'T' );
+    const dateVal = vals[ 0 ];
+    const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
     this.$fakeDateI = this._createFakeDateInput();
     this.$fakeTimeI = this._createFakeTimeInput();
 
@@ -79,14 +77,14 @@ DatetimepickerExtended.prototype._init = function() {
         return false;
     } );
 
-    this.$fakeTimeI.on( 'change', function() {
+    this.$fakeTimeI.on( 'change', () => {
         changeVal();
         return false;
     } );
 
     //reset button
-    this.$fakeTimeI.next( '.btn-reset' ).on( 'click', function() {
-        var event = $dateTimeI.val() ? 'change' : '';
+    this.$fakeTimeI.next( '.btn-reset' ).on( 'click', () => {
+        const event = $dateTimeI.val() ? 'change' : '';
         if ( event || that.$fakeDateI.val() || that.$fakeTimeI.val() ) {
             that.$fakeDateI.val( '' ).trigger( event ).datepicker( 'update' );
             that.$fakeTimeI.val( '' ).trigger( event );
@@ -95,9 +93,9 @@ DatetimepickerExtended.prototype._init = function() {
 
     function changeVal() {
         if ( that.$fakeDateI.val().length > 0 && that.$fakeTimeI.val().length > 3 ) {
-            var d = that.$fakeDateI.val().split( '-' );
-            var timeModified = timeFormat.hour12 ? types.time.convertMeridian( that.$fakeTimeI.val() ) : that.$fakeTimeI.val();
-            var t = timeModified.split( ':' );
+            const d = that.$fakeDateI.val().split( '-' );
+            const timeModified = timeFormat.hour12 ? types.time.convertMeridian( that.$fakeTimeI.val() ) : that.$fakeTimeI.val();
+            const t = timeModified.split( ':' );
             $dateTimeI.val( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString() ).trigger( 'change' );
         } else {
             $dateTimeI.val( '' ).trigger( 'change' );
@@ -110,8 +108,8 @@ DatetimepickerExtended.prototype._init = function() {
  * @param  {string} format the date format
  * @return {jQuery}        the jQuery-wrapped fake date input element
  */
-DatetimepickerExtended.prototype._createFakeDateInput = function() {
-    var $fakeDate = $(
+DatetimepickerExtended.prototype._createFakeDateInput = () => {
+    const $fakeDate = $(
         '<div class="date">' +
         '<input class="ignore" type="text" placeholder="yyyy-mm-dd"/>' +
         '</div>' );
@@ -125,11 +123,8 @@ DatetimepickerExtended.prototype._createFakeDateInput = function() {
  * @return {jQuery}        the jQuery-wrapped fake date input element
  */
 DatetimepickerExtended.prototype._createFakeTimeInput = function() {
-    var $fakeTime = $(
-        '<div class="timepicker">' +
-        '<input class="ignore timepicker-default" type="text" placeholder="hh:mm"/>' +
-        this.resetButtonHtml +
-        '</div>' );
+    const $fakeTime = $(
+        `<div class="timepicker"><input class="ignore timepicker-default" type="text" placeholder="hh:mm"/>${this.resetButtonHtml}</div>` );
 
     return $fakeTime.find( 'input' );
 };
@@ -143,11 +138,11 @@ DatetimepickerExtended.prototype._createFakeTimeInput = function() {
 
 
 DatetimepickerExtended.prototype.update = function() {
-    var $dateTimeI = $( this.element );
-    var val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
-    var vals = val.split( 'T' );
-    var dateVal = vals[ 0 ];
-    var timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
+    const $dateTimeI = $( this.element );
+    const val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
+    const vals = val.split( 'T' );
+    const dateVal = vals[ 0 ];
+    const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
 
     this.$fakeDateI.datepicker( 'setDate', dateVal );
     this.$fakeTimeI.timepicker( 'setTime', timeVal );
@@ -160,13 +155,13 @@ DatetimepickerExtended.prototype.update = function() {
  * @param { jQuery } $fakeDateI Fake date input element
  */
 DatetimepickerExtended.prototype._setFocusHandler = function( $els ) {
-    var that = this;
+    const that = this;
     // Handle focus on widget.
-    $els.on( 'focus', function() {
+    $els.on( 'focus', () => {
         $( that.element ).trigger( 'fakefocus' );
     } );
     // Handle focus on original input (goTo functionality)
-    $( this.element ).on( 'applyfocus', function() {
+    $( this.element ).on( 'applyfocus', () => {
         $els.eq( 0 ).focus();
     } );
 };
@@ -176,9 +171,9 @@ $.fn[ pluginName ] = function( options, event ) {
     options = options || {};
 
     return this.each( function() {
-        var $this = $( this );
-        var data = $this.data( pluginName );
-        var badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
+        const $this = $( this );
+        const data = $this.data( pluginName );
+        const badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
 
         /*
             Samsung mobile browser (called "Internet") has a weird bug that appears sometimes (?) when an input field
@@ -201,7 +196,7 @@ $.fn[ pluginName ] = function( options, event ) {
     } );
 };
 
-module.exports = {
+export default {
     'name': pluginName,
     'selector': 'input[type="datetime"]:not([readonly])'
 };

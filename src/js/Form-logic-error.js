@@ -1,5 +1,3 @@
-'use strict';
-
 function FormLogicError( message ) {
     this.message = message || 'unknown';
     this.name = 'FormLogicError';
@@ -9,4 +7,4 @@ function FormLogicError( message ) {
 FormLogicError.prototype = Object.create( Error.prototype );
 FormLogicError.prototype.constructor = FormLogicError;
 
-module.exports = FormLogicError;
+export default FormLogicError;

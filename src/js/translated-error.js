@@ -1,5 +1,3 @@
-'use strict';
-
 // Error to be translated
 function TranslatedError( message, translationKey, translationOptions ) {
     this.message = message;
@@ -9,4 +7,4 @@ function TranslatedError( message, translationKey, translationOptions ) {
 TranslatedError.prototype = Object.create( Error.prototype );
 TranslatedError.prototype.name = 'TranslatedError';
 
-module.exports = TranslatedError;
+export default TranslatedError;
