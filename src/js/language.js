@@ -18,8 +18,8 @@ module.exports = {
         }
         var $langSelector = $( root.querySelector( '.form-language-selector' ) );
         this.$formLanguages = $( this.form.view.html.querySelector( '#form-languages' ) );
-        this.currentLang = this.$formLanguages.attr( 'data-default-lang' ) || this.$formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
-        var currentDirectionality = this.$formLanguages.find( '[value="' + this.currentLang + '"]' ).attr( 'data-dir' ) || 'ltr';
+        this._currentLang = this.$formLanguages.attr( 'data-default-lang' ) || this.$formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
+        var currentDirectionality = this.$formLanguages.find( '[value="' + this._currentLang + '"]' ).attr( 'data-dir' ) || 'ltr';
 
         if ( $langSelector.length && this.$formLanguages.find( 'option' ).length > 1 ) {
             this.$formLanguages
@@ -28,7 +28,7 @@ module.exports = {
             $langSelector.removeClass( 'hide' );
         }
 
-        this.$formLanguages.val( this.currentLang );
+        this.$formLanguages.val( this._currentLang );
 
         this.form.view.$
             .attr( 'dir', currentDirectionality );
@@ -39,15 +39,29 @@ module.exports = {
 
         this.$formLanguages.change( function( event ) {
             event.preventDefault();
-            that.currentLang = $( this ).val();
-            that.setAll( that.currentLang );
+            that._currentLang = $( this ).val();
+            that.setAll( that._currentLang );
         } );
     },
+    /**
+     * @deprecated
+     */
     getCurrentLang: function() {
+        console.deprecate( 'langs.getCurrentLang()', 'langs.currentLang' );
         return this.currentLang;
     },
+    get currentLang() {
+        return this._currentLang;
+    },
+    /**
+     * @deprecated
+     */
     getCurrentLangDesc: function() {
-        return this.$formLanguages.find( '[value="' + this.currentLang + '"]' ).text();
+        console.deprecate( 'langs.getCurrentLangDesc()', 'langs.currentLangDesc' );
+        return this.currentLangDesc;
+    },
+    get currentLangDesc() {
+        return this.$formLanguages.find( '[value="' + this._currentLang + '"]' ).text();
     },
     setAll: function( lang ) {
         var that = this;

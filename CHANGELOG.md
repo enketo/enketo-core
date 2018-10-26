@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Does not show select options from external data if form is not translated (Survey123 only).
+
 [4.60.5] - 2018-10-25
 ----------------------
 ##### Fixed

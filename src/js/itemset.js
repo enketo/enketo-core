@@ -144,7 +144,8 @@ module.exports = {
                         case 'langs':
                             translations = labels.map( function( label ) {
                                 var lang = label.getAttribute( 'lang' );
-                                var active = lang === that.form.langs.getCurrentLang();
+                                // Two falsy values should set active to true.
+                                var active = ( !lang && !that.form.langs.currentLang ) || ( lang === that.form.langs.currentLang );
                                 return { language: lang, type: 'span', text: label.textContent, active: active };
                             } );
                             break;
@@ -152,7 +153,6 @@ module.exports = {
                             translations = [ { language: '', type: 'span', text: labels && labels.length ? labels[ 0 ].textContent : 'error', active: true } ];
                     }
                 }
-
                 // Obtain the value of the secondary instance item found.
                 var value = that.getNodeFromItem( valueRef, item ).textContent;
 
@@ -241,7 +241,9 @@ module.exports = {
             el.classList.add( 'option-label' );
         }
         el.classList.toggle( 'active', translation.active );
-        el.lang = translation.language;
+        if ( translation.language ) {
+            el.lang = translation.language;
+        }
         el.dataset.optionValue = value;
         if ( translation.src ) {
             el.src = translation.src;

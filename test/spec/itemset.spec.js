@@ -363,5 +363,16 @@ describe( 'Itemset functionality', function() {
             expect( options[ 0 ].value ).toEqual( 'één' );
             expect( options[ 1 ].value ).toEqual( 'tweo' );
         } );
+
+        it( 'shows external data labels in untranslated forms if those labels have a falsy lang attribute', function() {
+            var form = loadForm( 'secondary-lang-form-nolang.xml' );
+            var loadErrors = form.init();
+            var options = form.view.html.querySelectorAll( '.option-label.active' );
+
+            expect( loadErrors.length ).toEqual( 0 );
+            expect( options.length ).toEqual( 2 );
+            expect( options[ 0 ].textContent ).toEqual( 'one' );
+            expect( options[ 1 ].textContent ).toEqual( 'two' );
+        } );
     } );
 } );
