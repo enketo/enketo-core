@@ -3,6 +3,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------------
+##### Fixed
+- Default values not loaded in non-first repeat instances.
+
+[5.0.0-alpha.0] - 2016-11-05
+----------------------------
+##### Changed
+- Converted to modern Javascript **WARNING: requires new build systems**
+
 [4.60.6] - 2016-10-26
 ----------------------
 ##### Fixed

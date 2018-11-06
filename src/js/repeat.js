@@ -59,10 +59,11 @@ export default {
          * Widgets not yet initialized. Values not yet set.
          */
         $repeatInfos.siblings( '.or-repeat' ).reverse().each( function() {
-            const $templateEl = $( this ).remove();
-            const xPath = $templateEl.attr( 'name' );
-            $templateEl.removeClass( 'contains-current current' ).find( '.current' ).removeClass( 'current' );
-            that.templates[ xPath ] = $templateEl[ 0 ];
+            const templateEl = this.cloneNode( true );
+            const xPath = templateEl.getAttribute( 'name' );
+            this.remove();
+            $( templateEl ).removeClass( 'contains-current current' ).find( '.current' ).removeClass( 'current' );
+            that.templates[ xPath ] = templateEl;
         } );
 
         $repeatInfos.filter( '*:not([data-repeat-count])' ).reverse()

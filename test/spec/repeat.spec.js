@@ -56,6 +56,15 @@ describe( 'repeat functionality', () => {
             expect( $node4.length ).toEqual( 1 );
             expect( $node4.parent().hasClass( 'invalid-constraint' ) ).toBe( false );
         } );
+
+        it( 'populates default values in new clone', () => {
+            const formA = loadForm( 'repeat-default.xml' );
+            formA.init();
+            const repeatButton = formA.view.html.querySelector( '.add-repeat-btn' );
+            repeatButton.click();
+            repeatButton.click();
+            expect( [ ...formA.view.html.querySelectorAll( '[name="/repdef/rep/num"]' ) ].map( i => i.value ) ).toEqual( [ '5', '5', '5' ] );
+        } );
     } );
 
     describe( 'fixes unique ids in cloned repeats', () => {

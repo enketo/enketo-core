@@ -344,7 +344,11 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
 
     groupIndex = ( typeof groupIndex !== 'undefined' ) ? groupIndex : null;
 
-    this.model.node( selector, groupIndex, { onlyLeaf: true, noEmpty: true } ).getElements()
+    this.model.node( selector, groupIndex ).getElements()
+        .reduce( ( nodes, current ) => {
+            const newNodes = [ ...current.querySelectorAll( '*' ) ].filter( ( n ) => n.children.length === 0 && n.textContent );
+            return nodes.concat( newNodes );
+        }, [] )
         .forEach( element => {
             try {
                 var value = element.textContent;
