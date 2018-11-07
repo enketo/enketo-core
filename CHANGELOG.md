@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------------
 ##### Fixed
 - Default values not loaded in non-first repeat instances.
+- Table widget option hover background is not centered around radiobutton/checkbox.
 
 [5.0.0-alpha.0] - 2016-11-05
 ----------------------------
