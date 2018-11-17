@@ -1,183 +1,163 @@
-const pluginName = 'rangewidget';
-import $ from 'jquery';
 import Widget from '../../js/Widget';
 import { isNumber } from '../../js/utils';
+import events from '../../js/event';
 
-/*
- * @constructor
- * @param {Element}                       element   Element to apply widget to.
- * @param {{}|{helpers: *}}                             options   options
- */
-function RangeWidget( element, options ) {
-    this.namespace = pluginName;
-    Widget.call( this, element, options );
-    this._init();
-}
+class RangeWidget extends Widget {
 
-RangeWidget.prototype = Object.create( Widget.prototype );
-RangeWidget.prototype.constructor = RangeWidget;
-
-RangeWidget.prototype._init = function() {
-    const that = this;
-    this.props = this._getProps();
-    const $widget = $(
-        `<div class="widget range-widget"><div class="range-widget__wrap"><div class="range-widget__current"/><div class="range-widget__bg"/><div class="range-widget__ticks"/><div class="range-widget__scale"><span class="range-widget__scale__start"/>${this._stepsBetweenHtml( this.props )}${this.resetButtonHtml}<span class="range-widget__scale__end"/></div><div class="range-widget__bulb"><div class="range-widget__bulb__inner"/><div class="range-widget__bulb__mercury"/></div></div><input type="range" class="ignore empty" min="${this.props.min}" max="${this.props.max}" step="${this.props.step}"/></div>`
-    );
-
-    $widget.find( '.range-widget__scale__start' ).text( this.props.min );
-    $widget.find( '.range-widget__scale__end' ).text( this.props.max );
-
-    this.$number = $( this.element );
-    this.$range = $widget.find( 'input' );
-    this.$current = $widget.find( '.range-widget__current' );
-
-    this.$number
-        .after( $widget )
-        .on( 'applyfocus', () => {
-            that.$range.focus();
-        } )
-        .addClass( 'hide' );
-
-    if ( this.props.readonly ) {
-        this.disable();
+    static get selector() {
+        return '.or-appearance-distress input[type="number"], .question > input[type="number"][min][max][step]';
     }
 
-    this.$range
-        .on( 'change', function() {
-            that.$current.text( this.value );
-            that.$number.val( this.value ).trigger( 'change' );
-            that._updateMercury( ( this.value - this.min ) / ( that.props.max - that.props.min ) );
-        } )
-        .on( 'focus', () => {
-            that.$number.trigger( 'fakefocus' );
+    _init() {
+        const that = this;
+
+        const fragment = document.createRange().createContextualFragment(
+            `<div class="widget range-widget">
+                <div class="range-widget__wrap">
+                    <div class="range-widget__current"></div>
+                    <div class="range-widget__bg"></div>
+                    <div class="range-widget__ticks"></div>
+                    <div class="range-widget__scale">
+                        <span class="range-widget__scale__start"></span>
+                        ${this._stepsBetweenHtmlStr( this.props )}
+                        <span class="range-widget__scale__end"></span>
+                    </div>
+                    <div class="range-widget__bulb">
+                        <div class="range-widget__bulb__inner"></div>
+                        <div class="range-widget__bulb__mercury"></div>
+                    </div>
+                </div>
+                <input type="range" class="ignore empty" min="${this.props.min}" max="${this.props.max}" step="${this.props.step}"/>
+            </div>`
+        );
+        fragment.querySelector( '.range-widget__scale__end' ).before( this.resetButtonHtml );
+        fragment.querySelector( '.range-widget__scale__start' ).textContent = this.props.min;
+        fragment.querySelector( '.range-widget__scale__end' ).textContent = this.props.max;
+
+        this.element.after( fragment );
+        this.element.classList.add( 'hide' );
+        this.element.addEventListener( 'applyfocus', () => {
+            this.range.focus();
         } );
 
-    // Do not use change handler for this because this doesn't if the user clicks on the internal default
-    // value of the range input.
-    $widget
-        .find( 'input.empty' )
-        .on( 'click', () => {
-            that.$range.removeClass( 'empty' ).change();
+        this.widget = this.question.querySelector( '.widget' );
+        this.range = this.widget.querySelector( 'input' );
+        this.current = this.widget.querySelector( '.range-widget__current' );
+
+        if ( this.props.readonly ) {
+            this.disable();
+        }
+
+        this.range.addEventListener( 'change', () => {
+            this.current.textContent = this.value;
+            this.originalInputValue = this.value;
+            this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
+        } );
+        this.range.addEventListener( 'focus', () => {
+            this.element.dispatchEvent( events.FakeFocus() );
         } );
 
-    $widget
-        .find( '.btn-reset' )
-        .on( 'click', this._reset.bind( this ) );
+        // Do not use change handler for this because this doesn't if the user clicks on the internal DEFAULT
+        // value of the range input.
+        this.widget.querySelector( 'input.empty' ).addEventListener( 'click', () => {
+            this.range.classList.remove( 'empty' );
+            this.range.dispatchEvent( events.Change() );
+        } );
 
-    // loads the default value if exists, else resets
-    this.update();
+        this.widget.querySelector( '.btn-reset' ).addEventListener( 'click', this._reset.bind( this ) );
 
-    let ticks = this.props.ticks ? Math.ceil( Math.abs( ( this.props.max - this.props.min ) / this.props.step ) ) : 1;
-    // Now reduce to a number < 50 to avoid showing a sold black tick line.
-    let divisor = Math.ceil( ticks / 50 );
-    while ( ticks % divisor && divisor < ticks ) {
-        divisor++;
+        // loads the default value if exists, else resets
+        this.update();
+
+        let ticks = this.props.ticks ? Math.ceil( Math.abs( ( this.props.max - this.props.min ) / this.props.step ) ) : 1;
+        // Now reduce to a number < 50 to avoid showing a sold black tick line.
+        let divisor = Math.ceil( ticks / 50 );
+        while ( ticks % divisor && divisor < ticks ) {
+            divisor++;
+        }
+        ticks = ticks / divisor;
+
+        // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little 
+        // issues seemingly related to rounding or browser sloppiness. This far is less elegant but nice and robust:
+        this.widget.querySelector( '.range-widget__ticks' )
+            .append( document.createRange().createContextualFragment( new Array( ticks ).fill( '<span></span>' ).join( '' ) ) );
     }
-    ticks = ticks / divisor;
 
-    // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little 
-    // issues seemingly related to rounding or browser sloppiness. This is less elegant but robust:
-    $widget.find( '.range-widget__ticks' ).append( new Array( ticks ).fill( '<span/>' ).join( '' ) );
-};
+    _updateMercury( completeness ) {
+        const trackHeight = this.widget.querySelector( '.range-widget__ticks' ).clientHeight;
+        const bulbHeight = this.widget.querySelector( '.range-widget__bulb' ).clientHeight;
+        this.widget.querySelector( '.range-widget__bulb__mercury' ).style.height = `${( completeness * trackHeight ) + ( 0.5 * bulbHeight )}px`;
+    }
 
-RangeWidget.prototype._getProps = function() {
-    const min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
-    const max = isNumber( this.element.getAttribute( 'max' ) ) ? this.element.getAttribute( 'max' ) : 10;
-    const step = isNumber( this.element.getAttribute( 'step' ) ) ? this.element.getAttribute( 'step' ) : 1;
-    const $q = $( this.element ).closest( '.question' );
-    const distress = $q.hasClass( 'or-appearance-distress' );
-    return {
-        min: Number( min ),
-        max: Number( max ),
-        step: Number( step ),
-        readonly: this.element.readOnly,
-        vertical: $q.hasClass( 'or-appearance-vertical' ) || distress,
-        ticks: !$q.hasClass( 'or-appearance-no-ticks' ),
-        distress,
-    };
-};
-
-RangeWidget.prototype._updateMercury = function( completeness ) {
-    const $widget = $( this.element ).next( '.widget' );
-    const trackHeight = $widget.find( '.range-widget__ticks' ).height();
-    const bulbHeight = $widget.find( '.range-widget__bulb' ).height();
-    $widget.find( '.range-widget__bulb__mercury' ).css( 'height', `${( completeness * trackHeight ) + ( 0.5 * bulbHeight )}px` );
-};
-
-RangeWidget.prototype._stepsBetweenHtml = props => {
-    let html = '';
-    if ( props.distress ) {
-        const stepsCount = ( props.max - props.min ) / props.step;
-        if ( stepsCount <= 10 && ( props.max - props.min ) % props.step === 0 ) {
-            for ( let i = props.min + props.step; i < props.max; i += props.step ) {
-                html += `<span class="range-widget__scale__between">${i}</span>`;
+    _stepsBetweenHtmlStr( props ) {
+        let html = '';
+        if ( props.distress ) {
+            const stepsCount = ( props.max - props.min ) / props.step;
+            if ( stepsCount <= 10 && ( props.max - props.min ) % props.step === 0 ) {
+                for ( let i = props.min + props.step; i < props.max; i += props.step ) {
+                    html += `<span class="range-widget__scale__between">${i}</span>`;
+                }
             }
         }
+        return html;
     }
-    return html;
-};
 
-RangeWidget.prototype._reset = function() {
-    this.$range
-        .val( '' ) // this actually sets the value to some default value, not really helpful
-        .addClass( 'empty' );
-
-    this.$current.text( '-' );
-    this.$number.val( '' ).trigger( 'change' );
-    this._updateMercury( -1 );
-};
-
-RangeWidget.prototype.disable = function() {
-    $( this.element )
-        .next( '.widget' )
-        .find( 'input, button' )
-        .prop( 'disabled', true );
-};
-
-RangeWidget.prototype.enable = function() {
-    if ( this.props && !this.props.readonly ) {
-        $( this.element )
-            .next( '.widget' )
-            .find( 'input, button' )
-            .prop( 'disabled', false );
+    _reset() {
+        this.value = '';
+        this.originalInputValue = '';
+        this.current.textContent = '-';
+        this._updateMercury( -1 );
     }
-};
 
-RangeWidget.prototype.update = function() {
-    const value = this.element.value;
-
-    if ( isNumber( value ) ) {
-        $( this.element )
-            .next( '.widget' )
-            .find( 'input' )
-            .val( value )
-            .trigger( 'change' )
-            .removeClass( 'empty' );
-    } else {
-        this._reset();
+    disable() {
+        this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = true );
     }
-};
 
-
-$.fn[ pluginName ] = function( options, event ) {
-
-    options = options || {};
-
-    return this.each( function() {
-        const $this = $( this );
-        const data = $this.data( pluginName );
-
-        if ( !data && typeof options === 'object' ) {
-            $this.data( pluginName, new RangeWidget( this, options, event ) );
-        } else if ( data && typeof options == 'string' ) {
-            data[ options ]( this );
+    enable() {
+        if ( this.props && !this.props.readonly ) {
+            this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
         }
-    } );
-};
+    }
+
+    update() {
+        const value = this.element.value;
+
+        if ( isNumber( value ) ) {
+            this.value = value;
+            this.range.dispatchEvent( events.Change() );
+        } else {
+            this._reset();
+        }
+    }
+
+    get props() {
+        const props = this._props;
+        const min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
+        const max = isNumber( this.element.getAttribute( 'max' ) ) ? this.element.getAttribute( 'max' ) : 10;
+        const step = isNumber( this.element.getAttribute( 'step' ) ) ? this.element.getAttribute( 'step' ) : 1;
+        const distress = props.appearances.includes( 'distress' );
+
+        props.min = Number( min );
+        props.max = Number( max );
+        props.step = Number( step );
+        props.vertical = props.appearances.includes( 'vertical' ) || distress;
+        props.ticks = !props.appearances.includes( 'no-ticks' );
+        props.distress = distress;
+
+        return props;
+    }
+
+    get value() {
+        return this.range.classList.contains( 'empty' ) ? '' : this.range.value;
+    }
+
+    set value( value ) {
+        this.range.value = value;
+        // value '' actually sets the value to some default value in html range input, not really helpful
+        this.range.classList.toggle( 'empty', value === '' );
+    }
 
 
-export default {
-    'name': pluginName,
-    // avoid initizialing number inputs in geopoint widgets!
-    'selector': '.or-appearance-distress input[type="number"], .question > input[type="number"][min][max][step]'
-};
+}
+
+export default RangeWidget;

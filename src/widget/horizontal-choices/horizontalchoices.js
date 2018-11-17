@@ -1,72 +1,29 @@
-/**
- * Horizontal Choices Widget
- *
- */
-import $ from 'jquery';
-
 import Widget from '../../js/Widget';
-
-const pluginName = 'horizontalChoices';
 
 /**
  * Horizontal Choices Widgets. Adds a filler if the last row contains two elements.
  * The filler avoids the last radiobutton or checkbox to not be lined up correctly below the second column.
- *
- * @constructor
- * @param {Element}                       element   Element to apply widget to.
- * @param {(boolean|{touch: boolean})}    options   options
- * @param {*=}                            event     event
  */
+class HorizontalChoices extends Widget {
 
-function HorizontalChoices( element, options ) {
-    // set the namespace (important!)
-    this.namespace = pluginName;
-    // call the Super constructor
-    Widget.call( this, element, options );
-    this._init();
+    static get selector() {
+        return '.or-appearance-horizontal';
+    }
+
+    _init() {
+        this.element.querySelectorAll( '.option-wrapper' ).forEach( wrapper => {
+            const COLUMNS = 3;
+
+            let fillers = COLUMNS - wrapper.querySelectorAll( 'label' ).length % COLUMNS;
+
+            while ( fillers < COLUMNS && fillers > 0 ) {
+                wrapper.append( document.createRange().createContextualFragment( '<label class="filler"></label>' ) );
+                fillers--;
+            }
+            // if added to correct question type, add initialized class
+            this.question.classList.add( 'or-horizontal-initialized' );
+        } );
+    }
 }
 
-HorizontalChoices.prototype = Object.create( Widget.prototype );
-
-HorizontalChoices.prototype.constructor = HorizontalChoices;
-
-HorizontalChoices.prototype._init = function() {
-    $( this.element ).find( '.option-wrapper' ).each( function() {
-        const COLUMNS = 3;
-        const $wrapper = $( this );
-        let fillers = COLUMNS - $wrapper.find( 'label' ).length % COLUMNS;
-
-        while ( fillers < COLUMNS && fillers > 0 ) {
-            $wrapper.append( '<label class="filler"></label>' );
-            fillers--;
-        }
-        // if added to correct question type, add initialized class
-        $( this ).closest( '.question' ).addClass( 'or-horizontal-initialized' );
-    } );
-};
-
-
-$.fn[ pluginName ] = function( options, event ) {
-
-    options = options || {};
-
-    return this.each( function() {
-        const $this = $( this ),
-            data = $this.data( pluginName );
-
-        //only instantiate if options is an object (i.e. not a string) and if it doesn't exist already
-        if ( !data && typeof options === 'object' ) {
-            $this.data( pluginName, new HorizontalChoices( this, options, event ) );
-        }
-        //only call method if widget was instantiated before
-        else if ( data && typeof options === 'string' ) {
-            //pass the element as a parameter as this is used in destroy() for cloned elements and widgets
-            data[ options ]( this );
-        }
-    } );
-};
-
-export default {
-    'name': pluginName,
-    'selector': '.or-appearance-horizontal'
-};
+export default HorizontalChoices;

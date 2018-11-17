@@ -2,7 +2,7 @@ import a from '../widget/note/notewidget';
 import b from '../widget/select-desktop/selectpicker';
 import c from '../widget/select-mobile/selectpicker';
 import e from '../widget/select-autocomplete/autocomplete';
-//import f from '../widget/geo-esri/geopicker'   ;
+//import f from '../widget/geo-esri/geopicker';
 import f from '../widget/geo/geopicker';
 import g from '../widget/textarea/textarea';
 import h from '../widget/table/tablewidget';
@@ -24,5 +24,6 @@ import w from '../widget/image-map/image-map';
 import x from '../widget/range/range-widget';
 import y from '../widget/rank/rank-widget';
 import z from '../widget/url/url-widget';
+//import zz from '../widget/example/my-widget';
 
-export default [ a, b, c, /*d,*/ e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z ];
+export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z ];

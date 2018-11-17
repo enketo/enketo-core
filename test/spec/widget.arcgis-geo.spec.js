@@ -1,23 +1,22 @@
-import $ from 'jquery';
-import widget from '../../src/widget/geo-esri/geopicker';
+import ArcGisGeopicker from '../../src/widget/geo-esri/geopicker';
+import { testStaticProperties } from '../helpers/testWidget';
 
-const form = '<form class="or"><label class="question"><input type="text" data-type-xml="geopoint"/></label></form>';
+testStaticProperties( ArcGisGeopicker );
 
-describe( 'ESRI geopoint widget', () => {
-    let $form, geopointPicker;
+const FORM =
+    `<form class="or">
+        <label class="question">
+            <input name="/data/geop" type="text" data-type-xml="geopoint"/>
+        </label>
+    </form>`;
+
+describe( 'ArcGIS geopoint widget', () => {
+    let geopointPicker;
 
     beforeEach( () => {
-        $form = $( form );
-        $( 'body' ).append( $form );
-        geopointPicker = $form.find( widget.selector )[ widget.name ]().data( 'geopicker' );
-    } );
-
-    afterEach( () => {
-        $form.remove();
-    } );
-
-    it( 'can be instantiated', () => {
-        expect( widget.name ).not.toBeUndefined();
+        const fragment = document.createRange().createContextualFragment( FORM );
+        const control = fragment.querySelector( 'input' );
+        geopointPicker = new ArcGisGeopicker( control );
     } );
 
     describe( 'convertor of LatLng and degrees, minutes, seconds', () => {

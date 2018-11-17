@@ -194,7 +194,7 @@ export default {
             // Update outputs that are children of branch
             // TODO this re-evaluates all outputs in the form which is not efficient!
             this.form.output.update();
-            this.form.widgets.enable( $branchNode );
+            this.form.widgets.enable( $branchNode[ 0 ] );
             this.activate( $branchNode );
         }
         return change;
@@ -274,7 +274,7 @@ export default {
      */
     deactivate( $branchNode ) {
         $branchNode.addClass( 'disabled' );
-        this.form.widgets.disable( $branchNode );
+        this.form.widgets.disable( $branchNode[ 0 ] );
         this.setDisabledProperty( $branchNode, true );
     }
 };

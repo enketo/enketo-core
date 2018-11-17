@@ -1,23 +1,23 @@
-import $ from 'jquery';
-import widget from '../../src/widget/geo/geopicker';
+import Geopicker from '../../src/widget/geo/geopicker';
+import { runAllCommonWidgetTests } from '../helpers/testWidget';
 
-const form = '<form class="or"><label class="question"><input type="text" data-type-xml="geoshape"/></label></form>';
+const FORM =
+    `<form class="or">
+        <label class="question">
+            <input name="/data/geo" type="text" data-type-xml="geoshape"/>
+        </label>
+    </form>`;
+const SHAPE = '7.9377 -11.5845 0 0;7.9324 -11.5902 0 0;7.927 -11.5857 0 0;7.9377 -11.5845 0 0';
+
+runAllCommonWidgetTests( Geopicker, FORM, SHAPE );
 
 describe( 'geoshape widget', () => {
-    let $form, geoshapePicker;
+    let geoshapePicker;
 
     beforeEach( () => {
-        $form = $( form );
-        $( 'body' ).append( $form );
-        geoshapePicker = $form.find( widget.selector )[ widget.name ]().data( widget.name );
-    } );
-
-    afterEach( () => {
-        $form.remove();
-    } );
-
-    it( 'can be instantiated', () => {
-        expect( geoshapePicker ).not.toBeUndefined();
+        const fragment = document.createRange().createContextualFragment( FORM );
+        const control = fragment.querySelector( 'input' );
+        geoshapePicker = new Geopicker( control );
     } );
 
     describe( 'KML to Leaflet conversion', () => {

@@ -539,6 +539,8 @@ const theClass = {
     ***************************************************************************/
 
     lettersHelper( set, row, col ) {
+        let l1;
+        let l2;
 
         // handle case of last row
         if ( row === 0 ) {
@@ -557,8 +559,8 @@ const theClass = {
         switch ( set ) {
 
             case 1:
-                let l1 = "ABCDEFGH"; // column ids
-                let l2 = "ABCDEFGHJKLMNPQRSTUV"; // row ids
+                l1 = "ABCDEFGH"; // column ids
+                l2 = "ABCDEFGHJKLMNPQRSTUV"; // row ids
                 return l1.charAt( col ) + l2.charAt( row );
 
             case 2:

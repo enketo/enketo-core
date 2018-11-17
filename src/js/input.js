@@ -2,6 +2,8 @@
  * Form control (input, select, textarea) helper functions.
  */
 
+import types from './types';
+
 export default {
     // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
     getWrapNodes( $inputs ) {
@@ -132,29 +134,33 @@ export default {
         }
         return this.getWrapNodes( this.form.view.$.find( `[${attr}="${name}"]` ) ).eq( index ).find( `[${attr}="${name}"]:not(.ignore)` ).eq( 0 );
     },
-    setVal( $input, value ) {
+    setVal( $input, value, event = 'inputupdate.enketo' ) {
         let $inputs;
         const type = this.getInputType( $input );
         const $question = this.getWrapNodes( $input );
         const name = this.getName( $input );
 
         if ( type === 'radio' ) {
+            // TODO: should this revert to name if data-name is not present. Is data-name always present on radiobuttons?
             $inputs = $question.find( `[data-name="${name}"]:not(.ignore)` );
         } else {
             // why not use this.getIndex?
             $inputs = $question.find( `[name="${name}"]:not(.ignore)` );
 
             if ( type === 'file' ) {
-                $input.attr( 'data-loaded-file-name', value );
-                // console.error('Cannot set value of file input field (value: '+value+'). If trying to load '+
-                //  'this record for editing this file input field will remain unchanged.');
-                return false;
+                // value of file input can be reset to empty but not to a non-empty value
+                if ( value ) {
+                    $input.attr( 'data-loaded-file-name', value );
+                    // console.error('Cannot set value of file input field (value: '+value+'). If trying to load '+
+                    //  'this record for editing this file input field will remain unchanged.');
+                    return false;
+                }
             }
 
             if ( type === 'date' || type === 'datetime' ) {
                 // convert current value (loaded from instance) to a value that a native datepicker understands
                 // TODO: test for IE, FF, Safari when those browsers start including native datepickers
-                value = this.form.model.types[ type ].convert( value );
+                value = types[ type ].convert( value );
             }
 
             if ( type === 'time' ) {
@@ -180,6 +186,7 @@ export default {
         }
 
         if ( this.isMultiple( $input ) === true ) {
+            // TODO: It's weird that setVal does not take an array value but getVal returns an array value for multiple selects!
             value = value.split( ' ' );
         } else if ( type === 'radio' ) {
             value = [ value ];
@@ -192,7 +199,9 @@ export default {
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
                 $inputs.val( value );
                 // don't trigger on all radiobuttons/checkboxes
-                $inputs.eq( 0 ).trigger( 'inputupdate.enketo' );
+                if ( event ) {
+                    $inputs.eq( 0 ).trigger( 'inputupdate.enketo' );
+                }
             }
         }
 

@@ -1,16 +1,9 @@
-let options;
-let $form;
-let init;
-let enable;
-let disable;
-let _getElements;
-let _instantiate;
-let _setLangChangeListener;
-let _setOptionChangeListener;
-let _setValChangeListener;
 import $ from 'jquery';
 import _widgets from 'enketo/widgets';
+import { elementDataStore as data } from './dom-utils';
 const widgets = _widgets.filter( widget => widget.selector );
+let options;
+let formHtml;
 
 /**
  * Initializes widgets
@@ -18,21 +11,22 @@ const widgets = _widgets.filter( widget => widget.selector );
  * @param  {jQuery} $group The element inside which the widgets have to be initialized.
  * @param { *} options Options (e.g. helper function of Form.js passed)
  */
-
-init = function( $group, opts ) {
+function init( $group, opts = {} ) {
     if ( !this.form ) {
         throw new Error( 'Widgets module not correctly instantiated with form property.' );
     }
-    $form = this.form.view.$;
-    $group = $group || $form;
-    options = options || opts;
 
-    widgets.forEach( widget => {
-        _instantiate( widget, $group );
+    options = opts;
+    formHtml = this.form.view.html; // not sure why this is only available in init
+
+    const group = $group && $group.length ? $group[ 0 ] : formHtml;
+
+    widgets.forEach( Widget => {
+        _instantiate( Widget, group );
     } );
 
     return true;
-};
+}
 
 /**
  * Enables widgets if they weren't enabled already when the branch was enabled by the controller.
@@ -42,94 +36,84 @@ init = function( $group, opts ) {
  * actually preferable than waiting for create() to complete, because enable() will never do anything that isn't
  * done during create().
  *
- * @param  {jQuery} $group [description]
+ * @param  {Element} group [description]
  */
-enable = $group => {
-    let widget, $els;
-
-    for ( let i = 0; i < widgets.length; i++ ) {
-        widget = widgets[ i ];
-        if ( widget.name ) {
-            $els = _getElements( $group, widget.selector );
-            $els[ widget.name ]( 'enable' );
-        }
-    }
-};
+function enable( group ) {
+    widgets.forEach( Widget => {
+        const els = _getElements( group, Widget.selector );
+        new Collection( els ).enable( Widget );
+    } );
+}
 
 /**
  * Disables  widgets, if they aren't disabled already when the branch was disabled by the controller.
  * In most widgets, this function will do nothing because all fieldsets, inputs, textareas and selects will get
  * the disabled attribute automatically when the branch element provided as parameter becomes irrelevant.
  *
- * @param  { jQuery } $group The element inside which all widgets need to be disabled.
+ * @param  { Element } group The element inside which all widgets need to be disabled.
  */
-disable = $group => {
-    let widget, $els;
-
-    for ( let i = 0; i < widgets.length; i++ ) {
-
-        widget = widgets[ i ];
-        if ( widget.name ) {
-            $els = _getElements( $group, widget.selector );
-            $els[ widget.name ]( 'disable' );
-        }
-    }
-};
+function disable( group ) {
+    widgets.forEach( Widget => {
+        const els = _getElements( group, Widget.selector );
+        new Collection( els ).disable( Widget );
+    } );
+}
 
 /**
  * Returns the elements on which to apply the widget
  *
- * @param  {jQuery} $group   a jQuery-wrapped element
+ * @param  {Element} group   a jQuery-wrapped element
  * @param  {string} selector if the selector is null, the form element will be returned
  * @return {jQuery}          a jQuery collection
  */
-_getElements = ( $group, selector ) => {
+function _getElements( group, selector ) {
     if ( selector ) {
         if ( selector === 'form' ) {
-            return $form;
+            return [ formHtml ];
         }
         // e.g. if the widget selector starts at .question level (e.g. ".or-appearance-draw input")
-        if ( $group.is( '.question' ) ) {
-            return $group.find( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ).filter( selector );
+        if ( group.classList.contains( 'question' ) ) {
+            return [ ...group.querySelectorAll( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ) ]
+                .filter( el => el.matches( selector ) );
         }
-        return $group.find( selector );
+        return [ ...group.querySelectorAll( selector ) ];
     }
 
-    return $();
-};
+    return [];
+}
 
 /**
  * Instantiate a widget on a group (whole form or newly cloned repeat)
  *
  * @param  widget The widget to instantiate
- * @param  {jQuery} $group The elements inside which widgets need to be created.
+ * @param  {Element} group The element inside which widgets need to be created.
  */
-_instantiate = ( widget, $group ) => {
-    let $elements;
-    widget.options = widget.options || {};
+function _instantiate( Widget, group ) {
+    let opts = {};
 
-    if ( !widget.name ) {
+    if ( !Widget.name ) {
         return console.error( 'widget doesn\'t have a name' );
     }
 
-    if ( widget.helpersRequired && widget.helpersRequired.length > 0 ) {
-        widget.options.helpers = {};
-        widget.helpersRequired.forEach( helper => {
-            widget.options.helpers[ helper ] = options[ helper ];
+    if ( Widget.helpersRequired && Widget.helpersRequired.length > 0 ) {
+        opts.helpers = {};
+        Widget.helpersRequired.forEach( helper => {
+            opts.helpers[ helper ] = options[ helper ];
         } );
     }
 
-    $elements = _getElements( $group, widget.selector );
+    const elements = _getElements( group, Widget.selector );
 
-    if ( !$elements.length ) {
+    if ( !elements.length ) {
         return;
     }
 
-    $elements[ widget.name ]( widget.options );
-    _setLangChangeListener( widget, $elements );
-    _setOptionChangeListener( widget, $elements );
-    _setValChangeListener( widget, $elements );
-};
+    new Collection( elements ).instantiate( Widget, opts );
+
+    _setLangChangeListener( Widget, elements );
+    _setOptionChangeListener( Widget, elements );
+    _setValChangeListener( Widget, elements );
+}
 
 
 /**
@@ -138,50 +122,87 @@ _instantiate = ( widget, $group ) => {
  * the elements of the repeat, there should be no duplicate eventhandlers.
  *
  * @param {{name: string}} widget The widget configuration object
- * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
+ * @param {<Element>}         els    Array of elements that the widget has been instantiated on.
  */
-_setLangChangeListener = ( widget, $els ) => {
+function _setLangChangeListener( Widget, els ) {
     // call update for all widgets when language changes 
-    if ( $els.length > 0 ) {
-        $form.on( 'changelanguage', () => {
-            $els[ widget.name ]( 'update' );
+    if ( els.length > 0 ) {
+        $( formHtml ).on( 'changelanguage', () => {
+            new Collection( els ).update( Widget );
         } );
     }
-};
+}
 
 /**
  * Calls widget('update') on select-type widgets when the options change. This function is called upon initialization,
  * and whenever a new repeat is created. In the latter case, since the widget('update') is called upon
  * the elements of the repeat, there should be no duplicate eventhandlers.
  *
- * @param {{name: string}} widget The widget configuration object
- * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
+ * @param {{name: string}} widget   The widget configuration object
+ * @param {<Element>}      els      The array of elements that the widget has been instantiated on.
  */
-_setOptionChangeListener = ( widget, $els ) => {
-    if ( $els.length > 0 && widget.list ) {
-        $els.on( 'changeoption', function() {
+function _setOptionChangeListener( Widget, els ) {
+    if ( els.length > 0 && Widget.list ) {
+        $( els ).on( 'changeoption', function() {
             // update (itemselect) picker on which event was triggered because the options changed
-            $( this )[ widget.name ]( 'update' );
+            new Collection( this ).update( Widget );
         } );
     }
-};
+}
 
 /**
  * Calls widget('update') if the form input/select/textarea value changes due to an action outside
  * of the widget (e.g. a calculation).
  * 
- * @param {{name: string}} widget The widget configuration object
- * @param {jQuery}         $els   The jQuery collection of elements that the widget has been instantiated on.
+ * @param {{name: string}} widget   The widget configuration object
+ * @param {<Element>}      els      The array of elements that the widget has been instantiated on.
  */
-_setValChangeListener = ( widget, $els ) => {
-    const nodeName = $els.prop( 'nodeName' ).toLowerCase();
-    // avoid adding eventhandlers on widgets that apply to the <form> element
-    if ( $els.length > 0 && ( nodeName === 'input' || nodeName === 'select' || nodeName === 'textarea' ) ) {
-        $els.on( 'inputupdate.enketo', function() {
-            $( this )[ widget.name ]( 'update' );
+function _setValChangeListener( Widget, els ) {
+    // avoid adding eventhandlers on widgets that apply to the <form> or <label> element
+    if ( els.length > 0 && els[ 0 ].matches( 'input, select, textarea' ) ) {
+        $( els ).on( 'inputupdate.enketo', function() {
+            new Collection( this ).update( Widget );
         } );
     }
-};
+}
+
+class Collection {
+    constructor( elements ) {
+        if ( !Array.isArray( elements ) ) {
+            elements = [ elements ];
+        }
+        this.elements = elements;
+    }
+    _instantiateSingleWidget( element, Widget, options = {} ) {
+        if ( !Widget.condition( element ) ) {
+            return;
+        }
+        if ( data.has( element, Widget ) ) {
+            return;
+        }
+        data.put( element, Widget.name, new Widget( element, options ) );
+    }
+    _methodCall( Widget, method ) {
+        this.elements.forEach( element => {
+            const w = data.get( element, Widget.name );
+            if ( w ) {
+                w[ method ]();
+            }
+        } );
+    }
+    instantiate( Widget, options ) {
+        this.elements.forEach( el => this._instantiateSingleWidget( el, Widget, options ) );
+    }
+    update( Widget ) {
+        this._methodCall( Widget, 'update' );
+    }
+    disable( Widget ) {
+        this._methodCall( Widget, 'disable' );
+    }
+    enable( Widget ) {
+        this._methodCall( Widget, 'enable' );
+    }
+}
 
 export default {
     init,

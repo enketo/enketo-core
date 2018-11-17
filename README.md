@@ -180,29 +180,8 @@ new Form(formselector, data, {
 
 ### How to create or extend widgets
 
-To create new widgets, we recommend using this [plugin template](https://gist.github.com/MartijnR/6943281).
+See [doc/widgets.md](./doc/widgets.md).
 
-Each widget should fulfill the following requirements:
-
-* be a CommonJS jQuery plugin
-* return an object with its own name and selector-to-instantiate with
-* path to stylesheet scss file relative to the widget's own folder to be added in [_widgets.scss](./src/sass/core/_widgets.scss) (this will be automated in the future)
-* be responsive up to a minimum window width of 320px
-* use JSDoc style documentation
-* if hiding the original input element, it needs to load the default value from that input element into the widget
-* if hiding the original input element, it needs to stay synchronized with the widget and a `change` event should be triggered on the original whenever it changes value
-* if hiding the original input element, it needs to listen for the `applyfocus` event on the original input and focus the widget
-* if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming irrelevant (implement update() method)
-* it is recommended to apply the `widget` css class to any new elements it adds to the DOM (but not to their children)
-* new input/select/textarea elements inside widgets should have the `ignore` class
-* it requires the following methods (which can be automatically obtained by extending the Widget base class as demonstrated in the [plugin template](https://gist.github.com/MartijnR/6943281)
-  * `enable()` to enable the widget when a disabled ancestor gets enabled. This may be an empty function if that happens automatically.
-  * `disable()` This may be an empty function if the widgets gets disabled automatically cross-browser when its branch becomes irrelevant.
-  * `update()` to update the widget when called after the content used to instantiate it has changed (language, options or calculated value). In its simplest form this could simply call destroy() and then re-initialize the widget, or be an empty function if language changes are handled automatically and it is not a `<select>` widget.
-* if the widget needs tweaks or needs to be disabled for mobile use, use support.js to detect this.
-* allow clearing of the original input (i.e. setting value to '')
-* send a `fakefocus` event to the original input when the widget gets focus
-* please write test specs in the widget's /test folder.....(yeah, we need to do that for the existing widgets too...)
 
 ### Notes for JavaScript Developers
 

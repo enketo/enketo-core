@@ -1,10 +1,25 @@
 // TODO: add second "propagate" parameter to constructors to add .enketo namespace to event.
+// TODO: I'm not sure what the instanceof check does
 
 function DataUpdate( detail ) {
     if ( !( this instanceof DataUpdate ) ) {
         return new DataUpdate( detail );
     }
     return new CustomEvent( 'dataupdate', { detail } );
+}
+
+function FakeFocus() {
+    if ( !( this instanceof FakeFocus ) ) {
+        return new FakeFocus();
+    }
+    return new CustomEvent( 'fakefocus' );
+}
+
+function ApplyFocus() {
+    if ( !( this instanceof ApplyFocus ) ) {
+        return new ApplyFocus();
+    }
+    return new CustomEvent( 'applyfocus' );
 }
 
 function Removed( detail ) {
@@ -18,8 +33,15 @@ function Change() {
     return new Event( 'change', { bubbles: true } );
 }
 
+function Input() {
+    return new Event( 'input', { bubbles: true } );
+}
+
 export default {
     DataUpdate,
+    FakeFocus,
+    ApplyFocus,
     Removed,
-    Change
+    Change,
+    Input,
 };

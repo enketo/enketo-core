@@ -1,176 +1,151 @@
-const pluginName = 'rankWidget';
 import $ from 'jquery';
 import Widget from '../../js/Widget';
 import support from '../../js/support';
 import sortable from 'html5sortable/dist/html5sortable.cjs';
 import { t } from 'enketo/translator';
 
-/*
- * @constructor
- * @param {Element}                       element   Element to apply widget to.
- * @param {{}|{helpers: *}}                             options   options
- */
-function RankWidget( element, options ) {
-    this.namespace = pluginName;
-    Widget.call( this, element, options );
-    this._init();
-}
+class RankWidget extends Widget {
 
-RankWidget.prototype = Object.create( Widget.prototype );
-RankWidget.prototype.constructor = RankWidget;
+    static get selector() {
+        return 'input.rank';
+    }
 
-RankWidget.prototype._init = function() {
-    const that = this;
-    const loadedValue = this.element.value;
-    this.props = this._getProps();
-    this.itemSelector = 'label:not(.itemset-template)';
+    static get list() {
+        return true;
+    }
 
-    this.list = $( this.element ).next( '.option-wrapper' ).addClass( 'widget rank-widget' )[ 0 ];
-    const $reset = $( this.resetButtonHtml ).on( 'click', () => {
-        that._reset();
-        return false;
-    } );
-    const startText = support.touch ? t( 'rankwidget.tapstart' ) : t( 'rankwidget.clickstart' );
+    _init() {
+        const that = this;
+        const loadedValue = this.originalInputValue;
+        const startText = support.touch ? t( 'rankwidget.tapstart' ) : t( 'rankwidget.clickstart' );
 
-    $( this.list )
-        .toggleClass( 'rank-widget--empty', !loadedValue )
-        .append( $reset )
-        .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content">${startText}</span></div>` )
-        .on( 'click', function() {
-            if ( !that.element.disabled ) {
-                this.classList.remove( 'rank-widget--empty' );
-                that._updateOriginalInput( that._getValueFromWidget() );
-            }
+        this.itemSelector = 'label:not(.itemset-template)';
+        this.list = $( this.element ).next( '.option-wrapper' ).addClass( 'widget rank-widget' )[ 0 ];
+
+        $( this.list )
+            .toggleClass( 'rank-widget--empty', !loadedValue )
+            .append( this.resetButtonHtml )
+            .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content">${startText}</span></div>` )
+            .on( 'click', function() {
+                if ( !that.element.disabled ) {
+                    this.classList.remove( 'rank-widget--empty' );
+                    that.originalInputValue = that.value;
+                }
+            } );
+
+        this.list.querySelector( '.btn-reset' ).addEventListener( 'click', ( evt ) => {
+            this._reset();
+            evt.stopPropagation();
         } );
 
-    this.element.classList.add( 'hide' );
+        this.element.classList.add( 'hide' );
 
-    this._setValueInWidget( loadedValue );
+        this.value = loadedValue;
 
-    // Create the sortable drag-and-drop functionality
-    sortable( this.list, {
-        items: this.itemSelector,
-        //hoverClass: 'rank-widget__item--hover',
-        containerSerializer( container ) {
-            return {
-                value: [].slice.call( container.node.querySelectorAll( `${that.itemSelector} input` ) ).map( input => input.value ).join( ' ' )
-            };
+        // Create the sortable drag-and-drop functionality
+        sortable( this.list, {
+            items: this.itemSelector,
+            //hoverClass: 'rank-widget__item--hover',
+            containerSerializer( container ) {
+                return {
+                    value: [].slice.call( container.node.querySelectorAll( `${that.itemSelector} input` ) ).map( input => input.value ).join( ' ' )
+                };
+            }
+        } )[ 0 ].addEventListener( 'sortupdate', () => {
+            that.originalInputValue = that.value;
+        } );
+
+        if ( this.props.readonly ) {
+            this.disable();
         }
-    } )[ 0 ].addEventListener( 'sortupdate', () => {
-        that._updateOriginalInput( that._getValueFromWidget() );
-    } );
-
-    if ( this.props.readonly ) {
-        this.disable();
-    }
-};
-
-RankWidget.prototype._getProps = function() {
-    return {
-        readonly: this.element.readOnly,
-    };
-};
-
-RankWidget.prototype._getValueFromWidget = function() {
-    const result = sortable( this.list, 'serialize' );
-    return result[ 0 ].container.value;
-};
-
-RankWidget.prototype._setValueInWidget = function( value ) {
-    if ( !value ) {
-        return this._reset();
-    }
-    const that = this;
-    const values = value.split( ' ' );
-    const items = [].slice.call( this.list.querySelectorAll( `${this.itemSelector} input` ) );
-
-    // Basic error check
-    if ( values.length !== items.length ) {
-        throw new Error( 'Could not load rank widget value. Number of items mismatch.' );
     }
 
-    // Don't even attempt to rectify a mismatch between the value and the available items.
-    items.sort( ( a, b ) => {
-        const aIndex = values.indexOf( a.value );
-        const bIndex = values.indexOf( b.value );
-        if ( aIndex === -1 || bIndex === -1 ) {
-            throw new Error( 'Could not load rank widget value. Mismatch in item values.' );
+    _reset() {
+        this.originalInputValue = '';
+    }
+
+    get value() {
+        const result = sortable( this.list, 'serialize' );
+        return result[ 0 ].container.value;
+    }
+
+    set value( value ) {
+        if ( !value ) {
+            return this._reset();
         }
-        return aIndex > bIndex;
-    } );
+        const that = this;
+        const values = value.split( ' ' );
+        const items = [ ...this.list.querySelectorAll( `${this.itemSelector} input` ) ];
 
-    items.forEach( item => {
-        $( that.list ).find( '.btn-reset' ).before( $( item.parentNode ).detach() );
-    } );
-};
+        // Basic error check
+        if ( values.length !== items.length ) {
+            throw new Error( 'Could not load rank widget value. Number of items mismatch.' );
+        }
 
-/**
- * This is the input that Enketo's engine listens on.
- */
-RankWidget.prototype._updateOriginalInput = function( value ) {
-    $( this.element ).val( value ).trigger( 'change' );
-    $( this.list ).toggleClass( 'rank-widget--empty', !value );
-};
+        // Don't even attempt to rectify a mismatch between the value and the available items.
+        items.sort( ( a, b ) => {
+            const aIndex = values.indexOf( a.value );
+            const bIndex = values.indexOf( b.value );
+            if ( aIndex === -1 || bIndex === -1 ) {
+                throw new Error( 'Could not load rank widget value. Mismatch in item values.' );
+            }
+            return aIndex - bIndex;
+        } );
 
-RankWidget.prototype._reset = function() {
-    this._updateOriginalInput( '' );
-};
+        items.forEach( item => {
+            $( that.list ).find( '.btn-reset' ).before( $( item.parentNode ).detach() );
+        } );
+    }
 
-RankWidget.prototype.disable = function() {
-    $( this.element )
-        .prop( 'disabled', true )
-        .next( '.widget' )
-        .find( 'input, button' )
-        .prop( 'disabled', true );
-
-    sortable( this.list, 'disable' );
-};
-
-RankWidget.prototype.enable = function() {
-    if ( this.props && !this.props.readonly ) {
+    disable() {
         $( this.element )
-            .prop( 'disabled', false )
+            .prop( 'disabled', true )
             .next( '.widget' )
             .find( 'input, button' )
-            .prop( 'disabled', false );
+            .prop( 'disabled', true );
 
-        sortable( this.list, 'enable' );
+        sortable( this.list, 'disable' );
     }
-};
 
-RankWidget.prototype.update = function() {
-    const value = this.element.value;
-    // re-initalize sortable because the options may have changed
-    sortable( this.list );
+    enable() {
+        if ( this.props && !this.props.readonly ) {
+            $( this.element )
+                .prop( 'disabled', false )
+                .next( '.widget' )
+                .find( 'input, button' )
+                .prop( 'disabled', false );
 
-    if ( value ) {
-        this._setValueInWidget( value );
-        this._updateOriginalInput( value );
-    } else {
-        this._reset();
-    }
-};
-
-
-$.fn[ pluginName ] = function( options, event ) {
-
-    options = options || {};
-
-    return this.each( function() {
-        const $this = $( this );
-        const data = $this.data( pluginName );
-
-        if ( !data && typeof options === 'object' ) {
-            $this.data( pluginName, new RankWidget( this, options, event ) );
-        } else if ( data && typeof options == 'string' ) {
-            data[ options ]( this );
+            sortable( this.list, 'enable' );
         }
-    } );
-};
+    }
 
-export default {
-    'name': pluginName,
-    'list': true,
-    // avoid initizialing number inputs in geopoint widgets!
-    'selector': 'input.rank'
-};
+    update() {
+        const value = this.element.value;
+        // re-initalize sortable because the options may have changed
+        sortable( this.list );
+
+        if ( value ) {
+            this.value = value;
+            this.originalInputValue = value;
+        } else {
+            this._reset();
+        }
+    }
+
+    // Since we're overriding the setter we also have to overwrite the getter
+    // https://stackoverflow.com/questions/28950760/override-a-setter-and-the-getter-must-also-be-overridden
+    get originalInputValue() {
+        return super.originalInputValue;
+    }
+
+    /**
+     * This is the input that Enketo's engine listens on.
+     */
+    set originalInputValue( value ) {
+        super.originalInputValue = value;
+        this.list.classList.toggle( 'rank-widget--empty', !value );
+    }
+
+}
+
+export default RankWidget;

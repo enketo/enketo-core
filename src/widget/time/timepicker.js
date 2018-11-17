@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import event from '../../js/event';
 /*!
  * Timepicker
  *
@@ -975,7 +976,10 @@ import $ from 'jquery';
         },
 
         updateElement() {
-            this.$element.val( this.getTime() ).change();
+            this.$element.val( this.getTime() );
+            // this.$element.change() method does not fire an event that can be 
+            // caught with el.addEventListener('change', () => {})
+            this.$element[ 0 ].dispatchEvent( event.Change() );
         },
 
         updateFromElementVal() {

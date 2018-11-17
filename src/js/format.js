@@ -46,6 +46,4 @@ const format = {
     }
 };
 
-// TODO: figure this out
-export { format };
-export { time };
+export { format, time };
