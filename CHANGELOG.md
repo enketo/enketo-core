@@ -3,6 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------------
+##### Changed
+- Do not include time component for today().
+
+##### Fixed
+- Date calculations (e.g. today()) for number type questions do not return a number.
+
 [5.0.0-alpha.2] - 2018-12-11
 ----------------------------
 ##### Removed

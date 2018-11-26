@@ -86,7 +86,7 @@ const types = {
                 return types.date.validate( parts[ 0 ] ) && types.time.validate( parts[ 1 ], false );
             }
 
-            return false;
+            return types.data.validate( parts[ 0 ] );
         },
         convert( x ) {
             let date = 'Invalid Date';
@@ -100,6 +100,11 @@ const types = {
                 const convertedTime = types.time.convert( parts[ 1 ], false );
                 if ( convertedDate && convertedTime ) {
                     return `${convertedDate}T${convertedTime}`;
+                }
+            } else {
+                const convertedDate = types.date.convert( parts[ 0 ] );
+                if ( convertedDate ) {
+                    return `${convertedDate}T00:00:00.000${(new Date()).getTimezoneOffsetAsTime()}`;
                 }
             }
 

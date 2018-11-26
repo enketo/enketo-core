@@ -120,7 +120,8 @@ export default {
                 const newExpr = that.form.replaceChoiceNameFn( expr, 'string', name, index );
 
                 // it is possible that the fixed expr is '' which causes an error in XPath
-                const result = ( relevant && newExpr ) ? that.form.model.evaluate( newExpr, 'string', name, index ) : '';
+                const xpathType = that.form.input.getInputType( $control ) === 'number' ? 'number' : 'string';
+                const result = ( relevant && newExpr ) ? that.form.model.evaluate( newExpr, xpathType, name, index ) : '';
 
                 // filter the result set to only include the target node
                 dataNodesObj.setIndex( index );
