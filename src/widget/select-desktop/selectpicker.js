@@ -26,8 +26,6 @@ import event from '../../js/event';
 import { t } from 'enketo/translator';
 import '../../js/dropdown.jquery';
 
-const NONESELECTED = t( 'selectpicker.noneselected' );
-
 /**
  * Bootstrap Select picker that supports single and multiple selects
  * A port of https://github.com/silviomoreto/bootstrap-select
@@ -131,7 +129,7 @@ class DesktopSelectpicker extends Widget {
         } );
 
         if ( selectedLabels.length === 0 ) {
-            return NONESELECTED;
+            return t( 'selectpicker.noneselected' );
         } else if ( selectedLabels.length === 1 ) {
             return selectedLabels[ 0 ];
         } else {

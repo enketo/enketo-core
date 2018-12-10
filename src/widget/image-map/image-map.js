@@ -154,17 +154,18 @@ class ImageMap extends Widget {
     }
 
     _setHoverHandler() {
-        this.svg.addEventListener( 'mouseenter', ev => {
-            if ( ev.target.matches( 'path[id], g[id]' ) ) {
+        this.svg.querySelectorAll( 'path[id], g[id]' ).forEach( el => {
+            el.addEventListener( 'mouseenter', ev => {
                 const id = ev.target.id || ev.target.closest( 'g[id]' ).id;
-                const optionLabel = getSiblingElements( this._getInput( id ), '.option-label.active' ).textContent;
+                const labels = getSiblingElements( this._getInput( id ), '.option-label.active' );
+                const optionLabel = labels && labels.length ? labels[ 0 ].textContent : '';
                 this.tooltip.textContent = optionLabel;
-            }
-        } );
-        this.svg.addEventListener( 'mouseleave', ev => {
-            if ( ev.target.matches( 'path[id], g[id]' ) ) {
-                this.tooltip.textContent = '';
-            }
+            } );
+            el.addEventListener( 'mouseleave', ev => {
+                if ( ev.target.matches( 'path[id], g[id]' ) ) {
+                    this.tooltip.textContent = '';
+                }
+            } );
         } );
     }
 
