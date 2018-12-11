@@ -318,7 +318,7 @@ export default {
             $clone.trigger( 'addrepeat', [ repeatIndex, byCountUpdate ] );
             // Initialize widgets in clone after default values have been set
             if ( this.form.widgetsInitialized ) {
-                this.form.widgets.init( $clone );
+                this.form.widgets.init( $clone, this.form.options );
             } else {
                 // Upon inital formload the eventhandlers for calculated items have not yet been set.
                 // Calculations have already been initialized before the repeat clone(s) were created.
