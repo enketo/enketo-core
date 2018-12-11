@@ -3,16 +3,20 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.0.0-alpha.1] - 2018-12-10
 ----------------------------
+##### Removed
+- Deprecated methods.
+
 ##### Changed
 - Converted to new widget format **WARNING: widgets in the old format are no longer supported**.
+- Consistent JS filenames without capitalization and without camelCasing.
 
 ##### Fixed
 - Default values not loaded in non-first repeat instances.
 - Table widget option hover background is not centered around radiobutton/checkbox.
 
-[5.0.0-alpha.0] - 2016-11-05
+[5.0.0-alpha.0] - 2018-11-05
 ----------------------------
 ##### Changed
 - Converted to modern Javascript **WARNING: requires new build systems**

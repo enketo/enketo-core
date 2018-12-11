@@ -21,13 +21,6 @@ if ( os.ios || os.android ) {
 }
 
 export default {
-    /**
-     * @deprecated
-     */
-    get inputtypes() {
-        console.deprecate( 'support.inputtypes', 'support.inputTypes' );
-        return inputTypes;
-    },
     get inputTypes() {
         return inputTypes;
     },

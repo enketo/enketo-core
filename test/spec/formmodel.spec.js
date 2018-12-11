@@ -370,20 +370,18 @@ describe( 'Data node remover', () => {
     } );
 } );
 
-
 describe( 'DeprecatedID value getter', () => {
     it( 'returns "" if deprecatedID node does not exist', () => {
         const model = new Model( '<model><instance><data></data></instance></model>' );
         model.init();
-        expect( model.getDeprecatedID() ).toEqual( '' );
+        expect( model.deprecatedID ).toEqual( '' );
     } );
     it( 'returns value of deprecatedID node', () => {
         const model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
         model.init();
-        expect( model.getDeprecatedID() ).toEqual( 'a' );
+        expect( model.deprecatedID ).toEqual( 'a' );
     } );
 } );
-
 
 describe( 'getRepeatSeries', () => {
     // Note the strategic placements of whitespace '\n'
@@ -709,44 +707,6 @@ describe( 'external instances functionality', () => {
         // form reset functionality in apps.
         // https://github.com/kobotoolbox/enketo-express/issues/1086
         expect( external[ 0 ].xml.querySelector( 'country' ).textContent ).toEqual( 'nl' );
-    } );
-
-    it( 'populates matching external instances provided as XML Strings (old usage)', () => {
-        model = new Model( {
-            modelStr,
-            external: [ {
-                id: 'cities',
-                xml: citiesStr
-            }, {
-                id: 'neighborhoods',
-                xml: '<root/>'
-            }, {
-                id: 'countries',
-                xml: '<root/>'
-            } ]
-        } );
-        loadErrors = model.init();
-        expect( loadErrors.length ).toEqual( 0 );
-        expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).toEqual( 'nl' );
-    } );
-
-    it( 'outputs errors if an external instance is not valid XML (string)', () => {
-        model = new Model( {
-            modelStr,
-            external: [ {
-                id: 'cities',
-                xml: '<root>'
-            }, {
-                id: 'neighborhoods',
-                xml: '<root/>'
-            }, {
-                id: 'countries',
-                xml: '<root/>'
-            } ]
-        } );
-        loadErrors = model.init();
-        expect( loadErrors.length ).toEqual( 4 );
-        expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML instance "cities". Invalid XML: <root>' );
     } );
 
     it( 'removes existing (internal) content before adding external instances', () => {

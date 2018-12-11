@@ -41,22 +41,8 @@ export default {
             that.setAll( that._currentLang );
         } );
     },
-    /**
-     * @deprecated
-     */
-    getCurrentLang() {
-        console.deprecate( 'langs.getCurrentLang()', 'langs.currentLang' );
-        return this.currentLang;
-    },
     get currentLang() {
         return this._currentLang;
-    },
-    /**
-     * @deprecated
-     */
-    getCurrentLangDesc() {
-        console.deprecate( 'langs.getCurrentLangDesc()', 'langs.currentLangDesc' );
-        return this.currentLangDesc;
     },
     get currentLangDesc() {
         return this.$formLanguages.find( `[value="${this._currentLang}"]` ).text();

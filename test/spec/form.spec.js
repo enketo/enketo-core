@@ -1122,7 +1122,7 @@ describe( 'required enketo-transformer version', () => {
 
     it( 'can be obtained', () => {
         const expected = pkg.devDependencies[ 'enketo-transformer' ];
-        const actual = Form.getRequiredTransformerVersion();
+        const actual = Form.requiredTransformerVersion;
 
         expect( actual ).toBe( expected,
             `It looks like enketo-transformer has been updated in package.json from ${actual} to ${expected}.  You also need to update the value returned by From.getRequiredTransformerVersion() to the new version number.` );

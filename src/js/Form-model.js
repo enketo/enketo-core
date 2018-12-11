@@ -24,7 +24,7 @@ let Nodeset;
  * Class dealing with the XML Model of a form
  *
  * @constructor
- * @param {{modelStr: string, ?instanceStr: string, ?external: <{id: string, xml: ( string || xmlDocument) }>, ?submitted: boolean }} data:
+ * @param {{modelStr: string, ?instanceStr: string, ?external: <{id: string, xml: xmlDocument }>, ?submitted: boolean }} data:
  *                            data object containing XML model, 
  *                            (partial) XML instance to load, 
  *                            external data array
@@ -128,11 +128,7 @@ FormModel.prototype.init = function() {
                 instanceDoc.removeChild( secondaryInstanceChildren[ i ] );
             }
             let rootEl;
-            if ( typeof instance.xml === 'string' || instance.xmlStr ) {
-                console.deprecate( 'External instance provided as string', 'provide external instance as XML Document' );
-                rootEl = parser.parseFromString( instance.xml || instance.xmlStr, 'text/xml' ).firstChild;
-                that.throwParserErrors( rootEl, instance.xml || instance.xmlStr );
-            } else if ( instance.xml instanceof XMLDocument ) {
+            if ( instance.xml instanceof XMLDocument ) {
                 if ( window.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
                     // IE does not support importNode
                     rootEl = that.importNode( instance.xml.documentElement, true );
@@ -1358,19 +1354,6 @@ Nodeset = function( selector, index, filter, model ) {
     this.index = index;
 };
 
-/**
- * Privileged method to find data nodes filtered by a jQuery or XPath selector and additional filter properties
- * Without parameters it returns a collection of all data nodes excluding template nodes and their children. Therefore, most
- * queries will not require filter properties. This function handles all (?) data queries in the application.
- *
- * @return {jQuery} jQuery-wrapped filtered instance nodes that match the selector and index
- */
-
-Nodeset.prototype.get = function() {
-    console.deprecate( 'node.get()', 'node.getElement() or node.getElements()' );
-    return $( this.getElements() );
-};
-
 Nodeset.prototype.getElement = function() {
     return this.getElements()[ 0 ];
 };
@@ -1649,55 +1632,3 @@ FormModel.prototype.getRemovalEventData = () => /* node */ {};
 FormModel.prototype.types = types;
 
 export { FormModel };
-
-
-// The deprecated methods below to be removed for version 5.0.0:
-/**
- * @deprecated
- */
-FormModel.prototype.getVersion = function() {
-    console.deprecate( 'FormModel.getVersion()', 'model.version' );
-    return this.version;
-};
-/**
- * @deprecated
- * 
- * See Also:
- * Returns jQuery Data Object (obsolete?)
- * See also: <nodes.get()>, which is always (?) preferred except for debugging.
- *
- * @return {jQuery} JQuery Data Object
- */
-FormModel.prototype.get = function() {
-    console.deprecate( 'model.get()', 'model.xml' );
-    return this.$ || null;
-};
-/**
- * @deprecated
- * @return {Element} data XML object (not sure if type is element actually)
- */
-FormModel.prototype.getXML = function() {
-    console.deprecate( 'model.getXML()', 'model.xml' );
-    return this.xml || null;
-};
-/**
- * @deprecated
- */
-FormModel.prototype.getInstanceID = function() {
-    console.deprecate( 'model.getInstanceID()', 'model.instanceID' );
-    return this.instanceID;
-};
-/**
- * @deprecated
- */
-FormModel.prototype.getDeprecatedID = function() {
-    console.deprecate( 'model.getDeprecatedID()', 'model.deprecatedID' );
-    return this.deprecatedID;
-};
-/**
- * @deprecated
- */
-FormModel.prototype.getInstanceName = function() {
-    console.deprecate( 'model.getInstanceName()', 'model.instanceName' );
-    return this.instanceName;
-};
