@@ -8,7 +8,7 @@
 
 import $ from 'jquery';
 import support from './src/js/support';
-import { Form } from './src/js/Form';
+import { Form } from './src/js/form';
 import fileManager from './src/js/file-manager';
 var loadErrors;
 var form;
