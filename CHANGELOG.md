@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[5.0.0-alpha.1] - 2018-12-10
+[5.0.0-alpha.2] - 2018-12-11
 ----------------------------
 ##### Removed
 - Deprecated methods.

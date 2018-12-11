@@ -1,11 +1,11 @@
 Widgets in Enketo Core
 =======================
 
-Widgets extend the [Widget class](../src/js/Widget.js). This is an example:
+Widgets extend the [Widget class](../src/js/widget.js). This is an example:
 
 (see full functioning example at [/src/widget/example/my-widget.js](../src/widget/example/my-widget.js)
 ```js
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 
 /*
  * Make sure to give the widget a unique widget class name and extend Widget.

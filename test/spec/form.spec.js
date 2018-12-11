@@ -1,4 +1,4 @@
-import { Form } from '../../src/js/Form';
+import { Form } from '../../src/js/form';
 import $ from 'jquery';
 import loadForm from '../helpers/load-form';
 import forms from '../mock/forms';

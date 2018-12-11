@@ -1,4 +1,4 @@
-import SuperWidget from '../../src/js/Widget';
+import SuperWidget from '../../src/js/widget';
 import input from '../../src/js/input';
 import $ from 'jquery';
 

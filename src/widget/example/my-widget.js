@@ -1,4 +1,4 @@
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 
 /*
  * Make sure to give the widget a unique widget class name and extend Widget.

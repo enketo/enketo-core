@@ -10,7 +10,7 @@ $.expr[ ':' ].RD_contains = $.expr.createPseudo( arg => elem => $( elem ).text()
 
 function RelevantDropdown( element, options, e ) {
     this.namespace = pluginName;
-    //Widget.call( this, element, options );
+    //widget.call( this, element, options );
     this.element = element;
     this.options = $.extend( {
         fadeOutSpeed: 'normal', // speed to fade out the dataList Popup

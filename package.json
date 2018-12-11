@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.0.0-alpha.1",
+    "version": "5.0.0-alpha.2",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -28,7 +28,7 @@
         "name": "Alex Anderson"
     } ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
-    "main": "src/js/Form.js",
+    "main": "src/js/form.js",
     "scripts": {
         "start": "grunt develop",
         "test": "grunt test"

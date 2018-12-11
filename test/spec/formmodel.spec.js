@@ -1,4 +1,4 @@
-import { FormModel as Model } from '../../src/js/Form-model';
+import { FormModel as Model } from '../../src/js/form-model';
 import forms from '../mock/forms';
 import config from '../../config';
 

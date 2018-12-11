@@ -1,4 +1,4 @@
-import { Form } from '../../src/js/Form';
+import { Form } from '../../src/js/form';
 import forms from '../mock/forms';
 
 export default ( filename, editStr, options, session ) => {
