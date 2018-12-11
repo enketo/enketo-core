@@ -1,4 +1,4 @@
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import support from '../../js/support';
 import $ from 'jquery';
 import types from '../../js/types';

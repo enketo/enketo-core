@@ -3,7 +3,7 @@ Widgets in Enketo Core
 
 Widgets extend the [Widget class](../src/js/Widget.js). This is an example:
 
-(see full functioning example at [/src/widgets/example/my-widget.js](../src/widgets/example/my-widget.js))
+(see full functioning example at [/src/widget/example/my-widget.js](../src/widget/example/my-widget.js)
 ```js
 import Widget from '../../js/Widget';
 

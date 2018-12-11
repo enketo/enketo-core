@@ -1,4 +1,4 @@
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 
 class UrlWidget extends Widget {
 

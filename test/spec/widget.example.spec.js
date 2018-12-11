@@ -1,5 +1,5 @@
 import ExampleWidget from '../../src/widget/example/my-widget';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM =
     `<label class="question or-appearance-my-widget">

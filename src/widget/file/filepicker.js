@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import fileManager from 'enketo/file-manager';
 import { getFilename, updateDownloadLink } from '../../js/utils';
 import event from '../../js/event';

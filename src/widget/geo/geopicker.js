@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import config from 'enketo/config';
 import L from 'leaflet';
 import { t } from 'enketo/translator';

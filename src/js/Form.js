@@ -1,4 +1,4 @@
-import { FormModel } from './Form-model';
+import { FormModel } from './form-model';
 import $ from 'jquery';
 import { toArray, parseFunctionFromExpression, stripQuotes, getFilename } from './utils';
 import { t } from 'enketo/translator';
@@ -17,7 +17,7 @@ import calculationModule from './calculate';
 import requiredModule from './required';
 import maskModule from './mask';
 import readonlyModule from './readonly';
-import FormLogicError from './Form-logic-error';
+import FormLogicError from './form-logic-error';
 import './plugins';
 import './extend';
 

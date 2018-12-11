@@ -1,5 +1,5 @@
 import RangeWidget from '../../src/widget/range/range-widget';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM1 =
     `<label class="question non-select or-appearance-no-ticks">

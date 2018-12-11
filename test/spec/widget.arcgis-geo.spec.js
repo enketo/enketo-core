@@ -1,5 +1,5 @@
 import ArcGisGeopicker from '../../src/widget/geo-esri/geopicker';
-import { testStaticProperties } from '../helpers/testWidget';
+import { testStaticProperties } from '../helpers/test-widget';
 
 testStaticProperties( ArcGisGeopicker );
 

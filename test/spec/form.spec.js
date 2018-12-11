@@ -1,6 +1,6 @@
 import { Form } from '../../src/js/Form';
 import $ from 'jquery';
-import loadForm from '../helpers/loadForm';
+import loadForm from '../helpers/load-form';
 import forms from '../mock/forms';
 import config from '../../config';
 import pkg from '../../package';

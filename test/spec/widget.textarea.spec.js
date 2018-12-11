@@ -1,5 +1,5 @@
 import TextareaWidget from '../../src/widget/textarea/textarea';
-import { testStaticProperties, testBasicInstantiation } from '../helpers/testWidget';
+import { testStaticProperties, testBasicInstantiation } from '../helpers/test-widget';
 
 
 const FORM = `

@@ -1,4 +1,4 @@
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import $ from 'jquery';
 import support from '../../js/support';
 import fileManager from 'enketo/file-manager';

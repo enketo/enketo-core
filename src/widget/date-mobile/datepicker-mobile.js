@@ -1,4 +1,4 @@
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import support from '../../js/support';
 import { elementDataStore as data } from '../../js/dom-utils';
 

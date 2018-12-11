@@ -1,4 +1,4 @@
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import { isNumber } from '../../js/utils';
 import events from '../../js/event';
 

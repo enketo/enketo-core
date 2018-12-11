@@ -1,5 +1,5 @@
 import Filepicker from '../../src/widget/file/filepicker';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM =
     `<form class="or">

@@ -1,4 +1,4 @@
-import loadForm from '../helpers/loadForm';
+import loadForm from '../helpers/load-form';
 
 describe( 'Pages mode', () => {
 

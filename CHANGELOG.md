@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------------
+##### Changed
+- Converted to new widget format **WARNING: widgets in the old format are no longer supported**.
+
 ##### Fixed
 - Default values not loaded in non-first repeat instances.
 - Table widget option hover background is not centered around radiobutton/checkbox.

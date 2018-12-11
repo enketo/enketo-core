@@ -1,5 +1,5 @@
 import Radiopicker from '../../src/widget/radio/radiopicker';
-import { testStaticProperties, testBasicInstantiation } from '../helpers/testWidget';
+import { testStaticProperties, testBasicInstantiation } from '../helpers/test-widget';
 
 const FORM =
     `<form class="or">

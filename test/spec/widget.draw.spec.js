@@ -1,5 +1,5 @@
 import DrawWidget from '../../src/widget/draw/draw-widget';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM1 =
     `<form class="or">

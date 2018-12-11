@@ -1,5 +1,5 @@
 import Timepicker from '../../src/widget/time/timepicker-extended';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 import { format } from '../../src/js/format';
 
 const FORM = `

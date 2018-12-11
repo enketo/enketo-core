@@ -1,5 +1,5 @@
 import UrlWidget from '../../src/widget/url/url-widget';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM =
     `<form class="or">

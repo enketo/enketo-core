@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 import $ from 'jquery';
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import support from '../../js/support';
 import { getSiblingElementsAndSelf } from '../../js/dom-utils';
 import event from '../../js/event';

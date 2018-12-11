@@ -1,5 +1,5 @@
 import RankWidget from '../../src/widget/rank/rank-widget';
-import { testStaticProperties } from '../helpers/testWidget';
+import { testStaticProperties } from '../helpers/test-widget';
 
 testStaticProperties( RankWidget );
 

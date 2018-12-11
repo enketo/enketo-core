@@ -1,5 +1,5 @@
 import Datepicker from '../../src/widget/date/datepicker-extended';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM1 = '<form class="or"><label class="question"><input name="/data/date" type="date" data-type-xml="date" value="" /></label></form>';
 const FORM2 = '<form class="or"><label class="question or-appearance-month-year"><input  name="/data/date" type="date" data-type-xml="date" value="" /></label></form>';

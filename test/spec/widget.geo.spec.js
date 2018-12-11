@@ -1,5 +1,5 @@
 import Geopicker from '../../src/widget/geo/geopicker';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM =
     `<form class="or">

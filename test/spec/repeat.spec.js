@@ -1,4 +1,4 @@
-import loadForm from '../helpers/loadForm';
+import loadForm from '../helpers/load-form';
 import $ from 'jquery';
 import forms from '../mock/forms';
 import event from '../../src/js/event';

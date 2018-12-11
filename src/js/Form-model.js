@@ -2,7 +2,7 @@ import MergeXML from 'mergexml/mergexml';
 import { readCookie, parseFunctionFromExpression, stripQuotes } from './utils';
 import $ from 'jquery';
 import { getSiblingElementsAndSelf } from './dom-utils';
-import FormLogicError from './Form-logic-error';
+import FormLogicError from './form-logic-error';
 import config from 'enketo/config';
 import types from './types';
 import event from './event';

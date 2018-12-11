@@ -1,4 +1,4 @@
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 
 /**
  * Horizontal Choices Widgets. Adds a filler if the last row contains two elements.

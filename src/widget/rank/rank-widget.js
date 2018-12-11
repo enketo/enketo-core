@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Widget from '../../js/Widget';
+import Widget from '../../js/widget';
 import support from '../../js/support';
 import sortable from 'html5sortable/dist/html5sortable.cjs';
 import { t } from 'enketo/translator';

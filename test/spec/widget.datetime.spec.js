@@ -1,5 +1,5 @@
 import Datetimepicker from '../../src/widget/datetime/datetimepicker-extended';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM =
     `<form class="or">

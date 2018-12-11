@@ -1,5 +1,5 @@
 import ImageMapWidget from '../../src/widget/image-map/image-map';
-import { runAllCommonWidgetTests } from '../helpers/testWidget';
+import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const SVG = 'data:text/svg;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NTkiIGhlaWdodD0iNTkzIiB2aWV3Qm94PSIwIDAgOTI3IDU4NiI+DQo8dGl0bGU+QmxhbmsgVVMgc3RhdGVzIG1hcDwvdGl0bGU+DQo8Zz4NCiAgPHBhdGggZmlsbD0icGluayIgaWQ9IkNPIiBkPSJNMzgwLjIsMjM1LjUgbC0zNiwtMy41IC03OS4xLC04LjYgLTIuMiwyMi4xIC03LDUwLjQgLTEuOSwxMy43IDM0LDMuOSAzNy41LDQuNCAzNC43LDMgMTQuMywwLjZ6Ij48L3BhdGg+ICANCjwvZz4NCjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0E5QTlBOSIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJNMjE1LDQ5M3Y1NWwzNiw0NSBNMCw0MjVoMTQ3bDY4LDY4aDg1bDU0LDU0djQ2Ij48L3BhdGg+DQo8L3N2Zz4=';
 const FORM1 =
