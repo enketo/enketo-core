@@ -1,127 +1,92 @@
-import Widget from '../../js/widget';
-import $ from 'jquery';
+import RangeWidget from '../../widget/range/range-widget';
+import { isNumber } from '../../js/utils';
 import support from '../../js/support';
-import event from '../../js/event';
-import 'bootstrap-slider-basic';
 
-// TODO: replace bootstrap-slider-basic with native slider as in range picker.
-// TODO: remove jQuery
-// TODO: make common widget tests pass
-
-class Analogscalepicker extends Widget {
+class AnalogScaleWidget extends RangeWidget {
 
     static get selector() {
         return '.or-appearance-analog-scale input[type="number"]';
     }
 
     _init() {
-        const $question = $( this.element ).closest( '.question' ).addClass( 'or-analog-scale-initialized' );
-        const $input = $( this.element );
-        const value = Number( this.originalInputValue ) || -1;
-
-        $input
-            .slider( {
-                reversed: this.props.orientation === 'vertical',
-                min: 0,
-                max: 100,
-                orientation: this.props.orientation,
-                step: this.props.step,
-                value,
-                enabled: !this.props.readonly
-            } );
-
-        this.$widget = $input.next( '.widget' );
-        this.$slider = this.$widget.find( '.slider' );
-        this.$labelContent = $( '<div class="label-content widget" />' ).prependTo( $question );
-        this.$originalLabels = $question.find( '.question-label, .or-hint, .or-required-msg, .or-constraint-msg' );
-        this.$labelContent.append( this.$originalLabels );
-
-        this._renderResetButton();
+        super._init();
+        if ( this.props.vertical ) {
+            this.question.classList.add( 'or-appearance-vertical' );
+        }
+        this.question.classList.add( 'or-analog-scale-initialized' );
         this._renderLabels();
-        this._renderScale();
-        this._setChangeListener();
         this._setResizeListener();
-
-        // update reset button and slider "empty" state
-        $input.trigger( `programmaticChange${this.namespace}` );
     }
+
+    _getHtmlStr() {
+        const html =
+            `<div class="widget analog-scale-widget">
+                ${super._getHtmlStr()}
+            </div>`;
+
+        return html;
+    }
+
+    _updateMercury() {}
 
     /** 
      * (re-)Renders the widget labels based on the current content of .question-label.active
      */
     _renderLabels() {
-        const $labelEl = this.$labelContent.find( '.question-label.active' );
-        const labels = $labelEl.html().split( /\|/ ).map( label => label.trim() );
+        const fragment = document.createRange().createContextualFragment( '<div class="label-content widget"></div>' );
+        const wrapper = fragment.querySelector( '.label-content' );
 
-        this.$mainLabel = this.$mainLabel || $( '<span class="question-label widget active" />' ).insertAfter( $labelEl );
-        this.$mainLabel.empty().append( labels[ 0 ] );
+        this.question.querySelectorAll( '.question-label, .or-hint, .or-required-msg, .or-constraint-msg' )
+            .forEach( el => wrapper.append( el ) );
 
-        this.$maxLabel = this.$maxLabel || $( '<div class="max-label" />' ).prependTo( this.$widget );
-        this.$maxLabel.empty().append( labels[ 1 ] );
+        this.question.prepend( fragment );
 
-        this.$minLabel = this.$minLabel || $( '<div class="min-label" />' ).appendTo( this.$widget );
-        this.$minLabel.empty().append( labels[ 2 ] );
+        this.labelContent = this.question.querySelector( '.label-content' );
+        this._updateLabels();
+    }
 
+    _updateLabels() {
+        if ( !this.question.classList.contains( 'or-analog-scale-initialized' ) ) {
+            return;
+        }
+        const labelEl = this.labelContent.querySelector( '.question-label.active:not(.widget)' );
+        const labels = labelEl.innerHTML.split( /\|/ ).map( label => label.trim() );
+
+        const existingLabel = this.labelContent.querySelector( '.question-label.widget' );
+        if ( existingLabel ) {
+            existingLabel.remove();
+        }
+        const labelFragment = document.createRange().createContextualFragment( `<span class="question-label widget active">${labels[ 0 ]}</span>` );
+        labelEl.after( labelFragment );
+
+        const existingMaxLabel = this.widget.querySelector( '.max-label' );
+        if ( existingMaxLabel ) {
+            existingMaxLabel.remove();
+        }
+        const maxLabel = document.createRange().createContextualFragment( `<div class="max-label">${labels[ 1 ]}</div>` );
+        this.widget.prepend( maxLabel );
+
+        const existingMinLabel = this.widget.querySelector( '.min-label' );
+        if ( existingMinLabel ) {
+            existingMinLabel.remove();
+        }
+        const minLabel = document.createRange().createContextualFragment( `<div class="min-label">${labels[ 2 ]}</div>` );
+        this.widget.append( minLabel );
+
+        const showValue = this.labelContent.querySelector( '.show-value' );
+        if ( showValue ) {
+            showValue.remove();
+        }
         if ( labels[ 3 ] ) {
-            this.$showValue = this.$showValue || $( '<div class="widget show-value" />' ).appendTo( this.$labelContent );
-            this.$showValue.empty().append( `<div class="show-value__box">${labels[ 3 ]}<span class="show-value__value">${this.element.value}</span></div>` );
-        } else if ( this.$showValue ) {
-            this.$showValue.remove();
-            this.$showValue = undefined;
+            const showValueBox = document.createRange().createContextualFragment(
+                `<div class="widget show-value">
+                    <div class="show-value__box">${labels[ 3 ]}<span class="show-value__value">${this.value}</span></div>
+                <div>` );
+            this.labelContent.append( showValueBox );
+            this.current = this.labelContent.querySelector( '.show-value__value' );
         }
     }
 
-    _renderScale() {
-        let i;
-        const $scale = $( '<div class="scale"></div>' );
-
-        if ( this.props.orientation === 'vertical' ) {
-            for ( i = 100; i >= 0; i -= 10 ) {
-                $scale.append( this._getNumberHtml( i ) );
-            }
-        } else {
-            for ( i = 0; i <= 100; i += 10 ) {
-                $scale.append( this._getNumberHtml( i ) );
-            }
-        }
-
-        this.$slider.prepend( $scale );
-    }
-
-    _getNumberHtml( num ) {
-        return `<div class="scale__number"><div class="scale__ticks"></div><div class="scale__value">${num}</div></div>`;
-    }
-
-    _renderResetButton() {
-        const that = this;
-
-        this.$resetBtn = $( this.resetButtonHtml )
-            .appendTo( this.$widget )
-            .on( 'click', () => {
-                $( that.element ).slider( 'setValue', 0, false );
-                $( that.element ).val( '' ).trigger( `programmaticChange${that.namespace}` );
-                return false;
-            } )
-            .prop( 'disabled', that.props.readonly );
-    }
-
-    _updateCurrentValueShown() {
-        if ( this.$showValue ) {
-            this.$showValue.find( '.show-value__value' ).text( this.originalInputValue );
-        }
-    }
-
-    _setChangeListener() {
-        const that = this;
-
-        $( this.element ).on( `slideStop.${this.namespace} programmaticChange${this.namespace}`, () => {
-            const empty = ( this.value === '' );
-            this.element.dispatchEvent( event.Change() ); //).trigger( 'change' );
-            that.$resetBtn.prop( 'disabled', empty || that.props.readonly );
-            that.$slider.toggleClass( 'slider--empty', empty );
-            that._updateCurrentValueShown();
-        } );
-    }
 
     /*
      * Stretch the question to full page height.
@@ -129,73 +94,51 @@ class Analogscalepicker extends Widget {
      * because that theme relies on flexbox with "flex-direction: row".
      */
     _setResizeListener() {
-        const $question = $( this.element ).closest( '.question' );
-
-        if ( !$question.hasClass( 'or-appearance-horizontal' ) ) {
+        if ( this.props.vertical ) {
             // Will only be triggered if question by itself constitutes a page.
-            // It will not be triggerd if question is contained inside a group with fieldlist appearance.
-            $question.on( 'pageflip.enketo', this._stretchHeight );
+            // It will not be triggered if question is contained inside a group with fieldlist appearance.
+            this.question.addEventListener( 'pageflip', this._stretchHeight.bind( this ) );
         }
     }
 
     _stretchHeight() {
-        const $question = $( this ).closest( '.question' ).css( 'min-height', 'auto' );
-        const height = $question.outerHeight();
-        const $form = $question.closest( '.or' );
-        const diff = ( $form.offset().top + $form.height() ) - ( $question.offset().top + height ) - 10;
+        this.question.style[ 'min-height' ] = 'auto';
+        const height = this.question.offsetHeight;
+        const form = this.question.closest( '.or' );
+        const diff = form.offsetTop + form.offsetHeight - this.question.offsetTop + height - 10;
+        //const diff = ( $form.offset().top + $form.height() ) - ( $question.offset().top + height ) - 10;
         if ( diff ) {
             // To somewhat avoid problems when a repeat is clone and height is set while the widget is detached
             // we use min-height instead of height.
-            $question.css( 'min-height', `${height + diff}px` );
+            //this.question.style[ 'min-height' ] = `${height + diff}px`;
         }
     }
-
-    disable() {
-        //const value = ( this.originalInputValue !== '' ) ? Number( this.originalInputValue ) : 0;
-        $( this.element )
-            .slider( 'disable' );
-        //.slider( 'setValue', value, false );
-    }
-
-    enable() {
-        $( this.element )
-            .slider( 'enable' );
-    }
-
 
     update() {
-        // in case input value was changed (due to calculation update)
-        const that = this;
-        const value = this.originalInputValue !== '' ? Number( this.originalInputValue ) : 0;
-        //const $el = $( this.element );
-        const sliderValue = this.value; //$el.slider( 'getValue' );
-        if ( value !== sliderValue ) {
-            this.value = value;
-            //$( this.element )
-            //    .slider( 'setValue', value, false )
-            $( this.element ).trigger( `programmaticChange${that.namespace}` );
-        }
-        // in case language was changed
-        this._renderLabels();
+        super.update();
+        this._updateLabels();
     }
 
-
     get props() {
+        // TODO: use super.props() and override step, max, vertical?
         const props = this._props;
         props.touch = support.touch;
-        props.step = props.type === 'decimal' ? 0.1 : 1;
-        props.orientation = props.appearances.includes( 'horizontal' ) ? 'horizontal' : 'vertical';
-
+        props.min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
+        props.max = isNumber( this.element.getAttribute( 'max' ) ) ? this.element.getAttribute( 'max' ) : 100;
+        props.step = isNumber( this.element.getAttribute( 'step' ) ) ? this.element.getAttribute( 'step' ) : 1; //( props.type === 'decimal' ? 0.1 : 1 );
+        props.vertical = !props.appearances.includes( 'horizontal' );
+        props.ticks = !props.appearances.includes( 'no-ticks' );
+        props.maxTicks = 10;
         return props;
     }
 
     get value() {
-        return $( this.element ).slider( 'getValue' );
+        return super.value;
     }
 
     set value( value ) {
-        $( this.element ).slider( 'setValue', value, false );
+        super.value = value;
     }
 }
 
-export default Analogscalepicker;
+export default AnalogScaleWidget;

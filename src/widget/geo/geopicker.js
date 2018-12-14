@@ -177,10 +177,10 @@ class Geopicker extends Widget {
 
         // ensure all tiles are displayed when revealing page, https://github.com/kobotoolbox/enketo-express/issues/188
         // remove handler once it has been used
-        this.$form.on( `pageflip.enketo.map${this.mapId}`, event => {
+        this.$form.on( `pageflip.map${this.mapId}`, event => {
             if ( that.map && $.contains( event.target, that.element ) ) {
                 that.map.invalidateSize();
-                that.$form.off( `pageflip.enketo.map${that.mapId}` );
+                that.$form.off( `pageflip.map${that.mapId}` );
             }
         } );
 

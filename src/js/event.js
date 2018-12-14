@@ -22,6 +22,13 @@ function ApplyFocus() {
     return new CustomEvent( 'applyfocus' );
 }
 
+function PageFlip() {
+    if ( !( this instanceof PageFlip ) ) {
+        return new PageFlip();
+    }
+    return new CustomEvent( 'pageflip' );
+}
+
 function Removed( detail ) {
     if ( !( this instanceof Removed ) ) {
         return new Removed( detail );
@@ -41,6 +48,7 @@ export default {
     DataUpdate,
     FakeFocus,
     ApplyFocus,
+    PageFlip,
     Removed,
     Change,
     Input,

@@ -7,72 +7,33 @@ $analog-picker-max-height: 800px !default;
 $q-pad-left: 0px !default;
 $q-pad-right: 0px !default;
 
-@import "../../sass/core/slider";
 
 @mixin ticks($orientation: "vertical") {
     @if $orientation=="horizontal" {
-        .scale__number {
-            position: relative;
-            line-height: 16px;
-            display: inline-block;
-            height: 30px;
-            width: 10%;
-            border-left: $border;
-            background-image: linear-gradient(0deg, $analog-picker-tick-color 1px, transparent 0px);
-            background-repeat: no-repeat;
-            background-size: 100% 52%;
-            background-position: top;
-
-            &:last-child {
-                width: 0;
-                margin-right: -2px;
-            }
-        }
-
-        .scale__ticks {
-            width: 100%;
-            height: 50%;
-            margin-top: 7px;
+        span {
+            padding: 4px 0;
             background-image: linear-gradient(270deg, $analog-picker-tick-color 1px, transparent 0px);
             background-repeat: repeat-x;
-            background-origin: border-box;
+            background-origin: content-box;
             background-size: 10% 100%;
         }
     }
 
     @else {
-        .scale__number {
-            position: relative;
-            line-height: 16px;
-            height: 10%;
-            width: 30px;
-            border-top: $border;
-            background-image: linear-gradient(90deg, $analog-picker-tick-color 1px, transparent 0px);
-            background-repeat: no-repeat;
-            background-size: 52% 100%;
-            background-position: right;
-
-            &:last-child {
-                height: 0;
-            }
-        }
-
-        .scale__ticks {
-            width: 50%;
-            height: 100%;
-            margin-left: 25%;
+        span {
+            padding: 0 25%;
             background-image: linear-gradient(0deg, $analog-picker-tick-color 1px, transparent 0px);
             background-repeat: repeat-y;
-            background-origin: border-box;
+            background-origin: content-box;
             background-size: 100% 10%;
         }
     }
 }
 
 .or-analog-scale-initialized {
-    position: relative; // using a dirty trick, knowing that only only question-labels with a lang attribute
+    position: relative;
 
-    // are switched when the language changes
+    // Using a dirty trick, knowing that only original question-labels have a lang attribute
     .label-content {
         .question-label.active {
             display: inline;
@@ -83,57 +44,17 @@ $q-pad-right: 0px !default;
         }
     }
 
-    .widget:not(.or-comment-widget) {
+    // Overridden by show value box.
+    .range-widget__current {
+        visibility: hidden;
+    }
+
+    >.widget:not(.or-comment-widget) {
         // override main.scss style
         // The margin-bottom is maintained to 
         // have space for the constraint message in the horizontal
         // analog scale widget.
         margin: 0 0 9px 0;
-    }
-
-    .scale {
-        @include font-normal;
-
-        height: 100%;
-        position: absolute;
-        font-size: 12px;
-    }
-
-    .slider-disabled {
-        opacity: 0.5;
-    }
-
-    .slider-track {
-        border-bottom: none;
-        background: none;
-        border-radius: 0;
-        box-shadow: none;
-        z-index: 10;
-    }
-
-    .slider-handle {
-        background: $analog-picker-handle-color;
-        opacity: 0.9; // outline: 0;
-    }
-
-    .slider--empty {
-        .slider-handle {
-            background: transparent;
-        }
-    }
-
-    .slider-selection {
-        background: transparent;
-        box-shadow: none;
-        border-radius: 0;
-    }
-
-    .btn-reset {
-        position: relative;
-
-        &:disabled {
-            visibility: hidden;
-        }
     }
 
     .show-value__box {
@@ -165,133 +86,75 @@ $q-pad-right: 0px !default;
         text-align: center;
     }
 
-    .slider-vertical {
-        @include ticks("vertical");
 
-        @include display-flex;
+    &:not(.or-appearance-no-ticks) {
 
-        @include flex-direction(column);
+        .range-widget {
+            &__ticks {
+                @include ticks('vertical');
 
-        width: $analog-picker-width; // weird rule to push down vertical slider
+                &__scale {
 
-        // so it doesn't interfere with comment icon
-        &.widget:not(.or-comment-widget) {
-            margin-top: 15px;
+                    &__start,
+                    &__end {
+                        display: none;
+                    }
+                }
+            }
         }
 
-        .slider {
-            @include flex(1);
-
-            height: 100%;
-            min-height: $analog-picker-min-height;
-            max-height: $analog-picker-max-height;
-            margin: 10px 0;
-            left: 50%;
-        }
-
-        .slider-handle {
-            margin-left: -5px;
-        }
-
-        .scale {
-            left: -6px;
-        }
-
-        .scale__value {
-            position: absolute;
-            top: -9px;
-            left: -25px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .min-label {
-            margin-top: -20px;
-        }
-
-        .btn-reset {
-            width: 20px;
-            left: 100px;
-            bottom: 25px;
+        &.or-appearance-horizontal {
+            .range-widget {
+                &__ticks {
+                    @include ticks('horizontal');
+                }
+            }
         }
     }
 
-    .slider-horizontal {
-        @include display-flex;
+    &.or-appearance-no-ticks {
+        .range-widget {
+            &__scale {
 
-        @include flex-wrap(nowrap);
+                &__start,
+                &__end {
+                    display: none;
+                }
+            }
+        }
+    }
 
-        @include flex-direction(row);
+    &.or-appearance-horizontal {
 
-        align-items: center;
-        position: relative;
-        margin-top: 25px;
-
-        @include ticks("horizontal");
-
-        .slider {
-            @include flex(1);
-
-            order: 2;
+        .analog-scale-widget {
+            display: flex;
         }
 
-        .slider-track {
-            margin-top: -6px;
-        }
+        .range-widget {
+            flex: 1;
 
-        .slider-handle {
-            margin-top: -4.5px;
-        }
+            // adjust default range widget 
+            &__wrap {
+                height: 117px
+            }
 
-        .scale {
-            position: relative;
-            top: -6.5px;
-        }
+            // adjust default range widget
+            &__current {
+                line-height: 38.5px;
+            }
 
-        .scale__value {
-            position: absolute;
-            top: -17px;
-            width: 20px;
-            left: -10px;
-            text-align: center;
-        }
-
-        .btn-reset {
-            left: 50%;
-            bottom: -35px;
+            // adjust default range widget
+            [type=range] {
+                top: 33.5px;
+            }
         }
 
         .max-label,
         .min-label {
             width: 80px;
+            align-self: center;
         }
 
-        .min-label {
-            order: 1;
-            padding: 10px 15px 10px 0;
-        }
-
-        .max-label {
-            order: 3;
-            padding: 10px 0 10px 15px;
-        }
-    }
-
-    &.or-appearance-no-ticks {
-        .scale__number {
-            &:not(:last-child):not(:first-child) {
-                border-top: none;
-                border-left: none;
-            }
-        }
-
-        .scale__value {
-            display: none;
-        }
-
-        .scale__ticks {
-            display: none;
-        }
     }
 
     &:not(.or-appearance-horizontal) {
@@ -303,6 +166,11 @@ $q-pad-right: 0px !default;
 
         .label-content {
             @include flex(1);
+        }
+
+        .analog-scale-widget {
+            // same width as range-widget inside it
+            width: 200px;
         }
     }
 
@@ -321,93 +189,5 @@ $q-pad-right: 0px !default;
 .pages.or [role="page"].current {
     &.or-analog-scale-initialized:not(.or-appearance-horizontal) {
         @include display-flex;
-    }
-}
-
-// corrections for small screens
-@media screen and (max-width: 500px) {
-    .or-analog-scale-initialized {
-        .slider-horizontal:not(.or-comment-widget) {
-            margin-top: 35px;
-        }
-
-        .slider-horizontal {
-            @include flex-wrap(wrap);
-
-            .slider {
-                @include flex(100%);
-
-                order: 1;
-            }
-
-            .max-label {
-                order: 4;
-            }
-
-            .min-label {
-                order: 2;
-            }
-
-            .btn-reset {
-                @include flex(1);
-
-                order: 3;
-                left: auto;
-                bottom: auto;
-            }
-        }
-    }
-}
-
-// corrections for rtl display
-.or[dir="rtl"] {
-    .or-analog-scale-initialized {
-        .slider-vertical {
-            .slider {
-                left: auto;
-                right: 50%;
-            }
-
-            .btn-reset {
-                left: auto;
-                right: 105px;
-            }
-
-            .scale__ticks {
-                margin-left: auto;
-                margin-right: 25%;
-            }
-        }
-
-        .slider-horizontal {
-            .scale {
-                @include display-flex;
-
-                @include flex-wrap(nowrap);
-
-                @include flex-direction(row);
-            }
-
-            .scale__number {
-                @for $position from 1 through 11 {
-                    &:nth-child(#{$position}) {
-                        order: #{11 - $position};
-                    }
-                }
-            }
-
-            .min-label {
-                order: 3;
-            }
-
-            .max-label {
-                order: 1;
-            }
-
-            .btn-reset {
-                left: auto;
-                right: 50%;
-            }
-        }
     }
 }

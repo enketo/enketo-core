@@ -24,3 +24,6 @@ Propagates the internal 'removed' event by firing it on the form.or element.
 
 ##### gotohidden.enketo
 Fired on form control when an attempt is made to 'go to' this field but it is hidden from view because it is irrelevant.
+
+##### pageflip
+Fired when user flips to a new page, on the page itself.

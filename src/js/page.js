@@ -3,7 +3,7 @@
  */
 
 import $ from 'jquery';
-
+import events from './event';
 import config from 'enketo/config';
 import 'jquery-touchswipe';
 
@@ -272,13 +272,13 @@ export default {
                 this._setToCurrent( pageEl );
                 this._focusOnFirstQuestion( pageEl );
                 this._toggleButtons( newIndex );
-                $( pageEl ).trigger( 'pageflip.enketo' );
+                pageEl.dispatchEvent( events.PageFlip() );
             }
         } else {
             this._setToCurrent( pageEl );
             this._focusOnFirstQuestion( pageEl );
             this._toggleButtons( newIndex );
-            $( pageEl ).trigger( 'pageflip.enketo' );
+            pageEl.dispatchEvent( events.PageFlip() );
         }
     },
     _flipToFirst() {

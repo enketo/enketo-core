@@ -5,31 +5,13 @@ import events from '../../js/event';
 class RangeWidget extends Widget {
 
     static get selector() {
-        return '.or-appearance-distress input[type="number"], .question > input[type="number"][min][max][step]';
+        return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale) > input[type="number"][min][max][step]';
     }
 
     _init() {
         const that = this;
 
-        const fragment = document.createRange().createContextualFragment(
-            `<div class="widget range-widget">
-                <div class="range-widget__wrap">
-                    <div class="range-widget__current"></div>
-                    <div class="range-widget__bg"></div>
-                    <div class="range-widget__ticks"></div>
-                    <div class="range-widget__scale">
-                        <span class="range-widget__scale__start"></span>
-                        ${this._stepsBetweenHtmlStr( this.props )}
-                        <span class="range-widget__scale__end"></span>
-                    </div>
-                    <div class="range-widget__bulb">
-                        <div class="range-widget__bulb__inner"></div>
-                        <div class="range-widget__bulb__mercury"></div>
-                    </div>
-                </div>
-                <input type="range" class="ignore empty" min="${this.props.min}" max="${this.props.max}" step="${this.props.step}"/>
-            </div>`
-        );
+        const fragment = document.createRange().createContextualFragment( this._getHtmlStr() );
         fragment.querySelector( '.range-widget__scale__end' ).before( this.resetButtonHtml );
         fragment.querySelector( '.range-widget__scale__start' ).textContent = this.props.min;
         fragment.querySelector( '.range-widget__scale__end' ).textContent = this.props.max;
@@ -71,7 +53,7 @@ class RangeWidget extends Widget {
 
         let ticks = this.props.ticks ? Math.ceil( Math.abs( ( this.props.max - this.props.min ) / this.props.step ) ) : 1;
         // Now reduce to a number < 50 to avoid showing a sold black tick line.
-        let divisor = Math.ceil( ticks / 50 );
+        let divisor = Math.ceil( ticks / this.props.maxTicks );
         while ( ticks % divisor && divisor < ticks ) {
             divisor++;
         }
@@ -81,6 +63,32 @@ class RangeWidget extends Widget {
         // issues seemingly related to rounding or browser sloppiness. This far is less elegant but nice and robust:
         this.widget.querySelector( '.range-widget__ticks' )
             .append( document.createRange().createContextualFragment( new Array( ticks ).fill( '<span></span>' ).join( '' ) ) );
+    }
+
+    /**
+     * This is separated so it can be extended (in the analog-scale widget)
+     */
+    _getHtmlStr() {
+        const html =
+            `<div class="widget range-widget">
+                <div class="range-widget__wrap">
+                    <div class="range-widget__current"></div>
+                    <div class="range-widget__bg"></div>
+                    <div class="range-widget__ticks"></div>
+                    <div class="range-widget__scale">
+                        <span class="range-widget__scale__start"></span>
+                        ${this._stepsBetweenHtmlStr( this.props )}
+                        <span class="range-widget__scale__end"></span>
+                    </div>
+                    <div class="range-widget__bulb">
+                        <div class="range-widget__bulb__inner"></div>
+                        <div class="range-widget__bulb__mercury"></div>
+                    </div>
+                </div>
+                <input type="range" class="ignore empty" min="${this.props.min}" max="${this.props.max}" step="${this.props.step}"/>
+            </div>`;
+
+        return html;
     }
 
     _updateMercury( completeness ) {
@@ -143,6 +151,7 @@ class RangeWidget extends Widget {
         props.vertical = props.appearances.includes( 'vertical' ) || distress;
         props.ticks = !props.appearances.includes( 'no-ticks' );
         props.distress = distress;
+        props.maxTicks = 50;
 
         return props;
     }

@@ -74,7 +74,6 @@
     "dependencies": {
         "@babel/polyfill": "^7.0.0",
         "bootstrap-datepicker": "1.8.x",
-        "bootstrap-slider-basic": "3.3.x",
         "core-js": "^2.5.7",
         "enketo-xpathjs": "1.9.0",
         "html5sortable": "^0.9.3",
