@@ -18,7 +18,7 @@
 
         @include flex-direction(row);
 
-        > label {
+        >label {
             @include flex(1);
 
             @include display-flex;
@@ -82,8 +82,10 @@
         }
     }
 
-    &:hover .option-wrapper > label {
-        &:first-of-type, &:last-of-type {
+    &:hover .option-wrapper>label {
+
+        &:first-of-type,
+        &:last-of-type {
             .option-label::after {
                 background-color: $question-hover-bg;
             }
@@ -91,8 +93,10 @@
     }
 
     &.focus {
-        .option-wrapper > label {
-            &:first-of-type, &:last-of-type {
+        .option-wrapper>label {
+
+            &:first-of-type,
+            &:last-of-type {
                 .option-label::after {
                     background-color: $question-focus-bg;
                 }
@@ -104,7 +108,7 @@
 // corrections for rtl display
 .or[dir="rtl"] .or-appearance-likert {
     .option-wrapper {
-        > label {
+        >label {
             margin-right: 0;
 
             &:first-of-type .option-label::after {
@@ -131,10 +135,12 @@
 }
 
 // fix colors when background is not default inside repeats
-.or-repeat .or-appearance-likert .option-wrapper > label {
+.or-repeat .or-appearance-likert .option-wrapper>label {
+
     &:first-of-type .option-label::after,
     &:last-of-type .option-label::after,
-    input[type=radio], input[type=checkbox] {
+    input[type=radio],
+    input[type=checkbox] {
         background-color: $repeat-bg;
     }
 }

@@ -1,7 +1,9 @@
 //widget scss overrides
 .question .geopoint.widget {
+
     input[type=number],
     input[type=text] {
+
         &[name=alt],
         &[name=acc] {
             width: 40%;
@@ -20,6 +22,7 @@
 }
 
 .question .widget.datetimepicker {
+
     .date,
     .timepicker {
         @include display-flex;
@@ -32,28 +35,23 @@
     }
 }
 
+
 .or-appearance-likert .option-wrapper {
-    // Not clear to me why all these likert fixes are necessary
+
     margin-top: 20px;
 
     >label {
-        margin-bottom: 30px;
-
-        input[type=radio],
-        input[type=checkbox] {
-            margin-top: -45px;
-        }
-
-        .option-label {
-            border-top-width: 1.5px;
-        }
+        @include flex-direction(column-reverse);
+        justify-content: flex-end;
     }
+
 }
 
 // tables
 .question.or-appearance-list-nolabel,
 .question.or-appearance-label {
     margin: 0; // TODO: still a problem if the list-nolabel is followed by a regular select
+
     &:not(:last-of-type) {
         border-bottom: none;
     }
@@ -65,6 +63,7 @@
 
 .touch {
     .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
+
         // touch radio buttons and checkboxes
         .option-wrapper>label {
             border: none;
@@ -76,6 +75,7 @@
 
 // geopoint widget
 .question .geopicker.widget {
+
     input[type=text],
     input[type=number],
     textarea {
@@ -199,6 +199,7 @@ html:not(.touch) .question .geopoint.widget {
 legend .btn-comment {
     top: 0; // undo legend hack
     right: -$q-pad-side;
+
     .icon {
         position: static;
     }
@@ -209,6 +210,7 @@ legend .btn-comment {
         left: 0;
         right: auto;
     }
+
     legend .btn-comment {
         left: -$q-pad-side;
     }
@@ -223,6 +225,7 @@ legend .btn-comment {
 
 // select picker
 .bootstrap-select {
+
     .dropdown-toggle,
     .dropdown-menu {
         width: 100%;
@@ -237,12 +240,15 @@ legend .btn-comment {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+
     .file-feedback,
     .file-preview {
         width: 100%;
     }
+
     .btn-download {
         margin-right: 10px;
+
         .icon {
             vertical-align: middle;
             margin-top: 1px;
