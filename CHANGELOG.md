@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.0.1] - 2018-12-20
 --------------------
+##### Changed
+- Support Document instance for external data.
+
 ##### Fixed
 - Likert item option labels with unequal number of lines not lined up correctly in Grid Theme.
 

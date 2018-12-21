@@ -36,9 +36,7 @@ const formSelector = 'form.or';
   // optional boolean whether this instance has ever been submitted before
   submitted: false,
   // optional array of external data objects containing: 
-  // {id: 'someInstanceId', xml: xmlDocument}
-  // or (NOT recommended - terrible performance for large documents):
-  // {id: 'someInstanceId', xml: '<root>external instance content</root>'}
+  // {id: 'someInstanceId', xml: XMLDocument}
   external: [],
   // optional object of session properties 
   // 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid'
