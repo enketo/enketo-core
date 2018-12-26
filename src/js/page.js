@@ -315,13 +315,20 @@ export default {
         if ( this.$toc.length ) {
             // regenerate complete ToC from first enabled question/group label of each page
             this.tocItems = this.$activePages.get()
-                .filter( pageEl => !pageEl.classList.contains( 'or-repeat-info' ) ).map( pageEl => {
+                .filter( pageEl => !pageEl.classList.contains( 'or-repeat-info' ) )
+                .map( ( pageEl, index ) => {
+                    let tocItemText = `[${index + 1}]`;
                     const labelEl = pageEl.querySelector( '.question-label.active' );
-                    if ( !labelEl ) {
-                        return false;
+                    if ( labelEl ) {
+                        tocItemText = labelEl.textContent;
+                    } else {
+                        const hintEl = pageEl.querySelector( '.or-hint.active' );
+                        if ( hintEl ) {
+                            tocItemText = hintEl.textContent;
+                        }
                     }
-                    const label = labelEl.textContent;
-                    return { pageEl, label };
+                    tocItemText = tocItemText.length > 20 ? `${tocItemText.substring(0,20)}...` : tocItemText;
+                    return { pageEl, tocItemText };
                 } );
             this.$toc.empty()[ 0 ].append( this._getTocHtmlFragment( this.tocItems ) );
             this.$toc.closest( '.pages-toc' ).removeClass( 'hide' );
@@ -333,7 +340,7 @@ export default {
             const li = document.createElement( 'li' );
             const a = document.createElement( 'a' );
             a.setAttribute( 'href', `#${item.pageEl.querySelector( '[name]' ).getAttribute( 'name' )}` );
-            a.textContent = item.label;
+            a.textContent = item.tocItemText;
             li.append( a );
             items.appendChild( li );
         } );

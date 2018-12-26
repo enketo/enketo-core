@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>test survey</h:title>
+        <model>
+            <instance>
+                <all_rows_have_no_label_multiplePages id="surveyPoint">
+                    <page1>
+                        <note1/>
+                    </page1>
+                    <page2>
+                        <text1/>
+                    </page2>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </all_rows_have_no_label_multiplePages>
+            </instance>
+            <bind nodeset="/all_rows_have_no_label_multiplePages/page1/note1" readonly="true()" type="string"/>
+            <bind nodeset="/all_rows_have_no_label_multiplePages/page2/text1" type="string"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/all_rows_have_no_label_multiplePages/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body class="pages">
+        <group appearance="field-list" ref="/all_rows_have_no_label_multiplePages/page1">
+            <input ref="/all_rows_have_no_label_multiplePages/page1/note1">
+                <hint>hint5678901234567890abc</hint>
+            </input>
+        </group>
+        <group appearance="field-list" ref="/all_rows_have_no_label_multiplePages/page2">
+            <input ref="/all_rows_have_no_label_multiplePages/page2/text1">
+            </input>
+        </group>
+    </h:body>
+</h:html>

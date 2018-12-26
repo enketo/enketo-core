@@ -87,6 +87,17 @@ describe( 'Pages mode', () => {
                 .toEqual( SUB_NL );
         } );
 
+        it( 'uses an abbreviated hint or default [number] if page has no label', () => {
+            const form = loadForm( 'pages-nolabel.xml' );
+            form.view.$.append( '<ol class="pages-toc__list"/>' );
+            form.init();
+            const $toc = form.pages.$toc;
+
+            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+                .toEqual( [ 'hint5678901234567890...', '[2]' ] );
+
+        } );
+
     } );
 
 } );
