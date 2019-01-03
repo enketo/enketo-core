@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>broken_repeat_example</h:title>
+        <model>
+            <itext>
+                <translation default="true()" lang="default">
+                    <text id="static_instance-members-3">
+                        <value>Leticia</value>
+                    </text>
+                    <text id="static_instance-members-1">
+                        <value>Linda</value>
+                    </text>
+                    <text id="static_instance-members-2">
+                        <value>Marcus</value>
+                    </text>
+                    <text id="static_instance-yes_no-0">
+                        <value>Yes</value>
+                    </text>
+                    <text id="static_instance-change_types-2">
+                        <value>Deletion of existing trustee listing</value>
+                    </text>
+                    <text id="static_instance-yes_no-1">
+                        <value>No</value>
+                    </text>
+                    <text id="static_instance-change_types-1">
+                        <value>Correction of existing trustee listing</value>
+                    </text>
+                    <text id="static_instance-change_types-0">
+                        <value>Addition of trustee not previously listed</value>
+                    </text>
+                    <text id="static_instance-organizations-0">
+                        <value>00001 - Organization A</value>
+                    </text>
+                    <text id="static_instance-members-0">
+                        <value>Bill</value>
+                    </text>
+                    <text id="static_instance-organizations-1">
+                        <value>00002 - Organization B</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <broken_repeat_example id="broken_repeat_example">
+                    <organization/>
+                    <m_gate/>
+                    <members jr:template="">
+                        <change_type/>
+                        <member/>
+                    </members>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </broken_repeat_example>
+            </instance>
+            <instance id="organizations">
+                <root>
+                    <item>
+                        <itextId>static_instance-organizations-0</itextId>
+                        <name>00001</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-organizations-1</itextId>
+                        <name>00002</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="change_types">
+                <root>
+                    <item>
+                        <itextId>static_instance-change_types-0</itextId>
+                        <name>add</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-change_types-1</itextId>
+                        <name>correct</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-change_types-2</itextId>
+                        <name>delete</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="yes_no">
+                <root>
+                    <item>
+                        <itextId>static_instance-yes_no-0</itextId>
+                        <name>yes</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-yes_no-1</itextId>
+                        <name>no</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="members">
+                <root>
+                    <item>
+                        <itextId>static_instance-members-0</itextId>
+                        <organization>00001</organization>
+                        <name>1</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-members-1</itextId>
+                        <organization>00002</organization>
+                        <name>2</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-members-2</itextId>
+                        <organization>00001</organization>
+                        <name>3</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-members-3</itextId>
+                        <organization>00002</organization>
+                        <name>4</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/broken_repeat_example/organization" type="select1"/>
+            <bind nodeset="/broken_repeat_example/m_gate" type="select1"/>
+            <bind nodeset="/broken_repeat_example/members" relevant="selected( /broken_repeat_example/m_gate ,'yes')"/>
+            <bind nodeset="/broken_repeat_example/members/change_type" type="select1"/>
+            <bind nodeset="/broken_repeat_example/members/member" relevant="selected( ../change_type ,'correct') or selected( ../change_type ,'delete')" type="select1"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/broken_repeat_example/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 appearance="autocomplete" ref="/broken_repeat_example/organization">
+            <label>Organization</label>
+            <item>
+                <label>00001 - Organization A</label>
+                <value>00001</value>
+            </item>
+            <item>
+                <label>00002 - Organization B</label>
+                <value>00002</value>
+            </item>
+        </select1>
+        <select1 ref="/broken_repeat_example/m_gate">
+            <label>Do you have member changes to report?</label>
+            <item>
+                <label>Yes</label>
+                <value>yes</value>
+            </item>
+            <item>
+                <label>No</label>
+                <value>no</value>
+            </item>
+        </select1>
+        <group ref="/broken_repeat_example/members">
+            <label>Members</label>
+            <repeat nodeset="/broken_repeat_example/members">
+                <select1 ref="/broken_repeat_example/members/change_type">
+                    <label>Change type</label>
+                    <item>
+                        <label>Addition of trustee not previously listed</label>
+                        <value>add</value>
+                    </item>
+                    <item>
+                        <label>Correction of existing trustee listing</label>
+                        <value>correct</value>
+                    </item>
+                    <item>
+                        <label>Deletion of existing trustee listing</label>
+                        <value>delete</value>
+                    </item>
+                </select1>
+                <select1 appearance="autocomplete" ref="/broken_repeat_example/members/member">
+                    <label>Member</label>
+                    <itemset nodeset="instance('members')/root/item[organization= /broken_repeat_example/organization ]">
+                        <value ref="name"/>
+                        <label ref="jr:itext(itextId)"/>
+                    </itemset>
+                </select1>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

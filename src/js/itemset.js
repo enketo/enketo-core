@@ -9,15 +9,28 @@ import $ from 'jquery';
 import { parseFunctionFromExpression } from './utils';
 
 export default {
-    update( updated ) {
+    update( updated = {} ) {
         const that = this;
         const itemsCache = {};
+        let $nodes;
 
         if ( !this.form ) {
             throw new Error( 'Output module not correctly instantiated with form property.' );
         }
 
-        const $nodes = this.form.getRelatedNodes( 'data-items-path', '.itemset-template', updated );
+        if ( updated.relevantPath ) {
+            // Questions that are descendants of a group:
+            $nodes = this.form.getRelatedNodes( 'data-items-path', `[name^="${updated.relevantPath}/"]` )
+                .add( this.form.getRelatedNodes( 'data-items-path', `[name^="${updated.relevantPath}/"] ~ datalist > .itemset-template` ) )
+                // Individual questions (autocomplete)
+                .add( this.form.getRelatedNodes( 'data-items-path', `[name="${updated.relevantPath}"]` ) )
+                .add( this.form.getRelatedNodes( 'data-items-path', `[name="${updated.relevantPath}"] ~ datalist > .itemset-template` ) )
+                // Individual radiobutton questions with an itemset...:
+                .add( this.form.getRelatedNodes( 'data-items-path', `[data-name="${updated.relevantPath}"]` ) )
+                .add( this.form.getRelatedNodes( 'data-items-path', `[data-name="${updated.relevantPath}"] ~ datalist > .itemset-template` ) );
+        } else {
+            $nodes = this.form.getRelatedNodes( 'data-items-path', '.itemset-template', updated );
+        }
 
         const clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
 
@@ -79,7 +92,6 @@ export default {
              */
             const insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
             const insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
-
             const index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
 
             if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {

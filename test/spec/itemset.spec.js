@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import loadForm from '../helpers/load-form';
+import events from '../../src/js/event';
 
 describe( 'Itemset functionality', () => {
     let form;
@@ -310,6 +311,59 @@ describe( 'Itemset functionality', () => {
             $r1.next( '.widget' ).click();
 
             expect( $r1.val() ).toEqual( 'cacao coffee' );
+        } );
+    } );
+
+    describe( 'in a group that becomes relevant', () => {
+        it( 'are re-evaluated', () => {
+            const form = loadForm( 'itemset-relevant.xml' );
+            form.init();
+            const input = form.view.html.querySelector( '[name="/broken_repeat_example/organization"]' );
+            input.value = '00001';
+            input.dispatchEvent( events.Change() );
+            const option1 = form.view.html.querySelector( '[name="/broken_repeat_example/m_gate"][value="yes"]' );
+            option1.checked = true;
+            option1.dispatchEvent( events.Change() );
+            const option2 = form.view.html.querySelector( '[data-name="/broken_repeat_example/members/change_type"][value="correct"]' );
+            option2.checked = true;
+            option2.dispatchEvent( events.Change() );
+
+            expect( form.view.html.querySelectorAll( '.or-repeat datalist > option' ).length ).toEqual( 3 );
+        } );
+    } );
+
+    describe( 'in a group that becomes relevant, irrelevant relevant', () => {
+        it( 'are re-evaluated', () => {
+            const form = loadForm( 'itemset-relevant.xml' );
+            form.init();
+            const input = form.view.html.querySelector( '[name="/broken_repeat_example/organization"]' );
+            input.value = '00001';
+            input.dispatchEvent( events.Change() );
+            const option1 = form.view.html.querySelector( '[name="/broken_repeat_example/m_gate"][value="yes"]' );
+            option1.checked = true;
+            option1.dispatchEvent( events.Change() );
+            const option2 = form.view.html.querySelector( '[data-name="/broken_repeat_example/members/change_type"][value="correct"]' );
+            option2.checked = true;
+            option2.dispatchEvent( events.Change() );
+
+            // make autocomplete selection
+            const auto = form.view.html.querySelector( '[name="/broken_repeat_example/members/member"]' );
+            auto.value = '1';
+            auto.dispatchEvent( events.Change() );
+
+            // make irrelevant again
+            const option3 = form.view.html.querySelector( '[name="/broken_repeat_example/m_gate"][value="no"]' );
+            option3.checked = true;
+            option3.dispatchEvent( events.Change() );
+            // make relevant again
+            option1.checked = true;
+            option1.dispatchEvent( events.Change() );
+            option2.checked = true;
+            option2.dispatchEvent( events.Change() );
+
+
+
+            expect( form.view.html.querySelectorAll( '.or-repeat datalist > option:not([value=""])' ).length ).toEqual( 2 );
         } );
     } );
 

@@ -9,19 +9,16 @@ import $ from 'jquery';
 import config from 'enketo/config';
 
 export default {
-    update( updated, filter ) {
+
+    update( updated = {}, filter = '' ) {
         let $nodes;
         const that = this;
-
-        // Filter is used in custom applications that make a distinction between types of calculations.
-        filter = filter || '';
 
         if ( !this.form ) {
             throw new Error( 'Calculation module not correctly instantiated with form property.' );
         }
 
-        updated = updated || {};
-
+        // Filter is used in custom applications that make a distinction between types of calculations.
         if ( updated.relevantPath ) {
             // Questions that are descendants of a group:
             $nodes = this.form.getRelatedNodes( 'data-calculate', `[name^="${updated.relevantPath}/"]${filter}` )

@@ -37,7 +37,7 @@ class AutocompleteSelectpicker extends Widget {
              * However, for some reason !item.dataset.value is failing in Safari, which as a result sets all dataset.value attributes to "null" 
              * To workaround this, we check for the value attribute instead.
              */
-            if ( !item.classList.contains( 'itemset-template' ) && value !== undefined && value !== null ) {
+            if ( !item.classList.contains( 'itemset-template' ) && item.textContent && value !== undefined && value !== null ) {
                 item.dataset.value = value;
                 item.setAttribute( 'value', item.textContent );
                 item.textContent = '';
@@ -141,11 +141,12 @@ class AutocompleteSelectpicker extends Widget {
     }
 
     disable() {
-        this.fakeInput.querySelector( 'li' ).classList.add( 'disabled' );
+        this.fakeInput.classList.add( 'disabled' );
     }
 
     enable() {
-        this.fakeInput.querySelector( 'li' ).classList.remove( 'disabled' );
+        this.fakeInput.classList.remove( 'disabled' );
+
     }
 
     update() {
