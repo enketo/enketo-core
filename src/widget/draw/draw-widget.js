@@ -458,7 +458,7 @@ class DrawWidget extends Widget {
     }
 
     get value() {
-        return this.cache ? this.props.filename : '';
+        return this.cache || '';
     }
 
     set value( dataUrl ) {
