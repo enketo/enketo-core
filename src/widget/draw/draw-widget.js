@@ -6,6 +6,7 @@ import SignaturePad from 'signature_pad';
 import { t } from 'enketo/translator';
 import dialog from 'enketo/dialog';
 import { updateDownloadLink, dataUriToBlobSync, getFilename } from '../../js/utils';
+const DELAY = 4500;
 
 /**
  * SignaturePad.prototype.fromDataURL is asynchronous and does not return a 
@@ -69,8 +70,6 @@ SignaturePad.prototype.updateData = function( pointGroups ) {
     this._data = pointGroups;
 };
 
-
-
 /**
  * Widget to obtain user-provided drawings or signature.
  */
@@ -103,10 +102,20 @@ class DrawWidget extends Widget {
             this._handleFiles( existingFilename );
         }
 
+        // We built a delay in saving on stroke "end", to avoid excessive updating
+        // This event does not fire on touchscreens for which we use the .hide-canvas-btn click
+        // to do the same thing.
+        canvas.addEventListener( 'blur', this._forceUpdate.bind( this ) );
+
         this.initialize = fileManager.init()
             .then( () => {
                 that.pad = new SignaturePad( canvas, {
-                    onEnd: that._updateValue.bind( that ),
+                    onEnd: () => {
+                        // keep replacing this timer so continuous drawing
+                        // doesn't update the value after every stroke.
+                        clearTimeout( that._updateWithDelay );
+                        that._updateWithDelay = setTimeout( that._updateValue.bind( that ), DELAY );
+                    },
                     penColor: that.props.colors[ 0 ] || 'black'
                 } );
                 that.pad.off();
@@ -154,6 +163,7 @@ class DrawWidget extends Widget {
                         that.$widget.removeClass( 'full-screen' );
                         that.pad.off();
                         that._resizeCanvas( canvas );
+                        that._forceUpdate();
                         return false;
                     } ).click();
 
@@ -182,6 +192,11 @@ class DrawWidget extends Widget {
                 // https://github.com/kobotoolbox/enketo-express/issues/844
                 that._resizeCanvas( canvas );
             } );
+    }
+
+    _forceUpdate() {
+        clearTimeout( this._updateWithDelay );
+        this._updateValue();
     }
 
     // All this is copied from the file-picker widget

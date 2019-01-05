@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Changed
+- Fewer model updates during drawing using draw/signature/annotate widgets (performance).
+  
 ##### Fixed
 - Loading error in Pages mode when a page has no label.
 - Itemsets not populating if inside an irrelevant group upon load.
