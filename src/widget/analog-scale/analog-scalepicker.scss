@@ -86,6 +86,18 @@ $q-pad-right: 0px !default;
         text-align: center;
     }
 
+    .min-label {
+        order: 1;
+    }
+
+    .range-widget {
+        order: 4; // same as set by Grid Theme
+    }
+
+    .max-label {
+        order: 5;
+    }
+
 
     &:not(.or-appearance-no-ticks) {
 

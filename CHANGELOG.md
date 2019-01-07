@@ -3,11 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[unreleased]
+[5.0.3] - 2019-01-07
 --------------------
 ##### Fixed
 - Too much delay in saving drawings/signatures/annotations.
-
+- Slider in vertical range widget not aligned properly in Grid Theme.
+- Analog scale widget min/max labels not position properly in Grid Theme.
 
 [5.0.2] - 2019-01-07
 --------------------

@@ -256,3 +256,9 @@ legend .btn-comment {
     }
 
 }
+
+// range/distress/analog-scale pickers vertical
+.or-appearance-vertical .range-widget__wrap,
+.or-appearance-distress .range-widget__wrap {
+    margin-top: 0;
+}
