@@ -42,13 +42,12 @@ RelevantDropdown.prototype._updateFakeDatalist = function() {
     const $datalist = $( `#${this.listId}` );
     // Used to prevent reflow
     const tempItems = document.createDocumentFragment();
-    const tempitem = null;
 
     this.$fakeDatalist.empty();
 
     // Fill empty fake datalist
     $datalist.find( 'option' ).each( function() {
-        tempItem = $( '<li />', {
+        const tempItem = $( '<li />', {
             // .val is required here, not .text or .html
             // HTML *needs* to be <option value='xxx'> not <option>xxx</option>  (IE)
             'text': $( this ).val()

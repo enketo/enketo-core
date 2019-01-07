@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.0.2] - 2018-01-07
 --------------------
 ##### Changed
 - Fewer model updates during drawing using draw/signature/annotate widgets (performance).
@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Loading error in Pages mode when a page has no label.
 - Itemsets not populating if inside an irrelevant group upon load.
 - Download link not working for Draw/Signature/Annotate widgets.
+- Broken autocomplete widget in Safari and all iOS browsers.
 
 [5.0.1] - 2018-12-20
 --------------------
