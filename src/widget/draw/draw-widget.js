@@ -6,7 +6,7 @@ import SignaturePad from 'signature_pad';
 import { t } from 'enketo/translator';
 import dialog from 'enketo/dialog';
 import { updateDownloadLink, dataUriToBlobSync, getFilename } from '../../js/utils';
-const DELAY = 4500;
+const DELAY = 1500;
 
 /**
  * SignaturePad.prototype.fromDataURL is asynchronous and does not return a 
