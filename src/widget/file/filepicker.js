@@ -47,20 +47,10 @@ class Filepicker extends Widget {
         this.fakeInput = widget.querySelector( '.fake-file-input' );
         this.downloadLink = widget.querySelector( '.btn-download' );
 
-        widget.querySelector( '.btn-reset' ).addEventListener( 'click', () => {
-            if ( ( this.originalInputValue || this.value ) ) {
-                dialog.confirm( t( 'filepicker.resetWarning', { item: t( 'filepicker.file' ) } ) )
-                    .then( confirmed => {
-                        if ( confirmed ) {
-                            this.originalInputValue = '';
-                        }
-                    } )
-                    .catch( () => {} );
-            }
-        } );
+        that._setResetButtonListener( widget.querySelector( '.btn-reset' ) );
 
         // Focus listener needs to be added synchronously
-        that._focusListener();
+        that._setFocusListener();
 
         // show loaded file name or placeholder regardless of whether widget is supported
         this._showFileName( existingFileName );
@@ -77,7 +67,7 @@ class Filepicker extends Widget {
         fileManager.init()
             .then( () => {
                 that._showFeedback();
-                that._changeListener();
+                that._setChangeListener();
                 that.element.disabled = false;
                 if ( existingFileName ) {
                     fileManager.getFileUrl( existingFileName )
@@ -101,7 +91,23 @@ class Filepicker extends Widget {
         this.fakeInput.setAttribute( 'placeholder', t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) );
     }
 
-    _changeListener() {
+    _setResetButtonListener( resetButton ) {
+        if ( resetButton ) {
+            resetButton.addEventListener( 'click', () => {
+                if ( ( this.originalInputValue || this.value ) ) {
+                    dialog.confirm( t( 'filepicker.resetWarning', { item: t( 'filepicker.file' ) } ) )
+                        .then( confirmed => {
+                            if ( confirmed ) {
+                                this.originalInputValue = '';
+                            }
+                        } )
+                        .catch( () => {} );
+                }
+            } );
+        }
+    }
+
+    _setChangeListener() {
         const that = this;
 
         $( this.element )
@@ -184,17 +190,15 @@ class Filepicker extends Widget {
         } );
     }
 
-    _focusListener() {
-        const that = this;
-
+    _setFocusListener() {
         // Handle focus on widget input
         this.fakeInput.addEventListener( 'focus', () => {
-            that.element.dispatchEvent( event.FakeFocus() );
+            this.element.dispatchEvent( event.FakeFocus() );
         } );
 
         // Handle focus on original input (goTo functionality)
         this.element.addEventListener( 'applyfocus', () => {
-            that.fakeInput.focus();
+            this.fakeInput.focus();
         } );
     }
 
