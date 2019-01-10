@@ -194,7 +194,11 @@ const types = {
                 const timeParts = parts[ 0 ].split( ':' );
                 if ( parts.length > 0 ) {
                     // This will only work for latin numbers but that should be fine because that's what the widget supports.
-                    timeParts[ 0 ] = parts[ 1 ] === time.pmNotation ? Number( timeParts[ 0 ] ) + 12 : timeParts[ 0 ];
+                    if ( parts[ 1 ] === time.pmNotation ) {
+                        timeParts[ 0 ] = ( ( Number( timeParts[ 0 ] ) % 12 ) + 12 ).toString().pad( 2 );
+                    } else if ( parts[ 1 ] === time.amNotation ) {
+                        timeParts[ 0 ] = ( Number( timeParts[ 0 ] ) % 12 ).toString().pad( 2 );
+                    }
                     x = timeParts.join( ':' );
                 }
             }
