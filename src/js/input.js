@@ -3,6 +3,7 @@
  */
 
 import types from './types';
+import events from './event';
 
 export default {
     // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
@@ -134,7 +135,7 @@ export default {
         }
         return this.getWrapNodes( this.form.view.$.find( `[${attr}="${name}"]` ) ).eq( index ).find( `[${attr}="${name}"]:not(.ignore)` ).eq( 0 );
     },
-    setVal( $input, value, event = 'inputupdate.enketo' ) {
+    setVal( $input, value, event = events.InputUpdate() ) {
         let $inputs;
         const type = this.getInputType( $input );
         const $question = this.getWrapNodes( $input );
@@ -200,7 +201,7 @@ export default {
                 $inputs.val( value );
                 // don't trigger on all radiobuttons/checkboxes
                 if ( event ) {
-                    $inputs.eq( 0 ).trigger( 'inputupdate.enketo' );
+                    $inputs[ 0 ].dispatchEvent( event );
                 }
             }
         }

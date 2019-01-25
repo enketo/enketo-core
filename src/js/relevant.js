@@ -5,6 +5,7 @@
  */
 
 import $ from 'jquery';
+import events from './event';
 
 export default {
     update( updated, forceClearIrrelevant ) {
@@ -237,7 +238,7 @@ export default {
     clear( $branchNode, path ) {
         // A change event ensures the model is updated
         // An inputupdate event is required to update widgets
-        $branchNode.clearInputs( 'change', 'inputupdate.enketo' );
+        $branchNode.clearInputs( 'change', events.InputUpdate().type );
         // Update calculated items if branch is a group
         // We exclude question branches here because those will have been cleared already in the previous line.
         if ( $branchNode.is( '.or-group, .or-group-data' ) ) {

@@ -161,9 +161,9 @@ function _setOptionChangeListener( Widget, els ) {
 function _setValChangeListener( Widget, els ) {
     // avoid adding eventhandlers on widgets that apply to the <form> or <label> element
     if ( els.length > 0 && els[ 0 ].matches( 'input, select, textarea' ) ) {
-        $( els ).on( 'inputupdate.enketo', function() {
-            new Collection( this ).update( Widget );
-        } );
+        els.forEach( el => el.addEventListener( events.InputUpdate.type, event => {
+            new Collection( event.target ).update( Widget );
+        } ) );
     }
 }
 

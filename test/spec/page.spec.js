@@ -72,8 +72,8 @@ describe( 'Pages mode', () => {
         it( 'updates a ToC when the language changes', () => {
             const form = loadForm( 'pages.xml' );
             form.view.html.after( document.createRange().createContextualFragment(
-                `<ol class="pages-toc__list"/>
-                <span class="form-language-selector"/>`
+                `<ol class="pages-toc__list"></ol>
+                <span class="form-language-selector"></span>`
             ) );
             form.init();
             const toc = form.pages.$toc[ 0 ];

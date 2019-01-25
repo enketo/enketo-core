@@ -40,6 +40,10 @@ function Input() {
     return new Event( 'input', { bubbles: true } );
 }
 
+function InputUpdate() {
+    return new CustomEvent( 'inputupdate', { bubbles: true } );
+}
+
 export default {
     DataUpdate,
     FakeFocus,
@@ -51,4 +55,5 @@ export default {
     ChangeLanguage,
     Change,
     Input,
+    InputUpdate
 };
