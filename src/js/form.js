@@ -18,6 +18,7 @@ import requiredModule from './required';
 import maskModule from './mask';
 import readonlyModule from './readonly';
 import FormLogicError from './form-logic-error';
+import events from './event';
 import './plugins';
 import './extend';
 
@@ -661,7 +662,8 @@ Form.prototype.setEventHandlers = function() {
         that.editStatus = true;
     } );
 
-    this.view.$.on( 'addrepeat', ( event, index ) => {
+    this.view.html.addEventListener( events.AddRepeat().type, event => {
+        const index = event.detail ? event.detail[ 0 ] : undefined;
         const $clone = $( event.target );
         const updated = {
             repeatPath: $clone.attr( 'name' ),
@@ -677,11 +679,11 @@ Form.prototype.setEventHandlers = function() {
         that.progress.update();
     } );
 
-    this.view.$.on( 'removerepeat', () => {
+    this.view.html.addEventListener( events.RemoveRepeat(), () => {
         that.progress.update();
     } );
 
-    this.view.$.on( 'changelanguage', () => {
+    this.view.html.addEventListener( events.ChangeLanguage().type, () => {
         that.output.update();
     } );
 

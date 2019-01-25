@@ -48,7 +48,7 @@ export default {
             this.setUi( this._currentLang );
         } );
 
-        this.form.view.$.on( 'addrepeat', event => this.setUi( this._currentLang, event.target ) );
+        this.form.view.html.addEventListener( events.AddRepeat().type, event => this.setUi( this._currentLang, event.target ) );
     },
     get currentLang() {
         return this._currentLang;
@@ -75,7 +75,7 @@ export default {
         window.enketoFormLocale = lang;
 
         this.form.view.html.querySelectorAll( 'select, datalist' ).forEach( el => this.setSelect( el ) );
-        this.form.view.$.trigger( 'changelanguage' );
+        this.form.view.html.dispatchEvent( events.ChangeLanguage() );
     },
     // swap language of <select> and <datalist> <option>s
     setSelect( select ) {

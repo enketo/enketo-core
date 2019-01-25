@@ -143,31 +143,30 @@ export default {
             } );
     },
     _setRepeatHandlers() {
-        const that = this;
         // TODO: can be optimized by smartly updating the active pages
-        this.form.view.$
-            .on( 'addrepeat.pagemode', ( event, index, byCountUpdate ) => {
-                that._updateAllActive();
-                // Don't flip if the user didn't create the repeat with the + button.
-                // or if is the default first instance created during loading.
-                // except if the new repeat is actually first page in the form.
-                if ( !byCountUpdate || that.$activePages[ 0 ] === event.target ) {
-                    that.flipToPageContaining( $( event.target ) );
+        this.form.view.html.addEventListener( events.AddRepeat().type, event => {
+            const byCountUpdate = event.detail ? event.detail[ 1 ] : undefined;
+            this._updateAllActive();
+            // Don't flip if the user didn't create the repeat with the + button.
+            // or if is the default first instance created during loading.
+            // except if the new repeat is actually first page in the form.
+            if ( !byCountUpdate || this.$activePages[ 0 ] === event.target ) {
+                this.flipToPageContaining( $( event.target ) );
+            }
+        } );
+        this.form.view.html.addEventListener( events.RemoveRepeat().type, event => {
+            // if the current page is removed
+            // note that that.$current will have length 1 even if it was removed from DOM!
+            if ( this.$current.closest( 'html' ).length === 0 ) {
+                this._updateAllActive();
+                let $target = $( event.target ).prev();
+                if ( $target.length === 0 ) {
+                    $target = $( event.target );
                 }
-            } )
-            .on( 'removerepeat.pagemode', event => {
-                // if the current page is removed
-                // note that that.$current will have length 1 even if it was removed from DOM!
-                if ( that.$current.closest( 'html' ).length === 0 ) {
-                    that._updateAllActive();
-                    let $target = $( event.target ).prev();
-                    if ( $target.length === 0 ) {
-                        $target = $( event.target );
-                    }
-                    // is it best to go to previous page always?
-                    that.flipToPageContaining( $target );
-                }
-            } );
+                // is it best to go to previous page always?
+                this.flipToPageContaining( $target );
+            }
+        } );
     },
     _setBranchHandlers() {
         const that = this;
@@ -184,10 +183,9 @@ export default {
             } );
     },
     _setLangChangeHandlers() {
-        const that = this;
-        this.form.view.$
-            .on( 'changelanguage.pagemode', () => {
-                that._updateToc();
+        this.form.view.html
+            .addEventListener( events.ChangeLanguage().type, () => {
+                this._updateToc();
             } );
     },
     _getCurrent() {

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import _widgets from 'enketo/widgets';
 import { elementDataStore as data } from './dom-utils';
+import events from './event';
 const widgets = _widgets.filter( widget => widget.selector );
 let options;
 let formHtml;
@@ -127,7 +128,7 @@ function _instantiate( Widget, group ) {
 function _setLangChangeListener( Widget, els ) {
     // call update for all widgets when language changes 
     if ( els.length > 0 ) {
-        $( formHtml ).on( 'changelanguage', () => {
+        formHtml.addEventListener( events.ChangeLanguage().type, () => {
             new Collection( els ).update( Widget );
         } );
     }

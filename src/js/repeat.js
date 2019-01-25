@@ -10,6 +10,7 @@
  */
 
 import $ from 'jquery';
+import events from './event';
 
 import config from 'enketo/config';
 const disableFirstRepeatRemoval = config.repeatOrdinals === true;
@@ -315,7 +316,7 @@ export default {
             // even if they are in different series.
             repeatIndex = repeatIndex || this.getIndex( $clone[ 0 ] );
             // This will trigger setting default values, calculations, readonly, relevancy, language updates, and automatic page flips.
-            $clone.trigger( 'addrepeat', [ repeatIndex, byCountUpdate ] );
+            $clone[ 0 ].dispatchEvent( events.AddRepeat( [ repeatIndex, byCountUpdate ] ) );
             // Initialize widgets in clone after default values have been set
             if ( this.form.widgetsInitialized ) {
                 this.form.widgets.init( $clone, this.form.options );
@@ -359,7 +360,7 @@ export default {
             that.toggleButtons( repeatInfo );
             // Trigger the removerepeat on the next repeat or repeat-info(always present)
             // so that removerepeat handlers know where the repeat was removed
-            $next.trigger( 'removerepeat' );
+            $next[ 0 ].dispatchEvent( events.RemoveRepeat() );
             // Now remove the data node
             that.form.model.node( repeatPath, repeatIndex ).remove();
         } );
