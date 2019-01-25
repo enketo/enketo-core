@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- New repeats are always shown in default language.
+
 [5.0.4] - 2019-01-10
 ---------------------
 ##### Fixed

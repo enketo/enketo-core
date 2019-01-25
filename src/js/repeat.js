@@ -314,7 +314,7 @@ export default {
             // This is the index of the new repeat in relation to all other repeats of the same name,
             // even if they are in different series.
             repeatIndex = repeatIndex || this.getIndex( $clone[ 0 ] );
-            // This will trigger setting default values, calculations, readonly, relevancy, and automatic page flips.
+            // This will trigger setting default values, calculations, readonly, relevancy, language updates, and automatic page flips.
             $clone.trigger( 'addrepeat', [ repeatIndex, byCountUpdate ] );
             // Initialize widgets in clone after default values have been set
             if ( this.form.widgetsInitialized ) {

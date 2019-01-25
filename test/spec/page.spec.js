@@ -1,4 +1,5 @@
 import loadForm from '../helpers/load-form';
+import events from '../../src/js/event';
 
 describe( 'Pages mode', () => {
 
@@ -39,51 +40,58 @@ describe( 'Pages mode', () => {
 
         it( 'builds a ToC using the first visible label on each page', () => {
             const form = loadForm( 'pages.xml' );
-            form.view.$.append( '<ol class="pages-toc__list"/>' );
+            form.view.html.after( document.createRange().createContextualFragment(
+                `<ol class="pages-toc__list"/>`
+            ) );
             form.init();
-            const $toc = form.pages.$toc;
+            const toc = form.pages.$toc[ 0 ];
 
-            expect( $toc.length ).toEqual( 1 );
-            expect( $toc.find( 'li' ).length ).toEqual( 10 );
-            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+            expect( toc ).not.toEqual( null );
+            expect( toc.querySelectorAll( 'li' ).length ).toEqual( 10 );
+            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_EN );
         } );
 
         it( 'updates a ToC when page relevancy changes', () => {
             const form = loadForm( 'pages.xml' );
-            form.view.$.append( '<ol class="pages-toc__list"/>' );
+            form.view.html.after( document.createRange().createContextualFragment(
+                `<ol class="pages-toc__list"/>`
+            ) );
             form.init();
-            const $toc = form.pages.$toc;
+            const toc = form.pages.$toc[ 0 ];
 
-            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_EN );
 
             // Now make a bunch of pages irrelevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
-            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
                 .toEqual( SUB_EN );
         } );
 
         it( 'updates a ToC when the language changes', () => {
             const form = loadForm( 'pages.xml' );
-            form.view.$.append( '<ol class="pages-toc__list"/>' );
+            form.view.html.after( document.createRange().createContextualFragment(
+                `<ol class="pages-toc__list"/>
+                <span class="form-language-selector"/>`
+            ) );
             form.init();
-            const $toc = form.pages.$toc;
+            const toc = form.pages.$toc[ 0 ];
 
-            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_EN );
 
             // Switch language
             const langSelector = form.view.html.parentNode.querySelector( '#form-languages' );
             langSelector.value = 'nl';
-            langSelector.dispatchEvent( new Event( 'change' ) );
+            langSelector.dispatchEvent( events.Change() );
 
-            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_NL );
 
             // Now make a bunch of pages irrelevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
-            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
                 .toEqual( SUB_NL );
         } );
 
@@ -91,9 +99,9 @@ describe( 'Pages mode', () => {
             const form = loadForm( 'pages-nolabel.xml' );
             form.view.$.append( '<ol class="pages-toc__list"/>' );
             form.init();
-            const $toc = form.pages.$toc;
+            const toc = form.pages.$toc[ 0 ];
 
-            expect( $toc.find( 'li' ).get().map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
                 .toEqual( [ 'hint5678901234567890...', '[2]' ] );
 
         } );

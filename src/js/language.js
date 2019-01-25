@@ -2,11 +2,11 @@
  * Form languages module.
  */
 
-import $ from 'jquery';
+import { getSiblingElements } from './dom-utils';
+import events from './event';
 
 export default {
     init() {
-        const that = this;
         if ( !this.form ) {
             throw new Error( 'Language module not correctly instantiated with form property.' );
         }
@@ -14,62 +14,67 @@ export default {
         if ( !root ) {
             return;
         }
-        const $langSelector = $( root.querySelector( '.form-language-selector' ) );
-        this.$formLanguages = $( this.form.view.html.querySelector( '#form-languages' ) );
-        this._currentLang = this.$formLanguages.attr( 'data-default-lang' ) || this.$formLanguages.find( 'option' ).eq( 0 ).attr( 'value' );
-        const currentDirectionality = this.$formLanguages.find( `[value="${this._currentLang}"]` ).attr( 'data-dir' ) || 'ltr';
+        const langSelector = root.querySelector( '.form-language-selector' );
+        const formLanguages = this.form.view.html.querySelector( '#form-languages' );
 
-        if ( $langSelector.length && this.$formLanguages.find( 'option' ).length > 1 ) {
-            this.$formLanguages
-                .detach()
-                .appendTo( $langSelector );
-            $langSelector.removeClass( 'hide' );
-        }
-
-        this.$formLanguages.val( this._currentLang );
-
-        this.form.view.$
-            .attr( 'dir', currentDirectionality );
-
-        if ( this.$formLanguages.find( 'option' ).length < 2 ) {
+        if ( !formLanguages ) {
             return;
         }
 
-        this.$formLanguages.change( function( event ) {
+        const languages = [ ...formLanguages.querySelectorAll( 'option' ) ].map( option => option.value );
+        if ( langSelector ) {
+            langSelector
+                .append( formLanguages );
+            if ( languages.length > 1 ) {
+                langSelector.classList.remove( 'hide' );
+            }
+        }
+        this.formLanguages = root.querySelector( '#form-languages' );
+        this._currentLang = this.formLanguages.dataset.defaultLang || languages[ 0 ] || '';
+        const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );
+        const currentDirectionality = langOption && langOption.dataset.dir || 'ltr';
+
+        this.formLanguages.value = this._currentLang;
+
+        this.form.view.html.setAttribute( 'dir', currentDirectionality );
+
+        if ( languages.length < 2 ) {
+            return;
+        }
+
+        this.formLanguages.addEventListener( events.Change().type, event => {
             event.preventDefault();
-            that._currentLang = $( this ).val();
-            that.setAll( that._currentLang );
+            this._currentLang = event.target.value;
+            this.setUi( this._currentLang );
         } );
+
+        this.form.view.$.on( 'addrepeat', event => this.setUi( this._currentLang, event.target ) );
     },
     get currentLang() {
         return this._currentLang;
     },
     get currentLangDesc() {
-        return this.$formLanguages.find( `[value="${this._currentLang}"]` ).text();
+        const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );
+        return langOption ? langOption.textContent : null;
     },
-    setAll( lang ) {
-        const that = this;
-        const dir = this.$formLanguages.find( `[value="${lang}"]` ).attr( 'data-dir' ) || 'ltr';
+    setUi( lang, group = this.form.view.html ) {
+        const dir = this.formLanguages.querySelector( `[value="${lang}"]` ).dataset.dir || 'ltr';
+        const translations = [ ...group.querySelectorAll( '[lang]' ) ];
 
-        this.form.view.$
-            .attr( 'dir', dir )
-            .find( '[lang]' )
-            .removeClass( 'active' )
-            .filter( `[lang="${lang}"], [lang=""]` )
-            .filter( function() {
-                const $this = $( this );
-                return !$this.hasClass( 'or-form-short' ) || ( $this.hasClass( 'or-form-short' ) && $this.siblings( '.or-form-long' ).length === 0 );
-            } )
-            .addClass( 'active' );
+        this.form.view.html.setAttribute( 'dir', dir );
+        translations.forEach( el => el.classList.remove( 'active' ) );
+        translations
+            .filter( el => el.matches( `[lang="${lang}"], [lang=""]` ) &&
+                ( !el.classList.contains( 'or-form-short' ) || ( el.classList.contains( 'or-form-short' ) && getSiblingElements( el, '.or-form-long' ).length === 0 ) ) )
+            .forEach( el => el.classList.add(
+                'active'
+            ) );
 
         // For use in locale-sensitive XPath functions.
         // Don't even check whether it's a proper subtag or not. It will revert to client locale if it is not recognized.
         window.enketoFormLocale = lang;
 
-        this.form.view.$.find( 'select, datalist' ).each( function() {
-            that.setSelect( this );
-        } );
-
+        this.form.view.html.querySelectorAll( 'select, datalist' ).forEach( el => this.setSelect( el ) );
         this.form.view.$.trigger( 'changelanguage' );
     },
     // swap language of <select> and <datalist> <option>s
@@ -81,8 +86,8 @@ export default {
         if ( !translations ) {
             return;
         }
-        Array.prototype.slice.call( select.children )
-            .filter( el => el.matches( 'option' ) && !el.matches( '[value=""], [data-value=""]' ) )
+
+        [ ...select.children ].filter( el => el.matches( 'option' ) && !el.matches( '[value=""], [data-value=""]' ) )
             .forEach( option => {
                 const curLabel = type === 'datalist' ? option.value : option.textContent;
                 const value = type === 'datalist' ? option.dataset.value : option.value;
