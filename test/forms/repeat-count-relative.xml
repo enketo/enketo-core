@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:oc="http://openclinica.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>relative repeat count</h:title>
+        <model>
+            <instance>
+                <data id="data">
+                    <count></count>
+                    <rep1 jr:template="">
+                        <txt/>
+                    </rep1>
+                    <rep2 jr:template="">
+                        <txt2/>
+                    </rep2>
+                    <sum_note/>
+                    <txtsum_note/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/count" type="int"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/count">
+            <label>How many repeats?</label>
+        </input>
+        <group ref="/data/rep1">
+            <label>Repeat with count</label>
+            <repeat jr:count=" /data/count " nodeset="/data/rep1">
+                <input ref="/data/rep1/txt">
+                    <label>Enter text</label>
+                </input>
+            </repeat>
+        </group>
+        <group ref="/data/rep2">
+            <label>Repeat with count</label>
+            <repeat jr:count=" ../count " nodeset="/data/rep2">
+                <input ref="/data/rep1/txt2">
+                    <label>Enter text</label>
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

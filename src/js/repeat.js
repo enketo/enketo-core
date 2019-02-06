@@ -121,6 +121,19 @@ export default {
         }
         return count - 1;
     },
+    /*
+     * Obtains the absolute index of the provided repeat-info element
+     */
+    getInfoIndex( repeatInfo ) {
+        if ( !this.form.repeatsPresent ) {
+            return 0;
+        }
+        if ( !repeatInfo || !repeatInfo.classList.contains( 'or-repeat-info' ) ) {
+            return null;
+        }
+        const name = repeatInfo.dataset.name;
+        return [ ...repeatInfo.closest( 'form.or' ).querySelectorAll( `.or-repeat-info[data-name="${name}"` ) ].indexOf( repeatInfo );
+    },
     /**
      * [updateViewInstancesFromModel description]
      * @param  {[type]} idx           not used but part of jQuery.each
@@ -182,12 +195,7 @@ export default {
     updateRepeatInstancesFromCount( idx, repeatInfo ) {
         const that = this;
         let $last;
-        let repCountNodes;
         let numRepsInCount;
-        let numRepsInView;
-        let toCreate;
-        let repPath;
-        let repIndex;
         const $repeatInfo = $( repeatInfo );
         const repCountPath = repeatInfo.dataset.repeatCount || '';
 
@@ -196,28 +204,22 @@ export default {
         }
 
         /*
-         * We cannot pass a context to model.evaluate() if the number or repeats in a series is zero.
+         * We cannot pass an .or-repeat context to model.evaluate() if the number or repeats in a series is zero.
          * However, but we do still need a context for nested repeats where the count of the nested repeat
-         * is determined in a node inside the parent repeat. To do so we use this method:
-         *
-         * 1. determine the index from the view (always 0 for not-nested-repeats)
-         * 2. obtain ALL repCount nodes from the model
-         * 3. select the correct node from the result array
-         * 
+         * is determined in a node inside the parent repeat. To do so we use the repeat comment in model as context.
          */
-        repPath = repeatInfo.dataset.name;
-        repIndex = this.getIndex( repeatInfo );
-        repCountNodes = this.form.model.evaluate( repCountPath, 'nodes', null, null, true );
+        const repPath = repeatInfo.dataset.name;
+        const repCountNode = this.form.model.evaluate( repCountPath, 'node', this.form.model.getRepeatCommentSelector( repPath ), this.getInfoIndex( repeatInfo ), true );
 
-        if ( repCountNodes.length && repCountNodes[ repIndex ] ) {
-            numRepsInCount = Number( repCountNodes[ repIndex ].textContent );
+        if ( repCountNode ) {
+            numRepsInCount = Number( repCountNode.textContent );
         } else {
             console.error( 'Unexpectedly, could not obtain repeat count node' );
         }
 
         numRepsInCount = isNaN( numRepsInCount ) ? 0 : numRepsInCount;
-        numRepsInView = $repeatInfo.siblings( `.or-repeat[name="${repPath}"]` ).length;
-        toCreate = numRepsInCount - numRepsInView;
+        const numRepsInView = $repeatInfo.siblings( `.or-repeat[name="${repPath}"]` ).length;
+        let toCreate = numRepsInCount - numRepsInView;
 
         if ( toCreate > 0 ) {
             that.add( repeatInfo, toCreate );

@@ -273,6 +273,34 @@ describe( 'repeat functionality', () => {
 
             expect( form.view.html.querySelectorAll( a )[ 1 ].querySelectorAll( b ).length ).toEqual( 2 );
         } );
+
+        it( 'and is able to use a relative repeat count path for top-level repeats', () => {
+            const f = loadForm( 'repeat-count-relative.xml' );
+            f.init();
+
+            f.view.html.querySelector( 'input[name="/data/count"]' ).value = 4;
+            f.view.html.querySelector( 'input[name="/data/count"]' ).dispatchEvent( event.Change() );
+
+            expect( f.view.html.querySelectorAll( '.or-repeat' ).length ).toEqual( 8 ); //4+4
+        } );
+
+        it( 'and is able to use a relative repeat count path for nested repeats', () => {
+            const f = loadForm( 'repeat-count-relative-nested.xml' );
+            f.init();
+
+            expect( f.view.html.querySelectorAll( '.or-repeat[name="/data/rep1"]' ).length ).toEqual( 2 );
+
+            const count1 = f.view.html.querySelectorAll( 'input[name="/data/rep1/txt"]' )[ 0 ];
+            count1.value = 6;
+            count1.dispatchEvent( event.Change() );
+
+            const count2 = f.view.html.querySelectorAll( 'input[name="/data/rep1/txt"]' )[ 1 ];
+            count2.value = 1;
+            count2.dispatchEvent( event.Change() );
+
+            expect( f.view.html.querySelectorAll( '.or-repeat[name="/data/rep1/rep2"]' ).length ).toEqual( 7 ); //6+1
+        } );
+
     } );
 
 

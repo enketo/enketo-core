@@ -486,6 +486,9 @@ FormModel.prototype.getXPath = function( node, rootNodeName, includePosition ) {
     let index;
     const steps = [];
     let position = '';
+    if ( !node || node.nodeType !== 1 ) {
+        return null;
+    }
     const nodeName = node.nodeName;
     let parent = node.parentElement;
     let parentName = parent ? parent.nodeName : null;
@@ -614,9 +617,12 @@ FormModel.prototype.getRepeatCommentText = path => {
     return REPEAT_COMMENT_PREFIX + path;
 };
 
+FormModel.prototype.getRepeatCommentSelector = function( repeatPath ) {
+    return `//comment()[self::comment()="${this.getRepeatCommentText( repeatPath )}"]`;
+};
+
 FormModel.prototype.getRepeatCommentEl = function( repeatPath, repeatSeriesIndex ) {
-    const xPath = `//comment()[self::comment()="${this.getRepeatCommentText( repeatPath )}"]`;
-    return this.evaluate( xPath, 'nodes', null, null, true )[ repeatSeriesIndex ];
+    return this.evaluate( this.getRepeatCommentSelector( repeatPath ), 'nodes', null, null, true )[ repeatSeriesIndex ];
 };
 
 /**
@@ -922,6 +928,12 @@ FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
  */
 FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
     let target = this.node( selector, index ).getElement();
+
+    // target is null for nested repeats if no repeats exist
+    if ( !target ) {
+        return expr;
+    }
+
     const parents = [ target ];
     const that = this;
 
@@ -1073,7 +1085,9 @@ FormModel.prototype.replaceInstanceFn = function( expr ) {
  */
 FormModel.prototype.replaceCurrentFn = ( expr, contextSelector ) => {
     // relative paths
-    expr = expr.replace( 'current()/.', `${contextSelector}/.` );
+    if ( contextSelector ) {
+        expr = expr.replace( 'current()/.', `${contextSelector}/.` );
+    }
     // absolute paths
     expr = expr.replace( 'current()/', '/' );
 
@@ -1195,7 +1209,7 @@ FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
  *
  * @param  { string }     expr        the expression to evaluate
  * @param  { string= }    resTypeStr  boolean, string, number, node, nodes (best to always supply this)
- * @param  { string= }    selector    jQuery selector which will be use to provide the context to the evaluator
+ * @param  { string= }    selector    query selector which will be use to provide the context to the evaluator
  * @param  { number= }    index       0-based index of selector in document
  * @param  { boolean= }   tryNative   whether an attempt to try the Native Evaluator is safe (ie. whether it is
  *                                    certain that there are no date comparisons)
@@ -1204,7 +1218,7 @@ FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
 FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
     let j, context, doc, resTypeNum, resultTypes, result, collection, response, repeats, cacheKey, original, cacheable;
 
-    //console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
+    // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
     //    index + ' and result type: ' + resTypeStr );
     original = expr;
     tryNative = tryNative || false;

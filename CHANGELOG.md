@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.0.5] - 2019-02-07
 ---------------------
 ##### Fixed
 - New repeats are always shown in default language.
+- Relative repeat-counts not working.
 
 [5.0.4] - 2019-01-10
 ---------------------
