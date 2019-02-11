@@ -168,7 +168,7 @@ new Form(formselector, data, {
 
 ### How to develop Enketo Core
 
-1. install [node](http://nodejs.org/) and [grunt-cli](http://gruntjs.com/getting-started)
+1. install [node](http://nodejs.org/) version 8 until [this issue](https://github.com/enketo/enketo-transformer/issues/53) is closed, and [grunt-cli](http://gruntjs.com/getting-started)
 2. install dependencies with `npm install`
 3. build with `grunt`
 4. start built-in auto-reloading development server with `npm start` 
