@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Changed
 - Readonly draw widgets no longer show drawings on grey background in Grid Theme, nor apply an opaqueness filter.
+
+##### Fixed
 - Loading image from record may show error even if it was loaded successfully.
 
 [5.0.5] - 2019-02-07
