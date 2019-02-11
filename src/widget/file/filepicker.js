@@ -25,7 +25,6 @@ class Filepicker extends Widget {
         const existingFileName = this.element.getAttribute( 'data-loaded-file-name' );
         const that = this;
 
-        this.element.disabled = true;
         this.element.classList.add( 'hide' );
         this.question.classList.add( 'with-media', 'clearfix' );
 
@@ -35,12 +34,14 @@ class Filepicker extends Widget {
                     <div class="file-feedback"></div>
                     <div class="file-preview"></div>
                 </div>` );
-        if ( !this.props.readonly ) {
-            fragment.querySelector( 'input' ).after( this.downloadButtonHtml );
-            fragment.querySelector( 'input' ).after( this.resetButtonHtml );
-        }
+
+        fragment.querySelector( 'input' ).after( this.downloadButtonHtml );
+        fragment.querySelector( 'input' ).after( this.resetButtonHtml );
 
         this.element.after( fragment );
+
+        this.disable();
+
         const widget = this.question.querySelector( '.widget' );
         this.feedback = widget.querySelector( '.file-feedback' );
         this.preview = widget.querySelector( '.file-preview' );
@@ -68,7 +69,9 @@ class Filepicker extends Widget {
             .then( () => {
                 that._showFeedback();
                 that._setChangeListener();
-                that.element.disabled = false;
+                if ( !that.props.readonly ) {
+                    that.enable();
+                }
                 if ( existingFileName ) {
                     fileManager.getFileUrl( existingFileName )
                         .then( url => {
@@ -245,6 +248,15 @@ class Filepicker extends Widget {
 
     _updateDownloadLink( objectUrl, fileName ) {
         updateDownloadLink( this.downloadLink, objectUrl, fileName );
+    }
+
+    disable() {
+        this.element.disabled = true;
+        this.question.querySelector( '.btn-reset' ).disabled = true;
+    }
+    enable() {
+        this.element.disabled = false;
+        this.question.querySelector( '.btn-reset' ).disabled = false;
     }
 
     get props() {
