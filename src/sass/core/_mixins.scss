@@ -80,6 +80,7 @@
 }
 
 @mixin clearfix {
+
     &:before,
     &:after {
         content: " "; // 1
@@ -152,6 +153,7 @@
     @if $total==null {
         $flex: $value;
     }
+
     @else if $total>=$value {
         $flex: percentage($value / $total);
     }
@@ -167,6 +169,7 @@
     @if $total==null {
         $flex: $value;
     }
+
     @else if $total>=$value {
         $flex: percentage($value / $total);
     }
@@ -232,9 +235,64 @@
 @mixin form-header-margin($padding) {
     margin-left: -$padding;
     margin-right: -$padding;
-    width: calc(100% + ( 2 * #{$padding}));
+    width: calc(100% + (2 * #{$padding}));
 }
 
 @mixin focus-shadow {
     // just a placeholder
+}
+
+// from https://gist.github.com/JacobDB/0ffffaf8e772c12acf7102edb8a302be
+// Replace letters
+@function str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search);
+
+    @if $index {
+        @return str-slice($string, 1, $index - 1)+$replace+str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    }
+
+    @return $string;
+}
+
+// from https://gist.github.com/JacobDB/0ffffaf8e772c12acf7102edb8a302be
+// Encode symbols
+@function url-encode($string) {
+    $map: ("%": "%25",
+        "<": "%3C",
+        ">": "%3E",
+        " ": "%20",
+        "!": "%21",
+        "*": "%2A",
+        "'": "%27",
+        '"': "%22",
+        "(": "%28",
+        ")": "%29",
+        ";": "%3B",
+        ":": "%3A",
+        "@": "%40",
+        "&": "%26",
+        "=": "%3D",
+        "+": "%2B",
+        "$": "%24",
+        ",": "%2C",
+        "/": "%2F",
+        "?": "%3F",
+        "#": "%23",
+        "[": "%5B",
+        "]": "%5D"
+        );
+
+    $new: $string;
+
+    @each $search,
+    $replace in $map {
+        $new: str-replace($new, $search, $replace);
+    }
+
+    @return $new;
+}
+
+// Format the SVG as a URL
+@function svg-as-url($string) {
+    @return url('data:image/svg+xml,#{url-encode($string)}');
 }

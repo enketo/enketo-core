@@ -101,15 +101,6 @@ module.exports = grunt => {
                     done( {
                         file: url
                     } );
-                },
-                // Temporary workaround for SVG tickmarks in checkboxes in Firefox. 
-                // See https://github.com/enketo/enketo-core/issues/439
-                functions: {
-                    'base64-url($mimeType, $data)': function( mimeType, data ) {
-                        const base64 = new Buffer( data.getValue() ).toString( 'base64' );
-                        const urlString = `url("data:${mimeType.getValue()};base64,${base64}")`;
-                        return nodeSass.types.String( urlString );
-                    }
                 }
             },
             compile: {
