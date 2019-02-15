@@ -1,4 +1,3 @@
-/* global Buffer */
 /**
  * When using enketo-core in your own app, you'd want to replace
  * this build file with one of your own in your project root.
