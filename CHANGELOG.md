@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.1.0] - 2019-02-18
 ---------------------
 ##### Changed
 - Readonly draw widgets no longer show drawings on grey background in Grid Theme, nor apply an opaqueness filter.
@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Loading image from record may show error even if it was loaded successfully.
+- Generic file upload not working (cannot set property 'src' of null).
 
 [5.0.5] - 2019-02-07
 ---------------------

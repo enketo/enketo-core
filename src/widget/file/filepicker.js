@@ -235,11 +235,9 @@ class Filepicker extends Widget {
             case 'video/*':
                 htmlStr = '<video controls="controls"/>';
                 break;
-            default:
-                break;
         }
 
-        if ( url ) {
+        if ( url && htmlStr ) {
             const fragment = document.createRange().createContextualFragment( htmlStr );
             fragment.querySelector( '*' ).src = url;
             this.preview.append( fragment );
