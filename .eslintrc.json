@@ -15,6 +15,13 @@
         "sourceType": "module",
         "ecmaVersion": 6
     },
+    "settings": {
+        "jsdoc": {
+            "tagNamePreference": {
+                "returns": "return"
+            }
+        }
+    },
     "rules": {
         "indent": [ "warn", 4, { "SwitchCase": 1 } ],
         "linebreak-style": [ "error", "unix" ],
