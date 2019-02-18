@@ -1,0 +1,8 @@
+dir: src
+packageJson: package.json
+articles:
+  - Overview: README.md
+  - Changelog: CHANGELOG.md
+branches:
+  - master
+  - 2ai-documentation-improvement
