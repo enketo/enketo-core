@@ -4,6 +4,7 @@ import loadForm from '../helpers/load-form';
 import forms from '../mock/forms';
 import config from '../../config';
 import pkg from '../../package';
+import dialog from '../../src/js/fake-dialog';
 
 describe( 'Output functionality ', () => {
     // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
@@ -621,6 +622,7 @@ describe( 'branching functionality', () => {
 
     describe( 'on a question inside a REMOVED repeat', () => {
         it( 'does not try to evaluate it', ( done ) => {
+            dialog.confirm = () => Promise.resolve( true );
             const form = loadForm( 'repeat-irrelevant-date.xml' );
             form.init();
             form.view.$.find( '[name="/repeat/rep"] button.remove' ).click();

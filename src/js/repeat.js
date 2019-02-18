@@ -11,6 +11,8 @@
 
 import $ from 'jquery';
 import events from './event';
+import { t } from 'enketo/translator';
+import dialog from 'enketo/dialog';
 
 import config from 'enketo/config';
 const disableFirstRepeatRemoval = config.repeatOrdinals === true;
@@ -86,13 +88,24 @@ export default {
             return false;
         } );
         this.form.view.$.on( 'click', 'button.remove:enabled', function() {
-            //remove clone
-            that.remove( $( this ).closest( '.or-repeat' ) );
+            that.confirmDelete( this.closest( '.or-repeat' ) );
             //prevent default
             return false;
         } );
 
         this.countUpdate();
+    },
+    // Make this function overwritable
+    confirmDelete( repeatEl ) {
+        const that = this;
+        dialog.confirm( { heading: t( 'repeat.confirmremove.heading' ), message: t( 'repeat.confirmremove.msg' ) } )
+            .then( confirmed => {
+                if ( confirmed ) {
+                    //remove clone
+                    that.remove( $( repeatEl ) );
+                }
+            } )
+            .catch( console.error );
     },
     /*
      * Obtains the absolute index of the provided repeat or repeat-info element

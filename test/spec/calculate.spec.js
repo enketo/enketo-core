@@ -1,6 +1,11 @@
 import loadForm from '../helpers/load-form';
+import dialog from '../../src/js/fake-dialog';
 
 describe( 'calculate functionality', () => {
+
+    beforeAll( () => {
+        dialog.confirm = () => Promise.resolve( true );
+    } );
 
     it( 'updates inside multiple repeats when repeats become relevant', () => {
         const form = loadForm( 'repeat-relevant-calculate.xml' );
