@@ -1,5 +1,6 @@
 import loadForm from '../helpers/load-form';
 import dialog from '../../src/js/fake-dialog';
+import events from '../../src/js/event';
 
 describe( 'calculate functionality', () => {
 
@@ -35,6 +36,19 @@ describe( 'calculate functionality', () => {
             expect( form.view.$.find( '[name="/data/rg/row"]' )[ 1 ].value ).toEqual( '2' );
             done();
         }, 650 );
+
+    } );
+
+    it( 'updates a calculation for node if calc refers to node filtered with predicate', () => {
+        const form = loadForm( 'count-repeated-nodes.xml' );
+        form.init();
+
+        const text1 = form.view.html.querySelector( 'textarea[name="/repeat-group-comparison/REP/text1"]' );
+
+        text1.value = ' yes ';
+        text1.dispatchEvent( events.Change() );
+
+        expect( form.view.html.querySelector( 'input[name="/repeat-group-comparison/count2"]' ).value ).toEqual( '1' );
 
     } );
 } );

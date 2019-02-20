@@ -487,7 +487,9 @@ Form.prototype.getQuerySelectorsForLogic = ( filter, attr, nodeName ) => [
     // #4: at the end of an expression
     `${filter}[${attr}$="/${nodeName}"]`,
     // #5: followed by ] (used in itemset filters)
-    `${filter}[${attr}*="/${nodeName}]"]`
+    `${filter}[${attr}*="/${nodeName}]"]`,
+    // #6: followed by [ (used when filtering nodes in repeat instances)
+    `${filter}[${attr}*="/${nodeName}["]`
 ];
 
 /**
