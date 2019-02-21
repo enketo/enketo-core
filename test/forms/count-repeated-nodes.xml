@@ -36,9 +36,6 @@
         </input>
       </repeat>
     </group>
-    <input ref="/repeat-group-comparison/count1">
-      <label>Number of times the word "yes" was entered.</label>
-    </input>
     <input ref="/repeat-group-comparison/count2">
       <label>Number of times the word "yes" was entered with or without preceding/trailing spaces</label>
     </input>

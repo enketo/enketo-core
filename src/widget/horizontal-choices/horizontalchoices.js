@@ -7,7 +7,7 @@ import Widget from '../../js/widget';
 class HorizontalChoices extends Widget {
 
     static get selector() {
-        return '.or-appearance-horizontal';
+        return '.question.or-appearance-horizontal';
     }
 
     _init() {
