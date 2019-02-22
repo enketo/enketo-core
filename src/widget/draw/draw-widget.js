@@ -168,9 +168,10 @@ class DrawWidget extends Widget {
                     } ).click();
 
                 $( canvas )
-                    .on( `canvasreload.${that.namespace}`, () => {
+                    .on( 'canvasreload', () => {
                         if ( that.cache ) {
-                            that.pad.fromObjectURL( that.cache );
+                            that.pad.fromObjectURL( that.cache )
+                                .then( that._updateValue.bind( that ) );
                         }
                     } );
                 that.enable();
@@ -215,7 +216,7 @@ class DrawWidget extends Widget {
         this._showFileName( loadedFileName );
 
         $input
-            .on( `click.${this.namespace}`, event => {
+            .on( 'click', event => {
                 // The purpose of this handler is to block the filepicker window
                 // when the label is clicked outside of the input.
                 if ( that.props.readonly || event.namespace !== 'propagate' ) {
@@ -224,7 +225,7 @@ class DrawWidget extends Widget {
                     return false;
                 }
             } )
-            .on( `change.${this.namespace}`, function() {
+            .on( 'change', function() {
                 // Get the file
                 const file = this.files[ 0 ];
 
@@ -248,7 +249,7 @@ class DrawWidget extends Widget {
             } );
 
         $fakeInput
-            .on( `click.${this.namespace}`, function( event ) {
+            .on( 'click', function( event ) {
                 /* 
                     The purpose of this handler is to selectively propagate clicks on the fake
                     input to the underlying file input (to show the file picker window).
@@ -264,7 +265,7 @@ class DrawWidget extends Widget {
                 event.preventDefault();
                 $input.trigger( 'click.propagate' );
             } )
-            .on( `change.${this.namespace}`, () => // For robustness, avoid any editing of filenames by user.
+            .on( 'change', () => // For robustness, avoid any editing of filenames by user.
                 false );
     }
 
@@ -405,7 +406,7 @@ class DrawWidget extends Widget {
             canvas.width = canvas.offsetWidth * ratio;
             canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext( '2d' ).scale( ratio, ratio );
-            $( canvas ).trigger( `canvasreload.${this.namespace}` );
+            $( canvas ).trigger( 'canvasreload' );
         }
     }
 
