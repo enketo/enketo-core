@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import support from '../../js/support';
+import events from '../../js/event';
 import sortable from 'html5sortable/dist/html5sortable.cjs';
 import { t } from 'enketo/translator';
 
@@ -30,6 +31,7 @@ class RankWidget extends Widget {
                 if ( !that.element.disabled ) {
                     this.classList.remove( 'rank-widget--empty' );
                     that.originalInputValue = that.value;
+                    that.element.dispatchEvent( events.FakeFocus() );
                 }
             } );
 
@@ -52,7 +54,8 @@ class RankWidget extends Widget {
                 };
             }
         } )[ 0 ].addEventListener( 'sortupdate', () => {
-            that.originalInputValue = that.value;
+            this.originalInputValue = this.value;
+            this.element.dispatchEvent( events.FakeFocus() );
         } );
 
         if ( this.props.readonly ) {

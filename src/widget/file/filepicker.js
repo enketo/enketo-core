@@ -2,7 +2,7 @@ import $ from 'jquery';
 import Widget from '../../js/widget';
 import fileManager from 'enketo/file-manager';
 import { getFilename, updateDownloadLink } from '../../js/utils';
-import event from '../../js/event';
+import events from '../../js/event';
 import { t } from 'enketo/translator';
 import TranslatedError from '../../js/translated-error';
 import dialog from 'enketo/dialog';
@@ -194,13 +194,9 @@ class Filepicker extends Widget {
     }
 
     _setFocusListener() {
-        // Handle focus on widget input
-        this.fakeInput.addEventListener( 'focus', () => {
-            this.element.dispatchEvent( event.FakeFocus() );
-        } );
 
         // Handle focus on original input (goTo functionality)
-        this.element.addEventListener( 'applyfocus', () => {
+        this.element.addEventListener( events.ApplyFocus().type, () => {
             this.fakeInput.focus();
         } );
     }

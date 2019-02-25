@@ -215,11 +215,6 @@ class Geopicker extends Widget {
             return false;
         } );
 
-        // pass focus events on widget elements back to original input
-        this.$widget.on( 'focus', 'input', () => {
-            $( that.element ).trigger( 'fakefocus' );
-        } );
-
         // enable search
         if ( this.props.search ) {
             this._enableSearch();

@@ -80,14 +80,14 @@ Form.prototype = {
         this.view.$.attr( 'name', name );
     },
     get editStatus() {
-        return !!this.view.$.data( 'edited' );
+        return this.view.html.dataset.edited === 'true';
     },
     set editStatus( status ) {
         // only trigger edit event once
-        if ( status && status !== this.view.$.data( 'edited' ) ) {
-            this.view.$.trigger( 'edited.enketo' );
+        if ( status && status !== this.view.html.dataset.edited ) {
+            this.view.html.dispatchEvent( events.Edited() );
         }
-        this.view.$.data( 'edited', status );
+        this.view.html.dataset.edited = status;
     },
     get surveyName() {
         return this.view.$.find( '#form-title' ).text();
@@ -148,10 +148,10 @@ Form.prototype.init = function() {
 
     // Before initializing form view, passthrough some model events externally
     this.model.events.addEventListener( 'dataupdate', event => {
-        that.view.$.trigger( 'dataupdate.enketo', event.detail );
+        that.view.html.dispatchEvent( events.DataUpdate( event.detail ) );
     } );
     this.model.events.addEventListener( 'removed', event => {
-        that.view.$.trigger( 'removed.enketo', event.detail );
+        that.view.html.dispatchEvent( events.Removed( event.detail ) );
     } );
 
     this.pages = this.addModule( pageModule );
@@ -645,15 +645,19 @@ Form.prototype.setEventHandlers = function() {
                 that.validateInput( $input )
                     .then( valid => {
                         // propagate event externally after internal processing is completed
-                        $input.trigger( 'valuechange.enketo', valid );
+                        $input.trigger( 'valuechange', valid );
                     } );
             }
         } );
 
     // doing this on the focus event may have little effect on performance, because nothing else is happening :)
-    this.view.$.on( 'focus fakefocus', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', event => {
+    this.view.html.addEventListener( 'focusin', event => {
         // update the form progress status
-        that.progress.update( event.target );
+        this.progress.update( event.target );
+    } );
+    this.view.html.addEventListener( events.FakeFocus().type, event => {
+        // update the form progress status
+        this.progress.update( event.target );
     } );
 
     this.model.events.addEventListener( 'dataupdate', event => {
@@ -681,7 +685,7 @@ Form.prototype.setEventHandlers = function() {
         that.progress.update();
     } );
 
-    this.view.html.addEventListener( events.RemoveRepeat(), () => {
+    this.view.html.addEventListener( events.RemoveRepeat().type, () => {
         that.progress.update();
     } );
 
@@ -758,7 +762,7 @@ Form.prototype.validateAll = function() {
 
     return this.validateContent( this.view.$ )
         .then( valid => {
-            that.view.$.trigger( 'validationcomplete.enketo' );
+            that.view.html.dispatchEvent( events.ValidationComplete() );
             return valid;
         } );
 };
@@ -890,7 +894,7 @@ Form.prototype.validateInput = function( $input ) {
             }
             // Send invalidated event
             if ( !passed && !previouslyInvalid ) {
-                $input.trigger( 'invalidated.enketo' );
+                $input[ 0 ].dispatchEvent( events.Invalidated() );
             }
             return passed;
         } )
@@ -958,7 +962,7 @@ Form.prototype.goToTarget = function( target ) {
         // check if the nearest question or group is irrelevant after page flip
         if ( $( target ).closest( '.or-branch.disabled' ).length ) {
             // It is up to the apps to decide what to do with this event.
-            $( target ).trigger( 'gotohidden.enketo' );
+            $( target ).trigger( 'gotohidden' );
         }
         // Scroll to element
         target.scrollIntoView();

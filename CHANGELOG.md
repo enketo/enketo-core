@@ -3,11 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-Unreleased
+[Unreleased]
 ---------------------
+##### Changed
+- Partial rewrite of events.
+- Improved accuracy of progress tracker.
+
 ##### Fixed
 - On touchscreen devices, the draw widget download functionality does not work, and clicking the Draw button empties the canvas.
-
 
 [5.1.1] - 2019-02-21
 ---------------------

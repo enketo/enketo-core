@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
-import event from '../../js/event';
+import events from '../../js/event';
 
 const sadExcuseForABrowser = !( 'list' in document.createElement( 'input' ) &&
     'options' in document.createElement( 'datalist' ) &&
@@ -79,7 +79,7 @@ class AutocompleteSelectpicker extends Widget {
         // If a corresponding label cannot be found the value is invalid,
         // and should be cleared. For this we trigger an 'input' event.
         if ( inputValue && !label ) {
-            this.fakeInput.dispatchEvent( event.Input() );
+            this.fakeInput.dispatchEvent( events.Input() );
         }
     }
 
@@ -129,13 +129,8 @@ class AutocompleteSelectpicker extends Widget {
     }
 
     _setFocusListener() {
-        // Handle widget focus
-        this.fakeInput.addEventListener( 'focus', () => {
-            this.element.dispatchEvent( event.FakeFocus() );
-        } );
-
         // Handle original input focus
-        this.element.addEventListener( 'applyfocus', () => {
+        this.element.addEventListener( events.ApplyFocus().type, () => {
             this.fakeInput.focus();
         } );
     }

@@ -21,6 +21,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import support from '../../js/support';
+import events from '../../js/event';
 import { getSiblingElementsAndSelf } from '../../js/dom-utils';
 import event from '../../js/event';
 import { t } from 'enketo/translator';
@@ -219,15 +220,10 @@ class DesktopSelectpicker extends Widget {
         const _this = this;
 
         // Focus on original element (form.goTo functionality)
-        $( this.element ).on( 'applyfocus', () => {
+        this.element.addEventListener( events.ApplyFocus().type, () => {
             _this.$picker.find( '.dropdown-toggle' ).focus();
         } );
 
-        // focus on widget
-        this.$picker.on( 'shown.bs.dropdown', () => {
-            $( _this.element ).trigger( 'fakefocus' );
-            return true;
-        } );
     }
 
     disable() {

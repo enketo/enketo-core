@@ -144,6 +144,7 @@ class ImageMap extends Widget {
                 if ( input ) {
                     input.checked = !input.checked;
                     input.dispatchEvent( events.Change() );
+                    input.dispatchEvent( events.FakeFocus() );
                 }
             }
         } );

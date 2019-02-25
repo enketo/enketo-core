@@ -2,7 +2,6 @@ import Widget from '../../js/widget';
 import support from '../../js/support';
 import $ from 'jquery';
 import types from '../../js/types';
-import event from '../../js/event';
 import { isNumber, getPasteData } from '../../js/utils';
 import 'bootstrap-datepicker';
 import '../../js/dropdown.jquery';
@@ -144,10 +143,6 @@ class DatepickerExtended extends Widget {
      * @param { jQuery } $fakeDateI Fake date input element
      */
     _setFocusHandler( $fakeDateI ) {
-        // Handle focus on widget
-        $fakeDateI.on( 'focus', () => {
-            this.element.dispatchEvent( event.FakeFocus() );
-        } );
         // Handle focus on original input (goTo functionality)
         $( this.element ).on( 'applyfocus', () => {
             $fakeDateI[ 0 ].focus();

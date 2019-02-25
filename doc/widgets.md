@@ -138,10 +138,10 @@ runAllCommonWidgetTests( ExampleWidget, FORM, VALUE );
 * if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming irrelevant (update)
 * apply the `widget` css class to the top level elements it adds to the DOM (but not to their children)
 * new input/select/textarea elements inside widgets should have the `ignore` class to isolate them from the Enketo form engine
-* send a `fakefocus` event to the original input when the widget gets focus
 * include `enable()`, `disable()` and `update()` method overrides. See the Widget class.
 * if the widget needs tweaks or needs to be disabled for mobile use, use support.js to detect this and override the static `condition()` function in Widget.js.
 * allow clearing of the original input (i.e. setting value to '')
+* if the widget does not get automatic (built-in HTML) focus, trigger a `fakefocus` event to the original input when the widget gets focus (rarely required, but see rank widget)
 
 #### DON'T
 
