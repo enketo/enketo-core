@@ -84,7 +84,7 @@ Form.prototype = {
     },
     set editStatus( status ) {
         // only trigger edit event once
-        if ( status && status !== this.view.html.dataset.edited ) {
+        if ( status && status !== this.editStatus ) {
             this.view.html.dispatchEvent( events.Edited() );
         }
         this.view.html.dataset.edited = status;
