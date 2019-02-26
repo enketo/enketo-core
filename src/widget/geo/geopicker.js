@@ -39,7 +39,7 @@ import 'leaflet.gridlayer.googlemutant';
 class Geopicker extends Widget {
 
     static get selector() {
-        return 'input[data-type-xml="geopoint"], input[data-type-xml="geotrace"], input[data-type-xml="geoshape"]';
+        return '.question input[data-type-xml="geopoint"], .question input[data-type-xml="geotrace"], .question input[data-type-xml="geoshape"]';
     }
 
     static condition( element ) {

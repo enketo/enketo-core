@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - On touchscreen devices, the draw widget download functionality does not work, and clicking the Draw button empties the canvas.
+- XForms using geopoint, geotrace, geoshape, time, date, datetime, select minimal, rank, autocomplete calculations **without form control** (advanced) fail to load.
 
 [5.1.1] - 2019-02-21
 ---------------------

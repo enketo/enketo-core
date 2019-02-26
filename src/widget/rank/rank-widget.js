@@ -8,7 +8,7 @@ import { t } from 'enketo/translator';
 class RankWidget extends Widget {
 
     static get selector() {
-        return 'input.rank';
+        return '.question input.rank';
     }
 
     static get list() {

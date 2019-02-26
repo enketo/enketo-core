@@ -14,7 +14,7 @@ import './jquery.relevant-dropdown';
 class AutocompleteSelectpicker extends Widget {
 
     static get selector() {
-        return 'input[list]';
+        return '.question input[list]';
     }
 
     static get list() {

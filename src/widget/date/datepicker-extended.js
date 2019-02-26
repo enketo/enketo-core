@@ -13,7 +13,7 @@ import '../../js/dropdown.jquery';
 class DatepickerExtended extends Widget {
 
     static get selector() {
-        return 'input[type="date"]:not([readonly])';
+        return '.question input[type="date"]:not([readonly])';
     }
 
     static condition() {

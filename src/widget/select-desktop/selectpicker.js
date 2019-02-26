@@ -35,7 +35,7 @@ import '../../js/dropdown.jquery';
 class DesktopSelectpicker extends Widget {
 
     static get selector() {
-        return 'select:not(#form-languages)';
+        return '.question select';
     }
 
     static get list() {

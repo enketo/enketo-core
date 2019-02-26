@@ -14,7 +14,7 @@ import { elementDataStore as data } from '../../js/dom-utils';
 
 class DatepickerNative extends Widget {
     static get selector() {
-        return 'input[type="date"]';
+        return '.question input[type="date"]';
     }
     static condition( element ) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if mobile device is used.

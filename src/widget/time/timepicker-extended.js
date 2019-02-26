@@ -10,7 +10,7 @@ import '../../js/dropdown.jquery';
 class TimepickerExtended extends Widget {
 
     static get selector() {
-        return 'input[type="time"]:not([readonly])';
+        return '.question input[type="time"]:not([readonly])';
     }
 
     static condition() {
