@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.1.2] - 2019-02-26
 ---------------------
 ##### Changed
 - Partial rewrite of events.
@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - On touchscreen devices, the draw widget download functionality does not work, and clicking the Draw button empties the canvas.
 - XForms using geopoint, geotrace, geoshape, time, date, datetime, select minimal, rank, autocomplete calculations **without form control** (advanced) fail to load.
+- Some widgets (such as all geo widgets) do not update view if a calculation changes the underlying value.
 
 [5.1.1] - 2019-02-21
 ---------------------
