@@ -192,6 +192,9 @@ Form.prototype.init = function() {
         // after radio button data-name setting (now done in XLST)
         this.repeats.init();
 
+        // after repeats.init, but before itemset.update
+        this.output.update();
+
         // after repeats.init
         this.itemset.update();
 
@@ -211,9 +214,6 @@ Form.prototype.init = function() {
 
         // after widgets.init(), and after repeats.init(), and after pages.init()
         this.relevant.update();
-
-        // after repeats.init()
-        this.output.update();
 
         // after widgets init to make sure widget handlers are called before
         // after loading existing instance to not trigger an 'edit' event

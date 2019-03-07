@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- The output in an itemset option label is not populated upon load.
+
 [5.1.3] - 2019-02-26
 ---------------------
 ##### Changed
