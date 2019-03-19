@@ -181,7 +181,12 @@ class Collection {
         if ( data.has( element, Widget ) ) {
             return;
         }
-        data.put( element, Widget.name, new Widget( element, options ) );
+        const w = new Widget( element, options );
+        if ( w instanceof Promise ) {
+            w.then( wr => data.put( element, Widget.name, wr ) );
+        } else {
+            data.put( element, Widget.name, w );
+        }
     }
     _methodCall( Widget, method ) {
         this.elements.forEach( element => {
