@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.2.0] - 2019-03-19
 ---------------------
 ##### Added
 - A configurable option to provide a maximum character length of a text field.
