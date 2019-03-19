@@ -18,5 +18,6 @@ export default {
         'webMapId': '',
         'hasZ': true,
         'basemaps': [ 'streets' ]
-    }
+    },
+    'textMaxChars': 2000
 };

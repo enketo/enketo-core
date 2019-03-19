@@ -24,6 +24,7 @@ import w from '../widget/image-map/image-map';
 import x from '../widget/range/range-widget';
 import y from '../widget/rank/rank-widget';
 import z from '../widget/url/url-widget';
+import aa from '../widget/text-max/text-max';
 //import zz from '../widget/example/my-widget';
 
-export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z ];
+export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa ];

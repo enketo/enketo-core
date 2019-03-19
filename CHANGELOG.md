@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Added
+- A configurable option to provide a maximum character length of a text field.
+
 ##### Fixed
 - The output in an itemset option label is not populated upon load.
 
