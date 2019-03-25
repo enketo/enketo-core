@@ -31,7 +31,8 @@
     "main": "src/js/form.js",
     "scripts": {
         "start": "grunt develop",
-        "test": "grunt test"
+        "test": "grunt test",
+        "build-docs": "./node_modules/.bin/jsdoc -c jsdoc.config.js"
     },
     "devDependencies": {
         "@babel/cli": "^7.2.3",
@@ -50,6 +51,7 @@
         "grunt-sass": "^3.0.2",
         "grunt-shell": "3.0.x",
         "jasmine-core": "^2.9.1",
+        "jsdoc": "^3.5.5",
         "json-pretty": "0.0.1",
         "karma": "4.0.x",
         "karma-chrome-launcher": "2.2.x",
