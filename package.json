@@ -34,6 +34,7 @@
     "scripts": {
         "start": "grunt develop",
         "test": "grunt test",
+        "beautify": "grunt jsbeautifier:fix",
         "build-docs": "./node_modules/.bin/jsdoc -c jsdoc.config.js"
     },
     "devDependencies": {

@@ -10,7 +10,7 @@ module.exports = {
         readme: 'README.md',
         template: 'node_modules/docdash'
     },
-    plugins: ['plugins/markdown'],
+    plugins: [ 'plugins/markdown' ],
     source: {
         include: [
             'src/',
