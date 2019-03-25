@@ -42,14 +42,14 @@ module.exports = {
         typedefs: true,
         removeQuotes: 'none',
         scripts: [],
-        menu:{
-            'Github repo':{
+        menu: {
+            'Github repo': {
                 href: 'https://github.com/enketo/enketo-core',
                 target: '_blank',
                 class: 'menu-item',
                 id: 'repository'
             },
-            'Change log':{
+            'Change log': {
                 href: 'https://github.com/enketo/enketo-core/blob/master/CHANGELOG.md',
                 target: '_blank',
                 class: 'menu-item',
