@@ -3,8 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.2.1] - 2019-03-26
 --------------------
+##### Changed
+- The restriction on crossing paths in the geoshape widget was removed.
+
 ##### Fixed
 - Radiobutton unselect functionality can cause infinite loops with certain custom extensions that update values programmatically.
 
