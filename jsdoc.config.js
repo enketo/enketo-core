@@ -37,7 +37,7 @@ module.exports = {
             description: 'Extensible Enketo form engine'
         },
         search: true,
-        collapse: true,
+        collapse: false,
         wrap: true,
         typedefs: true,
         removeQuotes: 'none',
