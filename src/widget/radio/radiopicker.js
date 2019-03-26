@@ -1,4 +1,5 @@
 import Widget from '../../js/widget';
+import events from '../../js/event';
 import $ from 'jquery';
 
 /**
@@ -27,7 +28,7 @@ class Radiopicker extends Widget {
                 }
             } )
             // Detect programmatic clearing to remove data-checked attribute.
-            .on( 'change', '[data-checked] > input:not(:checked)', function() {
+            .on( events.InputUpdate().type, '[data-checked] > input:not(:checked)', function() {
                 delete this.parentNode.dataset.checked;
             } )
             // Readonly buttons/checkboxes will not respond to clicks.
@@ -48,7 +49,7 @@ class Radiopicker extends Widget {
              * 
              * See more at https://github.com/enketo/enketo-core/issues/516
              */
-            .on( 'change', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', function( event ) {
+            .on( events.Change().type, 'input[type="checkbox"][readonly],input[type="radio"][readonly]', function( event ) {
                 const byProgram = typeof event.originalEvent === 'undefined';
                 if ( !byProgram ) {
                     event.stopImmediatePropagation();
