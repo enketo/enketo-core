@@ -29,7 +29,7 @@ import '../../js/dropdown.jquery';
 /**
  * Bootstrap Select picker that supports single and multiple selects
  * A port of https://github.com/silviomoreto/bootstrap-select
- *
+ * @extends Widget
  */
 class DesktopSelectpicker extends Widget {
 
@@ -170,7 +170,7 @@ class DesktopSelectpicker extends Widget {
                 // we had to use event.preventDefault() on <a> tag click events.
                 // This broke view updates when clicking on the radiobuttons and checkboxes directly
                 // although the underlying values did change correctly.
-                // 
+                //
                 // It has to do with event propagation. I could not figure out how to fix it.
                 // Therefore I used a workaround by slightly delaying the status changes.
                 setTimeout( () => {

@@ -2,6 +2,9 @@ import Widget from '../../js/widget';
 import { isNumber } from '../../js/utils';
 import events from '../../js/event';
 
+/**
+ * @extends Widget
+ */
 class RangeWidget extends Widget {
 
     static get selector() {
@@ -59,7 +62,7 @@ class RangeWidget extends Widget {
         }
         ticks = ticks / divisor;
 
-        // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little 
+        // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little
         // issues seemingly related to rounding or browser sloppiness. This far is less elegant but nice and robust:
         this.widget.querySelector( '.range-widget__ticks' )
             .append( document.createRange().createContextualFragment( new Array( ticks ).fill( '<span></span>' ).join( '' ) ) );

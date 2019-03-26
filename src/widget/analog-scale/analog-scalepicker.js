@@ -2,6 +2,9 @@ import RangeWidget from '../../widget/range/range-widget';
 import { isNumber } from '../../js/utils';
 import support from '../../js/support';
 
+/**
+ * @extends RangeWidget
+ */
 class AnalogScaleWidget extends RangeWidget {
 
     static get selector() {
@@ -29,7 +32,7 @@ class AnalogScaleWidget extends RangeWidget {
 
     _updateMercury() {}
 
-    /** 
+    /**
      * (re-)Renders the widget labels based on the current content of .question-label.active
      */
     _renderLabels() {
@@ -90,7 +93,7 @@ class AnalogScaleWidget extends RangeWidget {
 
     /*
      * Stretch the question to full page height.
-     * Doing this with pure css flexbox using "flex-direction: column" interferes with the Grid theme 
+     * Doing this with pure css flexbox using "flex-direction: column" interferes with the Grid theme
      * because that theme relies on flexbox with "flex-direction: row".
      */
     _setResizeListener() {

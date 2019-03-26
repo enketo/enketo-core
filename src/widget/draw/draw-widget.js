@@ -9,13 +9,13 @@ import { updateDownloadLink, dataUriToBlobSync, getFilename } from '../../js/uti
 const DELAY = 1500;
 
 /**
- * SignaturePad.prototype.fromDataURL is asynchronous and does not return a 
- * Promise. This is a rewrite returning a promise and the objectUrl.
+ * SignaturePad.prototype.fromDataURL is asynchronous and does not return
+ * a Promise. This is a rewrite returning a promise and the objectUrl.
  * In addition it also fixes a bug where a loaded image is stretched to fit
  * the canvas.
- * 
- * @param {*} objectUrl 
- * @param {*} options 
+ *
+ * @param {*} objectUrl
+ * @param {*} options
  */
 SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
     const image = new Image();
@@ -56,8 +56,8 @@ SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
 /**
  * Similar to SignaturePad.prototype.fromData except that it doesn't clear the canvas.
  * This is to facilitate undoing a drawing stroke over a background (bitmap) image.
- * 
- * @param {*} pointGroups 
+ *
+ * @param {*} pointGroups
  */
 SignaturePad.prototype.updateData = function( pointGroups ) {
     const that = this;
@@ -72,6 +72,7 @@ SignaturePad.prototype.updateData = function( pointGroups ) {
 
 /**
  * Widget to obtain user-provided drawings or signature.
+ * @extends Widget
  */
 class DrawWidget extends Widget {
     static get selector() {
@@ -144,7 +145,7 @@ class DrawWidget extends Widget {
                         const data = that.pad.toData();
                         that.pad.clear();
                         const fileInput = that.$widget[ 0 ].querySelector( 'input[type=file]' );
-                        // that.element.dataset.loadedFileName will have been removed only after resetting 
+                        // that.element.dataset.loadedFileName will have been removed only after resetting
                         const fileToLoad = fileInput && fileInput.files[ 0 ] ? fileInput.files[ 0 ] : that.element.dataset.loadedFileName;
                         that._loadFileIntoPad( fileToLoad )
                             .then( () => {
@@ -184,7 +185,7 @@ class DrawWidget extends Widget {
                 canvas.focus();
             } )
             .closest( '[role="page"]' ).on( 'pageflip', () => {
-                // When an existing value is loaded into the canvas and is not 
+                // When an existing value is loaded into the canvas and is not
                 // the first page, it won't become visible until the canvas is clicked
                 // or the window is resized:
                 // https://github.com/kobotoolbox/enketo-express/issues/895
@@ -201,7 +202,7 @@ class DrawWidget extends Widget {
 
     // All this is copied from the file-picker widget
     _handleFiles( loadedFileName ) {
-        // Monitor maxSize changes to update placeholder text in annotate widget. This facilitates asynchronous 
+        // Monitor maxSize changes to update placeholder text in annotate widget. This facilitates asynchronous
         // obtaining of max size from server without slowing down form loading.
         this._updatePlaceholder();
         this.$widget.closest( 'form.or' ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
@@ -249,7 +250,7 @@ class DrawWidget extends Widget {
 
         $fakeInput
             .on( `click.${this.namespace}`, function( event ) {
-                /* 
+                /*
                     The purpose of this handler is to selectively propagate clicks on the fake
                     input to the underlying file input (to show the file picker window).
                     It blocks propagation if the filepicker has a value to avoid accidentally
@@ -350,7 +351,7 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * 
+     *
      * @param {*} file Either a filename or a file.
      */
     _loadFileIntoPad( file ) {
@@ -435,8 +436,8 @@ class DrawWidget extends Widget {
                         .prop( 'disabled', false );
                 }
                 // https://github.com/enketo/enketo-core/issues/450
-                // When loading a question with a relevant, it is invisible 
-                // until branch.js removes the "pre-init" class. The rendering of the 
+                // When loading a question with a relevant, it is invisible
+                // until branch.js removes the "pre-init" class. The rendering of the
                 // canvas may therefore still be ongoing when this widget is instantiated.
                 // For that reason we call _resizeCanvas when enable is called to make
                 // sure the canvas is rendered properly.
@@ -444,11 +445,11 @@ class DrawWidget extends Widget {
             } );
     }
 
-    /** 
+    /**
      * Updates value when it is programmatically cleared.
      * There is no way to programmatically update a file input other than clearing it, so that's all
      * we need to do.
-     * 
+     *
      * @param  {[type]} element [description]
      * @return {[type]}         [description]
      */

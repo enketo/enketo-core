@@ -4,8 +4,9 @@ import events from '../../js/event';
 import { getSiblingElements } from '../../js/dom-utils';
 
 /**
- * Image Map widget that turns an SVG image into a clickable map 
+ * Image Map widget that turns an SVG image into a clickable map
  * by matching radiobutton/checkbox values with id attribute values in the SVG
+ * @extends Widget
  */
 class ImageMap extends Widget {
 
@@ -119,7 +120,7 @@ class ImageMap extends Widget {
 
     /**
      * Removes id attributes from unmatched path elements in order to prevent hover effect (and click listener).
-     * 
+     *
      * @return {jQuery} [description]
      */
     _removeUnmatchedIds( svg ) {

@@ -32,10 +32,13 @@ const iconMultiActive = L.divIcon( {
     className: 'enketo-geopoint-circle-marker-active'
 } );
 
-// Leaflet extensions. 
+// Leaflet extensions.
 import 'leaflet-draw';
 import 'leaflet.gridlayer.googlemutant';
 
+/**
+ * @extends Widget
+ */
 class Geopicker extends Widget {
 
     static get selector() {
@@ -99,7 +102,7 @@ class Geopicker extends Widget {
             const value = event.target.value;
             const coords = that._convertKmlCoordinatesToLeafletCoordinates( value );
 
-            // reset textarea 
+            // reset textarea
             event.target.value = '';
 
             setTimeout( () => {
@@ -322,7 +325,7 @@ class Geopicker extends Widget {
             this.$map.append( mapBtn );
         }
 
-        // unhide search bar 
+        // unhide search bar
         // TODO: can be done in CSS?
         if ( !this.props.touch ) {
             this.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
@@ -637,8 +640,8 @@ class Geopicker extends Widget {
                 that.$widget.find( '.leaflet-control-layers-toggle' ).append( '<span class="icon icon-globe"></span>' );
 
                 // Add ignore and option-label class to Leaflet-added input elements and their labels
-                // something weird seems to happen. It seems the layercontrol is added twice (second replacing first) 
-                // which means the classes are not present in the final control. 
+                // something weird seems to happen. It seems the layercontrol is added twice (second replacing first)
+                // which means the classes are not present in the final control.
                 // Using the baselayerchange event handler is a trick that seems to work.
                 that.map.on( 'baselayerchange', () => {
                     that.$widget.find( '.leaflet-control-container input' ).addClass( 'ignore no-unselect' ).next( 'span' ).addClass( 'option-label' );
@@ -1069,7 +1072,7 @@ class Geopicker extends Widget {
         this.$acc.val( acc || '' ).trigger( ev );
     }
 
-    /** 
+    /**
      * Converts the contents of a single KML <coordinates> element (may inlude the coordinates tags as well) to an array
      * of geopoint coordinates used in the ODK XForm format. Note that the KML format does not allow spaces within a tuple of coordinates
      * only between. Separator between KML tuples can be newline, space or a combination.

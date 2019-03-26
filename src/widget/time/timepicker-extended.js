@@ -7,6 +7,9 @@ import event from '../../js/event';
 import './timepicker';
 import '../../js/dropdown.jquery';
 
+/**
+ * @extends Widget
+ */
 class TimepickerExtended extends Widget {
 
     static get selector() {

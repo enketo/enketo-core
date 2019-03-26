@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 /**
  * Enhances radio buttons
+ * @extends Widget
  */
 class Radiopicker extends Widget {
 
@@ -39,20 +40,20 @@ class Radiopicker extends Widget {
              * In Safari a click on a readonly checkbox/radio button sets `checked` to true, **before** the click event fires.
              * This causes the model to update. The above clickhandler will set the checked back to false, but there is
              * no way to propagate that reversion back to the model.
-             * 
+             *
              * Disabling change handling on readonly checkboxes/radiobuttons is not an option, because of the scenario
              * described in Form.js in the comment above the change handler.
-             * 
-             * The solution is to detect here whether the change event was triggered by a human, by checking if the 
+             *
+             * The solution is to detect here whether the change event was triggered by a human, by checking if the
              * originalEvent property is defined.
-             * 
+             *
              * See more at https://github.com/enketo/enketo-core/issues/516
              */
             .on( 'change', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', function( event ) {
                 const byProgram = typeof event.originalEvent === 'undefined';
                 if ( !byProgram ) {
                     event.stopImmediatePropagation();
-                    /*               
+                    /*
                      * For radiobuttons, this is ugly and relies on the data-checked attribute.
                      * Without this, is it still possible to check a readonly radio button (although it won't propagate to the model).
                      * I think this is the only remnant of the usage of data-checked in Enketo. However, it is

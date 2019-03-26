@@ -8,7 +8,9 @@ import 'bootstrap-datepicker';
 import '../time/timepicker';
 import '../../js/dropdown.jquery';
 
-
+/**
+ * @extends Widget
+ */
 class DatetimepickerExtended extends Widget {
 
     static get selector() {
@@ -144,9 +146,9 @@ class DatetimepickerExtended extends Widget {
 
     set value( value ) {
         /*
-          Loaded or default datetime values remain untouched until they are edited. This is done to preserve 
+          Loaded or default datetime values remain untouched until they are edited. This is done to preserve
           the timezone information (especially for instances-to-edit) if the values are not edited (the
-          original entry may have been done in a different time zone than the edit). However, 
+          original entry may have been done in a different time zone than the edit). However,
           values shown in the widget should reflect the local time representation of that value.
          */
         const val = value ? new Date( value ).toISOLocalString() : '';

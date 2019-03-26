@@ -5,6 +5,7 @@ import event from '../../js/event';
 
 /**
  * Visually transforms a question into a comment modal that can be shown on its linked question.
+ * @extends Widget
  */
 class Comment extends Widget {
 
@@ -44,7 +45,7 @@ class Comment extends Widget {
         const targetPath = this.element.dataset.for.trim();
         const absoluteTargetPath = this.options.helpers.pathToAbsolute( targetPath, contextPath );
         // The root is nearest repeat or otherwise nearest form. This avoids having to calculate indices, without
-        // diminishing the flexibility in any meaningful way, 
+        // diminishing the flexibility in any meaningful way,
         // as it e.g. wouldn't make sense to place a comment node for a top-level question, inside a repeat.
         const root = input.closest( 'form.or, .or-repeat' );
 
@@ -142,8 +143,8 @@ class Comment extends Widget {
              * Any current error state shown in the linked question will not automatically update.
              * It only updates when its **own** value changes.
              * See https://github.com/kobotoolbox/enketo-express/issues/608
-             * Since a linked question and a comment belong so closely together, and likely have 
-             * a `required` or `constraint` dependency, it makes sense to 
+             * Since a linked question and a comment belong so closely together, and likely have
+             * a `required` or `constraint` dependency, it makes sense to
              * separately call a validate method on the linked question to update the error state if necessary.
              *
              * Note that with setting "validateContinously" set to "true" this means it will be validated twice.

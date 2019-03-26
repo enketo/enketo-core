@@ -16,6 +16,9 @@ const NORTHING_OFFSET = 10000000.0;
 let esriArcGisJsRequest;
 let esri;
 
+/**
+ * @extends Widget
+ */
 class ArcGisGeopicker extends Widget {
 
     static get selector() {
@@ -381,7 +384,7 @@ class ArcGisGeopicker extends Widget {
             return;
         }
 
-        // add the map 
+        // add the map
         if ( !this.mapView ) {
             this._addDynamicMap();
         }
@@ -547,7 +550,7 @@ class ArcGisGeopicker extends Widget {
             const currentId = ( evt && evt.current ) ? evt.current.id : null;
             const nextBasemap = that._getNextBasemap( currentId, basemapList );
             // TODO: it might be more efficient to maintain an array of Basemap instances
-            // instead of strings. 
+            // instead of strings.
             basemapToggle.nextBasemap = nextBasemap;
         } );
 
@@ -856,7 +859,7 @@ class ArcGisGeopicker extends Widget {
      * Loads a value into the widget.
      * This function could be called upon intialization to load the default value.
      * It could also be called when the value has updated due a calculation.
-     * 
+     *
      * @param  {[type]} val [description]
      * @return {[type]}     [description]
      */
