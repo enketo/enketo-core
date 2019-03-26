@@ -960,17 +960,18 @@ Form.prototype.goToTarget = function( target ) {
             this.pages.flipToPageContaining( $( target ) );
         }
         // check if the nearest question or group is irrelevant after page flip
-        if ( $( target ).closest( '.or-branch.disabled' ).length ) {
+        if ( target.closest( '.or-branch.disabled' ) ) {
             // It is up to the apps to decide what to do with this event.
-            $( target ).trigger( 'gotohidden' );
+            target.dispatchEvent( events.GoToHidden() );
         }
         // Scroll to element
         target.scrollIntoView();
         // Focus on the first non .ignore form control
         // If the element is hidden (e.g. because it's been replaced by a widget), 
         // the focus event will not fire, so we also trigger an applyfocus event that widgets can listen for.
-        $( target.querySelector( 'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)' ) )
-            .trigger( 'focus' ).trigger( 'applyfocus' );
+        const input = target.querySelector( 'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)' );
+        input.focus();
+        input.dispatchEvent( events.ApplyFocus() );
     }
     return !!target;
 };

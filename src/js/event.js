@@ -60,6 +60,10 @@ function ProgressUpdate( detail ) {
     return new CustomEvent( 'progressupdate', { detail, bubbles: true } );
 }
 
+function GoToHidden() {
+    return new CustomEvent( 'gotohidden', { bubbles: true } );
+}
+
 export default {
     DataUpdate,
     FakeFocus,
@@ -75,5 +79,6 @@ export default {
     Edited,
     ValidationComplete,
     Invalidated,
-    ProgressUpdate
+    ProgressUpdate,
+    GoToHidden
 };
