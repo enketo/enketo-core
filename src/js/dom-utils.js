@@ -1,12 +1,25 @@
 /**
+ * @module dom-utils
+ */
+
+/**
  * Gets siblings that match selector and self _in DOM order_.
- * @param {} element 
- * @param {*} selector 
+ *
+ * @param {Node} element - Target element.
+ * @param {*} selector - A CSS selector.
+ * @return {Array} Array of sibling nodes plus target element.
  */
 function getSiblingElementsAndSelf( element, selector ) {
     return _getSiblingElements( element, selector, [ element ] );
 }
 
+/**
+ * Gets siblings that match selector _in DOM order_.
+ *
+ * @param {Node} element - Target element.
+ * @param {*} selector - A CSS selector.
+ * @return {Array} Array of sibling nodes.
+ */
 function getSiblingElements( element, selector ) {
     return _getSiblingElements( element, selector );
 }
@@ -34,13 +47,19 @@ function _getSiblingElements( element, selector, startArray = [] ) {
     return siblings;
 }
 
+/**
+ * Removes all children elements.
+ *
+ * @param {Node} element - Target element.
+ * @return {undefined}
+ */
 function empty( element ) {
     [ ...element.children ].forEach( el => el.remove() );
 }
 
-/** 
+/**
  * Adapted from https://stackoverflow.com/a/46522991/3071529
- * 
+ *
  * A storage solution aimed at replacing jQuerys data function.
  * Implementation Note: Elements are stored in a (WeakMap)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap].
  * This makes sure the data is garbage collected when the node is removed.
