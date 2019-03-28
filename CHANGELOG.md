@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Hide reset button when question is readonly
 
+##### Fixed
+- Draw/Signature widget updates with empty file when canvas looses focus if nothing was drawn. Also when the question is readonly! 
+
 [5.2.1] - 2019-03-26
 --------------------
 ##### Changed

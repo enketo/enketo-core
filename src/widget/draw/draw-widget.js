@@ -196,8 +196,10 @@ class DrawWidget extends Widget {
     }
 
     _forceUpdate() {
-        clearTimeout( this._updateWithDelay );
-        this._updateValue();
+        if ( this._updateWithDelay ) {
+            clearTimeout( this._updateWithDelay );
+            this._updateValue();
+        }
     }
 
     // All this is copied from the file-picker widget
