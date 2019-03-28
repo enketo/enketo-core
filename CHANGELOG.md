@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Changed
+- Hide reset button when question is readonly
+
 [5.2.1] - 2019-03-26
 --------------------
 ##### Changed

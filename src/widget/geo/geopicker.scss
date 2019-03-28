@@ -237,6 +237,16 @@ $input-button-border: 2px solid #aaaaaa;
         margin-top: -1px;
     }
 
+    .btn-remove,
+    .close-chain-btn,
+    button[name=geodetect],
+    input[name=search],
+    .search-btn {
+        &[disabled] {
+            display: none;
+        }
+    }
+
     .hide-search {
         &.no-map {
             border-left: none;
@@ -461,6 +471,7 @@ $input-button-border: 2px solid #aaaaaa;
             @include flex-direction(column);
 
             @include flex-wrap(nowrap); // have to use flex again to get map canvas to stretch to 100% height
+
             .map-canvas {
                 height: 100%;
 
@@ -516,6 +527,7 @@ $input-button-border: 2px solid #aaaaaa;
         text-align: center;
         font-size: 20px;
         line-height: 44px;
+
         .icon-globe {
             margin: -1px auto 0 auto;
         }
@@ -526,6 +538,7 @@ $input-button-border: 2px solid #aaaaaa;
             // not translated, so avoid RTL effect:
             text-align: left;
             padding: 5px;
+
             .option-label {
                 margin-left: 30px;
                 display: block;
@@ -569,16 +582,19 @@ $input-button-border: 2px solid #aaaaaa;
     .geo-inputs {
         margin: 0 0 0 $separator-width;
     }
+
     .map-canvas-wrapper,
     .search-bar {
         float: left;
         border-left: none;
         border-right: solid 1px $groupline; //padding-left: 0;
+
         //padding-right: $separator-width;
         @media screen and (max-width: $geo-main-breakpoint) {
             //padding-right: 0;
             border-right: none;
         }
+
         .input-group {
             flex-direction: row-reverse;
         }
@@ -609,6 +625,7 @@ $input-button-border: 2px solid #aaaaaa;
         font-size: 16px;
         margin: 0 $separator-width 0 0;
     }
+
     .hide-map-btn {
         margin: 0 0 0 $separator-width;
     }
@@ -631,6 +648,7 @@ $input-button-border: 2px solid #aaaaaa;
     }
 
     &:not(.full-screen).hide-input {
+
         .map-canvas-wrapper,
         .search-bar {
             border-right: none;
@@ -657,7 +675,9 @@ $input-button-border: 2px solid #aaaaaa;
             border-bottom-right-radius: $border-radius-base;
         }
     }
-} // apply Enketo style to radio buttons in Leaflet layer control
+}
+
+// apply Enketo style to radio buttons in Leaflet layer control
 .question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) .geopicker label {
     line-height: 16px;
     font-weight: normal;
