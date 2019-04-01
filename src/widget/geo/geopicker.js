@@ -226,7 +226,7 @@ class Geopicker extends Widget {
         }
 
         if ( this.props.readonly ) {
-            this.disable( this.element );
+            this.disable();
         }
 
         // create "point buttons"

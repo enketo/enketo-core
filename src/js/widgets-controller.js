@@ -30,7 +30,7 @@ function init( $group, opts = {} ) {
 }
 
 /**
- * Enables widgets if they weren't enabled already when the branch was enabled by the controller.
+ * Enables widgets if they weren't enabled already if they are not readonly.
  * In most widgets, this function will do nothing because the disabled attribute was automatically removed from all
  * fieldsets, inputs, textareas and selects inside the branch element provided as parameter.
  * Note that this function can be called before the widgets have been initialized and will in that case do nothing. This is
@@ -41,7 +41,8 @@ function init( $group, opts = {} ) {
  */
 function enable( group ) {
     widgets.forEach( Widget => {
-        const els = _getElements( group, Widget.selector );
+        const els = _getElements( group, Widget.selector )
+            .filter( el => el.nodeName.toLowerCase() === 'select' ? !el.getAttribute( 'readonly' ) : !el.readOnly );
         new Collection( els ).enable( Widget );
     } );
 }

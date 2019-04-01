@@ -3,14 +3,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.2.2] - 2019-04-01
 --------------------
 ##### Changed
-- Hide reset button when question is readonly
+- Hide reset button when question is readonly.
 
 ##### Fixed
 - Readonly Draw/Signature widget updates with empty file when canvas looses focus. 
-- Readonly select minimal widget is not readonly.
+- Readonly Select Minimal widget is not readonly.
+- Readonly File widget becomes writeable if it becomes relevant.
 
 [5.2.1] - 2019-03-26
 --------------------

@@ -119,9 +119,7 @@ class RangeWidget extends Widget {
     }
 
     enable() {
-        if ( this.props && !this.props.readonly ) {
-            this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
-        }
+        this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
     }
 
     update() {

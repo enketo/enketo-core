@@ -199,9 +199,7 @@ class ImageMap extends Widget {
     }
 
     enable() {
-        if ( !this.props.readonly ) {
-            this.svg.removeAttribute( 'or-readonly' );
-        }
+        this.svg.removeAttribute( 'or-readonly' );
     }
 
     update() {

@@ -111,15 +111,13 @@ class RankWidget extends Widget {
     }
 
     enable() {
-        if ( this.props && !this.props.readonly ) {
-            $( this.element )
-                .prop( 'disabled', false )
-                .next( '.widget' )
-                .find( 'input, button' )
-                .prop( 'disabled', false );
+        $( this.element )
+            .prop( 'disabled', false )
+            .next( '.widget' )
+            .find( 'input, button' )
+            .prop( 'disabled', false );
 
-            sortable( this.list, 'enable' );
-        }
+        sortable( this.list, 'enable' );
     }
 
     update() {
