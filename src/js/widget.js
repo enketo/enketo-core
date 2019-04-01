@@ -32,7 +32,7 @@ class Widget {
     // Not meant to be overridden, but could be. Recommend to extend `get props()` instead.
     _getProps() {
         return {
-            readonly: this.element.nodeName.toLowerCase === 'select' ? !!this.element.getAttribute( 'readonly' ) : !!this.element.readOnly,
+            readonly: this.element.nodeName.toLowerCase() === 'select' ? !!this.element.getAttribute( 'readonly' ) : !!this.element.readOnly,
             appearances: [ ...this.element.closest( '.question, form.or' ).classList ]
                 .filter( cls => cls.indexOf( 'or-appearance-' ) === 0 )
                 .map( cls => cls.substring( 14 ) ),
