@@ -377,4 +377,12 @@ describe( 'repeat functionality', () => {
         } );
     } );
 
+    describe( 'repeats with repeat-count and only calculations', () => {
+        const form = loadForm( 'repeat-count-calc-only.xml' );
+        const errors = form.init();
+        it( 'loads without errors', () => {
+            expect( errors ).toEqual( [] );
+        } );
+    } );
+
 } );
