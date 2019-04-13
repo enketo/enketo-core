@@ -3,6 +3,7 @@ import support from '../../js/support';
 import $ from 'jquery';
 import { time as timeFormat } from '../../js/format';
 import types from '../../js/types';
+import events from '../../js/event';
 import '../../js/extend';
 import 'bootstrap-datepicker';
 import '../time/timepicker';
@@ -14,7 +15,7 @@ import '../../js/dropdown.jquery';
 class DatetimepickerExtended extends Widget {
 
     static get selector() {
-        return 'input[type="datetime"]:not([readonly])';
+        return '.question input[type="datetime"]:not([readonly])';
     }
 
     static condition() {
@@ -111,13 +112,8 @@ class DatetimepickerExtended extends Widget {
     }
 
     _setFocusHandler( $els ) {
-        const that = this;
-        // Handle focus on widget.
-        $els.on( 'focus', () => {
-            $( that.element ).trigger( 'fakefocus' );
-        } );
         // Handle focus on original input (goTo functionality)
-        $( this.element ).on( 'applyfocus', () => {
+        this.element.addEventListener( events.ApplyFocus().type, () => {
             $els.eq( 0 ).focus();
         } );
     }

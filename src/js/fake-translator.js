@@ -69,6 +69,12 @@ const SOURCE_STRINGS = {
         'gotonotfound': {
             'msg': 'Failed to find question \'__path__\' in form. Is it a valid path?'
         }
+    },
+    'confirm': {
+        'repeatremove': {
+            'heading': 'Delete this group of responses?',
+            'msg': 'This action is irreversible. Are you sure you want to proceed?'
+        }
     }
 };
 

@@ -30,7 +30,7 @@ function init( $group, opts = {} ) {
 }
 
 /**
- * Enables widgets if they weren't enabled already when the branch was enabled by the controller.
+ * Enables widgets if they weren't enabled already if they are not readonly.
  * In most widgets, this function will do nothing because the disabled attribute was automatically removed from all
  * fieldsets, inputs, textareas and selects inside the branch element provided as parameter.
  * Note that this function can be called before the widgets have been initialized and will in that case do nothing. This is
@@ -41,7 +41,8 @@ function init( $group, opts = {} ) {
  */
 function enable( group ) {
     widgets.forEach( Widget => {
-        const els = _getElements( group, Widget.selector );
+        const els = _getElements( group, Widget.selector )
+            .filter( el => el.nodeName.toLowerCase() === 'select' ? !el.getAttribute( 'readonly' ) : !el.readOnly );
         new Collection( els ).enable( Widget );
     } );
 }
@@ -161,7 +162,7 @@ function _setOptionChangeListener( Widget, els ) {
 function _setValChangeListener( Widget, els ) {
     // avoid adding eventhandlers on widgets that apply to the <form> or <label> element
     if ( els.length > 0 && els[ 0 ].matches( 'input, select, textarea' ) ) {
-        els.forEach( el => el.addEventListener( events.InputUpdate.type, event => {
+        els.forEach( el => el.addEventListener( events.InputUpdate().type, event => {
             new Collection( event.target ).update( Widget );
         } ) );
     }
@@ -181,7 +182,12 @@ class Collection {
         if ( data.has( element, Widget ) ) {
             return;
         }
-        data.put( element, Widget.name, new Widget( element, options ) );
+        const w = new Widget( element, options );
+        if ( w instanceof Promise ) {
+            w.then( wr => data.put( element, Widget.name, wr ) );
+        } else {
+            data.put( element, Widget.name, w );
+        }
     }
     _methodCall( Widget, method ) {
         this.elements.forEach( element => {

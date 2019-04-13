@@ -11,6 +11,8 @@
 
 import $ from 'jquery';
 import events from './event';
+import { t } from 'enketo/translator';
+import dialog from 'enketo/dialog';
 
 import config from 'enketo/config';
 const disableFirstRepeatRemoval = config.repeatOrdinals === true;
@@ -30,16 +32,20 @@ export default {
 
         $repeatInfos = this.form.view.$.find( '.or-repeat-info' );
         this.templates = {};
-        // Add repeat numbering elements, if repeat has form controls (not just calculations)
-        $repeatInfos.siblings( '.or-repeat' )
+        // Add repeat numbering elements
+        $repeatInfos
+            .siblings( '.or-repeat' )
+            .prepend( '<span class="repeat-number"></span>' )
+            // add empty class for calculation-only repeats
+            .addBack()
             .filter( function() {
-                // remove whitespace so we can use :empty css selector
+                // remove whitespace
                 if ( this.firstChild && this.firstChild.nodeType === 3 ) {
                     this.firstChild.textContent = '';
                 }
-                return !!this.querySelector( '.question' );
+                return !this.querySelector( '.question' );
             } )
-            .prepend( '<span class="repeat-number"></span>' );
+            .addClass( 'empty' );
         // Add repeat buttons
         $repeatInfos.filter( '*:not([data-repeat-fixed]):not([data-repeat-count])' )
             .append( '<button type="button" class="btn btn-default add-repeat-btn"><i class="icon icon-plus"> </i></button>' )
@@ -86,13 +92,24 @@ export default {
             return false;
         } );
         this.form.view.$.on( 'click', 'button.remove:enabled', function() {
-            //remove clone
-            that.remove( $( this ).closest( '.or-repeat' ) );
+            that.confirmDelete( this.closest( '.or-repeat' ) );
             //prevent default
             return false;
         } );
 
         this.countUpdate();
+    },
+    // Make this function overwritable
+    confirmDelete( repeatEl ) {
+        const that = this;
+        dialog.confirm( { heading: t( 'confirm.repeatremove.heading' ), msg: t( 'confirm.repeatremove.msg' ) } )
+            .then( confirmed => {
+                if ( confirmed ) {
+                    //remove clone
+                    that.remove( $( repeatEl ) );
+                }
+            } )
+            .catch( console.error );
     },
     /*
      * Obtains the absolute index of the provided repeat or repeat-info element

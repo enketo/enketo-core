@@ -54,7 +54,7 @@
       </repeat>
     </group>
     <input ref="/calcs_in_repeats/note1">
-      <label>value of num1 inside (first) repeat is: <output value=" /calcs_in_repeats/rep1/grp/num1 "/></label>
+      <label>value of num1 inside (first) repeat is: <output value=" /calcs_in_repeats/rep1/num1 "/></label>
     </input>
   </h:body>
 </h:html>

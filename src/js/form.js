@@ -79,14 +79,14 @@ Form.prototype = {
         this.view.$.attr( 'name', name );
     },
     get editStatus() {
-        return !!this.view.$.data( 'edited' );
+        return this.view.html.dataset.edited === 'true';
     },
     set editStatus( status ) {
         // only trigger edit event once
-        if ( status && status !== this.view.$.data( 'edited' ) ) {
-            this.view.$.trigger( 'edited.enketo' );
+        if ( status && status !== this.editStatus ) {
+            this.view.html.dispatchEvent( events.Edited() );
         }
-        this.view.$.data( 'edited', status );
+        this.view.html.dataset.edited = status;
     },
     get surveyName() {
         return this.view.$.find( '#form-title' ).text();
@@ -149,10 +149,10 @@ Form.prototype.init = function() {
 
     // Before initializing form view, passthrough some model events externally
     this.model.events.addEventListener( 'dataupdate', event => {
-        that.view.$.trigger( 'dataupdate.enketo', event.detail );
+        that.view.html.dispatchEvent( events.DataUpdate( event.detail ) );
     } );
     this.model.events.addEventListener( 'removed', event => {
-        that.view.$.trigger( 'removed.enketo', event.detail );
+        that.view.html.dispatchEvent( events.Removed( event.detail ) );
     } );
 
     this.pages = this.addModule( pageModule );
@@ -193,6 +193,9 @@ Form.prototype.init = function() {
         // after radio button data-name setting (now done in XLST)
         this.repeats.init();
 
+        // after repeats.init, but before itemset.update
+        this.output.update();
+
         // after repeats.init
         this.itemset.update();
 
@@ -212,9 +215,6 @@ Form.prototype.init = function() {
 
         // after widgets.init(), and after repeats.init(), and after pages.init()
         this.relevant.update();
-
-        // after repeats.init()
-        this.output.update();
 
         // after widgets init to make sure widget handlers are called before
         // after loading existing instance to not trigger an 'edit' event
@@ -488,7 +488,9 @@ Form.prototype.getQuerySelectorsForLogic = ( filter, attr, nodeName ) => [
     // #4: at the end of an expression
     `${filter}[${attr}$="/${nodeName}"]`,
     // #5: followed by ] (used in itemset filters)
-    `${filter}[${attr}*="/${nodeName}]"]`
+    `${filter}[${attr}*="/${nodeName}]"]`,
+    // #6: followed by [ (used when filtering nodes in repeat instances)
+    `${filter}[${attr}*="/${nodeName}["]`
 ];
 
 /**
@@ -644,15 +646,19 @@ Form.prototype.setEventHandlers = function() {
                 that.validateInput( $input )
                     .then( valid => {
                         // propagate event externally after internal processing is completed
-                        $input.trigger( 'valuechange.enketo', valid );
+                        $input.trigger( 'valuechange', valid );
                     } );
             }
         } );
 
     // doing this on the focus event may have little effect on performance, because nothing else is happening :)
-    this.view.$.on( 'focus fakefocus', 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)', event => {
+    this.view.html.addEventListener( 'focusin', event => {
         // update the form progress status
-        that.progress.update( event.target );
+        this.progress.update( event.target );
+    } );
+    this.view.html.addEventListener( events.FakeFocus().type, event => {
+        // update the form progress status
+        this.progress.update( event.target );
     } );
 
     this.model.events.addEventListener( 'dataupdate', event => {
@@ -680,7 +686,7 @@ Form.prototype.setEventHandlers = function() {
         that.progress.update();
     } );
 
-    this.view.html.addEventListener( events.RemoveRepeat(), () => {
+    this.view.html.addEventListener( events.RemoveRepeat().type, () => {
         that.progress.update();
     } );
 
@@ -755,7 +761,7 @@ Form.prototype.validateAll = function() {
 
     return this.validateContent( this.view.$ )
         .then( valid => {
-            that.view.$.trigger( 'validationcomplete.enketo' );
+            that.view.html.dispatchEvent( events.ValidationComplete() );
             return valid;
         } );
 };
@@ -887,7 +893,7 @@ Form.prototype.validateInput = function( $input ) {
             }
             // Send invalidated event
             if ( !passed && !previouslyInvalid ) {
-                $input.trigger( 'invalidated.enketo' );
+                $input[ 0 ].dispatchEvent( events.Invalidated() );
             }
             return passed;
         } )
@@ -953,17 +959,18 @@ Form.prototype.goToTarget = function( target ) {
             this.pages.flipToPageContaining( $( target ) );
         }
         // check if the nearest question or group is irrelevant after page flip
-        if ( $( target ).closest( '.or-branch.disabled' ).length ) {
+        if ( target.closest( '.or-branch.disabled' ) ) {
             // It is up to the apps to decide what to do with this event.
-            $( target ).trigger( 'gotohidden.enketo' );
+            target.dispatchEvent( events.GoToHidden() );
         }
         // Scroll to element
         target.scrollIntoView();
         // Focus on the first non .ignore form control
         // If the element is hidden (e.g. because it's been replaced by a widget),
         // the focus event will not fire, so we also trigger an applyfocus event that widgets can listen for.
-        $( target.querySelector( 'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)' ) )
-            .trigger( 'focus' ).trigger( 'applyfocus' );
+        const input = target.querySelector( 'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)' );
+        input.focus();
+        input.dispatchEvent( events.ApplyFocus() );
     }
     return !!target;
 };

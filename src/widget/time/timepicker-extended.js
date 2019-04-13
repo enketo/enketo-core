@@ -3,7 +3,7 @@ import Widget from '../../js/widget';
 import support from '../../js/support';
 import { time as timeFormat } from '../../js/format';
 import types from '../../js/types';
-import event from '../../js/event';
+import events from '../../js/event';
 import './timepicker';
 import '../../js/dropdown.jquery';
 
@@ -13,7 +13,7 @@ import '../../js/dropdown.jquery';
 class TimepickerExtended extends Widget {
 
     static get selector() {
-        return 'input[type="time"]:not([readonly])';
+        return '.question input[type="time"]:not([readonly])';
     }
 
     static condition() {
@@ -53,20 +53,15 @@ class TimepickerExtended extends Widget {
         // reset button
         resetBtn.addEventListener( 'click', this._reset.bind( this ) );
 
-        // pass widget focus event
-        this.fakeTimeI.addEventListener( 'focus', () => {
-            this.element.dispatchEvent( event.FakeFocus() );
-        } );
-
         // handle original input focus
-        this.element.addEventListener( 'applyfocus', () => {
+        this.element.addEventListener( events.ApplyFocus().type, () => {
             this.fakeTimeI.focus();
         } );
 
     }
 
     _reset() {
-        const ev = this.originalInputValue ? event.Change() : null;
+        const ev = this.originalInputValue ? events.Change() : null;
         if ( ev || this.value ) {
             this.value = '';
             //this.originalInputValue = '';

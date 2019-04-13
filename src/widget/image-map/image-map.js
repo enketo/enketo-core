@@ -145,6 +145,7 @@ class ImageMap extends Widget {
                 if ( input ) {
                     input.checked = !input.checked;
                     input.dispatchEvent( events.Change() );
+                    input.dispatchEvent( events.FakeFocus() );
                 }
             }
         } );
@@ -199,9 +200,7 @@ class ImageMap extends Widget {
     }
 
     enable() {
-        if ( !this.props.readonly ) {
-            this.svg.removeAttribute( 'or-readonly' );
-        }
+        this.svg.removeAttribute( 'or-readonly' );
     }
 
     update() {

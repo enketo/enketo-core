@@ -109,9 +109,13 @@ $media-margin: 10px;
     padding: 20px 10px 10px 10px;
     position: relative;
 
-    &:empty {
+    &.empty {
         // calculation-only repeats
         padding: 0;
+
+        .repeat-number {
+            display: none;
+        }
     }
 
     .repeat-number {

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+  xmlns:OpenClinica="http://openclinica.com/odm" 
+  xmlns:ev="http://www.w3.org/2001/xml-events" 
+  xmlns:h="http://www.w3.org/1999/xhtml" 
+  xmlns:jr="http://openrosa.org/javarosa" 
+  xmlns:oc="http://openclinica.org/xforms" 
+  xmlns:odk="http://www.opendatakit.org/xforms" 
+  xmlns:orx="http://openrosa.org/xforms" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Repeat Group Comparison</h:title>
+    <model>
+      <instance>
+        <repeat-group-comparison id="rgcompttest" version="1">
+          <REP jr:template="">
+            <text1/>
+          </REP>
+          <count2/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </repeat-group-comparison>
+      </instance>
+      <bind nodeset="/repeat-group-comparison/REP/text1" oc:itemgroup="group1" type="string"/>
+      <bind calculate="count(/repeat-group-comparison/REP/text1[normalize-space(.)=&quot;yes&quot;])" nodeset="/repeat-group-comparison/count2" readonly="true()" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/repeat-group-comparison/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body class="theme-grid">
+    <group ref="/repeat-group-comparison/REP">
+      <label></label>
+      <repeat nodeset="/repeat-group-comparison/REP">
+        <input appearance="w1 multiline" ref="/repeat-group-comparison/REP/text1">
+          <label>text</label>
+        </input>
+      </repeat>
+    </group>
+    <input ref="/repeat-group-comparison/count2">
+      <label>Number of times the word "yes" was entered with or without preceding/trailing spaces</label>
+    </input>
+  </h:body>
+</h:html>

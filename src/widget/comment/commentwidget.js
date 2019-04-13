@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import { t } from 'enketo/translator';
-import event from '../../js/event';
+import events from '../../js/event';
 
 /**
  * Visually transforms a question into a comment modal that can be shown on its linked question.
@@ -76,7 +76,7 @@ class Comment extends Widget {
     }
 
     _setValidationHandler() {
-        $( 'form.or' ).on( 'validationcomplete.enketo', () => {
+        this.element.closest( 'form.or' ).addEventListener( events.ValidationComplete().type, () => {
             const error = this._commentHasError();
             const value = this.originalInputValue;
             this._setCommentButtonState( value, error );
@@ -135,7 +135,7 @@ class Comment extends Widget {
         updateButton.addEventListener( 'click', ev => {
             const value = input.value;
             this.originalInputValue = value;
-            this.element.dispatchEvent( event.Change() );
+            this.element.dispatchEvent( events.Change() );
             const error = this._commentHasError();
             this._setCommentButtonState( value, error );
             this._hideCommentModal( this.linkedQuestion );

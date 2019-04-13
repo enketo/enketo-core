@@ -42,7 +42,7 @@ import 'leaflet.gridlayer.googlemutant';
 class Geopicker extends Widget {
 
     static get selector() {
-        return 'input[data-type-xml="geopoint"], input[data-type-xml="geotrace"], input[data-type-xml="geoshape"]';
+        return '.question input[data-type-xml="geopoint"], .question input[data-type-xml="geotrace"], .question input[data-type-xml="geoshape"]';
     }
 
     static condition( element ) {
@@ -83,7 +83,7 @@ class Geopicker extends Widget {
             event.stopImmediatePropagation();
 
             // if the points array contains empty points, skip the intersection check, it will be done before closing the polygon
-            if ( event.namespace !== 'bymap' && event.namespace !== 'bysearch' && that.polyline && !that.containsEmptyPoints( that.points, that.currentIndex ) && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
+            if ( event.namespace !== 'bymap' && event.namespace !== 'bysearch' && that.polyline && that.props.type === 'geoshape' && !that.containsEmptyPoints( that.points, that.currentIndex ) && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
                 that._showIntersectError();
                 that._updateInputs( that.points[ that.currentIndex ], 'nochange' );
             } else {
@@ -218,11 +218,6 @@ class Geopicker extends Widget {
             return false;
         } );
 
-        // pass focus events on widget elements back to original input
-        this.$widget.on( 'focus', 'input', () => {
-            $( that.element ).trigger( 'fakefocus' );
-        } );
-
         // enable search
         if ( this.props.search ) {
             this._enableSearch();
@@ -234,7 +229,7 @@ class Geopicker extends Widget {
         }
 
         if ( this.props.readonly ) {
-            this.disable( this.element );
+            this.disable();
         }
 
         // create "point buttons"
@@ -468,7 +463,7 @@ class Geopicker extends Widget {
                     lng: Math.round( position.coords.longitude * 1000000 ) / 1000000
                 };
 
-                if ( that.polyline && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
+                if ( that.polyline && that.props.type === 'geoshape' && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
                     that._showIntersectError();
                 } else {
                     //that.points[that.currentIndex] = [ position.coords.latitude, position.coords.longitude ];
@@ -614,7 +609,7 @@ class Geopicker extends Widget {
                         latLng.lng = Math.round( latLng.lng * 1000000 ) / 1000000;
 
                         // Skip intersection check if points contain empties. It will be done later, before the polygon is closed.
-                        if ( that.props.type !== 'geopoint' && !that.containsEmptyPoints( that.points, indexToPlacePoint ) && that.updatedPolylineWouldIntersect( latLng, indexToPlacePoint ) ) {
+                        if ( that.props.type === 'geoshape' && !that.containsEmptyPoints( that.points, indexToPlacePoint ) && that.updatedPolylineWouldIntersect( latLng, indexToPlacePoint ) ) {
                             that._showIntersectError();
                         } else {
                             if ( !that.$lat.val() || !that.$lng.val() || that.props.type === 'geopoint' ) {
@@ -843,7 +838,7 @@ class Geopicker extends Widget {
                     latLng.lat = Math.round( latLng.lat * 1000000 ) / 1000000;
                     latLng.lng = Math.round( latLng.lng * 1000000 ) / 1000000;
 
-                    if ( that.polyline && that.updatedPolylineWouldIntersect( latLng, index ) ) {
+                    if ( that.polyline && that.props.type === 'geoshape' && that.updatedPolylineWouldIntersect( latLng, index ) ) {
                         that._showIntersectError();
                         that._updateMarkers();
                     } else {

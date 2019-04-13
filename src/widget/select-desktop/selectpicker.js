@@ -21,6 +21,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import support from '../../js/support';
+import events from '../../js/event';
 import { getSiblingElementsAndSelf } from '../../js/dom-utils';
 import event from '../../js/event';
 import { t } from 'enketo/translator';
@@ -34,7 +35,7 @@ import '../../js/dropdown.jquery';
 class DesktopSelectpicker extends Widget {
 
     static get selector() {
-        return 'select:not(#form-languages)';
+        return '.question select';
     }
 
     static get list() {
@@ -50,6 +51,9 @@ class DesktopSelectpicker extends Widget {
         $select.css( 'display', 'none' );
         const $template = this._createLi( this._getTemplate() );
         this.$picker = $template.insertAfter( $select );
+        if ( this.props.readonly ) {
+            this.disable();
+        }
         this._clickListener();
         this._focusListener();
     }
@@ -67,9 +71,6 @@ class DesktopSelectpicker extends Widget {
         const li = [];
         let liHtml = '';
         const inputAttr = this.props.multiple ? 'type="checkbox"' : `type="radio" name="${Math.random() * 100000}"`;
-        const readonlyAttr = this.props.readonly ? ' readonly="readonly"' : '';
-        const disabledAttr = this.props.readonly ? ' disabled="disabled"' : '';
-        const disabledClass = this.props.readonly ? ' class="disabled"' : '';
 
         $( this.element ).find( 'option' ).each( function() {
             li.push( {
@@ -96,10 +97,10 @@ class DesktopSelectpicker extends Widget {
                      *    </li>
                      */
                     liHtml += `
-                    <li ${disabledClass}${checkedLiAttr}>
+                    <li ${checkedLiAttr}>
                         <a class="option-wrapper" tabindex="-1" href="#">
                             <label>
-                                <input class="ignore" ${inputAttr}${checkedInputAttr}${readonlyAttr}${disabledAttr} value="${li[ i ].value}" />
+                                <input class="ignore" ${inputAttr}${checkedInputAttr} value="${li[ i ].value}" />
                                 <span class="option-label">${li[ i ].label}</span>
                             </label>
                         </a>
@@ -219,25 +220,30 @@ class DesktopSelectpicker extends Widget {
         const _this = this;
 
         // Focus on original element (form.goTo functionality)
-        $( this.element ).on( 'applyfocus', () => {
+        this.element.addEventListener( events.ApplyFocus().type, () => {
             _this.$picker.find( '.dropdown-toggle' ).focus();
         } );
 
-        // focus on widget
-        this.$picker.on( 'shown.bs.dropdown', () => {
-            $( _this.element ).trigger( 'fakefocus' );
-            return true;
-        } );
     }
 
     disable() {
-        this.$picker.find( 'li' ).addClass( 'disabled' );
+        this.$picker[ 0 ].querySelectorAll( 'li' ).forEach( el => {
+            el.classList.add( 'disabled' );
+            const input = el.querySelector( 'input' );
+            // are both below necessary?
+            input.disabled = true;
+            input.readOnly = true;
+        } );
     }
 
     enable() {
-        if ( !this.props.readonly ) {
-            this.$picker.find( 'li' ).removeClass( 'disabled' );
-        }
+        this.$picker[ 0 ].querySelectorAll( 'li' ).forEach( el => {
+            el.classList.remove( 'disabled' );
+            const input = el.querySelector( 'input' );
+            input.disabled = false;
+            input.readOnly = false;
+        } );
+
     }
 
     update() {

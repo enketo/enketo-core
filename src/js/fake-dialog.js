@@ -14,7 +14,8 @@ function alert( content ) {
  * @param {String | {message: String, heading: String}} content Dialog content
  */
 function confirm( content ) {
-    return Promise.resolve( window.confirm( content ) );
+    const msg = content.message ? content.message : content;
+    return Promise.resolve( window.confirm( msg ) );
 }
 
 function prompt( content, def ) {

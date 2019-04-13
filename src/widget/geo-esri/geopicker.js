@@ -22,7 +22,7 @@ let esri;
 class ArcGisGeopicker extends Widget {
 
     static get selector() {
-        return 'input[data-type-xml="geopoint"]';
+        return '.question input[data-type-xml="geopoint"]';
     }
 
     static get helpersRequired() {

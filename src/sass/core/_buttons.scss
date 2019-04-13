@@ -6,6 +6,7 @@
     color: $color;
     background-color: $background;
     border-color: $border;
+
     &:hover,
     &:focus,
     &:active,
@@ -14,6 +15,7 @@
         background-color: darken($background, 8%);
         border-color: darken($border, 12%);
     }
+
     .open & {
         &.dropdown-toggle {
             color: $color;
@@ -21,18 +23,22 @@
             border-color: darken($border, 12%);
         }
     }
+
     &:active,
     &.active {
         background-image: none;
     }
+
     .open & {
         &.dropdown-toggle {
             background-image: none;
         }
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
+
         &,
         &:hover,
         &:focus,
@@ -42,6 +48,7 @@
             border-color: $border;
         }
     }
+
     .badge {
         color: $background;
         background-color: $color;
@@ -72,6 +79,7 @@ button {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
     &:focus,
     &:link,
     &:active,
@@ -88,6 +96,12 @@ button {
     @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
 }
 
+.btn-reset {
+    &[disabled] {
+        display: none;
+    }
+}
+
 // special minimal icon-only buttons
 .btn-icon-only {
     margin: 0 10px 0 10px;
@@ -97,8 +111,9 @@ button {
     border: none;
     width: $input-height;
     height: $input-height;
-    box-shadow:none;
+    box-shadow: none;
     opacity: 0.7;
+
     &:hover,
     &:focus,
     &:active,
@@ -108,6 +123,7 @@ button {
         background: none;
         box-shadow: none;
     }
+
     &:hover,
     &:disabled,
     &.disabled {

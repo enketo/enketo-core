@@ -38,9 +38,6 @@ class RangeWidget extends Widget {
             this.originalInputValue = this.value;
             this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
         } );
-        this.range.addEventListener( 'focus', () => {
-            this.element.dispatchEvent( events.FakeFocus() );
-        } );
 
         // Do not use change handler for this because this doesn't if the user clicks on the internal DEFAULT
         // value of the range input.
@@ -125,9 +122,7 @@ class RangeWidget extends Widget {
     }
 
     enable() {
-        if ( this.props && !this.props.readonly ) {
-            this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
-        }
+        this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
     }
 
     update() {

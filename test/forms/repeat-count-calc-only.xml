@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>repeat-count-calc-only</h:title>
+        <model>
+            <instance>
+                <repeat-count-calc-only id="repeat-count-calc-only">
+                    <a/>
+                    <rep_count/>
+                    <rep jr:template="">
+                        <calc1/>
+                        <calc2/>
+                    </rep>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </repeat-count-calc-only>
+            </instance>
+            <bind nodeset="/repeat-count-calc-only/a" type="select1"/>
+            <bind calculate="2" nodeset="/repeat-count-calc-only/rep_count" readonly="true()" type="string"/>
+            <bind calculate="position(..)+1" nodeset="/repeat-count-calc-only/rep/calc1" type="string"/>
+            <bind calculate="position(..)+2" nodeset="/repeat-count-calc-only/rep/calc2" type="string"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/repeat-count-calc-only/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 appearance="likert" ref="/repeat-count-calc-only/a">
+            <label>Enketo is incredible.</label>
+            <item>
+                <label>strongly disagree</label>
+                <value>1</value>
+            </item>
+            <item>
+                <label>disagree</label>
+                <value>2</value>
+            </item>
+            <item>
+                <label>neither agree nor disagree</label>
+                <value>3</value>
+            </item>
+            <item>
+                <label>agree</label>
+                <value>4</value>
+            </item>
+            <item>
+                <label>strongly agree</label>
+                <value>5</value>
+            </item>
+        </select1>
+        <group ref="/repeat-count-calc-only/rep">
+            <label></label>
+            <repeat jr:count=" /repeat-count-calc-only/rep_count " nodeset="/repeat-count-calc-only/rep"/>
+        </group>
+    </h:body>
+</h:html>

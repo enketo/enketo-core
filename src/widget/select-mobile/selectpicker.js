@@ -10,7 +10,7 @@ import support from '../../js/support';
 class MobileSelectPicker extends Widget {
 
     static get selector() {
-        return 'select[multiple]';
+        return '.question select[multiple]';
     }
 
     static condition() {

@@ -4,12 +4,63 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+--------------------
+##### Fixed
+- Failing to clone repeats that only contain calculations.
+
+[5.2.2] - 2019-04-01
+--------------------
+##### Changed
+- Hide reset button when question is readonly.
+
+##### Fixed
+- Readonly Draw/Signature widget updates with empty file when canvas looses focus. 
+- Readonly Select Minimal widget is not readonly.
+- Readonly File widget becomes writeable if it becomes relevant.
+
+[5.2.1] - 2019-03-26
+--------------------
+##### Changed
+- The restriction on crossing paths in the geoshape widget was removed.
+
+##### Fixed
+- Radiobutton unselect functionality can cause infinite loops with certain custom extensions that update values programmatically.
+
+[5.2.0] - 2019-03-19
+---------------------
+##### Added
+- A configurable option to provide a maximum character length of a text field.
+
+##### Fixed
+- The output in an itemset option label is not populated upon load.
+
+[5.1.3] - 2019-02-26
+---------------------
+##### Changed
+- Partial rewrite of events.
+- Improved accuracy of progress tracker.
+
+##### Fixed
+- On touchscreen devices, the draw widget download functionality does not work, and clicking the Draw button empties the canvas.
+- XForms using geopoint, geotrace, geoshape, time, date, datetime, select minimal, rank, autocomplete calculations **without form control** (advanced) fail to load.
+- Some widgets (such as all geo widgets) do not update view if a calculation changes the underlying value.
+
+[5.1.1] - 2019-02-21
+---------------------
+##### Fixed
+- Calculations using advanced count(/path/to/repeat/node1[text()="something"]) aren't recalculated when a node1 changes.
+- Exception occurs when appearance 'horizontal' is added to group (which has no support for this appearance).
+- If the window in an online-only multi-page form is resized, while a drawing is on a currently-not-shown page, the submission results in an empty drawing.
+
+[5.1.0] - 2019-02-18
 ---------------------
 ##### Changed
 - Readonly draw widgets no longer show drawings on grey background in Grid Theme, nor apply an opaqueness filter.
+- Repeat deletion with "-" button now requires confirmation.
 
 ##### Fixed
 - Loading image from record may show error even if it was loaded successfully.
+- Generic file upload not working (cannot set property 'src' of null).
 
 [5.0.5] - 2019-02-07
 ---------------------
