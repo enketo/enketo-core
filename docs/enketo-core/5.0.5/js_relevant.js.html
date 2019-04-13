@@ -202,7 +202,7 @@ export default {
     /**
      * Processes the evaluation result for a branch
      *
-     * @param {$} $branchNode
+     * @param {jQuery} $branchNode
      * @param {string} path - Path of branch node
      * @param {boolean} result - result of relevant evaluation
      * @param {boolean} forceClearIrrelevant - Whether to force clearing of irrelevant nodes and descendants
@@ -218,7 +218,7 @@ export default {
     /**
      * Checks whether branch currently has 'relevant' state
      *
-     * @param {$} $branchNode
+     * @param {jQuery} $branchNode
      * @return {boolean}
      */
     selfRelevant( $branchNode ) {
@@ -228,7 +228,7 @@ export default {
     /**
      * Enables and reveals a branch node/group
      *
-     * @param {$} $branchNode - The jQuery object to reveal and enable
+     * @param {jQuery} $branchNode - The jQuery object to reveal and enable
      */
     enable( $branchNode, path ) {
         let change = false;
@@ -255,7 +255,7 @@ export default {
     /**
      * Disables and hides a branch node/group
      *
-     * @param  {$} $branchNode The jQuery object to hide and disable
+     * @param  {jQuery} $branchNode The jQuery object to hide and disable
      */
     disable( $branchNode, path, forceClearIrrelevant ) {
         const virgin = $branchNode.hasClass( 'pre-init' );
@@ -280,7 +280,7 @@ export default {
      * Clears values from branchnode.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param  {$} $branchNode
+     * @param  {jQuery} $branchNode
      * @param  {string} path
      */
     clear( $branchNode, path ) {
@@ -311,7 +311,7 @@ export default {
      * Activates form controls.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {$} $branchNode
+     * @param {jQuery} $branchNode
      */
     activate( $branchNode ) {
         this.setDisabledProperty( $branchNode, false );
@@ -320,7 +320,7 @@ export default {
      * Deactivates form controls.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {$} $branchNode
+     * @param {jQuery} $branchNode
      */
     deactivate( $branchNode ) {
         $branchNode.addClass( 'disabled' );

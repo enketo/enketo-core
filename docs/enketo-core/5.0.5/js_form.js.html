@@ -430,7 +430,7 @@ Form.prototype.getModelValue = function( $control ) {
  * @param  {string} attribute The attribute name to search for
  * @param  {?string} filter   The optional filter to append to each selector
  * @param  {{nodes:Array&lt;string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
- * @return {$}           A jQuery collection of elements
+ * @return {jQuery}           A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     let $collection;
@@ -870,7 +870,7 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
 /**
  * Validates question values.
  *
- * @param  {$} $input    [description]
+ * @param  {jQuery} $input    [description]
  * @return {Promise}           [description]
  */
 Form.prototype.validateInput = function( $input ) {

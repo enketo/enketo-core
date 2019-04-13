@@ -57,7 +57,7 @@ let formHtml;
 /**
  * Initializes widgets
  *
- * @param  {$} $group The element inside which the widgets have to be initialized.
+ * @param  {jQuery} $group The element inside which the widgets have to be initialized.
  * @param { *} options Options (e.g. helper function of Form.js passed)
  */
 function init( $group, opts = {} ) {
@@ -113,7 +113,7 @@ function disable( group ) {
  *
  * @param {Element} group - a jQuery-wrapped element
  * @param {string} selector - if the selector is null, the form element will be returned
- * @return {$} a jQuery collection
+ * @return {jQuery} a jQuery collection
  */
 function _getElements( group, selector ) {
     if ( selector ) {
