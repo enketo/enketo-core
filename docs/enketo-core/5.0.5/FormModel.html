@@ -63,7 +63,7 @@
 
     
 
-    <h4 class="name" id="FormModel"><span class="type-signature"></span>new FormModel<span class="signature">(data, options<span class="signature-attributes">nullable</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="FormModel"><span class="type-signature"></span>new FormModel<span class="signature">(data, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -75,7 +75,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line34">line 34</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -160,6 +160,11 @@
 
             <td class="type">
             
+                
+<span class="param-type">Object</span>
+
+
+            
             </td>
 
             
@@ -174,7 +179,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>data object containing XML model, (partial) XML instance to load, external data array, flag to indicate whether data was submitted before</p></td>
         </tr>
 
     
@@ -196,9 +201,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -264,7 +269,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line78">line 78</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -327,7 +332,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line70">line 70</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -390,7 +395,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line86">line 86</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -463,7 +468,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line636">line 636</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line631">line 631</a>
     </li></ul></dd>
     
 
@@ -603,7 +608,7 @@
 
             
 
-            <td class="description last"><p>whether this operation is part of a merge operation (won't send dataupdate event, clears all values and 
+            <td class="description last"><p>whether this operation is part of a merge operation (won't send dataupdate event, clears all values and
                           will not add ordinal attributes as these should be provided in the record)</p></td>
         </tr>
 
@@ -646,7 +651,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line786">line 786</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line781">line 781</a>
     </li></ul></dd>
     
 
@@ -804,7 +809,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1218">line 1218</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1212">line 1212</a>
     </li></ul></dd>
     
 
@@ -1117,7 +1122,7 @@ a single node can be accessed by returned node(.textContent)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line805">line 805</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line799">line 799</a>
     </li></ul></dd>
     
 
@@ -1157,7 +1162,7 @@ a single node can be accessed by returned node(.textContent)</p>
 
 
 <div class="description">
-    <p>Extracts all templates from the model and stores them in a Javascript object poperties as Jquery collections</p>
+    <p>Extracts all templates from the model and stores them in a Javascript object poperties as Jquery collections.</p>
 </div>
 
 
@@ -1184,12 +1189,6 @@ a single node can be accessed by returned node(.textContent)</p>
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-    
 
 
 
@@ -1198,7 +1197,7 @@ a single node can be accessed by returned node(.textContent)</p>
 
     
 
-    <h4 class="name" id="getRepeatIndex"><span class="type-signature"></span>getRepeatIndex<span class="signature">(node)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getRepeatIndex"><span class="type-signature"></span>getRepeatIndex<span class="signature">(node)</span><span class="type-signature"> &rarr; {number}</span></h4>
 
     
 
@@ -1210,7 +1209,7 @@ a single node can be accessed by returned node(.textContent)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line527">line 527</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line523">line 523</a>
     </li></ul></dd>
     
 
@@ -1293,6 +1292,11 @@ a single node can be accessed by returned node(.textContent)</p>
 
             <td class="type">
             
+                
+<span class="param-type">Node</span>
+
+
+            
             </td>
 
             
@@ -1324,7 +1328,23 @@ a single node can be accessed by returned node(.textContent)</p>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>index</p>
+</div>
 
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -1335,7 +1355,7 @@ a single node can be accessed by returned node(.textContent)</p>
 
     
 
-    <h4 class="name" id="getRepeatSeries"><span class="type-signature"></span>getRepeatSeries<span class="signature">(repeatPath, repeatSeriesIndex)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getRepeatSeries"><span class="type-signature"></span>getRepeatSeries<span class="signature">(repeatPath, repeatSeriesIndex)</span><span class="type-signature"> &rarr; {Array.Element}</span></h4>
 
     
 
@@ -1347,7 +1367,7 @@ a single node can be accessed by returned node(.textContent)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line721">line 721</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line716">line 716</a>
     </li></ul></dd>
     
 
@@ -1489,7 +1509,23 @@ a single node can be accessed by returned node(.textContent)</p>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>Array of all repeat elements in a series.</p>
+</div>
 
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.Element</span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -1512,7 +1548,7 @@ a single node can be accessed by returned node(.textContent)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line238">line 238</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line234">line 234</a>
     </li></ul></dd>
     
 
@@ -1671,7 +1707,7 @@ in IE11. This function is a replacement for this specifically to find a secondar
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line880">line 880</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line874">line 874</a>
     </li></ul></dd>
     
 
@@ -1780,7 +1816,7 @@ in IE11. This function is a replacement for this specifically to find a secondar
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line485">line 485</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line481">line 481</a>
     </li></ul></dd>
     
 
@@ -2014,7 +2050,7 @@ in IE11. This function is a replacement for this specifically to find a secondar
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line272">line 272</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line268">line 268</a>
     </li></ul></dd>
     
 
@@ -2102,7 +2138,7 @@ TODO: remove to be replaced by separate IE11-only polyfill file/service</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line94">line 94</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -2189,7 +2225,7 @@ TODO: remove to be replaced by separate IE11-only polyfill file/service</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line929">line 929</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line923">line 923</a>
     </li></ul></dd>
     
 
@@ -2229,7 +2265,7 @@ TODO: remove to be replaced by separate IE11-only polyfill file/service</p>
 
 
 <div class="description">
-    <p>There is a huge historic issue (stemming from JavaRosa) that has resulted in the usage of incorrect formulae 
+    <p>There is a huge historic issue (stemming from JavaRosa) that has resulted in the usage of incorrect formulae
 on nodes inside repeat nodes.
 Those formulae use absolute paths when relative paths should have been used. See more here:
 http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms</p>
@@ -2383,7 +2419,7 @@ the second rep_a repeat.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line311">line 311</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line307">line 307</a>
     </li></ul></dd>
     
 
@@ -2542,7 +2578,7 @@ the second rep_a repeat.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line264">line 264</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line260">line 260</a>
     </li></ul></dd>
     
 
@@ -2848,7 +2884,7 @@ the second rep_a repeat.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1086">line 1086</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1080">line 1080</a>
     </li></ul></dd>
     
 
@@ -3032,7 +3068,7 @@ the much faster native evaluator in most cases!</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1104">line 1104</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1098">line 1098</a>
     </li></ul></dd>
     
 
@@ -3191,7 +3227,7 @@ to their native XPath equivalents using [position() = x] predicates</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1058">line 1058</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1052">line 1052</a>
     </li></ul></dd>
     
 
@@ -3351,7 +3387,7 @@ the much faster native evaluator in most cases!</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line559">line 559</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line554">line 554</a>
     </li></ul></dd>
     
 
@@ -3418,12 +3454,6 @@ the much faster native evaluator in most cases!</p>
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-    
 
 
 
@@ -3444,7 +3474,7 @@ the much faster native evaluator in most cases!</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1028">line 1028</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line1022">line 1022</a>
     </li></ul></dd>
     
 
@@ -3602,7 +3632,7 @@ the much faster native evaluator in most cases!</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line547">line 547</a>
+        <a href="js_form-model.js.html">js/form-model.js</a>, <a href="js_form-model.js.html#line543">line 543</a>
     </li></ul></dd>
     
 

@@ -169,7 +169,7 @@ class ImageMap extends Widget {
     /**
      * Removes id attributes from unmatched path elements in order to prevent hover effect (and click listener).
      *
-     * @return {jQuery} [description]
+     * @return {$} [description]
      */
     _removeUnmatchedIds( svg ) {
         svg.querySelectorAll( 'path[id], g[id]' ).forEach( el => {
