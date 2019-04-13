@@ -1,0 +1,4493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Geopicker - Enketo Core</title>
+    
+    <meta name="description" content="Extensible Enketo form engine" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/enketo/enketo-core" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h2><a href="https://github.com/enketo/enketo-core/blob/master/CHANGELOG.md" target="_blank" class="menu-item" id="change-log" >Change log</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-01-getting-started.html">Getting started</a></li><li><a href="tutorial-02-global-configuration.html">Global configuration</a></li><li><a href="tutorial-03-browser-support.html">Browser support</a></li><li><a href="tutorial-04-development.html">Development</a></li><li><a href="tutorial-05-notes-js.html">JS rules</a></li><li><a href="tutorial-06-notes-css.html">CSS rules</a></li><li><a href="tutorial-07-events.html">Available events</a></li><li><a href="tutorial-08-widgets.html">Creating/extending widgets</a></li></ul><h3>Classes</h3><ul><li><a href="AnalogScaleWidget.html">AnalogScaleWidget</a><ul class='methods'><li data-type='method'><a href="AnalogScaleWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_renderLabels">_renderLabels</a></li><li data-type='method'><a href="AnalogScaleWidget.html#disable">disable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#enable">enable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#update">update</a></li></ul></li><li><a href="ArcGisGeopicker.html">ArcGisGeopicker</a><ul class='methods'><li data-type='method'><a href="ArcGisGeopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addEsriLocate">_addEsriLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addRegularLocate">_addRegularLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="ArcGisGeopicker.html#disable">disable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#enable">enable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#update">update</a></li></ul></li><li><a href="AutocompleteSelectpicker.html">AutocompleteSelectpicker</a><ul class='methods'><li data-type='method'><a href="AutocompleteSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#update">update</a></li></ul></li><li><a href="Comment.html">Comment</a><ul class='methods'><li data-type='method'><a href="Comment.html#disable">disable</a></li><li data-type='method'><a href="Comment.html#enable">enable</a></li><li data-type='method'><a href="Comment.html#update">update</a></li></ul></li><li><a href="CompactPicker.html">CompactPicker</a><ul class='methods'><li data-type='method'><a href="CompactPicker.html#disable">disable</a></li><li data-type='method'><a href="CompactPicker.html#enable">enable</a></li><li data-type='method'><a href="CompactPicker.html#update">update</a></li></ul></li><li><a href="DatepickerExtended.html">DatepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatepickerExtended.html#_createFakeDateInput">_createFakeDateInput</a></li><li data-type='method'><a href="DatepickerExtended.html#_setChangeHandler">_setChangeHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setFocusHandler">_setFocusHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setResetHandler">_setResetHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatepickerExtended.html#update">update</a></li></ul></li><li><a href="DatepickerMobile.html">DatepickerMobile</a><ul class='methods'><li data-type='method'><a href="DatepickerMobile.html#disable">disable</a></li><li data-type='method'><a href="DatepickerMobile.html#enable">enable</a></li><li data-type='method'><a href="DatepickerMobile.html#update">update</a></li></ul></li><li><a href="DatepickerNative.html">DatepickerNative</a><ul class='methods'><li data-type='method'><a href="DatepickerNative.html#disable">disable</a></li><li data-type='method'><a href="DatepickerNative.html#enable">enable</a></li><li data-type='method'><a href="DatepickerNative.html#update">update</a></li></ul></li><li><a href="DatetimepickerExtended.html">DatetimepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatetimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#update">update</a></li></ul></li><li><a href="DesktopSelectpicker.html">DesktopSelectpicker</a><ul class='methods'><li data-type='method'><a href="DesktopSelectpicker.html#_createSelectedStr">_createSelectedStr</a></li><li data-type='method'><a href="DesktopSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#update">update</a></li></ul></li><li><a href="DrawWidget.html">DrawWidget</a><ul class='methods'><li data-type='method'><a href="DrawWidget.html#_loadFileIntoPad">_loadFileIntoPad</a></li><li data-type='method'><a href="DrawWidget.html#disable">disable</a></li><li data-type='method'><a href="DrawWidget.html#enable">enable</a></li><li data-type='method'><a href="DrawWidget.html#update">update</a></li></ul></li><li><a href="Filepicker.html">Filepicker</a><ul class='methods'><li data-type='method'><a href="Filepicker.html#disable">disable</a></li><li data-type='method'><a href="Filepicker.html#enable">enable</a></li><li data-type='method'><a href="Filepicker.html#update">update</a></li></ul></li><li><a href="Form.html">Form</a><ul class='members'><li data-type='member'><a href="Form.html#.requiredTransformerVersion">requiredTransformerVersion</a></li><li data-type='member'><a href="Form.html#validate">validate</a></li></ul><ul class='methods'><li data-type='method'><a href="Form.html#addModule">addModule</a></li><li data-type='method'><a href="Form.html#blockPageNavigation">blockPageNavigation</a></li><li data-type='method'><a href="Form.html#getDataStr">getDataStr</a></li><li data-type='method'><a href="Form.html#getDataStrWithoutIrrelevantNodes">getDataStrWithoutIrrelevantNodes</a></li><li data-type='method'><a href="Form.html#getQuerySelectorsForLogic">getQuerySelectorsForLogic</a></li><li data-type='method'><a href="Form.html#getRelatedNodes">getRelatedNodes</a></li><li data-type='method'><a href="Form.html#goToTarget">goToTarget</a></li><li data-type='method'><a href="Form.html#grosslyViolateStandardComplianceByIgnoringCertainCalcs">grosslyViolateStandardComplianceByIgnoringCertainCalcs</a></li><li data-type='method'><a href="Form.html#init">init</a></li><li data-type='method'><a href="Form.html#isValid">isValid</a></li><li data-type='method'><a href="Form.html#replaceChoiceNameFn">replaceChoiceNameFn</a></li><li data-type='method'><a href="Form.html#resetView">resetView</a></li><li data-type='method'><a href="Form.html#setAllVals">setAllVals</a></li><li data-type='method'><a href="Form.html#validateAll">validateAll</a></li><li data-type='method'><a href="Form.html#validateContent">validateContent</a></li><li data-type='method'><a href="Form.html#validateInput">validateInput</a></li><li data-type='method'><a href="Form.html#validationUpdate">validationUpdate</a></li></ul></li><li><a href="FormModel.html">FormModel</a><ul class='methods'><li data-type='method'><a href="FormModel.html#addRepeat">addRepeat</a></li><li data-type='method'><a href="FormModel.html#determineIndex">determineIndex</a></li><li data-type='method'><a href="FormModel.html#evaluate">evaluate</a></li><li data-type='method'><a href="FormModel.html#extractTemplates">extractTemplates</a></li><li data-type='method'><a href="FormModel.html#getRepeatIndex">getRepeatIndex</a></li><li data-type='method'><a href="FormModel.html#getRepeatSeries">getRepeatSeries</a></li><li data-type='method'><a href="FormModel.html#getSecondaryInstance">getSecondaryInstance</a></li><li data-type='method'><a href="FormModel.html#getStr">getStr</a></li><li data-type='method'><a href="FormModel.html#getXPath">getXPath</a></li><li data-type='method'><a href="FormModel.html#importNode">importNode</a></li><li data-type='method'><a href="FormModel.html#init">init</a></li><li data-type='method'><a href="FormModel.html#makeBugCompliant">makeBugCompliant</a></li><li data-type='method'><a href="FormModel.html#mergeXml">mergeXml</a></li><li data-type='method'><a href="FormModel.html#node">node</a></li><li data-type='method'><a href="FormModel.html#replaceCurrentFn">replaceCurrentFn</a></li><li data-type='method'><a href="FormModel.html#replaceIndexedRepeatFn">replaceIndexedRepeatFn</a></li><li data-type='method'><a href="FormModel.html#replaceInstanceFn">replaceInstanceFn</a></li><li data-type='method'><a href="FormModel.html#setInstanceIdAndDeprecatedId">setInstanceIdAndDeprecatedId</a></li><li data-type='method'><a href="FormModel.html#shiftRoot">shiftRoot</a></li><li data-type='method'><a href="FormModel.html#trimValues">trimValues</a></li></ul></li><li><a href="Geopicker.html">Geopicker</a><ul class='methods'><li data-type='method'><a href="Geopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="Geopicker.html#_addPointBtn">_addPointBtn</a></li><li data-type='method'><a href="Geopicker.html#_convertKmlCoordinatesToLeafletCoordinates">_convertKmlCoordinatesToLeafletCoordinates</a></li><li data-type='method'><a href="Geopicker.html#_dynamicMapAvailable">_dynamicMapAvailable</a></li><li data-type='method'><a href="Geopicker.html#_editPoint">_editPoint</a></li><li data-type='method'><a href="Geopicker.html#_enableDetection">_enableDetection</a></li><li data-type='method'><a href="Geopicker.html#_enableSearch">_enableSearch</a></li><li data-type='method'><a href="Geopicker.html#_getGoogleTileLayer">_getGoogleTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getLayers">_getLayers</a></li><li data-type='method'><a href="Geopicker.html#_getLeafletTileLayer">_getLeafletTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getTileOptions">_getTileOptions</a></li><li data-type='method'><a href="Geopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLngList">_isValidLatLngList</a></li><li data-type='method'><a href="Geopicker.html#_loadGoogleMapsScript">_loadGoogleMapsScript</a></li><li data-type='method'><a href="Geopicker.html#_markAsInvalid">_markAsInvalid</a></li><li data-type='method'><a href="Geopicker.html#_markAsValid">_markAsValid</a></li><li data-type='method'><a href="Geopicker.html#_removePoint">_removePoint</a></li><li data-type='method'><a href="Geopicker.html#_setCurrent">_setCurrent</a></li><li data-type='method'><a href="Geopicker.html#_updateArea">_updateArea</a></li><li data-type='method'><a href="Geopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="Geopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="Geopicker.html#_updateMarkers">_updateMarkers</a></li><li data-type='method'><a href="Geopicker.html#_updatePolygon">_updatePolygon</a></li><li data-type='method'><a href="Geopicker.html#_updatePolyline">_updatePolyline</a></li><li data-type='method'><a href="Geopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="Geopicker.html#containsEmptyPoints">containsEmptyPoints</a></li><li data-type='method'><a href="Geopicker.html#disable">disable</a></li><li data-type='method'><a href="Geopicker.html#enable">enable</a></li><li data-type='method'><a href="Geopicker.html#update">update</a></li><li data-type='method'><a href="Geopicker.html#updatedPolylineWouldIntersect">updatedPolylineWouldIntersect</a></li></ul></li><li><a href="HorizontalChoices.html">HorizontalChoices</a><ul class='methods'><li data-type='method'><a href="HorizontalChoices.html#disable">disable</a></li><li data-type='method'><a href="HorizontalChoices.html#enable">enable</a></li><li data-type='method'><a href="HorizontalChoices.html#update">update</a></li></ul></li><li><a href="ImageMap.html">ImageMap</a><ul class='methods'><li data-type='method'><a href="ImageMap.html#_removeUnmatchedIds">_removeUnmatchedIds</a></li><li data-type='method'><a href="ImageMap.html#_updateImage">_updateImage</a></li><li data-type='method'><a href="ImageMap.html#disable">disable</a></li><li data-type='method'><a href="ImageMap.html#enable">enable</a></li><li data-type='method'><a href="ImageMap.html#update">update</a></li></ul></li><li><a href="ImageViewer.html">ImageViewer</a><ul class='methods'><li data-type='method'><a href="ImageViewer.html#disable">disable</a></li><li data-type='method'><a href="ImageViewer.html#enable">enable</a></li><li data-type='method'><a href="ImageViewer.html#update">update</a></li></ul></li><li><a href="MobileSelectPicker.html">MobileSelectPicker</a><ul class='methods'><li data-type='method'><a href="MobileSelectPicker.html#_showSelectedValues">_showSelectedValues</a></li><li data-type='method'><a href="MobileSelectPicker.html#disable">disable</a></li><li data-type='method'><a href="MobileSelectPicker.html#enable">enable</a></li><li data-type='method'><a href="MobileSelectPicker.html#update">update</a></li></ul></li><li><a href="Nodeset.html">Nodeset</a><ul class='methods'><li data-type='method'><a href="Nodeset.html#convert">convert</a></li><li data-type='method'><a href="Nodeset.html#getVal">getVal</a></li><li data-type='method'><a href="Nodeset.html#remove">remove</a></li><li data-type='method'><a href="Nodeset.html#setIndex">setIndex</a></li><li data-type='method'><a href="Nodeset.html#setVal">setVal</a></li><li data-type='method'><a href="Nodeset.html#validateConstraintAndType">validateConstraintAndType</a></li></ul></li><li><a href="Radiopicker.html">Radiopicker</a><ul class='methods'><li data-type='method'><a href="Radiopicker.html#disable">disable</a></li><li data-type='method'><a href="Radiopicker.html#enable">enable</a></li><li data-type='method'><a href="Radiopicker.html#update">update</a></li></ul></li><li><a href="RangeWidget.html">RangeWidget</a><ul class='methods'><li data-type='method'><a href="RangeWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="RangeWidget.html#disable">disable</a></li><li data-type='method'><a href="RangeWidget.html#enable">enable</a></li><li data-type='method'><a href="RangeWidget.html#update">update</a></li></ul></li><li><a href="RankWidget.html">RankWidget</a><ul class='methods'><li data-type='method'><a href="RankWidget.html#disable">disable</a></li><li data-type='method'><a href="RankWidget.html#enable">enable</a></li><li data-type='method'><a href="RankWidget.html#update">update</a></li></ul></li><li><a href="TextareaWidget.html">TextareaWidget</a><ul class='methods'><li data-type='method'><a href="TextareaWidget.html#disable">disable</a></li><li data-type='method'><a href="TextareaWidget.html#enable">enable</a></li><li data-type='method'><a href="TextareaWidget.html#update">update</a></li></ul></li><li><a href="TextMaxWidget.html">TextMaxWidget</a></li><li><a href="TimepickerExtended.html">TimepickerExtended</a><ul class='methods'><li data-type='method'><a href="TimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="TimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="TimepickerExtended.html#update">update</a></li></ul></li><li><a href="UrlWidget.html">UrlWidget</a><ul class='methods'><li data-type='method'><a href="UrlWidget.html#disable">disable</a></li><li data-type='method'><a href="UrlWidget.html#enable">enable</a></li><li data-type='method'><a href="UrlWidget.html#update">update</a></li></ul></li><li><a href="Widget.html">Widget</a><ul class='members'><li data-type='member'><a href="Widget.html#.list">list</a></li><li data-type='member'><a href="Widget.html#.name">name</a></li><li data-type='member'><a href="Widget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#props">props</a></li><li data-type='member'><a href="Widget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Widget.html#value">value</a></li><li data-type='member'><a href="Widget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Widget.html#.condition">condition</a></li><li data-type='method'><a href="Widget.html#disable">disable</a></li><li data-type='method'><a href="Widget.html#enable">enable</a></li><li data-type='method'><a href="Widget.html#update">update</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-calculate.html">calculate</a><ul class='methods'><li data-type='method'><a href="module-calculate.html#.update">update</a></li></ul></li><li><a href="module-dom-utils.html">dom-utils</a><ul class='methods'><li data-type='method'><a href="module-dom-utils.html#~empty">empty</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElements">getSiblingElements</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElementsAndSelf">getSiblingElementsAndSelf</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#_getElements">_getElements</a></li><li><a href="global.html#_instantiate">_instantiate</a></li><li><a href="global.html#_setLangChangeListener">_setLangChangeListener</a></li><li><a href="global.html#_setOptionChangeListener">_setOptionChangeListener</a></li><li><a href="global.html#_setValChangeListener">_setValChangeListener</a></li><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#getPrintStyleSheet">getPrintStyleSheet</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#parseFunctionFromExpression">parseFunctionFromExpression</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#setDpi">setDpi</a></li><li><a href="global.html#styleReset">styleReset</a></li><li><a href="global.html#styleToAll">styleToAll</a></li><li><a href="global.html#t">t</a></li><li><a href="global.html#toArray">toArray</a></li><li><a href="global.html#updateDownloadLink">updateDownloadLink</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Geopicker</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        Geopicker
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+    
+
+    <h4 class="name" id="Geopicker"><span class="type-signature"></span>new Geopicker<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Widget.html">Widget</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="downloadButtonHtml"><span class="type-signature">(readonly) </span>downloadButtonHtml<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line99">line 99</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#downloadButtonHtml">Widget#downloadButtonHtml</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Returns a HTML document fragment for a download button.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="originalInputValue"><span class="type-signature">(readonly) </span>originalInputValue<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line133">line 133</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#originalInputValue">Widget#originalInputValue</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Obtains the value from the original form control the widget is instantiated on.
+This form control is often hidden by the widget.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="props"><span class="type-signature"></span>props<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1178">line 1178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#props">Widget#props</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Gets the widget properties and features.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="resetButtonHtml"><span class="type-signature">(readonly) </span>resetButtonHtml<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#resetButtonHtml">Widget#resetButtonHtml</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Returns a HTML document fragment for a reset button.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="value"><span class="type-signature">(readonly) </span>value<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line115">line 115</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#value">Widget#value</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Obtains the value from the current widget state. Should be overridden.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="_addDomElements"><span class="type-signature"></span>_addDomElements<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line279">line 279</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Adds the DOM elements</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_addPointBtn"><span class="type-signature"></span>_addPointBtn<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line272">line 272</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Adds a point button in the point navigation bar</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_convertKmlCoordinatesToLeafletCoordinates"><span class="type-signature"></span>_convertKmlCoordinatesToLeafletCoordinates<span class="signature">(kmlCoordinates)</span><span class="type-signature"> &rarr; {Array.&lt;Array.&lt;Number>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1081">line 1081</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Converts the contents of a single KML <coordinates> element (may inlude the coordinates tags as well) to an array
+of geopoint coordinates used in the ODK XForm format. Note that the KML format does not allow spaces within a tuple of coordinates
+only between. Separator between KML tuples can be newline, space or a combination.
+It only extracts the value of the first <coordinates> element or, if <coordinates> are not included from the whole string.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kmlCoordinates</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[description]</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Array of geopoint coordinates</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Array.&lt;Number>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_dynamicMapAvailable"><span class="type-signature"></span>_dynamicMapAvailable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line533">line 533</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Determines whether map is available for manipulation.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_editPoint"><span class="type-signature"></span>_editPoint<span class="signature">(latLng)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line994">line 994</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Edits a point in the list of points.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>latLng</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>LatLng object or array.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Whether point changed.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_enableDetection"><span class="type-signature"></span>_enableDetection<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line452">line 452</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Enables geo detection using the built-in browser geoLocation functionality</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_enableSearch"><span class="type-signature"></span>_enableSearch<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line488">line 488</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Enables search functionality using the Google Maps API v3
+This only changes the map view. It does not record geopoints.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_getGoogleTileLayer"><span class="type-signature"></span>_getGoogleTileLayer<span class="signature">(map, index)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line717">line 717</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Asynchronously obtains a Google Maps tilelayer</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>map</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>map layer as defined in the apps configuration</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the index of the layer</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_getLayers"><span class="type-signature"></span>_getLayers<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line674">line 674</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Obtains the tile layers according to the definition in the app configuration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>[description]</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_getLeafletTileLayer"><span class="type-signature"></span>_getLeafletTileLayer<span class="signature">(map, index)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line699">line 699</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Asynchronously (fake) obtains a Leaflet/Mapbox tilelayer</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>map</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>map layer as defined in the apps configuration</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the index of the layer</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_getTileOptions"><span class="type-signature"></span>_getTileOptions<span class="signature">(map, index)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line733">line 733</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Creates the tile layer options object from the maps configuration and defaults.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>map</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Map layer as defined in the apps configuration.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The index of the layer.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Tilelayer options object</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_isValidGeopoint"><span class="type-signature"></span>_isValidGeopoint<span class="signature">(geopoint)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line384">line 384</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Checks an Openrosa geopoint for validity. This function is used to provide more detailed
+error feedback than provided by the form controller. This can be used to pinpoint the exact
+invalid geopoints in a list of geopoints (the form controller only validates the total list).</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>geopoint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[description]</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>[description]</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_isValidLatLng"><span class="type-signature"></span>_isValidLatLng<span class="signature">(latLng)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line412">line 412</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Validates an individual latlng Array or Object</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>latLng</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(number|string)></span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>latLng object or array</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Whether latLng is valid or not</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_isValidLatLngList"><span class="type-signature"></span>_isValidLatLngList<span class="signature">(latLngs)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line394">line 394</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Validates a list of latLng Arrays or Objects.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>latLngs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.Array.&lt;(number|string)></span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of latLng objects or arrays.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Whether list is valid or not.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_loadGoogleMapsScript"><span class="type-signature"></span>_loadGoogleMapsScript<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line751">line 751</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Loader for the Google Maps script that can be called multiple times, but will ensure the
+script is only requested once.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>[description]</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_markAsInvalid"><span class="type-signature"></span>_markAsInvalid<span class="signature">(index)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line424">line 424</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Marks a point as invalid in the points navigation bar</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Index of point</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_markAsValid"><span class="type-signature"></span>_markAsValid<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line431">line 431</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Marks all points as valid in the points navigation bar</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_removePoint"><span class="type-signature"></span>_removePoint<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1011">line 1011</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Removes the current point.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_setCurrent"><span class="type-signature"></span>_setCurrent<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line438">line 438</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Changes the current point in the list of points</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_updateArea"><span class="type-signature"></span>_updateArea<span class="signature">(points)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line957">line 957</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the area in m2 shown inside a polygon.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>points</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;{lat: number, lng: number}></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A polygon.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_updateInputs"><span class="type-signature"></span>_updateInputs<span class="signature">(coords, ev<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1058">line 1058</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the (fake) input element for latitude, longitude, altitude and accuracy.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>coords</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Latitude, longitude, altitude and accuracy.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ev</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_updateMap"><span class="type-signature"></span>_updateMap<span class="signature">(@param, zoom<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line549">line 549</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the map to either show the provided coordinates (in the center), with the provided zoom level
+or update any markers, polylines, or polygons.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>@param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>latLng  latitude and longitude coordinates</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>zoom</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>zoom level</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns call to function</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_updateMarkers"><span class="type-signature"></span>_updateMarkers<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line802">line 802</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the markers on the dynamic map from the current list of points.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_updatePolygon"><span class="type-signature"></span>_updatePolygon<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line924">line 924</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the polygon on the dynamic map from the current list of points.
+A polygon is a type of polyline. This function is ALWAYS called by _updatePolyline.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_updatePolyline"><span class="type-signature"></span>_updatePolyline<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line872">line 872</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the polyline on the dynamic map from the current list of points</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_updateValue"><span class="type-signature"></span>_updateValue<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line361">line 361</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the value in the original input element.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Whether the value was changed.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="containsEmptyPoints"><span class="type-signature"></span>containsEmptyPoints<span class="signature">(points, allowedIndex<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1169">line 1169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Checks whether the array of points contains empty ones.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>points</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>allowedIndex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The index in which an empty value is allowed.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="disable"><span class="type-signature"></span>disable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1251">line 1251</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#disable">Widget#disable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Disables the widget</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="enable"><span class="type-signature"></span>enable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1234">line 1234</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#enable">Widget#enable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Enables a disabled widget</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1263">line 1263</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#update">Widget#update</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates the widget if the value has updated programmatically (e.g. due to a calculation)</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="updatedPolylineWouldIntersect"><span class="type-signature"></span>updatedPolylineWouldIntersect<span class="signature">(latLng, index)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_geo_geopicker.js.html">widget/geo/geopicker.js</a>, <a href="widget_geo_geopicker.js.html#line1115">line 1115</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Check if a polyline created from the current collection of points
+where one point is added or edited would have intersections.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>latLng</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An object or array notation of point.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Whether polyline would have intersections.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/jquery-3.1.1.min.js"></script>
+
+<script src="scripts/search.js"></script>
+
+
+
+
+</body>
+</html>
