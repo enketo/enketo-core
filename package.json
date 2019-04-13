@@ -35,7 +35,10 @@
         "start": "grunt develop",
         "test": "grunt test",
         "beautify": "grunt jsbeautifier:fix",
-        "build-docs": "./node_modules/.bin/jsdoc -c jsdoc.config.js"
+        "build-docs": "./node_modules/.bin/jsdoc -c jsdoc.config.js",
+        "publish-please-pre-script": "npm run test && npm run beautify && npm run build-docs",
+        "publish-please": "publish-please",
+        "prepublishOnly": "publish-please guard"
     },
     "devDependencies": {
         "@babel/cli": "^7.2.3",
@@ -90,6 +93,7 @@
         "leaflet-draw": "github:enketo/Leaflet.draw#ff73078",
         "leaflet.gridlayer.googlemutant": "0.8.x",
         "mergexml": "1.1.2",
+        "publish-please": "^5.4.3",
         "signature_pad": "2.3.x"
     }
 }
