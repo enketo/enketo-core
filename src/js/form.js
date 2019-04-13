@@ -27,13 +27,12 @@ import './extend';
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
- * @param {string} formSelector  jquery selector for the form
- * @param {{modelStr: string, ?instanceStr: string, ?submitted: boolean, ?external: <{id: string, xmlStr: string }> }} data data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
- * @param { {?webMapId: string}} options form options
- * 
- * @constructor
+ * @param {string} formSelector - jQuery selector for the form
+ * @param {{modelStr: string, instanceStr: string|undefined, submitted: boolean|undefined, external: {id: string, xmlStr: string }|undefined }} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
+ * @param {{webMapId: string|undefined}} options - form options
+ *
+ * @class
  */
-
 function Form( formSelector, data, options ) {
     const $form = $( formSelector );
 
@@ -120,6 +119,8 @@ Form.prototype = {
 
 /**
  * Returns a module and adds the form property to it.
+ *
+ * @param module
  */
 Form.prototype.addModule = function( module ) {
     return Object.create( module, {
@@ -262,7 +263,7 @@ Form.prototype.goTo = function( xpath ) {
 
 /**
  * Obtains a string of primary instance.
- * 
+ *
  * @param  {!{include: boolean}=} include optional object items to exclude if false
  * @return {string}        XML string of primary instance
  */
@@ -291,13 +292,13 @@ Form.prototype.resetView = function() {
  * Implements jr:choice-name
  * TODO: this needs to work for all expressions (relevants, constraints), now it only works for calculated items
  * Ideally this belongs in the form Model, but unfortunately it needs access to the view
- * 
- * @param  {[type]} expr       [description]
- * @param  {[type]} resTypeStr [description]
- * @param  {[type]} selector   [description]
- * @param  {[type]} index      [description]
- * @param  {[type]} tryNative  [description]
- * @return {[type]}            [description]
+ *
+ * @param  {string} expr
+ * @param  {string} resTypeStr
+ * @param  {string} selector
+ * @param  {number} index
+ * @param  {boolean} tryNative
+ * @return {string} updated expression
  */
 Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index, tryNative ) {
     const that = this;
@@ -336,7 +337,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
 
 /**
  *  Uses current state of model to set all the values in the form.
- *  Since not all data nodes with a value have a corresponding input element, 
+ *  Since not all data nodes with a value have a corresponding input element,
  *  we cycle through the HTML form elements and check for each form element whether data is available.
  */
 Form.prototype.setAllVals = function( $group, groupIndex ) {
@@ -470,7 +471,7 @@ Form.prototype.filterRadioCheckSiblings = $controls => {
 
 /**
  * Crafts an optimized jQuery selector for element attributes that contain an expression with a target node name.
- * 
+ *
  * @param  {string} filter   The filter to use
  * @param  {string} attr     The attribute to target
  * @param  {string} nodeName The XML nodeName to find
@@ -497,7 +498,7 @@ Form.prototype.getQuerySelectorsForLogic = ( filter, attr, nodeName ) => [
  * Though this function may be slow it is slow when it doesn't matter much (upon saving). The
  * alternative is to add some logic to relevant.update to mark irrelevant nodes in the model
  * but that would slow down form loading and form traversal when it does matter.
- * 
+ *
  * @return {string} [description]
  */
 Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
@@ -505,7 +506,7 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
     const modelClone = new FormModel( this.model.getStr() );
     modelClone.init();
 
-    // Since we are removing nodes, we need to go in reverse order to make sure 
+    // Since we are removing nodes, we need to go in reverse order to make sure
     // the indices are still correct!
     this.getRelatedNodes( 'data-relevant' ).reverse().each( function() {
         const $node = $( this );
@@ -514,9 +515,9 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
         const path = that.input.getName( $node );
         let context;
 
-        /* 
+        /*
          * Copied from relevant.js:
-         * 
+         *
          * If the relevant is placed on a group and that group contains repeats with the same name,
          * but currently has 0 repeats, the context will not be available.
          */
@@ -561,9 +562,9 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
     }
 };
 
-/**   
+/**
  * This re-validates questions that have a dependency on a question that has just been updated.
- * 
+ *
  * Note: it does not take care of re-validating a question itself after its value has changed due to a calculation update!
  */
 Form.prototype.validationUpdate = function( updated ) {
@@ -605,8 +606,8 @@ Form.prototype.setEventHandlers = function() {
 
     /*
      * The listener below catches both change and change.file events.
-     * The .file namespace is used in the filepicker to avoid an infinite loop. 
-     * 
+     * The .file namespace is used in the filepicker to avoid an infinite loop.
+     *
      * Fields with the "ignore" class are dynamically added to the DOM in a widget and are supposed to be handled
      * by the widget itself, e.g. the search field in a geopoint widget. They should be ignored by the main engine.
      *
@@ -672,7 +673,7 @@ Form.prototype.setEventHandlers = function() {
         };
         // Set defaults of added repeats in Form, setAllVals does not trigger change event
         that.setAllVals( $clone, index );
-        // Initialize calculations, relevant, itemset, required, output inside that repeat. 
+        // Initialize calculations, relevant, itemset, required, output inside that repeat.
         that.evaluationCascade.forEach( fn => {
             fn.call( that, updated );
         } );
@@ -711,8 +712,6 @@ Form.prototype.setInvalid = function( $node, type ) {
 /**
  * Blocks page navigation for a short period.
  * This can be used to ensure that the user sees a new error message before moving to another page.
- * 
- * @return {[type]} [description]
  */
 Form.prototype.blockPageNavigation = function() {
     const that = this;
@@ -725,7 +724,7 @@ Form.prototype.blockPageNavigation = function() {
 
 /**
  * Checks whether the question is not currently marked as invalid. If no argument is provided, it checks the whole form.
- * 
+ *
  * @return {!boolean} whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function( $node ) {
@@ -742,9 +741,9 @@ Form.prototype.clearIrrelevant = function() {
 };
 
 /**
- * Clears all irrelevant question values if necessary and then 
+ * Clears all irrelevant question values if necessary and then
  * validates all enabled input fields after first resetting everything as valid.
- * 
+ *
  * @return {Promise} wrapping {boolean} whether the form contains any errors
  */
 Form.prototype.validateAll = function() {
@@ -822,7 +821,7 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
 
 /**
  * Validates question values.
- * 
+ *
  * @param  {jQuery} $input    [description]
  * @return {Promise}           [description]
  */
@@ -833,7 +832,7 @@ Form.prototype.validateInput = function( $input ) {
     const that = this;
     let getValidationResult;
     // All relevant properties, except for the **very expensive** index property
-    // There is some scope for performance improvement by determining other properties when they 
+    // There is some scope for performance improvement by determining other properties when they
     // are needed, but that may not be so significant.
     const n = {
         path: this.input.getName( $input ),
@@ -944,7 +943,7 @@ Form.prototype.getGoToTarget = function( path ) {
 
 /**
  * Scrolls to a HTML Element, flips to the page it is on and focuses on the nearest form control.
- * 
+ *
  * @param  {HTMLElement} target A HTML element to scroll to
  */
 Form.prototype.goToTarget = function( target ) {
@@ -961,7 +960,7 @@ Form.prototype.goToTarget = function( target ) {
         // Scroll to element
         target.scrollIntoView();
         // Focus on the first non .ignore form control
-        // If the element is hidden (e.g. because it's been replaced by a widget), 
+        // If the element is hidden (e.g. because it's been replaced by a widget),
         // the focus event will not fire, so we also trigger an applyfocus event that widgets can listen for.
         $( target.querySelector( 'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)' ) )
             .trigger( 'focus' ).trigger( 'applyfocus' );
@@ -969,7 +968,7 @@ Form.prototype.goToTarget = function( target ) {
     return !!target;
 };
 
-/** 
+/**
  * Static method to obtain required enketo-transform version direct from class.
  */
 Form.requiredTransformerVersion = '1.30.1';

@@ -449,9 +449,6 @@ class DrawWidget extends Widget {
      * Updates value when it is programmatically cleared.
      * There is no way to programmatically update a file input other than clearing it, so that's all
      * we need to do.
-     *
-     * @param  {[type]} element [description]
-     * @return {[type]}         [description]
      */
     update() {
         if ( this.originalInputValue === '' ) {

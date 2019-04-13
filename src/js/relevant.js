@@ -89,7 +89,7 @@ export default {
             insideRepeat = clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat' ).length > 0;
             insideRepeatClone = clonedRepeatsPresent && $branchNode.parentsUntil( '.or', '.or-repeat.clone' ).length > 0;
 
-            /* 
+            /*
              * If the relevant is placed on a group and that group contains repeats with the same name,
              * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
              */
@@ -142,10 +142,10 @@ export default {
     /**
      * Evaluates a relevant expression (for future fancy stuff this is placed in a separate function)
      *
-     * @param  {string} expr        [description]
-     * @param  {string} contextPath [description]
-     * @param  {number} index       [description]
-     * @return {boolean}             [description]
+     * @param {string} expr
+     * @param {string} contextPath
+     * @param {number} index
+     * @return {boolean}
      */
     evaluate( expr, contextPath, index ) {
         const result = this.form.model.evaluate( expr, 'boolean', contextPath, index );
@@ -154,10 +154,10 @@ export default {
     /**
      * Processes the evaluation result for a branch
      *
-     * @param { jQuery } $branchNode [description]
-     * @param { string } path Path of branch node
-     * @param { boolean } result      result of relevant evaluation
-     * @param { =boolean } forceClearIrrelevant Whether to force clearing of irrelevant nodes and descendants
+     * @param {jQuery} $branchNode
+     * @param {string} path - Path of branch node
+     * @param {boolean} result - result of relevant evaluation
+     * @param {boolean} forceClearIrrelevant - Whether to force clearing of irrelevant nodes and descendants
      */
     process( $branchNode, path, result, forceClearIrrelevant ) {
         if ( result === true ) {
@@ -170,8 +170,8 @@ export default {
     /**
      * Checks whether branch currently has 'relevant' state
      *
-     * @param  {jQuery} $branchNode [description]
-     * @return {boolean}             [description]
+     * @param {jQuery} $branchNode
+     * @return {boolean}
      */
     selfRelevant( $branchNode ) {
         return !$branchNode.hasClass( 'disabled' ) && !$branchNode.hasClass( 'pre-init' );
@@ -180,7 +180,7 @@ export default {
     /**
      * Enables and reveals a branch node/group
      *
-     * @param  {jQuery} $branchNode The jQuery object to reveal and enable
+     * @param {jQuery} $branchNode - The jQuery object to reveal and enable
      */
     enable( $branchNode, path ) {
         let change = false;
@@ -229,11 +229,11 @@ export default {
         return change;
     },
     /**
-     * Clears values from branchnode. 
+     * Clears values from branchnode.
      * This function is separated so it can be overridden in custom apps.
-     * 
-     * @param  {[type]} $branchNode [description]
-     * @return {boolean}             [description]
+     *
+     * @param  {jQuery} $branchNode
+     * @param  {string} path
      */
     clear( $branchNode, path ) {
         // A change event ensures the model is updated
@@ -262,9 +262,8 @@ export default {
     /**
      * Activates form controls.
      * This function is separated so it can be overridden in custom apps.
-     * 
-     * @param  {[type]} $branchNode [description]
-     * @return {[type]}            [description]
+     *
+     * @param {jQuery} $branchNode
      */
     activate( $branchNode ) {
         this.setDisabledProperty( $branchNode, false );
@@ -272,9 +271,8 @@ export default {
     /**
      * Deactivates form controls.
      * This function is separated so it can be overridden in custom apps.
-     * 
-     * @param  {[type]} $branchNode [description]
-     * @return {[type]}             [description]
+     *
+     * @param {jQuery} $branchNode
      */
     deactivate( $branchNode ) {
         $branchNode.addClass( 'disabled' );

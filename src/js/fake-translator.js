@@ -82,9 +82,9 @@ const SOURCE_STRINGS = {
 /**
  * Meant to be replaced by a real translator in the app that consumes enketo-core
  *
- * @param  {String} key translation key
+ * @param  {string} key translation key
  * @param  {*} key translation options
- * @return {String} translation output
+ * @return {string} translation output
  */
 function t( key, options ) {
     let str = '';

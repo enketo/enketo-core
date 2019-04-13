@@ -15,24 +15,24 @@ import { t } from 'enketo/translator';
 
 /**
  * Initialize the file manager .
- * @return {[type]} promise boolean or rejection with Error
+ * @return {Promise|boolean|Error} promise boolean or rejection with Error
  */
 fileManager.init = () => Promise.resolve( true );
 
 /**
  * Whether the filemanager is waiting for user permissions
- * @return {Boolean} [description]
+ * @return {boolean} [description]
  */
 fileManager.isWaitingForPermissions = () => false;
 
 /**
  * Obtains a URL that can be used to show a preview of the file when used
  * as a src attribute.
- * 
+ *
  * It is meant for media previews and media downloads.
  *
  * @param  {?string|Object} subject File or filename in local storage
- * @return {[type]}         promise url string or rejection with Error
+ * @return {Promise|string|Error} promise url string or rejection with Error
  */
 fileManager.getFileUrl = subject => new Promise( ( resolve, reject ) => {
     let error;
@@ -56,11 +56,11 @@ fileManager.getFileUrl = subject => new Promise( ( resolve, reject ) => {
 
 /**
  * Similar to getFileURL, except that this one is guaranteed to return an objectURL
- * 
+ *
  * It is meant for loading images into a canvas.
- * 
+ *
  * @param  {?string|Object} subject File or filename in local storage
- * @return {[type]}         promise url string or rejection with Error
+ * @return {Promise|string|Error} promise url string or rejection with Error
  */
 fileManager.getObjectUrl = subject => fileManager.getFileUrl( subject )
     .then( url => {
@@ -85,7 +85,8 @@ fileManager.urlToBlob = url => {
 
 /**
  * Obtain files currently stored in file input elements of open record
- * @return {[File]} array of files
+ *
+ * @return {Array.File} array of files
  */
 fileManager.getCurrentFiles = () => {
     const files = [];
@@ -123,10 +124,10 @@ fileManager.getCurrentFiles = () => {
 };
 
 /**
- * Placeholder function to check if file size is acceptable. 
- * 
+ * Placeholder function to check if file size is acceptable.
+ *
  * @param  {Blob}  file [description]
- * @return {Boolean}      [description]
+ * @return {boolean}      [description]
  */
 fileManager.isTooLarge = () => false;
 

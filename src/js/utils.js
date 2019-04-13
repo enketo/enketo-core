@@ -4,9 +4,9 @@ let cookies;
 /**
  * Parses an Expression to extract all function calls and theirs argument arrays.
  *
- * @param  {String} expr The expression to search
- * @param  {String} func The function name to search for
- * @return {<String, <String*>>} The result array, where each result is an array containing the function call and array of arguments.
+ * @param {string} expr - The expression to search
+ * @param {string} func - The function name to search for
+ * @return {Array.Array.<string, any>} The result array, where each result is an array containing the function call and array of arguments.
  */
 function parseFunctionFromExpression( expr, func ) {
     let index;
@@ -58,9 +58,9 @@ function stripQuotes( str ) {
     return str;
 }
 
-// Because iOS gives any camera-provided file the same filename, we need to a 
+// Because iOS gives any camera-provided file the same filename, we need to a
 // unique-ified filename.
-// 
+//
 // See https://github.com/kobotoolbox/enketo-express/issues/374
 function getFilename( file, postfix ) {
     let filenameParts;
@@ -78,9 +78,10 @@ function getFilename( file, postfix ) {
 }
 
 /**
- * Converts NodeLists or DOMtokenLists to an array
- * @param  {[type]} list [description]
- * @return {[type]}      [description]
+ * Converts NodeLists or DOMtokenLists to an array.
+ *
+ * @param {NodeList|DOMTokenList} list
+ * @return {Array}
  */
 function toArray( list ) {
     const array = [];
@@ -155,7 +156,7 @@ function getPasteData( event ) {
 
 /**
  * Update a HTML anchor to serve as a download or reset it if an empty objectUrl is provided.
- * 
+ *
  * @param {HTMLElement} anchor the anchor element
  * @param {*} objectUrl the objectUrl to download
  * @param {*} fileName  the filename of the file
