@@ -29,6 +29,9 @@
             "name": "Alex Anderson"
         }
     ],
+    "files": [
+        "build/"
+    ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/form.js",
     "scripts": {
