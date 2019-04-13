@@ -6,7 +6,14 @@ module.exports = {
         destination: './docs/',
         tutorials: './tutorials',
         recurse: true,
-        package: 'package.json',
+        /*
+            TODO: Providing JSDoc with package.json makes it generate
+            `/docs/enketo-core/[version number]/index.html` instead of simply
+            `/docs/index.html`. For now we will stick with providing
+            documentation only for latest version, but it could be nice to
+            expand it to multiple versions in the future.
+        */
+        // package: 'package.json',
         readme: 'README.md',
         template: 'node_modules/docdash'
     },
