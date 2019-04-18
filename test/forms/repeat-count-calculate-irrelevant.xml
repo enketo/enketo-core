@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:OpenClinica="http://openclinica.com/odm" 
+    xmlns:enk="http://enketo.org/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:oc="http://openclinica.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Baseline</h:title>
+        <model>
+            <instance>
+                <data id="repeat-count-calculate-irrelevant" version="">
+                    <SHD>
+                        <SHD13/>
+                        <SHD_RPT_count>3</SHD_RPT_count>
+                        <SHD_RPT jr:template="">
+                            <SHD_NO/>
+                            <SHD_LEVEL/>
+                        </SHD_RPT>
+                    </SHD>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/SHD/SHD13" type="select1"/>
+            <bind nodeset="/data/SHD/SHD_RPT" relevant=" /data/SHD/SHD13 =1"/>
+            <bind calculate="'something'" nodeset="/data/SHD/SHD_RPT/SHD_NO" readonly="true()" type="string"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body class="pages theme-grid no-text-transform">
+        <group appearance="w6 field-list no-collapse" ref="/data/SHD">
+            <label>History</label>
+            <select1 appearance="w6" ref="/data/SHD/SHD13">
+                <label>13. Known Surgical Intervention Prior to Index Surgery:</label>
+                <item>
+                    <label>Yes</label>
+                    <value>1</value>
+                </item>
+                <item>
+                    <label>No</label>
+                    <value>0</value>
+                </item>
+            </select1>
+            <group ref="/data/SHD/SHD_RPT">
+                <label>Complete a‐d below.</label>
+                <repeat jr:count=" /data/SHD/SHD_RPT_count " nodeset="/data/SHD/SHD_RPT">
+                    <input appearance="w1" ref="/data/SHD/SHD_RPT/SHD_NO">
+                        <label>#</label>
+                    </input>
+                </repeat>
+            </group>
+        </group>
+    </h:body>
+</h:html>

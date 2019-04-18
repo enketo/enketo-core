@@ -11,12 +11,10 @@ function getSiblingElements( element, selector ) {
     return _getSiblingElements( element, selector );
 }
 
-function _getSiblingElements( element, selector, startArray = [] ) {
+function _getSiblingElements( element, selector = '*', startArray = [] ) {
     const siblings = startArray;
     let prev = element.previousElementSibling;
     let next = element.nextElementSibling;
-
-    selector = typeof selector === 'undefined' ? '*' : selector;
 
     while ( prev ) {
         if ( prev.matches( selector ) ) {
@@ -32,6 +30,22 @@ function _getSiblingElements( element, selector, startArray = [] ) {
         next = next.nextElementSibling;
     }
     return siblings;
+}
+
+function getAncestors( element, selector = '*' ) {
+    const ancestors = [];
+    console.log( 'element', element );
+    let parent = element.parentElement;
+
+    while ( parent ) {
+        if ( parent.matches( selector ) ) {
+            // document order
+            ancestors.unshift( parent );
+        }
+        parent = parent.parentElement;
+    }
+
+    return ancestors;
 }
 
 function empty( element ) {
@@ -74,5 +88,6 @@ export {
     elementDataStore,
     getSiblingElementsAndSelf,
     getSiblingElements,
+    getAncestors,
     empty,
 };

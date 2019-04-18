@@ -274,7 +274,7 @@ describe( 'calculations', () => {
 
         expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal() ).toEqual( '400' );
         expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal() ).toEqual( '' );
-        //sexpect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 2 ).getVal() ).toEqual( '800' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 2 ).getVal() ).toEqual( '800' );
     } );
 
     it( 'outside a repeat are updated if they are dependent on a repeat node', () => {
