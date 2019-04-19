@@ -78,10 +78,8 @@ class Radiopicker extends Widget {
 
     _updateDataChecked( el ) {
         if ( el.checked ) {
-            console.log( 'CHECKED!', el );
             el.parentNode.dataset.checked = true;
         } else {
-            console.log( 'not checked', el );
             delete el.parentNode.dataset.checked;
         }
     }

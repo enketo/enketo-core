@@ -36,9 +36,13 @@ class RangeWidget extends Widget {
             this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
         } );
 
-        // Do not use change handler for this because this doesn't if the user clicks on the internal DEFAULT
+        // Do not use change handler for this because this doesn't fire if the user clicks on the internal DEFAULT
         // value of the range input.
         this.widget.querySelector( 'input.empty' ).addEventListener( 'click', () => {
+            this.range.classList.remove( 'empty' );
+            this.range.dispatchEvent( events.Change() );
+        } );
+        this.widget.querySelector( 'input.empty' ).addEventListener( 'touchstart', () => {
             this.range.classList.remove( 'empty' );
             this.range.dispatchEvent( events.Change() );
         } );

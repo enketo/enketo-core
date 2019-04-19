@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Failing to clone repeats that only contain calculations.
 - Select one calculations not updating correctly.
 - Irrelevant calculations inside non-first repeat instances run upon load.
+- Range widgets do not work on touchscreen devices.
 
 [5.2.2] - 2019-04-01
 --------------------
