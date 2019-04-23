@@ -50,7 +50,7 @@ const types = {
     },
     'date': {
         validate( x ) {
-            const pattern = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
+            const pattern = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
             const segments = pattern.exec( x );
             if ( segments && segments.length === 4 ) {
                 const year = Number( segments[ 1 ] );
@@ -67,7 +67,7 @@ const types = {
                 // The XPath expression "2012-01-01" + 2 returns a number of days in XPath.
                 const date = new Date( x * 24 * 60 * 60 * 1000 );
                 return date.toString() === 'Invalid Date' ?
-                    '' : `${date.getFullYear().toString().pad( 4 )}-${( date.getMonth() + 1 ).toString().pad( 2 )}-${date.getDate().toString().pad( 2 )}`;
+                    '' : `${date.getFullYear().toString().pad(4)}-${(date.getMonth() + 1).toString().pad(2)}-${date.getDate().toString().pad(2)}`;
             } else {
                 // For both dates and datetimes
                 // If it's a datetime, we can quite safely assume it's in the local timezone, and therefore we can simply chop off
@@ -178,7 +178,7 @@ const types = {
             if ( tz.length === 0 ) {
                 offset = new Date().getTimezoneOffsetAsTime();
             } else {
-                offset = `${tz[ 0 ] + tz[ 1 ].pad( 2 )}:${tz[ 2 ] ? tz[ 2 ].pad( 2 ) : '00'}`;
+                offset = `${tz[0] + tz[1].pad(2)}:${tz[2] ? tz[2].pad(2) : '00'}`;
             }
 
             x = `${o.hours}:${o.minutes}:${o.seconds}${o.milliseconds ? `.${o.milliseconds}` : ''}${offset}`;

@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.2.3] - 2019-04-24
 --------------------
 ##### Fixed
 - Failing to clone repeats that only contain calculations.
@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Irrelevant calculations inside non-first repeat instances run upon load.
 - Range widgets do not work on touchscreen devices.
 - Date strings without timezone component are not always converted correctly in timezones that have DST.
+- Hand-typed/pasted dates with spaces or invalid characters are kept shown to user, but are not stored in model.
 
 [5.2.2] - 2019-04-01
 --------------------
