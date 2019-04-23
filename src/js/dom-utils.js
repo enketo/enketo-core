@@ -34,7 +34,6 @@ function _getSiblingElements( element, selector = '*', startArray = [] ) {
 
 function getAncestors( element, selector = '*' ) {
     const ancestors = [];
-    console.log( 'element', element );
     let parent = element.parentElement;
 
     while ( parent ) {

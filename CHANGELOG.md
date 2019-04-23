@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Select one calculations not updating correctly.
 - Irrelevant calculations inside non-first repeat instances run upon load.
 - Range widgets do not work on touchscreen devices.
+- Date strings without timezone component are not always converted correctly in timezones that have DST.
 
 [5.2.2] - 2019-04-01
 --------------------
