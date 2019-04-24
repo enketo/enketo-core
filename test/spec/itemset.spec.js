@@ -375,7 +375,7 @@ describe( 'Itemset functionality', () => {
         it( 'translates labels defined with translate()', () => {
             const form = loadForm( 'secondary-lang.xml' );
             const loadErrors = form.init();
-            const options = form.view.html.querySelectorAll( 'datalist>option:not(.itemset-template' );
+            const options = form.view.html.querySelectorAll( 'datalist>option:not(.itemset-template)' );
 
             expect( loadErrors.length ).toEqual( 0 );
             expect( options.length ).toEqual( 2 );

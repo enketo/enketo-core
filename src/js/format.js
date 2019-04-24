@@ -28,7 +28,7 @@ const time = {
         let matches = _getCleanLocalTime( dt ).match( HAS_MERIDIAN );
         if ( matches && matches.length ) {
             matches = matches.filter( item => !!item );
-            return matches[ matches.length - 1 ];
+            return matches[ matches.length - 1 ].trim();
         }
         return null;
     },
