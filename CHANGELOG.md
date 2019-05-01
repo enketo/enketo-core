@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[5.2.5] - 2019-05-01
+--------------------
+##### Fixed
+- Draw widgets loose drawing (or last stroke(s) in drawing) on mobile devices if clicking hide-full-screen button or switching device orientation within 1.5 sec after last change.
+
 [5.2.4] - 2019-04-25
 --------------------
 ##### Fixed
