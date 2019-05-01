@@ -93,7 +93,7 @@ class DatetimepickerExtended extends Widget {
     _createFakeDateInput() {
         const $fakeDate = $(
             '<div class="date">' +
-            '<input class="ignore" type="text" placeholder="yyyy-mm-dd"/>' +
+            '<input class="ignore" type="date" placeholder="yyyy-mm-dd"/>' +
             '</div>' );
 
         return $fakeDate.find( 'input' );
@@ -102,7 +102,7 @@ class DatetimepickerExtended extends Widget {
     _createFakeTimeInput() {
         const $fakeTime = $(
                 `<div class="timepicker">
-                    <input class="ignore timepicker-default" type="text" placeholder="hh:mm"/>
+                    <input class="ignore timepicker-default" type="time" placeholder="hh:mm"/>
                 </div>` )
             .append( this.resetButtonHtml );
 
