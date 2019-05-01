@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.2.5",
+    "version": "5.2.6",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -77,7 +77,7 @@
         "core-js": "3.0.x",
         "enketo-xpathjs": "1.9.2",
         "html5sortable": "^0.9.8",
-        "jquery": "3.4.x",
+        "jquery": "3.3.x",
         "jquery-touchswipe": "^1.6.19",
         "leaflet": "1.4.x",
         "leaflet-draw": "github:enketo/Leaflet.draw#ff73078",
