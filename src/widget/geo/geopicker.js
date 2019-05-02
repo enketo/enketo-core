@@ -482,7 +482,7 @@ class Geopicker extends Widget {
      */
     _showDetectError() {        
         console.log("geo error");
-        this.$detect.html("&#x26A0;&nbsp;Location error");
+        this.$detect.html("&#x26A0;&nbsp;GPS unavailable");
     }
 
     /**
