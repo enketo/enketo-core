@@ -168,7 +168,7 @@ class Geopicker extends Widget {
         } );
 
         // handle fullscreen map button click
-        this.$map.find( '.show-map-btn' ).on( 'click', () => {
+        this.$widget.find( '.show-map-btn' ).on( 'click', () => {
             that.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
             that.$widget.addClass( 'full-screen' );
             that._updateMap();
@@ -288,21 +288,23 @@ class Geopicker extends Widget {
         const kml = `<a href="#" class="toggle-input-type-btn"><span class="kml-input">KML</span><span class="points-input">${pntsTxt}</span></a><label class="geo kml">${kmlCrdsTxt}<progress class="paste-progress hide"></progress><textarea class="ignore" name="kml" placeholder="${kmlPstTxt}"></textarea><span class="disabled-msg">remove all points to enable</span></label>`;
         const closePlgnTxt = t( 'geopicker.closepolygon' );
         const close = `<button type="button" class="close-chain-btn btn btn-default btn-xs">${closePlgnTxt}</button>`;
-        const mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
+        const mapBtn = '<button type="button" class="show-map-btn btn btn-default"><i class="icon icon-globe"></i>&nbsp;View Map</button>';
         const latTxt = t( 'geopicker.latitude' );
         const lngTxt = t( 'geopicker.longitude' );
         const altTxt = t( 'geopicker.altitude' );
         const accTxt = t( 'geopicker.accuracy' );
         const srchTxt = t( 'geopicker.searchPlaceholder' );
+        const coords = `<div class="co-ordinates">${latTxt}: <span class='latLabel'></span><br/>${lngTxt}: <span class='lngLabel'></span></div>`;
 
         this.$widget = $(
-            `<div class="geopicker widget"><div class="search-bar hide-search no-map no-detect"><button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button><button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top"><span class="icon icon-crosshairs"> </span></button><div class="input-group"><input class="geo ignore" name="search" type="text" placeholder="${srchTxt}" disabled="disabled"/><button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button></div></div><div class="geo-inputs"><label class="geo lat">${latTxt}<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label><label class="geo long">${lngTxt}<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label><label class="geo alt">${altTxt}<input class="ignore" name="alt" type="number" step="0.1" /></label><label class="geo acc">${accTxt}<input class="ignore" name="acc" type="number" step="0.1" /></label><button type="button" class="btn-icon-only btn-remove" aria-label="remove"><span class="icon icon-trash"> </span></button></div></div>`
+            `<div class="geopicker widget"><div class="search-bar hide-search no-map no-detect"><button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button><button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top"><span class="icon icon-crosshairs"> </span></button><div class="input-group"><input class="geo ignore" name="search" type="text" placeholder="${srchTxt}" disabled="disabled"/><button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button></div></div><div class="geo-inputs"><label class="geo lat">${latTxt}<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label><label class="geo long">${lngTxt}<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label><label class="geo alt">${altTxt}<input class="ignore" name="alt" type="number" step="0.1" /></label><label class="geo acc">${accTxt}<input class="ignore" name="acc" type="number" step="0.1" /></label><button type="button" class="btn btn-default btn-remove" aria-label="remove"><span class="icon icon-trash"> </span>&nbsp;Clear location</button></div></div>`
         );
 
         // add the detection button
         if ( this.props.detect ) {
             this.$widget.find( '.search-bar' ).removeClass( 'no-detect' );
             this.$detect = this.$widget.find( 'button[name="geodetect"]' );
+            this._showDetect();
         }
 
         this.$search = this.$widget.find( '[name="search"]' );
@@ -320,7 +322,15 @@ class Geopicker extends Widget {
 
         // touchscreen maps
         if ( this.props.touch && this.props.map ) {
-            this.$map.append( mapBtn );
+            this.$map.addClass( "touch" );
+            this.$widget.prepend( mapBtn );
+        }
+
+        //Co-ordinates label        
+        if (this.$question.hasClass( 'or-appearance-hide-input' )){
+            this.$widget.prepend( coords );
+            this.$latLabel = this.$widget.find( ".latLabel");
+            this.$lngLabel = this.$widget.find( ".lngLabel");
         }
 
         // unhide search bar 
@@ -452,24 +462,27 @@ class Geopicker extends Widget {
      * Update the detect button to show fetching spinner
      * TODO: Translations
      */
-    _showDetecting() {
-        this.$detect.html("<i class='icon-crosshairs spin'></i> Getting location </span>");
+    _showDetecting() {        
+        console.log("geo detecting");
+        this.$detect.html("<i class='icon icon-crosshairs spin'></i>&nbsp;Getting location");
     }
 
     /**
      * Update the detect button to be more informative
      * TODO: Translations
      */
-    _showDetect() {
-        this.$detect.html("<i class='icon-crosshairs'></i> Get location");
+    _showDetect() {        
+        console.log("geo default");
+        this.$detect.html("<i class='icon icon-crosshairs'></i>&nbsp;Get location");
     }
 
     /**
      * Update the detect button to show an error
      * TODO: Translations
      */
-    _showDetectError() {
-        this.$detect.html("&#x26A0; Error detecting location");
+    _showDetectError() {        
+        console.log("geo error");
+        this.$detect.html("&#x26A0;&nbsp;Location error");
     }
 
     /**
@@ -620,7 +633,12 @@ class Geopicker extends Widget {
                 const options = {
                     layers: that._getDefaultLayer( layers )
                 };
-
+                try{
+                    //catch leaflet error when attempting to recreate map
+                    that.map.remove();
+                }catch(e){
+                    //do nothing
+                }
                 that.map = L.map( `map${that.mapId}`, options )
                     .on( 'click', e => {
                         let latLng;
@@ -1095,6 +1113,13 @@ class Geopicker extends Widget {
         this.$lng.val( lng || '' );
         this.$alt.val( alt || '' );
         this.$acc.val( acc || '' ).trigger( ev );
+
+        if (this.$latLabel){
+            this.$latLabel.text(lat || 'unknown');
+        }
+        if (this.$lngLabel){
+            this.$lngLabel.text(lng || 'unknown');
+        }
     }
 
     /** 
