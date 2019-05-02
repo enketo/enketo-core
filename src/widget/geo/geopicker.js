@@ -243,8 +243,14 @@ class Geopicker extends Widget {
             // set worldview in case permissions take too long (e.g. in FF);
             this._updateMap( [ 0, 0 ], 1 );
             if ( this.props.detect ) {
+
+                this._showDetecting();
                 navigator.geolocation.getCurrentPosition( position => {
+                    this._showDetect();
                     that._updateMap( [ position.coords.latitude, position.coords.longitude ], defaultZoom );
+                }, (e) => {
+                    this._showDetectError();
+                    console.error( 'error occurred trying to obtain position', e );
                 } );
             }
         } else {
@@ -443,6 +449,30 @@ class Geopicker extends Widget {
     }
 
     /**
+     * Update the detect button to show fetching spinner
+     * TODO: Translations
+     */
+    _showDetecting() {
+        this.$detect.html("<i class='icon-crosshairs spin'></i> Getting location </span>");
+    }
+
+    /**
+     * Update the detect button to be more informative
+     * TODO: Translations
+     */
+    _showDetect() {
+        this.$detect.html("<i class='icon-crosshairs'></i> Get location");
+    }
+
+    /**
+     * Update the detect button to show an error
+     * TODO: Translations
+     */
+    _showDetectError() {
+        this.$detect.html("&#x26A0; Error detecting location");
+    }
+
+    /**
      * Enables geo detection using the built-in browser geoLocation functionality
      */
     _enableDetection() {
@@ -452,8 +482,10 @@ class Geopicker extends Widget {
             maximumAge: 0
         };
         this.$detect.click( event => {
+            this._showDetecting();
             event.preventDefault();
             navigator.geolocation.getCurrentPosition( position => {
+                this._showDetect();
                 const latLng = {
                     lat: Math.round( position.coords.latitude * 1000000 ) / 1000000,
                     lng: Math.round( position.coords.longitude * 1000000 ) / 1000000
@@ -470,8 +502,9 @@ class Geopicker extends Widget {
                         that._addPoint();
                     }
                 }
-            }, () => {
-                console.error( 'error occurred trying to obtain position' );
+            }, (e) => {
+                this._showDetectError();
+                console.error( 'error occurred trying to obtain position', e );
             }, options );
             return false;
         } );
