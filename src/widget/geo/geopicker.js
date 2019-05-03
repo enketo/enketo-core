@@ -321,7 +321,7 @@ class Geopicker extends Widget {
         }
 
         // touchscreen maps
-        if ( this.props.touch && this.props.map ) {
+        if ( this.props.map ) { 
             this.$map.addClass( "touch" );
             this.$widget.prepend( mapBtn );
         }
@@ -463,7 +463,6 @@ class Geopicker extends Widget {
      * TODO: Translations
      */
     _showDetecting() {        
-        console.log("geo detecting");
         this.$detect.html("<i class='icon icon-crosshairs spin'></i>&nbsp;Getting location");
     }
 
@@ -472,7 +471,6 @@ class Geopicker extends Widget {
      * TODO: Translations
      */
     _showDetect() {        
-        console.log("geo default");
         this.$detect.html("<i class='icon icon-crosshairs'></i>&nbsp;Get location");
     }
 
@@ -481,7 +479,6 @@ class Geopicker extends Widget {
      * TODO: Translations
      */
     _showDetectError() {        
-        console.log("geo error");
         this.$detect.html("&#x26A0;&nbsp;GPS unavailable");
     }
 
