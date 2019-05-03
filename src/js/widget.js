@@ -144,17 +144,6 @@ class Widget {
         this.element.dispatchEvent( event.Change() );
     }
 
-    /** 
-     * Returns its own name.
-     * 
-     * @readonly
-     * @static
-     * @memberof Widget
-     */
-    static get name() {
-        return this.constructor.name;
-    }
-
     /**
      * Returns true if the widget is using a list of options.
      *
