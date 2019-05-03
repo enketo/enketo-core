@@ -91,18 +91,20 @@ class DatetimepickerExtended extends Widget {
     }
 
     _createFakeDateInput() {
+        const type = support.touch && support.inputTypes.date ? "date" : "text";
         const $fakeDate = $(
-            '<div class="date">' +
-            '<input class="ignore" type="date" placeholder="yyyy-mm-dd"/>' +
-            '</div>' );
+            `<div class="date">
+                <input class="ignore" type="${type}" placeholder="yyyy-mm-dd"/>
+            </div>` );
 
         return $fakeDate.find( 'input' );
     }
 
     _createFakeTimeInput() {
+        const type = support.touch && support.inputTypes.time ? "time" : "text";
         const $fakeTime = $(
                 `<div class="timepicker">
-                    <input class="ignore timepicker-default" type="time" placeholder="hh:mm"/>
+                    <input class="ignore timepicker-default" type="${type}" placeholder="hh:mm"/>
                 </div>` )
             .append( this.resetButtonHtml );
 
