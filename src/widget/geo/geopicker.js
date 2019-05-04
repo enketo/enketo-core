@@ -246,12 +246,16 @@ class Geopicker extends Widget {
 
                 this._showDetecting();
                 navigator.geolocation.getCurrentPosition( position => {
-                    this._showDetect();
+                    that._showDetect();
                     that._updateMap( [ position.coords.latitude, position.coords.longitude ], defaultZoom );
                 }, (e) => {
-                    this._showDetectError();
+                    that._showDetectError();
                     console.error( 'error occurred trying to obtain position', e );
-                } );
+                }, {
+                    enableHighAccuracy : false,
+                    timeout : 30000,
+                    maximumAge : 0
+                });
             }
         } else {
             // center map around first loaded geopoint value
@@ -489,13 +493,14 @@ class Geopicker extends Widget {
         const that = this;
         const options = {
             enableHighAccuracy: true,
-            maximumAge: 0
+            maximumAge: 0,
+            timeout : 30000
         };
         this.$detect.click( event => {
             this._showDetecting();
             event.preventDefault();
             navigator.geolocation.getCurrentPosition( position => {
-                this._showDetect();
+                that._showDetect();
                 const latLng = {
                     lat: Math.round( position.coords.latitude * 1000000 ) / 1000000,
                     lng: Math.round( position.coords.longitude * 1000000 ) / 1000000
@@ -513,7 +518,7 @@ class Geopicker extends Widget {
                     }
                 }
             }, (e) => {
-                this._showDetectError();
+                that._showDetectError();
                 console.error( 'error occurred trying to obtain position', e );
             }, options );
             return false;
