@@ -36,30 +36,33 @@ class DatetimepickerExtended extends Widget {
     _init() {
         this.$fakeDateI = this._createFakeDateInput();
         this.$fakeTimeI = this._createFakeTimeInput();
-
         this.element.classList.add( 'hide' );
-        this.element.after( document.createRange().createContextualFragment( '<div class="datetimepicker widget" />' ) );
+        this.element.after( $( '<div class="datetimepicker widget" />' )[0] );
         const widget = this.question.querySelector( '.widget' );
-        widget.append( this.$fakeDateI[ 0 ].closest( '.date' ) );
-        widget.append( this.$fakeTimeI[ 0 ].closest( '.timepicker' ) );
+        widget.append( this.$fakeDateI.parent()[0] );
+        widget.append( this.$fakeTimeI.parent()[0] );
+        widget.append( $( this.resetButtonHtml )[0] );
 
-        this.$fakeDateI
-            .datepicker( {
-                format: 'yyyy-mm-dd',
-                autoclose: true,
-                todayHighlight: true,
-                forceParse: false
-            } );
+        if (!support.touch || !support.inputTypes.date) {
+            this.$fakeDateI
+                .datepicker( {
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true,
+                    forceParse: false
+                } );
+        }
 
-        this.$fakeTimeI
-            .timepicker( {
-                showMeridian: timeFormat.hour12,
-                meridianNotation: {
-                    am: timeFormat.amNotation,
-                    pm: timeFormat.pmNotation
-                }
-            } );
-
+        if (!support.touch || !support.inputTypes.time) {
+            this.$fakeTimeI
+                .timepicker( {
+                    showMeridian: timeFormat.hour12,
+                    meridianNotation: {
+                        am: timeFormat.amNotation,
+                        pm: timeFormat.pmNotation
+                    }
+                } );
+        }
         this.value = this.originalInputValue;
 
         this._setFocusHandler( this.$fakeDateI.add( this.$fakeTimeI ) );
@@ -67,7 +70,10 @@ class DatetimepickerExtended extends Widget {
         this.$fakeDateI
             .on( 'change changeDate', () => {
                 if ( !types.date.validate( this.$fakeDateI[ 0 ].value ) ) {
-                    this.$fakeDateI.val( '' ).datepicker( 'update' );
+                    this.$fakeDateI.val( '' );
+                    if (!support.touch || !support.inputTypes.date){
+                        this.$fakeDateI.datepicker( 'update' );
+                    }
                 }
                 this.originalInputValue = this.value;
                 return false;
@@ -83,7 +89,10 @@ class DatetimepickerExtended extends Widget {
         this.question.querySelector( '.btn-reset' ).addEventListener( 'click', () => {
             const event = this.originalInputValue ? 'change' : '';
             if ( event || this.$fakeDateI.val() || this.$fakeTimeI.val() ) {
-                this.$fakeDateI.val( '' ).trigger( event ).datepicker( 'update' );
+                this.$fakeDateI.val( '' ).trigger( event );                
+                if (!support.touch || !support.inputTypes.date){
+                    this.$fakeDateI.datepicker( 'update' );
+                }
                 this.$fakeTimeI.val( '' ).trigger( event );
             }
         } );
@@ -100,14 +109,13 @@ class DatetimepickerExtended extends Widget {
         return $fakeDate.find( 'input' );
     }
 
-    _createFakeTimeInput() {
-        const type = support.touch && support.inputTypes.time ? "time" : "text";
+    _createFakeTimeInput() {        
+        const type = (support.touch && support.inputTypes.time) ? "time" : "text";
         const $fakeTime = $(
                 `<div class="timepicker">
                     <input class="ignore timepicker-default" type="${type}" placeholder="hh:mm"/>
-                </div>` )
-            .append( this.resetButtonHtml );
-
+                </div>` );
+                
         return $fakeTime.find( 'input' );
     }
 
@@ -124,9 +132,13 @@ class DatetimepickerExtended extends Widget {
         const vals = val.split( 'T' );
         const dateVal = vals[ 0 ];
         const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
-
-        this.$fakeDateI.datepicker( 'setDate', dateVal );
-        this.$fakeTimeI.timepicker( 'setTime', timeVal );
+        
+        if (!support.touch || !support.inputTypes.date){
+            this.$fakeDateI.datepicker( 'setDate', dateVal );
+        }
+        if (!support.touch || !support.inputTypes.time){
+            this.$fakeTimeI.timepicker( 'setTime', timeVal );
+        }
     }
 
     get value() {
@@ -151,8 +163,12 @@ class DatetimepickerExtended extends Widget {
         const vals = val.split( 'T' );
         const dateVal = vals[ 0 ];
         const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
-        this.$fakeDateI.datepicker( 'setDate', dateVal );
-        this.$fakeTimeI.timepicker( 'setTime', timeVal );
+        if (!support.touch || !support.inputTypes.date){
+            this.$fakeDateI.datepicker( 'setDate', dateVal );
+        }
+        if (!support.touch || !support.inputTypes.time){
+            this.$fakeTimeI.timepicker( 'setTime', timeVal );
+        }
     }
 }
 
