@@ -3,11 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased] 
+[5.2.7] - 2019-05-09
 --------------------
 ##### Fixed
 - Range, Analog Scale, Datetime, and Time widgets fire an unnecessary change event when a new value is set that is equal to the existing value.
 - Range widget fires an unnecessary change event when the value is empty, before the value is set, when the user clicks the widget.
+- Issue with datepickers in Grid Theme in Firefox in apps using Enketo Core (Enketo Express) where the reset button is rendered outside the cell.
 
 [5.2.6] - 2019-05-01
 --------------------
