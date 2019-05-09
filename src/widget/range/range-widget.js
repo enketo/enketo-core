@@ -31,9 +31,13 @@ class RangeWidget extends Widget {
         }
 
         this.range.addEventListener( 'change', () => {
-            this.current.textContent = this.value;
-            this.originalInputValue = this.value;
-            this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
+            // Avoid unnecessary change events on original input as these can have big negative consequences
+            // https://github.com/OpenClinica/enketo-express-oc/issues/209
+            if ( this.current.textContent !== this.value ) {
+                this.current.textContent = this.value;
+                this.originalInputValue = this.value;
+                this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
+            }
         } );
 
         // Do not use change handler for this because this doesn't fire if the user clicks on the internal DEFAULT

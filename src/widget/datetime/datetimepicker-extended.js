@@ -119,12 +119,15 @@ class DatetimepickerExtended extends Widget {
     update() {
         const $dateTimeI = $( this.element );
         const val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
-        const vals = val.split( 'T' );
-        const dateVal = vals[ 0 ];
-        const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
 
-        this.$fakeDateI.datepicker( 'setDate', dateVal );
-        this.$fakeTimeI.timepicker( 'setTime', timeVal );
+        if ( val !== this.value ) {
+            const vals = val.split( 'T' );
+            const dateVal = vals[ 0 ];
+            const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
+
+            this.$fakeDateI.datepicker( 'setDate', dateVal );
+            this.$fakeTimeI.timepicker( 'setTime', timeVal );
+        }
     }
 
     get value() {

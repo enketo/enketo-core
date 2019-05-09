@@ -141,6 +141,9 @@ class Widget {
      * @memberof Widget
      */
     set originalInputValue( value ) {
+        // Avoid unnecessary change events as they could have significant negative consequences!
+        // However, to add a check for this.originalInputValue !== value here would affect performance too much,
+        // so we rely on widget code to only this setter when the value changes.
         input.setVal( $( this.element ), value, null );
         this.element.dispatchEvent( event.Change() );
     }

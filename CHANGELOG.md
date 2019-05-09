@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased] 
+--------------------
+##### Fixed
+- Range, Analog Scale, Datetime, and Time widgets fire an unnecessary change event when a new value is set that is equal to the existing value.
+- Range widget fires an unnecessary change event when the value is empty, before the value is set, when the user clicks the widget.
+
 [5.2.6] - 2019-05-01
 --------------------
 ##### Fixed
