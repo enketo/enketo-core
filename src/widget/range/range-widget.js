@@ -119,7 +119,7 @@ class RangeWidget extends Widget {
         this.value = '';
         this.originalInputValue = '';
         this.current.textContent = '';
-        this._updateMercury( -1 );
+        this._updateMercury( 0 );
     }
 
     disable() {
