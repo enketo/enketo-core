@@ -321,6 +321,11 @@ $green: rgb(60, 182, 67);
         &__current {
             visibility: hidden;
             padding: 0 (5.5 + 0.5 * 1.5 * $ds-track-h);
+
+            &:empty:after {
+                display: block;
+                content: '-';
+            }
         }
 
         &__ticks {
