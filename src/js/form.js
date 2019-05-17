@@ -979,6 +979,6 @@ Form.prototype.goToTarget = function( target ) {
 /** 
  * Static method to obtain required enketo-transform version direct from class.
  */
-Form.requiredTransformerVersion = '1.30.1';
+Form.requiredTransformerVersion = '1.31.0';
 
 export { Form, FormModel };
