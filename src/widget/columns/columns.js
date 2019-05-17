@@ -1,12 +1,11 @@
 import Widget from '../../js/widget';
 
 /**
- * Horizontal Choices Widgets. Adds a filler if the last row contains two elements.
+ * Column (select) Widgets. Adds a filler if the last row contains two elements.
  * The filler avoids the last radiobutton or checkbox to not be lined up correctly below the second column.
  * 
- * Change the name of this widget to Columns or something
  */
-class HorizontalChoices extends Widget {
+class Columns extends Widget {
 
     static get selector() {
         return '.question.or-appearance-columns';
@@ -28,4 +27,4 @@ class HorizontalChoices extends Widget {
     }
 }
 
-export default HorizontalChoices;
+export default Columns;

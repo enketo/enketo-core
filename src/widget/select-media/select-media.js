@@ -4,9 +4,8 @@ import { getSiblingElements } from '../../js/dom-utils';
 /**
  * Media Picker. Hides text labels if a media label is present.
  * 
- * TODO: change the name of this widget
  */
-class CompactPicker extends Widget {
+class MediaPicker extends Widget {
 
     static get selector() {
         return '.or-appearance-no-buttons';
@@ -22,4 +21,4 @@ class CompactPicker extends Widget {
 
 }
 
-export default CompactPicker;
+export default MediaPicker;
