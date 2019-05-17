@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- Automatically enlarged multiline inputs cannot be manually resized to their original size.
+
 [5.2.8] - 2019-05-10
 --------------------
 ##### Fixed
