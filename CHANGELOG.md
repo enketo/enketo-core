@@ -3,13 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.3.0] - 2019-05-21
 --------------------
 ##### Removed
 - Support for appearances "quick" and "quickcompact".
 
 ##### Added
-- Support for appearances "columns", "columns-flex", "columns-n" all with an optional "no-buttons" modififier
+- Support for appearances "columns", "columns-pack", "columns-n" all with an optional "no-buttons" modifier
 
 ##### Fixed
 - Automatically enlarged multiline inputs cannot be manually resized to their original size.

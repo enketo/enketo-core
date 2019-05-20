@@ -89,7 +89,7 @@
     }
 }
 
-.or-appearance-columns-flex {
+.or-appearance-columns-pack {
 
     // the flexiness is only for appearance=random
     .option-wrapper {
@@ -106,7 +106,7 @@
 }
 
 .question.or-appearance-columns,
-.question.or-appearance-columns-flex {
+.question.or-appearance-columns-pack {
     &.or-appearance-no-buttons {
         @include select-no-buttons;
     }
