@@ -58,10 +58,10 @@
         "karma-safari-launcher": "1.0.x",
         "load-grunt-tasks": "4.x.x",
         "node-sass": "^4.11.0",
-        "rollup": "1.6.x",
-        "rollup-plugin-commonjs": "^9.2.0",
+        "rollup": "1.12.x",
+        "rollup-plugin-commonjs": "10.0.x",
         "rollup-plugin-json": "4.0.x",
-        "rollup-plugin-node-resolve": "4.0.x",
+        "rollup-plugin-node-resolve": "5.0.x",
         "time-grunt": "2.x.x"
     },
     "browser": {
@@ -76,7 +76,7 @@
         "bootstrap-datepicker": "1.8.x",
         "core-js": "3.0.x",
         "enketo-xpathjs": "1.9.2",
-        "html5sortable": "^0.9.8",
+        "html5sortable": "0.9.10",
         "jquery": "3.3.x",
         "jquery-touchswipe": "^1.6.19",
         "leaflet": "1.4.x",
