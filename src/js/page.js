@@ -299,8 +299,8 @@ export default {
             .eq( 0 )
             .trigger( 'fakefocus' );
 
-        const body = this.form.view.html.closest( 'body' );
-        const header = body ? body.querySelector( '.form-header' ) : null;
+        const wrapper = this.form.view.html.parentElement;
+        const header = wrapper ? wrapper.querySelector( '.form-header' ) : null;
         ( header || pageEl ).scrollIntoView();
     },
     _toggleButtons( index ) {
