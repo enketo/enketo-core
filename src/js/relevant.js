@@ -1,5 +1,7 @@
 /**
- * Updates branches
+ * @module relevant
+ *
+ * @description Updates branches
  *
  * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
  */

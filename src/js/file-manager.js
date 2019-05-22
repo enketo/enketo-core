@@ -1,5 +1,7 @@
 /**
- * Simple file manager with cross-browser support. That uses the FileReader
+ * @module fileManager
+ *
+ * @description Simple file manager with cross-browser support. That uses the FileReader
  * to create previews. Can be replaced with a more advanced version that
  * obtains files from storage.
  *
