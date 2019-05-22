@@ -30,7 +30,7 @@
         }
     ],
     "files": [
-        "build/"
+        "src/"
     ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/form.js",

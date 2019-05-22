@@ -826,10 +826,16 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
 };
 
 /**
+ * @typedef ValidateInputResolution
+ * @property {bool} requiredValid
+ * @property {bool} constraintValid
+ */
+
+/**
  * Validates question values.
  *
  * @param  {jQuery} $input    [description]
- * @return {Promise}           [description]
+ * @return {Promise<undefined|ValidateInputResolution>} resolves with validation result
  */
 Form.prototype.validateInput = function( $input ) {
     if ( !this.initialized ) {
