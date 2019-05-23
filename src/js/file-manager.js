@@ -22,7 +22,7 @@ import { t } from 'enketo/translator';
  *
  * @return {Promise|boolean|Error} promise boolean or rejection with Error
  */
-fileManager.init = () => {return Promise.resolve( true );};
+fileManager.init = () => { return Promise.resolve( true ); };
 
 /**
  * @function isWaitingForPermissions
@@ -31,7 +31,7 @@ fileManager.init = () => {return Promise.resolve( true );};
  *
  * @return {boolean} [description]
  */
-fileManager.isWaitingForPermissions = () => {return false;};
+fileManager.isWaitingForPermissions = () => { return false; };
 
 /**
  * @function getFileUrl
@@ -152,7 +152,7 @@ fileManager.getCurrentFiles = () => {
  *
  * @return {boolean} whether file is too large
  */
-fileManager.isTooLarge = () => {return false;};
+fileManager.isTooLarge = () => { return false; };
 
 /**
  * @function getMaxSizeReadable
@@ -161,6 +161,6 @@ fileManager.isTooLarge = () => {return false;};
  *
  * @return {string} human radable maximiym size
  */
-fileManager.getMaxSizeReadable = () => {return `${5}MB`;};
+fileManager.getMaxSizeReadable = () => { return `${5}MB`; };
 
 export default fileManager;
