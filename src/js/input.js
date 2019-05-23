@@ -6,6 +6,9 @@ import types from './types';
 import events from './event';
 
 export default {
+    getWrapNode( control ) {
+        return control.closest( '.question, .calculation' );
+    },
     // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
     getWrapNodes( $inputs ) {
         const type = this.getInputType( $inputs.eq( 0 ) );
@@ -117,13 +120,12 @@ export default {
         name = this.getName( $input );
 
         if ( inputType === 'radio' ) {
-            return this.getWrapNodes( $input ).find( 'input:checked' ).val() || '';
+            const checked = this.getWrapNode( $input[ 0 ] ).querySelector( `input[type="radio"][data-name="${name}"]:checked` );
+            return checked ? checked.value : '';
         }
-        // checkbox values bug in jQuery as (node.val() should work)
+
         if ( inputType === 'checkbox' ) {
-            this.getWrapNodes( $input ).find( `input[name="${name}"]:checked` ).each( function() {
-                values.push( this.value );
-            } );
+            this.getWrapNode( $input[ 0 ] ).querySelectorAll( `input[type="checkbox"][name="${name}"]:checked` ).forEach( input => values.push( input.value ) );
             return values;
         }
         return $input.val() || '';

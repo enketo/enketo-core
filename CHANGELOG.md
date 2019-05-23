@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 --------------------
 ##### Fixed
 - Dependency/build issue with 'sortable not defined'.
+- Form control value getter for complex third-party widgets may get a false value.
 
 [5.3.0] - 2019-05-21
 --------------------
