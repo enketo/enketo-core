@@ -2,7 +2,6 @@ import RangeWidget from '../../src/widget/range/range-widget';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
 import input from '../../src/js/input';
 import events from '../../src/js/event';
-import $ from 'jquery';
 
 const FORM1 =
     `<label class="question non-select or-appearance-no-ticks">
@@ -27,7 +26,7 @@ describe( 'Custom RangeWidget tests', () => {
         const value = '2';
 
         // Also needs to work for radiobuttons, checkboxes, selects.
-        input.setVal( $( control ), value, null );
+        input.setVal(  control, value, null );
 
         Promise.resolve()
             .then( () => new RangeWidget( control ) )

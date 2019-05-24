@@ -4,6 +4,7 @@ import loadForm from '../helpers/load-form';
 import forms from '../mock/forms';
 import config from '../../config';
 import pkg from '../../package';
+import events from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
 
 describe( 'Output functionality ', () => {
@@ -750,43 +751,54 @@ describe( 'obtaining XML string from form without irrelevant nodes', () => {
 describe( 'validation', () => {
 
     describe( 'feedback to user after equired field validation', () => {
-        let form, $numberInput, $numberLabel;
+        let form, numberInput, numberLabel;
 
         beforeEach( () => {
             $.fx.off = true; //turn jQuery animations off
             form = loadForm( 'group_branch.xml' );
             form.init();
-            $numberInput = form.view.$.find( '[name="/data/group/nodeB"]' );
-            $numberLabel = form.input.getWrapNodes( $numberInput );
+            numberInput = form.view.html.querySelector( '[name="/data/group/nodeB"]' );
+            numberLabel = form.input.getWrapNode( numberInput );
         } );
 
         it( 'validates a DISABLED and required number field without a value', () => {
-            $numberInput.val( '' ).trigger( 'change' );
-            expect( $numberLabel.length ).toEqual( 1 );
-            expect( $numberInput.val().length ).toEqual( 0 );
-            expect( $numberLabel.parents( '.or-group' ).prop( 'disabled' ) ).toBe( true );
-            expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
+            numberInput.value = '';
+            numberInput.dispatchEvent( events.Change() );
+            expect( numberLabel ).not.toEqual( null );
+            expect( numberInput.value.length ).toEqual( 0 );
+            //expect( numberLabel.closest( '.or-group' ).prop( 'disabled' ) ).toBe( true );
+            expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( false );
         } );
 
         //see issue #144
         it( 'validates an enabled and required number field with value 0 and 1', () => {
-            form.view.$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
-            expect( $numberLabel.length ).toEqual( 1 );
-            $numberInput.val( 0 ).trigger( 'change' ).trigger( 'validate' );
-            expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
-            $numberInput.val( 1 ).trigger( 'change' ).trigger( 'validate' );
-            expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( false );
+            const a = form.view.html.querySelector( '[name="/data/nodeA"]' );
+            a.value = 'yes';
+            a.dispatchEvent( events.Change() );
+
+            expect( numberLabel ).not.toEqual( null );
+            numberInput.value === 0;
+            numberInput.dispatchEvent( events.Change() );
+            //.trigger( 'validate' );
+            expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( false );
+            numberInput.value = 1;
+            numberInput.dispatchEvent( events.Change() )
+            //.trigger( 'validate' );
+            expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( false );
         } );
 
         // failing
         it( 'invalidates an enabled and required number field without a value', done => {
             // first make branch relevant
-            form.view.$.find( '[name="/data/nodeA"]' ).val( 'yes' ).trigger( 'change' );
+            const a = form.view.html.querySelector( '[name="/data/nodeA"]' )
+            a.value = 'yes';
+            a.dispatchEvent( events.Change() );
             // now set value to empty
-            $numberInput.val( '' ).trigger( 'change' );
-            form.validateInput( $numberInput )
+            numberInput.value = '';
+            numberInput.dispatchEvent( events.Change() );
+            form.validateInput( numberInput )
                 .then( () => {
-                    expect( $numberLabel.hasClass( 'invalid-required' ) ).toBe( true );
+                    expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( true );
                     done();
                 } );
         } );
@@ -796,12 +808,12 @@ describe( 'validation', () => {
             form.init();
             const $textarea = form.view.$.find( '[name="/thedata/nodeF"]' );
             $textarea.val( '\n' ).trigger( 'change' );
-            form.validateInput( $textarea )
+            form.validateInput( $textarea[ 0 ] )
                 .then( () => {
                     expect( $textarea.length ).toEqual( 1 );
                     expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
                     $textarea.val( '  \n  \n\r \t ' ).trigger( 'change' );
-                    return form.validateInput( $textarea );
+                    return form.validateInput( $textarea[ 0 ] );
                 } )
                 .then( () => {
                     expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
@@ -815,7 +827,7 @@ describe( 'validation', () => {
             const $dynReq = form.view.$.find( '.required' );
 
             expect( $dynReq.eq( 0 ).hasClass( 'hide' ) ).toBe( false );
-            form.validateInput( form.view.$.find( '[name="/dynamic-required/num"]' ) ).then( () => {
+            form.validateInput( form.view.html.querySelector( '[name="/dynamic-required/num"]' ) ).then( () => {
                 expect( $dynReq.eq( 1 ).hasClass( 'hide' ) ).toBe( true );
                 done();
             } );
@@ -1021,7 +1033,7 @@ describe( 're-validating inputs and updating user feedback', () => {
             // input.validate is called by a comment widget on the linked question when the comment value changes
             // set question in valid state (not automatic, but by calling input.validate)
             $oneComment.val( 'comment' ).trigger( 'change' );
-            form.input.validate( $one ).then( () => {
+            form.input.validate( $one[0] ).then( () => {
                 expect( $one.closest( '.question' ).hasClass( 'invalid-required' ) ).toBe( false );
                 done();
             } );

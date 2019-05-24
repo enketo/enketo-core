@@ -10,13 +10,6 @@ import $ from 'jquery';
  */
 export default {
     init() {
-        let item;
-        let param;
-        let curVal;
-        let newVal;
-        let dataNode;
-        let props;
-        let $preload;
         const that = this;
 
         if ( !this.form ) {
@@ -25,18 +18,19 @@ export default {
 
         //these initialize actual preload items
         this.form.view.$.find( 'input[data-preload], select[data-preload], textarea[data-preload]' ).each( function() {
-            $preload = $( this );
-            props = that.form.input.getProps( $preload );
-            item = $preload.attr( 'data-preload' ).toLowerCase();
-            param = $preload.attr( 'data-preload-params' ).toLowerCase();
+            const $preload = $( this );
+            const preload = this;
+            const props = that.form.input.getProps( preload );
+            const item = $preload.attr( 'data-preload' ).toLowerCase();
+            const param = $preload.attr( 'data-preload-params' ).toLowerCase();
 
             if ( typeof that[ item ] !== 'undefined' ) {
-                dataNode = that.form.model.node( props.path, props.index );
+                const dataNode = that.form.model.node( props.path, props.index );
                 // If a preload item is placed inside a repeat with repeat-count 0, the node
                 // doesn't exist and will never get a value (which is correct behavior)
                 if ( dataNode.getElements().length ) {
-                    curVal = dataNode.getVal();
-                    newVal = that[ item ]( {
+                    const curVal = dataNode.getVal();
+                    const newVal = that[ item ]( {
                         param,
                         curVal,
                         dataNode

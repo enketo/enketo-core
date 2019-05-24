@@ -84,7 +84,7 @@ export default {
              * I am not sure what is correct, but for now for XLSForm-style secondary instances with only one level underneath the <item>s that
              * the nodeset retrieves, Enketo's aproach works well.
              */
-            const context = that.form.input.getName( $input );
+            const context = that.form.input.getName( $input[ 0 ] );
 
             /*
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
@@ -92,7 +92,7 @@ export default {
              */
             const insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
             const insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
-            const index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
+            const index = ( insideRepeatClone ) ? that.form.input.getIndex( $input[ 0 ] ) : 0;
 
             if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                 $instanceItems = itemsCache[ itemsXpath ];
@@ -201,7 +201,7 @@ export default {
                 if ( $input.hasClass( 'rank' ) ) {
                     currentValue = '';
                 }
-                that.form.input.setVal( $input, currentValue );
+                that.form.input.setVal( $input[ 0 ], currentValue );
                 $input.trigger( 'change' );
             }
 

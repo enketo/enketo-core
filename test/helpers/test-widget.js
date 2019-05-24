@@ -99,7 +99,7 @@ function testComplexInstantiation( Widget, template, value ) {
             const control = fragment.querySelector( Widget.selector );
 
             // Also needs to work for radiobuttons, checkboxes, selects.
-            input.setVal( $( control ), value, null );
+            input.setVal( control , value, null );
             Promise.resolve()
                 .then( () => new Widget( control ) )
                 .then( widget => {
@@ -120,7 +120,7 @@ function testReset( Widget, template, value ) {
             const control = fragment.querySelector( Widget.selector );
 
             // Also needs to work for radiobuttons, checkboxes, selects.
-            input.setVal( $( control ), value, null );
+            input.setVal(  control , value, null );
 
             Promise.resolve()
                 .then( () => new Widget( control ) )
@@ -154,7 +154,7 @@ function testUpdate( Widget, template, value ) {
                     expect( widget.originalInputValue ).toEqual( '' );
 
                     // Also needs to work for radiobuttons, checkboxes, selects.
-                    input.setVal( $( control ), value, null );
+                    input.setVal( control, value, null );
                     // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
                     widget.update();
 
@@ -180,7 +180,7 @@ function testExcessiveChangeEventAvoidance( Widget, template, value ) {
                 .then( () => new Widget( control ) )
                 .then( widget => {
                     // Also needs to work for radiobuttons, checkboxes, selects.
-                    input.setVal( $( control ), value, null );
+                    input.setVal(  control, value, null );
                     // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
                     widget.update();
 

@@ -34,11 +34,12 @@ export default {
         $nodes.each( function() {
             let index;
             const $control = $( this );
-            const name = that.form.input.getName( $control );
+            const control = this;
+            const name = that.form.input.getName( control );
             const dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
-            const expr = that.form.input.getCalculation( $control );
-            const dataType = that.form.input.getXmlType( $control );
-            const relevantExpr = that.form.input.getRelevant( $control );
+            const expr = that.form.input.getCalculation( control );
+            const dataType = that.form.input.getXmlType( control );
+            const relevantExpr = that.form.input.getRelevant( control );
             const dataNodesObj = that.form.model.node( name );
             const dataNodes = dataNodesObj.getElements();
 
@@ -105,13 +106,13 @@ export default {
                     // Start at the highest level, and traverse down to the immediate parent group.
                     var relevant = ancestorGroups.filter( el => el.matches( '[data-relevant]' ) ).map( group => {
                         const $group = $( group );
-                        const nm = that.form.input.getName( $group );
+                        const nm = that.form.input.getName( group );
 
                         return {
                             context: nm,
                             // thankfully relevants on repeats are not possible with XLSForm-produced forms
                             index: that.form.view.$.find( `.or-group[name="${nm}"], .or-group-data[name="${nm}"]` ).index( $group ), // performance....
-                            expr: that.form.input.getRelevant( $group )
+                            expr: that.form.input.getRelevant( group )
                         };
                     } ).concat( [ {
                         context: name,
@@ -126,7 +127,7 @@ export default {
                 const newExpr = that.form.replaceChoiceNameFn( expr, 'string', name, index );
 
                 // It is possible that the fixed expr is '' which causes an error in XPath
-                const xpathType = that.form.input.getInputType( $control ) === 'number' ? 'number' : 'string';
+                const xpathType = that.form.input.getInputType( control ) === 'number' ? 'number' : 'string';
                 const result = relevant && newExpr ? that.form.model.evaluate( newExpr, xpathType, name, index ) : '';
 
                 // Filter the result set to only include the target node
@@ -138,14 +139,14 @@ export default {
                 // Not the most efficient to use input.setVal here as it will do another lookup
                 // of the node, that we already have...
                 // We should not use value "result" here because node.setVal() may have done a data type conversion
-                that.form.input.setVal( $control, dataNodesObj.getVal() );
+                that.form.input.setVal( control, dataNodesObj.getVal() );
 
                 /*
                  * We need to specifically call validate on the question itself, because the validationUpdate
                  * in the evaluation cascade only updates questions with a _dependency_ on this question.
                  */
                 if ( config.validateContinuously === true ) {
-                    that.form.validateInput( $control );
+                    that.form.validateInput( control );
                 }
             }
         } );

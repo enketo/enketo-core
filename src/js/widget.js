@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import input from './input';
 import event from './event';
 const range = document.createRange();
@@ -131,7 +130,7 @@ class Widget {
      * @memberof Widget
      */
     get originalInputValue() {
-        return input.getVal( $( this.element ) );
+        return input.getVal( this.element );
     }
 
     /**
@@ -144,7 +143,7 @@ class Widget {
         // Avoid unnecessary change events as they could have significant negative consequences!
         // However, to add a check for this.originalInputValue !== value here would affect performance too much,
         // so we rely on widget code to only this setter when the value changes.
-        input.setVal( $( this.element ), value, null );
+        input.setVal( this.element, value, null );
         this.element.dispatchEvent( event.Change() );
     }
 

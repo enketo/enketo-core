@@ -34,6 +34,7 @@ export default {
 
         $nodes.each( function() {
             const $node = $( this );
+            const node = this;
             let context;
             let $parentGroups;
             let pathParts;
@@ -50,8 +51,8 @@ export default {
             p = {};
             cacheIndex = null;
 
-            p.relevant = that.form.input.getRelevant( $node );
-            p.path = that.form.input.getName( $node );
+            p.relevant = that.form.input.getRelevant( node );
+            p.path = that.form.input.getName( node );
 
             if ( $branchNode.length !== 1 ) {
                 if ( $node.parentsUntil( '.or', '#or-calculated-items' ).length === 0 ) {
@@ -102,7 +103,7 @@ export default {
              * Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
              * It can be safely set to 0 for other branches.
              */
-            p.ind = ( context && insideRepeatClone ) ? that.form.input.getIndex( $node ) : 0;
+            p.ind = ( context && insideRepeatClone ) ? that.form.input.getIndex( node ) : 0;
             /*
              * Caching is only possible for expressions that do not contain relative paths to nodes.
              * So, first do a *very* aggresive check to see if the expression contains a relative path.

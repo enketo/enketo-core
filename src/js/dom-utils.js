@@ -47,6 +47,20 @@ function getAncestors( element, selector = '*' ) {
     return ancestors;
 }
 
+function closestAncestorUntil( element, filterSelector, endSelector ) {
+    let parent = element.parentElement;
+    let found = null;
+
+    while ( parent && !found ) {
+        if ( parent.matches( filterSelector ) ) {
+            found = parent;
+        }
+        parent = endSelector && parent.matches( endSelector ) ? null : parent.parentElement;
+    }
+
+    return found;
+}
+
 function empty( element ) {
     [ ...element.children ].forEach( el => el.remove() );
 }
@@ -88,5 +102,6 @@ export {
     getSiblingElementsAndSelf,
     getSiblingElements,
     getAncestors,
+    closestAncestorUntil,
     empty,
 };
