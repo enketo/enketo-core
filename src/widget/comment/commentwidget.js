@@ -41,7 +41,7 @@ class Comment extends Widget {
     }
 
     _getLinkedQuestion( input ) {
-        const contextPath = this.options.helpers.input.getName( $( input ) );
+        const contextPath = this.options.helpers.input.getName( input );
         const targetPath = this.element.dataset.for.trim();
         const absoluteTargetPath = this.options.helpers.pathToAbsolute( targetPath, contextPath );
         // The root is nearest repeat or otherwise nearest form. This avoids having to calculate indices, without
@@ -50,7 +50,7 @@ class Comment extends Widget {
         const root = input.closest( 'form.or, .or-repeat' );
 
         return this.options.helpers.input
-            .getWrapNodes( $( root.querySelector( `[name="${absoluteTargetPath}"], [data-name="${absoluteTargetPath}"]` ) ) )[ 0 ];
+            .getWrapNode( root.querySelector( `[name="${absoluteTargetPath}"], [data-name="${absoluteTargetPath}"]` ) );
     }
 
     _commentHasError() {

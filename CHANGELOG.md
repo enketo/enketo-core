@@ -6,7 +6,52 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 --------------------
 ##### Fixed
+- Dependency/build issue with 'sortable not defined'.
+- Form control value getter for complex third-party widgets may get a false value.
+
+[5.3.0] - 2019-05-21
+--------------------
+##### Removed
+- Support for appearances "quick" and "quickcompact".
+
+##### Added
+- Support for appearances "columns", "columns-pack", "columns-n" all with an optional "no-buttons" modifier
+
+##### Fixed
+- Automatically enlarged multiline inputs cannot be manually resized to their original size.
+
+[5.2.8] - 2019-05-10
+--------------------
+##### Fixed
+- Analog scale widget without current value box, still firing excessive change events.
+- Distress widget mercury is not reset properly.
+
+[5.2.7] - 2019-05-09
+--------------------
+##### Fixed
+- Range, Analog Scale, Datetime, and Time widgets fire an unnecessary change event when a new value is set that is equal to the existing value.
+- Range widget fires an unnecessary change event when the value is empty, before the value is set, when the user clicks the widget.
+- Issue with datepickers in Grid Theme in Firefox in apps using Enketo Core (Enketo Express) where the reset button is rendered outside the cell.
+
+[5.2.6] - 2019-05-01
+--------------------
+##### Fixed
+- Draw widgets loose drawing (or last stroke(s) in drawing) on mobile devices if clicking hide-full-screen button or switching device orientation within 1.5 sec after last change.
+
+[5.2.4] - 2019-04-25
+--------------------
+##### Fixed
+- Some forms with repeats fail to load in Safari.
+
+[5.2.3] - 2019-04-24
+--------------------
+##### Fixed
 - Failing to clone repeats that only contain calculations.
+- Select one calculations not updating correctly.
+- Irrelevant calculations inside non-first repeat instances run upon load.
+- Range widgets do not work on touchscreen devices.
+- Date strings without timezone component are not always converted correctly in timezones that have DST.
+- Hand-typed/pasted dates with spaces or invalid characters are kept shown to user, but are not stored in model.
 
 [5.2.2] - 2019-04-01
 --------------------

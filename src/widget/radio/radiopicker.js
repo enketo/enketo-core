@@ -14,23 +14,22 @@ class Radiopicker extends Widget {
 
     _init() {
         const $form = $( this.element );
+        const that = this;
 
         $form
-            // Applies a data-checked attribute to the parent label of a checked checkbox and radio button.
+            // Applies a data-checked attribute to the parent label of a checked radiobutton.
             .on( 'click', 'input[type="radio"]:not([readonly]):checked', function() {
                 $( this ).parent( 'label' ).siblings().removeAttr( 'data-checked' ).end().attr( 'data-checked', 'true' );
             } )
             // Same for checkbox.
             .on( 'click', 'input[type="checkbox"]:not([readonly])', function() {
-                if ( this.checked ) {
-                    this.parentNode.dataset.checked = 'true';
-                } else {
-                    delete this.parentNode.dataset.checked;
-                }
+                that._updateDataChecked( this );
             } )
-            // Detect programmatic clearing to remove data-checked attribute.
-            .on( events.InputUpdate().type, '[data-checked] > input:not(:checked)', function() {
-                delete this.parentNode.dataset.checked;
+            // Detect programmatic changes to update data-checked attribute.
+            .on( events.InputUpdate().type, 'input[type="radio"], input[type="checkbox"]', function() {
+                this.closest( '.option-wrapper' )
+                    .querySelectorAll( 'input[type="radio"],input[type="checkbox"]' )
+                    .forEach( input => that._updateDataChecked( input ) );
             } )
             // Readonly buttons/checkboxes will not respond to clicks.
             .on( 'click', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', event => {
@@ -72,10 +71,18 @@ class Radiopicker extends Widget {
             } );
 
         // Defaults
-        $form
-            .find( 'input[type="radio"]:checked, input[type="checkbox"]:checked' )
-            .parent( 'label' ).attr( 'data-checked', 'true' );
+        this.element
+            .querySelectorAll( 'input[type="radio"]:checked, input[type="checkbox"]:checked' )
+            .forEach( input => this._updateDataChecked( input ) );
 
+    }
+
+    _updateDataChecked( el ) {
+        if ( el.checked ) {
+            el.parentNode.dataset.checked = true;
+        } else {
+            delete el.parentNode.dataset.checked;
+        }
     }
 }
 

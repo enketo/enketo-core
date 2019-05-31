@@ -5,6 +5,7 @@
 import $ from 'jquery';
 
 import config from 'enketo/config';
+import { getAncestors } from './dom-utils';
 
 export default {
     /**
@@ -36,11 +37,12 @@ export default {
         $nodes.each( function() {
             let index;
             const $control = $( this );
-            const name = that.form.input.getName( $control );
+            const control = this;
+            const name = that.form.input.getName( control );
             const dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
-            const expr = that.form.input.getCalculation( $control );
-            const dataType = that.form.input.getXmlType( $control );
-            const relevantExpr = that.form.input.getRelevant( $control );
+            const expr = that.form.input.getCalculation( control );
+            const dataType = that.form.input.getXmlType( control );
+            const relevantExpr = that.form.input.getRelevant( control );
             const dataNodesObj = that.form.model.node( name );
             const dataNodes = dataNodesObj.getElements();
 
@@ -93,54 +95,61 @@ export default {
                  * Note: getting the parents of $control wouldn't work for nodes inside #calculated-items!
                  */
                 const parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
-                const $parentGroups = that.form.view.$.find( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` ).eq( index )
-                    .parents( '.or-group, .or-group-data' ).addBack();
+                let startElement;
 
-                if ( $parentGroups.length ) {
-                    // Start at the highest level, and traverse down to the DOM to the immediate parent group.
-                    var relevant = $parentGroups.filter( '[data-relevant]' ).reverse().get().map( group => {
+                if ( index === 0 ) {
+                    startElement = that.form.view.html.querySelector( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` );
+                } else {
+                    startElement = that.form.view.html.querySelectorAll( `.or-repeat[name="${parentPath}"]` )[ index ] ||
+                        that.form.view.html.querySelectorAll( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` )[ index ];
+                }
+                const ancestorGroups = startElement ? [ startElement ].concat( getAncestors( startElement, '.or-group, .or-group-data' ) ) : [];
+
+                if ( ancestorGroups.length ) {
+                    // Start at the highest level, and traverse down to the immediate parent group.
+                    var relevant = ancestorGroups.filter( el => el.matches( '[data-relevant]' ) ).map( group => {
                         const $group = $( group );
-                        const nm = that.form.input.getName( $group );
+                        const nm = that.form.input.getName( group );
 
                         return {
                             context: nm,
                             // thankfully relevants on repeats are not possible with XLSForm-produced forms
                             index: that.form.view.$.find( `.or-group[name="${nm}"], .or-group-data[name="${nm}"]` ).index( $group ), // performance....
-                            expr: that.form.input.getRelevant( $group )
+                            expr: that.form.input.getRelevant( group )
                         };
                     } ).concat( [ {
                         context: name,
                         index,
                         expr: relevantExpr
-                    } ] ).every( item => ( item.expr ) ? that.form.model.evaluate( item.expr, 'boolean', item.context, item.index ) : true );
+                    } ] ).every( item => item.expr ? that.form.model.evaluate( item.expr, 'boolean', item.context, item.index ) : true );
                 } else {
-                    relevant = ( relevantExpr ) ? that.form.model.evaluate( relevantExpr, 'boolean', name, index ) : true;
+                    relevant = relevantExpr ? that.form.model.evaluate( relevantExpr, 'boolean', name, index ) : true;
                 }
 
-                // not sure if using 'string' is always correct
+                // Not sure if using 'string' is always correct
                 const newExpr = that.form.replaceChoiceNameFn( expr, 'string', name, index );
 
-                // it is possible that the fixed expr is '' which causes an error in XPath
-                const xpathType = that.form.input.getInputType( $control ) === 'number' ? 'number' : 'string';
-                const result = ( relevant && newExpr ) ? that.form.model.evaluate( newExpr, xpathType, name, index ) : '';
+                // It is possible that the fixed expr is '' which causes an error in XPath
+                const xpathType = that.form.input.getInputType( control ) === 'number' ? 'number' : 'string';
+                const result = relevant && newExpr ? that.form.model.evaluate( newExpr, xpathType, name, index ) : '';
 
-                // filter the result set to only include the target node
+                // Filter the result set to only include the target node
                 dataNodesObj.setIndex( index );
 
-                // set the value
+                // Set the value
                 dataNodesObj.setVal( result, dataType );
 
                 // Not the most efficient to use input.setVal here as it will do another lookup
                 // of the node, that we already have...
                 // We should not use value "result" here because node.setVal() may have done a data type conversion
-                that.form.input.setVal( $control, dataNodesObj.getVal() );
+                that.form.input.setVal( control, dataNodesObj.getVal() );
 
                 /*
                  * We need to specifically call validate on the question itself, because the validationUpdate
                  * in the evaluation cascade only updates questions with a _dependency_ on this question.
                  */
                 if ( config.validateContinuously === true ) {
-                    that.form.validateInput( $control );
+                    that.form.validateInput( control );
                 }
             }
         } );

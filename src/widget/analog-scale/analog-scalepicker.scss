@@ -153,11 +153,18 @@ $q-pad-right: 0px !default;
             // adjust default range widget
             &__current {
                 line-height: 38.5px;
+                min-height: 48.5px;
             }
 
             // adjust default range widget
             [type=range] {
                 top: 33.5px;
+            }
+
+            .btn-reset {
+                // center when there is no min and max scale value
+                margin-left: auto;
+                margin-right: auto;
             }
         }
 

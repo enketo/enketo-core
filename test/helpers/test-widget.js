@@ -14,6 +14,7 @@ function runAllCommonWidgetTests( Widget, template = FORM_CONTROL_TEMPLATE, valu
     testComplexInstantiation( Widget, template, value );
     testReset( Widget, template, value );
     testUpdate( Widget, template, value );
+    testExcessiveChangeEventAvoidance( Widget, template, value );
 }
 
 function testStaticProperties( Widget ) {
@@ -98,7 +99,7 @@ function testComplexInstantiation( Widget, template, value ) {
             const control = fragment.querySelector( Widget.selector );
 
             // Also needs to work for radiobuttons, checkboxes, selects.
-            input.setVal( $( control ), value, null );
+            input.setVal( control , value, null );
             Promise.resolve()
                 .then( () => new Widget( control ) )
                 .then( widget => {
@@ -119,7 +120,7 @@ function testReset( Widget, template, value ) {
             const control = fragment.querySelector( Widget.selector );
 
             // Also needs to work for radiobuttons, checkboxes, selects.
-            input.setVal( $( control ), value, null );
+            input.setVal(  control , value, null );
 
             Promise.resolve()
                 .then( () => new Widget( control ) )
@@ -153,7 +154,7 @@ function testUpdate( Widget, template, value ) {
                     expect( widget.originalInputValue ).toEqual( '' );
 
                     // Also needs to work for radiobuttons, checkboxes, selects.
-                    input.setVal( $( control ), value, null );
+                    input.setVal( control, value, null );
                     // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
                     widget.update();
 
@@ -164,6 +165,41 @@ function testUpdate( Widget, template, value ) {
         } );
 
     } );
+}
+
+// This test checks for excessive firing of change events on the original input by the widget.
+// i.e. firing a change event when the value hasn't actually changed.
+function testExcessiveChangeEventAvoidance( Widget, template, value ) {
+    describe( `programmatically updating ${Widget.name} to the same value it already has`, () => {
+
+        it( 'does not lead to a change event firing', done => {
+            const fragment = document.createRange().createContextualFragment( template );
+            const control = fragment.querySelector( Widget.selector );
+
+            Promise.resolve()
+                .then( () => new Widget( control ) )
+                .then( widget => {
+                    // Also needs to work for radiobuttons, checkboxes, selects.
+                    input.setVal(  control, value, null );
+                    // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
+                    widget.update();
+
+                    // Check setup
+                    expect( widget.value ).toEqual( value );
+                    expect( widget.originalInputValue ).toEqual( value );
+
+                    // Actual test
+                    let changeEventCounter = 0;
+                    control.addEventListener( 'change', () => changeEventCounter++ );
+                    // Calling update without changing the value.
+                    widget.update();
+                    expect( changeEventCounter ).toEqual( 0 );
+                } )
+                .then( done, fail );
+        } );
+
+    } );
+
 }
 
 export { runAllCommonWidgetTests, testStaticProperties, testRequiredMethods, testBasicInstantiation, testComplexInstantiation, testReset, testUpdate };

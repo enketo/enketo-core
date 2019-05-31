@@ -150,11 +150,13 @@ class DatepickerExtended extends Widget {
         } );
     }
 
-    _toActualDate( date ) {
+    _toActualDate( date = '' ) {
+        date = date.trim();
         return date && this.settings.format === 'yyyy' && date.length < 5 ? `${date}-01-01` : ( date && this.settings.format === 'yyyy-mm' && date.length < 8 ? `${date}-01` : date );
     }
 
-    _toDisplayDate( date ) {
+    _toDisplayDate( date = '' ) {
+        date = date.trim();
         return date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
     }
 

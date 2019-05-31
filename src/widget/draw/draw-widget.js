@@ -163,8 +163,8 @@ class DrawWidget extends Widget {
                     .end().find( '.hide-canvas-btn' ).on( 'click', () => {
                         that.$widget.removeClass( 'full-screen' );
                         that.pad.off();
-                        that._resizeCanvas( canvas );
                         that._forceUpdate();
+                        that._resizeCanvas( canvas );
                         return false;
                     } ).click();
 
@@ -391,6 +391,7 @@ class DrawWidget extends Widget {
     _handleResize( canvas ) {
         const that = this;
         $( window ).on( 'resize', () => {
+            that._forceUpdate();
             that._resizeCanvas( canvas );
         } );
     }

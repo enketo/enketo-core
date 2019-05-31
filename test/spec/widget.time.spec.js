@@ -13,7 +13,7 @@ const FORM = `
 // We need to explicitly set locale to avoid time format issues
 const originalLocale = format.locale;
 
-describe( 'datepicker widget', () => {
+describe( 'timepicker widget', () => {
 
     beforeEach( () => {
         format.locale = 'nl';

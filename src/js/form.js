@@ -359,9 +359,9 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
                 var value = element.textContent;
                 var name = that.model.getXPath( element, 'instance' );
                 const index = that.model.node( name ).getElements().indexOf( element );
-                const $control = that.input.find( name, index );
-                if ( $control.length ) {
-                    that.input.setVal( $control, value );
+                const control = that.input.find( name, index );
+                if ( control ) {
+                    that.input.setVal( control, value );
                 }
             } catch ( e ) {
                 console.error( e );
@@ -374,8 +374,9 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
 };
 
 Form.prototype.getModelValue = function( $control ) {
-    const path = this.input.getName( $control );
-    const index = this.input.getIndex( $control );
+    const control = $control[ 0 ];
+    const path = this.input.getName( control );
+    const index = this.input.getIndex( control );
     return this.model.node( path, index ).getVal();
 };
 
@@ -515,9 +516,10 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
     // the indices are still correct!
     this.getRelatedNodes( 'data-relevant' ).reverse().each( function() {
         const $node = $( this );
-        const relevant = that.input.getRelevant( $node );
-        const index = that.input.getIndex( $node );
-        const path = that.input.getName( $node );
+        const node = this;
+        const relevant = that.input.getRelevant( node );
+        const index = that.input.getIndex( node );
+        const path = that.input.getName( node );
         let context;
 
         /*
@@ -600,7 +602,7 @@ Form.prototype.validationUpdate = function( updated ) {
             .add( this.getRelatedNodes( 'data-required', '', upd ) );
 
         $nodes.each( function() {
-            that.validateInput( $( this ) );
+            that.validateInput( this );
         } );
     }
 };
@@ -627,28 +629,29 @@ Form.prototype.setEventHandlers = function() {
         'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)',
         function() {
             const $input = $( this );
+            const input = this;
             const n = {
-                path: that.input.getName( $input ),
-                inputType: that.input.getInputType( $input ),
-                xmlType: that.input.getXmlType( $input ),
-                val: that.input.getVal( $input ),
-                index: that.input.getIndex( $input )
+                path: that.input.getName( input ),
+                inputType: that.input.getInputType( input ),
+                xmlType: that.input.getXmlType( input ),
+                val: that.input.getVal( input ),
+                index: that.input.getIndex( input )
             };
 
             // set file input values to the uniqified actual name of file (without c://fakepath or anything like that)
-            if ( n.val.length > 0 && n.inputType === 'file' && $input[ 0 ].files[ 0 ] && $input[ 0 ].files[ 0 ].size > 0 ) {
-                n.val = getFilename( $input[ 0 ].files[ 0 ], $input[ 0 ].dataset.filenamePostfix );
+            if ( n.val.length > 0 && n.inputType === 'file' && input.files[ 0 ] && input.files[ 0 ].size > 0 ) {
+                n.val = getFilename( input.files[ 0 ], input.dataset.filenamePostfix );
             }
             if ( n.val.length > 0 && n.inputType === 'drawing' ) {
                 n.val = getFilename( {
                     name: n.val
-                }, $input[ 0 ].dataset.filenamePostfix );
+                }, input.dataset.filenamePostfix );
             }
 
             const updated = that.model.node( n.path, n.index ).setVal( n.val, n.xmlType );
 
             if ( updated ) {
-                that.validateInput( $input )
+                that.validateInput( input )
                     .then( valid => {
                         // propagate event externally after internal processing is completed
                         $input.trigger( 'valuechange', valid );
@@ -705,19 +708,19 @@ Form.prototype.setEventHandlers = function() {
     } );
 };
 
-Form.prototype.setValid = function( $node, type ) {
-    const classes = ( type ) ? `invalid-${type}` : 'invalid-constraint invalid-required invalid-relevant';
-    this.input.getWrapNodes( $node ).removeClass( classes );
+Form.prototype.setValid = function( node, type ) {
+    const classes = ( type ) ? [ `invalid-${type}` ] : [ 'invalid-constraint', 'invalid-required', 'invalid-relevant' ];
+    this.input.getWrapNode( node ).classList.remove( ...classes );
 };
 
-Form.prototype.setInvalid = function( $node, type ) {
+Form.prototype.setInvalid = function( node, type ) {
     type = type || 'constraint';
 
-    if ( config.validatePage === false && this.isValid( $node ) ) {
+    if ( config.validatePage === false && this.isValid( node ) ) {
         this.blockPageNavigation();
     }
 
-    this.input.getWrapNodes( $node ).addClass( `invalid-${type}` );
+    this.input.getWrapNode( node ).classList.add( `invalid-${type}` );
 };
 
 /**
@@ -739,13 +742,13 @@ Form.prototype.blockPageNavigation = function() {
  * @param $node
  * @return {!boolean} whether the question/form is not marked as invalid.
  */
-Form.prototype.isValid = function( $node ) {
-    let $question;
-    if ( $node ) {
-        $question = this.input.getWrapNodes( $node );
-        return !$question.hasClass( 'invalid-required' ) && !$question.hasClass( 'invalid-constraint' ) && !$question.hasClass( 'invalid-relevant' );
+Form.prototype.isValid = function( node ) {
+    if ( node ) {
+        const question = this.input.getWrapNode( node );
+        const cls = question.classList;
+        return !cls.contains( 'invalid-required' ) && !cls.contains( 'invalid-constraint' ) && !cls.contains( 'invalid-relevant' );
     }
-    return this.view.$.find( '.invalid-required, .invalid-constraint, .invalid-relevant' ).length === 0;
+    return this.view.html.querySelector( '.invalid-required, .invalid-constraint, .invalid-relevant' ) === null;
 };
 
 Form.prototype.clearIrrelevant = function() {
@@ -790,17 +793,17 @@ Form.prototype.validateContent = function( $container ) {
     //can't fire custom events on disabled elements therefore we set them all as valid
     $container.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +
         'input:disabled, select:disabled, textarea:disabled' ).each( function() {
-        that.setValid( $( this ) );
+        that.setValid( this );
     } );
 
     const validations = $container.find( '.question' ).addBack( '.question' ).map( function() {
         // only trigger validate on first input and use a **pure CSS** selector (huge performance impact)
-        const $elem = $( this )
-            .find( 'input:not(.ignore):not(:disabled), select:not(.ignore):not(:disabled), textarea:not(.ignore):not(:disabled)' );
-        if ( $elem.length === 0 ) {
+        const elem = this
+            .querySelector( 'input:not(.ignore):not(:disabled), select:not(.ignore):not(:disabled), textarea:not(.ignore):not(:disabled)' );
+        if ( !elem ) {
             return Promise.resolve();
         }
-        return that.validateInput( $elem.eq( 0 ) );
+        return that.validateInput( elem );
     } ).toArray();
 
     return Promise.all( validations )
@@ -842,10 +845,10 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
 /**
  * Validates question values.
  *
- * @param  {jQuery} $input    [description]
+ * @param  {Element} control    [description]
  * @return {Promise<undefined|ValidateInputResolution>} resolves with validation result
  */
-Form.prototype.validateInput = function( $input ) {
+Form.prototype.validateInput = function( control ) {
     if ( !this.initialized ) {
         return Promise.resolve();
     }
@@ -855,15 +858,15 @@ Form.prototype.validateInput = function( $input ) {
     // There is some scope for performance improvement by determining other properties when they
     // are needed, but that may not be so significant.
     const n = {
-        path: this.input.getName( $input ),
-        inputType: this.input.getInputType( $input ),
-        xmlType: this.input.getXmlType( $input ),
-        enabled: this.input.isEnabled( $input ),
-        constraint: this.input.getConstraint( $input ),
-        calculation: this.input.getCalculation( $input ),
-        required: this.input.getRequired( $input ),
-        readonly: this.input.getReadonly( $input ),
-        val: this.input.getVal( $input )
+        path: this.input.getName( control ),
+        inputType: this.input.getInputType( control ),
+        xmlType: this.input.getXmlType( control ),
+        enabled: this.input.isEnabled( control ),
+        constraint: this.input.getConstraint( control ),
+        calculation: this.input.getCalculation( control ),
+        required: this.input.getRequired( control ),
+        readonly: this.input.getReadonly( control ),
+        val: this.input.getVal( control )
     };
     // No need to validate, **nor send validation events**. Meant for simple empty "notes" only.
     if ( n.readonly && !n.val && !n.required && !n.constraint && !n.calculation ) {
@@ -874,7 +877,7 @@ Form.prototype.validateInput = function( $input ) {
     // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
     if ( n.enabled && n.inputType !== 'hidden' ) {
         // Only now, will we determine the index.
-        n.ind = this.input.getIndex( $input );
+        n.ind = this.input.getIndex( control );
         getValidationResult = this.model.node( n.path, n.ind ).validate( n.constraint, n.required, n.xmlType );
     } else {
         getValidationResult = Promise.resolve( {
@@ -889,31 +892,32 @@ Form.prototype.validateInput = function( $input ) {
             const passed = result.requiredValid !== false && result.constraintValid !== false;
 
             if ( n.inputType !== 'hidden' ) {
+
                 // Check current UI state
-                n.$q = that.input.getWrapNodes( $input );
-                previouslyInvalid = n.$q.hasClass( 'invalid-required' ) || n.$q.hasClass( 'invalid-constraint' );
+                n.q = that.input.getWrapNode( control );
+                previouslyInvalid = n.q.classList.contains( 'invalid-required' ) || n.q.classList.contains( 'invalid-constraint' );
 
                 // Update UI
                 if ( result.requiredValid === false ) {
-                    that.setValid( $input, 'constraint' );
-                    that.setInvalid( $input, 'required' );
+                    that.setValid( control, 'constraint' );
+                    that.setInvalid( control, 'required' );
                 } else if ( result.constraintValid === false ) {
-                    that.setValid( $input, 'required' );
-                    that.setInvalid( $input, 'constraint' );
+                    that.setValid( control, 'required' );
+                    that.setInvalid( control, 'constraint' );
                 } else {
-                    that.setValid( $input, 'constraint' );
-                    that.setValid( $input, 'required' );
+                    that.setValid( control, 'constraint' );
+                    that.setValid( control, 'required' );
                 }
             }
             // Send invalidated event
             if ( !passed && !previouslyInvalid ) {
-                $input[ 0 ].dispatchEvent( events.Invalidated() );
+                control.dispatchEvent( events.Invalidated() );
             }
             return passed;
         } )
         .catch( e => {
             console.error( 'validation error', e );
-            that.setInvalid( $input, 'constraint' );
+            that.setInvalid( control, 'constraint' );
             throw e;
         } );
 };
@@ -958,7 +962,7 @@ Form.prototype.getGoToTarget = function( path ) {
         }
     }
 
-    return target ? this.input.getWrapNodes( $( target ) ).get( 0 ) : target;
+    return target ? this.input.getWrapNode( target ) : target;
 };
 
 /**
@@ -992,6 +996,6 @@ Form.prototype.goToTarget = function( target ) {
 /**
  * Static method to obtain required enketo-transform version direct from class.
  */
-Form.requiredTransformerVersion = '1.30.1';
+Form.requiredTransformerVersion = '1.31.1';
 
 export { Form, FormModel };

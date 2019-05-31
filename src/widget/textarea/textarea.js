@@ -17,8 +17,10 @@ class TextareaWidget extends Widget {
             const el = event.target;
             if ( el.nodeName.toLowerCase() === 'textarea' ) {
                 if ( el.scrollHeight > el.clientHeight && el.scrollHeight > defaultHeight ) {
-                    // setting min-height instead of height, as height doesn't work in Grid Theme.
-                    el.style[ 'min-height' ] = `${el.scrollHeight}px`;
+                    // using height instead of min-height to allow user to resize smaller manually
+                    el.style[ 'height' ] = `${el.scrollHeight}px`;
+                    // for the Grid theme:
+                    el.style[ 'flex' ] = 'auto';
                 }
             }
         } );

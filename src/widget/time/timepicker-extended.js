@@ -70,10 +70,12 @@ class TimepickerExtended extends Widget {
     }
 
     update() {
-        $( this.element )
-            .next( '.widget' )
-            .find( 'input' )
-            .timepicker( 'setTime', this.element.value );
+        if ( this.element.value !== this.value ) {
+            $( this.element )
+                .next( '.widget' )
+                .find( 'input' )
+                .timepicker( 'setTime', this.element.value );
+        }
     }
 
     get value() {

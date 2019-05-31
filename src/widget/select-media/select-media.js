@@ -2,13 +2,13 @@ import Widget from '../../js/widget';
 import { getSiblingElements } from '../../js/dom-utils';
 
 /**
- * Compact Picker. Hides text labels if a media label is present.
+ * Media Picker. Hides text labels if a media label is present.
  * @extends Widget
  */
-class CompactPicker extends Widget {
+class MediaPicker extends Widget {
 
     static get selector() {
-        return '.or-appearance-compact, .or-appearance-quickcompact, [class*="or-appearance-compact-"]';
+        return '.or-appearance-no-buttons';
     }
 
     _init() {
@@ -21,4 +21,4 @@ class CompactPicker extends Widget {
 
 }
 
-export default CompactPicker;
+export default MediaPicker;

@@ -106,15 +106,6 @@ class AnalogScaleWidget extends RangeWidget {
 
     _stretchHeight() {
         this.question.style[ 'min-height' ] = 'auto';
-        const height = this.question.offsetHeight;
-        const form = this.question.closest( '.or' );
-        const diff = form.offsetTop + form.offsetHeight - this.question.offsetTop + height - 10;
-        //const diff = ( $form.offset().top + $form.height() ) - ( $question.offset().top + height ) - 10;
-        if ( diff ) {
-            // To somewhat avoid problems when a repeat is clone and height is set while the widget is detached
-            // we use min-height instead of height.
-            //this.question.style[ 'min-height' ] = `${height + diff}px`;
-        }
     }
 
     update() {
@@ -123,7 +114,6 @@ class AnalogScaleWidget extends RangeWidget {
     }
 
     get props() {
-        // TODO: use super.props() and override step, max, vertical?
         const props = this._props;
         props.touch = support.touch;
         props.min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;

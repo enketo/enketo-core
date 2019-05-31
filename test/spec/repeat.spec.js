@@ -48,7 +48,7 @@ describe( 'repeat functionality', () => {
             const nodeSelector = 'input[name="/thedata/repeatGroup/nodeC"]';
             const node3 = form.view.html.querySelectorAll( nodeSelector )[ 2 ];
 
-            form.setInvalid( $( node3 ) );
+            form.setInvalid( node3 );
 
             expect( form.view.html.querySelectorAll( repeatSelector ).length ).toEqual( 3 );
             expect( node3.parentElement.classList.contains( 'invalid-constraint' ) ).toBe( true );

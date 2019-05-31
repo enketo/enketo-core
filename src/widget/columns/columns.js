@@ -1,14 +1,15 @@
 import Widget from '../../js/widget';
 
 /**
- * Horizontal Choices Widgets. Adds a filler if the last row contains two elements.
+ * Column (select) Widgets. Adds a filler if the last row contains two elements.
  * The filler avoids the last radiobutton or checkbox to not be lined up correctly below the second column.
+ *
  * @extends Widget
  */
-class HorizontalChoices extends Widget {
+class Columns extends Widget {
 
     static get selector() {
-        return '.question.or-appearance-horizontal';
+        return '.question.or-appearance-columns';
     }
 
     _init() {
@@ -22,9 +23,9 @@ class HorizontalChoices extends Widget {
                 fillers--;
             }
             // if added to correct question type, add initialized class
-            this.question.classList.add( 'or-horizontal-initialized' );
+            this.question.classList.add( 'or-columns-initialized' );
         } );
     }
 }
 
-export default HorizontalChoices;
+export default Columns;

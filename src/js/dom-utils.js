@@ -24,12 +24,10 @@ function getSiblingElements( element, selector ) {
     return _getSiblingElements( element, selector );
 }
 
-function _getSiblingElements( element, selector, startArray = [] ) {
+function _getSiblingElements( element, selector = '*', startArray = [] ) {
     const siblings = startArray;
     let prev = element.previousElementSibling;
     let next = element.nextElementSibling;
-
-    selector = typeof selector === 'undefined' ? '*' : selector;
 
     while ( prev ) {
         if ( prev.matches( selector ) ) {
@@ -45,6 +43,35 @@ function _getSiblingElements( element, selector, startArray = [] ) {
         next = next.nextElementSibling;
     }
     return siblings;
+}
+
+function getAncestors( element, selector = '*' ) {
+    const ancestors = [];
+    let parent = element.parentElement;
+
+    while ( parent ) {
+        if ( parent.matches( selector ) ) {
+            // document order
+            ancestors.unshift( parent );
+        }
+        parent = parent.parentElement;
+    }
+
+    return ancestors;
+}
+
+function closestAncestorUntil( element, filterSelector, endSelector ) {
+    let parent = element.parentElement;
+    let found = null;
+
+    while ( parent && !found ) {
+        if ( parent.matches( filterSelector ) ) {
+            found = parent;
+        }
+        parent = endSelector && parent.matches( endSelector ) ? null : parent.parentElement;
+    }
+
+    return found;
 }
 
 /**
@@ -93,5 +120,7 @@ export {
     elementDataStore,
     getSiblingElementsAndSelf,
     getSiblingElements,
+    getAncestors,
+    closestAncestorUntil,
     empty,
 };

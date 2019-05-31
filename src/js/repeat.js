@@ -149,7 +149,7 @@ export default {
             return null;
         }
         const name = repeatInfo.dataset.name;
-        return [ ...repeatInfo.closest( 'form.or' ).querySelectorAll( `.or-repeat-info[data-name="${name}"` ) ].indexOf( repeatInfo );
+        return [ ...repeatInfo.closest( 'form.or' ).querySelectorAll( `.or-repeat-info[data-name="${name}"]` ) ].indexOf( repeatInfo );
     },
     /**
      * [updateViewInstancesFromModel description]

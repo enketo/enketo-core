@@ -4,49 +4,46 @@
 
 import types from './types';
 import events from './event';
+import { closestAncestorUntil } from './dom-utils';
 
 export default {
-    // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
-    getWrapNodes( $inputs ) {
-        const type = this.getInputType( $inputs.eq( 0 ) );
-        return ( type === 'fieldset' ) ? $inputs : $inputs.closest( '.question, .calculation' );
+    getWrapNode( control ) {
+        return control.closest( '.question, .calculation' );
     },
-    /**
-     * NOTE: very inefficient, should actually not be used
-     *
-     * @param $input
-     */
-    getProps( $input ) {
-        if ( $input.length !== 1 ) {
-            return console.error( 'getProps(): no input node provided or multiple' );
-        }
+    getWrapNodes( controls ) {
+        const result = [];
+        controls.forEach( control => {
+            const question = this.getWrapNode( control );
+            if ( !result.includes( question ) ) {
+                result.push( question );
+            }
+        } );
+        return result;
+    },
+    getProps( control ) {
         return {
-            path: this.getName( $input ),
-            ind: this.getIndex( $input ),
-            inputType: this.getInputType( $input ),
-            xmlType: this.getXmlType( $input ),
-            constraint: this.getConstraint( $input ),
-            calculation: this.getCalculation( $input ),
-            relevant: this.getRelevant( $input ),
-            readonly: this.getReadonly( $input ),
-            val: this.getVal( $input ),
-            required: this.getRequired( $input ),
-            enabled: this.isEnabled( $input ),
-            multiple: this.isMultiple( $input )
+            path: this.getName( control ),
+            ind: this.getIndex( control ),
+            inputType: this.getInputType( control ),
+            xmlType: this.getXmlType( control ),
+            constraint: this.getConstraint( control ),
+            calculation: this.getCalculation( control ),
+            relevant: this.getRelevant( control ),
+            readonly: this.getReadonly( control ),
+            val: this.getVal( control ),
+            required: this.getRequired( control ),
+            enabled: this.isEnabled( control ),
+            multiple: this.isMultiple( control )
         };
     },
-    getInputType( $input ) {
-        let nodeName;
-        if ( $input.length !== 1 ) {
-            return ''; //console.error('getInputType(): no input node provided or multiple');
-        }
-        nodeName = $input.prop( 'nodeName' ).toLowerCase();
+    getInputType( control ) {
+        const nodeName = control.nodeName.toLowerCase();
         if ( nodeName === 'input' ) {
-            if ( $input.data( 'drawing' ) ) {
+            if ( control.dataset.drawing ) {
                 return 'drawing';
             }
-            if ( $input.attr( 'type' ).length > 0 ) {
-                return $input.attr( 'type' ).toLowerCase();
+            if ( control.type ) {
+                return control.type.toLowerCase();
             }
             return console.error( '<input> node has no type' );
 
@@ -60,104 +57,100 @@ export default {
             return console.error( 'unexpected input node type provided' );
         }
     },
-    getConstraint( $input ) {
-        return $input.attr( 'data-constraint' );
+    getConstraint( control ) {
+        return control.dataset.constraint;
     },
-    getRequired( $input ) {
+    getRequired( control ) {
         // only return value if input is not a table heading input
-        if ( $input.parentsUntil( '.or', '.or-appearance-label' ).length === 0 ) {
-            return $input.attr( 'data-required' );
+        if ( !closestAncestorUntil( control, '.or-appearance-label', '.or' ) ) {
+            return control.dataset.required;
         }
     },
-    getRelevant( $input ) {
-        return $input.attr( 'data-relevant' );
+    getRelevant( control ) {
+        return control.dataset.relevant;
     },
-    getReadonly( $input ) {
-        return $input.is( '[readonly]' );
+    getReadonly( control ) {
+        return control.matches( '[readonly]' );
     },
-    getCalculation( $input ) {
-        return $input.attr( 'data-calculate' );
+    getCalculation( control ) {
+        return control.dataset.calculate;
     },
-    getXmlType( $input ) {
-        if ( $input.length !== 1 ) {
-            return console.error( 'getXMLType(): no input node provided or multiple' );
+    getXmlType( control ) {
+        return control.dataset.typeXml;
+    },
+    getName( control ) {
+        const name = control.dataset.name || control.getAttribute( 'name' );
+        if ( !name ) {
+            console.error( 'input node has no name' );
         }
-        return $input.attr( 'data-type-xml' );
+        return name;
     },
-    getName( $input ) {
-        let name;
-        if ( $input.length !== 1 ) {
-            return console.error( 'getName(): no input node provided or multiple' );
-        }
-        name = $input.attr( 'data-name' ) || $input.attr( 'name' );
-        return name || console.error( 'input node has no name' );
+    getIndex( control ) {
+        return this.form.repeats.getIndex( control.closest( '.or-repeat' ) );
     },
-    /**
-     * Used to retrieve the index of a question amidst all questions with the same name.
-     * The index that can be used to find the corresponding node in the model.
-     * NOTE: this function should be used sparingly, as it is CPU intensive!
-     *
-     * @param $input
-     */
-    getIndex( $input ) {
-        if ( $input.length !== 1 ) {
-            return console.error( 'getIndex(): no input node provided or multiple' );
-        }
-        return this.form.repeats.getIndex( $input[ 0 ].closest( '.or-repeat' ) );
+    isMultiple( control ) {
+        return this.getInputType( control ) === 'checkbox' || control.multiple;
     },
-    isMultiple( $input ) {
-        return ( this.getInputType( $input ) === 'checkbox' || $input.attr( 'multiple' ) !== undefined ) ? true : false;
+    isEnabled( control ) {
+        return !( control.disabled || closestAncestorUntil( control, '.disabled', '.or' ) );
     },
-    isEnabled( $input ) {
-        return !( $input.prop( 'disabled' ) || $input.parentsUntil( '.or', '.disabled' ).length > 0 );
-    },
-    getVal( $input ) {
-        let inputType;
-        const values = [];
-        let name;
+    getVal( control ) {
+        let value = '';
+        const inputType = this.getInputType( control );
+        const name = this.getName( control );
 
-        if ( $input.length !== 1 ) {
-            return console.error( 'getVal(): no inputNode provided or multiple' );
+        switch ( inputType ) {
+            case 'radio': {
+                const checked = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"]:checked` );
+                value = checked ? checked.value : '';
+                break;
+            }
+            case 'checkbox': {
+                value = [ ...this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]:checked` ) ].map( input => input.value );
+                break;
+            }
+            case 'select': {
+                if ( this.isMultiple( control ) ) {
+                    value = [ ...control.querySelectorAll( 'option:checked' ) ].map( option => option.value );
+                } else {
+                    const selected = control.querySelector( 'option:checked' );
+                    value = selected ? selected.value : '';
+                }
+                break;
+            }
+            default: {
+                value = control.value;
+            }
         }
-        inputType = this.getInputType( $input );
-        name = this.getName( $input );
 
-        if ( inputType === 'radio' ) {
-            return this.getWrapNodes( $input ).find( 'input:checked' ).val() || '';
-        }
-        // checkbox values bug in jQuery as (node.val() should work)
-        if ( inputType === 'checkbox' ) {
-            this.getWrapNodes( $input ).find( `input[name="${name}"]:checked` ).each( function() {
-                values.push( this.value );
-            } );
-            return values;
-        }
-        return $input.val() || '';
+        return value || '';
     },
     find( name, index ) {
         let attr = 'name';
-        if ( this.getInputType( this.form.view.$.find( `[data-name="${name}"]:not(.ignore)` ).eq( 0 ) ) === 'radio' ) {
+        if ( this.form.view.html.querySelector( `input[type="radio"][data-name="${name}"]:not(.ignore)` ) ) {
             attr = 'data-name';
         }
-        return this.getWrapNodes( this.form.view.$.find( `[${attr}="${name}"]` ) ).eq( index ).find( `[${attr}="${name}"]:not(.ignore)` ).eq( 0 );
+        const question = this.getWrapNodes( this.form.view.html.querySelectorAll( `[${attr}="${name}"]` ) )[ index ];
+
+        return question ? question.querySelector( `[${attr}="${name}"]:not(.ignore)` ) : null;
     },
-    setVal( $input, value, event = events.InputUpdate() ) {
-        let $inputs;
-        const type = this.getInputType( $input );
-        const $question = this.getWrapNodes( $input );
-        const name = this.getName( $input );
+    setVal( control, value, event = events.InputUpdate() ) {
+        let inputs;
+        const type = this.getInputType( control );
+        const question = this.getWrapNode( control );
+        const name = this.getName( control );
 
         if ( type === 'radio' ) {
-            // TODO: should this revert to name if data-name is not present. Is data-name always present on radiobuttons?
-            $inputs = $question.find( `[data-name="${name}"]:not(.ignore)` );
+            // data-name is always present on radiobuttons
+            inputs = question.querySelectorAll( `[data-name="${name}"]:not(.ignore)` );
         } else {
             // why not use this.getIndex?
-            $inputs = $question.find( `[name="${name}"]:not(.ignore)` );
+            inputs = question.querySelectorAll( `[name="${name}"]:not(.ignore)` );
 
             if ( type === 'file' ) {
                 // value of file input can be reset to empty but not to a non-empty value
                 if ( value ) {
-                    $input.attr( 'data-loaded-file-name', value );
+                    control.setAttribute( 'data-loaded-file-name', value );
                     // console.error('Cannot set value of file input field (value: '+value+'). If trying to load '+
                     //  'this record for editing this file input field will remain unchanged.');
                     return false;
@@ -192,7 +185,7 @@ export default {
             }
         }
 
-        if ( this.isMultiple( $input ) === true ) {
+        if ( this.isMultiple( control ) === true ) {
             // TODO: It's weird that setVal does not take an array value but getVal returns an array value for multiple selects!
             value = value.split( ' ' );
         } else if ( type === 'radio' ) {
@@ -201,20 +194,51 @@ export default {
 
         // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its
         // original input element has changed **programmatically**.
-        if ( $inputs.length ) {
-            const curVal = this.getVal( $input );
+        if ( inputs.length ) {
+            const curVal = this.getVal( control );
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
-                $inputs.val( value );
+                switch ( type ) {
+                    case 'radio': {
+                        const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
+                        if ( input ) {
+                            input.checked = true;
+                        }
+                        break;
+                    }
+                    case 'checkbox': {
+                        this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]` )
+                            .forEach( input => input.checked = value.includes( input.value ) );
+                        break;
+                    }
+                    case 'select': {
+                        if ( this.isMultiple( control ) ) {
+                            control.querySelectorAll( 'option' ).forEach( option => option.selected = value.includes( option.value ) );
+                        } else {
+                            const option = control.querySelector( `option[value="${value}"]` );
+                            if ( option ) {
+                                option.selected = true;
+                            } else {
+                                control.querySelectorAll( 'option' ).forEach( option => option.selected = false );
+                            }
+                        }
+                        break;
+                    }
+                    default: {
+                        control.value = value;
+                    }
+                }
+
+
                 // don't trigger on all radiobuttons/checkboxes
                 if ( event ) {
-                    $inputs[ 0 ].dispatchEvent( event );
+                    inputs[ 0 ].dispatchEvent( event );
                 }
             }
         }
 
-        return $inputs[ 0 ];
+        return inputs[ 0 ];
     },
-    validate( $input ) {
-        return this.form.validateInput( $input );
+    validate( control ) {
+        return this.form.validateInput( control );
     }
 };
