@@ -24,7 +24,7 @@ let Nodeset;
  * Class dealing with the XML Model of a form
  *
  * @class
- * @param {{modelStr: string, instanceStr: string=, external: {id: string, xml: xmlDocument}=, submitted: boolean= }} data - data object containing XML model, (partial) XML instance to load, external data array, flag to indicate whether data was submitted before
+ * @param {{modelStr: string, instanceStr: string=, external: {id: string, xml: XMLDocument}=, submitted: boolean= }} data - data object containing XML model, (partial) XML instance to load, external data array, flag to indicate whether data was submitted before
  * @param {{full:boolean=}=} options - Whether to initialize the full model or only the primary instance
  */
 FormModel = function( data, options ) {
@@ -228,8 +228,8 @@ FormModel.prototype.createSession = function( id, sessObj ) {
  * For some unknown reason we cannot use doc.getElementById(id) or doc.querySelector('#'+id)
  * in IE11. This function is a replacement for this specifically to find a secondary instance.
  *
- * @param  {string} id [description]
- * @return {Element}    [description]
+ * @param  {string} id - DOM element id.
+ * @return {Element}
  */
 FormModel.prototype.getSecondaryInstance = function( id ) {
     let instanceEl;
@@ -264,6 +264,9 @@ FormModel.prototype.node = function( selector, index, filter ) {
 /**
  * Alternative adoptNode on IE11 (http://stackoverflow.com/questions/1811116/ie-support-for-dom-importnode)
  * TODO: remove to be replaced by separate IE11-only polyfill file/service
+ *
+ * @param node
+ * @param allChildren
  */
 FormModel.prototype.importNode = function( node, allChildren ) {
     let i;
@@ -473,10 +476,11 @@ FormModel.prototype.mergeXml = function( recordStr ) {
 
 /**
  * Creates an XPath from a node
- * @param { XMLElement} node XML node
- * @param  {string=} rootNodeName   if absent the root is #document
- * @param  {boolean=} includePosition whether or not to include the positions /path/to/repeat[2]/node
- * @return {string}                 XPath
+ *
+ * @param { XMLElement} node - XML node
+ * @param  {string=} rootNodeName - if absent the root is #document
+ * @param  {boolean=} includePosition - whether or not to include the positions /path/to/repeat[2]/node
+ * @return {string} XPath
  */
 FormModel.prototype.getXPath = function( node, rootNodeName, includePosition ) {
     let index;
@@ -623,9 +627,9 @@ FormModel.prototype.getRepeatCommentEl = function( repeatPath, repeatSeriesIndex
 /**
  * Adds a <repeat>able instance node in a particular series of a repeat.
  *
- * @param  {string} repeatPath absolute path of a repeat
- * @param  {number} repeatSeriesIndex    index of the repeat series that gets a new repeat (this is always 0 for non-nested repeats)
- * @param  {boolean} merge   whether this operation is part of a merge operation (won't send dataupdate event, clears all values and
+ * @param  {string} repeatPath - absolute path of a repeat
+ * @param  {number} repeatSeriesIndex - index of the repeat series that gets a new repeat (this is always 0 for non-nested repeats)
+ * @param  {boolean} merge - whether this operation is part of a merge operation (won't send dataupdate event, clears all values and
  *                           will not add ordinal attributes as these should be provided in the record)
  */
 FormModel.prototype.addRepeat = function( repeatPath, repeatSeriesIndex, merge ) {
@@ -775,8 +779,8 @@ FormModel.prototype.hasPreviousCommentSiblingWithContent = ( node, content ) => 
 /**
  * Determines the index of a repeated node amongst all nodes with the same XPath selector
  *
- * @param  {Element} element element
- * @return {number}       [description]
+ * @param  {Element} element
+ * @return {number} determined index.
  */
 FormModel.prototype.determineIndex = function( element ) {
     const that = this;
@@ -1092,8 +1096,10 @@ FormModel.prototype.replaceCurrentFn = ( expr, contextSelector ) => {
  * Replaces indexed-repeat(node, path, position, path, position, etc) substrings by converting them
  * to their native XPath equivalents using [position() = x] predicates
  *
- * @param  {string} expr the XPath expression
- * @return {string}      converted XPath expression
+ * @param  {string} expr - the XPath expression.
+ * @param  {string} selector
+ * @param  {string} index
+ * @return {string} converted XPath expression
  */
 FormModel.prototype.replaceIndexedRepeatFn = function( expr, selector, index ) {
     const that = this;
@@ -1344,11 +1350,11 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
 /**
  * Class dealing with nodes and nodesets of the XML instance
  *
- * @constructor
- * @param {string=} selector simpleXPath or jQuery selectedor
- * @param {number=} index    the index of the target node with that selector
- * @param {?{onlyLeaf: boolean, noEmpty: boolean}=} filter   filter object for the result nodeset
- * @param { FormModel } model instance of FormModel
+ * @class
+ * @param {string=} selector - simpleXPath or jQuery selectedor
+ * @param {number=} index - the index of the target node with that selector
+ * @param {?{onlyLeaf: boolean, noEmpty: boolean}=} filter - filter object for the result nodeset
+ * @param { FormModel } model - instance of FormModel
  */
 Nodeset = function( selector, index, filter, model ) {
     const defaultSelector = model.hasInstance ? '/model/instance[1]//*' : '//*';
@@ -1545,9 +1551,10 @@ Nodeset.prototype.remove = function() {
 
 /**
  * Convert a value to a specified data type( though always stringified )
- * @param  {?string=} x           value to convert
- * @param  {?string=} xmlDataType XML data type
- * @return {string}               string representation of converted value
+ *
+ * @param  {?string=} x - value to convert
+ * @param  {?string=} xmlDataType - XML data type
+ * @return {string} - string representation of converted value
  */
 Nodeset.prototype.convert = ( x, xmlDataType ) => {
     if ( x.toString() === '' ) {
@@ -1579,8 +1586,9 @@ Nodeset.prototype.validate = function( constraintExpr, requiredExpr, xmlDataType
 
 /**
  * Validate a value with an XPath Expression and /or xml data type
- * @param  {?string=} expr        XPath expression
- * @param  {?string=} xmlDataType XML datatype
+ *
+ * @param  {?string=} expr - XPath expression
+ * @param  {?string=} xmlDataType - XML datatype
  * @return {Promise} wrapping a boolean indicating if the value is valid or not; error also indicates invalid field, or problem validating it
  */
 Nodeset.prototype.validateConstraintAndType = function( expr, xmlDataType ) {

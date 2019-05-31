@@ -6,8 +6,9 @@ import 'enketo-xpathjs/src/date-extensions';
 
 /**
  * Pads a string with prefixed zeros until the requested string length is achieved.
- * @param  {number} digits [description]
- * @return {String|string}        [description]
+ *
+ * @param  {number} digits - The desired string length.
+ * @return {string} - Padded string.
  */
 String.prototype.pad = function( digits ) {
     let x = this;

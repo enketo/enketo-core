@@ -5,7 +5,7 @@ The engine that powers [Enketo Smart Paper](https://enketo.org) and various thir
 
 This repo is meant to use as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of an Enketo-powered application and how Enketo Core fits into this.
 
-Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
+Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date. Read more about in-depth of the engine at [documentation](http://enketo.github.io/enketo-core).
 
 ### Sponsors
 

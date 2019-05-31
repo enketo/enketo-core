@@ -11,7 +11,11 @@ export default {
         const type = this.getInputType( $inputs.eq( 0 ) );
         return ( type === 'fieldset' ) ? $inputs : $inputs.closest( '.question, .calculation' );
     },
-    /** very inefficient, should actually not be used **/
+    /**
+     * NOTE: very inefficient, should actually not be used
+     *
+     * @param $input
+     */
     getProps( $input ) {
         if ( $input.length !== 1 ) {
             return console.error( 'getProps(): no input node provided or multiple' );
@@ -92,6 +96,8 @@ export default {
      * Used to retrieve the index of a question amidst all questions with the same name.
      * The index that can be used to find the corresponding node in the model.
      * NOTE: this function should be used sparingly, as it is CPU intensive!
+     *
+     * @param $input
      */
     getIndex( $input ) {
         if ( $input.length !== 1 ) {
@@ -193,7 +199,7 @@ export default {
             value = [ value ];
         }
 
-        // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
+        // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its
         // original input element has changed **programmatically**.
         if ( $inputs.length ) {
             const curVal = this.getVal( $input );

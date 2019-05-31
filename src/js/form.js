@@ -336,9 +336,12 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
 };
 
 /**
- *  Uses current state of model to set all the values in the form.
- *  Since not all data nodes with a value have a corresponding input element,
- *  we cycle through the HTML form elements and check for each form element whether data is available.
+ * Uses current state of model to set all the values in the form.
+ * Since not all data nodes with a value have a corresponding input element,
+ * we cycle through the HTML form elements and check for each form element whether data is available.
+ *
+ * @param $group
+ * @param groupIndex
  */
 Form.prototype.setAllVals = function( $group, groupIndex ) {
     const that = this;
@@ -379,10 +382,10 @@ Form.prototype.getModelValue = function( $control ) {
 /**
  * Finds nodes that have attributes with XPath expressions that refer to particular XML elements.
  *
- * @param  {string} attribute The attribute name to search for
- * @param  {?string} filter   The optional filter to append to each selector
- * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
- * @return {jQuery}           A jQuery collection of elements
+ * @param  {string} attr - The attribute name to search for
+ * @param  {?string} filter - The optional filter to append to each selector
+ * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated - The object containing info on updated data nodes
+ * @return {jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     let $collection;
@@ -568,6 +571,8 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
  * This re-validates questions that have a dependency on a question that has just been updated.
  *
  * Note: it does not take care of re-validating a question itself after its value has changed due to a calculation update!
+ *
+ * @param {Object} updated
  */
 Form.prototype.validationUpdate = function( updated ) {
     let $nodes;
@@ -731,6 +736,7 @@ Form.prototype.blockPageNavigation = function() {
 /**
  * Checks whether the question is not currently marked as invalid. If no argument is provided, it checks the whole form.
  *
+ * @param $node
  * @return {!boolean} whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function( $node ) {
@@ -773,6 +779,8 @@ Form.prototype.validate = Form.prototype.validateAll;
 
 /**
  * Validates all enabled input fields in the supplied container, after first resetting everything as valid.
+ *
+ * @param $container
  * @return {Promise} wrapping {boolean} whether the container contains any errors
  */
 Form.prototype.validateContent = function( $container ) {
@@ -956,7 +964,7 @@ Form.prototype.getGoToTarget = function( path ) {
 /**
  * Scrolls to a HTML Element, flips to the page it is on and focuses on the nearest form control.
  *
- * @param  {HTMLElement} target A HTML element to scroll to
+ * @param {HTMLElement} target - A HTML element to scroll to
  */
 Form.prototype.goToTarget = function( target ) {
     if ( target ) {

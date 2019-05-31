@@ -1,4 +1,4 @@
-// This is NOT a complete list of all enketo-core UI strings. Use a parser to find 
+// This is NOT a complete list of all enketo-core UI strings. Use a parser to find
 // all strings. E.g. https://github.com/i18next/i18next-parser
 const SOURCE_STRINGS = {
     'constraint': {
@@ -88,8 +88,8 @@ const SOURCE_STRINGS = {
 /**
  * Meant to be replaced by a real translator in the app that consumes enketo-core
  *
- * @param  {string} key translation key
- * @param  {*} key translation options
+ * @param  {string} key - translation key
+ * @param  {*} options - translation options
  * @return {string} translation output
  */
 function t( key, options ) {
