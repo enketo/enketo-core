@@ -1,5 +1,4 @@
-Events in Enketo Core
-=======================
+### Events in Enketo Core
 
 ##### inputupdate
 Fired on a form control when it is programmatically updated and when this results in a change in value

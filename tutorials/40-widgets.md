@@ -1,5 +1,4 @@
-Widgets in Enketo Core
-=======================
+### Widgets in Enketo Core
 
 Widgets extend the [Widget class](../src/js/widget.js). This is an example:
 

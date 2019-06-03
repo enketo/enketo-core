@@ -1,26 +1,20 @@
 {
-    "01-getting-started": {
+    "00-getting-started": {
         "title": "Getting started"
     },
-    "02-global-configuration": {
+    "10-configuration": {
         "title": "Configuration"
     },
-    "03-browser-support": {
-        "title": "Browser support"
-    },
-    "04-development": {
+    "20-development": {
         "title": "Development"
     },
-    "05-notes-js": {
-        "title": "JS rules"
-    },
-    "06-notes-css": {
-        "title": "CSS rules"
-    },
-    "07-events": {
+    "30-events": {
         "title": "Available events"
     },
-    "08-widgets": {
+    "40-widgets": {
         "title": "Creating/extending widgets"
+    },
+    "90-ie11": {
+        "title": "IE11"
     }
 }

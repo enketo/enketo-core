@@ -1,11 +1,30 @@
 Enketo Core [![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core?type=dev) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijnr/enketo-core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=enketo/enketo-core&amp;utm_campaign=Badge_Grade)
 ===============
 
-The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [these](https://enketo.org/about/adoption/).
+The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [this selection](https://enketo.org/about/adoption/).
 
-This repo is meant to use as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of an Enketo-powered application and how Enketo Core fits into this.
+Enketo's form engine is compatible with tools in the ODK ecosystem and complies with its [XForms specification](https://opendatakit.github.io/xforms-spec/) though not all features in that specification have been implemented yet.
 
-Follow the [Enketo blog](http://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date. Read more about in-depth of the engine at [documentation](http://enketo.github.io/enketo-core).
+This repo is meant to be used as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of a real-life full-fledged data collection application and how Enketo Core fits into this.
+
+**To get started visit our [technical documentation](https://enketo.github.io/enketo-core).**
+
+Follow the [Enketo blog](https://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date. 
+
+
+### Browser support
+
+The following browsers are officially supported:
+* latest Android webview on latest Android OS
+* latest WKWebView on latest iOS
+* latest version of Chrome/Chromium on OS X, Linux, Windows, Android and iOS
+* latest version of Firefox on OS X, Windows, Linux, Android and iOS
+* latest version of Safari on OS X, Windows, and on the latest version of iOS
+* latest version of Microsoft Edge
+
+We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
+
+[Here is some guidance](https://enketo.github.io/enketo-core/docs/tutorial-90-ie11.html) that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.
 
 ### Sponsors
 
