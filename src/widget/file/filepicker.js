@@ -14,6 +14,7 @@ import { empty } from '../../js/dom-utils';
 /**
  * FilePicker that works both offline and online. It abstracts the file storage/cache away
  * with the injected fileManager.
+ * @extends Widget
  */
 class Filepicker extends Widget {
 
@@ -60,7 +61,7 @@ class Filepicker extends Widget {
             this._showFeedback( t( 'filepicker.waitingForPermissions' ), 'warning' );
         }
 
-        // Monitor maxSize changes to update placeholder text. This facilitates asynchronous 
+        // Monitor maxSize changes to update placeholder text. This facilitates asynchronous
         // obtaining of max size from server without slowing down form loading.
         this._updatePlaceholder();
         $( this.element.closest( 'form.or' ) ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
@@ -170,7 +171,7 @@ class Filepicker extends Widget {
             } );
 
         this.fakeInput.addEventListener( 'click', event => {
-            /* 
+            /*
                 The purpose of this handler is to selectively propagate clicks on the fake
                 input to the underlying file input (to show the file picker window).
                 It blocks propagation if the filepicker has a value to avoid accidentally

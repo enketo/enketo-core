@@ -3,7 +3,7 @@
  */
 
 /**
- * @param {String | {message: String, heading: String}} content Dialog content
+ * @param {string | {message: string, heading: string}} content - Dialog content
  */
 function alert( content ) {
     window.alert( content );
@@ -11,7 +11,7 @@ function alert( content ) {
 }
 
 /**
- * @param {String | {message: String, heading: String}} content Dialog content
+ * @param {string | {message: string, heading: string}} content - Dialog content
  */
 function confirm( content ) {
     const msg = content.message ? content.message : content;

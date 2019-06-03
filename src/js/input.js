@@ -20,7 +20,6 @@ export default {
         } );
         return result;
     },
-    /** very inefficient, should actually not be used **/
     getProps( control ) {
         return {
             path: this.getName( control ),
@@ -101,27 +100,31 @@ export default {
         const name = this.getName( control );
 
         switch ( inputType ) {
-            case 'radio': {
-                const checked = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"]:checked` );
-                value = checked ? checked.value : '';
-                break;
-            }
-            case 'checkbox': {
-                value = [ ...this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]:checked` ) ].map( input => input.value );
-                break;
-            }
-            case 'select': {
-                if ( this.isMultiple( control ) ) {
-                    value = [ ...control.querySelectorAll( 'option:checked' ) ].map( option => option.value );
-                } else {
-                    const selected = control.querySelector( 'option:checked' );
-                    value = selected ? selected.value : '';
+            case 'radio':
+                {
+                    const checked = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"]:checked` );
+                    value = checked ? checked.value : '';
+                    break;
                 }
-                break;
-            }
-            default: {
-                value = control.value;
-            }
+            case 'checkbox':
+                {
+                    value = [ ...this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]:checked` ) ].map( input => input.value );
+                    break;
+                }
+            case 'select':
+                {
+                    if ( this.isMultiple( control ) ) {
+                        value = [ ...control.querySelectorAll( 'option:checked' ) ].map( option => option.value );
+                    } else {
+                        const selected = control.querySelector( 'option:checked' );
+                        value = selected ? selected.value : '';
+                    }
+                    break;
+                }
+            default:
+                {
+                    value = control.value;
+                }
         }
 
         return value || '';
@@ -193,40 +196,44 @@ export default {
             value = [ value ];
         }
 
-        // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
+        // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its
         // original input element has changed **programmatically**.
         if ( inputs.length ) {
             const curVal = this.getVal( control );
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
                 switch ( type ) {
-                    case 'radio': {
-                        const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
-                        if ( input ) {
-                            input.checked = true;
-                        }
-                        break;
-                    }
-                    case 'checkbox': {
-                        this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]` )
-                            .forEach( input => input.checked = value.includes( input.value ) );
-                        break;
-                    }
-                    case 'select': {
-                        if ( this.isMultiple( control ) ) {
-                            control.querySelectorAll( 'option' ).forEach( option => option.selected = value.includes( option.value ) );
-                        } else {
-                            const option = control.querySelector( `option[value="${value}"]` );
-                            if ( option ) {
-                                option.selected = true;
-                            } else {
-                                control.querySelectorAll( 'option' ).forEach( option => option.selected = false );
+                    case 'radio':
+                        {
+                            const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
+                            if ( input ) {
+                                input.checked = true;
                             }
+                            break;
                         }
-                        break;
-                    }
-                    default: {
-                        control.value = value;
-                    }
+                    case 'checkbox':
+                        {
+                            this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]` )
+                            .forEach( input => input.checked = value.includes( input.value ) );
+                            break;
+                        }
+                    case 'select':
+                        {
+                            if ( this.isMultiple( control ) ) {
+                                control.querySelectorAll( 'option' ).forEach( option => option.selected = value.includes( option.value ) );
+                            } else {
+                                const option = control.querySelector( `option[value="${value}"]` );
+                                if ( option ) {
+                                    option.selected = true;
+                                } else {
+                                    control.querySelectorAll( 'option' ).forEach( option => option.selected = false );
+                                }
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            control.value = value;
+                        }
                 }
 
 

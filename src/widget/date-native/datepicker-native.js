@@ -6,12 +6,12 @@ import { elementDataStore as data } from '../../js/dom-utils';
  * The whole purpose of this widget is to hide the placeholder text on native date inputs
  * and show a consistent date format between readonly and non-readonly questions. This widget
  * is only activated for READONLY questions on NON-MOBILE devices.
- * 
- * The placeholder is considered particularly unhelpful for month-year and year appearances. 
+ *
+ * The placeholder is considered particularly unhelpful for month-year and year appearances.
  * For consistency it's also removed from regular date inputs.
- * 
+ *
+ * @extends Widget
  */
-
 class DatepickerNative extends Widget {
     static get selector() {
         return '.question input[type="date"]';

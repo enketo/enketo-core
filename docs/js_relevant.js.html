@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>js/relevant.js - Enketo Core</title>
+    
+    <meta name="description" content="Extensible Enketo form engine" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/enketo/enketo-core" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h2><a href="https://github.com/enketo/enketo-core/blob/master/CHANGELOG.md" target="_blank" class="menu-item" id="change-log" >Change log</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-01-getting-started.html">Getting started</a></li><li><a href="tutorial-02-global-configuration.html">Configuration</a></li><li><a href="tutorial-03-browser-support.html">Browser support</a></li><li><a href="tutorial-04-development.html">Development</a></li><li><a href="tutorial-05-notes-js.html">JS rules</a></li><li><a href="tutorial-06-notes-css.html">CSS rules</a></li><li><a href="tutorial-07-events.html">Available events</a></li><li><a href="tutorial-08-widgets.html">Creating/extending widgets</a></li></ul><h3>Classes</h3><ul><li><a href="AnalogScaleWidget.html">AnalogScaleWidget</a><ul class='methods'><li data-type='method'><a href="AnalogScaleWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_renderLabels">_renderLabels</a></li><li data-type='method'><a href="AnalogScaleWidget.html#disable">disable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#enable">enable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#update">update</a></li></ul></li><li><a href="ArcGisGeopicker.html">ArcGisGeopicker</a><ul class='methods'><li data-type='method'><a href="ArcGisGeopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addEsriLocate">_addEsriLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addRegularLocate">_addRegularLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="ArcGisGeopicker.html#disable">disable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#enable">enable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#update">update</a></li></ul></li><li><a href="AutocompleteSelectpicker.html">AutocompleteSelectpicker</a><ul class='methods'><li data-type='method'><a href="AutocompleteSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#update">update</a></li></ul></li><li><a href="Comment.html">Comment</a><ul class='methods'><li data-type='method'><a href="Comment.html#disable">disable</a></li><li data-type='method'><a href="Comment.html#enable">enable</a></li><li data-type='method'><a href="Comment.html#update">update</a></li></ul></li><li><a href="CompactPicker.html">CompactPicker</a><ul class='methods'><li data-type='method'><a href="CompactPicker.html#disable">disable</a></li><li data-type='method'><a href="CompactPicker.html#enable">enable</a></li><li data-type='method'><a href="CompactPicker.html#update">update</a></li></ul></li><li><a href="DatepickerExtended.html">DatepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatepickerExtended.html#_createFakeDateInput">_createFakeDateInput</a></li><li data-type='method'><a href="DatepickerExtended.html#_setChangeHandler">_setChangeHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setFocusHandler">_setFocusHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setResetHandler">_setResetHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatepickerExtended.html#update">update</a></li></ul></li><li><a href="DatepickerMobile.html">DatepickerMobile</a><ul class='methods'><li data-type='method'><a href="DatepickerMobile.html#disable">disable</a></li><li data-type='method'><a href="DatepickerMobile.html#enable">enable</a></li><li data-type='method'><a href="DatepickerMobile.html#update">update</a></li></ul></li><li><a href="DatepickerNative.html">DatepickerNative</a><ul class='methods'><li data-type='method'><a href="DatepickerNative.html#disable">disable</a></li><li data-type='method'><a href="DatepickerNative.html#enable">enable</a></li><li data-type='method'><a href="DatepickerNative.html#update">update</a></li></ul></li><li><a href="DatetimepickerExtended.html">DatetimepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatetimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#update">update</a></li></ul></li><li><a href="DesktopSelectpicker.html">DesktopSelectpicker</a><ul class='methods'><li data-type='method'><a href="DesktopSelectpicker.html#_createSelectedStr">_createSelectedStr</a></li><li data-type='method'><a href="DesktopSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#update">update</a></li></ul></li><li><a href="DrawWidget.html">DrawWidget</a><ul class='methods'><li data-type='method'><a href="DrawWidget.html#_loadFileIntoPad">_loadFileIntoPad</a></li><li data-type='method'><a href="DrawWidget.html#disable">disable</a></li><li data-type='method'><a href="DrawWidget.html#enable">enable</a></li><li data-type='method'><a href="DrawWidget.html#update">update</a></li></ul></li><li><a href="Filepicker.html">Filepicker</a><ul class='methods'><li data-type='method'><a href="Filepicker.html#disable">disable</a></li><li data-type='method'><a href="Filepicker.html#enable">enable</a></li><li data-type='method'><a href="Filepicker.html#update">update</a></li></ul></li><li><a href="Form.html">Form</a><ul class='members'><li data-type='member'><a href="Form.html#.requiredTransformerVersion">requiredTransformerVersion</a></li><li data-type='member'><a href="Form.html#validate">validate</a></li></ul><ul class='methods'><li data-type='method'><a href="Form.html#addModule">addModule</a></li><li data-type='method'><a href="Form.html#blockPageNavigation">blockPageNavigation</a></li><li data-type='method'><a href="Form.html#getDataStr">getDataStr</a></li><li data-type='method'><a href="Form.html#getDataStrWithoutIrrelevantNodes">getDataStrWithoutIrrelevantNodes</a></li><li data-type='method'><a href="Form.html#getQuerySelectorsForLogic">getQuerySelectorsForLogic</a></li><li data-type='method'><a href="Form.html#getRelatedNodes">getRelatedNodes</a></li><li data-type='method'><a href="Form.html#goToTarget">goToTarget</a></li><li data-type='method'><a href="Form.html#grosslyViolateStandardComplianceByIgnoringCertainCalcs">grosslyViolateStandardComplianceByIgnoringCertainCalcs</a></li><li data-type='method'><a href="Form.html#init">init</a></li><li data-type='method'><a href="Form.html#isValid">isValid</a></li><li data-type='method'><a href="Form.html#replaceChoiceNameFn">replaceChoiceNameFn</a></li><li data-type='method'><a href="Form.html#resetView">resetView</a></li><li data-type='method'><a href="Form.html#setAllVals">setAllVals</a></li><li data-type='method'><a href="Form.html#validateAll">validateAll</a></li><li data-type='method'><a href="Form.html#validateContent">validateContent</a></li><li data-type='method'><a href="Form.html#validateInput">validateInput</a></li><li data-type='method'><a href="Form.html#validationUpdate">validationUpdate</a></li></ul></li><li><a href="FormModel.html">FormModel</a><ul class='methods'><li data-type='method'><a href="FormModel.html#addRepeat">addRepeat</a></li><li data-type='method'><a href="FormModel.html#determineIndex">determineIndex</a></li><li data-type='method'><a href="FormModel.html#evaluate">evaluate</a></li><li data-type='method'><a href="FormModel.html#extractTemplates">extractTemplates</a></li><li data-type='method'><a href="FormModel.html#getRepeatIndex">getRepeatIndex</a></li><li data-type='method'><a href="FormModel.html#getRepeatSeries">getRepeatSeries</a></li><li data-type='method'><a href="FormModel.html#getSecondaryInstance">getSecondaryInstance</a></li><li data-type='method'><a href="FormModel.html#getStr">getStr</a></li><li data-type='method'><a href="FormModel.html#getXPath">getXPath</a></li><li data-type='method'><a href="FormModel.html#importNode">importNode</a></li><li data-type='method'><a href="FormModel.html#init">init</a></li><li data-type='method'><a href="FormModel.html#makeBugCompliant">makeBugCompliant</a></li><li data-type='method'><a href="FormModel.html#mergeXml">mergeXml</a></li><li data-type='method'><a href="FormModel.html#node">node</a></li><li data-type='method'><a href="FormModel.html#replaceCurrentFn">replaceCurrentFn</a></li><li data-type='method'><a href="FormModel.html#replaceIndexedRepeatFn">replaceIndexedRepeatFn</a></li><li data-type='method'><a href="FormModel.html#replaceInstanceFn">replaceInstanceFn</a></li><li data-type='method'><a href="FormModel.html#setInstanceIdAndDeprecatedId">setInstanceIdAndDeprecatedId</a></li><li data-type='method'><a href="FormModel.html#shiftRoot">shiftRoot</a></li><li data-type='method'><a href="FormModel.html#trimValues">trimValues</a></li></ul></li><li><a href="Geopicker.html">Geopicker</a><ul class='methods'><li data-type='method'><a href="Geopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="Geopicker.html#_addPointBtn">_addPointBtn</a></li><li data-type='method'><a href="Geopicker.html#_convertKmlCoordinatesToLeafletCoordinates">_convertKmlCoordinatesToLeafletCoordinates</a></li><li data-type='method'><a href="Geopicker.html#_dynamicMapAvailable">_dynamicMapAvailable</a></li><li data-type='method'><a href="Geopicker.html#_editPoint">_editPoint</a></li><li data-type='method'><a href="Geopicker.html#_enableDetection">_enableDetection</a></li><li data-type='method'><a href="Geopicker.html#_enableSearch">_enableSearch</a></li><li data-type='method'><a href="Geopicker.html#_getGoogleTileLayer">_getGoogleTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getLayers">_getLayers</a></li><li data-type='method'><a href="Geopicker.html#_getLeafletTileLayer">_getLeafletTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getTileOptions">_getTileOptions</a></li><li data-type='method'><a href="Geopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLngList">_isValidLatLngList</a></li><li data-type='method'><a href="Geopicker.html#_loadGoogleMapsScript">_loadGoogleMapsScript</a></li><li data-type='method'><a href="Geopicker.html#_markAsInvalid">_markAsInvalid</a></li><li data-type='method'><a href="Geopicker.html#_markAsValid">_markAsValid</a></li><li data-type='method'><a href="Geopicker.html#_removePoint">_removePoint</a></li><li data-type='method'><a href="Geopicker.html#_setCurrent">_setCurrent</a></li><li data-type='method'><a href="Geopicker.html#_updateArea">_updateArea</a></li><li data-type='method'><a href="Geopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="Geopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="Geopicker.html#_updateMarkers">_updateMarkers</a></li><li data-type='method'><a href="Geopicker.html#_updatePolygon">_updatePolygon</a></li><li data-type='method'><a href="Geopicker.html#_updatePolyline">_updatePolyline</a></li><li data-type='method'><a href="Geopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="Geopicker.html#containsEmptyPoints">containsEmptyPoints</a></li><li data-type='method'><a href="Geopicker.html#disable">disable</a></li><li data-type='method'><a href="Geopicker.html#enable">enable</a></li><li data-type='method'><a href="Geopicker.html#update">update</a></li><li data-type='method'><a href="Geopicker.html#updatedPolylineWouldIntersect">updatedPolylineWouldIntersect</a></li></ul></li><li><a href="HorizontalChoices.html">HorizontalChoices</a><ul class='methods'><li data-type='method'><a href="HorizontalChoices.html#disable">disable</a></li><li data-type='method'><a href="HorizontalChoices.html#enable">enable</a></li><li data-type='method'><a href="HorizontalChoices.html#update">update</a></li></ul></li><li><a href="ImageMap.html">ImageMap</a><ul class='methods'><li data-type='method'><a href="ImageMap.html#_removeUnmatchedIds">_removeUnmatchedIds</a></li><li data-type='method'><a href="ImageMap.html#_updateImage">_updateImage</a></li><li data-type='method'><a href="ImageMap.html#disable">disable</a></li><li data-type='method'><a href="ImageMap.html#enable">enable</a></li><li data-type='method'><a href="ImageMap.html#update">update</a></li></ul></li><li><a href="ImageViewer.html">ImageViewer</a><ul class='methods'><li data-type='method'><a href="ImageViewer.html#disable">disable</a></li><li data-type='method'><a href="ImageViewer.html#enable">enable</a></li><li data-type='method'><a href="ImageViewer.html#update">update</a></li></ul></li><li><a href="MobileSelectPicker.html">MobileSelectPicker</a><ul class='methods'><li data-type='method'><a href="MobileSelectPicker.html#_showSelectedValues">_showSelectedValues</a></li><li data-type='method'><a href="MobileSelectPicker.html#disable">disable</a></li><li data-type='method'><a href="MobileSelectPicker.html#enable">enable</a></li><li data-type='method'><a href="MobileSelectPicker.html#update">update</a></li></ul></li><li><a href="Nodeset.html">Nodeset</a><ul class='methods'><li data-type='method'><a href="Nodeset.html#convert">convert</a></li><li data-type='method'><a href="Nodeset.html#getVal">getVal</a></li><li data-type='method'><a href="Nodeset.html#remove">remove</a></li><li data-type='method'><a href="Nodeset.html#setIndex">setIndex</a></li><li data-type='method'><a href="Nodeset.html#setVal">setVal</a></li><li data-type='method'><a href="Nodeset.html#validateConstraintAndType">validateConstraintAndType</a></li></ul></li><li><a href="Radiopicker.html">Radiopicker</a><ul class='methods'><li data-type='method'><a href="Radiopicker.html#disable">disable</a></li><li data-type='method'><a href="Radiopicker.html#enable">enable</a></li><li data-type='method'><a href="Radiopicker.html#update">update</a></li></ul></li><li><a href="RangeWidget.html">RangeWidget</a><ul class='methods'><li data-type='method'><a href="RangeWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="RangeWidget.html#disable">disable</a></li><li data-type='method'><a href="RangeWidget.html#enable">enable</a></li><li data-type='method'><a href="RangeWidget.html#update">update</a></li></ul></li><li><a href="RankWidget.html">RankWidget</a><ul class='methods'><li data-type='method'><a href="RankWidget.html#disable">disable</a></li><li data-type='method'><a href="RankWidget.html#enable">enable</a></li><li data-type='method'><a href="RankWidget.html#update">update</a></li></ul></li><li><a href="TextareaWidget.html">TextareaWidget</a><ul class='methods'><li data-type='method'><a href="TextareaWidget.html#disable">disable</a></li><li data-type='method'><a href="TextareaWidget.html#enable">enable</a></li><li data-type='method'><a href="TextareaWidget.html#update">update</a></li></ul></li><li><a href="TextMaxWidget.html">TextMaxWidget</a></li><li><a href="TimepickerExtended.html">TimepickerExtended</a><ul class='methods'><li data-type='method'><a href="TimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="TimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="TimepickerExtended.html#update">update</a></li></ul></li><li><a href="UrlWidget.html">UrlWidget</a><ul class='methods'><li data-type='method'><a href="UrlWidget.html#disable">disable</a></li><li data-type='method'><a href="UrlWidget.html#enable">enable</a></li><li data-type='method'><a href="UrlWidget.html#update">update</a></li></ul></li><li><a href="Widget.html">Widget</a><ul class='members'><li data-type='member'><a href="Widget.html#.list">list</a></li><li data-type='member'><a href="Widget.html#.name">name</a></li><li data-type='member'><a href="Widget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#props">props</a></li><li data-type='member'><a href="Widget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Widget.html#value">value</a></li><li data-type='member'><a href="Widget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Widget.html#.condition">condition</a></li><li data-type='method'><a href="Widget.html#disable">disable</a></li><li data-type='method'><a href="Widget.html#enable">enable</a></li><li data-type='method'><a href="Widget.html#update">update</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-calculate.html">calculate</a><ul class='methods'><li data-type='method'><a href="module-calculate.html#.update">update</a></li></ul></li><li><a href="module-dom-utils.html">dom-utils</a><ul class='methods'><li data-type='method'><a href="module-dom-utils.html#~empty">empty</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElements">getSiblingElements</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElementsAndSelf">getSiblingElementsAndSelf</a></li></ul></li><li><a href="module-event.html">event</a><ul class='methods'><li data-type='method'><a href="module-event.html#~AddRepeat">AddRepeat</a></li><li data-type='method'><a href="module-event.html#~ApplyFocus">ApplyFocus</a></li><li data-type='method'><a href="module-event.html#~Change">Change</a></li><li data-type='method'><a href="module-event.html#~ChangeLanguage">ChangeLanguage</a></li><li data-type='method'><a href="module-event.html#~DataUpdate">DataUpdate</a></li><li data-type='method'><a href="module-event.html#~Edited">Edited</a></li><li data-type='method'><a href="module-event.html#~FakeFocus">FakeFocus</a></li><li data-type='method'><a href="module-event.html#~GoToHidden">GoToHidden</a></li><li data-type='method'><a href="module-event.html#~Input">Input</a></li><li data-type='method'><a href="module-event.html#~InputUpdate">InputUpdate</a></li><li data-type='method'><a href="module-event.html#~Invalidated">Invalidated</a></li><li data-type='method'><a href="module-event.html#~PageFlip">PageFlip</a></li><li data-type='method'><a href="module-event.html#~ProgressUpdate">ProgressUpdate</a></li><li data-type='method'><a href="module-event.html#~Removed">Removed</a></li><li data-type='method'><a href="module-event.html#~RemoveRepeat">RemoveRepeat</a></li><li data-type='method'><a href="module-event.html#~ValidationComplete">ValidationComplete</a></li></ul></li><li><a href="module-fileManager.html">fileManager</a><ul class='methods'><li data-type='method'><a href="module-fileManager.html#~getCurrentFiles">getCurrentFiles</a></li><li data-type='method'><a href="module-fileManager.html#~getFileUrl">getFileUrl</a></li><li data-type='method'><a href="module-fileManager.html#~getMaxSizeReadable">getMaxSizeReadable</a></li><li data-type='method'><a href="module-fileManager.html#~getObjectUrl">getObjectUrl</a></li><li data-type='method'><a href="module-fileManager.html#~init">init</a></li><li data-type='method'><a href="module-fileManager.html#~isTooLarge">isTooLarge</a></li><li data-type='method'><a href="module-fileManager.html#~isWaitingForPermissions">isWaitingForPermissions</a></li><li data-type='method'><a href="module-fileManager.html#~urlToBlob">urlToBlob</a></li></ul></li><li><a href="module-format.html">format</a></li><li><a href="module-relevant.html">relevant</a><ul class='methods'><li data-type='method'><a href="module-relevant.html#.activate">activate</a></li><li data-type='method'><a href="module-relevant.html#.clear">clear</a></li><li data-type='method'><a href="module-relevant.html#.deactivate">deactivate</a></li><li data-type='method'><a href="module-relevant.html#.disable">disable</a></li><li data-type='method'><a href="module-relevant.html#.enable">enable</a></li><li data-type='method'><a href="module-relevant.html#.evaluate">evaluate</a></li><li data-type='method'><a href="module-relevant.html#.process">process</a></li><li data-type='method'><a href="module-relevant.html#.selfRelevant">selfRelevant</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="module-format-format.html">format~format</a></li><li><a href="module-format-time.html">format~time</a><ul class='methods'><li data-type='method'><a href="module-format-time.html#.hasMeridian">hasMeridian</a></li><li data-type='method'><a href="module-format-time.html#.meridianNotation">meridianNotation</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#_getElements">_getElements</a></li><li><a href="global.html#_instantiate">_instantiate</a></li><li><a href="global.html#_setLangChangeListener">_setLangChangeListener</a></li><li><a href="global.html#_setOptionChangeListener">_setOptionChangeListener</a></li><li><a href="global.html#_setValChangeListener">_setValChangeListener</a></li><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#FormLogicError">FormLogicError</a></li><li><a href="global.html#getPrintStyleSheet">getPrintStyleSheet</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#parseFunctionFromExpression">parseFunctionFromExpression</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#setDpi">setDpi</a></li><li><a href="global.html#styleReset">styleReset</a></li><li><a href="global.html#styleToAll">styleToAll</a></li><li><a href="global.html#t">t</a></li><li><a href="global.html#toArray">toArray</a></li><li><a href="global.html#updateDownloadLink">updateDownloadLink</a></li><li><a href="global.html#ValidateInputResolution">ValidateInputResolution</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">js/relevant.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module relevant
+ *
+ * @description Updates branches
+ *
+ * @param  {{nodes:Array&lt;string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+ */
+
+import $ from 'jquery';
+import events from './event';
+
+export default {
+    update( updated, forceClearIrrelevant ) {
+        let $nodes;
+
+        if ( !this.form ) {
+            throw new Error( 'Branch module not correctly instantiated with form property.' );
+        }
+
+        $nodes = this.form.getRelatedNodes( 'data-relevant', '', updated );
+
+        this.updateNodes( $nodes, forceClearIrrelevant );
+    },
+    updateNodes( $nodes, forceClearIrrelevant ) {
+        let p;
+        let $branchNode;
+        let result;
+        let insideRepeat;
+        let insideRepeatClone;
+        let cacheIndex;
+        const relevantCache = {};
+        const alreadyCovered = [];
+        let branchChange = false;
+        const that = this;
+        const clonedRepeatsPresent = this.form.repeatsPresent &amp;&amp; this.form.view.html.querySelector( '.or-repeat.clone' );
+
+        $nodes.each( function() {
+            const $node = $( this );
+            let context;
+            let $parentGroups;
+            let pathParts;
+            let parentPath;
+
+            //note that $(this).attr('name') is not the same as p.path for repeated radiobuttons!
+            if ( alreadyCovered.indexOf( $node.attr( 'name' ) ) !== -1 ) {
+                return;
+            }
+
+            // since this result is almost certainly not empty, closest() is the most efficient
+            $branchNode = $node.closest( '.or-branch' );
+
+            p = {};
+            cacheIndex = null;
+
+            p.relevant = that.form.input.getRelevant( $node );
+            p.path = that.form.input.getName( $node );
+
+            if ( $branchNode.length !== 1 ) {
+                if ( $node.parentsUntil( '.or', '#or-calculated-items' ).length === 0 ) {
+                    console.error( 'could not find branch node for ', this );
+                }
+                return;
+            }
+
+            /*
+             * Check if the (calculate without form control) node is part of a repeat that has no instances
+             */
+            pathParts = p.path.split( '/' );
+            if ( pathParts.length > 3 ) {
+                parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
+                $parentGroups = that.form.view.$.find( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` )
+                    // now remove the groups that have a repeat-info child without repeat instance siblings
+                    .filter( function() {
+                        const $g = $( this );
+                        return $g.children( '.or-repeat' ).length > 0 || $g.children( '.or-repeat-info' ).length === 0;
+                    } ); //.eq( index )
+                // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
+                // Hence that relevant does not need to be evaluated (and would fail otherwise because the context doesn't exist).
+                if ( $parentGroups.length === 0 ) {
+                    return;
+                }
+            }
+
+            /*
+             * Determining ancestry is expensive. Using the knowledge most forms don't use repeats and
+             * if they do, they usually don't have cloned repeats during initialization we perform first a check for .repeat.clone.
+             * The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
+             * (6-7 seconds of loading time on the bench6 form)
+             */
+            // TODO: these checks fail miserably for calculated items that do not have a form control
+            insideRepeat = clonedRepeatsPresent &amp;&amp; $branchNode.parentsUntil( '.or', '.or-repeat' ).length > 0;
+            insideRepeatClone = clonedRepeatsPresent &amp;&amp; $branchNode.parentsUntil( '.or', '.or-repeat.clone' ).length > 0;
+
+            /*
+             * If the relevant is placed on a group and that group contains repeats with the same name,
+             * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
+             */
+            if ( $node.children( `.or-repeat-info[data-name="${p.path}"]` ).length &amp;&amp; !$node.children( `.or-repeat[name="${p.path}"]` ).length ) {
+                context = null;
+            } else {
+                context = p.path;
+            }
+            /*
+             * Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
+             * It can be safely set to 0 for other branches.
+             */
+            p.ind = ( context &amp;&amp; insideRepeatClone ) ? that.form.input.getIndex( $node ) : 0;
+            /*
+             * Caching is only possible for expressions that do not contain relative paths to nodes.
+             * So, first do a *very* aggresive check to see if the expression contains a relative path.
+             * This check assumes that child nodes (e.g. "mychild = 'bob'") are NEVER used in a relevant
+             * expression, which may prove to be incorrect.
+             */
+            if ( p.relevant.indexOf( '..' ) === -1 ) {
+                if ( !insideRepeat ) {
+                    cacheIndex = p.relevant;
+                } else {
+                    // The path is stripped of the last nodeName to record the context.
+                    // This might be dangerous, but until we find a bug, it helps in those forms where one group contains
+                    // many sibling questions that each have the same relevant.
+                    cacheIndex = `${p.relevant}__${p.path.substring( 0, p.path.lastIndexOf( '/' ) )}__${p.ind}`;
+                }
+            }
+            if ( cacheIndex &amp;&amp; typeof relevantCache[ cacheIndex ] !== 'undefined' ) {
+                result = relevantCache[ cacheIndex ];
+            } else {
+                result = that.evaluate( p.relevant, context, p.ind );
+                relevantCache[ cacheIndex ] = result;
+            }
+
+            if ( !insideRepeat ) {
+                alreadyCovered.push( this.getAttribute( 'name' ) );
+            }
+
+            if ( that.process( $branchNode, p.path, result, forceClearIrrelevant ) === true ) {
+                branchChange = true;
+            }
+        } );
+
+        if ( branchChange ) {
+            this.form.view.$.trigger( 'changebranch' );
+        }
+    },
+    /**
+     * Evaluates a relevant expression (for future fancy stuff this is placed in a separate function)
+     *
+     * @param {string} expr
+     * @param {string} contextPath
+     * @param {number} index
+     * @return {boolean}
+     */
+    evaluate( expr, contextPath, index ) {
+        const result = this.form.model.evaluate( expr, 'boolean', contextPath, index );
+        return result;
+    },
+    /**
+     * Processes the evaluation result for a branch
+     *
+     * @param {jQuery} $branchNode
+     * @param {string} path - Path of branch node
+     * @param {boolean} result - result of relevant evaluation
+     * @param {boolean} forceClearIrrelevant - Whether to force clearing of irrelevant nodes and descendants
+     */
+    process( $branchNode, path, result, forceClearIrrelevant ) {
+        if ( result === true ) {
+            return this.enable( $branchNode, path );
+        } else {
+            return this.disable( $branchNode, path, forceClearIrrelevant );
+        }
+    },
+
+    /**
+     * Checks whether branch currently has 'relevant' state
+     *
+     * @param {jQuery} $branchNode
+     * @return {boolean}
+     */
+    selfRelevant( $branchNode ) {
+        return !$branchNode.hasClass( 'disabled' ) &amp;&amp; !$branchNode.hasClass( 'pre-init' );
+    },
+
+    /**
+     * Enables and reveals a branch node/group
+     *
+     * @param {jQuery} $branchNode - The jQuery object to reveal and enable
+     */
+    enable( $branchNode, path ) {
+        let change = false;
+
+        if ( !this.selfRelevant( $branchNode ) ) {
+            change = true;
+            $branchNode.removeClass( 'disabled pre-init' );
+            // Update calculated items, both individual question or descendants of group
+            this.form.calc.update( {
+                relevantPath: path
+            } );
+            this.form.itemset.update( {
+                relevantPath: path
+            } );
+            // Update outputs that are children of branch
+            // TODO this re-evaluates all outputs in the form which is not efficient!
+            this.form.output.update();
+            this.form.widgets.enable( $branchNode[ 0 ] );
+            this.activate( $branchNode );
+        }
+        return change;
+    },
+
+    /**
+     * Disables and hides a branch node/group
+     *
+     * @param  {jQuery} $branchNode The jQuery object to hide and disable
+     */
+    disable( $branchNode, path, forceClearIrrelevant ) {
+        const virgin = $branchNode.hasClass( 'pre-init' );
+        let change = false;
+
+        if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
+            change = true;
+            // if the branch was previously enabled, keep any default values
+            if ( !virgin ) {
+                if ( this.form.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
+                    this.clear( $branchNode, path );
+                }
+            } else {
+                $branchNode.removeClass( 'pre-init' );
+            }
+
+            this.deactivate( $branchNode );
+        }
+        return change;
+    },
+    /**
+     * Clears values from branchnode.
+     * This function is separated so it can be overridden in custom apps.
+     *
+     * @param  {jQuery} $branchNode
+     * @param  {string} path
+     */
+    clear( $branchNode, path ) {
+        // A change event ensures the model is updated
+        // An inputupdate event is required to update widgets
+        $branchNode.clearInputs( 'change', events.InputUpdate().type );
+        // Update calculated items if branch is a group
+        // We exclude question branches here because those will have been cleared already in the previous line.
+        if ( $branchNode.is( '.or-group, .or-group-data' ) ) {
+            this.form.calc.update( {
+                relevantPath: path
+            } );
+        }
+    },
+    setDisabledProperty( $branchNode, bool ) {
+        const type = $branchNode.prop( 'nodeName' ).toLowerCase();
+
+        if ( type === 'label' ) {
+            $branchNode.children( 'input, select, textarea' ).prop( 'disabled', bool );
+        } else if ( type === 'fieldset' || type === 'section' ) {
+            // TODO: a &lt;section> cannot be disabled like this
+            $branchNode.prop( 'disabled', bool );
+        } else {
+            $branchNode.find( 'fieldset, input, select, textarea' ).prop( 'disabled', bool );
+        }
+    },
+    /**
+     * Activates form controls.
+     * This function is separated so it can be overridden in custom apps.
+     *
+     * @param {jQuery} $branchNode
+     */
+    activate( $branchNode ) {
+        this.setDisabledProperty( $branchNode, false );
+    },
+    /**
+     * Deactivates form controls.
+     * This function is separated so it can be overridden in custom apps.
+     *
+     * @param {jQuery} $branchNode
+     */
+    deactivate( $branchNode ) {
+        $branchNode.addClass( 'disabled' );
+        this.form.widgets.disable( $branchNode[ 0 ] );
+        this.setDisabledProperty( $branchNode, true );
+    }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/jquery-3.1.1.min.js"></script>
+
+<script src="scripts/search.js"></script>
+
+
+
+
+</body>
+</html>

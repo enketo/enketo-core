@@ -64,9 +64,9 @@ function disable( group ) {
 /**
  * Returns the elements on which to apply the widget
  *
- * @param  {Element} group   a jQuery-wrapped element
- * @param  {string} selector if the selector is null, the form element will be returned
- * @return {jQuery}          a jQuery collection
+ * @param {Element} group - a jQuery-wrapped element
+ * @param {string} selector - if the selector is null, the form element will be returned
+ * @return {jQuery} a jQuery collection
  */
 function _getElements( group, selector ) {
     if ( selector ) {
@@ -87,8 +87,8 @@ function _getElements( group, selector ) {
 /**
  * Instantiate a widget on a group (whole form or newly cloned repeat)
  *
- * @param  widget The widget to instantiate
- * @param  {Element} group The element inside which widgets need to be created.
+ * @param {Object} Widget - The widget to instantiate
+ * @param {Element} group - The element inside which widgets need to be created.
  */
 function _instantiate( Widget, group ) {
     let opts = {};
@@ -123,11 +123,11 @@ function _instantiate( Widget, group ) {
  * and whenever a new repeat is created. In the latter case, since the widget('update') is called upon
  * the elements of the repeat, there should be no duplicate eventhandlers.
  *
- * @param {{name: string}} widget The widget configuration object
- * @param {<Element>}         els    Array of elements that the widget has been instantiated on.
+ * @param {{name: string}} Widget - The widget configuration object
+ * @param {Element} els - Array of elements that the widget has been instantiated on.
  */
 function _setLangChangeListener( Widget, els ) {
-    // call update for all widgets when language changes 
+    // call update for all widgets when language changes
     if ( els.length > 0 ) {
         formHtml.addEventListener( events.ChangeLanguage().type, () => {
             new Collection( els ).update( Widget );
@@ -140,8 +140,8 @@ function _setLangChangeListener( Widget, els ) {
  * and whenever a new repeat is created. In the latter case, since the widget('update') is called upon
  * the elements of the repeat, there should be no duplicate eventhandlers.
  *
- * @param {{name: string}} widget   The widget configuration object
- * @param {<Element>}      els      The array of elements that the widget has been instantiated on.
+ * @param {{name: string}} Widget - The widget configuration object
+ * @param {Element} els - The array of elements that the widget has been instantiated on.
  */
 function _setOptionChangeListener( Widget, els ) {
     if ( els.length > 0 && Widget.list ) {
@@ -155,9 +155,9 @@ function _setOptionChangeListener( Widget, els ) {
 /**
  * Calls widget('update') if the form input/select/textarea value changes due to an action outside
  * of the widget (e.g. a calculation).
- * 
- * @param {{name: string}} widget   The widget configuration object
- * @param {<Element>}      els      The array of elements that the widget has been instantiated on.
+ *
+ * @param {{name: string}} Widget - The widget configuration object.
+ * @param {Element} els - The array of elements that the widget has been instantiated on.
  */
 function _setValChangeListener( Widget, els ) {
     // avoid adding eventhandlers on widgets that apply to the <form> or <label> element

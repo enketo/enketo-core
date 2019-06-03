@@ -1,6 +1,6 @@
 /**
  * Repeats module.
- * 
+ *
  * Two important concepts are used:
  * 1. The first XLST-added repeat view is cloned to serve as a template of that repeat.
  * 2. Each repeat series has a sibling .or-repeat-info element that stores info that is relevant to that series.
@@ -80,7 +80,7 @@ export default {
                     that.updateDefaultFirstRepeatInstance( null, this );
                 }
             } )
-            // If there is no repeat-count attribute, check how many repeat instances 
+            // If there is no repeat-count attribute, check how many repeat instances
             // are in the model, and update view if necessary.
             .each( that.updateViewInstancesFromModel.bind( this ) );
 
@@ -153,9 +153,9 @@ export default {
     },
     /**
      * [updateViewInstancesFromModel description]
-     * @param  {[type]} idx           not used but part of jQuery.each
-     * @param   {Element} repeatInfo  repeatInfo element
-     * @return {[type]}            [description]
+     * @param {number} idx - not used but part of jQuery.each
+     * @param {Element} repeatInfo - repeatInfo element
+     * @return {number}
      */
     updateViewInstancesFromModel( idx, repeatInfo ) {
         const that = this;
@@ -181,9 +181,8 @@ export default {
     },
     /**
      * [updateDefaultFirstRepeatInstance description]
-     * @param  {[type]} idx             not use but part of jQeury.each
-     * @param   {Element} repeatInfo    repeatInfo element
-     * @return {[type]}            [description]
+     * @param {number} idx - not used but part of jQuery.each
+     * @param {Element} repeatInfo - repeatInfo element
      */
     updateDefaultFirstRepeatInstance( idx, repeatInfo ) {
         let repeatSeriesIndex;
@@ -205,9 +204,9 @@ export default {
     },
     /**
      * [updateRepeatInstancesFromCount description]
-     * @param  {[type]} idx             not use but part of jQeury.each
-     * @param   {Element} repeatInfo repeatInfo element
-     * @return {[type]}            [description]
+     *
+     * @param {number} idx - not used but part of jQuery.each
+     * @param {Element} repeatInfo - repeatInfo element
      */
     updateRepeatInstancesFromCount( idx, repeatInfo ) {
         const that = this;
@@ -257,9 +256,8 @@ export default {
     /**
      * Checks whether repeat count value has been updated and updates repeat instances
      * accordingly.
-     * 
-     * @param  {[type]} updated [description]
-     * @return {[type]}         [description]
+     *
+     * @param {Object} updated
      */
     countUpdate( updated ) {
         let $repeatInfos;
@@ -267,11 +265,12 @@ export default {
         $repeatInfos = this.form.getRelatedNodes( 'data-repeat-count', '.or-repeat-info', updated );
         $repeatInfos.each( this.updateRepeatInstancesFromCount.bind( this ) );
     },
-    /**s
-     * clone a repeat group/node
-     * @param   {Element} repeatInfo repeatInfo element
-     * @param   {number=} count number of clones to create
-     * @return  {boolean}       [description]
+    /**
+     * Clone a repeat group/node.
+     *
+     * @param {Element} repeatInfo - A repeatInfo element.
+     * @param {number=} count - Number of clones to create.
+     * @return {boolean} Cloning success/failure outcome.
      */
     add( repeatInfo, count ) {
         let $repeats;

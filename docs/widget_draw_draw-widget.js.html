@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>widget/draw/draw-widget.js - Enketo Core</title>
+    
+    <meta name="description" content="Extensible Enketo form engine" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/enketo/enketo-core" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h2><a href="https://github.com/enketo/enketo-core/blob/master/CHANGELOG.md" target="_blank" class="menu-item" id="change-log" >Change log</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-01-getting-started.html">Getting started</a></li><li><a href="tutorial-02-global-configuration.html">Configuration</a></li><li><a href="tutorial-03-browser-support.html">Browser support</a></li><li><a href="tutorial-04-development.html">Development</a></li><li><a href="tutorial-05-notes-js.html">JS rules</a></li><li><a href="tutorial-06-notes-css.html">CSS rules</a></li><li><a href="tutorial-07-events.html">Available events</a></li><li><a href="tutorial-08-widgets.html">Creating/extending widgets</a></li></ul><h3>Classes</h3><ul><li><a href="AnalogScaleWidget.html">AnalogScaleWidget</a><ul class='methods'><li data-type='method'><a href="AnalogScaleWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_renderLabels">_renderLabels</a></li><li data-type='method'><a href="AnalogScaleWidget.html#disable">disable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#enable">enable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#update">update</a></li></ul></li><li><a href="ArcGisGeopicker.html">ArcGisGeopicker</a><ul class='methods'><li data-type='method'><a href="ArcGisGeopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addEsriLocate">_addEsriLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addRegularLocate">_addRegularLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="ArcGisGeopicker.html#disable">disable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#enable">enable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#update">update</a></li></ul></li><li><a href="AutocompleteSelectpicker.html">AutocompleteSelectpicker</a><ul class='methods'><li data-type='method'><a href="AutocompleteSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#update">update</a></li></ul></li><li><a href="Comment.html">Comment</a><ul class='methods'><li data-type='method'><a href="Comment.html#disable">disable</a></li><li data-type='method'><a href="Comment.html#enable">enable</a></li><li data-type='method'><a href="Comment.html#update">update</a></li></ul></li><li><a href="CompactPicker.html">CompactPicker</a><ul class='methods'><li data-type='method'><a href="CompactPicker.html#disable">disable</a></li><li data-type='method'><a href="CompactPicker.html#enable">enable</a></li><li data-type='method'><a href="CompactPicker.html#update">update</a></li></ul></li><li><a href="DatepickerExtended.html">DatepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatepickerExtended.html#_createFakeDateInput">_createFakeDateInput</a></li><li data-type='method'><a href="DatepickerExtended.html#_setChangeHandler">_setChangeHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setFocusHandler">_setFocusHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setResetHandler">_setResetHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatepickerExtended.html#update">update</a></li></ul></li><li><a href="DatepickerMobile.html">DatepickerMobile</a><ul class='methods'><li data-type='method'><a href="DatepickerMobile.html#disable">disable</a></li><li data-type='method'><a href="DatepickerMobile.html#enable">enable</a></li><li data-type='method'><a href="DatepickerMobile.html#update">update</a></li></ul></li><li><a href="DatepickerNative.html">DatepickerNative</a><ul class='methods'><li data-type='method'><a href="DatepickerNative.html#disable">disable</a></li><li data-type='method'><a href="DatepickerNative.html#enable">enable</a></li><li data-type='method'><a href="DatepickerNative.html#update">update</a></li></ul></li><li><a href="DatetimepickerExtended.html">DatetimepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatetimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#update">update</a></li></ul></li><li><a href="DesktopSelectpicker.html">DesktopSelectpicker</a><ul class='methods'><li data-type='method'><a href="DesktopSelectpicker.html#_createSelectedStr">_createSelectedStr</a></li><li data-type='method'><a href="DesktopSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#update">update</a></li></ul></li><li><a href="DrawWidget.html">DrawWidget</a><ul class='methods'><li data-type='method'><a href="DrawWidget.html#_loadFileIntoPad">_loadFileIntoPad</a></li><li data-type='method'><a href="DrawWidget.html#disable">disable</a></li><li data-type='method'><a href="DrawWidget.html#enable">enable</a></li><li data-type='method'><a href="DrawWidget.html#update">update</a></li></ul></li><li><a href="Filepicker.html">Filepicker</a><ul class='methods'><li data-type='method'><a href="Filepicker.html#disable">disable</a></li><li data-type='method'><a href="Filepicker.html#enable">enable</a></li><li data-type='method'><a href="Filepicker.html#update">update</a></li></ul></li><li><a href="Form.html">Form</a><ul class='members'><li data-type='member'><a href="Form.html#.requiredTransformerVersion">requiredTransformerVersion</a></li><li data-type='member'><a href="Form.html#validate">validate</a></li></ul><ul class='methods'><li data-type='method'><a href="Form.html#addModule">addModule</a></li><li data-type='method'><a href="Form.html#blockPageNavigation">blockPageNavigation</a></li><li data-type='method'><a href="Form.html#getDataStr">getDataStr</a></li><li data-type='method'><a href="Form.html#getDataStrWithoutIrrelevantNodes">getDataStrWithoutIrrelevantNodes</a></li><li data-type='method'><a href="Form.html#getQuerySelectorsForLogic">getQuerySelectorsForLogic</a></li><li data-type='method'><a href="Form.html#getRelatedNodes">getRelatedNodes</a></li><li data-type='method'><a href="Form.html#goToTarget">goToTarget</a></li><li data-type='method'><a href="Form.html#grosslyViolateStandardComplianceByIgnoringCertainCalcs">grosslyViolateStandardComplianceByIgnoringCertainCalcs</a></li><li data-type='method'><a href="Form.html#init">init</a></li><li data-type='method'><a href="Form.html#isValid">isValid</a></li><li data-type='method'><a href="Form.html#replaceChoiceNameFn">replaceChoiceNameFn</a></li><li data-type='method'><a href="Form.html#resetView">resetView</a></li><li data-type='method'><a href="Form.html#setAllVals">setAllVals</a></li><li data-type='method'><a href="Form.html#validateAll">validateAll</a></li><li data-type='method'><a href="Form.html#validateContent">validateContent</a></li><li data-type='method'><a href="Form.html#validateInput">validateInput</a></li><li data-type='method'><a href="Form.html#validationUpdate">validationUpdate</a></li></ul></li><li><a href="FormModel.html">FormModel</a><ul class='methods'><li data-type='method'><a href="FormModel.html#addRepeat">addRepeat</a></li><li data-type='method'><a href="FormModel.html#determineIndex">determineIndex</a></li><li data-type='method'><a href="FormModel.html#evaluate">evaluate</a></li><li data-type='method'><a href="FormModel.html#extractTemplates">extractTemplates</a></li><li data-type='method'><a href="FormModel.html#getRepeatIndex">getRepeatIndex</a></li><li data-type='method'><a href="FormModel.html#getRepeatSeries">getRepeatSeries</a></li><li data-type='method'><a href="FormModel.html#getSecondaryInstance">getSecondaryInstance</a></li><li data-type='method'><a href="FormModel.html#getStr">getStr</a></li><li data-type='method'><a href="FormModel.html#getXPath">getXPath</a></li><li data-type='method'><a href="FormModel.html#importNode">importNode</a></li><li data-type='method'><a href="FormModel.html#init">init</a></li><li data-type='method'><a href="FormModel.html#makeBugCompliant">makeBugCompliant</a></li><li data-type='method'><a href="FormModel.html#mergeXml">mergeXml</a></li><li data-type='method'><a href="FormModel.html#node">node</a></li><li data-type='method'><a href="FormModel.html#replaceCurrentFn">replaceCurrentFn</a></li><li data-type='method'><a href="FormModel.html#replaceIndexedRepeatFn">replaceIndexedRepeatFn</a></li><li data-type='method'><a href="FormModel.html#replaceInstanceFn">replaceInstanceFn</a></li><li data-type='method'><a href="FormModel.html#setInstanceIdAndDeprecatedId">setInstanceIdAndDeprecatedId</a></li><li data-type='method'><a href="FormModel.html#shiftRoot">shiftRoot</a></li><li data-type='method'><a href="FormModel.html#trimValues">trimValues</a></li></ul></li><li><a href="Geopicker.html">Geopicker</a><ul class='methods'><li data-type='method'><a href="Geopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="Geopicker.html#_addPointBtn">_addPointBtn</a></li><li data-type='method'><a href="Geopicker.html#_convertKmlCoordinatesToLeafletCoordinates">_convertKmlCoordinatesToLeafletCoordinates</a></li><li data-type='method'><a href="Geopicker.html#_dynamicMapAvailable">_dynamicMapAvailable</a></li><li data-type='method'><a href="Geopicker.html#_editPoint">_editPoint</a></li><li data-type='method'><a href="Geopicker.html#_enableDetection">_enableDetection</a></li><li data-type='method'><a href="Geopicker.html#_enableSearch">_enableSearch</a></li><li data-type='method'><a href="Geopicker.html#_getGoogleTileLayer">_getGoogleTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getLayers">_getLayers</a></li><li data-type='method'><a href="Geopicker.html#_getLeafletTileLayer">_getLeafletTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getTileOptions">_getTileOptions</a></li><li data-type='method'><a href="Geopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLngList">_isValidLatLngList</a></li><li data-type='method'><a href="Geopicker.html#_loadGoogleMapsScript">_loadGoogleMapsScript</a></li><li data-type='method'><a href="Geopicker.html#_markAsInvalid">_markAsInvalid</a></li><li data-type='method'><a href="Geopicker.html#_markAsValid">_markAsValid</a></li><li data-type='method'><a href="Geopicker.html#_removePoint">_removePoint</a></li><li data-type='method'><a href="Geopicker.html#_setCurrent">_setCurrent</a></li><li data-type='method'><a href="Geopicker.html#_updateArea">_updateArea</a></li><li data-type='method'><a href="Geopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="Geopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="Geopicker.html#_updateMarkers">_updateMarkers</a></li><li data-type='method'><a href="Geopicker.html#_updatePolygon">_updatePolygon</a></li><li data-type='method'><a href="Geopicker.html#_updatePolyline">_updatePolyline</a></li><li data-type='method'><a href="Geopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="Geopicker.html#containsEmptyPoints">containsEmptyPoints</a></li><li data-type='method'><a href="Geopicker.html#disable">disable</a></li><li data-type='method'><a href="Geopicker.html#enable">enable</a></li><li data-type='method'><a href="Geopicker.html#update">update</a></li><li data-type='method'><a href="Geopicker.html#updatedPolylineWouldIntersect">updatedPolylineWouldIntersect</a></li></ul></li><li><a href="HorizontalChoices.html">HorizontalChoices</a><ul class='methods'><li data-type='method'><a href="HorizontalChoices.html#disable">disable</a></li><li data-type='method'><a href="HorizontalChoices.html#enable">enable</a></li><li data-type='method'><a href="HorizontalChoices.html#update">update</a></li></ul></li><li><a href="ImageMap.html">ImageMap</a><ul class='methods'><li data-type='method'><a href="ImageMap.html#_removeUnmatchedIds">_removeUnmatchedIds</a></li><li data-type='method'><a href="ImageMap.html#_updateImage">_updateImage</a></li><li data-type='method'><a href="ImageMap.html#disable">disable</a></li><li data-type='method'><a href="ImageMap.html#enable">enable</a></li><li data-type='method'><a href="ImageMap.html#update">update</a></li></ul></li><li><a href="ImageViewer.html">ImageViewer</a><ul class='methods'><li data-type='method'><a href="ImageViewer.html#disable">disable</a></li><li data-type='method'><a href="ImageViewer.html#enable">enable</a></li><li data-type='method'><a href="ImageViewer.html#update">update</a></li></ul></li><li><a href="MobileSelectPicker.html">MobileSelectPicker</a><ul class='methods'><li data-type='method'><a href="MobileSelectPicker.html#_showSelectedValues">_showSelectedValues</a></li><li data-type='method'><a href="MobileSelectPicker.html#disable">disable</a></li><li data-type='method'><a href="MobileSelectPicker.html#enable">enable</a></li><li data-type='method'><a href="MobileSelectPicker.html#update">update</a></li></ul></li><li><a href="Nodeset.html">Nodeset</a><ul class='methods'><li data-type='method'><a href="Nodeset.html#convert">convert</a></li><li data-type='method'><a href="Nodeset.html#getVal">getVal</a></li><li data-type='method'><a href="Nodeset.html#remove">remove</a></li><li data-type='method'><a href="Nodeset.html#setIndex">setIndex</a></li><li data-type='method'><a href="Nodeset.html#setVal">setVal</a></li><li data-type='method'><a href="Nodeset.html#validateConstraintAndType">validateConstraintAndType</a></li></ul></li><li><a href="Radiopicker.html">Radiopicker</a><ul class='methods'><li data-type='method'><a href="Radiopicker.html#disable">disable</a></li><li data-type='method'><a href="Radiopicker.html#enable">enable</a></li><li data-type='method'><a href="Radiopicker.html#update">update</a></li></ul></li><li><a href="RangeWidget.html">RangeWidget</a><ul class='methods'><li data-type='method'><a href="RangeWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="RangeWidget.html#disable">disable</a></li><li data-type='method'><a href="RangeWidget.html#enable">enable</a></li><li data-type='method'><a href="RangeWidget.html#update">update</a></li></ul></li><li><a href="RankWidget.html">RankWidget</a><ul class='methods'><li data-type='method'><a href="RankWidget.html#disable">disable</a></li><li data-type='method'><a href="RankWidget.html#enable">enable</a></li><li data-type='method'><a href="RankWidget.html#update">update</a></li></ul></li><li><a href="TextareaWidget.html">TextareaWidget</a><ul class='methods'><li data-type='method'><a href="TextareaWidget.html#disable">disable</a></li><li data-type='method'><a href="TextareaWidget.html#enable">enable</a></li><li data-type='method'><a href="TextareaWidget.html#update">update</a></li></ul></li><li><a href="TextMaxWidget.html">TextMaxWidget</a></li><li><a href="TimepickerExtended.html">TimepickerExtended</a><ul class='methods'><li data-type='method'><a href="TimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="TimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="TimepickerExtended.html#update">update</a></li></ul></li><li><a href="UrlWidget.html">UrlWidget</a><ul class='methods'><li data-type='method'><a href="UrlWidget.html#disable">disable</a></li><li data-type='method'><a href="UrlWidget.html#enable">enable</a></li><li data-type='method'><a href="UrlWidget.html#update">update</a></li></ul></li><li><a href="Widget.html">Widget</a><ul class='members'><li data-type='member'><a href="Widget.html#.list">list</a></li><li data-type='member'><a href="Widget.html#.name">name</a></li><li data-type='member'><a href="Widget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#props">props</a></li><li data-type='member'><a href="Widget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Widget.html#value">value</a></li><li data-type='member'><a href="Widget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Widget.html#.condition">condition</a></li><li data-type='method'><a href="Widget.html#disable">disable</a></li><li data-type='method'><a href="Widget.html#enable">enable</a></li><li data-type='method'><a href="Widget.html#update">update</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-calculate.html">calculate</a><ul class='methods'><li data-type='method'><a href="module-calculate.html#.update">update</a></li></ul></li><li><a href="module-dom-utils.html">dom-utils</a><ul class='methods'><li data-type='method'><a href="module-dom-utils.html#~empty">empty</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElements">getSiblingElements</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElementsAndSelf">getSiblingElementsAndSelf</a></li></ul></li><li><a href="module-event.html">event</a><ul class='methods'><li data-type='method'><a href="module-event.html#~AddRepeat">AddRepeat</a></li><li data-type='method'><a href="module-event.html#~ApplyFocus">ApplyFocus</a></li><li data-type='method'><a href="module-event.html#~Change">Change</a></li><li data-type='method'><a href="module-event.html#~ChangeLanguage">ChangeLanguage</a></li><li data-type='method'><a href="module-event.html#~DataUpdate">DataUpdate</a></li><li data-type='method'><a href="module-event.html#~Edited">Edited</a></li><li data-type='method'><a href="module-event.html#~FakeFocus">FakeFocus</a></li><li data-type='method'><a href="module-event.html#~GoToHidden">GoToHidden</a></li><li data-type='method'><a href="module-event.html#~Input">Input</a></li><li data-type='method'><a href="module-event.html#~InputUpdate">InputUpdate</a></li><li data-type='method'><a href="module-event.html#~Invalidated">Invalidated</a></li><li data-type='method'><a href="module-event.html#~PageFlip">PageFlip</a></li><li data-type='method'><a href="module-event.html#~ProgressUpdate">ProgressUpdate</a></li><li data-type='method'><a href="module-event.html#~Removed">Removed</a></li><li data-type='method'><a href="module-event.html#~RemoveRepeat">RemoveRepeat</a></li><li data-type='method'><a href="module-event.html#~ValidationComplete">ValidationComplete</a></li></ul></li><li><a href="module-fileManager.html">fileManager</a><ul class='methods'><li data-type='method'><a href="module-fileManager.html#~getCurrentFiles">getCurrentFiles</a></li><li data-type='method'><a href="module-fileManager.html#~getFileUrl">getFileUrl</a></li><li data-type='method'><a href="module-fileManager.html#~getMaxSizeReadable">getMaxSizeReadable</a></li><li data-type='method'><a href="module-fileManager.html#~getObjectUrl">getObjectUrl</a></li><li data-type='method'><a href="module-fileManager.html#~init">init</a></li><li data-type='method'><a href="module-fileManager.html#~isTooLarge">isTooLarge</a></li><li data-type='method'><a href="module-fileManager.html#~isWaitingForPermissions">isWaitingForPermissions</a></li><li data-type='method'><a href="module-fileManager.html#~urlToBlob">urlToBlob</a></li></ul></li><li><a href="module-format.html">format</a></li><li><a href="module-relevant.html">relevant</a><ul class='methods'><li data-type='method'><a href="module-relevant.html#.activate">activate</a></li><li data-type='method'><a href="module-relevant.html#.clear">clear</a></li><li data-type='method'><a href="module-relevant.html#.deactivate">deactivate</a></li><li data-type='method'><a href="module-relevant.html#.disable">disable</a></li><li data-type='method'><a href="module-relevant.html#.enable">enable</a></li><li data-type='method'><a href="module-relevant.html#.evaluate">evaluate</a></li><li data-type='method'><a href="module-relevant.html#.process">process</a></li><li data-type='method'><a href="module-relevant.html#.selfRelevant">selfRelevant</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="module-format-format.html">format~format</a></li><li><a href="module-format-time.html">format~time</a><ul class='methods'><li data-type='method'><a href="module-format-time.html#.hasMeridian">hasMeridian</a></li><li data-type='method'><a href="module-format-time.html#.meridianNotation">meridianNotation</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#_getElements">_getElements</a></li><li><a href="global.html#_instantiate">_instantiate</a></li><li><a href="global.html#_setLangChangeListener">_setLangChangeListener</a></li><li><a href="global.html#_setOptionChangeListener">_setOptionChangeListener</a></li><li><a href="global.html#_setValChangeListener">_setValChangeListener</a></li><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#FormLogicError">FormLogicError</a></li><li><a href="global.html#getPrintStyleSheet">getPrintStyleSheet</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#parseFunctionFromExpression">parseFunctionFromExpression</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#setDpi">setDpi</a></li><li><a href="global.html#styleReset">styleReset</a></li><li><a href="global.html#styleToAll">styleToAll</a></li><li><a href="global.html#t">t</a></li><li><a href="global.html#toArray">toArray</a></li><li><a href="global.html#updateDownloadLink">updateDownloadLink</a></li><li><a href="global.html#ValidateInputResolution">ValidateInputResolution</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">widget/draw/draw-widget.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Widget from '../../js/widget';
+import $ from 'jquery';
+import support from '../../js/support';
+import fileManager from 'enketo/file-manager';
+import SignaturePad from 'signature_pad';
+import { t } from 'enketo/translator';
+import dialog from 'enketo/dialog';
+import { updateDownloadLink, dataUriToBlobSync, getFilename } from '../../js/utils';
+const DELAY = 1500;
+
+/**
+ * SignaturePad.prototype.fromDataURL is asynchronous and does not return
+ * a Promise. This is a rewrite returning a promise and the objectUrl.
+ * In addition it also fixes a bug where a loaded image is stretched to fit
+ * the canvas.
+ *
+ * @param {*} objectUrl
+ * @param {*} options
+ */
+SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
+    const image = new Image();
+    options = options || {};
+    const deviceRatio = options.ratio || window.devicePixelRatio || 1;
+    const width = options.width || ( this._canvas.width / deviceRatio );
+    const height = options.height || ( this._canvas.height / deviceRatio );
+    const that = this;
+
+    this._reset();
+
+    return new Promise( resolve => {
+        image.src = objectUrl;
+        image.onload = () => {
+            const imgWidth = image.width;
+            const imgHeight = image.height;
+            const hRatio = width / imgWidth;
+            const vRatio = height / imgHeight;
+            let left;
+            let top;
+
+            if ( hRatio &lt; 1 || vRatio &lt; 1 ) { //if image is bigger than canvas then fit within the canvas
+                const ratio = Math.min( hRatio, vRatio );
+                left = ( width - imgWidth * ratio ) / 2;
+                top = ( height - imgHeight * ratio ) / 2;
+                that._ctx.drawImage( image, 0, 0, imgWidth, imgHeight, left, top, imgWidth * ratio, imgHeight * ratio );
+            } else { // if image is smaller than canvas then show it in the center and don't stretch it
+                left = ( width - imgWidth ) / 2;
+                top = ( height - imgHeight ) / 2;
+                that._ctx.drawImage( image, left, top, imgWidth, imgHeight );
+            }
+            resolve( objectUrl );
+        };
+        that._isEmpty = false;
+    } );
+};
+
+/**
+ * Similar to SignaturePad.prototype.fromData except that it doesn't clear the canvas.
+ * This is to facilitate undoing a drawing stroke over a background (bitmap) image.
+ *
+ * @param {*} pointGroups
+ */
+SignaturePad.prototype.updateData = function( pointGroups ) {
+    const that = this;
+    this._fromData(
+        pointGroups,
+        ( curve, widths ) => { that._drawCurve( curve, widths.start, widths.end ); },
+        rawPoint => { that._drawDot( rawPoint ); }
+    );
+
+    this._data = pointGroups;
+};
+
+/**
+ * Widget to obtain user-provided drawings or signature.
+ * @extends Widget
+ */
+class DrawWidget extends Widget {
+    static get selector() {
+        // note that the selector needs to match both the pre-instantiated form and the post-instantiated form (type attribute changes)
+        return '.or-appearance-draw input[data-type-xml="binary"][accept^="image"], .or-appearance-signature input[data-type-xml="binary"][accept^="image"], .or-appearance-annotate input[data-type-xml="binary"][accept^="image"]';
+    }
+
+    _init() {
+        let canvas;
+        const that = this;
+        const existingFilename = this.element.dataset.loadedFileName;
+
+        this.element.type = 'text';
+        this.element.dataset.drawing = true;
+
+        this.element.after( this._getMarkup() );
+        const question = this.question;
+
+        question.classList.add( `or-${this.props.type}-initialized` );
+
+        this.$widget = $( question.querySelector( '.widget' ) );
+
+        canvas = this.$widget[ 0 ].querySelector( '.draw-widget__body__canvas' );
+        this._handleResize( canvas );
+        this._resizeCanvas( canvas );
+
+        if ( this.props.load ) {
+            this._handleFiles( existingFilename );
+        }
+
+        // We built a delay in saving on stroke "end", to avoid excessive updating
+        // This event does not fire on touchscreens for which we use the .hide-canvas-btn click
+        // to do the same thing.
+        canvas.addEventListener( 'blur', this._forceUpdate.bind( this ) );
+
+        this.initialize = fileManager.init()
+            .then( () => {
+                that.pad = new SignaturePad( canvas, {
+                    onEnd: () => {
+                        // keep replacing this timer so continuous drawing
+                        // doesn't update the value after every stroke.
+                        clearTimeout( that._updateWithDelay );
+                        that._updateWithDelay = setTimeout( that._updateValue.bind( that ), DELAY );
+                    },
+                    penColor: that.props.colors[ 0 ] || 'black'
+                } );
+                that.pad.off();
+                if ( existingFilename ) {
+                    that.element.value = existingFilename;
+                    return that._loadFileIntoPad( existingFilename )
+                        .then( that._updateDownloadLink.bind( that ) );
+                }
+                return true;
+            } );
+        this.disable();
+        this.initialize
+            .then( () => {
+                that.$widget
+                    .find( '.btn-reset' ).on( 'click', that._reset.bind( that ) )
+                    .end().find( '.draw-widget__colorpicker' )
+                    .on( 'click', '.current', function() {
+                        $( this ).parent().toggleClass( 'reveal' );
+                    } )
+                    .on( 'click', '[data-color]:not(.current)', function() {
+                        $( this ).siblings().removeClass( 'current' ).end().addClass( 'current' )
+                            .parent().removeClass( 'reveal' );
+                        that.pad.penColor = this.dataset.color;
+                    } )
+                    .end().find( '.draw-widget__undo' ).on( 'click', () => {
+                        const data = that.pad.toData();
+                        that.pad.clear();
+                        const fileInput = that.$widget[ 0 ].querySelector( 'input[type=file]' );
+                        // that.element.dataset.loadedFileName will have been removed only after resetting
+                        const fileToLoad = fileInput &amp;&amp; fileInput.files[ 0 ] ? fileInput.files[ 0 ] : that.element.dataset.loadedFileName;
+                        that._loadFileIntoPad( fileToLoad )
+                            .then( () => {
+                                that.pad.updateData( data.slice( 0, -1 ) );
+                                that._updateValue();
+                                that.pad.penColor = that.$widget.find( '.draw-widget__colorpicker .current' )[ 0 ].dataset.color;
+                            } );
+                    } )
+                    .end().find( '.show-canvas-btn' ).on( 'click', () => {
+                        that.$widget.addClass( 'full-screen' );
+                        that._resizeCanvas( canvas );
+                        that.enable();
+                        return false;
+                    } )
+                    .end().find( '.hide-canvas-btn' ).on( 'click', () => {
+                        that.$widget.removeClass( 'full-screen' );
+                        that.pad.off();
+                        that._resizeCanvas( canvas );
+                        that._forceUpdate();
+                        return false;
+                    } ).click();
+
+                $( canvas )
+                    .on( 'canvasreload', () => {
+                        if ( that.cache ) {
+                            that.pad.fromObjectURL( that.cache )
+                                .then( that._updateValue.bind( that ) );
+                        }
+                    } );
+                that.enable();
+            } )
+            .catch( error => {
+                that._showFeedback( error.message );
+            } );
+
+        $( this.element )
+            .on( 'applyfocus', () => {
+                canvas.focus();
+            } )
+            .closest( '[role="page"]' ).on( 'pageflip', () => {
+                // When an existing value is loaded into the canvas and is not
+                // the first page, it won't become visible until the canvas is clicked
+                // or the window is resized:
+                // https://github.com/kobotoolbox/enketo-express/issues/895
+                // This also fixes a similar issue with an empty canvas:
+                // https://github.com/kobotoolbox/enketo-express/issues/844
+                that._resizeCanvas( canvas );
+            } );
+    }
+
+    _forceUpdate() {
+        if ( this._updateWithDelay ) {
+            clearTimeout( this._updateWithDelay );
+            this._updateValue();
+        }
+    }
+
+    // All this is copied from the file-picker widget
+    _handleFiles( loadedFileName ) {
+        // Monitor maxSize changes to update placeholder text in annotate widget. This facilitates asynchronous
+        // obtaining of max size from server without slowing down form loading.
+        this._updatePlaceholder();
+        this.$widget.closest( 'form.or' ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
+
+        const that = this;
+
+        const $input = this.$widget.find( 'input[type=file]' );
+        const $fakeInput = this.$widget.find( '.fake-file-input' );
+
+        // show loaded file name or placeholder regardless of whether widget is supported
+        this._showFileName( loadedFileName );
+
+        $input
+            .on( 'click', event => {
+                // The purpose of this handler is to block the filepicker window
+                // when the label is clicked outside of the input.
+                if ( that.props.readonly || event.namespace !== 'propagate' ) {
+                    that.$fakeInput.focus();
+                    event.stopImmediatePropagation();
+                    return false;
+                }
+            } )
+            .on( 'change', function() {
+                // Get the file
+                const file = this.files[ 0 ];
+
+                if ( file ) {
+                    // Process the file
+                    if ( !fileManager.isTooLarge( file ) ) {
+                        // Update UI
+                        that.pad.clear();
+                        that._loadFileIntoPad( this.files[ 0 ] )
+                            .then( () => {
+                                that._updateValue.call( that );
+                                that._showFileName( file.name );
+                                that.enable();
+                            } );
+                    } else {
+                        that._showFeedback( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
+                    }
+                } else {
+                    that._showFileName( null );
+                }
+            } );
+
+        $fakeInput
+            .on( 'click', function( event ) {
+                /*
+                    The purpose of this handler is to selectively propagate clicks on the fake
+                    input to the underlying file input (to show the file picker window).
+                    It blocks propagation if the filepicker has a value to avoid accidentally
+                    clearing files in a loaded record, hereby blocking native browser file input behavior
+                    to clear values. Instead the reset button is the only way to clear a value.
+                */
+                if ( that.props.readonly || $input[ 0 ].value || $fakeInput[ 0 ].value ) {
+                    $( this ).focus();
+                    event.stopImmediatePropagation();
+                    return false;
+                }
+                event.preventDefault();
+                $input.trigger( 'click.propagate' );
+            } )
+            .on( 'change', () => // For robustness, avoid any editing of filenames by user.
+                false );
+    }
+
+    _showFileName( fileName ) {
+        this.$widget.find( '.fake-file-input' ).val( fileName ).prop( 'readonly', !!fileName );
+    }
+
+    _updatePlaceholder() {
+        this.$widget.find( '.fake-file-input' ).attr( 'placeholder', t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) );
+    }
+
+    _getMarkup() {
+        // HTML syntax copied from filepicker widget
+        const load = this.props.load ? `&lt;input type="file" class="ignore draw-widget__load"${this.props.capture !== null ? ` capture="${this.props.capture}"` : ''} accept="${this.props.accept}"/>&lt;div class="widget file-picker">&lt;input class="ignore fake-file-input"/>&lt;div class="file-feedback">&lt;/div>&lt;/div>` : '';
+        const fullscreenBtns = this.props.touch ? '&lt;button type="button" class="show-canvas-btn btn btn-default">Draw/Sign&lt;/button>' +
+            '&lt;button type="button" class="hide-canvas-btn btn btn-default">&lt;span class="icon icon-arrow-left"> &lt;/span>&lt;/button>' : '';
+        const fragment = document.createRange().createContextualFragment(
+            `&lt;div class="widget draw-widget">
+                &lt;div class="draw-widget__body">
+                    ${fullscreenBtns}
+                    ${load}
+                    &lt;canvas class="draw-widget__body__canvas noSwipe disabled" tabindex="0">&lt;/canvas>
+                    &lt;div class="draw-widget__colorpicker">&lt;/div>
+                    ${this.props.type === 'signature' ? '' : '&lt;button class="btn-icon-only draw-widget__undo" aria-label="undo" type=button>&lt;i class="icon icon-undo"> &lt;/i>&lt;/button>'}
+                &lt;/div>
+                &lt;div class="draw-widget__footer">
+                    &lt;div class="draw-widget__feedback">&lt;/div>
+                &lt;/div>
+            &lt;/div>`
+        );
+        fragment.querySelector( '.draw-widget__footer' ).prepend( this.downloadButtonHtml );
+        fragment.querySelector( '.draw-widget__footer' ).prepend( this.resetButtonHtml );
+
+        const colorpicker = fragment.querySelector( '.draw-widget__colorpicker' );
+
+        this.props.colors.forEach( ( color, index ) => {
+            const current = index === 0 ? ' current' : '';
+            const colorDiv = document.createRange().createContextualFragment( `&lt;div class="${current}"data-color="${color}" style="background: ${color};" />` );
+            colorpicker.append( colorDiv );
+        } );
+
+        return fragment;
+    }
+
+    _updateValue() {
+        const now = new Date();
+        const postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
+        this.element.dataset.filenamePostfix = postfix;
+        // Note that this.element has become a text input.
+        this.originalInputValue = this.props.filename;
+        // pad.toData() doesn't seem to work when redrawing on a smaller canvas. Doesn't scale.
+        // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
+        this.value = this.pad.toDataURL();
+        this._updateDownloadLink( this.value );
+    }
+
+    _reset() {
+        const that = this;
+
+        if ( this.element.value ) {
+            // This discombulated line is to help the i18next parser pick up all 3 keys.
+            const item = this.props.type === 'signature' ?
+                t( 'drawwidget.signature' ) : ( this.props.type === 'drawing' ? t( 'drawwidget.drawing' ) : t( 'drawwidget.annotation' ) );
+            dialog.confirm( t( 'filepicker.resetWarning', { item } ) )
+                .then( confirmed => {
+                    if ( !confirmed ) {
+                        return;
+                    }
+                    that.pad.clear();
+                    that.cache = null;
+                    // Only upon reset is loadedFileName removed, so that "undo" will work
+                    // for drawings loaded from storage.
+                    delete that.element.dataset.loadedFileName;
+                    that.element.dataset.filenamePostfix = '';
+                    $( that.element ).val( '' ).trigger( 'change' );
+                    // Annotate file input
+                    that.$widget.find( 'input[type=file]' ).val( '' ).trigger( 'change' );
+                    that._updateDownloadLink( '' );
+                    that.disable();
+                    that.enable();
+                } );
+        }
+    }
+
+    /**
+     *
+     * @param {*} file Either a filename or a file.
+     */
+    _loadFileIntoPad( file ) {
+        const that = this;
+        if ( !file ) {
+            return Promise.resolve( '' );
+        }
+        return fileManager.getObjectUrl( file )
+            .then( that.pad.fromObjectURL.bind( that.pad ) )
+            .then( objectUrl => {
+                that.cache = objectUrl;
+                return objectUrl;
+            } )
+            .catch( () => {
+                that._showFeedback( 'File could not be loaded (leave unchanged if already submitted and you want to preserve it).', 'error' );
+            } );
+    }
+
+    _showFeedback( message ) {
+        message = message || '';
+
+        // replace text and replace all existing classes with the new status class
+        this.$widget.find( '.draw-widget__feedback' ).text( message );
+    }
+
+    _updateDownloadLink( url ) {
+        if ( url &amp;&amp; url.indexOf( 'data:' ) === 0 ) {
+            url = URL.createObjectURL( dataUriToBlobSync( url ) );
+        }
+        const fileName = url ? getFilename( { name: this.element.value }, this.element.dataset.filenamePostfix ) : '';
+        updateDownloadLink( this.$widget.find( '.btn-download' )[ 0 ], url, fileName );
+    }
+
+    _handleResize( canvas ) {
+        const that = this;
+        $( window ).on( 'resize', () => {
+            that._resizeCanvas( canvas );
+        } );
+    }
+
+    // Adjust canvas coordinate space taking into account pixel ratio,
+    // to make it look crisp on mobile devices.
+    // This also causes canvas to be cleared.
+    _resizeCanvas( canvas ) {
+        // Use a little trick to avoid resizing currently-hidden canvases
+        // https://github.com/enketo/enketo-core/issues/605
+        if ( canvas.offsetWidth > 0 ) {
+            // When zoomed out to less than 100%, for some very strange reason,
+            // some browsers report devicePixelRatio as less than 1
+            // and only part of the canvas is cleared then.
+            const ratio = Math.max( window.devicePixelRatio || 1, 1 );
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext( '2d' ).scale( ratio, ratio );
+            $( canvas ).trigger( 'canvasreload' );
+        }
+    }
+
+    disable() {
+        const that = this;
+        const canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
+
+        this.initialize
+            .then( () => {
+                that.pad.off();
+                canvas.classList.add( 'disabled' );
+                that.$widget
+                    .find( '.btn-reset' )
+                    .prop( 'disabled', true );
+            } );
+    }
+
+    enable() {
+        const that = this;
+        const canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
+        const touchNotFull = this.props.touch &amp;&amp; !this.$widget.is( '.full-screen' );
+        const needFile = this.props.load &amp;&amp; !this.element.value;
+
+        this.initialize
+            .then( () => {
+                if ( !that.props.readonly &amp;&amp; !needFile &amp;&amp; !touchNotFull ) {
+                    that.pad.on();
+                    canvas.classList.remove( 'disabled' );
+                    that.$widget
+                        .find( '.btn-reset' )
+                        .prop( 'disabled', false );
+                }
+                // https://github.com/enketo/enketo-core/issues/450
+                // When loading a question with a relevant, it is invisible
+                // until branch.js removes the "pre-init" class. The rendering of the
+                // canvas may therefore still be ongoing when this widget is instantiated.
+                // For that reason we call _resizeCanvas when enable is called to make
+                // sure the canvas is rendered properly.
+                that._resizeCanvas( canvas );
+            } );
+    }
+
+    /**
+     * Updates value when it is programmatically cleared.
+     * There is no way to programmatically update a file input other than clearing it, so that's all
+     * we need to do.
+     */
+    update() {
+        if ( this.originalInputValue === '' ) {
+            this._reset();
+        }
+    }
+
+    get props() {
+        const props = this._props;
+
+        props.type = props.appearances.includes( 'draw' ) ? 'drawing' : ( props.appearances.includes( 'signature' ) ? 'signature' : 'annotation' );
+        props.filename = `${props.type}.png`;
+        props.load = props.type === 'annotation';
+        props.colors = props.type === 'signature' ? [] : [ 'black', 'lightblue', 'blue', 'red', 'orange', 'cyan', 'yellow', 'lightgreen', 'green', 'pink', 'purple', 'lightgray', 'darkgray' ];
+        props.touch = support.touch;
+        props.accept = this.element.getAttribute( 'accept' );
+        props.capture = this.element.getAttribute( 'capture' );
+
+        return props;
+    }
+
+    get value() {
+        return this.cache || '';
+    }
+
+    set value( dataUrl ) {
+        this.cache = dataUrl;
+    }
+
+}
+
+export default DrawWidget;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/jquery-3.1.1.min.js"></script>
+
+<script src="scripts/search.js"></script>
+
+
+
+
+</body>
+</html>

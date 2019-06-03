@@ -3,7 +3,8 @@ import Widget from '../../js/widget';
 /**
  * Column (select) Widgets. Adds a filler if the last row contains two elements.
  * The filler avoids the last radiobutton or checkbox to not be lined up correctly below the second column.
- * 
+ *
+ * @extends Widget
  */
 class Columns extends Widget {
 

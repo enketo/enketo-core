@@ -1,7 +1,5 @@
 /**
- * Updates calculated items
- *
- * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+ * @module calculate
  */
 
 import $ from 'jquery';
@@ -10,7 +8,12 @@ import config from 'enketo/config';
 import { getAncestors } from './dom-utils';
 
 export default {
-
+    /**
+     * Updates calculated items.
+     *
+     * @param {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated - The object containing info on updated data nodes.
+     * @param {string=} filter - CSS selector filter.
+     */
     update( updated = {}, filter = '' ) {
         let $nodes;
         const that = this;
@@ -63,8 +66,8 @@ export default {
                         updateCalc( index );
                     } );
                 } else {
-                    /* 
-                     * This occurs when the updated object contains a relevantPath that refers to a repeat and multiple repeats are 
+                    /*
+                     * This occurs when the updated object contains a relevantPath that refers to a repeat and multiple repeats are
                      * present, without calculated items that HAVE a visible form control.
                      */
                     const $repeatSiblings = $control.closest( '.or-repeat' ).siblings( '.or-repeat' ).addBack();
@@ -86,9 +89,9 @@ export default {
                  * (also for nodes in #calculated-items).
                  *
                  * Then get all the group parents of that node.
-                 * 
+                 *
                  * TODO: determine index at every level to properly support repeats and nested repeats
-                 * 
+                 *
                  * Note: getting the parents of $control wouldn't work for nodes inside #calculated-items!
                  */
                 const parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );

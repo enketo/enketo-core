@@ -1,5 +1,7 @@
 /**
- * Simple file manager with cross-browser support. That uses the FileReader
+ * @module fileManager
+ *
+ * @description Simple file manager with cross-browser support. That uses the FileReader
  * to create previews. Can be replaced with a more advanced version that
  * obtains files from storage.
  *
@@ -14,53 +16,65 @@ const fileManager = {};
 import { t } from 'enketo/translator';
 
 /**
- * Initialize the file manager .
- * @return {[type]} promise boolean or rejection with Error
+ * @function init
+ *
+ * @description Initialize the file manager.
+ *
+ * @return {Promise|boolean|Error} promise boolean or rejection with Error
  */
-fileManager.init = () => Promise.resolve( true );
+fileManager.init = () => { return Promise.resolve( true ); };
 
 /**
- * Whether the filemanager is waiting for user permissions
- * @return {Boolean} [description]
+ * @function isWaitingForPermissions
+ *
+ * @description Whether the filemanager is waiting for user permissions
+ *
+ * @return {boolean} [description]
  */
-fileManager.isWaitingForPermissions = () => false;
+fileManager.isWaitingForPermissions = () => { return false; };
 
 /**
- * Obtains a URL that can be used to show a preview of the file when used
+ * @function getFileUrl
+ *
+ * @description Obtains a URL that can be used to show a preview of the file when used
  * as a src attribute.
- * 
+ *
  * It is meant for media previews and media downloads.
  *
- * @param  {?string|Object} subject File or filename in local storage
- * @return {[type]}         promise url string or rejection with Error
+ * @param  {?string|Object} subject - File or filename in local storage
+ * @return {Promise|string|Error} promise url string or rejection with Error
  */
-fileManager.getFileUrl = subject => new Promise( ( resolve, reject ) => {
-    let error;
+fileManager.getFileUrl = subject => {
+    return new Promise( ( resolve, reject ) => {
+        let error;
 
-    if ( !subject ) {
-        resolve( null );
-    } else if ( typeof subject === 'string' ) {
-        // TODO obtain from storage as http URL or objectURL
-        reject( 'no!' );
-    } else if ( typeof subject === 'object' ) {
-        if ( fileManager.isTooLarge( subject ) ) {
-            error = new Error( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
-            reject( error );
+        if ( !subject ) {
+            resolve( null );
+        } else if ( typeof subject === 'string' ) {
+            // TODO obtain from storage as http URL or objectURL
+            reject( 'no!' );
+        } else if ( typeof subject === 'object' ) {
+            if ( fileManager.isTooLarge( subject ) ) {
+                error = new Error( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
+                reject( error );
+            } else {
+                resolve( URL.createObjectURL( subject ) );
+            }
         } else {
-            resolve( URL.createObjectURL( subject ) );
+            reject( new Error( 'Unknown error occurred' ) );
         }
-    } else {
-        reject( new Error( 'Unknown error occurred' ) );
-    }
-} );
+    } );
+};
 
 /**
- * Similar to getFileURL, except that this one is guaranteed to return an objectURL
- * 
+ * @function getObjectUrl
+ *
+ * @description Similar to getFileURL, except that this one is guaranteed to return an objectURL
+ *
  * It is meant for loading images into a canvas.
- * 
- * @param  {?string|Object} subject File or filename in local storage
- * @return {[type]}         promise url string or rejection with Error
+ *
+ * @param  {?string|Object} subject - File or filename in local storage
+ * @return {Promise|string|Error} promise url string or rejection with Error
  */
 fileManager.getObjectUrl = subject => fileManager.getFileUrl( subject )
     .then( url => {
@@ -70,6 +84,12 @@ fileManager.getObjectUrl = subject => fileManager.getFileUrl( subject )
         return url;
     } );
 
+/**
+ * @function urlToBlob
+ *
+ * @param {string} url - url to get
+ * @return {Promise} promise of XMLHttpRequesting given url
+ */
 fileManager.urlToBlob = url => {
     const xhr = new XMLHttpRequest();
 
@@ -84,8 +104,11 @@ fileManager.urlToBlob = url => {
 };
 
 /**
- * Obtain files currently stored in file input elements of open record
- * @return {[File]} array of files
+ * @function getCurrentFiles
+ *
+ * @description Obtain files currently stored in file input elements of open record
+ *
+ * @return {Array.File} array of files
  */
 fileManager.getCurrentFiles = () => {
     const files = [];
@@ -123,16 +146,21 @@ fileManager.getCurrentFiles = () => {
 };
 
 /**
- * Placeholder function to check if file size is acceptable. 
- * 
- * @param  {Blob}  file [description]
- * @return {Boolean}      [description]
+ * @function isTooLarge
+ *
+ * @description Placeholder function to check if file size is acceptable.
+ *
+ * @return {boolean} whether file is too large
  */
-fileManager.isTooLarge = () => false;
+fileManager.isTooLarge = () => { return false; };
 
 /**
- * Replace with function that determines max size published in OpenRosa server response header.
+ * @function getMaxSizeReadable
+ *
+ * @description Replace with function that determines max size published in OpenRosa server response header.
+ *
+ * @return {string} human radable maximiym size
  */
-fileManager.getMaxSizeReadable = () => `${5}MB`;
+fileManager.getMaxSizeReadable = () => { return `${5}MB`; };
 
 export default fileManager;

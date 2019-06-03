@@ -16,6 +16,9 @@ const NORTHING_OFFSET = 10000000.0;
 let esriArcGisJsRequest;
 let esri;
 
+/**
+ * @extends Widget
+ */
 class ArcGisGeopicker extends Widget {
 
     static get selector() {
@@ -302,7 +305,7 @@ class ArcGisGeopicker extends Widget {
     /**
      * Updates the value in the original input element.
      *
-     * @return {Boolean} Whether the value was changed.
+     * @return {boolean} Whether the value was changed.
      */
     _updateValue() {
         const oldValue = this.originalInputValue;
@@ -347,7 +350,7 @@ class ArcGisGeopicker extends Widget {
      * invalid geopoints in a list of geopoints (the form controller only validates the total list).
      *
      * @param  {string}  geopoint [description]
-     * @return {Boolean}          [description]
+     * @return {boolean}          [description]
      */
     _isValidGeopoint( geopoint ) {
         let coords;
@@ -381,7 +384,7 @@ class ArcGisGeopicker extends Widget {
             return;
         }
 
-        // add the map 
+        // add the map
         if ( !this.mapView ) {
             this._addDynamicMap();
         }
@@ -395,7 +398,7 @@ class ArcGisGeopicker extends Widget {
     /**
      * Validates an individual latlng Array or Object
      * @param  {(Array.<number|string>|{lat: number, long:number})}  latLng latLng object or array
-     * @return {Boolean}        Whether latLng is valid or not
+     * @return {boolean}        Whether latLng is valid or not
      */
     _isValidLatLng( latLng ) {
         let lat;
@@ -547,7 +550,7 @@ class ArcGisGeopicker extends Widget {
             const currentId = ( evt && evt.current ) ? evt.current.id : null;
             const nextBasemap = that._getNextBasemap( currentId, basemapList );
             // TODO: it might be more efficient to maintain an array of Basemap instances
-            // instead of strings. 
+            // instead of strings.
             basemapToggle.nextBasemap = nextBasemap;
         } );
 
@@ -856,9 +859,8 @@ class ArcGisGeopicker extends Widget {
      * Loads a value into the widget.
      * This function could be called upon intialization to load the default value.
      * It could also be called when the value has updated due a calculation.
-     * 
-     * @param  {[type]} val [description]
-     * @return {[type]}     [description]
+     *
+     * @param {string} value
      */
     set value( value ) {
         const that = this;

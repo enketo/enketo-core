@@ -9,6 +9,7 @@ import '../../js/dropdown.jquery';
 /**
  * Extends eternicode's bootstrap-datepicker without changing the original.
  * https://github.com/eternicode/bootstrap-datepicker
+ * @extends Widget
  */
 class DatepickerExtended extends Widget {
 
@@ -95,7 +96,7 @@ class DatepickerExtended extends Widget {
             let value = e.type === 'paste' ? getPasteData( e ) : this.value;
 
             if ( value.length > 0 ) {
-                // Note: types.date.convert considers numbers to be a number of days since the epoch 
+                // Note: types.date.convert considers numbers to be a number of days since the epoch
                 // as this is what the XPath evaluator may return.
                 // For user-entered input, we want to consider a Number value to be incorrect, expect for year input.
                 if ( isNumber( value ) && settings.format !== 'yyyy' ) {
@@ -106,7 +107,7 @@ class DatepickerExtended extends Widget {
                 }
             }
 
-            // Here we have to do something unusual to prevent native inputs from automatically 
+            // Here we have to do something unusual to prevent native inputs from automatically
             // changing 2012-12-32 into 2013-01-01
             // convertedValue is '' for invalid 2012-12-32
             if ( convertedValue === '' || this.originalInputValue !== convertedValue ) {

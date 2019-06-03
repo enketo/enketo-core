@@ -1,5 +1,8 @@
 import Widget from '../../js/widget';
 
+/**
+ * @extends Widget
+ */
 class UrlWidget extends Widget {
 
     static get selector() {

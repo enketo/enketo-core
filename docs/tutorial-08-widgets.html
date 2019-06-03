@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Tutorial: Creating/extending widgets - Enketo Core</title>
+    
+    <meta name="description" content="Extensible Enketo form engine" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/enketo/enketo-core" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h2><a href="https://github.com/enketo/enketo-core/blob/master/CHANGELOG.md" target="_blank" class="menu-item" id="change-log" >Change log</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-01-getting-started.html">Getting started</a></li><li><a href="tutorial-02-global-configuration.html">Configuration</a></li><li><a href="tutorial-03-browser-support.html">Browser support</a></li><li><a href="tutorial-04-development.html">Development</a></li><li><a href="tutorial-05-notes-js.html">JS rules</a></li><li><a href="tutorial-06-notes-css.html">CSS rules</a></li><li><a href="tutorial-07-events.html">Available events</a></li><li><a href="tutorial-08-widgets.html">Creating/extending widgets</a></li></ul><h3>Classes</h3><ul><li><a href="AnalogScaleWidget.html">AnalogScaleWidget</a><ul class='methods'><li data-type='method'><a href="AnalogScaleWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_renderLabels">_renderLabels</a></li><li data-type='method'><a href="AnalogScaleWidget.html#disable">disable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#enable">enable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#update">update</a></li></ul></li><li><a href="ArcGisGeopicker.html">ArcGisGeopicker</a><ul class='methods'><li data-type='method'><a href="ArcGisGeopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addEsriLocate">_addEsriLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_addRegularLocate">_addRegularLocate</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="ArcGisGeopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="ArcGisGeopicker.html#disable">disable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#enable">enable</a></li><li data-type='method'><a href="ArcGisGeopicker.html#update">update</a></li></ul></li><li><a href="AutocompleteSelectpicker.html">AutocompleteSelectpicker</a><ul class='methods'><li data-type='method'><a href="AutocompleteSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#update">update</a></li></ul></li><li><a href="Comment.html">Comment</a><ul class='methods'><li data-type='method'><a href="Comment.html#disable">disable</a></li><li data-type='method'><a href="Comment.html#enable">enable</a></li><li data-type='method'><a href="Comment.html#update">update</a></li></ul></li><li><a href="CompactPicker.html">CompactPicker</a><ul class='methods'><li data-type='method'><a href="CompactPicker.html#disable">disable</a></li><li data-type='method'><a href="CompactPicker.html#enable">enable</a></li><li data-type='method'><a href="CompactPicker.html#update">update</a></li></ul></li><li><a href="DatepickerExtended.html">DatepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatepickerExtended.html#_createFakeDateInput">_createFakeDateInput</a></li><li data-type='method'><a href="DatepickerExtended.html#_setChangeHandler">_setChangeHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setFocusHandler">_setFocusHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setResetHandler">_setResetHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatepickerExtended.html#update">update</a></li></ul></li><li><a href="DatepickerMobile.html">DatepickerMobile</a><ul class='methods'><li data-type='method'><a href="DatepickerMobile.html#disable">disable</a></li><li data-type='method'><a href="DatepickerMobile.html#enable">enable</a></li><li data-type='method'><a href="DatepickerMobile.html#update">update</a></li></ul></li><li><a href="DatepickerNative.html">DatepickerNative</a><ul class='methods'><li data-type='method'><a href="DatepickerNative.html#disable">disable</a></li><li data-type='method'><a href="DatepickerNative.html#enable">enable</a></li><li data-type='method'><a href="DatepickerNative.html#update">update</a></li></ul></li><li><a href="DatetimepickerExtended.html">DatetimepickerExtended</a><ul class='methods'><li data-type='method'><a href="DatetimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#update">update</a></li></ul></li><li><a href="DesktopSelectpicker.html">DesktopSelectpicker</a><ul class='methods'><li data-type='method'><a href="DesktopSelectpicker.html#_createSelectedStr">_createSelectedStr</a></li><li data-type='method'><a href="DesktopSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#update">update</a></li></ul></li><li><a href="DrawWidget.html">DrawWidget</a><ul class='methods'><li data-type='method'><a href="DrawWidget.html#_loadFileIntoPad">_loadFileIntoPad</a></li><li data-type='method'><a href="DrawWidget.html#disable">disable</a></li><li data-type='method'><a href="DrawWidget.html#enable">enable</a></li><li data-type='method'><a href="DrawWidget.html#update">update</a></li></ul></li><li><a href="Filepicker.html">Filepicker</a><ul class='methods'><li data-type='method'><a href="Filepicker.html#disable">disable</a></li><li data-type='method'><a href="Filepicker.html#enable">enable</a></li><li data-type='method'><a href="Filepicker.html#update">update</a></li></ul></li><li><a href="Form.html">Form</a><ul class='members'><li data-type='member'><a href="Form.html#.requiredTransformerVersion">requiredTransformerVersion</a></li><li data-type='member'><a href="Form.html#validate">validate</a></li></ul><ul class='methods'><li data-type='method'><a href="Form.html#addModule">addModule</a></li><li data-type='method'><a href="Form.html#blockPageNavigation">blockPageNavigation</a></li><li data-type='method'><a href="Form.html#getDataStr">getDataStr</a></li><li data-type='method'><a href="Form.html#getDataStrWithoutIrrelevantNodes">getDataStrWithoutIrrelevantNodes</a></li><li data-type='method'><a href="Form.html#getQuerySelectorsForLogic">getQuerySelectorsForLogic</a></li><li data-type='method'><a href="Form.html#getRelatedNodes">getRelatedNodes</a></li><li data-type='method'><a href="Form.html#goToTarget">goToTarget</a></li><li data-type='method'><a href="Form.html#grosslyViolateStandardComplianceByIgnoringCertainCalcs">grosslyViolateStandardComplianceByIgnoringCertainCalcs</a></li><li data-type='method'><a href="Form.html#init">init</a></li><li data-type='method'><a href="Form.html#isValid">isValid</a></li><li data-type='method'><a href="Form.html#replaceChoiceNameFn">replaceChoiceNameFn</a></li><li data-type='method'><a href="Form.html#resetView">resetView</a></li><li data-type='method'><a href="Form.html#setAllVals">setAllVals</a></li><li data-type='method'><a href="Form.html#validateAll">validateAll</a></li><li data-type='method'><a href="Form.html#validateContent">validateContent</a></li><li data-type='method'><a href="Form.html#validateInput">validateInput</a></li><li data-type='method'><a href="Form.html#validationUpdate">validationUpdate</a></li></ul></li><li><a href="FormModel.html">FormModel</a><ul class='methods'><li data-type='method'><a href="FormModel.html#addRepeat">addRepeat</a></li><li data-type='method'><a href="FormModel.html#determineIndex">determineIndex</a></li><li data-type='method'><a href="FormModel.html#evaluate">evaluate</a></li><li data-type='method'><a href="FormModel.html#extractTemplates">extractTemplates</a></li><li data-type='method'><a href="FormModel.html#getRepeatIndex">getRepeatIndex</a></li><li data-type='method'><a href="FormModel.html#getRepeatSeries">getRepeatSeries</a></li><li data-type='method'><a href="FormModel.html#getSecondaryInstance">getSecondaryInstance</a></li><li data-type='method'><a href="FormModel.html#getStr">getStr</a></li><li data-type='method'><a href="FormModel.html#getXPath">getXPath</a></li><li data-type='method'><a href="FormModel.html#importNode">importNode</a></li><li data-type='method'><a href="FormModel.html#init">init</a></li><li data-type='method'><a href="FormModel.html#makeBugCompliant">makeBugCompliant</a></li><li data-type='method'><a href="FormModel.html#mergeXml">mergeXml</a></li><li data-type='method'><a href="FormModel.html#node">node</a></li><li data-type='method'><a href="FormModel.html#replaceCurrentFn">replaceCurrentFn</a></li><li data-type='method'><a href="FormModel.html#replaceIndexedRepeatFn">replaceIndexedRepeatFn</a></li><li data-type='method'><a href="FormModel.html#replaceInstanceFn">replaceInstanceFn</a></li><li data-type='method'><a href="FormModel.html#setInstanceIdAndDeprecatedId">setInstanceIdAndDeprecatedId</a></li><li data-type='method'><a href="FormModel.html#shiftRoot">shiftRoot</a></li><li data-type='method'><a href="FormModel.html#trimValues">trimValues</a></li></ul></li><li><a href="Geopicker.html">Geopicker</a><ul class='methods'><li data-type='method'><a href="Geopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="Geopicker.html#_addPointBtn">_addPointBtn</a></li><li data-type='method'><a href="Geopicker.html#_convertKmlCoordinatesToLeafletCoordinates">_convertKmlCoordinatesToLeafletCoordinates</a></li><li data-type='method'><a href="Geopicker.html#_dynamicMapAvailable">_dynamicMapAvailable</a></li><li data-type='method'><a href="Geopicker.html#_editPoint">_editPoint</a></li><li data-type='method'><a href="Geopicker.html#_enableDetection">_enableDetection</a></li><li data-type='method'><a href="Geopicker.html#_enableSearch">_enableSearch</a></li><li data-type='method'><a href="Geopicker.html#_getGoogleTileLayer">_getGoogleTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getLayers">_getLayers</a></li><li data-type='method'><a href="Geopicker.html#_getLeafletTileLayer">_getLeafletTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getTileOptions">_getTileOptions</a></li><li data-type='method'><a href="Geopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLngList">_isValidLatLngList</a></li><li data-type='method'><a href="Geopicker.html#_loadGoogleMapsScript">_loadGoogleMapsScript</a></li><li data-type='method'><a href="Geopicker.html#_markAsInvalid">_markAsInvalid</a></li><li data-type='method'><a href="Geopicker.html#_markAsValid">_markAsValid</a></li><li data-type='method'><a href="Geopicker.html#_removePoint">_removePoint</a></li><li data-type='method'><a href="Geopicker.html#_setCurrent">_setCurrent</a></li><li data-type='method'><a href="Geopicker.html#_updateArea">_updateArea</a></li><li data-type='method'><a href="Geopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="Geopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="Geopicker.html#_updateMarkers">_updateMarkers</a></li><li data-type='method'><a href="Geopicker.html#_updatePolygon">_updatePolygon</a></li><li data-type='method'><a href="Geopicker.html#_updatePolyline">_updatePolyline</a></li><li data-type='method'><a href="Geopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="Geopicker.html#containsEmptyPoints">containsEmptyPoints</a></li><li data-type='method'><a href="Geopicker.html#disable">disable</a></li><li data-type='method'><a href="Geopicker.html#enable">enable</a></li><li data-type='method'><a href="Geopicker.html#update">update</a></li><li data-type='method'><a href="Geopicker.html#updatedPolylineWouldIntersect">updatedPolylineWouldIntersect</a></li></ul></li><li><a href="HorizontalChoices.html">HorizontalChoices</a><ul class='methods'><li data-type='method'><a href="HorizontalChoices.html#disable">disable</a></li><li data-type='method'><a href="HorizontalChoices.html#enable">enable</a></li><li data-type='method'><a href="HorizontalChoices.html#update">update</a></li></ul></li><li><a href="ImageMap.html">ImageMap</a><ul class='methods'><li data-type='method'><a href="ImageMap.html#_removeUnmatchedIds">_removeUnmatchedIds</a></li><li data-type='method'><a href="ImageMap.html#_updateImage">_updateImage</a></li><li data-type='method'><a href="ImageMap.html#disable">disable</a></li><li data-type='method'><a href="ImageMap.html#enable">enable</a></li><li data-type='method'><a href="ImageMap.html#update">update</a></li></ul></li><li><a href="ImageViewer.html">ImageViewer</a><ul class='methods'><li data-type='method'><a href="ImageViewer.html#disable">disable</a></li><li data-type='method'><a href="ImageViewer.html#enable">enable</a></li><li data-type='method'><a href="ImageViewer.html#update">update</a></li></ul></li><li><a href="MobileSelectPicker.html">MobileSelectPicker</a><ul class='methods'><li data-type='method'><a href="MobileSelectPicker.html#_showSelectedValues">_showSelectedValues</a></li><li data-type='method'><a href="MobileSelectPicker.html#disable">disable</a></li><li data-type='method'><a href="MobileSelectPicker.html#enable">enable</a></li><li data-type='method'><a href="MobileSelectPicker.html#update">update</a></li></ul></li><li><a href="Nodeset.html">Nodeset</a><ul class='methods'><li data-type='method'><a href="Nodeset.html#convert">convert</a></li><li data-type='method'><a href="Nodeset.html#getVal">getVal</a></li><li data-type='method'><a href="Nodeset.html#remove">remove</a></li><li data-type='method'><a href="Nodeset.html#setIndex">setIndex</a></li><li data-type='method'><a href="Nodeset.html#setVal">setVal</a></li><li data-type='method'><a href="Nodeset.html#validateConstraintAndType">validateConstraintAndType</a></li></ul></li><li><a href="Radiopicker.html">Radiopicker</a><ul class='methods'><li data-type='method'><a href="Radiopicker.html#disable">disable</a></li><li data-type='method'><a href="Radiopicker.html#enable">enable</a></li><li data-type='method'><a href="Radiopicker.html#update">update</a></li></ul></li><li><a href="RangeWidget.html">RangeWidget</a><ul class='methods'><li data-type='method'><a href="RangeWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="RangeWidget.html#disable">disable</a></li><li data-type='method'><a href="RangeWidget.html#enable">enable</a></li><li data-type='method'><a href="RangeWidget.html#update">update</a></li></ul></li><li><a href="RankWidget.html">RankWidget</a><ul class='methods'><li data-type='method'><a href="RankWidget.html#disable">disable</a></li><li data-type='method'><a href="RankWidget.html#enable">enable</a></li><li data-type='method'><a href="RankWidget.html#update">update</a></li></ul></li><li><a href="TextareaWidget.html">TextareaWidget</a><ul class='methods'><li data-type='method'><a href="TextareaWidget.html#disable">disable</a></li><li data-type='method'><a href="TextareaWidget.html#enable">enable</a></li><li data-type='method'><a href="TextareaWidget.html#update">update</a></li></ul></li><li><a href="TextMaxWidget.html">TextMaxWidget</a></li><li><a href="TimepickerExtended.html">TimepickerExtended</a><ul class='methods'><li data-type='method'><a href="TimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="TimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="TimepickerExtended.html#update">update</a></li></ul></li><li><a href="UrlWidget.html">UrlWidget</a><ul class='methods'><li data-type='method'><a href="UrlWidget.html#disable">disable</a></li><li data-type='method'><a href="UrlWidget.html#enable">enable</a></li><li data-type='method'><a href="UrlWidget.html#update">update</a></li></ul></li><li><a href="Widget.html">Widget</a><ul class='members'><li data-type='member'><a href="Widget.html#.list">list</a></li><li data-type='member'><a href="Widget.html#.name">name</a></li><li data-type='member'><a href="Widget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#props">props</a></li><li data-type='member'><a href="Widget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Widget.html#value">value</a></li><li data-type='member'><a href="Widget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Widget.html#.condition">condition</a></li><li data-type='method'><a href="Widget.html#disable">disable</a></li><li data-type='method'><a href="Widget.html#enable">enable</a></li><li data-type='method'><a href="Widget.html#update">update</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-calculate.html">calculate</a><ul class='methods'><li data-type='method'><a href="module-calculate.html#.update">update</a></li></ul></li><li><a href="module-dom-utils.html">dom-utils</a><ul class='methods'><li data-type='method'><a href="module-dom-utils.html#~empty">empty</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElements">getSiblingElements</a></li><li data-type='method'><a href="module-dom-utils.html#~getSiblingElementsAndSelf">getSiblingElementsAndSelf</a></li></ul></li><li><a href="module-event.html">event</a><ul class='methods'><li data-type='method'><a href="module-event.html#~AddRepeat">AddRepeat</a></li><li data-type='method'><a href="module-event.html#~ApplyFocus">ApplyFocus</a></li><li data-type='method'><a href="module-event.html#~Change">Change</a></li><li data-type='method'><a href="module-event.html#~ChangeLanguage">ChangeLanguage</a></li><li data-type='method'><a href="module-event.html#~DataUpdate">DataUpdate</a></li><li data-type='method'><a href="module-event.html#~Edited">Edited</a></li><li data-type='method'><a href="module-event.html#~FakeFocus">FakeFocus</a></li><li data-type='method'><a href="module-event.html#~GoToHidden">GoToHidden</a></li><li data-type='method'><a href="module-event.html#~Input">Input</a></li><li data-type='method'><a href="module-event.html#~InputUpdate">InputUpdate</a></li><li data-type='method'><a href="module-event.html#~Invalidated">Invalidated</a></li><li data-type='method'><a href="module-event.html#~PageFlip">PageFlip</a></li><li data-type='method'><a href="module-event.html#~ProgressUpdate">ProgressUpdate</a></li><li data-type='method'><a href="module-event.html#~Removed">Removed</a></li><li data-type='method'><a href="module-event.html#~RemoveRepeat">RemoveRepeat</a></li><li data-type='method'><a href="module-event.html#~ValidationComplete">ValidationComplete</a></li></ul></li><li><a href="module-fileManager.html">fileManager</a><ul class='methods'><li data-type='method'><a href="module-fileManager.html#~getCurrentFiles">getCurrentFiles</a></li><li data-type='method'><a href="module-fileManager.html#~getFileUrl">getFileUrl</a></li><li data-type='method'><a href="module-fileManager.html#~getMaxSizeReadable">getMaxSizeReadable</a></li><li data-type='method'><a href="module-fileManager.html#~getObjectUrl">getObjectUrl</a></li><li data-type='method'><a href="module-fileManager.html#~init">init</a></li><li data-type='method'><a href="module-fileManager.html#~isTooLarge">isTooLarge</a></li><li data-type='method'><a href="module-fileManager.html#~isWaitingForPermissions">isWaitingForPermissions</a></li><li data-type='method'><a href="module-fileManager.html#~urlToBlob">urlToBlob</a></li></ul></li><li><a href="module-format.html">format</a></li><li><a href="module-relevant.html">relevant</a><ul class='methods'><li data-type='method'><a href="module-relevant.html#.activate">activate</a></li><li data-type='method'><a href="module-relevant.html#.clear">clear</a></li><li data-type='method'><a href="module-relevant.html#.deactivate">deactivate</a></li><li data-type='method'><a href="module-relevant.html#.disable">disable</a></li><li data-type='method'><a href="module-relevant.html#.enable">enable</a></li><li data-type='method'><a href="module-relevant.html#.evaluate">evaluate</a></li><li data-type='method'><a href="module-relevant.html#.process">process</a></li><li data-type='method'><a href="module-relevant.html#.selfRelevant">selfRelevant</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="module-format-format.html">format~format</a></li><li><a href="module-format-time.html">format~time</a><ul class='methods'><li data-type='method'><a href="module-format-time.html#.hasMeridian">hasMeridian</a></li><li data-type='method'><a href="module-format-time.html#.meridianNotation">meridianNotation</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#_getElements">_getElements</a></li><li><a href="global.html#_instantiate">_instantiate</a></li><li><a href="global.html#_setLangChangeListener">_setLangChangeListener</a></li><li><a href="global.html#_setOptionChangeListener">_setOptionChangeListener</a></li><li><a href="global.html#_setValChangeListener">_setValChangeListener</a></li><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#FormLogicError">FormLogicError</a></li><li><a href="global.html#getPrintStyleSheet">getPrintStyleSheet</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#parseFunctionFromExpression">parseFunctionFromExpression</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#setDpi">setDpi</a></li><li><a href="global.html#styleReset">styleReset</a></li><li><a href="global.html#styleToAll">styleToAll</a></li><li><a href="global.html#t">t</a></li><li><a href="global.html#toArray">toArray</a></li><li><a href="global.html#updateDownloadLink">updateDownloadLink</a></li><li><a href="global.html#ValidateInputResolution">ValidateInputResolution</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tutorial: Creating/extending widgets</h1>
+    
+
+    <section>
+
+<header>
+    
+
+    <h2>Creating/extending widgets</h2>
+</header>
+
+<article>
+    <h1 id="widgets-in-enketo-core">Widgets in Enketo Core</h1>
+<p>Widgets extend the <a href="../src/js/widget.js">Widget class</a>. This is an example:</p>
+<p>(see full functioning example at <a href="../src/widget/example/my-widget.js">/src/widget/example/my-widget.js</a></p>
+<pre class="prettyprint source lang-js"><code>import Widget from '../../js/widget';
+
+/*
+ * Make sure to give the widget a unique widget class name and extend Widget.
+ */
+class MyWidget extends Widget {
+
+    /*
+     * The selector that determines on which form control the widget is instantiated. 
+     * Make sure that any other widgets that target the same from control are not interfering with this widget by disabling
+     * the other widget or making them complementary.
+     * This function is always required.
+     */
+    static get selector() {
+        return '.or-appearance-my-widget input[type=&quot;number&quot;]';
+    }
+
+    /*
+     * Initialize the widget that has been instantiated using the Widget (super) constructor.
+     * The _init function is called by that super constructor unless that constructor is overridden.
+     * This function is always required.
+     */
+    _init() {
+        // Hide the original input
+        this.element.classList.add( 'hide' );
+
+        // Create the widget's DOM fragment.
+        const fragment = document.createRange().createContextualFragment(
+            `&lt;div class=&quot;widget&quot;>
+                &lt;input class=&quot;ignore&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; step=&quot;1&quot;/>
+            &lt;div>`
+        );
+        fragment.querySelector( '.widget' ).appendChild( this.resetButtonHtml );
+
+        // Only when the new DOM has been fully created as a HTML fragment, we append it.
+        this.element.after( fragment );
+
+        const widget = this.element.parentElement.querySelector( '.widget' );
+        this.range = widget.querySelector( 'input' );
+
+        // Set the current loaded value into the widget
+        this.value = this.originalInputValue;
+
+        // Set event handlers for the widget
+        this.range.addEventListener( 'change', this._change.bind( this ) );
+        widget.querySelector( '.btn-reset' ).addEventListener( 'click', this._reset.bind( this ) );
+
+        // This widget initializes synchronously so we don't return anything.
+        // If the widget initializes asynchronously return a promise that resolves to `this`.
+    }
+
+    _reset() {
+        this.value = '';
+        this.originalInputValue = '';
+        this.element.classList.add( 'empty' );
+    }
+
+    _change( ev ) {
+        // propagate value changes to original input and make sure a change event is fired
+        this.originalInputValue = ev.target.value;
+        this.element.classList.remove( 'empty' );
+    }
+
+    /*
+     * Disallow user input into widget by making it readonly.
+     */
+    disable() {
+        this.range.disabled = true;
+    }
+
+    /*
+     * Performs opposite action of disable() function.
+     */
+    enable() {
+        this.range.disabled = false;
+    }
+
+    /*
+     * Update the language, list of options and value of the widget.
+     */
+    update() {
+        this.value = this.originalInputValue;
+    }
+
+    /*
+     * Obtain the current value from the widget. Usually required.
+     */
+    get value() {
+        return this.element.classList.contains( 'empty' ) ? '' : this.range.value;
+    }
+
+    /*
+     * Set a value in the widget. Usually required.
+     */
+    set value( value ) {
+        this.range.value = value;
+    }
+
+}
+
+export default MyWidget;</code></pre><p>Some of the tests are common to all widgets, and can be run with a few lines:</p>
+<p>(see full functioning example at <a href="../test/spec/widget.example.spec.js">/test/spec/widget.example.spec.js</a>)</p>
+<pre class="prettyprint source lang-js"><code>import ExampleWidget from '../../src/widget/example/my-widget';
+import { runAllCommonWidgetTests } from '../helpers/testWidget';
+
+const FORM = 
+    `&lt;label class=&quot;question or-appearance-my-widget&quot;>
+        &lt;input type=&quot;number&quot; name=&quot;/data/node&quot;>
+    &lt;/label>`;
+const VALUE = '2';
+
+runAllCommonWidgetTests( ExampleWidget, FORM, VALUE );</code></pre><h3 id="do">DO</h3>
+<ul>
+<li>use the rank widget as a more complex example that uses the best practices (some other widgets use an older style)</li>
+<li>add an <code>_init</code> function to your widget that either returns nothing or a Promise (if it initializes asynchronously)</li>
+<li>include a widget.my-widget.spec.js file in the /test folder</li>
+<li>run at least the standardized common widget tests by doing: TBD</li>
+<li>make the widget responsive up to a minimum window width of 320px</li>
+<li>ensure the widget's scss and js file is/are loaded in widgets.js and _widgets.scss respectively</li>
+<li>if hiding the original input element, it needs to load the default value <code>this.originalInputValue</code> into the widget</li>
+<li>if hiding the original input element, keep its value  syncronized using <code>this.originalInputValue = ...</code></li>
+<li>if hiding the original input element, it needs to listen for the <code>applyfocus</code> event on the original input and focus the widget</li>
+<li>if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming irrelevant (update)</li>
+<li>apply the <code>widget</code> css class to the top level elements it adds to the DOM (but not to their children)</li>
+<li>new input/select/textarea elements inside widgets should have the <code>ignore</code> class to isolate them from the Enketo form engine</li>
+<li>include <code>enable()</code>, <code>disable()</code> and <code>update()</code> method overrides. See the Widget class.</li>
+<li>if the widget needs tweaks or needs to be disabled for mobile use, use support.js to detect this and override the static <code>condition()</code> function in Widget.js.</li>
+<li>allow clearing of the original input (i.e. setting value to '')</li>
+<li>if the widget does not get automatic (built-in HTML) focus, trigger a <code>fakefocus</code> event to the original input when the widget gets focus (rarely required, but see rank widget)</li>
+</ul>
+<h4 id="don-t">DON'T</h4>
+<ul>
+<li>do not include jQuery, React, Vue or any other general purpose libraries or frameworks</li>
+</ul>
+</article>
+
+</section>
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/jquery-3.1.1.min.js"></script>
+
+<script src="scripts/search.js"></script>
+
+
+
+
+</body>
+</html>

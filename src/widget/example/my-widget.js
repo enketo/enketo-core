@@ -6,7 +6,7 @@ import Widget from '../../js/widget';
 class MyWidget extends Widget {
 
     /*
-     * The selector that determines on which form control the widget is instantiated. 
+     * The selector that determines on which form control the widget is instantiated.
      * Make sure that any other widgets that target the same from control are not interfering with this widget by disabling
      * the other widget or making them complementary.
      * This function is always required.

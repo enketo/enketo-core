@@ -5,6 +5,9 @@ import events from '../../js/event';
 import sortable from 'html5sortable/dist/html5sortable.cjs';
 import { t } from 'enketo/translator';
 
+/**
+ * @extends Widget
+ */
 class RankWidget extends Widget {
 
     static get selector() {

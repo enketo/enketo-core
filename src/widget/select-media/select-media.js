@@ -3,7 +3,7 @@ import { getSiblingElements } from '../../js/dom-utils';
 
 /**
  * Media Picker. Hides text labels if a media label is present.
- * 
+ * @extends Widget
  */
 class MediaPicker extends Widget {
 

@@ -3,8 +3,9 @@ import support from '../../js/support';
 import { elementDataStore as data } from '../../js/dom-utils';
 
 /**
- * For now, the whole purpose of this widget is to show a native month picker on 
+ * For now, the whole purpose of this widget is to show a native month picker on
  * MOBILE devices with browsers that support it.
+ * @extends Widget
  */
 class DatepickerMobile extends Widget {
 
