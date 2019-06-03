@@ -1,3 +1,7 @@
+/** 
+ * @module widgets-controller
+ */
+
 import $ from 'jquery';
 import _widgets from 'enketo/widgets';
 import { elementDataStore as data } from './dom-utils';

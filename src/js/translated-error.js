@@ -1,4 +1,12 @@
-// Error to be translated
+/**
+ * Error to be translated
+ * 
+ * @class
+ * @extends Error
+ * @param {string} message
+ * @param {string} translationKey
+ * @param {*} translationOptions
+ */
 function TranslatedError( message, translationKey, translationOptions ) {
     this.message = message;
     this.translationKey = translationKey;

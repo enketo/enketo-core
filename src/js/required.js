@@ -1,3 +1,9 @@
+/**  
+ * Deals with form logic around required questions.
+ * 
+ * @module required
+ */
+
 import $ from 'jquery';
 
 export default {

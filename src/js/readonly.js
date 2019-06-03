@@ -1,3 +1,7 @@
+/**
+ * @module readonly
+ */
+
 import $ from 'jquery';
 
 export default {

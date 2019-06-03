@@ -1,12 +1,15 @@
-/**
- * Updates output values, optionally filtered by those values that contain a changed node name
- *
- * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+/** 
+ * @module output
  */
 
 import $ from 'jquery';
 
 export default {
+    /**
+     * Updates output values, optionally filtered by those values that contain a changed node name
+     *
+     * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+     */
     update( updated ) {
         const outputCache = {};
         let val = '';

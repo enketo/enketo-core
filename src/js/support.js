@@ -1,5 +1,7 @@
 /**
  * Detects features.
+ * 
+ * @module support
  */
 
 import { os } from './sniffer';
@@ -21,9 +23,15 @@ if ( os.ios || os.android ) {
 }
 
 export default {
+    /** 
+     * @type Array<string>
+     **/
     get inputTypes() {
         return inputTypes;
     },
+    /** 
+     * @type boolean
+     **/
     get touch() {
         return mobile;
     },

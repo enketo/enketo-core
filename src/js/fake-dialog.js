@@ -1,5 +1,7 @@
-/*
- * This file is meant to be overidden with one that uses the app's dialogs.
+/**
+ * This placeholder module is meant to be overwritten with one that uses the app's own dialogs.
+ * 
+ * @module dialog
  */
 
 /**

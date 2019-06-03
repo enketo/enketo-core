@@ -18,17 +18,25 @@ function _cleanSpecialChars( timeStr ) {
 }
 
 /**
- * time
- * @namespace
+ * @namespace time
  */
 const time = {
     // For now we just look at a subset of numbers in Arabic and Latin. There are actually over 20 number scripts and :digit: doesn't work in browsers
+    /**   
+     * @type {string}
+     */
     get hour12() {
         return this.hasMeridian( _getCleanLocalTime() );
     },
+    /**   
+     * @type {string}
+     */
     get pmNotation() {
         return this.meridianNotation( new Date( 2000, 1, 1, 23, 0, 0 ) );
     },
+    /**   
+     * @type {string}
+     */
     get amNotation() {
         return this.meridianNotation( new Date( 2000, 1, 1, 1, 0, 0 ) );
     },
@@ -57,6 +65,9 @@ const time = {
  * @namespace format
  */
 const format = {
+    /**   
+     * @type {string}
+     */
     set locale( loc ) {
         _locale = loc;
     },

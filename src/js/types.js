@@ -1,6 +1,13 @@
+/** 
+ * @module types 
+ **/
+
+ //TODO: figure out how to JSDocument this
+
 import { isNumber } from './utils';
 import { time } from './format';
-const types = {
+
+export default {
     'string': {
         convert( x ) {
             return x.replace( /^\s+$/, '' );
@@ -249,5 +256,3 @@ const types = {
         }
     }
 };
-
-export default types;

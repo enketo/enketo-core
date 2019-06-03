@@ -1,3 +1,7 @@
+/**
+ * @module mask
+ */
+
 import $ from 'jquery';
 import { getPasteData } from './utils';
 const KEYBOARD_CUT_PASTE = 'xvc';

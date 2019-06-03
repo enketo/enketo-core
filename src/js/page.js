@@ -1,5 +1,7 @@
 /**
  * Pages module.
+ * 
+ * @module pages
  */
 
 import $ from 'jquery';
