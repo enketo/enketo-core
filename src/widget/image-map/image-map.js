@@ -112,7 +112,7 @@ class ImageMap extends Widget {
         console.error( err );
         const fragment = document.createRange().createContextualFragment(
             `<div class="widget image-map">
-                <div class="image-map__error">${t( 'imagemap.svgNotFound' )}</div>
+                <div class="image-map__error" data-i18n="imagemap.svgNotFound">${t( 'imagemap.svgNotFound' )}</div>
             </div>`
         );
         this.question.querySelector( '.option-wrapper' ).before( fragment );

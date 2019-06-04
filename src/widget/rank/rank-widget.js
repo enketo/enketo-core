@@ -29,7 +29,7 @@ class RankWidget extends Widget {
         $( this.list )
             .toggleClass( 'rank-widget--empty', !loadedValue )
             .append( this.resetButtonHtml )
-            .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content">${startText}</span></div>` )
+            .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content" data-i18n="rankwidget.clickstart">${startText}</span></div>` )
             .on( 'click', function() {
                 if ( !that.element.disabled ) {
                     this.classList.remove( 'rank-widget--empty' );

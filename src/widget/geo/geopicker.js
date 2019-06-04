@@ -279,21 +279,51 @@ class Geopicker extends Widget {
     _addDomElements() {
         const map = `<div class="map-canvas-wrapper"><div class=map-canvas id="map${this.mapId}"></div></div>`;
         const points = '<div class="points"><button type="button" class="addpoint">+</button></div>';
-        const kmlPstTxt = t( 'geopicker.kmlpaste' );
-        const kmlCrdsTxt = t( 'geopicker.kmlcoords' );
-        const pntsTxt = t( 'geopicker.points' );
-        const kml = `<a href="#" class="toggle-input-type-btn"><span class="kml-input">KML</span><span class="points-input">${pntsTxt}</span></a><label class="geo kml">${kmlCrdsTxt}<progress class="paste-progress hide"></progress><textarea class="ignore" name="kml" placeholder="${kmlPstTxt}"></textarea><span class="disabled-msg">remove all points to enable</span></label>`;
-        const closePlgnTxt = t( 'geopicker.closepolygon' );
-        const close = `<button type="button" class="close-chain-btn btn btn-default btn-xs">${closePlgnTxt}</button>`;
+        const kml = `
+            <a href="#" class="toggle-input-type-btn">
+                <span class="kml-input">KML</span>
+                <span class="points-input" data-i18n="geopicker.points">${t( 'geopicker.points' )}</span>
+            </a>
+            <label class="geo kml">
+                <span data-i18n="geopicker.kmlcoords">${t( 'geopicker.kmlcoords' )}</span>
+                <progress class="paste-progress hide"></progress>
+                <textarea class="ignore" name="kml" placeholder="${ t( 'geopicker.kmlpaste' )}" data-i18n="geopicker.kmlpaste"></textarea>
+                <span class="disabled-msg">remove all points to enable</span>
+            </label>`;
+
+        const close = `<button type="button" class="close-chain-btn btn btn-default btn-xs" data-i18n="geopicker.closepolygon">${t( 'geopicker.closepolygon' )}</button>`;
         const mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
-        const latTxt = t( 'geopicker.latitude' );
-        const lngTxt = t( 'geopicker.longitude' );
-        const altTxt = t( 'geopicker.altitude' );
-        const accTxt = t( 'geopicker.accuracy' );
-        const srchTxt = t( 'geopicker.searchPlaceholder' );
 
         this.$widget = $(
-            `<div class="geopicker widget"><div class="search-bar hide-search no-map no-detect"><button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button><button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top"><span class="icon icon-crosshairs"> </span></button><div class="input-group"><input class="geo ignore" name="search" type="text" placeholder="${srchTxt}" disabled="disabled"/><button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button></div></div><div class="geo-inputs"><label class="geo lat">${latTxt}<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label><label class="geo long">${lngTxt}<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label><label class="geo alt">${altTxt}<input class="ignore" name="alt" type="number" step="0.1" /></label><label class="geo acc">${accTxt}<input class="ignore" name="acc" type="number" step="0.1" /></label><button type="button" class="btn-icon-only btn-remove" aria-label="remove"><span class="icon icon-trash"> </span></button></div></div>`
+            `<div class="geopicker widget">
+                <div class="search-bar hide-search no-map no-detect">
+                    <button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>
+                    <button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top"><span class="icon icon-crosshairs"> </span></button>
+                    <div class="input-group">
+                        <input class="geo ignore" name="search" type="text" placeholder="${t( 'geopicker.searchPlaceholder' )}" data-i18n="geopicker.searchPlaceholder" disabled="disabled"/>
+                        <button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button>
+                    </div>
+                </div>
+                <div class="geo-inputs">
+                    <label class="geo lat">
+                        <span data-i18n="geopicker.latitude">${t( 'geopicker.latitude' )}</span>
+                        <input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/>
+                    </label>
+                    <label class="geo long">
+                        <span data-i18n="geopicker.longitude">${t( 'geopicker.longitude' )}</span>
+                        <input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/>
+                    </label>
+                    <label class="geo alt">
+                        <span data-i18n="geopicker.altitude">${t( 'geopicker.altitude' )}</span>
+                        <input class="ignore" name="alt" type="number" step="0.1" />
+                    </label>
+                    <label class="geo acc">
+                        <span data-i18n="geopicker.accuracy">${t( 'geopicker.accuracy' )}</span>
+                        <input class="ignore" name="acc" type="number" step="0.1" />
+                    </label>
+                    <button type="button" class="btn-icon-only btn-remove" aria-label="remove"><span class="icon icon-trash"> </span></button>
+                </div>
+            </div>`
         );
 
         // add the detection button

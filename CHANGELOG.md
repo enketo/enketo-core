@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 --------------------
 ##### Added
 - An option to override the default XForm language during form instantiation.
+  
+##### Changed
+- Made preparations for apps to dynamically switch the language of non-form-defined strings.
 
 ##### Fixed
 - Dependency/build issue with 'sortable not defined'.

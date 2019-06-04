@@ -57,7 +57,7 @@ class Widget {
     }
 
     /**
-     * Updates languages, <option>s (cascading selects, and (calculated) values.
+     * Updates form-defined language strings, <option>s (cascading selects, and (calculated) values.
      * Most of the times, this function needs to be overridden in the widget.
      */
     update() {}
