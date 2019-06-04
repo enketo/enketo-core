@@ -7,7 +7,7 @@
 import { isNumber } from './utils';
 import { time } from './format';
 
-export default {
+const types = {
     'string': {
         convert( x ) {
             return x.replace( /^\s+$/, '' );
@@ -256,3 +256,5 @@ export default {
         }
     }
 };
+
+export default types;
