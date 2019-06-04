@@ -185,7 +185,7 @@ Form.prototype.init = function() {
         this.calc.update();
 
         // before itemset.update
-        this.langs.init();
+        this.langs.init( this.options.language );
 
         // before repeats.init so that template contains role="page" when applicable
         this.pages.init();

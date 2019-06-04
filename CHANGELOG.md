@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Added
+- An option to override the default XForm language during form instantiation.
+
 ##### Fixed
 - Dependency/build issue with 'sortable not defined'.
 - Form control value getter for complex third-party widgets may get a false value.

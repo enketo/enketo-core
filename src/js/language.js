@@ -8,7 +8,7 @@ import { getSiblingElements } from './dom-utils';
 import events from './event';
 
 export default {
-    init() {
+    init( overrideLang ) {
         if ( !this.form ) {
             throw new Error( 'Language module not correctly instantiated with form property.' );
         }
@@ -32,7 +32,14 @@ export default {
             }
         }
         this.formLanguages = root.querySelector( '#form-languages' );
-        this._currentLang = this.formLanguages.dataset.defaultLang || languages[ 0 ] || '';
+
+        if ( overrideLang && languages.includes( overrideLang ) ) {
+            this._currentLang = overrideLang;
+            this.setUi( this._currentLang );
+        } else {
+            this._currentLang = this.formLanguages.dataset.defaultLang || languages[ 0 ] || '';
+        }
+
         const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );
         const currentDirectionality = langOption && langOption.dataset.dir || 'ltr';
 

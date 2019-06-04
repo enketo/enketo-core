@@ -58,3 +58,7 @@ new Form(formselector, data, {
   printRelevantOnly: false
 });
 ```
+
+#### Explicitly set the default form language
+
+The `language` option overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
