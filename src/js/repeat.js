@@ -1,5 +1,5 @@
 /**
- * Repeats module.
+ * Repeat module.
  *
  * Two important concepts are used:
  * 1. The first XLST-added repeat view is cloned to serve as a template of that repeat.
@@ -7,6 +7,8 @@
  *
  * Note that with nested repeats you may have many more series of repeats than templates, because a nested repeat
  * may have multiple series.
+ * 
+ * @module repeat
  */
 
 import $ from 'jquery';

@@ -1,14 +1,16 @@
 /**
- * Updates itemsets
- *
- * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+ * Updates itemsets.
+ * 
+ * @module itemset
  */
 
 import $ from 'jquery';
-
 import { parseFunctionFromExpression } from './utils';
 
 export default {
+    /**
+     * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+     */
     update( updated = {} ) {
         const that = this;
         const itemsCache = {};

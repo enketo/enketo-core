@@ -1,13 +1,10 @@
-import $ from 'jquery';
-
-/*
- * Preloader module.
+/** 
+ * Preloader module (soon to be deprecated).
  * 
- * Note that preloaders may be deprecated in the future. This code is already prepared for a change 
- * by using a (secret) "session" instance.
- *
- * Functions are designed to fail silently if unknown preloaders are called.
+ * @module preloader
  */
+
+import $ from 'jquery';
 export default {
     init() {
         const that = this;

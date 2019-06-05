@@ -1,5 +1,7 @@
 /**
  * Deals with printing
+ * 
+ * @module print
  */
 
 import $ from 'jquery';
@@ -27,7 +29,7 @@ function setDpi() {
 }
 
 /**
- * Gets print stylesheets
+ * Gets a single print stylesheet
  * @return {Element} [description]
  */
 function getPrintStyleSheet() {
@@ -44,6 +46,11 @@ function getPrintStyleSheet() {
     return null;
 }
 
+/**
+ * Obtains a link element with a reference to the print stylesheet.
+ *
+ * @returns {Element} [description]
+ */
 function getPrintStyleSheetLink() {
     return $( 'link[media="print"]:eq(0)' );
 }
@@ -74,10 +81,21 @@ function styleReset() {
     $( '.back-to-screen-view' ).off( 'click' ).remove();
 }
 
+/**
+ * Tests if the form element is set to use the Grid Theme.
+ *
+ * @returns {boolean}
+ */
 function isGrid() {
     return /theme-.*grid.*/.test( $( 'form.or' ).attr( 'class' ) );
 }
 
+/**
+ * Fixes a Grid Theme layout programmatically by imitating CSS multi-line flexbox in JavaScript.
+ *
+ * @param {*} paper
+ * @returns {Promise}
+ */
 function fixGrid( paper ) {
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
     $( '.main' ).css( 'width', getPaperPixelWidth( paper ) ).addClass( 'print-width-adjusted' );
@@ -146,6 +164,12 @@ function fixGrid( paper ) {
     } );
 }
 
+/**
+ * Returns a CSS width value in px (e.g. `"100px"`) for a provided paper format, orientation (`"portrait"` or `"landscape"`) and margin (as any valid CSS value).
+ *
+ * @param {{format: string, margin: string, orientation: string}} paper
+ * @returns {string}
+ */
 function getPaperPixelWidth( paper ) {
     let printWidth;
     const FORMATS = {
@@ -180,12 +204,13 @@ function getPaperPixelWidth( paper ) {
     return `${( printWidth - ( 2 * paper.margin ) ) * dpi}px`;
 }
 
-
 /**
  * Prints the form after first preparing the Grid (every time it is called).
  * 
- * It's just demo function that only collects paper format and should be replaced
+ * It's just a demo function that only collects paper format and should be replaced
  * in your app with a dialog that collects a complete paper format (size, margin, orientation);
+ *
+ * @param {string} theme
  */
 function print( theme ) {
     if ( theme === 'grid' || ( !theme && isGrid() ) ) {
@@ -211,7 +236,5 @@ function print( theme ) {
         window.print();
     }
 }
-
-//window.printthis = print;
 
 export { print, fixGrid, styleToAll, styleReset, isGrid };

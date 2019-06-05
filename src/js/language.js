@@ -1,5 +1,7 @@
 /**
  * Form languages module.
+ * 
+ * @module language
  */
 
 import { getSiblingElements } from './dom-utils';

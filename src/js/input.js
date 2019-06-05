@@ -1,5 +1,7 @@
 /**
  * Form control (input, select, textarea) helper functions.
+ * 
+ * @module input
  */
 
 import types from './types';

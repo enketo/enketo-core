@@ -1,4 +1,11 @@
 /* global ArrayBuffer, Uint8Array */
+
+/** 
+ * Various utilities.
+ * 
+ * @module utils
+ */
+
 let cookies;
 
 /**

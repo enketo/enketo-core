@@ -1,5 +1,12 @@
+/** 
+ * @module types 
+ **/
+
+//TODO: figure out how to JSDocument this
+
 import { isNumber } from './utils';
 import { time } from './format';
+
 const types = {
     'string': {
         convert( x ) {

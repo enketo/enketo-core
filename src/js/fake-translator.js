@@ -1,3 +1,9 @@
+/** 
+ * Placeholder module for translator. It is meant to be overwritten by a translator used in your app.
+ * 
+ * @module fake-translator
+ */
+
 // This is NOT a complete list of all enketo-core UI strings. Use a parser to find
 // all strings. E.g. https://github.com/i18next/i18next-parser
 const SOURCE_STRINGS = {
