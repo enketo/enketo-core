@@ -3,10 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.4.0] - 2019-06-05
 --------------------
 ##### Added
 - An option to override the default XForm language during form instantiation.
+- Developer documentation.
   
 ##### Changed
 - Made preparations for apps to dynamically switch the language of non-form-defined strings.
