@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.4.0",
+    "version": "5.4.1",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -25,10 +25,11 @@
         "url": "https://www.linkedin.com/in/martijnvanderijdt"
     },
     "contributors": [ {
-        "name": "Alex Anderson"
+            "name": "Alex Anderson"
     } ],
     "files": [
-        "src/"
+        "src/",
+        "config.js"
     ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/form.js",
