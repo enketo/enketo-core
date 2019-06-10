@@ -176,7 +176,7 @@ $q-pad-right: 0px !default;
 
     }
 
-    &:not(.or-appearance-horizontal) {
+    &.or-appearance-vertical:not(.disabled) {
         @include display-flex;
 
         @include flex(1);
