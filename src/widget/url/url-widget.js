@@ -10,7 +10,7 @@ class UrlWidget extends Widget {
     }
 
     _init() {
-        const fragment = document.createRange().createContextualFragment( '<a class="widget url-widget" target="_blank"/>' );
+        const fragment = document.createRange().createContextualFragment( '<a class="widget url-widget" target="_blank" rel="noopener"/>' );
 
         this.element.classList.add( 'hide' );
         this.element.after( fragment );
