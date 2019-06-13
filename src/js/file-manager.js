@@ -134,12 +134,12 @@ fileManager.getCurrentFiles = () => {
             // TODO: in the future, when browser support increase we can invoke
             // the File constructor to do this.
             newFilename = getFilename( file, this.dataset.filenamePostfix );
-            if (fileManager.isImageFile(file)) {
-                fileManager.resizeImage(file, fileManager.getMaxImageWidth(), fileManager.getMaxImageWidth()).then(blob => {
+            if ( fileManager.isImageFile( file ) ) {
+                fileManager.resizeImage( file, fileManager.getMaxImageWidth(), fileManager.getMaxImageWidth() ).then( blob => {
                     file = blob;
                     file.name = newFilename;
                     files.push( file );
-                })
+                } )
             } else {
                 file = new Blob( [ file ], {
                     type: file.type
@@ -187,7 +187,7 @@ fileManager.getMaxImageWidth = () => { return 1024; };
  *
  * @return {boolean} whether file is image
  */
-fileManager.isImageFile = file => { return file && file.type.split('/')[0] === 'image'; }
+fileManager.isImageFile = file => { return file && file.type.split( '/' )[ 0 ] === 'image'; }
 
 /**
  * @function resizeImage
@@ -198,41 +198,41 @@ fileManager.isImageFile = file => { return file && file.type.split('/')[0] === '
  *
  * @return {Promise<Blob>} promise of resized image blob
  */
-fileManager.resizeImage = (file, maxWidth, maxHeight) => {
-    return new Promise((resolve, reject) => {
+fileManager.resizeImage = ( file, maxWidth, maxHeight ) => {
+    return new Promise( ( resolve, reject ) => {
         let image = new Image();
-        image.src = URL.createObjectURL(file);
+        image.src = URL.createObjectURL( file );
         image.onload = () => {
             let width = image.width;
             let height = image.height;
-            
-            if (width <= maxWidth && height <= maxHeight) {
-                resolve(file);
+
+            if ( width <= maxWidth && height <= maxHeight ) {
+                resolve( file );
             }
 
             let newWidth;
             let newHeight;
 
-            if (width > height) {
-                newHeight = height * (maxWidth / width);
+            if ( width > height ) {
+                newHeight = height * ( maxWidth / width );
                 newWidth = maxWidth;
             } else {
-                newWidth = width * (maxHeight / height);
+                newWidth = width * ( maxHeight / height );
                 newHeight = maxHeight;
             }
 
-            let canvas = document.createElement('canvas');
+            let canvas = document.createElement( 'canvas' );
             canvas.width = newWidth;
             canvas.height = newHeight;
 
-            let context = canvas.getContext('2d');
+            let context = canvas.getContext( '2d' );
 
-            context.drawImage(image, 0, 0, newWidth, newHeight);
+            context.drawImage( image, 0, 0, newWidth, newHeight );
 
-            canvas.toBlob(resolve, file.type);
+            canvas.toBlob( resolve, file.type );
         };
         image.onerror = reject;
-    });
+    } );
 }
 
 export default fileManager;
