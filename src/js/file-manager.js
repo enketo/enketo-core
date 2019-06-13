@@ -176,7 +176,7 @@ fileManager.getMaxSizeReadable = () => { return `${5}MB`; };
  *
  * @description Replace with function that determines maximum image width.
  *
- * @return {Number} maximum image width
+ * @return {number} maximum image width
  */
 fileManager.getMaxImageWidth = () => { return 1024; };
 
@@ -193,8 +193,8 @@ fileManager.isImageFile = file => { return file && file.type.split( '/' )[ 0 ] =
  * @function resizeImage
  *
  * @param {File} file - image file to be resized
- * @param {Number} maxWidth - maximum width of resized image
- * @param {Number} maxHeight - maximum height of resized image
+ * @param {number} maxWidth - maximum width of resized image
+ * @param {number} maxHeight - maximum height of resized image
  *
  * @return {Promise<Blob>} promise of resized image blob
  */
