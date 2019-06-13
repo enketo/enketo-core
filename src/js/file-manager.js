@@ -139,7 +139,7 @@ fileManager.getCurrentFiles = () => {
                     file = blob;
                     file.name = newFilename;
                     files.push( file );
-                } )
+                } );
             } else {
                 file = new Blob( [ file ], {
                     type: file.type
@@ -187,7 +187,7 @@ fileManager.getMaxImageWidth = () => { return 1024; };
  *
  * @return {boolean} whether file is image
  */
-fileManager.isImageFile = file => { return file && file.type.split( '/' )[ 0 ] === 'image'; }
+fileManager.isImageFile = file => { return file && file.type.split( '/' )[ 0 ] === 'image'; };
 
 /**
  * @function resizeImage
@@ -233,6 +233,6 @@ fileManager.resizeImage = ( file, maxWidth, maxHeight ) => {
         };
         image.onerror = reject;
     } );
-}
+};
 
 export default fileManager;
