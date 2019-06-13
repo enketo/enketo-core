@@ -134,11 +134,19 @@ fileManager.getCurrentFiles = () => {
             // TODO: in the future, when browser support increase we can invoke
             // the File constructor to do this.
             newFilename = getFilename( file, this.dataset.filenamePostfix );
-            file = new Blob( [ file ], {
-                type: file.type
-            } );
-            file.name = newFilename;
-            files.push( file );
+            if (fileManager.isImageFile(file)) {
+                fileManager.resizeImage(file, fileManager.getMaxImageWidth(), fileManager.getMaxImageWidth()).then(blob => {
+                    file = blob;
+                    file.name = newFilename;
+                    files.push( file );
+                })
+            } else {
+                file = new Blob( [ file ], {
+                    type: file.type
+                } );
+                file.name = newFilename;
+                files.push( file );
+            }
         }
     } );
 
@@ -162,5 +170,69 @@ fileManager.isTooLarge = () => { return false; };
  * @return {string} human radable maximiym size
  */
 fileManager.getMaxSizeReadable = () => { return `${5}MB`; };
+
+/**
+ * @function getMaxImageWidth
+ *
+ * @description Replace with function that determines maximum image width.
+ *
+ * @return {Number} maximum image width
+ */
+fileManager.getMaxImageWidth = () => { return 1024; };
+
+/**
+ * @function isImageFile
+ *
+ * @description Check whether current file is image by reading its type.
+ *
+ * @return {boolean} whether file is image
+ */
+fileManager.isImageFile = file => { return file && file.type.split('/')[0] === 'image'; }
+
+/**
+ * @function resizeImage
+ *
+ * @param {File} file - image file to be resized
+ * @param {Number} maxWidth - maximum width of resized image
+ * @param {Number} maxHeight - maximum height of resized image
+ *
+ * @return {Promise<Blob>} promise of resized image blob
+ */
+fileManager.resizeImage = (file, maxWidth, maxHeight) => {
+    return new Promise((resolve, reject) => {
+        let image = new Image();
+        image.src = URL.createObjectURL(file);
+        image.onload = () => {
+            let width = image.width;
+            let height = image.height;
+            
+            if (width <= maxWidth && height <= maxHeight) {
+                resolve(file);
+            }
+
+            let newWidth;
+            let newHeight;
+
+            if (width > height) {
+                newHeight = height * (maxWidth / width);
+                newWidth = maxWidth;
+            } else {
+                newWidth = width * (maxHeight / height);
+                newHeight = maxHeight;
+            }
+
+            let canvas = document.createElement('canvas');
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            let context = canvas.getContext('2d');
+
+            context.drawImage(image, 0, 0, newWidth, newHeight);
+
+            canvas.toBlob(resolve, file.type);
+        };
+        image.onerror = reject;
+    });
+}
 
 export default fileManager;
