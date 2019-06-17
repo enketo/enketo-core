@@ -394,6 +394,11 @@ class DrawWidget extends Widget {
             that._forceUpdate();
             that._resizeCanvas( canvas );
         } );
+
+        $( window ).on( 'orientationchange', () => {
+            that.disable();
+            setTimeout( that.enable.bind( that ), 500 );
+        } );
     }
 
     // Adjust canvas coordinate space taking into account pixel ratio,
