@@ -134,19 +134,11 @@ fileManager.getCurrentFiles = () => {
             // TODO: in the future, when browser support increase we can invoke
             // the File constructor to do this.
             newFilename = getFilename( file, this.dataset.filenamePostfix );
-            if ( fileManager.isImageFile( file ) ) {
-                fileManager.resizeImage( file, fileManager.getMaxImageWidth(), fileManager.getMaxImageWidth() ).then( blob => {
-                    file = blob;
-                    file.name = newFilename;
-                    files.push( file );
-                } );
-            } else {
-                file = new Blob( [ file ], {
-                    type: file.type
-                } );
-                file.name = newFilename;
-                files.push( file );
-            }
+            file = new Blob( [ file ], {
+                type: file.type
+            } );
+            file.name = newFilename;
+            files.push( file );
         }
     } );
 
@@ -170,24 +162,6 @@ fileManager.isTooLarge = () => { return false; };
  * @return {string} human radable maximiym size
  */
 fileManager.getMaxSizeReadable = () => { return `${5}MB`; };
-
-/**
- * @function getMaxImageWidth
- *
- * @description Replace with function that determines maximum image width.
- *
- * @return {number} maximum image width
- */
-fileManager.getMaxImageWidth = () => { return 1024; };
-
-/**
- * @function isImageFile
- *
- * @description Check whether current file is image by reading its type.
- *
- * @return {boolean} whether file is image
- */
-fileManager.isImageFile = file => { return file && file.type.split( '/' )[ 0 ] === 'image'; };
 
 /**
  * @function resizeImage

@@ -150,6 +150,7 @@ class Filepicker extends Widget {
                     .then( url => {
                         // Update UI
                         that._showPreview( url, that.props.mediaType );
+                        that._resizeImage( file, that.props.mediaType );
                         that._showFeedback();
                         that._showFileName( fileName );
                         if ( loadedFileName && loadedFileName !== fileName ) {
@@ -241,6 +242,15 @@ class Filepicker extends Widget {
         }
     }
 
+    _resizeImage( file, mediaType ) {
+        if ( mediaType !== 'image/*' ) {
+            return;
+        }
+        fileManager.resizeImage( file, this.props.maxPixels, this.props.maxPixels ).then( blob => {
+            file = blob;
+        } );
+    }
+
     _updateDownloadLink( objectUrl, fileName ) {
         updateDownloadLink( this.downloadLink, objectUrl, fileName );
     }
@@ -257,6 +267,7 @@ class Filepicker extends Widget {
     get props() {
         const props = this._props;
         props.mediaType = this.element.getAttribute( 'accept' );
+        props.maxPixels = 1024;
 
         return props;
     }
