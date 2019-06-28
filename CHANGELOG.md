@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Improvements to print style (group header size, opacity of disabled questions, line-height in Grid Theme)
 
+##### Fixed
+- Long words break out of cell in Grid Theme.
+
 [5.4.1] - 2019-06-10
 --------------------
 ##### Fixed
