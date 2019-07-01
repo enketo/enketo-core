@@ -184,7 +184,7 @@ function updateDownloadLink( anchor, objectUrl, fileName ) {
  *
  * @return {Promise<Blob>} promise of resized image blob
  */
-function resizeImage ( file, maxPixels ) {
+function resizeImage( file, maxPixels ) {
     return new Promise( ( resolve, reject ) => {
         let image = new Image();
         image.src = URL.createObjectURL( file );

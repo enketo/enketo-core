@@ -246,7 +246,7 @@ class Filepicker extends Widget {
         if ( mediaType !== 'image/*' ) {
             return;
         }
-        if (this.props && this.props.maxPixels) {
+        if ( this.props && this.props.maxPixels ) {
             resizeImage( file, this.props.maxPixels ).then( blob => {
                 file = blob;
             } );
