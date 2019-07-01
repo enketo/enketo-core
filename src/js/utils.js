@@ -1,8 +1,8 @@
 /* global ArrayBuffer, Uint8Array */
 
-/** 
+/**
  * Various utilities.
- * 
+ *
  * @module utils
  */
 
@@ -176,6 +176,51 @@ function updateDownloadLink( anchor, objectUrl, fileName ) {
     anchor.setAttribute( 'download', fileName || '' );
 }
 
+/**
+ * @function resizeImage
+ *
+ * @param {File} file - image file to be resized
+ * @param {number} maxPixels - maximum pixels of resized image
+ *
+ * @return {Promise<Blob>} promise of resized image blob
+ */
+function resizeImage ( file, maxPixels ) {
+    return new Promise( ( resolve, reject ) => {
+        let image = new Image();
+        image.src = URL.createObjectURL( file );
+        image.onload = () => {
+            let width = image.width;
+            let height = image.height;
+
+            if ( width <= maxPixels && height <= maxPixels ) {
+                resolve( file );
+            }
+
+            let newWidth;
+            let newHeight;
+
+            if ( width > height ) {
+                newHeight = height * ( maxPixels / width );
+                newWidth = maxPixels;
+            } else {
+                newWidth = width * ( maxPixels / height );
+                newHeight = maxPixels;
+            }
+
+            let canvas = document.createElement( 'canvas' );
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            let context = canvas.getContext( '2d' );
+
+            context.drawImage( image, 0, 0, newWidth, newHeight );
+
+            canvas.toBlob( resolve, file.type );
+        };
+        image.onerror = reject;
+    } );
+}
+
 export {
     parseFunctionFromExpression,
     stripQuotes,
@@ -185,5 +230,6 @@ export {
     readCookie,
     dataUriToBlobSync,
     getPasteData,
-    updateDownloadLink
+    updateDownloadLink,
+    resizeImage
 };

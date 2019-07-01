@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import fileManager from 'enketo/file-manager';
-import { getFilename, updateDownloadLink } from '../../js/utils';
+import { getFilename, updateDownloadLink, resizeImage } from '../../js/utils';
 import events from '../../js/event';
 import { t } from 'enketo/translator';
 import TranslatedError from '../../js/translated-error';
@@ -246,9 +246,11 @@ class Filepicker extends Widget {
         if ( mediaType !== 'image/*' ) {
             return;
         }
-        fileManager.resizeImage( file, this.props.maxPixels, this.props.maxPixels ).then( blob => {
-            file = blob;
-        } );
+        if (this.props && this.props.maxPixels) {
+            resizeImage( file, this.props.maxPixels ).then( blob => {
+                file = blob;
+            } );
+        }
     }
 
     _updateDownloadLink( objectUrl, fileName ) {
