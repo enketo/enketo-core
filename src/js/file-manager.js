@@ -134,11 +134,24 @@ fileManager.getCurrentFiles = () => {
             // TODO: in the future, when browser support increase we can invoke
             // the File constructor to do this.
             newFilename = getFilename( file, this.dataset.filenamePostfix );
-            file = new Blob( [ file ], {
-                type: file.type
-            } );
-            file.name = newFilename;
-            files.push( file );
+
+            // If file is resized, get Blob representation of file URL
+            if ( this.dataset.resized && this.dataset.resizedFileUrl ) {
+                fileManager.urlToBlob( this.dataset.resizedFileUrl )
+                    .then( resizedFileBlob => {
+                        file = new Blob( [ resizedFileBlob ], {
+                            type: file.type
+                        } );
+                        file.name = newFilename;
+                        files.push( file );
+                    } );
+            } else {
+                file = new Blob( [ file ], {
+                    type: file.type
+                } );
+                file.name = newFilename;
+                files.push( file );
+            }
         }
     } );
 
