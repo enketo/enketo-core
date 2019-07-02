@@ -290,7 +290,7 @@ class Filepicker extends Widget {
     get props() {
         const props = this._props;
         props.mediaType = this.element.getAttribute( 'accept' );
-        props.maxPixels = 1024;
+        props.maxPixels = this.element.dataset.maxPixels ? this.element.dataset.maxPixels : 1024;
 
         return props;
     }
