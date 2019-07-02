@@ -119,6 +119,16 @@ $printBaseFontSize: 10px;
     }
 }
 
+.question.or-appearance-minimal {
+    .dropdown-menu {
+        padding-top: 0;
+
+        label {
+            padding-left: 4px !important;
+        }
+    }
+}
+
 .bootstrap-select {
     margin: 0;
     padding: 0;
