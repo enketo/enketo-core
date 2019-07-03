@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Added 
+- Support for max-pixel attribute.
+
 ##### Changed
 - Improvements to print style (group header size, opacity of disabled questions, line-height in Grid Theme)\
 - Improved print style of select minimal widget.
