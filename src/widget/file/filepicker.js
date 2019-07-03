@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import fileManager from 'enketo/file-manager';
-import { getFilename, updateDownloadLink, resizeImage } from '../../js/utils';
+import { getFilename, updateDownloadLink, resizeImage, isNumber } from '../../js/utils';
 import events from '../../js/event';
 import { t } from 'enketo/translator';
 import TranslatedError from '../../js/translated-error';
@@ -270,6 +270,8 @@ class Filepicker extends Widget {
                     .catch( () => {
                         reject( file );
                     } );
+            } else {
+                reject( file );
             }
         } );
     }
@@ -290,7 +292,10 @@ class Filepicker extends Widget {
     get props() {
         const props = this._props;
         props.mediaType = this.element.getAttribute( 'accept' );
-        props.maxPixels = this.element.dataset.maxPixels ? this.element.dataset.maxPixels : 1024;
+
+        if ( this.element.dataset.maxPixels && isNumber( this.element.dataset.maxPixels ) ) {
+            props.maxPixels = parseInt( this.element.dataset.maxPixels, 10 );
+        }
 
         return props;
     }
