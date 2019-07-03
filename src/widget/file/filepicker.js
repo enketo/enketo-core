@@ -153,6 +153,7 @@ class Filepicker extends Widget {
                         event.target.dataset.resized = true;
                         file = resizedFile;
                     } )
+                    .catch( () => {} )
                     .finally( () => {
                         fileManager.getFileUrl( file, fileName )
                             .then( url => {
