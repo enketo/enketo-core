@@ -289,13 +289,28 @@ label.geo {
             box-shadow: none;
             list-style-type: circle;
             max-height: none;
+            padding-top: 0;
+            min-width: auto;
 
             li,
             li.active {
                 flex: 1;
                 min-width: 30%;
                 display: inline-block;
-                margin-right: 20px;
+                margin-right: 8px;
+
+                .option-wrapper {
+                    white-space: normal;
+                    padding: 0;
+
+                    label {
+                        padding-left: 4px !important;
+
+                        .option-label {
+                            word-break: break-word;
+                        }
+                    }
+                }
             }
 
             a {
