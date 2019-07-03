@@ -122,9 +122,22 @@ $printBaseFontSize: 10px;
 .question.or-appearance-minimal {
     .dropdown-menu {
         padding-top: 0;
+        min-width: auto;
 
-        label {
-            padding-left: 4px !important;
+        li {
+            margin-right: 8px;
+
+            .option-wrapper {
+                white-space: normal;
+
+                label {
+                    padding-left: 4px !important;
+
+                    .option-label {
+                        word-break: break-word;
+                    }
+                }
+            }
         }
     }
 }
