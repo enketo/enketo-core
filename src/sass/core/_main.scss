@@ -338,7 +338,7 @@ legend {
         margin: 0;
         cursor: pointer;
         padding: 4px;
-        margin: 0 10px 1px 10px; // TODO: remove hover rule for tables (in likert already done)
+        margin: 0 8px 1px 10px; // TODO: remove hover rule for tables (in likert already done)
 
         &:hover:not(.filler) {
             background-color: $brand-secondary-color;
@@ -359,6 +359,7 @@ legend {
     .option-label {
         margin-left: 30px; // input is floated to deal with multi-line labels
         display: block;
+        word-break: break-all;
     }
 
     img,
@@ -575,7 +576,7 @@ legend .required {
 }
 
 .disabled {
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .invalid-constraint,

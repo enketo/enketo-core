@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.4.0",
+    "version": "5.4.1",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -30,7 +30,8 @@
         }
     ],
     "files": [
-        "src/"
+        "src/",
+        "config.js"
     ],
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/form.js",
@@ -72,6 +73,7 @@
         "karma-safari-launcher": "1.0.x",
         "load-grunt-tasks": "4.x.x",
         "node-sass": "^4.11.0",
+        "publish-please": "^5.4.3",
         "rollup": "1.12.x",
         "rollup-plugin-commonjs": "10.0.x",
         "rollup-plugin-json": "4.0.x",
@@ -97,7 +99,6 @@
         "leaflet-draw": "github:enketo/Leaflet.draw#ff73078",
         "leaflet.gridlayer.googlemutant": "0.8.x",
         "mergexml": "1.1.2",
-        "publish-please": "^5.4.3",
         "signature_pad": "2.3.x"
     }
 }

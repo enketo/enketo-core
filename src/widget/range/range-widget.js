@@ -119,10 +119,12 @@ class RangeWidget extends Widget {
     }
 
     _reset() {
-        this.value = '';
-        this.originalInputValue = '';
+        // Update UI stuff before the actual value to avoid issues in custom clients that may want to programmatically undo a reset ("strict required" in OpenClinica)
+        // as that is subtly different from updating a value with a calculation since this.originalInputValue=  sets the evaluation cascade in motion.
         this.current.textContent = '';
         this._updateMercury( 0 );
+        this.value = '';
+        this.originalInputValue = '';
     }
 
     disable() {

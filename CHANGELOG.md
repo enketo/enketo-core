@@ -3,6 +3,20 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Changed
+- Improvements to print style (group header size, opacity of disabled questions, line-height in Grid Theme)
+
+##### Fixed
+- Long words break out of cell in Grid Theme.
+
+[5.4.1] - 2019-06-10
+--------------------
+##### Fixed
+- Disabled analog-scale widget is still visible.
+- Tests in enketo-express fail due to npm packaging issue.
+
 [5.4.0] - 2019-06-05
 --------------------
 ##### Added
