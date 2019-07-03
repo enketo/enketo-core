@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import fileManager from 'enketo/file-manager';
-import { getFilename, updateDownloadLink } from '../../js/utils';
+import { getFilename, updateDownloadLink, resizeImage, isNumber } from '../../js/utils';
 import events from '../../js/event';
 import { t } from 'enketo/translator';
 import TranslatedError from '../../js/translated-error';
@@ -146,27 +146,42 @@ class Filepicker extends Widget {
                 fileName = getFilename( file, postfix );
 
                 // Process the file
-                fileManager.getFileUrl( file, fileName )
-                    .then( url => {
-                        // Update UI
-                        that._showPreview( url, that.props.mediaType );
-                        that._showFeedback();
-                        that._showFileName( fileName );
-                        if ( loadedFileName && loadedFileName !== fileName ) {
-                            that.element.removeAttribute( 'data-loaded-file-name' );
-                        }
-                        that._updateDownloadLink( url, fileName );
-                        // Update record
-                        $( that.element ).trigger( 'change.propagate' );
+                // Resize the file. Currently will resize an image.
+                this._resizeFile( file, that.props.mediaType )
+                    .then( resizedFile => {
+                        // Put information in file element that file is resized
+                        event.target.dataset.resized = true;
+                        file = resizedFile;
                     } )
-                    .catch( error => {
-                        // Update record to clear any existing valid value
-                        $( that.element ).val( '' ).trigger( 'change.propagate' );
-                        // Update UI
-                        that._showFileName( '' );
-                        that._showPreview( null );
-                        that._showFeedback( error, 'error' );
-                        that._updateDownloadLink( '', '' );
+                    .catch( () => {} )
+                    .finally( () => {
+                        fileManager.getFileUrl( file, fileName )
+                            .then( url => {
+                                // If file is resized, put information of resized file URL in file element
+                                // Will be used by fileManager.getCurrentFiles
+                                if ( event.target.dataset.resized ) {
+                                    event.target.dataset.resizedFileUrl = url;
+                                }
+                                // Update UI
+                                that._showPreview( url, that.props.mediaType );
+                                that._showFeedback();
+                                that._showFileName( fileName );
+                                if ( loadedFileName && loadedFileName !== fileName ) {
+                                    that.element.removeAttribute( 'data-loaded-file-name' );
+                                }
+                                that._updateDownloadLink( url, fileName );
+                                // Update record
+                                $( that.element ).trigger( 'change.propagate' );
+                            } )
+                            .catch( error => {
+                                // Update record to clear any existing valid value
+                                $( that.element ).val( '' ).trigger( 'change.propagate' );
+                                // Update UI
+                                that._showFileName( '' );
+                                that._showPreview( null );
+                                that._showFeedback( error, 'error' );
+                                that._updateDownloadLink( '', '' );
+                            } );
                     } );
             } );
 
@@ -241,6 +256,27 @@ class Filepicker extends Widget {
         }
     }
 
+    _resizeFile( file, mediaType ) {
+        return new Promise( ( resolve, reject ) => {
+            if ( mediaType !== 'image/*' ) {
+                reject( file );
+            }
+
+            // file is image, resize it
+            if ( this.props && this.props.maxPixels ) {
+                resizeImage( file, this.props.maxPixels )
+                    .then( blob => {
+                        resolve( blob );
+                    } )
+                    .catch( () => {
+                        reject( file );
+                    } );
+            } else {
+                reject( file );
+            }
+        } );
+    }
+
     _updateDownloadLink( objectUrl, fileName ) {
         updateDownloadLink( this.downloadLink, objectUrl, fileName );
     }
@@ -257,6 +293,10 @@ class Filepicker extends Widget {
     get props() {
         const props = this._props;
         props.mediaType = this.element.getAttribute( 'accept' );
+
+        if ( this.element.dataset.maxPixels && isNumber( this.element.dataset.maxPixels ) ) {
+            props.maxPixels = parseInt( this.element.dataset.maxPixels, 10 );
+        }
 
         return props;
     }
