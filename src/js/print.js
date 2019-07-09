@@ -36,7 +36,7 @@ function getPrintStyleSheet() {
     let sheet;
     // document.styleSheets is an Object not an Array!
     for ( const i in document.styleSheets ) {
-        if ( document.styleSheets.hasOwnProperty( i ) ) {
+        if ( Object.prototype.hasOwnProperty.call( document, i ) ) {
             sheet = document.styleSheets[ i ];
             if ( sheet.media.mediaText === 'print' ) {
                 return sheet;

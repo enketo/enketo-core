@@ -72,7 +72,7 @@
 //from: https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/after()/after().md
 ( function( arr ) {
     arr.forEach( function( item ) {
-        if ( item.hasOwnProperty( 'after' ) ) {
+        if ( Object.prototype.hasOwnProperty.call( item, 'after' ) ) {
             return;
         }
         Object.defineProperty( item, 'after', {

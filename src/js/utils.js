@@ -1,5 +1,3 @@
-/* global ArrayBuffer, Uint8Array */
-
 /**
  * Various utilities.
  *

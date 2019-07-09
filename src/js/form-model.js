@@ -1152,7 +1152,7 @@ FormModel.prototype.replacePullDataFn = function( expr, selector, index ) {
     const replacements = this.convertPullDataFn( expr, selector, index );
 
     for ( const pullData in replacements ) {
-        if ( replacements.hasOwnProperty( pullData ) ) {
+        if ( Object.prototype.hasOwnProperty.call( replacements, pullData ) ) {
             // We evaluate this here, so we can use the native evaluator safely. This speeds up pulldata() by about a factor *740*!
             pullDataResult = that.evaluate( replacements[ pullData ], 'string', selector, index, true );
             expr = expr.replace( pullData, `"${pullDataResult}"` );
@@ -1286,7 +1286,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
 
     // translate typeStr to number according to DOM level 3 XPath constants
     for ( resTypeNum in resultTypes ) {
-        if ( resultTypes.hasOwnProperty( resTypeNum ) ) {
+        if ( Object.prototype.hasOwnProperty.call( resultTypes, resTypeNum ) ) {
             resTypeNum = Number( resTypeNum );
             if ( resultTypes[ resTypeNum ][ 0 ] === resTypeStr ) {
                 break;
@@ -1325,7 +1325,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         // for type = any, see if a valid string, number or boolean is returned
         if ( resTypeNum === 0 ) {
             for ( resTypeNum in resultTypes ) {
-                if ( resultTypes.hasOwnProperty( resTypeNum ) ) {
+                if ( Object.prototype.hasOwnProperty.call( resultTypes, resTypeNum ) ) {
                     resTypeNum = Number( resTypeNum );
                     if ( resTypeNum === Number( result.resultType ) && resTypeNum > 0 && resTypeNum < 4 ) {
                         response = result[ resultTypes[ resTypeNum ][ 2 ] ];
