@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.5.0] - 2019-07-09
 --------------------
 ##### Added 
 - Support for max-pixel attribute.
@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Long words break out of cell in Grid Theme.
+- Workaround for an iOS browser bug where a readonly date input is actually fully functional.
 
 [5.4.1] - 2019-06-10
 --------------------
