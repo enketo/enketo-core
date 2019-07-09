@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>js/utils.js - Enketo Core</title>
+    <title>widget/date-native-ios/datepicker-native-ios.js - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,7 +36,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">js/utils.js</h1>
+    <h1 class="page-title">widget/date-native-ios/datepicker-native-ios.js</h1>
     
 
     
@@ -46,241 +46,49 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/* global ArrayBuffer, Uint8Array */
+            <pre class="prettyprint source linenums"><code>import Widget from '../../js/widget';
+import { os } from '../../js/sniffer';
+import { elementDataStore as data } from '../../js/dom-utils';
 
 /**
- * Various utilities.
+ * The whole purpose of this widget is to workaround iOS browser bugs. See bug descriptions inline below.
  *
- * @module utils
+ * @extends Widget
  */
-
-let cookies;
-
-/**
- * Parses an Expression to extract all function calls and theirs argument arrays.
- *
- * @param {string} expr - The expression to search
- * @param {string} func - The function name to search for
- * @return {Array.Array.&lt;string, any>} The result array, where each result is an array containing the function call and array of arguments.
- */
-function parseFunctionFromExpression( expr, func ) {
-    let index;
-    let result;
-    let openBrackets;
-    let start;
-    let argStart;
-    let args;
-    const findFunc = new RegExp( `${func}\\s*\\(`, 'g' );
-    const results = [];
-
-    if ( !expr || !func ) {
-        return results;
+class DatepickerNativeIos extends Widget {
+    static get selector() {
+        return '.question input[type="date"]';
     }
+    static condition( element ) {
+        // Do not instantiate if DatepickerExtended was instantiated on element or if non-iOS browser is used.
+        return !data.has( element, 'DatepickerExtended' ) &amp;&amp; os.ios;
+    }
+    _init() {
 
-    while ( ( result = findFunc.exec( expr ) ) !== null ) {
-        openBrackets = 1;
-        args = [];
-        start = result.index;
-        argStart = findFunc.lastIndex;
-        index = argStart - 1;
-        while ( openBrackets !== 0 &amp;&amp; index &lt; expr.length ) {
-            index++;
-            if ( expr[ index ] === '(' ) {
-                openBrackets++;
-            } else if ( expr[ index ] === ')' ) {
-                openBrackets--;
-            } else if ( expr[ index ] === ',' &amp;&amp; openBrackets === 1 ) {
-                args.push( expr.substring( argStart, index ).trim() );
-                argStart = index + 1;
+        /*
+         * Bug 1.
+         *
+         * This bug deals with readonly date inputs on iOS browsers (e.g. Safari and Chrome). 
+         * See https://github.com/OpenClinica/enketo-express-oc/issues/219.
+         * Once this bug is fixed in iOS, this code can be removed.
+         * 
+         * Unfortunately, I don't think we can detect the presence of the bug itself to avoid 
+         * using the workaround automatically (after Apple fixes it).
+         * 
+         * This is a very ugly solution, but the bug is fairly obscure, and the workaround is hopefully
+         * just temporary.
+         */
+        console.log( 'Adding iOS readonly datepicker workaround.' );
+        this.element.addEventListener( 'focus', () => {
+            // prepare for future where readonly state is dynamic
+            if ( this.element.readOnly ) {
+                this.element.blur();
             }
-        }
-        // add last argument
-        if ( argStart &lt; index ) {
-            args.push( expr.substring( argStart, index ).trim() );
-        }
-
-        // add [ 'function( a ,b)', ['a','b'] ] to result array
-        results.push( [ expr.substring( start, index + 1 ), args ] );
+        } );
     }
-
-    return results;
 }
 
-function stripQuotes( str ) {
-    if ( /^".+"$/.test( str ) || /^'.+'$/.test( str ) ) {
-        return str.substring( 1, str.length - 1 );
-    }
-    return str;
-}
-
-// Because iOS gives any camera-provided file the same filename, we need to a
-// unique-ified filename.
-//
-// See https://github.com/kobotoolbox/enketo-express/issues/374
-function getFilename( file, postfix ) {
-    let filenameParts;
-    if ( typeof file === 'object' &amp;&amp; file !== null &amp;&amp; file.name ) {
-        postfix = postfix || '';
-        filenameParts = file.name.split( '.' );
-        if ( filenameParts.length > 1 ) {
-            filenameParts[ filenameParts.length - 2 ] += postfix;
-        } else if ( filenameParts.length === 1 ) {
-            filenameParts[ 0 ] += postfix;
-        }
-        return filenameParts.join( '.' );
-    }
-    return '';
-}
-
-/**
- * Converts NodeLists or DOMtokenLists to an array.
- *
- * @param {NodeList|DOMTokenList} list
- * @return {Array}
- */
-function toArray( list ) {
-    const array = [];
-    // iterate backwards ensuring that length is an UInt32
-    for ( let i = list.length >>> 0; i--; ) {
-        array[ i ] = list[ i ];
-    }
-    return array;
-}
-
-function isNumber( n ) {
-    return !isNaN( parseFloat( n ) ) &amp;&amp; isFinite( n );
-}
-
-function readCookie( name ) {
-    let c;
-    let C;
-    let i;
-
-    if ( cookies ) {
-        return cookies[ name ];
-    }
-
-    c = document.cookie.split( '; ' );
-    cookies = {};
-
-    for ( i = c.length - 1; i >= 0; i-- ) {
-        C = c[ i ].split( '=' );
-        // decode URI
-        C[ 1 ] = decodeURIComponent( C[ 1 ] );
-        // if cookie is signed (using expressjs/cookie-parser/), extract value
-        if ( C[ 1 ].substr( 0, 2 ) === 's:' ) {
-            C[ 1 ] = C[ 1 ].slice( 2 );
-            C[ 1 ] = C[ 1 ].slice( 0, C[ 1 ].lastIndexOf( '.' ) );
-        }
-        cookies[ C[ 0 ] ] = decodeURIComponent( C[ 1 ] );
-    }
-
-    return cookies[ name ];
-}
-
-function dataUriToBlobSync( dataURI ) {
-    let byteString;
-    let mimeString;
-    let buffer;
-    let array;
-
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    byteString = atob( dataURI.split( ',' )[ 1 ] );
-    // separate out the mime component
-    mimeString = dataURI.split( ',' )[ 0 ].split( ':' )[ 1 ].split( ';' )[ 0 ];
-
-    // write the bytes of the string to an ArrayBuffer
-    buffer = new ArrayBuffer( byteString.length );
-    array = new Uint8Array( buffer );
-
-    for ( let i = 0; i &lt; byteString.length; i++ ) {
-        array[ i ] = byteString.charCodeAt( i );
-    }
-
-    // write the ArrayBuffer to a blob
-    return new Blob( [ array ], {
-        type: mimeString
-    } );
-}
-
-function getPasteData( event ) {
-    const clipboardData = event.originalEvent.clipboardData || window.clipboardData; // modern || IE11
-    return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
-}
-
-/**
- * Update a HTML anchor to serve as a download or reset it if an empty objectUrl is provided.
- *
- * @param {HTMLElement} anchor the anchor element
- * @param {*} objectUrl the objectUrl to download
- * @param {*} fileName  the filename of the file
- */
-function updateDownloadLink( anchor, objectUrl, fileName ) {
-    if ( window.updateDownloadLinkIe11 ) {
-        return window.updateDownloadLinkIe11( ...arguments );
-    }
-    anchor.setAttribute( 'href', objectUrl || '' );
-    anchor.setAttribute( 'download', fileName || '' );
-}
-
-/**
- * @function resizeImage
- *
- * @param {File} file - image file to be resized
- * @param {number} maxPixels - maximum pixels of resized image
- *
- * @return {Promise&lt;Blob>} promise of resized image blob
- */
-function resizeImage( file, maxPixels ) {
-    return new Promise( ( resolve, reject ) => {
-        let image = new Image();
-        image.src = URL.createObjectURL( file );
-        image.onload = () => {
-            let width = image.width;
-            let height = image.height;
-
-            if ( width &lt;= maxPixels &amp;&amp; height &lt;= maxPixels ) {
-                resolve( file );
-            }
-
-            let newWidth;
-            let newHeight;
-
-            if ( width > height ) {
-                newHeight = height * ( maxPixels / width );
-                newWidth = maxPixels;
-            } else {
-                newWidth = width * ( maxPixels / height );
-                newHeight = maxPixels;
-            }
-
-            let canvas = document.createElement( 'canvas' );
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-
-            let context = canvas.getContext( '2d' );
-
-            context.drawImage( image, 0, 0, newWidth, newHeight );
-
-            canvas.toBlob( resolve, file.type );
-        };
-        image.onerror = reject;
-    } );
-}
-
-export {
-    parseFunctionFromExpression,
-    stripQuotes,
-    getFilename,
-    toArray,
-    isNumber,
-    readCookie,
-    dataUriToBlobSync,
-    getPasteData,
-    updateDownloadLink,
-    resizeImage
-};
+export default DatepickerNativeIos;
 </code></pre>
         </article>
     </section>

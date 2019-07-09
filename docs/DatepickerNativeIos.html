@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>js/utils.js - Enketo Core</title>
+    <title>DatepickerNativeIos - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,254 +36,778 @@
 
 <div id="main">
     
-    <h1 class="page-title">js/utils.js</h1>
+    <h1 class="page-title">DatepickerNativeIos</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/* global ArrayBuffer, Uint8Array */
+        <h2>
+        DatepickerNativeIos
+        </h2>
+        
+            <div class="class-description"><p>The whole purpose of this widget is to workaround iOS browser bugs. See bug descriptions inline below.</p></div>
+        
+    
+</header>
 
-/**
- * Various utilities.
- *
- * @module utils
- */
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-let cookies;
+    
+    <h2>Constructor</h2>
+    
 
-/**
- * Parses an Expression to extract all function calls and theirs argument arrays.
- *
- * @param {string} expr - The expression to search
- * @param {string} func - The function name to search for
- * @return {Array.Array.&lt;string, any>} The result array, where each result is an array containing the function call and array of arguments.
- */
-function parseFunctionFromExpression( expr, func ) {
-    let index;
-    let result;
-    let openBrackets;
-    let start;
-    let argStart;
-    let args;
-    const findFunc = new RegExp( `${func}\\s*\\(`, 'g' );
-    const results = [];
+    <h4 class="name" id="DatepickerNativeIos"><span class="type-signature"></span>new DatepickerNativeIos<span class="signature">()</span><span class="type-signature"></span></h4>
 
-    if ( !expr || !func ) {
-        return results;
-    }
+    
 
-    while ( ( result = findFunc.exec( expr ) ) !== null ) {
-        openBrackets = 1;
-        args = [];
-        start = result.index;
-        argStart = findFunc.lastIndex;
-        index = argStart - 1;
-        while ( openBrackets !== 0 &amp;&amp; index &lt; expr.length ) {
-            index++;
-            if ( expr[ index ] === '(' ) {
-                openBrackets++;
-            } else if ( expr[ index ] === ')' ) {
-                openBrackets--;
-            } else if ( expr[ index ] === ',' &amp;&amp; openBrackets === 1 ) {
-                args.push( expr.substring( argStart, index ).trim() );
-                argStart = index + 1;
-            }
-        }
-        // add last argument
-        if ( argStart &lt; index ) {
-            args.push( expr.substring( argStart, index ).trim() );
-        }
 
-        // add [ 'function( a ,b)', ['a','b'] ] to result array
-        results.push( [ expr.substring( start, index + 1 ), args ] );
-    }
 
-    return results;
-}
 
-function stripQuotes( str ) {
-    if ( /^".+"$/.test( str ) || /^'.+'$/.test( str ) ) {
-        return str.substring( 1, str.length - 1 );
-    }
-    return str;
-}
+<dl class="details">
 
-// Because iOS gives any camera-provided file the same filename, we need to a
-// unique-ified filename.
-//
-// See https://github.com/kobotoolbox/enketo-express/issues/374
-function getFilename( file, postfix ) {
-    let filenameParts;
-    if ( typeof file === 'object' &amp;&amp; file !== null &amp;&amp; file.name ) {
-        postfix = postfix || '';
-        filenameParts = file.name.split( '.' );
-        if ( filenameParts.length > 1 ) {
-            filenameParts[ filenameParts.length - 2 ] += postfix;
-        } else if ( filenameParts.length === 1 ) {
-            filenameParts[ 0 ] += postfix;
-        }
-        return filenameParts.join( '.' );
-    }
-    return '';
-}
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_date-native-ios_datepicker-native-ios.js.html">widget/date-native-ios/datepicker-native-ios.js</a>, <a href="widget_date-native-ios_datepicker-native-ios.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
 
-/**
- * Converts NodeLists or DOMtokenLists to an array.
- *
- * @param {NodeList|DOMTokenList} list
- * @return {Array}
- */
-function toArray( list ) {
-    const array = [];
-    // iterate backwards ensuring that length is an UInt32
-    for ( let i = list.length >>> 0; i--; ) {
-        array[ i ] = list[ i ];
-    }
-    return array;
-}
+    
 
-function isNumber( n ) {
-    return !isNaN( parseFloat( n ) ) &amp;&amp; isFinite( n );
-}
+    
 
-function readCookie( name ) {
-    let c;
-    let C;
-    let i;
+    
 
-    if ( cookies ) {
-        return cookies[ name ];
-    }
+    
 
-    c = document.cookie.split( '; ' );
-    cookies = {};
+    
 
-    for ( i = c.length - 1; i >= 0; i-- ) {
-        C = c[ i ].split( '=' );
-        // decode URI
-        C[ 1 ] = decodeURIComponent( C[ 1 ] );
-        // if cookie is signed (using expressjs/cookie-parser/), extract value
-        if ( C[ 1 ].substr( 0, 2 ) === 's:' ) {
-            C[ 1 ] = C[ 1 ].slice( 2 );
-            C[ 1 ] = C[ 1 ].slice( 0, C[ 1 ].lastIndexOf( '.' ) );
-        }
-        cookies[ C[ 0 ] ] = decodeURIComponent( C[ 1 ] );
-    }
+    
 
-    return cookies[ name ];
-}
+    
 
-function dataUriToBlobSync( dataURI ) {
-    let byteString;
-    let mimeString;
-    let buffer;
-    let array;
+    
 
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    byteString = atob( dataURI.split( ',' )[ 1 ] );
-    // separate out the mime component
-    mimeString = dataURI.split( ',' )[ 0 ].split( ':' )[ 1 ].split( ';' )[ 0 ];
+    
 
-    // write the bytes of the string to an ArrayBuffer
-    buffer = new ArrayBuffer( byteString.length );
-    array = new Uint8Array( buffer );
+    
 
-    for ( let i = 0; i &lt; byteString.length; i++ ) {
-        array[ i ] = byteString.charCodeAt( i );
-    }
+    
 
-    // write the ArrayBuffer to a blob
-    return new Blob( [ array ], {
-        type: mimeString
-    } );
-}
+    
 
-function getPasteData( event ) {
-    const clipboardData = event.originalEvent.clipboardData || window.clipboardData; // modern || IE11
-    return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
-}
+    
 
-/**
- * Update a HTML anchor to serve as a download or reset it if an empty objectUrl is provided.
- *
- * @param {HTMLElement} anchor the anchor element
- * @param {*} objectUrl the objectUrl to download
- * @param {*} fileName  the filename of the file
- */
-function updateDownloadLink( anchor, objectUrl, fileName ) {
-    if ( window.updateDownloadLinkIe11 ) {
-        return window.updateDownloadLinkIe11( ...arguments );
-    }
-    anchor.setAttribute( 'href', objectUrl || '' );
-    anchor.setAttribute( 'download', fileName || '' );
-}
+    
 
-/**
- * @function resizeImage
- *
- * @param {File} file - image file to be resized
- * @param {number} maxPixels - maximum pixels of resized image
- *
- * @return {Promise&lt;Blob>} promise of resized image blob
- */
-function resizeImage( file, maxPixels ) {
-    return new Promise( ( resolve, reject ) => {
-        let image = new Image();
-        image.src = URL.createObjectURL( file );
-        image.onload = () => {
-            let width = image.width;
-            let height = image.height;
+    
+</dl>
 
-            if ( width &lt;= maxPixels &amp;&amp; height &lt;= maxPixels ) {
-                resolve( file );
-            }
 
-            let newWidth;
-            let newHeight;
 
-            if ( width > height ) {
-                newHeight = height * ( maxPixels / width );
-                newWidth = maxPixels;
-            } else {
-                newWidth = width * ( maxPixels / height );
-                newHeight = maxPixels;
-            }
 
-            let canvas = document.createElement( 'canvas' );
-            canvas.width = newWidth;
-            canvas.height = newHeight;
 
-            let context = canvas.getContext( '2d' );
 
-            context.drawImage( image, 0, 0, newWidth, newHeight );
 
-            canvas.toBlob( resolve, file.type );
-        };
-        image.onerror = reject;
-    } );
-}
 
-export {
-    parseFunctionFromExpression,
-    stripQuotes,
-    getFilename,
-    toArray,
-    isNumber,
-    readCookie,
-    dataUriToBlobSync,
-    getPasteData,
-    updateDownloadLink,
-    resizeImage
-};
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Widget.html">Widget</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="downloadButtonHtml"><span class="type-signature">(readonly) </span>downloadButtonHtml<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line98">line 98</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#downloadButtonHtml">Widget#downloadButtonHtml</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Returns a HTML document fragment for a download button.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="originalInputValue"><span class="type-signature">(readonly) </span>originalInputValue<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line132">line 132</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#originalInputValue">Widget#originalInputValue</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Obtains the value from the original form control the widget is instantiated on.
+This form control is often hidden by the widget.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="props"><span class="type-signature">(readonly) </span>props<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line71">line 71</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#props">Widget#props</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Returns widget properties. May need to be extended.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="resetButtonHtml"><span class="type-signature">(readonly) </span>resetButtonHtml<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#resetButtonHtml">Widget#resetButtonHtml</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Returns a HTML document fragment for a reset button.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="value"><span class="type-signature">(readonly) </span>value<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line114">line 114</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Widget.html#value">Widget#value</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Obtains the value from the current widget state. Should be overridden.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="disable"><span class="type-signature"></span>disable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#disable">Widget#disable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Disallow user input into widget by making it readonly.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="enable"><span class="type-signature"></span>enable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#enable">Widget#enable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Performs opposite action of disable() function.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Widget.html#update">Widget#update</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Updates form-defined language strings, <option>s (cascading selects, and (calculated) values.
+Most of the times, this function needs to be overridden in the widget.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
