@@ -24,7 +24,7 @@ let Nodeset;
  * Class dealing with the XML Model of a form
  *
  * @class
- * @param {{modelStr: string, instanceStr: string=, external: {id: string, xml: XMLDocument}=, submitted: boolean= }} data - data object containing XML model, (partial) XML instance to load, external data array, flag to indicate whether data was submitted before
+ * @param {{modelStr: string, instanceStr: string=, external: <{id: string, xml: XMLDocument}>=, submitted: boolean= }} data - data object containing XML model, (partial) XML instance to load, external data array, flag to indicate whether data was submitted before
  * @param {{full:boolean=}=} options - Whether to initialize the full model or only the primary instance
  */
 FormModel = function( data, options ) {
@@ -272,29 +272,28 @@ FormModel.prototype.importNode = function( node, allChildren ) {
     let i;
     let il;
     switch ( node.nodeType ) {
-        case document.ELEMENT_NODE:
-            {
-                const newNode = document.createElementNS( node.namespaceURI, node.nodeName );
-                if ( node.attributes && node.attributes.length > 0 ) {
-                    for ( i = 0, il = node.attributes.length; i < il; i++ ) {
-                        const attr = node.attributes[ i ];
-                        if ( attr.namespaceURI ) {
-                            newNode.setAttributeNS( attr.namespaceURI, attr.nodeName, node.getAttributeNS( attr.namespaceURI, attr.localName ) );
-                        } else {
-                            newNode.setAttribute( attr.nodeName, node.getAttribute( attr.nodeName ) );
-                        }
+        case document.ELEMENT_NODE: {
+            const newNode = document.createElementNS( node.namespaceURI, node.nodeName );
+            if ( node.attributes && node.attributes.length > 0 ) {
+                for ( i = 0, il = node.attributes.length; i < il; i++ ) {
+                    const attr = node.attributes[ i ];
+                    if ( attr.namespaceURI ) {
+                        newNode.setAttributeNS( attr.namespaceURI, attr.nodeName, node.getAttributeNS( attr.namespaceURI, attr.localName ) );
+                    } else {
+                        newNode.setAttribute( attr.nodeName, node.getAttribute( attr.nodeName ) );
                     }
                 }
-                if ( allChildren && node.children.length ) {
-                    for ( i = 0, il = node.children.length; i < il; i++ ) {
-                        newNode.appendChild( this.importNode( node.children[ i ], allChildren ) );
-                    }
-                }
-                if ( !node.children.length && node.textContent ) {
-                    newNode.textContent = node.textContent;
-                }
-                return newNode;
             }
+            if ( allChildren && node.children.length ) {
+                for ( i = 0, il = node.children.length; i < il; i++ ) {
+                    newNode.appendChild( this.importNode( node.children[ i ], allChildren ) );
+                }
+            }
+            if ( !node.children.length && node.textContent ) {
+                newNode.textContent = node.textContent;
+            }
+            return newNode;
+        }
         case document.TEXT_NODE:
         case document.CDATA_SECTION_NODE:
         case document.COMMENT_NODE:
