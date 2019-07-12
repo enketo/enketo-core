@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[5.5.1] - 2019-07-12
+--------------------
+##### Changed
+- Developer documentation update.
+- Major dependencies update.
+
 [5.5.0] - 2019-07-09
 --------------------
 ##### Added 
