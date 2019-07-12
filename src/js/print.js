@@ -7,7 +7,7 @@
 import $ from 'jquery';
 
 let dpi, printStyleSheet;
-let $printStyleSheetLink;
+let printStyleSheetLink;
 import dialog from 'enketo/dialog';
 
 // make sure setDpi is not called until DOM is ready
@@ -33,11 +33,10 @@ function setDpi() {
  * @return {Element} [description]
  */
 function getPrintStyleSheet() {
-    let sheet;
     // document.styleSheets is an Object not an Array!
     for ( const i in document.styleSheets ) {
-        if ( Object.prototype.hasOwnProperty.call( document, i ) ) {
-            sheet = document.styleSheets[ i ];
+        if ( Object.prototype.hasOwnProperty.call( document.styleSheets, i ) ) {
+            const sheet = document.styleSheets[ i ];
             if ( sheet.media.mediaText === 'print' ) {
                 return sheet;
             }
@@ -52,7 +51,7 @@ function getPrintStyleSheet() {
  * @returns {Element} [description]
  */
 function getPrintStyleSheetLink() {
-    return $( 'link[media="print"]:eq(0)' );
+    return document.querySelector( 'link[media="print"]' );
 }
 
 /**
@@ -61,11 +60,11 @@ function getPrintStyleSheetLink() {
 function styleToAll() {
     // sometimes, setStylesheet fails upon loading
     printStyleSheet = printStyleSheet || getPrintStyleSheet();
-    $printStyleSheetLink = $printStyleSheetLink || getPrintStyleSheetLink();
+    printStyleSheetLink = printStyleSheetLink || getPrintStyleSheetLink();
     // Chrome:
     printStyleSheet.media.mediaText = 'all';
     // Firefox:
-    $printStyleSheetLink.attr( 'media', 'all' );
+    printStyleSheetLink.setAttribute( 'media', 'all' );
     return !!printStyleSheet;
 }
 
@@ -74,7 +73,7 @@ function styleToAll() {
  */
 function styleReset() {
     printStyleSheet.media.mediaText = 'print';
-    $printStyleSheetLink.attr( 'media', 'print' );
+    printStyleSheetLink.setAttribute( 'media', 'print' );
     $( '.print-height-adjusted, .print-width-adjusted, .main' )
         .removeAttr( 'style' )
         .removeClass( 'print-height-adjusted print-width-adjusted' );
@@ -87,7 +86,7 @@ function styleReset() {
  * @returns {boolean}
  */
 function isGrid() {
-    return /theme-.*grid.*/.test( $( 'form.or' ).attr( 'class' ) );
+    return /theme-.*grid.*/.test( document.querySelector( 'form.or' ).getAttribute( 'class' ) );
 }
 
 /**
@@ -98,7 +97,9 @@ function isGrid() {
  */
 function fixGrid( paper ) {
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
-    $( '.main' ).css( 'width', getPaperPixelWidth( paper ) ).addClass( 'print-width-adjusted' );
+    const main = document.querySelector( '.main' );
+    main.style.width = getPaperPixelWidth( paper );
+    main.classList.add( 'print-width-adjusted' );
     // wait for browser repainting after width change
     return new Promise( resolve => {
         setTimeout( () => {
@@ -106,11 +107,11 @@ function fixGrid( paper ) {
             let rowTop;
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
             const maxWidth = $( '#form-title' ).outerWidth() - 1;
-            const $els = $( '.question, .trigger' ).not( '.draft' );
+            const els = document.querySelectorAll( '.question:not(.draft), .trigger:not(.draft)' );
 
-            $els.each( function( index ) {
-                const lastElement = index === $els.length - 1;
-                const $el = $( this );
+            els.forEach( ( el, index ) => {
+                const lastElement = index === els.length - 1;
+                const $el = $( el );
                 const top = $el.offset().top;
                 rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
                 $row = $row || $el;
