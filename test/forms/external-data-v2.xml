@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>external-data</h:title>
+        <model>
+            <instance>
+                <external-data id="external-data">
+                    <grp/>
+                    <internal-select/>
+                    <external-select/>
+                    <external-select-minimal/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </external-data>
+            </instance>
+            <instance id="mydata" src="jr://file/mydata.xml"/>
+            <instance id="choices">
+                <root>
+                    <item>
+                        <label>aa (value has spaces!)</label>
+                        <group>a</group>
+                        <name>a a</name>                        <!-- this should prompt spaces warning -->
+                    </item>
+                    <item>
+                        <label>bb</label>
+                        <group>a</group>
+                        <name>bb</name>
+                    </item>
+                    <item>
+                        <label>cc</label>
+                        <group>b</group>
+                        <name>cc</name>
+                    </item>
+                    <item>
+                        <label>dd</label>
+                        <group>b</group>
+                        <name>dd</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/external-data/grp" type="select1"/>
+            <bind nodeset="/external-data/internal-select" type="select"/>
+            <bind nodeset="/external-data/external-select" type="select"/>
+            <bind nodeset="/external-data/external-select-minimal" type="select"/>
+            <bind jr:preload="uid" nodeset="/external-data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/external-data/grp">
+            <label>Select</label>
+            <item>
+                <label>a</label>
+                <value>a</value>
+            </item>
+            <item>
+                <label>b</label>
+                <value>b</value>
+            </item>
+        </select1>
+        <select ref="/external-data/internal-select">
+            <label>Select</label>
+            <itemset nodeset="instance('choices')/root/item[group= /external-data/grp ]">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select>
+        <select ref="/external-data/external-select">
+            <label>Select</label>
+            <itemset nodeset="instance('mydata')/root/item[group= /external-data/grp ]">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select>
+        <select ref="/external-data/external-select-minimal" appearance="minimal">
+            <label>Select</label>
+            <itemset nodeset="instance('mydata')/root/item[group= /external-data/grp ]">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select>
+    </h:body>
+</h:html>

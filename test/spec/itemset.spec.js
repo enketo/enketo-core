@@ -394,4 +394,63 @@ describe( 'Itemset functionality', () => {
             expect( options[ 1 ].textContent ).toEqual( 'two' );
         } );
     } );
+
+    describe( 'show a warning if a multi-select value that loaded from external data has spaces', () => {
+        const externalArr = [ {
+            id: 'mydata',
+            xml: new DOMParser().parseFromString(
+                `   <root>
+                        <item>
+                            <label>11</label>
+                            <group>a</group>
+                            <name>1 1</name>                        
+                        </item>
+                        <item>
+                            <label>22</label>
+                            <group>a</group>
+                            <name>22</name>
+                        </item>
+                        <item>
+                            <label>33</label>
+                            <group>b</group>
+                            <name>33</name>
+                        </item>
+                        <item>
+                            <label>44 (value has spaces!)</label>
+                            <group>b</group>
+                            <name>4 4</name>
+                        </item>
+                    </root>
+                `, 'text/xml' )
+        } ];
+
+        let form, loadErrors;
+        beforeEach( () => {
+            form = loadForm( 'external-data-v2.xml', undefined, undefined, undefined, externalArr );
+            loadErrors = form.init();
+            spyOn(window, 'alert');
+        } );
+
+        it( 'initializes form', () => {
+            expect( loadErrors.length ).toEqual( 0 );
+        } );
+
+        it( 'select "a" option', () => {
+            const option = form.view.html.querySelector( '[name="/external-data/grp"][value="a"]' );
+            option.checked = true;
+            option.dispatchEvent( events.Change() );
+            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "a a" that contains a space.' );
+            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "1 1" that contains a space.' );
+            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "1 1" that contains a space.' );
+        } );
+
+        it( 'select "b" option', () => {
+            const option = form.view.html.querySelector( '[name="/external-data/grp"][value="b"]' );
+            option.checked = true;
+            option.dispatchEvent( events.Change() );
+            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "4 4" that contains a space.' );
+            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "4 4" that contains a space.' );
+        } );
+
+    } );
 } );

@@ -6,6 +6,8 @@
 
 import $ from 'jquery';
 import { parseFunctionFromExpression } from './utils';
+import dialog from 'enketo/dialog';
+import { t } from 'enketo/translator';
 
 export default {
     /**
@@ -168,7 +170,13 @@ export default {
                 }
                 // Obtain the value of the secondary instance item found.
                 const value = that.getNodeFromItem( valueRef, item ).textContent;
-
+                /**
+                 * #510 Show warning if select_multiple value has spaces
+                 */
+                const multiple = ( inputAttributes[ 'data-type-xml' ] == 'select' ) && ( inputAttributes[ 'type' ] == 'checkbox' ) || ( $list[ 0 ] && $list[ 0 ].multiple );
+                if ( multiple && ( value.indexOf( ' ' ) > -1 ) ) {
+                    dialog.alert( t( 'alert.valuehasspaces.multiple', { value: value } ) );
+                }
                 if ( templateNodeName === 'label' ) {
                     optionsFragment.appendChild( that.createInput( inputAttributes, translations, value ) );
                 } else if ( templateNodeName === 'option' ) {

@@ -74,6 +74,9 @@ const SOURCE_STRINGS = {
     'alert': {
         'gotonotfound': {
             'msg': 'Failed to find question \'__path__\' in form. Is it a valid path?'
+        },
+        'valuehasspaces': {
+            'multiple': 'Select multiple question has an illegal value "__value__" that contains a space.'
         }
     },
     'confirm': {
