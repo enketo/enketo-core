@@ -9,9 +9,7 @@ $media-margin: 10px;
 .or-required-msg,
 .or-relevant-msg,
 .option-wrapper .itemset-template,
-.itemset-labels,
-.or-hint.or-form-guidance,
-.or-hint.or-form-guidance.active {
+.itemset-labels {
     display: none;
 }
 
@@ -87,6 +85,15 @@ $media-margin: 10px;
 
     ~br {
         display: none;
+    }
+}
+
+.or-form-guidance.active {
+    margin: 5px 0;
+    color: $brand-primary-color;
+
+    summary {
+        color: #888888;
     }
 }
 

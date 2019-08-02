@@ -5,9 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Changed
+- Guidance hints are now displayed on screen as collapsible element.
+
 ##### Fixed
 - Likert widget label in Grid Theme overlaps widget in print view.
-
 
 [5.5.1] - 2019-07-12
 --------------------

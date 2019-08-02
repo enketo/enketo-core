@@ -181,8 +181,7 @@ label.geo {
         display: none !important;
     }
 
-    .or-hint.active,
-    .or-hint.or-form-guidance.active {
+    .or-hint.active {
         color: black;
         display: block;
         padding-top: 5px;
@@ -194,8 +193,12 @@ label.geo {
         border: 1px dotted black;
         padding: 1px;
         margin-top: 5px;
-        font-size: 10px;
+
+        summary {
+            display: none;
+        }
     }
+
 }
 
 .invalid-constraint,
