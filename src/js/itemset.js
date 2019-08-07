@@ -37,6 +37,7 @@ export default {
         }
 
         const clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
+        const alerts = [];
 
         $nodes.each( function() {
             let $input;
@@ -175,7 +176,7 @@ export default {
                  */
                 const multiple = ( inputAttributes[ 'data-type-xml' ] == 'select' ) && ( inputAttributes[ 'type' ] == 'checkbox' ) || ( $list[ 0 ] && $list[ 0 ].multiple );
                 if ( multiple && ( value.indexOf( ' ' ) > -1 ) ) {
-                    dialog.alert( t( 'alert.valuehasspaces.multiple', { value: value } ) );
+                    alerts[ alerts.length ] = t( 'alert.valuehasspaces.multiple', { value: value } );
                 }
                 if ( templateNodeName === 'label' ) {
                     optionsFragment.appendChild( that.createInput( inputAttributes, translations, value ) );
@@ -220,6 +221,12 @@ export default {
             }
 
         } );
+        if ( alerts.length > 0 ) {
+            /**
+             * We're assuming the enketo-core-consuming app has a dialog that supports some basic HTML rendering
+             */
+            dialog.alert( alerts.join("<br>") );
+        }
     },
 
     /**
