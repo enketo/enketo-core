@@ -225,7 +225,7 @@ export default {
             /**
              * We're assuming the enketo-core-consuming app has a dialog that supports some basic HTML rendering
              */
-            dialog.alert( alerts.join("<br>") );
+            dialog.alert( alerts.join( '<br>' ) );
         }
     },
 

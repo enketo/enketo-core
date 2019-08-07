@@ -428,7 +428,7 @@ describe( 'Itemset functionality', () => {
         beforeEach( () => {
             form = loadForm( 'external-data-v2.xml', undefined, undefined, undefined, externalArr );
             loadErrors = form.init();
-            spyOn(window, 'alert');
+            spyOn( window, 'alert' );
         } );
 
         it( 'initializes form', () => {
@@ -439,17 +439,14 @@ describe( 'Itemset functionality', () => {
             const option = form.view.html.querySelector( '[name="/external-data/grp"][value="a"]' );
             option.checked = true;
             option.dispatchEvent( events.Change() );
-            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "a a" that contains a space.' );
-            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "1 1" that contains a space.' );
-            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "1 1" that contains a space.' );
+            expect( window.alert ).toHaveBeenCalledWith( 'Select multiple question has an illegal value "a a" that contains a space.<br>Select multiple question has an illegal value "1 1" that contains a space.<br>Select multiple question has an illegal value "1 1" that contains a space.' );
         } );
 
         it( 'select "b" option', () => {
             const option = form.view.html.querySelector( '[name="/external-data/grp"][value="b"]' );
             option.checked = true;
             option.dispatchEvent( events.Change() );
-            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "4 4" that contains a space.' );
-            expect(window.alert).toHaveBeenCalledWith( 'Select multiple question has an illegal value "4 4" that contains a space.' );
+            expect( window.alert ).toHaveBeenCalledWith( 'Select multiple question has an illegal value "4 4" that contains a space.<br>Select multiple question has an illegal value "4 4" that contains a space.' );
         } );
 
     } );
