@@ -92,6 +92,7 @@ const SOURCE_STRINGS = {
  *
  * t('constraint.invalid');
  * t('constraint.required');
+ * t('hint.guidance.details');
  */
 
 /**

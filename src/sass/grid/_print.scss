@@ -116,18 +116,6 @@ $printBaseFontSize: 10px;
     }
 }
 
-.or-appearance-likert .option-wrapper {
-
-    // Not clear to me why all these likert fixes are necessary
-    >label {
-
-        input[type=radio],
-        input[type=checkbox] {
-            margin-top: -40px;
-        }
-    }
-}
-
 .bootstrap-select {
     margin: 0;
     padding: 0;
