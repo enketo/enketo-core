@@ -253,6 +253,29 @@ function getPaperPixelWidth( paper ) {
     return `${( printWidth - ( 2 * paper.margin ) ) * dpi}px`;
 }
 
+
+function openAllDetails() {
+    document.querySelectorAll( 'details.or-form-guidance.active' )
+        .forEach( details => {
+            if ( details.open ) {
+                details.dataset.previousOpen = true;
+            } else {
+                details.open = true;
+            }
+        } );
+}
+
+function closeAllDetails() {
+    document.querySelectorAll( 'details.or-form-guidance.active' )
+        .forEach( details => {
+            if ( details.dataset.previousOpen ) {
+                delete details.dataset.previousOpen;
+            } else {
+                details.open = false;
+            }
+        } );
+}
+
 /**
  * Prints the form after first preparing the Grid (every time it is called).
  * 
@@ -286,7 +309,7 @@ function print( theme ) {
     }
 }
 
-export { print, fixGrid, styleToAll, styleReset, isGrid };
+export { print, fixGrid, styleToAll, styleReset, isGrid, openAllDetails, closeAllDetails };
 </code></pre>
         </article>
     </section>
