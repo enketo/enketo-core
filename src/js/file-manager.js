@@ -114,41 +114,72 @@ fileManager.getCurrentFiles = () => {
     const files = [];
 
     // Get any files inside file input elements or text input elements for drawings.
-    $( 'form.or' ).find( 'input[type="file"]:not(.ignore), input[type="text"][data-drawing="true"]' ).each( function() {
-        let newFilename;
-        let file = null;
-        let canvas = null;
-        if ( this.type === 'file' ) {
-            file = this.files[ 0 ]; // Why doesn't this fail for empty file inputs?
-        } else if ( this.value ) {
-            canvas = $( this ).closest( '.question' )[ 0 ].querySelector( '.draw-widget canvas' );
-            if ( canvas ) {
-                // TODO: In the future, we could simply do canvas.toBlob() instead
-                file = dataUriToBlobSync( canvas.toDataURL() );
-                file.name = this.value;
-            }
-        }
-        if ( file && file.name ) {
-            // Correct file names by adding a unique-ish postfix
-            // First create a clone, because the name property is immutable
-            // TODO: in the future, when browser support increase we can invoke
-            // the File constructor to do this.
-            newFilename = getFilename( file, this.dataset.filenamePostfix );
-
+    $( 'form.or' )
+        .find( 'input[type="file"]:not(.ignore)' ).each( function() {
+            let file = this.files[ 0 ]; // Why doesn't this fail for empty file inputs?
             // If file is resized, get Blob representation of data URI
-            if ( this.dataset.resized && this.dataset.resizedDataURI ) {
+            if ( file && file.name && this.dataset.resized && this.dataset.resizedDataURI ) {
                 file = dataUriToBlobSync( this.dataset.resizedDataURI );
             }
-            file = new Blob( [ file ], {
-                type: file.type
-            } );
-            file.name = newFilename;
-            files.push( file );
-        }
-    } );
+
+            if ( file && file.name ) {
+                const postfixed = addFilenamePostfix(file, this.dataset.filenamePostfix);
+                files.push( postfixed );
+            }
+        } )
+        .end()
+        .find( 'input[type="text"][data-drawing="true"]' ).each( function() {
+            if ( this.value ) {
+                const canvas = $( this ).closest( '.question' )[ 0 ].querySelector( '.draw-widget canvas' );
+                if ( canvas ) {
+                    // TODO: In the future, we could simply do canvas.toBlob() instead
+                    const file = dataUriToBlobSync( canvas.toDataURL() );
+                    file.name = this.value;
+                    if ( file && file.name ) {
+                        const postfixed = addFilenamePostfix(file, this.dataset.filenamePostfix);
+                        files.push( postfixed );
+                    }
+                }
+            }
+        })
+        .end()
+        .find( 'input[type="text"][data-audio-recording="true"]' ).each( function() {
+            if ( this.value ) {
+                const audio = $( this ).closest( '.question' )[ 0 ].querySelector( '.audio-recorder-widget audio' );
+                if (audio && audio.src) {
+                    const file = dataUriToBlobSync( audio.src );
+                    file.name = this.value;
+                    if (file && file.name) {
+                        files.push(file);
+                    }
+                }
+            }
+        });
 
     return files;
 };
+
+/**
+ * @function addFilenamePostfix
+ *
+ * @description Clone the given file object, and append the given postfix to the filename.
+ *
+ * @param {File} file - File object which will be cloned, and whose name property will have a postfix added.
+ * @param {string | undefined} postfix - Optional postfix parameter
+ * @return {File} cloned File object with modified filename.
+ */
+function addFilenamePostfix(file, postfix) {
+    // Correct file names by adding a unique-ish postfix
+    // First create a clone, because the name property is immutable
+    // TODO: in the future, when browser support increase we can invoke
+    // the File constructor to do this.
+    const newFilename = getFilename( file, postfix );
+    const clone = new Blob( [ file ], {
+        type: file.type
+    } );
+    clone.name = newFilename;
+    return clone;
+}
 
 /**
  * @function isTooLarge

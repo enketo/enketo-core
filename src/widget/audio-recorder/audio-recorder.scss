@@ -1,0 +1,21 @@
+.audio-recorder {
+    .disabled {
+        pointer-events: none;
+    }
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.audio-recorder__info-message {
+    color: $state-info-text;
+}
+
+.audio-recorder__warning-message {
+    color: $state-warning-text;
+}
+
+.audio-recorder__error-message {
+    color: $state-danger-text;
+}

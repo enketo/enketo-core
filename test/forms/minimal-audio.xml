@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<h:head>
+    <h:title>ultra-minimal-audio-survey</h:title>
+    <model>
+        <instance>
+            <ultra-minimal-audio-survey id="ultra-minimal-audio-survey">
+                <audio_question_name/>
+                <meta>
+                    <instanceID/>
+                </meta>
+            </ultra-minimal-audio-survey>
+        </instance>
+        <bind nodeset="/ultra-minimal-audio-survey/audio_question_name" type="binary"/>
+        <bind calculate="concat('uuid:', uuid())" nodeset="/ultra-minimal-audio-survey/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+</h:head>
+<h:body>
+    <upload mediatype="audio/*" ref="/ultra-minimal-audio-survey/audio_question_name">
+    <label>audio question label</label>
+</upload>
+</h:body>
+</h:html>

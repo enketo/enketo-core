@@ -12,7 +12,7 @@ import l from '../widget/date-mobile/datepicker-mobile';
 import m from '../widget/time/timepicker-extended';
 import n from '../widget/datetime/datetimepicker-extended';
 import o from '../widget/select-media/select-media';
-import p from '../widget/file/filepicker';
+import p from '../widget/audio-recorder/audio-recorder';
 import q from '../widget/draw/draw-widget';
 import r from '../widget/select-likert/likertitem';
 import s from '../widget/columns/columns';
@@ -25,6 +25,7 @@ import y from '../widget/rank/rank-widget';
 import z from '../widget/url/url-widget';
 import aa from '../widget/text-max/text-max';
 import ab from '../widget/date-native-ios/datepicker-native-ios';
+import ac from '../widget/file/filepicker';
 //import zz from '../widget/example/my-widget';
 
-export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, ab ];
+export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, ab, ac ];

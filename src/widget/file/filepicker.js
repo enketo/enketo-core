@@ -6,7 +6,7 @@ import events from '../../js/event';
 import { t } from 'enketo/translator';
 import TranslatedError from '../../js/translated-error';
 import dialog from 'enketo/dialog';
-import { empty } from '../../js/dom-utils';
+import { elementDataStore, empty } from '../../js/dom-utils';
 
 // TODO: remove remaining jquery (events, namespaces)
 // TODO: run (some) standard widget tests
@@ -308,6 +308,12 @@ class Filepicker extends Widget {
 
     set value( value ) {
         this.fakeInput.value = value;
+    }
+
+    static condition( element ) {
+        // Do not instantiate if AudioRecorder was instantiated on element.
+        // Note: This assumes that AudioRecorder is exported from `widgets.js` before Filepicker is.
+        return !elementDataStore.has( element, 'AudioRecorder' );
     }
 
 }
