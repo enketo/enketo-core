@@ -3,6 +3,7 @@
 const resolve = require( 'rollup-plugin-node-resolve' );
 const commonjs = require( 'rollup-plugin-commonjs' );
 const json = require( 'rollup-plugin-json' );
+const istanbul = require( 'rollup-plugin-istanbul' );
 
 module.exports = config => {
 
@@ -62,15 +63,41 @@ module.exports = config => {
                     include: 'node_modules/**', // Default: undefined
                     sourceMap: false, // Default: true
                 } ),
-                json() // still used for importing package.json
-
+                json(), // still used for importing package.json
+                istanbul( {
+                    include: [
+                        'src/js/*.js',
+                        // TODO commented out beacause of `JavaScript heap out of memory` errors:
+                        // 'src/widget/*/*.js'
+                    ]
+                } )
             ]
         },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: [ 'progress' ],
+        reporters: [ 'progress', 'coverage' ],
+
+
+        coverageReporter: {
+            dir: 'test-coverage',
+            reporters: [
+                {
+                    type: 'html',
+                    includeAllSources: true
+                },
+                {
+                    type: 'text-summary',
+                    file: 'text-summary.txt',
+                    includeAllSources: true
+                },
+                {
+                    type: 'text-summary',
+                    includeAllSources: true
+                }
+            ]
+        },
 
 
         // web server port
