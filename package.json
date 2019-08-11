@@ -64,6 +64,7 @@
         "grunt-sass": "^3.0.2",
         "grunt-shell": "3.0.x",
         "istanbul": "^0.4.5",
+        "istanbul-reporter-shield-badge": "^1.2.0",
         "jasmine-core": "^2.9.1",
         "jsdoc": "^3.6.2",
         "json-pretty": "0.0.1",

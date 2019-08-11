@@ -3,6 +3,7 @@
 const resolve = require( 'rollup-plugin-node-resolve' );
 const commonjs = require( 'rollup-plugin-commonjs' );
 const json = require( 'rollup-plugin-json' );
+const path = require( 'path' );
 const istanbul = require( 'rollup-plugin-istanbul' );
 
 module.exports = config => {
@@ -67,8 +68,7 @@ module.exports = config => {
                 istanbul( {
                     include: [
                         'src/js/*.js',
-                        // TODO commented out beacause of `JavaScript heap out of memory` errors:
-                        // 'src/widget/*/*.js'
+                        'src/widget/*/*.js'
                     ]
                 } )
             ]
@@ -90,6 +90,19 @@ module.exports = config => {
                 {
                     type: 'text-summary',
                     file: 'text-summary.txt',
+                    includeAllSources: true
+                },
+                {
+                    type: (() => {
+                        const shieldBadgeReporter = require('istanbul-reporter-shield-badge');
+                        const istanbul = require('istanbul');
+                        istanbul.Report.register(shieldBadgeReporter);
+                        return 'shield-badge';
+                    })(),
+                    range: [60, 80],
+                    subject: 'coverage',
+                    readmeFilename: 'README.md',
+                    readmeDir: path.resolve(__dirname, '..'),
                     includeAllSources: true
                 },
                 {
