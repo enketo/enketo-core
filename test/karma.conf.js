@@ -83,15 +83,12 @@ module.exports = config => {
         coverageReporter: {
             dir: 'test-coverage',
             reporters: [
+                // for in-depth analysis in your browser
                 {
                     type: 'html',
                     includeAllSources: true
                 },
-                {
-                    type: 'text-summary',
-                    file: 'text-summary.txt',
-                    includeAllSources: true
-                },
+                // for generating coverage badge in README.md
                 {
                     type: (() => {
                         const shieldBadgeReporter = require('istanbul-reporter-shield-badge');
@@ -105,6 +102,7 @@ module.exports = config => {
                     readmeDir: path.resolve(__dirname, '..'),
                     includeAllSources: true
                 },
+                // for displaying percentages summary in command line
                 {
                     type: 'text-summary',
                     includeAllSources: true
