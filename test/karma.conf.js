@@ -4,7 +4,11 @@ const resolve = require( 'rollup-plugin-node-resolve' );
 const commonjs = require( 'rollup-plugin-commonjs' );
 const json = require( 'rollup-plugin-json' );
 const path = require( 'path' );
-const istanbul = require( 'rollup-plugin-istanbul' );
+const rollupIstanbul = require( 'rollup-plugin-istanbul' );
+const istanbul = require('istanbul');
+const shieldBadgeReporter = require('istanbul-reporter-shield-badge');
+
+istanbul.Report.register(shieldBadgeReporter);
 
 module.exports = config => {
 
@@ -65,7 +69,7 @@ module.exports = config => {
                     sourceMap: false, // Default: true
                 } ),
                 json(), // still used for importing package.json
-                istanbul( {
+                rollupIstanbul( {
                     include: [
                         'src/js/*.js',
                         'src/widget/*/*.js'
@@ -90,12 +94,7 @@ module.exports = config => {
                 },
                 // for generating coverage badge in README.md
                 {
-                    type: (() => {
-                        const shieldBadgeReporter = require('istanbul-reporter-shield-badge');
-                        const istanbul = require('istanbul');
-                        istanbul.Report.register(shieldBadgeReporter);
-                        return 'shield-badge';
-                    })(),
+                    type: 'shield-badge',
                     range: [60, 80],
                     subject: 'coverage',
                     readmeFilename: 'README.md',
