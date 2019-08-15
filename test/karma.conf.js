@@ -3,6 +3,12 @@
 const resolve = require( 'rollup-plugin-node-resolve' );
 const commonjs = require( 'rollup-plugin-commonjs' );
 const json = require( 'rollup-plugin-json' );
+const path = require( 'path' );
+const rollupIstanbul = require( 'rollup-plugin-istanbul' );
+const istanbul = require('istanbul');
+const shieldBadgeReporter = require('istanbul-reporter-shield-badge');
+
+istanbul.Report.register(shieldBadgeReporter);
 
 module.exports = config => {
 
@@ -62,15 +68,51 @@ module.exports = config => {
                     include: 'node_modules/**', // Default: undefined
                     sourceMap: false, // Default: true
                 } ),
-                json() // still used for importing package.json
-
+                json(), // still used for importing package.json
+                rollupIstanbul( {
+                    include: [
+                        'src/js/*.js',
+                        'src/widget/*/*.js'
+                    ],
+                    exclude: [
+                        // exclude libraries that ware copied into widgets
+                        'src/widget/geo-esri/**',
+                        'src/widget/time/timepicker.js'
+                    ]
+                } )
             ]
         },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: [ 'progress' ],
+        reporters: [ 'progress', 'coverage' ],
+
+
+        coverageReporter: {
+            dir: 'test-coverage',
+            reporters: [
+                // for in-depth analysis in your browser
+                {
+                    type: 'html',
+                    includeAllSources: true
+                },
+                // for generating coverage badge in README.md
+                {
+                    type: 'shield-badge',
+                    range: [60, 80],
+                    subject: 'coverage',
+                    readmeFilename: 'README.md',
+                    readmeDir: path.resolve(__dirname, '..'),
+                    includeAllSources: true
+                },
+                // for displaying percentages summary in command line
+                {
+                    type: 'text-summary',
+                    includeAllSources: true
+                }
+            ]
+        },
 
 
         // web server port

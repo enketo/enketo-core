@@ -73,7 +73,6 @@ module.exports = grunt => {
         karma: {
             options: {
                 singleRun: true,
-                reporters: [ 'dots' ],
                 configFile: 'test/karma.conf.js',
                 customLaunchers: {
                     ChromeHeadlessNoSandbox: {
