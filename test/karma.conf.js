@@ -73,6 +73,11 @@ module.exports = config => {
                     include: [
                         'src/js/*.js',
                         'src/widget/*/*.js'
+                    ],
+                    exclude: [
+                        // exclude libraries that ware copied into widgets
+                        'src/widget/geo-esri/**',
+                        'src/widget/time/timepicker.js'
                     ]
                 } )
             ]
