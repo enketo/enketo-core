@@ -151,17 +151,18 @@ class Filepicker extends Widget {
                     .then( resizedFile => {
                         // Put information in file element that file is resized
                         event.target.dataset.resized = true;
+                        // Put resizedDataURI that will be used by fileManager.getCurrentFiles to get blob synchronously
+                        const reader = new FileReader();
+                        reader.addEventListener( "load", function() {
+                            event.target.dataset.resizedDataURI = reader.result;
+                        }, false );
+                        reader.readAsDataURL( resizedFile );
                         file = resizedFile;
                     } )
                     .catch( () => {} )
                     .finally( () => {
                         fileManager.getFileUrl( file, fileName )
                             .then( url => {
-                                // If file is resized, put information of resized file URL in file element
-                                // Will be used by fileManager.getCurrentFiles
-                                if ( event.target.dataset.resized ) {
-                                    event.target.dataset.resizedFileUrl = url;
-                                }
                                 // Update UI
                                 that._showPreview( url, that.props.mediaType );
                                 that._showFeedback();
