@@ -153,7 +153,7 @@ class Filepicker extends Widget {
                         event.target.dataset.resized = true;
                         // Put resizedDataURI that will be used by fileManager.getCurrentFiles to get blob synchronously
                         const reader = new FileReader();
-                        reader.addEventListener( "load", function() {
+                        reader.addEventListener( 'load', function() {
                             event.target.dataset.resizedDataURI = reader.result;
                         }, false );
                         reader.readAsDataURL( resizedFile );
