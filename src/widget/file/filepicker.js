@@ -150,14 +150,10 @@ class Filepicker extends Widget {
                 this._resizeFile( file, that.props.mediaType )
                     .then( resizedFile => {
                         // Put information in file element that file is resized
-                        event.target.dataset.resized = true;
                         // Put resizedDataURI that will be used by fileManager.getCurrentFiles to get blob synchronously
-                        const reader = new FileReader();
-                        reader.addEventListener( 'load', function() {
-                            event.target.dataset.resizedDataURI = reader.result;
-                        }, false );
-                        reader.readAsDataURL( resizedFile );
-                        file = resizedFile;
+                        event.target.dataset.resized = true;
+                        event.target.dataset.resizedDataURI = resizedFile.dataURI;
+                        file = resizedFile.blob;
                     } )
                     .catch( () => {} )
                     .finally( () => {
@@ -267,7 +263,11 @@ class Filepicker extends Widget {
             if ( this.props && this.props.maxPixels ) {
                 resizeImage( file, this.props.maxPixels )
                     .then( blob => {
-                        resolve( blob );
+                        const reader = new FileReader();
+                        reader.addEventListener( 'load', function() {
+                            resolve( { blob, 'dataURI': reader.result } );
+                        }, false );
+                        reader.readAsDataURL( blob );
                     } )
                     .catch( () => {
                         reject( file );
