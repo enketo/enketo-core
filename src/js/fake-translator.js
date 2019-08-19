@@ -11,22 +11,6 @@ const SOURCE_STRINGS = {
         'invalid': 'Value not allowed',
         'required': 'This field is required'
     },
-    'esri-geopicker': {
-        'coordinate-mgrs': 'MGRS coordinate',
-        'decimal': 'decimal',
-        'degrees': 'degrees, minutes, seconds',
-        'latitude-degrees': 'latitude (d° m’ s” N)',
-        'longitude-degrees': 'longitude (d° m’ s” W)',
-        'mgrs': 'MGRS',
-        'notavailable': 'Not Available',
-        'utm': 'UTM',
-        'utm-easting': 'easting (m)',
-        'utm-hemisphere': 'hemisphere',
-        'utm-north': 'North',
-        'utm-northing': 'northing (m)',
-        'utm-south': 'South',
-        'utm-zone': 'zone'
-    },
     'filepicker': {
         'placeholder': 'Click here to upload file. (< __maxSize__)',
         'notFound': 'File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).',
