@@ -255,23 +255,7 @@ label.geo {
     }
 }
 
-.esri-geopicker.widget {
-    .esri-ui-top-left {
-        display: none;
-    }
 
-    .btn[name="geodetect"] {
-        display: none !important;
-    }
-
-    .interaction-blocker {
-        display: none !important;
-    }
-
-    .map-canvas-wrapper:not(.hide-map) {
-        display: block !important;
-    }
-}
 
 .bootstrap-select {
     @include clearfix;

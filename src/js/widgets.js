@@ -2,7 +2,6 @@ import a from '../widget/note/notewidget';
 import b from '../widget/select-desktop/selectpicker';
 import c from '../widget/select-mobile/selectpicker';
 import e from '../widget/select-autocomplete/autocomplete';
-//import f from '../widget/geo-esri/geopicker';
 import f from '../widget/geo/geopicker';
 import g from '../widget/textarea/textarea';
 import h from '../widget/table/tablewidget';
