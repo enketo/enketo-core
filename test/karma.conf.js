@@ -5,10 +5,10 @@ const commonjs = require( 'rollup-plugin-commonjs' );
 const json = require( 'rollup-plugin-json' );
 const path = require( 'path' );
 const rollupIstanbul = require( 'rollup-plugin-istanbul' );
-const istanbul = require('istanbul');
-const shieldBadgeReporter = require('istanbul-reporter-shield-badge');
+const istanbul = require( 'istanbul' );
+const shieldBadgeReporter = require( 'istanbul-reporter-shield-badge' );
 
-istanbul.Report.register(shieldBadgeReporter);
+istanbul.Report.register( shieldBadgeReporter );
 
 module.exports = config => {
 
@@ -60,8 +60,6 @@ module.exports = config => {
             },
             plugins: [
                 resolve( {
-                    module: true, // Default: true
-                    main: true, // Default: true
                     browser: true, // Default: false
                 } ),
                 commonjs( {
@@ -99,10 +97,10 @@ module.exports = config => {
                 // for generating coverage badge in README.md
                 {
                     type: 'shield-badge',
-                    range: [60, 80],
+                    range: [ 60, 80 ],
                     subject: 'coverage',
                     readmeFilename: 'README.md',
-                    readmeDir: path.resolve(__dirname, '..'),
+                    readmeDir: path.resolve( __dirname, '..' ),
                     includeAllSources: true
                 },
                 // for displaying percentages summary in command line
