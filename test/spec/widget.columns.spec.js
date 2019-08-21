@@ -31,9 +31,9 @@ const FORM =
 testStaticProperties( ColumnsWidget );
 testBasicInstantiation( ColumnsWidget, FORM );
 
-describe( 'Custom ColumnsWidget tests', () => {
+describe( 'ColumnsWidget', () => {
 
-    it( 'Fillers are added', done => {
+    it( 'adds fillers', done => {
         const fragment = document.createRange().createContextualFragment( FORM );
         const el = fragment.querySelector( ColumnsWidget.selector );
 

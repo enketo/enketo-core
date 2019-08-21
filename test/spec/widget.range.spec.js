@@ -18,15 +18,15 @@ runAllCommonWidgetTests( RangeWidget, FORM2, '2.1' );
 // because it actually also test an issue where the widget internally fires a change event when the widget is empty,
 // and the user clicks it. This fires 2 events, whereby the first is fired before the model changes the value from empty.
 // https://github.com/OpenClinica/enketo-express-oc/issues/209
-describe( 'Custom RangeWidget tests', () => {
+describe( 'RangeWidget', () => {
 
-    it( 'firing a change event on the range input (the widget) without actually changing the value does not lead to an unnecessary change event firing', done => {
+    it( 'is firing a change event on the range input (the widget) without actually changing the value does not lead to an unnecessary change event firing', done => {
         const fragment = document.createRange().createContextualFragment( FORM1 );
         const control = fragment.querySelector( RangeWidget.selector );
         const value = '2';
 
         // Also needs to work for radiobuttons, checkboxes, selects.
-        input.setVal(  control, value, null );
+        input.setVal( control, value, null );
 
         Promise.resolve()
             .then( () => new RangeWidget( control ) )

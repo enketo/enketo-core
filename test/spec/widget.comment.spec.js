@@ -26,7 +26,7 @@ const options = {
 testStaticProperties( CommentWidget );
 //testBasicInstantiation( CommentWidget, FORM, options );
 
-describe( 'Custom CommentWidget tests', () => {
+describe( 'CommentWidget', () => {
     let widget;
 
     beforeEach( () => {
@@ -35,20 +35,20 @@ describe( 'Custom CommentWidget tests', () => {
         widget = new CommentWidget( el, options );
     } );
 
-    it( 'Comment question is hidden', () => {
+    it( 'hides comment question', () => {
         expect( widget.question.matches( '.hide' ) ).toEqual( true );
     } );
 
-    it( 'Comment button is added to linkedQuestion', () => {
+    it( 'adds comment button to linkedQuestion', () => {
         expect( widget.linkedQuestion.querySelector( '.btn-comment' ) ).not.toEqual( null );
     } );
 
-    it( 'Shows a comment dialog when comment button is clicked', () => {
+    it( 'shows a comment dialog when comment button is clicked', () => {
         widget.linkedQuestion.querySelector( '.btn-comment' ).click();
         expect( widget.linkedQuestion.querySelector( '.or-comment-widget textarea' ) ).not.toEqual( null );
     } );
 
-    it( 'Closes a comment dialog when update button is clicked', () => {
+    it( 'closes a comment dialog when update button is clicked', () => {
         widget.linkedQuestion.querySelector( '.btn-comment' ).click();
         const w = widget.linkedQuestion.querySelector( '.or-comment-widget' );
         w.querySelector( 'textarea' ).textContent = 'a comment';

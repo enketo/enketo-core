@@ -14,9 +14,9 @@ const FORM =
 testStaticProperties( ImageViewer );
 testBasicInstantiation( ImageViewer, FORM );
 
-describe( 'Custom ImageViewer tests', () => {
+describe( 'ImageViewer', () => {
 
-    it( 'on widget click event', done => {
+    it( 'on widget click event does things', done => {
         const fragment = document.createRange().createContextualFragment( FORM );
         const control = fragment.querySelector( ImageViewer.selector );
 
