@@ -27,6 +27,13 @@ module.exports = config => {
         frameworks: [ 'jasmine' ],
 
 
+        client: {
+            jasmine: {
+                random: false
+            }
+        },
+
+
         // list of files / patterns to load in the browser
         files: [
             'test/mock/*.js',
