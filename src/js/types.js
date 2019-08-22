@@ -93,7 +93,7 @@ const types = {
                 return types.date.validate( parts[ 0 ] ) && types.time.validate( parts[ 1 ], false );
             }
 
-            return types.data.validate( parts[ 0 ] );
+            return types.date.validate( parts[ 0 ] );
         },
         convert( x ) {
             let date = 'Invalid Date';
