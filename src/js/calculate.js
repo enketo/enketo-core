@@ -11,8 +11,12 @@ export default {
     /**
      * Updates calculated items.
      *
-     * @param {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated - The object containing info on updated data nodes.
-     * @param {string=} filter - CSS selector filter.
+     * @param {object} [updated] - The object containing info on updated data nodes.
+     * @param {Array<string>} [updated.nodes]
+     * @param {string} [updated.repeatPath]
+     * @param {number} [updated.repeatIndex]
+     * @param {string} [updated.relevantPath]
+     * @param {string} [filter] - CSS selector filter.
      */
     update( updated = {}, filter = '' ) {
         let $nodes;
