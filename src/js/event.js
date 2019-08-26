@@ -4,10 +4,11 @@
 // TODO: add second "propagate" parameter to constructors to add .enketo namespace to event.
 
 /**
- * Data update event
+ * Data update event.
  *
- * @param detail
- * @return {CustomEvent}
+ * @static
+ * @param {*} detail - Data to be passed with event
+ * @return {CustomEvent} Custom "dataupdate" event
  */
 function DataUpdate( detail ) {
     return new CustomEvent( 'dataupdate', { detail } );
@@ -16,7 +17,7 @@ function DataUpdate( detail ) {
 /**
  * Fake focus event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "fakefocus" event (bubbling)
  */
 function FakeFocus() {
     return new CustomEvent( 'fakefocus', { bubbles: true } );
@@ -25,7 +26,7 @@ function FakeFocus() {
 /**
  * Apply focus event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "applyfocus" event
  */
 function ApplyFocus() {
     return new CustomEvent( 'applyfocus' );
@@ -34,7 +35,7 @@ function ApplyFocus() {
 /**
  * Page flip event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "pageflip" event (bubbling)
  */
 function PageFlip() {
     return new CustomEvent( 'pageflip', { bubbles: true } );
@@ -43,8 +44,8 @@ function PageFlip() {
 /**
  * Removed event.
  *
- * @param detail
- * @return {CustomEvent}
+ * @param {*} detail - Data to be passed with event
+ * @return {CustomEvent} Custom "removed" event (bubbling)
  */
 function Removed( detail ) {
     return new CustomEvent( 'removed', { detail, bubbles: true } );
@@ -53,8 +54,8 @@ function Removed( detail ) {
 /**
  * Add repeat event.
  *
- * @param detail
- * @return {CustomEvent}
+ * @param {*} detail - Data to be passed with event
+ * @return {CustomEvent} Custom "addrepeat" event (bubbling)
  */
 function AddRepeat( detail ) {
     return new CustomEvent( 'addrepeat', { detail, bubbles: true } );
@@ -63,7 +64,7 @@ function AddRepeat( detail ) {
 /**
  * Remove repeat event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "removerepeat" event (bubbling)
  */
 function RemoveRepeat() {
     return new CustomEvent( 'removerepeat', { bubbles: true } );
@@ -72,7 +73,7 @@ function RemoveRepeat() {
 /**
  * Change language event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "changelanguage" event (bubbling)
  */
 function ChangeLanguage() {
     return new CustomEvent( 'changelanguage', { bubbles: true } );
@@ -81,7 +82,7 @@ function ChangeLanguage() {
 /**
  * Change event.
  *
- * @return {Event}
+ * @return {Event} "change" event (bubbling)
  */
 function Change() {
     return new Event( 'change', { bubbles: true } );
@@ -90,16 +91,16 @@ function Change() {
 /**
  * Input event.
  *
- * @return {Event}
+ * @return {Event} "input" event (bubbling)
  */
 function Input() {
     return new Event( 'input', { bubbles: true } );
 }
 
 /**
- * Input update event
+ * Input update event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "inputupdate" event (bubbling)
  */
 function InputUpdate() {
     return new CustomEvent( 'inputupdate', { bubbles: true } );
@@ -108,7 +109,7 @@ function InputUpdate() {
 /**
  * Edited event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "edited" event (bubbling)
  */
 function Edited() {
     return new CustomEvent( 'edited', { bubbles: true } );
@@ -117,7 +118,7 @@ function Edited() {
 /**
  * Validation complete event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "validationcomplete" event (bubbling)
  */
 function ValidationComplete() {
     return new CustomEvent( 'validationcomplete', { bubbles: true } );
@@ -126,17 +127,17 @@ function ValidationComplete() {
 /**
  * Invalidated event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "invalidated" event (bubbling)
  */
 function Invalidated() {
     return new CustomEvent( 'invalidated', { bubbles: true } );
 }
 
 /**
- * Progress update event
+ * Progress update event.
  *
- * @param detail
- * @return {CustomEvent}
+ * @param {*} detail - Data to be passed with event
+ * @return {CustomEvent} Custom "progressupdate" event (bubbling)
  */
 function ProgressUpdate( detail ) {
     return new CustomEvent( 'progressupdate', { detail, bubbles: true } );
@@ -145,7 +146,7 @@ function ProgressUpdate( detail ) {
 /**
  * Go to hidden event.
  *
- * @return {CustomEvent}
+ * @return {CustomEvent} Custom "gotohidden" event (bubbling)
  */
 function GoToHidden() {
     return new CustomEvent( 'gotohidden', { bubbles: true } );
