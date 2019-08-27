@@ -1,6 +1,6 @@
-/** 
+/**
  * Placeholder module for translator. It is meant to be overwritten by a translator used in your app.
- * 
+ *
  * @module fake-translator
  */
 
@@ -82,9 +82,10 @@ const SOURCE_STRINGS = {
 /**
  * Meant to be replaced by a real translator in the app that consumes enketo-core
  *
- * @param  {string} key - translation key
- * @param  {*} options - translation options
- * @return {string} translation output
+ * @static
+ * @param  {string} key - Translation key
+ * @param  {object} [options] - Translation options object
+ * @return {string} Translation output
  */
 function t( key, options ) {
     let str = '';

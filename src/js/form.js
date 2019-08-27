@@ -56,10 +56,16 @@ function Form( formSelector, data, options ) {
 
 /**
  * Getter and setter functions
- * @type {Object}
+ * @type {object}
  */
 Form.prototype = {
+    /**
+     * @type Array
+     */
     evaluationCascadeAdditions: [],
+    /**
+     * @type Array
+     */
     get evaluationCascade() {
         return [
             this.calc.update.bind( this.calc ),
@@ -72,12 +78,18 @@ Form.prototype = {
             this.validationUpdate
         ].concat( this.evaluationCascadeAdditions );
     },
+    /**
+     * @type string
+     */
     get recordName() {
         return this.view.$.attr( 'name' );
     },
     set recordName( name ) {
         this.view.$.attr( 'name', name );
     },
+    /**
+     * @type boolean
+     */
     get editStatus() {
         return this.view.html.dataset.edited === 'true';
     },
@@ -88,30 +100,57 @@ Form.prototype = {
         }
         this.view.html.dataset.edited = status;
     },
+    /**
+     * @type string
+     */
     get surveyName() {
         return this.view.$.find( '#form-title' ).text();
     },
+    /**
+     * @type string
+     */
     get instanceID() {
         return this.model.instanceID;
     },
+    /**
+     * @type string
+     */
     get deprecatedID() {
         return this.model.deprecatedID;
     },
+    /**
+     * @type string
+     */
     get instanceName() {
         return this.model.instanceName;
     },
+    /**
+     * @type string
+     */
     get version() {
         return this.model.version;
     },
+    /**
+     * @type string
+     */
     get encryptionKey() {
         return this.view.$.data( 'base64rsapublickey' );
     },
+    /**
+     * @type string
+     */
     get action() {
         return this.view.$.attr( 'action' );
     },
+    /**
+     * @type string
+     */
     get method() {
         return this.view.$.attr( 'method' );
     },
+    /**
+     * @type string
+     */
     get id() {
         return this.view.html.id;
     }
@@ -120,7 +159,8 @@ Form.prototype = {
 /**
  * Returns a module and adds the form property to it.
  *
- * @param module
+ * @param {object} module
+ * @return {object} updated module
  */
 Form.prototype.addModule = function( module ) {
     return Object.create( module, {
@@ -135,6 +175,7 @@ Form.prototype.addModule = function( module ) {
  *
  * Initializes the Form instance (XML Model and HTML View).
  *
+ * @return {Array<Error>} List of initialization errors.
  */
 Form.prototype.init = function() {
     let loadErrors = [];
@@ -995,6 +1036,9 @@ Form.prototype.goToTarget = function( target ) {
 
 /**
  * Static method to obtain required enketo-transform version direct from class.
+ *
+ * @type string
+ * @default
  */
 Form.requiredTransformerVersion = '1.33.0';
 
