@@ -23,12 +23,22 @@ import './plugins';
 import './extend';
 
 /**
+ * @typedef FormDataObj
+ * @property {string} modelStr
+ * @property {string} [instanceStr]
+ * @property {boolean} [submitted]
+ * @property {object} external
+ * @property {string} external.id
+ * @property {string} [external.xmlStr]
+ */
+
+/**
  * Class: Form
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
  * @param {string} formSelector - jQuery selector for the form
- * @param {{modelStr: string, instanceStr: string|undefined, submitted: boolean|undefined, external: {id: string, xmlStr: string }|undefined }} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
+ * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {{webMapId: string|undefined}} options - form options
  *
  * @class
@@ -56,7 +66,6 @@ function Form( formSelector, data, options ) {
 
 /**
  * Getter and setter functions
- * @type {object}
  */
 Form.prototype = {
     /**
@@ -292,6 +301,10 @@ Form.prototype.init = function() {
     return loadErrors;
 };
 
+/**
+ * @param {string} xpath
+ * @return {Array<Error>} A list of errors originated from `goToTarget`. Empty if everything went fine.
+ */
 Form.prototype.goTo = function( xpath ) {
     const errors = [];
     if ( !this.goToTarget( this.getGoToTarget( xpath ) ) ) {
@@ -305,8 +318,8 @@ Form.prototype.goTo = function( xpath ) {
 /**
  * Obtains a string of primary instance.
  *
- * @param  {!{include: boolean}=} include optional object items to exclude if false
- * @return {string}        XML string of primary instance
+ * @param {{include: boolean}} [include] - Optional object items to exclude if false
+ * @return {string} XML string of primary instance
  */
 Form.prototype.getDataStr = function( include ) {
     include = ( typeof include !== 'object' || include === null ) ? {} : include;
@@ -334,11 +347,11 @@ Form.prototype.resetView = function() {
  * TODO: this needs to work for all expressions (relevants, constraints), now it only works for calculated items
  * Ideally this belongs in the form Model, but unfortunately it needs access to the view
  *
- * @param  {string} expr
- * @param  {string} resTypeStr
- * @param  {string} selector
- * @param  {number} index
- * @param  {boolean} tryNative
+ * @param {string} expr
+ * @param {string} resTypeStr
+ * @param {string} selector
+ * @param {number} index
+ * @param {boolean} tryNative
  * @return {string} updated expression
  */
 Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index, tryNative ) {
@@ -381,8 +394,8 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
  * Since not all data nodes with a value have a corresponding input element,
  * we cycle through the HTML form elements and check for each form element whether data is available.
  *
- * @param $group
- * @param groupIndex
+ * @param {jQuery} $group
+ * @param {number} groupIndex
  */
 Form.prototype.setAllVals = function( $group, groupIndex ) {
     const that = this;
@@ -411,9 +424,12 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
                 throw new Error( `Could not load input field value with name: ${name} and value: ${value}` );
             }
         } );
-    return;
 };
 
+/**
+ * @param {jQuery} $control
+ * @return {string|undefined} Value
+ */
 Form.prototype.getModelValue = function( $control ) {
     const control = $control[ 0 ];
     const path = this.input.getName( control );
@@ -424,9 +440,12 @@ Form.prototype.getModelValue = function( $control ) {
 /**
  * Finds nodes that have attributes with XPath expressions that refer to particular XML elements.
  *
- * @param  {string} attr - The attribute name to search for
- * @param  {?string} filter - The optional filter to append to each selector
- * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated - The object containing info on updated data nodes
+ * @param {string} attr - The attribute name to search for
+ * @param {string} [filter] - The optional filter to append to each selector
+ * @param {object} [updated] - The object containing info on updated data nodes
+ * @param {Array<string>} [updated.nodes]
+ * @param {string} [updated.repeatPath]
+ * @param {number} [updated.repeatIndex]
  * @return {jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
@@ -498,6 +517,10 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     return $collection;
 };
 
+/**
+ * @param {jQuery} $controls
+ * @return {jQuery}
+ */
 Form.prototype.filterRadioCheckSiblings = $controls => {
     const wrappers = [];
     return $controls.filter( function() {
@@ -517,10 +540,10 @@ Form.prototype.filterRadioCheckSiblings = $controls => {
 /**
  * Crafts an optimized jQuery selector for element attributes that contain an expression with a target node name.
  *
- * @param  {string} filter   The filter to use
- * @param  {string} attr     The attribute to target
- * @param  {string} nodeName The XML nodeName to find
- * @return {string}          The selector
+ * @param {string} filter - The filter to use
+ * @param {string} attr - The attribute to target
+ * @param {string} nodeName - The XML nodeName to find
+ * @return {string} The selector
  */
 Form.prototype.getQuerySelectorsForLogic = ( filter, attr, nodeName ) => [
     // The target node name is ALWAYS at the END of a path inside the expression.
@@ -546,7 +569,7 @@ Form.prototype.getQuerySelectorsForLogic = ( filter, attr, nodeName ) => [
  * alternative is to add some logic to relevant.update to mark irrelevant nodes in the model
  * but that would slow down form loading and form traversal when it does matter.
  *
- * @return {string} [description]
+ * @return {string} Data string
  */
 Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
     const that = this;
@@ -615,7 +638,9 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
  *
  * Note: it does not take care of re-validating a question itself after its value has changed due to a calculation update!
  *
- * @param {Object} updated
+ * @param {object} [updated]
+ * @param {boolean} [updated.cloned]
+ * @param {string} repeatPath
  */
 Form.prototype.validationUpdate = function( updated ) {
     let $nodes;
@@ -648,6 +673,9 @@ Form.prototype.validationUpdate = function( updated ) {
     }
 };
 
+/**
+ * A big function that sets event handlers.
+ */
 Form.prototype.setEventHandlers = function() {
     const that = this;
 
@@ -749,11 +777,19 @@ Form.prototype.setEventHandlers = function() {
     } );
 };
 
+/**
+ * @param {Element} node
+ * @param {string} [type] - One of "constraint", "required" and "relevant".
+ */
 Form.prototype.setValid = function( node, type ) {
     const classes = ( type ) ? [ `invalid-${type}` ] : [ 'invalid-constraint', 'invalid-required', 'invalid-relevant' ];
     this.input.getWrapNode( node ).classList.remove( ...classes );
 };
 
+/**
+ * @param {Element} node
+ * @param {string} [type] - One of "constraint", "required" and "relevant".
+ */
 Form.prototype.setInvalid = function( node, type ) {
     type = type || 'constraint';
 
@@ -780,8 +816,8 @@ Form.prototype.blockPageNavigation = function() {
 /**
  * Checks whether the question is not currently marked as invalid. If no argument is provided, it checks the whole form.
  *
- * @param $node
- * @return {!boolean} whether the question/form is not marked as invalid.
+ * @param {Element} node
+ * @return {!boolean} Whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function( node ) {
     if ( node ) {
@@ -792,6 +828,9 @@ Form.prototype.isValid = function( node ) {
     return this.view.html.querySelector( '.invalid-required, .invalid-constraint, .invalid-relevant' ) === null;
 };
 
+/**
+ * Clears irrelevant
+ */
 Form.prototype.clearIrrelevant = function() {
     this.relevant.update( null, true );
 };
@@ -818,13 +857,15 @@ Form.prototype.validateAll = function() {
 
 /**
  * Alias of validateAll
+ *
+ * @function
  */
 Form.prototype.validate = Form.prototype.validateAll;
 
 /**
  * Validates all enabled input fields in the supplied container, after first resetting everything as valid.
  *
- * @param $container
+ * @param {jQuery} $container
  * @return {Promise} wrapping {boolean} whether the container contains any errors
  */
 Form.prototype.validateContent = function( $container ) {
@@ -864,6 +905,11 @@ Form.prototype.validateContent = function( $container ) {
             false );
 };
 
+/**
+ * @param {string} targetPath
+ * @param {string} contextPath
+ * @return {string} path
+ */
 Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
     let target;
 
@@ -886,7 +932,7 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
 /**
  * Validates question values.
  *
- * @param  {Element} control    [description]
+ * @param {Element} control
  * @return {Promise<undefined|ValidateInputResolution>} resolves with validation result
  */
 Form.prototype.validateInput = function( control ) {
@@ -963,6 +1009,10 @@ Form.prototype.validateInput = function( control ) {
         } );
 };
 
+/**
+ * @param {string} path
+ * @return {undefined|Element}
+ */
 Form.prototype.getGoToTarget = function( path ) {
     let hits;
     let modelNode;
@@ -1010,6 +1060,7 @@ Form.prototype.getGoToTarget = function( path ) {
  * Scrolls to a HTML Element, flips to the page it is on and focuses on the nearest form control.
  *
  * @param {HTMLElement} target - A HTML element to scroll to
+ * @return {boolean} whether target found
  */
 Form.prototype.goToTarget = function( target ) {
     if ( target ) {
