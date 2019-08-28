@@ -1,6 +1,6 @@
 /**
  * Pages module.
- * 
+ *
  * @module pages
  */
 
@@ -10,9 +10,23 @@ import config from 'enketo/config';
 import 'jquery-touchswipe';
 
 export default {
+    /**
+     * @type boolean
+     * @default
+     */
     active: false,
+    /**
+     * @type Array|jQuery
+     * @default
+     */
     $current: [],
+    /**
+     * @type jQuery
+     */
     $activePages: $(),
+    /**
+     * @type function
+     */
     init() {
         if ( !this.form ) {
             throw new Error( 'Repeats module not correctly instantiated with form property.' );
@@ -52,10 +66,14 @@ export default {
             }*/
         }
     },
-    // flips to the page provided as jQueried parameter or the page containing
-    // the jQueried element provided as parameter
-    // alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
-    // it flips to the page contained with the jQueried parameter;
+    /**
+     * flips to the page provided as jQueried parameter or the page containing
+     * the jQueried element provided as parameter
+     * alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
+     * it flips to the page contained with the jQueried parameter;
+     *
+     * @param {jQuery} $e
+     */
     flipToPageContaining( $e ) {
         let $closest;
 
@@ -68,6 +86,9 @@ export default {
         }
         this.$toc.parent().find( '.pages-toc__overlay' ).click();
     },
+    /**
+     * sets button handlers
+     */
     _setButtonHandlers() {
         const that = this;
         // Make sure eventhandlers are not duplicated after resetting form.
@@ -96,6 +117,9 @@ export default {
             return false;
         } );
     },
+    /**
+     * sets swipe handlers
+     */
     _setSwipeHandlers() {
         if ( config.swipePage === false ) {
             return;
@@ -118,10 +142,10 @@ export default {
                 if ( phase === 'start' ) {
                     /*
                      * Triggering blur will fire a change event on the currently focused form control
-                     * This will trigger validation and is required to block page navigation on swipe 
+                     * This will trigger validation and is required to block page navigation on swipe
                      * with form.pageNavigationBlocked
                      * The only potential problem with this approach is that the threshold (250ms)
-                     * may theoretically not be sufficient to ensure validation is completed to 
+                     * may theoretically not be sufficient to ensure validation is completed to
                      * set form.pageNavigationBlocked to true. The edge case will be very slow devices
                      * and/or amazingly complex constraint expressions.
                      */
@@ -130,6 +154,9 @@ export default {
             }
         } );
     },
+    /**
+     * sets toc handlers
+     */
     _setTocHandlers() {
         const that = this;
         this.$toc
@@ -144,6 +171,9 @@ export default {
                 that.$toc.parent().find( '#toc-toggle' ).prop( 'checked', false );
             } );
     },
+    /**
+     * sets repeat handlers
+     */
     _setRepeatHandlers() {
         // TODO: can be optimized by smartly updating the active pages
         this.form.view.html.addEventListener( events.AddRepeat().type, event => {
@@ -170,6 +200,9 @@ export default {
             }
         } );
     },
+    /**
+     * sets branch handlers
+     */
     _setBranchHandlers() {
         const that = this;
         // TODO: can be optimized by smartly updating the active pages
@@ -184,15 +217,24 @@ export default {
                 that._toggleButtons();
             } );
     },
+    /**
+     * sets language change handlers
+     */
     _setLangChangeHandlers() {
         this.form.view.html
             .addEventListener( events.ChangeLanguage().type, () => {
                 this._updateToc();
             } );
     },
+    /**
+     * @return {jQuery} current page
+     */
     _getCurrent() {
         return this.$current;
     },
+    /**
+     * @param {jQuery} $all
+     */
     _updateAllActive( $all ) {
         $all = $all || this.form.view.$.find( '[role="page"]' );
         this.$activePages = $all.filter( function() {
@@ -200,18 +242,29 @@ export default {
             return $this.closest( '.disabled' ).length === 0 &&
                 ( $this.is( '.question' ) || $this.find( '.question:not(.disabled)' ).length > 0 ||
                     // or-repeat-info is only considered a page by itself if it has no sibling repeats
-                    // When there are siblings repeats, we use CSS trickery to show the + button underneath the last 
+                    // When there are siblings repeats, we use CSS trickery to show the + button underneath the last
                     // repeat.
                     ( $this.is( '.or-repeat-info' ) && $this.siblings( '.or-repeat' ).length === 0 ) );
         } );
         this._updateToc();
     },
+    /**
+     * @param {number} currentIndex
+     * @return {jQuery} Previous page
+     */
     _getPrev( currentIndex ) {
         return this.$activePages[ currentIndex - 1 ];
     },
+    /**
+     * @param {number} currentIndex
+     * @return {jQuery} Next page
+     */
     _getNext( currentIndex ) {
         return this.$activePages[ currentIndex + 1 ];
     },
+    /**
+     * @return {number} Current page index
+     */
     _getCurrentIndex() {
         return this.$activePages.index( this.$current );
     },

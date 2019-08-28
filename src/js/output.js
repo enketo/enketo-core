@@ -1,4 +1,4 @@
-/** 
+/**
  * @module output
  */
 
@@ -8,7 +8,10 @@ export default {
     /**
      * Updates output values, optionally filtered by those values that contain a changed node name
      *
-     * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+     * @param {object} [updated] - The object containing info on updated data nodes
+     * @param {Array<string>} [updated.nodes]
+     * @param {string} [updated.repeatPath]
+     * @param {number} [updated.repeatIndex]
      */
     update( updated ) {
         const outputCache = {};
@@ -49,9 +52,9 @@ export default {
 
             let contextPath = that.form.input.getName( context );
 
-            /* 
+            /*
              * If the output is part of a group label and that group contains repeats with the same name,
-             * but currently has 0 repeats, the context will not be available. See issue 502. 
+             * but currently has 0 repeats, the context will not be available. See issue 502.
              * This same logic is applied in branch.js.
              */
             if ( $( context ).children( `.or-repeat-info[data-name="${contextPath}"]` ).length && !$( context ).children( `.or-repeat[name="${contextPath}"]` ).length ) {
