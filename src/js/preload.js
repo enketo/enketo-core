@@ -1,11 +1,14 @@
-/** 
+/**
  * Preloader module (soon to be deprecated).
- * 
+ *
  * @module preloader
  */
 
 import $ from 'jquery';
 export default {
+    /**
+     * Initializes preloader
+     */
     init() {
         const that = this;
 
@@ -40,6 +43,10 @@ export default {
             }
         } );
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'timestamp': function( o ) {
         let value;
         const that = this;
@@ -58,6 +65,10 @@ export default {
         }
         return 'error - unknown timestamp parameter';
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'date': function( o ) {
         let today;
         let year;
@@ -74,6 +85,10 @@ export default {
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'property': function( o ) {
         let node;
 
@@ -88,6 +103,10 @@ export default {
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'context': function( o ) {
         // 'application', 'user'??
         if ( o.curVal.length === 0 ) {
@@ -95,18 +114,30 @@ export default {
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'patient': function( o ) {
         if ( o.curVal.length === 0 ) {
             return 'patient preload item not supported in enketo';
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'user': function( o ) {
         if ( o.curVal.length === 0 ) {
             return 'user preload item not supported in enketo yet';
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'uid': function( o ) {
         if ( o.curVal.length === 0 ) {
             return this.form.model.evaluate( 'concat("uuid:", uuid())', 'string' );

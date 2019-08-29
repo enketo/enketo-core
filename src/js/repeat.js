@@ -7,7 +7,7 @@
  *
  * Note that with nested repeats you may have many more series of repeats than templates, because a nested repeat
  * may have multiple series.
- * 
+ *
  * @module repeat
  */
 
@@ -259,7 +259,7 @@ export default {
      * Checks whether repeat count value has been updated and updates repeat instances
      * accordingly.
      *
-     * @param {Object} updated
+     * @param {UpdatedDataNodes} updated
      */
     countUpdate( updated ) {
         let $repeatInfos;

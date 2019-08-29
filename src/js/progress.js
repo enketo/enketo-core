@@ -1,6 +1,6 @@
 /**
  * Progress module.
- * 
+ *
  * @module progress
  */
 
@@ -11,9 +11,21 @@ import events from './event';
  * currently focused input or the last changed input as the indicator for the current location.
  */
 export default {
+    /**
+     * @type number
+     */
     status: 0,
+    /**
+     * @type Element
+     */
     lastChanged: null,
+    /**
+     * @type Array<Element>
+     */
     all: null,
+    /**
+     * Updates total
+     */
     updateTotal() {
         this.all = [ ...this.form.view.html.querySelectorAll( '.question:not(.disabled):not(.or-appearance-comment):not(.or-appearance-dn):not(.readonly)' ) ]
             .filter( question => !question.closest( '.disabled' ) );
@@ -42,7 +54,7 @@ export default {
         }
     },
     /**
-     * @returns string
+     * @return {string} status
      */
     get() {
         return this.status;

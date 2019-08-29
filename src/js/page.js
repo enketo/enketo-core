@@ -302,6 +302,9 @@ export default {
                 return true;
             } );
     },
+    /**
+     * Switches to previous page
+     */
     _prev() {
         const currentIndex = this._getCurrentIndex();
         const prev = this._getPrev( currentIndex );
@@ -310,12 +313,21 @@ export default {
             this._flipTo( prev, currentIndex - 1 );
         }
     },
+    /**
+     * @param {Element} pageEl
+     */
     _setToCurrent( pageEl ) {
         const $n = $( pageEl );
         $n.addClass( 'current hidden' );
         this.$current = $n.removeClass( 'hidden' )
             .parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
     },
+    /**
+     * Switches to a page
+     *
+     * @param {Element} pageEl
+     * @param {number} newIndex
+     */
     _flipTo( pageEl, newIndex ) {
         // if there is a current page
         if ( this.$current.length > 0 && this.$current.closest( 'html' ).length === 1 ) {
@@ -334,13 +346,23 @@ export default {
             pageEl.dispatchEvent( events.PageFlip() );
         }
     },
+    /**
+     * Switches to first page
+     */
     _flipToFirst() {
         this._flipTo( this.$activePages[ 0 ] );
     },
+    /**
+     * Switches to last page
+     */
     _flipToLast() {
         this._flipTo( this.$activePages.last()[ 0 ] );
     },
-
+    /**
+     * Focuses on first question and scrolls it into view
+     *
+     * @param {Element} pageEl
+     */
     _focusOnFirstQuestion( pageEl ) {
         //triggering fake focus in case element cannot be focused (if hidden by widget)
         $( pageEl )
@@ -356,6 +378,11 @@ export default {
 
         pageEl.scrollIntoView();
     },
+    /**
+     * Updates status of navigation buttons
+     *
+     * @param {number} index
+     */
     _toggleButtons( index ) {
         const i = index || this._getCurrentIndex(),
             next = this._getNext( i ),
@@ -364,6 +391,9 @@ export default {
         this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
         this.$formFooter.toggleClass( 'end', !next );
     },
+    /**
+     * Updates Table of Contents
+     */
     _updateToc() {
         if ( this.$toc.length ) {
             // regenerate complete ToC from first enabled question/group label of each page
@@ -387,6 +417,12 @@ export default {
             this.$toc.closest( '.pages-toc' ).removeClass( 'hide' );
         }
     },
+    /**
+     * Builds Table of Contents
+     *
+     * @param {Array<object>} tocItems
+     * @return {Array<Element>}
+     */
     _getTocHtmlFragment( tocItems ) {
         const items = document.createDocumentFragment();
         tocItems.forEach( item => {

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>js/preload.js - Enketo Core</title>
+    <title>plugins - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,166 +36,446 @@
 
 <div id="main">
     
-    <h1 class="page-title">js/preload.js</h1>
+    <h1 class="page-title">plugins</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Preloader module (soon to be deprecated).
- *
- * @module preloader
- */
+        
+            
+        
+    
+</header>
 
-import $ from 'jquery';
-export default {
-    /**
-     * Initializes preloader
-     */
-    init() {
-        const that = this;
+<article>
+    
+        <div class="container-overview">
+        
+            
+                <div class="description"><p>Functions that extends jQuery</p></div>
+            
 
-        if ( !this.form ) {
-            throw new Error( 'Preload module not correctly instantiated with form property.' );
-        }
+            
+                
 
-        //these initialize actual preload items
-        this.form.view.$.find( 'input[data-preload], select[data-preload], textarea[data-preload]' ).each( function() {
-            const $preload = $( this );
-            const preload = this;
-            const props = that.form.input.getProps( preload );
-            const item = $preload.attr( 'data-preload' ).toLowerCase();
-            const param = $preload.attr( 'data-preload-params' ).toLowerCase();
 
-            if ( typeof that[ item ] !== 'undefined' ) {
-                const dataNode = that.form.model.node( props.path, props.index );
-                // If a preload item is placed inside a repeat with repeat-count 0, the node
-                // doesn't exist and will never get a value (which is correct behavior)
-                if ( dataNode.getElements().length ) {
-                    const curVal = dataNode.getVal();
-                    const newVal = that[ item ]( {
-                        param,
-                        curVal,
-                        dataNode
-                    } );
 
-                    dataNode.setVal( newVal, props.xmlType );
-                }
-            } else {
-                console.log( `Preload "${item}" not supported. May or may not be a big deal.` );
-            }
-        } );
-    },
-    /**
-     * @param {object} o
-     * @return {string}
-     */
-    'timestamp': function( o ) {
-        let value;
-        const that = this;
-        // when is 'start' or 'end'
-        if ( o.param === 'start' ) {
-            return ( o.curVal.length > 0 ) ? o.curVal : this.form.model.evaluate( 'now()', 'string' );
-        }
-        if ( o.param === 'end' ) {
-            //set event handler for each save event (needs to be triggered!)
-            this.form.view.$.on( 'beforesave', () => {
-                value = that.form.model.evaluate( 'now()', 'string' );
-                o.dataNode.setVal( value, 'datetime' );
-            } );
-            //TODO: why populate this upon load?
-            return this.form.model.evaluate( 'now()', 'string' );
-        }
-        return 'error - unknown timestamp parameter';
-    },
-    /**
-     * @param {object} o
-     * @return {string}
-     */
-    'date': function( o ) {
-        let today;
-        let year;
-        let month;
-        let day;
 
-        if ( o.curVal.length === 0 ) {
-            today = new Date( this.form.model.evaluate( 'today()', 'string' ) );
-            year = today.getFullYear().toString().pad( 4 );
-            month = ( today.getMonth() + 1 ).toString().pad( 2 );
-            day = today.getDate().toString().pad( 2 );
+<dl class="details">
 
-            return `${year}-${month}-${day}`;
-        }
-        return o.curVal;
-    },
-    /**
-     * @param {object} o
-     * @return {string}
-     */
-    'property': function( o ) {
-        let node;
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
 
-        // 'deviceid', 'subscriberid', 'simserial', 'phonenumber'
-        if ( o.curVal.length === 0 ) {
-            node = this.form.model.node( `instance("__session")/session/context/${o.param}` );
-            if ( node.getElements().length ) {
-                return node.getVal();
-            } else {
-                return `no ${o.param} property in enketo`;
-            }
-        }
-        return o.curVal;
-    },
-    /**
-     * @param {object} o
-     * @return {string}
-     */
-    'context': function( o ) {
-        // 'application', 'user'??
-        if ( o.curVal.length === 0 ) {
-            return ( o.param === 'application' ) ? 'enketo' : `${o.param} not supported in enketo`;
-        }
-        return o.curVal;
-    },
-    /**
-     * @param {object} o
-     * @return {string}
-     */
-    'patient': function( o ) {
-        if ( o.curVal.length === 0 ) {
-            return 'patient preload item not supported in enketo';
-        }
-        return o.curVal;
-    },
-    /**
-     * @param {object} o
-     * @return {string}
-     */
-    'user': function( o ) {
-        if ( o.curVal.length === 0 ) {
-            return 'user preload item not supported in enketo yet';
-        }
-        return o.curVal;
-    },
-    /**
-     * @param {object} o
-     * @return {string}
-     */
-    'uid': function( o ) {
-        if ( o.curVal.length === 0 ) {
-            return this.form.model.evaluate( 'concat("uuid:", uuid())', 'string' );
-        }
-        return o.curVal;
-    }
-};
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="~clearInputs"><span class="type-signature">(inner) </span>clearInputs<span class="signature">(ev1<span class="signature-attributes">opt</span>, ev2<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Clears form input fields and triggers events when doing this. If formelement is cloned but not yet added to DOM
+(and not synchronized with data object), the desired event is probably 'edit' (default). If it is already added
+to the DOM (and synchronized with data object) a regular change event should be fired</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ev1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Event to be triggered when a value is cleared</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ev2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Event to be triggered when a value is cleared</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">jQuery</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~reverse"><span class="type-signature">(inner) </span>reverse<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Reverses a jQuery collection</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
