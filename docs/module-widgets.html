@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>widget/select-media/select-media.js - Enketo Core</title>
+    <title>widgets - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,44 +36,136 @@
 
 <div id="main">
     
-    <h1 class="page-title">widget/select-media/select-media.js</h1>
+    <h1 class="page-title">widgets</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import Widget from '../../js/widget';
-import { getSiblingElements } from '../../js/dom-utils';
+        
+            
+        
+    
+</header>
 
-/**
- * Media Picker. Hides text labels if a media label is present.
- * 
- * @extends Widget
- */
-class MediaPicker extends Widget {
+<article>
+    
+        <div class="container-overview">
+        
+            
+                <div class="description"><p>A collection of all available widgets</p></div>
+            
 
-    static get selector() {
-        return '.or-appearance-no-buttons';
-    }
+            
+                
 
-    _init() {
-        this.element.querySelectorAll( '.option-label' ).forEach( function( optionLabel ) {
-            if ( getSiblingElements( optionLabel, 'img, video, audio' ).length > 0 ) {
-                optionLabel.style.display = 'none';
-            }
-        } );
-    }
 
-}
 
-export default MediaPicker;
-</code></pre>
-        </article>
-    </section>
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets.js.html">js/widgets.js</a>, <a href="js_widgets.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>widget/select-media/select-media.js - Enketo Core</title>
+    <title>js/widgets.js - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,7 +36,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">widget/select-media/select-media.js</h1>
+    <h1 class="page-title">js/widgets.js</h1>
     
 
     
@@ -46,31 +46,42 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import Widget from '../../js/widget';
-import { getSiblingElements } from '../../js/dom-utils';
-
-/**
- * Media Picker. Hides text labels if a media label is present.
- * 
- * @extends Widget
+            <pre class="prettyprint source linenums"><code>/**
+ * A collection of all available widgets
+ *
+ * @module widgets
  */
-class MediaPicker extends Widget {
 
-    static get selector() {
-        return '.or-appearance-no-buttons';
-    }
+import a from '../widget/note/notewidget';
+import b from '../widget/select-desktop/selectpicker';
+import c from '../widget/select-mobile/selectpicker';
+import e from '../widget/select-autocomplete/autocomplete';
+import f from '../widget/geo/geopicker';
+import g from '../widget/textarea/textarea';
+import h from '../widget/table/tablewidget';
+import i from '../widget/radio/radiopicker';
+import j from '../widget/date/datepicker-extended';
+import k from '../widget/date-native/datepicker-native';
+import l from '../widget/date-mobile/datepicker-mobile';
+import m from '../widget/time/timepicker-extended';
+import n from '../widget/datetime/datetimepicker-extended';
+import o from '../widget/select-media/select-media';
+import p from '../widget/file/filepicker';
+import q from '../widget/draw/draw-widget';
+import r from '../widget/select-likert/likertitem';
+import s from '../widget/columns/columns';
+import t from '../widget/analog-scale/analog-scalepicker';
+import u from '../widget/big-image/image-viewer';
+import v from '../widget/comment/commentwidget';
+import w from '../widget/image-map/image-map';
+import x from '../widget/range/range-widget';
+import y from '../widget/rank/rank-widget';
+import z from '../widget/url/url-widget';
+import aa from '../widget/text-max/text-max';
+import ab from '../widget/date-native-ios/datepicker-native-ios';
+//import zz from '../widget/example/my-widget';
 
-    _init() {
-        this.element.querySelectorAll( '.option-label' ).forEach( function( optionLabel ) {
-            if ( getSiblingElements( optionLabel, 'img, video, audio' ).length > 0 ) {
-                optionLabel.style.display = 'none';
-            }
-        } );
-    }
-
-}
-
-export default MediaPicker;
+export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, ab ];
 </code></pre>
         </article>
     </section>
