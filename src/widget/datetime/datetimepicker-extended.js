@@ -13,7 +13,9 @@ import '../../js/dropdown.jquery';
  * @extends Widget
  */
 class DatetimepickerExtended extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input[type="datetime"]:not([readonly])';
     }

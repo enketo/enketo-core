@@ -6,7 +6,9 @@ import support from '../../js/support';
  * @extends RangeWidget
  */
 class AnalogScaleWidget extends RangeWidget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.or-appearance-analog-scale input[type="number"]';
     }
@@ -21,6 +23,9 @@ class AnalogScaleWidget extends RangeWidget {
         this._setResizeListener();
     }
 
+    /**
+     * @return {string} HTML string
+     */
     _getHtmlStr() {
         const html =
             `<div class="widget analog-scale-widget">
@@ -48,6 +53,9 @@ class AnalogScaleWidget extends RangeWidget {
         this._updateLabels();
     }
 
+    /**
+     * Updates labels
+     */
     _updateLabels() {
         if ( !this.question.classList.contains( 'or-analog-scale-initialized' ) ) {
             return;
@@ -90,8 +98,7 @@ class AnalogScaleWidget extends RangeWidget {
         }
     }
 
-
-    /*
+    /**
      * Stretch the question to full page height.
      * Doing this with pure css flexbox using "flex-direction: column" interferes with the Grid theme
      * because that theme relies on flexbox with "flex-direction: row".
@@ -104,15 +111,24 @@ class AnalogScaleWidget extends RangeWidget {
         }
     }
 
+    /**
+     * Stretches height
+     */
     _stretchHeight() {
         this.question.style[ 'min-height' ] = 'auto';
     }
 
+    /**
+     * Updates with labels
+     */
     update() {
         super.update();
         this._updateLabels();
     }
 
+    /**
+     * @type object
+     */
     get props() {
         const props = this._props;
         props.touch = support.touch;
@@ -125,6 +141,9 @@ class AnalogScaleWidget extends RangeWidget {
         return props;
     }
 
+    /**
+     * @type *
+     */
     get value() {
         return super.value;
     }

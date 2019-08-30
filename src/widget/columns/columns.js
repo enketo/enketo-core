@@ -7,7 +7,9 @@ import Widget from '../../js/widget';
  * @extends Widget
  */
 class Columns extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question.or-appearance-columns';
     }
