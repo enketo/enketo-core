@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>RankWidget - Enketo Core</title>
+    <title>MyWidget - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,7 +36,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">RankWidget</h1>
+    <h1 class="page-title">MyWidget</h1>
     
 
     
@@ -49,8 +49,11 @@
 <header>
     
         <h2>
-        RankWidget
+        MyWidget
         </h2>
+        
+            <div class="class-description"><p>An example widget.</p>
+<p>Make sure to give the widget a unique widget class name and extend Widget.</p></div>
         
     
 </header>
@@ -62,8 +65,10 @@
             
 
     
+    <h2>Constructor</h2>
+    
 
-    <h4 class="name" id="RankWidget"><span class="type-signature"></span>new RankWidget<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MyWidget"><span class="type-signature"></span>new MyWidget<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -75,7 +80,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line11">line 11</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -146,17 +151,6 @@
     
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="Widget.html">Widget</a></li>
-    </ul>
-
-
-    
 
     
 
@@ -173,7 +167,7 @@
 
         
             
-<h4 class="name" id="downloadButtonHtml"><span class="type-signature">(readonly) </span>downloadButtonHtml<span class="type-signature"> :Element</span></h4>
+<h4 class="name" id=".selector"><span class="type-signature">(static) </span>selector<span class="type-signature"></span></h4>
 
 
 
@@ -184,7 +178,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line104">line 104</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -192,11 +186,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#downloadButtonHtml">Widget#downloadButtonHtml</a>
-    </li></ul></dd>
     
 
     
@@ -229,85 +218,10 @@
 
 
 <div class="description">
-    <p>Returns a HTML document fragment for a download button.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Element</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="originalInputValue"><span class="type-signature"></span>originalInputValue<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line148">line 148</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#originalInputValue">Widget#originalInputValue</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>This is the input that Enketo's engine listens on.</p>
+    <p>The selector that determines on which form control the widget is instantiated.
+Make sure that any other widgets that target the same from control are not interfering with this widget by disabling
+the other widget or making them complementary.
+This function is always required.</p>
 </div>
 
 
@@ -319,7 +233,7 @@
 
         
             
-<h4 class="name" id="props"><span class="type-signature">(readonly) </span>props<span class="type-signature"> :object</span></h4>
+<h4 class="name" id="value"><span class="type-signature"></span>value<span class="type-signature"> :*</span></h4>
 
 
 
@@ -330,7 +244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line77">line 77</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -338,11 +252,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#props">Widget#props</a>
-    </li></ul></dd>
     
 
     
@@ -375,163 +284,7 @@
 
 
 <div class="description">
-    <p>Returns widget properties. May need to be extended.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="resetButtonHtml"><span class="type-signature">(readonly) </span>resetButtonHtml<span class="type-signature"> :Element</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line87">line 87</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#resetButtonHtml">Widget#resetButtonHtml</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Returns a HTML document fragment for a reset button.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Element</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="value"><span class="type-signature">(readonly) </span>value<span class="type-signature"> :*</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line120">line 120</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#value">Widget#value</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Obtains the value from the current widget state. Should be overridden.</p>
+    <p>Obtain the current value from the widget. Usually required.</p>
 </div>
 
 
@@ -552,19 +305,9 @@
 
 
         
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
             
+<h4 class="name" id="value"><span class="type-signature"></span>value<span class="type-signature"></span></h4>
 
-    
-
-    <h4 class="name" id="_getProps"><span class="type-signature"></span>_getProps<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
-
-    
 
 
 
@@ -574,7 +317,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line38">line 38</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line100">line 100</a>
     </li></ul></dd>
     
 
@@ -582,11 +325,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#_getProps">Widget#_getProps</a>
-    </li></ul></dd>
     
 
     
@@ -619,7 +357,7 @@
 
 
 <div class="description">
-    <p>Not meant to be overridden, but could be. Recommend to extend <code>get props()</code> instead.</p>
+    <p>Set a value in the widget. Usually required.</p>
 </div>
 
 
@@ -629,47 +367,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
         
-<div class="param-desc">
-    <p>props object</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
     
 
-
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
@@ -688,7 +390,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line27">line 27</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -698,11 +400,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#_init">Widget#_init</a>
-    </li></ul></dd>
     
 
     
@@ -733,7 +430,9 @@
 
 
 <div class="description">
-    <p>Meant to be overridden, but automatically called.</p>
+    <p>Initialize the widget that has been instantiated using the Widget (super) constructor.
+The _init function is called by that super constructor unless that constructor is overridden.
+This function is always required.</p>
 </div>
 
 
@@ -780,7 +479,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line54">line 54</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -790,11 +489,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#disable">Widget#disable</a>
-    </li></ul></dd>
     
 
     
@@ -872,7 +566,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line61">line 61</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -882,11 +576,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#enable">Widget#enable</a>
-    </li></ul></dd>
     
 
     
@@ -964,7 +653,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line69">line 69</a>
+        <a href="widget_example_my-widget.js.html">widget/example/my-widget.js</a>, <a href="widget_example_my-widget.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -974,11 +663,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#update">Widget#update</a>
-    </li></ul></dd>
     
 
     
@@ -1009,8 +693,7 @@
 
 
 <div class="description">
-    <p>Updates form-defined language strings, <option>s (cascading selects, and (calculated) values.
-Most of the times, this function needs to be overridden in the widget.</p>
+    <p>Update the language, list of options and value of the widget.</p>
 </div>
 
 
