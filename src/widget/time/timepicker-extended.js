@@ -11,11 +11,16 @@ import '../../js/dropdown.jquery';
  * @extends Widget
  */
 class TimepickerExtended extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input[type="time"]:not([readonly])';
     }
 
+    /**
+     * @return {boolean}
+     */
     static condition() {
         return !support.touch || !support.inputTypes.time;
     }
@@ -57,9 +62,11 @@ class TimepickerExtended extends Widget {
         this.element.addEventListener( events.ApplyFocus().type, () => {
             this.fakeTimeI.focus();
         } );
-
     }
 
+    /**
+     * Resets widget
+     */
     _reset() {
         const ev = this.originalInputValue ? events.Change() : null;
         if ( ev || this.value ) {
@@ -69,6 +76,9 @@ class TimepickerExtended extends Widget {
         }
     }
 
+    /**
+     * Updates widget
+     */
     update() {
         if ( this.element.value !== this.value ) {
             $( this.element )
@@ -78,6 +88,9 @@ class TimepickerExtended extends Widget {
         }
     }
 
+    /**
+     * @type string
+     */
     get value() {
         return this.fakeTimeI.value;
     }
