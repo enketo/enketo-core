@@ -3,10 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.7.0] - 2019-09-05
 --------------------
 ##### Added
 - Support for "picker" appearance on range question (100% in enketo-transformer actually)
+
+##### Fixed
+- Datepicker widget cause infinite loops with certain custom extensions that update values programmatically.
 
 [5.6.0] - 2019-08-20
 --------------------
