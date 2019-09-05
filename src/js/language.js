@@ -1,6 +1,6 @@
 /**
  * Form languages module.
- * 
+ *
  * @module language
  */
 
@@ -8,6 +8,9 @@ import { getSiblingElements } from './dom-utils';
 import events from './event';
 
 export default {
+    /**
+     * @param {string} overrideLang
+     */
     init( overrideLang ) {
         if ( !this.form ) {
             throw new Error( 'Language module not correctly instantiated with form property.' );
@@ -59,13 +62,23 @@ export default {
 
         this.form.view.html.addEventListener( events.AddRepeat().type, event => this.setUi( this._currentLang, event.target ) );
     },
+    /**
+     * @type string
+     */
     get currentLang() {
         return this._currentLang;
     },
+    /**
+     * @type string|null
+     */
     get currentLangDesc() {
         const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );
         return langOption ? langOption.textContent : null;
     },
+    /**
+     * @param {string} lang
+     * @param {Element} [group]
+     */
     setUi( lang, group = this.form.view.html ) {
         const dir = this.formLanguages.querySelector( `[value="${lang}"]` ).dataset.dir || 'ltr';
         const translations = [ ...group.querySelectorAll( '[lang]' ) ];
@@ -86,7 +99,11 @@ export default {
         this.form.view.html.querySelectorAll( 'select, datalist' ).forEach( el => this.setSelect( el ) );
         this.form.view.html.dispatchEvent( events.ChangeLanguage() );
     },
-    // swap language of <select> and <datalist> <option>s
+    /**
+     * swap language of <select> and <datalist> <option>s
+     *
+     * @param {Element} select
+     */
     setSelect( select ) {
         const type = select.nodeName.toLowerCase();
         const question = select.closest( '.question' );

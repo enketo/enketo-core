@@ -1,3 +1,9 @@
+/**
+ * A collection of all available widgets
+ *
+ * @module widgets
+ */
+
 import a from '../widget/note/notewidget';
 import b from '../widget/select-desktop/selectpicker';
 import c from '../widget/select-mobile/selectpicker';

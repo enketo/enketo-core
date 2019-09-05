@@ -7,7 +7,9 @@ import config from 'enketo/config';
  * but this is the easiest way to do it.
  */
 class TextMaxWidget extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '[data-type-xml="string"]';
     }

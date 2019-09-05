@@ -1,6 +1,6 @@
-/**  
+/**
  * Deals with form logic around required questions.
- * 
+ *
  * @module required
  */
 
@@ -10,7 +10,7 @@ export default {
     /**
      * Updates readonly
      *
-     * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated /*, filter*/ ) {
         const that = this;

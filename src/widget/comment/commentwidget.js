@@ -8,11 +8,16 @@ import events from '../../js/event';
  * @extends Widget
  */
 class Comment extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.or-appearance-comment input[type="text"][data-for], .or-appearance-comment textarea[data-for]';
     }
 
+    /**
+     * @type string
+     */
     static get helpersRequired() {
         return [ 'input', 'pathToAbsolute' ];
     }
@@ -40,6 +45,10 @@ class Comment extends Widget {
         }
     }
 
+    /**
+     * @param {Element} input
+     * @return {Element}
+     */
     _getLinkedQuestion( input ) {
         const contextPath = this.options.helpers.input.getName( input );
         const targetPath = this.element.dataset.for.trim();
@@ -53,16 +62,26 @@ class Comment extends Widget {
             .getWrapNode( root.querySelector( `[name="${absoluteTargetPath}"], [data-name="${absoluteTargetPath}"]` ) );
     }
 
+    /**
+     * @return {boolean}
+     */
     _commentHasError() {
         return this.commentQuestion.classList.contains( 'invalid-required' ) || this.commentQuestion.classList.contains( 'invalid-constraint' );
     }
 
+    /**
+     * @param {*} value
+     * @param {Error} error
+     */
     _setCommentButtonState( value, error ) {
         value = typeof value === 'string' ? value.trim() : value;
         this.commentButton.classList.toggle( 'empty', !value );
         this.commentButton.classList.toggle( 'invalid', !!error );
     }
 
+    /**
+     * Sets comment button handler
+     */
     _setCommentButtonHandler() {
         this.commentButton.addEventListener( 'click', ev => {
             if ( this._isCommentModalShown( this.linkedQuestion ) ) {
@@ -75,6 +94,9 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * Sets validation handler
+     */
     _setValidationHandler() {
         this.element.closest( 'form.or' ).addEventListener( events.ValidationComplete().type, () => {
             const error = this._commentHasError();
@@ -83,6 +105,9 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * Sets focus handler
+     */
     _setFocusHandler() {
         $( this.element ).on( 'applyfocus', () => {
             if ( this.commentButton.matches( ':visible' ) ) {
@@ -93,10 +118,17 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * @param {Element} linkedQuestion
+     * @return {boolean}
+     */
     _isCommentModalShown( linkedQuestion ) {
         return !!linkedQuestion.querySelector( '.or-comment-widget' );
     }
 
+    /**
+     * Shows comment modal
+     */
     _showCommentModal() {
         const comment = this.question.cloneNode( true );
         const updateText = t( 'widget.comment.update' ) || 'Update';
@@ -167,6 +199,11 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * Hides comment modal
+     *
+     * @param {Element} linkedQuestion
+     */
     _hideCommentModal( linkedQuestion ) {
         linkedQuestion.querySelector( '.or-comment-widget' ).remove();
         const overlay = linkedQuestion.previousElementSibling;

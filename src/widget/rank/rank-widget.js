@@ -9,11 +9,16 @@ import { t } from 'enketo/translator';
  * @extends Widget
  */
 class RankWidget extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input.rank';
     }
 
+    /**
+     * @type boolean
+     */
     static get list() {
         return true;
     }
@@ -66,10 +71,16 @@ class RankWidget extends Widget {
         }
     }
 
+    /**
+     * Resets widget
+     */
     _reset() {
         this.originalInputValue = '';
     }
 
+    /**
+     * @type string
+     */
     get value() {
         const result = sortable( this.list, 'serialize' );
         return result[ 0 ].container.value;
@@ -103,6 +114,9 @@ class RankWidget extends Widget {
         } );
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         $( this.element )
             .prop( 'disabled', true )
@@ -113,6 +127,9 @@ class RankWidget extends Widget {
         sortable( this.list, 'disable' );
     }
 
+    /**
+     * Enables widget
+     */
     enable() {
         $( this.element )
             .prop( 'disabled', false )
@@ -123,6 +140,9 @@ class RankWidget extends Widget {
         sortable( this.list, 'enable' );
     }
 
+    /**
+     * Updates widget
+     */
     update() {
         const value = this.element.value;
         // re-initalize sortable because the options may have changed
@@ -138,12 +158,17 @@ class RankWidget extends Widget {
 
     // Since we're overriding the setter we also have to overwrite the getter
     // https://stackoverflow.com/questions/28950760/override-a-setter-and-the-getter-must-also-be-overridden
+    /**
+     * @type string
+     */
     get originalInputValue() {
         return super.originalInputValue;
     }
 
     /**
      * This is the input that Enketo's engine listens on.
+     *
+     * @type string
      */
     set originalInputValue( value ) {
         super.originalInputValue = value;

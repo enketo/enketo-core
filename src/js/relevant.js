@@ -2,14 +2,16 @@
  * @module relevant
  *
  * @description Updates branches
- *
- * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
  */
 
 import $ from 'jquery';
 import events from './event';
 
 export default {
+    /**
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
+     * @param {boolean} forceClearIrrelevant
+     */
     update( updated, forceClearIrrelevant ) {
         let $nodes;
 
@@ -21,6 +23,10 @@ export default {
 
         this.updateNodes( $nodes, forceClearIrrelevant );
     },
+    /**
+     * @param {jQuery} $nodes
+     * @param {boolean} forceClearIrrelevant
+     */
     updateNodes( $nodes, forceClearIrrelevant ) {
         let p;
         let $branchNode;
@@ -184,6 +190,8 @@ export default {
      * Enables and reveals a branch node/group
      *
      * @param {jQuery} $branchNode - The jQuery object to reveal and enable
+     * @param {string} path
+     * @return {boolean}
      */
     enable( $branchNode, path ) {
         let change = false;
@@ -210,7 +218,10 @@ export default {
     /**
      * Disables and hides a branch node/group
      *
-     * @param  {jQuery} $branchNode The jQuery object to hide and disable
+     * @param {jQuery} $branchNode - The jQuery object to hide and disable
+     * @param {string} path
+     * @param {boolean} forceClearIrrelevant
+     * @return {boolean}
      */
     disable( $branchNode, path, forceClearIrrelevant ) {
         const virgin = $branchNode.hasClass( 'pre-init' );
@@ -235,8 +246,8 @@ export default {
      * Clears values from branchnode.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param  {jQuery} $branchNode
-     * @param  {string} path
+     * @param {jQuery} $branchNode
+     * @param {string} path
      */
     clear( $branchNode, path ) {
         // A change event ensures the model is updated
@@ -250,6 +261,10 @@ export default {
             } );
         }
     },
+    /**
+     * @param {jQuery} $branchNode
+     * @param {boolean} bool
+     */
     setDisabledProperty( $branchNode, bool ) {
         const type = $branchNode.prop( 'nodeName' ).toLowerCase();
 

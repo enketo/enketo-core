@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Collection - Enketo Core</title>
+    
+    <meta name="description" content="Extensible Enketo form engine" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/enketo/enketo-core" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h2><a href="https://github.com/enketo/enketo-core/blob/master/CHANGELOG.md" target="_blank" class="menu-item" id="change-log" >Change log</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00-getting-started.html">Getting started</a></li><li><a href="tutorial-10-configuration.html">Configuration</a></li><li><a href="tutorial-20-development.html">Development</a></li><li><a href="tutorial-30-events.html">Available events</a></li><li><a href="tutorial-40-widgets.html">Creating/extending widgets</a></li><li><a href="tutorial-90-ie11.html">IE11</a></li></ul><h3>Classes</h3><ul><li><a href="AnalogScaleWidget.html">AnalogScaleWidget</a><ul class='members'><li data-type='member'><a href="AnalogScaleWidget.html#.selector">selector</a></li><li data-type='member'><a href="AnalogScaleWidget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="AnalogScaleWidget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="AnalogScaleWidget.html#props">props</a></li><li data-type='member'><a href="AnalogScaleWidget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="AnalogScaleWidget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="AnalogScaleWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_getProps">_getProps</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_init">_init</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_renderLabels">_renderLabels</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_reset">_reset</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_setResizeListener">_setResizeListener</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_stepsBetweenHtmlStr">_stepsBetweenHtmlStr</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_stretchHeight">_stretchHeight</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_updateLabels">_updateLabels</a></li><li data-type='method'><a href="AnalogScaleWidget.html#_updateMercury">_updateMercury</a></li><li data-type='method'><a href="AnalogScaleWidget.html#disable">disable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#enable">enable</a></li><li data-type='method'><a href="AnalogScaleWidget.html#update">update</a></li></ul></li><li><a href="AutocompleteSelectpicker.html">AutocompleteSelectpicker</a><ul class='members'><li data-type='member'><a href="AutocompleteSelectpicker.html#.list">list</a></li><li data-type='member'><a href="AutocompleteSelectpicker.html#.selector">selector</a></li><li data-type='member'><a href="AutocompleteSelectpicker.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="AutocompleteSelectpicker.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="AutocompleteSelectpicker.html#props">props</a></li><li data-type='member'><a href="AutocompleteSelectpicker.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="AutocompleteSelectpicker.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="AutocompleteSelectpicker.html#_findLabel">_findLabel</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#_findValue">_findValue</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#_getProps">_getProps</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#_init">_init</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#_setFakeInputListener">_setFakeInputListener</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#_setFocusListener">_setFocusListener</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#_showCurrentLabel">_showCurrentLabel</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="AutocompleteSelectpicker.html#update">update</a></li></ul></li><li><a href="Columns.html">Columns</a><ul class='members'><li data-type='member'><a href="Columns.html#.selector">selector</a></li><li data-type='member'><a href="Columns.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Columns.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Columns.html#props">props</a></li><li data-type='member'><a href="Columns.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Columns.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Columns.html#_getProps">_getProps</a></li><li data-type='method'><a href="Columns.html#_init">_init</a></li><li data-type='method'><a href="Columns.html#disable">disable</a></li><li data-type='method'><a href="Columns.html#enable">enable</a></li><li data-type='method'><a href="Columns.html#update">update</a></li></ul></li><li><a href="Comment.html">Comment</a><ul class='members'><li data-type='member'><a href="Comment.html#.helpersRequired">helpersRequired</a></li><li data-type='member'><a href="Comment.html#.selector">selector</a></li><li data-type='member'><a href="Comment.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Comment.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Comment.html#props">props</a></li><li data-type='member'><a href="Comment.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Comment.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Comment.html#_commentHasError">_commentHasError</a></li><li data-type='method'><a href="Comment.html#_getLinkedQuestion">_getLinkedQuestion</a></li><li data-type='method'><a href="Comment.html#_getProps">_getProps</a></li><li data-type='method'><a href="Comment.html#_hideCommentModal">_hideCommentModal</a></li><li data-type='method'><a href="Comment.html#_init">_init</a></li><li data-type='method'><a href="Comment.html#_isCommentModalShown">_isCommentModalShown</a></li><li data-type='method'><a href="Comment.html#_setCommentButtonHandler">_setCommentButtonHandler</a></li><li data-type='method'><a href="Comment.html#_setCommentButtonState">_setCommentButtonState</a></li><li data-type='method'><a href="Comment.html#_setFocusHandler">_setFocusHandler</a></li><li data-type='method'><a href="Comment.html#_setValidationHandler">_setValidationHandler</a></li><li data-type='method'><a href="Comment.html#_showCommentModal">_showCommentModal</a></li><li data-type='method'><a href="Comment.html#disable">disable</a></li><li data-type='method'><a href="Comment.html#enable">enable</a></li><li data-type='method'><a href="Comment.html#update">update</a></li></ul></li><li><a href="DatepickerExtended.html">DatepickerExtended</a><ul class='members'><li data-type='member'><a href="DatepickerExtended.html#.selector">selector</a></li><li data-type='member'><a href="DatepickerExtended.html#displayedValue">displayedValue</a></li><li data-type='member'><a href="DatepickerExtended.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="DatepickerExtended.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="DatepickerExtended.html#props">props</a></li><li data-type='member'><a href="DatepickerExtended.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="DatepickerExtended.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="DatepickerExtended.html#.condition">condition</a></li><li data-type='method'><a href="DatepickerExtended.html#_createFakeDateInput">_createFakeDateInput</a></li><li data-type='method'><a href="DatepickerExtended.html#_getProps">_getProps</a></li><li data-type='method'><a href="DatepickerExtended.html#_init">_init</a></li><li data-type='method'><a href="DatepickerExtended.html#_setChangeHandler">_setChangeHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setFocusHandler">_setFocusHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_setResetHandler">_setResetHandler</a></li><li data-type='method'><a href="DatepickerExtended.html#_toActualDate">_toActualDate</a></li><li data-type='method'><a href="DatepickerExtended.html#_toDisplayDate">_toDisplayDate</a></li><li data-type='method'><a href="DatepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatepickerExtended.html#update">update</a></li></ul></li><li><a href="DatepickerMobile.html">DatepickerMobile</a><ul class='members'><li data-type='member'><a href="DatepickerMobile.html#.selector">selector</a></li><li data-type='member'><a href="DatepickerMobile.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="DatepickerMobile.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="DatepickerMobile.html#props">props</a></li><li data-type='member'><a href="DatepickerMobile.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="DatepickerMobile.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="DatepickerMobile.html#.condition">condition</a></li><li data-type='method'><a href="DatepickerMobile.html#_getProps">_getProps</a></li><li data-type='method'><a href="DatepickerMobile.html#_init">_init</a></li><li data-type='method'><a href="DatepickerMobile.html#disable">disable</a></li><li data-type='method'><a href="DatepickerMobile.html#enable">enable</a></li><li data-type='method'><a href="DatepickerMobile.html#update">update</a></li></ul></li><li><a href="DatepickerNative.html">DatepickerNative</a><ul class='members'><li data-type='member'><a href="DatepickerNative.html#.selector">selector</a></li><li data-type='member'><a href="DatepickerNative.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="DatepickerNative.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="DatepickerNative.html#props">props</a></li><li data-type='member'><a href="DatepickerNative.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="DatepickerNative.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="DatepickerNative.html#.condition">condition</a></li><li data-type='method'><a href="DatepickerNative.html#_getProps">_getProps</a></li><li data-type='method'><a href="DatepickerNative.html#_init">_init</a></li><li data-type='method'><a href="DatepickerNative.html#disable">disable</a></li><li data-type='method'><a href="DatepickerNative.html#enable">enable</a></li><li data-type='method'><a href="DatepickerNative.html#update">update</a></li></ul></li><li><a href="DatepickerNativeIos.html">DatepickerNativeIos</a><ul class='members'><li data-type='member'><a href="DatepickerNativeIos.html#.selector">selector</a></li><li data-type='member'><a href="DatepickerNativeIos.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="DatepickerNativeIos.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="DatepickerNativeIos.html#props">props</a></li><li data-type='member'><a href="DatepickerNativeIos.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="DatepickerNativeIos.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="DatepickerNativeIos.html#.condition">condition</a></li><li data-type='method'><a href="DatepickerNativeIos.html#_getProps">_getProps</a></li><li data-type='method'><a href="DatepickerNativeIos.html#_init">_init</a></li><li data-type='method'><a href="DatepickerNativeIos.html#disable">disable</a></li><li data-type='method'><a href="DatepickerNativeIos.html#enable">enable</a></li><li data-type='method'><a href="DatepickerNativeIos.html#update">update</a></li></ul></li><li><a href="DatetimepickerExtended.html">DatetimepickerExtended</a><ul class='members'><li data-type='member'><a href="DatetimepickerExtended.html#.selector">selector</a></li><li data-type='member'><a href="DatetimepickerExtended.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="DatetimepickerExtended.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="DatetimepickerExtended.html#props">props</a></li><li data-type='member'><a href="DatetimepickerExtended.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="DatetimepickerExtended.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="DatetimepickerExtended.html#.condition">condition</a></li><li data-type='method'><a href="DatetimepickerExtended.html#_createFakeDateInput">_createFakeDateInput</a></li><li data-type='method'><a href="DatetimepickerExtended.html#_createFakeTimeInput">_createFakeTimeInput</a></li><li data-type='method'><a href="DatetimepickerExtended.html#_getProps">_getProps</a></li><li data-type='method'><a href="DatetimepickerExtended.html#_init">_init</a></li><li data-type='method'><a href="DatetimepickerExtended.html#_setFocusHandler">_setFocusHandler</a></li><li data-type='method'><a href="DatetimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="DatetimepickerExtended.html#update">update</a></li></ul></li><li><a href="DesktopSelectpicker.html">DesktopSelectpicker</a><ul class='members'><li data-type='member'><a href="DesktopSelectpicker.html#.list">list</a></li><li data-type='member'><a href="DesktopSelectpicker.html#.selector">selector</a></li><li data-type='member'><a href="DesktopSelectpicker.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="DesktopSelectpicker.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="DesktopSelectpicker.html#props">props</a></li><li data-type='member'><a href="DesktopSelectpicker.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="DesktopSelectpicker.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="DesktopSelectpicker.html#.condition">condition</a></li><li data-type='method'><a href="DesktopSelectpicker.html#_clickListener">_clickListener</a></li><li data-type='method'><a href="DesktopSelectpicker.html#_createLi">_createLi</a></li><li data-type='method'><a href="DesktopSelectpicker.html#_createSelectedStr">_createSelectedStr</a></li><li data-type='method'><a href="DesktopSelectpicker.html#_focusListener">_focusListener</a></li><li data-type='method'><a href="DesktopSelectpicker.html#_getProps">_getProps</a></li><li data-type='method'><a href="DesktopSelectpicker.html#_getTemplate">_getTemplate</a></li><li data-type='method'><a href="DesktopSelectpicker.html#_init">_init</a></li><li data-type='method'><a href="DesktopSelectpicker.html#disable">disable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#enable">enable</a></li><li data-type='method'><a href="DesktopSelectpicker.html#update">update</a></li></ul></li><li><a href="DrawWidget.html">DrawWidget</a><ul class='members'><li data-type='member'><a href="DrawWidget.html#.selector">selector</a></li><li data-type='member'><a href="DrawWidget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="DrawWidget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="DrawWidget.html#props">props</a></li><li data-type='member'><a href="DrawWidget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="DrawWidget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="DrawWidget.html#_getMarkup">_getMarkup</a></li><li data-type='method'><a href="DrawWidget.html#_getProps">_getProps</a></li><li data-type='method'><a href="DrawWidget.html#_handleFiles">_handleFiles</a></li><li data-type='method'><a href="DrawWidget.html#_handleResize">_handleResize</a></li><li data-type='method'><a href="DrawWidget.html#_init">_init</a></li><li data-type='method'><a href="DrawWidget.html#_loadFileIntoPad">_loadFileIntoPad</a></li><li data-type='method'><a href="DrawWidget.html#_reset">_reset</a></li><li data-type='method'><a href="DrawWidget.html#_resizeCanvas">_resizeCanvas</a></li><li data-type='method'><a href="DrawWidget.html#_showFeedback">_showFeedback</a></li><li data-type='method'><a href="DrawWidget.html#_showFileName">_showFileName</a></li><li data-type='method'><a href="DrawWidget.html#_updateDownloadLink">_updateDownloadLink</a></li><li data-type='method'><a href="DrawWidget.html#_updatePlaceholder">_updatePlaceholder</a></li><li data-type='method'><a href="DrawWidget.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="DrawWidget.html#disable">disable</a></li><li data-type='method'><a href="DrawWidget.html#enable">enable</a></li><li data-type='method'><a href="DrawWidget.html#update">update</a></li></ul></li><li><a href="Filepicker.html">Filepicker</a><ul class='members'><li data-type='member'><a href="Filepicker.html#.selector">selector</a></li><li data-type='member'><a href="Filepicker.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Filepicker.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Filepicker.html#props">props</a></li><li data-type='member'><a href="Filepicker.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Filepicker.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Filepicker.html#_getProps">_getProps</a></li><li data-type='method'><a href="Filepicker.html#_init">_init</a></li><li data-type='method'><a href="Filepicker.html#_resizeFile">_resizeFile</a></li><li data-type='method'><a href="Filepicker.html#_setChangeListener">_setChangeListener</a></li><li data-type='method'><a href="Filepicker.html#_setFocusListener">_setFocusListener</a></li><li data-type='method'><a href="Filepicker.html#_setResetButtonListener">_setResetButtonListener</a></li><li data-type='method'><a href="Filepicker.html#_showFeedback">_showFeedback</a></li><li data-type='method'><a href="Filepicker.html#_showFileName">_showFileName</a></li><li data-type='method'><a href="Filepicker.html#_showPreview">_showPreview</a></li><li data-type='method'><a href="Filepicker.html#_updateDownloadLink">_updateDownloadLink</a></li><li data-type='method'><a href="Filepicker.html#_updatePlaceholder">_updatePlaceholder</a></li><li data-type='method'><a href="Filepicker.html#disable">disable</a></li><li data-type='method'><a href="Filepicker.html#enable">enable</a></li><li data-type='method'><a href="Filepicker.html#update">update</a></li></ul></li><li><a href="Form.html">Form</a><ul class='members'><li data-type='member'><a href="Form.html#.requiredTransformerVersion">requiredTransformerVersion</a></li><li data-type='member'><a href="Form.html#action">action</a></li><li data-type='member'><a href="Form.html#deprecatedID">deprecatedID</a></li><li data-type='member'><a href="Form.html#editStatus">editStatus</a></li><li data-type='member'><a href="Form.html#encryptionKey">encryptionKey</a></li><li data-type='member'><a href="Form.html#evaluationCascade">evaluationCascade</a></li><li data-type='member'><a href="Form.html#evaluationCascadeAdditions">evaluationCascadeAdditions</a></li><li data-type='member'><a href="Form.html#id">id</a></li><li data-type='member'><a href="Form.html#instanceID">instanceID</a></li><li data-type='member'><a href="Form.html#instanceName">instanceName</a></li><li data-type='member'><a href="Form.html#method">method</a></li><li data-type='member'><a href="Form.html#recordName">recordName</a></li><li data-type='member'><a href="Form.html#surveyName">surveyName</a></li><li data-type='member'><a href="Form.html#version">version</a></li></ul><ul class='methods'><li data-type='method'><a href="Form.html#addModule">addModule</a></li><li data-type='method'><a href="Form.html#blockPageNavigation">blockPageNavigation</a></li><li data-type='method'><a href="Form.html#clearIrrelevant">clearIrrelevant</a></li><li data-type='method'><a href="Form.html#filterRadioCheckSiblings">filterRadioCheckSiblings</a></li><li data-type='method'><a href="Form.html#getDataStr">getDataStr</a></li><li data-type='method'><a href="Form.html#getDataStrWithoutIrrelevantNodes">getDataStrWithoutIrrelevantNodes</a></li><li data-type='method'><a href="Form.html#getGoToTarget">getGoToTarget</a></li><li data-type='method'><a href="Form.html#getModelValue">getModelValue</a></li><li data-type='method'><a href="Form.html#getQuerySelectorsForLogic">getQuerySelectorsForLogic</a></li><li data-type='method'><a href="Form.html#getRelatedNodes">getRelatedNodes</a></li><li data-type='method'><a href="Form.html#goTo">goTo</a></li><li data-type='method'><a href="Form.html#goToTarget">goToTarget</a></li><li data-type='method'><a href="Form.html#grosslyViolateStandardComplianceByIgnoringCertainCalcs">grosslyViolateStandardComplianceByIgnoringCertainCalcs</a></li><li data-type='method'><a href="Form.html#init">init</a></li><li data-type='method'><a href="Form.html#isValid">isValid</a></li><li data-type='method'><a href="Form.html#pathToAbsolute">pathToAbsolute</a></li><li data-type='method'><a href="Form.html#replaceChoiceNameFn">replaceChoiceNameFn</a></li><li data-type='method'><a href="Form.html#resetView">resetView</a></li><li data-type='method'><a href="Form.html#setAllVals">setAllVals</a></li><li data-type='method'><a href="Form.html#setEventHandlers">setEventHandlers</a></li><li data-type='method'><a href="Form.html#setInvalid">setInvalid</a></li><li data-type='method'><a href="Form.html#setValid">setValid</a></li><li data-type='method'><a href="Form.html#validate">validate</a></li><li data-type='method'><a href="Form.html#validateAll">validateAll</a></li><li data-type='method'><a href="Form.html#validateContent">validateContent</a></li><li data-type='method'><a href="Form.html#validateInput">validateInput</a></li><li data-type='method'><a href="Form.html#validationUpdate">validationUpdate</a></li></ul></li><li><a href="FormLogicError.html">FormLogicError</a></li><li><a href="FormModel.html">FormModel</a><ul class='methods'><li data-type='method'><a href="FormModel.html#addOrdinalAttribute">addOrdinalAttribute</a></li><li data-type='method'><a href="FormModel.html#addRepeat">addRepeat</a></li><li data-type='method'><a href="FormModel.html#addRepeatComments">addRepeatComments</a></li><li data-type='method'><a href="FormModel.html#addTemplate">addTemplate</a></li><li data-type='method'><a href="FormModel.html#convertPullDataFn">convertPullDataFn</a></li><li data-type='method'><a href="FormModel.html#createSession">createSession</a></li><li data-type='method'><a href="FormModel.html#determineIndex">determineIndex</a></li><li data-type='method'><a href="FormModel.html#evaluate">evaluate</a></li><li data-type='method'><a href="FormModel.html#extractFakeTemplates">extractFakeTemplates</a></li><li data-type='method'><a href="FormModel.html#extractTemplates">extractTemplates</a></li><li data-type='method'><a href="FormModel.html#getMetaNode">getMetaNode</a></li><li data-type='method'><a href="FormModel.html#getNamespacePrefix">getNamespacePrefix</a></li><li data-type='method'><a href="FormModel.html#getNsResolver">getNsResolver</a></li><li data-type='method'><a href="FormModel.html#getRemovalEventData">getRemovalEventData</a></li><li data-type='method'><a href="FormModel.html#getRepeatCommentEl">getRepeatCommentEl</a></li><li data-type='method'><a href="FormModel.html#getRepeatCommentSelector">getRepeatCommentSelector</a></li><li data-type='method'><a href="FormModel.html#getRepeatCommentText">getRepeatCommentText</a></li><li data-type='method'><a href="FormModel.html#getRepeatIndex">getRepeatIndex</a></li><li data-type='method'><a href="FormModel.html#getRepeatSeries">getRepeatSeries</a></li><li data-type='method'><a href="FormModel.html#getSecondaryInstance">getSecondaryInstance</a></li><li data-type='method'><a href="FormModel.html#getStr">getStr</a></li><li data-type='method'><a href="FormModel.html#getTemplateNodes">getTemplateNodes</a></li><li data-type='method'><a href="FormModel.html#getUpdateEventData">getUpdateEventData</a></li><li data-type='method'><a href="FormModel.html#getXPath">getXPath</a></li><li data-type='method'><a href="FormModel.html#hasPreviousCommentSiblingWithContent">hasPreviousCommentSiblingWithContent</a></li><li data-type='method'><a href="FormModel.html#hasPreviousSiblingElementSameName">hasPreviousSiblingElementSameName</a></li><li data-type='method'><a href="FormModel.html#importNode">importNode</a></li><li data-type='method'><a href="FormModel.html#init">init</a></li><li data-type='method'><a href="FormModel.html#makeBugCompliant">makeBugCompliant</a></li><li data-type='method'><a href="FormModel.html#mergeXml">mergeXml</a></li><li data-type='method'><a href="FormModel.html#node">node</a></li><li data-type='method'><a href="FormModel.html#removeDuplicateEnketoNsDeclarations">removeDuplicateEnketoNsDeclarations</a></li><li data-type='method'><a href="FormModel.html#removeOrdinalAttributes">removeOrdinalAttributes</a></li><li data-type='method'><a href="FormModel.html#replaceCurrentFn">replaceCurrentFn</a></li><li data-type='method'><a href="FormModel.html#replaceIndexedRepeatFn">replaceIndexedRepeatFn</a></li><li data-type='method'><a href="FormModel.html#replaceInstanceFn">replaceInstanceFn</a></li><li data-type='method'><a href="FormModel.html#replacePullDataFn">replacePullDataFn</a></li><li data-type='method'><a href="FormModel.html#replaceVersionFn">replaceVersionFn</a></li><li data-type='method'><a href="FormModel.html#setInstanceIdAndDeprecatedId">setInstanceIdAndDeprecatedId</a></li><li data-type='method'><a href="FormModel.html#setNamespaces">setNamespaces</a></li><li data-type='method'><a href="FormModel.html#shiftRoot">shiftRoot</a></li><li data-type='method'><a href="FormModel.html#throwParserErrors">throwParserErrors</a></li><li data-type='method'><a href="FormModel.html#trimValues">trimValues</a></li></ul></li><li><a href="Geopicker.html">Geopicker</a><ul class='members'><li data-type='member'><a href="Geopicker.html#.selector">selector</a></li><li data-type='member'><a href="Geopicker.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Geopicker.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Geopicker.html#props">props</a></li><li data-type='member'><a href="Geopicker.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Geopicker.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Geopicker.html#.condition">condition</a></li><li data-type='method'><a href="Geopicker.html#_addDomElements">_addDomElements</a></li><li data-type='method'><a href="Geopicker.html#_addDynamicMap">_addDynamicMap</a></li><li data-type='method'><a href="Geopicker.html#_addPoint">_addPoint</a></li><li data-type='method'><a href="Geopicker.html#_addPointBtn">_addPointBtn</a></li><li data-type='method'><a href="Geopicker.html#_cleanLatLng">_cleanLatLng</a></li><li data-type='method'><a href="Geopicker.html#_closePolygon">_closePolygon</a></li><li data-type='method'><a href="Geopicker.html#_convertKmlCoordinatesToLeafletCoordinates">_convertKmlCoordinatesToLeafletCoordinates</a></li><li data-type='method'><a href="Geopicker.html#_dynamicMapAvailable">_dynamicMapAvailable</a></li><li data-type='method'><a href="Geopicker.html#_editPoint">_editPoint</a></li><li data-type='method'><a href="Geopicker.html#_enableDetection">_enableDetection</a></li><li data-type='method'><a href="Geopicker.html#_enableSearch">_enableSearch</a></li><li data-type='method'><a href="Geopicker.html#_getBaseLayers">_getBaseLayers</a></li><li data-type='method'><a href="Geopicker.html#_getDefaultLayer">_getDefaultLayer</a></li><li data-type='method'><a href="Geopicker.html#_getGoogleTileLayer">_getGoogleTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getLayers">_getLayers</a></li><li data-type='method'><a href="Geopicker.html#_getLeafletTileLayer">_getLeafletTileLayer</a></li><li data-type='method'><a href="Geopicker.html#_getProps">_getProps</a></li><li data-type='method'><a href="Geopicker.html#_getTileOptions">_getTileOptions</a></li><li data-type='method'><a href="Geopicker.html#_inFullScreenMode">_inFullScreenMode</a></li><li data-type='method'><a href="Geopicker.html#_init">_init</a></li><li data-type='method'><a href="Geopicker.html#_isValidGeopoint">_isValidGeopoint</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLng">_isValidLatLng</a></li><li data-type='method'><a href="Geopicker.html#_isValidLatLngList">_isValidLatLngList</a></li><li data-type='method'><a href="Geopicker.html#_loadGoogleMapsScript">_loadGoogleMapsScript</a></li><li data-type='method'><a href="Geopicker.html#_markAsInvalid">_markAsInvalid</a></li><li data-type='method'><a href="Geopicker.html#_markAsValid">_markAsValid</a></li><li data-type='method'><a href="Geopicker.html#_removePoint">_removePoint</a></li><li data-type='method'><a href="Geopicker.html#_setCurrent">_setCurrent</a></li><li data-type='method'><a href="Geopicker.html#_showIntersectError">_showIntersectError</a></li><li data-type='method'><a href="Geopicker.html#_switchInputType">_switchInputType</a></li><li data-type='method'><a href="Geopicker.html#_updateArea">_updateArea</a></li><li data-type='method'><a href="Geopicker.html#_updateDynamicMapView">_updateDynamicMapView</a></li><li data-type='method'><a href="Geopicker.html#_updateInputs">_updateInputs</a></li><li data-type='method'><a href="Geopicker.html#_updateMap">_updateMap</a></li><li data-type='method'><a href="Geopicker.html#_updateMarkers">_updateMarkers</a></li><li data-type='method'><a href="Geopicker.html#_updatePolygon">_updatePolygon</a></li><li data-type='method'><a href="Geopicker.html#_updatePolyline">_updatePolyline</a></li><li data-type='method'><a href="Geopicker.html#_updateValue">_updateValue</a></li><li data-type='method'><a href="Geopicker.html#containsEmptyPoints">containsEmptyPoints</a></li><li data-type='method'><a href="Geopicker.html#disable">disable</a></li><li data-type='method'><a href="Geopicker.html#enable">enable</a></li><li data-type='method'><a href="Geopicker.html#update">update</a></li><li data-type='method'><a href="Geopicker.html#updatedPolylineWouldIntersect">updatedPolylineWouldIntersect</a></li></ul></li><li><a href="ImageMap.html">ImageMap</a><ul class='members'><li data-type='member'><a href="ImageMap.html#.selector">selector</a></li><li data-type='member'><a href="ImageMap.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="ImageMap.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="ImageMap.html#props">props</a></li><li data-type='member'><a href="ImageMap.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="ImageMap.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="ImageMap.html#_addFunctionality">_addFunctionality</a></li><li data-type='method'><a href="ImageMap.html#_addMarkup">_addMarkup</a></li><li data-type='method'><a href="ImageMap.html#_getInput">_getInput</a></li><li data-type='method'><a href="ImageMap.html#_getProps">_getProps</a></li><li data-type='method'><a href="ImageMap.html#_init">_init</a></li><li data-type='method'><a href="ImageMap.html#_isSvgDoc">_isSvgDoc</a></li><li data-type='method'><a href="ImageMap.html#_removeUnmatchedIds">_removeUnmatchedIds</a></li><li data-type='method'><a href="ImageMap.html#_setChangeHandler">_setChangeHandler</a></li><li data-type='method'><a href="ImageMap.html#_setHoverHandler">_setHoverHandler</a></li><li data-type='method'><a href="ImageMap.html#_setSvgClickHandler">_setSvgClickHandler</a></li><li data-type='method'><a href="ImageMap.html#_showSvgNotFoundError">_showSvgNotFoundError</a></li><li data-type='method'><a href="ImageMap.html#_updateImage">_updateImage</a></li><li data-type='method'><a href="ImageMap.html#disable">disable</a></li><li data-type='method'><a href="ImageMap.html#enable">enable</a></li><li data-type='method'><a href="ImageMap.html#update">update</a></li></ul></li><li><a href="ImageViewer.html">ImageViewer</a><ul class='members'><li data-type='member'><a href="ImageViewer.html#.selector">selector</a></li><li data-type='member'><a href="ImageViewer.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="ImageViewer.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="ImageViewer.html#props">props</a></li><li data-type='member'><a href="ImageViewer.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="ImageViewer.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="ImageViewer.html#_getProps">_getProps</a></li><li data-type='method'><a href="ImageViewer.html#_init">_init</a></li><li data-type='method'><a href="ImageViewer.html#disable">disable</a></li><li data-type='method'><a href="ImageViewer.html#enable">enable</a></li><li data-type='method'><a href="ImageViewer.html#update">update</a></li></ul></li><li><a href="LikertItem.html">LikertItem</a></li><li><a href="MediaPicker.html">MediaPicker</a><ul class='members'><li data-type='member'><a href="MediaPicker.html#.selector">selector</a></li><li data-type='member'><a href="MediaPicker.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="MediaPicker.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="MediaPicker.html#props">props</a></li><li data-type='member'><a href="MediaPicker.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="MediaPicker.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="MediaPicker.html#_getProps">_getProps</a></li><li data-type='method'><a href="MediaPicker.html#_init">_init</a></li><li data-type='method'><a href="MediaPicker.html#disable">disable</a></li><li data-type='method'><a href="MediaPicker.html#enable">enable</a></li><li data-type='method'><a href="MediaPicker.html#update">update</a></li></ul></li><li><a href="MobileSelectPicker.html">MobileSelectPicker</a><ul class='members'><li data-type='member'><a href="MobileSelectPicker.html#.selector">selector</a></li><li data-type='member'><a href="MobileSelectPicker.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="MobileSelectPicker.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="MobileSelectPicker.html#props">props</a></li><li data-type='member'><a href="MobileSelectPicker.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="MobileSelectPicker.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="MobileSelectPicker.html#.condition">condition</a></li><li data-type='method'><a href="MobileSelectPicker.html#_getProps">_getProps</a></li><li data-type='method'><a href="MobileSelectPicker.html#_init">_init</a></li><li data-type='method'><a href="MobileSelectPicker.html#_showSelectedValues">_showSelectedValues</a></li><li data-type='method'><a href="MobileSelectPicker.html#disable">disable</a></li><li data-type='method'><a href="MobileSelectPicker.html#enable">enable</a></li><li data-type='method'><a href="MobileSelectPicker.html#update">update</a></li></ul></li><li><a href="module-widgets-controller-Collection.html">widgets-controller~Collection</a><ul class='methods'><li data-type='method'><a href="module-widgets-controller-Collection.html#_instantiateSingleWidget">_instantiateSingleWidget</a></li><li data-type='method'><a href="module-widgets-controller-Collection.html#_methodCall">_methodCall</a></li><li data-type='method'><a href="module-widgets-controller-Collection.html#disable">disable</a></li><li data-type='method'><a href="module-widgets-controller-Collection.html#enable">enable</a></li><li data-type='method'><a href="module-widgets-controller-Collection.html#instantiate">instantiate</a></li><li data-type='method'><a href="module-widgets-controller-Collection.html#update">update</a></li></ul></li><li><a href="MyWidget.html">MyWidget</a><ul class='members'><li data-type='member'><a href="MyWidget.html#.selector">selector</a></li><li data-type='member'><a href="MyWidget.html#value">value</a></li><li data-type='member'><a href="MyWidget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="MyWidget.html#_init">_init</a></li><li data-type='method'><a href="MyWidget.html#disable">disable</a></li><li data-type='method'><a href="MyWidget.html#enable">enable</a></li><li data-type='method'><a href="MyWidget.html#update">update</a></li></ul></li><li><a href="Nodeset.html">Nodeset</a><ul class='methods'><li data-type='method'><a href="Nodeset.html#convert">convert</a></li><li data-type='method'><a href="Nodeset.html#getClosestRepeat">getClosestRepeat</a></li><li data-type='method'><a href="Nodeset.html#getElement">getElement</a></li><li data-type='method'><a href="Nodeset.html#getElements">getElements</a></li><li data-type='method'><a href="Nodeset.html#getVal">getVal</a></li><li data-type='method'><a href="Nodeset.html#isRequired">isRequired</a></li><li data-type='method'><a href="Nodeset.html#remove">remove</a></li><li data-type='method'><a href="Nodeset.html#setIndex">setIndex</a></li><li data-type='method'><a href="Nodeset.html#setVal">setVal</a></li><li data-type='method'><a href="Nodeset.html#validate">validate</a></li><li data-type='method'><a href="Nodeset.html#validateConstraintAndType">validateConstraintAndType</a></li><li data-type='method'><a href="Nodeset.html#validateRequired">validateRequired</a></li></ul></li><li><a href="NoteWidget.html">NoteWidget</a></li><li><a href="Radiopicker.html">Radiopicker</a><ul class='members'><li data-type='member'><a href="Radiopicker.html#.selector">selector</a></li><li data-type='member'><a href="Radiopicker.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Radiopicker.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Radiopicker.html#props">props</a></li><li data-type='member'><a href="Radiopicker.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Radiopicker.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Radiopicker.html#_getProps">_getProps</a></li><li data-type='method'><a href="Radiopicker.html#_init">_init</a></li><li data-type='method'><a href="Radiopicker.html#_updateDataChecked">_updateDataChecked</a></li><li data-type='method'><a href="Radiopicker.html#disable">disable</a></li><li data-type='method'><a href="Radiopicker.html#enable">enable</a></li><li data-type='method'><a href="Radiopicker.html#update">update</a></li></ul></li><li><a href="RangeWidget.html">RangeWidget</a><ul class='members'><li data-type='member'><a href="RangeWidget.html#.selector">selector</a></li><li data-type='member'><a href="RangeWidget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="RangeWidget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="RangeWidget.html#props">props</a></li><li data-type='member'><a href="RangeWidget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="RangeWidget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="RangeWidget.html#_getHtmlStr">_getHtmlStr</a></li><li data-type='method'><a href="RangeWidget.html#_getProps">_getProps</a></li><li data-type='method'><a href="RangeWidget.html#_init">_init</a></li><li data-type='method'><a href="RangeWidget.html#_reset">_reset</a></li><li data-type='method'><a href="RangeWidget.html#_stepsBetweenHtmlStr">_stepsBetweenHtmlStr</a></li><li data-type='method'><a href="RangeWidget.html#_updateMercury">_updateMercury</a></li><li data-type='method'><a href="RangeWidget.html#disable">disable</a></li><li data-type='method'><a href="RangeWidget.html#enable">enable</a></li><li data-type='method'><a href="RangeWidget.html#update">update</a></li></ul></li><li><a href="RankWidget.html">RankWidget</a><ul class='members'><li data-type='member'><a href="RankWidget.html#.list">list</a></li><li data-type='member'><a href="RankWidget.html#.selector">selector</a></li><li data-type='member'><a href="RankWidget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="RankWidget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="RankWidget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="RankWidget.html#props">props</a></li><li data-type='member'><a href="RankWidget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="RankWidget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="RankWidget.html#_getProps">_getProps</a></li><li data-type='method'><a href="RankWidget.html#_init">_init</a></li><li data-type='method'><a href="RankWidget.html#_reset">_reset</a></li><li data-type='method'><a href="RankWidget.html#disable">disable</a></li><li data-type='method'><a href="RankWidget.html#enable">enable</a></li><li data-type='method'><a href="RankWidget.html#update">update</a></li></ul></li><li><a href="TableWidget.html">TableWidget</a></li><li><a href="TextareaWidget.html">TextareaWidget</a><ul class='members'><li data-type='member'><a href="TextareaWidget.html#.selector">selector</a></li><li data-type='member'><a href="TextareaWidget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="TextareaWidget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="TextareaWidget.html#props">props</a></li><li data-type='member'><a href="TextareaWidget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="TextareaWidget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="TextareaWidget.html#_getProps">_getProps</a></li><li data-type='method'><a href="TextareaWidget.html#_init">_init</a></li><li data-type='method'><a href="TextareaWidget.html#disable">disable</a></li><li data-type='method'><a href="TextareaWidget.html#enable">enable</a></li><li data-type='method'><a href="TextareaWidget.html#update">update</a></li></ul></li><li><a href="TextMaxWidget.html">TextMaxWidget</a><ul class='members'><li data-type='member'><a href="TextMaxWidget.html#.selector">selector</a></li></ul></li><li><a href="TimepickerExtended.html">TimepickerExtended</a><ul class='members'><li data-type='member'><a href="TimepickerExtended.html#.selector">selector</a></li><li data-type='member'><a href="TimepickerExtended.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="TimepickerExtended.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="TimepickerExtended.html#props">props</a></li><li data-type='member'><a href="TimepickerExtended.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="TimepickerExtended.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="TimepickerExtended.html#.condition">condition</a></li><li data-type='method'><a href="TimepickerExtended.html#_getProps">_getProps</a></li><li data-type='method'><a href="TimepickerExtended.html#_init">_init</a></li><li data-type='method'><a href="TimepickerExtended.html#_reset">_reset</a></li><li data-type='method'><a href="TimepickerExtended.html#disable">disable</a></li><li data-type='method'><a href="TimepickerExtended.html#enable">enable</a></li><li data-type='method'><a href="TimepickerExtended.html#update">update</a></li></ul></li><li><a href="TranslatedError.html">TranslatedError</a></li><li><a href="UrlWidget.html">UrlWidget</a><ul class='members'><li data-type='member'><a href="UrlWidget.html#.selector">selector</a></li><li data-type='member'><a href="UrlWidget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="UrlWidget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="UrlWidget.html#props">props</a></li><li data-type='member'><a href="UrlWidget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="UrlWidget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="UrlWidget.html#_getProps">_getProps</a></li><li data-type='method'><a href="UrlWidget.html#_init">_init</a></li><li data-type='method'><a href="UrlWidget.html#disable">disable</a></li><li data-type='method'><a href="UrlWidget.html#enable">enable</a></li><li data-type='method'><a href="UrlWidget.html#update">update</a></li></ul></li><li><a href="Widget.html">Widget</a><ul class='members'><li data-type='member'><a href="Widget.html#.list">list</a></li><li data-type='member'><a href="Widget.html#.name">name</a></li><li data-type='member'><a href="Widget.html#downloadButtonHtml">downloadButtonHtml</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#originalInputValue">originalInputValue</a></li><li data-type='member'><a href="Widget.html#props">props</a></li><li data-type='member'><a href="Widget.html#resetButtonHtml">resetButtonHtml</a></li><li data-type='member'><a href="Widget.html#value">value</a></li><li data-type='member'><a href="Widget.html#value">value</a></li></ul><ul class='methods'><li data-type='method'><a href="Widget.html#.condition">condition</a></li><li data-type='method'><a href="Widget.html#_getProps">_getProps</a></li><li data-type='method'><a href="Widget.html#_init">_init</a></li><li data-type='method'><a href="Widget.html#disable">disable</a></li><li data-type='method'><a href="Widget.html#enable">enable</a></li><li data-type='method'><a href="Widget.html#update">update</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-calculate.html">calculate</a><ul class='methods'><li data-type='method'><a href="module-calculate.html#.update">update</a></li></ul></li><li><a href="module-dialog.html">dialog</a><ul class='methods'><li data-type='method'><a href="module-dialog.html#.alert">alert</a></li><li data-type='method'><a href="module-dialog.html#.confirm">confirm</a></li><li data-type='method'><a href="module-dialog.html#.prompt">prompt</a></li></ul></li><li><a href="module-dom-utils.html">dom-utils</a><ul class='members'><li data-type='member'><a href="module-dom-utils.html#.elementDataStore">elementDataStore</a></li></ul><ul class='methods'><li data-type='method'><a href="module-dom-utils.html#.closestAncestorUntil">closestAncestorUntil</a></li><li data-type='method'><a href="module-dom-utils.html#.empty">empty</a></li><li data-type='method'><a href="module-dom-utils.html#.getAncestors">getAncestors</a></li><li data-type='method'><a href="module-dom-utils.html#.getSiblingElements">getSiblingElements</a></li><li data-type='method'><a href="module-dom-utils.html#.getSiblingElementsAndSelf">getSiblingElementsAndSelf</a></li><li data-type='method'><a href="module-dom-utils.html#~_getSiblingElements">_getSiblingElements</a></li></ul></li><li><a href="module-event.html">event</a><ul class='methods'><li data-type='method'><a href="module-event.html#.DataUpdate">DataUpdate</a></li><li data-type='method'><a href="module-event.html#~AddRepeat">AddRepeat</a></li><li data-type='method'><a href="module-event.html#~ApplyFocus">ApplyFocus</a></li><li data-type='method'><a href="module-event.html#~Change">Change</a></li><li data-type='method'><a href="module-event.html#~ChangeLanguage">ChangeLanguage</a></li><li data-type='method'><a href="module-event.html#~Edited">Edited</a></li><li data-type='method'><a href="module-event.html#~FakeFocus">FakeFocus</a></li><li data-type='method'><a href="module-event.html#~GoToHidden">GoToHidden</a></li><li data-type='method'><a href="module-event.html#~Input">Input</a></li><li data-type='method'><a href="module-event.html#~InputUpdate">InputUpdate</a></li><li data-type='method'><a href="module-event.html#~Invalidated">Invalidated</a></li><li data-type='method'><a href="module-event.html#~PageFlip">PageFlip</a></li><li data-type='method'><a href="module-event.html#~ProgressUpdate">ProgressUpdate</a></li><li data-type='method'><a href="module-event.html#~Removed">Removed</a></li><li data-type='method'><a href="module-event.html#~RemoveRepeat">RemoveRepeat</a></li><li data-type='method'><a href="module-event.html#~ValidationComplete">ValidationComplete</a></li></ul></li><li><a href="module-fake-translator.html">fake-translator</a><ul class='methods'><li data-type='method'><a href="module-fake-translator.html#.t">t</a></li></ul></li><li><a href="module-fileManager.html">fileManager</a><ul class='methods'><li data-type='method'><a href="module-fileManager.html#.getCurrentFiles">getCurrentFiles</a></li><li data-type='method'><a href="module-fileManager.html#.getFileUrl">getFileUrl</a></li><li data-type='method'><a href="module-fileManager.html#.getMaxSizeReadable">getMaxSizeReadable</a></li><li data-type='method'><a href="module-fileManager.html#.getObjectUrl">getObjectUrl</a></li><li data-type='method'><a href="module-fileManager.html#.init">init</a></li><li data-type='method'><a href="module-fileManager.html#.isTooLarge">isTooLarge</a></li><li data-type='method'><a href="module-fileManager.html#.isWaitingForPermissions">isWaitingForPermissions</a></li><li data-type='method'><a href="module-fileManager.html#.urlToBlob">urlToBlob</a></li></ul></li><li><a href="module-format.html">format</a><ul class='methods'><li data-type='method'><a href="module-format.html#~_cleanSpecialChars">_cleanSpecialChars</a></li><li data-type='method'><a href="module-format.html#~_getCleanLocalTime">_getCleanLocalTime</a></li></ul></li><li><a href="module-input.html">input</a><ul class='methods'><li data-type='method'><a href="module-input.html#.find">find</a></li><li data-type='method'><a href="module-input.html#.getCalculation">getCalculation</a></li><li data-type='method'><a href="module-input.html#.getConstraint">getConstraint</a></li><li data-type='method'><a href="module-input.html#.getIndex">getIndex</a></li><li data-type='method'><a href="module-input.html#.getInputType">getInputType</a></li><li data-type='method'><a href="module-input.html#.getName">getName</a></li><li data-type='method'><a href="module-input.html#.getProps">getProps</a></li><li data-type='method'><a href="module-input.html#.getReadonly">getReadonly</a></li><li data-type='method'><a href="module-input.html#.getRelevant">getRelevant</a></li><li data-type='method'><a href="module-input.html#.getRequired">getRequired</a></li><li data-type='method'><a href="module-input.html#.getVal">getVal</a></li><li data-type='method'><a href="module-input.html#.getWrapNode">getWrapNode</a></li><li data-type='method'><a href="module-input.html#.getWrapNodes">getWrapNodes</a></li><li data-type='method'><a href="module-input.html#.getXmlType">getXmlType</a></li><li data-type='method'><a href="module-input.html#.isEnabled">isEnabled</a></li><li data-type='method'><a href="module-input.html#.isMultiple">isMultiple</a></li><li data-type='method'><a href="module-input.html#.setVal">setVal</a></li><li data-type='method'><a href="module-input.html#.validate">validate</a></li></ul></li><li><a href="module-itemset.html">itemset</a><ul class='methods'><li data-type='method'><a href="module-itemset.html#.createInput">createInput</a></li><li data-type='method'><a href="module-itemset.html#.createOption">createOption</a></li><li data-type='method'><a href="module-itemset.html#.createOptionTranslation">createOptionTranslation</a></li><li data-type='method'><a href="module-itemset.html#.getNodeFromItem">getNodeFromItem</a></li><li data-type='method'><a href="module-itemset.html#.getNodesFromItem">getNodesFromItem</a></li><li data-type='method'><a href="module-itemset.html#.update">update</a></li></ul></li><li><a href="module-language.html">language</a><ul class='members'><li data-type='member'><a href="module-language.html#.currentLang">currentLang</a></li><li data-type='member'><a href="module-language.html#.currentLangDesc">currentLangDesc</a></li></ul><ul class='methods'><li data-type='method'><a href="module-language.html#.init">init</a></li><li data-type='method'><a href="module-language.html#.setSelect">setSelect</a></li><li data-type='method'><a href="module-language.html#.setUi">setUi</a></li></ul></li><li><a href="module-mask.html">mask</a><ul class='methods'><li data-type='method'><a href="module-mask.html#.init">init</a></li><li data-type='method'><a href="module-mask.html#~_isKeyboardCutPaste">_isKeyboardCutPaste</a></li><li data-type='method'><a href="module-mask.html#~_isNotPrintableKey">_isNotPrintableKey</a></li><li data-type='method'><a href="module-mask.html#~_setNumberMask">_setNumberMask</a></li></ul></li><li><a href="module-output.html">output</a><ul class='methods'><li data-type='method'><a href="module-output.html#.update">update</a></li></ul></li><li><a href="module-pages.html">pages</a><ul class='members'><li data-type='member'><a href="module-pages.html#.$activePages">$activePages</a></li><li data-type='member'><a href="module-pages.html#.$current">$current</a></li><li data-type='member'><a href="module-pages.html#.active">active</a></li></ul><ul class='methods'><li data-type='method'><a href="module-pages.html#._flipTo">_flipTo</a></li><li data-type='method'><a href="module-pages.html#._flipToFirst">_flipToFirst</a></li><li data-type='method'><a href="module-pages.html#._flipToLast">_flipToLast</a></li><li data-type='method'><a href="module-pages.html#._focusOnFirstQuestion">_focusOnFirstQuestion</a></li><li data-type='method'><a href="module-pages.html#._getCurrent">_getCurrent</a></li><li data-type='method'><a href="module-pages.html#._getCurrentIndex">_getCurrentIndex</a></li><li data-type='method'><a href="module-pages.html#._getNext">_getNext</a></li><li data-type='method'><a href="module-pages.html#._getPrev">_getPrev</a></li><li data-type='method'><a href="module-pages.html#._getTocHtmlFragment">_getTocHtmlFragment</a></li><li data-type='method'><a href="module-pages.html#._next">_next</a></li><li data-type='method'><a href="module-pages.html#._prev">_prev</a></li><li data-type='method'><a href="module-pages.html#._setBranchHandlers">_setBranchHandlers</a></li><li data-type='method'><a href="module-pages.html#._setButtonHandlers">_setButtonHandlers</a></li><li data-type='method'><a href="module-pages.html#._setLangChangeHandlers">_setLangChangeHandlers</a></li><li data-type='method'><a href="module-pages.html#._setRepeatHandlers">_setRepeatHandlers</a></li><li data-type='method'><a href="module-pages.html#._setSwipeHandlers">_setSwipeHandlers</a></li><li data-type='method'><a href="module-pages.html#._setTocHandlers">_setTocHandlers</a></li><li data-type='method'><a href="module-pages.html#._setToCurrent">_setToCurrent</a></li><li data-type='method'><a href="module-pages.html#._toggleButtons">_toggleButtons</a></li><li data-type='method'><a href="module-pages.html#._updateAllActive">_updateAllActive</a></li><li data-type='method'><a href="module-pages.html#._updateToc">_updateToc</a></li><li data-type='method'><a href="module-pages.html#.flipToPageContaining">flipToPageContaining</a></li><li data-type='method'><a href="module-pages.html#.init">init</a></li></ul></li><li><a href="module-preloader.html">preloader</a><ul class='methods'><li data-type='method'><a href="module-preloader.html#.context">context</a></li><li data-type='method'><a href="module-preloader.html#.date">date</a></li><li data-type='method'><a href="module-preloader.html#.init">init</a></li><li data-type='method'><a href="module-preloader.html#.patient">patient</a></li><li data-type='method'><a href="module-preloader.html#.property">property</a></li><li data-type='method'><a href="module-preloader.html#.timestamp">timestamp</a></li><li data-type='method'><a href="module-preloader.html#.uid">uid</a></li><li data-type='method'><a href="module-preloader.html#.user">user</a></li></ul></li><li><a href="module-print.html">print</a><ul class='methods'><li data-type='method'><a href="module-print.html#.closeAllDetails">closeAllDetails</a></li><li data-type='method'><a href="module-print.html#.fixGrid">fixGrid</a></li><li data-type='method'><a href="module-print.html#.isGrid">isGrid</a></li><li data-type='method'><a href="module-print.html#.openAllDetails">openAllDetails</a></li><li data-type='method'><a href="module-print.html#.print">print</a></li><li data-type='method'><a href="module-print.html#.styleReset">styleReset</a></li><li data-type='method'><a href="module-print.html#.styleToAll">styleToAll</a></li><li data-type='method'><a href="module-print.html#~getPaperPixelWidth">getPaperPixelWidth</a></li><li data-type='method'><a href="module-print.html#~getPrintStyleSheet">getPrintStyleSheet</a></li><li data-type='method'><a href="module-print.html#~getPrintStyleSheetLink">getPrintStyleSheetLink</a></li><li data-type='method'><a href="module-print.html#~setDpi">setDpi</a></li></ul></li><li><a href="module-progress.html">progress</a><ul class='members'><li data-type='member'><a href="module-progress.html#.all">all</a></li><li data-type='member'><a href="module-progress.html#.lastChanged">lastChanged</a></li><li data-type='member'><a href="module-progress.html#.status">status</a></li></ul><ul class='methods'><li data-type='method'><a href="module-progress.html#.get">get</a></li><li data-type='method'><a href="module-progress.html#.update">update</a></li><li data-type='method'><a href="module-progress.html#.updateTotal">updateTotal</a></li></ul></li><li><a href="module-readonly.html">readonly</a><ul class='methods'><li data-type='method'><a href="module-readonly.html#.update">update</a></li></ul></li><li><a href="module-relevant.html">relevant</a><ul class='methods'><li data-type='method'><a href="module-relevant.html#.activate">activate</a></li><li data-type='method'><a href="module-relevant.html#.clear">clear</a></li><li data-type='method'><a href="module-relevant.html#.deactivate">deactivate</a></li><li data-type='method'><a href="module-relevant.html#.disable">disable</a></li><li data-type='method'><a href="module-relevant.html#.enable">enable</a></li><li data-type='method'><a href="module-relevant.html#.evaluate">evaluate</a></li><li data-type='method'><a href="module-relevant.html#.process">process</a></li><li data-type='method'><a href="module-relevant.html#.selfRelevant">selfRelevant</a></li><li data-type='method'><a href="module-relevant.html#.setDisabledProperty">setDisabledProperty</a></li><li data-type='method'><a href="module-relevant.html#.update">update</a></li><li data-type='method'><a href="module-relevant.html#.updateNodes">updateNodes</a></li></ul></li><li><a href="module-repeat.html">repeat</a><ul class='methods'><li data-type='method'><a href="module-repeat.html#.add">add</a></li><li data-type='method'><a href="module-repeat.html#.countUpdate">countUpdate</a></li><li data-type='method'><a href="module-repeat.html#.init">init</a></li><li data-type='method'><a href="module-repeat.html#.updateDefaultFirstRepeatInstance">updateDefaultFirstRepeatInstance</a></li><li data-type='method'><a href="module-repeat.html#.updateRepeatInstancesFromCount">updateRepeatInstancesFromCount</a></li><li data-type='method'><a href="module-repeat.html#.updateViewInstancesFromModel">updateViewInstancesFromModel</a></li></ul></li><li><a href="module-required.html">required</a><ul class='methods'><li data-type='method'><a href="module-required.html#.update">update</a></li></ul></li><li><a href="module-sniffer.html">sniffer</a></li><li><a href="module-support.html">support</a><ul class='members'><li data-type='member'><a href="module-support.html#.inputTypes">inputTypes</a></li><li data-type='member'><a href="module-support.html#.touch">touch</a></li></ul></li><li><a href="module-types.html">types</a></li><li><a href="module-utils.html">utils</a><ul class='methods'><li data-type='method'><a href="module-utils.html#.dataUriToBlobSync">dataUriToBlobSync</a></li><li data-type='method'><a href="module-utils.html#.getFilename">getFilename</a></li><li data-type='method'><a href="module-utils.html#.getPasteData">getPasteData</a></li><li data-type='method'><a href="module-utils.html#.isNumber">isNumber</a></li><li data-type='method'><a href="module-utils.html#.parseFunctionFromExpression">parseFunctionFromExpression</a></li><li data-type='method'><a href="module-utils.html#.readCookie">readCookie</a></li><li data-type='method'><a href="module-utils.html#.resizeImage">resizeImage</a></li><li data-type='method'><a href="module-utils.html#.stripQuotes">stripQuotes</a></li><li data-type='method'><a href="module-utils.html#.toArray">toArray</a></li><li data-type='method'><a href="module-utils.html#.updateDownloadLink">updateDownloadLink</a></li></ul></li><li><a href="module-widgets.html">widgets</a></li><li><a href="module-widgets-controller.html">widgets-controller</a><ul class='methods'><li data-type='method'><a href="module-widgets-controller.html#.disable">disable</a></li><li data-type='method'><a href="module-widgets-controller.html#.enable">enable</a></li><li data-type='method'><a href="module-widgets-controller.html#.init">init</a></li><li data-type='method'><a href="module-widgets-controller.html#~_getElements">_getElements</a></li><li data-type='method'><a href="module-widgets-controller.html#~_instantiate">_instantiate</a></li><li data-type='method'><a href="module-widgets-controller.html#~_setLangChangeListener">_setLangChangeListener</a></li><li data-type='method'><a href="module-widgets-controller.html#~_setOptionChangeListener">_setOptionChangeListener</a></li><li data-type='method'><a href="module-widgets-controller.html#~_setValChangeListener">_setValChangeListener</a></li></ul></li></ul><h3>Externals</h3><ul><li><a href="external-jQuery.html">external:jQuery</a><ul class='methods'><li data-type='method'><a href="external-jQuery.html#clearInputs">clearInputs</a></li><li data-type='method'><a href="external-jQuery.html#reverse">reverse</a></li></ul></li><li><a href="external-SignaturePad.html">external:SignaturePad</a><ul class='methods'><li data-type='method'><a href="external-SignaturePad.html#fromObjectURL">fromObjectURL</a></li><li data-type='method'><a href="external-SignaturePad.html#updateData">updateData</a></li></ul></li><li><a href="external-String.html">external:String</a><ul class='methods'><li data-type='method'><a href="external-String.html#pad">pad</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="module-dom-utils-elementDataStore.html">dom-utils~elementDataStore</a><ul class='members'><li data-type='member'><a href="module-dom-utils-elementDataStore.html#._storage">_storage</a></li></ul><ul class='methods'><li data-type='method'><a href="module-dom-utils-elementDataStore.html#.get">get</a></li><li data-type='method'><a href="module-dom-utils-elementDataStore.html#.has">has</a></li><li data-type='method'><a href="module-dom-utils-elementDataStore.html#.put">put</a></li><li data-type='method'><a href="module-dom-utils-elementDataStore.html#.remove">remove</a></li></ul></li><li><a href="module-format-format.html">format~format</a><ul class='members'><li data-type='member'><a href="module-format-format.html#.locale">locale</a></li></ul></li><li><a href="module-format-time.html">format~time</a><ul class='members'><li data-type='member'><a href="module-format-time.html#.amNotation">amNotation</a></li><li data-type='member'><a href="module-format-time.html#.hour12">hour12</a></li><li data-type='member'><a href="module-format-time.html#.pmNotation">pmNotation</a></li></ul><ul class='methods'><li data-type='method'><a href="module-format-time.html#.hasMeridian">hasMeridian</a></li><li data-type='method'><a href="module-format-time.html#.meridianNotation">meridianNotation</a></li></ul></li><li><a href="module-sniffer-os.html">sniffer~os</a><ul class='members'><li data-type='member'><a href="module-sniffer-os.html#.android">android</a></li><li data-type='member'><a href="module-sniffer-os.html#.ios">ios</a></li></ul></li><li><a href="module-types-types.html">types~types</a></li><li><a href="module-types-types.barcode.html">types~types.barcode</a><ul class='methods'><li data-type='method'><a href="module-types-types.barcode.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.binary.html">types~types.binary</a><ul class='methods'><li data-type='method'><a href="module-types-types.binary.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.date.html">types~types.date</a><ul class='methods'><li data-type='method'><a href="module-types-types.date.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.date.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.datetime.html">types~types.datetime</a><ul class='methods'><li data-type='method'><a href="module-types-types.datetime.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.datetime.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.decimal.html">types~types.decimal</a><ul class='methods'><li data-type='method'><a href="module-types-types.decimal.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.decimal.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.geopoint.html">types~types.geopoint</a><ul class='methods'><li data-type='method'><a href="module-types-types.geopoint.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.geopoint.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.geoshape.html">types~types.geoshape</a><ul class='methods'><li data-type='method'><a href="module-types-types.geoshape.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.geoshape.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.geotrace.html">types~types.geotrace</a><ul class='methods'><li data-type='method'><a href="module-types-types.geotrace.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.geotrace.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.int.html">types~types.int</a><ul class='methods'><li data-type='method'><a href="module-types-types.int.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.int.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.select.html">types~types.select</a><ul class='methods'><li data-type='method'><a href="module-types-types.select.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.select1.html">types~types.select1</a><ul class='methods'><li data-type='method'><a href="module-types-types.select1.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.string.html">types~types.string</a><ul class='methods'><li data-type='method'><a href="module-types-types.string.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.string.html#.validate">validate</a></li></ul></li><li><a href="module-types-types.time.html">types~types.time</a><ul class='methods'><li data-type='method'><a href="module-types-types.time.html#.convert">convert</a></li><li data-type='method'><a href="module-types-types.time.html#.convertMeridian">convertMeridian</a></li><li data-type='method'><a href="module-types-types.time.html#.validate">validate</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#FormDataObj">FormDataObj</a></li><li><a href="global.html#LatLngArray">LatLngArray</a></li><li><a href="global.html#LatLngObj">LatLngObj</a></li><li><a href="global.html#NodesetFilter">NodesetFilter</a></li><li><a href="global.html#UpdatedDataNodes">UpdatedDataNodes</a></li><li><a href="global.html#ValidateInputResolution">ValidateInputResolution</a></li><li><a href="global.html#xpath-evaluator-binding">xpath-evaluator-binding</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Collection</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="module-widgets-controller.html">widgets-controller</a>~</span>
+        
+        Collection
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+    
+
+    <h4 class="name" id="Collection"><span class="type-signature"></span>new Collection<span class="signature">(elements)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets-controller.js.html">js/widgets-controller.js</a>, <a href="js_widgets-controller.js.html#line184">line 184</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>elements</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Element></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="_instantiateSingleWidget"><span class="type-signature"></span>_instantiateSingleWidget<span class="signature">(element, Widget, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets-controller.js.html">js/widgets-controller.js</a>, <a href="js_widgets-controller.js.html#line195">line 195</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>element</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_methodCall"><span class="type-signature"></span>_methodCall<span class="signature">(Widget, method)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets-controller.js.html">js/widgets-controller.js</a>, <a href="js_widgets-controller.js.html#line213">line 213</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="disable"><span class="type-signature"></span>disable<span class="signature">(Widget)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets-controller.js.html">js/widgets-controller.js</a>, <a href="js_widgets-controller.js.html#line237">line 237</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="enable"><span class="type-signature"></span>enable<span class="signature">(Widget)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets-controller.js.html">js/widgets-controller.js</a>, <a href="js_widgets-controller.js.html#line243">line 243</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="instantiate"><span class="type-signature"></span>instantiate<span class="signature">(Widget, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets-controller.js.html">js/widgets-controller.js</a>, <a href="js_widgets-controller.js.html#line225">line 225</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(Widget)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_widgets-controller.js.html">js/widgets-controller.js</a>, <a href="js_widgets-controller.js.html#line231">line 231</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/jquery-3.1.1.min.js"></script>
+
+<script src="scripts/search.js"></script>
+
+
+
+
+</body>
+</html>

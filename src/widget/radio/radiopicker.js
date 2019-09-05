@@ -4,10 +4,13 @@ import $ from 'jquery';
 
 /**
  * Enhances radio buttons
+ *
  * @extends Widget
  */
 class Radiopicker extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return 'form';
     }
@@ -77,6 +80,9 @@ class Radiopicker extends Widget {
 
     }
 
+    /**
+     * @param {Element} el
+     */
     _updateDataChecked( el ) {
         if ( el.checked ) {
             el.parentNode.dataset.checked = true;

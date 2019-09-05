@@ -2,6 +2,9 @@ import Widget from '../../js/widget';
 import $ from 'jquery';
 import support from '../../js/support';
 import fileManager from 'enketo/file-manager';
+/**
+ * @external SignaturePad
+ */
 import SignaturePad from 'signature_pad';
 import { t } from 'enketo/translator';
 import dialog from 'enketo/dialog';
@@ -14,8 +17,10 @@ const DELAY = 1500;
  * In addition it also fixes a bug where a loaded image is stretched to fit
  * the canvas.
  *
+ * @function external:SignaturePad#fromObjectURL
  * @param {*} objectUrl
  * @param {*} options
+ * @return {Promise}
  */
 SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
     const image = new Image();
@@ -57,6 +62,7 @@ SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
  * Similar to SignaturePad.prototype.fromData except that it doesn't clear the canvas.
  * This is to facilitate undoing a drawing stroke over a background (bitmap) image.
  *
+ * @function external:SignaturePad#updateData
  * @param {*} pointGroups
  */
 SignaturePad.prototype.updateData = function( pointGroups ) {
@@ -72,9 +78,13 @@ SignaturePad.prototype.updateData = function( pointGroups ) {
 
 /**
  * Widget to obtain user-provided drawings or signature.
+ *
  * @extends Widget
  */
 class DrawWidget extends Widget {
+    /**
+     * @type string
+     */
     static get selector() {
         // note that the selector needs to match both the pre-instantiated form and the post-instantiated form (type attribute changes)
         return '.or-appearance-draw input[data-type-xml="binary"][accept^="image"], .or-appearance-signature input[data-type-xml="binary"][accept^="image"], .or-appearance-annotate input[data-type-xml="binary"][accept^="image"]';
@@ -204,6 +214,9 @@ class DrawWidget extends Widget {
     }
 
     // All this is copied from the file-picker widget
+    /**
+     * @param {string} loadedFileName
+     */
     _handleFiles( loadedFileName ) {
         // Monitor maxSize changes to update placeholder text in annotate widget. This facilitates asynchronous
         // obtaining of max size from server without slowing down form loading.
@@ -272,14 +285,23 @@ class DrawWidget extends Widget {
                 false );
     }
 
+    /**
+     * @param {string} fileName
+     */
     _showFileName( fileName ) {
         this.$widget.find( '.fake-file-input' ).val( fileName ).prop( 'readonly', !!fileName );
     }
 
+    /**
+     * Updates placeholder
+     */
     _updatePlaceholder() {
         this.$widget.find( '.fake-file-input' ).attr( 'placeholder', t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) );
     }
 
+    /**
+     * @return {DocumentFragment}
+     */
     _getMarkup() {
         // HTML syntax copied from filepicker widget
         const load = this.props.load ? `<input type="file" class="ignore draw-widget__load"${this.props.capture !== null ? ` capture="${this.props.capture}"` : ''} accept="${this.props.accept}"/><div class="widget file-picker"><input class="ignore fake-file-input"/><div class="file-feedback"></div></div>` : '';
@@ -313,6 +335,9 @@ class DrawWidget extends Widget {
         return fragment;
     }
 
+    /**
+     * Updates value
+     */
     _updateValue() {
         const now = new Date();
         const postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
@@ -325,6 +350,9 @@ class DrawWidget extends Widget {
         this._updateDownloadLink( this.value );
     }
 
+    /**
+     * Clears pad, cache, loaded file name, download link and others
+     */
     _reset() {
         const that = this;
 
@@ -354,8 +382,8 @@ class DrawWidget extends Widget {
     }
 
     /**
-     *
-     * @param {*} file Either a filename or a file.
+     * @param {string|File} file - Either a filename or a file.
+     * @return {Promise<string>}
      */
     _loadFileIntoPad( file ) {
         const that = this;
@@ -373,6 +401,9 @@ class DrawWidget extends Widget {
             } );
     }
 
+    /**
+     * @param {string} message
+     */
     _showFeedback( message ) {
         message = message || '';
 
@@ -380,6 +411,9 @@ class DrawWidget extends Widget {
         this.$widget.find( '.draw-widget__feedback' ).text( message );
     }
 
+    /**
+     * @param {string} url
+     */
     _updateDownloadLink( url ) {
         if ( url && url.indexOf( 'data:' ) === 0 ) {
             url = URL.createObjectURL( dataUriToBlobSync( url ) );
@@ -388,6 +422,11 @@ class DrawWidget extends Widget {
         updateDownloadLink( this.$widget.find( '.btn-download' )[ 0 ], url, fileName );
     }
 
+    /**
+     * Forces update and resizes canvas on window resize
+     *
+     * @param {Element} canvas - Canvas element
+     */
     _handleResize( canvas ) {
         const that = this;
         $( window ).on( 'resize', () => {
@@ -396,9 +435,13 @@ class DrawWidget extends Widget {
         } );
     }
 
-    // Adjust canvas coordinate space taking into account pixel ratio,
-    // to make it look crisp on mobile devices.
-    // This also causes canvas to be cleared.
+    /**
+     * Adjust canvas coordinate space taking into account pixel ratio,
+     * to make it look crisp on mobile devices.
+     * This also causes canvas to be cleared.
+     *
+     * @param {Element} canvas - Canvas element
+     */
     _resizeCanvas( canvas ) {
         // Use a little trick to avoid resizing currently-hidden canvases
         // https://github.com/enketo/enketo-core/issues/605
@@ -414,6 +457,9 @@ class DrawWidget extends Widget {
         }
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         const that = this;
         const canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
@@ -428,6 +474,9 @@ class DrawWidget extends Widget {
             } );
     }
 
+    /**
+     * Enables widget
+     */
     enable() {
         const that = this;
         const canvas = this.$widget.find( '.draw-widget__body__canvas' )[ 0 ];
@@ -464,6 +513,9 @@ class DrawWidget extends Widget {
         }
     }
 
+    /**
+     * @type object
+     */
     get props() {
         const props = this._props;
 
@@ -478,6 +530,9 @@ class DrawWidget extends Widget {
         return props;
     }
 
+    /**
+     * @type string
+     */
     get value() {
         return this.cache || '';
     }

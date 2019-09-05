@@ -12,11 +12,16 @@ import '../../js/dropdown.jquery';
  * @extends Widget
  */
 class DatepickerExtended extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input[type="date"]:not([readonly])';
     }
 
+    /**
+     * @type boolean
+     */
     static condition() {
         const badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
 
@@ -69,8 +74,9 @@ class DatepickerExtended extends Widget {
 
     /**
      * Creates fake date input elements
-     * @param  {string} format the date format
-     * @return {jQuery}        the jQuery-wrapped fake date input element
+     *
+     * @param {string} format - The date format
+     * @return {jQuery} The jQuery-wrapped fake date input element
      */
     _createFakeDateInput( format ) {
         const $dateI = $( this.element );
@@ -86,7 +92,7 @@ class DatepickerExtended extends Widget {
     /**
      * Copy manual changes that were not detected by bootstrap-datepicker (one without pressing Enter) to original date input field
      *
-     * @param { jQuery } $fakeDateI Fake date input element
+     * @param {jQuery} $fakeDateI - Fake date input element
      */
     _setChangeHandler( $fakeDateI ) {
         const settings = this.settings;
@@ -127,7 +133,7 @@ class DatepickerExtended extends Widget {
     /**
      * Reset button handler
      *
-     * @param { jQuery } $fakeDateI Fake date input element
+     * @param {jQuery} $fakeDateI - Fake date input element
      */
     _setResetHandler( $fakeDateI ) {
         $fakeDateI.next( '.btn-reset' ).on( 'click', () => {
@@ -141,7 +147,7 @@ class DatepickerExtended extends Widget {
      * Handler for focus events.
      * These events on the original input are used to check whether to display the 'required' message
      *
-     * @param { jQuery } $fakeDateI Fake date input element
+     * @param {jQuery} $fakeDateI - Fake date input element
      */
     _setFocusHandler( $fakeDateI ) {
         // Handle focus on original input (goTo functionality)
@@ -150,11 +156,19 @@ class DatepickerExtended extends Widget {
         } );
     }
 
+    /**
+     * @param {string} [date]
+     * @return string
+     */
     _toActualDate( date = '' ) {
         date = date.trim();
         return date && this.settings.format === 'yyyy' && date.length < 5 ? `${date}-01-01` : ( date && this.settings.format === 'yyyy-mm' && date.length < 8 ? `${date}-01` : date );
     }
 
+    /**
+     * @param {string} [date]
+     * @return string
+     */
     _toDisplayDate( date = '' ) {
         date = date.trim();
         return date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
@@ -164,10 +178,16 @@ class DatepickerExtended extends Widget {
         this.value = this.element.value;
     }
 
+    /**
+     * @type string
+     */
     get displayedValue() {
         return this.question.querySelector( '.widget input' ).value;
     }
 
+    /**
+     * @type string
+     */
     get value() {
         return this._toActualDate( this.displayedValue );
     }

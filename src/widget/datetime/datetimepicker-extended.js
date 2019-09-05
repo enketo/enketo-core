@@ -13,11 +13,15 @@ import '../../js/dropdown.jquery';
  * @extends Widget
  */
 class DatetimepickerExtended extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input[type="datetime"]:not([readonly])';
     }
-
+    /**
+     * @return {boolean}
+     */
     static condition() {
         const badSamsung = /GT-P31[0-9]{2}.+AppleWebKit\/534\.30/;
 
@@ -89,9 +93,11 @@ class DatetimepickerExtended extends Widget {
                 this.$fakeTimeI.val( '' ).trigger( event );
             }
         } );
-
     }
 
+    /**
+     * @return {Element} fake date input
+     */
     _createFakeDateInput() {
         const $fakeDate = $(
             '<div class="date">' +
@@ -101,6 +107,9 @@ class DatetimepickerExtended extends Widget {
         return $fakeDate.find( 'input' );
     }
 
+    /**
+     * @return {Element} fake time input
+     */
     _createFakeTimeInput() {
         const $fakeTime = $(
                 `<div class="timepicker">
@@ -111,6 +120,9 @@ class DatetimepickerExtended extends Widget {
         return $fakeTime.find( 'input' );
     }
 
+    /**
+     * @param {jQuery} $els
+     */
     _setFocusHandler( $els ) {
         // Handle focus on original input (goTo functionality)
         this.element.addEventListener( events.ApplyFocus().type, () => {
@@ -132,6 +144,9 @@ class DatetimepickerExtended extends Widget {
         }
     }
 
+    /**
+     * @type string
+     */
     get value() {
         if ( this.$fakeDateI.val().length > 0 && this.$fakeTimeI.val().length > 3 ) {
             const d = this.$fakeDateI.val().split( '-' );
