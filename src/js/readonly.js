@@ -1,11 +1,4 @@
 /**
- * @typedef UpdatedDataNodes
- * @property {Array<string>} [nodes]
- * @property {string} [repeatPath]
- * @property {string} [repeatIndex]
- */
-
-/**
  * @module readonly
  */
 
@@ -15,7 +8,7 @@ export default {
     /**
      * Updates readonly
      *
-     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated ) {
         const $nodes = this.form.getRelatedNodes( 'readonly', '', updated );

@@ -81,6 +81,16 @@ import './extend';
  */
 
 /**
+ * @typedef UpdatedDataNodes
+ * @global
+ * @description The object containing info on updated data nodes
+ * @property {Array&lt;string>} [nodes]
+ * @property {string} [repeatPath]
+ * @property {number} [repeatIndex]
+ * @property {string} [relevantPath]
+ */
+
+/**
  * Class: Form
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
@@ -232,7 +242,7 @@ Form.prototype.addModule = function( module ) {
  *
  * Initializes the Form instance (XML Model and HTML View).
  *
- * @return {Array&lt;Error>} List of initialization errors.
+ * @return {Array&lt;string>} List of initialization errors.
  */
 Form.prototype.init = function() {
     let loadErrors = [];
@@ -351,7 +361,7 @@ Form.prototype.init = function() {
 
 /**
  * @param {string} xpath
- * @return {Array&lt;Error>} A list of errors originated from `goToTarget`. Empty if everything went fine.
+ * @return {Array&lt;string>} A list of errors originated from `goToTarget`. Empty if everything went fine.
  */
 Form.prototype.goTo = function( xpath ) {
     const errors = [];
@@ -490,10 +500,7 @@ Form.prototype.getModelValue = function( $control ) {
  *
  * @param {string} attr - The attribute name to search for
  * @param {string} [filter] - The optional filter to append to each selector
- * @param {object} [updated] - The object containing info on updated data nodes
- * @param {Array&lt;string>} [updated.nodes]
- * @param {string} [updated.repeatPath]
- * @param {number} [updated.repeatIndex]
+ * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
  * @return {jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {

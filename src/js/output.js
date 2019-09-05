@@ -8,10 +8,7 @@ export default {
     /**
      * Updates output values, optionally filtered by those values that contain a changed node name
      *
-     * @param {object} [updated] - The object containing info on updated data nodes
-     * @param {Array<string>} [updated.nodes]
-     * @param {string} [updated.repeatPath]
-     * @param {number} [updated.repeatIndex]
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated ) {
         const outputCache = {};

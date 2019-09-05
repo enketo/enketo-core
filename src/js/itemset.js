@@ -11,10 +11,7 @@ import { t } from 'enketo/translator';
 
 export default {
     /**
-     * @param {object} [updated] - The object containing info on updated data nodes
-     * @param {Array<string>} [updated.nodes]
-     * @param {string} [updated.repeatPath]
-     * @param {number} [updated.repeatIndex]
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated = {} ) {
         const that = this;

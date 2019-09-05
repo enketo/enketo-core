@@ -83,7 +83,7 @@ FormModel.prototype = {
 /**
  * Initializes FormModel
  *
- * @return {Array<Error>} list of initialization errors
+ * @return {Array<string>} list of initialization errors
  */
 FormModel.prototype.init = function() {
     let id;
@@ -1513,7 +1513,7 @@ Nodeset.prototype.setIndex = function( index ) {
  * @param {(string|Array<string>)} [newVals] - The new value of the node.
  * @param {string} [xmlDataType] - XML data type of the node
  *
- * @return {null|object} `null` is returned when the node is not found or multiple nodes were selected,
+ * @return {null|UpdatedDataNodes} `null` is returned when the node is not found or multiple nodes were selected,
  *                       otherwise an object with update information is returned.
  */
 Nodeset.prototype.setVal = function( newVals, xmlDataType ) {

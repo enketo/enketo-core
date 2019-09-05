@@ -259,7 +259,7 @@ export default {
      * Checks whether repeat count value has been updated and updates repeat instances
      * accordingly.
      *
-     * @param {UpdatedDataNodes} updated
+     * @param {UpdatedDataNodes} updated - The object containing info on updated data nodes.
      */
     countUpdate( updated ) {
         let $repeatInfos;
