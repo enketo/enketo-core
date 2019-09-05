@@ -131,6 +131,19 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        details.groups-toc {
+            summary {
+                border-bottom: 1px solid black;
+                padding: 8px 20px 8px 5px;
+            }
+            ul {
+                list-style: none;
+                padding-left: 0;
+            }
+            a {
+                padding-left: 30px;
+            }
+        }
     }
     &__overlay {
         display: none;

@@ -1,6 +1,6 @@
 /**
  * Pages module.
- * 
+ *
  * @module pages
  */
 
@@ -20,6 +20,7 @@ export default {
         if ( this.form.view.$.hasClass( 'pages' ) ) {
             const $allPages = this.form.view.$.find( ' .question:not([role="comment"]), .or-appearance-field-list' )
                 .add( '.or-repeat.or-appearance-field-list + .or-repeat-info' )
+                .add( '.or-group' )
                 .filter( function() {
                     // something tells me there is a more efficient way to doing this
                     // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
@@ -37,6 +38,7 @@ export default {
                 this.$toc = $( formWrapper.querySelector( '.pages-toc__list' ) );
                 this._updateAllActive( $allPages );
                 this._updateToc();
+                this._cleanupGroupToc();
                 this._toggleButtons( 0 );
                 this._setButtonHandlers();
                 this._setRepeatHandlers();
@@ -118,10 +120,10 @@ export default {
                 if ( phase === 'start' ) {
                     /*
                      * Triggering blur will fire a change event on the currently focused form control
-                     * This will trigger validation and is required to block page navigation on swipe 
+                     * This will trigger validation and is required to block page navigation on swipe
                      * with form.pageNavigationBlocked
                      * The only potential problem with this approach is that the threshold (250ms)
-                     * may theoretically not be sufficient to ensure validation is completed to 
+                     * may theoretically not be sufficient to ensure validation is completed to
                      * set form.pageNavigationBlocked to true. The edge case will be very slow devices
                      * and/or amazingly complex constraint expressions.
                      */
@@ -135,8 +137,8 @@ export default {
         this.$toc
             .on( 'click', 'a', function() {
                 if ( !that.form.pageNavigationBlocked ) {
-                    const index = $( this.parentNode ).prevAll().length;
-                    that.flipToPageContaining( $( that.tocItems[ index ].pageEl ) );
+                    const currentIndex = $( '[role="pageLink"]' ).index( $( this.parentNode ) );
+                    that.flipToPageContaining( $( that.tocItems[ currentIndex ].pageEl ) );
                 }
                 return false;
             } )
@@ -200,7 +202,7 @@ export default {
             return $this.closest( '.disabled' ).length === 0 &&
                 ( $this.is( '.question' ) || $this.find( '.question:not(.disabled)' ).length > 0 ||
                     // or-repeat-info is only considered a page by itself if it has no sibling repeats
-                    // When there are siblings repeats, we use CSS trickery to show the + button underneath the last 
+                    // When there are siblings repeats, we use CSS trickery to show the + button underneath the last
                     // repeat.
                     ( $this.is( '.or-repeat-info' ) && $this.siblings( '.or-repeat' ).length === 0 ) );
         } );
@@ -336,14 +338,44 @@ export default {
     },
     _getTocHtmlFragment( tocItems ) {
         const items = document.createDocumentFragment();
+        let currentGroupList;
         tocItems.forEach( item => {
+            const $itemPageEl = $( item.pageEl );
             const li = document.createElement( 'li' );
-            const a = document.createElement( 'a' );
-            a.setAttribute( 'href', `#${item.pageEl.querySelector( '[name]' ).getAttribute( 'name' )}` );
-            a.textContent = item.tocItemText;
-            li.append( a );
-            items.appendChild( li );
+            if ( $itemPageEl.is( '.or-group' ) ) {
+                const details = document.createElement( 'details' );
+                const summary = document.createElement( 'summary' );
+                const groupList = document.createElement( 'ul' );
+                summary.textContent = item.tocItemText;
+                $( details ).addClass( 'groups-toc' );
+                details.append( summary );
+                details.append( groupList );
+                currentGroupList = groupList;
+                li.append( details );
+                items.appendChild( li );
+            } else {
+                const a = document.createElement( 'a' );
+                a.setAttribute( 'href', `#${item.pageEl.querySelector( '[name]' ).getAttribute( 'name' )}` );
+                a.textContent = item.tocItemText;
+                li.setAttribute( 'role', 'pageLink' );
+                li.append( a );
+                if ( $itemPageEl.parent().is( '.or-group' ) ) {
+                    currentGroupList.append( li );
+                } else {
+                    items.appendChild( li );
+                }
+            }
         } );
         return items;
+    },
+    _cleanupGroupToc() {
+        this.$activePages = this.$activePages.filter( function() {
+            const $this = $( this );
+            return !$this.is( '.or-group' );
+        } );
+        this.tocItems = this.tocItems.filter( function( item ) {
+            const $pageEl = $( item.pageEl );
+            return !$pageEl.is( '.or-group' );
+        } );
     }
 };
