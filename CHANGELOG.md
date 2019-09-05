@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Fixed
+- Analog scale widget layout messed up in Grid Theme on IE11.
+
 [5.7.0] - 2019-09-05
 --------------------
 ##### Added

@@ -143,7 +143,7 @@ $q-pad-right: 0px !default;
         }
 
         .range-widget {
-            flex: 1;
+            flex: 100%;
 
             // adjust default range widget 
             &__wrap {
@@ -179,12 +179,12 @@ $q-pad-right: 0px !default;
     &.or-appearance-vertical:not(.disabled) {
         @include display-flex;
 
-        @include flex(1);
+        @include flex(100%);
 
         @include flex-direction(row);
 
         .label-content {
-            @include flex(1);
+            @include flex(100%);
         }
 
         .analog-scale-widget {
