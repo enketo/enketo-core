@@ -1,6 +1,6 @@
 /**
  * Deals with printing
- * 
+ *
  * @module print
  */
 
@@ -14,6 +14,13 @@ import dialog from 'enketo/dialog';
 $( document ).ready( () => {
     setDpi();
 } );
+
+/**
+ * @typedef PaperObj
+ * @property {string} format
+ * @property {string} margin
+ * @property {string} orientation
+ */
 
 /**
  * Calculates the dots per inch and sets the dpi property
@@ -30,7 +37,8 @@ function setDpi() {
 
 /**
  * Gets a single print stylesheet
- * @return {Element} [description]
+ *
+ * @return {Element|null}
  */
 function getPrintStyleSheet() {
     // document.styleSheets is an Object not an Array!
@@ -48,7 +56,7 @@ function getPrintStyleSheet() {
 /**
  * Obtains a link element with a reference to the print stylesheet.
  *
- * @returns {Element} [description]
+ * @return {Element}
  */
 function getPrintStyleSheetLink() {
     return document.querySelector( 'link[media="print"]' );
@@ -56,6 +64,9 @@ function getPrintStyleSheetLink() {
 
 /**
  * Applies the print stylesheet to the current view by changing stylesheets media property to 'all'
+ *
+ * @static
+ * @return {boolean}
  */
 function styleToAll() {
     // sometimes, setStylesheet fails upon loading
@@ -70,6 +81,8 @@ function styleToAll() {
 
 /**
  * Resets the print stylesheet to only apply to media 'print'
+ *
+ * @static
  */
 function styleReset() {
     printStyleSheet.media.mediaText = 'print';
@@ -83,7 +96,8 @@ function styleReset() {
 /**
  * Tests if the form element is set to use the Grid Theme.
  *
- * @returns {boolean}
+ * @static
+ * @return {boolean}
  */
 function isGrid() {
     return /theme-.*grid.*/.test( document.querySelector( 'form.or' ).getAttribute( 'class' ) );
@@ -92,8 +106,9 @@ function isGrid() {
 /**
  * Fixes a Grid Theme layout programmatically by imitating CSS multi-line flexbox in JavaScript.
  *
- * @param {*} paper
- * @returns {Promise}
+ * @static
+ * @param {PaperObj} paper
+ * @return {Promise}
  */
 function fixGrid( paper ) {
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
@@ -168,8 +183,8 @@ function fixGrid( paper ) {
 /**
  * Returns a CSS width value in px (e.g. `"100px"`) for a provided paper format, orientation (`"portrait"` or `"landscape"`) and margin (as any valid CSS value).
  *
- * @param {{format: string, margin: string, orientation: string}} paper
- * @returns {string}
+ * @param {PaperObj} paper
+ * @return {string}
  */
 function getPaperPixelWidth( paper ) {
     let printWidth;
@@ -205,7 +220,9 @@ function getPaperPixelWidth( paper ) {
     return `${( printWidth - ( 2 * paper.margin ) ) * dpi}px`;
 }
 
-
+/**
+ * @static
+ */
 function openAllDetails() {
     document.querySelectorAll( 'details.or-form-guidance.active' )
         .forEach( details => {
@@ -217,6 +234,9 @@ function openAllDetails() {
         } );
 }
 
+/**
+ * @static
+ */
 function closeAllDetails() {
     document.querySelectorAll( 'details.or-form-guidance.active' )
         .forEach( details => {
@@ -230,10 +250,11 @@ function closeAllDetails() {
 
 /**
  * Prints the form after first preparing the Grid (every time it is called).
- * 
+ *
  * It's just a demo function that only collects paper format and should be replaced
  * in your app with a dialog that collects a complete paper format (size, margin, orientation);
  *
+ * @static
  * @param {string} theme
  */
 function print( theme ) {

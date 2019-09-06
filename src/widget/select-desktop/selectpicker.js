@@ -33,15 +33,23 @@ import '../../js/dropdown.jquery';
  * @extends Widget
  */
 class DesktopSelectpicker extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question select';
     }
 
+    /**
+     * @type boolean
+     */
     static get list() {
         return true;
     }
 
+    /**
+     * @return {boolean}
+     */
     static condition() {
         return !support.touch;
     }
@@ -57,6 +65,10 @@ class DesktopSelectpicker extends Widget {
         this._clickListener();
         this._focusListener();
     }
+
+    /**
+     * @return {string} HTML string
+     */
     _getTemplate() {
         return `
         <div class="btn-group bootstrap-select widget clearfix">
@@ -67,6 +79,10 @@ class DesktopSelectpicker extends Widget {
         </div>`;
     }
 
+    /**
+     * @param {string} template
+     * @return {jQuery}
+     */
     _createLi( template ) {
         const li = [];
         let liHtml = '';
@@ -116,8 +132,9 @@ class DesktopSelectpicker extends Widget {
 
 
     /**
-     * create text to show in closed picker
-     * @param  {jQuery=} $select  jQuery-wrapped select element
+     * Create text to show in closed picker
+     *
+     * @param {jQuery} [$select] - jQuery-wrapped select element
      * @return {string}
      */
     _createSelectedStr() {
@@ -140,6 +157,9 @@ class DesktopSelectpicker extends Widget {
         }
     }
 
+    /**
+     * Handles click listener
+     */
     _clickListener() {
         const _this = this;
 
@@ -216,6 +236,9 @@ class DesktopSelectpicker extends Widget {
             } );
     }
 
+    /**
+     * Handles focus listener
+     */
     _focusListener() {
         const _this = this;
 
@@ -223,9 +246,11 @@ class DesktopSelectpicker extends Widget {
         this.element.addEventListener( events.ApplyFocus().type, () => {
             _this.$picker.find( '.dropdown-toggle' ).focus();
         } );
-
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         this.$picker[ 0 ].querySelectorAll( 'li' ).forEach( el => {
             el.classList.add( 'disabled' );
@@ -236,6 +261,9 @@ class DesktopSelectpicker extends Widget {
         } );
     }
 
+    /**
+     * Enables widget
+     */
     enable() {
         this.$picker[ 0 ].querySelectorAll( 'li' ).forEach( el => {
             el.classList.remove( 'disabled' );
@@ -243,9 +271,11 @@ class DesktopSelectpicker extends Widget {
             input.disabled = false;
             input.readOnly = false;
         } );
-
     }
 
+    /**
+     * Updates widget
+     */
     update() {
         this.$picker.remove();
         this._init();

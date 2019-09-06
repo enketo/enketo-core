@@ -13,13 +13,22 @@ import { elementDataStore as data } from '../../js/dom-utils';
  * @extends Widget
  */
 class DatepickerNative extends Widget {
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input[type="date"]';
     }
+
+    /**
+     * @param {Element} element
+     * @return {boolean}
+     */
     static condition( element ) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if mobile device is used.
         return !data.has( element, 'DatepickerExtended' ) && !support.touch;
     }
+
     _init() {
         this.element.type = 'text';
         this.element.classList.add( 'mask-date' );

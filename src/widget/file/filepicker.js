@@ -14,10 +14,13 @@ import { empty } from '../../js/dom-utils';
 /**
  * FilePicker that works both offline and online. It abstracts the file storage/cache away
  * with the injected fileManager.
+ *
  * @extends Widget
  */
 class Filepicker extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"]';
     }
@@ -91,10 +94,18 @@ class Filepicker extends Widget {
             } );
     }
 
+    /**
+     * Updates placeholder
+     */
     _updatePlaceholder() {
         this.fakeInput.setAttribute( 'placeholder', t( 'filepicker.placeholder', { maxSize: fileManager.getMaxSizeReadable() || '?MB' } ) );
     }
 
+    /**
+     * Click action of reset button
+     *
+     * @param {Element} resetButton
+     */
     _setResetButtonListener( resetButton ) {
         if ( resetButton ) {
             resetButton.addEventListener( 'click', () => {
@@ -111,6 +122,9 @@ class Filepicker extends Widget {
         }
     }
 
+    /**
+     * Handles change listener
+     */
     _setChangeListener() {
         const that = this;
 
@@ -206,19 +220,30 @@ class Filepicker extends Widget {
         } );
     }
 
+    /**
+     * Handle focus listener
+     */
     _setFocusListener() {
-
         // Handle focus on original input (goTo functionality)
         this.element.addEventListener( events.ApplyFocus().type, () => {
             this.fakeInput.focus();
         } );
     }
 
+    /**
+     * Sets file name as value
+     *
+     * @param {string} fileName
+     */
     _showFileName( fileName ) {
         this.value = fileName;
         this.fakeInput.readOnly = !!fileName;
     }
 
+    /**
+     * @param {TranslatedError|Error} fb
+     * @param {string} [status]
+     */
     _showFeedback( fb, status ) {
         const message = fb instanceof TranslatedError ? t( fb.translationKey, fb.translationOptions ) :
             fb instanceof Error ? fb.message :
@@ -229,6 +254,10 @@ class Filepicker extends Widget {
         this.feedback.setAttribute( 'class', `file-feedback ${status}` );
     }
 
+    /**
+     * @param {string} url
+     * @param {string} mediaType
+     */
     _showPreview( url, mediaType ) {
         let htmlStr;
 
@@ -253,6 +282,11 @@ class Filepicker extends Widget {
         }
     }
 
+    /**
+     * @param {File} file - Image file to be resized
+     * @param {string} mediaType
+     * @return {Promise<Blob|File>} Resolves with blob, rejects with input file
+     */
     _resizeFile( file, mediaType ) {
         return new Promise( ( resolve, reject ) => {
             if ( mediaType !== 'image/*' ) {
@@ -278,19 +312,33 @@ class Filepicker extends Widget {
         } );
     }
 
+    /**
+     * @param {string} objectUrl
+     * @param {string} fileName
+     */
     _updateDownloadLink( objectUrl, fileName ) {
         updateDownloadLink( this.downloadLink, objectUrl, fileName );
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         this.element.disabled = true;
         this.question.querySelector( '.btn-reset' ).disabled = true;
     }
+
+    /**
+     * Enables widget
+     */
     enable() {
         this.element.disabled = false;
         this.question.querySelector( '.btn-reset' ).disabled = false;
     }
 
+    /**
+     * @type object
+     */
     get props() {
         const props = this._props;
         props.mediaType = this.element.getAttribute( 'accept' );
@@ -302,6 +350,9 @@ class Filepicker extends Widget {
         return props;
     }
 
+    /**
+     * @type string
+     */
     get value() {
         return this.fakeInput.value;
     }

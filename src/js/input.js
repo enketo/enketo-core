@@ -1,6 +1,6 @@
 /**
  * Form control (input, select, textarea) helper functions.
- * 
+ *
  * @module input
  */
 
@@ -9,9 +9,17 @@ import events from './event';
 import { closestAncestorUntil } from './dom-utils';
 
 export default {
+    /**
+     * @param {Element} control
+     * @return {Element} Wrap node
+     */
     getWrapNode( control ) {
         return control.closest( '.question, .calculation' );
     },
+    /**
+     * @param {Array<Element>} controls
+     * @return {Array<Element>} Wrap nodes
+     */
     getWrapNodes( controls ) {
         const result = [];
         controls.forEach( control => {
@@ -22,6 +30,10 @@ export default {
         } );
         return result;
     },
+    /**
+     * @param {Element} control
+     * @return {object} control element properties
+     */
     getProps( control ) {
         return {
             path: this.getName( control ),
@@ -38,6 +50,10 @@ export default {
             multiple: this.isMultiple( control )
         };
     },
+    /**
+     * @param {Element} control
+     * @return {string} input type
+     */
     getInputType( control ) {
         const nodeName = control.nodeName.toLowerCase();
         if ( nodeName === 'input' ) {
@@ -59,27 +75,55 @@ export default {
             return console.error( 'unexpected input node type provided' );
         }
     },
+    /**
+     * @param {Element} control
+     * @return {string} element constraint
+     */
     getConstraint( control ) {
         return control.dataset.constraint;
     },
+    /**
+     * @param {Element} control
+     * @return {string|undefined} element required
+     */
     getRequired( control ) {
         // only return value if input is not a table heading input
         if ( !closestAncestorUntil( control, '.or-appearance-label', '.or' ) ) {
             return control.dataset.required;
         }
     },
+    /**
+     * @param {Element} control
+     * @return {string} element relevant
+     */
     getRelevant( control ) {
         return control.dataset.relevant;
     },
+    /**
+     * @param {Element} control
+     * @return {boolean} whether element is read only
+     */
     getReadonly( control ) {
         return control.matches( '[readonly]' );
     },
+    /**
+     * @param {Element} control
+     * @return {string} element calculate
+     */
     getCalculation( control ) {
         return control.dataset.calculate;
     },
+    /**
+     * @param {Element} control
+     * @return {string} element XML type
+     */
     getXmlType( control ) {
         return control.dataset.typeXml;
     },
+    /**
+     * @param {Element} control
+     * @return {string} element name
+     */
     getName( control ) {
         const name = control.dataset.name || control.getAttribute( 'name' );
         if ( !name ) {
@@ -87,15 +131,31 @@ export default {
         }
         return name;
     },
+    /**
+     * @param {Element} control
+     * @return {string}
+     */
     getIndex( control ) {
         return this.form.repeats.getIndex( control.closest( '.or-repeat' ) );
     },
+    /**
+     * @param {Element} control
+     * @return {boolean} whether element is multiple
+     */
     isMultiple( control ) {
         return this.getInputType( control ) === 'checkbox' || control.multiple;
     },
+    /**
+     * @param {Element} control
+     * @return {boolean} whether element is enabled
+     */
     isEnabled( control ) {
         return !( control.disabled || closestAncestorUntil( control, '.disabled', '.or' ) );
     },
+    /**
+     * @param {Element} control
+     * @return {string} element value
+     */
     getVal( control ) {
         let value = '';
         const inputType = this.getInputType( control );
@@ -131,6 +191,11 @@ export default {
 
         return value || '';
     },
+    /**
+     * @param {string} name
+     * @param {number} index
+     * @return {Element} found element
+     */
     find( name, index ) {
         let attr = 'name';
         if ( this.form.view.html.querySelector( `input[type="radio"][data-name="${name}"]:not(.ignore)` ) ) {
@@ -140,6 +205,12 @@ export default {
 
         return question ? question.querySelector( `[${attr}="${name}"]:not(.ignore)` ) : null;
     },
+    /**
+     * @param {Element} control
+     * @param {*} value
+     * @param {Event} [event]
+     * @return {Element}
+     */
     setVal( control, value, event = events.InputUpdate() ) {
         let inputs;
         const type = this.getInputType( control );
@@ -248,6 +319,10 @@ export default {
 
         return inputs[ 0 ];
     },
+    /**
+     * @param {Element} control
+     * @return {Promise<undefined|ValidateInputResolution>}
+     */
     validate( control ) {
         return this.form.validateInput( control );
     }

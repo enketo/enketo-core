@@ -1,6 +1,6 @@
 /**
  * Updates itemsets.
- * 
+ *
  * @module itemset
  */
 
@@ -11,7 +11,7 @@ import { t } from 'enketo/translator';
 
 export default {
     /**
-     * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated = {} ) {
         const that = this;
@@ -203,7 +203,7 @@ export default {
 
             /**
              * Attempt to populate inputs with current value in model (except for ranking input)
-             * Note that if the current value is not empty and the new itemset does not 
+             * Note that if the current value is not empty and the new itemset does not
              * include (an) item(s) with this/se value(s), this will clear/update the model and
              * this will trigger a dataupdate event. This may call this update function again.
              */
@@ -231,6 +231,11 @@ export default {
 
     /**
      * Minimal XPath evaluation helper that queries from a single item context.
+     *
+     * @param {string} expr - The XPath expression
+     * @param {string} context
+     * @param {boolean} single
+     * @return {Array<Element>} found nodes
      */
     getNodesFromItem( expr, context, single ) {
         if ( !expr || !context ) {
@@ -250,11 +255,21 @@ export default {
         return response;
     },
 
+    /**
+     * @param {string} expr - The XPath expression
+     * @param {string} content
+     * @return {Element|null} found nodes
+     */
     getNodeFromItem( expr, content ) {
         const nodes = this.getNodesFromItem( expr, content, true );
         return nodes.length ? nodes[ 0 ] : null;
     },
 
+    /**
+     * @param {string} label
+     * @param {string} value
+     * @return {Element} created option
+     */
     createOption( label, value ) {
         const option = document.createElement( 'option' );
         option.textContent = label;
@@ -262,6 +277,11 @@ export default {
         return option;
     },
 
+    /**
+     * @param {string} translation
+     * @param {string} value
+     * @return {Element} created element
+     */
     createOptionTranslation( translation, value ) {
         const el = document.createElement( translation.type || 'span' );
         if ( translation.text ) {
@@ -280,6 +300,12 @@ export default {
         return el;
     },
 
+    /**
+     * @param {Array<object>} attributes
+     * @param {Array<object>} translations
+     * @param {string} value
+     * @return {Element} label element (wrapper)
+     */
     createInput( attributes, translations, value ) {
         const that = this;
         const label = document.createElement( 'label' );

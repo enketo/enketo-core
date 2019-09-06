@@ -16,6 +16,7 @@ const fileManager = {};
 import { t } from 'enketo/translator';
 
 /**
+ * @static
  * @function init
  *
  * @description Initialize the file manager.
@@ -25,6 +26,7 @@ import { t } from 'enketo/translator';
 fileManager.init = () => { return Promise.resolve( true ); };
 
 /**
+ * @static
  * @function isWaitingForPermissions
  *
  * @description Whether the filemanager is waiting for user permissions
@@ -34,6 +36,7 @@ fileManager.init = () => { return Promise.resolve( true ); };
 fileManager.isWaitingForPermissions = () => { return false; };
 
 /**
+ * @static
  * @function getFileUrl
  *
  * @description Obtains a URL that can be used to show a preview of the file when used
@@ -67,6 +70,7 @@ fileManager.getFileUrl = subject => {
 };
 
 /**
+ * @static
  * @function getObjectUrl
  *
  * @description Similar to getFileURL, except that this one is guaranteed to return an objectURL
@@ -85,6 +89,7 @@ fileManager.getObjectUrl = subject => fileManager.getFileUrl( subject )
     } );
 
 /**
+ * @static
  * @function urlToBlob
  *
  * @param {string} url - url to get
@@ -104,6 +109,7 @@ fileManager.urlToBlob = url => {
 };
 
 /**
+ * @static
  * @function getCurrentFiles
  *
  * @description Obtain files currently stored in file input elements of open record
@@ -151,6 +157,7 @@ fileManager.getCurrentFiles = () => {
 };
 
 /**
+ * @static
  * @function isTooLarge
  *
  * @description Placeholder function to check if file size is acceptable.
@@ -160,6 +167,7 @@ fileManager.getCurrentFiles = () => {
 fileManager.isTooLarge = () => { return false; };
 
 /**
+ * @static
  * @function getMaxSizeReadable
  *
  * @description Replace with function that determines max size published in OpenRosa server response header.

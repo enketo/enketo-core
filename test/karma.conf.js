@@ -80,8 +80,10 @@ module.exports = config => {
                         'src/widget/*/*.js'
                     ],
                     exclude: [
-                        // exclude libraries that ware copied into widgets
-                        'src/widget/time/timepicker.js'
+                        // exclude copied external libraries
+                        'src/widget/time/timepicker.js',
+                        'src/widget/select-autocomplete/jquery.relevant-dropdown.js',
+                        'src/js/dropdown.jquery.js',
                     ]
                 } )
             ]

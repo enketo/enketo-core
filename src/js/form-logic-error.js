@@ -1,8 +1,8 @@
 /**
  * A custom error type for form logic
- * 
- * @class 
- * @extends Error
+ *
+ * @class
+ * @augments Error
  * @param {string} message - Optional message.
  */
 function FormLogicError( message ) {
