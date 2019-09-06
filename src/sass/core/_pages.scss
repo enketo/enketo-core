@@ -114,7 +114,7 @@
             border-bottom: 1px solid $gray;
             padding: 0;
             margin: 0;
-            &:hover {
+            &[role="pageLink"]:hover {
                 background: $brand-secondary-color;
             }
         }
