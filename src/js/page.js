@@ -162,7 +162,7 @@ export default {
         this.$toc
             .on( 'click', 'a', function() {
                 if ( !that.form.pageNavigationBlocked ) {
-                    const currentIndex = $( '[role="pageLink"]' ).index( $( this.parentNode ) );
+                    const currentIndex = that.$toc.find( '[role="pageLink"]' ).index( $( this.parentNode ) );
                     that.flipToPageContaining( $( that.tocItems[ currentIndex ].pageEl ) );
                 }
                 return false;
