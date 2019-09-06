@@ -20,7 +20,6 @@ export default {
         if ( this.form.view.$.hasClass( 'pages' ) ) {
             const $allPages = this.form.view.$.find( ' .question:not([role="comment"]), .or-appearance-field-list' )
                 .add( '.or-repeat.or-appearance-field-list + .or-repeat-info' )
-                .add( '.or-group' )
                 .filter( function() {
                     // something tells me there is a more efficient way to doing this
                     // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
@@ -38,7 +37,6 @@ export default {
                 this.$toc = $( formWrapper.querySelector( '.pages-toc__list' ) );
                 this._updateAllActive( $allPages );
                 this._updateToc();
-                this._cleanupGroupToc();
                 this._toggleButtons( 0 );
                 this._setButtonHandlers();
                 this._setRepeatHandlers();
@@ -313,23 +311,27 @@ export default {
         this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
         this.$formFooter.toggleClass( 'end', !next );
     },
+    _getElTitle( el ) {
+        let tocItemText;
+        const labelEl = el.querySelector( '.question-label.active' );
+        if ( labelEl ) {
+            tocItemText = labelEl.textContent;
+        } else {
+            const hintEl = el.querySelector( '.or-hint.active' );
+            if ( hintEl ) {
+                tocItemText = hintEl.textContent;
+            }
+        }
+        tocItemText = tocItemText && tocItemText.length > 20 ? `${tocItemText.substring(0,20)}...` : tocItemText;
+        return tocItemText;
+    },
     _updateToc() {
         if ( this.$toc.length ) {
             // regenerate complete ToC from first enabled question/group label of each page
             this.tocItems = this.$activePages.get()
                 .filter( pageEl => !pageEl.classList.contains( 'or-repeat-info' ) )
                 .map( ( pageEl, index ) => {
-                    let tocItemText = `[${index + 1}]`;
-                    const labelEl = pageEl.querySelector( '.question-label.active' );
-                    if ( labelEl ) {
-                        tocItemText = labelEl.textContent;
-                    } else {
-                        const hintEl = pageEl.querySelector( '.or-hint.active' );
-                        if ( hintEl ) {
-                            tocItemText = hintEl.textContent;
-                        }
-                    }
-                    tocItemText = tocItemText.length > 20 ? `${tocItemText.substring(0,20)}...` : tocItemText;
+                    let tocItemText = this._getElTitle( pageEl ) || `[${index + 1}]`;
                     return { pageEl, tocItemText };
                 } );
             this.$toc.empty()[ 0 ].append( this._getTocHtmlFragment( this.tocItems ) );
@@ -338,44 +340,48 @@ export default {
     },
     _getTocHtmlFragment( tocItems ) {
         const items = document.createDocumentFragment();
+        let currentGroupParent;
         let currentGroupList;
         tocItems.forEach( item => {
-            const $itemPageEl = $( item.pageEl );
             const li = document.createElement( 'li' );
-            if ( $itemPageEl.is( '.or-group' ) ) {
-                const details = document.createElement( 'details' );
-                const summary = document.createElement( 'summary' );
-                const groupList = document.createElement( 'ul' );
-                summary.textContent = item.tocItemText;
-                $( details ).addClass( 'groups-toc' );
-                details.append( summary );
-                details.append( groupList );
-                currentGroupList = groupList;
-                li.append( details );
-                items.appendChild( li );
-            } else {
-                const a = document.createElement( 'a' );
-                a.setAttribute( 'href', `#${item.pageEl.querySelector( '[name]' ).getAttribute( 'name' )}` );
-                a.textContent = item.tocItemText;
-                li.setAttribute( 'role', 'pageLink' );
-                li.append( a );
-                if ( $itemPageEl.parent().is( '.or-group' ) ) {
-                    currentGroupList.append( li );
-                } else {
-                    items.appendChild( li );
+
+            const a = document.createElement( 'a' );
+            a.setAttribute( 'href', `#${item.pageEl.querySelector( '[name]' ).getAttribute( 'name' )}` );
+            a.textContent = item.tocItemText;
+
+            li.setAttribute( 'role', 'pageLink' );
+            li.append( a );
+
+            const itemPageEl = item.pageEl;
+
+            let groupParent = itemPageEl.closest( '.or-group' );
+            if ( groupParent ) {
+                if ( !groupParent.isEqualNode( currentGroupParent ) ) {
+                    currentGroupList = null;
                 }
+                if ( !currentGroupList ) {
+                    currentGroupParent = groupParent;
+
+                    const listItemGroupToc = document.createElement( 'li' );
+                    const groupToc = document.createElement( 'details' );
+                    const groupTocTitle = document.createElement( 'summary' );
+                    const groupTocList = document.createElement( 'ul' );
+
+                    groupTocTitle.textContent = this._getElTitle( currentGroupParent );
+                    groupToc.classList.add( 'groups-toc' );
+                    groupToc.append( groupTocTitle );
+                    groupToc.append( groupTocList );
+                    listItemGroupToc.append( groupToc );
+                    items.appendChild( listItemGroupToc );
+
+                    currentGroupList = groupTocList;
+                }
+                currentGroupList.append( li );
+            } else {
+                currentGroupList = null;
+                items.appendChild( li );
             }
         } );
         return items;
-    },
-    _cleanupGroupToc() {
-        this.$activePages = this.$activePages.filter( function() {
-            const $this = $( this );
-            return !$this.is( '.or-group' );
-        } );
-        this.tocItems = this.tocItems.filter( function( item ) {
-            const $pageEl = $( item.pageEl );
-            return !$pageEl.is( '.or-group' );
-        } );
     }
 };

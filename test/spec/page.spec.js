@@ -47,8 +47,8 @@ describe( 'Pages mode', () => {
             const toc = form.pages.$toc[ 0 ];
 
             expect( toc ).not.toEqual( null );
-            expect( toc.querySelectorAll( 'li' ).length ).toEqual( 10 );
-            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
+            expect( toc.querySelectorAll( 'li[role="pageLink"]' ).length ).toEqual( 10 );
+            expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_EN );
         } );
 
@@ -60,12 +60,12 @@ describe( 'Pages mode', () => {
             form.init();
             const toc = form.pages.$toc[ 0 ];
 
-            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_EN );
 
             // Now make a bunch of pages irrelevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
-            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( SUB_EN );
         } );
 
@@ -78,7 +78,7 @@ describe( 'Pages mode', () => {
             form.init();
             const toc = form.pages.$toc[ 0 ];
 
-            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_EN );
 
             // Switch language
@@ -86,12 +86,12 @@ describe( 'Pages mode', () => {
             langSelector.value = 'nl';
             langSelector.dispatchEvent( events.Change() );
 
-            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_NL );
 
             // Now make a bunch of pages irrelevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
-            expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
+            expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( SUB_NL );
         } );
 
