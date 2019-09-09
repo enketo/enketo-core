@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.7.1] - 2019-09-09
 --------------------
 ##### Change
 - XPath functions `decimal-time()` and `decimal-date-time()` now use maximum precision instead of rounding to 3 decimals.
