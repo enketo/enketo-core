@@ -26,7 +26,7 @@
     },
     "contributors": [
         {
-        "name": "Alex Anderson"
+            "name": "Alex Anderson"
         }
     ],
     "files": [
@@ -97,7 +97,7 @@
         "@babel/polyfill": "^7.2.5",
         "bootstrap-datepicker": "1.9.x",
         "core-js": "^3.2.1",
-        "enketo-xpathjs": "1.9.2",
+        "enketo-xpathjs": "1.9.4",
         "html5sortable": "0.9.16",
         "jquery": "3.3.1",
         "jquery-touchswipe": "^1.6.19",

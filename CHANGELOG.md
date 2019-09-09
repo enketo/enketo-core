@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Change
+- XPath functions `decimal-time()` and `decimal-date-time()` now use maximum precision instead of rounding to 3 decimals.
+
 ##### Fixed
 - Analog scale widget layout messed up in Grid Theme on IE11.
 
