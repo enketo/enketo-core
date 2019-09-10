@@ -1,7 +1,7 @@
 import MergeXML from 'mergexml/mergexml';
 import { readCookie, parseFunctionFromExpression, stripQuotes } from './utils';
 import $ from 'jquery';
-import { getSiblingElementsAndSelf } from './dom-utils';
+import { getSiblingElementsAndSelf, getXPath, getRepeatIndex, hasPreviousCommentSiblingWithContent, hasPreviousSiblingElementSameName } from './dom-utils';
 import FormLogicError from './form-logic-error';
 import config from 'enketo/config';
 import types from './types';
@@ -378,11 +378,11 @@ FormModel.prototype.mergeXml = function( recordStr ) {
             let positionedPath;
             let repeatParts;
             try {
-                path = that.getXPath( node, 'instance', false );
+                path = getXPath( node, 'instance', false );
                 // If this is a templated repeat (check templates)
                 // or a repeat without templates
-                if ( typeof that.templates[ path ] !== 'undefined' || that.getRepeatIndex( node ) > 0 ) {
-                    positionedPath = that.getXPath( node, 'instance', true );
+                if ( typeof that.templates[ path ] !== 'undefined' || getRepeatIndex( node ) > 0 ) {
+                    positionedPath = getXPath( node, 'instance', true );
                     if ( !that.evaluate( positionedPath, 'node', null, null, true ) ) {
                         repeatParts = positionedPath.match( /([^[]+)\[(\d+)\]\//g );
                         // If the positionedPath has a non-0 repeat index followed by (at least) 1 node, avoid cloning out of order.
@@ -410,7 +410,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
             return recordNode.children.length === 0 && val.trim().length === 0;
         } )
         .forEach( leafNode => {
-            const path = that.getXPath( leafNode, 'instance', true );
+            const path = getXPath( leafNode, 'instance', true );
             const instanceNode = that.node( path, 0 ).getElement();
             if ( instanceNode ) {
                 // TODO: after dropping support for IE11, we can also use instanceNode.children.length
@@ -476,72 +476,6 @@ FormModel.prototype.mergeXml = function( recordStr ) {
     // reset the rootElement
     this.rootElement = modelInstanceChildEl;
 
-};
-
-/**
- * Creates an XPath from a node
- *
- * @param {Element} node - XML node
- * @param {string} [rootNodeName] - Defaults to #document
- * @param {boolean} [includePosition] - Whether or not to include the positions `/path/to/repeat[2]/node`
- * @return {string} XPath
- */
-FormModel.prototype.getXPath = function( node, rootNodeName, includePosition ) {
-    let index;
-    const steps = [];
-    let position = '';
-    if ( !node || node.nodeType !== 1 ) {
-        return null;
-    }
-    const nodeName = node.nodeName;
-    let parent = node.parentElement;
-    let parentName = parent ? parent.nodeName : null;
-
-    rootNodeName = rootNodeName || '#document';
-    includePosition = includePosition || false;
-
-    if ( includePosition ) {
-        index = this.getRepeatIndex( node );
-        if ( index > 0 ) {
-            position = `[${index + 1}]`;
-        }
-    }
-
-    steps.push( nodeName + position );
-
-    while ( parent && parentName !== rootNodeName && parentName !== '#document' ) {
-        if ( includePosition ) {
-            index = this.getRepeatIndex( parent );
-            position = ( index > 0 ) ? `[${index + 1}]` : '';
-        }
-        steps.push( parentName + position );
-        parent = parent.parentElement;
-        parentName = parent ? parent.nodeName : null;
-    }
-
-    return `/${steps.reverse().join( '/' )}`;
-};
-
-/**
- * Obtains the index of a repeat instance within its own series.
- *
- * @param {Element} node - XML node
- * @return {number} index
- */
-FormModel.prototype.getRepeatIndex = node => {
-    let index = 0;
-    const nodeName = node.nodeName;
-    let prevSibling = node.previousSibling;
-
-    while ( prevSibling ) {
-        // ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
-        if ( prevSibling.nodeName && prevSibling.nodeName === nodeName ) {
-            index++;
-        }
-        prevSibling = prevSibling.previousSibling;
-    }
-
-    return index;
 };
 
 /**
@@ -776,59 +710,17 @@ FormModel.prototype.getRepeatSeries = function( repeatPath, repeatSeriesIndex ) 
 };
 
 /**
- * @param {Element} el - Target node
- * @return {boolean} Whether previous sibling has same name
- */
-FormModel.prototype.hasPreviousSiblingElementSameName = el => {
-    let found = false;
-    const nodeName = el.nodeName;
-    el = el.previousSibling;
-
-    while ( el ) {
-        // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
-        // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
-        if ( el.nodeName && el.nodeName === nodeName ) {
-            found = true;
-            break;
-        }
-        el = el.previousSibling;
-    }
-    return found;
-};
-
-/**
- * @param {Element} node - Target node
- * @param {string} content - Text content to look for
- * @return {boolean} Whether previous comment sibling has given text content
- */
-FormModel.prototype.hasPreviousCommentSiblingWithContent = ( node, content ) => {
-    let found = false;
-    node = node.previousSibling;
-
-    while ( node ) {
-        if ( node.nodeType === Node.COMMENT_NODE && node.textContent === content ) {
-            found = true;
-            break;
-        }
-        node = node.previousSibling;
-    }
-    return found;
-};
-
-/**
  * Determines the index of a repeated node amongst all nodes with the same XPath selector
  *
  * @param {Element} element - Target node
  * @return {number} Determined index
  */
 FormModel.prototype.determineIndex = function( element ) {
-    const that = this;
-
     if ( element ) {
         const nodeName = element.nodeName;
-        const path = this.getXPath( element, 'instance' );
+        const path = getXPath( element, 'instance' );
         const family = Array.prototype.slice.call( this.xml.querySelectorAll( nodeName.replace( /\./g, '\\.' ) ) )
-            .filter( node => path === that.getXPath( node, 'instance' ) );
+            .filter( node => path === getXPath( node, 'instance' ) );
         return family.length === 1 ? null : family.indexOf( element );
     } else {
         console.error( 'no node, or multiple nodes, provided to determineIndex function' );
@@ -844,7 +736,7 @@ FormModel.prototype.extractTemplates = function() {
 
     // in reverse document order to properly deal with nested repeat templates
     this.getTemplateNodes().reverse().forEach( templateEl => {
-        const xPath = that.getXPath( templateEl, 'instance' );
+        const xPath = getXPath( templateEl, 'instance' );
         that.addTemplate( xPath, templateEl );
         /*
          * Nested repeats that have a template attribute are correctly add to that.templates.
@@ -877,10 +769,10 @@ FormModel.prototype.extractFakeTemplates = function( repeatPaths ) {
  */
 FormModel.prototype.addRepeatComments = function( repeatPath ) {
     const comment = this.getRepeatCommentText( repeatPath );
-    const that = this;
+
     // Find all repeat series.
     this.evaluate( repeatPath, 'nodes', null, null, true ).forEach( repeat => {
-        if ( !that.hasPreviousSiblingElementSameName( repeat ) && !that.hasPreviousCommentSiblingWithContent( repeat, comment ) ) {
+        if ( !hasPreviousSiblingElementSameName( repeat ) && !hasPreviousCommentSiblingWithContent( repeat, comment ) ) {
             // Add a comment to the primary instance that serves as an insertion point for each repeat series,
             repeat.before( document.createComment( comment ) );
         }
@@ -990,7 +882,6 @@ FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
     }
 
     const parents = [ target ];
-    const that = this;
 
     while ( target && target.parentElement && target.nodeName.toLowerCase() !== 'instance' ) {
         target = target.parentElement;
@@ -1005,7 +896,7 @@ FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
 
         // if the node is a repeat node that has been cloned at least once (i.e. if it has siblings with the same nodeName)
         if ( siblingsAndSelf.length > 1 ) {
-            const parentSelector = that.getXPath( element, 'instance' );
+            const parentSelector = getXPath( element, 'instance' );
             const parentIndex = siblingsAndSelf.indexOf( element );
             // Add position to segments that do not have an XPath predicate.
             expr = expr.replace( new RegExp( `${parentSelector}/`, 'g' ), `${parentSelector}[${parentIndex + 1}]/` );
@@ -1339,7 +1230,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         expr = expr.trim();
         expr = this.replaceInstanceFn( expr );
         expr = this.replaceVersionFn( expr );
-        expr = this.replaceCurrentFn( expr, this.getXPath( context, 'instance', true ) );
+        expr = this.replaceCurrentFn( expr, getXPath( context, 'instance', true ) );
         // shiftRoot should come after replaceCurrentFn
         expr = this.shiftRoot( expr );
         // path corrections for repeated nodes: http://opendatakit.github.io/odk-xform-spec/#a-big-deviation-with-xforms
@@ -1592,7 +1483,7 @@ Nodeset.prototype.getClosestRepeat = function() {
     }
 
     return ( !nodeName || nodeName === 'instance' ) ? {} : {
-        repeatPath: this.model.getXPath( el, 'instance' ),
+        repeatPath: getXPath( el, 'instance' ),
         repeatIndex: this.model.determineIndex( el )
     };
 };
@@ -1605,7 +1496,7 @@ Nodeset.prototype.remove = function() {
 
     if ( dataNode ) {
         const nodeName = dataNode.nodeName;
-        const repeatPath = this.model.getXPath( dataNode, 'instance' );
+        const repeatPath = getXPath( dataNode, 'instance' );
         let repeatIndex = this.model.determineIndex( dataNode );
         const removalEventData = this.model.getRemovalEventData( dataNode );
 

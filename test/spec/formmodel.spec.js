@@ -395,40 +395,6 @@ describe( 'getRepeatSeries', () => {
     } );
 } );
 
-
-describe( 'getXPath', () => {
-    const xmlStr = '<root><path><to><node/><repeat><number/></repeat><repeat><number/><number/></repeat></to></path></root>';
-    const model = new Model( xmlStr );
-    model.init();
-
-    it( 'returns /root/path/to/node without parameters', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node ) ).toEqual( '/root/path/to/node' );
-    } );
-
-    it( 'returns same /root/path/to/node if first parameter is null', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node, null ) ).toEqual( '/root/path/to/node' );
-    } );
-
-    it( 'returns path from context first node provided as parameter', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node, 'root' ) ).toEqual( '/path/to/node' );
-    } );
-    it( 'returned path includes no positions if there are no siblings with the same name along the path', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/node' );
-    } );
-    it( 'returned path includes positions when asked', () => {
-        const node = model.xml.querySelectorAll( 'number' )[ 1 ];
-        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number' );
-    } );
-    it( 'returned path includes positions when asked (multiple levels)', () => {
-        const node = model.xml.querySelectorAll( 'number' )[ 2 ];
-        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number[2]' );
-    } );
-} );
-
 describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensive tests!)', () => {
     let i;
 

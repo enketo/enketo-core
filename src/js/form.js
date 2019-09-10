@@ -1,6 +1,7 @@
 import { FormModel } from './form-model';
 import $ from 'jquery';
 import { toArray, parseFunctionFromExpression, stripQuotes, getFilename } from './utils';
+import { getXPath } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
@@ -421,7 +422,7 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
         .forEach( element => {
             try {
                 var value = element.textContent;
-                var name = that.model.getXPath( element, 'instance' );
+                var name = getXPath( element, 'instance' );
                 const index = that.model.node( name ).getElements().indexOf( element );
                 const control = that.input.find( name, index );
                 if ( control ) {
@@ -927,7 +928,7 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
     // index is irrelevant (no positions in returned path)
     target = this.model.evaluate( targetPath, 'node', contextPath, 0, true );
 
-    return this.model.getXPath( target, 'instance', false );
+    return getXPath( target, 'instance', false );
 };
 
 /**
@@ -1039,7 +1040,7 @@ Form.prototype.getGoToTarget = function( path ) {
     }
 
     // Convert to absolute path, while maintaining positions.
-    path = this.model.getXPath( modelNode, 'instance', true );
+    path = getXPath( modelNode, 'instance', true );
 
     // Not inside a cloned repeat.
     target = this.view.html.querySelector( `[name="${path}"]` );
@@ -1064,9 +1065,9 @@ Form.prototype.getGoToTarget = function( path ) {
 };
 
 /**
- * Scrolls to a HTML Element, flips to the page it is on and focuses on the nearest form control.
+ * Scrolls to an HTML question or group element, flips to the page it is on and focuses on the nearest form control.
  *
- * @param {HTMLElement} target - A HTML element to scroll to
+ * @param {HTMLElement} target - An HTML question or group element to scroll to
  * @return {boolean} whether target found
  */
 Form.prototype.goToTarget = function( target ) {
