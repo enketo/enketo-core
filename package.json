@@ -99,7 +99,7 @@
         "core-js": "^3.2.1",
         "enketo-xpathjs": "1.9.4",
         "html5sortable": "0.9.16",
-        "jquery": "3.3.1",
+        "jquery": "3.4.0",
         "jquery-touchswipe": "^1.6.19",
         "leaflet": "1.5.x",
         "leaflet-draw": "github:enketo/Leaflet.draw#ff73078",
