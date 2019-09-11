@@ -161,7 +161,7 @@ function hasPreviousCommentSiblingWithContent( node, content ) {
  * @param {boolean} [includePosition] - Whether or not to include the positions `/path/to/repeat[2]/node`
  * @return {string} XPath
  */
-function getXPath( node, rootNodeName, includePosition ) {
+function getXPath( node, rootNodeName = '#document', includePosition = false ) {
     let index;
     const steps = [];
     let position = '';
@@ -171,9 +171,6 @@ function getXPath( node, rootNodeName, includePosition ) {
     const nodeName = node.nodeName;
     let parent = node.parentElement;
     let parentName = parent ? parent.nodeName : null;
-
-    rootNodeName = rootNodeName || '#document';
-    includePosition = includePosition || false;
 
     if ( includePosition ) {
         index = getRepeatIndex( node );
