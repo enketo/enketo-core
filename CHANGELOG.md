@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[5.7.2] - 2019-09-11
+--------------------
+##### Changed
+- Dependencies (maintenance).
+
 [5.7.1] - 2019-09-09
 --------------------
 ##### Changed
