@@ -2,19 +2,19 @@ import MergeXML from 'mergexml/mergexml';
 import { readCookie, parseFunctionFromExpression, stripQuotes } from './utils';
 import $ from 'jquery';
 import { getSiblingElementsAndSelf, getXPath, getRepeatIndex, hasPreviousCommentSiblingWithContent, hasPreviousSiblingElementSameName } from './dom-utils';
+import bindEvaluator from './xpath-evaluator-binding';
 import FormLogicError from './form-logic-error';
 import config from 'enketo/config';
 import types from './types';
 import event from './event';
+import './extend';
+
 const REPEAT_COMMENT_PREFIX = 'repeat:/';
 const INSTANCE = /instance\(\s*(["'])((?:(?!\1)[A-z0-9.\-_]+))\1\s*\)/g;
-const OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^)])/;
 const OPENROSA_XFORMS_NS = 'http://openrosa.org/xforms';
 const JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
 const ENKETO_XFORMS_NS = 'http://enketo.org/xforms';
 
-//require( './plugins' );
-import './extend';
 
 const parser = new DOMParser();
 let FormModel;
@@ -112,6 +112,8 @@ FormModel.prototype.init = function() {
         // the default model
         this.xml = parser.parseFromString( this.data.modelStr, 'text/xml' );
         this.throwParserErrors( this.xml, this.data.modelStr );
+        this.bindOpenRosaXpathEvaluator();
+
         // add external data to model
         this.data.external.forEach( instance => {
             id = `instance "${instance.id}"` || 'instance unknown';
@@ -135,6 +137,8 @@ FormModel.prototype.init = function() {
             if ( rootEl ) {
                 instanceDoc.appendChild( rootEl );
             }
+
+
         } );
 
         // TODO: in the future, we should search for jr://instance/session and
@@ -276,29 +280,28 @@ FormModel.prototype.importNode = function( node, allChildren ) {
     let i;
     let il;
     switch ( node.nodeType ) {
-        case document.ELEMENT_NODE:
-            {
-                const newNode = document.createElementNS( node.namespaceURI, node.nodeName );
-                if ( node.attributes && node.attributes.length > 0 ) {
-                    for ( i = 0, il = node.attributes.length; i < il; i++ ) {
-                        const attr = node.attributes[ i ];
-                        if ( attr.namespaceURI ) {
-                            newNode.setAttributeNS( attr.namespaceURI, attr.nodeName, node.getAttributeNS( attr.namespaceURI, attr.localName ) );
-                        } else {
-                            newNode.setAttribute( attr.nodeName, node.getAttribute( attr.nodeName ) );
-                        }
+        case document.ELEMENT_NODE: {
+            const newNode = document.createElementNS( node.namespaceURI, node.nodeName );
+            if ( node.attributes && node.attributes.length > 0 ) {
+                for ( i = 0, il = node.attributes.length; i < il; i++ ) {
+                    const attr = node.attributes[ i ];
+                    if ( attr.namespaceURI ) {
+                        newNode.setAttributeNS( attr.namespaceURI, attr.nodeName, node.getAttributeNS( attr.namespaceURI, attr.localName ) );
+                    } else {
+                        newNode.setAttribute( attr.nodeName, node.getAttribute( attr.nodeName ) );
                     }
                 }
-                if ( allChildren && node.children.length ) {
-                    for ( i = 0, il = node.children.length; i < il; i++ ) {
-                        newNode.appendChild( this.importNode( node.children[ i ], allChildren ) );
-                    }
-                }
-                if ( !node.children.length && node.textContent ) {
-                    newNode.textContent = node.textContent;
-                }
-                return newNode;
             }
+            if ( allChildren && node.children.length ) {
+                for ( i = 0, il = node.children.length; i < il; i++ ) {
+                    newNode.appendChild( this.importNode( node.children[ i ], allChildren ) );
+                }
+            }
+            if ( !node.children.length && node.textContent ) {
+                newNode.textContent = node.textContent;
+            }
+            return newNode;
+        }
         case document.TEXT_NODE:
         case document.CDATA_SECTION_NODE:
         case document.COMMENT_NODE:
@@ -529,14 +532,13 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
     }
 };
 
-import bindJsEvaluator from './xpath-evaluator-binding';
 /**
  * Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
  * OpenRosa functions or for browsers that do not have a native evaluator.
  *
  * @type function
  */
-FormModel.prototype.bindJsEvaluator = bindJsEvaluator;
+FormModel.prototype.bindOpenRosaXpathEvaluator = bindEvaluator;
 
 /**
  * @param {string} localName
@@ -1184,24 +1186,17 @@ FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
  * @param {string} [resTypeStr] - "boolean", "string", "number", "node", "nodes" (best to always supply this)
  * @param {string} [selector] - Query selector which will be use to provide the context to the evaluator
  * @param {number} [index] - 0-based index of selector in document
- * @param {boolean} [tryNative] - Whether an attempt to try the Native Evaluator is safe (ie. whether it is
- *                                certain that there are no date comparisons)
  * @return {number|string|boolean|Array<element>} The result
  */
-FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
-    let j, context, doc, resTypeNum, resultTypes, result, collection, response, repeats, cacheKey, original, cacheable;
-
+FormModel.prototype.evaluate = function( expr, resTypeStr = 'any', selector, index = 0 ) {
     // console.debug( 'evaluating expr: ' + expr + ' with context selector: ' + selector + ', 0-based index: ' +
     //    index + ' and result type: ' + resTypeStr );
-    original = expr;
-    tryNative = tryNative || false;
-    resTypeStr = resTypeStr || 'any';
-    index = index || 0;
-    doc = this.xml;
-    repeats = null;
-
+    const original = expr;
+    const doc = this.xml;
+    let repeats = null;
+    let context;
     if ( selector ) {
-        collection = this.node( selector ).getElements();
+        const collection = this.node( selector ).getElements();
         repeats = collection.length;
         context = collection[ index ];
     } else {
@@ -1216,14 +1211,14 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
     // cache key includes the number of repeated context nodes,
     // to force a new cache item if the number of repeated changes to > 0
     // TODO: these cache keys can get quite large. Would it be beneficial to get the md5 of the key?
-    cacheKey = [ expr, selector, index, repeats ].join( '|' );
+    const cacheKey = [ expr, selector, index, repeats ].join( '|' );
 
     // These functions need to come before makeBugCompliant.
     // An expression transformation with indexed-repeat or pulldata cannot be cached because in
     // "indexed-repeat(node, repeat nodeset, index)" the index parameter could be an expression.
     expr = this.replaceIndexedRepeatFn( expr, selector, index );
     expr = this.replacePullDataFn( expr, selector, index );
-    cacheable = ( original === expr );
+    const cacheable = ( original === expr );
 
     // if no cached conversion exists
     if ( !this.convertedExpressions[ cacheKey ] ) {
@@ -1248,7 +1243,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         expr = this.convertedExpressions[ cacheKey ];
     }
 
-    resultTypes = {
+    const resultTypes = {
         0: [ 'any', 'ANY_TYPE' ],
         1: [ 'number', 'NUMBER_TYPE', 'numberValue' ],
         2: [ 'string', 'STRING_TYPE', 'stringValue' ],
@@ -1257,6 +1252,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         9: [ 'node', 'FIRST_ORDERED_NODE_TYPE', 'singleNodeValue' ]
     };
 
+    let resTypeNum;
     // translate typeStr to number according to DOM level 3 XPath constants
     for ( resTypeNum in resultTypes ) {
         if ( Object.prototype.hasOwnProperty.call( resultTypes, resTypeNum ) ) {
@@ -1269,30 +1265,14 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         }
     }
 
-    // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
-    if ( tryNative && typeof doc.evaluate !== 'undefined' && !OPENROSA.test( expr ) ) {
-        try {
-            // console.log( 'trying the blazing fast native XPath Evaluator for', expr, index );
-            result = doc.evaluate( expr, context, this.getNsResolver(), resTypeNum, null );
-        } catch ( e ) {
-            console.log( '%cWell native XPath evaluation did not work... No worries, worth a shot, the expression probably ' +
-                'contained unknown OpenRosa functions or errors:', 'color:orange', expr );
-        }
+    let result;
+    try {
+        result = doc.evaluate( expr, context, this.getNsResolver(), resTypeNum, null );
+    } catch ( e ) {
+        throw new FormLogicError( `Could not evaluate: ${expr}, message: ${e.message}` );
     }
 
-    // if that didn't work, try the slow XPathJS evaluator
-    if ( !result ) {
-        try {
-            if ( typeof doc.jsEvaluate === 'undefined' ) {
-                this.bindJsEvaluator();
-            }
-            // console.log( 'trying the slow enketo-xpathjs "openrosa" evaluator for', expr, index );
-            result = doc.jsEvaluate( expr, context, this.getNsResolver(), resTypeNum, null );
-        } catch ( e ) {
-            throw new FormLogicError( `Could not evaluate: ${expr}, message: ${e.message}` );
-        }
-    }
-
+    let response;
     // get desired value from the result object
     if ( result ) {
         // for type = any, see if a valid string, number or boolean is returned
@@ -1310,7 +1290,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         } else if ( resTypeNum === 7 ) {
             // response is an array of Elements
             response = [];
-            for ( j = 0; j < result.snapshotLength; j++ ) {
+            for ( let j = 0; j < result.snapshotLength; j++ ) {
                 response.push( result.snapshotItem( j ) );
             }
         } else {

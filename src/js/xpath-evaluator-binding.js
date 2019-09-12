@@ -1,12 +1,10 @@
-import XPathJS from 'enketo-xpathjs';
+import orxe from 'openrosa-xpath-evaluator';
 
 /**
  * @function xpath-evaluator-binding
  * @param {Function} addExtensions
  */
 export default function( addExtensions ) {
-    const evaluator = new XPathJS.XPathEvaluator();
-
     /*
      * Note: it's inefficient to extend XPathJS here (for every model instance)
      * instead of just once in the prototype.
@@ -21,27 +19,8 @@ export default function( addExtensions ) {
      * and leave the addExtensions parameter empty here.
      */
     if ( typeof addExtensions === 'function' ) {
-        addExtensions( XPathJS );
+        addExtensions( orxe );
     }
 
-    XPathJS.bindDomLevel3XPath( this.xml, {
-        'window': {
-            JsXPathException: true,
-            JsXPathExpression: true,
-            JsXPathNSResolver: true,
-            JsXPathResult: true,
-            JsXPathNamespace: true
-        },
-        'document': {
-            jsCreateExpression( ...args ) {
-                return evaluator.createExpression( ...args );
-            },
-            jsCreateNSResolver( ...args ) {
-                return evaluator.createNSResolver( ...args );
-            },
-            jsEvaluate( ...args ) {
-                return evaluator.evaluate( ...args );
-            }
-        }
-    } );
+    orxe.bindDomLevel3XPath( this.xml );
 }
