@@ -113,6 +113,110 @@ function empty( element ) {
 }
 
 /**
+ * @param {Element} el - Target node
+ * @return {boolean} Whether previous sibling has same name
+ */
+function hasPreviousSiblingElementSameName( el ) {
+    let found = false;
+    const nodeName = el.nodeName;
+    el = el.previousSibling;
+
+    while ( el ) {
+        // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+        // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
+        if ( el.nodeName && el.nodeName === nodeName ) {
+            found = true;
+            break;
+        }
+        el = el.previousSibling;
+    }
+    return found;
+}
+
+/**
+ * @param {Element} node - Target node
+ * @param {string} content - Text content to look for
+ * @return {boolean} Whether previous comment sibling has given text content
+ */
+function hasPreviousCommentSiblingWithContent( node, content ) {
+    let found = false;
+    node = node.previousSibling;
+
+    while ( node ) {
+        if ( node.nodeType === Node.COMMENT_NODE && node.textContent === content ) {
+            found = true;
+            break;
+        }
+        node = node.previousSibling;
+    }
+    return found;
+}
+
+
+/**
+ * Creates an XPath from a node
+ *
+ * @param {Element} node - XML node
+ * @param {string} [rootNodeName] - Defaults to #document
+ * @param {boolean} [includePosition] - Whether or not to include the positions `/path/to/repeat[2]/node`
+ * @return {string} XPath
+ */
+function getXPath( node, rootNodeName = '#document', includePosition = false ) {
+    let index;
+    const steps = [];
+    let position = '';
+    if ( !node || node.nodeType !== 1 ) {
+        return null;
+    }
+    const nodeName = node.nodeName;
+    let parent = node.parentElement;
+    let parentName = parent ? parent.nodeName : null;
+
+    if ( includePosition ) {
+        index = getRepeatIndex( node );
+        if ( index > 0 ) {
+            position = `[${index + 1}]`;
+        }
+    }
+
+    steps.push( nodeName + position );
+
+    while ( parent && parentName !== rootNodeName && parentName !== '#document' ) {
+        if ( includePosition ) {
+            index = getRepeatIndex( parent );
+            position = ( index > 0 ) ? `[${index + 1}]` : '';
+        }
+        steps.push( parentName + position );
+        parent = parent.parentElement;
+        parentName = parent ? parent.nodeName : null;
+    }
+
+    return `/${steps.reverse().join( '/' )}`;
+}
+
+/**
+ * Obtains the index of a repeat instance within its own series.
+ *
+ * @param {Element} node - XML node
+ * @return {number} index
+ */
+function getRepeatIndex( node ) {
+    let index = 0;
+    const nodeName = node.nodeName;
+    let prevSibling = node.previousSibling;
+
+    while ( prevSibling ) {
+        // ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+        if ( prevSibling.nodeName && prevSibling.nodeName === nodeName ) {
+            index++;
+        }
+        prevSibling = prevSibling.previousSibling;
+    }
+
+    return index;
+}
+
+/**
  * Adapted from https://stackoverflow.com/a/46522991/3071529
  *
  * A storage solution aimed at replacing jQuerys data function.
@@ -186,6 +290,10 @@ export {
     getSiblingElementsAndSelf,
     getSiblingElements,
     getAncestors,
+    getRepeatIndex,
+    getXPath,
+    hasPreviousCommentSiblingWithContent,
+    hasPreviousSiblingElementSameName,
     closestAncestorUntil,
     empty,
 };
