@@ -162,8 +162,14 @@ export default {
         this.$toc
             .on( 'click', 'a', function() {
                 if ( !that.form.pageNavigationBlocked ) {
-                    const currentIndex = that.$toc.find( '[role="pageLink"]' ).index( $( this.parentNode ) );
-                    that.flipToPageContaining( $( that.tocItems[ currentIndex ].pageEl ) );
+                    if ( this.parentElement && this.parentElement.getAttribute( 'tocId' ) ) {
+                        const tocId = parseInt( this.parentElement.getAttribute( 'tocId' ), 10 );
+                        const destItem = that.form.toc.tocItems.find( item => item.tocId === tocId );
+                        if ( destItem && destItem.element ) {
+                            const destEl = destItem.element;
+                            that.form.goToTarget( destEl );
+                        }
+                    }
                 }
                 return false;
             } )
@@ -392,90 +398,13 @@ export default {
         this.$formFooter.toggleClass( 'end', !next );
     },
     /**
-     * Get Title of Current Page Element
-     *
-     * @param {Element} el
-     */
-    _getElTitle( el ) {
-        let tocItemText;
-        const labelEl = el.querySelector( '.question-label.active' );
-        if ( labelEl ) {
-            tocItemText = labelEl.textContent;
-        } else {
-            const hintEl = el.querySelector( '.or-hint.active' );
-            if ( hintEl ) {
-                tocItemText = hintEl.textContent;
-            }
-        }
-        tocItemText = tocItemText && tocItemText.length > 20 ? `${tocItemText.substring(0,20)}...` : tocItemText;
-        return tocItemText;
-    },
-    /**
      * Updates Table of Contents
      */
     _updateToc() {
         if ( this.$toc.length ) {
             // regenerate complete ToC from first enabled question/group label of each page
-            this.tocItems = this.$activePages.get()
-                .filter( pageEl => !pageEl.classList.contains( 'or-repeat-info' ) )
-                .map( ( pageEl, index ) => {
-                    let tocItemText = this._getElTitle( pageEl ) || `[${index + 1}]`;
-                    return { pageEl, tocItemText };
-                } );
-            this.$toc.empty()[ 0 ].append( this._getTocHtmlFragment( this.tocItems ) );
+            this.$toc.empty()[ 0 ].append( this.form.toc.getHtmlFragment() );
             this.$toc.closest( '.pages-toc' ).removeClass( 'hide' );
         }
-    },
-    /**
-     * Builds Table of Contents
-     *
-     * @param {Array<object>} tocItems
-     * @return {Array<Element>}
-     */
-    _getTocHtmlFragment( tocItems ) {
-        const items = document.createDocumentFragment();
-        let currentGroupParent;
-        let currentGroupList;
-        tocItems.forEach( item => {
-            const li = document.createElement( 'li' );
-
-            const a = document.createElement( 'a' );
-            a.setAttribute( 'href', `#${item.pageEl.querySelector( '[name]' ).getAttribute( 'name' )}` );
-            a.textContent = item.tocItemText;
-
-            li.setAttribute( 'role', 'pageLink' );
-            li.append( a );
-
-            const itemPageEl = item.pageEl;
-
-            let groupParent = itemPageEl.closest( '.or-group' );
-            if ( groupParent ) {
-                if ( !groupParent.isEqualNode( currentGroupParent ) ) {
-                    currentGroupList = null;
-                }
-                if ( !currentGroupList ) {
-                    currentGroupParent = groupParent;
-
-                    const listItemGroupToc = document.createElement( 'li' );
-                    const groupToc = document.createElement( 'details' );
-                    const groupTocTitle = document.createElement( 'summary' );
-                    const groupTocList = document.createElement( 'ul' );
-
-                    groupTocTitle.textContent = this._getElTitle( currentGroupParent );
-                    groupToc.classList.add( 'groups-toc' );
-                    groupToc.append( groupTocTitle );
-                    groupToc.append( groupTocList );
-                    listItemGroupToc.append( groupToc );
-                    items.appendChild( listItemGroupToc );
-
-                    currentGroupList = groupTocList;
-                }
-                currentGroupList.append( li );
-            } else {
-                currentGroupList = null;
-                items.appendChild( li );
-            }
-        } );
-        return items;
     }
 };
