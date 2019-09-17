@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+--------------------
+##### Changed
+- ToC now matches ODK Collect and shows all questions hierarchically.
+
 [5.7.2] - 2019-09-11
 --------------------
 ##### Changed

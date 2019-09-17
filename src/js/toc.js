@@ -4,8 +4,7 @@
  * @module toc
  */
 
-import $ from 'jquery';
-import { getAncestors } from './dom-utils';
+import { getAncestors, getSiblingElements } from './dom-utils';
 
 export default {
     /**
@@ -25,13 +24,12 @@ export default {
         this.tocItems = [];
         const tocElements = [ ...this.form.view.$[ 0 ].querySelectorAll( '.question:not([role="comment"]), .or-group' ) ]
             .filter( tocEl => {
-                const $this = $( tocEl );
-                return $this.closest( '.disabled' ).length === 0 &&
-                    ( $this.is( '.question' ) || $this.find( '.question:not(.disabled)' ).length > 0 ||
+                return !tocEl.closest( '.disabled' ) &&
+                    ( tocEl.matches( '.question' ) || tocEl.querySelector( '.question:not(.disabled)' ) ||
                         // or-repeat-info is only considered a page by itself if it has no sibling repeats
                         // When there are siblings repeats, we use CSS trickery to show the + button underneath the last
                         // repeat.
-                        ( $this.is( '.or-repeat-info' ) && $this.siblings( '.or-repeat' ).length === 0 ) );
+                        ( tocEl.matches( '.or-repeat-info' ) && getSiblingElements( tocEl, '.or-repeat' ).length === 0 ) );
             } )
             .filter( tocEl => !tocEl.classList.contains( 'or-repeat-info' ) );
         tocElements.forEach( ( element, index ) => {
