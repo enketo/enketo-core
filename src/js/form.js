@@ -6,6 +6,7 @@ import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
 import repeatModule from './repeat';
+import tocModule from './toc';
 import pageModule from './page';
 import relevantModule from './relevant';
 import itemsetModule from './itemset';
@@ -216,6 +217,7 @@ Form.prototype.init = function() {
         that.view.html.dispatchEvent( events.Removed( event.detail ) );
     } );
 
+    this.toc = this.addModule( tocModule );
     this.pages = this.addModule( pageModule );
     this.langs = this.addModule( languageModule );
     this.progress = this.addModule( progressModule );
