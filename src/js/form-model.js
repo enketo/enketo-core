@@ -1306,7 +1306,9 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
                     }
                 }
             }
-            console.error( `Expression: ${expr} did not return any boolean, string or number value as expected` );
+            if ( !response ) {
+                console.error( `Expression: ${expr} did not return any boolean, string or number value as expected` );
+            }
         } else if ( resTypeNum === 7 ) {
             // response is an array of Elements
             response = [];
