@@ -168,7 +168,11 @@ class DatetimepickerExtended extends Widget {
         const val = value ? new Date( value ).toISOLocalString() : '';
         const vals = val.split( 'T' );
         const dateVal = vals[ 0 ];
-        const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : '';
+        /**
+         * seems the source of issue #649 is in the toISOLocalString function 
+         * refer: https://github.com/enketo/enketo-xpathjs/blob/master/src/date-extensions.js#L16
+         */
+        const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : ( dateVal && !vals[ 1 ] ) ? '00:00' : '';
         this.$fakeDateI.datepicker( 'setDate', dateVal );
         this.$fakeTimeI.timepicker( 'setTime', timeVal );
     }

@@ -805,7 +805,9 @@ import event from '../../js/event';
                     }
                 }
             } else {
-                timeMode = ( ( /a/i ).test( time ) ? 1 : 0 ) + ( ( /p/i ).test( time ) ? 2 : 0 ); // 0 = none, 1 = AM, 2 = PM, 3 = BOTH.
+                let am = this.showMeridian ? this.meridianNotation.am : 'am';
+                let pm = this.showMeridian ? this.meridianNotation.pm : 'pm';
+                timeMode = ( ( new RegExp( am, 'i' ) ).test( time ) ? 1 : 0 ) + ( ( new RegExp( pm, 'i' ) ).test( time ) ? 2 : 0 ); // 0 = none, 1 = AM, 2 = PM, 3 = BOTH.
                 if ( timeMode > 2 ) { // If both are present, fail.
                     this.clear();
                     return;
@@ -869,7 +871,7 @@ import event from '../../js/event';
                 }
 
                 if ( this.showMeridian ) {
-                    if ( hour > 12 ) {
+                    if ( hour >= 12 ) {
                         // Force PM.
                         timeMode = 2;
                         hour -= 12;
