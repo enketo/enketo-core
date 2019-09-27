@@ -8,6 +8,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - ToC now matches ODK Collect and shows all questions hierarchically.
 
+##### Fixed
+- time/datetime with time between 12:00 and 13:00 not set to PM.
+- time picker in datetime shows empty value if the default value of datetime is at midnight.
+- AM/PM notation broken in time/datetime picker for non-english languages.
+
 [5.7.2] - 2019-09-11
 --------------------
 ##### Changed
