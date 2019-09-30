@@ -31,6 +31,7 @@ import y from '../widget/rank/rank-widget';
 import z from '../widget/url/url-widget';
 import aa from '../widget/text-max/text-max';
 import ab from '../widget/date-native-ios/datepicker-native-ios';
+import ac from '../widget/rating/rating';
 //import zz from '../widget/example/my-widget';
 
-export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, ab ];
+export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, ab, ac ];

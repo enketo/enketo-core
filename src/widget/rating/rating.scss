@@ -1,0 +1,39 @@
+.or-appearance-rating {
+
+    .rating-widget__rating {
+        display: inline-block;
+        width: 100%;
+        height: auto;
+    }
+
+    input[type=radio] {
+        &.rating-widget__rating__star, &.rating-widget__rating__star:checked {
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            -ms-appearance: none;
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            margin-bottom: 0;
+            margin-top: 0;
+            border-style: solid;
+            background-color: transparent;
+            background-image: svg-as-url("<svg xmlns='http://www.w3.org/2000/svg' viewBox='-6 1 53 50'> 0 3 <path d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z' style='fill:#{$brand-primary-color}' /> 0 4 </svg>");
+            background-size: 35px 25px;
+            background-position: -3px;
+            background-repeat: no-repeat;
+            border-color: transparent !important;
+            border-radius: 0;
+        }
+    }
+
+    /* plain stars, hover behavior */
+    .empty input.rating-widget__rating__star:not(:hover),
+    .empty input.rating-widget__rating__star:hover:disabled,
+    .rating-widget__rating__star:checked ~ .rating-widget__rating__star:not(:hover),
+    .rating-widget__rating__star:checked ~ .rating-widget__rating__star:hover:disabled {
+        background-image: svg-as-url("<svg xmlns='http://www.w3.org/2000/svg' viewBox='-6 1 53 50'> 0 3 <path d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z' style='stroke: black; fill: transparent;'/> 0 4 </svg>");
+    }
+}

@@ -10,7 +10,7 @@ class RangeWidget extends Widget {
      * @type string
      */
     static get selector() {
-        return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale) > input[type="number"][min][max][step]';
+        return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale):not(.or-appearance-rating) > input[type="number"][min][max][step]';
     }
 
     _init() {
