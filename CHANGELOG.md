@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 --------------------
+##### Added
+- Rating widget!
+
 ##### Changed
 - ToC now matches ODK Collect and shows all questions hierarchically.
 
