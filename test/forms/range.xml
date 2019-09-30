@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>A Demo Form</h:title>
+    <model>
+      <instance>
+        <range id="range">
+          <range1/>
+          <range2/>
+          <range3/>
+          <range4/>
+          <range5/>
+          <range6>3</range6>
+          <distress/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </range>
+      </instance>
+      <bind nodeset="/range/range1" type="int"/>
+      <bind nodeset="/range/range2" type="decimal"/>
+      <bind nodeset="/range/range3" type="int"/>
+      <bind nodeset="/range/range4" type="int"/>
+      <bind nodeset="/range/range5" type="int"/>
+      <bind nodeset="/range/range6" type="int" readonly="true()"/>
+      <bind nodeset="/range/distress" type="int"/>
+      <bind jr:preload="uid" nodeset="/range/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body class="script-autocomplete theme-grid">
+    <range end="5" ref="/range/range1" start="0" step="1">
+      <label>Range widget 1</label>
+      <hint>A horizontal range widget (type=range)</hint>
+    </range>
+    <range appearance="vertical" end="2" ref="/range/range2" start="0" step="0.1">
+      <label>Range widget 2</label>
+      <hint>A vertical range widget (type=range, appearance=vertical)</hint>
+    </range>
+    <range appearance="no-ticks" end="5" ref="/range/range3" start="0" step="1">
+      <label>Range widget 3</label>
+      <hint>A horizontal range widget without ticks (type=range, appearance=no-ticks)</hint>
+    </range>
+    <range appearance="picker" end="5" ref="/range/range4" start="0" step="1">
+      <label>Range picker widget 4</label>
+      <hint>A horizontal range widget without ticks (type=range, appearance=picker)</hint>
+    </range>
+    <range appearance="rating" end="5" ref="/range/range5" start="0" step="1">
+      <label>Rating widget 5</label>
+      <hint>A horizontal range widget without ticks (type=range, appearance=rating)</hint>
+    </range>
+    <range appearance="rating" end="10" ref="/range/range6" start="1" step="1">
+      <label>Rating with default value</label>
+      <hint>A horizontal range widget without ticks (type=range, appearance=rating)</hint>
+    </range>
+    <range appearance="distress" end="10" ref="/range/distress" start="1" step="1">
+      <label>Distress widget</label>
+      <hint>A highly specific widget to measure distress(type=range, appearance=distress)</hint>
+    </range>
+  </h:body>
+</h:html>

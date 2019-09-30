@@ -6,9 +6,11 @@ import events from '../../js/event';
  * @extends Widget
  */
 class RangeWidget extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
-        return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale) > input[type="number"][min][max][step]';
+        return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale):not(.or-appearance-rating) > input[type="number"][min][max][step]';
     }
 
     _init() {
@@ -75,6 +77,8 @@ class RangeWidget extends Widget {
 
     /**
      * This is separated so it can be extended (in the analog-scale widget)
+     *
+     * @return {string} HTML string
      */
     _getHtmlStr() {
         const html =
@@ -99,12 +103,19 @@ class RangeWidget extends Widget {
         return html;
     }
 
+    /**
+     * @param {number} completeness
+     */
     _updateMercury( completeness ) {
         const trackHeight = this.widget.querySelector( '.range-widget__ticks' ).clientHeight;
         const bulbHeight = this.widget.querySelector( '.range-widget__bulb' ).clientHeight;
         this.widget.querySelector( '.range-widget__bulb__mercury' ).style.height = `${( completeness * trackHeight ) + ( 0.5 * bulbHeight )}px`;
     }
 
+    /**
+     * @param {object} props
+     * @return {string} HTML string
+     */
     _stepsBetweenHtmlStr( props ) {
         let html = '';
         if ( props.distress ) {
@@ -118,6 +129,9 @@ class RangeWidget extends Widget {
         return html;
     }
 
+    /**
+     * Resets widget
+     */
     _reset() {
         // Update UI stuff before the actual value to avoid issues in custom clients that may want to programmatically undo a reset ("strict required" in OpenClinica)
         // as that is subtly different from updating a value with a calculation since this.originalInputValue=  sets the evaluation cascade in motion.
@@ -127,14 +141,23 @@ class RangeWidget extends Widget {
         this.originalInputValue = '';
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = true );
     }
 
+    /**
+     * Enables widget
+     */
     enable() {
         this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
     }
 
+    /**
+     * Updates widget
+     */
     update() {
         const value = this.element.value;
 
@@ -146,6 +169,9 @@ class RangeWidget extends Widget {
         }
     }
 
+    /**
+     * @type object
+     */
     get props() {
         const props = this._props;
         const min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
@@ -164,6 +190,9 @@ class RangeWidget extends Widget {
         return props;
     }
 
+    /**
+     * @type string
+     */
     get value() {
         return this.range.classList.contains( 'empty' ) ? '' : this.range.value;
     }
