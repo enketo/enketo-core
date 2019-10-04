@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>jQuery - Enketo Core</title>
+    <title>widget/rating/rating.js - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,413 +36,153 @@
 
 <div id="main">
     
-    <h1 class="page-title">jQuery</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        jQuery
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="clearInputs"><span class="type-signature"></span>clearInputs<span class="signature">(ev1<span class="signature-attributes">opt</span>, ev2<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line6">line 6</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Clears form input fields and triggers events when doing this. If formelement is cloned but not yet added to DOM
-(and not synchronized with data object), the desired event is probably 'edit' (default). If it is already added
-to the DOM (and synchronized with data object) a regular change event should be fired</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ev1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Event to be triggered when a value is cleared</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ev2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Event to be triggered when a value is cleared</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">jQuery</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="reverse"><span class="type-signature"></span>reverse<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line77">line 77</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Reverses a jQuery collection</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Array</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">widget/rating/rating.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Widget from '../../js/widget';
+import { isNumber } from '../../js/utils';
+import events from '../../js/event';
+
+/**
+ * @extends RangeWidget
+ */
+class RatingWidget extends Widget {
+    /**
+     * @type string
+     */
+    static get selector() {
+        return '.or-appearance-rating input[type="number"]';
+    }
+
+    _init() {
+        const fragment = document.createRange().createContextualFragment( this._getHtmlStr() );
+        this.element.after( fragment );
+        this.element.classList.add( 'hide' );
+        this.widget = this.question.querySelector( '.widget' );
+
+        let ratingStars = '',
+            name = Math.random().toString( 36 ).substring( 2, 15 );
+        for ( let i = this.props.min; i &lt;= this.props.max; i += this.props.step ) {
+            ratingStars += `&lt;input type=radio name="rating-stars__${name}" class="rating-widget__rating__star ignore" value="${i}"/>`;
+        }
+
+        this.widget.querySelector( '.rating-widget__rating' )
+            .append( document.createRange().createContextualFragment( ratingStars ) );
+
+        this.rating = this.widget.querySelector( '.rating-widget__rating' );
+        this.stars = this.rating.querySelectorAll( '.rating-widget__rating__star' );
+        this.stars.forEach( el => {
+            el.addEventListener( 'change', () => {
+                const selected = this.rating.querySelector( 'input:checked' );
+                // contains class 'empty' means first load
+                if ( ( this.value != selected.value || this.rating.classList.contains( 'empty' ) ) ) {
+                    this.value = selected.value;
+                }
+            } );
+        } );
+
+        // loads the default value if exists
+        this.update();
+
+        if ( this.props.readonly ) {
+            this.disable();
+        }
+    }
+
+    /**
+     * This is separated so it can be extended (in the analog-scale widget)
+     *
+     * @return {string} HTML string
+     */
+    _getHtmlStr() {
+        return `&lt;div class="widget rating-widget">
+                	&lt;div class="rating-widget__rating empty">&lt;/div>
+            	&lt;/div>`;
+    }
+
+    /**
+     * Disables widget
+     */
+    disable() {
+        this.stars.forEach( el => el.disabled = true );
+    }
+
+    /**
+     * Enables widget
+     */
+    enable() {
+        this.stars.forEach( el => el.disabled = false );
+    }
+
+    /**
+     * Updates widget
+     */
+    update() {
+        const value = this.element.value;
+        if ( isNumber( value ) ) {
+            this.stars.forEach( ( star ) => {
+                if ( star.value === value ) {
+                    star.checked = true;
+                    star.dispatchEvent( events.Change() );
+                }
+            } );
+        } else {
+            this._reset();
+        }
+    }
+
+    /**
+     * Resets widget
+     */
+    _reset() {
+        const selected = this.rating.querySelector( 'input:checked' );
+        if ( selected ) {
+            this.value = '';
+            selected.checked = false;
+        }
+    }
+
+    /**
+     * @type object
+     */
+    get props() {
+        const props = this._props;
+        const min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
+        const max = isNumber( this.element.getAttribute( 'max' ) ) ? this.element.getAttribute( 'max' ) : 10;
+        const step = isNumber( this.element.getAttribute( 'step' ) ) ? this.element.getAttribute( 'step' ) : 1;
+
+        props.min = Number( min );
+        props.max = Number( max );
+        props.step = Number( step );
+
+        return props;
+    }
+
+    /**
+     * @type string
+     */
+    get value() {
+        return this.originalInputValue;
+    }
+
+    set value( value ) {
+        this.originalInputValue = value;
+        this.rating.classList.toggle( 'empty', value === '' );
+    }
+
+}
+
+export default RatingWidget;
+</code></pre>
+        </article>
+    </section>
 
 
 

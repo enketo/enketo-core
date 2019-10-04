@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>jQuery - Enketo Core</title>
+    <title>toc - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,7 +36,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">jQuery</h1>
+    <h1 class="page-title">toc</h1>
     
 
     
@@ -48,9 +48,8 @@
 
 <header>
     
-        <h2>
-        jQuery
-        </h2>
+        
+            
         
     
 </header>
@@ -60,13 +59,21 @@
         <div class="container-overview">
         
             
+                <div class="description"><p>Table of Contents (toc) module.</p></div>
+            
+
+            
+                
+
+
+
 
 <dl class="details">
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line1">line 1</a>
+        <a href="js_toc.js.html">js/toc.js</a>, <a href="js_toc.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -104,7 +111,33 @@
 
 
 
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             
         
@@ -124,6 +157,158 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="._maxTocLevel"><span class="type-signature">(static) </span>_maxTocLevel<span class="type-signature"> :Number</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_toc.js.html">js/toc.js</a>, <a href="js_toc.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li class="object-value"><pre class="prettyprint"><code>[]</code></pre></li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".tocItems"><span class="type-signature">(static) </span>tocItems<span class="type-signature"> :Array</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_toc.js.html">js/toc.js</a>, <a href="js_toc.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li class="object-value"><pre class="prettyprint"><code>[]</code></pre></li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -133,7 +318,7 @@
 
     
 
-    <h4 class="name" id="clearInputs"><span class="type-signature"></span>clearInputs<span class="signature">(ev1<span class="signature-attributes">opt</span>, ev2<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
+    <h4 class="name" id="._buildTocHtmlList"><span class="type-signature">(static) </span>_buildTocHtmlList<span class="signature">(items, appendTo)</span><span class="type-signature"></span></h4>
 
     
 
@@ -145,7 +330,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line6">line 6</a>
+        <a href="js_toc.js.html">js/toc.js</a>, <a href="js_toc.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -185,9 +370,7 @@
 
 
 <div class="description">
-    <p>Clears form input fields and triggers events when doing this. If formelement is cloned but not yet added to DOM
-(and not synchronized with data object), the desired event is probably 'edit' (default). If it is already added
-to the DOM (and synchronized with data object) a regular change event should be fired</p>
+    <p>Builds List of ToC Items</p>
 </div>
 
 
@@ -213,8 +396,6 @@ to the DOM (and synchronized with data object) a regular change event should be 
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -227,66 +408,46 @@ to the DOM (and synchronized with data object) a regular change event should be 
 
         <tr>
             
-                <td class="name"><code>ev1</code></td>
+                <td class="name"><code>items</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Array.&lt;Object></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last"><p>Event to be triggered when a value is cleared</p></td>
+            <td class="description last"></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>ev2</code></td>
+                <td class="name"><code>appendTo</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Element</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last"><p>Event to be triggered when a value is cleared</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -308,24 +469,6 @@ to the DOM (and synchronized with data object) a regular change event should be 
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">jQuery</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -334,7 +477,7 @@ to the DOM (and synchronized with data object) a regular change event should be 
 
     
 
-    <h4 class="name" id="reverse"><span class="type-signature"></span>reverse<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    <h4 class="name" id="._getTitle"><span class="type-signature">(static) </span>_getTitle<span class="signature">(el)</span><span class="type-signature"></span></h4>
 
     
 
@@ -346,7 +489,7 @@ to the DOM (and synchronized with data object) a regular change event should be 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_plugins.js.html">js/plugins.js</a>, <a href="js_plugins.js.html#line77">line 77</a>
+        <a href="js_toc.js.html">js/toc.js</a>, <a href="js_toc.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -386,7 +529,230 @@ to the DOM (and synchronized with data object) a regular change event should be 
 
 
 <div class="description">
-    <p>Reverses a jQuery collection</p>
+    <p>Get Title of Current ToC Element</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>el</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".generateTocItems"><span class="type-signature">(static) </span>generateTocItems<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_toc.js.html">js/toc.js</a>, <a href="js_toc.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Generate ToC Items</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getHtmlFragment"><span class="type-signature">(static) </span>getHtmlFragment<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="js_toc.js.html">js/toc.js</a>, <a href="js_toc.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Generate ToC Html Fragment</p>
 </div>
 
 
@@ -416,19 +782,11 @@ to the DOM (and synchronized with data object) a regular change event should be 
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>DocumentFragment</p>
+</div>
 
 
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Array</span>
-
-
-    </dd>
-</dl>
 
     
 
