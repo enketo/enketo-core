@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Option labels break in middle of word instead of a space.
+
 [5.8.0] - 2019-10-04
 --------------------
 ##### Added
