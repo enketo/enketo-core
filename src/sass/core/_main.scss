@@ -366,7 +366,7 @@ legend {
     .option-label {
         margin-left: 30px; // input is floated to deal with multi-line labels
         display: block;
-        word-break: break-all;
+        word-break: break-word;
     }
 
     img,
