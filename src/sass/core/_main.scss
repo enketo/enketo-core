@@ -427,7 +427,7 @@ legend {
     input[type=date],
     input[type=month],
     input[type=time],
-    input[type=datetime],
+    input[type=datetime-local],
     input[type=number],
     textarea,
     select {
@@ -444,7 +444,7 @@ legend {
     input[type=date],
     input[type=month],
     input[type=time],
-    input[type=datetime],
+    input[type=datetime-local],
     input[type=number],
     textarea {
         border: 1px solid #ddd8ce;
@@ -464,7 +464,7 @@ input[type=file],
 input[type=date],
 input[type=month],
 input[type=time],
-input[type=datetime],
+input[type=datetime-local],
 input[type=number],
 input[type=range],
 textarea,
@@ -496,9 +496,9 @@ select {
 
     &[type=date],
     &[type=month],
+    &[type=datetime-local],
     &[type=number],
     &[type=time],
-    &[type=datetime],
     &[type=text].mask-date {
         width: $input-min-width;
     }

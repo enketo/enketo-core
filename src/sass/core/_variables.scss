@@ -19,7 +19,7 @@ $question-margin: 20px !default;
 
 // input sizing
 $input-height: 34px !default;
-$input-min-width: 180px !default;
+$input-min-width: 240px !default; // width based on width required for native datetime-local input
 $input-max-width: 80% !default;
 
 // colors, icons

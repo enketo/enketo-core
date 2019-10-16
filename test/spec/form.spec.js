@@ -1033,7 +1033,7 @@ describe( 're-validating inputs and updating user feedback', () => {
             // input.validate is called by a comment widget on the linked question when the comment value changes
             // set question in valid state (not automatic, but by calling input.validate)
             $oneComment.val( 'comment' ).trigger( 'change' );
-            form.input.validate( $one[0] ).then( () => {
+            form.input.validate( $one[ 0 ] ).then( () => {
                 expect( $one.closest( '.question' ).hasClass( 'invalid-required' ) ).toBe( false );
                 done();
             } );
@@ -1114,7 +1114,7 @@ describe( 'form status', () => {
 
     it( 'correctly maintains edit status', () => {
         expect( form.editStatus ).toBe( false );
-        form.view.$.find( 'input[name="/thedata/nodeA"]' ).val( '2010-10-01T11:12:00+06:00' ).trigger( 'change' );
+        form.view.$.find( 'input[name="/thedata/nodeA"]' ).val( '2010-10-01T11:12:00' ).trigger( 'change' );
         expect( form.editStatus ).toBe( true );
     } );
 } );

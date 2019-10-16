@@ -61,7 +61,7 @@ $printBaseFontSize: 10px;
 
         &[type=date],
         &[type=time],
-        &[type=datetime] {
+        &[type=datetime-local] {
             opacity: 0.7;
             display: block !important;
             visibility: hidden;

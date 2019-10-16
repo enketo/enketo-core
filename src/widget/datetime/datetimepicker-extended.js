@@ -17,7 +17,7 @@ class DatetimepickerExtended extends Widget {
      * @type string
      */
     static get selector() {
-        return '.question input[type="datetime"]:not([readonly])';
+        return '.question input[type="datetime-local"]:not([readonly])';
     }
     /**
      * @return {boolean}

@@ -9,6 +9,9 @@ import { elementDataStore as data } from '../../js/dom-utils';
  *
  * The placeholder is considered particularly unhelpful for month-year and year appearances.
  * For consistency it's also removed from regular date inputs.
+ * 
+ * TODO: it looks like empty date/datetime-local inputs are hidden, so not clear to me if this widget actually 
+ * changes anything.
  *
  * @extends Widget
  */
@@ -17,7 +20,7 @@ class DatepickerNative extends Widget {
      * @type string
      */
     static get selector() {
-        return '.question input[type="date"]';
+        return '.question input[type="date"],.question input[type="datetime-local"]';
     }
 
     /**
@@ -26,7 +29,7 @@ class DatepickerNative extends Widget {
      */
     static condition( element ) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if mobile device is used.
-        return !data.has( element, 'DatepickerExtended' ) && !support.touch;
+        return !data.has( element, 'DatepickerExtended' ) && !data.has( element, 'DatetimepickerExtended' ) && !support.touch;
     }
 
     _init() {

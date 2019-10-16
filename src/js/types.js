@@ -1,4 +1,6 @@
 /**
+ * XML types
+ * 
  * @module types
  */
 

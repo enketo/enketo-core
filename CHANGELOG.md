@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Changed
+- Now using native datetime picker on mobile browsers.
+
 ##### Fixed
 - Option labels break in middle of word instead of a space.
 

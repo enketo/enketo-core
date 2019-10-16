@@ -37,7 +37,8 @@ $.fn.clearInputs = function( ev1, ev2 ) {
                     delete this.dataset.loadedFileName;
                     /* falls through */
                 case 'date':
-                case 'datetime':
+                case 'datetime-local':
+                case 'month':
                 case 'time':
                 case 'number':
                 case 'search':
