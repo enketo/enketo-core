@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Option labels break in middle of word instead of a space.
+- Readonly native date/time/datetime picker in iOS is fully functional when it should not be (re-introduced bug in iOS13)
 
 [5.8.0] - 2019-10-04
 --------------------

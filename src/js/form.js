@@ -748,7 +748,7 @@ Form.prototype.setEventHandlers = function() {
         this.progress.update( event.target );
     } );
 
-    this.model.events.addEventListener( 'dataupdate', event => {
+    this.model.events.addEventListener( events.DataUpdate().type, event => {
         that.evaluationCascade.forEach( fn => {
             fn.call( that, event.detail );
         }, true );

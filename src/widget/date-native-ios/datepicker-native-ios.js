@@ -12,7 +12,7 @@ class DatepickerNativeIos extends Widget {
      * @type string
      */
     static get selector() {
-        return '.question input[type="date"]';
+        return ' .question input[type="date"], .question input[type="datetime-local"], .question input[type="time"]';
     }
 
     /**
@@ -21,7 +21,7 @@ class DatepickerNativeIos extends Widget {
      */
     static condition( element ) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if non-iOS browser is used.
-        return !data.has( element, 'DatepickerExtended' ) && os.ios;
+        return !data.has( element, 'DatepickerExtended' ) && !data.has( element, 'DatetimepickerExtended' ) && !data.has( element, 'TimepickerExtended' ) && os.ios;
     }
 
     _init() {
@@ -29,7 +29,7 @@ class DatepickerNativeIos extends Widget {
         /*
          * Bug 1.
          *
-         * This bug deals with readonly date inputs on iOS browsers (e.g. Safari and Chrome).
+         * This bug deals with readonly date, time, and datetime-local inputs on iOS browsers (e.g. Safari and Chrome).
          * See https://github.com/OpenClinica/enketo-express-oc/issues/219.
          * Once this bug is fixed in iOS, this code can be removed.
          *
@@ -39,7 +39,7 @@ class DatepickerNativeIos extends Widget {
          * This is a very ugly solution, but the bug is fairly obscure, and the workaround is hopefully
          * just temporary.
          */
-        console.log( 'Adding iOS readonly datepicker workaround.' );
+        console.log( 'Adding iOS readonly date/time/datetime picker workaround.' );
         this.element.addEventListener( 'focus', () => {
             // prepare for future where readonly state is dynamic
             if ( this.element.readOnly ) {
