@@ -38,6 +38,7 @@
     "scripts": {
         "start": "grunt develop",
         "test": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt test",
+        "test-browsers": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt karma:browsers",
         "beautify": "grunt jsbeautifier:fix",
         "build-docs": "rimraf docs && ./node_modules/.bin/jsdoc -c jsdoc.config.js",
         "remove-docs": "rm -R ./docs/*.html",

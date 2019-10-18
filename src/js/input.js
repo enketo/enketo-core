@@ -61,7 +61,15 @@ export default {
                 return 'drawing';
             }
             if ( control.type ) {
-                return control.type.toLowerCase();
+                if ( control.type === 'text' && this.getXmlType( control ) === 'date' ) {
+                    // for browsers that don't support type='date' and return 'text' (e.g. Safari Desktop)
+                    return 'date';
+                } else if ( control.type === 'text' && this.getXmlType( control ) === 'datetime' ) {
+                    // for browsers that don't support type='datetime-local' and return 'text' (e.g. Safari and Firefox Desktop)
+                    return 'datetime-local';
+                } else {
+                    return control.type.toLowerCase();
+                }
             }
             return console.error( '<input> node has no type' );
 
@@ -118,7 +126,7 @@ export default {
      * @return {string} element XML type
      */
     getXmlType( control ) {
-        return control.dataset.typeXml || 'string';
+        return control.dataset.typeXml.toLowerCase() || 'string';
     },
     /**
      * @param {Element} control
@@ -246,13 +254,13 @@ export default {
                 }
             }
 
-            if ( xmlType.toLowerCase() === 'date' || xmlType.toLowerCase() === 'datetime' ) {
+            if ( xmlType === 'date' || xmlType === 'datetime' ) {
                 if ( value ) {
                     // convert current value (loaded from instance) to a value that a native datepicker understands
                     // TODO: test for IE, FF, Safari when those browsers start including native datepickers
                     value = types[ xmlType.toLowerCase() ].convert( value );
 
-                    if ( xmlType.toLowerCase() === 'datetime' ) {
+                    if ( xmlType === 'datetime' ) {
                         // convert to local time zone
                         value = new Date( value ).toISOLocalString();
                         // chop off local timezone offset to display properly in (native datetime-local) widget

@@ -22,22 +22,20 @@ class DatepickerMobile extends Widget {
      */
     static condition( element ) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if non-mobile device is used.
-        return !data.has( element, 'DatepickerExtended' ) && support.touch;
+        return !data.has( element, 'DatepickerExtended' ) && support.touch && support.inputTypes.month;
     }
 
     _init() {
-        if ( support.inputTypes.month ) {
-            this.element.classList.add( 'hide' );
-            const fragment = document.createRange().createContextualFragment( '<input class="ignore widget datepicker-mobile" type="month"/>' );
-            this.element.after( fragment );
-            this.widgetInput = this.question.querySelector( 'input.widget' );
-            // set default value
-            this.value = this.originalInputValue;
+        this.element.classList.add( 'hide' );
+        const fragment = document.createRange().createContextualFragment( '<input class="ignore widget datepicker-mobile" type="month"/>' );
+        this.element.after( fragment );
+        this.widgetInput = this.question.querySelector( 'input.widget' );
+        // set default value
+        this.value = this.originalInputValue;
 
-            this.widgetInput.addEventListener( 'change', () => {
-                this.originalInputValue = this.value;
-            } );
-        }
+        this.widgetInput.addEventListener( 'change', () => {
+            this.originalInputValue = this.value;
+        } );
     }
 
     /**
