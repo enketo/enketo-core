@@ -685,14 +685,12 @@ class Geopicker extends Widget {
 
         // update the map if it is visible
         if ( !this.props.touch || this._inFullScreenMode() ) {
-            if ( !this.map ) {
-                this._addDynamicMap()
-                    .then( () => {
-                        that._updateDynamicMapView( latLng, zoom );
-                    } );
-            } else {
-                that._updateDynamicMapView( latLng, zoom );
-            }
+            this.loadMap = this.loadMap || this._addDynamicMap();
+            this.loadMap
+                .then( () => {
+                    that._updateDynamicMapView( latLng, zoom );
+                } );
+
         }
     }
 
