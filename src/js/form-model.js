@@ -1270,7 +1270,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
     }
 
     // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
-    if ( tryNative && typeof doc.evaluate !== 'undefined' && !OPENROSA.test( expr ) ) {
+    if ( typeof doc.evaluate !== 'undefined' && !OPENROSA.test( expr ) ) {
         try {
             // console.log( 'trying the blazing fast native XPath Evaluator for', expr, index );
             result = doc.evaluate( expr, context, this.getNsResolver(), resTypeNum, null );
