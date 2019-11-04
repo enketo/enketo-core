@@ -558,7 +558,13 @@ describe( 'converting expressions with current() for context /data/node', () => 
     [
         [ 'instance("a")/path/to/node[filter = current()/data/some/node]', 'instance("a")/path/to/node[filter = /data/some/node]' ],
         [ 'instance("a")/path/to/node[filter = current()/.]', 'instance("a")/path/to/node[filter = /data/node/.]' ],
-        [ 'instance("a")/path/to/node[filter = current()/../some/node]', 'instance("a")/path/to/node[filter = /data/node/../some/node]' ]
+        [ 'instance("a")/path/to/node[filter = current()/../some/node]', 'instance("a")/path/to/node[filter = /data/node/../some/node]' ],
+        [ 'instance("a")/path/to/node[animaltypes = current()/../animaltype and groupanimals = current()/../groupanimal ]',
+            'instance("a")/path/to/node[animaltypes = /data/node/../animaltype and groupanimals = /data/node/../groupanimal ]'
+        ],
+        [ 'instance("a")/path/to/node[filtera = current()/../some/node and filterb = current()/../some/node and filterc = current()/a and filterd = current()/a]',
+            'instance("a")/path/to/node[filtera = /data/node/../some/node and filterb = /data/node/../some/node and filterc = /a and filterd = /a]'
+        ],
 
     ].forEach( test => {
         it( 'happens correctly', () => {
