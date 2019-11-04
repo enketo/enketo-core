@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[5.9.1] - 2019-11-04
+---------------------
+##### Fixed
+- If a predicate consists of parts that contain multiple `current()` calls, the expression is not evaluated correctly (noticeable inside repeats for multiple-choice questions with complex choice filters).
+
 [5.9.0] - 2019-10-23
 ---------------------
 ##### Changed

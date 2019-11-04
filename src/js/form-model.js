@@ -1041,10 +1041,10 @@ FormModel.prototype.replaceInstanceFn = function( expr ) {
 FormModel.prototype.replaceCurrentFn = ( expr, contextSelector ) => {
     // relative paths
     if ( contextSelector ) {
-        expr = expr.replace( 'current()/.', `${contextSelector}/.` );
+        expr = expr.replace( /current\(\)\/\./g, `${contextSelector}/.` );
     }
     // absolute paths
-    expr = expr.replace( 'current()/', '/' );
+    expr = expr.replace( /current\(\)\//g, '/' );
 
     return expr;
 };
