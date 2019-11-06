@@ -555,17 +555,23 @@ describe( 'converting instance("id") to absolute paths', () => {
 describe( 'converting expressions with current() for context /data/node', () => {
     const context = '/data/node';
 
+    // Note: these test include current()/node paths that may not have a use case in ODK XForms
     [
-        [ 'instance("a")/path/to/node[filter = current()/data/some/node]', 'instance("a")/path/to/node[filter = /data/some/node]' ],
+        [ 'instance("a")/path/to/node[filter = current()/some/nodeA]', 'instance("a")/path/to/node[filter = /data/node/some/nodeA]' ],
         [ 'instance("a")/path/to/node[filter = current()/.]', 'instance("a")/path/to/node[filter = /data/node/.]' ],
         [ 'instance("a")/path/to/node[filter = current()/../some/node]', 'instance("a")/path/to/node[filter = /data/node/../some/node]' ],
         [ 'instance("a")/path/to/node[animaltypes = current()/../animaltype and groupanimals = current()/../groupanimal ]',
             'instance("a")/path/to/node[animaltypes = /data/node/../animaltype and groupanimals = /data/node/../groupanimal ]'
         ],
         [ 'instance("a")/path/to/node[filtera = current()/../some/node and filterb = current()/../some/node and filterc = current()/a and filterd = current()/a]',
-            'instance("a")/path/to/node[filtera = /data/node/../some/node and filterb = /data/node/../some/node and filterc = /a and filterd = /a]'
+            'instance("a")/path/to/node[filtera = /data/node/../some/node and filterb = /data/node/../some/node and filterc = /data/node/a and filterd = /data/node/a]'
         ],
-
+        [ 'instance("a")/root/item[name = current()/. or not(/data/repeat/option) ]',
+            'instance("a")/root/item[name = /data/node/. or not(/data/repeat/option) ]'
+        ],
+        [ 'instance("a")/root/item[name = current() or not(/data/repeat/option) ]',
+            'instance("a")/root/item[name = /data/node or not(/data/repeat/option) ]'
+        ],
     ].forEach( test => {
         it( 'happens correctly', () => {
             const model = new Model( '<model><instance><root/></instance></model>' );

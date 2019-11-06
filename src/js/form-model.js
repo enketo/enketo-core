@@ -1039,14 +1039,7 @@ FormModel.prototype.replaceInstanceFn = function( expr ) {
  * @return {string} New expression
  */
 FormModel.prototype.replaceCurrentFn = ( expr, contextSelector ) => {
-    // relative paths
-    if ( contextSelector ) {
-        expr = expr.replace( /current\(\)\/\./g, `${contextSelector}/.` );
-    }
-    // absolute paths
-    expr = expr.replace( /current\(\)\//g, '/' );
-
-    return expr;
+    return expr.replace( /current\(\)/g, `${contextSelector}` );
 };
 
 /**

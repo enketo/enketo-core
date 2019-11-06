@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- `current()` without a path, and `current()/path/to/node` without a step down do not work.
+
 [5.9.1] - 2019-11-04
 ---------------------
 ##### Fixed
