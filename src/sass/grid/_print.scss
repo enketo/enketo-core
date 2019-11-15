@@ -219,6 +219,24 @@ screen and (min-width: 700px) {
     .back-to-screen-view {
         display: none !important;
     }
+
+    .question {
+        textarea {
+            display: none;
+        }
+
+        input {
+            &[type=text] {
+                display: none;
+            }
+        }
+
+        .print-input-text, .print-textarea {
+            font-weight: normal;
+            width: 100%;
+            padding: 5px 0;
+        }
+    }
 }
 
 // End of adjustment to get page breaks to work in multi-line flexbox
