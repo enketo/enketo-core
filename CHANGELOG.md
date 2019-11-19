@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - `current()` without a path, and `current()/path/to/node` without a step down do not work.
+- Datetime picker does not load a midnight datetime value.
 
 [5.9.1] - 2019-11-04
 ---------------------
