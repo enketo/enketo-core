@@ -265,8 +265,8 @@ export default {
                         value = new Date( value ).toISOLocalString();
                         // chop off local timezone offset to display properly in (native datetime-local) widget
                         const parts = value.split( 'T' );
-                        const date = parts[0];
-                        const time = ( parts && parts[ 1 ] ) ? parts[ 1 ].split(/[Z\-+]/)[0] : '00:00';
+                        const date = parts[ 0 ];
+                        const time = ( parts && parts[ 1 ] ) ? parts[ 1 ].split( /[Z\-+]/ )[ 0 ] : '00:00';
                         value = `${date}T${time}`;
                     }
                 }
