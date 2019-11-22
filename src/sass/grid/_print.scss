@@ -40,7 +40,7 @@ $printBaseFontSize: 10px;
 
 .question {
 
-    &.non-select::after,
+    &.non-select:not(.or-analog-scale-initialized)::after,
     &.or-appearance-search:after,
     &.or-appearance-autocomplete:after {
         content: ' ';
