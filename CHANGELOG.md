@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Some PDF viewers do not show radiobuttons with an opacity (e.g. a disabled radio button).
+- MS Edge does not show any checkmarks in printouts of radiobuttons and checkboxes.
+
 [5.9.2] - 2019-11-22
 ---------------------
 ##### Fixed

@@ -107,6 +107,16 @@ label.geo {
     font-size: $printBaseFontSize;
 }
 
+// We can not rely on cross-browser printing of CSS background images
+// so to be sure that a box is correctly shown to be "checked", we use the default appearance.
+input[type=radio] {
+    @include appearance(radio !important);
+}
+
+input[type=checkbox] {
+    @include appearance(checkbox !important);
+}
+
 .or {
 
     h2,

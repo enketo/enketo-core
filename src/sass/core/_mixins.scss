@@ -127,10 +127,14 @@
 }
 
 @mixin appearance-none {
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -ms-appearance: none;
+    @include appearance(none)
+}
+
+@mixin appearance($appearance) {
+    appearance: $appearance;
+    -moz-appearance: $appearance;
+    -webkit-appearance: $appearance;
+    -ms-appearance: $appearance;
 }
 
 @mixin display-flex {
@@ -258,28 +262,28 @@
 // Encode symbols
 @function url-encode($string) {
     $map: ("%": "%25",
-        "<": "%3C",
-        ">": "%3E",
-        " ": "%20",
-        "!": "%21",
-        "*": "%2A",
-        "'": "%27",
-        '"': "%22",
-        "(": "%28",
-        ")": "%29",
-        ";": "%3B",
-        ":": "%3A",
-        "@": "%40",
-        "&": "%26",
-        "=": "%3D",
-        "+": "%2B",
-        "$": "%24",
-        ",": "%2C",
-        "/": "%2F",
-        "?": "%3F",
-        "#": "%23",
-        "[": "%5B",
-        "]": "%5D"
+            "<": "%3C",
+            ">": "%3E",
+            " ": "%20",
+            "!": "%21",
+            "*": "%2A",
+            "'": "%27",
+            '"': "%22",
+            "(": "%28",
+            ")": "%29",
+            ";": "%3B",
+            ":": "%3A",
+            "@": "%40",
+            "&": "%26",
+            "=": "%3D",
+            "+": "%2B",
+            "$": "%24",
+            ",": "%2C",
+            "/": "%2F",
+            "?": "%3F",
+            "#": "%23",
+            "[": "%5B",
+            "]": "%5D"
         );
 
     $new: $string;
