@@ -873,7 +873,9 @@ import event from '../../js/event';
                 if ( this.showMeridian ) {
                     if ( hour >= 12 ) {
                         // Force PM.
-                        timeMode = 2;
+                        if ( !timeMode ) {
+                            timeMode = 2;
+                        }
                         hour -= 12;
                     }
                     if ( !timeMode ) {

@@ -6,7 +6,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]
 ---------------------
 ##### Fixed
+- Some PDF viewers do not show radiobuttons with an opacity (e.g. a disabled radio button).
+- MS Edge does not show any checkmarks in printouts of radiobuttons and checkboxes.
+
+[5.9.2] - 2019-11-22
+---------------------
+##### Fixed
 - `current()` without a path, and `current()/path/to/node` without a step down do not work.
+- Datetime picker does not load a midnight datetime value.
+- Analog scale layout messed up in printout.
 
 [5.9.1] - 2019-11-04
 ---------------------
