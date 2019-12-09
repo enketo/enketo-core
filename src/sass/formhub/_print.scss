@@ -36,23 +36,3 @@
         }
     }
 }
-
-@media print {
-    .question {
-        textarea {
-            display: none;
-        }
-
-        input {
-            &[type=text] {
-                display: none;
-            }
-        }
-
-        .print-input-text, .print-textarea {
-            font-weight: normal;
-            width: 80%;
-            padding: 6px 12px;
-        }
-    }
-}
