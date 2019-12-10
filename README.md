@@ -20,14 +20,14 @@ Follow the [Enketo blog](https://blog.enketo.org) or [Enketo on twitter](https:/
 The following browsers are officially supported:
 * latest Android webview on latest Android OS
 * latest WKWebView on latest iOS
-* latest version of Chrome/Chromium on OS X, Linux, Windows, Android and iOS
-* latest version of Firefox on OS X, Windows, Linux, Android and iOS
-* latest version of Safari on OS X, Windows, and on the latest version of iOS
+* latest version of Chrome/Chromium on Mac OS, Linux, Windows, Android and iOS
+* latest version of Firefox on Mac OS, Windows, Linux, Android and iOS
+* latest version of Safari on Mac OS, Windows, and on the latest version of iOS
 * latest version of Microsoft Edge
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
-[Here is some guidance](https://enketo.github.io/enketo-core/docs/tutorial-90-ie11.html) that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.
+[Here is some guidance](https://enketo.github.io/enketo-core/tutorial-90-ie11.html) that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.
 
 ### Sponsors
 
@@ -42,7 +42,7 @@ The development of this library was sponsored by:
 * [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
 * [Ona](https://ona.io)
 * [Medic Mobile](http://medicmobile.org/)
-* [Enketo LLC](https://enketo.org)
+* [Esri](https://esri.com)
 
 ### Performance (live)
 
