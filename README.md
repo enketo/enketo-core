@@ -66,4 +66,3 @@ Specifications:
 Example:
 
 Powered by <a href="https://enketo.org"><img height="16" style="height: 16px;" src="https://enketo.org/media/images/logos/enketo_bare_150x56.png" /></a>
-a>
