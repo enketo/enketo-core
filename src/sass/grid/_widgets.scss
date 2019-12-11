@@ -232,3 +232,15 @@ legend .btn-comment {
 .or-appearance-distress .range-widget__wrap {
     margin-top: 0;
 }
+
+// text-print widget
+@media print {
+    .or-text-print-initialized {
+        .print-input-text {
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            border-bottom: none;
+        }
+    }
+}
