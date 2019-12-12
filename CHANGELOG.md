@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Some PDF viewers do not show radiobuttons with an opacity (e.g. a disabled radio button).
 - MS Edge does not show any checkmarks in printouts of radiobuttons and checkboxes.
+- Overflowing content in text form controls is not shown on printout.
 
 [5.9.2] - 2019-11-22
 ---------------------
