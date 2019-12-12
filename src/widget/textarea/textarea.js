@@ -14,19 +14,24 @@ class TextareaWidget extends Widget {
     }
 
     _init() {
-        const textarea = this.element.querySelector( 'textarea' );
-        const defaultHeight = textarea ? textarea.clientHeight : 20;
+        const textareas = this.element.querySelectorAll( 'textarea' );
+        this.defaultHeight = textareas[ 0 ] ? textareas[ 0 ].clientHeight : 20;
         this.element.addEventListener( 'input', event => {
             const el = event.target;
             if ( el.nodeName.toLowerCase() === 'textarea' ) {
-                if ( el.scrollHeight > el.clientHeight && el.scrollHeight > defaultHeight ) {
-                    // using height instead of min-height to allow user to resize smaller manually
-                    el.style[ 'height' ] = `${el.scrollHeight}px`;
-                    // for the Grid theme:
-                    el.style[ 'flex' ] = 'auto';
-                }
+                this._resize( el );
             }
         } );
+        textareas.forEach( this._resize.bind( this ) );
+    }
+
+    _resize( el ) {
+        if ( el.scrollHeight > el.clientHeight && el.scrollHeight > this.defaultHeight ) {
+            // using height instead of min-height to allow user to resize smaller manually
+            el.style[ 'height' ] = `${el.scrollHeight}px`;
+            // for the Grid theme:
+            el.style[ 'flex' ] = 'auto';
+        }
     }
 }
 
