@@ -35,9 +35,7 @@ class TextPrintWidget extends Widget {
     }
 
     _copyValue() {
-        if (this.element.value !== '') {
-            this.widget.innerHTML = this.element.value.replace( /\n/g, '<br>' );
-        }
+        this.widget.innerHTML = this.element.value.replace( /\n/g, '<br>' );
     }
 
     update() {
