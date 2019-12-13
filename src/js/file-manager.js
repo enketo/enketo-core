@@ -14,6 +14,7 @@ import $ from 'jquery';
 import { getFilename, dataUriToBlobSync } from './utils';
 const fileManager = {};
 import { t } from 'enketo/translator';
+const URL_RE = /[a-zA-Z0-9+-.]+?:\/\//;
 
 /**
  * @static
@@ -55,7 +56,15 @@ fileManager.getFileUrl = subject => {
             resolve( null );
         } else if ( typeof subject === 'string' ) {
             // TODO obtain from storage as http URL or objectURL
-            reject( 'no!' );
+            // or from model for default binary files
+
+            // Very crude URL checker which is fine for now,
+            // because at this point we don't expect anything other than jr://
+            if ( URL_RE.test( subject ) ) {
+                resolve( subject );
+            } else {
+                reject( 'no!' );
+            }
         } else if ( typeof subject === 'object' ) {
             if ( fileManager.isTooLarge( subject ) ) {
                 error = new Error( t( 'filepicker.toolargeerror', { maxSize: fileManager.getMaxSizeReadable() } ) );
@@ -128,7 +137,7 @@ fileManager.getCurrentFiles = () => {
             file = this.files[ 0 ]; // Why doesn't this fail for empty file inputs?
         } else if ( this.value ) {
             canvas = $( this ).closest( '.question' )[ 0 ].querySelector( '.draw-widget canvas' );
-            if ( canvas ) {
+            if ( canvas && !URL_RE.test( this.value ) ) {
                 // TODO: In the future, we could simply do canvas.toBlob() instead
                 file = dataUriToBlobSync( canvas.toDataURL() );
                 file.name = this.value;

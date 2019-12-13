@@ -182,7 +182,7 @@ class DrawWidget extends Widget {
                     .on( 'canvasreload', () => {
                         if ( that.cache ) {
                             that.pad.fromObjectURL( that.cache )
-                                .then( that._updateValue.bind( that ) );
+                                .then( that._updateValue.bind( that, false ) );
                         }
                     } );
                 that.enable();
@@ -338,12 +338,16 @@ class DrawWidget extends Widget {
     /**
      * Updates value
      */
-    _updateValue() {
+    _updateValue( changed = true ) {
         const now = new Date();
         const postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
         this.element.dataset.filenamePostfix = postfix;
         // Note that this.element has become a text input.
-        this.originalInputValue = this.props.filename;
+        // When a default file is loaded this function is called by the canvasreload handler, but the user hasn't changed anything.
+        // We want to make sure the model remains unchanged in that case. 
+        if ( changed ) {
+            this.originalInputValue = this.props.filename;
+        }
         // pad.toData() doesn't seem to work when redrawing on a smaller canvas. Doesn't scale.
         // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
         this.value = this.pad.toDataURL();
@@ -370,6 +374,7 @@ class DrawWidget extends Widget {
                     // Only upon reset is loadedFileName removed, so that "undo" will work
                     // for drawings loaded from storage.
                     delete that.element.dataset.loadedFileName;
+                    delete that.element.dataset.loadedUrl;
                     that.element.dataset.filenamePostfix = '';
                     $( that.element ).val( '' ).trigger( 'change' );
                     // Annotate file input
@@ -389,6 +394,9 @@ class DrawWidget extends Widget {
         const that = this;
         if ( !file ) {
             return Promise.resolve( '' );
+        }
+        if ( file.startsWith( 'jr://' ) && this.element.dataset.loadedUrl ) {
+            file = this.element.dataset.loadedUrl;
         }
         return fileManager.getObjectUrl( file )
             .then( that.pad.fromObjectURL.bind( that.pad ) )

@@ -24,11 +24,9 @@
         "email": "martijn@enketo.org",
         "url": "https://www.linkedin.com/in/martijnvanderijdt"
     },
-    "contributors": [
-        {
-            "name": "Alex Anderson"
-        }
-    ],
+    "contributors": [ {
+        "name": "Alex Anderson"
+    } ],
     "files": [
         "src/",
         "config.js"
@@ -53,7 +51,7 @@
         "browserify": "^16.3.0",
         "cross-env": "^6.0.3",
         "docdash": "^1.0.3",
-        "enketo-transformer": "1.35.0",
+        "enketo-transformer": "1.36.0",
         "eslint-plugin-jsdoc": "15.9.x",
         "grunt": "^1.0.4",
         "grunt-concurrent": "3.x.x",

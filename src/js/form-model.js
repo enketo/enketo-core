@@ -1435,6 +1435,9 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
         if ( xmlDataType === 'binary' ) {
             if ( newVal.length > 0 ) {
                 target.setAttribute( 'type', 'file' );
+                // The src attribute if for default binary values (added by enketo-transformer)
+                // As soon as the value changes this attribute can be removed to clean up.
+                target.removeAttribute( 'src' );
             } else {
                 target.removeAttribute( 'type' );
             }

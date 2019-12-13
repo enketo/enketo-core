@@ -429,6 +429,9 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
                 const control = that.input.find( name, index );
                 if ( control ) {
                     that.input.setVal( control, value );
+                    if ( that.input.getXmlType( control ) === 'binary' && value.startsWith( 'jr://' ) && element.getAttribute( 'src' ) ) {
+                        control.setAttribute( 'data-loaded-url', element.getAttribute( 'src' ) );
+                    }
                 }
             } catch ( e ) {
                 console.error( e );
@@ -1101,6 +1104,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type string
  * @default
  */
-Form.requiredTransformerVersion = '1.35.0';
+Form.requiredTransformerVersion = '1.36.0';
 
 export { Form, FormModel };

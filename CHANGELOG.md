@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Added
+- Support for default drawings in all 3 drawing widgets.
+
 ##### Fixed
 - Some PDF viewers do not show radiobuttons with an opacity (e.g. a disabled radio button).
 - MS Edge does not show any checkmarks in printouts of radiobuttons and checkboxes.
