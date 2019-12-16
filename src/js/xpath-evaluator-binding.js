@@ -1,4 +1,4 @@
-import XPathJS from 'enketo-xpathjs';
+import XPathJS from 'openrosa-xpath-evaluator';
 
 /**
  * @function xpath-evaluator-binding
