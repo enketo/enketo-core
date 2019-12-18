@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>widget/date/datepicker-extended.js - Enketo Core</title>
+    <title>widget/text-print/text-print.js - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -36,7 +36,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">widget/date/datepicker-extended.js</h1>
+    <h1 class="page-title">widget/text-print/text-print.js</h1>
     
 
     
@@ -47,194 +47,51 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import Widget from '../../js/widget';
-import support from '../../js/support';
-import $ from 'jquery';
-import types from '../../js/types';
-import { isNumber, getPasteData } from '../../js/utils';
-import 'bootstrap-datepicker';
-import '../../js/dropdown.jquery';
 
 /**
- * Extends eternicode's bootstrap-datepicker without changing the original.
- * https://github.com/eternicode/bootstrap-datepicker
- * @extends Widget
+ * Clone text input fields value into new print-only element.
+ * This is an unusual way to implement a feature, because it is not an actual widget,
+ * but this is the easiest way to do it.
  */
-class DatepickerExtended extends Widget {
+class TextPrintWidget extends Widget {
     /**
      * @type string
      */
     static get selector() {
-        return '.question input[type="date"]:not([readonly])';
-    }
-
-    /**
-     * @type boolean
-     */
-    static condition() {
-        return !support.touch || !support.inputTypes.date;
+        return '.question:not(.or-appearance-autocomplete) > input[type=text]:not(.ignore)';
     }
 
     _init() {
-        this.settings = ( this.props.appearances.includes( 'year' ) ) ? {
-            format: 'yyyy',
-            startView: 'decade',
-            minViewMode: 'years'
-        } : ( this.props.appearances.includes( 'month-year' ) ) ? {
-            format: 'yyyy-mm',
-            startView: 'year',
-            minViewMode: 'months'
-        } : {
-            format: 'yyyy-mm-dd',
-            startView: 'month',
-            minViewMode: 'days'
-        };
+        this.question.classList.add( 'or-text-print-initialized' );
 
-        this.$fakeDateI = this._createFakeDateInput( this.settings.format );
+        const className = 'print-input-text';
+        const printElement = document.createElement( 'div' );
+        printElement.classList.add( className );
+        printElement.classList.add( 'print-only' );
 
-        this._setChangeHandler( this.$fakeDateI );
-        this._setFocusHandler( this.$fakeDateI );
-        this._setResetHandler( this.$fakeDateI );
+        if ( getComputedStyle( this.element ).order !== '' ) {
+            printElement.style.order = parseInt( getComputedStyle( this.element ).order, 10 ) + 1;
+        }
+        this.element.after( printElement );
 
-        this.$fakeDateI.datepicker( {
-            format: this.settings.format,
-            autoclose: true,
-            todayHighlight: true,
-            startView: this.settings.startView,
-            minViewMode: this.settings.minViewMode,
-            forceParse: false
-        } );
+        this.widget = this.element.parentElement.querySelector( `.${className}` );
+        this._copyValue();
 
-        this.value = this.element.value;
-    }
-
-    /**
-     * Creates fake date input elements
-     *
-     * @param {string} format - The date format
-     * @return {jQuery} The jQuery-wrapped fake date input element
-     */
-    _createFakeDateInput( format ) {
-        const $dateI = $( this.element );
-        const $fakeDate = $( `&lt;div class="widget date">&lt;input class="ignore input-small" type="text" placeholder="${format}" />&lt;/div>` )
-            .append( this.resetButtonHtml );
-        const $fakeDateI = $fakeDate.find( 'input' );
-
-        $dateI.hide().after( $fakeDate );
-
-        return $fakeDateI;
-    }
-
-    /**
-     * Copy manual changes that were not detected by bootstrap-datepicker (one without pressing Enter) to original date input field
-     *
-     * @param {jQuery} $fakeDateI - Fake date input element
-     */
-    _setChangeHandler( $fakeDateI ) {
-        const settings = this.settings;
-
-        $fakeDateI.on( 'change paste', e => {
-            let convertedValue = '';
-            let value = e.type === 'paste' ? getPasteData( e ) : this.value;
-
-            if ( value.length > 0 ) {
-                // Note: types.date.convert considers numbers to be a number of days since the epoch
-                // as this is what the XPath evaluator may return.
-                // For user-entered input, we want to consider a Number value to be incorrect, expect for year input.
-                if ( isNumber( value ) &amp;&amp; settings.format !== 'yyyy' ) {
-                    convertedValue = '';
-                } else {
-                    value = this._toActualDate( value );
-                    convertedValue = types.date.convert( value );
-                }
-            }
-
-            $fakeDateI.val( this._toDisplayDate( convertedValue ) ).datepicker( 'update' );
-
-            // Here we have to do something unusual to prevent native inputs from automatically
-            // changing 2012-12-32 into 2013-01-01
-            // convertedValue is '' for invalid 2012-12-32
-            if ( convertedValue === '' &amp;&amp; e.type === 'paste' ) {
-                e.stopImmediatePropagation();
-            }
-
-            // Avoid triggering unnecessary change events as they mess up sensitive custom applications (OC)
-            if ( this.originalInputValue !== convertedValue ) {
-                this.originalInputValue = convertedValue;
-            }
-
-            return false;
+        this.element.addEventListener( 'input', () => {
+            this._copyValue();
         } );
     }
 
-    /**
-     * Reset button handler
-     *
-     * @param {jQuery} $fakeDateI - Fake date input element
-     */
-    _setResetHandler( $fakeDateI ) {
-        $fakeDateI.next( '.btn-reset' ).on( 'click', () => {
-            if ( this.originalInputValue ) {
-                this.value = '';
-            }
-        } );
-    }
-
-    /**
-     * Handler for focus events.
-     * These events on the original input are used to check whether to display the 'required' message
-     *
-     * @param {jQuery} $fakeDateI - Fake date input element
-     */
-    _setFocusHandler( $fakeDateI ) {
-        // Handle focus on original input (goTo functionality)
-        $( this.element ).on( 'applyfocus', () => {
-            $fakeDateI[ 0 ].focus();
-        } );
-    }
-
-    /**
-     * @param {string} [date]
-     * @return string
-     */
-    _toActualDate( date = '' ) {
-        date = date.trim();
-        return date &amp;&amp; this.settings.format === 'yyyy' &amp;&amp; date.length &lt; 5 ? `${date}-01-01` : ( date &amp;&amp; this.settings.format === 'yyyy-mm' &amp;&amp; date.length &lt; 8 ? `${date}-01` : date );
-    }
-
-    /**
-     * @param {string} [date]
-     * @return string
-     */
-    _toDisplayDate( date = '' ) {
-        date = date.trim();
-        return date &amp;&amp; this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
+    _copyValue() {
+        this.widget.innerHTML = this.element.value.replace( /\n/g, '&lt;br>' );
     }
 
     update() {
-        this.value = this.element.value;
+        this._copyValue();
     }
-
-    /**
-     * @type string
-     */
-    get displayedValue() {
-        return this.question.querySelector( '.widget input' ).value;
-    }
-
-    /**
-     * @type string
-     */
-    get value() {
-        return this._toActualDate( this.displayedValue );
-    }
-
-    set value( date ) {
-        this.$fakeDateI.datepicker( 'setDate', this._toDisplayDate( date ) );
-    }
-
 }
 
-export default DatepickerExtended;
+export default TextPrintWidget;
 </code></pre>
         </article>
     </section>
