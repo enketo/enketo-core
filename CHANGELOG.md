@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+##### Changed
+- Replaced XPath evaluator! **WARNING: breaks IE11 build system and requires updating custom XPath extensions**
+
+
 [5.10.0] - 2019-12-18
 ---------------------
 ##### Added
