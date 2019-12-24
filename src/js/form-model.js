@@ -12,6 +12,7 @@ const OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coal
 const OPENROSA_XFORMS_NS = 'http://openrosa.org/xforms';
 const JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
 const ENKETO_XFORMS_NS = 'http://enketo.org/xforms';
+const ODK_XFORMS_NS = 'http://www.opendatakit.org/xforms';
 
 //require( './plugins' );
 import './extend';
@@ -109,10 +110,11 @@ FormModel.prototype.init = function() {
     // Create the model
     try {
         id = 'model';
-        // the default model
+        // The default model
         this.xml = parser.parseFromString( this.data.modelStr, 'text/xml' );
         this.throwParserErrors( this.xml, this.data.modelStr );
-        // add external data to model
+
+        // Add external data to model
         this.data.external.forEach( instance => {
             id = `instance "${instance.id}"` || 'instance unknown';
             instanceDoc = that.getSecondaryInstance( instance.id );
@@ -151,6 +153,10 @@ FormModel.prototype.init = function() {
             this.hasInstance = !!this.xml.querySelector( 'model > instance' );
             this.rootElement = this.xml.querySelector( 'instance > *' ) || this.xml.documentElement;
             this.setNamespaces();
+
+            // Determine whether it is possible that this form uses incorrect absolute/path/to/repeat/node syntax when
+            // it actually was supposed to use a relative ../node path (old issue with older pyxform-generated forms).
+            this.noRepeatRefErrorExpected = this.evaluate( '/node()/@odk:generated-by', 'boolean', null, null, true );
 
             // Check if instanceID is present
             if ( !this.getMetaNode( 'instanceID' ).getElement() ) {
@@ -874,6 +880,10 @@ FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
  * @param {number} index - Index of the instance node with that selector
  */
 FormModel.prototype.makeBugCompliant = function( expr, selector, index ) {
+    if ( this.noRepeatRefErrorExpected ) {
+        return expr;
+    }
+
     let target = this.node( selector, index ).getElement();
 
     // target is null for nested repeats if no repeats exist
@@ -934,7 +944,8 @@ FormModel.prototype.setNamespaces = function() {
         [
             [ 'orx', OPENROSA_XFORMS_NS, false ],
             [ 'jr', JAVAROSA_XFORMS_NS, false ],
-            [ 'enk', ENKETO_XFORMS_NS, config.repeatOrdinals === true ]
+            [ 'enk', ENKETO_XFORMS_NS, config.repeatOrdinals === true ],
+            [ 'odk', ODK_XFORMS_NS, false ]
         ].forEach( arr => {
             if ( !that.getNamespacePrefix( arr[ 1 ] ) ) {
                 prefix = ( !that.namespaces[ arr[ 0 ] ] ) ? arr[ 0 ] : `__${arr[ 0 ]}`;
