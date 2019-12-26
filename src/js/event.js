@@ -52,10 +52,28 @@ function Removed( detail ) {
 }
 
 /**
- * Add repeat event.
- *
- * @param {*} detail - Data to be passed with event
- * @return {CustomEvent} Custom "addrepeat" event (bubbling)
+ * The odk-instance-first-load event as defined in the ODK XForms spec.
+ * @see https://opendatakit.github.io/xforms-spec/#event:odk-instance-first-load
+ *@return {CustomEvent} Custom "odk-instanc-first-load" event (bubbling)
+ */
+function InstanceFirstLoad() {
+    return new CustomEvent( 'odk-instance-first-load', { bubbles: true } );
+}
+
+/**
+ * The odk-new-repeat event as defined in the ODK XForms spec.
+ * @see https://opendatakit.github.io/xforms-spec/#event:odk-new-repeat
+ * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
+ * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
+ */
+function NewRepeat( detail ) {
+    return new CustomEvent( 'odk-new-repeat', { detail, bubbles: true } );
+}
+
+/**
+ * The addrepeat event is similar but fired under different circumstances.
+ * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
+ * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
  */
 function AddRepeat( detail ) {
     return new CustomEvent( 'addrepeat', { detail, bubbles: true } );
@@ -152,12 +170,15 @@ function GoToHidden() {
     return new CustomEvent( 'gotohidden', { bubbles: true } );
 }
 
+
 export default {
     DataUpdate,
     FakeFocus,
     ApplyFocus,
     PageFlip,
     Removed,
+    InstanceFirstLoad,
+    NewRepeat,
     AddRepeat,
     RemoveRepeat,
     ChangeLanguage,
@@ -168,5 +189,6 @@ export default {
     ValidationComplete,
     Invalidated,
     ProgressUpdate,
-    GoToHidden
+    GoToHidden,
+
 };

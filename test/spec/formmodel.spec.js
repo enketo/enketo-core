@@ -1,4 +1,5 @@
 import { FormModel as Model } from '../../src/js/form-model';
+import events from '../../src/js/event';
 import forms from '../mock/forms';
 import config from '../../config';
 
@@ -1402,4 +1403,30 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( eventObjects[ 1 ].nodes ).toEqual( [ 'deprecatedID' ] );
 
     } );
+
+} );
+
+describe( 'odk-instance-first-load event', () => {
+
+    const modelStr = '<data><a/></data>';
+    const instanceStr = '<data><a>1</a></data>';
+
+    it( 'fires once when starting a new record', () => {
+        const model = new Model( { modelStr } );
+        let eventsOccurred = 0;
+
+        model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
+        model.init();
+        expect( eventsOccurred ).toEqual( 1 );
+    } );
+
+    it( 'does not fire when loading an existing record', () => {
+        const model = new Model( { modelStr, instanceStr } );
+        let eventsOccurred = 0;
+
+        model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
+        model.init();
+        expect( eventsOccurred ).toEqual( 0 );
+    } );
+
 } );

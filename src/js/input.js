@@ -14,7 +14,7 @@ export default {
      * @return {Element} Wrap node
      */
     getWrapNode( control ) {
-        return control.closest( '.question, .calculation' );
+        return control.closest( '.question, .calculation, .setvalue' );
     },
     /**
      * @param {Array<Element>} controls

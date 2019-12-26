@@ -101,6 +101,11 @@ function closestAncestorUntil( element, filterSelector, endSelector ) {
     return found;
 }
 
+function getChildren( element, selector = '*' ) {
+    return [ ...element.children ]
+        .filter( el => el.matches( selector ) );
+}
+
 /**
  * Removes all children elements.
  *
@@ -290,6 +295,7 @@ export {
     getSiblingElementsAndSelf,
     getSiblingElements,
     getAncestors,
+    getChildren,
     getRepeatIndex,
     getXPath,
     hasPreviousCommentSiblingWithContent,

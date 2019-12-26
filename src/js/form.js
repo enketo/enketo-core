@@ -1,7 +1,7 @@
 import { FormModel } from './form-model';
 import $ from 'jquery';
 import { toArray, parseFunctionFromExpression, stripQuotes, getFilename } from './utils';
-import { getXPath } from './dom-utils';
+import { getXPath, closestAncestorUntil } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
@@ -58,8 +58,8 @@ import './extend';
 function Form( formSelector, data, options ) {
     const $form = $( formSelector );
 
-    this.$nonRepeats = {};
-    this.$all = {};
+    this.nonRepeats = {};
+    this.all = {};
     this.options = typeof options !== 'object' ? {} : options;
     if ( typeof this.options.clearIrrelevantImmediately === 'undefined' ) {
         this.options.clearIrrelevantImmediately = true;
@@ -202,21 +202,6 @@ Form.prototype.init = function() {
     let loadErrors = [];
     const that = this;
 
-    loadErrors = loadErrors.concat( this.model.init() );
-
-    if ( typeof this.model === 'undefined' || !( this.model instanceof FormModel ) ) {
-        loadErrors.push( 'Form could not be initialized without a model.' );
-        return loadErrors;
-    }
-
-    // Before initializing form view, passthrough some model events externally
-    this.model.events.addEventListener( 'dataupdate', event => {
-        that.view.html.dispatchEvent( events.DataUpdate( event.detail ) );
-    } );
-    this.model.events.addEventListener( 'removed', event => {
-        that.view.html.dispatchEvent( events.Removed( event.detail ) );
-    } );
-
     this.toc = this.addModule( tocModule );
     this.pages = this.addModule( pageModule );
     this.langs = this.addModule( languageModule );
@@ -232,6 +217,27 @@ Form.prototype.init = function() {
     this.required = this.addModule( requiredModule );
     this.mask = this.addModule( maskModule );
     this.readonly = this.addModule( readonlyModule );
+
+    // Handle odk-instance-first-load event
+    this.model.events.addEventListener( events.InstanceFirstLoad().type, event => this.calc.setValue( event ) );
+
+    //Handle odk-new-repeat event before initializing repeats
+    this.view.html.addEventListener( events.NewRepeat().type, event => this.calc.setValue( event ) );
+
+    loadErrors = loadErrors.concat( this.model.init() );
+
+    if ( typeof this.model === 'undefined' || !( this.model instanceof FormModel ) ) {
+        loadErrors.push( 'Form could not be initialized without a model.' );
+        return loadErrors;
+    }
+
+    // Before initializing form view, passthrough some model events externally
+    this.model.events.addEventListener( events.DataUpdate().type, event => {
+        that.view.html.dispatchEvent( events.DataUpdate( event.detail ) );
+    } );
+    this.model.events.addEventListener( events.Removed().type, event => {
+        that.view.html.dispatchEvent( events.Removed( event.detail ) );
+    } );
 
     try {
         this.preloads.init();
@@ -254,7 +260,11 @@ Form.prototype.init = function() {
         this.pages.init();
 
         // after radio button data-name setting (now done in XLST)
+        // Set temporary event handler to ensure calculations in newly added repeats are run for the first time
+        const tempHandler = event => this.calc.update( event.detail );
+        this.view.html.addEventListener( events.AddRepeat().type, tempHandler );
         this.repeats.init();
+        this.view.html.removeEventListener( events.AddRepeat().type, tempHandler );
 
         // after repeats.init, but before itemset.update
         this.output.update();
@@ -283,7 +293,7 @@ Form.prototype.init = function() {
         // after loading existing instance to not trigger an 'edit' event
         this.setEventHandlers();
 
-        // update field calculations again to make sure that dependent
+        // Update field calculations again to make sure that dependent
         // field values are calculated
         this.calc.update();
 
@@ -462,9 +472,9 @@ Form.prototype.getModelValue = function( $control ) {
  * @return {jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
-    let $collection;
-    let $repeatControls = null;
-    let $controls;
+    let collection;
+    let repeatControls = null;
+    let controls;
     let selector = [];
     const that = this;
 
@@ -472,29 +482,27 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     filter = filter || '';
 
     // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
-    if ( !this.$nonRepeats[ attr ] ) {
-        $controls = this.view.$.find( `:not(.or-repeat-info)[${attr}]` )
-            .filter( function() {
-                return $( this ).closest( '.or-repeat' ).length === 0;
-            } );
-        this.$nonRepeats[ attr ] = this.filterRadioCheckSiblings( $controls );
+    if ( !this.nonRepeats[ attr ] ) {
+        controls = [ ...this.view.html.querySelectorAll( `:not(.or-repeat-info)[${attr}]` ) ]
+            .filter( el => !el.closest( '.or-repeat' ) );
+        this.nonRepeats[ attr ] = this.filterRadioCheckSiblings( controls );
     }
 
     // If the updated node is inside a repeat (and there are multiple repeats present)
     if ( typeof updated.repeatPath !== 'undefined' && updated.repeatIndex >= 0 ) {
-        $controls = this.view.$.find( `.or-repeat[name="${updated.repeatPath}"]` ).eq( updated.repeatIndex )
-            .find( `[${attr}]` );
-        $repeatControls = this.filterRadioCheckSiblings( $controls );
+        const repeatEl = [ ...this.view.html.querySelectorAll( `.or-repeat[name="${updated.repeatPath}"]` ) ][ updated.repeatIndex ];
+        controls = repeatEl ? [ ...repeatEl.querySelectorAll( `[${attr}]` ) ] : [];
+        repeatControls = this.filterRadioCheckSiblings( controls );
     }
 
     // If a new repeat was created, update the cached collection of all form controls with that attribute
     // If a repeat was deleted ( update.repeatPath && !updated.cloned), rebuild cache
-    if ( !this.$all[ attr ] || ( updated.repeatPath && !updated.cloned ) ) {
+    if ( !this.all[ attr ] || ( updated.repeatPath && !updated.cloned ) ) {
         // (re)build the cache
-        this.$all[ attr ] = this.filterRadioCheckSiblings( this.view.$.find( `[${attr}]` ) );
-    } else if ( updated.cloned && $repeatControls ) {
+        this.all[ attr ] = this.filterRadioCheckSiblings( [ ...this.view.html.querySelectorAll( `[${attr}]` ) ] );
+    } else if ( updated.cloned && repeatControls ) {
         // update the cache
-        this.$all[ attr ] = this.$all[ attr ].add( $repeatControls );
+        this.all[ attr ] = this.all[ attr ].concat( repeatControls );
     }
 
     /**
@@ -504,11 +512,11 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
      * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node, /path/to/repeat, 3).
      * We accept that for now.
      **/
-    if ( $repeatControls ) {
+    if ( repeatControls ) {
         // The non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
-        $collection = this.$nonRepeats[ attr ].add( $repeatControls );
+        collection = this.nonRepeats[ attr ].concat( repeatControls );
     } else {
-        $collection = this.$all[ attr ];
+        collection = this.all[ attr ];
     }
 
     // Add selectors based on specific changed nodes
@@ -523,22 +531,22 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     }
 
     const selectorStr = selector.join( ', ' );
-
-    $collection = selectorStr ? $collection.filter( selectorStr ) : $collection;
+    collection = selectorStr ? collection.filter( el => el.matches( selectorStr ) ) : collection;
 
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
-    return $collection;
+    // TODO: remove jQuery wrapper, just return array of elements
+    return $( collection );
 };
 
 /**
- * @param {jQuery} $controls
- * @return {jQuery}
+ * @param {Array<Element>} controls
+ * @return {Array<Element>}
  */
-Form.prototype.filterRadioCheckSiblings = $controls => {
+Form.prototype.filterRadioCheckSiblings = controls => {
     const wrappers = [];
-    return $controls.filter( function() {
+    return controls.filter( control => {
         // TODO: can this be further performance-optimized?
-        const wrapper = this.type === 'radio' || this.type === 'checkbox' ? $( this.parentNode ).parent( '.option-wrapper' )[ 0 ] : null;
+        const wrapper = control.type === 'radio' || control.type === 'checkbox' ? closestAncestorUntil( control, '.option-wrapper', '.question' ) : null;
         // Filter out duplicate radiobuttons and checkboxes
         if ( wrapper ) {
             if ( wrappers.indexOf( wrapper ) !== -1 ) {
@@ -551,7 +559,7 @@ Form.prototype.filterRadioCheckSiblings = $controls => {
 };
 
 /**
- * Crafts an optimized jQuery selector for element attributes that contain an expression with a target node name.
+ * Crafts an optimized selector for element attributes that contain an expression with a target node name.
  *
  * @param {string} filter - The filter to use
  * @param {string} attr - The attribute to target
@@ -760,28 +768,24 @@ Form.prototype.setEventHandlers = function() {
     } );
 
     this.view.html.addEventListener( events.AddRepeat().type, event => {
-        const index = event.detail ? event.detail[ 0 ] : undefined;
         const $clone = $( event.target );
-        const updated = {
-            repeatPath: $clone.attr( 'name' ),
-            repeatIndex: index,
-            cloned: true
-        };
-        // Set defaults of added repeats in Form, setAllVals does not trigger change event
-        that.setAllVals( $clone, index );
+
+        // Set template-defined static defaults of added repeats in Form, setAllVals does not trigger change event
+        this.setAllVals( $clone, event.detail.repeatIndex );
+
         // Initialize calculations, relevant, itemset, required, output inside that repeat.
-        that.evaluationCascade.forEach( fn => {
-            fn.call( that, updated );
+        this.evaluationCascade.forEach( fn => {
+            fn.call( that, event.detail );
         } );
-        that.progress.update();
+        this.progress.update();
     } );
 
     this.view.html.addEventListener( events.RemoveRepeat().type, () => {
-        that.progress.update();
+        this.progress.update();
     } );
 
     this.view.html.addEventListener( events.ChangeLanguage().type, () => {
-        that.output.update();
+        this.output.update();
     } );
 
     this.view.$.find( '.or-group > h4' ).on( 'click', function() {
@@ -1104,6 +1108,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type string
  * @default
  */
-Form.requiredTransformerVersion = '1.36.0';
+Form.requiredTransformerVersion = '1.37.0';
 
 export { Form, FormModel };

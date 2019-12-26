@@ -25,7 +25,7 @@ describe( 'Output functionality ', () => {
     } );
 } );
 
-describe( 'Output functionality inside branches that irrelevan upon load', () => {
+describe( 'Output functionality inside branches that irrelevant upon load', () => {
     const form = loadForm( 'output-irrelevant.xml' );
     form.init();
 

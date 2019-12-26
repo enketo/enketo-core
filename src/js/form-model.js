@@ -179,6 +179,9 @@ FormModel.prototype.init = function() {
             id = 'record';
             if ( this.data.instanceStr ) {
                 this.mergeXml( this.data.instanceStr );
+            } else {
+                // Only dispatch for newly created records
+                this.events.dispatchEvent( event.InstanceFirstLoad() );
             }
             // Set the two most important meta fields before any field 'dataupdate' event fires.
             this.setInstanceIdAndDeprecatedId();

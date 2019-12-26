@@ -183,12 +183,11 @@ export default {
     _setRepeatHandlers() {
         // TODO: can be optimized by smartly updating the active pages
         this.form.view.html.addEventListener( events.AddRepeat().type, event => {
-            const byCountUpdate = event.detail ? event.detail[ 1 ] : undefined;
             this._updateAllActive();
             // Don't flip if the user didn't create the repeat with the + button.
             // or if is the default first instance created during loading.
             // except if the new repeat is actually first page in the form.
-            if ( !byCountUpdate || this.$activePages[ 0 ] === event.target ) {
+            if ( event.detail.trigger === 'user' || this.$activePages[ 0 ] === event.target ) {
                 this.flipToPageContaining( $( event.target ) );
             }
         } );
