@@ -301,8 +301,6 @@ export default {
             value = [ value ];
         }
 
-        // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its
-        // original input element has changed **programmatically**.
         if ( inputs.length ) {
             const curVal = this.getVal( control );
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
@@ -340,7 +338,6 @@ export default {
                             control.value = value;
                         }
                 }
-
 
                 // don't trigger on all radiobuttons/checkboxes
                 if ( event ) {
