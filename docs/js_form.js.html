@@ -16,6 +16,7 @@
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -486,7 +487,7 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
                 const index = that.model.node( name ).getElements().indexOf( element );
                 const control = that.input.find( name, index );
                 if ( control ) {
-                    that.input.setVal( control, value );
+                    that.input.setVal( control, value, null );
                     if ( that.input.getXmlType( control ) === 'binary' &amp;&amp; value.startsWith( 'jr://' ) &amp;&amp; element.getAttribute( 'src' ) ) {
                         control.setAttribute( 'data-loaded-url', element.getAttribute( 'src' ) );
                     }
@@ -1177,12 +1178,10 @@ export { Form, FormModel };
 </footer>
 
 <script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
 <script src="scripts/linenumber.js"></script>
 
-<script src="scripts/jquery-3.1.1.min.js"></script>
-
-<script src="scripts/search.js"></script>
-
+<script src="scripts/search.js" defer></script>
 
 
 

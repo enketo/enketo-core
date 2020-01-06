@@ -16,6 +16,7 @@
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -349,8 +350,6 @@ export default {
             value = [ value ];
         }
 
-        // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its
-        // original input element has changed **programmatically**.
         if ( inputs.length ) {
             const curVal = this.getVal( control );
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
@@ -389,7 +388,6 @@ export default {
                         }
                 }
 
-
                 // don't trigger on all radiobuttons/checkboxes
                 if ( event ) {
                     inputs[ 0 ].dispatchEvent( event );
@@ -425,12 +423,10 @@ export default {
 </footer>
 
 <script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
 <script src="scripts/linenumber.js"></script>
 
-<script src="scripts/jquery-3.1.1.min.js"></script>
-
-<script src="scripts/search.js"></script>
-
+<script src="scripts/search.js" defer></script>
 
 
 

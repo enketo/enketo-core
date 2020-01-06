@@ -16,6 +16,7 @@
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -198,7 +199,7 @@ class Widget {
     set originalInputValue( value ) {
         // Avoid unnecessary change events as they could have significant negative consequences!
         // However, to add a check for this.originalInputValue !== value here would affect performance too much,
-        // so we rely on widget code to only this setter when the value changes.
+        // so we rely on widget code to only use this setter when the value changes.
         input.setVal( this.element, value, null );
         this.element.dispatchEvent( event.Change() );
     }
@@ -256,12 +257,10 @@ export default Widget;
 </footer>
 
 <script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
 <script src="scripts/linenumber.js"></script>
 
-<script src="scripts/jquery-3.1.1.min.js"></script>
-
-<script src="scripts/search.js"></script>
-
+<script src="scripts/search.js" defer></script>
 
 
 
