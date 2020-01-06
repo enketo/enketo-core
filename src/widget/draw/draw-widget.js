@@ -395,7 +395,7 @@ class DrawWidget extends Widget {
         if ( !file ) {
             return Promise.resolve( '' );
         }
-        if ( file.startsWith( 'jr://' ) && this.element.dataset.loadedUrl ) {
+        if ( typeof file === 'string' && file.startsWith( 'jr://' ) && this.element.dataset.loadedUrl ) {
             file = this.element.dataset.loadedUrl;
         }
         return fileManager.getObjectUrl( file )

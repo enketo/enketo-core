@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - No longer triggering an inputupdate event when setting default values in view.
 
+##### Fixed
+- Annotate widget broken when uploading new image.
+
 [5.11.0] - 2019-12-31
 ---------------------
 ##### Added
