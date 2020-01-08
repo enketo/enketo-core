@@ -11,7 +11,7 @@ $picker-border: 2px solid grey;
 
 .or-drawing-initialized,
 .or-signature-initialized,
-.or-annotate-initialized {
+.or-annotation-initialized {
     input[type="text"] {
         display: none;
     }
@@ -20,6 +20,14 @@ $picker-border: 2px solid grey;
 .or-signature-initialized {
     .draw-widget__body {
         padding-top: $ratio2 * 100%;
+    }
+}
+
+.or-annotation-initialized {
+
+    // make space for absolutely positioned fake-file-input
+    .draw-widget {
+        margin-top: 50px;
     }
 }
 
@@ -158,8 +166,8 @@ $picker-border: 2px solid grey;
         padding-right: $fullscreen-margin-h;
 
         .draw-widget__body {
-            width: calc(100vmin - 2 * #{$fullscreen-margin-h});
-            padding-top: calc(#{$ratio1} * 100vmin); // - 2 * #{$fullscreen-margin});
+            width: calc(100% - 2 * #{$fullscreen-margin-h});
+            padding-top: calc(#{$ratio1} * (100% - 2 * #{$fullscreen-margin-h}));
             margin: $fullscreen-margin-v auto;
 
             input[type=file] {
