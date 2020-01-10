@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.11.2] - 2020-01-10
 ---------------------
 ##### Fixed
 - Annotation and draw widget on mobile devices slightly decrease image size every time a switch between fullscreen (draw) view and full form view.

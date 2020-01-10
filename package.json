@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.11.1",
+    "version": "5.11.2",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -24,9 +24,11 @@
         "email": "martijn@enketo.org",
         "url": "https://www.linkedin.com/in/martijnvanderijdt"
     },
-    "contributors": [ {
-        "name": "Alex Anderson"
-    } ],
+    "contributors": [
+        {
+            "name": "Alex Anderson"
+        }
+    ],
     "files": [
         "src/",
         "config.js"
@@ -95,7 +97,7 @@
     "dependencies": {
         "@babel/polyfill": "^7.7.0",
         "bootstrap-datepicker": "1.9.x",
-        "core-js": "^3.6.2",
+        "core-js": "^3.6.3",
         "enketo-xpathjs": "1.9.4",
         "html5sortable": "0.9.17",
         "jquery": "^3.4.1",

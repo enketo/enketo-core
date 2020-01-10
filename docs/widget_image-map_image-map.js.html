@@ -100,15 +100,17 @@ class ImageMap extends Widget {
      * @param {object} widget
      */
     _addFunctionality( widget ) {
-        this.svg = widget.querySelector( 'svg' );
-        this.tooltip = widget.querySelector( '.image-map__ui__tooltip' );
-        if ( this.props.readonly ) {
-            this.disable();
+        if ( widget ) {
+            this.svg = widget.querySelector( 'svg' );
+            this.tooltip = widget.querySelector( '.image-map__ui__tooltip' );
+            if ( this.props.readonly ) {
+                this.disable();
+            }
+            this._setSvgClickHandler();
+            this._setChangeHandler();
+            this._setHoverHandler();
+            this._updateImage();
         }
-        this._setSvgClickHandler();
-        this._setChangeHandler();
-        this._setHoverHandler();
-        this._updateImage();
     }
 
     /**
