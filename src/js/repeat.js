@@ -366,9 +366,10 @@ export default {
         } );
     },
     fixRadioNames( element ) {
+        const random = Math.floor( ( Math.random() * 10000000 ) + 1 );
         element.querySelectorAll( 'input[type="radio"]' )
             .forEach( el => {
-                el.setAttribute( 'name', Math.floor( ( Math.random() * 10000000 ) + 1 ) );
+                el.setAttribute( 'name', random );
             } );
     },
     fixDatalistIds( element ) {
