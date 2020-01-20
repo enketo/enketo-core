@@ -33,12 +33,12 @@ export default {
             throw new Error( 'Repeats module not correctly instantiated with form property.' );
         }
         if ( this.form.view.html.classList.contains( 'pages' ) ) {
-            const allPages = [ ...this.form.view.html.querySelectorAll( ' .question, .or-appearance-field-list' ) ]
+            const allPages = [ ...this.form.view.html.querySelectorAll( '.question, .or-appearance-field-list' ) ]
                 .concat( [ ...this.form.view.html.querySelectorAll( '.or-repeat.or-appearance-field-list + .or-repeat-info' ) ] )
                 .filter( el => {
                     // something tells me there is a more efficient way to doing this
                     // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
-                    return !el.parentElement.closest( '.or-appearance-field-list' ) && !el.querySelector( '[data-for]' );
+                    return !el.parentElement.closest( '.or-appearance-field-list' ) && !( el.matches( '.question' ) && el.querySelector( '[data-for]' ) );
                 } )
                 .map( el => {
                     el.setAttribute( 'role', 'page' );
@@ -247,7 +247,8 @@ export default {
     /**
      * @param {Array<Node>} all
      */
-    _updateAllActive( all = [ ...this.form.view.html.querySelectorAll( '[role="page"]' ) ] ) {
+    _updateAllActive( all ) {
+        all = all || [ ...this.form.view.html.querySelectorAll( '[role="page"]' ) ];
         this.activePages = all.filter( el => {
             return !el.closest( '.disabled' ) &&
                 ( el.matches( '.question' ) || el.querySelector( '.question:not(.disabled)' ) ||
@@ -357,7 +358,7 @@ export default {
                 this._toggleButtons( newIndex );
                 pageEl.dispatchEvent( events.PageFlip() );
             }
-        } else {
+        } else if ( pageEl ) {
             this._setToCurrent( pageEl );
             this._focusOnFirstQuestion( pageEl );
             this._toggleButtons( newIndex );
