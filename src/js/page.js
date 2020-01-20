@@ -245,7 +245,7 @@ export default {
         return this.current;
     },
     /**
-     * @param {<Element>} all
+     * @param {Array<Node>} all
      */
     _updateAllActive( all = [ ...this.form.view.html.querySelectorAll( '[role="page"]' ) ] ) {
         this.activePages = all.filter( el => {
