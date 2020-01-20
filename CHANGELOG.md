@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[5.11.3]
+[5.11.4] - 2020-01-20
 ---------------------
 ##### Fixed
 - Radiobutton questions inside repeats allow multiple selections (regression since 5.11.0).
