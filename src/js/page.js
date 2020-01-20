@@ -7,6 +7,7 @@
 import $ from 'jquery';
 import events from './event';
 import config from 'enketo/config';
+import { getSiblingElements, closestAncestorUntil } from './dom-utils';
 import 'jquery-touchswipe';
 
 export default {
@@ -19,11 +20,11 @@ export default {
      * @type Array|jQuery
      * @default
      */
-    $current: [],
+    current: null,
     /**
      * @type jQuery
      */
-    $activePages: $(),
+    activePages: [],
     /**
      * @type function
      */
@@ -31,17 +32,20 @@ export default {
         if ( !this.form ) {
             throw new Error( 'Repeats module not correctly instantiated with form property.' );
         }
-        if ( this.form.view.$.hasClass( 'pages' ) ) {
-            const $allPages = this.form.view.$.find( ' .question:not([role="comment"]), .or-appearance-field-list' )
-                .add( '.or-repeat.or-appearance-field-list + .or-repeat-info' )
-                .filter( function() {
+        if ( this.form.view.html.classList.contains( 'pages' ) ) {
+            const allPages = [ ...this.form.view.html.querySelectorAll( ' .question, .or-appearance-field-list' ) ]
+                .concat( [ ...this.form.view.html.querySelectorAll( '.or-repeat.or-appearance-field-list + .or-repeat-info' ) ] )
+                .filter( el => {
                     // something tells me there is a more efficient way to doing this
                     // e.g. by selecting the descendants of the .or-appearance-field-list and removing those
-                    return $( this ).parent().closest( '.or-appearance-field-list' ).length === 0;
+                    return !el.parentElement.closest( '.or-appearance-field-list' ) && !el.querySelector( '[data-for]' );
                 } )
-                .attr( 'role', 'page' );
+                .map( el => {
+                    el.setAttribute( 'role', 'page' );
+                    return el;
+                } );
 
-            if ( $allPages.length > 0 || $allPages.eq( 0 ).hasClass( 'or-repeat' ) ) {
+            if ( allPages.length > 0 || allPages[ 0 ].classList.contains( 'or-repeat' ) ) {
                 const formWrapper = this.form.view.html.parentNode;
                 this.$formFooter = $( formWrapper.querySelector( '.form-footer' ) );
                 this.$btnFirst = this.$formFooter.find( '.first-page' );
@@ -49,7 +53,7 @@ export default {
                 this.$btnNext = this.$formFooter.find( '.next-page' );
                 this.$btnLast = this.$formFooter.find( '.last-page' );
                 this.$toc = $( formWrapper.querySelector( '.pages-toc__list' ) );
-                this._updateAllActive( $allPages );
+                this._updateAllActive( allPages );
                 this._updateToc();
                 this._toggleButtons( 0 );
                 this._setButtonHandlers();
@@ -149,7 +153,10 @@ export default {
                      * set form.pageNavigationBlocked to true. The edge case will be very slow devices
                      * and/or amazingly complex constraint expressions.
                      */
-                    that._getCurrent().find( ':focus' ).blur();
+                    const focused = that._getCurrent() ? that._getCurrent().querySelector( ':focus' ) : null;
+                    if ( focused ) {
+                        focused.blur();
+                    }
                 }
             }
         } );
@@ -187,14 +194,14 @@ export default {
             // Don't flip if the user didn't create the repeat with the + button.
             // or if is the default first instance created during loading.
             // except if the new repeat is actually first page in the form.
-            if ( event.detail.trigger === 'user' || this.$activePages[ 0 ] === event.target ) {
+            if ( event.detail.trigger === 'user' || this.activePages[ 0 ] === event.target ) {
                 this.flipToPageContaining( $( event.target ) );
             }
         } );
         this.form.view.html.addEventListener( events.RemoveRepeat().type, event => {
             // if the current page is removed
-            // note that that.$current will have length 1 even if it was removed from DOM!
-            if ( this.$current.closest( 'html' ).length === 0 ) {
+            // note that that.current will have length 1 even if it was removed from DOM!
+            if ( this.current && this.current.closest( 'html' ) ) {
                 this._updateAllActive();
                 let $target = $( event.target ).prev();
                 if ( $target.length === 0 ) {
@@ -216,7 +223,7 @@ export default {
             .on( 'changebranch.pagemode', () => {
                 that._updateAllActive();
                 // If the current page has become inactive (e.g. a form whose first page during load becomes irrelevant)
-                if ( that.$activePages.get().indexOf( that.$current[ 0 ] ) === -1 ) {
+                if ( that.activePages.includes( that.current ) ) {
                     that._next();
                 }
                 that._toggleButtons();
@@ -232,24 +239,22 @@ export default {
             } );
     },
     /**
-     * @return {jQuery} current page
+     * @return {Element} current page
      */
     _getCurrent() {
-        return this.$current;
+        return this.current;
     },
     /**
-     * @param {jQuery} $all
+     * @param {<Element>} all
      */
-    _updateAllActive( $all ) {
-        $all = $all || this.form.view.$.find( '[role="page"]' );
-        this.$activePages = $all.filter( function() {
-            const $this = $( this );
-            return $this.closest( '.disabled' ).length === 0 &&
-                ( $this.is( '.question' ) || $this.find( '.question:not(.disabled)' ).length > 0 ||
+    _updateAllActive( all = [ ...this.form.view.html.querySelectorAll( '[role="page"]' ) ] ) {
+        this.activePages = all.filter( el => {
+            return !el.closest( '.disabled' ) &&
+                ( el.matches( '.question' ) || el.querySelector( '.question:not(.disabled)' ) ||
                     // or-repeat-info is only considered a page by itself if it has no sibling repeats
                     // When there are siblings repeats, we use CSS trickery to show the + button underneath the last
                     // repeat.
-                    ( $this.is( '.or-repeat-info' ) && $this.siblings( '.or-repeat' ).length === 0 ) );
+                    ( el.matches( '.or-repeat-info' ) && getSiblingElements( el, '.or-repeat' ).length === 0 ) );
         } );
         this._updateToc();
     },
@@ -258,26 +263,26 @@ export default {
      * @return {jQuery} Previous page
      */
     _getPrev( currentIndex ) {
-        return this.$activePages[ currentIndex - 1 ];
+        return this.activePages[ currentIndex - 1 ];
     },
     /**
      * @param {number} currentIndex
      * @return {jQuery} Next page
      */
     _getNext( currentIndex ) {
-        return this.$activePages[ currentIndex + 1 ];
+        return this.activePages[ currentIndex + 1 ];
     },
     /**
      * @return {number} Current page index
      */
     _getCurrentIndex() {
-        return this.$activePages.index( this.$current );
+        return this.activePages.findIndex( el => el === this.current );
     },
     /**
      * Changes the `pages.next()` function to return a `Promise`, wrapping one of the following values:
      *
      * @return {Promise} wrapping {boolean} or {number}.  If a {number}, this is the index into
-     *         `$activePages` of the new current page; if a {boolean}, {false} means that validation
+     *         `activePages` of the new current page; if a {boolean}, {false} means that validation
      *         failed, and {true} that validation passed, but the page did not change.
      */
     _next() {
@@ -286,7 +291,7 @@ export default {
         let validate;
 
         currentIndex = this._getCurrentIndex();
-        validate = ( config.validatePage === false ) ? Promise.resolve( true ) : this.form.validateContent( this.$current );
+        validate = ( config.validatePage === false ) ? Promise.resolve( true ) : this.form.validateContent( $( this.current ) );
 
         return validate
             .then( valid => {
@@ -322,10 +327,14 @@ export default {
      * @param {Element} pageEl
      */
     _setToCurrent( pageEl ) {
-        const $n = $( pageEl );
-        $n.addClass( 'current hidden' );
-        this.$current = $n.removeClass( 'hidden' )
-            .parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).addClass( 'contains-current' ).end();
+        pageEl.classList.add( 'current', 'hidden' );
+        // Was just added, for animation?        
+        pageEl.classList.remove( 'hidden' );
+        const cc = closestAncestorUntil( pageEl, '.or-group, .or-group-data, .or-repeat', '.or' );
+        if ( cc ) {
+            cc.classList.add( 'contains-current' );
+        }
+        this.current = pageEl;
     },
     /**
      * Switches to a page
@@ -334,11 +343,15 @@ export default {
      * @param {number} newIndex
      */
     _flipTo( pageEl, newIndex ) {
-        // if there is a current page
-        if ( this.$current.length > 0 && this.$current.closest( 'html' ).length === 1 ) {
+        // if there is a current page (note: if current page was removed it is not null, hence the .closest('html') check)
+        if ( this.current && this.current.closest( 'html' ) ) {
             // if current page is not same as pageEl
-            if ( this.$current[ 0 ] !== pageEl ) {
-                this.$current.removeClass( 'current fade-out' ).parentsUntil( '.or', '.or-group, .or-group-data, .or-repeat' ).removeClass( 'contains-current' );
+            if ( this.current !== pageEl ) {
+                this.current.classList.remove( 'current', 'fade-out' );
+                const cc = closestAncestorUntil( this.current, '.or-group, .or-group-data, .or-repeat', '.or' );
+                if ( cc ) {
+                    cc.classList.remove( 'contains-current' );
+                }
                 this._setToCurrent( pageEl );
                 this._focusOnFirstQuestion( pageEl );
                 this._toggleButtons( newIndex );
@@ -355,13 +368,13 @@ export default {
      * Switches to first page
      */
     _flipToFirst() {
-        this._flipTo( this.$activePages[ 0 ] );
+        this._flipTo( this.activePages[ 0 ] );
     },
     /**
      * Switches to last page
      */
     _flipToLast() {
-        this._flipTo( this.$activePages.last()[ 0 ] );
+        this._flipTo( this.activePages[ this.activePages.length - 1 ] );
     },
     /**
      * Focuses on first question and scrolls it into view

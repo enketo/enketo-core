@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Radiobutton questions inside repeats allow multiple selections (regression since 5.11.0).
+- Comment questions in a form in Pages mode without field-list appearances, add an empty page.
 
 [5.11.2] - 2020-01-10
 ---------------------
