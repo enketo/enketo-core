@@ -223,7 +223,7 @@ export default {
             .on( 'changebranch.pagemode', () => {
                 that._updateAllActive();
                 // If the current page has become inactive (e.g. a form whose first page during load becomes irrelevant)
-                if ( that.activePages.includes( that.current ) ) {
+                if ( !that.activePages.includes( that.current ) ) {
                     that._next();
                 }
                 that._toggleButtons();
