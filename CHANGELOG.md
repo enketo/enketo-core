@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.11.5] - 2020-01-21
 ---------------------
 ##### Fixed
 - Forms in pages mode sometimes do not show correct first page upon load (regression since 5.11.3).

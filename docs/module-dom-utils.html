@@ -99,7 +99,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line294">line 294</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line295">line 295</a>
     </li></ul></dd>
     
 
@@ -163,7 +163,7 @@
 
     
 
-    <h4 class="name" id=".closestAncestorUntil"><span class="type-signature">(static) </span>closestAncestorUntil<span class="signature">(element, filterSelector, endSelector)</span><span class="type-signature"> &rarr; {Node}</span></h4>
+    <h4 class="name" id=".closestAncestorUntil"><span class="type-signature">(static) </span>closestAncestorUntil<span class="signature">(element, filterSelector, endSelector<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Node}</span></h4>
 
     
 
@@ -175,7 +175,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line90">line 90</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -241,7 +241,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -266,7 +270,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>Target element.</p></td>
@@ -289,7 +305,21 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>*</code>
+                
+                </td>
             
 
             <td class="description last"><p>A CSS selector.</p></td>
@@ -312,10 +342,24 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>A CSS selector.</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>A CSS selector indicating where to stop. It will include this element if matched by the filter.</p></td>
         </tr>
 
     
@@ -379,7 +423,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line116">line 116</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line117">line 117</a>
     </li></ul></dd>
     
 
@@ -521,7 +565,7 @@
 
     
 
-    <h4 class="name" id=".getAncestors"><span class="type-signature">(static) </span>getAncestors<span class="signature">(element, selector<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;Node>}</span></h4>
+    <h4 class="name" id=".getAncestors"><span class="type-signature">(static) </span>getAncestors<span class="signature">(element, filterSelector<span class="signature-attributes">opt</span>, endSelector<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;Node>}</span></h4>
 
     
 
@@ -533,7 +577,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line66">line 66</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -650,7 +694,7 @@
 
         <tr>
             
-                <td class="name"><code>selector</code></td>
+                <td class="name"><code>filterSelector</code></td>
             
 
             <td class="type">
@@ -683,6 +727,43 @@
             
 
             <td class="description last"><p>A CSS selector.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>endSelector</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>A CSS selector indicating where to stop. It will include this element if matched by the filter.</p></td>
         </tr>
 
     
@@ -734,7 +815,7 @@
 
     
 
-    <h4 class="name" id=".getSiblingElements"><span class="type-signature">(static) </span>getSiblingElements<span class="signature">(element, selector)</span><span class="type-signature"> &rarr; {Array.&lt;Node>}</span></h4>
+    <h4 class="name" id=".getSiblingElements"><span class="type-signature">(static) </span>getSiblingElements<span class="signature">(element, selector<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;Node>}</span></h4>
 
     
 
@@ -812,6 +893,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -837,6 +920,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -859,6 +950,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -915,7 +1016,7 @@
 
     
 
-    <h4 class="name" id=".getSiblingElementsAndSelf"><span class="type-signature">(static) </span>getSiblingElementsAndSelf<span class="signature">(element, selector)</span><span class="type-signature"> &rarr; {Array.&lt;Node>}</span></h4>
+    <h4 class="name" id=".getSiblingElementsAndSelf"><span class="type-signature">(static) </span>getSiblingElementsAndSelf<span class="signature">(element, selector<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;Node>}</span></h4>
 
     
 
@@ -993,6 +1094,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1018,6 +1121,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1040,6 +1151,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1358,7 +1479,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line208">line 208</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -1516,7 +1637,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line169">line 169</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -1768,7 +1889,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line146">line 146</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line147">line 147</a>
     </li></ul></dd>
     
 
@@ -1945,7 +2066,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line124">line 124</a>
+        <a href="js_dom-utils.js.html">js/dom-utils.js</a>, <a href="js_dom-utils.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -2061,7 +2182,7 @@
 
         
 <div class="param-desc">
-    <p>Whether previous sibling has same name</p>
+    <p>Whether previous sibling has same node name</p>
 </div>
 
 
