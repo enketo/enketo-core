@@ -201,7 +201,7 @@ export default {
         this.form.view.html.addEventListener( events.RemoveRepeat().type, event => {
             // if the current page is removed
             // note that that.current will have length 1 even if it was removed from DOM!
-            if ( this.current && this.current.closest( 'html' ) ) {
+            if ( this.current && !this.current.closest( 'html' ) ) {
                 this._updateAllActive();
                 let $target = $( event.target ).prev();
                 if ( $target.length === 0 ) {
