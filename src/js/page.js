@@ -196,6 +196,8 @@ export default {
             // except if the new repeat is actually the first page in the form, or contains the first page
             if ( event.detail.trigger === 'user' || this.activePages[ 0 ] === event.target || getAncestors( this.activePages[ 0 ], '.or-repeat' ).includes( event.target ) ) {
                 this.flipToPageContaining( $( event.target ) );
+            } else {
+                this._toggleButtons();
             }
         } );
         this.form.view.html.addEventListener( events.RemoveRepeat().type, event => {
@@ -396,12 +398,11 @@ export default {
     /**
      * Updates status of navigation buttons
      *
-     * @param {number} index
+     * @param {number} [index]
      */
-    _toggleButtons( index ) {
-        const i = index || this._getCurrentIndex(),
-            next = this._getNext( i ),
-            prev = this._getPrev( i );
+    _toggleButtons( index = this._getCurrentIndex() ) {
+        const next = this._getNext( index );
+        const prev = this._getPrev( index );
         this.$btnNext.add( this.$btnLast ).toggleClass( 'disabled', !next );
         this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
         this.$formFooter.toggleClass( 'end', !next );
