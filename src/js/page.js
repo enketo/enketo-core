@@ -7,7 +7,7 @@
 import $ from 'jquery';
 import events from './event';
 import config from 'enketo/config';
-import { getSiblingElements, closestAncestorUntil } from './dom-utils';
+import { getSiblingElements, getAncestors } from './dom-utils';
 import 'jquery-touchswipe';
 
 export default {
@@ -193,8 +193,8 @@ export default {
             this._updateAllActive();
             // Don't flip if the user didn't create the repeat with the + button.
             // or if is the default first instance created during loading.
-            // except if the new repeat is actually first page in the form.
-            if ( event.detail.trigger === 'user' || this.activePages[ 0 ] === event.target ) {
+            // except if the new repeat is actually the first page in the form, or contains the first page
+            if ( event.detail.trigger === 'user' || this.activePages[ 0 ] === event.target || getAncestors( this.activePages[ 0 ], '.or-repeat' ).includes( event.target ) ) {
                 this.flipToPageContaining( $( event.target ) );
             }
         } );
@@ -292,7 +292,7 @@ export default {
         let validate;
 
         currentIndex = this._getCurrentIndex();
-        validate = ( config.validatePage === false ) ? Promise.resolve( true ) : this.form.validateContent( $( this.current ) );
+        validate = ( config.validatePage === false || !this.current ) ? Promise.resolve( true ) : this.form.validateContent( $( this.current ) );
 
         return validate
             .then( valid => {
@@ -331,10 +331,8 @@ export default {
         pageEl.classList.add( 'current', 'hidden' );
         // Was just added, for animation?        
         pageEl.classList.remove( 'hidden' );
-        const cc = closestAncestorUntil( pageEl, '.or-group, .or-group-data, .or-repeat', '.or' );
-        if ( cc ) {
-            cc.classList.add( 'contains-current' );
-        }
+        getAncestors( pageEl, '.or-group, .or-group-data, .or-repeat', '.or' )
+            .forEach( el => el.classList.add( 'contains-current' ) );
         this.current = pageEl;
     },
     /**
@@ -349,10 +347,8 @@ export default {
             // if current page is not same as pageEl
             if ( this.current !== pageEl ) {
                 this.current.classList.remove( 'current', 'fade-out' );
-                const cc = closestAncestorUntil( this.current, '.or-group, .or-group-data, .or-repeat', '.or' );
-                if ( cc ) {
-                    cc.classList.remove( 'contains-current' );
-                }
+                getAncestors( this.current, '.or-group, .or-group-data, .or-repeat', '.or' )
+                    .forEach( el => el.classList.remove( 'contains-current' ) );
                 this._setToCurrent( pageEl );
                 this._focusOnFirstQuestion( pageEl );
                 this._toggleButtons( newIndex );

@@ -7,7 +7,7 @@
  *
  * @static
  * @param {Node} element - Target element.
- * @param {string} selector - A CSS selector.
+ * @param {string} [selector] - A CSS selector.
  * @return {Array<Node>} Array of sibling nodes plus target element.
  */
 function getSiblingElementsAndSelf( element, selector ) {
@@ -19,7 +19,7 @@ function getSiblingElementsAndSelf( element, selector ) {
  *
  * @static
  * @param {Node} element - Target element.
- * @param {string} selector - A CSS selector.
+ * @param {string} [selector] - A CSS selector.
  * @return {Array<Node>} Array of sibling nodes.
  */
 function getSiblingElements( element, selector ) {
@@ -60,19 +60,20 @@ function _getSiblingElements( element, selector = '*', startArray = [] ) {
  *
  * @static
  * @param {Node} element - Target element.
- * @param {string} [selector] - A CSS selector.
+ * @param {string} [filterSelector] - A CSS selector.
+ * @param {string} [endSelector] - A CSS selector indicating where to stop. It will include this element if matched by the filter.
  * @return {Array<Node>} Array of ancestors.
  */
-function getAncestors( element, selector = '*' ) {
+function getAncestors( element, filterSelector = '*', endSelector ) {
     const ancestors = [];
     let parent = element.parentElement;
 
     while ( parent ) {
-        if ( parent.matches( selector ) ) {
+        if ( parent.matches( filterSelector ) ) {
             // document order
             ancestors.unshift( parent );
         }
-        parent = parent.parentElement;
+        parent = endSelector && parent.matches( endSelector ) ? null : parent.parentElement;
     }
 
     return ancestors;
@@ -84,10 +85,10 @@ function getAncestors( element, selector = '*' ) {
  * @static
  * @param {Node} element - Target element.
  * @param {string} filterSelector - A CSS selector.
- * @param {string} endSelector - A CSS selector.
+ * @param {string} [endSelector] - A CSS selector indicating where to stop. It will include this element if matched by the filter.
  * @return {Node} Closest ancestor.
  */
-function closestAncestorUntil( element, filterSelector, endSelector ) {
+function closestAncestorUntil( element, filterSelector = '*', endSelector ) {
     let parent = element.parentElement;
     let found = null;
 
@@ -119,7 +120,7 @@ function empty( element ) {
 
 /**
  * @param {Element} el - Target node
- * @return {boolean} Whether previous sibling has same name
+ * @return {boolean} Whether previous sibling has same node name
  */
 function hasPreviousSiblingElementSameName( el ) {
     let found = false;

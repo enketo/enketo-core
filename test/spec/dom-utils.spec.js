@@ -1,10 +1,146 @@
-import { closestAncestorUntil, getXPath } from '../../src/js/dom-utils';
+import { getSiblingElements, getSiblingElementsAndSelf, getAncestors, closestAncestorUntil, getChildren, getXPath } from '../../src/js/dom-utils';
 
 function getFragment( htmlStr ) {
     return document.createRange().createContextualFragment( htmlStr );
 }
 
 describe( 'DOM utils', () => {
+
+    describe( 'getSiblingElements', () => {
+        const fragment = getFragment( `
+            <root>
+                <div id="e">
+                    <div id="d" class="or b"></div>
+                    <div id="c" class="a something disabled"></div>
+                    <div id="b" class="a"></div>
+                    <div id="a" class="b"></div>
+                </div>
+            </root>
+        ` );
+
+        const e = fragment.querySelector( '#e' );
+        const d = fragment.querySelector( '#d' );
+        const c = fragment.querySelector( '#c' );
+        const b = fragment.querySelector( '#b' );
+        const a = fragment.querySelector( '#a' );
+
+        [
+            [ getSiblingElements( a ), [ d, c, b ] ],
+            [ getSiblingElements( a, '.a' ), [ c, b ] ],
+            [ getSiblingElements( a, '.b' ), [ d ] ],
+            [ getSiblingElements( e ), [] ],
+            [ getSiblingElements( e, '.b' ), [] ]
+        ].forEach( t => {
+            it( 'works', () => {
+                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+            } );
+        } );
+    } );
+
+    describe( 'getSiblingElementsAndSelf', () => {
+        const fragment = getFragment( `
+            <root>
+                <div id="e">
+                    <div id="d" class="or b"></div>
+                    <div id="c" class="a something disabled"></div>
+                    <div id="b" class="a"></div>
+                    <div id="a" class="b"></div>
+                </div>
+            </root>
+        ` );
+
+        const e = fragment.querySelector( '#e' );
+        const d = fragment.querySelector( '#d' );
+        const c = fragment.querySelector( '#c' );
+        const b = fragment.querySelector( '#b' );
+        const a = fragment.querySelector( '#a' );
+
+        [
+            [ getSiblingElementsAndSelf( a ), [ d, c, b, a ] ],
+            [ getSiblingElementsAndSelf( a, '.a' ), [ c, b, a ] ],
+            [ getSiblingElementsAndSelf( a, '.b' ), [ d, a ] ],
+            [ getSiblingElementsAndSelf( e ), [ e ] ],
+            [ getSiblingElementsAndSelf( e, '.b' ), [ e ] ]
+        ].forEach( t => {
+            it( 'works', () => {
+                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+            } );
+        } );
+    } );
+
+    describe( 'getChildren', () => {
+        const fragment = getFragment( `
+            <root>
+                <div id="e">
+                    <div id="d" class="or b"></div>
+                    <div id="c" class="a something disabled"></div>
+                    <div id="b" class="a"></div>
+                    <div id="a" class="b"></div>
+                </div>
+            </root>
+        ` );
+
+        const root = fragment.querySelector( 'root' );
+        const e = fragment.querySelector( '#e' );
+        const d = fragment.querySelector( '#d' );
+        const c = fragment.querySelector( '#c' );
+        const b = fragment.querySelector( '#b' );
+        const a = fragment.querySelector( '#a' );
+
+        [
+            [ getChildren( e ), [ d, c, b, a ] ],
+            [ getChildren( e, '.a' ), [ c, b ] ],
+            [ getChildren( root ), [ e ] ],
+            [ getChildren( a ), [] ]
+        ].forEach( t => {
+            it( 'works', () => {
+                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+            } );
+        } );
+    } );
+
+    describe( 'getAncestors', () => {
+        const fragment = getFragment( `
+            <root>
+                <div id="e" class="disabled else">
+                    <div id="d" class="or b">
+                        <div id="c" class="a something disabled">
+                            <div id="b" class="a">
+                                <div id="a" class="b"></div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </root>
+        ` );
+
+        const root = fragment.querySelector( 'root' );
+        const e = fragment.querySelector( '#e' );
+        const d = fragment.querySelector( '#d' );
+        const c = fragment.querySelector( '#c' );
+        const b = fragment.querySelector( '#b' );
+        const a = fragment.querySelector( '#a' );
+
+        [
+            [ getAncestors( a, '.b', '.or' ), [ d ] ],
+            [ getAncestors( a, '.disabled', '.or' ), [ c ] ],
+            [ getAncestors( a, '.disabled', 'root' ), [ e, c ] ],
+            [ getAncestors( c, '.disabled' ), [ e ] ],
+            [ getAncestors( a, '.else', '.or' ), [] ],
+            [ getAncestors( a, '.else' ), [ e ] ],
+            [ getAncestors( b, '.a', '.or' ), [ c ] ],
+            [ getAncestors( b, '.b', '.or' ), [ d ] ],
+            [ getAncestors( b, '.or', '.or' ), [ d ] ],
+            [ getAncestors( a ), [ root, e, d, c, b ] ]
+
+        ].forEach( t => {
+            it( 'works', () => {
+                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+            } );
+        } );
+
+    } );
+
 
     describe( 'closestAncestorUntil', () => {
         const fragment = getFragment( `
@@ -41,7 +177,21 @@ describe( 'DOM utils', () => {
     } );
 
     describe( 'getXPath', () => {
-        const xmlStr = '<root><path><to><node/><repeat><number/></repeat><repeat><number/><number/></repeat></to></path></root>';
+        const xmlStr = `
+            <root>
+                <path>
+                    <to>
+                        <node/>
+                        <repeat>
+                            <number/>
+                        </repeat>
+                        <repeat>
+                            <number/>
+                            <number/>
+                        </repeat>
+                    </to>
+                </path>
+            </root>`;
         const xml = new DOMParser().parseFromString( xmlStr, 'text/xml' );
 
         it( 'returns /root/path/to/node without parameters', () => {
