@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Fixed
+- Text-print widget is also instantiated for comment widgets, causing an issue for a customized Enketo Express application.
+
 [5.11.5] - 2020-01-21
 ---------------------
 ##### Fixed
