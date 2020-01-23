@@ -11,9 +11,7 @@ let printStyleSheetLink;
 import dialog from 'enketo/dialog';
 
 // make sure setDpi is not called until DOM is ready
-$( document ).ready( () => {
-    setDpi();
-} );
+document.addEventListener( 'DOMContentLoaded', () => setDpi() );
 
 /**
  * @typedef PaperObj
@@ -87,9 +85,11 @@ function styleToAll() {
 function styleReset() {
     printStyleSheet.media.mediaText = 'print';
     printStyleSheetLink.setAttribute( 'media', 'print' );
-    $( '.print-height-adjusted, .print-width-adjusted, .main' )
-        .removeAttr( 'style' )
-        .removeClass( 'print-height-adjusted print-width-adjusted' );
+    document.querySelectorAll( '.print-height-adjusted, .print-width-adjusted, .main' )
+        .forEach( el => {
+            el.removeAttribute( 'style' );
+            el.classList.remove( 'print-height-adjusted', 'print-width-adjusted' );
+        } );
     $( '.back-to-screen-view' ).off( 'click' ).remove();
 }
 
@@ -108,9 +108,10 @@ function isGrid() {
  *
  * @static
  * @param {PaperObj} paper
+ * @param {number} [delay] The delay in milliseconds, before starting the job.
  * @return {Promise}
  */
-function fixGrid( paper ) {
+function fixGrid( paper, delay = 0 ) {
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
     const main = document.querySelector( '.main' );
     main.style.width = getPaperPixelWidth( paper );
@@ -118,65 +119,76 @@ function fixGrid( paper ) {
     // wait for browser repainting after width change
     return new Promise( resolve => {
         setTimeout( () => {
-            let $row;
+            let row = [];
             let rowTop;
+            const title = document.querySelector( '#form-title' );
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
-            const maxWidth = $( '#form-title' ).outerWidth() - 1;
+            const maxWidth = title ? title.offsetWidth - 1 : null;
             const els = document.querySelectorAll( '.question:not(.draft), .trigger:not(.draft)' );
 
             els.forEach( ( el, index ) => {
                 const lastElement = index === els.length - 1;
-                const $el = $( el );
-                const top = $el.offset().top;
+                const top = $( el ).offset().top;
                 rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
-                $row = $row || $el;
 
                 if ( top === rowTop ) {
-                    $row = $row.add( $el );
+                    row = row.concat( el );
                 }
 
-                if ( top > rowTop || lastElement ) {
-                    const widths = [];
-                    let cumulativeWidth = 0;
-                    let maxHeight = 0;
+                // process row, and start a new row
+                if ( top > rowTop ) {
+                    _resizeRowElements( row, maxWidth );
 
-                    $row.each( function() {
-                        const width = Number( $( this ).css( 'width' ).replace( 'px', '' ) );
-                        widths.push( width );
-                        cumulativeWidth += width;
-                    } );
-
-                    // adjusts widths if w-values don't add up to 100%
-                    if ( cumulativeWidth < maxWidth ) {
-                        const diff = maxWidth - cumulativeWidth;
-                        $row.each( function( index ) {
-                            const width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
-                            // round down to 2 decimals to avoid 100.001% totals
-                            $( this )
-                                .css( 'width', `${Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100}%` )
-                                .addClass( 'print-width-adjusted' );
-                        } );
+                    if ( lastElement && !row.includes( el ) ) {
+                        _resizeRowElements( [ el ], maxWidth );
+                    } else {
+                        // start a new row
+                        row = [ el ];
+                        rowTop = $( el ).offset().top;
                     }
 
-                    $row.each( function() {
-                        const height = $( this ).outerHeight();
-                        maxHeight = ( height > maxHeight ) ? height : maxHeight;
-                    } );
-
-                    $row.addClass( 'print-height-adjusted' ).css( 'height', `${maxHeight}px` );
-
-                    // start a new row
-                    $row = $el;
-                    rowTop = $el.offset().top;
                 } else if ( rowTop < top ) {
-                    console.error( 'unexpected question top position: ', top, 'for element:', $el, 'expected >=', rowTop );
+                    console.error( 'unexpected question top position: ', top, 'for element:', el, 'expected >=', rowTop );
                 }
             } );
 
             // In case anybody is using this event.
-            $( window ).trigger( 'printviewready' );
+            window.dispatchEvent( new CustomEvent( 'printviewready' ) );
             resolve();
-        }, 800 );
+        }, delay );
+    } );
+}
+
+function _resizeRowElements( row, maxWidth ) {
+    const widths = [];
+    let cumulativeWidth = 0;
+    let maxHeight = 0;
+
+    row.forEach( el => {
+        const width = Number( $( el ).css( 'width' ).replace( 'px', '' ) );
+        widths.push( width );
+        cumulativeWidth += width;
+    } );
+
+    // adjusts widths if w-values don't add up to 100%
+    if ( cumulativeWidth < maxWidth ) {
+        const diff = maxWidth - cumulativeWidth;
+        row.forEach( ( el, index ) => {
+            const width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
+            // round down to 2 decimals to avoid 100.001% totals
+            el.style.width = `${Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100}%`;
+            el.classList.add( 'print-width-adjusted' );
+        } );
+    }
+
+    row.forEach( el => {
+        const height = el.offsetHeight;
+        maxHeight = ( height > maxHeight ) ? height : maxHeight;
+    } );
+
+    row.forEach( el => {
+        el.classList.add( 'print-height-adjusted' );
+        el.style.height = `${maxHeight}px`;
     } );
 }
 

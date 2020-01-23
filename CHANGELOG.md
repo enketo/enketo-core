@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - Exception occurs when first repeat is created that contains a calculation if `validateContinuously` is set to `true`.
+- Rows are not always stretching correctly when printing Grid Theme forms.
 
 [5.11.6] - 2020-01-22
 ---------------------
