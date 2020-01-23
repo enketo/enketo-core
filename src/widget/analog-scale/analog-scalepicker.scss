@@ -143,7 +143,7 @@ $q-pad-right: 0px !default;
         }
 
         .range-widget {
-            flex: 1;
+            flex: 100%;
 
             // adjust default range widget 
             &__wrap {
@@ -153,11 +153,18 @@ $q-pad-right: 0px !default;
             // adjust default range widget
             &__current {
                 line-height: 38.5px;
+                min-height: 48.5px;
             }
 
             // adjust default range widget
             [type=range] {
                 top: 33.5px;
+            }
+
+            .btn-reset {
+                // center when there is no min and max scale value
+                margin-left: auto;
+                margin-right: auto;
             }
         }
 
@@ -169,15 +176,15 @@ $q-pad-right: 0px !default;
 
     }
 
-    &:not(.or-appearance-horizontal) {
+    &.or-appearance-vertical:not(.disabled) {
         @include display-flex;
 
-        @include flex(1);
+        @include flex(100%);
 
         @include flex-direction(row);
 
         .label-content {
-            @include flex(1);
+            @include flex(100%);
         }
 
         .analog-scale-widget {

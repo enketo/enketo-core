@@ -38,7 +38,7 @@
 
 .or-appearance-likert .option-wrapper {
 
-    margin-top: 20px;
+    margin-top: 10px;
 
     >label {
         @include flex-direction(column-reverse);
@@ -126,29 +126,6 @@
     }
 }
 
-.esri-geopicker {
-    border-bottom: none;
-    padding-bottom: 0;
-
-    .btn[name=geodetect] {
-        border: none;
-        background: transparent;
-        box-shadow: none;
-        font-weight: bolder;
-    }
-
-    input[type=text],
-    input[type=number],
-    textarea,
-    select {
-        border-bottom: 1px dotted #cccccc;
-    }
-
-    .geo-unit {
-        right: 12px;
-    }
-}
-
 html:not(.touch) .question .geopoint.widget {
     .search-bar {
         button.btn {
@@ -214,13 +191,6 @@ legend .btn-comment {
     legend .btn-comment {
         left: -$q-pad-side;
     }
-
-    .esri-geopicker {
-        .geo-unit {
-            right: auto;
-            left: 12px;
-        }
-    }
 }
 
 // select picker
@@ -261,4 +231,16 @@ legend .btn-comment {
 .or-appearance-vertical .range-widget__wrap,
 .or-appearance-distress .range-widget__wrap {
     margin-top: 0;
+}
+
+// text-print widget
+@media print {
+    .or-text-print-initialized {
+        .print-input-text {
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            border-bottom: none;
+        }
+    }
 }

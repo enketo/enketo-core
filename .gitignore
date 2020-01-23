@@ -1,5 +1,9 @@
 node_modules/
+npm-debug.log
 build/css/
 build/js/
 test/mock/forms.js
+test-coverage/
 temp
+.DS_Store
+Thumbs.db

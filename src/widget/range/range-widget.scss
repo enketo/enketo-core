@@ -140,6 +140,7 @@ $left: -85px;
         padding-bottom: $pad;
         vertical-align: middle;
         line-height: ($height - (3*$track-h)) / 2;
+        min-height: 10px + ($height - (3*$track-h)) / 2;
     }
 
     &__ticks {
@@ -320,6 +321,11 @@ $green: rgb(60, 182, 67);
         &__current {
             visibility: hidden;
             padding: 0 (5.5 + 0.5 * 1.5 * $ds-track-h);
+
+            &:empty:after {
+                display: block;
+                content: '-';
+            }
         }
 
         &__ticks {

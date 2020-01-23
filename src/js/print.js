@@ -1,17 +1,26 @@
 /**
  * Deals with printing
+ *
+ * @module print
  */
 
 import $ from 'jquery';
 
 let dpi, printStyleSheet;
-let $printStyleSheetLink;
+let printStyleSheetLink;
 import dialog from 'enketo/dialog';
 
 // make sure setDpi is not called until DOM is ready
 $( document ).ready( () => {
     setDpi();
 } );
+
+/**
+ * @typedef PaperObj
+ * @property {string} format
+ * @property {string} margin
+ * @property {string} orientation
+ */
 
 /**
  * Calculates the dots per inch and sets the dpi property
@@ -27,15 +36,15 @@ function setDpi() {
 }
 
 /**
- * Gets print stylesheets
- * @return {Element} [description]
+ * Gets a single print stylesheet
+ *
+ * @return {Element|null}
  */
 function getPrintStyleSheet() {
-    let sheet;
     // document.styleSheets is an Object not an Array!
     for ( const i in document.styleSheets ) {
-        if ( document.styleSheets.hasOwnProperty( i ) ) {
-            sheet = document.styleSheets[ i ];
+        if ( Object.prototype.hasOwnProperty.call( document.styleSheets, i ) ) {
+            const sheet = document.styleSheets[ i ];
             if ( sheet.media.mediaText === 'print' ) {
                 return sheet;
             }
@@ -44,43 +53,68 @@ function getPrintStyleSheet() {
     return null;
 }
 
+/**
+ * Obtains a link element with a reference to the print stylesheet.
+ *
+ * @return {Element}
+ */
 function getPrintStyleSheetLink() {
-    return $( 'link[media="print"]:eq(0)' );
+    return document.querySelector( 'link[media="print"]' );
 }
 
 /**
  * Applies the print stylesheet to the current view by changing stylesheets media property to 'all'
+ *
+ * @static
+ * @return {boolean}
  */
 function styleToAll() {
     // sometimes, setStylesheet fails upon loading
     printStyleSheet = printStyleSheet || getPrintStyleSheet();
-    $printStyleSheetLink = $printStyleSheetLink || getPrintStyleSheetLink();
+    printStyleSheetLink = printStyleSheetLink || getPrintStyleSheetLink();
     // Chrome:
     printStyleSheet.media.mediaText = 'all';
     // Firefox:
-    $printStyleSheetLink.attr( 'media', 'all' );
+    printStyleSheetLink.setAttribute( 'media', 'all' );
     return !!printStyleSheet;
 }
 
 /**
  * Resets the print stylesheet to only apply to media 'print'
+ *
+ * @static
  */
 function styleReset() {
     printStyleSheet.media.mediaText = 'print';
-    $printStyleSheetLink.attr( 'media', 'print' );
+    printStyleSheetLink.setAttribute( 'media', 'print' );
     $( '.print-height-adjusted, .print-width-adjusted, .main' )
         .removeAttr( 'style' )
         .removeClass( 'print-height-adjusted print-width-adjusted' );
     $( '.back-to-screen-view' ).off( 'click' ).remove();
 }
 
+/**
+ * Tests if the form element is set to use the Grid Theme.
+ *
+ * @static
+ * @return {boolean}
+ */
 function isGrid() {
-    return /theme-.*grid.*/.test( $( 'form.or' ).attr( 'class' ) );
+    return /theme-.*grid.*/.test( document.querySelector( 'form.or' ).getAttribute( 'class' ) );
 }
 
+/**
+ * Fixes a Grid Theme layout programmatically by imitating CSS multi-line flexbox in JavaScript.
+ *
+ * @static
+ * @param {PaperObj} paper
+ * @return {Promise}
+ */
 function fixGrid( paper ) {
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
-    $( '.main' ).css( 'width', getPaperPixelWidth( paper ) ).addClass( 'print-width-adjusted' );
+    const main = document.querySelector( '.main' );
+    main.style.width = getPaperPixelWidth( paper );
+    main.classList.add( 'print-width-adjusted' );
     // wait for browser repainting after width change
     return new Promise( resolve => {
         setTimeout( () => {
@@ -88,11 +122,11 @@ function fixGrid( paper ) {
             let rowTop;
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
             const maxWidth = $( '#form-title' ).outerWidth() - 1;
-            const $els = $( '.question, .trigger' ).not( '.draft' );
+            const els = document.querySelectorAll( '.question:not(.draft), .trigger:not(.draft)' );
 
-            $els.each( function( index ) {
-                const lastElement = index === $els.length - 1;
-                const $el = $( this );
+            els.forEach( ( el, index ) => {
+                const lastElement = index === els.length - 1;
+                const $el = $( el );
                 const top = $el.offset().top;
                 rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
                 $row = $row || $el;
@@ -146,6 +180,12 @@ function fixGrid( paper ) {
     } );
 }
 
+/**
+ * Returns a CSS width value in px (e.g. `"100px"`) for a provided paper format, orientation (`"portrait"` or `"landscape"`) and margin (as any valid CSS value).
+ *
+ * @param {PaperObj} paper
+ * @return {string}
+ */
 function getPaperPixelWidth( paper ) {
     let printWidth;
     const FORMATS = {
@@ -180,12 +220,42 @@ function getPaperPixelWidth( paper ) {
     return `${( printWidth - ( 2 * paper.margin ) ) * dpi}px`;
 }
 
+/**
+ * @static
+ */
+function openAllDetails() {
+    document.querySelectorAll( 'details.or-form-guidance.active' )
+        .forEach( details => {
+            if ( details.open ) {
+                details.dataset.previousOpen = true;
+            } else {
+                details.open = true;
+            }
+        } );
+}
+
+/**
+ * @static
+ */
+function closeAllDetails() {
+    document.querySelectorAll( 'details.or-form-guidance.active' )
+        .forEach( details => {
+            if ( details.dataset.previousOpen ) {
+                delete details.dataset.previousOpen;
+            } else {
+                details.open = false;
+            }
+        } );
+}
 
 /**
  * Prints the form after first preparing the Grid (every time it is called).
- * 
- * It's just demo function that only collects paper format and should be replaced
+ *
+ * It's just a demo function that only collects paper format and should be replaced
  * in your app with a dialog that collects a complete paper format (size, margin, orientation);
+ *
+ * @static
+ * @param {string} theme
  */
 function print( theme ) {
     if ( theme === 'grid' || ( !theme && isGrid() ) ) {
@@ -212,6 +282,4 @@ function print( theme ) {
     }
 }
 
-//window.printthis = print;
-
-export { print, fixGrid, styleToAll, styleReset, isGrid };
+export { print, fixGrid, styleToAll, styleReset, isGrid, openAllDetails, closeAllDetails };

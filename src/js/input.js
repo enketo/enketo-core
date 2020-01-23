@@ -1,48 +1,75 @@
 /**
  * Form control (input, select, textarea) helper functions.
+ *
+ * @module input
  */
 
 import types from './types';
 import events from './event';
+import { closestAncestorUntil } from './dom-utils';
 
 export default {
-    // Multiple nodes are limited to ones of the same input type (better implemented as JQuery plugin actually)
-    getWrapNodes( $inputs ) {
-        const type = this.getInputType( $inputs.eq( 0 ) );
-        return ( type === 'fieldset' ) ? $inputs : $inputs.closest( '.question, .calculation' );
+    /**
+     * @param {Element} control
+     * @return {Element} Wrap node
+     */
+    getWrapNode( control ) {
+        return control.closest( '.question, .calculation, .setvalue' );
     },
-    /** very inefficient, should actually not be used **/
-    getProps( $input ) {
-        if ( $input.length !== 1 ) {
-            return console.error( 'getProps(): no input node provided or multiple' );
-        }
+    /**
+     * @param {Array<Element>} controls
+     * @return {Array<Element>} Wrap nodes
+     */
+    getWrapNodes( controls ) {
+        const result = [];
+        controls.forEach( control => {
+            const question = this.getWrapNode( control );
+            if ( !result.includes( question ) ) {
+                result.push( question );
+            }
+        } );
+        return result;
+    },
+    /**
+     * @param {Element} control
+     * @return {object} control element properties
+     */
+    getProps( control ) {
         return {
-            path: this.getName( $input ),
-            ind: this.getIndex( $input ),
-            inputType: this.getInputType( $input ),
-            xmlType: this.getXmlType( $input ),
-            constraint: this.getConstraint( $input ),
-            calculation: this.getCalculation( $input ),
-            relevant: this.getRelevant( $input ),
-            readonly: this.getReadonly( $input ),
-            val: this.getVal( $input ),
-            required: this.getRequired( $input ),
-            enabled: this.isEnabled( $input ),
-            multiple: this.isMultiple( $input )
+            path: this.getName( control ),
+            ind: this.getIndex( control ),
+            inputType: this.getInputType( control ),
+            xmlType: this.getXmlType( control ),
+            constraint: this.getConstraint( control ),
+            calculation: this.getCalculation( control ),
+            relevant: this.getRelevant( control ),
+            readonly: this.getReadonly( control ),
+            val: this.getVal( control ),
+            required: this.getRequired( control ),
+            enabled: this.isEnabled( control ),
+            multiple: this.isMultiple( control )
         };
     },
-    getInputType( $input ) {
-        let nodeName;
-        if ( $input.length !== 1 ) {
-            return ''; //console.error('getInputType(): no input node provided or multiple');
-        }
-        nodeName = $input.prop( 'nodeName' ).toLowerCase();
+    /**
+     * @param {Element} control
+     * @return {string} input type
+     */
+    getInputType( control ) {
+        const nodeName = control.nodeName.toLowerCase();
         if ( nodeName === 'input' ) {
-            if ( $input.data( 'drawing' ) ) {
+            if ( control.dataset.drawing ) {
                 return 'drawing';
             }
-            if ( $input.attr( 'type' ).length > 0 ) {
-                return $input.attr( 'type' ).toLowerCase();
+            if ( control.type ) {
+                if ( control.type === 'text' && this.getXmlType( control ) === 'date' ) {
+                    // for browsers that don't support type='date' and return 'text' (e.g. Safari Desktop)
+                    return 'date';
+                } else if ( control.type === 'text' && this.getXmlType( control ) === 'datetime' ) {
+                    // for browsers that don't support type='datetime-local' and return 'text' (e.g. Safari and Firefox Desktop)
+                    return 'datetime-local';
+                } else {
+                    return control.type.toLowerCase();
+                }
             }
             return console.error( '<input> node has no type' );
 
@@ -56,112 +83,193 @@ export default {
             return console.error( 'unexpected input node type provided' );
         }
     },
-    getConstraint( $input ) {
-        return $input.attr( 'data-constraint' );
-    },
-    getRequired( $input ) {
-        // only return value if input is not a table heading input
-        if ( $input.parentsUntil( '.or', '.or-appearance-label' ).length === 0 ) {
-            return $input.attr( 'data-required' );
-        }
-    },
-    getRelevant( $input ) {
-        return $input.attr( 'data-relevant' );
-    },
-    getReadonly( $input ) {
-        return $input.is( '[readonly]' );
-    },
-    getCalculation( $input ) {
-        return $input.attr( 'data-calculate' );
-    },
-    getXmlType( $input ) {
-        if ( $input.length !== 1 ) {
-            return console.error( 'getXMLType(): no input node provided or multiple' );
-        }
-        return $input.attr( 'data-type-xml' );
-    },
-    getName( $input ) {
-        let name;
-        if ( $input.length !== 1 ) {
-            return console.error( 'getName(): no input node provided or multiple' );
-        }
-        name = $input.attr( 'data-name' ) || $input.attr( 'name' );
-        return name || console.error( 'input node has no name' );
+    /**
+     * @param {Element} control
+     * @return {string} element constraint
+     */
+    getConstraint( control ) {
+        return control.dataset.constraint;
     },
     /**
-     * Used to retrieve the index of a question amidst all questions with the same name.
-     * The index that can be used to find the corresponding node in the model.
-     * NOTE: this function should be used sparingly, as it is CPU intensive!
+     * @param {Element} control
+     * @return {string|undefined} element required
      */
-    getIndex( $input ) {
-        if ( $input.length !== 1 ) {
-            return console.error( 'getIndex(): no input node provided or multiple' );
+    getRequired( control ) {
+        // only return value if input is not a table heading input
+        if ( !closestAncestorUntil( control, '.or-appearance-label', '.or' ) ) {
+            return control.dataset.required;
         }
-        return this.form.repeats.getIndex( $input[ 0 ].closest( '.or-repeat' ) );
     },
-    isMultiple( $input ) {
-        return ( this.getInputType( $input ) === 'checkbox' || $input.attr( 'multiple' ) !== undefined ) ? true : false;
+    /**
+     * @param {Element} control
+     * @return {string} element relevant
+     */
+    getRelevant( control ) {
+        return control.dataset.relevant;
     },
-    isEnabled( $input ) {
-        return !( $input.prop( 'disabled' ) || $input.parentsUntil( '.or', '.disabled' ).length > 0 );
+    /**
+     * @param {Element} control
+     * @return {boolean} whether element is read only
+     */
+    getReadonly( control ) {
+        return control.matches( '[readonly]' );
     },
-    getVal( $input ) {
-        let inputType;
-        const values = [];
-        let name;
+    /**
+     * @param {Element} control
+     * @return {string} element calculate
+     */
+    getCalculation( control ) {
+        return control.dataset.calculate;
+    },
+    /**
+     * @param {Element} control
+     * @return {string} element XML type
+     */
+    getXmlType( control ) {
+        return control.dataset.typeXml.toLowerCase() || 'string';
+    },
+    /**
+     * @param {Element} control
+     * @return {string} element name
+     */
+    getName( control ) {
+        const name = control.dataset.name || control.getAttribute( 'name' );
+        if ( !name ) {
+            console.error( 'input node has no name' );
+        }
+        return name;
+    },
+    /**
+     * @param {Element} control
+     * @return {string}
+     */
+    getIndex( control ) {
+        return this.form.repeats.getIndex( control.closest( '.or-repeat' ) );
+    },
+    /**
+     * @param {Element} control
+     * @return {boolean} whether element is multiple
+     */
+    isMultiple( control ) {
+        return this.getInputType( control ) === 'checkbox' || control.multiple;
+    },
+    /**
+     * @param {Element} control
+     * @return {boolean} whether element is enabled
+     */
+    isEnabled( control ) {
+        return !( control.disabled || closestAncestorUntil( control, '.disabled', '.or' ) );
+    },
+    /**
+     * @param {Element} control
+     * @return {string} element value
+     */
+    getVal( control ) {
+        let value = '';
+        const inputType = this.getInputType( control );
+        const name = this.getName( control );
 
-        if ( $input.length !== 1 ) {
-            return console.error( 'getVal(): no inputNode provided or multiple' );
+        switch ( inputType ) {
+            case 'radio':
+                {
+                    const checked = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"]:checked` );
+                    value = checked ? checked.value : '';
+                    break;
+                }
+            case 'checkbox':
+                {
+                    value = [ ...this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]:checked` ) ].map( input => input.value );
+                    break;
+                }
+            case 'select':
+                {
+                    if ( this.isMultiple( control ) ) {
+                        value = [ ...control.querySelectorAll( 'option:checked' ) ].map( option => option.value );
+                    } else {
+                        const selected = control.querySelector( 'option:checked' );
+                        value = selected ? selected.value : '';
+                    }
+                    break;
+                }
+            case 'datetime-local':
+                {
+                    if ( control.value ) {
+                        const dt = control.value.split( 'T' )[ 1 ].length === 5 ? control.value + ':00' : control.value;
+                        // Add local timezone offset
+                        // do not use .toISOLocalString() because new Date("2019-10-17T16:34:23.048") works differently in iOS/Safari
+                        // Take care to get DST offsets right for the date value.
+                        value = dt + new Date( dt ).getTimezoneOffsetAsTime();
+                    }
+                    break;
+                }
+            default:
+                {
+                    value = control.value;
+                }
         }
-        inputType = this.getInputType( $input );
-        name = this.getName( $input );
 
-        if ( inputType === 'radio' ) {
-            return this.getWrapNodes( $input ).find( 'input:checked' ).val() || '';
-        }
-        // checkbox values bug in jQuery as (node.val() should work)
-        if ( inputType === 'checkbox' ) {
-            this.getWrapNodes( $input ).find( `input[name="${name}"]:checked` ).each( function() {
-                values.push( this.value );
-            } );
-            return values;
-        }
-        return $input.val() || '';
+        return value || '';
     },
+    /**
+     * @param {string} name
+     * @param {number} index
+     * @return {Element} found element
+     */
     find( name, index ) {
         let attr = 'name';
-        if ( this.getInputType( this.form.view.$.find( `[data-name="${name}"]:not(.ignore)` ).eq( 0 ) ) === 'radio' ) {
+        if ( this.form.view.html.querySelector( `input[type="radio"][data-name="${name}"]:not(.ignore)` ) ) {
             attr = 'data-name';
         }
-        return this.getWrapNodes( this.form.view.$.find( `[${attr}="${name}"]` ) ).eq( index ).find( `[${attr}="${name}"]:not(.ignore)` ).eq( 0 );
+        const question = this.getWrapNodes( this.form.view.html.querySelectorAll( `[${attr}="${name}"]` ) )[ index ];
+
+        return question ? question.querySelector( `[${attr}="${name}"]:not(.ignore)` ) : null;
     },
-    setVal( $input, value, event = events.InputUpdate() ) {
-        let $inputs;
-        const type = this.getInputType( $input );
-        const $question = this.getWrapNodes( $input );
-        const name = this.getName( $input );
+    /**
+     * @param {Element} control
+     * @param {*} value
+     * @param {Event} [event]
+     * @return {Element}
+     */
+    setVal( control, value, event = events.InputUpdate() ) {
+        let inputs;
+        const type = this.getInputType( control );
+        const xmlType = this.getXmlType( control );
+        const question = this.getWrapNode( control );
+        const name = this.getName( control );
 
         if ( type === 'radio' ) {
-            // TODO: should this revert to name if data-name is not present. Is data-name always present on radiobuttons?
-            $inputs = $question.find( `[data-name="${name}"]:not(.ignore)` );
+            // data-name is always present on radiobuttons
+            inputs = question.querySelectorAll( `[data-name="${name}"]:not(.ignore)` );
         } else {
             // why not use this.getIndex?
-            $inputs = $question.find( `[name="${name}"]:not(.ignore)` );
+            inputs = question.querySelectorAll( `[name="${name}"]:not(.ignore)` );
 
             if ( type === 'file' ) {
                 // value of file input can be reset to empty but not to a non-empty value
                 if ( value ) {
-                    $input.attr( 'data-loaded-file-name', value );
+                    control.setAttribute( 'data-loaded-file-name', value );
                     // console.error('Cannot set value of file input field (value: '+value+'). If trying to load '+
                     //  'this record for editing this file input field will remain unchanged.');
                     return false;
                 }
             }
 
-            if ( type === 'date' || type === 'datetime' ) {
-                // convert current value (loaded from instance) to a value that a native datepicker understands
-                // TODO: test for IE, FF, Safari when those browsers start including native datepickers
-                value = types[ type ].convert( value );
+            if ( xmlType === 'date' || xmlType === 'datetime' ) {
+                if ( value ) {
+                    // convert current value (loaded from instance) to a value that a native datepicker understands
+                    // TODO: test for IE, FF, Safari when those browsers start including native datepickers
+                    value = types[ xmlType.toLowerCase() ].convert( value );
+
+                    if ( xmlType === 'datetime' ) {
+                        // convert to local time zone
+                        value = new Date( value ).toISOLocalString();
+                        // chop off local timezone offset to display properly in (native datetime-local) widget
+                        const parts = value.split( 'T' );
+                        const date = parts[ 0 ];
+                        const time = ( parts && parts[ 1 ] ) ? parts[ 1 ].split( /[Z\-+]/ )[ 0 ] : '00:00';
+                        value = `${date}T${time}`;
+                    }
+                }
             }
 
             if ( type === 'time' ) {
@@ -186,29 +294,65 @@ export default {
             }
         }
 
-        if ( this.isMultiple( $input ) === true ) {
+        if ( this.isMultiple( control ) === true ) {
             // TODO: It's weird that setVal does not take an array value but getVal returns an array value for multiple selects!
             value = value.split( ' ' );
         } else if ( type === 'radio' ) {
             value = [ value ];
         }
 
-        // Trigger an 'inputupdate' event which can be used in widgets to update the widget when the value of its 
-        // original input element has changed **programmatically**.
-        if ( $inputs.length ) {
-            const curVal = this.getVal( $input );
+        if ( inputs.length ) {
+            const curVal = this.getVal( control );
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
-                $inputs.val( value );
+                switch ( type ) {
+                    case 'radio':
+                        {
+                            const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
+                            if ( input ) {
+                                input.checked = true;
+                            }
+                            break;
+                        }
+                    case 'checkbox':
+                        {
+                            this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]` )
+                            .forEach( input => input.checked = value.includes( input.value ) );
+                            break;
+                        }
+                    case 'select':
+                        {
+                            if ( this.isMultiple( control ) ) {
+                                control.querySelectorAll( 'option' ).forEach( option => option.selected = value.includes( option.value ) );
+                            } else {
+                                const option = control.querySelector( `option[value="${value}"]` );
+                                if ( option ) {
+                                    option.selected = true;
+                                } else {
+                                    control.querySelectorAll( 'option' ).forEach( option => option.selected = false );
+                                }
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            control.value = value;
+                        }
+                }
+
                 // don't trigger on all radiobuttons/checkboxes
                 if ( event ) {
-                    $inputs[ 0 ].dispatchEvent( event );
+                    inputs[ 0 ].dispatchEvent( event );
                 }
             }
         }
 
-        return $inputs[ 0 ];
+        return inputs[ 0 ];
     },
-    validate( $input ) {
-        return this.form.validateInput( $input );
+    /**
+     * @param {Element} control
+     * @return {Promise<undefined|ValidateInputResolution>}
+     */
+    validate( control ) {
+        return this.form.validateInput( control );
     }
 };

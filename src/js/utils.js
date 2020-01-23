@@ -1,12 +1,18 @@
-/* global ArrayBuffer, Uint8Array */
+/**
+ * Various utilities.
+ *
+ * @module utils
+ */
+
 let cookies;
 
 /**
  * Parses an Expression to extract all function calls and theirs argument arrays.
  *
- * @param  {String} expr The expression to search
- * @param  {String} func The function name to search for
- * @return {<String, <String*>>} The result array, where each result is an array containing the function call and array of arguments.
+ * @static
+ * @param {string} expr - The expression to search
+ * @param {string} func - The function name to search for
+ * @return {Array<Array<string, any>>} The result array, where each result is an array containing the function call and array of arguments.
  */
 function parseFunctionFromExpression( expr, func ) {
     let index;
@@ -51,6 +57,11 @@ function parseFunctionFromExpression( expr, func ) {
     return results;
 }
 
+/**
+ * @static
+ * @param {string} str
+ * @return {string}
+ */
 function stripQuotes( str ) {
     if ( /^".+"$/.test( str ) || /^'.+'$/.test( str ) ) {
         return str.substring( 1, str.length - 1 );
@@ -58,10 +69,16 @@ function stripQuotes( str ) {
     return str;
 }
 
-// Because iOS gives any camera-provided file the same filename, we need to a 
+// Because iOS gives any camera-provided file the same filename, we need to a
 // unique-ified filename.
-// 
+//
 // See https://github.com/kobotoolbox/enketo-express/issues/374
+/**
+ * @static
+ * @param {object} file
+ * @param {string} postfix
+ * @return {string}
+ */
 function getFilename( file, postfix ) {
     let filenameParts;
     if ( typeof file === 'object' && file !== null && file.name ) {
@@ -78,9 +95,11 @@ function getFilename( file, postfix ) {
 }
 
 /**
- * Converts NodeLists or DOMtokenLists to an array
- * @param  {[type]} list [description]
- * @return {[type]}      [description]
+ * Converts NodeLists or DOMtokenLists to an array.
+ *
+ * @static
+ * @param {NodeList|DOMTokenList} list
+ * @return {Array}
  */
 function toArray( list ) {
     const array = [];
@@ -91,10 +110,20 @@ function toArray( list ) {
     return array;
 }
 
+/**
+ * @static
+ * @param {*} n
+ * @return {boolean}
+ */
 function isNumber( n ) {
     return !isNaN( parseFloat( n ) ) && isFinite( n );
 }
 
+/**
+ * @static
+ * @param {string} name
+ * @return {string}
+ */
 function readCookie( name ) {
     let c;
     let C;
@@ -122,6 +151,11 @@ function readCookie( name ) {
     return cookies[ name ];
 }
 
+/**
+ * @static
+ * @param {string} dataURI
+ * @return {Blob}
+ */
 function dataUriToBlobSync( dataURI ) {
     let byteString;
     let mimeString;
@@ -148,6 +182,11 @@ function dataUriToBlobSync( dataURI ) {
     } );
 }
 
+/**
+ * @static
+ * @param {Event} event
+ * @return {string|null}
+ */
 function getPasteData( event ) {
     const clipboardData = event.originalEvent.clipboardData || window.clipboardData; // modern || IE11
     return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
@@ -155,10 +194,11 @@ function getPasteData( event ) {
 
 /**
  * Update a HTML anchor to serve as a download or reset it if an empty objectUrl is provided.
- * 
- * @param {HTMLElement} anchor the anchor element
- * @param {*} objectUrl the objectUrl to download
- * @param {*} fileName  the filename of the file
+ *
+ * @static
+ * @param {HTMLElement} anchor - The anchor element
+ * @param {string} objectUrl - The objectUrl to download
+ * @param {string} fileName - The filename of the file
  */
 function updateDownloadLink( anchor, objectUrl, fileName ) {
     if ( window.updateDownloadLinkIe11 ) {
@@ -166,6 +206,49 @@ function updateDownloadLink( anchor, objectUrl, fileName ) {
     }
     anchor.setAttribute( 'href', objectUrl || '' );
     anchor.setAttribute( 'download', fileName || '' );
+}
+
+/**
+ * @static
+ * @param {File} file - Image file to be resized
+ * @param {number} maxPixels - Maximum pixels of resized image
+ * @return {Promise<Blob>} Promise of resized image blob
+ */
+function resizeImage( file, maxPixels ) {
+    return new Promise( ( resolve, reject ) => {
+        let image = new Image();
+        image.src = URL.createObjectURL( file );
+        image.onload = () => {
+            let width = image.width;
+            let height = image.height;
+
+            if ( width <= maxPixels && height <= maxPixels ) {
+                resolve( file );
+            }
+
+            let newWidth;
+            let newHeight;
+
+            if ( width > height ) {
+                newHeight = height * ( maxPixels / width );
+                newWidth = maxPixels;
+            } else {
+                newWidth = width * ( maxPixels / height );
+                newHeight = maxPixels;
+            }
+
+            let canvas = document.createElement( 'canvas' );
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            let context = canvas.getContext( '2d' );
+
+            context.drawImage( image, 0, 0, newWidth, newHeight );
+
+            canvas.toBlob( resolve, file.type );
+        };
+        image.onerror = reject;
+    } );
 }
 
 export {
@@ -177,5 +260,6 @@ export {
     readCookie,
     dataUriToBlobSync,
     getPasteData,
-    updateDownloadLink
+    updateDownloadLink,
+    resizeImage
 };

@@ -2,10 +2,15 @@ import Widget from '../../js/widget';
 import { isNumber } from '../../js/utils';
 import events from '../../js/event';
 
+/**
+ * @extends Widget
+ */
 class RangeWidget extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
-        return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale) > input[type="number"][min][max][step]';
+        return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale):not(.or-appearance-rating) > input[type="number"][min][max][step]';
     }
 
     _init() {
@@ -31,14 +36,22 @@ class RangeWidget extends Widget {
         }
 
         this.range.addEventListener( 'change', () => {
-            this.current.textContent = this.value;
-            this.originalInputValue = this.value;
-            this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
+            // Avoid unnecessary change events on original input as these can have big negative consequences
+            // https://github.com/OpenClinica/enketo-express-oc/issues/209
+            if ( this.originalInputValue !== this.value ) {
+                this.current.textContent = this.value;
+                this.originalInputValue = this.value;
+                this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
+            }
         } );
 
-        // Do not use change handler for this because this doesn't if the user clicks on the internal DEFAULT
+        // Do not use change handler for this because this doesn't fire if the user clicks on the internal DEFAULT
         // value of the range input.
         this.widget.querySelector( 'input.empty' ).addEventListener( 'click', () => {
+            this.range.classList.remove( 'empty' );
+            this.range.dispatchEvent( events.Change() );
+        } );
+        this.widget.querySelector( 'input.empty' ).addEventListener( 'touchstart', () => {
             this.range.classList.remove( 'empty' );
             this.range.dispatchEvent( events.Change() );
         } );
@@ -56,7 +69,7 @@ class RangeWidget extends Widget {
         }
         ticks = ticks / divisor;
 
-        // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little 
+        // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little
         // issues seemingly related to rounding or browser sloppiness. This far is less elegant but nice and robust:
         this.widget.querySelector( '.range-widget__ticks' )
             .append( document.createRange().createContextualFragment( new Array( ticks ).fill( '<span></span>' ).join( '' ) ) );
@@ -64,6 +77,8 @@ class RangeWidget extends Widget {
 
     /**
      * This is separated so it can be extended (in the analog-scale widget)
+     *
+     * @return {string} HTML string
      */
     _getHtmlStr() {
         const html =
@@ -88,12 +103,19 @@ class RangeWidget extends Widget {
         return html;
     }
 
+    /**
+     * @param {number} completeness
+     */
     _updateMercury( completeness ) {
         const trackHeight = this.widget.querySelector( '.range-widget__ticks' ).clientHeight;
         const bulbHeight = this.widget.querySelector( '.range-widget__bulb' ).clientHeight;
         this.widget.querySelector( '.range-widget__bulb__mercury' ).style.height = `${( completeness * trackHeight ) + ( 0.5 * bulbHeight )}px`;
     }
 
+    /**
+     * @param {object} props
+     * @return {string} HTML string
+     */
     _stepsBetweenHtmlStr( props ) {
         let html = '';
         if ( props.distress ) {
@@ -107,23 +129,35 @@ class RangeWidget extends Widget {
         return html;
     }
 
+    /**
+     * Resets widget
+     */
     _reset() {
+        // Update UI stuff before the actual value to avoid issues in custom clients that may want to programmatically undo a reset ("strict required" in OpenClinica)
+        // as that is subtly different from updating a value with a calculation since this.originalInputValue=  sets the evaluation cascade in motion.
+        this.current.textContent = '';
+        this._updateMercury( 0 );
         this.value = '';
         this.originalInputValue = '';
-        this.current.textContent = '-';
-        this._updateMercury( -1 );
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = true );
     }
 
+    /**
+     * Enables widget
+     */
     enable() {
-        if ( this.props && !this.props.readonly ) {
-            this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
-        }
+        this.widget.querySelectorAll( 'input, button' ).forEach( el => el.disabled = false );
     }
 
+    /**
+     * Updates widget
+     */
     update() {
         const value = this.element.value;
 
@@ -135,6 +169,9 @@ class RangeWidget extends Widget {
         }
     }
 
+    /**
+     * @type object
+     */
     get props() {
         const props = this._props;
         const min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
@@ -153,6 +190,9 @@ class RangeWidget extends Widget {
         return props;
     }
 
+    /**
+     * @type string
+     */
     get value() {
         return this.range.classList.contains( 'empty' ) ? '' : this.range.value;
     }

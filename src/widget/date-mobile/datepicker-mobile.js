@@ -3,35 +3,44 @@ import support from '../../js/support';
 import { elementDataStore as data } from '../../js/dom-utils';
 
 /**
- * For now, the whole purpose of this widget is to show a native month picker on 
+ * For now, the whole purpose of this widget is to show a native month picker on
  * MOBILE devices with browsers that support it.
+ *
+ * @extends Widget
  */
 class DatepickerMobile extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.or-appearance-month-year input[type="date"]';
     }
 
+    /**
+     * @param {Element} element
+     * @return {boolean}
+     */
     static condition( element ) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if non-mobile device is used.
-        return !data.has( element, 'DatepickerExtended' ) && support.touch;
+        return !data.has( element, 'DatepickerExtended' ) && support.touch && support.inputTypes.month;
     }
 
     _init() {
-        if ( support.inputTypes.month ) {
-            this.element.classList.add( 'hide' );
-            const fragment = document.createRange().createContextualFragment( '<input class="ignore widget datepicker-mobile" type="month"/>' );
-            this.element.after( fragment );
-            this.widgetInput = this.question.querySelector( 'input.widget' );
-            // set default value
-            this.value = this.originalInputValue;
+        this.element.classList.add( 'hide' );
+        const fragment = document.createRange().createContextualFragment( '<input class="ignore widget datepicker-mobile" type="month"/>' );
+        this.element.after( fragment );
+        this.widgetInput = this.question.querySelector( 'input.widget' );
+        // set default value
+        this.value = this.originalInputValue;
 
-            this.widgetInput.addEventListener( 'change', () => {
-                this.originalInputValue = this.value;
-            } );
-        }
+        this.widgetInput.addEventListener( 'change', () => {
+            this.originalInputValue = this.value;
+        } );
     }
 
+    /**
+     * @type string
+     */
     get value() {
         return this.widgetInput.value ? `${this.widgetInput.value}-01` : '';
     }
@@ -41,6 +50,9 @@ class DatepickerMobile extends Widget {
         this.widgetInput.value = toSet;
     }
 
+    /**
+     * Updates value
+     */
     update() {
         this.value = this.originalInputValue;
     }

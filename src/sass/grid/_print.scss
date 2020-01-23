@@ -3,6 +3,7 @@
 $printBaseFontSize: 10px;
 
 .or {
+
     input:not([type="radio"]):not([type="checkbox"]),
     select,
     textarea {
@@ -29,6 +30,7 @@ $printBaseFontSize: 10px;
 }
 
 .or.print-relevant-only {
+
     // targeting is getting a little weird here
     .question.or-branch.disabled,
     .or-branch.disabled {
@@ -37,7 +39,8 @@ $printBaseFontSize: 10px;
 }
 
 .question {
-    &.non-select::after,
+
+    &.non-select:not(.or-analog-scale-initialized)::after,
     &.or-appearance-search:after,
     &.or-appearance-autocomplete:after {
         content: ' ';
@@ -55,14 +58,17 @@ $printBaseFontSize: 10px;
     }
 
     input {
+
         &[type=date],
         &[type=time],
-        &[type=datetime] {
+        &[type=datetime-local] {
             opacity: 0.7;
             display: block !important;
             visibility: hidden;
         }
-    } // just hiding file-feedback so it provides a bit of empty space in the printout
+    }
+
+    // just hiding file-feedback so it provides a bit of empty space in the printout
     .file-feedback {
         visibility: hidden;
         display: block !important;
@@ -99,22 +105,13 @@ $printBaseFontSize: 10px;
 }
 
 .geopicker.widget {
+
     .geo-inputs label.geo:nth-of-type(3),
     .geo-inputs label.geo:nth-of-type(4) {
         min-height: 0;
 
         input {
             float: none;
-        }
-    }
-}
-
-.or-appearance-likert .option-wrapper {
-    // Not clear to me why all these likert fixes are necessary
-    >label {
-        input[type=radio],
-        input[type=checkbox] {
-            margin-top: -40px;
         }
     }
 }
@@ -128,6 +125,7 @@ $printBaseFontSize: 10px;
     }
 
     ul {
+
         li,
         li.active {
             border: none;
@@ -173,6 +171,7 @@ $printBaseFontSize: 10px;
     @include display-inline-flex;
 
     vertical-align: top; //padding: 5px 5px 12px 5px;
+
     // unfortunately we cannot target actual page-breaks to provide a top-border
     &:not(.invalid-required):not(.invalid-constraint) {
         border-top: $grid-border;
@@ -194,6 +193,7 @@ screen and (min-width: 700px) {
                 @if $total>=$default-grid-width {
                     width: 100%;
                 }
+
                 @else {
                     width: $total / 4 * 100%;
                 }

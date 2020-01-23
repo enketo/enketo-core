@@ -1,22 +1,43 @@
 /**
+ * @module dom-utils
+ */
+
+/**
  * Gets siblings that match selector and self _in DOM order_.
- * @param {} element 
- * @param {*} selector 
+ *
+ * @static
+ * @param {Node} element - Target element.
+ * @param {string} [selector] - A CSS selector.
+ * @return {Array<Node>} Array of sibling nodes plus target element.
  */
 function getSiblingElementsAndSelf( element, selector ) {
     return _getSiblingElements( element, selector, [ element ] );
 }
 
+/**
+ * Gets siblings that match selector _in DOM order_.
+ *
+ * @static
+ * @param {Node} element - Target element.
+ * @param {string} [selector] - A CSS selector.
+ * @return {Array<Node>} Array of sibling nodes.
+ */
 function getSiblingElements( element, selector ) {
     return _getSiblingElements( element, selector );
 }
 
-function _getSiblingElements( element, selector, startArray = [] ) {
+/**
+ * Gets siblings that match selector _in DOM order_.
+ *
+ * @param {Node} element - Target element.
+ * @param {string} [selector] - A CSS selector.
+ * @param {Array<Node>} [startArray] - Array of nodes to start with.
+ * @return {Array<Node>} Array of sibling nodes.
+ */
+function _getSiblingElements( element, selector = '*', startArray = [] ) {
     const siblings = startArray;
     let prev = element.previousElementSibling;
     let next = element.nextElementSibling;
-
-    selector = typeof selector === 'undefined' ? '*' : selector;
 
     while ( prev ) {
         if ( prev.matches( selector ) ) {
@@ -34,33 +55,229 @@ function _getSiblingElements( element, selector, startArray = [] ) {
     return siblings;
 }
 
+/**
+ * Gets ancestors that match selector _in DOM order_.
+ *
+ * @static
+ * @param {Node} element - Target element.
+ * @param {string} [filterSelector] - A CSS selector.
+ * @param {string} [endSelector] - A CSS selector indicating where to stop. It will include this element if matched by the filter.
+ * @return {Array<Node>} Array of ancestors.
+ */
+function getAncestors( element, filterSelector = '*', endSelector ) {
+    const ancestors = [];
+    let parent = element.parentElement;
+
+    while ( parent ) {
+        if ( parent.matches( filterSelector ) ) {
+            // document order
+            ancestors.unshift( parent );
+        }
+        parent = endSelector && parent.matches( endSelector ) ? null : parent.parentElement;
+    }
+
+    return ancestors;
+}
+
+/**
+ * Gets closest ancestor that match selector until the end selector.
+ *
+ * @static
+ * @param {Node} element - Target element.
+ * @param {string} filterSelector - A CSS selector.
+ * @param {string} [endSelector] - A CSS selector indicating where to stop. It will include this element if matched by the filter.
+ * @return {Node} Closest ancestor.
+ */
+function closestAncestorUntil( element, filterSelector = '*', endSelector ) {
+    let parent = element.parentElement;
+    let found = null;
+
+    while ( parent && !found ) {
+        if ( parent.matches( filterSelector ) ) {
+            found = parent;
+        }
+        parent = endSelector && parent.matches( endSelector ) ? null : parent.parentElement;
+    }
+
+    return found;
+}
+
+function getChildren( element, selector = '*' ) {
+    return [ ...element.children ]
+        .filter( el => el.matches( selector ) );
+}
+
+/**
+ * Removes all children elements.
+ *
+ * @static
+ * @param {Node} element - Target element.
+ * @return {undefined}
+ */
 function empty( element ) {
     [ ...element.children ].forEach( el => el.remove() );
 }
 
-/** 
+/**
+ * @param {Element} el - Target node
+ * @return {boolean} Whether previous sibling has same node name
+ */
+function hasPreviousSiblingElementSameName( el ) {
+    let found = false;
+    const nodeName = el.nodeName;
+    el = el.previousSibling;
+
+    while ( el ) {
+        // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+        // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
+        if ( el.nodeName && el.nodeName === nodeName ) {
+            found = true;
+            break;
+        }
+        el = el.previousSibling;
+    }
+    return found;
+}
+
+/**
+ * @param {Element} node - Target node
+ * @param {string} content - Text content to look for
+ * @return {boolean} Whether previous comment sibling has given text content
+ */
+function hasPreviousCommentSiblingWithContent( node, content ) {
+    let found = false;
+    node = node.previousSibling;
+
+    while ( node ) {
+        if ( node.nodeType === Node.COMMENT_NODE && node.textContent === content ) {
+            found = true;
+            break;
+        }
+        node = node.previousSibling;
+    }
+    return found;
+}
+
+
+/**
+ * Creates an XPath from a node
+ *
+ * @param {Element} node - XML node
+ * @param {string} [rootNodeName] - Defaults to #document
+ * @param {boolean} [includePosition] - Whether or not to include the positions `/path/to/repeat[2]/node`
+ * @return {string} XPath
+ */
+function getXPath( node, rootNodeName = '#document', includePosition = false ) {
+    let index;
+    const steps = [];
+    let position = '';
+    if ( !node || node.nodeType !== 1 ) {
+        return null;
+    }
+    const nodeName = node.nodeName;
+    let parent = node.parentElement;
+    let parentName = parent ? parent.nodeName : null;
+
+    if ( includePosition ) {
+        index = getRepeatIndex( node );
+        if ( index > 0 ) {
+            position = `[${index + 1}]`;
+        }
+    }
+
+    steps.push( nodeName + position );
+
+    while ( parent && parentName !== rootNodeName && parentName !== '#document' ) {
+        if ( includePosition ) {
+            index = getRepeatIndex( parent );
+            position = ( index > 0 ) ? `[${index + 1}]` : '';
+        }
+        steps.push( parentName + position );
+        parent = parent.parentElement;
+        parentName = parent ? parent.nodeName : null;
+    }
+
+    return `/${steps.reverse().join( '/' )}`;
+}
+
+/**
+ * Obtains the index of a repeat instance within its own series.
+ *
+ * @param {Element} node - XML node
+ * @return {number} index
+ */
+function getRepeatIndex( node ) {
+    let index = 0;
+    const nodeName = node.nodeName;
+    let prevSibling = node.previousSibling;
+
+    while ( prevSibling ) {
+        // ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+        if ( prevSibling.nodeName && prevSibling.nodeName === nodeName ) {
+            index++;
+        }
+        prevSibling = prevSibling.previousSibling;
+    }
+
+    return index;
+}
+
+/**
  * Adapted from https://stackoverflow.com/a/46522991/3071529
- * 
+ *
  * A storage solution aimed at replacing jQuerys data function.
  * Implementation Note: Elements are stored in a (WeakMap)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap].
  * This makes sure the data is garbage collected when the node is removed.
+ *
+ * @namespace
  */
 const elementDataStore = {
+    /**
+     * @type WeakMap
+     */
     _storage: new WeakMap(),
+    /**
+     * Adds object to element storage. Ensures that element storage exist.
+     *
+     * @param {Node} element - Target element.
+     * @param {string} key - Name of the stored data.
+     * @param {object} obj - Stored data.
+     */
     put: function( element, key, obj ) {
         if ( !this._storage.has( element ) ) {
             this._storage.set( element, new Map() );
         }
         this._storage.get( element ).set( key, obj );
     },
+    /**
+     * Return object from element storage.
+     *
+     * @param {Node} element - Target element.
+     * @param {string} key - Name of the stored data.
+     * @return {object} Stored data object.
+     */
     get: function( element, key ) {
         const item = this._storage.get( element );
         return item ? item.get( key ) : item;
     },
+    /**
+     * Checkes whether element has given storage item.
+     *
+     * @param {Node} element - Target element.
+     * @param {string} key - Name of the stored data.
+     * @return {boolean}
+     */
     has: function( element, key ) {
         const item = this._storage.get( element );
         return item && item.has( key );
     },
+    /**
+     * Removes item from element storage. Removes element storage if empty.
+     *
+     * @param {Node} element - Target element.
+     * @param {string} key - Name of the stored data.
+     * @return {object} Removed data object.
+     */
     remove: function( element, key ) {
         var ret = this._storage.get( element ).delete( key );
         if ( !this._storage.get( key ).size === 0 ) {
@@ -71,8 +288,19 @@ const elementDataStore = {
 };
 
 export {
+    /**
+     * @static
+     * @see {@link module:dom-utils~elementDataStore|elementDataStore}
+     */
     elementDataStore,
     getSiblingElementsAndSelf,
     getSiblingElements,
+    getAncestors,
+    getChildren,
+    getRepeatIndex,
+    getXPath,
+    hasPreviousCommentSiblingWithContent,
+    hasPreviousSiblingElementSameName,
+    closestAncestorUntil,
     empty,
 };

@@ -6,7 +6,7 @@ testStaticProperties( RankWidget );
 describe( 'RankWidget instantiation', () => {
     const HTML1 = `
         <fieldset class="question or-appearance-one or-appearance-two">
-            <input type="text" name="/data/node">
+            <input type="text" name="/data/node" data-type-xml="rank">
             <div class="option-wrapper">
                 <label>
                     <input name="data/r" value="one" class="ignore" type="text">

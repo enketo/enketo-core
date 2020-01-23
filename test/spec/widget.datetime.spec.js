@@ -4,7 +4,7 @@ import { runAllCommonWidgetTests } from '../helpers/test-widget';
 const FORM =
     `<form class="or">
         <label class="question ">
-            <input name="/data/dt" type="datetime" data-type-xml="datetime" value="" />
+            <input name="/data/dt" type="datetime-local" data-type-xml="dateTime" value="" />
         </label>
     </form>`;
 
@@ -35,7 +35,8 @@ describe( 'datetimepicker widget', () => {
             fakeTimeInput.value = '01:01';
             fakeDateInput.dispatchEvent( new Event( 'change' ) );
 
-            expect( input.value ).toEqual( '2012-01-01T01:01:00.000-07:00' );
+            // timezone info will be added by engine
+            expect( input.value ).toEqual( '2012-01-01T01:01:00.000' );
             expect( input.onchange.calls.count() ).toEqual( 1 );
 
             // reset value in fake input manually

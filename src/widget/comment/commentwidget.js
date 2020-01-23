@@ -5,13 +5,19 @@ import events from '../../js/event';
 
 /**
  * Visually transforms a question into a comment modal that can be shown on its linked question.
+ * @extends Widget
  */
 class Comment extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.or-appearance-comment input[type="text"][data-for], .or-appearance-comment textarea[data-for]';
     }
 
+    /**
+     * @type string
+     */
     static get helpersRequired() {
         return [ 'input', 'pathToAbsolute' ];
     }
@@ -39,29 +45,43 @@ class Comment extends Widget {
         }
     }
 
+    /**
+     * @param {Element} input
+     * @return {Element}
+     */
     _getLinkedQuestion( input ) {
-        const contextPath = this.options.helpers.input.getName( $( input ) );
+        const contextPath = this.options.helpers.input.getName( input );
         const targetPath = this.element.dataset.for.trim();
         const absoluteTargetPath = this.options.helpers.pathToAbsolute( targetPath, contextPath );
         // The root is nearest repeat or otherwise nearest form. This avoids having to calculate indices, without
-        // diminishing the flexibility in any meaningful way, 
+        // diminishing the flexibility in any meaningful way,
         // as it e.g. wouldn't make sense to place a comment node for a top-level question, inside a repeat.
         const root = input.closest( 'form.or, .or-repeat' );
 
         return this.options.helpers.input
-            .getWrapNodes( $( root.querySelector( `[name="${absoluteTargetPath}"], [data-name="${absoluteTargetPath}"]` ) ) )[ 0 ];
+            .getWrapNode( root.querySelector( `[name="${absoluteTargetPath}"], [data-name="${absoluteTargetPath}"]` ) );
     }
 
+    /**
+     * @return {boolean}
+     */
     _commentHasError() {
         return this.commentQuestion.classList.contains( 'invalid-required' ) || this.commentQuestion.classList.contains( 'invalid-constraint' );
     }
 
+    /**
+     * @param {*} value
+     * @param {Error} error
+     */
     _setCommentButtonState( value, error ) {
         value = typeof value === 'string' ? value.trim() : value;
         this.commentButton.classList.toggle( 'empty', !value );
         this.commentButton.classList.toggle( 'invalid', !!error );
     }
 
+    /**
+     * Sets comment button handler
+     */
     _setCommentButtonHandler() {
         this.commentButton.addEventListener( 'click', ev => {
             if ( this._isCommentModalShown( this.linkedQuestion ) ) {
@@ -74,6 +94,9 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * Sets validation handler
+     */
     _setValidationHandler() {
         this.element.closest( 'form.or' ).addEventListener( events.ValidationComplete().type, () => {
             const error = this._commentHasError();
@@ -82,6 +105,9 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * Sets focus handler
+     */
     _setFocusHandler() {
         $( this.element ).on( 'applyfocus', () => {
             if ( this.commentButton.matches( ':visible' ) ) {
@@ -92,10 +118,17 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * @param {Element} linkedQuestion
+     * @return {boolean}
+     */
     _isCommentModalShown( linkedQuestion ) {
         return !!linkedQuestion.querySelector( '.or-comment-widget' );
     }
 
+    /**
+     * Shows comment modal
+     */
     _showCommentModal() {
         const comment = this.question.cloneNode( true );
         const updateText = t( 'widget.comment.update' ) || 'Update';
@@ -142,8 +175,8 @@ class Comment extends Widget {
              * Any current error state shown in the linked question will not automatically update.
              * It only updates when its **own** value changes.
              * See https://github.com/kobotoolbox/enketo-express/issues/608
-             * Since a linked question and a comment belong so closely together, and likely have 
-             * a `required` or `constraint` dependency, it makes sense to 
+             * Since a linked question and a comment belong so closely together, and likely have
+             * a `required` or `constraint` dependency, it makes sense to
              * separately call a validate method on the linked question to update the error state if necessary.
              *
              * Note that with setting "validateContinously" set to "true" this means it will be validated twice.
@@ -166,6 +199,11 @@ class Comment extends Widget {
         } );
     }
 
+    /**
+     * Hides comment modal
+     *
+     * @param {Element} linkedQuestion
+     */
     _hideCommentModal( linkedQuestion ) {
         linkedQuestion.querySelector( '.or-comment-widget' ).remove();
         const overlay = linkedQuestion.previousElementSibling;

@@ -1,14 +1,18 @@
 /**
- * Updates itemsets
+ * Updates itemsets.
  *
- * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+ * @module itemset
  */
 
 import $ from 'jquery';
-
 import { parseFunctionFromExpression } from './utils';
+import dialog from 'enketo/dialog';
+import { t } from 'enketo/translator';
 
 export default {
+    /**
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
+     */
     update( updated = {} ) {
         const that = this;
         const itemsCache = {};
@@ -33,6 +37,7 @@ export default {
         }
 
         const clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
+        const alerts = [];
 
         $nodes.each( function() {
             let $input;
@@ -84,7 +89,7 @@ export default {
              * I am not sure what is correct, but for now for XLSForm-style secondary instances with only one level underneath the <item>s that
              * the nodeset retrieves, Enketo's aproach works well.
              */
-            const context = that.form.input.getName( $input );
+            const context = that.form.input.getName( $input[ 0 ] );
 
             /*
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat.
@@ -92,7 +97,7 @@ export default {
              */
             const insideRepeat = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat' ).length > 0 ) ? true : false;
             const insideRepeatClone = ( clonedRepeatsPresent && $input.parentsUntil( '.or', '.or-repeat.clone' ).length > 0 ) ? true : false;
-            const index = ( insideRepeatClone ) ? that.form.input.getIndex( $input ) : 0;
+            const index = ( insideRepeatClone ) ? that.form.input.getIndex( $input[ 0 ] ) : 0;
 
             if ( typeof itemsCache[ itemsXpath ] !== 'undefined' ) {
                 $instanceItems = itemsCache[ itemsXpath ];
@@ -166,7 +171,13 @@ export default {
                 }
                 // Obtain the value of the secondary instance item found.
                 const value = that.getNodeFromItem( valueRef, item ).textContent;
-
+                /**
+                 * #510 Show warning if select_multiple value has spaces
+                 */
+                const multiple = ( inputAttributes[ 'data-type-xml' ] == 'select' ) && ( inputAttributes[ 'type' ] == 'checkbox' ) || ( $list[ 0 ] && $list[ 0 ].multiple );
+                if ( multiple && ( value.indexOf( ' ' ) > -1 ) ) {
+                    alerts[ alerts.length ] = t( 'alert.valuehasspaces.multiple', { value: value } );
+                }
                 if ( templateNodeName === 'label' ) {
                     optionsFragment.appendChild( that.createInput( inputAttributes, translations, value ) );
                 } else if ( templateNodeName === 'option' ) {
@@ -192,7 +203,7 @@ export default {
 
             /**
              * Attempt to populate inputs with current value in model (except for ranking input)
-             * Note that if the current value is not empty and the new itemset does not 
+             * Note that if the current value is not empty and the new itemset does not
              * include (an) item(s) with this/se value(s), this will clear/update the model and
              * this will trigger a dataupdate event. This may call this update function again.
              */
@@ -201,7 +212,7 @@ export default {
                 if ( $input.hasClass( 'rank' ) ) {
                     currentValue = '';
                 }
-                that.form.input.setVal( $input, currentValue );
+                that.form.input.setVal( $input[ 0 ], currentValue );
                 $input.trigger( 'change' );
             }
 
@@ -210,10 +221,21 @@ export default {
             }
 
         } );
+        if ( alerts.length > 0 ) {
+            /**
+             * We're assuming the enketo-core-consuming app has a dialog that supports some basic HTML rendering
+             */
+            dialog.alert( alerts.join( '<br>' ) );
+        }
     },
 
     /**
      * Minimal XPath evaluation helper that queries from a single item context.
+     *
+     * @param {string} expr - The XPath expression
+     * @param {string} context
+     * @param {boolean} single
+     * @return {Array<Element>} found nodes
      */
     getNodesFromItem( expr, context, single ) {
         if ( !expr || !context ) {
@@ -233,11 +255,21 @@ export default {
         return response;
     },
 
+    /**
+     * @param {string} expr - The XPath expression
+     * @param {string} content
+     * @return {Element|null} found nodes
+     */
     getNodeFromItem( expr, content ) {
         const nodes = this.getNodesFromItem( expr, content, true );
         return nodes.length ? nodes[ 0 ] : null;
     },
 
+    /**
+     * @param {string} label
+     * @param {string} value
+     * @return {Element} created option
+     */
     createOption( label, value ) {
         const option = document.createElement( 'option' );
         option.textContent = label;
@@ -245,6 +277,11 @@ export default {
         return option;
     },
 
+    /**
+     * @param {string} translation
+     * @param {string} value
+     * @return {Element} created element
+     */
     createOptionTranslation( translation, value ) {
         const el = document.createElement( translation.type || 'span' );
         if ( translation.text ) {
@@ -263,6 +300,12 @@ export default {
         return el;
     },
 
+    /**
+     * @param {Array<object>} attributes
+     * @param {Array<object>} translations
+     * @param {string} value
+     * @return {Element} label element (wrapper)
+     */
     createInput( attributes, translations, value ) {
         const that = this;
         const label = document.createElement( 'label' );

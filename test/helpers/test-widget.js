@@ -1,19 +1,19 @@
 import SuperWidget from '../../src/js/widget';
 import input from '../../src/js/input';
-import $ from 'jquery';
 
 const FORM_CONTROL_TEMPLATE = `
     <label class="question">
         <input type="text" name="/data/node">
     </label>`;
 
-function runAllCommonWidgetTests( Widget, template = FORM_CONTROL_TEMPLATE, value = '2' ) {
+function runAllCommonWidgetTests( Widget, template = FORM_CONTROL_TEMPLATE, value = '2', options ) {
     testStaticProperties( Widget );
     testRequiredMethods( Widget );
-    testBasicInstantiation( Widget, template );
-    testComplexInstantiation( Widget, template, value );
+    testBasicInstantiation( Widget, template, options );
+    testComplexInstantiation( Widget, template, value, options );
     testReset( Widget, template, value );
     testUpdate( Widget, template, value );
+    testExcessiveChangeEventAvoidance( Widget, template, value );
 }
 
 function testStaticProperties( Widget ) {
@@ -48,7 +48,7 @@ function testRequiredMethods( Widget ) {
     } );
 }
 
-function testBasicInstantiation( Widget, template ) {
+function testBasicInstantiation( Widget, template, options = { a: 'b' } ) {
     describe( `basic instantiation of ${Widget.name}:`, () => {
 
         it( 'passes options and populates widget props', done => {
@@ -57,7 +57,7 @@ function testBasicInstantiation( Widget, template ) {
             question.classList.add( 'or-appearance-one' );
             question.classList.add( 'or-appearance-two' );
             const control = fragment.querySelector( Widget.selector );
-            const options = { a: 'b' };
+
             Promise.resolve()
                 .then( () => new Widget( control, options ) )
                 .then( widget => {
@@ -90,7 +90,7 @@ function testBasicInstantiation( Widget, template ) {
     } );
 }
 
-function testComplexInstantiation( Widget, template, value ) {
+function testComplexInstantiation( Widget, template, value, options ) {
     describe( `complex instantiation of ${Widget.name}:`, () => {
 
         it( 'loads default value', done => {
@@ -98,9 +98,9 @@ function testComplexInstantiation( Widget, template, value ) {
             const control = fragment.querySelector( Widget.selector );
 
             // Also needs to work for radiobuttons, checkboxes, selects.
-            input.setVal( $( control ), value, null );
+            input.setVal( control, value, null );
             Promise.resolve()
-                .then( () => new Widget( control ) )
+                .then( () => new Widget( control, options ) )
                 .then( widget => {
                     expect( widget.originalInputValue ).toEqual( value );
                     expect( widget.value ).toEqual( value );
@@ -119,7 +119,7 @@ function testReset( Widget, template, value ) {
             const control = fragment.querySelector( Widget.selector );
 
             // Also needs to work for radiobuttons, checkboxes, selects.
-            input.setVal( $( control ), value, null );
+            input.setVal( control, value, null );
 
             Promise.resolve()
                 .then( () => new Widget( control ) )
@@ -153,7 +153,7 @@ function testUpdate( Widget, template, value ) {
                     expect( widget.originalInputValue ).toEqual( '' );
 
                     // Also needs to work for radiobuttons, checkboxes, selects.
-                    input.setVal( $( control ), value, null );
+                    input.setVal( control, value, null );
                     // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
                     widget.update();
 
@@ -164,6 +164,41 @@ function testUpdate( Widget, template, value ) {
         } );
 
     } );
+}
+
+// This test checks for excessive firing of change events on the original input by the widget.
+// i.e. firing a change event when the value hasn't actually changed.
+function testExcessiveChangeEventAvoidance( Widget, template, value ) {
+    describe( `programmatically updating ${Widget.name} to the same value it already has`, () => {
+
+        it( 'does not lead to a change event firing', done => {
+            const fragment = document.createRange().createContextualFragment( template );
+            const control = fragment.querySelector( Widget.selector );
+
+            Promise.resolve()
+                .then( () => new Widget( control ) )
+                .then( widget => {
+                    // Also needs to work for radiobuttons, checkboxes, selects.
+                    input.setVal( control, value, null );
+                    // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
+                    widget.update();
+
+                    // Check setup
+                    expect( widget.value ).toEqual( value );
+                    expect( widget.originalInputValue ).toEqual( value );
+
+                    // Actual test
+                    let changeEventCounter = 0;
+                    control.addEventListener( 'change', () => changeEventCounter++ );
+                    // Calling update without changing the value.
+                    widget.update();
+                    expect( changeEventCounter ).toEqual( 0 );
+                } )
+                .then( done, fail );
+        } );
+
+    } );
+
 }
 
 export { runAllCommonWidgetTests, testStaticProperties, testRequiredMethods, testBasicInstantiation, testComplexInstantiation, testReset, testUpdate };

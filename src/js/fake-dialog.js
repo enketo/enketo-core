@@ -1,9 +1,18 @@
-/*
- * This file is meant to be overidden with one that uses the app's dialogs.
+/**
+ * This placeholder module is meant to be overwritten with one that uses the app's own dialogs.
+ *
+ * @module dialog
  */
 
 /**
- * @param {String | {message: String, heading: String}} content Dialog content
+ * @typedef DialogContentObj
+ * @property {string} message
+ * @property {string} heading
+ */
+
+/**
+ * @static
+ * @param {string | DialogContentObj} content - Dialog content
  */
 function alert( content ) {
     window.alert( content );
@@ -11,13 +20,19 @@ function alert( content ) {
 }
 
 /**
- * @param {String | {message: String, heading: String}} content Dialog content
+ * @static
+ * @param {string | DialogContentObj} content - Dialog content
  */
 function confirm( content ) {
     const msg = content.message ? content.message : content;
     return Promise.resolve( window.confirm( msg ) );
 }
 
+/**
+ * @static
+ * @param {string | DialogContentObj} content - Dialog content
+ * @param {string} def - Default input value
+ */
 function prompt( content, def ) {
     return Promise.resolve( window.prompt( content, def ) );
 }

@@ -1,26 +1,65 @@
+/**
+ * XML types
+ * 
+ * @module types
+ */
+
 import { isNumber } from './utils';
 import { time } from './format';
+
+/**
+ * @namespace types
+ */
 const types = {
+    /**
+     * @namespace
+     */
     'string': {
+        /**
+         * @param {string} x
+         * @return {string}
+         */
         convert( x ) {
             return x.replace( /^\s+$/, '' );
         },
         //max length of type string is 255 chars.Convert( truncate ) silently ?
+        /**
+         * @return {boolean} always `true`
+         */
         validate() {
             return true;
         }
     },
+    /**
+     * @namespace
+     */
     'select': {
+        /**
+         * @return {boolean} always `true`
+         */
         validate() {
             return true;
         }
     },
+    /**
+     * @namespace
+     */
     'select1': {
+        /**
+         * @return {boolean} always `true`
+         */
         validate() {
             return true;
         }
     },
+    /**
+     * @namespace
+     */
     'decimal': {
+        /**
+         * @param {number|string} x
+         * @return {number}
+         */
         convert( x ) {
             const num = Number( x );
             if ( isNaN( num ) || num === Number.POSITIVE_INFINITY || num === Number.NEGATIVE_INFINITY ) {
@@ -29,12 +68,23 @@ const types = {
             }
             return num;
         },
+        /**
+         * @param {number|string} x
+         * @return {boolean}
+         */
         validate( x ) {
             const num = Number( x );
             return !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY;
         }
     },
+    /**
+     * @namespace
+     */
     'int': {
+        /**
+         * @param {number|string} x
+         * @return {number}
+         */
         convert( x ) {
             const num = Number( x );
             if ( isNaN( num ) || num === Number.POSITIVE_INFINITY || num === Number.NEGATIVE_INFINITY ) {
@@ -43,14 +93,25 @@ const types = {
             }
             return ( num >= 0 ) ? Math.floor( num ) : -Math.floor( Math.abs( num ) );
         },
+        /**
+         * @param {number|string} x
+         * @return {boolean}
+         */
         validate( x ) {
             const num = Number( x );
             return !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY && Math.round( num ) === num && num.toString() === x.toString();
         }
     },
+    /**
+     * @namespace
+     */
     'date': {
+        /**
+         * @param {string} x
+         * @return {boolean}
+         */
         validate( x ) {
-            const pattern = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
+            const pattern = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
             const segments = pattern.exec( x );
             if ( segments && segments.length === 4 ) {
                 const year = Number( segments[ 1 ] );
@@ -62,12 +123,16 @@ const types = {
             }
             return false;
         },
+        /**
+         * @param {number|string} x
+         * @return {string}
+         */
         convert( x ) {
             if ( isNumber( x ) ) {
                 // The XPath expression "2012-01-01" + 2 returns a number of days in XPath.
                 const date = new Date( x * 24 * 60 * 60 * 1000 );
                 return date.toString() === 'Invalid Date' ?
-                    '' : `${date.getFullYear().toString().pad( 4 )}-${( date.getMonth() + 1 ).toString().pad( 2 )}-${date.getDate().toString().pad( 2 )}`;
+                    '' : `${date.getFullYear().toString().pad(4)}-${(date.getMonth() + 1).toString().pad(2)}-${date.getDate().toString().pad(2)}`;
             } else {
                 // For both dates and datetimes
                 // If it's a datetime, we can quite safely assume it's in the local timezone, and therefore we can simply chop off
@@ -79,15 +144,26 @@ const types = {
             }
         }
     },
+    /**
+     * @namespace
+     */
     'datetime': {
+        /**
+         * @param {string} x
+         * @return {boolean}
+         */
         validate( x ) {
             const parts = x.split( 'T' );
             if ( parts.length === 2 ) {
                 return types.date.validate( parts[ 0 ] ) && types.time.validate( parts[ 1 ], false );
             }
 
-            return types.data.validate( parts[ 0 ] );
+            return types.date.validate( parts[ 0 ] );
         },
+        /**
+         * @param {number|string} x
+         * @return {string}
+         */
         convert( x ) {
             let date = 'Invalid Date';
             const parts = x.split( 'T' );
@@ -111,10 +187,18 @@ const types = {
             return date.toString() !== 'Invalid Date' ? date.toISOLocalString() : '';
         }
     },
+    /**
+     * @namespace
+     */
     'time': {
         // Note that it's okay if the validate function is stricter than the spec,
         // (for timezone offset), as long as the convertor automatically converts
         // to a valid time.
+        /**
+         * @param {string} x
+         * @param {boolean} [requireMillis]
+         * @return {boolean}
+         */
         validate( x, requireMillis ) {
             let m = x.match( /^(\d\d):(\d\d):(\d\d)\.\d\d\d(\+|-)(\d\d):(\d\d)$/ );
 
@@ -135,6 +219,11 @@ const types = {
                 m[ 5 ] < 24 && m[ 5 ] >= 0 && // this could be tighter
                 m[ 6 ] < 60 && m[ 6 ] >= 0; // this is probably either 0 or 30
         },
+        /**
+         * @param {string} x
+         * @param {boolean} [requireMillis]
+         * @return {string}
+         */
         convert( x, requireMillis ) {
             let date;
             const o = {};
@@ -178,15 +267,20 @@ const types = {
             if ( tz.length === 0 ) {
                 offset = new Date().getTimezoneOffsetAsTime();
             } else {
-                offset = `${tz[ 0 ] + tz[ 1 ].pad( 2 )}:${tz[ 2 ] ? tz[ 2 ].pad( 2 ) : '00'}`;
+                offset = `${tz[0] + tz[1].pad(2)}:${tz[2] ? tz[2].pad(2) : '00'}`;
             }
 
             x = `${o.hours}:${o.minutes}:${o.seconds}${o.milliseconds ? `.${o.milliseconds}` : ''}${offset}`;
 
             return this.validate( x, requireMillis ) ? x : '';
         },
-        // converts "11:30 AM", and "11:30 ", and "11:30 上午" to: "11:30"
-        // converts "11:30 PM", and "11:30 下午" to: "23:30"
+        /**
+         * converts "11:30 AM", and "11:30 ", and "11:30 上午" to: "11:30"
+         * converts "11:30 PM", and "11:30 下午" to: "23:30"
+         *
+         * @param {string} x
+         * @return {string}
+         */
         convertMeridian( x ) {
             x = x.trim();
             if ( time.hasMeridian( x ) ) {
@@ -205,45 +299,90 @@ const types = {
             return x;
         }
     },
+    /**
+     * @namespace
+     */
     'barcode': {
+        /**
+         * @return {boolean} always `true`
+         */
         validate() {
             return true;
         }
     },
+    /**
+     * @namespace
+     */
     'geopoint': {
+        /**
+         * @param {string} x
+         * @return {boolean}
+         */
         validate( x ) {
             const coords = x.toString().trim().split( ' ' );
             // Note that longitudes from -180 to 180 are problematic when recording points close to the international
-            // dateline. They are therefore set from -360  to 360 (circumventing Earth twice, I think) which is 
+            // dateline. They are therefore set from -360  to 360 (circumventing Earth twice, I think) which is
             // an arbitrary limit. https://github.com/kobotoolbox/enketo-express/issues/1033
             return ( coords[ 0 ] !== '' && coords[ 0 ] >= -90 && coords[ 0 ] <= 90 ) &&
                 ( coords[ 1 ] !== '' && coords[ 1 ] >= -360 && coords[ 1 ] <= 360 ) &&
                 ( typeof coords[ 2 ] === 'undefined' || !isNaN( coords[ 2 ] ) ) &&
                 ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
         },
+        /**
+         * @param {string} x
+         * @return {string}
+         */
         convert( x ) {
             return x.toString().trim();
         }
     },
+    /**
+     * @namespace
+     */
     'geotrace': {
+        /**
+         * @param {string} x
+         * @return {boolean}
+         */
         validate( x ) {
             const geopoints = x.toString().split( ';' );
             return geopoints.length >= 2 && geopoints.every( geopoint => types.geopoint.validate( geopoint ) );
         },
+        /**
+         * @param {string} x
+         * @return {string}
+         */
         convert( x ) {
             return x.toString().trim();
         }
     },
+    /**
+     * @namespace
+     */
     'geoshape': {
+        /**
+         * @param {string} x
+         * @return {boolean}
+         */
         validate( x ) {
             const geopoints = x.toString().split( ';' );
             return geopoints.length >= 4 && ( geopoints[ 0 ] === geopoints[ geopoints.length - 1 ] ) && geopoints.every( geopoint => types.geopoint.validate( geopoint ) );
         },
+        /**
+         * @param {string} x
+         * @return {string}
+         */
         convert( x ) {
             return x.toString().trim();
         }
     },
+    /**
+     * @namespace
+     */
     'binary': {
+        /**
+         * @return {boolean} always `true`
+         */
         validate() {
             return true;
         }

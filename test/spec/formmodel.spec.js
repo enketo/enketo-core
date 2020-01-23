@@ -1,4 +1,5 @@
 import { FormModel as Model } from '../../src/js/form-model';
+import events from '../../src/js/event';
 import forms from '../mock/forms';
 import config from '../../config';
 
@@ -395,40 +396,6 @@ describe( 'getRepeatSeries', () => {
     } );
 } );
 
-
-describe( 'getXPath', () => {
-    const xmlStr = '<root><path><to><node/><repeat><number/></repeat><repeat><number/><number/></repeat></to></path></root>';
-    const model = new Model( xmlStr );
-    model.init();
-
-    it( 'returns /root/path/to/node without parameters', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node ) ).toEqual( '/root/path/to/node' );
-    } );
-
-    it( 'returns same /root/path/to/node if first parameter is null', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node, null ) ).toEqual( '/root/path/to/node' );
-    } );
-
-    it( 'returns path from context first node provided as parameter', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node, 'root' ) ).toEqual( '/path/to/node' );
-    } );
-    it( 'returned path includes no positions if there are no siblings with the same name along the path', () => {
-        const node = model.xml.querySelector( 'node' );
-        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/node' );
-    } );
-    it( 'returned path includes positions when asked', () => {
-        const node = model.xml.querySelectorAll( 'number' )[ 1 ];
-        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number' );
-    } );
-    it( 'returned path includes positions when asked (multiple levels)', () => {
-        const node = model.xml.querySelectorAll( 'number' )[ 2 ];
-        expect( model.getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number[2]' );
-    } );
-} );
-
 describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensive tests!)', () => {
     let i;
 
@@ -589,11 +556,23 @@ describe( 'converting instance("id") to absolute paths', () => {
 describe( 'converting expressions with current() for context /data/node', () => {
     const context = '/data/node';
 
+    // Note: these test include current()/node paths that may not have a use case in ODK XForms
     [
-        [ 'instance("a")/path/to/node[filter = current()/data/some/node]', 'instance("a")/path/to/node[filter = /data/some/node]' ],
+        [ 'instance("a")/path/to/node[filter = current()/some/nodeA]', 'instance("a")/path/to/node[filter = /data/node/some/nodeA]' ],
         [ 'instance("a")/path/to/node[filter = current()/.]', 'instance("a")/path/to/node[filter = /data/node/.]' ],
-        [ 'instance("a")/path/to/node[filter = current()/../some/node]', 'instance("a")/path/to/node[filter = /data/node/../some/node]' ]
-
+        [ 'instance("a")/path/to/node[filter = current()/../some/node]', 'instance("a")/path/to/node[filter = /data/node/../some/node]' ],
+        [ 'instance("a")/path/to/node[animaltypes = current()/../animaltype and groupanimals = current()/../groupanimal ]',
+            'instance("a")/path/to/node[animaltypes = /data/node/../animaltype and groupanimals = /data/node/../groupanimal ]'
+        ],
+        [ 'instance("a")/path/to/node[filtera = current()/../some/node and filterb = current()/../some/node and filterc = current()/a and filterd = current()/a]',
+            'instance("a")/path/to/node[filtera = /data/node/../some/node and filterb = /data/node/../some/node and filterc = /data/node/a and filterd = /data/node/a]'
+        ],
+        [ 'instance("a")/root/item[name = current()/. or not(/data/repeat/option) ]',
+            'instance("a")/root/item[name = /data/node/. or not(/data/repeat/option) ]'
+        ],
+        [ 'instance("a")/root/item[name = current() or not(/data/repeat/option) ]',
+            'instance("a")/root/item[name = /data/node or not(/data/repeat/option) ]'
+        ],
     ].forEach( test => {
         it( 'happens correctly', () => {
             const model = new Model( '<model><instance><root/></instance></model>' );
@@ -1424,4 +1403,30 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( eventObjects[ 1 ].nodes ).toEqual( [ 'deprecatedID' ] );
 
     } );
+
+} );
+
+describe( 'odk-instance-first-load event', () => {
+
+    const modelStr = '<data><a/></data>';
+    const instanceStr = '<data><a>1</a></data>';
+
+    it( 'fires once when starting a new record', () => {
+        const model = new Model( { modelStr } );
+        let eventsOccurred = 0;
+
+        model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
+        model.init();
+        expect( eventsOccurred ).toEqual( 1 );
+    } );
+
+    it( 'does not fire when loading an existing record', () => {
+        const model = new Model( { modelStr, instanceStr } );
+        let eventsOccurred = 0;
+
+        model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
+        model.init();
+        expect( eventsOccurred ).toEqual( 0 );
+    } );
+
 } );

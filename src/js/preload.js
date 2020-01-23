@@ -1,22 +1,15 @@
-import $ from 'jquery';
-
-/*
- * Preloader module.
- * 
- * Note that preloaders may be deprecated in the future. This code is already prepared for a change 
- * by using a (secret) "session" instance.
+/**
+ * Preloader module (soon to be deprecated).
  *
- * Functions are designed to fail silently if unknown preloaders are called.
+ * @module preloader
  */
+
+import $ from 'jquery';
 export default {
+    /**
+     * Initializes preloader
+     */
     init() {
-        let item;
-        let param;
-        let curVal;
-        let newVal;
-        let dataNode;
-        let props;
-        let $preload;
         const that = this;
 
         if ( !this.form ) {
@@ -25,18 +18,19 @@ export default {
 
         //these initialize actual preload items
         this.form.view.$.find( 'input[data-preload], select[data-preload], textarea[data-preload]' ).each( function() {
-            $preload = $( this );
-            props = that.form.input.getProps( $preload );
-            item = $preload.attr( 'data-preload' ).toLowerCase();
-            param = $preload.attr( 'data-preload-params' ).toLowerCase();
+            const $preload = $( this );
+            const preload = this;
+            const props = that.form.input.getProps( preload );
+            const item = $preload.attr( 'data-preload' ).toLowerCase();
+            const param = $preload.attr( 'data-preload-params' ).toLowerCase();
 
             if ( typeof that[ item ] !== 'undefined' ) {
-                dataNode = that.form.model.node( props.path, props.index );
+                const dataNode = that.form.model.node( props.path, props.index );
                 // If a preload item is placed inside a repeat with repeat-count 0, the node
                 // doesn't exist and will never get a value (which is correct behavior)
                 if ( dataNode.getElements().length ) {
-                    curVal = dataNode.getVal();
-                    newVal = that[ item ]( {
+                    const curVal = dataNode.getVal();
+                    const newVal = that[ item ]( {
                         param,
                         curVal,
                         dataNode
@@ -49,6 +43,10 @@ export default {
             }
         } );
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'timestamp': function( o ) {
         let value;
         const that = this;
@@ -67,6 +65,10 @@ export default {
         }
         return 'error - unknown timestamp parameter';
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'date': function( o ) {
         let today;
         let year;
@@ -83,6 +85,10 @@ export default {
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'property': function( o ) {
         let node;
 
@@ -97,6 +103,10 @@ export default {
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'context': function( o ) {
         // 'application', 'user'??
         if ( o.curVal.length === 0 ) {
@@ -104,18 +114,30 @@ export default {
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'patient': function( o ) {
         if ( o.curVal.length === 0 ) {
             return 'patient preload item not supported in enketo';
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'user': function( o ) {
         if ( o.curVal.length === 0 ) {
             return 'user preload item not supported in enketo yet';
         }
         return o.curVal;
     },
+    /**
+     * @param {object} o
+     * @return {string}
+     */
     'uid': function( o ) {
         if ( o.curVal.length === 0 ) {
             return this.form.model.evaluate( 'concat("uuid:", uuid())', 'string' );

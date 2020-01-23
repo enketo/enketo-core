@@ -1,22 +1,40 @@
 /**
  * Progress module.
+ *
+ * @module progress
  */
 
 import events from './event';
 
 /**
  * Maintains progress state of user traversing through form, using
- * currently focused input || last changed input as current location.
+ * currently focused input or the last changed input as the indicator for the current location.
  */
 export default {
+    /**
+     * @type number
+     */
     status: 0,
+    /**
+     * @type Element
+     */
     lastChanged: null,
+    /**
+     * @type Array<Element>
+     */
     all: null,
+    /**
+     * Updates total
+     */
     updateTotal() {
         this.all = [ ...this.form.view.html.querySelectorAll( '.question:not(.disabled):not(.or-appearance-comment):not(.or-appearance-dn):not(.readonly)' ) ]
             .filter( question => !question.closest( '.disabled' ) );
     },
-    // updates rounded % value of progress and triggers event if changed
+    /**
+     * Updates rounded % value of progress and triggers event if changed.
+     *
+     * @param {Element} el
+     */
     update( el ) {
         let status;
 
@@ -35,6 +53,9 @@ export default {
             this.form.view.html.dispatchEvent( events.ProgressUpdate( status ) );
         }
     },
+    /**
+     * @return {string} status
+     */
     get() {
         return this.status;
     }

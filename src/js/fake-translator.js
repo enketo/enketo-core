@@ -1,25 +1,15 @@
-// This is NOT a complete list of all enketo-core UI strings. Use a parser to find 
+/**
+ * Placeholder module for translator. It is meant to be overwritten by a translator used in your app.
+ *
+ * @module fake-translator
+ */
+
+// This is NOT a complete list of all enketo-core UI strings. Use a parser to find
 // all strings. E.g. https://github.com/i18next/i18next-parser
 const SOURCE_STRINGS = {
     'constraint': {
         'invalid': 'Value not allowed',
         'required': 'This field is required'
-    },
-    'esri-geopicker': {
-        'coordinate-mgrs': 'MGRS coordinate',
-        'decimal': 'decimal',
-        'degrees': 'degrees, minutes, seconds',
-        'latitude-degrees': 'latitude (d° m’ s” N)',
-        'longitude-degrees': 'longitude (d° m’ s” W)',
-        'mgrs': 'MGRS',
-        'notavailable': 'Not Available',
-        'utm': 'UTM',
-        'utm-easting': 'easting (m)',
-        'utm-hemisphere': 'hemisphere',
-        'utm-north': 'North',
-        'utm-northing': 'northing (m)',
-        'utm-south': 'South',
-        'utm-zone': 'zone'
     },
     'filepicker': {
         'placeholder': 'Click here to upload file. (< __maxSize__)',
@@ -68,6 +58,9 @@ const SOURCE_STRINGS = {
     'alert': {
         'gotonotfound': {
             'msg': 'Failed to find question \'__path__\' in form. Is it a valid path?'
+        },
+        'valuehasspaces': {
+            'multiple': 'Select multiple question has an illegal value "__value__" that contains a space.'
         }
     },
     'confirm': {
@@ -83,14 +76,16 @@ const SOURCE_STRINGS = {
  *
  * t('constraint.invalid');
  * t('constraint.required');
+ * t('hint.guidance.details');
  */
 
 /**
  * Meant to be replaced by a real translator in the app that consumes enketo-core
  *
- * @param  {String} key translation key
- * @param  {*} key translation options
- * @return {String} translation output
+ * @static
+ * @param  {string} key - Translation key
+ * @param  {object} [options] - Translation options object
+ * @return {string} Translation output
  */
 function t( key, options ) {
     let str = '';

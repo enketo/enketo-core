@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setvalue</h:title>
+        <model>
+            <instance>
+                <data id="setvalue">
+                    <a/>
+                    <b/>
+                    <c>default</c>
+                    <my_age>3</my_age>
+                    <person jr:template="">
+                        <age>1000</age>
+                        <d>templated</d>
+                    </person>
+                    <person>
+                        <age/>
+                        <d/>
+                    </person>
+                    <person>
+                        <age>100</age>
+                        <d>bb</d>
+                    </person>
+                    <count>6</count>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/a" type="int"/>
+            <bind nodeset="/data/c" type="string"/>
+            <bind nodeset="/data/person/age" type="decimal"/>
+            <setvalue event="some-unsupported-event odk-instance-first-load" ref="/data/a">1+1</setvalue>
+            <setvalue event="odk-new-repeat" ref="/data/person/d" value="'a'"></setvalue>
+        </model>
+    </h:head>
+    <h:body>
+        <setvalue event="odk-instance-first-load" ref="/data/b" value="string-length(/data/c)"/>
+        <input ref="/data/c">
+            <label>Enter</label>
+        </input>
+        <input ref="/data/my_age">
+            <label>Your age</label>
+        </input>
+        <repeat nodeset="/data/person">
+            <setvalue event="odk-new-repeat" ref="/data/person/age" value="../../my_age + 2" />
+            <input ref="/data/person/age">
+                <label>Person's age</label>
+            </input>
+        </repeat>
+    </h:body>
+</h:html>

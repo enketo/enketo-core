@@ -51,4 +51,16 @@ describe( 'calculate functionality', () => {
         expect( form.view.html.querySelector( 'input[name="/repeat-group-comparison/count2"]' ).value ).toEqual( '1' );
 
     } );
+
+    it( 'does not calculate questions inside repeat instances created with repeat-count, if the repeat is not relevant', () => {
+        const form = loadForm( 'repeat-count-calculate-irrelevant.xml' );
+        form.init();
+
+        const calcs = form.model.xml.querySelectorAll( 'SHD_NO' );
+
+        expect( calcs.length ).toEqual( 3 );
+        expect( calcs[ 0 ].textContent ).toEqual( '' );
+        expect( calcs[ 1 ].textContent ).toEqual( '' );
+        expect( calcs[ 2 ].textContent ).toEqual( '' );
+    } );
 } );

@@ -1,10 +1,16 @@
+/**
+ * Deals with form logic around required questions.
+ *
+ * @module required
+ */
+
 import $ from 'jquery';
 
 export default {
     /**
      * Updates readonly
      *
-     * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated /*, filter*/ ) {
         const that = this;
@@ -20,10 +26,11 @@ export default {
 
         $nodes.each( function() {
             const $input = $( this );
-            const requiredExpr = that.form.input.getRequired( $input );
-            const path = that.form.input.getName( $input );
+            const input = this;
+            const requiredExpr = that.form.input.getRequired( input );
+            const path = that.form.input.getName( input );
             // Minimize index determination because it is expensive.
-            const index = repeatClonesPresent ? that.form.input.getIndex( $input ) : 0;
+            const index = repeatClonesPresent ? that.form.input.getIndex( input ) : 0;
             // The path is stripped of the last nodeName to record the context.
             // This might be dangerous, but until we find a bug, it improves performance a lot in those forms where one group contains
             // many sibling questions that each have the same required expression.

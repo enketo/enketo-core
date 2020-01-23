@@ -1,0 +1,20 @@
+{
+    "00-getting-started": {
+        "title": "Getting started"
+    },
+    "10-configuration": {
+        "title": "Configuration"
+    },
+    "20-development": {
+        "title": "Development"
+    },
+    "30-events": {
+        "title": "Available events"
+    },
+    "40-widgets": {
+        "title": "Creating/extending widgets"
+    },
+    "90-ie11": {
+        "title": "IE11"
+    }
+}

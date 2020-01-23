@@ -5,7 +5,6 @@
 
 // fonts
 $font-size-base: 16px !default;
-$line-height-base: 1.25 !default;
 
 // line-heights
 $line-height-base: 1.42857 !default;
@@ -20,7 +19,7 @@ $question-margin: 20px !default;
 
 // input sizing
 $input-height: 34px !default;
-$input-min-width: 180px !default;
+$input-min-width: 240px !default; // width based on width required for native datetime-local input
 $input-max-width: 80% !default;
 
 // colors, icons

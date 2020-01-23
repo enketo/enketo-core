@@ -9,9 +9,7 @@ $media-margin: 10px;
 .or-required-msg,
 .or-relevant-msg,
 .option-wrapper .itemset-template,
-.itemset-labels,
-.or-hint.or-form-guidance,
-.or-hint.or-form-guidance.active {
+.itemset-labels {
     display: none;
 }
 
@@ -90,6 +88,15 @@ $media-margin: 10px;
     }
 }
 
+.or-form-guidance.active {
+    margin: 5px 0;
+    color: $brand-primary-color;
+
+    summary {
+        color: #888888;
+    }
+}
+
 .or .form-logo {
     display: block;
     text-align: center;
@@ -109,9 +116,13 @@ $media-margin: 10px;
     padding: 20px 10px 10px 10px;
     position: relative;
 
-    &:empty {
+    &.empty {
         // calculation-only repeats
         padding: 0;
+
+        .repeat-number {
+            display: none;
+        }
     }
 
     .repeat-number {
@@ -334,7 +345,7 @@ legend {
         margin: 0;
         cursor: pointer;
         padding: 4px;
-        margin: 0 10px 1px 10px; // TODO: remove hover rule for tables (in likert already done)
+        margin: 0 8px 1px 10px; // TODO: remove hover rule for tables (in likert already done)
 
         &:hover:not(.filler) {
             background-color: $brand-secondary-color;
@@ -355,6 +366,7 @@ legend {
     .option-label {
         margin-left: 30px; // input is floated to deal with multi-line labels
         display: block;
+        word-break: break-word;
     }
 
     img,
@@ -388,8 +400,8 @@ legend {
             background-color: transparent;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: auto;
-            margin: 0 0 6.4px 0;
+            //width: auto;
+            margin: 0 1px 6.4px 1px;
             padding: 10px;
 
             input[type="radio"],
@@ -415,7 +427,7 @@ legend {
     input[type=date],
     input[type=month],
     input[type=time],
-    input[type=datetime],
+    input[type=datetime-local],
     input[type=number],
     textarea,
     select {
@@ -432,7 +444,7 @@ legend {
     input[type=date],
     input[type=month],
     input[type=time],
-    input[type=datetime],
+    input[type=datetime-local],
     input[type=number],
     textarea {
         border: 1px solid #ddd8ce;
@@ -452,7 +464,7 @@ input[type=file],
 input[type=date],
 input[type=month],
 input[type=time],
-input[type=datetime],
+input[type=datetime-local],
 input[type=number],
 input[type=range],
 textarea,
@@ -484,9 +496,9 @@ select {
 
     &[type=date],
     &[type=month],
+    &[type=datetime-local],
     &[type=number],
     &[type=time],
-    &[type=datetime],
     &[type=text].mask-date {
         width: $input-min-width;
     }
@@ -571,7 +583,7 @@ legend .required {
 }
 
 .disabled {
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .invalid-constraint,

@@ -1,10 +1,14 @@
+/**
+ * @module readonly
+ */
+
 import $ from 'jquery';
 
 export default {
     /**
      * Updates readonly
      *
-     * @param  {{nodes:Array<string>=, repeatPath: string=, repeatIndex: number=}=} updated The object containing info on updated data nodes
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated ) {
         const $nodes = this.form.getRelatedNodes( 'readonly', '', updated );

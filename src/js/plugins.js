@@ -1,3 +1,6 @@
+/**
+ * @external jQuery
+ */
 import $ from 'jquery';
 
 /**
@@ -5,9 +8,10 @@ import $ from 'jquery';
  * (and not synchronized with data object), the desired event is probably 'edit' (default). If it is already added
  * to the DOM (and synchronized with data object) a regular change event should be fired
  *
- * @param  {string=} ev1 event to be triggered when a value is cleared
- * @param  {string=} ev2 event to be triggered when a value is cleared
- * @return { jQuery} [description]
+ * @function external:jQuery#clearInputs
+ * @param {string} [ev1] - Event to be triggered when a value is cleared
+ * @param {string} [ev2] - Event to be triggered when a value is cleared
+ * @return {jQuery}
  */
 $.fn.clearInputs = function( ev1, ev2 ) {
     ev1 = ev1 || 'edit';
@@ -33,7 +37,8 @@ $.fn.clearInputs = function( ev1, ev2 ) {
                     delete this.dataset.loadedFileName;
                     /* falls through */
                 case 'date':
-                case 'datetime':
+                case 'datetime-local':
+                case 'month':
                 case 'time':
                 case 'number':
                 case 'search':
@@ -72,6 +77,8 @@ $.fn.clearInputs = function( ev1, ev2 ) {
 
 /**
  * Reverses a jQuery collection
+ *
+ * @function external:jQuery#reverse
  * @type {Array}
  */
 $.fn.reverse = [].reverse;

@@ -32,16 +32,42 @@ const iconMultiActive = L.divIcon( {
     className: 'enketo-geopoint-circle-marker-active'
 } );
 
-// Leaflet extensions. 
+// Leaflet extensions.
 import 'leaflet-draw';
 import 'leaflet.gridlayer.googlemutant';
 
-class Geopicker extends Widget {
+/**
+ * @typedef LatLngArray
+ * @description An array of two (or four) elements, `[0]` latitude and `[1]` longitude.
+ * @property {string|number} 0 - Latitude
+ * @property {string|number} 1 - Longitude
+ * @property {string|number} [2] - Altitude
+ * @property {string|number} [3] - Accuracy
+ */
 
+/**
+ * @typedef LatLngObj
+ * @property {number} lat - Latitude
+ * @property {number} long - Longitude
+ * @property {number} [alt] - Altitude
+ * @property {number} [acc] - Accuracy
+ */
+
+/**
+ * @extends Widget
+ */
+class Geopicker extends Widget {
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input[data-type-xml="geopoint"], .question input[data-type-xml="geotrace"], .question input[data-type-xml="geoshape"]';
     }
 
+    /**
+     * @param {Element} element
+     * @return {boolean}
+     */
     static condition( element ) {
         // Allow geopicker and ArcGIS geopicker to be used in same form
         return !data.has( element, 'ArcGisGeopicker' );
@@ -99,7 +125,7 @@ class Geopicker extends Widget {
             const value = event.target.value;
             const coords = that._convertKmlCoordinatesToLeafletCoordinates( value );
 
-            // reset textarea 
+            // reset textarea
             event.target.value = '';
 
             setTimeout( () => {
@@ -226,7 +252,7 @@ class Geopicker extends Widget {
         }
 
         if ( this.props.readonly ) {
-            this.disable( this.element );
+            this.disable();
         }
 
         // create "point buttons"
@@ -265,6 +291,9 @@ class Geopicker extends Widget {
         }
     }
 
+    /**
+     * @param {string} type
+     */
     _switchInputType( type ) {
         if ( type === 'kml' ) {
             this.$inputGroup.addClass( 'kml-input-mode' );
@@ -285,23 +314,52 @@ class Geopicker extends Widget {
      */
     _addDomElements() {
         const map = `<div class="map-canvas-wrapper"><div class=map-canvas id="map${this.mapId}"></div></div>`;
-        const points = '<div class="points"><button type="button" class="addpoint">+</button></div>';
-        const kmlPstTxt = t( 'geopicker.kmlpaste' );
-        const kmlCrdsTxt = t( 'geopicker.kmlcoords' );
-        const pntsTxt = t( 'geopicker.points' );
-        const kml = `<a href="#" class="toggle-input-type-btn"><span class="kml-input">KML</span><span class="points-input">${pntsTxt}</span></a><label class="geo kml">${kmlCrdsTxt}<progress class="paste-progress hide"></progress><textarea class="ignore" name="kml" placeholder="${kmlPstTxt}"></textarea><span class="disabled-msg">remove all points to enable</span></label>`;
-        const closePlgnTxt = t( 'geopicker.closepolygon' );
-        const close = `<button type="button" class="close-chain-btn btn btn-default btn-xs">${closePlgnTxt}</button>`;
-        const mapBtn = '<button type="button" class="show-map-btn btn btn-default"><i class="icon icon-globe"></i>&nbsp;View Map</button>';
-        const latTxt = t( 'geopicker.latitude' );
-        const lngTxt = t( 'geopicker.longitude' );
-        const altTxt = t( 'geopicker.altitude' );
-        const accTxt = t( 'geopicker.accuracy' );
-        const srchTxt = t( 'geopicker.searchPlaceholder' );
-        const coords = `<div class="co-ordinates">${latTxt}: <span class='latLabel'></span><br/>${lngTxt}: <span class='lngLabel'></span></div>`;
+        const points = '<div class="points"><button type="button" class="addpoint">+</button></div>';      
+        const kml = `
+            <a href="#" class="toggle-input-type-btn">
+                <span class="kml-input">KML</span>
+                <span class="points-input" data-i18n="geopicker.points">${t( 'geopicker.points' )}</span>
+            </a>
+            <label class="geo kml">
+                <span data-i18n="geopicker.kmlcoords">${t( 'geopicker.kmlcoords' )}</span>
+                <progress class="paste-progress hide"></progress>
+                <textarea class="ignore" name="kml" placeholder="${ t( 'geopicker.kmlpaste' )}" data-i18n="geopicker.kmlpaste"></textarea>
+                <span class="disabled-msg">remove all points to enable</span>
+            </label>`;
+
+        const close = `<button type="button" class="close-chain-btn btn btn-default btn-xs" data-i18n="geopicker.closepolygon">${t( 'geopicker.closepolygon' )}</button>`;
+        const mapBtn = '<button type="button" class="show-map-btn btn btn-default">Map</button>';
 
         this.$widget = $(
-            `<div class="geopicker widget"><div class="search-bar hide-search no-map no-detect"><button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button><button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top"><span class="icon icon-crosshairs"> </span></button><div class="input-group"><input class="geo ignore" name="search" type="text" placeholder="${srchTxt}" disabled="disabled"/><button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button></div></div><div class="geo-inputs"><label class="geo lat">${latTxt}<input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/></label><label class="geo long">${lngTxt}<input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/></label><label class="geo alt">${altTxt}<input class="ignore" name="alt" type="number" step="0.1" /></label><label class="geo acc">${accTxt}<input class="ignore" name="acc" type="number" step="0.1" /></label><button type="button" class="btn btn-default btn-remove" aria-label="remove"><span class="icon icon-trash"> </span>&nbsp;Clear location</button></div></div>`
+            `<div class="geopicker widget">
+                <div class="search-bar hide-search no-map no-detect">
+                    <button type="button" class="hide-map-btn btn btn-default"><span class="icon icon-arrow-left"> </span></button>
+                    <button name="geodetect" type="button" class="btn btn-default" title="detect current location" data-placement="top"><span class="icon icon-crosshairs"> </span></button>
+                    <div class="input-group">
+                        <input class="geo ignore" name="search" type="text" placeholder="${t( 'geopicker.searchPlaceholder' )}" data-i18n="geopicker.searchPlaceholder" disabled="disabled"/>
+                        <button type="button" class="btn btn-default search-btn"><i class="icon icon-search"> </i></button>
+                    </div>
+                </div>
+                <div class="geo-inputs">
+                    <label class="geo lat">
+                        <span data-i18n="geopicker.latitude">${t( 'geopicker.latitude' )}</span>
+                        <input class="ignore" name="lat" type="number" step="0.000001" min="-90" max="90"/>
+                    </label>
+                    <label class="geo long">
+                        <span data-i18n="geopicker.longitude">${t( 'geopicker.longitude' )}</span>
+                        <input class="ignore" name="long" type="number" step="0.000001" min="-180" max="180"/>
+                    </label>
+                    <label class="geo alt">
+                        <span data-i18n="geopicker.altitude">${t( 'geopicker.altitude' )}</span>
+                        <input class="ignore" name="alt" type="number" step="0.1" />
+                    </label>
+                    <label class="geo acc">
+                        <span data-i18n="geopicker.accuracy">${t( 'geopicker.accuracy' )}</span>
+                        <input class="ignore" name="acc" type="number" step="0.1" />
+                    </label>
+                    <button type="button" class="btn-icon-only btn-remove" aria-label="remove"><span class="icon icon-trash"> </span></button>
+                </div>
+            </div>`
         );
 
         // add the detection button
@@ -337,7 +395,7 @@ class Geopicker extends Widget {
             this.$lngLabel = this.$widget.find( ".lngLabel");
         }
 
-        // unhide search bar 
+        // unhide search bar
         // TODO: can be done in CSS?
         if ( !this.props.touch ) {
             this.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
@@ -373,7 +431,7 @@ class Geopicker extends Widget {
     /**
      * Updates the value in the original input element.
      *
-     * @return {Boolean} Whether the value was changed.
+     * @return {boolean} Whether the value was changed.
      */
     _updateValue() {
         this._markAsValid();
@@ -395,17 +453,18 @@ class Geopicker extends Widget {
      * error feedback than provided by the form controller. This can be used to pinpoint the exact
      * invalid geopoints in a list of geopoints (the form controller only validates the total list).
      *
-     * @param  {string}  geopoint [description]
-     * @return {Boolean}          [description]
+     * @param {string} geopoint
+     * @return {boolean}
      */
     _isValidGeopoint( geopoint ) {
         return geopoint ? types.geopoint.validate( geopoint ) : false;
     }
 
     /**
-     * Validates a list of latLng Arrays or Objects
-     * @param  {Array.((Array.<number|string>|{lat: number, long:number}))}  latLngs Array of latLng objects or arrays
-     * @return {Boolean}         Whether list is valid or not
+     * Validates a list of latLng Arrays or Objects.
+     *
+     * @param {Array<LatLngArray|LatLngObj>} latLngs - Array of latLng objects or arrays.
+     * @return {boolean} Whether list is valid or not.
      */
     _isValidLatLngList( latLngs ) {
         const that = this;
@@ -413,6 +472,9 @@ class Geopicker extends Widget {
         return latLngs.every( ( latLng, index, array ) => that._isValidLatLng( latLng ) || ( latLng.join() === '' && index === array.length - 1 ) );
     }
 
+    /**
+     * @type LatLngArray|LatLngObj
+     */
     _cleanLatLng( latLng ) {
         if ( Array.isArray( latLng ) ) {
             return [ latLng[ 0 ], latLng[ 1 ] ];
@@ -422,8 +484,9 @@ class Geopicker extends Widget {
 
     /**
      * Validates an individual latlng Array or Object
-     * @param  {(Array.<number|string>|{lat: number, long:number})}  latLng latLng object or array
-     * @return {Boolean}        Whether latLng is valid or not
+     *
+     * @param {LatLngArray|LatLngObj} latLng - latLng object or array
+     * @return {boolean} Whether latLng is valid or not
      */
     _isValidLatLng( latLng ) {
         const lat = ( typeof latLng[ 0 ] === 'number' ) ? latLng[ 0 ] : ( typeof latLng.lat === 'number' ) ? latLng.lat : null;
@@ -435,7 +498,8 @@ class Geopicker extends Widget {
 
     /**
      * Marks a point as invalid in the points navigation bar
-     * @param  {number} index Index of point
+     *
+     * @param {number} index - Index of point
      */
     _markAsInvalid( index ) {
         this.$points.find( '.point' ).eq( index ).addClass( 'has-error' );
@@ -450,6 +514,8 @@ class Geopicker extends Widget {
 
     /**
      * Changes the current point in the list of points
+     *
+     * @param {number} index
      */
     _setCurrent( index ) {
         this.currentIndex = index;
@@ -572,12 +638,15 @@ class Geopicker extends Widget {
     }
 
     /**
-     * Determines whether map is available for manipulation.
+     * @return {boolean} Whether map is available for manipulation
      */
     _dynamicMapAvailable() {
         return !!this.map;
     }
 
+    /**
+     * @return {boolean} Whether map is in fullscreen mode
+     */
     _inFullScreenMode() {
         return this.$widget.hasClass( 'full-screen' );
     }
@@ -586,9 +655,8 @@ class Geopicker extends Widget {
      * Updates the map to either show the provided coordinates (in the center), with the provided zoom level
      * or update any markers, polylines, or polygons.
      *
-     * @param  @param  {Array.<number>|{lat: number, lng: number}} latLng  latitude and longitude coordinates
-     * @param  {number=} zoom zoom level
-     * @return {Function} Returns call to function
+     * @param {LatLngArray|LatLngObj} latLng - Latitude and longitude coordinates
+     * @param {number} [zoom] - zoom level
      */
     _updateMap( latLng, zoom ) {
         const that = this;
@@ -616,17 +684,18 @@ class Geopicker extends Widget {
 
         // update the map if it is visible
         if ( !this.props.touch || this._inFullScreenMode() ) {
-            if ( !this.map ) {
-                this._addDynamicMap()
-                    .then( () => {
-                        that._updateDynamicMapView( latLng, zoom );
-                    } );
-            } else {
-                that._updateDynamicMapView( latLng, zoom );
-            }
+            this.loadMap = this.loadMap || this._addDynamicMap();
+            this.loadMap
+                .then( () => {
+                    that._updateDynamicMapView( latLng, zoom );
+                } );
+
         }
     }
 
+    /**
+     * @return {Promise}
+     */
     _addDynamicMap() {
         const that = this;
 
@@ -685,8 +754,8 @@ class Geopicker extends Widget {
                 that.$widget.find( '.leaflet-control-layers-toggle' ).append( '<span class="icon icon-globe"></span>' );
 
                 // Add ignore and option-label class to Leaflet-added input elements and their labels
-                // something weird seems to happen. It seems the layercontrol is added twice (second replacing first) 
-                // which means the classes are not present in the final control. 
+                // something weird seems to happen. It seems the layercontrol is added twice (second replacing first)
+                // which means the classes are not present in the final control.
                 // Using the baselayerchange event handler is a trick that seems to work.
                 that.map.on( 'baselayerchange', () => {
                     that.$widget.find( '.leaflet-control-container input' ).addClass( 'ignore no-unselect' ).next( 'span' ).addClass( 'option-label' );
@@ -694,8 +763,11 @@ class Geopicker extends Widget {
             } );
     }
 
+    /**
+     * @param {LatLngArray|LatLngObj} latLng - Latitude and longitude coordinates
+     * @param {number} [zoom] - zoom level
+     */
     _updateDynamicMapView( latLng, zoom ) {
-
         if ( !latLng ) {
             this._updatePolyline();
             this._updateMarkers();
@@ -711,6 +783,9 @@ class Geopicker extends Widget {
         }
     }
 
+    /**
+     * Displays intersect error
+     */
     _showIntersectError() {
         dialog.alert( 'Borders cannot intersect!' );
     }
@@ -718,7 +793,7 @@ class Geopicker extends Widget {
     /**
      * Obtains the tile layers according to the definition in the app configuration.
      *
-     * @return {Promise} [description]
+     * @return {Promise}
      */
     _getLayers() {
         const that = this;
@@ -741,8 +816,8 @@ class Geopicker extends Widget {
     /**
      * Asynchronously (fake) obtains a Leaflet/Mapbox tilelayer
      *
-     * @param  {{}}     map   map layer as defined in the apps configuration
-     * @param  {number} index the index of the layer
+     * @param {object} map - Map layer as defined in the apps configuration.
+     * @param {number} index - The index of the layer.
      * @return {Promise}
      */
     _getLeafletTileLayer( map, index ) {
@@ -759,8 +834,8 @@ class Geopicker extends Widget {
     /**
      * Asynchronously obtains a Google Maps tilelayer
      *
-     * @param  {{}}     map   map layer as defined in the apps configuration
-     * @param  {number} index the index of the layer
+     * @param {object} map - Map layer as defined in the apps configuration.
+     * @param {number} index - The index of the layer.
      * @return {Promise}
      */
     _getGoogleTileLayer( map, index ) {
@@ -775,9 +850,9 @@ class Geopicker extends Widget {
     /**
      * Creates the tile layer options object from the maps configuration and defaults.
      *
-     * @param  {{}}     map   map layer as defined in the apps configuration
-     * @param  {[type]} index the index of the layer
-     * @return {{id: string, maxZoom: number, minZoom: number, name: string, attribution: string}}   Tilelayer options object
+     * @param {object} map - Map layer as defined in the apps configuration.
+     * @param {number} index - The index of the layer.
+     * @return {{id: string, maxZoom: number, minZoom: number, name: string, attribution: string}} Tilelayer options object
      */
     _getTileOptions( map, index ) {
         const name = map.name || `map-${index + 1}`;
@@ -795,7 +870,7 @@ class Geopicker extends Widget {
      * Loader for the Google Maps script that can be called multiple times, but will ensure the
      * script is only requested once.
      *
-     * @return {Promise} [description]
+     * @return {Promise}
      */
     _loadGoogleMapsScript() {
         // request Google maps script only once, using a variable outside of the scope of the current widget
@@ -823,6 +898,10 @@ class Geopicker extends Widget {
         return googleMapsScriptRequest;
     }
 
+    /**
+     * @param {Array<object>} layers
+     * @return {object} Default layer
+     */
     _getDefaultLayer( layers ) {
         let defaultLayer;
         const that = this;
@@ -835,6 +914,10 @@ class Geopicker extends Widget {
         return defaultLayer;
     }
 
+    /**
+     * @param {Array<object>} layers
+     * @return {Array<object>} Base layers
+     */
     _getBaseLayers( layers ) {
         const baseLayers = {};
 
@@ -1000,7 +1083,8 @@ class Geopicker extends Widget {
 
     /**
      * Updates the area in m2 shown inside a polygon.
-     * @type {[type]}
+     *
+     * @param {Array<LatLngObj>} points - A polygon.
      */
     _updateArea( points ) {
         let area;
@@ -1024,9 +1108,11 @@ class Geopicker extends Widget {
         } else {
             this.map.closePopup();
         }
-
     }
 
+    /**
+     * Adds a point.
+     */
     _addPoint() {
         this._addPointBtn();
         this.points.push( [] );
@@ -1035,9 +1121,10 @@ class Geopicker extends Widget {
     }
 
     /**
-     * Edits a point in the list of points
-     * @param  {Array.<number>|{lat: number, lng: number, alt: number, acc: number}} latLng LatLng object or array
-     * @return {Boolean]}        Whether point changed.
+     * Edits a point in the list of points.
+     *
+     * @param {LatLngArray|LatLngObj} latLng - LatLng object or array.
+     * @return {boolean} Whether point changed.
      */
     _editPoint( latLng ) {
         let changed;
@@ -1054,7 +1141,7 @@ class Geopicker extends Widget {
     }
 
     /**
-     * Removes the current point
+     * Removes the current point.
      */
     _removePoint() {
         let newIndex = this.currentIndex;
@@ -1069,6 +1156,11 @@ class Geopicker extends Widget {
         this._updateMap();
     }
 
+    /**
+     * Closes polygon
+     *
+     * @return {Error|undefined}
+     */
     _closePolygon() {
         const lastPoint = this.points[ this.points.length - 1 ];
         // console.debug( 'closing polygon' );
@@ -1098,10 +1190,10 @@ class Geopicker extends Widget {
     }
 
     /**
-     * Updates the (fake) input element for latitude, longitude, altitude and accuracy
+     * Updates the (fake) input element for latitude, longitude, altitude and accuracy.
      *
-     * @param  @param  {Array.<number>|{lat: number, lng: number, alt: number, acc: number}} coords latitude, longitude, altitude and accuracy
-     * @param  {string=} ev  [description]
+     * @param {LatLngArray|LatLngObj} coords - Latitude, longitude, altitude and accuracy.
+     * @param {string} [ev]
      */
     _updateInputs( coords, ev ) {
         const lat = coords[ 0 ] || coords.lat || '';
@@ -1124,14 +1216,14 @@ class Geopicker extends Widget {
         }
     }
 
-    /** 
+    /**
      * Converts the contents of a single KML <coordinates> element (may inlude the coordinates tags as well) to an array
      * of geopoint coordinates used in the ODK XForm format. Note that the KML format does not allow spaces within a tuple of coordinates
      * only between. Separator between KML tuples can be newline, space or a combination.
      * It only extracts the value of the first <coordinates> element or, if <coordinates> are not included from the whole string.
      *
-     * @param  {string} kmlCoordinates [description]
-     * @return {Array.<Array<Number>>} Array of geopoint coordinates
+     * @param {string} kmlCoordinates
+     * @return {Array<Array<number>>} Array of geopoint coordinates
      */
     _convertKmlCoordinatesToLeafletCoordinates( kmlCoordinates ) {
         const coordinates = [];
@@ -1162,9 +1254,10 @@ class Geopicker extends Widget {
     /**
      * Check if a polyline created from the current collection of points
      * where one point is added or edited would have intersections.
-     * @param  {[type]} latLng [description]
-     * @param  {[type]} index  [description]
-     * @return {[type]} [description]
+     *
+     * @param {LatLngArray|LatLngObj} latLng - An object or array notation of point.
+     * @param {number} index
+     * @return {boolean} Whether polyline would have intersections.
      */
     updatedPolylineWouldIntersect( latLng, index ) {
         const pointsToTest = [];
@@ -1216,8 +1309,9 @@ class Geopicker extends Widget {
     /**
      * Checks whether the array of points contains empty ones.
      *
-     * @allowedIndex {number=} The index in which an empty value is allowed
-     * @return {[type]} [description]
+     * @param {Array<LatLngArray>} points
+     * @param {number} [allowedIndex] - The index in which an empty value is allowed.
+     * @return {boolean}
      */
     containsEmptyPoints( points, allowedIndex ) {
         return points.some( ( point, index ) => index !== allowedIndex && ( !point[ 0 ] || !point[ 1 ] ) );
@@ -1240,6 +1334,9 @@ class Geopicker extends Widget {
         return props;
     }
 
+    /**
+     * @type string
+     */
     get value() {
         let newValue = '';
         // all points should be valid geopoints and only the last item may be empty

@@ -1,7 +1,14 @@
+/**
+ * @module mask
+ */
+
 import $ from 'jquery';
 import { getPasteData } from './utils';
 const KEYBOARD_CUT_PASTE = 'xvc';
 
+/**
+ * @static
+ */
 function init() {
     /*
      * These are hardcoded number input masks. The approach will be different if we
@@ -11,6 +18,11 @@ function init() {
     _setNumberMask( '[data-type-xml="decimal"]', /^(-?[0-9]+[.,]?[0-9]*$)/, '-0123456789.,' );
 }
 
+/**
+ * @param {string} selector
+ * @param {string} validRegex
+ * @param {string} allowedChars
+ */
 function _setNumberMask( selector, validRegex, allowedChars ) {
 
     $( selector )
@@ -40,8 +52,8 @@ function _setNumberMask( selector, validRegex, allowedChars ) {
         /*
          * Workaround for most browsers keeping invalid numbers visible in the input without a means to access the invalid value.
          * E.g. see https://bugs.chromium.org/p/chromium/issues/detail?id=178437&can=2&q=178437&colspec=ID%20Pri%20M%20Stars%20ReleaseBlock%20Component%20Status%20Owner%20Summary%20OS%20Modified
-         * 
-         * A much more intelligent way to solve the problem would be to add a feedback loop from the Model to the input that would 
+         *
+         * A much more intelligent way to solve the problem would be to add a feedback loop from the Model to the input that would
          * correct (a converted number) or empty (an invalid number). https://github.com/enketo/enketo-core/issues/407
          */
         .on( 'blur', function() {
@@ -57,11 +69,19 @@ function _setNumberMask( selector, validRegex, allowedChars ) {
 }
 
 // Using the (assumed) fact that a non-printable character key always has length > 1
-// IE11: non-confirming 'Spacebar' 
+// IE11: non-confirming 'Spacebar'
+/**
+ * @param {Event} e
+ * @return {boolean}
+ */
 function _isNotPrintableKey( e ) {
     return e.key.length > 1 && e.key !== 'Spacebar';
 }
 
+/**
+ * @param {Event} e
+ * @return {boolean}
+ */
 function _isKeyboardCutPaste( e ) {
     return KEYBOARD_CUT_PASTE.indexOf( e.key ) !== -1 && ( e.metaKey || e.ctrlKey );
 }

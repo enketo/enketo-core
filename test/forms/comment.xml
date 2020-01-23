@@ -23,7 +23,7 @@
       <bind nodeset="/comment/meta/instanceID" jr:preload="uid" type="string"/>
     </model>
   </h:head>
-  <h:body>
+  <h:body class="pages">
     <input ref="/comment/one">
       <label>Enter number</label>
     </input>

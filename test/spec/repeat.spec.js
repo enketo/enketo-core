@@ -48,7 +48,7 @@ describe( 'repeat functionality', () => {
             const nodeSelector = 'input[name="/thedata/repeatGroup/nodeC"]';
             const node3 = form.view.html.querySelectorAll( nodeSelector )[ 2 ];
 
-            form.setInvalid( $( node3 ) );
+            form.setInvalid( node3 );
 
             expect( form.view.html.querySelectorAll( repeatSelector ).length ).toEqual( 3 );
             expect( node3.parentElement.classList.contains( 'invalid-constraint' ) ).toBe( true );
@@ -352,6 +352,7 @@ describe( 'repeat functionality', () => {
     } );
 
     describe( 'initializes date widgets', () => {
+
         it( 'in a new repeat instance if the date widget is not relevant by default', () => {
             const form = loadForm( 'repeat-irrelevant-date.xml' );
             form.init();
@@ -362,6 +363,7 @@ describe( 'repeat functionality', () => {
             el.dispatchEvent( event.Change() );
             expect( form.view.html.querySelectorAll( '[name="/repeat/rep/b"]' )[ 1 ].closest( '.question' ).querySelectorAll( '.widget' ).length ).toEqual( 1 );
         } );
+
     } );
 
     describe( 'getIndex() function', () => {
@@ -375,6 +377,47 @@ describe( 'repeat functionality', () => {
                 expect( form.repeats.getIndex( repeats[ index ] ) ).toEqual( index );
             } );
         } );
+
+    } );
+
+    describe( 'repeats with repeat-count and only calculations', () => {
+
+        const form = loadForm( 'repeat-count-calc-only.xml' );
+        const errors = form.init();
+        it( 'loads without errors', () => {
+            expect( errors ).toEqual( [] );
+        } );
+
+    } );
+
+    describe( 'radiobuttons', () => {
+
+        it( 'inside each repeat instance have different name attributes', () => {
+            const form = loadForm( 'repeat-radio.xml' );
+            const rep = '.or-repeat[name="/data/rep"]';
+            const radio = '[data-name="/data/rep/num"]';
+
+            form.init();
+            form.view.html.querySelector( '.add-repeat-btn' ).click();
+
+            const repeats = form.view.html.querySelectorAll( rep );
+            expect( repeats.length ).toEqual( 2 );
+
+            const names1 = [ ...repeats[ 0 ].querySelectorAll( radio ) ].map( el => el.name );
+            const names2 = [ ...repeats[ 1 ].querySelectorAll( radio ) ].map( el => el.name );
+
+            expect( names1.length ).toEqual( 2 );
+            expect( names1[ 0 ] ).not.toEqual( undefined );
+            expect( names1[ 0 ] ).toEqual( names1[ 1 ] );
+
+            expect( names2.length ).toEqual( 2 );
+            expect( names2[ 0 ] ).not.toEqual( undefined );
+            expect( names2[ 0 ] ).toEqual( names2[ 1 ] );
+
+            expect( names1[ 0 ] ).not.toEqual( names2[ 0 ] );
+
+        } );
+
     } );
 
 } );

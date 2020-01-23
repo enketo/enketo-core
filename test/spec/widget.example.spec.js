@@ -3,7 +3,7 @@ import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM =
     `<label class="question or-appearance-my-widget">
-        <input type="number" name="/data/node">
+        <input type="number" name="/data/node" data-type-xml="decimal" />
     </label>`;
 const VALUE = '2';
 

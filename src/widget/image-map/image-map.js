@@ -4,11 +4,15 @@ import events from '../../js/event';
 import { getSiblingElements } from '../../js/dom-utils';
 
 /**
- * Image Map widget that turns an SVG image into a clickable map 
- * by matching radiobutton/checkbox values with id attribute values in the SVG
+ * Image Map widget that turns an SVG image into a clickable map
+ * by matching radiobutton/checkbox values with id attribute values in the SVG.
+ *
+ * @extends Widget
  */
 class ImageMap extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.simple-select.or-appearance-image-map label:first-child > input';
     }
@@ -43,18 +47,27 @@ class ImageMap extends Widget {
         }
     }
 
+    /**
+     * @param {object} widget
+     */
     _addFunctionality( widget ) {
-        this.svg = widget.querySelector( 'svg' );
-        this.tooltip = widget.querySelector( '.image-map__ui__tooltip' );
-        if ( this.props.readonly ) {
-            this.disable();
+        if ( widget ) {
+            this.svg = widget.querySelector( 'svg' );
+            this.tooltip = widget.querySelector( '.image-map__ui__tooltip' );
+            if ( this.props.readonly ) {
+                this.disable();
+            }
+            this._setSvgClickHandler();
+            this._setChangeHandler();
+            this._setHoverHandler();
+            this._updateImage();
         }
-        this._setSvgClickHandler();
-        this._setChangeHandler();
-        this._setHoverHandler();
-        this._updateImage();
     }
 
+    /**
+     * @param {Element} img
+     * @return {Promise}
+     */
     _addMarkup( img ) {
         const that = this;
         const src = img.getAttribute( 'src' );
@@ -107,11 +120,14 @@ class ImageMap extends Widget {
             .catch( this._showSvgNotFoundError.bind( that ) );
     }
 
+    /**
+     * @param {Error} err
+     */
     _showSvgNotFoundError( err ) {
         console.error( err );
         const fragment = document.createRange().createContextualFragment(
             `<div class="widget image-map">
-                <div class="image-map__error">${t( 'imagemap.svgNotFound' )}</div>
+                <div class="image-map__error" data-i18n="imagemap.svgNotFound">${t( 'imagemap.svgNotFound' )}</div>
             </div>`
         );
         this.question.querySelector( '.option-wrapper' ).before( fragment );
@@ -119,8 +135,9 @@ class ImageMap extends Widget {
 
     /**
      * Removes id attributes from unmatched path elements in order to prevent hover effect (and click listener).
-     * 
-     * @return {jQuery} [description]
+     *
+     * @param {Element} svg
+     * @return {Element} cleaned up SVG
      */
     _removeUnmatchedIds( svg ) {
         svg.querySelectorAll( 'path[id], g[id]' ).forEach( el => {
@@ -132,10 +149,17 @@ class ImageMap extends Widget {
         return svg;
     }
 
+    /**
+     * @param {string} id
+     * @return {Element}
+     */
     _getInput( id ) {
         return this.question.querySelector( `input[value="${id}"]` );
     }
 
+    /**
+     * Handles SVG click listener
+     */
     _setSvgClickHandler() {
         this.svg.addEventListener( 'click', ev => {
             if ( !ev.target.closest( 'svg' ).matches( '[or-readonly]' ) && ev.target.matches( 'path[id], g[id]' ) ) {
@@ -150,10 +174,16 @@ class ImageMap extends Widget {
         } );
     }
 
+    /**
+     * Handles change listener
+     */
     _setChangeHandler() {
         this.question.addEventListener( 'change', this._updateImage.bind( this ) );
     }
 
+    /**
+     * Handles hover listener
+     */
     _setHoverHandler() {
         this.svg.querySelectorAll( 'path[id], g[id]' ).forEach( el => {
             el.addEventListener( 'mouseenter', ev => {
@@ -170,6 +200,10 @@ class ImageMap extends Widget {
         } );
     }
 
+    /**
+     * @param {object} data
+     * @return {boolean}
+     */
     _isSvgDoc( data ) {
         return typeof data === 'object' && data.querySelector( 'svg' );
     }
@@ -194,20 +228,30 @@ class ImageMap extends Widget {
         } );
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         this.svg.setAttribute( 'or-readonly', '' );
     }
 
+    /**
+     * Enables widget
+     */
     enable() {
-        if ( !this.props.readonly ) {
-            this.svg.removeAttribute( 'or-readonly' );
-        }
+        this.svg.removeAttribute( 'or-readonly' );
     }
 
+    /**
+     * Updates widget image
+     */
     update() {
         this._updateImage();
     }
 
+    /**
+     * @type string
+     */
     get value() {
         // This widget is unusual. It would better to get the value from the map.
         return this.originalInputValue;

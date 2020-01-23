@@ -10,13 +10,20 @@ import './jquery.relevant-dropdown';
 
 /**
  * Autocomplete select1 picker for modern browsers.
+ *
+ * @extends Widget
  */
 class AutocompleteSelectpicker extends Widget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.question input[list]';
     }
 
+    /**
+     * @type boolean
+     */
     static get list() {
         return true;
     }
@@ -26,15 +33,15 @@ class AutocompleteSelectpicker extends Widget {
 
         this.options = [ ...this.question.querySelectorAll( `datalist#${listId} > option` ) ];
 
-        // This value -> data-value change is not slow, so no need to move to enketo-xslt as that would 
+        // This value -> data-value change is not slow, so no need to move to enketo-xslt as that would
         // increase itemset complexity even further.
         this.options.forEach( item => {
             const value = item.getAttribute( 'value' );
             /**
              * We're changing the original datalist here, so have to make sure we don't do anything
              * if dataset.value is already populated.
-             * 
-             * However, for some reason !item.dataset.value is failing in Safari, which as a result sets all dataset.value attributes to "null" 
+             *
+             * However, for some reason !item.dataset.value is failing in Safari, which as a result sets all dataset.value attributes to "null"
              * To workaround this, we check for the value attribute instead.
              */
             if ( !item.classList.contains( 'itemset-template' ) && item.textContent && value !== undefined && value !== null ) {
@@ -70,6 +77,9 @@ class AutocompleteSelectpicker extends Widget {
         this._showCurrentLabel(); // after setting fakeInputListener!
     }
 
+    /**
+     * Displays current label
+     */
     _showCurrentLabel() {
         const inputValue = this.originalInputValue;
         const label = this._findLabel( inputValue );
@@ -83,6 +93,9 @@ class AutocompleteSelectpicker extends Widget {
         }
     }
 
+    /**
+     * Sets fake input listener
+     */
     _setFakeInputListener() {
         this.fakeInput.addEventListener( 'input', e => {
             const input = e.target;
@@ -95,6 +108,10 @@ class AutocompleteSelectpicker extends Widget {
         } );
     }
 
+    /**
+     * @param {string} label
+     * @return {string} value
+     */
     _findValue( label ) {
         let value = '';
 
@@ -112,6 +129,10 @@ class AutocompleteSelectpicker extends Widget {
         return value;
     }
 
+    /**
+     * @param {string} value
+     * @return {string} label
+     */
     _findLabel( value ) {
         let label = '';
 
@@ -128,6 +149,9 @@ class AutocompleteSelectpicker extends Widget {
         return label;
     }
 
+    /**
+     * Handles focus listener
+     */
     _setFocusListener() {
         // Handle original input focus
         this.element.addEventListener( events.ApplyFocus().type, () => {
@@ -135,24 +159,31 @@ class AutocompleteSelectpicker extends Widget {
         } );
     }
 
+    /**
+     * Disables widget
+     */
     disable() {
         this.fakeInput.classList.add( 'disabled' );
     }
 
+    /**
+     * Enables widget
+     */
     enable() {
         this.fakeInput.classList.remove( 'disabled' );
-
     }
 
+    /**
+     * Updates widget
+     *
+     * There are 3 scenarios for which method is called:
+     * 1. The options change (dynamic itemset)
+     * 2. The language changed. (just this._showCurrentLabel() would be more efficient)
+     * 3. The value of the underlying original input changed due a calculation. (same as #2?)
+     *
+     * For now we just dumbly reinstantiate it (including the polyfill).
+     */
     update() {
-        /*
-         * There are 3 scenarios for which method is called:
-         * 1. The options change (dynamic itemset)
-         * 2. The language changed. (just this._showCurrentLabel() would be more efficient)
-         * 3. The value of the underlying original input changed due a calculation. (same as #2?)
-         * 
-         * For now we just dumbly reinstantiate it (including the polyfill).
-         */
         this.element.parentElement.querySelector( '.widget' ).remove();
         this._init();
     }

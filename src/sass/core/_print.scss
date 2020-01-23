@@ -82,11 +82,12 @@ h4::before {
 
 // font sizes  & line heights
 h3 {
-    font-size: 1.6 * $printBaseFontSize;
+    font-size: 2 * $printBaseFontSize;
 }
 
-h4 {
-    font-size: 1.3 * $printBaseFontSize;
+h4,
+h4>.question-label {
+    font-size: 1.5 * $printBaseFontSize;
 }
 
 label,
@@ -104,6 +105,16 @@ label.geo {
 
 .question input:not([type=radio]):not([type=checkbox]) {
     font-size: $printBaseFontSize;
+}
+
+// We can not rely on cross-browser printing of CSS background images
+// so to be sure that a box is correctly shown to be "checked", we use the default appearance.
+input[type=radio] {
+    @include appearance(radio !important);
+}
+
+input[type=checkbox] {
+    @include appearance(checkbox !important);
 }
 
 .or {
@@ -162,7 +173,7 @@ label.geo {
     input[type=file],
     input[type=date],
     input[type=time],
-    input[type=datetime],
+    input[type=datetime-local],
     input[type=number],
     select,
     textarea {
@@ -180,8 +191,7 @@ label.geo {
         display: none !important;
     }
 
-    .or-hint.active,
-    .or-hint.or-form-guidance.active {
+    .or-hint.active {
         color: black;
         display: block;
         padding-top: 5px;
@@ -193,8 +203,12 @@ label.geo {
         border: 1px dotted black;
         padding: 1px;
         margin-top: 5px;
-        font-size: 10px;
+
+        summary {
+            display: none;
+        }
     }
+
 }
 
 .invalid-constraint,
@@ -251,23 +265,7 @@ label.geo {
     }
 }
 
-.esri-geopicker.widget {
-    .esri-ui-top-left {
-        display: none;
-    }
 
-    .btn[name="geodetect"] {
-        display: none !important;
-    }
-
-    .interaction-blocker {
-        display: none !important;
-    }
-
-    .map-canvas-wrapper:not(.hide-map) {
-        display: block !important;
-    }
-}
 
 .bootstrap-select {
     @include clearfix;
@@ -288,13 +286,28 @@ label.geo {
             box-shadow: none;
             list-style-type: circle;
             max-height: none;
+            padding-top: 0;
+            min-width: auto;
 
             li,
             li.active {
                 flex: 1;
                 min-width: 30%;
                 display: inline-block;
-                margin-right: 20px;
+                margin-right: 8px;
+
+                .option-wrapper {
+                    white-space: normal;
+                    padding: 0;
+
+                    label {
+                        padding-left: 4px !important;
+
+                        .option-label {
+                            word-break: break-word;
+                        }
+                    }
+                }
             }
 
             a {
@@ -342,7 +355,7 @@ label.geo {
     // which moves the vertical widget below the label instead of next to it.
     &:not(.or-appearance-horizontal) {
         display: flex !important;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
 
     .scale__ticks {

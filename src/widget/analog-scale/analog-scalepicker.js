@@ -2,8 +2,13 @@ import RangeWidget from '../../widget/range/range-widget';
 import { isNumber } from '../../js/utils';
 import support from '../../js/support';
 
+/**
+ * @extends RangeWidget
+ */
 class AnalogScaleWidget extends RangeWidget {
-
+    /**
+     * @type string
+     */
     static get selector() {
         return '.or-appearance-analog-scale input[type="number"]';
     }
@@ -18,6 +23,9 @@ class AnalogScaleWidget extends RangeWidget {
         this._setResizeListener();
     }
 
+    /**
+     * @return {string} HTML string
+     */
     _getHtmlStr() {
         const html =
             `<div class="widget analog-scale-widget">
@@ -29,7 +37,7 @@ class AnalogScaleWidget extends RangeWidget {
 
     _updateMercury() {}
 
-    /** 
+    /**
      * (re-)Renders the widget labels based on the current content of .question-label.active
      */
     _renderLabels() {
@@ -45,6 +53,9 @@ class AnalogScaleWidget extends RangeWidget {
         this._updateLabels();
     }
 
+    /**
+     * Updates labels
+     */
     _updateLabels() {
         if ( !this.question.classList.contains( 'or-analog-scale-initialized' ) ) {
             return;
@@ -87,10 +98,9 @@ class AnalogScaleWidget extends RangeWidget {
         }
     }
 
-
-    /*
+    /**
      * Stretch the question to full page height.
-     * Doing this with pure css flexbox using "flex-direction: column" interferes with the Grid theme 
+     * Doing this with pure css flexbox using "flex-direction: column" interferes with the Grid theme
      * because that theme relies on flexbox with "flex-direction: row".
      */
     _setResizeListener() {
@@ -101,26 +111,25 @@ class AnalogScaleWidget extends RangeWidget {
         }
     }
 
+    /**
+     * Stretches height
+     */
     _stretchHeight() {
         this.question.style[ 'min-height' ] = 'auto';
-        const height = this.question.offsetHeight;
-        const form = this.question.closest( '.or' );
-        const diff = form.offsetTop + form.offsetHeight - this.question.offsetTop + height - 10;
-        //const diff = ( $form.offset().top + $form.height() ) - ( $question.offset().top + height ) - 10;
-        if ( diff ) {
-            // To somewhat avoid problems when a repeat is clone and height is set while the widget is detached
-            // we use min-height instead of height.
-            //this.question.style[ 'min-height' ] = `${height + diff}px`;
-        }
     }
 
+    /**
+     * Updates with labels
+     */
     update() {
         super.update();
         this._updateLabels();
     }
 
+    /**
+     * @type object
+     */
     get props() {
-        // TODO: use super.props() and override step, max, vertical?
         const props = this._props;
         props.touch = support.touch;
         props.min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
@@ -132,6 +141,9 @@ class AnalogScaleWidget extends RangeWidget {
         return props;
     }
 
+    /**
+     * @type *
+     */
     get value() {
         return super.value;
     }

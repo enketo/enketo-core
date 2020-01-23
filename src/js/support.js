@@ -1,5 +1,7 @@
 /**
  * Detects features.
+ * 
+ * @module support
  */
 
 import { os } from './sniffer';
@@ -8,7 +10,7 @@ const inputTypes = {};
 let mobile = false;
 
 // test input types
-[ 'date', 'datetime', 'time', 'month' ].forEach( inputType => {
+[ 'date', 'datetime-local', 'time', 'month' ].forEach( inputType => {
     const input = document.createElement( 'input' );
     input.setAttribute( 'type', inputType );
     inputTypes[ inputType ] = input.type !== 'text';
@@ -21,9 +23,15 @@ if ( os.ios || os.android ) {
 }
 
 export default {
+    /** 
+     * @type Array<string>
+     **/
     get inputTypes() {
         return inputTypes;
     },
+    /** 
+     * @type boolean
+     **/
     get touch() {
         return mobile;
     },

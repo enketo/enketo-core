@@ -7,7 +7,7 @@ input[type=file],
 input[type=date],
 input[type=month],
 input[type=time],
-input[type=datetime],
+input[type=datetime-local],
 input[type=number],
 select,
 textarea {
@@ -25,7 +25,7 @@ input:not([readonly])+.widget {
     input[type=date],
     input[type=month],
     input[type=time],
-    input[type=datetime],
+    input[type=datetime-local],
     input[type=number],
     select,
     textarea {
