@@ -72,6 +72,7 @@ function Form( formSelector, data, options ) {
     this.model = new FormModel( data );
     this.repeatsPresent = !!this.view.html.querySelector( '.or-repeat' );
     this.widgetsInitialized = false;
+    this.repeatsInitialized = false;
     this.pageNavigationBlocked = false;
     this.initialized = false;
 }
@@ -263,6 +264,7 @@ Form.prototype.init = function() {
         // Set temporary event handler to ensure calculations in newly added repeats are run for the first time
         const tempHandler = event => this.calc.update( event.detail );
         this.view.html.addEventListener( events.AddRepeat().type, tempHandler );
+        this.repeatsInitialized = true;
         this.repeats.init();
         this.view.html.removeEventListener( events.AddRepeat().type, tempHandler );
 
@@ -499,7 +501,11 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     // If a repeat was deleted ( update.repeatPath && !updated.cloned), rebuild cache
     if ( !this.all[ attr ] || ( updated.repeatPath && !updated.cloned ) ) {
         // (re)build the cache
-        this.all[ attr ] = this.filterRadioCheckSiblings( [ ...this.view.html.querySelectorAll( `[${attr}]` ) ] );
+        // However, if repeats have not been initialized exclude nodes inside a repeat until the first repeat has been added during repeat initialization. 
+        // The default view repeat will be removed during initialization (and stored as template), before it is re-added, if necessary. 
+        // We need to avoid adding these fields to the initial cache, 
+        // so we don't waste time evaluating logic, and don't have to rebuild the cache after repeats have been initialized.
+        this.all[ attr ] = this.repeatsInitialized ? this.filterRadioCheckSiblings( [ ...this.view.html.querySelectorAll( `[${attr}]` ) ] ) : this.nonRepeats[ attr ];
     } else if ( updated.cloned && repeatControls ) {
         // update the cache
         this.all[ attr ] = this.all[ attr ].concat( repeatControls );

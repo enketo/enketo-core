@@ -420,4 +420,15 @@ describe( 'repeat functionality', () => {
 
     } );
 
+    describe( 'calculated items inside repeats', () => {
+
+        it( 'are cached correctly', () => {
+            const form = loadForm( 'repeat-relevant-calculate-single.xml' );
+            form.init();
+            // Issue where a calculation inside a repeat is cached before the repeats are initialized (which removes the first repeat, before adding it)
+            // This results in two cached calculations (for the same node) of which one no longer exists.
+            expect( form.getRelatedNodes( 'data-calculate' ).length ).toEqual( 1 );
+        } );
+    } );
+
 } );

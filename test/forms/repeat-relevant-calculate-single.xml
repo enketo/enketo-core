@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:OpenClinica="http://openclinica.com/odm" 
+    xmlns:enk="http://enketo.org/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:oc="http://openclinica.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Vital Signs</h:title>
+        <model>
+            <instance>
+                <data id="6">
+                    <yn/>
+                    <rg>
+                        <row/>
+                    </rg>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/rg" relevant=" /data/yn  = 1"/>
+            <bind calculate="position(..)" nodeset="/data/rg/row" readonly="true()" type="int"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/yn">
+            <label>Was blood pressure measured?</label>
+            <item>
+                <label>Yes</label>
+                <value>1</value>
+            </item>
+        </select1>
+        <group ref="/data/rg">
+            <label/>
+            <repeat nodeset="/data/rg">
+                <input ref="/data/rg/row">
+                    <label>This is Repeating Group entry:</label>
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
