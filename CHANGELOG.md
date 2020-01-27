@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Text-print widget is also instantiated for comment widgets, causing an issue for a customized Enketo Express application.
 - If repeats are removed in pages mode, the pages get messed up.
-- If repeats are added in pages mode, the Next/Back buttons are not updated when they should be.
+- If repeats are added in pages mode during form load (default instances or loading existing record with multiple instances), the Next/Back buttons are not updated when they should be.
 
 [5.11.5] - 2020-01-21
 ---------------------
