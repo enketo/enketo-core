@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.11.7] - 2020-01-28
 ---------------------
 ##### Fixed
 - Exception occurs when first repeat is created that contains a calculation if `validateContinuously` is set to `true`.

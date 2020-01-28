@@ -160,7 +160,9 @@ export default {
         if ( event.type === new events.InstanceFirstLoad().type ) {
             // We ignore relevance for the data-instance-first-load, as that will likely never be what users want for a default value.
             ignoreRelevance = true;
-            nodes = this.form.getRelatedNodes( 'data-setvalue', `[data-event*="${event.type}"]` ).get();
+            // Do not use getRelatedNodes here, because the obtaining (and caching) of nodes inside repeats is (and should be) disabled at the 
+            // time this event fires.
+            nodes = this.form.filterRadioCheckSiblings( [ ...this.form.view.html.querySelectorAll( `[data-setvalue][data-event*="${event.type}"]` ) ] );
         } else if ( event.type === new events.NewRepeat().type ) {
             // Only this event requires specific index targeting through the "updated" object
             nodes = this.form.getRelatedNodes( 'data-setvalue', `[data-event*="${event.type}"]`, event.detail ).get();

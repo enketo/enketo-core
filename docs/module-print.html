@@ -60,7 +60,7 @@
         <div class="container-overview">
         
             
-                <div class="description"><p>Deals with printing</p></div>
+                <div class="description usertext"><p>Deals with printing</p></div>
             
 
             
@@ -179,7 +179,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line240">line 240</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line252">line 252</a>
     </li></ul></dd>
     
 
@@ -250,7 +250,7 @@
 
     
 
-    <h4 class="name" id=".fixGrid"><span class="type-signature">(static) </span>fixGrid<span class="signature">(paper)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id=".fixGrid"><span class="type-signature">(static) </span>fixGrid<span class="signature">(paper, delay<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -262,7 +262,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line113">line 113</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line114">line 114</a>
     </li></ul></dd>
     
 
@@ -301,7 +301,7 @@
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Fixes a Grid Theme layout programmatically by imitating CSS multi-line flexbox in JavaScript.</p>
 </div>
 
@@ -328,7 +328,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -353,10 +357,61 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>delay</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>0</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>The delay in milliseconds, before starting the job.</p></td>
         </tr>
 
     
@@ -455,7 +510,7 @@
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Tests if the form element is set to use the Grid Theme.</p>
 </div>
 
@@ -521,7 +576,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line226">line 226</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line238">line 238</a>
     </li></ul></dd>
     
 
@@ -604,7 +659,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line260">line 260</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line272">line 272</a>
     </li></ul></dd>
     
 
@@ -643,7 +698,7 @@
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Prints the form after first preparing the Grid (every time it is called).</p>
 <p>It's just a demo function that only collects paper format and should be replaced
 in your app with a dialog that collects a complete paper format (size, margin, orientation);</p>
@@ -742,7 +797,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line87">line 87</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -781,7 +836,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Resets the print stylesheet to only apply to media 'print'</p>
 </div>
 
@@ -829,7 +884,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line71">line 71</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -868,7 +923,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Applies the print stylesheet to the current view by changing stylesheets media property to 'all'</p>
 </div>
 
@@ -934,7 +989,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line189">line 189</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line201">line 201</a>
     </li></ul></dd>
     
 
@@ -973,7 +1028,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Returns a CSS width value in px (e.g. <code>&quot;100px&quot;</code>) for a provided paper format, orientation (<code>&quot;portrait&quot;</code> or <code>&quot;landscape&quot;</code>) and margin (as any valid CSS value).</p>
 </div>
 
@@ -1088,7 +1143,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line43">line 43</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -1127,7 +1182,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Gets a single print stylesheet</p>
 </div>
 
@@ -1196,7 +1251,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line61">line 61</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -1235,7 +1290,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Obtains a link element with a reference to the print stylesheet.</p>
 </div>
 
@@ -1301,7 +1356,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line28">line 28</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -1340,7 +1395,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Calculates the dots per inch and sets the dpi property</p>
 </div>
 
@@ -1390,7 +1445,7 @@ in your app with a dialog that collects a complete paper format (size, margin, o
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line18">line 18</a>
+        <a href="js_print.js.html">js/print.js</a>, <a href="js_print.js.html#line16">line 16</a>
     </li></ul></dd>
     
 

@@ -115,7 +115,7 @@
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Class dealing with the XML Model of a form</p>
 </div>
 
@@ -309,7 +309,7 @@
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
 OpenRosa functions or for browsers that do not have a native evaluator.</p>
 </div>
@@ -590,7 +590,7 @@ OpenRosa functions or for browsers that do not have a native evaluator.</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Exposed <a href="module-types.html"><code>types</code></a> to facilitate extending with custom types</p>
 </div>
 
@@ -897,7 +897,7 @@ OpenRosa functions or for browsers that do not have a native evaluator.</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Adds a <repeat>able instance node in a particular series of a repeat.</p>
 </div>
 
@@ -1765,7 +1765,7 @@ will not add ordinal attributes as these should be provided in the record)</p></
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Determines the index of a repeated node amongst all nodes with the same XPath selector</p>
 </div>
 
@@ -1923,7 +1923,7 @@ will not add ordinal attributes as these should be provided in the record)</p></
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Evaluates an XPath Expression using XPathJS_javarosa (not native XPath 1.0 evaluator)</p>
 <p>This function does not seem to work properly for nodeset resulttypes otherwise:
 muliple nodes can be accessed by returned node.snapshotItem(i)(.textContent)
@@ -2368,7 +2368,7 @@ certain that there are no date comparisons)</p></td>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Extracts all templates from the model and stores them in a Javascript object poperties as Jquery collections.</p>
 </div>
 
@@ -2766,7 +2766,7 @@ certain that there are no date comparisons)</p></td>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Returns a namespace resolver with single <code>lookupNamespaceURI</code> method</p>
 </div>
 
@@ -2871,7 +2871,7 @@ certain that there are no date comparisons)</p></td>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Placeholder function meant to be overwritten</p>
 </div>
 
@@ -3443,7 +3443,7 @@ certain that there are no date comparisons)</p></td>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Obtains a single series of repeat element;</p>
 </div>
 
@@ -3624,7 +3624,7 @@ certain that there are no date comparisons)</p></td>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>For some unknown reason we cannot use doc.getElementById(id) or doc.querySelector('#'+id)
 in IE11. This function is a replacement for this specifically to find a secondary instance.</p>
 </div>
@@ -3779,7 +3779,7 @@ in IE11. This function is a replacement for this specifically to find a secondar
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Obtains a cleaned up string of the data instance</p>
 </div>
 
@@ -3993,7 +3993,7 @@ in IE11. This function is a replacement for this specifically to find a secondar
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Placeholder function meant to be overwritten</p>
 </div>
 
@@ -4080,7 +4080,7 @@ in IE11. This function is a replacement for this specifically to find a secondar
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Alternative adoptNode on IE11 (http://stackoverflow.com/questions/1811116/ie-support-for-dom-importnode)
 TODO: remove to be replaced by separate IE11-only polyfill file/service</p>
 </div>
@@ -4240,7 +4240,7 @@ TODO: remove to be replaced by separate IE11-only polyfill file/service</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Initializes FormModel</p>
 </div>
 
@@ -4349,7 +4349,7 @@ TODO: remove to be replaced by separate IE11-only polyfill file/service</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>There is a huge historic issue (stemming from JavaRosa) that has resulted in the usage of incorrect formulae
 on nodes inside repeat nodes.
 Those formulae use absolute paths when relative paths should have been used. See more here:
@@ -4543,7 +4543,7 @@ the second rep_a repeat.</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Merges an XML instance string into the XML Model</p>
 </div>
 
@@ -4702,7 +4702,7 @@ the second rep_a repeat.</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Returns a new Nodeset instance</p>
 </div>
 
@@ -5100,7 +5100,7 @@ the second rep_a repeat.</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Removes all ordinal attriubetes from all applicable nodes</p>
 </div>
 
@@ -5236,7 +5236,7 @@ the second rep_a repeat.</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Replaces current() with /absolute/path/to/node to ensure the context is shifted to the primary instance</p>
 <p>Doing this here instead of adding a current() function to the XPath evaluator, means we can keep using
 the much faster native evaluator in most cases!</p>
@@ -5420,7 +5420,7 @@ the much faster native evaluator in most cases!</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Replaces indexed-repeat(node, path, position, path, position, etc) substrings by converting them
 to their native XPath equivalents using [position() = x] predicates</p>
 </div>
@@ -5625,7 +5625,7 @@ to their native XPath equivalents using [position() = x] predicates</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Replace instance('id') with an absolute path
 Doing this here instead of adding an instance() function to the XPath evaluator, means we can keep using
 the much faster native evaluator in most cases!</p>
@@ -6139,7 +6139,7 @@ the much faster native evaluator in most cases!</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Sets instance ID and deprecated ID</p>
 </div>
 
@@ -6226,7 +6226,7 @@ the much faster native evaluator in most cases!</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Set namespaces for all nodes</p>
 </div>
 
@@ -6313,7 +6313,7 @@ the much faster native evaluator in most cases!</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Shift root to first instance for all absolute paths not starting with /model</p>
 </div>
 
@@ -6626,7 +6626,7 @@ the much faster native evaluator in most cases!</p>
 
 
 
-<div class="description">
+<div class="description usertext">
     <p>Trims values of all Form elements</p>
 </div>
 
