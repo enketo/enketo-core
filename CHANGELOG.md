@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- No longer trigger an inputupdate event when loading an existing itemset value.
+
 [5.11.7] - 2020-01-28
 ---------------------
 ##### Fixed
@@ -37,7 +42,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [5.11.1] - 2020-01-06
 ---------------------
 ##### Changed
-- No longer triggering an inputupdate event when setting default values in view.
+- No longer trigger an inputupdate event when setting default values in view.
 
 ##### Fixed
 - Annotate widget broken when uploading new image.
