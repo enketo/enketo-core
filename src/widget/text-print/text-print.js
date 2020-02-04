@@ -12,7 +12,7 @@ class TextPrintWidget extends Widget {
     static get selector() {
         // The [data-for] exclusion prevents "comment" widgets from being included.
         // It is not quite correct to do this but atm the "for" attribute in XForms is only used for comment widgets.
-        return '.question:not(.or-appearance-autocomplete) > input[type=text]:not(.ignore):not([data-for])';
+        return '.question:not(.or-appearance-autocomplete):not(.or-appearance-url) > input[type=text]:not(.ignore):not([data-for])';
     }
 
     _init() {
