@@ -3,7 +3,7 @@
 ##### inputupdate
 Fired on a form control when it is programmatically updated and when this results in a change in value
 
-#### valuechange
+#### xforms-value-changed
 Fired on a form control when it is updated directly by the user and when this results in a change in value
 
 ##### invalidated

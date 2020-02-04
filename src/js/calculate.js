@@ -117,6 +117,12 @@ export default {
         } else if ( event.type === new events.NewRepeat().type ) {
             // Only this event requires specific index targeting through the "updated" object
             nodes = this.form.getRelatedNodes( 'data-setvalue', `[data-event*="${event.type}"]`, event.detail ).get();
+        } else if ( event.type === new events.XFormsValueChanged().type ) {
+            const question = event.target.closest( '.question' );
+            const setValueNode = question ? question.querySelector( `[data-setvalue][data-event*="${event.type}"]` ) : null;
+            if ( setValueNode ) {
+                nodes = [ setValueNode ];
+            }
         }
 
         nodes.forEach( control => {
@@ -133,12 +139,12 @@ export default {
                 dataNodesObj
             };
 
-            if ( dataNodes.length > 1 && event.type !== new events.NewRepeat().type ) {
+            if ( dataNodes.length > 1 && event.type !== new events.NewRepeat().type && event.type !== new events.XFormsValueChanged().type ) {
                 /*
                  * This case is the consequence of the decision to place setvalue items that are siblings of bind in the XForm 
                  * as a separate group (.or-setvalue-items), instead of in the Form DOM in the locations where they belong.
                  * This occurs when update is called when multiple repeats are present. 
-                 * For now this is only relevant for events that are *not* odk-new-repeat.
+                 * For now this is only relevant for events that are *not* odk-new-repeat and *not* xforms-value-changed.
                  */
                 dataNodes.forEach( ( el, index ) => {
                     const obj = Object.create( props );

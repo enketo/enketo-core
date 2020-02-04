@@ -222,8 +222,11 @@ Form.prototype.init = function() {
     // Handle odk-instance-first-load event
     this.model.events.addEventListener( events.InstanceFirstLoad().type, event => this.calc.setValue( event ) );
 
-    //Handle odk-new-repeat event before initializing repeats
+    // Handle odk-new-repeat event before initializing repeats
     this.view.html.addEventListener( events.NewRepeat().type, event => this.calc.setValue( event ) );
+
+    // Handle xforms-value-changed
+    this.view.html.addEventListener( events.XFormsValueChanged().type, event => this.calc.setValue( event ) );
 
     loadErrors = loadErrors.concat( this.model.init() );
 
@@ -724,7 +727,6 @@ Form.prototype.setEventHandlers = function() {
     this.view.$.on( 'change.file',
         'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)',
         function() {
-            const $input = $( this );
             const input = this;
             const n = {
                 path: that.input.getName( input ),
@@ -748,9 +750,9 @@ Form.prototype.setEventHandlers = function() {
 
             if ( updated ) {
                 that.validateInput( input )
-                    .then( valid => {
+                    .then( () => {
                         // propagate event externally after internal processing is completed
-                        $input.trigger( 'valuechange', valid );
+                        input.dispatchEvent( events.XFormsValueChanged( { repeatIndex: n.index } ) );
                     } );
             }
         } );
@@ -1114,6 +1116,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type string
  * @default
  */
-Form.requiredTransformerVersion = '1.37.0';
+Form.requiredTransformerVersion = '1.38.0';
 
 export { Form, FormModel };

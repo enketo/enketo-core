@@ -1069,12 +1069,12 @@ describe( 'clearing inputs', () => {
 
 describe( 'white-space-only input', () => {
     // This is e.g. important for automatic value-change log creation in OpenClinica.
-    it( 'does not fire a valuechange event', done => {
+    it( 'does not fire an xforms-value-changed event', done => {
         const form = loadForm( 'thedata.xml' );
         form.init();
         const $input = form.view.$.find( '[name="/thedata/nodeF"]' );
         let counter = 0;
-        $input.on( 'valuechange.enketo', () => counter++ );
+        $input[ 0 ].addEventListener( new events.XFormsValueChanged().type, () => counter++ );
 
         function inputVal( val ) {
             return new Promise( resolve => {

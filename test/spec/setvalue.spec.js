@@ -1,6 +1,7 @@
 import loadForm from '../helpers/load-form';
 import forms from '../mock/forms';
 import { Form } from '../../src/js/form';
+import events from '../../src/js/event';
 
 /*
  * These tests are for setvalue actions. Even though this functionality is part of calculate.js they are separated since they 
@@ -12,7 +13,7 @@ describe( 'setvalue action to populate defaults', () => {
     it( 'works for questions with odk-instance-first-load outside of the XForms body', () => {
         const form1 = loadForm( 'setvalue.xml' );
         form1.init();
-        expect( form1.model.xml.querySelector( 'a' ).textContent ).toEqual( '2' );
+        expect( form1.model.xml.querySelector( 'a' ).textContent ).toEqual( 'initialized' );
     } );
 
     it( 'works for questions with odk-instance-first-load inside of the XForms body', () => {
@@ -22,7 +23,6 @@ describe( 'setvalue action to populate defaults', () => {
     } );
 
     describe( 'inside repeats', () => {
-
 
         describe( 'with only odk-new-repeat', () => {
 
@@ -350,6 +350,51 @@ describe( 'setvalue action to populate defaults', () => {
 
         } );
 
+    } );
+
+} );
+
+
+describe( 'setvalue actions to populate a value if another value changes', () => {
+
+    it( 'works outside a repeat in conjunction with a select_minimal', done => {
+        const form = loadForm( 'setvalue.xml' );
+        form.init();
+        const myAgeView = form.view.html.querySelector( '[name="/data/my_age"]' );
+        const myAgeChangedView = form.view.html.querySelector( '[name="/data/my_age_changed"]' );
+        const myAgeChangedModel = form.model.xml.querySelector( 'my_age_changed' );
+
+        expect( myAgeChangedView.textContent ).toEqual( '' );
+        expect( myAgeChangedModel.textContent ).toEqual( '' );
+
+        form.input.setVal( myAgeView, '11', null );
+        myAgeView.dispatchEvent( events.Change() );
+
+        setTimeout( () => {
+            //expect( myAgeChangedView.textContent ).toEqual( '6' );
+            expect( myAgeChangedModel.textContent ).toEqual( '111' );
+            done();
+        }, 100 );
+    } );
+
+    it( 'works inside a repeat in conjunction with a number input', done => {
+        const form = loadForm( 'setvalue.xml' );
+        form.init();
+        const agesView = [ ...form.view.html.querySelectorAll( '[name="/data/person/age"]' ) ];
+        const ageChangedsView = [ ...form.view.html.querySelectorAll( '[name="/data/person/age_changed"]' ) ];
+        const ageChangedsModel = [ ...form.model.xml.querySelectorAll( 'age_changed' ) ];
+
+        expect( ageChangedsView.map( el => el.textContent ) ).toEqual( [ '', '' ] );
+        expect( ageChangedsModel.map( el => el.textContent ) ).toEqual( [ '', '' ] );
+
+        form.input.setVal( agesView[ 0 ], '22', null );
+        agesView[ 0 ].dispatchEvent( events.Change() );
+
+        setTimeout( () => {
+            //expect( ageChangedsView.map( el => el.textContent )).toEqual( [ 'Age changed!', '' ] );
+            expect( ageChangedsModel.map( el => el.textContent ) ).toEqual( [ 'Age changed!', '' ] );
+            done();
+        }, 100 );
     } );
 
 } );

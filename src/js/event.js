@@ -54,7 +54,7 @@ function Removed( detail ) {
 /**
  * The odk-instance-first-load event as defined in the ODK XForms spec.
  * @see https://opendatakit.github.io/xforms-spec/#event:odk-instance-first-load
- *@return {CustomEvent} Custom "odk-instanc-first-load" event (bubbling)
+ *@return {CustomEvent} Custom "odk-instance-first-load" event (bubbling)
  */
 function InstanceFirstLoad() {
     return new CustomEvent( 'odk-instance-first-load', { bubbles: true } );
@@ -100,10 +100,21 @@ function ChangeLanguage() {
 /**
  * Change event.
  *
- * @return {Event} "change" event (bubbling)
+ * @return {Event} The regular HTML "change" event (bubbling)
  */
 function Change() {
     return new Event( 'change', { bubbles: true } );
+}
+
+/**
+ * Xforms-value-changed event as defined in the ODK XForms spec.
+ * @see https://opendatakit.github.io/xforms-spec/#event:xforms-value-changed
+ *@return {CustomEvent} Custom "xforms-value-changed" event (bubbling)
+ * @param {{repeatIndex: number}} detail - Data to be passed with event.
+ * @return {Event} "change" event (bubbling)
+ */
+function XFormsValueChanged( detail ) {
+    return new CustomEvent( 'xforms-value-changed', { detail, bubbles: true } );
 }
 
 /**
@@ -190,5 +201,5 @@ export default {
     Invalidated,
     ProgressUpdate,
     GoToHidden,
-
+    XFormsValueChanged
 };

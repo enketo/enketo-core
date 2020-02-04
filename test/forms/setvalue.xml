@@ -15,12 +15,15 @@
                     <b/>
                     <c>default</c>
                     <my_age>3</my_age>
+                    <my_age_changed/>
                     <person>
                         <age/>
+                        <age_changed/>
                         <d/>
                     </person>
                     <person>
                         <age>100</age>
+                        <age_changed/>
                         <d>bb</d>
                     </person>
                     <count>6</count>
@@ -29,10 +32,11 @@
                     </meta>
                 </data>
             </instance>
-            <bind nodeset="/data/a" type="int"/>
+            <bind nodeset="/data/a" type="string"/>
             <bind nodeset="/data/c" type="string"/>
+            <bind nodeset="/data/my_age_changed" type="int"/>
             <bind nodeset="/data/person/age" type="decimal"/>
-            <setvalue event="some-unsupported-event odk-instance-first-load" ref="/data/a">1+1</setvalue>
+            <setvalue event="some-unsupported-event odk-instance-first-load" ref="/data/a">initialized</setvalue>
             <setvalue event="odk-new-repeat" ref="/data/person/d" value="'a'"></setvalue>
         </model>
     </h:head>
@@ -41,13 +45,23 @@
         <input ref="/data/c">
             <label>Enter</label>
         </input>
-        <input ref="/data/my_age">
+        <select1 ref="/data/my_age" appearance="minimal">
             <label>Your age</label>
-        </input>
+            <setvalue event="xforms-value-changed" ref="/data/my_age_changed" value="../my_age+100"/>
+            <item>
+                <label>10</label>
+                <value>10</value>
+            </item>
+            <item>
+                <label>11</label>
+                <value>11</value>
+            </item>
+        </select1>
         <repeat nodeset="/data/person">
             <setvalue event="odk-new-repeat" ref="/data/person/age" value="../../my_age + 2" />
             <input ref="/data/person/age">
                 <label>Person's age</label>
+                <setvalue event="xforms-value-changed" ref="/data/person/age_changed">Age changed!</setvalue>
             </input>
         </repeat>
     </h:body>
