@@ -133,6 +133,9 @@ function fixGrid( paper, delay = 0 ) {
 
                 if ( top === rowTop ) {
                     row = row.concat( el );
+                    if ( lastElement ) {
+                        _resizeRowElements( row, maxWidth );
+                    }
                 }
 
                 // process row, and start a new row
