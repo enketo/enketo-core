@@ -12,6 +12,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - No longer trigger an inputupdate event when loading an existing itemset value.
 - "valuechange" event was changed to "xforms-value-changed" (TBC!)
 
+##### Fixed
+- Text-print widget causes double URL to be shown in print view for URL widget.
+
 [5.11.7] - 2020-01-28
 ---------------------
 ##### Fixed
