@@ -16,7 +16,7 @@ class DatepickerExtended extends Widget {
      * @type string
      */
     static get selector() {
-        return '.question input[type="date"]:not([readonly])';
+        return '.question input[type="date"]';
     }
 
     /**
@@ -47,16 +47,14 @@ class DatepickerExtended extends Widget {
         this._setFocusHandler( this.$fakeDateI );
         this._setResetHandler( this.$fakeDateI );
 
-        this.$fakeDateI.datepicker( {
-            format: this.settings.format,
-            autoclose: true,
-            todayHighlight: true,
-            startView: this.settings.startView,
-            minViewMode: this.settings.minViewMode,
-            forceParse: false
-        } );
-
+        this.enable();
         this.value = this.element.value;
+
+        // It is much easier to first enable and disable, and not as bad it seems, since readonly will become dynamic eventually.
+        if ( this.props.readonly ) {
+            console.log( 'disabling datepicker' );
+            this.disable();
+        }
     }
 
     /**
@@ -160,6 +158,21 @@ class DatepickerExtended extends Widget {
     _toDisplayDate( date = '' ) {
         date = date.trim();
         return date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
+    }
+
+    disable() {
+        this.$fakeDateI.datepicker( 'destroy' );
+    }
+
+    enable() {
+        this.$fakeDateI.datepicker( {
+            format: this.settings.format,
+            autoclose: true,
+            todayHighlight: true,
+            startView: this.settings.startView,
+            minViewMode: this.settings.minViewMode,
+            forceParse: false
+        } );
     }
 
     update() {

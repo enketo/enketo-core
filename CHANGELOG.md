@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Text-print widget causes double URL to be shown in print view for URL widget.
 - Last row of Grid Theme form may have incorrect cell heights.
+- Readonly month-year or year inputs show full underlying value instead of month-year/year.
   
 [5.11.7] - 2020-01-28
 ---------------------
