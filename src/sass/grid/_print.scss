@@ -222,3 +222,13 @@ screen and (min-width: 700px) {
 }
 
 // End of adjustment to get page breaks to work in multi-line flexbox
+
+// text-print widget
+.or-text-print-initialized {
+    .print-input-text {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+        border-bottom: none;
+    }
+}
