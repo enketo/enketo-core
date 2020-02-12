@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>widgets - Enketo Core</title>
+    <title>widget/thousands-sep/thousands-sep.js - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -37,136 +37,81 @@
 
 <div id="main">
     
-    <h1 class="page-title">widgets</h1>
+    <h1 class="page-title">widget/thousands-sep/thousands-sep.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-                <div class="description usertext"><p>A collection of all available widgets</p></div>
-            
-
-            
-                
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widgets.js.html">js/widgets.js</a>, <a href="js_widgets.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Widget from '../../js/widget';
+import { isNumber } from '../../js/utils';
+
+/**
+ * Thousands separator widget.
+ * Deviates from ODK XForms spec by not supporting text fields.
+ */
+class ThousandsSeparatorWidget extends Widget {
+
+    static get selector() {
+        return '.or-appearance-thousands-sep input[type="number"]';
+    }
+
+    /**
+     * Initialize 
+     */
+    _init() {
+        const fragment = document.createRange().createContextualFragment( '&lt;div class="widget ">&lt;/div>' );
+
+        this.element.after( fragment );
+        this.widget = this.element.parentElement.querySelector( '.widget' );
+
+        // Set the current loaded value into the widget
+        this.update();
+
+        this.element.addEventListener( 'change', this.update.bind( this ) );
+    }
+
+    /**
+     * Update the value of the widget.
+     */
+    update() {
+        this.value = this.originalInputValue;
+    }
+
+    /**
+     * Obtain the current value from the widget. 
+     *
+     * @type *
+     */
+    get value() {
+        return this.widget.textContent;
+    }
+
+    /**
+     * Set a value in the widget.
+     *
+     * @param {*} value
+     */
+    set value( value ) {
+        let displayValue = '';
+
+        if ( isNumber( value ) ) {
+            displayValue = Number( value ).toLocaleString( undefined, { maximumFractionDigits: 20 } );
+        }
+
+        this.widget.textContent = displayValue;
+    }
+
+}
+
+export default ThousandsSeparatorWidget;
+</code></pre>
+        </article>
+    </section>
 
 
 
