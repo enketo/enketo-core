@@ -162,6 +162,8 @@ class DatepickerExtended extends Widget {
 
     disable() {
         this.$fakeDateI.datepicker( 'destroy' );
+        this.$fakeDateI.prop( 'disabled', true );
+        this.$fakeDateI.next( '.btn-reset' ).prop( 'disabled', true );
     }
 
     enable() {
@@ -173,6 +175,8 @@ class DatepickerExtended extends Widget {
             minViewMode: this.settings.minViewMode,
             forceParse: false
         } );
+        this.$fakeDateI.prop( 'disabled', false );
+        this.$fakeDateI.next( '.btn-reset' ).prop( 'disabled', false );
     }
 
     update() {
