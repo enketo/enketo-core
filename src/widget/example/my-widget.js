@@ -29,7 +29,7 @@ class MyWidget extends Widget {
         const fragment = document.createRange().createContextualFragment(
             `<div class="widget">
                 <input class="ignore" type="range" min="0" max="100" step="1"/>
-            <div>`
+            </div>`
         );
         fragment.querySelector( '.widget' ).appendChild( this.resetButtonHtml );
 

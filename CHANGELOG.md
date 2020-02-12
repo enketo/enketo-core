@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Added
 - Support for setvalue action with xforms-value-changed event.
+- Basic support for "thousands-sep" appearance on integer and decimal fields.
 
 ##### Changed
 - No longer trigger an inputupdate event when loading an existing itemset value.
