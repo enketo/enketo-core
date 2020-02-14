@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Changed
+- The odk:generated-by attribute check on the primary instance (introduced in 5.11.0), was changed to a check for odk:xforms-version on the model node.
+
 ##### Fixed
 - Readonly date widgets can be edited or reset (regression in 5.12.0).
 
