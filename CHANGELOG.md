@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.13.0] - 2020-02-14
 ----------------------
 ##### Changed
 - The odk:generated-by attribute check on the primary instance (introduced in 5.11.0), was changed to a check for odk:xforms-version on the model node.
