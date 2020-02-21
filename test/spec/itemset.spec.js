@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import loadForm from '../helpers/load-form';
 import events from '../../src/js/event';
+import { isStaticItemsetFromSecondaryInstance } from '../../src/js/itemset';
 
 describe( 'Itemset functionality', () => {
     let form;
@@ -450,4 +451,22 @@ describe( 'Itemset functionality', () => {
         } );
 
     } );
+
+    describe( 'analyzes whether XPath itemset expression is static external instance nodeset', () => {
+        [
+            [ '/path/to/node', false ],
+            [ '/path/to/node[name=/path/to/another/node]', false ],
+            [ ' instance( "something")/path/to/node[name=/path/to/another/node]', false ],
+            [ ' instance( "something")/path/to/node ', true ],
+            [ 'instance("countries")/root/item', true ],
+            [ 'instance("countries")/root/item[43]', true ],
+            [ 'instance("countries")/root/item[label=current()/../answer]', false ]
+        ].forEach( test => {
+            it( `correctly determines that ${test[0]} is ${test[1] === true ? '': 'not '}dynamic`, () => {
+                expect( isStaticItemsetFromSecondaryInstance( test[ 0 ] ) ).toEqual( test[ 1 ] );
+            } );
+        } );
+
+    } );
+
 } );

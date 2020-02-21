@@ -106,7 +106,7 @@ export default {
      */
     setSelect( select ) {
         const type = select.nodeName.toLowerCase();
-        const question = select.closest( '.question' );
+        const question = select.closest( '.question, .or-repeat-info' );
         const translations = question ? question.querySelector( '.or-option-translations' ) : null;
 
         if ( !translations ) {

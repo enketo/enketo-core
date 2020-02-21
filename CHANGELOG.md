@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Changed
+- Improved performance of autocomplete questions inside repeats that use static option lists.
+
 [5.13.2] - 2020-03-20
 ----------------------
 ##### Fixed

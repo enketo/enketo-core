@@ -16,7 +16,7 @@ import events from './event';
 import { t } from 'enketo/translator';
 import dialog from 'enketo/dialog';
 import { getSiblingElements, getChildren, getSiblingElementsAndSelf } from './dom-utils';
-
+import { isStaticItemsetFromSecondaryInstance } from './itemset';
 import config from 'enketo/config';
 const disableFirstRepeatRemoval = config.repeatOrdinals === true;
 
@@ -28,6 +28,8 @@ export default {
     init() {
         const that = this;
         let $repeatInfos;
+
+        this.staticLists = [];
 
         if ( !this.form ) {
             throw new Error( 'Repeat module not correctly instantiated with form property.' );
@@ -277,8 +279,8 @@ export default {
         // Add required number of repeats
         for ( let i = 0; i < toCreate; i++ ) {
             // Fix names of radio button groups
-            clone.querySelectorAll( '.option-wrapper' ).forEach( this.fixRadioNames );
-            clone.querySelectorAll( 'datalist' ).forEach( this.fixDatalistIds );
+            clone.querySelectorAll( '.option-wrapper' ).forEach( this.fixRadioName );
+            this.processDatalists( clone.querySelectorAll( 'datalist' ), repeatInfo );
 
             // Insert the clone
             repeatInfo.parentElement.insertBefore( clone, repeatInfo );
@@ -358,17 +360,55 @@ export default {
             that.form.model.node( repeatPath, repeatIndex ).remove();
         } );
     },
-    fixRadioNames( element ) {
+    fixRadioName( element ) {
         const random = Math.floor( ( Math.random() * 10000000 ) + 1 );
         element.querySelectorAll( 'input[type="radio"]' )
             .forEach( el => {
                 el.setAttribute( 'name', random );
             } );
     },
-    fixDatalistIds( element ) {
+    fixDatalistId( element ) {
         const newId = element.id + Math.floor( ( Math.random() * 10000000 ) + 1 );
         element.parentNode.querySelector( `input[list="${element.id}"]` ).setAttribute( 'list', newId );
         element.id = newId;
+    },
+    processDatalists( datalists, repeatInfo ) {
+        datalists.forEach( datalist => {
+            const template = datalist.querySelector( '.itemset-template[data-items-path]' );
+            const expr = template ? template.dataset.itemsPath : null;
+
+            if ( !isStaticItemsetFromSecondaryInstance( expr ) ) {
+                this.fixDatalistId( datalist );
+            } else {
+                const id = datalist.id;
+                const inputs = getSiblingElements( datalist, 'input[list]' );
+                const input = inputs.length ? inputs[ 0 ] : null;
+                if ( input ) {
+                    // For very long static datalists, a huge performance improvement can be achieved, by using the 
+                    // same datalist for all repeat instances that use it.
+                    if ( this.staticLists.includes( id ) ) {
+                        datalist.remove();
+                    } else {
+                        // Let all identical input[list] questions amongst all repeat instances use the same
+                        // datalist by moving it under repeatInfo. 
+                        // It will survive removal of all repeat instances.
+                        const parent = datalist.parentElement;
+                        const detachedList = parent.removeChild( datalist );
+                        const name = input.name;
+                        detachedList.setAttribute( 'data-name', name );
+                        repeatInfo.appendChild( detachedList );
+                        const translations = parent.querySelector( '.or-option-translations' );
+                        const labels = parent.querySelector( '.itemset-labels' );
+                        const detachedTranslations = parent.removeChild( translations );
+                        const detachedLabels = parent.removeChild( labels );
+                        repeatInfo.appendChild( detachedTranslations );
+                        repeatInfo.appendChild( detachedLabels );
+                        this.staticLists.push( id );
+                        //input.classList.add( 'shared' );
+                    }
+                }
+            }
+        } );
     },
     toggleButtons( repeatInfo ) {
         $( repeatInfo )

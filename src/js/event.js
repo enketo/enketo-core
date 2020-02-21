@@ -181,6 +181,10 @@ function GoToHidden() {
     return new CustomEvent( 'gotohidden', { bubbles: true } );
 }
 
+function ChangeOption() {
+    return new CustomEvent( 'changeoption', { bubbles: true } );
+}
+
 
 export default {
     DataUpdate,
@@ -201,5 +205,6 @@ export default {
     Invalidated,
     ProgressUpdate,
     GoToHidden,
-    XFormsValueChanged
+    XFormsValueChanged,
+    ChangeOption
 };

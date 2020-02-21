@@ -153,7 +153,7 @@ function _setLangChangeListener( Widget, els ) {
  */
 function _setOptionChangeListener( Widget, els ) {
     if ( els.length > 0 && Widget.list ) {
-        $( els ).on( 'changeoption', function() {
+        $( els ).on( events.ChangeOption().type, function() {
             // update (itemselect) picker on which event was triggered because the options changed
             new Collection( this ).update( Widget );
         } );

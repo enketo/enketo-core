@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import events from '../../js/event';
+import { getSiblingElements } from '../../js/dom-utils';
 
 const sadExcuseForABrowser = !( 'list' in document.createElement( 'input' ) &&
     'options' in document.createElement( 'datalist' ) &&
@@ -31,7 +32,12 @@ class AutocompleteSelectpicker extends Widget {
     _init() {
         const listId = this.element.getAttribute( 'list' );
 
-        this.options = [ ...this.question.querySelectorAll( `datalist#${listId} > option` ) ];
+        if ( getSiblingElements( this.element, 'datalist' ).length === 0 ) {
+            const infos = getSiblingElements( this.element.closest( '.or-repeat' ), '.or-repeat-info' );
+            this.options = infos.length ? [ ...infos[ 0 ].querySelectorAll( `datalist#${listId} > option` ) ] : [];
+        } else {
+            this.options = [ ...this.question.querySelectorAll( `datalist#${listId} > option` ) ];
+        }
 
         // This value -> data-value change is not slow, so no need to move to enketo-xslt as that would
         // increase itemset complexity even further.
