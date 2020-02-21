@@ -203,7 +203,6 @@ export default {
      * @param {Element} repeatInfo - repeatInfo element
      */
     updateRepeatInstancesFromCount( repeatInfo ) {
-        let numRepsInCount;
         const repCountPath = repeatInfo.dataset.repeatCount || '';
 
         if ( !repCountPath ) {
@@ -216,14 +215,7 @@ export default {
          * is determined in a node inside the parent repeat. To do so we use the repeat comment in model as context.
          */
         const repPath = repeatInfo.dataset.name;
-        const repCountNode = this.form.model.evaluate( repCountPath, 'node', this.form.model.getRepeatCommentSelector( repPath ), this.getInfoIndex( repeatInfo ), true );
-
-        if ( repCountNode ) {
-            numRepsInCount = Number( repCountNode.textContent );
-        } else {
-            console.error( 'Unexpectedly, could not obtain repeat count node' );
-        }
-
+        let numRepsInCount = this.form.model.evaluate( repCountPath, 'number', this.form.model.getRepeatCommentSelector( repPath ), this.getInfoIndex( repeatInfo ), true );
         numRepsInCount = isNaN( numRepsInCount ) ? 0 : numRepsInCount;
         const numRepsInView = getSiblingElements( repeatInfo, `.or-repeat[name="${repPath}"]` ).length;
         let toCreate = numRepsInCount - numRepsInView;
