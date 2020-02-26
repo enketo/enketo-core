@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Fixed
 - `jr:count` does not work if number is provided instead of /path/to/count.
+- Date calculations in readonly fields do not show a value if not loaded from record.
 
 [5.13.0] - 2020-02-14
 ----------------------
