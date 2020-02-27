@@ -126,7 +126,7 @@ export default {
      * @return {string} element XML type
      */
     getXmlType( control ) {
-        return control.dataset.typeXml.toLowerCase() || 'string';
+        return ( control.dataset.typeXml || 'string' ).toLowerCase();
     },
     /**
      * @param {Element} control
