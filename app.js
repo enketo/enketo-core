@@ -65,12 +65,7 @@ function initializeForm() {
     form = new Form( 'form.or:eq(0)', {
         modelStr: modelStr
     }, {
-        arcGis: {
-            basemaps: [ 'streets', 'topo', 'satellite', 'osm' ],
-            webMapId: 'f2e9b762544945f390ca4ac3671cfa72',
-            hasZ: true
-        },
-        'clearIrrelevantImmediately': true
+        'clearIrrelevantImmediately': false
     } );
     // for debugging
     window.form = form;

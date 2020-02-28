@@ -11,13 +11,7 @@ export default {
     'repeatOrdinals': false,
     'validateContinuously': false,
     'validatePage': true,
+    'clearIrrelevantImmediately': true,
     'swipePage': true,
-    'arcGis': {
-        'jsUrl': '',
-        'cssUrl': '',
-        'webMapId': '',
-        'hasZ': true,
-        'basemaps': [ 'streets' ]
-    },
     'textMaxChars': 2000
 };

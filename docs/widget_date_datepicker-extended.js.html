@@ -247,7 +247,11 @@ class DatepickerExtended extends Widget {
     }
 
     set value( date ) {
-        this.$fakeDateI.datepicker( 'setDate', this._toDisplayDate( date ) );
+        if ( this.$fakeDateI[ 0 ].disabled ) {
+            this.$fakeDateI[ 0 ].value = this._toDisplayDate( date );
+        } else {
+            this.$fakeDateI.datepicker( 'setDate', this._toDisplayDate( date ) );
+        }
     }
 
 }
