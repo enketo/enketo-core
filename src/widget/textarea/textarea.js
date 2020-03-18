@@ -23,6 +23,10 @@ class TextareaWidget extends Widget {
             }
         } );
         textareas.forEach( this._resize.bind( this ) );
+        this.element.addEventListener( 'pageflip', event => {
+            const els = event.target.querySelectorAll( 'textarea' );
+            els.forEach( this._resize.bind( this ) );
+        } );
     }
 
     _resize( el ) {
