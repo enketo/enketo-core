@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- If last element of last row of form with Grid theme is hidden, the cells of that last row are not resized properly in the print view.
+
 [5.13.1] - 2020-02-28
 ----------------------
 ##### Fixed
