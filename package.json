@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.13.1",
+    "version": "5.13.2",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -54,7 +54,7 @@
         "cross-env": "^7.0.0",
         "docdash": "^1.2.0",
         "enketo-transformer": "1.38.1",
-        "eslint-plugin-jsdoc": "21.x.x",
+        "eslint-plugin-jsdoc": "22.x.x",
         "grunt": "^1.0.4",
         "grunt-concurrent": "3.x.x",
         "grunt-contrib-connect": "2.1.x",

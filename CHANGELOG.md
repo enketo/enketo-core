@@ -3,10 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.13.2] - 2020-03-20
 ----------------------
 ##### Fixed
 - If last element of last row of form with Grid theme is hidden, the cells of that last row are not resized properly in the print view.
+- Textareas not resizing in pages mode when loading large text values on non-first pages.
+
 
 [5.13.1] - 2020-02-28
 ----------------------

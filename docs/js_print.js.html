@@ -182,9 +182,12 @@ function fixGrid( paper, delay = 0 ) {
 
                 if ( top === rowTop ) {
                     row = row.concat( el );
-                    if ( lastElement ) {
-                        _resizeRowElements( row, maxWidth );
-                    }
+                }
+
+                // If an element is hidden, top = 0. We still need to trigger a resize on the very last row
+                // if the last element is hidden, so this is placed outside of the previous if statement
+                if ( lastElement ) {
+                    _resizeRowElements( row, maxWidth );
                 }
 
                 // process row, and start a new row

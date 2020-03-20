@@ -170,42 +170,37 @@ export default {
         const name = this.getName( control );
 
         switch ( inputType ) {
-            case 'radio':
-                {
-                    const checked = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"]:checked` );
-                    value = checked ? checked.value : '';
-                    break;
+            case 'radio': {
+                const checked = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"]:checked` );
+                value = checked ? checked.value : '';
+                break;
+            }
+            case 'checkbox': {
+                value = [ ...this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]:checked` ) ].map( input => input.value );
+                break;
+            }
+            case 'select': {
+                if ( this.isMultiple( control ) ) {
+                    value = [ ...control.querySelectorAll( 'option:checked' ) ].map( option => option.value );
+                } else {
+                    const selected = control.querySelector( 'option:checked' );
+                    value = selected ? selected.value : '';
                 }
-            case 'checkbox':
-                {
-                    value = [ ...this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]:checked` ) ].map( input => input.value );
-                    break;
+                break;
+            }
+            case 'datetime-local': {
+                if ( control.value ) {
+                    const dt = control.value.split( 'T' )[ 1 ].length === 5 ? control.value + ':00' : control.value;
+                    // Add local timezone offset
+                    // do not use .toISOLocalString() because new Date("2019-10-17T16:34:23.048") works differently in iOS/Safari
+                    // Take care to get DST offsets right for the date value.
+                    value = dt + new Date( dt ).getTimezoneOffsetAsTime();
                 }
-            case 'select':
-                {
-                    if ( this.isMultiple( control ) ) {
-                        value = [ ...control.querySelectorAll( 'option:checked' ) ].map( option => option.value );
-                    } else {
-                        const selected = control.querySelector( 'option:checked' );
-                        value = selected ? selected.value : '';
-                    }
-                    break;
-                }
-            case 'datetime-local':
-                {
-                    if ( control.value ) {
-                        const dt = control.value.split( 'T' )[ 1 ].length === 5 ? control.value + ':00' : control.value;
-                        // Add local timezone offset
-                        // do not use .toISOLocalString() because new Date("2019-10-17T16:34:23.048") works differently in iOS/Safari
-                        // Take care to get DST offsets right for the date value.
-                        value = dt + new Date( dt ).getTimezoneOffsetAsTime();
-                    }
-                    break;
-                }
-            default:
-                {
-                    value = control.value;
-                }
+                break;
+            }
+            default: {
+                value = control.value;
+            }
         }
 
         return value || '';
@@ -305,38 +300,34 @@ export default {
             const curVal = this.getVal( control );
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
                 switch ( type ) {
-                    case 'radio':
-                        {
-                            const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
-                            if ( input ) {
-                                input.checked = true;
-                            }
-                            break;
+                    case 'radio': {
+                        const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
+                        if ( input ) {
+                            input.checked = true;
                         }
-                    case 'checkbox':
-                        {
-                            this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]` )
+                        break;
+                    }
+                    case 'checkbox': {
+                        this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]` )
                             .forEach( input => input.checked = value.includes( input.value ) );
-                            break;
-                        }
-                    case 'select':
-                        {
-                            if ( this.isMultiple( control ) ) {
-                                control.querySelectorAll( 'option' ).forEach( option => option.selected = value.includes( option.value ) );
+                        break;
+                    }
+                    case 'select': {
+                        if ( this.isMultiple( control ) ) {
+                            control.querySelectorAll( 'option' ).forEach( option => option.selected = value.includes( option.value ) );
+                        } else {
+                            const option = control.querySelector( `option[value="${value}"]` );
+                            if ( option ) {
+                                option.selected = true;
                             } else {
-                                const option = control.querySelector( `option[value="${value}"]` );
-                                if ( option ) {
-                                    option.selected = true;
-                                } else {
-                                    control.querySelectorAll( 'option' ).forEach( option => option.selected = false );
-                                }
+                                control.querySelectorAll( 'option' ).forEach( option => option.selected = false );
                             }
-                            break;
                         }
-                    default:
-                        {
-                            control.value = value;
-                        }
+                        break;
+                    }
+                    default: {
+                        control.value = value;
+                    }
                 }
 
                 // don't trigger on all radiobuttons/checkboxes
