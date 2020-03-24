@@ -118,12 +118,6 @@ module.exports = grunt => {
             },
             rollup: {
                 command: 'npx rollup --config'
-            },
-            babel: {
-                command: 'npx babel build/js/enketo-bundle.js --out-file build/js/enketo-ie11-temp-bundle.js'
-            },
-            browserify: {
-                command: 'npx browserify src/js/workarounds-ie11.js build/js/enketo-ie11-temp-bundle.js -o build/js/enketo-ie11-bundle.js'
             }
         }
     } );
@@ -157,7 +151,6 @@ module.exports = grunt => {
     } );
 
     grunt.registerTask( 'compile', [ 'shell:rollup' ] );
-    grunt.registerTask( 'compile-ie11', [ 'shell:rollup', 'shell:babel', 'shell:browserify' ] );
     grunt.registerTask( 'test', [ 'jsbeautifier:test', 'eslint', 'compile', 'transforms', 'karma:headless', 'style' ] );
     grunt.registerTask( 'style', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );

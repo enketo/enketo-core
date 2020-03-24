@@ -47,10 +47,6 @@
         "prepublishOnly": "publish-please guard"
     },
     "devDependencies": {
-        "@babel/cli": "^7.8.3",
-        "@babel/core": "^7.8.3",
-        "@babel/preset-env": "^7.8.3",
-        "browserify": "^16.5.0",
         "cross-env": "^7.0.0",
         "docdash": "^1.2.0",
         "enketo-transformer": "1.38.1",
@@ -95,9 +91,7 @@
         "enketo/file-manager": "./src/js/file-manager"
     },
     "dependencies": {
-        "@babel/polyfill": "^7.8.3",
         "bootstrap-datepicker": "1.9.x",
-        "core-js": "^3.6.4",
         "enketo-xpathjs": "1.9.4",
         "html5sortable": "0.9.17",
         "jquery": "^3.4.1",

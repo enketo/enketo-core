@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Removed
+- IE11 build tasks and loading tricks.
+
 ##### Changed
 - Improved performance of autocomplete questions inside repeats that use static option lists.
 
