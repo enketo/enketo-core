@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.14.0] - 2020-03-27
 ----------------------
 ##### Removed
 - Example IE11 build tasks and loading tricks.
