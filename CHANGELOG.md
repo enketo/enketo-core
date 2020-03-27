@@ -11,6 +11,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Improved performance of autocomplete questions inside repeats that use static option lists.
 
+##### Fixed
+- Option label images in Likert widget are not centered below text.
+
 [5.13.2] - 2020-03-20
 ----------------------
 ##### Fixed
