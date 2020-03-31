@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.14.1] - 2020-03-31
 ----------------------
 ##### Fixed
 - Loading error if multiple autocomplete questions with static lists are used inside a repeat (regression in 5.14.0)
