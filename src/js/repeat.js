@@ -383,6 +383,7 @@ export default {
                 const id = datalist.id;
                 const inputs = getSiblingElements( datalist, 'input[list]' );
                 const input = inputs.length ? inputs[ 0 ] : null;
+
                 if ( input ) {
                     // For very long static datalists, a huge performance improvement can be achieved, by using the 
                     // same datalist for all repeat instances that use it.
@@ -393,16 +394,23 @@ export default {
                         // datalist by moving it under repeatInfo. 
                         // It will survive removal of all repeat instances.
                         const parent = datalist.parentElement;
-                        const detachedList = parent.removeChild( datalist );
                         const name = input.name;
+
+                        const dl = parent.querySelector( 'datalist' );
+                        const detachedList = parent.removeChild( dl );
                         detachedList.setAttribute( 'data-name', name );
                         repeatInfo.appendChild( detachedList );
+
                         const translations = parent.querySelector( '.or-option-translations' );
-                        const labels = parent.querySelector( '.itemset-labels' );
                         const detachedTranslations = parent.removeChild( translations );
-                        const detachedLabels = parent.removeChild( labels );
+                        detachedTranslations.setAttribute( 'data-name', name );
                         repeatInfo.appendChild( detachedTranslations );
+
+                        const labels = parent.querySelector( '.itemset-labels' );
+                        const detachedLabels = parent.removeChild( labels );
+                        detachedLabels.setAttribute( 'data-name', name );
                         repeatInfo.appendChild( detachedLabels );
+
                         this.staticLists.push( id );
                         //input.classList.add( 'shared' );
                     }

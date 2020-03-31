@@ -147,10 +147,14 @@ export default {
              * Remove current items before rebuilding a new itemset from scratch.
              */
             // the current <option> and <input> elements
-            const question = template.closest( '.question, .or-repeat-info' );
+            // datalist will catch the shared datalists inside .or-repeat-info
+            const question = template.closest( '.question, datalist' );
             [ ...question.querySelectorAll( templateNodeName ) ].filter( el => el !== template ).forEach( el => el.remove() );
             // labels for current <option> elements
-            const optionsTranslations = question.querySelector( '.or-option-translations' );
+            const next = question.nextElementSibling;
+            // next is a somewhat fragile match for option-translations belonging to a shared datalist in
+            // .or-repeat-info if there are multiple shared datalists.
+            const optionsTranslations = next && next.matches( '.or-option-translations' ) ? next : question.querySelector( '.or-option-translations' );
             if ( optionsTranslations ) {
                 [ ...optionsTranslations.children ].forEach( child => child.remove() );
             }
