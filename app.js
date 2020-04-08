@@ -32,7 +32,9 @@ if ( xform && xform !== 'null' ) {
         .done( function( survey ) {
             formStr = survey.form;
             modelStr = survey.model;
-            $( '.form-header' ).after( formStr );
+            const range = document.createRange();
+            const formEl = range.createContextualFragment( formStr );
+            document.querySelector( '.form-header' ).after( formEl );
             initializeForm();
         } )
         .fail( function() {

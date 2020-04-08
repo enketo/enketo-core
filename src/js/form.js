@@ -49,14 +49,18 @@ import './extend';
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
- * @param {string} formSelector - jQuery selector for the form
+ * @param {Element} form - HTML form element
  * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {{webMapId: string|undefined}} options - form options
  *
  * @class
  */
-function Form( formSelector, data, options ) {
-    const $form = $( formSelector );
+function Form( formEl, data, options ) {
+    const $form = $( formEl );
+
+    if ( typeof formEl === 'string' ) {
+        console.deprecate( 'Form instantiation using a selector', 'a HTML <form> element' );
+    }
 
     this.nonRepeats = {};
     this.all = {};
@@ -67,7 +71,7 @@ function Form( formSelector, data, options ) {
     this.view = {
         $: $form,
         html: $form[ 0 ],
-        $clone: $form.clone()
+        clone: $form[ 0 ].cloneNode( true )
     };
     this.model = new FormModel( data );
     this.repeatsPresent = !!this.view.html.querySelector( '.or-repeat' );
