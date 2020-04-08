@@ -26,21 +26,21 @@ export default {
             return;
         }
 
-        const languages = [ ...formLanguages.querySelectorAll( 'option' ) ].map( option => option.value );
+        this.languages = [ ...formLanguages.querySelectorAll( 'option' ) ].map( option => option.value );
         if ( langSelector ) {
             langSelector
                 .append( formLanguages );
-            if ( languages.length > 1 ) {
+            if ( this.languages.length > 1 ) {
                 langSelector.classList.remove( 'hide' );
             }
         }
         this.formLanguages = root.querySelector( '#form-languages' );
 
-        if ( overrideLang && languages.includes( overrideLang ) ) {
+        if ( overrideLang && this.languages.includes( overrideLang ) ) {
             this._currentLang = overrideLang;
             this.setUi( this._currentLang );
         } else {
-            this._currentLang = this.formLanguages.dataset.defaultLang || languages[ 0 ] || '';
+            this._currentLang = this.formLanguages.dataset.defaultLang || this.languages[ 0 ] || '';
         }
 
         const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );
@@ -50,7 +50,7 @@ export default {
 
         this.form.view.html.setAttribute( 'dir', currentDirectionality );
 
-        if ( languages.length < 2 ) {
+        if ( this.languages.length < 2 ) {
             return;
         }
 
@@ -76,9 +76,11 @@ export default {
         return langOption ? langOption.textContent : null;
     },
     /**
-     * @param {string} lang
-     * @param {Element} [group]
+     * @type array
      */
+    get languagesUsed() {
+        return this.languages || [];
+    },
     setUi( lang, group = this.form.view.html ) {
         const dir = this.formLanguages.querySelector( `[value="${lang}"]` ).dataset.dir || 'ltr';
         const translations = [ ...group.querySelectorAll( '[lang]' ) ];

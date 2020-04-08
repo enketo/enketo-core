@@ -175,6 +175,12 @@ Form.prototype = {
      */
     get id() {
         return this.view.html.id;
+    },
+    /**
+     * @type Array<string>
+     */
+    get languages() {
+        return this.langs.languagesUsed;
     }
 };
 
