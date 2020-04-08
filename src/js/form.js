@@ -377,7 +377,7 @@ Form.prototype.getDataStr = function( include ) {
 Form.prototype.resetView = function() {
     //form language selector was moved outside of <form> so has to be separately removed
     $( '#form-languages' ).remove();
-    this.view.$.replaceWith( this.view.$clone );
+    this.view.$.replaceWith( $( this.view.clone ) );
 };
 
 /**

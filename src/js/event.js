@@ -144,6 +144,16 @@ function Edited() {
     return new CustomEvent( 'edited', { bubbles: true } );
 }
 
+
+/**
+ * Before save event.
+ *
+ * @return {CustomEvent} Custom "edited" event (bubbling)
+ */
+function BeforeSave() {
+    return new CustomEvent( 'beforesave', { bubbles: true } );
+}
+
 /**
  * Validation complete event.
  *
@@ -201,6 +211,7 @@ export default {
     Input,
     InputUpdate,
     Edited,
+    BeforeSave,
     ValidationComplete,
     Invalidated,
     ProgressUpdate,

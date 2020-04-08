@@ -122,7 +122,7 @@ describe( 'Preload and MetaData functionality', () => {
         expect( timeEnd.length > 10 ).toBe( true );
 
         setTimeout( () => {
-            form.view.$.trigger( 'beforesave' );
+            form.view.html.dispatchEvent( events.BeforeSave() );
             timeEndNew = form.model.node( '/preload/end' ).getVal();
             expect( new Date( timeEndNew ) - new Date( timeEnd ) ).toBeGreaterThan( 1000 );
             expect( new Date( timeEndNew ) - new Date( timeEnd ) ).toBeLessThan( 1050 );
