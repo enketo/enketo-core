@@ -26,7 +26,7 @@ class RankWidget extends Widget {
     _init() {
         const that = this;
         const loadedValue = this.originalInputValue;
-        const startText = support.touch ? t( 'rankwidget.tapstart' ) : t( 'rankwidget.clickstart' );
+        const startTextKey = support.touch ? 'rankwidget.tapstart' : 'rankwidget.clickstart';
 
         this.itemSelector = 'label:not(.itemset-template)';
         this.list = $( this.element ).next( '.option-wrapper' ).addClass( 'widget rank-widget' )[ 0 ];
@@ -34,7 +34,7 @@ class RankWidget extends Widget {
         $( this.list )
             .toggleClass( 'rank-widget--empty', !loadedValue )
             .append( this.resetButtonHtml )
-            .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content" data-i18n="rankwidget.clickstart">${startText}</span></div>` )
+            .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content" data-i18n="${startTextKey}">${support.touch ? t('rankwidget.tapstart') : t('rankwidget.clickstart')}</span></div>` )
             .on( 'click', function() {
                 if ( !that.element.disabled ) {
                     this.classList.remove( 'rank-widget--empty' );

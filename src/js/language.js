@@ -38,7 +38,7 @@ export default {
 
         if ( overrideLang && this.languages.includes( overrideLang ) ) {
             this._currentLang = overrideLang;
-            this.setUi( this._currentLang );
+            this.setFormUi( this._currentLang );
         } else {
             this._currentLang = this.formLanguages.dataset.defaultLang || this.languages[ 0 ] || '';
         }
@@ -57,10 +57,10 @@ export default {
         this.formLanguages.addEventListener( events.Change().type, event => {
             event.preventDefault();
             this._currentLang = event.target.value;
-            this.setUi( this._currentLang );
+            this.setFormUi( this._currentLang );
         } );
 
-        this.form.view.html.addEventListener( events.AddRepeat().type, event => this.setUi( this._currentLang, event.target ) );
+        this.form.view.html.addEventListener( events.AddRepeat().type, event => this.setFormUi( this._currentLang, event.target ) );
     },
     /**
      * @type string
@@ -81,7 +81,7 @@ export default {
     get languagesUsed() {
         return this.languages || [];
     },
-    setUi( lang, group = this.form.view.html ) {
+    setFormUi( lang, group = this.form.view.html ) {
         const dir = this.formLanguages.querySelector( `[value="${lang}"]` ).dataset.dir || 'ltr';
         const translations = [ ...group.querySelectorAll( '[lang]' ) ];
 

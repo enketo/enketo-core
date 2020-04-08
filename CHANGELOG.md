@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Changed
 - Form instantiation now recommended with form Element instead of form selector.
+- Prepared for language syncing feature in Enketo Express.
 
 [5.14.1] - 2020-03-31
 ----------------------
