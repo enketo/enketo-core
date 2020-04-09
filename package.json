@@ -76,7 +76,7 @@
         "node-sass": "^4.13.1",
         "publish-please": "^5.5.1",
         "rimraf": "^3.0.2",
-        "rollup": "2.2.x",
+        "rollup": "^2.3.4",
         "rollup-plugin-commonjs": "10.1.x",
         "rollup-plugin-istanbul": "^2.0.1",
         "rollup-plugin-json": "4.0.x",
@@ -98,7 +98,7 @@
         "jquery-touchswipe": "^1.6.19",
         "leaflet": "1.6.x",
         "leaflet-draw": "github:enketo/Leaflet.draw#ff73078",
-        "leaflet.gridlayer.googlemutant": "0.8.x",
+        "leaflet.gridlayer.googlemutant": "0.9.x",
         "mergexml": "1.2.1",
         "signature_pad": "2.3.x"
     }
