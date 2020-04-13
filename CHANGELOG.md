@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Form instantiation now recommended with form Element instead of form selector.
 - Prepared for language syncing feature in Enketo Express.
 
+##### Fixed
+- The dotted lines on Grid theme printouts are not positioned at the bottom of cells.
+- A text question on Grid theme printouts that has only text questions on the same row (or nothing else), has too little space to write.
+- Date/datetime/time questions take up too much vertical space on Grid theme printouts.
+
 [5.14.1] - 2020-03-31
 ----------------------
 ##### Fixed

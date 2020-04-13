@@ -1,4 +1,5 @@
 input[type=text],
+.print-input-text,
 input[type=tel],
 input[type=password],
 input[type=url],
@@ -16,6 +17,7 @@ textarea {
 
 // fix readonly inputs inside widgets that are not actually 'readonly'
 input:not([readonly])+.widget {
+
     input[type=text],
     input[type=tel],
     input[type=password],
@@ -133,6 +135,7 @@ input[type="date"] {
 // Note: Neither radios nor checkboxes can be readonly.
 input[type="radio"],
 input[type="checkbox"] {
+
     &[disabled],
     fieldset[disabled] & {
         cursor: not-allowed;

@@ -5,6 +5,7 @@ $printBaseFontSize: 10px;
 .or {
 
     input:not([type="radio"]):not([type="checkbox"]),
+    .print-input-text,
     select,
     textarea {
         border-bottom: none;
@@ -52,8 +53,8 @@ $printBaseFontSize: 10px;
         border-bottom: 1px dotted black;
     }
 
-    &.widget.date,
-    &.widget.bootstrap-timepicker {
+    .widget.date,
+    .widget.bootstrap-timepicker {
         display: none;
     }
 
@@ -222,13 +223,3 @@ screen and (min-width: 700px) {
 }
 
 // End of adjustment to get page breaks to work in multi-line flexbox
-
-// text-print widget
-.or-text-print-initialized {
-    .print-input-text {
-        width: 100%;
-        padding-left: 0;
-        padding-right: 0;
-        border-bottom: none;
-    }
-}

@@ -166,6 +166,7 @@ input[type=checkbox] {
     }
 
     input[type=text],
+    .print-input-text,
     input[type=tel],
     input[type=password],
     input[type=url],
@@ -461,14 +462,6 @@ h4 {
         &[type=text] {
             display: none;
         }
-    }
-
-    .print-input-text {
-        font-weight: normal;
-        font-size: 12px;
-        width: 80%;
-        padding: 6px 12px;
-        border-bottom: 1px solid black;
     }
 
     .print-only {

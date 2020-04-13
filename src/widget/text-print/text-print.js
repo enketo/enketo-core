@@ -20,12 +20,8 @@ class TextPrintWidget extends Widget {
 
         const className = 'print-input-text';
         const printElement = document.createElement( 'div' );
-        printElement.classList.add( className );
-        printElement.classList.add( 'print-only' );
+        printElement.classList.add( className, 'widget', 'print-only' );
 
-        if ( getComputedStyle( this.element ).order !== '' ) {
-            printElement.style.order = parseInt( getComputedStyle( this.element ).order, 10 ) + 1;
-        }
         this.element.after( printElement );
 
         this.widget = this.element.parentElement.querySelector( `.${className}` );
