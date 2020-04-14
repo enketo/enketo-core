@@ -39,6 +39,15 @@ $printBaseFontSize: 10px;
     }
 }
 
+.or:not(.print-relevant-only) {
+
+    // targeting is getting a little weird here
+    .question.or-branch.disabled,
+    .or-branch.disabled {
+        display: inline-flex;
+    }
+}
+
 .question {
 
     &.non-select:not(.or-analog-scale-initialized)::after,

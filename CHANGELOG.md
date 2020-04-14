@@ -7,7 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Fixed
 - When instantiating a single-language form with an explicit language override, itemsets may fail to populate.
-- Empty readonly text fields take up unnecessary space in print view.
+- Empty readonly text fields take up unnecessary space in the print view.
+- Irrelevant questions in Grid theme are not getting the correct width in the print view.
 
 [5.14.2] - 2020-04-14
 ----------------------
