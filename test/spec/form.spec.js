@@ -1196,6 +1196,23 @@ describe( 'jr:choice-name', () => {
     } );
 } );
 
+describe( 'autocomplete questions', () => {
+    it( 'populate correctly if a single language is defined in the form, and the Form instance is instantiated using that language explicitly', () => {
+        const form = loadForm( 'autocomplete-cascade.xml', null, { language: 'en' } );
+        form.init();
+        const datalists = form.view.html.querySelectorAll( 'datalist' );
+        const firstDatalistContent = [ ...datalists[ 0 ].querySelectorAll( 'option' ) ].map( el => `${el.value}:${el.dataset.value}` );
+        expect( firstDatalistContent ).toEqual( [ '...:', 'A:a', 'B:b', 'C:c' ] );
+
+        // select value in first datalist, to populate the second one
+        form.view.html.querySelector( 'input[list]' ).value = 'b';
+        form.view.html.querySelector( 'input[list]' ).dispatchEvent( events.Change() );
+
+        const secondDatalistContent = [ ...datalists[ 1 ].querySelectorAll( 'option' ) ].map( el => `${el.value}:${el.dataset.value}` );
+        expect( secondDatalistContent ).toEqual( [ ':undefined', 'BA:ba', 'BB:bb', 'BC:bc' ] );
+    } );
+} );
+
 describe( 'Form.prototype', () => {
 
     describe( '#replaceChoiceNameFn()', () => {

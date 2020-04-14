@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- When instantiating a single-language form with an explicit language override, itemsets may fail to populate.
+
 [5.14.2] - 2020-04-14
 ----------------------
 ##### Changed
