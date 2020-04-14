@@ -293,7 +293,8 @@ $media-margin: 10px;
 
     input[readonly].empty,
     select[readonly].empty,
-    textarea[readonly].empty {
+    textarea[readonly].empty,
+    .print-input-text {
         display: none;
     }
 

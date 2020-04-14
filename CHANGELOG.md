@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Fixed
 - When instantiating a single-language form with an explicit language override, itemsets may fail to populate.
+- Empty readonly text fields take up unnecessary space in print view.
 
 [5.14.2] - 2020-04-14
 ----------------------
