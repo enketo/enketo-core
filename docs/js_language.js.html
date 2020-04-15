@@ -85,7 +85,7 @@ export default {
         }
         this.formLanguages = root.querySelector( '#form-languages' );
 
-        if ( overrideLang &amp;&amp; this.languages.includes( overrideLang ) ) {
+        if ( overrideLang &amp;&amp; this.languages.includes( overrideLang ) &amp;&amp; this.languages.length > 1 ) {
             this._currentLang = overrideLang;
             this.setFormUi( this._currentLang );
         } else {
@@ -167,14 +167,17 @@ export default {
         [ ...select.children ].filter( el => el.matches( 'option' ) &amp;&amp; !el.matches( '[value=""], [data-value=""]' ) )
             .forEach( option => {
                 const curLabel = type === 'datalist' ? option.value : option.textContent;
-                const value = type === 'datalist' ? option.dataset.value : option.value;
+                // Datalist will not have initialized when init function is called upon form load, so it is option.value until it has initialized. That is not great.
+                const value = type === 'datalist' ? option.dataset.value || option.value : option.value;
                 const translatedOption = translations.querySelector( `.active[data-option-value="${value}"]` );
-                let newLabel = curLabel;
-                if ( translatedOption &amp;&amp; translatedOption.textContent ) {
-                    newLabel = translatedOption.textContent;
+                if ( translatedOption ) {
+                    let newLabel = curLabel;
+                    if ( translatedOption &amp;&amp; translatedOption.textContent ) {
+                        newLabel = translatedOption.textContent;
+                    }
+                    option.value = value;
+                    option.textContent = newLabel;
                 }
-                option.value = value;
-                option.textContent = newLabel;
             } );
     }
 };
