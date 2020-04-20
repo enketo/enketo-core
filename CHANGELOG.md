@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Border shown when printing a Grid Theme form.
+
 [5.14.3] - 2020-04-15
 ----------------------
 ##### Fixed
