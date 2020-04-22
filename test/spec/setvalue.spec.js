@@ -397,4 +397,42 @@ describe( 'setvalue actions to populate a value if another value changes', () =>
         }, 100 );
     } );
 
+
+    it( 'works for multiple setvalue actions triggered by same question', done => {
+        const form = loadForm( 'setvalue-multiple-under-one.xml' );
+        form.init();
+        const aView = form.input.find( '/data/a', 0 );
+        const cView = form.input.find( '/data/c', 0 );
+        const dView = form.input.find( '/data/d', 0 );
+        const bModel = form.model.xml.querySelector( 'b' );
+        const cModel = form.model.xml.querySelector( 'c' );
+        const dModel = form.model.xml.querySelector( 'd' );
+        const eModel = form.model.xml.querySelector( 'e' );
+
+        form.input.setVal( dView, '3030', null );
+        dView.dispatchEvent( events.Change() );
+
+        expect( aView.textContent ).toEqual( '' );
+        expect( bModel.textContent ).toEqual( '' );
+        expect( cModel.textContent ).toEqual( '' );
+        expect( dView.value ).toEqual( '3030' );
+        expect( dModel.textContent ).toEqual( '3030' );
+        expect( eModel.textContent ).toEqual( 'default' );
+
+        form.input.setVal( aView, '11', null );
+        aView.dispatchEvent( events.Change() );
+
+        setTimeout( () => {
+            expect( bModel.textContent ).toEqual( '2' );
+            expect( cView.value ).toEqual( '11.11' );
+            expect( cModel.textContent ).toEqual( '11.11' );
+            expect( dView.value ).toEqual( '' );
+            expect( dModel.textContent ).toEqual( '' );
+            expect( eModel.textContent ).toEqual( '' );
+            done();
+        }, 100 );
+
+
+    } );
+
 } );

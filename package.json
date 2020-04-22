@@ -49,8 +49,8 @@
     "devDependencies": {
         "cross-env": "^7.0.2",
         "docdash": "^1.2.0",
-        "enketo-transformer": "1.39.0",
-        "eslint-plugin-jsdoc": "23.x.x",
+        "enketo-transformer": "1.40.0",
+        "eslint-plugin-jsdoc": "22.x.x",
         "grunt": "^1.0.4",
         "grunt-concurrent": "3.x.x",
         "grunt-contrib-connect": "2.1.x",

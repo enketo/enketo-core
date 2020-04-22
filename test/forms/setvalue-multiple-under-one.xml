@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>when-setvalue</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="when-setvalue">
+                    <a/>
+                    <b/>
+                    <c/>
+                    <d/>
+                    <e>default</e>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/a" type="string"/>
+            <bind nodeset="/data/b" type="decimal"/>
+            <bind nodeset="/data/c" type="decimal"/>
+            <bind nodeset="/data/d" type="integer"/>
+            <bind nodeset="/data/e" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/a">
+            <label>Enter text</label>
+            <setvalue event="xforms-value-changed" ref="/data/b" value="1 + 1" />
+            <setvalue event="xforms-value-changed" ref="/data/c" value="11.11" />
+            <setvalue event="xforms-value-changed" ref="/data/d" value="" />
+            <setvalue event="xforms-value-changed" ref="/data/e" value="" />
+        </input>
+        <input ref="/data/c">
+            <label/>
+            <hint>A hint</hint>
+        </input>
+        <input ref="/data/d">
+            <label>Some text</label>
+        </input>
+    </h:body>
+</h:html>
