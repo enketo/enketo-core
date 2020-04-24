@@ -36,6 +36,9 @@ Fired when user flips to a new page, on the page element itself.
 ##### edited
 Fired on form.or element when user makes first edit in form. Fires only once.
 
-##### validationcomplete
+##### validation-complete
 Fired on form.or element when validation completes.
+
+##### progress-update
+Fired when the user moves to a different question in the form.
 

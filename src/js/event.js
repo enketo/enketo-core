@@ -151,7 +151,7 @@ function Edited() {
  * @return {CustomEvent} Custom "edited" event (bubbling)
  */
 function BeforeSave() {
-    return new CustomEvent( 'beforesave', { bubbles: true } );
+    return new CustomEvent( 'before-save', { bubbles: true } );
 }
 
 /**
@@ -160,7 +160,7 @@ function BeforeSave() {
  * @return {CustomEvent} Custom "validationcomplete" event (bubbling)
  */
 function ValidationComplete() {
-    return new CustomEvent( 'validationcomplete', { bubbles: true } );
+    return new CustomEvent( 'validation-complete', { bubbles: true } );
 }
 
 /**
@@ -179,7 +179,7 @@ function Invalidated() {
  * @return {CustomEvent} Custom "progressupdate" event (bubbling)
  */
 function ProgressUpdate( detail ) {
-    return new CustomEvent( 'progressupdate', { detail, bubbles: true } );
+    return new CustomEvent( 'progress-update', { detail, bubbles: true } );
 }
 
 /**
