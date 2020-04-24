@@ -34,7 +34,7 @@ if ( xform && xform !== 'null' ) {
             formStr = survey.form;
             modelStr = survey.model;
             const range = document.createRange();
-            const formEl = range.createContextualFragment( formStr );
+            const formEl = range.createContextualFragment( formStr ).querySelector( 'form' );
             document.querySelector( '.form-header' ).after( formEl );
             initializeForm();
         } )

@@ -97,7 +97,7 @@ describe( 'Preload and MetaData functionality', () => {
 
     // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'does not generate a new instanceID if one is already present', () => {
-        form = new Form( forms[ 'random.xml' ].html_form, {
+        form = new Form( document.createRange().createContextualFragment( forms[ 'random.xml' ].html_form ).querySelector( 'form' ), {
             modelStr: forms[ 'random.xml' ].xml_model.replace( '<instanceID/>', '<instanceID>existing</instanceID>' )
         } );
         form.init();
@@ -160,7 +160,7 @@ describe( 'Preload and MetaData functionality', () => {
 
     function testPreloadExistingValue( node ) {
         it( `obtains unchanged preload value of item (WITH preload binding): ${node.selector}`, () => {
-            form = new Form( forms[ 'preload.xml' ].html_form, {
+            form = new Form( document.createRange().createContextualFragment( forms[ 'preload.xml' ].html_form ).querySelector( 'form' ), {
                 modelStr: '<preload>' +
                     '<start>2012-10-30T08:44:57.000-06</start>' +
                     '<end>2012-10-30T08:44:57.000-06:00</end>' +

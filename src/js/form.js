@@ -60,6 +60,7 @@ function Form( formEl, data, options ) {
 
     if ( typeof formEl === 'string' ) {
         console.deprecate( 'Form instantiation using a selector', 'a HTML <form> element' );
+        formEl = $form[ 0 ];
     }
 
     this.nonRepeats = {};
@@ -68,10 +69,11 @@ function Form( formEl, data, options ) {
     if ( typeof this.options.clearIrrelevantImmediately === 'undefined' ) {
         this.options.clearIrrelevantImmediately = true;
     }
+
     this.view = {
         $: $form,
-        html: $form[ 0 ],
-        clone: $form[ 0 ].cloneNode( true )
+        html: formEl,
+        clone: formEl.cloneNode( true )
     };
     this.model = new FormModel( data );
     this.repeatsPresent = !!this.view.html.querySelector( '.or-repeat' );
@@ -1131,6 +1133,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type string
  * @default
  */
-Form.requiredTransformerVersion = '1.40.0';
+Form.requiredTransformerVersion = '1.40.1';
 
 export { Form, FormModel };

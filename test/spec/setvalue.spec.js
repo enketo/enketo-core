@@ -116,7 +116,8 @@ describe( 'setvalue action to populate defaults', () => {
 
             it( 'works when jr:repeat-count is used', () => {
                 const form1 = new Form(
-                    forms[ 'setvalue.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' ), {
+                    document.createRange().createContextualFragment(
+                        forms[ 'setvalue.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' ) ).querySelector( 'form' ), {
                         modelStr: forms[ 'setvalue.xml' ].xml_model
                     }
                 );
@@ -130,7 +131,7 @@ describe( 'setvalue action to populate defaults', () => {
 
             it( 'works when jr:repeat-count is used (form with jr:template)', () => {
                 const form1 = new Form(
-                    forms[ 'setvalue-template.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' ), {
+                    document.createRange().createContextualFragment( forms[ 'setvalue-template.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' ) ).querySelector( 'form' ), {
                         modelStr: forms[ 'setvalue-template.xml' ].xml_model
                     }
                 );
