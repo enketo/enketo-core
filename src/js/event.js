@@ -183,16 +183,26 @@ function ProgressUpdate( detail ) {
 }
 
 /**
- * Go to hidden event.
+ * Go to hidden event fired when the goto target is not relevant.
  *
- * @return {CustomEvent} Custom "gotohidden" event (bubbling)
+ * @return {CustomEvent} Custom "gotoirrelevant" event (bubbling)
  */
-function GoToHidden() {
-    return new CustomEvent( 'gotohidden', { bubbles: true } );
+function GoToIrrelevant() {
+    return new CustomEvent( 'goto-irrelevant', { bubbles: true } );
+}
+
+/**
+ * Go to invisible event fired when the target has no form control.
+ * This is event has prevalence of the "go to hidden" event.
+ *
+ * @return {CustomEvent} Custom "gotoinvisible" event (bubbling)
+ */
+function GoToInvisible() {
+    return new CustomEvent( 'goto-invisible', { bubbles: true } );
 }
 
 function ChangeOption() {
-    return new CustomEvent( 'changeoption', { bubbles: true } );
+    return new CustomEvent( 'change-option', { bubbles: true } );
 }
 
 
@@ -215,7 +225,8 @@ export default {
     ValidationComplete,
     Invalidated,
     ProgressUpdate,
-    GoToHidden,
+    GoToIrrelevant,
+    GoToInvisible,
     XFormsValueChanged,
     ChangeOption
 };

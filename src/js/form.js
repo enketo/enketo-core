@@ -347,7 +347,7 @@ Form.prototype.goTo = function( xpath ) {
     const errors = [];
     if ( !this.goToTarget( this.getGoToTarget( xpath ) ) ) {
         errors.push( t( 'alert.gotonotfound.msg', {
-            path: location.hash.substring( 1 )
+            path: xpath.substring( xpath.lastIndexOf( '/' ) + 1 )
         } ) );
     }
     return errors;
@@ -1103,10 +1103,15 @@ Form.prototype.goToTarget = function( target ) {
             // Flip to page
             this.pages.flipToPageContaining( $( target ) );
         }
+        // check if the target has a form control
+        if ( target.closest( '.calculation, .setvalue' ) ) {
+            // It is up to the apps to decide what to do with this event.
+            target.dispatchEvent( events.GoToInvisible() );
+        }
         // check if the nearest question or group is irrelevant after page flip
         if ( target.closest( '.or-branch.disabled' ) ) {
             // It is up to the apps to decide what to do with this event.
-            target.dispatchEvent( events.GoToHidden() );
+            target.dispatchEvent( events.GoToIrrelevant() );
         }
         // Scroll to element
         target.scrollIntoView();

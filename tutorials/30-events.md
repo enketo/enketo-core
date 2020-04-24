@@ -24,8 +24,11 @@ Fired on the repeat or repeat element immediately following a removed repeat.
 ##### removed
 Fired on model.events, when a node is removed. It passes an "update object". This event is propagated for external use by firing it on the form.or element as well.
 
-##### gotohidden.enketo
+##### goto-irrelevant
 Fired on form control when an attempt is made to 'go to' this field but it is hidden from view because it is irrelevant.
+
+##### goto-invisible
+Fired on form control when an attempt is made to 'go to' this field but it is hidden from view because it is has no form control.
 
 ##### pageflip
 Fired when user flips to a new page, on the page element itself.

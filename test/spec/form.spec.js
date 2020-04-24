@@ -1213,6 +1213,41 @@ describe( 'autocomplete questions', () => {
     } );
 } );
 
+
+describe( 'goTo functionality', () => {
+    const form = loadForm( 'relevant-default.xml' );
+    form.init();
+
+    it( 'returns an error if the goto field does not exist', () => {
+        const result = form.goTo( '//notdey' );
+        expect( result.length ).toEqual( 1 );
+        expect( result[ 0 ] ).toContain( 'Failed to find question \'notdey\'' );
+    } );
+
+    it( 'returns empty array (of errors) if field exists', () => {
+        expect( form.goTo( '//one' ) ).toEqual( [] );
+        expect( form.goTo( '/relevant-default/one' ) ).toEqual( [] );
+        expect( form.goTo( '//three' ) ).toEqual( [] );
+        expect( form.goTo( '/relevant-default/grp/three' ) ).toEqual( [] );
+        expect( form.goTo( '//four' ) ).toEqual( [] );
+        expect( form.goTo( '/relevant-default/grp/four' ) ).toEqual( [] );
+    } );
+
+    it( 'triggers a goto-irrelevant event if the goto field is irrelevant', () => {
+        let counter = 0;
+        form.view.html.addEventListener( events.GoToIrrelevant().type, () => counter++ );
+        form.goTo( '//three' );
+        expect( counter ).toEqual( 1 );
+    } );
+
+    it( 'triggers a goto-invisible event if the goto field does not have a form control', () => {
+        let counter = 0;
+        form.view.html.addEventListener( events.GoToInvisible().type, () => counter++ );
+        form.goTo( '//four' );
+        expect( counter ).toEqual( 1 );
+    } );
+} );
+
 describe( 'Form.prototype', () => {
 
     describe( '#replaceChoiceNameFn()', () => {

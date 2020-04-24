@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Added
 - Support for multiple setvalue/xforms-value-changed actions under the same form control.
+- A "goto-invisible" event to trigger when a "goto" instruction points to a field without a form control.
 
 ##### Fixed
 - Border shown when printing a Grid Theme form.
