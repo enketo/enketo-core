@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[5.15.1] - 2020-05-01
+---------------------
+##### Changed
+- The resetView method now returns the new form element.
+
 [5.15.0] - 2020-04-24
 ----------------------
 ##### Added
