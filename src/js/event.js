@@ -195,6 +195,23 @@ function ChangeOption() {
     return new CustomEvent( 'changeoption', { bubbles: true } );
 }
 
+/**
+ * Go to printify text event.
+ *
+ * @return {CustomEvent} Custom "printifyText" event (bubbling)
+ */
+function PrintifyText() {
+    return new CustomEvent( 'printify.text', { bubbles: true } );
+}
+
+/**
+ * Go to deprintify text event.
+ *
+ * @return {CustomEvent} Custom "dePrintifyText" event (bubbling)
+ */
+function DePrintifyText() {
+    return new CustomEvent( 'deprintify.text', { bubbles: true } );
+}
 
 export default {
     DataUpdate,
@@ -217,5 +234,7 @@ export default {
     ProgressUpdate,
     GoToHidden,
     XFormsValueChanged,
-    ChangeOption
+    ChangeOption,
+    PrintifyText,
+    DePrintifyText
 };
