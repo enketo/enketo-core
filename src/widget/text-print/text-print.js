@@ -22,27 +22,25 @@ class TextPrintWidget extends Widget {
     }
 
     _addWidget() {
-        const className = 'print-text-input';
-        const printElement = document.createElement( 'div' );
-        printElement.classList.add( className, 'widget' );
+        if ( !this.widget ) {
+            const className = 'print-input-text';
+            const printElement = document.createElement( 'div' );
+            printElement.classList.add( className, 'widget' );
 
-        if ( getComputedStyle( this.element ).order !== '' ) {
-            printElement.style.order = parseInt( getComputedStyle( this.element ).order, 10 ) + 1;
+            this.element.after( printElement );
+            this.element.classList.add( 'print-hide' );
+
+            this.widget = this.element.parentElement.querySelector( `.${className}` );
+            this.widget.innerHTML = this.element.value.replace( /\n/g, '<br>' );
         }
-        this.element.after( printElement );
-        this.element.classList.add( 'print-only' );
-
-        this.widget = this.element.parentElement.querySelector( `.${className}` );
-        this.widget.innerHTML = this.element.value.replace( /\n/g, '<br>' );
     }
 
     _removeWidget() {
-        this.element.classList.remove( 'print-only' );
-        this.element.parentElement.removeChild( this.widget );
-    }
-
-    update() {
-        this._addWidget();
+        if ( this.widget ) {
+            this.element.classList.remove( 'print-hide' );
+            this.element.parentElement.removeChild( this.widget );
+            this.widget = null;
+        }
     }
 }
 
