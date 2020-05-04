@@ -1,4 +1,5 @@
 import Widget from '../../js/widget';
+import events from '../../js/event';
 
 /**
  * Clone text input fields value into new print-only element.
@@ -12,32 +13,36 @@ class TextPrintWidget extends Widget {
     static get selector() {
         // The [data-for] exclusion prevents "comment" widgets from being included.
         // It is not quite correct to do this but atm the "for" attribute in XForms is only used for comment widgets.
-        return '.question:not(.or-appearance-autocomplete):not(.or-appearance-url) > input[type=text]:not(.ignore):not([data-for])';
+        return '.question:not(.or-appearance-autocomplete):not(.or-appearance-url) > input[type=text]:not(.ignore):not([data-for]), .question:not(.or-appearance-autocomplete):not(.or-appearance-url) > textarea:not(.ignore):not([data-for])';
     }
 
     _init() {
-        this.question.classList.add( 'or-text-print-initialized' );
-
-        const className = 'print-input-text';
-        const printElement = document.createElement( 'div' );
-        printElement.classList.add( className, 'widget', 'print-only' );
-
-        this.element.after( printElement );
-
-        this.widget = this.element.parentElement.querySelector( `.${className}` );
-        this._copyValue();
-
-        this.element.addEventListener( 'input', () => {
-            this._copyValue();
-        } );
+        this.question.addEventListener( events.PrintifyText().type, this._addWidget.bind( this ) );
+        this.question.addEventListener( events.DePrintifyText().type, this._removeWidget.bind( this ) );
     }
 
-    _copyValue() {
+    _addWidget() {
+        const className = 'print-text-input';
+        const printElement = document.createElement( 'div' );
+        printElement.classList.add( className, 'widget' );
+
+        if ( getComputedStyle( this.element ).order !== '' ) {
+            printElement.style.order = parseInt( getComputedStyle( this.element ).order, 10 ) + 1;
+        }
+        this.element.after( printElement );
+        this.element.classList.add( 'print-only' );
+
+        this.widget = this.element.parentElement.querySelector( `.${className}` );
         this.widget.innerHTML = this.element.value.replace( /\n/g, '<br>' );
     }
 
+    _removeWidget() {
+        this.element.classList.remove( 'print-only' );
+        this.element.parentElement.removeChild( this.widget );
+    }
+
     update() {
-        this._copyValue();
+        this._addWidget();
     }
 }
 

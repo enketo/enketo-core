@@ -458,15 +458,8 @@ h4 {
     }
 }
 
-.or-text-print-initialized {
-    input {
-        &[type=text] {
-            display: none;
-        }
-    }
-
-    .print-only {
-        display: inline-block;
-        page-break-inside: avoid;
+input[type=text], textarea {
+    &.print-only {
+        display: none;
     }
 }
