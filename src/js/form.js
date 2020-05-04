@@ -26,12 +26,12 @@ import './extend';
 
 /**
  * @typedef FormDataObj
- * @property {string} modelStr
- * @property {string} [instanceStr]
- * @property {boolean} [submitted]
- * @property {object} external
- * @property {string} external.id
- * @property {string} [external.xmlStr]
+ * @property {string} modelStr -  XML Model as string
+ * @property {string} [instanceStr] - (partial) XML instance to load
+ * @property {boolean} [submitted] - Flag to indicate whether data was submitted before
+ * @property {object} [external] - Array of external data objects, required for each external data instance in the XForm
+ * @property {string} [external.id] - ID of external instance
+ * @property {string} [external.xmlStr] - XML string of external instance content
  */
 
 /**
@@ -49,9 +49,12 @@ import './extend';
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
- * @param {Element} form - HTML form element
+ * @param {Element} form - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
  * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
- * @param {{webMapId: string|undefined}} options - form options
+ * @param {Object} [options] - form options
+ * @param {boolean} [options.clearIrrelevantImmediately] - If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
+ * @param {boolean} [options.printRelevantOnly] - If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
+ * @param {language} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
  *
  * @class
  */

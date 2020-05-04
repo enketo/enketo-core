@@ -25,8 +25,9 @@ let Nodeset;
  * Class dealing with the XML Model of a form
  *
  * @class
- * @param {{modelStr: string, instanceStr: string=, external: Array.<{id: string, xml: XMLDocument}>=, submitted: boolean= }} data - data object containing XML model, (partial) XML instance to load, external data array, flag to indicate whether data was submitted before
- * @param {{full:boolean=}=} options - Whether to initialize the full model or only the primary instance
+ * @param {FormDataObj} data - data object
+ * @param {Object=} options - FormModel options
+ * @param {string=} options.full - Whether to initialize the full model or only the primary instance.
  */
 FormModel = function( data, options ) {
 
