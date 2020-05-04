@@ -31,6 +31,7 @@ body {
     }
 }
 
+.print-hide,
 .side-slider,
 .side-slider__toggle,
 #feedback-bar,
@@ -455,11 +456,5 @@ h4 {
         &::-ms-thumb {
             border-color: black !important;
         }
-    }
-}
-
-input[type=text], textarea {
-    &.print-only {
-        display: none;
     }
 }

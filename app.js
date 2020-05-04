@@ -10,6 +10,7 @@ import support from './src/js/support';
 import { Form } from './src/js/form';
 import fileManager from './src/js/file-manager';
 import events from './src/js/event';
+import { fixGrid, styleToAll, styleReset } from './src/js/print';
 var loadErrors;
 var form;
 var formStr;
@@ -69,6 +70,7 @@ function initializeForm() {
     form = new Form( formEl, {
         modelStr: modelStr
     }, {
+        'printRelevantOnly': false,
         'clearIrrelevantImmediately': false
     } );
     // for debugging
@@ -86,3 +88,19 @@ function getURLParameter( name ) {
         ( new RegExp( name + '=' + '(.+?)(&|$)' ).exec( location.search ) || [ null, null ] )[ 1 ]
     );
 }
+
+// to facilitate developing print-specific issues
+function printView( on = true ) {
+    if ( on ) {
+        document.querySelectorAll( '.question' ).forEach( el => el.dispatchEvent( events.PrintifyText() ) );
+        styleToAll();
+        setTimeout( () => {
+            fixGrid( { format: 'letter' } );
+        }, 500 );
+
+    } else {
+        document.querySelectorAll( '.question' ).forEach( el => el.dispatchEvent( events.DePrintifyText() ) );
+        styleReset();
+    }
+}
+window.printView = printView;

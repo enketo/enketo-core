@@ -3,6 +3,10 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+---------------------
+##### Fixed
+- Textarea not resizing correctly when printing in pages mode.
+
 [5.15.1] - 2020-05-01
 ---------------------
 ##### Changed
