@@ -208,19 +208,19 @@ function ChangeOption() {
 /**
  * Go to printify text event.
  *
- * @return {CustomEvent} Custom "printifyText" event (bubbling)
+ * @return {CustomEvent} Custom "printify" event (bubbling)
  */
-function PrintifyText() {
-    return new CustomEvent( 'printify.text', { bubbles: true } );
+function Printify() {
+    return new CustomEvent( 'printify', { bubbles: true } );
 }
 
 /**
  * Go to deprintify text event.
  *
- * @return {CustomEvent} Custom "dePrintifyText" event (bubbling)
+ * @return {CustomEvent} Custom "deprintify" event (bubbling)
  */
-function DePrintifyText() {
-    return new CustomEvent( 'deprintify.text', { bubbles: true } );
+function DePrintify() {
+    return new CustomEvent( 'deprintify', { bubbles: true } );
 }
 
 export default {
@@ -246,6 +246,6 @@ export default {
     GoToInvisible,
     XFormsValueChanged,
     ChangeOption,
-    PrintifyText,
-    DePrintifyText
+    Printify,
+    DePrintify
 };

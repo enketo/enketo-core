@@ -194,6 +194,10 @@ input[type=checkbox] {
         display: none !important;
     }
 
+    .print-input-text {
+        height: auto;
+    }
+
     .or-hint.active {
         color: black;
         display: block;

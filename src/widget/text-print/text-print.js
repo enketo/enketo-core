@@ -17,8 +17,8 @@ class TextPrintWidget extends Widget {
     }
 
     _init() {
-        this.question.addEventListener( events.PrintifyText().type, this._addWidget.bind( this ) );
-        this.question.addEventListener( events.DePrintifyText().type, this._removeWidget.bind( this ) );
+        this.question.addEventListener( events.Printify().type, this._addWidget.bind( this ) );
+        this.question.addEventListener( events.DePrintify().type, this._removeWidget.bind( this ) );
     }
 
     _addWidget() {

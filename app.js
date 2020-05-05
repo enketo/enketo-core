@@ -90,17 +90,21 @@ function getURLParameter( name ) {
 }
 
 // to facilitate developing print-specific issues
-function printView( on = true ) {
+function printView( on = true, grid = false ) {
     if ( on ) {
-        document.querySelectorAll( '.question' ).forEach( el => el.dispatchEvent( events.PrintifyText() ) );
+        document.querySelectorAll( '.question' ).forEach( el => el.dispatchEvent( events.Printify() ) );
         styleToAll();
-        setTimeout( () => {
-            fixGrid( { format: 'letter' } );
-        }, 500 );
+        if ( grid ) {
+            setTimeout( () => {
+                fixGrid( { format: 'letter' } );
+            }, 500 );
+        }
 
     } else {
-        document.querySelectorAll( '.question' ).forEach( el => el.dispatchEvent( events.DePrintifyText() ) );
+        document.querySelectorAll( '.question' ).forEach( el => el.dispatchEvent( events.DePrintify() ) );
         styleReset();
     }
 }
+
+window.printGridView = ( on = true ) => printView( on, true );
 window.printView = printView;
