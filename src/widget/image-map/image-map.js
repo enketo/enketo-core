@@ -2,6 +2,7 @@ import Widget from '../../js/widget';
 import { t } from 'enketo/translator';
 import events from '../../js/event';
 import { getSiblingElements } from '../../js/dom-utils';
+const SELECTORS = 'path[id], g[id], circle[id]';
 
 /**
  * Image Map widget that turns an SVG image into a clickable map
@@ -148,7 +149,7 @@ class ImageMap extends Widget {
      * @return {Element} cleaned up SVG
      */
     _removeUnmatchedIds( svg ) {
-        svg.querySelectorAll( 'path[id], g[id]' ).forEach( el => {
+        svg.querySelectorAll( SELECTORS ).forEach( el => {
             if ( !this._getInput( el.id ) ) {
                 el.removeAttribute( 'id' );
             }
@@ -170,7 +171,7 @@ class ImageMap extends Widget {
      */
     _setSvgClickHandler() {
         this.svg.addEventListener( 'click', ev => {
-            if ( !ev.target.closest( 'svg' ).matches( '[or-readonly]' ) && ev.target.matches( 'path[id], g[id]' ) ) {
+            if ( !ev.target.closest( 'svg' ).matches( '[or-readonly]' ) && ( ev.target.matches( SELECTORS ) || ev.target.closest( SELECTORS ) ) ) {
                 const id = ev.target.id || ev.target.closest( 'g[id]' ).id;
                 const input = this._getInput( id );
                 if ( input ) {
@@ -193,7 +194,7 @@ class ImageMap extends Widget {
      * Handles hover listener
      */
     _setHoverHandler() {
-        this.svg.querySelectorAll( 'path[id], g[id]' ).forEach( el => {
+        this.svg.querySelectorAll( SELECTORS ).forEach( el => {
             el.addEventListener( 'mouseenter', ev => {
                 const id = ev.target.id || ev.target.closest( 'g[id]' ).id;
                 const labels = getSiblingElements( this._getInput( id ), '.option-label.active' );
@@ -201,7 +202,7 @@ class ImageMap extends Widget {
                 this.tooltip.textContent = optionLabel;
             } );
             el.addEventListener( 'mouseleave', ev => {
-                if ( ev.target.matches( 'path[id], g[id]' ) ) {
+                if ( ev.target.matches( SELECTORS ) ) {
                     this.tooltip.textContent = '';
                 }
             } );
@@ -222,7 +223,7 @@ class ImageMap extends Widget {
      */
     _updateImage() {
         let values = this.originalInputValue;
-        this.svg.querySelectorAll( 'path[or-selected], g[or-selected]' ).forEach( el => el.removeAttribute( 'or-selected' ) );
+        this.svg.querySelectorAll( 'path[or-selected], g[or-selected], circle[or-selected]' ).forEach( el => el.removeAttribute( 'or-selected' ) );
 
         if ( typeof values === 'string' ) {
             values = [ values ];
@@ -231,7 +232,7 @@ class ImageMap extends Widget {
         values.forEach( value => {
             if ( value ) {
                 // if multiple values have the same id, change all of them (e.g. a province that is not contiguous)
-                this.svg.querySelectorAll( `path#${value},g#${value}` ).forEach( el => el.setAttribute( 'or-selected', '' ) );
+                this.svg.querySelectorAll( `path#${value},g#${value},circle#${value}` ).forEach( el => el.setAttribute( 'or-selected', '' ) );
             }
         } );
     }
