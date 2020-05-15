@@ -54,11 +54,11 @@ import { elementDataStore as data } from '../../js/dom-utils';
 /**
  * The whole purpose of this widget is to workaround iOS browser bugs. See bug descriptions inline below.
  *
- * @extends Widget
+ * @augments Widget
  */
 class DatepickerNativeIos extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return ' .question input[type="date"], .question input[type="datetime-local"], .question input[type="time"]';

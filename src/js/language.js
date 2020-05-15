@@ -69,7 +69,7 @@ export default {
         return this._currentLang;
     },
     /**
-     * @type {string}|null
+     * @type {string}
      */
     get currentLangDesc() {
         const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );

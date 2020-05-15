@@ -340,6 +340,7 @@ import event from '../../js/event';
             el.textContent = this.meridianNotation.pm;
             const pmLength = el.scrollWidth;
             el.remove();
+
             return amLength > pmLength ? amLength : pmLength;
         },
 
@@ -360,12 +361,12 @@ import event from '../../js/event';
             }
 
             templateContent = `&lt;table>&lt;tr>&lt;td>&lt;a href="#" data-action="incrementHour">&lt;span class="${this.icons.up}">&lt;/span>&lt;/a>&lt;/td>&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>&lt;a href="#" data-action="incrementMinute">&lt;span class="${this.icons.up}">&lt;/span>&lt;/a>&lt;/td>${this.showSeconds ?
-        `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>&lt;a href="#" data-action="incrementSecond">&lt;span class="${this.icons.up}">&lt;/span>&lt;/a>&lt;/td>` : ''}${this.showMeridian ?
-        `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td class="meridian-column">&lt;a href="#" data-action="toggleMeridian">&lt;span class="${this.icons.up}">&lt;/span>&lt;/a>&lt;/td>` : ''}&lt;/tr>&lt;tr>&lt;td>${hourTemplate}&lt;/td> &lt;td class="separator">:&lt;/td>&lt;td>${minuteTemplate}&lt;/td> ${this.showSeconds ?
-        `&lt;td class="separator">:&lt;/td>&lt;td>${secondTemplate}&lt;/td>` : ''}${this.showMeridian ?
-        `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>${meridianTemplate}&lt;/td>` : ''}&lt;/tr>&lt;tr>&lt;td>&lt;a href="#" data-action="decrementHour">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>&lt;td class="separator">&lt;/td>&lt;td>&lt;a href="#" data-action="decrementMinute">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>${this.showSeconds ?
-        `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>&lt;a href="#" data-action="decrementSecond">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>` : ''}${this.showMeridian ?
-        `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>&lt;a href="#" data-action="toggleMeridian">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>` : ''}&lt;/tr>&lt;/table>`;
+                `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>&lt;a href="#" data-action="incrementSecond">&lt;span class="${this.icons.up}">&lt;/span>&lt;/a>&lt;/td>` : ''}${this.showMeridian ?
+                `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td class="meridian-column">&lt;a href="#" data-action="toggleMeridian">&lt;span class="${this.icons.up}">&lt;/span>&lt;/a>&lt;/td>` : ''}&lt;/tr>&lt;tr>&lt;td>${hourTemplate}&lt;/td> &lt;td class="separator">:&lt;/td>&lt;td>${minuteTemplate}&lt;/td> ${this.showSeconds ?
+                `&lt;td class="separator">:&lt;/td>&lt;td>${secondTemplate}&lt;/td>` : ''}${this.showMeridian ?
+                `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>${meridianTemplate}&lt;/td>` : ''}&lt;/tr>&lt;tr>&lt;td>&lt;a href="#" data-action="decrementHour">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>&lt;td class="separator">&lt;/td>&lt;td>&lt;a href="#" data-action="decrementMinute">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>${this.showSeconds ?
+                `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>&lt;a href="#" data-action="decrementSecond">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>` : ''}${this.showMeridian ?
+                `&lt;td class="separator">&amp;nbsp;&lt;/td>&lt;td>&lt;a href="#" data-action="toggleMeridian">&lt;span class="${this.icons.down}">&lt;/span>&lt;/a>&lt;/td>` : ''}&lt;/tr>&lt;/table>`;
 
             switch ( this.template ) {
                 case 'dropdown':
@@ -380,6 +381,7 @@ import event from '../../js/event';
             if ( this.hour === '' ) {
                 return '';
             }
+
             //return this.hour +                                                           ':' + ( this.minute.toString().length === 1 ? '0' + this.minute : this.minute ) + ( this.showSeconds ? ':' + ( this.second.toString().length === 1 ? '0' + this.second : this.second ) : '' ) + ( this.showMeridian ? ' ' + this.meridian : '' );
             return `${this.hour.toString().length === 1 ? `0${this.hour}` : this.hour}:${this.minute.toString().length === 1 ? `0${this.minute}` : this.minute}${this.showSeconds ? `:${this.second.toString().length === 1 ? `0${this.second}` : this.second}` : ''}${this.showMeridian ? ` ${this.meridian}` : ''}`;
         },
@@ -560,6 +562,7 @@ import event from '../../js/event';
 
         getCurrentHour() {
             const h24 = new Date().getHours();
+
             return ( this.showMeridian ) ? h24 % 12 : h24;
         },
 
@@ -578,6 +581,7 @@ import event from '../../js/event';
             if ( this.showMeridian ) {
                 if ( this.hour === 11 ) {
                     this.hour++;
+
                     return this.toggleMeridian();
                 } else if ( this.hour === 12 ) {
                     this.hour = 0;
@@ -686,6 +690,9 @@ import event from '../../js/event';
          * to the nearest "step", like 45 if step is 15. Segment will
          * "overflow" to 0 if it's larger than 59 or would otherwise
          * round up to 60.
+         *
+         * @param {number} segment - The segment value
+         * @param {number} step - The step
          */
         changeToNearestStep( segment, step ) {
             if ( segment % step === 0 ) {
@@ -831,6 +838,7 @@ import event from '../../js/event';
         setTime( time, ignoreWidget ) {
             if ( !time ) {
                 this.clear();
+
                 return;
             }
 
@@ -859,6 +867,7 @@ import event from '../../js/event';
                 timeMode = ( ( new RegExp( am, 'i' ) ).test( time ) ? 1 : 0 ) + ( ( new RegExp( pm, 'i' ) ).test( time ) ? 2 : 0 ); // 0 = none, 1 = AM, 2 = PM, 3 = BOTH.
                 if ( timeMode > 2 ) { // If both are present, fail.
                     this.clear();
+
                     return;
                 }
 
@@ -868,6 +877,7 @@ import event from '../../js/event';
 
                 if ( this.explicitMode &amp;&amp; hour.length > 2 &amp;&amp; ( hour.length % 2 ) !== 0 ) {
                     this.clear();
+
                     return;
                 }
 
@@ -1167,6 +1177,7 @@ import event from '../../js/event';
     $.fn.timepicker = function( option ) {
         const args = Array( ...arguments );
         args.shift();
+
         return this.each( function() {
             const $this = $( this );
             let data = $this.data( 'timepicker' );

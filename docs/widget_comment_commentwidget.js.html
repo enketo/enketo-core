@@ -54,18 +54,19 @@ import events from '../../js/event';
 
 /**
  * Visually transforms a question into a comment modal that can be shown on its linked question.
- * @extends Widget
+ *
+ * @augments Widget
  */
 class Comment extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.or-appearance-comment input[type="text"][data-for], .or-appearance-comment textarea[data-for]';
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     static get helpersRequired() {
         return [ 'input', 'pathToAbsolute' ];

@@ -65,6 +65,7 @@ import $ from 'jquery';
 $.fn.clearInputs = function( ev1, ev2 ) {
     ev1 = ev1 || 'edit';
     ev2 = ev2 || '';
+
     return this.each( function() {
         //remove media previews
         $( this ).find( '.file-preview' ).remove();

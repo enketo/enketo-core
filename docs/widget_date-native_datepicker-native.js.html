@@ -62,11 +62,11 @@ import { elementDataStore as data } from '../../js/dom-utils';
  * TODO: it looks like empty date/datetime-local inputs are hidden, so not clear to me if this widget actually 
  * changes anything.
  *
- * @extends Widget
+ * @augments Widget
  */
 class DatepickerNative extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input[type="date"],.question input[type="datetime-local"]';

@@ -135,6 +135,7 @@ function _getElements( group, selector ) {
             return [ ...group.querySelectorAll( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ) ]
                 .filter( el => el.matches( selector ) );
         }
+
         return [ ...group.querySelectorAll( selector ) ];
     }
 

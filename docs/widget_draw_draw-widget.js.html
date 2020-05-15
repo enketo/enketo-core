@@ -128,11 +128,11 @@ SignaturePad.prototype.updateData = function( pointGroups ) {
 /**
  * Widget to obtain user-provided drawings or signature.
  *
- * @extends Widget
+ * @augments Widget
  */
 class DrawWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         // note that the selector needs to match both the pre-instantiated form and the post-instantiated form (type attribute changes)
@@ -181,9 +181,11 @@ class DrawWidget extends Widget {
                 that.pad.off();
                 if ( existingFilename ) {
                     that.element.value = existingFilename;
+
                     return that._loadFileIntoPad( existingFilename )
                         .then( that._updateDownloadLink.bind( that ) );
                 }
+
                 return true;
             } );
         this.disable();
@@ -217,6 +219,7 @@ class DrawWidget extends Widget {
                         that.$widget.addClass( 'full-screen' );
                         that._resizeCanvas( canvas );
                         that.enable();
+
                         return false;
                     } )
                     .end().find( '.hide-canvas-btn' ).on( 'click', () => {
@@ -224,6 +227,7 @@ class DrawWidget extends Widget {
                         that.pad.off();
                         that._forceUpdate();
                         that._resizeCanvas( canvas );
+
                         return false;
                     } ).click();
 
@@ -287,6 +291,7 @@ class DrawWidget extends Widget {
                 if ( that.props.readonly || event.namespace !== 'propagate' ) {
                     that.$fakeInput.focus();
                     event.stopImmediatePropagation();
+
                     return false;
                 }
             } )
@@ -325,6 +330,7 @@ class DrawWidget extends Widget {
                 if ( that.props.readonly || $input[ 0 ].value || $fakeInput[ 0 ].value ) {
                     $( this ).focus();
                     event.stopImmediatePropagation();
+
                     return false;
                 }
                 event.preventDefault();
@@ -386,6 +392,8 @@ class DrawWidget extends Widget {
 
     /**
      * Updates value
+     *
+     * @param changed
      */
     _updateValue( changed = true ) {
         const now = new Date();
@@ -447,10 +455,12 @@ class DrawWidget extends Widget {
         if ( typeof file === 'string' &amp;&amp; file.startsWith( 'jr://' ) &amp;&amp; this.element.dataset.loadedUrl ) {
             file = this.element.dataset.loadedUrl;
         }
+
         return fileManager.getObjectUrl( file )
             .then( that.pad.fromObjectURL.bind( that.pad ) )
             .then( objectUrl => {
                 that.cache = objectUrl;
+
                 return objectUrl;
             } )
             .catch( () => {
@@ -571,7 +581,7 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @type object
+     * @type {object}
      */
     get props() {
         const props = this._props;
@@ -588,7 +598,7 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.cache || '';
