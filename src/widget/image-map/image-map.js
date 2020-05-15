@@ -96,22 +96,30 @@ class ImageMap extends Widget {
                     that.question.querySelector( '.option-wrapper' ).before( fragment );
                     const widget = that.question.querySelector( '.image-map' );
                     const svg = widget.querySelector( 'svg' );
-                    // Resize, using original unscaled SVG dimensions
-                    // svg.getBBox() only works after SVG has been added to DOM.
-                    // In FF getBBox causes an "NS_ERROR_FAILURE" exception likely because the SVG
-                    // image has not finished rendering. This doesn't always happen though.
-                    // For now, we just log the FF error, and hope that resizing is done correctly via
-                    // attributes.
-                    let bbox = {};
-                    try {
-                        bbox = svg.getBBox();
-                    } catch ( e ) {
-                        console.error( 'Could not obtain Boundary Box of SVG element', e );
+
+                    // Use any explicitly defined viewPort and else define one using bounding box or attributes
+                    if ( !svg.getAttribute( 'viewBox' ) ) {
+                        // Resize, using original unscaled SVG dimensions
+                        let viewBox;
+                        try {
+                            const bbox = svg.getBBox();
+                            viewBox = `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`;
+                        } catch ( e ) {
+                            // svg.getBBox() only works after SVG has been added to DOM.
+                            // In FF getBBox causes an "NS_ERROR_FAILURE" exception likely because the SVG
+                            // image has not finished rendering. This doesn't always happen though.
+                            // For now, we just log the FF error, and hope that resizing is done correctly via
+                            // attributes.
+                            console.error( 'Could not obtain Boundary Box of SVG element', e );
+                            let width = svg.getAttribute( 'width' );
+                            let height = svg.getAttribute( 'height' );
+                            if ( width && height ) {
+                                viewBox = `0 0 ${parseInt( width, 10 )} ${parseInt( height, 10 )}`;
+                            }
+                        }
+                        svg.setAttribute( 'viewBox', viewBox );
                     }
 
-                    const width = bbox.width || svg.getAttribute( 'width' );
-                    const height = bbox.height || svg.getAttribute( 'height' );
-                    svg.setAttribute( 'viewBox', [ 0, 0, parseInt( width, 10 ), parseInt( height, 10 ) ].join( ' ' ) );
                     return widget;
                 } else {
                     throw ( 'Image is not an SVG doc' );

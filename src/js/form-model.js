@@ -1342,7 +1342,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
  * Class dealing with nodes and nodesets of the XML instance
  *
  * @class
- * @param {string} [selector] - SimpleXPath or jQuery selectedor
+ * @param {string} [selector] - SimpleXPath or jQuery selector
  * @param {number} [index] - The index of the target node with that selector
  * @param {NodesetFilter} [filter] - Filter object for the result nodeset
  * @param {FormModel} model - Instance of FormModel

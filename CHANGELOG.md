@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- SVG image not always displayed in its entirety. Any SVG-specified viewBox is overwritten.
+
 [5.15.3] - 2020-05-12
 ---------------------
 ##### Fixed
