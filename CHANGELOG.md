@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - SVG image in image-map widget is not always displayed in its entirety. Any SVG-specified `viewBox` attribute is overwritten.
 - SVG `<circle>` element with `id` attribute is not working in the image-map widget.
 - SVG `<circle>` element with a parent `<g>` element with an id attribute is not working in the image-map widget.
+- Geo widget update function doesn't redraw a map, e.g. when changing language.
 
 [5.15.3] - 2020-05-12
 ---------------------

@@ -1360,6 +1360,7 @@ class Geopicker extends Widget {
         const widget = this.element.parentElement.querySelector( '.widget' );
         if ( widget ) {
             widget.remove();
+            this.loadMap = undefined;
             this.map = undefined;
             this.polyline = undefined;
             this.polygon = undefined;
