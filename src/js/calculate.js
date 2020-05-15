@@ -206,7 +206,7 @@ export default {
      * Determines relevancy of node by re-evaluating relevant expressions of self and ancestors.
      *
      * @param {*} props
-     * @returns {boolean}
+     * @return {boolean}
      */
     _isRelevant( props ) {
         let relevant = props.relevantExpr ? this.form.model.evaluate( props.relevantExpr, 'boolean', props.name, props.index ) : true;

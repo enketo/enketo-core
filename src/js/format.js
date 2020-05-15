@@ -14,6 +14,7 @@ const HAS_MERIDIAN = new RegExp( `^(${TIME_PART} ?(${MERIDIAN_PART}))|((${MERIDI
  */
 function _getCleanLocalTime( dt ) {
     dt = typeof dt == 'undefined' ? new Date() : dt;
+
     return _cleanSpecialChars( dt.toLocaleTimeString( _locale ) );
 }
 
@@ -31,19 +32,19 @@ function _cleanSpecialChars( timeStr ) {
 const time = {
     // For now we just look at a subset of numbers in Arabic and Latin. There are actually over 20 number scripts and :digit: doesn't work in browsers
     /**
-     * @type string
+     * @type {string}
      */
     get hour12() {
         return this.hasMeridian( _getCleanLocalTime() );
     },
     /**
-     * @type string
+     * @type {string}
      */
     get pmNotation() {
         return this.meridianNotation( new Date( 2000, 1, 1, 23, 0, 0 ) );
     },
     /**
-     * @type string
+     * @type {string}
      */
     get amNotation() {
         return this.meridianNotation( new Date( 2000, 1, 1, 1, 0, 0 ) );
@@ -56,8 +57,10 @@ const time = {
         let matches = _getCleanLocalTime( dt ).match( HAS_MERIDIAN );
         if ( matches && matches.length ) {
             matches = matches.filter( item => !!item );
+
             return matches[ matches.length - 1 ].trim();
         }
+
         return null;
     },
     /**
@@ -76,7 +79,7 @@ const time = {
  */
 const format = {
     /**
-     * @type string
+     * @type {string}
      */
     set locale( loc ) {
         _locale = loc;

@@ -13,7 +13,7 @@ export default {
      */
     tocItems: [],
     /**
-     * @type Number
+     * @type {number}
      * @default
      */
     _maxTocLevel: [],
@@ -104,13 +104,14 @@ export default {
                 tocItemText = hintEl.textContent;
             }
         }
-        tocItemText = tocItemText && tocItemText.length > 20 ? `${tocItemText.substring(0,20)}...` : tocItemText;
+        tocItemText = tocItemText && tocItemText.length > 20 ? `${tocItemText.substring( 0,20 )}...` : tocItemText;
+
         return tocItemText;
     },
     /**
      * Builds List of ToC Items
      *
-     * @param {Array<Object>} items
+     * @param {Array<object>} items
      * @param {Element} appendTo
      */
     _buildTocHtmlList( items, appendTo ) {

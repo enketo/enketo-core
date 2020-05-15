@@ -53,6 +53,7 @@ function Removed( detail ) {
 
 /**
  * The odk-instance-first-load event as defined in the ODK XForms spec.
+ *
  * @see https://opendatakit.github.io/xforms-spec/#event:odk-instance-first-load
  *@return {CustomEvent} Custom "odk-instance-first-load" event (bubbling)
  */
@@ -62,6 +63,7 @@ function InstanceFirstLoad() {
 
 /**
  * The odk-new-repeat event as defined in the ODK XForms spec.
+ *
  * @see https://opendatakit.github.io/xforms-spec/#event:odk-new-repeat
  * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
  * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
@@ -72,6 +74,7 @@ function NewRepeat( detail ) {
 
 /**
  * The addrepeat event is similar but fired under different circumstances.
+ *
  * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
  * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
  */
@@ -108,6 +111,7 @@ function Change() {
 
 /**
  * Xforms-value-changed event as defined in the ODK XForms spec.
+ *
  * @see https://opendatakit.github.io/xforms-spec/#event:xforms-value-changed
  *@return {CustomEvent} Custom "xforms-value-changed" event (bubbling)
  * @param {{repeatIndex: number}} detail - Data to be passed with event.

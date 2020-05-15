@@ -56,9 +56,11 @@ export default {
                 value = that.form.model.evaluate( 'now()', 'string' );
                 o.dataNode.setVal( value, 'datetime' );
             } );
+
             //TODO: why populate this upon load?
             return this.form.model.evaluate( 'now()', 'string' );
         }
+
         return 'error - unknown timestamp parameter';
     },
     /**
@@ -79,6 +81,7 @@ export default {
 
             return `${year}-${month}-${day}`;
         }
+
         return o.curVal;
     },
     /**
@@ -97,6 +100,7 @@ export default {
                 return `no ${o.param} property in enketo`;
             }
         }
+
         return o.curVal;
     },
     /**
@@ -108,6 +112,7 @@ export default {
         if ( o.curVal.length === 0 ) {
             return ( o.param === 'application' ) ? 'enketo' : `${o.param} not supported in enketo`;
         }
+
         return o.curVal;
     },
     /**
@@ -118,6 +123,7 @@ export default {
         if ( o.curVal.length === 0 ) {
             return 'patient preload item not supported in enketo';
         }
+
         return o.curVal;
     },
     /**
@@ -128,6 +134,7 @@ export default {
         if ( o.curVal.length === 0 ) {
             return 'user preload item not supported in enketo yet';
         }
+
         return o.curVal;
     },
     /**
@@ -138,6 +145,7 @@ export default {
         if ( o.curVal.length === 0 ) {
             return this.form.model.evaluate( 'concat("uuid:", uuid())', 'string' );
         }
+
         return o.curVal;
     }
 };

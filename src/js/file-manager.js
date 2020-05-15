@@ -45,7 +45,7 @@ fileManager.isWaitingForPermissions = () => { return false; };
  *
  * It is meant for media previews and media downloads.
  *
- * @param  {?string|Object} subject - File or filename in local storage
+ * @param  {?string|object} subject - File or filename in local storage
  * @return {Promise|string|Error} promise url string or rejection with Error
  */
 fileManager.getFileUrl = subject => {
@@ -86,7 +86,7 @@ fileManager.getFileUrl = subject => {
  *
  * It is meant for loading images into a canvas.
  *
- * @param  {?string|Object} subject - File or filename in local storage
+ * @param  {?string|object} subject - File or filename in local storage
  * @return {Promise|string|Error} promise url string or rejection with Error
  */
 fileManager.getObjectUrl = subject => fileManager.getFileUrl( subject )
@@ -94,6 +94,7 @@ fileManager.getObjectUrl = subject => fileManager.getFileUrl( subject )
         if ( /https?:\/\//.test( url ) ) {
             return fileManager.urlToBlob( url ).then( URL.createObjectURL );
         }
+
         return url;
     } );
 

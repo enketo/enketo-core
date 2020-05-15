@@ -30,6 +30,7 @@ function isStaticItemsetFromSecondaryInstance( expr ) {
         return true;
     }
     const containsNumericPredicate = /\[\d+\]/.test( expr );
+
     return containsNumericPredicate;
 }
 
@@ -189,6 +190,7 @@ export default {
                                     const text = label.textContent;
                                     const active = label.classList.contains( 'active' );
                                     const alt = label.alt;
+
                                     return { language, type, text, active, src, alt };
                                 } );
                                 break;
@@ -197,6 +199,7 @@ export default {
                                     const lang = label.getAttribute( 'lang' );
                                     // Two falsy values should set active to true.
                                     const active = ( !lang && !that.form.langs.currentLang ) || ( lang === that.form.langs.currentLang );
+
                                     return { language: lang, type: 'span', text: label.textContent, active };
                                 } );
                                 break;
@@ -297,6 +300,7 @@ export default {
         } else {
             response.push( result.singleNodeValue );
         }
+
         return response;
     },
 
@@ -307,6 +311,7 @@ export default {
      */
     getNodeFromItem( expr, content ) {
         const nodes = this.getNodesFromItem( expr, content, true );
+
         return nodes.length ? nodes[ 0 ] : null;
     },
 
@@ -319,6 +324,7 @@ export default {
         const option = document.createElement( 'option' );
         option.textContent = label;
         option.value = value;
+
         return option;
     },
 
@@ -342,6 +348,7 @@ export default {
             el.src = translation.src;
             el.alt = translation.alt;
         }
+
         return el;
     },
 
@@ -363,6 +370,7 @@ export default {
         translations.forEach( translation => {
             label.appendChild( that.createOptionTranslation( translation, value ) );
         } );
+
         return label;
     }
 };

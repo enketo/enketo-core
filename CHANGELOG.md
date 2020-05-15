@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Changed
+- Code style
+
 ##### Fixed
 - SVG image in image-map widget is not always displayed in its entirety. Any SVG-specified `viewBox` attribute is overwritten.
 - SVG `<circle>` element with `id` attribute is not working in the image-map widget.

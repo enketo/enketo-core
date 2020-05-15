@@ -3,11 +3,11 @@ import Widget from '../../js/widget';
 /**
  * Auto-resizes textarea elements.
  *
- * @extends Widget
+ * @augments Widget
  */
 class TextareaWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return 'form';

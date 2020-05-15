@@ -34,23 +34,16 @@ module.exports = grunt => {
                 }
             }
         },
-        jsbeautifier: {
-            test: {
-                src: [ '*.js', 'src/js/*.js', 'src/widget/*/*.js' ],
-                options: {
-                    config: './.jsbeautifyrc',
-                    mode: 'VERIFY_ONLY'
-                }
+        eslint: {
+            check: {
+                src: [ '*.js', 'src/**/*.js' ]
             },
             fix: {
-                src: [ '*.js', 'src/js/*.js', 'src/widget/*/*.js' ],
                 options: {
-                    config: './.jsbeautifyrc'
-                }
+                    fix: true,
+                },
+                src: [ '*.js', 'src/**/*.js' ]
             }
-        },
-        eslint: {
-            all: [ '*.js', 'src/**/*.js' ]
         },
         watch: {
             sass: {
@@ -136,9 +129,10 @@ module.exports = grunt => {
             .reduce( ( prevPromise, filePath ) => prevPromise.then( () => {
                 const xformStr = grunt.file.read( filePath );
                 grunt.log.writeln( `Transforming ${filePath}...` );
+
                 return transformer.transform( { xform: xformStr } )
                     .then( result => {
-                        forms[ filePath.substring( filePath.lastIndexOf( '/' ) + 1 ) ] = {
+                        forms[filePath.substring( filePath.lastIndexOf( '/' ) + 1 )] = {
                             html_form: result.form,
                             xml_model: result.model
                         };
@@ -151,9 +145,9 @@ module.exports = grunt => {
     } );
 
     grunt.registerTask( 'compile', [ 'shell:rollup' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'eslint', 'compile', 'transforms', 'karma:headless', 'style' ] );
-    grunt.registerTask( 'style', [ 'sass' ] );
+    grunt.registerTask( 'test', [ 'eslint:check', 'compile', 'transforms', 'karma:headless', 'css' ] );
+    grunt.registerTask( 'css', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
-    grunt.registerTask( 'develop', [ 'style', 'compile', 'concurrent:develop' ] );
-    grunt.registerTask( 'default', [ 'style', 'compile' ] );
+    grunt.registerTask( 'develop', [ 'css', 'compile', 'concurrent:develop' ] );
+    grunt.registerTask( 'default', [ 'css', 'compile' ] );
 };

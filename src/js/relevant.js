@@ -66,6 +66,7 @@ export default {
                 if ( $node.parentsUntil( '.or', '#or-calculated-items' ).length === 0 ) {
                     console.error( 'could not find branch node for ', this );
                 }
+
                 return;
             }
 
@@ -79,6 +80,7 @@ export default {
                     // now remove the groups that have a repeat-info child without repeat instance siblings
                     .filter( function() {
                         const $g = $( this );
+
                         return $g.children( '.or-repeat' ).length > 0 || $g.children( '.or-repeat-info' ).length === 0;
                     } ); //.eq( index )
                 // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
@@ -158,6 +160,7 @@ export default {
      */
     evaluate( expr, contextPath, index ) {
         const result = this.form.model.evaluate( expr, 'boolean', contextPath, index );
+
         return result;
     },
     /**
@@ -212,6 +215,7 @@ export default {
             this.form.widgets.enable( $branchNode[ 0 ] );
             this.activate( $branchNode );
         }
+
         return change;
     },
 
@@ -240,6 +244,7 @@ export default {
 
             this.deactivate( $branchNode );
         }
+
         return change;
     },
     /**

@@ -63,16 +63,17 @@ export default {
         this.form.view.html.addEventListener( events.AddRepeat().type, event => this.setFormUi( this._currentLang, event.target ) );
     },
     /**
-     * @type string
+     * @type {string}
      */
     get currentLang() {
         return this._currentLang;
     },
     /**
-     * @type string|null
+     * @type {string}|null
      */
     get currentLangDesc() {
         const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );
+
         return langOption ? langOption.textContent : null;
     },
     /**

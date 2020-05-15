@@ -13,7 +13,7 @@ const pf = navigator.platform;
  **/
 const os = {
     /**
-     * @type string
+     * @type {string}
      **/
     get ios() {
         // in iOS13, the default Safari setting is 'Request Desktop Site' to be On. 
@@ -22,7 +22,7 @@ const os = {
         return /iPad|iPhone|iPod/i.test( pf ) || ( /Mac/i.test( pf ) && document.documentElement.ontouchstart !== undefined );
     },
     /**
-     * @type string
+     * @type {string}
      **/
     get android() {
         return /android/i.test( ua );

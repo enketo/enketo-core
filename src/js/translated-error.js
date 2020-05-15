@@ -2,7 +2,7 @@
  * Error to be translated
  * 
  * @class
- * @extends Error
+ * @augments Error
  * @param {string} message
  * @param {string} translationKey
  * @param {*} translationOptions

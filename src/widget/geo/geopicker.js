@@ -54,11 +54,11 @@ import 'leaflet.gridlayer.googlemutant';
  */
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class Geopicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input[data-type-xml="geopoint"], .question input[data-type-xml="geotrace"], .question input[data-type-xml="geoshape"]';
@@ -147,6 +147,7 @@ class Geopicker extends Widget {
         this.$widget.find( '.toggle-input-type-btn' ).on( 'click', () => {
             const type = that.$inputGroup.hasClass( 'kml-input-mode' ) ? 'points' : 'kml';
             that._switchInputType( type );
+
             return false;
         } );
 
@@ -163,18 +164,21 @@ class Geopicker extends Widget {
         this.$points.on( 'click', '.point', function() {
             that._setCurrent( that.$points.find( '.point' ).index( $( this ) ) );
             that._switchInputType( 'points' );
+
             return false;
         } );
 
         // handle addpoint button click
         this.$points.find( '.addpoint' ).on( 'click', () => {
             that._addPoint();
+
             return false;
         } );
 
         // handle polygon close button click
         this.$widget.find( '.close-chain-btn' ).on( 'click', () => {
             that._closePolygon();
+
             return false;
         } );
 
@@ -198,6 +202,7 @@ class Geopicker extends Widget {
             that.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
             that.$widget.addClass( 'full-screen' );
             that._updateMap();
+
             return false;
         } );
 
@@ -238,6 +243,7 @@ class Geopicker extends Widget {
                 that.polygon = null;
                 that.polyline = null;
             }
+
             return false;
         } );
 
@@ -423,6 +429,7 @@ class Geopicker extends Widget {
 
         if ( oldValue !== newValue ) {
             this.originalInputValue = newValue;
+
             return true;
         } else {
             return false;
@@ -460,6 +467,7 @@ class Geopicker extends Widget {
         if ( Array.isArray( latLng ) ) {
             return [ latLng[ 0 ], latLng[ 1 ] ];
         }
+
         return latLng;
     }
 
@@ -540,6 +548,7 @@ class Geopicker extends Widget {
             }, () => {
                 console.error( 'error occurred trying to obtain position' );
             }, options );
+
             return false;
         } );
     }
@@ -776,6 +785,7 @@ class Geopicker extends Widget {
         // so it will be re-used when the form is reset or multiple geo widgets are created
         map.tileIndex = ( map.tileIndex === undefined ) ? Math.round( Math.random() * 100 ) % map.tiles.length : map.tileIndex;
         url = map.tiles[ map.tileIndex ];
+
         return Promise.resolve( L.tileLayer( url, options ) );
     }
 
@@ -856,6 +866,7 @@ class Geopicker extends Widget {
 
         layers.reverse().some( layer => {
             defaultLayer = layer;
+
             return that.props.appearances.some( appearance => appearance === layer.options.name );
         } );
 
@@ -970,6 +981,7 @@ class Geopicker extends Widget {
             }
             this.polyline = null;
             this.polygon = null;
+
             // console.log( 'list of points invalid' );
             return;
         }
@@ -1276,7 +1288,7 @@ class Geopicker extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         let newValue = '';
@@ -1306,6 +1318,7 @@ class Geopicker extends Widget {
                 newValue = newValue.substring( 0, newValue.lastIndexOf( ';' ) );
             }
         } );
+
         return newValue;
     }
 

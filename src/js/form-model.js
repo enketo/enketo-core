@@ -26,7 +26,7 @@ let Nodeset;
  *
  * @class
  * @param {FormDataObj} data - data object
- * @param {Object=} options - FormModel options
+ * @param {object=} options - FormModel options
  * @param {string=} options.full - Whether to initialize the full model or only the primary instance.
  */
 FormModel = function( data, options ) {
@@ -57,7 +57,7 @@ FormModel = function( data, options ) {
  */
 FormModel.prototype = {
     /**
-     * @type string
+     * @type {string}
      */
     get version() {
         return this.evaluate( '/node()/@version', 'string', null, null, true );
@@ -257,6 +257,7 @@ FormModel.prototype.getSecondaryInstance = function( id ) {
         const idAttr = el.getAttribute( 'id' );
         if ( idAttr === id ) {
             instanceEl = el;
+
             return true;
         } else {
             return false;
@@ -309,6 +310,7 @@ FormModel.prototype.importNode = function( node, allChildren ) {
             if ( !node.children.length && node.textContent ) {
                 newNode.textContent = node.textContent;
             }
+
             return newNode;
         }
         case document.TEXT_NODE:
@@ -419,6 +421,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
     Array.prototype.slice.call( record.querySelectorAll( '*' ) )
         .filter( recordNode => {
             const val = recordNode.textContent;
+
             return recordNode.children.length === 0 && val.trim().length === 0;
         } )
         .forEach( leafNode => {
@@ -571,6 +574,7 @@ FormModel.prototype.getMetaNode = function( localName ) {
  */
 FormModel.prototype.getRepeatCommentText = path => {
     path = path.trim();
+
     return REPEAT_COMMENT_PREFIX + path;
 };
 
@@ -733,9 +737,11 @@ FormModel.prototype.determineIndex = function( element ) {
         const path = getXPath( element, 'instance' );
         const family = Array.prototype.slice.call( this.xml.querySelectorAll( nodeName.replace( /\./g, '\\.' ) ) )
             .filter( node => path === getXPath( node, 'instance' ) );
+
         return family.length === 1 ? null : family.indexOf( element );
     } else {
         console.error( 'no node, or multiple nodes, provided to determineIndex function' );
+
         return -1;
     }
 };
@@ -820,6 +826,7 @@ FormModel.prototype.addTemplate = function( repeatPath, repeat, empty ) {
  */
 FormModel.prototype.getTemplateNodes = function() {
     const jrPrefix = this.getNamespacePrefix( JAVAROSA_XFORMS_NS );
+
     // For now we support both the official namespaced template and the hacked non-namespaced template attributes
     // Note: due to an MS Edge bug, we use the slow JS XPath evaluator here. It would be VERY GOOD for performance
     // to switch back once the Edge bug is fixed. The bug results in not finding any templates.
@@ -842,6 +849,7 @@ FormModel.prototype.getStr = function() {
     if ( navigator.userAgent.indexOf( 'Trident/' ) === -1 ) {
         dataStr = this.removeDuplicateEnketoNsDeclarations( dataStr );
     }
+
     return dataStr;
 };
 
@@ -852,6 +860,7 @@ FormModel.prototype.getStr = function() {
 FormModel.prototype.removeDuplicateEnketoNsDeclarations = function( xmlStr ) {
     let i = 0;
     const declarationExp = new RegExp( `( xmlns:${this.getNamespacePrefix( ENKETO_XFORMS_NS )}="${ENKETO_XFORMS_NS}")`, 'g' );
+
     return xmlStr.replace( declarationExp, match => {
         i++;
         if ( i > 1 ) {
@@ -972,6 +981,7 @@ FormModel.prototype.setNamespaces = function() {
  */
 FormModel.prototype.getNamespacePrefix = function( namespace ) {
     const found = Object.entries( this.namespaces ).find( arr => arr[ 1 ] === namespace );
+
     return found ? found[ 0 ] : undefined;
 };
 
@@ -1004,6 +1014,7 @@ FormModel.prototype.shiftRoot = function( expr ) {
         expr = expr.replace( LITERALS, ( m, p1, p2, p3, p4 ) => {
             const encoded = typeof p1 !== 'undefined' ? encodeURIComponent( p1 ) : encodeURIComponent( p3 );
             const quote = p2 || p4;
+
             return quote + encoded + quote;
         } );
         // Insert /model/instance[1]
@@ -1013,9 +1024,11 @@ FormModel.prototype.shiftRoot = function( expr ) {
         expr = expr.replace( LITERALS, ( m, p1, p2, p3, p4 ) => {
             const decoded = typeof p1 !== 'undefined' ? decodeURIComponent( p1 ) : decodeURIComponent( p3 );
             const quote = p2 || p4;
+
             return quote + decoded + quote;
         } );
     }
+
     return expr;
 };
 
@@ -1135,6 +1148,7 @@ FormModel.prototype.replacePullDataFn = function( expr, selector, index ) {
             expr = expr.replace( pullData, `"${pullDataResult}"` );
         }
     }
+
     return expr;
 };
 
@@ -1328,6 +1342,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         } else {
             response = result[ resultTypes[ resTypeNum ][ 2 ] ];
         }
+
         return response;
     }
 };
@@ -1382,6 +1397,7 @@ Nodeset.prototype.getElements = function() {
             this._nodes = this._nodes
                 .filter( node => {
                     val = node.textContent;
+
                     return node.children.length === 0 && val.trim().length > 0;
                 } );
         }
@@ -1459,14 +1475,17 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
                 target.removeAttribute( 'type' );
             }
         }
+
         return updated;
     }
     if ( targets.length > 1 ) {
         console.error( 'nodeset.setVal expected nodeset with one node, but received multiple' );
+
         return null;
     }
     if ( targets.length === 0 ) {
         console.log( `Data node: ${this.selector} with null-based index: ${this.index} not found. Ignored.` );
+
         return null;
     }
 
@@ -1480,6 +1499,7 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
  */
 Nodeset.prototype.getVal = function() {
     const nodes = this.getElements();
+
     return nodes.length ? nodes[ 0 ].textContent : undefined;
 };
 
@@ -1569,6 +1589,7 @@ Nodeset.prototype.convert = ( x, xmlDataType ) => {
         typeof types[ xmlDataType.toLowerCase() ].convert !== 'undefined' ) {
         return types[ xmlDataType.toLowerCase() ].convert( x );
     }
+
     return x;
 };
 
@@ -1586,10 +1607,12 @@ Nodeset.prototype.validate = function( constraintExpr, requiredExpr, xmlDataType
     return this.validateRequired( requiredExpr )
         .then( passed => {
             result.requiredValid = passed;
+
             return ( passed === false ) ? null : that.validateConstraintAndType( constraintExpr, xmlDataType );
         } )
         .then( passed => {
             result.constraintValid = passed;
+
             return result;
         } );
 };
@@ -1672,7 +1695,7 @@ FormModel.prototype.getRemovalEventData = () => /* node */ {};
 /**
  * Exposed {@link module:types|types} to facilitate extending with custom types
  *
- * @type object
+ * @type {object}
  */
 FormModel.prototype.types = types;
 

@@ -10,11 +10,11 @@ import '../time/timepicker';
 import '../../js/dropdown.jquery';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class DatetimepickerExtended extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input[type="datetime-local"]:not([readonly])';
@@ -63,12 +63,14 @@ class DatetimepickerExtended extends Widget {
                     this.$fakeDateI.val( '' ).datepicker( 'update' );
                 }
                 this.originalInputValue = this.value;
+
                 return false;
             } );
 
         this.$fakeTimeI
             .on( 'change', () => {
                 this.originalInputValue = this.value;
+
                 return false;
             } );
 
@@ -99,7 +101,7 @@ class DatetimepickerExtended extends Widget {
      */
     _createFakeTimeInput() {
         const $fakeTime = $(
-                `<div class="timepicker">
+            `<div class="timepicker">
                     <input class="ignore timepicker-default" type="text" placeholder="hh:mm"/>
                 </div>` )
             .append( this.resetButtonHtml );
@@ -132,13 +134,14 @@ class DatetimepickerExtended extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         if ( this.$fakeDateI.val().length > 0 && this.$fakeTimeI.val().length > 3 ) {
             const d = this.$fakeDateI.val().split( '-' );
             const timeModified = timeFormat.hour12 ? types.time.convertMeridian( this.$fakeTimeI.val() ) : this.$fakeTimeI.val();
             const t = timeModified.split( ':' );
+
             return new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString();
         } else {
             return '';

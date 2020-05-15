@@ -6,18 +6,18 @@ import sortable from 'html5sortable/dist/html5sortable.cjs';
 import { t } from 'enketo/translator';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class RankWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input.rank';
     }
 
     /**
-     * @type boolean
+     * @type {boolean}
      */
     static get list() {
         return true;
@@ -34,7 +34,7 @@ class RankWidget extends Widget {
         $( this.list )
             .toggleClass( 'rank-widget--empty', !loadedValue )
             .append( this.resetButtonHtml )
-            .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content" data-i18n="${startTextKey}">${support.touch ? t('rankwidget.tapstart') : t('rankwidget.clickstart')}</span></div>` )
+            .append( `<div class="rank-widget__overlay"><span class="rank-widget__overlay__content" data-i18n="${startTextKey}">${support.touch ? t( 'rankwidget.tapstart' ) : t( 'rankwidget.clickstart' )}</span></div>` )
             .on( 'click', function() {
                 if ( !that.element.disabled ) {
                     this.classList.remove( 'rank-widget--empty' );
@@ -79,10 +79,11 @@ class RankWidget extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         const result = sortable( this.list, 'serialize' );
+
         return result[ 0 ].container.value;
     }
 
@@ -106,6 +107,7 @@ class RankWidget extends Widget {
             if ( aIndex === -1 || bIndex === -1 ) {
                 throw new Error( 'Could not load rank widget value. Mismatch in item values.' );
             }
+
             return aIndex - bIndex;
         } );
 
@@ -159,7 +161,7 @@ class RankWidget extends Widget {
     // Since we're overriding the setter we also have to overwrite the getter
     // https://stackoverflow.com/questions/28950760/override-a-setter-and-the-getter-must-also-be-overridden
     /**
-     * @type string
+     * @type {string}
      */
     get originalInputValue() {
         return super.originalInputValue;
@@ -168,7 +170,7 @@ class RankWidget extends Widget {
     /**
      * This is the input that Enketo's engine listens on.
      *
-     * @type string
+     * @type {string}
      */
     set originalInputValue( value ) {
         super.originalInputValue = value;

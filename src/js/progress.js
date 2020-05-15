@@ -12,7 +12,7 @@ import events from './event';
  */
 export default {
     /**
-     * @type number
+     * @type {number}
      */
     status: 0,
     /**

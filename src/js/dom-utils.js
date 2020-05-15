@@ -52,6 +52,7 @@ function _getSiblingElements( element, selector = '*', startArray = [] ) {
         }
         next = next.nextElementSibling;
     }
+
     return siblings;
 }
 
@@ -136,6 +137,7 @@ function hasPreviousSiblingElementSameName( el ) {
         }
         el = el.previousSibling;
     }
+
     return found;
 }
 
@@ -155,6 +157,7 @@ function hasPreviousCommentSiblingWithContent( node, content ) {
         }
         node = node.previousSibling;
     }
+
     return found;
 }
 
@@ -258,6 +261,7 @@ const elementDataStore = {
      */
     get: function( element, key ) {
         const item = this._storage.get( element );
+
         return item ? item.get( key ) : item;
     },
     /**
@@ -269,6 +273,7 @@ const elementDataStore = {
      */
     has: function( element, key ) {
         const item = this._storage.get( element );
+
         return item && item.has( key );
     },
     /**
@@ -283,6 +288,7 @@ const elementDataStore = {
         if ( !this._storage.get( key ).size === 0 ) {
             this._storage.delete( element );
         }
+
         return ret;
     }
 };

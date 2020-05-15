@@ -9,18 +9,19 @@ import '../../js/dropdown.jquery';
 /**
  * Extends eternicode's bootstrap-datepicker without changing the original.
  * https://github.com/eternicode/bootstrap-datepicker
- * @extends Widget
+ *
+ * @augments Widget
  */
 class DatepickerExtended extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input[type="date"]';
     }
 
     /**
-     * @type boolean
+     * @type {boolean}
      */
     static condition() {
         return !support.touch || !support.inputTypes.date;
@@ -148,6 +149,7 @@ class DatepickerExtended extends Widget {
      */
     _toActualDate( date = '' ) {
         date = date.trim();
+
         return date && this.settings.format === 'yyyy' && date.length < 5 ? `${date}-01-01` : ( date && this.settings.format === 'yyyy-mm' && date.length < 8 ? `${date}-01` : date );
     }
 
@@ -157,6 +159,7 @@ class DatepickerExtended extends Widget {
      */
     _toDisplayDate( date = '' ) {
         date = date.trim();
+
         return date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
     }
 
@@ -184,14 +187,14 @@ class DatepickerExtended extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get displayedValue() {
         return this.question.querySelector( '.widget input' ).value;
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this._toActualDate( this.displayedValue );

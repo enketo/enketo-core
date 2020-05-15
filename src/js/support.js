@@ -30,7 +30,7 @@ export default {
         return inputTypes;
     },
     /** 
-     * @type boolean
+     * @type {boolean}
      **/
     get touch() {
         return mobile;

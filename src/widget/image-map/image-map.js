@@ -8,11 +8,11 @@ const SELECTORS = 'path[id], g[id], circle[id]';
  * Image Map widget that turns an SVG image into a clickable map
  * by matching radiobutton/checkbox values with id attribute values in the SVG.
  *
- * @extends Widget
+ * @augments Widget
  */
 class ImageMap extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.simple-select.or-appearance-image-map label:first-child > input';
@@ -49,7 +49,7 @@ class ImageMap extends Widget {
     }
 
     /**
-     * @param {object} widget
+     * @param {object} widget - the widget element
      */
     _addFunctionality( widget ) {
         if ( widget ) {
@@ -66,8 +66,8 @@ class ImageMap extends Widget {
     }
 
     /**
-     * @param {Element} img
-     * @return {Promise}
+     * @param {Element} img - the image element
+     * @return {Promise} the widget element
      */
     _addMarkup( img ) {
         const that = this;
@@ -130,7 +130,7 @@ class ImageMap extends Widget {
     }
 
     /**
-     * @param {Error} err
+     * @param {Error} err - error message
      */
     _showSvgNotFoundError( err ) {
         console.error( err );
@@ -145,7 +145,7 @@ class ImageMap extends Widget {
     /**
      * Removes id attributes from unmatched path elements in order to prevent hover effect (and click listener).
      *
-     * @param {Element} svg
+     * @param {Element} svg - SVG element
      * @return {Element} cleaned up SVG
      */
     _removeUnmatchedIds( svg ) {
@@ -159,8 +159,8 @@ class ImageMap extends Widget {
     }
 
     /**
-     * @param {string} id
-     * @return {Element}
+     * @param {string} id - the option ID
+     * @return {Element} input element with matching ID
      */
     _getInput( id ) {
         return this.question.querySelector( `input[value="${id}"]` );
@@ -198,7 +198,7 @@ class ImageMap extends Widget {
             el.addEventListener( 'mouseenter', ev => {
                 const id = ev.target.id || ev.target.closest( 'g[id]' ).id;
                 const labels = getSiblingElements( this._getInput( id ), '.option-label.active' );
-                const optionLabel = labels && labels.length ? labels[ 0 ].textContent : '';
+                const optionLabel = labels && labels.length ? labels[0].textContent : '';
                 this.tooltip.textContent = optionLabel;
             } );
             el.addEventListener( 'mouseleave', ev => {
@@ -210,8 +210,8 @@ class ImageMap extends Widget {
     }
 
     /**
-     * @param {object} data
-     * @return {boolean}
+     * @param {object} data - an object
+     * @return {boolean} whether provided object is an SVG document
      */
     _isSvgDoc( data ) {
         return typeof data === 'object' && data.querySelector( 'svg' );
@@ -259,7 +259,7 @@ class ImageMap extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         // This widget is unusual. It would better to get the value from the map.

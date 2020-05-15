@@ -3,11 +3,11 @@ import { isNumber } from '../../js/utils';
 import support from '../../js/support';
 
 /**
- * @extends RangeWidget
+ * @augments RangeWidget
  */
 class AnalogScaleWidget extends RangeWidget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.or-appearance-analog-scale input[type="number"]';
@@ -127,7 +127,7 @@ class AnalogScaleWidget extends RangeWidget {
     }
 
     /**
-     * @type object
+     * @type {object}
      */
     get props() {
         const props = this._props;
@@ -138,11 +138,12 @@ class AnalogScaleWidget extends RangeWidget {
         props.vertical = !props.appearances.includes( 'horizontal' );
         props.ticks = !props.appearances.includes( 'no-ticks' );
         props.maxTicks = 10;
+
         return props;
     }
 
     /**
-     * @type *
+     * @type {*}
      */
     get value() {
         return super.value;

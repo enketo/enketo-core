@@ -30,25 +30,26 @@ import '../../js/dropdown.jquery';
 /**
  * Bootstrap Select picker that supports single and multiple selects
  * A port of https://github.com/silviomoreto/bootstrap-select
- * @extends Widget
+ *
+ * @augments Widget
  */
 class DesktopSelectpicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question select';
     }
 
     /**
-     * @type boolean
+     * @type {boolean}
      */
     static get list() {
         return true;
     }
 
     /**
-     * @return {boolean}
+     * @return {boolean} Whether additional condition to instantiate the widget is met.
      */
     static condition() {
         return !support.touch;
@@ -80,8 +81,8 @@ class DesktopSelectpicker extends Widget {
     }
 
     /**
-     * @param {string} template
-     * @return {jQuery}
+     * @param {string} template - The select template to use.
+     * @return {jQuery} - The jQuery-wrapped template.
      */
     _createLi( template ) {
         const li = [];
@@ -134,8 +135,7 @@ class DesktopSelectpicker extends Widget {
     /**
      * Create text to show in closed picker
      *
-     * @param {jQuery} [$select] - jQuery-wrapped select element
-     * @return {string}
+     * @return {string} - text to show in closed picker
      */
     _createSelectedStr() {
         const selectedLabels = [];
@@ -227,6 +227,7 @@ class DesktopSelectpicker extends Widget {
             } )
             .on( 'click', 'li.disabled', e => {
                 e.stopPropagation();
+
                 return false;
             } )
             .on( 'click', 'a', e => {

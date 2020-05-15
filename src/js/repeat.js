@@ -23,7 +23,8 @@ const disableFirstRepeatRemoval = config.repeatOrdinals === true;
 export default {
     /**
      * Initializes all Repeat Groups in form (only called once).
-     * @param  {Form} form the parent form object
+     *
+     * @param  {Form} form - the parent form object
      */
     init() {
         const that = this;
@@ -48,6 +49,7 @@ export default {
                 if ( this.firstChild && this.firstChild.nodeType === 3 ) {
                     this.firstChild.textContent = '';
                 }
+
                 return !this.querySelector( '.question' );
             } )
             .addClass( 'empty' );
@@ -94,16 +96,19 @@ export default {
         this.form.view.$.on( 'click', 'button.add-repeat-btn:enabled', function() {
             // Create a clone
             that.add( $( this ).closest( '.or-repeat-info' )[ 0 ] );
+
             // Prevent default
             return false;
         } );
         this.form.view.$.on( 'click', 'button.remove:enabled', function() {
             that.confirmDelete( this.closest( '.or-repeat' ) );
+
             //prevent default
             return false;
         } );
 
         this.countUpdate();
+
         return true;
     },
     // Make this function overwritable
@@ -143,6 +148,7 @@ export default {
             const parent = checkEl.parentElement;
             checkEl = parent ? parent.closest( '.or-repeat' ) : null;
         }
+
         return count - 1;
     },
     /*
@@ -156,10 +162,12 @@ export default {
             return null;
         }
         const name = repeatInfo.dataset.name;
+
         return [ ...repeatInfo.closest( 'form.or' ).querySelectorAll( `.or-repeat-info[data-name="${name}"]` ) ].indexOf( repeatInfo );
     },
     /**
      * [updateViewInstancesFromModel description]
+     *
      * @param {Element} repeatInfo - repeatInfo element
      * @return {number}
      */
@@ -179,10 +187,12 @@ export default {
                 .reduce( ( acc, current ) => acc.concat( [ ...current.querySelectorAll( '.or-repeat-info:not([data-repeat-count])' ) ] ), [] )
                 .forEach( this.updateViewInstancesFromModel.bind( this ) );
         }
+
         return repInModelSeries.length;
     },
     /**
      * [updateDefaultFirstRepeatInstance description]
+     *
      * @param {Element} repeatInfo - repeatInfo element
      */
     updateDefaultFirstRepeatInstance( repeatInfo ) {
@@ -259,6 +269,7 @@ export default {
     add( repeatInfo, toCreate = 1, trigger = 'user' ) {
         if ( !repeatInfo ) {
             console.error( 'Nothing to clone' );
+
             return false;
         }
 

@@ -36,7 +36,7 @@ class ThousandsSeparatorWidget extends Widget {
     /**
      * Obtain the current value from the widget. 
      *
-     * @type *
+     * @type {string}
      */
     get value() {
         return this.widget.textContent;
@@ -45,7 +45,7 @@ class ThousandsSeparatorWidget extends Widget {
     /**
      * Set a value in the widget.
      *
-     * @param {*} value
+     * @param {number} [value] - The number value to update with.
      */
     set value( value ) {
         let displayValue = '';

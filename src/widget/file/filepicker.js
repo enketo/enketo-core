@@ -15,11 +15,11 @@ import { empty } from '../../js/dom-utils';
  * FilePicker that works both offline and online. It abstracts the file storage/cache away
  * with the injected fileManager.
  *
- * @extends Widget
+ * @augments Widget
  */
 class Filepicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"]';
@@ -135,6 +135,7 @@ class Filepicker extends Widget {
                 if ( that.props.readonly || event.namespace !== 'propagate' ) {
                     that.fakeInput.focus();
                     event.stopImmediatePropagation();
+
                     return false;
                 }
             } )
@@ -148,6 +149,7 @@ class Filepicker extends Widget {
                 if ( event.namespace === 'propagate' ) {
                     // Trigger eventhandler to update instance value
                     $( this.element ).trigger( 'change.file' );
+
                     return false;
                 } else {
                     event.stopImmediatePropagation();
@@ -208,6 +210,7 @@ class Filepicker extends Widget {
             if ( this.props.readonly || this.originalInputValue || this.value ) {
                 this.fakeInput.focus();
                 event.stopImmediatePropagation();
+
                 return;
             }
             $( that.element ).trigger( 'click.propagate' );
@@ -247,7 +250,7 @@ class Filepicker extends Widget {
     _showFeedback( fb, status ) {
         const message = fb instanceof TranslatedError ? t( fb.translationKey, fb.translationOptions ) :
             fb instanceof Error ? fb.message :
-            fb || '';
+                fb || '';
         status = status || '';
         // replace text and replace all existing classes with the new status class
         this.feedback.textContent = message;
@@ -337,7 +340,7 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @type object
+     * @type {object}
      */
     get props() {
         const props = this._props;
@@ -351,7 +354,7 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.fakeInput.value;

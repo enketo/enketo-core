@@ -1,11 +1,11 @@
 import Widget from '../../js/widget';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class UrlWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.or-appearance-url input[type="text"]';
@@ -28,7 +28,7 @@ class UrlWidget extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.question.querySelector( '.url-widget' ).href;

@@ -12,7 +12,7 @@ import 'jquery-touchswipe';
 
 export default {
     /**
-     * @type boolean
+     * @type {boolean}
      * @default
      */
     active: false,
@@ -42,6 +42,7 @@ export default {
                 } )
                 .map( el => {
                     el.setAttribute( 'role', 'page' );
+
                     return el;
                 } );
 
@@ -100,24 +101,28 @@ export default {
             if ( !that.form.pageNavigationBlocked ) {
                 that._flipToFirst();
             }
+
             return false;
         } );
         this.$btnPrev.off( '.pagemode' ).on( 'click.pagemode', () => {
             if ( !that.form.pageNavigationBlocked ) {
                 that._prev();
             }
+
             return false;
         } );
         this.$btnNext.off( '.pagemode' ).on( 'click.pagemode', () => {
             if ( !that.form.pageNavigationBlocked ) {
                 that._next();
             }
+
             return false;
         } );
         this.$btnLast.off( '.pagemode' ).on( 'click.pagemode', () => {
             if ( !that.form.pageNavigationBlocked ) {
                 that._flipToLast();
             }
+
             return false;
         } );
     },
@@ -178,6 +183,7 @@ export default {
                         }
                     }
                 }
+
                 return false;
             } )
             .parent().find( '.pages-toc__overlay' ).on( 'click', () => {

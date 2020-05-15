@@ -16,6 +16,7 @@
  */
 function alert( content ) {
     window.alert( content );
+
     return Promise.resolve();
 }
 
@@ -25,6 +26,7 @@ function alert( content ) {
  */
 function confirm( content ) {
     const msg = content.message ? content.message : content;
+
     return Promise.resolve( window.confirm( msg ) );
 }
 

@@ -50,12 +50,12 @@ import './extend';
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
  * @param {Element} form - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
+ * @param formEl
  * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
- * @param {Object} [options] - form options
+ * @param {object} [options] - form options
  * @param {boolean} [options.clearIrrelevantImmediately] - If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
  * @param {boolean} [options.printRelevantOnly] - If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
  * @param {language} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
- *
  * @class
  */
 function Form( formEl, data, options ) {
@@ -110,7 +110,7 @@ Form.prototype = {
         ].concat( this.evaluationCascadeAdditions );
     },
     /**
-     * @type string
+     * @type {string}
      */
     get recordName() {
         return this.view.$.attr( 'name' );
@@ -119,7 +119,7 @@ Form.prototype = {
         this.view.$.attr( 'name', name );
     },
     /**
-     * @type boolean
+     * @type {boolean}
      */
     get editStatus() {
         return this.view.html.dataset.edited === 'true';
@@ -132,55 +132,55 @@ Form.prototype = {
         this.view.html.dataset.edited = status;
     },
     /**
-     * @type string
+     * @type {string}
      */
     get surveyName() {
         return this.view.$.find( '#form-title' ).text();
     },
     /**
-     * @type string
+     * @type {string}
      */
     get instanceID() {
         return this.model.instanceID;
     },
     /**
-     * @type string
+     * @type {string}
      */
     get deprecatedID() {
         return this.model.deprecatedID;
     },
     /**
-     * @type string
+     * @type {string}
      */
     get instanceName() {
         return this.model.instanceName;
     },
     /**
-     * @type string
+     * @type {string}
      */
     get version() {
         return this.model.version;
     },
     /**
-     * @type string
+     * @type {string}
      */
     get encryptionKey() {
         return this.view.$.data( 'base64rsapublickey' );
     },
     /**
-     * @type string
+     * @type {string}
      */
     get action() {
         return this.view.$.attr( 'action' );
     },
     /**
-     * @type string
+     * @type {string}
      */
     get method() {
         return this.view.$.attr( 'method' );
     },
     /**
-     * @type string
+     * @type {string}
      */
     get id() {
         return this.view.html.id;
@@ -247,6 +247,7 @@ Form.prototype.init = function() {
 
     if ( typeof this.model === 'undefined' || !( this.model instanceof FormModel ) ) {
         loadErrors.push( 'Form could not be initialized without a model.' );
+
         return loadErrors;
     }
 
@@ -332,6 +333,7 @@ Form.prototype.init = function() {
         }, 0 );
 
         this.initialized = true;
+
         return loadErrors;
     } catch ( e ) {
         console.error( e );
@@ -341,6 +343,7 @@ Form.prototype.init = function() {
     document.querySelector( 'body' ).scrollIntoView();
 
     console.debug( 'loadErrors', loadErrors );
+
     return loadErrors;
 };
 
@@ -355,6 +358,7 @@ Form.prototype.goTo = function( xpath ) {
             path: xpath.substring( xpath.lastIndexOf( '/' ) + 1 )
         } ) );
     }
+
     return errors;
 };
 
@@ -370,6 +374,7 @@ Form.prototype.getDataStr = function( include ) {
     if ( include.irrelevant === false ) {
         return this.getDataStrWithoutIrrelevantNodes();
     }
+
     return this.model.getStr();
 };
 
@@ -378,6 +383,7 @@ Form.prototype.getDataStr = function( include ) {
  * new Form ( .....) and form.init()
  * For this reason, it does not fix event handler, $form, formView.$ etc.!
  * It also does not affect the XML instance!
+ *
  * @return {Element} the new form element
  */
 Form.prototype.resetView = function() {
@@ -386,6 +392,7 @@ Form.prototype.resetView = function() {
         this.langs.formLanguages.remove();
     }
     this.view.html.replaceWith( this.view.clone );
+
     return document.querySelector( 'form.or' );
 };
 
@@ -433,6 +440,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
         }
 
     } );
+
     return expr;
 };
 
@@ -453,6 +461,7 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
     this.model.node( selector, groupIndex ).getElements()
         .reduce( ( nodes, current ) => {
             const newNodes = [ ...current.querySelectorAll( '*' ) ].filter( ( n ) => n.children.length === 0 && n.textContent );
+
             return nodes.concat( newNodes );
         }, [] )
         .forEach( element => {
@@ -484,6 +493,7 @@ Form.prototype.getModelValue = function( $control ) {
     const control = $control[ 0 ];
     const path = this.input.getName( control );
     const index = this.input.getIndex( control );
+
     return this.model.node( path, index ).getVal();
 };
 
@@ -572,6 +582,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
  */
 Form.prototype.filterRadioCheckSiblings = controls => {
     const wrappers = [];
+
     return controls.filter( control => {
         // TODO: can this be further performance-optimized?
         const wrapper = control.type === 'radio' || control.type === 'checkbox' ? closestAncestorUntil( control, '.option-wrapper', '.question' ) : null;
@@ -582,6 +593,7 @@ Form.prototype.filterRadioCheckSiblings = controls => {
             }
             wrappers.push( wrapper );
         }
+
         return true;
     } );
 };
@@ -867,8 +879,10 @@ Form.prototype.isValid = function( node ) {
     if ( node ) {
         const question = this.input.getWrapNode( node );
         const cls = question.classList;
+
         return !cls.contains( 'invalid-required' ) && !cls.contains( 'invalid-constraint' ) && !cls.contains( 'invalid-relevant' );
     }
+
     return this.view.html.querySelector( '.invalid-required, .invalid-constraint, .invalid-relevant' ) === null;
 };
 
@@ -895,6 +909,7 @@ Form.prototype.validateAll = function() {
     return this.validateContent( this.view.$ )
         .then( valid => {
             that.view.html.dispatchEvent( events.ValidationComplete() );
+
             return valid;
         } );
 };
@@ -929,6 +944,7 @@ Form.prototype.validateContent = function( $container ) {
         if ( !elem ) {
             return Promise.resolve();
         }
+
         return that.validateInput( elem );
     } ).toArray();
 
@@ -942,6 +958,7 @@ Form.prototype.validateContent = function( $container ) {
             if ( $firstError.length > 0 ) {
                 that.goToTarget( $firstError[ 0 ] );
             }
+
             return $firstError.length === 0;
         } )
         .catch( () => // fail whole-form validation if any of the question
@@ -1044,6 +1061,7 @@ Form.prototype.validateInput = function( control ) {
             if ( !passed && !previouslyInvalid ) {
                 control.dispatchEvent( events.Invalidated() );
             }
+
             return passed;
         } )
         .catch( e => {
@@ -1131,13 +1149,14 @@ Form.prototype.goToTarget = function( target ) {
         input.focus();
         input.dispatchEvent( events.ApplyFocus() );
     }
+
     return !!target;
 };
 
 /**
  * Static method to obtain required enketo-transform version direct from class.
  *
- * @type string
+ * @type {string}
  * @default
  */
 Form.requiredTransformerVersion = '1.40.1';

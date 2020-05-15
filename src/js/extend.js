@@ -23,6 +23,7 @@ String.prototype.pad = function( digits ) {
     while ( x.length < digits ) {
         x = `0${x}`;
     }
+
     return x;
 };
 

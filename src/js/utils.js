@@ -66,6 +66,7 @@ function stripQuotes( str ) {
     if ( /^".+"$/.test( str ) || /^'.+'$/.test( str ) ) {
         return str.substring( 1, str.length - 1 );
     }
+
     return str;
 }
 
@@ -89,8 +90,10 @@ function getFilename( file, postfix ) {
         } else if ( filenameParts.length === 1 ) {
             filenameParts[ 0 ] += postfix;
         }
+
         return filenameParts.join( '.' );
     }
+
     return '';
 }
 
@@ -107,6 +110,7 @@ function toArray( list ) {
     for ( let i = list.length >>> 0; i--; ) {
         array[ i ] = list[ i ];
     }
+
     return array;
 }
 
@@ -189,6 +193,7 @@ function dataUriToBlobSync( dataURI ) {
  */
 function getPasteData( event ) {
     const clipboardData = event.originalEvent.clipboardData || window.clipboardData; // modern || IE11
+
     return ( clipboardData ) ? clipboardData.getData( 'text' ) : null;
 }
 

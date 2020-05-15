@@ -3,11 +3,11 @@ import { isNumber } from '../../js/utils';
 import events from '../../js/event';
 
 /**
- * @extends RangeWidget
+ * @augments RangeWidget
  */
 class RatingWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.or-appearance-rating input[type="number"]';
@@ -102,7 +102,7 @@ class RatingWidget extends Widget {
     }
 
     /**
-     * @type object
+     * @type {object}
      */
     get props() {
         const props = this._props;
@@ -118,7 +118,7 @@ class RatingWidget extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.originalInputValue;

@@ -86,7 +86,7 @@ class MyWidget extends Widget {
     /**
      * Obtain the current value from the widget. Usually required.
      *
-     * @type *
+     * @type {*}
      */
     get value() {
         return this.element.classList.contains( 'empty' ) ? '' : this.range.value;

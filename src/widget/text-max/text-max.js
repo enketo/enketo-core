@@ -8,7 +8,7 @@ import config from 'enketo/config';
  */
 class TextMaxWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '[data-type-xml="string"]';

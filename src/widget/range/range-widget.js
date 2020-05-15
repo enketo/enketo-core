@@ -3,11 +3,11 @@ import { isNumber } from '../../js/utils';
 import events from '../../js/event';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class RangeWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale):not(.or-appearance-rating) > input[type="number"][min][max][step]';
@@ -104,7 +104,7 @@ class RangeWidget extends Widget {
     }
 
     /**
-     * @param {number} completeness
+     * @param {number} completeness - level of mercury
      */
     _updateMercury( completeness ) {
         const trackHeight = this.widget.querySelector( '.range-widget__ticks' ).clientHeight;
@@ -113,7 +113,7 @@ class RangeWidget extends Widget {
     }
 
     /**
-     * @param {object} props
+     * @param {object} props - The range properties.
      * @return {string} HTML string
      */
     _stepsBetweenHtmlStr( props ) {
@@ -126,6 +126,7 @@ class RangeWidget extends Widget {
                 }
             }
         }
+
         return html;
     }
 
@@ -170,7 +171,7 @@ class RangeWidget extends Widget {
     }
 
     /**
-     * @type object
+     * @type {object}
      */
     get props() {
         const props = this._props;
@@ -191,7 +192,7 @@ class RangeWidget extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.range.classList.contains( 'empty' ) ? '' : this.range.value;

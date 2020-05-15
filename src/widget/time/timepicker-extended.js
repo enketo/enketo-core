@@ -8,18 +8,19 @@ import './timepicker';
 import '../../js/dropdown.jquery';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class TimepickerExtended extends Widget {
     /**
-     * @type string
+     * @type {string}
+     * @return {string} The selector the widget should activated on.
      */
     static get selector() {
         return '.question input[type="time"]:not([readonly])';
     }
 
     /**
-     * @return {boolean}
+     * @return {boolean} Whether additional condition to instantiate the widget is met.
      */
     static condition() {
         return !support.touch || !support.inputTypes.time;
@@ -89,7 +90,7 @@ class TimepickerExtended extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.fakeTimeI.value;

@@ -66,6 +66,7 @@ const types = {
                 // Comply with XML schema decimal type that has no special values. '' is our only option.
                 return '';
             }
+
             return num;
         },
         /**
@@ -74,6 +75,7 @@ const types = {
          */
         validate( x ) {
             const num = Number( x );
+
             return !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY;
         }
     },
@@ -91,6 +93,7 @@ const types = {
                 // Comply with XML schema int type that has no special values. '' is our only option.
                 return '';
             }
+
             return ( num >= 0 ) ? Math.floor( num ) : -Math.floor( Math.abs( num ) );
         },
         /**
@@ -99,6 +102,7 @@ const types = {
          */
         validate( x ) {
             const num = Number( x );
+
             return !isNaN( num ) && num !== Number.POSITIVE_INFINITY && num !== Number.NEGATIVE_INFINITY && Math.round( num ) === num && num.toString() === x.toString();
         }
     },
@@ -118,9 +122,11 @@ const types = {
                 const month = Number( segments[ 2 ] ) - 1;
                 const day = Number( segments[ 3 ] );
                 const date = new Date( year, month, day );
+
                 // Do not approve automatic JavaScript conversion of invalid dates such as 2017-12-32
                 return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
             }
+
             return false;
         },
         /**
@@ -131,8 +137,9 @@ const types = {
             if ( isNumber( x ) ) {
                 // The XPath expression "2012-01-01" + 2 returns a number of days in XPath.
                 const date = new Date( x * 24 * 60 * 60 * 1000 );
+
                 return date.toString() === 'Invalid Date' ?
-                    '' : `${date.getFullYear().toString().pad(4)}-${(date.getMonth() + 1).toString().pad(2)}-${date.getDate().toString().pad(2)}`;
+                    '' : `${date.getFullYear().toString().pad( 4 )}-${( date.getMonth() + 1 ).toString().pad( 2 )}-${date.getDate().toString().pad( 2 )}`;
             } else {
                 // For both dates and datetimes
                 // If it's a datetime, we can quite safely assume it's in the local timezone, and therefore we can simply chop off
@@ -140,6 +147,7 @@ const types = {
                 if ( /[0-9]T[0-9]/.test( x ) ) {
                     x = x.split( 'T' )[ 0 ];
                 }
+
                 return this.validate( x ) ? x : '';
             }
         }
@@ -180,7 +188,7 @@ const types = {
             } else {
                 const convertedDate = types.date.convert( parts[ 0 ] );
                 if ( convertedDate ) {
-                    return `${convertedDate}T00:00:00.000${(new Date()).getTimezoneOffsetAsTime()}`;
+                    return `${convertedDate}T00:00:00.000${( new Date() ).getTimezoneOffsetAsTime()}`;
                 }
             }
 
@@ -267,7 +275,7 @@ const types = {
             if ( tz.length === 0 ) {
                 offset = new Date().getTimezoneOffsetAsTime();
             } else {
-                offset = `${tz[0] + tz[1].pad(2)}:${tz[2] ? tz[2].pad(2) : '00'}`;
+                offset = `${tz[0] + tz[1].pad( 2 )}:${tz[2] ? tz[2].pad( 2 ) : '00'}`;
             }
 
             x = `${o.hours}:${o.minutes}:${o.seconds}${o.milliseconds ? `.${o.milliseconds}` : ''}${offset}`;
@@ -296,6 +304,7 @@ const types = {
                     x = timeParts.join( ':' );
                 }
             }
+
             return x;
         }
     },
@@ -320,6 +329,7 @@ const types = {
          */
         validate( x ) {
             const coords = x.toString().trim().split( ' ' );
+
             // Note that longitudes from -180 to 180 are problematic when recording points close to the international
             // dateline. They are therefore set from -360  to 360 (circumventing Earth twice, I think) which is
             // an arbitrary limit. https://github.com/kobotoolbox/enketo-express/issues/1033
@@ -346,6 +356,7 @@ const types = {
          */
         validate( x ) {
             const geopoints = x.toString().split( ';' );
+
             return geopoints.length >= 2 && geopoints.every( geopoint => types.geopoint.validate( geopoint ) );
         },
         /**
@@ -366,6 +377,7 @@ const types = {
          */
         validate( x ) {
             const geopoints = x.toString().split( ';' );
+
             return geopoints.length >= 4 && ( geopoints[ 0 ] === geopoints[ geopoints.length - 1 ] ) && geopoints.every( geopoint => types.geopoint.validate( geopoint ) );
         },
         /**

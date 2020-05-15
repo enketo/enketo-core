@@ -48,6 +48,7 @@ function getPrintStyleSheet() {
             }
         }
     }
+
     return null;
 }
 
@@ -74,6 +75,7 @@ function styleToAll() {
     printStyleSheet.media.mediaText = 'all';
     // Firefox:
     printStyleSheetLink.setAttribute( 'media', 'all' );
+
     return !!printStyleSheet;
 }
 
@@ -108,7 +110,7 @@ function isGrid() {
  *
  * @static
  * @param {PaperObj} paper
- * @param {number} [delay] The delay in milliseconds, before starting the job.
+ * @param {number} [delay] - The delay in milliseconds, before starting the job.
  * @return {Promise}
  */
 function fixGrid( paper, delay = 0 ) {
@@ -116,6 +118,7 @@ function fixGrid( paper, delay = 0 ) {
     const main = document.querySelector( '.main' );
     main.style.width = getPaperPixelWidth( paper );
     main.classList.add( 'print-width-adjusted' );
+
     // wait for browser repainting after width change
     return new Promise( resolve => {
         setTimeout( () => {
@@ -284,6 +287,7 @@ function print( theme ) {
                     throw new Error( 'Print cancelled by user.' );
                 }
                 swapped = styleToAll();
+
                 return fixGrid( {
                     format
                 } );
