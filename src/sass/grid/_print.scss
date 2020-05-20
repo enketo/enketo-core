@@ -62,19 +62,12 @@ $printBaseFontSize: 10px;
         border-bottom: 1px dotted black;
     }
 
-    .widget.date,
-    .widget.bootstrap-timepicker {
-        display: none;
-    }
-
-    input {
-
-        &[type=date],
-        &[type=time],
-        &[type=datetime-local] {
-            opacity: 0.7;
-            display: block !important;
-            visibility: hidden;
+    .widget {
+        // not sure if this could apply to all widgets, or just the ones below
+        &.date,
+        &.timepicker,
+        &.datetimepicker{
+            flex: 1;
         }
     }
 

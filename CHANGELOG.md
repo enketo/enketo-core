@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Date fields in Grid Theme do not show values in print view.
+
 [5.15.4] - 2020-05-15
 ----------------------
 ##### Changed
@@ -107,7 +112,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Text-print widget causes double URL to be shown in print view for URL widget.
 - Last row of Grid Theme form may have incorrect cell heights.
 - Readonly month-year or year inputs show full underlying value instead of month-year/year.
-  
+
 [5.11.7] - 2020-01-28
 ---------------------
 ##### Fixed
@@ -243,7 +248,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [5.5.0] - 2019-07-09
 --------------------
-##### Added 
+##### Added
 - Support for max-pixel attribute.
 
 ##### Changed
@@ -265,7 +270,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - An option to override the default XForm language during form instantiation.
 - Developer documentation.
-  
+
 ##### Changed
 - Made preparations for apps to dynamically switch the language of non-form-defined strings.
 
@@ -323,7 +328,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Hide reset button when question is readonly.
 
 ##### Fixed
-- Readonly Draw/Signature widget updates with empty file when canvas looses focus. 
+- Readonly Draw/Signature widget updates with empty file when canvas looses focus.
 - Readonly Select Minimal widget is not readonly.
 - Readonly File widget becomes writeable if it becomes relevant.
 
@@ -394,7 +399,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 --------------------
 ##### Changed
 - Fewer model updates during drawing using draw/signature/annotate widgets (performance).
-  
+
 ##### Fixed
 - Loading error in Pages mode when a page has no label.
 - Itemsets not populating if inside an irrelevant group upon load.
@@ -413,7 +418,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 --------------------
 ##### Removed
 - Deprecated methods.
-- 
+-
 ##### Changed
 - Converted to modern Javascript **WARNING: requires new build systems**
 - Do not include time component for today().
@@ -491,7 +496,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Changed
 - IE11 support is now enabled differently. See [readme.md](https://github.com/enketo/enketo-core#enabling-support-for-internet-explorer-11). **WARNING**
-  
+
 ##### Fixed
 - Calculation results inside repeats are shown incorrectly to user under certain conditions.
 - When a repeat is removed, calculations inside sibling repeats (e.g. using `position(..)`) are not always re-calculated.
@@ -583,7 +588,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.53.0] - 2018-06-15
 ---------------------
 ##### Added
-- Support for ranking widget 
+- Support for ranking widget
 
 [4.52.4] - 2018-06-12
 ---------------------
@@ -600,7 +605,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Fixed
 - IE11 hack is not focused enough (affecting EE modals).
-- Coordinates around the international dateline (longitude < -180 degrees) are considered invalid in geo widgets. 
+- Coordinates around the international dateline (longitude < -180 degrees) are considered invalid in geo widgets.
 
 [4.52.1] - 2018-06-04
 ---------------------
@@ -638,7 +643,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.51.3] - 2018-05-02
 ---------------------
 ##### Fixed
-- When a record is loaded with an empty value for a node that has a default value in the XForm, all secondary instance values are emptied. 
+- When a record is loaded with an empty value for a node that has a default value in the XForm, all secondary instance values are emptied.
 
 [4.51.2] - 2018-05-01
 ---------------------
@@ -665,7 +670,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Decimal-date-time() not spec-compliant at all.
 - Filepicker and drawing widgets have functional reset button when they are readonly.
 
-[4.50.0] - 2018-04-22 
+[4.50.0] - 2018-04-22
 ----------------------
 ##### Added
 - Basic randomize() support to shuffle nodesets (no support for itemsets with itext labels).
@@ -893,7 +898,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.41.9] - 2017-12-20
 ---------------------
 ##### Fixed
-- Npm refuses to install previous version with enketo-xslt 1.15.2, since December 19th 2017 or before. 
+- Npm refuses to install previous version with enketo-xslt 1.15.2, since December 19th 2017 or before.
 
 [4.41.8] - 2017-12-19
 ---------------------
@@ -932,7 +937,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Draw/signature widget not working in pages mode sometimes, if it is not on the first page.
 
-[4.41.4] - 2017-11-16 
+[4.41.4] - 2017-11-16
 ---------------------
 ##### Changed
 - Visually separate repeat instances in Grid Theme.
@@ -1007,8 +1012,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [4.39.1] - 2017-09-13
 ----------------------
 ##### Fixed
-- Form loading error with new decimal input mask. 
- 
+- Form loading error with new decimal input mask.
+
 [4.39.0] - 2017-09-06
 ----------------------
 ##### Added
@@ -1045,7 +1050,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Added
 - Ability to hide irrelevant questions from printout (now the default) with a setting.
- 
+
 ##### Changed
 - Touchscreen detection to change widgets and appearance has been tweaked and is now only considering iOS and Android browsers.
 - Native date inputs (touchscreen or readonly) do not show 'yyyy-mm-dd' placeholder text anymore when empty and unfocused,
@@ -1295,7 +1300,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Added
 - Autocomplete widget for all browser except: Safari and all browsers on iOS.
 
-[4.22.2] - 2017-02-23 
+[4.22.2] - 2017-02-23
 ---------------------
 ##### Fixed
 - jr:choice-name() inside a repeat produces incorrect results.
@@ -1352,7 +1357,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [4.17.1] - 2016-12-22
 ---------------------
-##### Fixed 
+##### Fixed
 - Enketo transformer version in getRequiredTransformerVersion not up to date.
 
 [4.17.0] - 2016-12-22
@@ -1781,7 +1786,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Changed
 - Analog scale picker reset button disabled when value is empty.
-- Analog scale picker reset button hidden when disabled. 
+- Analog scale picker reset button hidden when disabled.
 - Analog scale picker handle hidden when value is empty.
 
 ##### Fixed
@@ -1821,7 +1826,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Output loading error if external instance is referenced in XPath but does not exist in the model.
 
-[4.0.2] - 2015-09-04 
+[4.0.2] - 2015-09-04
 --------------------
 ##### Added
 - Facilitate easy XPath evaluator override.
@@ -1863,7 +1868,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Repeat button location in Grid theme.
 - Radio buttons inside cloned repeat, require 2 clicks if the master was selected.
-- Radio button and checkbox default values not populated correctly in cloned repeat. Overriding values in first repeat. 
+- Radio button and checkbox default values not populated correctly in cloned repeat. Overriding values in first repeat.
 - Indexed-repeat() result incorrect if expression is inside 2+ repeat.
 - Webform not responsive when used in full-size iframe.
 
@@ -1881,7 +1886,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Language options in form language selector oddly aligned when mix of rtl and ltr languages is used (FF).
 - Title directionality is not displayed according to script used in Grid theme.
 
-[3.8.0] - 2015-07-28 
+[3.8.0] - 2015-07-28
 ------------------------
 ##### Added
 - Appearance "compact-n" support for media grid pickers.
@@ -1916,12 +1921,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - A note preceding a traditional table is formatted as a group label.
 
-[3.5.13] - 2015-06-18 
+[3.5.13] - 2015-06-18
 ------------------------
 ##### Fixed
 - Groups and repeats missing from print view in pages mode.
 - Sidebar handle is shown up in print view.
-- Back button in pages shows merged pages after form reset. 
+- Back button in pages shows merged pages after form reset.
 - First page in pages mode is shown if it is disabled.
 
 [3.5.12] - 2015-06-16
@@ -1956,7 +1961,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [3.5.8] - 2015-05-04
 -------------------------
-##### Added 
+##### Added
 - Enable print script for themes based on Grid Theme that include "grid" in the theme name.
 
 ##### Changed
@@ -1985,7 +1990,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 -----------------
 ##### Changed
 - Branch update performance
-- Calculate update performance 
+- Calculate update performance
 - Widget loading performance
 
 ##### Fixed
@@ -2067,7 +2072,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [3.3.2] - 2015-01-23
 ---------
 ##### Added
-- Ability to extract instanceName from model 
+- Ability to extract instanceName from model
 
 
 [3.3.1] - 2015-01-06
