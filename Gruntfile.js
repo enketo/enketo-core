@@ -48,7 +48,7 @@ module.exports = grunt => {
         watch: {
             sass: {
                 files: [ 'grid/sass/**/*.scss', 'src/sass/**/*.scss', 'src/widget/**/*.scss' ],
-                tasks: [ 'style' ],
+                tasks: [ 'css' ],
                 options: {
                     spawn: true,
                     livereload: true,
