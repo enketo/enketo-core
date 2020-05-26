@@ -15,7 +15,7 @@ import { t } from 'enketo/translator';
  * Hopefully in the future it can do this properly, but for now it considers any expression
  * with a non-numeric (position) predicate to be dynamic.
  * This function relies on external instances themselves to be static.
- * 
+ *
  * @static
  * @param {string} expr - XPath expression to analyze
  * @return {boolean} Whether expression contains a predicate
@@ -51,15 +51,20 @@ export default {
 
         if ( updated.relevantPath ) {
             // Questions that are descendants of a group:
-            nodes = this.form.getRelatedNodes( 'data-items-path', `[name^="${updated.relevantPath}/"]` )
-                .add( this.form.getRelatedNodes( 'data-items-path', `[name^="${updated.relevantPath}/"] ~ datalist > .itemset-template` ) )
-                // Individual questions (autocomplete)
-                .add( this.form.getRelatedNodes( 'data-items-path', `[name="${updated.relevantPath}"]` ) )
-                .add( this.form.getRelatedNodes( 'data-items-path', `[name="${updated.relevantPath}"] ~ datalist > .itemset-template` ) )
-                // Individual radiobutton questions with an itemset...:
-                .add( this.form.getRelatedNodes( 'data-items-path', `[data-name="${updated.relevantPath}"]` ) )
-                .add( this.form.getRelatedNodes( 'data-items-path', `[data-name="${updated.relevantPath}"] ~ datalist > .itemset-template` ) )
-                .get();
+            nodes  = this.form.getRelatedNodes( 'data-items-path', '.itemset-template' ).get()
+                .filter( template => {
+                    return template.querySelector( `[type="checkbox"][name^="${updated.relevantPath}/"]` ) // checkboxes, ancestor relevant
+                     || template.querySelector( `[type="radio"][data-name^="${updated.relevantPath}/"]` ) //  radiobuttons, ancestor relevant
+                     || template.parentElement.matches( `select[name^="${updated.relevantPath}/"]` ) // select minimal, ancestor relevant
+                     || template.parentElement.parentElement.querySelector( `input[list][name^="${updated.relevantPath}/"]` ) // autocomplete, ancestor relevant
+                     || template.querySelector( `[type="checkbox"][name="${updated.relevantPath}"]` ) // checkboxes, self relevant
+                     || template.querySelector( `[type="radio"][data-name="${updated.relevantPath}"]` ) //  radiobuttons, self relevant
+                     || template.parentElement.matches( `select[name="${updated.relevantPath}"]` ) // select minimal, self relevant
+                     || template.parentElement.parentElement.querySelector( `input[list][name="${updated.relevantPath}"]` ); // autocomplete, self relevant
+                } );
+
+            // TODO: missing case: static shared itemlist in repeat
+
         } else {
             nodes = this.form.getRelatedNodes( 'data-items-path', '.itemset-template', updated )
                 .get();

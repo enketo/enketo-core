@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Fixed
 - Date fields in Grid Theme do not show values in print view.
+- Itemsets inside a non-relevant groups or questions are not updated when group becomes relevant if choice_filter condition does not include node that makes group/question relevant.
 
 [5.15.4] - 2020-05-15
 ----------------------
