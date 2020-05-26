@@ -1,5 +1,6 @@
 import Widget from '../../js/widget';
 import $ from 'jquery';
+import events from '../../js/event';
 import support from '../../js/support';
 import fileManager from 'enketo/file-manager';
 /**
@@ -225,7 +226,7 @@ class DrawWidget extends Widget {
         // Monitor maxSize changes to update placeholder text in annotate widget. This facilitates asynchronous
         // obtaining of max size from server without slowing down form loading.
         this._updatePlaceholder();
-        this.$widget.closest( 'form.or' ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
+        this.element.closest( 'form.or' ).addEventListener( events.UpdateMaxSize().type, this._updatePlaceholder.bind( this ) );
 
         const that = this;
 
@@ -352,7 +353,7 @@ class DrawWidget extends Widget {
         this.element.dataset.filenamePostfix = postfix;
         // Note that this.element has become a text input.
         // When a default file is loaded this function is called by the canvasreload handler, but the user hasn't changed anything.
-        // We want to make sure the model remains unchanged in that case. 
+        // We want to make sure the model remains unchanged in that case.
         if ( changed ) {
             this.originalInputValue = this.props.filename;
         }

@@ -227,6 +227,10 @@ function DePrintify() {
     return new CustomEvent( 'deprintify', { bubbles: true } );
 }
 
+function UpdateMaxSize() {
+    return new CustomEvent( 'update-max-size', { bubbles: true } );
+}
+
 export default {
     DataUpdate,
     FakeFocus,
@@ -251,5 +255,6 @@ export default {
     XFormsValueChanged,
     ChangeOption,
     Printify,
-    DePrintify
+    DePrintify,
+    UpdateMaxSize
 };
