@@ -30,7 +30,7 @@
   </h:head>
   <h:body>
     <input ref="/calc-in-group-with-relevant/cond">
-      <label>Enter 'hide' to make group irrelevant</label>
+      <label>Enter 'hide' to make group non-relevant</label>
     </input>
     <group ref="/calc-in-group-with-relevant/grp">
       <input ref="/calc-in-group-with-relevant/grp/groupReadonlyCalc">

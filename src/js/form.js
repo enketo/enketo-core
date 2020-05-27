@@ -53,7 +53,6 @@ import './extend';
  * @param formEl
  * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {object} [options] - form options
- * @param {boolean} [options.clearIrrelevantImmediately] - If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
  * @param {boolean} [options.printRelevantOnly] - If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
  * @param {language} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
  * @class
@@ -69,9 +68,6 @@ function Form( formEl, data, options ) {
     this.nonRepeats = {};
     this.all = {};
     this.options = typeof options !== 'object' ? {} : options;
-    if ( typeof this.options.clearIrrelevantImmediately === 'undefined' ) {
-        this.options.clearIrrelevantImmediately = true;
-    }
 
     this.view = {
         $: $form,
@@ -533,9 +529,9 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     // If a repeat was deleted ( update.repeatPath && !updated.cloned), rebuild cache
     if ( !this.all[ attr ] || ( updated.repeatPath && !updated.cloned ) ) {
         // (re)build the cache
-        // However, if repeats have not been initialized exclude nodes inside a repeat until the first repeat has been added during repeat initialization. 
-        // The default view repeat will be removed during initialization (and stored as template), before it is re-added, if necessary. 
-        // We need to avoid adding these fields to the initial cache, 
+        // However, if repeats have not been initialized exclude nodes inside a repeat until the first repeat has been added during repeat initialization.
+        // The default view repeat will be removed during initialization (and stored as template), before it is re-added, if necessary.
+        // We need to avoid adding these fields to the initial cache,
         // so we don't waste time evaluating logic, and don't have to rebuild the cache after repeats have been initialized.
         this.all[ attr ] = this.repeatsInitialized ? this.filterRadioCheckSiblings( [ ...this.view.html.querySelectorAll( `[${attr}]` ) ] ) : this.nonRepeats[ attr ];
     } else if ( updated.cloned && repeatControls ) {
@@ -752,7 +748,7 @@ Form.prototype.setEventHandlers = function() {
      *
      * Readonly fields are not excluded because of this scenario:
      * 1. readonly field has a calculation
-     * 2. readonly field becomes irrelevant (e.g. parent group with relevant)
+     * 2. readonly field becomes non-relevant (e.g. parent group with relevant)
      * 3. this clears value in view, which should propagate to model via 'change' event
      */
     this.view.$.on( 'change.file',
@@ -887,14 +883,14 @@ Form.prototype.isValid = function( node ) {
 };
 
 /**
- * Clears irrelevant
+ * Clears non-relevant values.
  */
-Form.prototype.clearIrrelevant = function() {
+Form.prototype.clearNonRelevant = function() {
     this.relevant.update( null, true );
 };
 
 /**
- * Clears all irrelevant question values if necessary and then
+ * Clears all non-relevant question values if necessary and then
  * validates all enabled input fields after first resetting everything as valid.
  *
  * @return {Promise} wrapping {boolean} whether the form contains any errors
@@ -902,9 +898,7 @@ Form.prototype.clearIrrelevant = function() {
 Form.prototype.validateAll = function() {
     const that = this;
     // to not delay validation unneccessarily we only clear irrelevants if necessary
-    if ( this.options.clearIrrelevantImmediately === false ) {
-        this.clearIrrelevant();
-    }
+    this.clearNonRelevant();
 
     return this.validateContent( this.view.$ )
         .then( valid => {
@@ -978,7 +972,7 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
         return targetPath;
     }
 
-    // index is irrelevant (no positions in returned path)
+    // index is non-relevant (no positions in returned path)
     target = this.model.evaluate( targetPath, 'node', contextPath, 0, true );
 
     return getXPath( target, 'instance', false );

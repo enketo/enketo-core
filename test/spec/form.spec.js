@@ -306,7 +306,7 @@ describe( 'calculations', () => {
 
 describe( 'branching functionality', () => {
 
-    it( 'hides irrelevant branches upon initialization', () => {
+    it( 'hides non-relevant branches upon initialization', () => {
         const form = loadForm( 'group_branch.xml' );
         form.init();
         expect( form.view.$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
@@ -382,25 +382,25 @@ describe( 'branching functionality', () => {
         it( 'evaluates a calculated item only when it becomes relevant', () => {
             // node without relevant attribute:
             expect( dataO.node( '/calcs/calc11' ).getVal() ).toEqual( '12' );
-            // node that is irrelevant
+            // node that is non-relevant
             expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
             $node.val( 'yes' ).trigger( 'change' );
             // node that has become relevant
             expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
-            // make irrelevant again (was a bug)
+            // make non-relevant again (was a bug)
             $node.val( 'no' ).trigger( 'change' );
             // double-check that calc11 is unaffected (was a bug)
             expect( dataO.node( '/calcs/calc11' ).getVal() ).toEqual( '12' );
-            // node that is irrelevant
-            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
+            // node that is non-relevant, value will stay (until record is finalized)
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
 
         } );
 
-        it( 'empties an already calculated item once it becomes irrelevant', () => {
+        it( 'does not empty an already calculated item once it becomes non-relevant', () => {
             $node.val( 'yes' ).trigger( 'change' );
             expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
             $node.val( 'no' ).trigger( 'change' );
-            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
         } );
     } );
 
@@ -460,7 +460,7 @@ describe( 'branching functionality', () => {
     // https://github.com/enketo/enketo-core/issues/444
     describe( 'in nested repeats with a <select> that has a relevant', () => {
         // instanceStr is in this case just used to conveniently create 2 parent repeats with each 1 child repeat (<select> with relevant).
-        // The second child repeat in each parent repeat with name 'type_other' is irrelevant.
+        // The second child repeat in each parent repeat with name 'type_other' is non-relevant.
         const instanceStr = '<data><region><livestock><type>d</type><type_other/></livestock></region><region><livestock><type>d</type></livestock></region><meta><instanceID>a</instanceID></meta></data>';
         const form = loadForm( 'nested-repeat-v5.xml', instanceStr );
         form.init();
@@ -470,7 +470,7 @@ describe( 'branching functionality', () => {
         } );
     } );
 
-    describe( 'handles clearing of form control values in irrelevant branches', () => {
+    describe( 'handles clearing of form control values in non-relevant branches', () => {
         const name = 'relevant-default.xml';
         const one = '/relevant-default/one';
         const two = '/relevant-default/two';
@@ -486,10 +486,8 @@ describe( 'branching functionality', () => {
             expect( form.model.node( three ).getVal() ).toEqual( 'three' );
         } );
 
-        it( 'by not clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantsImmediately is set to false', () => {
-            const form = loadForm( name, null, {
-                clearIrrelevantImmediately: false
-            } );
+        it( 'by not clearing values of non-relevant questions during FORM TRAVERSAL', () => {
+            const form = loadForm( name );
             form.init();
             const $one = form.view.$.find( `[name="${one}"]` );
             // enable
@@ -502,42 +500,12 @@ describe( 'branching functionality', () => {
             expect( form.model.node( three ).getVal() ).toEqual( 'three' );
         } );
 
-        it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is set to true', () => {
-            const form = loadForm( name, null, {
-                clearIrrelevantImmediately: true
-            } );
-            form.init();
-            const $one = form.view.$.find( `[name="${one}"]` );
-            // enable
-            $one.val( 'text' ).trigger( 'change' );
-            expect( form.view.$.find( `[name="${two}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            expect( form.view.$.find( `[name="${three}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            // disable
-            $one.val( '' ).trigger( 'change' );
-            expect( form.model.node( two ).getVal() ).toEqual( '' );
-            expect( form.model.node( three ).getVal() ).toEqual( '' );
-        } );
-
-        it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is not set', () => {
-            const form = loadForm( name );
-            form.init();
-            const $one = form.view.$.find( `[name="${one}"]` );
-            // enable
-            $one.val( 'text' ).trigger( 'change' );
-            expect( form.view.$.find( `[name="${two}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            expect( form.view.$.find( `[name="${three}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            // disable
-            $one.val( '' ).trigger( 'change' );
-            expect( form.model.node( two ).getVal() ).toEqual( '' );
-            expect( form.model.node( three ).getVal() ).toEqual( '' );
-        } );
-
-        it( 'by clearing values of irrelevant questions when form.clearIrrelevant() is called', () => {
+        it( 'by clearing values of non-relevant questions when form.clearNonRelevant() is called', () => {
             const form = loadForm( name );
             form.init();
             expect( form.model.node( two ).getVal() ).toEqual( 'two' );
             expect( form.model.node( three ).getVal() ).toEqual( 'three' );
-            form.clearIrrelevant();
+            form.clearNonRelevant();
             expect( form.model.node( two ).getVal() ).toEqual( '' );
             expect( form.model.node( three ).getVal() ).toEqual( '' );
         } );
@@ -551,7 +519,7 @@ describe( 'branching functionality', () => {
     } );
 
 
-    describe( 'handles calculated values in irrelevant/relevant branches with default settings', () => {
+    describe( 'handles calculated values in non-relevant/relevant branches with default settings', () => {
         const name = 'calc-in-group-with-relevant.xml';
         const cond = '/calc-in-group-with-relevant/cond';
         const groupCalc = '/calc-in-group-with-relevant/grp/groupCalc';
@@ -568,22 +536,22 @@ describe( 'branching functionality', () => {
             expect( form.model.node( calc ).getVal() ).toEqual( '34' );
         } );
 
-        it( 'by clearing calculations when parent group of calculation itself becomes irrelevant', () => {
+        it( 'by not clearing calculations when parent group of calculation itself becomes non-relevant', () => {
             const form = loadForm( name );
             form.init();
             form.view.$.find( `[name="${cond}"]` ).val( 'hide' ).trigger( 'change' );
-            expect( form.model.node( groupCalc ).getVal() ).toEqual( '' );
-            expect( form.model.node( groupReadonlyCalc ).getVal() ).toEqual( '' );
+            expect( form.model.node( groupCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( groupReadonlyCalc ).getVal() ).toEqual( '34' );
 
-            // bonus, questions outside group but also irrelevant
-            expect( form.model.node( readonlyCalc ).getVal() ).toEqual( '' );
-            expect( form.model.node( calc ).getVal() ).toEqual( '' );
+            // bonus, questions outside group but also non-relevant
+            expect( form.model.node( readonlyCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( calc ).getVal() ).toEqual( '34' );
         } );
 
         it( 'by re-populating calculations when parent group of calculation itself becomes relevant', () => {
             const form = loadForm( name );
             form.init();
-            // make irrelevant -> clear (see previous test)
+            // make non-relevant -> clear (see previous test)
             form.view.$.find( `[name="${cond}"]` ).val( 'hide' ).trigger( 'change' );
             // make relevant again
             form.view.$.find( `[name="${cond}"]` ).val( '' ).trigger( 'change' );
@@ -641,7 +609,7 @@ describe( 'branching functionality', () => {
 } );
 
 describe( 'obtaining XML string from form without irrelevant nodes', () => {
-    it( 'works for calcs that are irrelevant upon load', () => {
+    it( 'works for calcs that are non-relevant upon load', () => {
         const form = loadForm( 'calcs.xml' );
         const match = '<calc1/>';
         form.init();
@@ -652,7 +620,7 @@ describe( 'obtaining XML string from form without irrelevant nodes', () => {
         } ) ).not.toMatch( match );
     } );
 
-    it( 'works for calcs that become irrelevant after load', () => {
+    it( 'works for calcs that become non-relevant after load', () => {
         let $node;
         const form = loadForm( 'calcs.xml' );
         form.init();
@@ -782,7 +750,7 @@ describe( 'validation', () => {
             //.trigger( 'validate' );
             expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( false );
             numberInput.value = 1;
-            numberInput.dispatchEvent( events.Change() )
+            numberInput.dispatchEvent( events.Change() );
             //.trigger( 'validate' );
             expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( false );
         } );
@@ -790,7 +758,7 @@ describe( 'validation', () => {
         // failing
         it( 'invalidates an enabled and required number field without a value', done => {
             // first make branch relevant
-            const a = form.view.html.querySelector( '[name="/data/nodeA"]' )
+            const a = form.view.html.querySelector( '[name="/data/nodeA"]' );
             a.value = 'yes';
             a.dispatchEvent( events.Change() );
             // now set value to empty
@@ -813,6 +781,7 @@ describe( 'validation', () => {
                     expect( $textarea.length ).toEqual( 1 );
                     expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
                     $textarea.val( '  \n  \n\r \t ' ).trigger( 'change' );
+
                     return form.validateInput( $textarea[ 0 ] );
                 } )
                 .then( () => {
@@ -850,6 +819,7 @@ describe( 'validation', () => {
                     expect( result ).toEqual( true );
                     // now make make sure a constraint fails
                     form.model.xml.querySelector( 'nodeB' ).textContent = 'c';
+
                     return form.validate();
                 } )
                 .then( result => {
@@ -887,16 +857,19 @@ describe( 'validation', () => {
             setValue( C, '12' )
                 .then( () => {
                     config.validateContinuously = false;
+
                     // violate
                     return setValue( B, 'a' );
                 } )
                 .then( () => {
                     expect( form.view.$.find( C ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toEqual( false );
+
                     // pass
                     return setValue( B, 'b' );
                 } )
                 .then( () => {
                     config.validateContinuously = true;
+
                     //violate
                     return setValue( B, 'a' );
                 } )
@@ -945,6 +918,7 @@ describe( 'validation', () => {
                 .then( () => {
                     expect( form.view.$.find( one ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( true );
                     expect( form.view.$.find( two ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( true );
+
                     return setValue( src, 'valid' );
                 } )
                 .then( () => {
@@ -1085,18 +1059,22 @@ describe( 'white-space-only input', () => {
         inputVal( '  ' )
             .then( () => {
                 expect( counter ).toEqual( 0 );
+
                 return inputVal( ' a' );
             } )
             .then( () => {
                 expect( counter ).toEqual( 1 );
+
                 return inputVal( '   ' );
             } )
             .then( () => {
                 expect( counter ).toEqual( 2 );
+
                 return inputVal( ' ' );
             } )
             .then( () => {
                 expect( counter ).toEqual( 2 );
+
                 return inputVal( '' );
             } )
             .then( () => {

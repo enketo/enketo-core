@@ -230,7 +230,7 @@ export default {
             //.off( 'changebranch.pagemode' )
             .on( 'changebranch.pagemode', () => {
                 that._updateAllActive();
-                // If the current page has become inactive (e.g. a form whose first page during load becomes irrelevant)
+                // If the current page has become inactive (e.g. a form whose first page during load becomes non-relevant)
                 if ( !that.activePages.includes( that.current ) ) {
                     that._next();
                 }
@@ -337,7 +337,7 @@ export default {
      */
     _setToCurrent( pageEl ) {
         pageEl.classList.add( 'current', 'hidden' );
-        // Was just added, for animation?        
+        // Was just added, for animation?
         pageEl.classList.remove( 'hidden' );
         getAncestors( pageEl, '.or-group, .or-group-data, .or-repeat', '.or' )
             .forEach( el => el.classList.add( 'contains-current' ) );

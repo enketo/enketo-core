@@ -42,7 +42,7 @@ describe( 'ToC for pages mode', () => {
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_EN );
 
-            // Now make a bunch of pages irrelevant
+            // Now make a bunch of pages non-relevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( SUB_EN );
@@ -68,7 +68,7 @@ describe( 'ToC for pages mode', () => {
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( ALL_NL );
 
-            // Now make a bunch of pages irrelevant
+            // Now make a bunch of pages non-relevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
                 .toEqual( SUB_NL );

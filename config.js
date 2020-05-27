@@ -11,7 +11,6 @@ export default {
     'repeatOrdinals': false,
     'validateContinuously': false,
     'validatePage': true,
-    'clearIrrelevantImmediately': true,
     'swipePage': true,
     'textMaxChars': 2000
 };

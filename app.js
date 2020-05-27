@@ -70,8 +70,7 @@ function initializeForm() {
     form = new Form( formEl, {
         modelStr: modelStr
     }, {
-        'printRelevantOnly': false,
-        'clearIrrelevantImmediately': false
+        'printRelevantOnly': false
     } );
     // for debugging
     window.form = form;

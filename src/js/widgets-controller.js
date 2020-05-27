@@ -57,7 +57,7 @@ function enable( group ) {
 /**
  * Disables  widgets, if they aren't disabled already when the branch was disabled by the controller.
  * In most widgets, this function will do nothing because all fieldsets, inputs, textareas and selects will get
- * the disabled attribute automatically when the branch element provided as parameter becomes irrelevant.
+ * the disabled attribute automatically when the branch element provided as parameter becomes non-relevant.
  *
  * @static
  * @param {Element} group - The element inside which all widgets need to be disabled.

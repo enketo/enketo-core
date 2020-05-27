@@ -37,18 +37,6 @@ This setting with default `true` value determines whether to enable support for 
 
 Per-form configuration is done by adding an (optional) options object as 3rd parameter when instantiating a form.
 
-#### Behaviour of skip logic
-
-```
-new Form(formselector, data, {
-  clearIrrelevantImmediately: false
-});
-```
-
-If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
-
-In the second case the irrelevant values will not be cleared until `form.validate()` is called (usually when the user marks a record as complete).
-
 #### Print only the "relevant" parts of the form
 
 If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.

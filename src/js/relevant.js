@@ -10,9 +10,9 @@ import events from './event';
 export default {
     /**
      * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
-     * @param {boolean} forceClearIrrelevant
+     * @param {boolean} forceClearNonRelevant
      */
-    update( updated, forceClearIrrelevant ) {
+    update( updated, forceClearNonRelevant ) {
         let $nodes;
 
         if ( !this.form ) {
@@ -21,13 +21,13 @@ export default {
 
         $nodes = this.form.getRelatedNodes( 'data-relevant', '', updated );
 
-        this.updateNodes( $nodes, forceClearIrrelevant );
+        this.updateNodes( $nodes, forceClearNonRelevant );
     },
     /**
      * @param {jQuery} $nodes
-     * @param {boolean} forceClearIrrelevant
+     * @param {boolean} forceClearNonRelevant
      */
-    updateNodes( $nodes, forceClearIrrelevant ) {
+    updateNodes( $nodes, forceClearNonRelevant ) {
         let p;
         let $branchNode;
         let result;
@@ -141,7 +141,7 @@ export default {
                 alreadyCovered.push( this.getAttribute( 'name' ) );
             }
 
-            if ( that.process( $branchNode, p.path, result, forceClearIrrelevant ) === true ) {
+            if ( that.process( $branchNode, p.path, result, forceClearNonRelevant ) === true ) {
                 branchChange = true;
             }
         } );
@@ -169,13 +169,13 @@ export default {
      * @param {jQuery} $branchNode
      * @param {string} path - Path of branch node
      * @param {boolean} result - result of relevant evaluation
-     * @param {boolean} forceClearIrrelevant - Whether to force clearing of irrelevant nodes and descendants
+     * @param {boolean} forceClearNonRelevant - Whether to force clearing of non-relevant nodes and descendants
      */
-    process( $branchNode, path, result, forceClearIrrelevant ) {
+    process( $branchNode, path, result, forceClearNonRelevant ) {
         if ( result === true ) {
             return this.enable( $branchNode, path );
         } else {
-            return this.disable( $branchNode, path, forceClearIrrelevant );
+            return this.disable( $branchNode, path, forceClearNonRelevant );
         }
     },
 
@@ -224,18 +224,18 @@ export default {
      *
      * @param {jQuery} $branchNode - The jQuery object to hide and disable
      * @param {string} path
-     * @param {boolean} forceClearIrrelevant
+     * @param {boolean} forceClearNonRelevant
      * @return {boolean}
      */
-    disable( $branchNode, path, forceClearIrrelevant ) {
+    disable( $branchNode, path, forceClearNonRelevant ) {
         const virgin = $branchNode.hasClass( 'pre-init' );
         let change = false;
 
-        if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
+        if ( virgin || this.selfRelevant( $branchNode ) || forceClearNonRelevant ) {
             change = true;
             // if the branch was previously enabled, keep any default values
             if ( !virgin ) {
-                if ( this.form.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
+                if ( forceClearNonRelevant ) {
                     this.clear( $branchNode, path );
                 }
             } else {

@@ -7,7 +7,7 @@ Fired on a form control when it is programmatically updated and when this result
 Fired on a form control when it is updated directly by the user and when this results in a change in value
 
 ##### invalidated
-Fired on a form control when it has failed constraint, datatype, or required validation. 
+Fired on a form control when it has failed constraint, datatype, or required validation.
 
 ##### dataupdate
 Fired on model.$events, when a single model value has changed its value, a repeat is added, or a node is removed. It passes an "update object". This event is propagated for external use by firing it on the form.or element as well.
@@ -25,7 +25,7 @@ Fired on the repeat or repeat element immediately following a removed repeat.
 Fired on model.events, when a node is removed. It passes an "update object". This event is propagated for external use by firing it on the form.or element as well.
 
 ##### goto-irrelevant
-Fired on form control when an attempt is made to 'go to' this field but it is hidden from view because it is irrelevant.
+Fired on form control when an attempt is made to 'go to' this field but it is hidden from view because it is non-relevant.
 
 ##### goto-invisible
 Fired on form control when an attempt is made to 'go to' this field but it is hidden from view because it is has no form control.

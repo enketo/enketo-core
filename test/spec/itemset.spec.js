@@ -375,7 +375,7 @@ describe( 'Itemset functionality', () => {
         } );
     } );
 
-    describe( 'in a group that becomes relevant, irrelevant relevant', () => {
+    describe( 'in a group that becomes relevant, non-relevant, relevant', () => {
         it( 'are re-evaluated', () => {
             const form = loadForm( 'itemset-relevant.xml' );
             form.init();
@@ -394,7 +394,7 @@ describe( 'Itemset functionality', () => {
             auto.value = '1';
             auto.dispatchEvent( events.Change() );
 
-            // make irrelevant again
+            // make non-relevant again
             const option3 = form.view.html.querySelector( '[name="/broken_repeat_example/m_gate"][value="no"]' );
             option3.checked = true;
             option3.dispatchEvent( events.Change() );
