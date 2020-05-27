@@ -116,7 +116,7 @@ class Filepicker extends Widget {
         // Monitor maxSize changes to update placeholder text. This facilitates asynchronous
         // obtaining of max size from server without slowing down form loading.
         this._updatePlaceholder();
-        $( this.element.closest( 'form.or' ) ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
+        this.element.closest( 'form.or' ).addEventListener( events.UpdateMaxSize().type, this._updatePlaceholder.bind( this ) );
 
         fileManager.init()
             .then( () => {
