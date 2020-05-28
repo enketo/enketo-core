@@ -3,10 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.16.0] - 2020-05-28
 ----------------------
 ##### Removed
 - Configuration option `clearIrrelevantImmediately`. Non-relevant values are never immediately cleared.
+
+##### Changed
+- Changed external instance XML document type check for Enketo Validate use.
 
 [5.15.5] - 2020-05-27
 ----------------------

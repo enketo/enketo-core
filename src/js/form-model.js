@@ -125,7 +125,8 @@ FormModel.prototype.init = function() {
                 instanceDoc.removeChild( secondaryInstanceChildren[ i ] );
             }
             let rootEl;
-            // instanceof Document is only supported for Enketo Validate. It is not meant to be used otherwise as it could create problems.
+            // The instance.xml.prototype.name === 'Document' check is only supported for Enketo Validate.
+            // Document instances are not supposed to be used otherwise as it could create problems.
             if ( instance.xml instanceof XMLDocument || instance.xml instanceof Document ) {
                 if ( window.navigator.userAgent.indexOf( 'Trident/' ) >= 0 ) {
                     // IE does not support importNode
