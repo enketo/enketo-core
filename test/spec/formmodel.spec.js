@@ -6,6 +6,7 @@ import config from '../../config';
 const getModel = filename => {
     const model = new Model( forms[ filename ].xml_model );
     model.init();
+
     return model;
 };
 
@@ -47,7 +48,7 @@ describe( 'Instantiating a model', () => {
     } );
 
     it( 'without an instanceID node, returns an error', () => {
-        const result = new Model( modelStr ).init();
+        const result = new Model( '<data></data>' ).init();
 
         expect( result.length ).toEqual( 1 );
         expect( /Missing\sinstanceID/.test( result[ 0 ] ) ).toEqual( true );
@@ -358,7 +359,7 @@ describe( 'Data node remover', () => {
     } );
 
     it( 'can remove nodes with a . in the nodeName', () => {
-        const model = new Model( '<model><instance><data><F27./></data></instance></model>' );
+        const model = new Model( '<model><instance><data><F27./><meta><instanceID/></meta></data></instance></model>' );
         const path = '/data/F27.';
         let node;
 
@@ -373,12 +374,12 @@ describe( 'Data node remover', () => {
 
 describe( 'DeprecatedID value getter', () => {
     it( 'returns "" if deprecatedID node does not exist', () => {
-        const model = new Model( '<model><instance><data></data></instance></model>' );
+        const model = new Model( '<model><instance><data><meta><instanceID/></meta></data></instance></model>' );
         model.init();
         expect( model.deprecatedID ).toEqual( '' );
     } );
     it( 'returns value of deprecatedID node', () => {
-        const model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
+        const model = new Model( '<model><instance><data><meta><instanceID/><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
         model.init();
         expect( model.deprecatedID ).toEqual( 'a' );
     } );
@@ -386,7 +387,7 @@ describe( 'DeprecatedID value getter', () => {
 
 describe( 'getRepeatSeries', () => {
     // Note the strategic placements of whitespace '\n'
-    const model = new Model( '<model><instance><a>\n<r><b/><nR/>\n<nR/></r>\n<r><b/><nR/><nR/>\n<nR/></r></a></instance></model>' );
+    const model = new Model( '<model><instance><a>\n<r><b/><nR/>\n<nR/></r>\n<r><b/><nR/><nR/>\n<nR/></r></a><meta><instanceID/></meta></instance></model>' );
     model.init();
     model.extractFakeTemplates( [ '/a/r', '/a/r/nR' ] );
     it( 'returns the elements in one series of repeats', () => {
@@ -442,7 +443,7 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
 
 // This test makes sure that whatever date strings are returned by the XPath evaluator can be dealt with by the form engine
 describe( 'dates returned by the XPath evaluator ', () => {
-    const model = new Model( '<model><instance><data></data></instance></model>' );
+    const model = new Model( '<model><instance><data><meta><instanceID/></meta</data></instance></model>' );
     model.init();
     [
         [ 'date("2018-01-01")', '2018-01-01', 'date' ],
@@ -682,7 +683,7 @@ describe( 'external instances functionality', () => {
         expect( loadErrors.length ).toEqual( 0 );
         expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).toEqual( 'nl' );
 
-        // Now check that the orginal external XML docs are stil the same. Very important for e.g. 
+        // Now check that the orginal external XML docs are stil the same. Very important for e.g.
         // form reset functionality in apps.
         // https://github.com/kobotoolbox/enketo-express/issues/1086
         expect( external[ 0 ].xml.querySelector( 'country' ).textContent ).toEqual( 'nl' );
@@ -1408,7 +1409,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
 
 describe( 'odk-instance-first-load event', () => {
 
-    const modelStr = '<data><a/></data>';
+    const modelStr = '<data><a/><meta><instanceID/></meta</data>';
     const instanceStr = '<data><a>1</a></data>';
 
     it( 'fires once when starting a new record', () => {

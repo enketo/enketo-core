@@ -1300,8 +1300,8 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
             // console.log( 'trying the blazing fast native XPath Evaluator for', expr, index );
             result = doc.evaluate( expr, context, this.getNsResolver(), resTypeNum, null );
         } catch ( e ) {
-            console.log( '%cWell native XPath evaluation did not work... No worries, worth a shot, the expression probably ' +
-                'contained unknown OpenRosa functions or errors:', 'color:orange', expr );
+            //console.log( '%cWell native XPath evaluation did not work... No worries, worth a shot, the expression probably ' +
+            //    'contained unknown OpenRosa functions or errors:', expr );
         }
     }
 
