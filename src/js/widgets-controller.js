@@ -49,7 +49,7 @@ function init( $group, opts = {} ) {
 function enable( group ) {
     widgets.forEach( Widget => {
         const els = _getElements( group, Widget.selector )
-            .filter( el => el.nodeName.toLowerCase() === 'select' ? !el.getAttribute( 'readonly' ) : !el.readOnly );
+            .filter( el => el.nodeName.toLowerCase() === 'select' ? !el.hasAttribute( 'readonly' ) : !el.readOnly );
         new Collection( els ).enable( Widget );
     } );
 }
