@@ -63,4 +63,17 @@ describe( 'calculate functionality', () => {
         expect( calcs[ 1 ].textContent ).toEqual( '' );
         expect( calcs[ 2 ].textContent ).toEqual( '' );
     } );
+
+    // This is important for OpenClinica, but also reduces unnecessary work. A calculation that runs upon form load and
+    // doesn't change a default, or loaded, value doesn't have to populate the form control, as this will be done by setAllVals
+    it( 'does not set the form control value if the calculation result does not change the value in the model', () => {
+        const form = loadForm( 'calc-control.xml', '<data><calc>12</calc></data>' );
+
+        let counter = 0;
+        form.view.html.querySelector( '[name="/data/calc"]' ).addEventListener( new events.InputUpdate().type, () => counter++ );
+        form.init();
+
+        expect( counter ).toEqual( 0 );
+    } );
+
 } );

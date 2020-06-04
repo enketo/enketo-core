@@ -111,7 +111,7 @@ export default {
         if ( event.type === new events.InstanceFirstLoad().type ) {
             // We ignore relevance for the data-instance-first-load, as that will likely never be what users want for a default value.
             ignoreRelevance = true;
-            // Do not use getRelatedNodes here, because the obtaining (and caching) of nodes inside repeats is (and should be) disabled at the 
+            // Do not use getRelatedNodes here, because the obtaining (and caching) of nodes inside repeats is (and should be) disabled at the
             // time this event fires.
             nodes = this.form.filterRadioCheckSiblings( [ ...this.form.view.html.querySelectorAll( `[data-setvalue][data-event*="${event.type}"]` ) ] );
         } else if ( event.type === new events.NewRepeat().type ) {
@@ -138,9 +138,9 @@ export default {
 
             if ( dataNodes.length > 1 && event.type !== new events.NewRepeat().type && event.type !== new events.XFormsValueChanged().type ) {
                 /*
-                 * This case is the consequence of the decision to place setvalue items that are siblings of bind in the XForm 
+                 * This case is the consequence of the decision to place setvalue items that are siblings of bind in the XForm
                  * as a separate group (.or-setvalue-items), instead of in the Form DOM in the locations where they belong.
-                 * This occurs when update is called when multiple repeats are present. 
+                 * This occurs when update is called when multiple repeats are present.
                  * For now this is only relevant for events that are *not* odk-new-repeat and *not* xforms-value-changed.
                  */
                 dataNodes.forEach( ( el, index ) => {
@@ -180,14 +180,18 @@ export default {
         // Filter the result set to only include the target node
         props.dataNodesObj.setIndex( props.index );
 
+        const existingModelValue = props.dataNodesObj.getVal();
+
         // Set the value
         props.dataNodesObj.setVal( result, props.dataType );
+
+        const newModelValue = props.dataNodesObj.getVal();
 
         // Not the most efficient to use input.setVal here as it will do another lookup
         // of the node, that we already have...
         // We should not use value "result" here because node.setVal() may have done a data type conversion
-        if ( control ) {
-            this.form.input.setVal( control, props.dataNodesObj.getVal() );
+        if ( control && existingModelValue !== newModelValue ) {
+            this.form.input.setVal( control, newModelValue );
 
             /*
              * We need to specifically call validate on the question itself, because the validationUpdate
