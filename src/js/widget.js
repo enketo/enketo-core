@@ -40,7 +40,7 @@ class Widget {
         const that = this;
 
         return {
-            get readonly() { return that.element.nodeName.toLowerCase() === 'select' ? !!that.element.getAttribute( 'readonly' ) : !!that.element.readOnly; },
+            get readonly() { return that.element.nodeName.toLowerCase() === 'select' ? that.element.hasAttribute( 'readonly' ) : !!that.element.readOnly; },
             appearances: [ ...this.element.closest( '.question, form.or' ).classList ]
                 .filter( cls => cls.indexOf( 'or-appearance-' ) === 0 )
                 .map( cls => cls.substring( 14 ) ),

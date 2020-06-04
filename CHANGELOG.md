@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Readonly select-minimal widgets are not readonly.
+
 [5.16.0] - 2020-05-28
 ----------------------
 ##### Removed
