@@ -10,6 +10,19 @@ const getModel = filename => {
     return model;
 };
 
+// suppress particular console.warn messages
+console.__warn = console.warn;
+console.warn = ( msg ) => {
+    const surpressedMessages = [
+        'Model has no instanceID element'
+    ];
+    if ( surpressedMessages.includes( msg ) ){
+        return;
+    } else {
+        console.__warn( msg );
+    }
+};
+
 // I don't remember why this functionality exists
 describe( 'Primary instance node values', () => {
     const model = new Model( '<model><instance><data><nodeA> 2  </nodeA><meta><instanceID/></meta></data></instance></model>' );
@@ -54,6 +67,7 @@ describe( 'Instantiating a model', () => {
         expect( /Missing\sinstanceID/.test( result[ 0 ] ) ).toEqual( true );
     } );
 } );
+
 
 describe( 'Data node getter', () => {
     let i;
@@ -352,7 +366,7 @@ describe( 'Data node remover', () => {
             node = data.node( '/thedata/nodeA' );
 
         expect( node.getElements().length ).toEqual( 1 );
-        /*data.node( '/thedata/nodeA' )*/
+
         node.remove();
         expect( node.getElements().length ).toEqual( 0 );
         expect( data.node( '/thedata/nodeA' ).getElements().length ).toEqual( 0 );
@@ -387,7 +401,27 @@ describe( 'DeprecatedID value getter', () => {
 
 describe( 'getRepeatSeries', () => {
     // Note the strategic placements of whitespace '\n'
-    const model = new Model( '<model><instance><a>\n<r><b/><nR/>\n<nR/></r>\n<r><b/><nR/><nR/>\n<nR/></r></a><meta><instanceID/></meta></instance></model>' );
+    const model = new Model( `
+        <model>
+            <instance>
+                <a>
+                    <r>
+                        <b/>
+                        <nR/>
+                        <nR/>
+                    </r>
+                    <r>
+                        <b/>
+                        <nR/>
+                        <nR/>
+                        <nR/>
+                    </r>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </a>
+            </instance>
+        </model>` );
     model.init();
     model.extractFakeTemplates( [ '/a/r', '/a/r/nR' ] );
     it( 'returns the elements in one series of repeats', () => {
@@ -443,7 +477,7 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
 
 // This test makes sure that whatever date strings are returned by the XPath evaluator can be dealt with by the form engine
 describe( 'dates returned by the XPath evaluator ', () => {
-    const model = new Model( '<model><instance><data><meta><instanceID/></meta</data></instance></model>' );
+    const model = new Model( '<model><instance><data><meta><instanceID/></meta></data></instance></model>' );
     model.init();
     [
         [ 'date("2018-01-01")', '2018-01-01', 'date' ],
@@ -523,13 +557,13 @@ describe( 'converting absolute paths', () => {
 
     ].forEach( test => {
         it( 'converts correctly when the model and instance node are included in the model', () => {
-            const model = new Model( '<model><instance><root/></instance></model>' );
+            const model = new Model( '<model><instance><root><meta><instanceID/></meta></root></instance></model>' );
             const expected = test[ 1 ] || test[ 0 ];
             model.init();
             expect( model.shiftRoot( test[ 0 ] ) ).toEqual( expected );
         } );
         it( 'does nothing if model and instance node are absent in the model', () => {
-            const model = new Model( '<data><nodeA/></data>' );
+            const model = new Model( '<data><nodeA/><meta><instanceID/></meta></data>' );
             expect( model.shiftRoot( test[ 0 ] ) ).toEqual( test[ 0 ] );
         } );
     } );
@@ -1342,8 +1376,8 @@ describe( 'merging an instance into the model', () => {
         } );
 
     } );
-} );
 
+} );
 
 // Runs fine headlessly locally, but not on Travis for some reason.
 describe( 'instanceID and deprecatedID are populated upon model initilization', () => {
@@ -1409,7 +1443,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
 
 describe( 'odk-instance-first-load event', () => {
 
-    const modelStr = '<data><a/><meta><instanceID/></meta</data>';
+    const modelStr = '<data><a><meta><instanceID/></meta></a></data>';
     const instanceStr = '<data><a>1</a></data>';
 
     it( 'fires once when starting a new record', () => {
@@ -1431,3 +1465,4 @@ describe( 'odk-instance-first-load event', () => {
     } );
 
 } );
+

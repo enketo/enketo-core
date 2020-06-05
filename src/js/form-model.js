@@ -519,6 +519,12 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
     instanceIdEl = instanceIdObj.getElement();
     instanceIdExistingVal = instanceIdObj.getVal();
 
+    if ( !instanceIdEl ){
+        console.warn( 'Model has no instanceID element' );
+
+        return;
+    }
+
     if ( this.data.instanceStr && this.data.submitted ) {
         deprecatedIdEl = this.getMetaNode( 'deprecatedID' ).getElement();
 

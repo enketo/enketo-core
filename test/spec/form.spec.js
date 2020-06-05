@@ -6,6 +6,7 @@ import config from '../../config';
 import pkg from '../../package';
 import events from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
+const range = document.createRange();
 
 describe( 'Output functionality ', () => {
     // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
@@ -61,25 +62,24 @@ describe( 'Output functionality within repeats', () => {
 } );
 
 describe( 'Preload and MetaData functionality', () => {
-    let form, t;
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on /[ROOT]/meta/instanceID', () => {
-        form = loadForm( 'random.xml' );
+        const form = loadForm( 'random.xml' );
         form.init();
         expect( form.model.node( '/random/meta/instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on [ROOT]/orx:meta/orx:instanceID', () => {
-        form = loadForm( 'meta-namespace.xml' );
+        const form = loadForm( 'meta-namespace.xml' );
         form.init();
         expect( form.model.node( '/data/orx:meta/orx:instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'generates an instanceID on /[ROOT]/meta/instanceID WITHOUT preload binding', () => {
-        form = loadForm( 'random.xml' );
+        const form = loadForm( 'random.xml' );
         form.init();
         form.view.$.find( 'fieldset#or-preload-items' ).remove();
         expect( form.view.$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
@@ -88,7 +88,7 @@ describe( 'Preload and MetaData functionality', () => {
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'generates an instanceID WITH a preload binding', () => {
-        form = loadForm( 'preload.xml' );
+        const form = loadForm( 'preload.xml' );
         form.init();
         const sel = 'fieldset#or-preload-items input[name="/preload/meta/instanceID"][data-preload="uid"]';
         expect( form.view.$.find( sel ).length ).toEqual( 1 );
@@ -97,7 +97,7 @@ describe( 'Preload and MetaData functionality', () => {
 
     // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'does not generate a new instanceID if one is already present', () => {
-        form = new Form( document.createRange().createContextualFragment( forms[ 'random.xml' ].html_form ).querySelector( 'form' ), {
+        const form = new Form( document.createRange().createContextualFragment( `<div>${forms[ 'random.xml' ].html_form}</div>` ).querySelector( 'form' ), {
             modelStr: forms[ 'random.xml' ].xml_model.replace( '<instanceID/>', '<instanceID>existing</instanceID>' )
         } );
         form.init();
@@ -105,7 +105,7 @@ describe( 'Preload and MetaData functionality', () => {
     } );
 
     it( 'generates a timeStart on /[ROOT]/meta/timeStart WITH a preload binding', () => {
-        form = loadForm( 'preload.xml' );
+        const form = loadForm( 'preload.xml' );
         form.init();
         expect( form.model.node( '/preload/start' ).getVal().length > 10 ).toBe( true );
     } );
@@ -114,7 +114,7 @@ describe( 'Preload and MetaData functionality', () => {
         let timeEnd;
         let timeEndNew;
 
-        form = loadForm( 'preload.xml' );
+        const form = loadForm( 'preload.xml' );
         form.init();
         timeEnd = form.model.node( '/preload/end' ).getVal();
 
@@ -132,7 +132,7 @@ describe( 'Preload and MetaData functionality', () => {
     } );
 
     it( 'also works with nodes that have a corresponding form control element', () => {
-        form = loadForm( 'preload-input.xml' );
+        const form = loadForm( 'preload-input.xml' );
         form.init();
 
         [ '/dynamic-default/two', '/dynamic-default/four', '/dynamic-default/six' ].forEach( path => {
@@ -150,7 +150,7 @@ describe( 'Preload and MetaData functionality', () => {
             simserial: 'e',
             subscriberid: 'f'
         };
-        form = loadForm( 'preload.xml', undefined, undefined, session );
+        const form = loadForm( 'preload.xml', undefined, undefined, session );
         form.init();
 
         [ 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid' ].forEach( prop => {
@@ -160,26 +160,31 @@ describe( 'Preload and MetaData functionality', () => {
 
     function testPreloadExistingValue( node ) {
         it( `obtains unchanged preload value of item (WITH preload binding): ${node.selector}`, () => {
-            form = new Form( document.createRange().createContextualFragment( forms[ 'preload.xml' ].html_form ).querySelector( 'form' ), {
-                modelStr: '<preload>' +
-                    '<start>2012-10-30T08:44:57.000-06</start>' +
-                    '<end>2012-10-30T08:44:57.000-06:00</end>' +
-                    '<today>2012-10-30</today>' +
-                    '<deviceid>some value</deviceid>' +
-                    '<subscriberid>some value</subscriberid>' +
-                    '<imei>2332</imei>' +
-                    '<phonenumber>234234324</phonenumber>' +
-                    '<application>some context</application>' +
-                    '<patient>this one</patient>' +
-                    '<username>John Doe</username>' +
-                    '<browser_name>fake</browser_name>' +
-                    '<browser_version>xx</browser_version>' +
-                    '<os_name>fake</os_name>' +
-                    '<os_version>xx</os_version>' +
-                    '<unknown>some value</unknown>' +
-                    '<meta><instanceID>uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8</instanceID></meta>' +
-                    '</preload>'
-            } );
+            const form =  loadForm( 'preload.xml',
+                `<preload>
+                    <start>2012-10-30T08:44:57.000-06</start>
+                    <end>2012-10-30T08:44:57.000-06:00</end>
+                    <today>2012-10-30</today>
+                    <deviceid>some value</deviceid>
+                    <subscriberid>some value</subscriberid>
+                    <imei>2332</imei>
+                    <email/>
+                    <simserial></simserial>
+                    <phonenumber>234234324</phonenumber>
+                    <username>John Doe</username>
+                    <start_note></start_note>
+                    <end_note/>
+                    <today_note/>
+                    <deviceid_note/>
+                    <subscriberid_note/>
+                    <imei_note/>
+                    <phonenumber_note/>
+                    <username_note/>
+                    <meta>
+                        <instanceID>uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8</instanceID>
+                    </meta>
+                </preload>`
+            );
             form.init();
             expect( form.model.node( node.selector ).getVal() ).toEqual( node.result );
         } );
@@ -187,13 +192,13 @@ describe( 'Preload and MetaData functionality', () => {
 
     function testPreloadNonExistingValue( node ) {
         it( `populates previously empty preload item (WITH preload binding): ${node.selector}`, () => {
-            form = loadForm( 'preload.xml' );
+            const form = loadForm( 'preload.xml' );
             form.init();
             expect( form.model.node( node.selector ).getVal().length > 0 ).toBe( true );
         } );
     }
 
-    t = [
+    const t = [
         [ '/preload/start', '2012-10-30T08:44:57.000-06:00' ],
         [ '/preload/today', '2012-10-30' ],
         [ '/preload/deviceid', 'some value' ],
@@ -215,6 +220,7 @@ describe( 'Preload and MetaData functionality', () => {
             selector: t[ i ][ 0 ],
             result: t[ i ][ 1 ]
         } );
+
         testPreloadNonExistingValue( {
             selector: t[ i ][ 0 ]
         } );
@@ -222,6 +228,7 @@ describe( 'Preload and MetaData functionality', () => {
     testPreloadNonExistingValue( {
         selector: '/preload/end'
     } );
+
 } );
 
 describe( 'Loading instance values into html input fields functionality', () => {

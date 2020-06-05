@@ -4,7 +4,7 @@ import { Form } from '../../src/js/form';
 import events from '../../src/js/event';
 
 /*
- * These tests are for setvalue actions. Even though this functionality is part of calculate.js they are separated since they 
+ * These tests are for setvalue actions. Even though this functionality is part of calculate.js they are separated since they
  * different features of XForms.
  */
 
@@ -117,7 +117,7 @@ describe( 'setvalue action to populate defaults', () => {
             it( 'works when jr:repeat-count is used', () => {
                 const form1 = new Form(
                     document.createRange().createContextualFragment(
-                        forms[ 'setvalue.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' ) ).querySelector( 'form' ), {
+                        `<div>${forms[ 'setvalue.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' )}</div>` ).querySelector( 'form' ), {
                         modelStr: forms[ 'setvalue.xml' ].xml_model
                     }
                 );
@@ -131,7 +131,7 @@ describe( 'setvalue action to populate defaults', () => {
 
             it( 'works when jr:repeat-count is used (form with jr:template)', () => {
                 const form1 = new Form(
-                    document.createRange().createContextualFragment( forms[ 'setvalue-template.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' ) ).querySelector( 'form' ), {
+                    document.createRange().createContextualFragment( `<div>${forms[ 'setvalue-template.xml' ].html_form.replace( 'class="or-repeat-info"', 'class="or-repeat-info" data-repeat-count="/data/count"' )}</div>` ).querySelector( 'form' ), {
                         modelStr: forms[ 'setvalue-template.xml' ].xml_model
                     }
                 );
