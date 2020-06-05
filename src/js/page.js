@@ -17,7 +17,7 @@ export default {
      */
     active: false,
     /**
-     * @type Array|jQuery
+     * @type {Array|import('./type-def').jQuery}
      * @default
      */
     current: null,
@@ -77,7 +77,7 @@ export default {
      * alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
      * it flips to the page contained with the jQueried parameter;
      *
-     * @param {jQuery} $e
+     * @param {import('./type-def').jQuery} $e
      */
     flipToPageContaining( $e ) {
         let $closest;
@@ -269,14 +269,14 @@ export default {
     },
     /**
      * @param {number} currentIndex
-     * @return {jQuery} Previous page
+     * @return {import('./type-def').jQuery} Previous page
      */
     _getPrev( currentIndex ) {
         return this.activePages[ currentIndex - 1 ];
     },
     /**
      * @param {number} currentIndex
-     * @return {jQuery} Next page
+     * @return {import('./type-def').jQuery} Next page
      */
     _getNext( currentIndex ) {
         return this.activePages[ currentIndex + 1 ];

@@ -53,7 +53,6 @@ class DatepickerExtended extends Widget {
 
         // It is much easier to first enable and disable, and not as bad it seems, since readonly will become dynamic eventually.
         if ( this.props.readonly ) {
-            console.log( 'disabling datepicker' );
             this.disable();
         }
     }
@@ -62,7 +61,7 @@ class DatepickerExtended extends Widget {
      * Creates fake date input elements
      *
      * @param {string} format - The date format
-     * @return {jQuery} The jQuery-wrapped fake date input element
+     * @return {import('../../js/src/type-def').jQuery} The jQuery-wrapped fake date input element
      */
     _createFakeDateInput( format ) {
         const $dateI = $( this.element );
@@ -78,7 +77,7 @@ class DatepickerExtended extends Widget {
     /**
      * Copy manual changes that were not detected by bootstrap-datepicker (one without pressing Enter) to original date input field
      *
-     * @param {jQuery} $fakeDateI - Fake date input element
+     * @param {import('../../js/src/type-def').jQuery} $fakeDateI - Fake date input element
      */
     _setChangeHandler( $fakeDateI ) {
         const settings = this.settings;
@@ -120,7 +119,7 @@ class DatepickerExtended extends Widget {
     /**
      * Reset button handler
      *
-     * @param {jQuery} $fakeDateI - Fake date input element
+     * @param {import('../../js/src/type-def').jQuery} $fakeDateI - Fake date input element
      */
     _setResetHandler( $fakeDateI ) {
         $fakeDateI.next( '.btn-reset' ).on( 'click', () => {
@@ -134,7 +133,7 @@ class DatepickerExtended extends Widget {
      * Handler for focus events.
      * These events on the original input are used to check whether to display the 'required' message
      *
-     * @param {jQuery} $fakeDateI - Fake date input element
+     * @param {import('../../js/src/type-def').jQuery} $fakeDateI - Fake date input element
      */
     _setFocusHandler( $fakeDateI ) {
         // Handle focus on original input (goTo functionality)
@@ -144,8 +143,8 @@ class DatepickerExtended extends Widget {
     }
 
     /**
-     * @param {string} [date]
-     * @return string
+     * @param {string} [date] - date
+     * @return {string} the actual date
      */
     _toActualDate( date = '' ) {
         date = date.trim();
@@ -154,8 +153,8 @@ class DatepickerExtended extends Widget {
     }
 
     /**
-     * @param {string} [date]
-     * @return string
+     * @param {string} [date] - date
+     * @return {string} the display date
      */
     _toDisplayDate( date = '' ) {
         date = date.trim();

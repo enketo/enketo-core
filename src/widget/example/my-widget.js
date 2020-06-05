@@ -95,7 +95,7 @@ class MyWidget extends Widget {
     /**
      * Set a value in the widget. Usually required.
      *
-     * @param {*} value
+     * @param {*} value - value to set
      */
     set value( value ) {
         this.range.value = value;

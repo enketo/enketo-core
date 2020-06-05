@@ -14,7 +14,7 @@ let formHtml;
  * Initializes widgets
  *
  * @static
- * @param {jQuery} $group - The element inside which the widgets have to be initialized.
+ * @param {import('./type-def').jQuery} $group - The element inside which the widgets have to be initialized.
  * @param {*} [opts] - Options (e.g. helper function of Form.js passed)
  * @return {boolean} `true` when initialized successfuly
  */
@@ -44,7 +44,7 @@ function init( $group, opts = {} ) {
  * done during create().
  *
  * @static
- * @param {Element} group
+ * @param {Element} group - HTML element
  */
 function enable( group ) {
     widgets.forEach( Widget => {
@@ -74,7 +74,7 @@ function disable( group ) {
  *
  * @param {Element} group - A jQuery-wrapped element
  * @param {string|null} selector - If the selector is `null`, the form element will be returned
- * @return {jQuery} A jQuery collection
+ * @return {import('./type-def').jQuery} A jQuery collection
  */
 function _getElements( group, selector ) {
     if ( selector ) {
@@ -180,7 +180,7 @@ function _setValChangeListener( Widget, els ) {
 class Collection {
     /**
      * @class
-     * @param {Array<Element>} elements
+     * @param {Array<Element>} elements - HTML elements
      */
     constructor( elements ) {
         if ( !Array.isArray( elements ) ) {
@@ -189,9 +189,9 @@ class Collection {
         this.elements = elements;
     }
     /**
-     * @param {Element} element
-     * @param {object} Widget
-     * @param {object} [options]
+     * @param {Element} element - HTML element
+     * @param {object} Widget - widget to instantiate
+     * @param {object} [options] - widget options
      */
     _instantiateSingleWidget( element, Widget, options = {} ) {
         if ( !Widget.condition( element ) ) {
@@ -208,8 +208,8 @@ class Collection {
         }
     }
     /**
-     * @param {object} Widget
-     * @param {Function} method
+     * @param {object} Widget - widget to instantiate
+     * @param {Function} method - widget function to call
      */
     _methodCall( Widget, method ) {
         this.elements.forEach( element => {
@@ -220,26 +220,26 @@ class Collection {
         } );
     }
     /**
-     * @param {object} Widget
-     * @param {object} [options]
+     * @param {object} Widget - widget to instantiate
+     * @param {object} [options] - widget options
      */
     instantiate( Widget, options ) {
         this.elements.forEach( el => this._instantiateSingleWidget( el, Widget, options ) );
     }
     /**
-     * @param {object} Widget
+     * @param {object} Widget - widget to instantiate
      */
     update( Widget ) {
         this._methodCall( Widget, 'update' );
     }
     /**
-     * @param {object} Widget
+     * @param {object} Widget - widget to instantiate
      */
     disable( Widget ) {
         this._methodCall( Widget, 'disable' );
     }
     /**
-     * @param {object} Widget
+     * @param {object} Widget - The widget to instantiate
      */
     enable( Widget ) {
         this._methodCall( Widget, 'enable' );

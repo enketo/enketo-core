@@ -82,7 +82,7 @@ class DesktopSelectpicker extends Widget {
 
     /**
      * @param {string} template - The select template to use.
-     * @return {jQuery} - The jQuery-wrapped template.
+     * @return {import('./type-def').jQuery} - The jQuery-wrapped template.
      */
     _createLi( template ) {
         const li = [];

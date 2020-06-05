@@ -169,7 +169,7 @@ export default {
      * [updateViewInstancesFromModel description]
      *
      * @param {Element} repeatInfo - repeatInfo element
-     * @return {number}
+     * @return {number} length of repeat series in model
      */
     updateViewInstancesFromModel( repeatInfo ) {
         const repeatPath = repeatInfo.dataset.name;
@@ -252,7 +252,7 @@ export default {
      * Checks whether repeat count value has been updated and updates repeat instances
      * accordingly.
      *
-     * @param {UpdatedDataNodes} updated - The object containing info on updated data nodes.
+     * @param {import('./type-def').UpdatedDataNodes} updated - The object containing info on updated data nodes.
      */
     countUpdate( updated = {} ) {
         const repeatInfos = this.form.getRelatedNodes( 'data-repeat-count', '.or-repeat-info', updated ).get();
@@ -396,13 +396,13 @@ export default {
                 const input = inputs.length ? inputs[ 0 ] : null;
 
                 if ( input ) {
-                    // For very long static datalists, a huge performance improvement can be achieved, by using the 
+                    // For very long static datalists, a huge performance improvement can be achieved, by using the
                     // same datalist for all repeat instances that use it.
                     if ( this.staticLists.includes( id ) ) {
                         datalist.remove();
                     } else {
                         // Let all identical input[list] questions amongst all repeat instances use the same
-                        // datalist by moving it under repeatInfo. 
+                        // datalist by moving it under repeatInfo.
                         // It will survive removal of all repeat instances.
                         const parent = datalist.parentElement;
                         const name = input.name;

@@ -25,33 +25,13 @@ import './plugins';
 import './extend';
 
 /**
- * @typedef FormDataObj
- * @property {string} modelStr -  XML Model as string
- * @property {string} [instanceStr] - (partial) XML instance to load
- * @property {boolean} [submitted] - Flag to indicate whether data was submitted before
- * @property {object} [external] - Array of external data objects, required for each external data instance in the XForm
- * @property {string} [external.id] - ID of external instance
- * @property {string} [external.xmlStr] - XML string of external instance content
- */
-
-/**
- * @typedef UpdatedDataNodes
- * @global
- * @description The object containing info on updated data nodes
- * @property {Array<string>} [nodes]
- * @property {string} [repeatPath]
- * @property {number} [repeatIndex]
- * @property {string} [relevantPath]
- */
-
-/**
  * Class: Form
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
  * @param {Element} form - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
  * @param formEl
- * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
+ * @param {import('type-def').FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {object} [options] - form options
  * @param {boolean} [options.printRelevantOnly] - If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
  * @param {language} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
@@ -87,11 +67,11 @@ function Form( formEl, data, options ) {
  */
 Form.prototype = {
     /**
-     * @type Array
+     * @type {Array}
      */
     evaluationCascadeAdditions: [],
     /**
-     * @type Array
+     * @type {Array}
      */
     get evaluationCascade() {
         return [
@@ -182,7 +162,7 @@ Form.prototype = {
         return this.view.html.id;
     },
     /**
-     * @type Array<string>
+     * @type {Array<string>}
      */
     get languages() {
         return this.langs.languagesUsed;
@@ -445,7 +425,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
  * Since not all data nodes with a value have a corresponding input element,
  * we cycle through the HTML form elements and check for each form element whether data is available.
  *
- * @param {jQuery} $group
+ * @param {import('./type-def').jQuery} $group
  * @param {number} groupIndex
  */
 Form.prototype.setAllVals = function( $group, groupIndex ) {
@@ -482,7 +462,7 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
 };
 
 /**
- * @param {jQuery} $control
+ * @param {import('./type-def').jQuery} $control
  * @return {string|undefined} Value
  */
 Form.prototype.getModelValue = function( $control ) {
@@ -498,8 +478,9 @@ Form.prototype.getModelValue = function( $control ) {
  *
  * @param {string} attr - The attribute name to search for
  * @param {string} [filter] - The optional filter to append to each selector
- * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
- * @return {jQuery} - A jQuery collection of elements
+ * @param
+ * @param updated
+ * @return {import('./type-def').jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     let collection;
@@ -918,7 +899,7 @@ Form.prototype.validate = Form.prototype.validateAll;
 /**
  * Validates all enabled input fields in the supplied container, after first resetting everything as valid.
  *
- * @param {jQuery} $container
+ * @param {import('./type-def').jQuery} $container
  * @return {Promise} wrapping {boolean} whether the container contains any errors
  */
 Form.prototype.validateContent = function( $container ) {

@@ -19,9 +19,12 @@ const DELAY = 1500;
  * the canvas.
  *
  * @function external:SignaturePad#fromObjectURL
- * @param {*} objectUrl
- * @param {*} options
- * @return {Promise}
+ * @param {*} objectUrl - ObjectURL
+ * @param {object} options - options
+ * @param {number} [options.ratio] - ratio
+ * @param {number} [options.width] - width
+ * @param {number} [options.height] - height
+ * @return {Promise} a promise that resolves with an objectURL
  */
 SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
     const image = new Image();
@@ -64,7 +67,7 @@ SignaturePad.prototype.fromObjectURL = function( objectUrl, options ) {
  * This is to facilitate undoing a drawing stroke over a background (bitmap) image.
  *
  * @function external:SignaturePad#updateData
- * @param {*} pointGroups
+ * @param {*} pointGroups - pointGroups
  */
 SignaturePad.prototype.updateData = function( pointGroups ) {
     const that = this;
@@ -220,7 +223,7 @@ class DrawWidget extends Widget {
 
     // All this is copied from the file-picker widget
     /**
-     * @param {string} loadedFileName
+     * @param {string} loadedFileName - the loaded filename
      */
     _handleFiles( loadedFileName ) {
         // Monitor maxSize changes to update placeholder text in annotate widget. This facilitates asynchronous
@@ -293,7 +296,7 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @param {string} fileName
+     * @param {string} fileName - filename to show
      */
     _showFileName( fileName ) {
         this.$widget.find( '.fake-file-input' ).val( fileName ).prop( 'readonly', !!fileName );
@@ -307,7 +310,7 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @return {DocumentFragment}
+     * @return {DocumentFragment} a document fragment with the widget markup
      */
     _getMarkup() {
         // HTML syntax copied from filepicker widget
@@ -345,7 +348,7 @@ class DrawWidget extends Widget {
     /**
      * Updates value
      *
-     * @param changed
+     * @param {boolean} [changed] - whether the value has changed
      */
     _updateValue( changed = true ) {
         const now = new Date();
@@ -397,7 +400,7 @@ class DrawWidget extends Widget {
 
     /**
      * @param {string|File} file - Either a filename or a file.
-     * @return {Promise<string>}
+     * @return {Promise} promise resolving with a string
      */
     _loadFileIntoPad( file ) {
         const that = this;
@@ -421,7 +424,7 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @param {string} message
+     * @param {string} message - the feedback message to show
      */
     _showFeedback( message ) {
         message = message || '';
@@ -431,7 +434,7 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @param {string} url
+     * @param {string} url - the download URL
      */
     _updateDownloadLink( url ) {
         if ( url && url.indexOf( 'data:' ) === 0 ) {

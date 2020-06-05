@@ -38,7 +38,7 @@ export { isStaticItemsetFromSecondaryInstance };
 
 export default {
     /**
-     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
+     * @param {import('./type-def').UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated = {} ) {
         const that = this;

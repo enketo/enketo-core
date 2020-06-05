@@ -8,7 +8,7 @@ export default {
     /**
      * Updates output values, optionally filtered by those values that contain a changed node name
      *
-     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
+     * @param {import('./type-def').UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated ) {
         const outputCache = {};

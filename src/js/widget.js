@@ -84,7 +84,7 @@ class Widget {
      * Returns a HTML document fragment for a reset button.
      *
      * @readonly
-     * @type Element
+     * @type {Element}
      */
     get resetButtonHtml() {
         return range.createContextualFragment(
@@ -101,7 +101,7 @@ class Widget {
      * Returns a HTML document fragment for a download button.
      *
      * @readonly
-     * @type Element
+     * @type {Element}
      */
     get downloadButtonHtml() {
         return range.createContextualFragment(
@@ -126,7 +126,7 @@ class Widget {
     /**
      * Sets a value in the widget. Should be overridden.
      *
-     * @param {*} value
+     * @param {*} value - value to set
      * @type {*}
      */
     set value( value ) {}
@@ -146,7 +146,7 @@ class Widget {
      * Updates the value in the original form control the widget is instantiated on.
      * This form control is often hidden by the widget.
      *
-     * @param {*} value
+     * @param {*} value - value to set
      * @type {*}
      */
     set originalInputValue( value ) {
@@ -184,7 +184,7 @@ class Widget {
      * Note that the Element (used in the constructor) will be provided as parameter.
      *
      * @static
-     * @return {boolean}
+     * @return {boolean} to instantiate or not to instantiate, that is the question
      */
     static condition() {
         return true;

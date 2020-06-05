@@ -104,7 +104,7 @@ class Filepicker extends Widget {
     /**
      * Click action of reset button
      *
-     * @param {Element} resetButton
+     * @param {Element} resetButton - reset button HTML element
      */
     _setResetButtonListener( resetButton ) {
         if ( resetButton ) {
@@ -236,7 +236,7 @@ class Filepicker extends Widget {
     /**
      * Sets file name as value
      *
-     * @param {string} fileName
+     * @param {string} fileName - filename
      */
     _showFileName( fileName ) {
         this.value = fileName;
@@ -244,8 +244,8 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {TranslatedError|Error} fb
-     * @param {string} [status]
+     * @param {TranslatedError|Error} fb - Error instance
+     * @param {string} [status] - status
      */
     _showFeedback( fb, status ) {
         const message = fb instanceof TranslatedError ? t( fb.translationKey, fb.translationOptions ) :
@@ -258,8 +258,8 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {string} url
-     * @param {string} mediaType
+     * @param {string} url - URL
+     * @param {string} mediaType - media type
      */
     _showPreview( url, mediaType ) {
         let htmlStr;
@@ -286,9 +286,9 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {File} file - Image file to be resized
-     * @param {string} mediaType
-     * @return {Promise<Blob|File>} Resolves with blob, rejects with input file
+     * @param {File} file - image file to be resized
+     * @param {string} mediaType - media type
+     * @return {Promise<Blob|File>} resolves with blob, rejects with input file
      */
     _resizeFile( file, mediaType ) {
         return new Promise( ( resolve, reject ) => {
@@ -316,8 +316,8 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {string} objectUrl
-     * @param {string} fileName
+     * @param {string} objectUrl - ObjectURL
+     * @param {string} fileName - filename
      */
     _updateDownloadLink( objectUrl, fileName ) {
         updateDownloadLink( this.downloadLink, objectUrl, fileName );

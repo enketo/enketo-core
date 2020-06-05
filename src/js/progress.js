@@ -16,11 +16,11 @@ export default {
      */
     status: 0,
     /**
-     * @type Element
+     * @type {Element}
      */
     lastChanged: null,
     /**
-     * @type Array<Element>
+     * @type {Array<Element>}
      */
     all: null,
     /**

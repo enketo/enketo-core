@@ -20,7 +20,7 @@ class DatetimepickerExtended extends Widget {
         return '.question input[type="datetime-local"]:not([readonly])';
     }
     /**
-     * @return {boolean}
+     * @return {boolean} to instantiate or not to instantiate, that is the question
      */
     static condition() {
         return !support.touch || !support.inputTypes[ 'datetime-local' ];
@@ -110,7 +110,7 @@ class DatetimepickerExtended extends Widget {
     }
 
     /**
-     * @param {jQuery} $els
+     * @param {import('../../js/src/type-def').jQuery} $els - a set of elements wrapped in jQuery
      */
     _setFocusHandler( $els ) {
         // Handle focus on original input (goTo functionality)
@@ -159,7 +159,7 @@ class DatetimepickerExtended extends Widget {
         const vals = val.split( 'T' );
         const dateVal = vals[ 0 ];
         /**
-         * seems the source of issue #649 is in the toISOLocalString function 
+         * seems the source of issue #649 is in the toISOLocalString function
          * refer: https://github.com/enketo/enketo-xpathjs/blob/master/src/date-extensions.js#L16
          */
         const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : ( dateVal && !vals[ 1 ] ) ? '00:00' : '';

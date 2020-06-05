@@ -1,6 +1,6 @@
 /**
  * Detects features.
- * 
+ *
  * @module support
  */
 
@@ -23,13 +23,13 @@ if ( os.ios || os.android ) {
 }
 
 export default {
-    /** 
-     * @type Array<string>
+    /**
+     * @type {Array<string>}
      **/
     get inputTypes() {
         return inputTypes;
     },
-    /** 
+    /**
      * @type {boolean}
      **/
     get touch() {

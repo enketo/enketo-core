@@ -10,7 +10,8 @@ export default {
     /**
      * Updates calculated items.
      *
-     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
+     * @param
+     * @param updated
      * @param {string} [filter] - CSS selector filter.
      */
     update( updated = {}, filter = '' ) {
@@ -92,7 +93,7 @@ export default {
      * Runs <setvalue> actions.
      *
      * @param {CustomEvent} [event] - The event type that triggered the setvalue action.
-     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes. Only used here for the odk-new-repeat event.
+     * @param {import('./type-def').UpdatedDataNodes} [updated] - The object containing info on updated data nodes. Only used here for the odk-new-repeat event.
      */
     setValue( event ) {
         let ignoreRelevance = false;

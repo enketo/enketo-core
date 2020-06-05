@@ -1,6 +1,6 @@
 /**
  * XML types
- * 
+ *
  * @module types
  */
 
@@ -16,8 +16,8 @@ const types = {
      */
     'string': {
         /**
-         * @param {string} x
-         * @return {string}
+         * @param {string} x - value
+         * @return {string} converted value
          */
         convert( x ) {
             return x.replace( /^\s+$/, '' );
@@ -57,8 +57,8 @@ const types = {
      */
     'decimal': {
         /**
-         * @param {number|string} x
-         * @return {number}
+         * @param {number|string} x - value
+         * @return {number} converted value
          */
         convert( x ) {
             const num = Number( x );
@@ -70,8 +70,8 @@ const types = {
             return num;
         },
         /**
-         * @param {number|string} x
-         * @return {boolean}
+         * @param {number|string} x - value
+         * @return {boolean} whether value is valid
          */
         validate( x ) {
             const num = Number( x );
@@ -84,8 +84,8 @@ const types = {
      */
     'int': {
         /**
-         * @param {number|string} x
-         * @return {number}
+         * @param {number|string} x - value
+         * @return {number} converted value
          */
         convert( x ) {
             const num = Number( x );
@@ -97,8 +97,8 @@ const types = {
             return ( num >= 0 ) ? Math.floor( num ) : -Math.floor( Math.abs( num ) );
         },
         /**
-         * @param {number|string} x
-         * @return {boolean}
+         * @param {number|string} x - value
+         * @return {boolean} whether value is valid
          */
         validate( x ) {
             const num = Number( x );
@@ -111,8 +111,8 @@ const types = {
      */
     'date': {
         /**
-         * @param {string} x
-         * @return {boolean}
+         * @param {string} x - value
+         * @return {boolean} whether value is valid
          */
         validate( x ) {
             const pattern = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
@@ -130,8 +130,8 @@ const types = {
             return false;
         },
         /**
-         * @param {number|string} x
-         * @return {string}
+         * @param {number|string} x - value
+         * @return {string} converted value
          */
         convert( x ) {
             if ( isNumber( x ) ) {
@@ -157,8 +157,8 @@ const types = {
      */
     'datetime': {
         /**
-         * @param {string} x
-         * @return {boolean}
+         * @param {string} x - value
+         * @return {boolean} whether value is valid
          */
         validate( x ) {
             const parts = x.split( 'T' );
@@ -169,8 +169,8 @@ const types = {
             return types.date.validate( parts[ 0 ] );
         },
         /**
-         * @param {number|string} x
-         * @return {string}
+         * @param {number|string} x - value
+         * @return {string} converted value
          */
         convert( x ) {
             let date = 'Invalid Date';
@@ -203,9 +203,9 @@ const types = {
         // (for timezone offset), as long as the convertor automatically converts
         // to a valid time.
         /**
-         * @param {string} x
-         * @param {boolean} [requireMillis]
-         * @return {boolean}
+         * @param {string} x - value
+         * @param {boolean} [requireMillis] - whether milliseconds are required
+         * @return {boolean} whether value is valid
          */
         validate( x, requireMillis ) {
             let m = x.match( /^(\d\d):(\d\d):(\d\d)\.\d\d\d(\+|-)(\d\d):(\d\d)$/ );
@@ -228,9 +228,9 @@ const types = {
                 m[ 6 ] < 60 && m[ 6 ] >= 0; // this is probably either 0 or 30
         },
         /**
-         * @param {string} x
-         * @param {boolean} [requireMillis]
-         * @return {string}
+         * @param {string} x - value
+         * @param {boolean} [requireMillis] - whether milliseconds are required
+         * @return {string} converted value
          */
         convert( x, requireMillis ) {
             let date;
@@ -286,8 +286,8 @@ const types = {
          * converts "11:30 AM", and "11:30 ", and "11:30 上午" to: "11:30"
          * converts "11:30 PM", and "11:30 下午" to: "23:30"
          *
-         * @param {string} x
-         * @return {string}
+         * @param {string} x - value
+         * @return {string} converted value
          */
         convertMeridian( x ) {
             x = x.trim();
@@ -324,8 +324,8 @@ const types = {
      */
     'geopoint': {
         /**
-         * @param {string} x
-         * @return {boolean}
+         * @param {string} x - value
+         * @return {boolean} whether value is valid
          */
         validate( x ) {
             const coords = x.toString().trim().split( ' ' );
@@ -339,8 +339,8 @@ const types = {
                 ( typeof coords[ 3 ] === 'undefined' || ( !isNaN( coords[ 3 ] ) && coords[ 3 ] >= 0 ) );
         },
         /**
-         * @param {string} x
-         * @return {string}
+         * @param {string} x - value
+         * @return {string} converted value
          */
         convert( x ) {
             return x.toString().trim();
@@ -351,8 +351,8 @@ const types = {
      */
     'geotrace': {
         /**
-         * @param {string} x
-         * @return {boolean}
+         * @param {string} x - value
+         * @return {boolean} whether value is valid
          */
         validate( x ) {
             const geopoints = x.toString().split( ';' );
@@ -360,8 +360,8 @@ const types = {
             return geopoints.length >= 2 && geopoints.every( geopoint => types.geopoint.validate( geopoint ) );
         },
         /**
-         * @param {string} x
-         * @return {string}
+         * @param {string} x - value
+         * @return {string} converted value
          */
         convert( x ) {
             return x.toString().trim();
@@ -372,8 +372,8 @@ const types = {
      */
     'geoshape': {
         /**
-         * @param {string} x
-         * @return {boolean}
+         * @param {string} x - value
+         * @return {boolean} whether value is valid
          */
         validate( x ) {
             const geopoints = x.toString().split( ';' );
@@ -381,8 +381,8 @@ const types = {
             return geopoints.length >= 4 && ( geopoints[ 0 ] === geopoints[ geopoints.length - 1 ] ) && geopoints.every( geopoint => types.geopoint.validate( geopoint ) );
         },
         /**
-         * @param {string} x
-         * @return {string}
+         * @param {string} x - value
+         * @return {string} converted value
          */
         convert( x ) {
             return x.toString().trim();
