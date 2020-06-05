@@ -89,31 +89,32 @@ class RankWidget extends Widget {
 
     set value( value ) {
         if ( !value ) {
-            return this._reset();
-        }
-        const that = this;
-        const values = value.split( ' ' );
-        const items = [ ...this.list.querySelectorAll( `${this.itemSelector} input` ) ];
+            this._reset();
+        } else {
+            const that = this;
+            const values = value.split( ' ' );
+            const items = [ ...this.list.querySelectorAll( `${this.itemSelector} input` ) ];
 
-        // Basic error check
-        if ( values.length !== items.length ) {
-            throw new Error( 'Could not load rank widget value. Number of items mismatch.' );
-        }
-
-        // Don't even attempt to rectify a mismatch between the value and the available items.
-        items.sort( ( a, b ) => {
-            const aIndex = values.indexOf( a.value );
-            const bIndex = values.indexOf( b.value );
-            if ( aIndex === -1 || bIndex === -1 ) {
-                throw new Error( 'Could not load rank widget value. Mismatch in item values.' );
+            // Basic error check
+            if ( values.length !== items.length ) {
+                throw new Error( 'Could not load rank widget value. Number of items mismatch.' );
             }
 
-            return aIndex - bIndex;
-        } );
+            // Don't even attempt to rectify a mismatch between the value and the available items.
+            items.sort( ( a, b ) => {
+                const aIndex = values.indexOf( a.value );
+                const bIndex = values.indexOf( b.value );
+                if ( aIndex === -1 || bIndex === -1 ) {
+                    throw new Error( 'Could not load rank widget value. Mismatch in item values.' );
+                }
 
-        items.forEach( item => {
-            $( that.list ).find( '.btn-reset' ).before( $( item.parentNode ).detach() );
-        } );
+                return aIndex - bIndex;
+            } );
+
+            items.forEach( item => {
+                $( that.list ).find( '.btn-reset' ).before( $( item.parentNode ).detach() );
+            } );
+        }
     }
 
     /**
