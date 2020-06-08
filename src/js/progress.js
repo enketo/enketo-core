@@ -33,7 +33,7 @@ export default {
     /**
      * Updates rounded % value of progress and triggers event if changed.
      *
-     * @param {Element} el
+     * @param {Element} el - the element that represent the current state of progress
      */
     update( el ) {
         let status;

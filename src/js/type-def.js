@@ -21,3 +21,4 @@
  * @typedef {object} jQuery
  * @description jQuery collection
  */
+

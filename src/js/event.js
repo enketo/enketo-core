@@ -113,9 +113,8 @@ function Change() {
  * Xforms-value-changed event as defined in the ODK XForms spec.
  *
  * @see https://opendatakit.github.io/xforms-spec/#event:xforms-value-changed
- *@return {CustomEvent} Custom "xforms-value-changed" event (bubbling)
  * @param {{repeatIndex: number}} detail - Data to be passed with event.
- * @return {Event} "change" event (bubbling)
+ * @return {CustomEvent} Custom "xforms-value-changed" event (bubbling).
  */
 function XFormsValueChanged( detail ) {
     return new CustomEvent( 'xforms-value-changed', { detail, bubbles: true } );

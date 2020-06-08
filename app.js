@@ -1,10 +1,11 @@
+/* eslint no-console: 0 */
+
 /**
  * This file is just meant to facilitate enketo-core development as a standalone library.
  *
  * When using enketo-core as a library inside your app, it is recommended to just **ignore** this file.
  * Place a replacement for this controller elsewhere in your app.
  */
-'use strict';
 
 import support from './src/js/support';
 import { Form } from './src/js/form';

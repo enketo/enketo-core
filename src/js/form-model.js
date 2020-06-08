@@ -211,7 +211,7 @@ FormModel.prototype.throwParserErrors = ( xmlDoc, xmlStr ) => {
 
 /**
  * @param {string} id - Instance ID
- * @param {object} [sessObj]
+ * @param {object} [sessObj] - session object
  */
 FormModel.prototype.createSession = function( id, sessObj ) {
     let instance;
@@ -249,12 +249,12 @@ FormModel.prototype.createSession = function( id, sessObj ) {
  * in IE11. This function is a replacement for this specifically to find a secondary instance.
  *
  * @param  {string} id - DOM element id.
- * @return {Element}
+ * @return {Element|undefined} secondary instance XML element
  */
 FormModel.prototype.getSecondaryInstance = function( id ) {
     let instanceEl;
 
-    [].slice.call( this.xml.querySelectorAll( 'model > instance' ) ).some( el => {
+    [ ...this.xml.querySelectorAll( 'model > instance' ) ].some( el => {
         const idAttr = el.getAttribute( 'id' );
         if ( idAttr === id ) {
             instanceEl = el;
@@ -271,10 +271,10 @@ FormModel.prototype.getSecondaryInstance = function( id ) {
 /**
  * Returns a new Nodeset instance
  *
- * @param {string|null} [selector]
- * @param {string|number|null} [index]
- * @param {NodesetFilter|null} [filter]
- * @return {Nodeset}
+ * @param {string|null} [selector] - simple path to node
+ * @param {string|number|null} [index] - index of node
+ * @param {NodesetFilter|null} [filter] - filter to apply
+ * @return {Nodeset} Nodeset instance
  */
 FormModel.prototype.node = function( selector, index, filter ) {
     return new Nodeset( selector, index, filter, this );
@@ -324,7 +324,6 @@ FormModel.prototype.importNode = function( node, allChildren ) {
  * Merges an XML instance string into the XML Model
  *
  * @param {string} recordStr - The XML record as string
- * @param {string} modelDoc - The XML model to merge the record into
  */
 FormModel.prototype.mergeXml = function( recordStr ) {
     let modelInstanceChildStr;
@@ -410,7 +409,7 @@ FormModel.prototype.mergeXml = function( recordStr ) {
                     }
                 }
             } catch ( e ) {
-                console.log( 'Ignored error:', e );
+                console.warn( 'Ignored error:', e );
             }
         } );
 
@@ -556,12 +555,12 @@ import bindJsEvaluator from './xpath-evaluator-binding';
  * Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
  * OpenRosa functions or for browsers that do not have a native evaluator.
  *
- * @type function
+ * @type {Function}
  */
 FormModel.prototype.bindJsEvaluator = bindJsEvaluator;
 
 /**
- * @param {string} localName
+ * @param {string} localName - node name without namespace
  * @return {Element} node
  */
 FormModel.prototype.getMetaNode = function( localName ) {
@@ -576,7 +575,7 @@ FormModel.prototype.getMetaNode = function( localName ) {
 };
 
 /**
- * @param {string} path
+ * @param {string} path - path to repeat
  * @return {string} repeat comment text
  */
 FormModel.prototype.getRepeatCommentText = path => {
@@ -586,7 +585,7 @@ FormModel.prototype.getRepeatCommentText = path => {
 };
 
 /**
- * @param {string} repeatPath
+ * @param {string} repeatPath - path to repeat
  * @return {string} selector
  */
 FormModel.prototype.getRepeatCommentSelector = function( repeatPath ) {
@@ -594,8 +593,8 @@ FormModel.prototype.getRepeatCommentSelector = function( repeatPath ) {
 };
 
 /**
- * @param {string} repeatPath
- * @param {number} repeatSeriesIndex
+ * @param {string} repeatPath - path to repeat
+ * @param {number} repeatSeriesIndex - index of repeat series
  * @return {Element} node
  */
 FormModel.prototype.getRepeatCommentEl = function( repeatPath, repeatSeriesIndex ) {
@@ -773,7 +772,7 @@ FormModel.prototype.extractTemplates = function() {
 };
 
 /**
- * @param {Array<string>} repeatPaths
+ * @param {Array<string>} repeatPaths - repeat paths
  */
 FormModel.prototype.extractFakeTemplates = function( repeatPaths ) {
     const that = this;
@@ -790,7 +789,7 @@ FormModel.prototype.extractFakeTemplates = function( repeatPaths ) {
 };
 
 /**
- * @param {string} repeatPath
+ * @param {string} repeatPath - path to repeat
  */
 FormModel.prototype.addRepeatComments = function( repeatPath ) {
     const comment = this.getRepeatCommentText( repeatPath );
@@ -805,9 +804,9 @@ FormModel.prototype.addRepeatComments = function( repeatPath ) {
 };
 
 /**
- * @param {string} repeatPath
+ * @param {string} repeatPath - path to repeat
  * @param {Element} repeat - Target node
- * @param {boolean} empty
+ * @param {boolean} empty - whether to empty values before adding the template
  */
 FormModel.prototype.addTemplate = function( repeatPath, repeat, empty ) {
     this.addRepeatComments( repeatPath );
@@ -995,7 +994,7 @@ FormModel.prototype.getNamespacePrefix = function( namespace ) {
 /**
  * Returns a namespace resolver with single `lookupNamespaceURI` method
  *
- * @return {{lookupNamespaceURI: Function}}
+ * @return {{lookupNamespaceURI: Function}} namespace resolver
  */
 FormModel.prototype.getNsResolver = function() {
     const namespaces = ( typeof this.namespaces === 'undefined' ) ? {} : this.namespaces;
@@ -1084,8 +1083,8 @@ FormModel.prototype.replaceCurrentFn = ( expr, contextSelector ) => {
  * to their native XPath equivalents using [position() = x] predicates
  *
  * @param {string} expr - The XPath expression
- * @param {string} selector
- * @param {number} index
+ * @param {string} selector - context path
+ * @param {number} index - index of context node
  * @return {string} Converted XPath expression
  */
 FormModel.prototype.replaceIndexedRepeatFn = function( expr, selector, index ) {
@@ -1139,8 +1138,8 @@ FormModel.prototype.replaceVersionFn = function( expr ) {
 
 /**
  * @param {string} expr - The XPath expression
- * @param {string} selector
- * @param {number} index
+ * @param {string} selector - context path
+ * @param {number} index - index of context node
  * @return {string} Converted XPath expression
  */
 FormModel.prototype.replacePullDataFn = function( expr, selector, index ) {
@@ -1161,8 +1160,8 @@ FormModel.prototype.replacePullDataFn = function( expr, selector, index ) {
 
 /**
  * @param {string} expr - The XPath expression
- * @param {string} selector
- * @param {number} index
+ * @param {string} selector - context path
+ * @param {number} index - index of context node
  * @return {string} Converted XPath expression
  */
 FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
@@ -1217,7 +1216,7 @@ FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
  * @param {number} [index] - 0-based index of selector in document
  * @param {boolean} [tryNative] - Whether an attempt to try the Native Evaluator is safe (ie. whether it is
  *                                certain that there are no date comparisons)
- * @return {number|string|boolean|Array<element>} The result
+ * @return {number|string|boolean|Array<Element>} The result
  */
 FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryNative ) {
     let j, context, doc, resTypeNum, resultTypes, result, collection, response, repeats, cacheKey, original, cacheable;
@@ -1491,7 +1490,7 @@ Nodeset.prototype.setVal = function( newVals, xmlDataType ) {
         return null;
     }
     if ( targets.length === 0 ) {
-        console.log( `Data node: ${this.selector} with null-based index: ${this.index} not found. Ignored.` );
+        console.warn( `Data node: ${this.selector} with null-based index: ${this.index} not found. Ignored.` );
 
         return null;
     }
@@ -1604,7 +1603,7 @@ Nodeset.prototype.convert = ( x, xmlDataType ) => {
  * @param {string} constraintExpr - The XPath expression
  * @param {string} requiredExpr - The XPath expression
  * @param {string} xmlDataType - XML data type
- * @return {Promise}
+ * @return {Promise} promise that resolves with a ValidateInputResolution object
  */
 Nodeset.prototype.validate = function( constraintExpr, requiredExpr, xmlDataType ) {
     const that = this;
@@ -1673,7 +1672,7 @@ Nodeset.prototype.isRequired = function( expr ) {
  * Validates if requiredness is fulfilled.
  *
  * @param {string} [expr] - The XPath expression
- * @return {Promise<boolean>}
+ * @return {Promise<boolean>} Promise that resolves with a boolean
  */
 Nodeset.prototype.validateRequired = function( expr ) {
     const that = this;

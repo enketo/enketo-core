@@ -22,11 +22,11 @@ export default {
      */
     current: null,
     /**
-     * @type jQuery
+     * @type {import('./type-def').jQuery}
      */
     activePages: [],
     /**
-     * @type function
+     * @type {Function}
      */
     init() {
         if ( !this.form ) {
@@ -77,7 +77,7 @@ export default {
      * alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
      * it flips to the page contained with the jQueried parameter;
      *
-     * @param {import('./type-def').jQuery} $e
+     * @param {import('./type-def').jQuery} $e - Element on page to flip to
      */
     flipToPageContaining( $e ) {
         let $closest;
@@ -253,7 +253,7 @@ export default {
         return this.current;
     },
     /**
-     * @param {Array<Node>} all
+     * @param {Array<Node>} all - all elements that represent a page
      */
     _updateAllActive( all ) {
         all = all || [ ...this.form.view.html.querySelectorAll( '[role="page"]' ) ];
@@ -268,14 +268,14 @@ export default {
         this._updateToc();
     },
     /**
-     * @param {number} currentIndex
+     * @param {number} currentIndex - current index
      * @return {import('./type-def').jQuery} Previous page
      */
     _getPrev( currentIndex ) {
         return this.activePages[ currentIndex - 1 ];
     },
     /**
-     * @param {number} currentIndex
+     * @param {number} currentIndex - current index
      * @return {import('./type-def').jQuery} Next page
      */
     _getNext( currentIndex ) {
@@ -333,7 +333,7 @@ export default {
         }
     },
     /**
-     * @param {Element} pageEl
+     * @param {Element} pageEl - page element
      */
     _setToCurrent( pageEl ) {
         pageEl.classList.add( 'current', 'hidden' );
@@ -346,8 +346,8 @@ export default {
     /**
      * Switches to a page
      *
-     * @param {Element} pageEl
-     * @param {number} newIndex
+     * @param {Element} pageEl - page element
+     * @param {number} newIndex - new index
      */
     _flipTo( pageEl, newIndex ) {
         // if there is a current page (note: if current page was removed it is not null, hence the .closest('html') check)
@@ -384,7 +384,7 @@ export default {
     /**
      * Focuses on first question and scrolls it into view
      *
-     * @param {Element} pageEl
+     * @param {Element} pageEl - page element
      */
     _focusOnFirstQuestion( pageEl ) {
         //triggering fake focus in case element cannot be focused (if hidden by widget)
@@ -404,7 +404,7 @@ export default {
     /**
      * Updates status of navigation buttons
      *
-     * @param {number} [index]
+     * @param {number} [index] - index of current page
      */
     _toggleButtons( index = this._getCurrentIndex() ) {
         const next = this._getNext( index );

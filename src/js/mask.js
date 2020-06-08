@@ -17,9 +17,9 @@ export default {
     },
 
     /**
-     * @param {string} selector
-     * @param {string} validRegex
-     * @param {string} allowedChars
+     * @param {string} selector - selector of elements to apply mask to
+     * @param {string} validRegex - regular expression for valid values
+     * @param {string} allowedChars - string of allowed characters
      */
     _setNumberMask( selector, validRegex, allowedChars ) {
         const form = this.form.view.html;
@@ -81,16 +81,16 @@ export default {
     // Using the (assumed) fact that a non-printable character key always has length > 1
     // IE11: non-confirming 'Spacebar'
     /**
-     * @param {Event} e
-     * @return {boolean}
+     * @param {Event} e - event
+     * @return {boolean} whether key is printable
      */
     _isNotPrintableKey( e ) {
         return e.key.length > 1 && e.key !== 'Spacebar';
     },
 
     /**
-     * @param {Event} e
-     * @return {boolean}
+     * @param {Event} e - event
+     * @return {boolean} whether event is a paste event
      */
     _isKeyboardCutPaste( e ) {
         return KEYBOARD_CUT_PASTE.indexOf( e.key ) !== -1 && ( e.metaKey || e.ctrlKey );

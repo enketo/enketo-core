@@ -23,8 +23,6 @@ const disableFirstRepeatRemoval = config.repeatOrdinals === true;
 export default {
     /**
      * Initializes all Repeat Groups in form (only called once).
-     *
-     * @param  {Form} form - the parent form object
      */
     init() {
         const that = this;

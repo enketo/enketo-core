@@ -10,14 +10,14 @@ import { closestAncestorUntil } from './dom-utils';
 
 export default {
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {Element} Wrap node
      */
     getWrapNode( control ) {
         return control.closest( '.question, .calculation, .setvalue' );
     },
     /**
-     * @param {Array<Element>} controls
+     * @param {Array<Element>} controls - form controls HTML elements
      * @return {Array<Element>} Wrap nodes
      */
     getWrapNodes( controls ) {
@@ -32,7 +32,7 @@ export default {
         return result;
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {object} control element properties
      */
     getProps( control ) {
@@ -52,7 +52,7 @@ export default {
         };
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string} input type
      */
     getInputType( control ) {
@@ -86,14 +86,14 @@ export default {
         }
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string} element constraint
      */
     getConstraint( control ) {
         return control.dataset.constraint;
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string|undefined} element required
      */
     getRequired( control ) {
@@ -103,35 +103,35 @@ export default {
         }
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string} element relevant
      */
     getRelevant( control ) {
         return control.dataset.relevant;
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {boolean} whether element is read only
      */
     getReadonly( control ) {
         return control.matches( '[readonly]' );
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string} element calculate
      */
     getCalculation( control ) {
         return control.dataset.calculate;
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string} element XML type
      */
     getXmlType( control ) {
         return ( control.dataset.typeXml || 'string' ).toLowerCase();
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string} element name
      */
     getName( control ) {
@@ -143,28 +143,28 @@ export default {
         return name;
     },
     /**
-     * @param {Element} control
-     * @return {string}
+     * @param {Element} control - form control HTML element
+     * @return {number} - the repeat index of the form control
      */
     getIndex( control ) {
         return this.form.repeats.getIndex( control.closest( '.or-repeat' ) );
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {boolean} whether element is multiple
      */
     isMultiple( control ) {
         return this.getInputType( control ) === 'checkbox' || control.multiple;
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {boolean} whether element is enabled
      */
     isEnabled( control ) {
         return !( control.disabled || closestAncestorUntil( control, '.disabled', '.or' ) );
     },
     /**
-     * @param {Element} control
+     * @param {Element} control - form control HTML element
      * @return {string} element value
      */
     getVal( control ) {
@@ -210,9 +210,9 @@ export default {
     },
     /**
      * Finds a form control that is not a nested setvalue/xforms-value-changed directive
-     * 
-     * @param {string} name
-     * @param {number} index
+     *
+     * @param {string} name - name attribute value
+     * @param {number} index - repeat index
      * @return {Element} found element
      */
     find( name, index = 0 ) {
@@ -226,10 +226,12 @@ export default {
         return question ? question.querySelector( `[${attr}="${name}"]:not(.ignore)` ) : null;
     },
     /**
-     * @param {Element} control
-     * @param {*} value
-     * @param {Event} [event]
-     * @return {Element}
+     * Sets the value of a form control (or group like radiobuttons)
+     *
+     * @param {Element} control - form control HTML element
+     * @param {string|number} value - value to set
+     * @param {Event} [event] - event to fire after setting value
+     * @return {Element} first control whose value was set
      */
     setVal( control, value, event = events.InputUpdate() ) {
         let inputs;
@@ -347,8 +349,8 @@ export default {
         return inputs[ 0 ];
     },
     /**
-     * @param {Element} control
-     * @return {Promise<undefined|ValidateInputResolution>}
+     * @param {Element} control - form control HTML element
+     * @return {Promise<undefined|import('./form').ValidateInputResolution>} Promise that resolves
      */
     validate( control ) {
         return this.form.validateInput( control );

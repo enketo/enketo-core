@@ -29,12 +29,11 @@ import './extend';
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
- * @param {Element} form - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
- * @param formEl
+ * @param {Element} formEl - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
  * @param {import('type-def').FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {object} [options] - form options
  * @param {boolean} [options.printRelevantOnly] - If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
- * @param {language} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
+ * @param {string} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
  * @class
  */
 function Form( formEl, data, options ) {
@@ -172,7 +171,7 @@ Form.prototype = {
 /**
  * Returns a module and adds the form property to it.
  *
- * @param {object} module
+ * @param {object} module - Enketo Core module
  * @return {object} updated module
  */
 Form.prototype.addModule = function( module ) {
@@ -318,13 +317,11 @@ Form.prototype.init = function() {
 
     document.querySelector( 'body' ).scrollIntoView();
 
-    console.debug( 'loadErrors', loadErrors );
-
     return loadErrors;
 };
 
 /**
- * @param {string} xpath
+ * @param {string} xpath - simple path to question
  * @return {Array<string>} A list of errors originated from `goToTarget`. Empty if everything went fine.
  */
 Form.prototype.goTo = function( xpath ) {
@@ -377,14 +374,14 @@ Form.prototype.resetView = function() {
  * TODO: this needs to work for all expressions (relevants, constraints), now it only works for calculated items
  * Ideally this belongs in the form Model, but unfortunately it needs access to the view
  *
- * @param {string} expr
- * @param {string} resTypeStr
- * @param {string} selector
- * @param {number} index
- * @param {boolean} tryNative
+ * @param {string} expr - XPath expression
+ * @param {string} resTypeStr - type of result
+ * @param {string} context - context path
+ * @param {number} index - index of context
+ * @param {boolean} tryNative - whether to try the native evaluator, i.e. if there is no risk it would create an incorrect result such as with date comparisons
  * @return {string} updated expression
  */
-Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index, tryNative ) {
+Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index, tryNative ) {
     const that = this;
     const choiceNames = parseFunctionFromExpression( expr, 'jr:choice-name' );
 
@@ -393,7 +390,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
 
         if ( params.length === 2 ) {
             let label = '';
-            const value = that.model.evaluate( params[ 0 ], resTypeStr, selector, index, tryNative );
+            const value = that.model.evaluate( params[ 0 ], resTypeStr, context, index, tryNative );
             const name = stripQuotes( params[ 1 ] ).trim();
             const $input = that.view.$.find( `[name="${name}"]` );
 
@@ -425,8 +422,8 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, selector, index
  * Since not all data nodes with a value have a corresponding input element,
  * we cycle through the HTML form elements and check for each form element whether data is available.
  *
- * @param {import('./type-def').jQuery} $group
- * @param {number} groupIndex
+ * @param {import('./type-def').jQuery} $group - group of elements for which form controls should be updated (with current model values)
+ * @param {number} groupIndex - index of the group
  */
 Form.prototype.setAllVals = function( $group, groupIndex ) {
     const that = this;
@@ -462,7 +459,7 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
 };
 
 /**
- * @param {import('./type-def').jQuery} $control
+ * @param {import('./type-def').jQuery} $control - HTML form control
  * @return {string|undefined} Value
  */
 Form.prototype.getModelValue = function( $control ) {
@@ -478,8 +475,7 @@ Form.prototype.getModelValue = function( $control ) {
  *
  * @param {string} attr - The attribute name to search for
  * @param {string} [filter] - The optional filter to append to each selector
- * @param
- * @param updated
+ * @param {import('./type-def').UpdatedDataNodes} updated - object that contains information on updated nodes
  * @return {import('./type-def').jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
@@ -554,8 +550,8 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
 };
 
 /**
- * @param {Array<Element>} controls
- * @return {Array<Element>}
+ * @param {Array<Element>} controls - radiobutton/checkbox HTML input elements
+ * @return {Array<Element>} filtered controls without any sibling radiobuttons and checkboxes (only the first)
  */
 Form.prototype.filterRadioCheckSiblings = controls => {
     const wrappers = [];
@@ -676,9 +672,7 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
  *
  * Note: it does not take care of re-validating a question itself after its value has changed due to a calculation update!
  *
- * @param {object} [updated]
- * @param {boolean} [updated.cloned]
- * @param {string} repeatPath
+ * @param {import('./type-def').UpdatedDataNodes} updated - object that contains information on updated nodes
  */
 Form.prototype.validationUpdate = function( updated ) {
     let $nodes;
@@ -811,16 +805,16 @@ Form.prototype.setEventHandlers = function() {
 };
 
 /**
- * @param {Element} node
+ * @param {Element} node - form control HTML element
  * @param {string} [type] - One of "constraint", "required" and "relevant".
  */
 Form.prototype.setValid = function( node, type ) {
-    const classes = ( type ) ? [ `invalid-${type}` ] : [ 'invalid-constraint', 'invalid-required', 'invalid-relevant' ];
+    const classes =  type ? [ `invalid-${type}` ] : [ 'invalid-constraint', 'invalid-required', 'invalid-relevant' ];
     this.input.getWrapNode( node ).classList.remove( ...classes );
 };
 
 /**
- * @param {Element} node
+ * @param {Element} node - form control HTML element
  * @param {string} [type] - One of "constraint", "required" and "relevant".
  */
 Form.prototype.setInvalid = function( node, type ) {
@@ -849,7 +843,7 @@ Form.prototype.blockPageNavigation = function() {
 /**
  * Checks whether the question is not currently marked as invalid. If no argument is provided, it checks the whole form.
  *
- * @param {Element} node
+ * @param {Element} node - form control HTML element
  * @return {!boolean} Whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function( node ) {
@@ -899,7 +893,7 @@ Form.prototype.validate = Form.prototype.validateAll;
 /**
  * Validates all enabled input fields in the supplied container, after first resetting everything as valid.
  *
- * @param {import('./type-def').jQuery} $container
+ * @param {import('./type-def').jQuery} $container - HTML container element inside which to validate form controls
  * @return {Promise} wrapping {boolean} whether the container contains any errors
  */
 Form.prototype.validateContent = function( $container ) {
@@ -942,9 +936,9 @@ Form.prototype.validateContent = function( $container ) {
 };
 
 /**
- * @param {string} targetPath
- * @param {string} contextPath
- * @return {string} path
+ * @param {string} targetPath - simple relative or absolute path
+ * @param {string} contextPath - absolute context path
+ * @return {string} absolute path
  */
 Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
     let target;
@@ -961,14 +955,14 @@ Form.prototype.pathToAbsolute = function( targetPath, contextPath ) {
 
 /**
  * @typedef ValidateInputResolution
- * @property {bool} requiredValid
- * @property {bool} constraintValid
+ * @property {boolean} requiredValid
+ * @property {boolean} constraintValid
  */
 
 /**
  * Validates question values.
  *
- * @param {Element} control
+ * @param {Element} control - form control HTML element
  * @return {Promise<undefined|ValidateInputResolution>} resolves with validation result
  */
 Form.prototype.validateInput = function( control ) {
@@ -1047,8 +1041,8 @@ Form.prototype.validateInput = function( control ) {
 };
 
 /**
- * @param {string} path
- * @return {undefined|Element}
+ * @param {string} path - path to HTML form control
+ * @return {null|Element} HTML question element
  */
 Form.prototype.getGoToTarget = function( path ) {
     let hits;

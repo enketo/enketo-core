@@ -35,13 +35,13 @@ export default {
                     dataNode.setVal( newVal, props.xmlType );
                 }
             } else {
-                console.log( `Preload "${item}" not supported. May or may not be a big deal.` );
+                console.warn( `Preload "${item}" not supported. May or may not be a big deal.` );
             }
         } );
     },
     /**
-     * @param {object} o
-     * @return {string}
+     * @param {object} o - parameter object
+     * @return {string} evaluated value or error message
      */
     'timestamp': function( o ) {
         let value;
@@ -64,8 +64,8 @@ export default {
         return 'error - unknown timestamp parameter';
     },
     /**
-     * @param {object} o
-     * @return {string}
+     * @param {object} o - parameter object
+     * @return {string} current value or evaluated value
      */
     'date': function( o ) {
         let today;
@@ -85,8 +85,8 @@ export default {
         return o.curVal;
     },
     /**
-     * @param {object} o
-     * @return {string}
+     * @param {object} o - parameter object
+     * @return {string} current value or evaluated value
      */
     'property': function( o ) {
         let node;
@@ -104,8 +104,8 @@ export default {
         return o.curVal;
     },
     /**
-     * @param {object} o
-     * @return {string}
+     * @param {object} o - parameter object
+     * @return {string} current value or evaluated value
      */
     'context': function( o ) {
         // 'application', 'user'??
@@ -116,8 +116,8 @@ export default {
         return o.curVal;
     },
     /**
-     * @param {object} o
-     * @return {string}
+     * @param {object} o - parameter object
+     * @return {string} current value or error message
      */
     'patient': function( o ) {
         if ( o.curVal.length === 0 ) {
@@ -127,8 +127,8 @@ export default {
         return o.curVal;
     },
     /**
-     * @param {object} o
-     * @return {string}
+     * @param {object} o - parameter object
+     * @return {string} current value or error message
      */
     'user': function( o ) {
         if ( o.curVal.length === 0 ) {
@@ -138,8 +138,8 @@ export default {
         return o.curVal;
     },
     /**
-     * @param {object} o
-     * @return {string}
+     * @param {object} o - parameter object
+     * @return {string} current value or evaluated value
      */
     'uid': function( o ) {
         if ( o.curVal.length === 0 ) {

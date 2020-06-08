@@ -9,8 +9,10 @@ const MERIDIAN_PART = `[^: ${NUMBER}]+`;
 const HAS_MERIDIAN = new RegExp( `^(${TIME_PART} ?(${MERIDIAN_PART}))|((${MERIDIAN_PART}) ?${TIME_PART})$` );
 
 /**
- * @param {Date} dt - Date object
- * @return {string}
+ * Transforms time to a cleaned-up localized time.
+ *
+ * @param {Date} dt - date object
+ * @return {string} cleaned-up localized time
  */
 function _getCleanLocalTime( dt ) {
     dt = typeof dt == 'undefined' ? new Date() : dt;
@@ -19,8 +21,10 @@ function _getCleanLocalTime( dt ) {
 }
 
 /**
- * @param {string} timeStr
- * @return {string}
+ * Remove unneeded and problematic special characters in (date)time string.
+ *
+ * @param {string} timeStr - (date)time string to clean up
+ * @return {string} transformed (date)time string with removed unneeded special characters that cause issues
  */
 function _cleanSpecialChars( timeStr ) {
     return timeStr.replace( /[\u200E\u200F]/g, '' );
@@ -50,8 +54,8 @@ const time = {
         return this.meridianNotation( new Date( 2000, 1, 1, 1, 0, 0 ) );
     },
     /**
-     * @type function
-     * @param {Date} dt
+     * @type {Function}
+     * @param {Date} dt - datetime string
      */
     meridianNotation( dt ) {
         let matches = _getCleanLocalTime( dt ).match( HAS_MERIDIAN );
@@ -66,7 +70,7 @@ const time = {
     /**
      * Whether time string has meridian parts
      *
-     * @type function
+     * @type {Function}
      * @param {string} time - Time string
      */
     hasMeridian( time ) {

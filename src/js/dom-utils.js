@@ -236,15 +236,15 @@ function getRepeatIndex( node ) {
  */
 const elementDataStore = {
     /**
-     * @type WeakMap
+     * @type {WeakMap}
      */
     _storage: new WeakMap(),
     /**
      * Adds object to element storage. Ensures that element storage exist.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @param {object} obj - Stored data.
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @param {object} obj - stored data
      */
     put: function( element, key, obj ) {
         if ( !this._storage.has( element ) ) {
@@ -255,9 +255,9 @@ const elementDataStore = {
     /**
      * Return object from element storage.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @return {object} Stored data object.
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @return {object} stored data object
      */
     get: function( element, key ) {
         const item = this._storage.get( element );
@@ -267,9 +267,9 @@ const elementDataStore = {
     /**
      * Checkes whether element has given storage item.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @return {boolean}
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @return {boolean} whether data is present
      */
     has: function( element, key ) {
         const item = this._storage.get( element );
@@ -279,9 +279,9 @@ const elementDataStore = {
     /**
      * Removes item from element storage. Removes element storage if empty.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @return {object} Removed data object.
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @return {object} removed data object
      */
     remove: function( element, key ) {
         var ret = this._storage.get( element ).delete( key );

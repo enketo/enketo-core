@@ -286,8 +286,8 @@ export default {
      * Minimal XPath evaluation helper that queries from a single item context.
      *
      * @param {string} expr - The XPath expression
-     * @param {string} context
-     * @param {boolean} single
+     * @param {string} context - context path
+     * @param {boolean} single - whether to only return a single (first) node
      * @return {Array<Element>} found nodes
      */
     getNodesFromItem( expr, context, single ) {
@@ -310,19 +310,21 @@ export default {
     },
 
     /**
-     * @param {string} expr - The XPath expression
-     * @param {string} content
+     * @param {string} expr - XPath expression
+     * @param {string} context - evalation context path
      * @return {Element|null} found nodes
      */
-    getNodeFromItem( expr, content ) {
-        const nodes = this.getNodesFromItem( expr, content, true );
+    getNodeFromItem( expr, context ) {
+        const nodes = this.getNodesFromItem( expr, context, true );
 
         return nodes.length ? nodes[ 0 ] : null;
     },
 
     /**
-     * @param {string} label
-     * @param {string} value
+     * Creates a HTML option element
+     *
+     * @param {string} label - option label
+     * @param {string} value - option value
      * @return {Element} created option
      */
     createOption( label, value ) {
@@ -334,8 +336,12 @@ export default {
     },
 
     /**
-     * @param {string} translation
-     * @param {string} value
+     * Creates an option translation <span> element
+     *
+     * @param {object} translation - translation object
+     * @param {string} [translation.type] - type of element to create, defaults to span
+     * @param {string} [translation.text] - translation text
+     * @param {string} value - option value
      * @return {Element} created element
      */
     createOptionTranslation( translation, value ) {
@@ -358,9 +364,11 @@ export default {
     },
 
     /**
-     * @param {Array<object>} attributes
-     * @param {Array<object>} translations
-     * @param {string} value
+     * Creates an input HTML element
+     *
+     * @param {Array<object>} attributes - attributes to add to input
+     * @param {Array<object>} translations - translation to add
+     * @param {string} value - option value
      * @return {Element} label element (wrapper)
      */
     createInput( attributes, translations, value ) {

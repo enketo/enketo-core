@@ -9,7 +9,7 @@ import events from './event';
 
 export default {
     /**
-     * @param {string} overrideLang
+     * @param {string} overrideLang - override language IANA subtag
      */
     init( overrideLang ) {
         if ( !this.form ) {
@@ -77,7 +77,7 @@ export default {
         return langOption ? langOption.textContent : null;
     },
     /**
-     * @type array
+     * @type {Array}
      */
     get languagesUsed() {
         return this.languages || [];
@@ -105,7 +105,7 @@ export default {
     /**
      * swap language of <select> and <datalist> <option>s
      *
-     * @param {Element} select
+     * @param {Element} select - select or datalist HTML element
      */
     setSelect( select ) {
         const type = select.nodeName.toLowerCase();

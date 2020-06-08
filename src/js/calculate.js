@@ -10,8 +10,7 @@ export default {
     /**
      * Updates calculated items.
      *
-     * @param
-     * @param updated
+     * @param {import('./type-def').UpdatedDataNodes} updated - the object containing info on updated data nodes
      * @param {string} [filter] - CSS selector filter.
      */
     update( updated = {}, filter = '' ) {
@@ -92,8 +91,7 @@ export default {
     /**
      * Runs <setvalue> actions.
      *
-     * @param {CustomEvent} [event] - The event type that triggered the setvalue action.
-     * @param {import('./type-def').UpdatedDataNodes} [updated] - The object containing info on updated data nodes. Only used here for the odk-new-repeat event.
+     * @param {CustomEvent} [event] - the event type that triggered the setvalue action.
      */
     setValue( event ) {
         let ignoreRelevance = false;
@@ -210,8 +208,8 @@ export default {
     /**
      * Determines relevancy of node by re-evaluating relevant expressions of self and ancestors.
      *
-     * @param {*} props
-     * @return {boolean}
+     * @param {*} props - properties of a node
+     * @return {boolean} whether the node is relevant
      */
     _isRelevant( props ) {
         let relevant = props.relevantExpr ? this.form.model.evaluate( props.relevantExpr, 'boolean', props.name, props.index ) : true;
