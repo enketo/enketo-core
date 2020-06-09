@@ -124,11 +124,11 @@ module.exports = grunt => {
         const formsJsPath = 'test/mock/forms.js';
         const xformsPaths = grunt.file.expand( {}, 'test/forms/*.xml' );
         const transformer = require( 'enketo-transformer' );
-
+        grunt.log.write( 'Transforming XForms ' );
         xformsPaths
             .reduce( ( prevPromise, filePath ) => prevPromise.then( () => {
                 const xformStr = grunt.file.read( filePath );
-                grunt.log.writeln( `Transforming ${filePath}...` );
+                grunt.log.write( '.' );
 
                 return transformer.transform( { xform: xformStr } )
                     .then( result => {
