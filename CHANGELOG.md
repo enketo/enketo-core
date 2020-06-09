@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Made fixed English geopicker warning translatable.
 
+##### Fixed
+- The "selected" message in the desktop select picker does not switch language immediately.
+
 [5.16.1] - 2020-06-05
 ----------------------
 ##### Fixed
