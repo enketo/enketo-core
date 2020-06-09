@@ -744,7 +744,7 @@ class Geopicker extends Widget {
      * Displays intersect error
      */
     _showIntersectError() {
-        dialog.alert( 'Borders cannot intersect!' );
+        dialog.alert( t( 'geopicker.bordersintersectwarning' ) );
     }
 
     /**
