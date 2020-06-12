@@ -1,6 +1,7 @@
 import RangeWidget from '../../widget/range/range-widget';
 import { isNumber } from '../../js/utils';
 import support from '../../js/support';
+import events from '../../js/event';
 
 /**
  * @augments RangeWidget
@@ -107,7 +108,7 @@ class AnalogScaleWidget extends RangeWidget {
         if ( this.props.vertical ) {
             // Will only be triggered if question by itself constitutes a page.
             // It will not be triggered if question is contained inside a group with fieldlist appearance.
-            this.question.addEventListener( 'pageflip', this._stretchHeight.bind( this ) );
+            this.question.addEventListener( events.PageFlip().type, this._stretchHeight.bind( this ) );
         }
     }
 

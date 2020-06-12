@@ -62,6 +62,7 @@ class ImageMap extends Widget {
             this._setChangeHandler();
             this._setHoverHandler();
             this._updateImage();
+            this._setPageHandler();
         }
     }
 
@@ -100,25 +101,7 @@ class ImageMap extends Widget {
 
                     // Use any explicitly defined viewPort and else define one using bounding box or attributes
                     if ( !svg.getAttribute( 'viewBox' ) ) {
-                        // Resize, using original unscaled SVG dimensions
-                        let viewBox;
-                        try {
-                            const bbox = svg.getBBox();
-                            viewBox = `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`;
-                        } catch ( e ) {
-                            // svg.getBBox() only works after SVG has been added to DOM.
-                            // In FF getBBox causes an "NS_ERROR_FAILURE" exception likely because the SVG
-                            // image has not finished rendering. This doesn't always happen though.
-                            // For now, we just log the FF error, and hope that resizing is done correctly via
-                            // attributes.
-                            console.error( 'Could not obtain Boundary Box of SVG element', e );
-                            let width = svg.getAttribute( 'width' );
-                            let height = svg.getAttribute( 'height' );
-                            if ( width && height ) {
-                                viewBox = `0 0 ${parseInt( width, 10 )} ${parseInt( height, 10 )}`;
-                            }
-                        }
-                        svg.setAttribute( 'viewBox', viewBox );
+                        this._setViewBox( svg );
                     }
 
                     return widget;
@@ -127,6 +110,29 @@ class ImageMap extends Widget {
                 }
             } )
             .catch( this._showSvgNotFoundError.bind( that ) );
+    }
+
+    _setViewBox( svg ){
+        let viewBox;
+        try {
+            // Resize, using original unscaled SVG dimensions
+            // Note that width and height will be zero if the SVG is currently not visible
+            const bbox = svg.getBBox();
+            viewBox = `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`;
+        } catch ( e ) {
+            // svg.getBBox() only works after SVG has been added to DOM.
+            // In FF getBBox causes an "NS_ERROR_FAILURE" exception likely because the SVG
+            // image has not finished rendering. This doesn't always happen though.
+            // For now, we just log the FF error, and hope that resizing is done correctly via
+            // attributes.
+            console.error( 'Could not obtain Boundary Box of SVG element', e );
+            let width = svg.getAttribute( 'width' );
+            let height = svg.getAttribute( 'height' );
+            if ( width && height ) {
+                viewBox = `0 0 ${parseInt( width, 10 )} ${parseInt( height, 10 )}`;
+            }
+        }
+        svg.setAttribute( 'viewBox', viewBox );
     }
 
     /**
@@ -207,6 +213,17 @@ class ImageMap extends Widget {
                 }
             } );
         } );
+    }
+
+    /**
+     * Handles page flip of page in which the widget is placed.
+     */
+    _setPageHandler(){
+        const page = this.element.closest( '[role="page"]' );
+
+        if ( page ){
+            page.addEventListener( events.PageFlip().type, () => this._setViewBox( this.svg ) );
+        }
     }
 
     /**

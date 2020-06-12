@@ -13,7 +13,8 @@
         "enketo",
         "OpenRosa",
         "ODK",
-        "XForms"
+        "XForms",
+        "form"
     ],
     "repository": {
         "type": "git",

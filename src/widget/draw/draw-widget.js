@@ -203,7 +203,7 @@ class DrawWidget extends Widget {
             .on( 'applyfocus', () => {
                 canvas.focus();
             } )
-            .closest( '[role="page"]' ).on( 'pageflip', () => {
+            .closest( '[role="page"]' ).on( events.PageFlip().type, () => {
                 // When an existing value is loaded into the canvas and is not
                 // the first page, it won't become visible until the canvas is clicked
                 // or the window is resized:

@@ -1,4 +1,5 @@
 import Widget from '../../js/widget';
+import events from '../../js/event';
 
 /**
  * Auto-resizes textarea elements.
@@ -23,7 +24,7 @@ class TextareaWidget extends Widget {
             }
         } );
         textareas.forEach( this._resize.bind( this ) );
-        this.element.addEventListener( 'pageflip', event => {
+        this.element.addEventListener( events.PageFlip().type, event => {
             const els = event.target.querySelectorAll( 'textarea' );
             els.forEach( this._resize.bind( this ) );
         } );
