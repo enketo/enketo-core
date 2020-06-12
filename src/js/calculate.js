@@ -10,7 +10,7 @@ export default {
     /**
      * Updates calculated items.
      *
-     * @param {import('./type-def').UpdatedDataNodes} updated - the object containing info on updated data nodes
+     * @param {UpdatedDataNodes} updated - the object containing info on updated data nodes
      * @param {string} [filter] - CSS selector filter.
      */
     update( updated = {}, filter = '' ) {

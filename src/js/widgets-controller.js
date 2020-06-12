@@ -14,7 +14,7 @@ let formHtml;
  * Initializes widgets
  *
  * @static
- * @param {import('./type-def').jQuery} $group - The element inside which the widgets have to be initialized.
+ * @param {jQuery} $group - The element inside which the widgets have to be initialized.
  * @param {*} [opts] - Options (e.g. helper function of Form.js passed)
  * @return {boolean} `true` when initialized successfuly
  */
@@ -74,7 +74,7 @@ function disable( group ) {
  *
  * @param {Element} group - A jQuery-wrapped element
  * @param {string|null} selector - If the selector is `null`, the form element will be returned
- * @return {import('./type-def').jQuery} A jQuery collection
+ * @return {jQuery} A jQuery collection
  */
 function _getElements( group, selector ) {
     if ( selector ) {

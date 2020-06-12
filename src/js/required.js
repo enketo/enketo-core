@@ -10,7 +10,7 @@ export default {
     /**
      * Updates readonly
      *
-     * @param {import('./type-def').UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update( updated /*, filter*/ ) {
         const that = this;

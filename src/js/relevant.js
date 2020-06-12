@@ -9,7 +9,7 @@ import events from './event';
 
 export default {
     /**
-     * @param {import('./type-def').UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
+     * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      * @param {boolean} forceClearNonRelevant -  whether to empty the values of non-relevant nodes
      */
     update( updated, forceClearNonRelevant ) {
@@ -24,7 +24,7 @@ export default {
         this.updateNodes( $nodes, forceClearNonRelevant );
     },
     /**
-     * @param {import('./type-def').jQuery} $nodes - Nodes to update
+     * @param {jQuery} $nodes - Nodes to update
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
     updateNodes( $nodes, forceClearNonRelevant ) {
@@ -166,7 +166,7 @@ export default {
     /**
      * Processes the evaluation result for a branch
      *
-     * @param {import('./type-def').jQuery} $branchNode - branch node
+     * @param {jQuery} $branchNode - branch node
      * @param {string} path - path of branch node
      * @param {boolean} result - result of relevant evaluation
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
@@ -182,7 +182,7 @@ export default {
     /**
      * Checks whether branch currently has 'relevant' state
      *
-     * @param {import('./type-def').jQuery} $branchNode - branch node
+     * @param {jQuery} $branchNode - branch node
      * @return {boolean} whether branch is currently relevant
      */
     selfRelevant( $branchNode ) {
@@ -192,7 +192,7 @@ export default {
     /**
      * Enables and reveals a branch node/group
      *
-     * @param {import('./type-def').jQuery} $branchNode - The jQuery object to reveal and enable
+     * @param {jQuery} $branchNode - The jQuery object to reveal and enable
      * @param {string} path - path of branch node
      * @return {boolean} whether the relevant changed as a result of this action
      */
@@ -222,7 +222,7 @@ export default {
     /**
      * Disables and hides a branch node/group
      *
-     * @param {import('./type-def').jQuery} $branchNode - The jQuery object to hide and disable
+     * @param {jQuery} $branchNode - The jQuery object to hide and disable
      * @param {string} path - path of branch node
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      * @return {boolean} whether the relevant changed as a result of this action
@@ -251,7 +251,7 @@ export default {
      * Clears values from branchnode.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {import('./type-def').jQuery} $branchNode - branch node
+     * @param {jQuery} $branchNode - branch node
      * @param {string} path - path of branch node
      */
     clear( $branchNode, path ) {
@@ -267,7 +267,7 @@ export default {
         }
     },
     /**
-     * @param {import('./type-def').jQuery} $branchNode - branch node
+     * @param {jQuery} $branchNode - branch node
      * @param {boolean} bool - value to set disabled property to
      */
     setDisabledProperty( $branchNode, bool ) {
@@ -286,7 +286,7 @@ export default {
      * Activates form controls.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {import('./type-def').jQuery} $branchNode - branch node
+     * @param {jQuery} $branchNode - branch node
      */
     activate( $branchNode ) {
         this.setDisabledProperty( $branchNode, false );
@@ -295,7 +295,7 @@ export default {
      * Deactivates form controls.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {import('./type-def').jQuery} $branchNode - branch node
+     * @param {jQuery} $branchNode - branch node
      */
     deactivate( $branchNode ) {
         $branchNode.addClass( 'disabled' );

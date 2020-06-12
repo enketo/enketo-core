@@ -30,7 +30,7 @@ import './extend';
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
  * @param {Element} formEl - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
- * @param {import('type-def').FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
+ * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {object} [options] - form options
  * @param {boolean} [options.printRelevantOnly] - If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
  * @param {string} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
@@ -422,7 +422,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
  * Since not all data nodes with a value have a corresponding input element,
  * we cycle through the HTML form elements and check for each form element whether data is available.
  *
- * @param {import('./type-def').jQuery} $group - group of elements for which form controls should be updated (with current model values)
+ * @param {jQuery} $group - group of elements for which form controls should be updated (with current model values)
  * @param {number} groupIndex - index of the group
  */
 Form.prototype.setAllVals = function( $group, groupIndex ) {
@@ -459,7 +459,7 @@ Form.prototype.setAllVals = function( $group, groupIndex ) {
 };
 
 /**
- * @param {import('./type-def').jQuery} $control - HTML form control
+ * @param {jQuery} $control - HTML form control
  * @return {string|undefined} Value
  */
 Form.prototype.getModelValue = function( $control ) {
@@ -475,8 +475,8 @@ Form.prototype.getModelValue = function( $control ) {
  *
  * @param {string} attr - The attribute name to search for
  * @param {string} [filter] - The optional filter to append to each selector
- * @param {import('./type-def').UpdatedDataNodes} updated - object that contains information on updated nodes
- * @return {import('./type-def').jQuery} - A jQuery collection of elements
+ * @param {UpdatedDataNodes} updated - object that contains information on updated nodes
+ * @return {jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     let collection;
@@ -672,7 +672,7 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
  *
  * Note: it does not take care of re-validating a question itself after its value has changed due to a calculation update!
  *
- * @param {import('./type-def').UpdatedDataNodes} updated - object that contains information on updated nodes
+ * @param {UpdatedDataNodes} updated - object that contains information on updated nodes
  */
 Form.prototype.validationUpdate = function( updated ) {
     let $nodes;
@@ -893,7 +893,7 @@ Form.prototype.validate = Form.prototype.validateAll;
 /**
  * Validates all enabled input fields in the supplied container, after first resetting everything as valid.
  *
- * @param {import('./type-def').jQuery} $container - HTML container element inside which to validate form controls
+ * @param {jQuery} $container - HTML container element inside which to validate form controls
  * @return {Promise} wrapping {boolean} whether the container contains any errors
  */
 Form.prototype.validateContent = function( $container ) {

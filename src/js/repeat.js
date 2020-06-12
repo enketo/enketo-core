@@ -250,7 +250,7 @@ export default {
      * Checks whether repeat count value has been updated and updates repeat instances
      * accordingly.
      *
-     * @param {import('./type-def').UpdatedDataNodes} updated - The object containing info on updated data nodes.
+     * @param {UpdatedDataNodes} updated - The object containing info on updated data nodes.
      */
     countUpdate( updated = {} ) {
         const repeatInfos = this.form.getRelatedNodes( 'data-repeat-count', '.or-repeat-info', updated ).get();

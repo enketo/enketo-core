@@ -350,7 +350,7 @@ export default {
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {Promise<undefined|import('./form').ValidateInputResolution>} Promise that resolves
+     * @return {Promise<undefined|ValidateInputResolution>} Promise that resolves
      */
     validate( control ) {
         return this.form.validateInput( control );

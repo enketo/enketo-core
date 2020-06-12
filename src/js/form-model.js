@@ -25,7 +25,7 @@ let Nodeset;
  * Class dealing with the XML Model of a form
  *
  * @class
- * @param {import('type-def').FormDataObj} data - data object
+ * @param {FormDataObj} data - data object
  * @param {object=} options - FormModel options
  * @param {string=} options.full - Whether to initialize the full model or only the primary instance.
  */
@@ -1438,7 +1438,7 @@ Nodeset.prototype.setIndex = function( index ) {
  * @param {(string|Array<string>)} [newVals] - The new value of the node.
  * @param {string} [xmlDataType] - XML data type of the node
  *
- * @return {null|import('./type-def').UpdatedDataNodes} `null` is returned when the node is not found or multiple nodes were selected,
+ * @return {null|UpdatedDataNodes} `null` is returned when the node is not found or multiple nodes were selected,
  *                       otherwise an object with update information is returned.
  */
 Nodeset.prototype.setVal = function( newVals, xmlDataType ) {

@@ -110,7 +110,7 @@ class DatetimepickerExtended extends Widget {
     }
 
     /**
-     * @param {import('../../js/src/type-def').jQuery} $els - a set of elements wrapped in jQuery
+     * @param {jQuery} $els - a set of elements wrapped in jQuery
      */
     _setFocusHandler( $els ) {
         // Handle focus on original input (goTo functionality)

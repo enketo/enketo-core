@@ -17,12 +17,12 @@ export default {
      */
     active: false,
     /**
-     * @type {Array|import('./type-def').jQuery}
+     * @type {Array|jQuery}
      * @default
      */
     current: null,
     /**
-     * @type {import('./type-def').jQuery}
+     * @type {jQuery}
      */
     activePages: [],
     /**
@@ -77,7 +77,7 @@ export default {
      * alternatively, (e.g. if a top level repeat without field-list appearance is provided as parameter)
      * it flips to the page contained with the jQueried parameter;
      *
-     * @param {import('./type-def').jQuery} $e - Element on page to flip to
+     * @param {jQuery} $e - Element on page to flip to
      */
     flipToPageContaining( $e ) {
         let $closest;
@@ -269,14 +269,14 @@ export default {
     },
     /**
      * @param {number} currentIndex - current index
-     * @return {import('./type-def').jQuery} Previous page
+     * @return {jQuery} Previous page
      */
     _getPrev( currentIndex ) {
         return this.activePages[ currentIndex - 1 ];
     },
     /**
      * @param {number} currentIndex - current index
-     * @return {import('./type-def').jQuery} Next page
+     * @return {jQuery} Next page
      */
     _getNext( currentIndex ) {
         return this.activePages[ currentIndex + 1 ];
