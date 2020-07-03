@@ -184,12 +184,17 @@ FormModel.prototype.init = function() {
             id = 'record';
             if ( this.data.instanceStr ) {
                 this.mergeXml( this.data.instanceStr );
-            } else {
+            }
+
+            // Set the two most important meta fields before any field 'dataupdate' event fires.
+            // The first dataupdate event will fire in response to the instance-first-load event.
+            this.setInstanceIdAndDeprecatedId();
+
+            if ( !this.data.instanceStr ){
                 // Only dispatch for newly created records
                 this.events.dispatchEvent( event.InstanceFirstLoad() );
             }
-            // Set the two most important meta fields before any field 'dataupdate' event fires.
-            this.setInstanceIdAndDeprecatedId();
+
         } catch ( e ) {
             console.error( e );
             this.loadErrors.push( `Error trying to parse XML ${id}. ${e.message}` );
