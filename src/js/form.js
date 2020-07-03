@@ -218,6 +218,18 @@ Form.prototype.init = function() {
     // Handle xforms-value-changed
     this.view.html.addEventListener( events.XFormsValueChanged().type, event => this.calc.setValue( event ) );
 
+    // Before initializing form view and model, passthrough some model events externally
+    // Because of setvalue/instance-first-load, this should be done before the model is initialized. This is important for custom
+    // applications that submit each individual value separately (opposed to a full XML model at the end).
+    this.model.events.addEventListener( events.DataUpdate().type, event => {
+        that.view.html.dispatchEvent( events.DataUpdate( event.detail ) );
+    } );
+
+    // This probably does not need to be before model.init();
+    this.model.events.addEventListener( events.Removed().type, event => {
+        that.view.html.dispatchEvent( events.Removed( event.detail ) );
+    } );
+
     loadErrors = loadErrors.concat( this.model.init() );
 
     if ( typeof this.model === 'undefined' || !( this.model instanceof FormModel ) ) {
@@ -225,14 +237,6 @@ Form.prototype.init = function() {
 
         return loadErrors;
     }
-
-    // Before initializing form view, passthrough some model events externally
-    this.model.events.addEventListener( events.DataUpdate().type, event => {
-        that.view.html.dispatchEvent( events.DataUpdate( event.detail ) );
-    } );
-    this.model.events.addEventListener( events.Removed().type, event => {
-        that.view.html.dispatchEvent( events.Removed( event.detail ) );
-    } );
 
     try {
         this.preloads.init();
