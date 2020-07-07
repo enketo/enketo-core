@@ -12,7 +12,6 @@ import { Form } from './src/js/form';
 import fileManager from './src/js/file-manager';
 import events from './src/js/event';
 import { fixGrid, styleToAll, styleReset } from './src/js/print';
-var loadErrors;
 var form;
 var formStr;
 var modelStr;
@@ -76,7 +75,7 @@ function initializeForm() {
     // for debugging
     window.form = form;
     //initialize form and check for load errors
-    loadErrors = form.init();
+    const loadErrors = form.init();
     if ( loadErrors.length > 0 ) {
         window.alert( 'loadErrors: ' + loadErrors.join( ', ' ) );
     }

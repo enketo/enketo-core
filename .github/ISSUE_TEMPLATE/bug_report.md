@@ -11,7 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **To Reproduce**
-Steps to reproduce the behavior. If applicable please included the smallest possible XLSForm (as zip or link).
+Steps to reproduce the behavior. If applicable please include the smallest possible XLSForm or XForm (as zip or link).
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
