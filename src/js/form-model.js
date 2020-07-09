@@ -838,11 +838,7 @@ FormModel.prototype.addTemplate = function( repeatPath, repeat, empty ) {
 FormModel.prototype.getTemplateNodes = function() {
     const jrPrefix = this.getNamespacePrefix( JAVAROSA_XFORMS_NS );
 
-    // For now we support both the official namespaced template and the hacked non-namespaced template attributes
-    // Note: due to an MS Edge bug, we use the slow JS XPath evaluator here. It would be VERY GOOD for performance
-    // to switch back once the Edge bug is fixed. The bug results in not finding any templates.
-    // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/9544701/
-    return this.evaluate( `/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@${jrPrefix}:template]`, 'nodes', null, null, false );
+    return this.evaluate( `/model/instance[1]/*//*[@${jrPrefix}:template]`, 'nodes', null, null, true );
 };
 
 /**

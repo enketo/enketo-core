@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ----------------------
 ##### Changed
 - Changed when dataupdate event is fired for setvalue/odk-instance-first-load actions to facilitate custom clients with field submission (like OpenClinica).
+- Speed up loading.
 
 [5.16.2] - 2020-06-12
 ----------------------
