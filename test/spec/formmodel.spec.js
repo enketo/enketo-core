@@ -98,8 +98,8 @@ describe( 'Data node getter', () => {
         [ '/thedata/repeatGroup/nodeC', null, { onlyleaf: true }, 3 ]
     ];
 
-    const model = new Model( '<model><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
-        '<repeatGroup template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
+    const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
+        '<repeatGroup jr:template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
         '<repeatGroup><nodeC>c2</nodeC></repeatGroup>' +
         '<repeatGroup><nodeC>c3</nodeC></repeatGroup>' +
         '<somenodes><A>one</A><B>one</B><C>one</C></somenodes><someweights><w1>1</w1><w2>3</w2><w.3>5</w.3></someweights><nodeF/>' +
@@ -505,7 +505,7 @@ describe( 'functionality to obtain string of the primary XML instance for storag
     } );
 
     it( 'returns primary instance without templates - B', () => {
-        const model = new Model( '<model><instance><data><group    template=""><a/></group></data></instance></model>' );
+        const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group    jr:template=""><a/></group></data></instance></model>' );
         model.init();
         expect( model.getStr() ).toEqual( '<data></data>' );
     } );
@@ -1158,7 +1158,7 @@ describe( 'merging an instance into the model', () => {
                 '<model><instance><a><c>record</c></a></instance></model>'
             ],
             // rogue record contains a node with a template or jr:template attribute
-            [ '<a><r template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><meta/></a></instance></model>' ],
+            //[ '<a xmlns:jr="http://openrosa.org/javarosa"><r jr:template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><meta/></a></instance></model>' ],
             [ '<a xmlns:jr="http://someth.ing"><r jr:template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>',
                 '<model><instance><a xmlns:jr="http://someth.ing"><r><b/></r><meta/></a></instance></model>'
             ],
@@ -1269,8 +1269,6 @@ describe( 'merging an instance into the model', () => {
 
     describe( 'when the model contains templates', () => {
         [
-            // with improper template=""
-            [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model><instance><a><r template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<a><r><b>5</b></r><r><b>6</b></r>' ],
             // with proper jr:template="" and namespace definition
             [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<instance><a><r><b>5</b></r><r><b>6</b></r>' ],
         ].forEach( test => {
