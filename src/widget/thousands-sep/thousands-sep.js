@@ -12,7 +12,7 @@ class ThousandsSeparatorWidget extends Widget {
     }
 
     /**
-     * Initialize 
+     * Initialize
      */
     _init() {
         const fragment = document.createRange().createContextualFragment( '<div class="widget "></div>' );
@@ -34,7 +34,7 @@ class ThousandsSeparatorWidget extends Widget {
     }
 
     /**
-     * Obtain the current value from the widget. 
+     * Obtain the current value from the widget.
      *
      * @type {string}
      */

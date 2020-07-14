@@ -7,7 +7,7 @@
 let cookies;
 
 /**
- * Parses an Expression to extract all function calls and theirs argument arrays.
+ * Parses an Expression to extract all function calls and their argument arrays.
  *
  * @static
  * @param {string} expr - The expression to search
@@ -15,12 +15,7 @@ let cookies;
  * @return {Array<Array<string, any>>} The result array, where each result is an array containing the function call and array of arguments.
  */
 function parseFunctionFromExpression( expr, func ) {
-    let index;
     let result;
-    let openBrackets;
-    let start;
-    let argStart;
-    let args;
     const findFunc = new RegExp( `${func}\\s*\\(`, 'g' );
     const results = [];
 
@@ -29,11 +24,11 @@ function parseFunctionFromExpression( expr, func ) {
     }
 
     while ( ( result = findFunc.exec( expr ) ) !== null ) {
-        openBrackets = 1;
-        args = [];
-        start = result.index;
-        argStart = findFunc.lastIndex;
-        index = argStart - 1;
+        const args = [];
+        let openBrackets = 1;
+        let start = result.index;
+        let argStart = findFunc.lastIndex;
+        let index = argStart - 1;
         while ( openBrackets !== 0 && index < expr.length ) {
             index++;
             if ( expr[ index ] === '(' ) {
@@ -81,10 +76,9 @@ function stripQuotes( str ) {
  * @return {string} new filename
  */
 function getFilename( file, postfix ) {
-    let filenameParts;
     if ( typeof file === 'object' && file !== null && file.name ) {
         postfix = postfix || '';
-        filenameParts = file.name.split( '.' );
+        const filenameParts = file.name.split( '.' );
         if ( filenameParts.length > 1 ) {
             filenameParts[ filenameParts.length - 2 ] += postfix;
         } else if ( filenameParts.length === 1 ) {
@@ -129,27 +123,23 @@ function isNumber( n ) {
  * @return {string|undefined} the value of the cookie
  */
 function readCookie( name ) {
-    let c;
-    let C;
-    let i;
-
     if ( cookies ) {
         return cookies[ name ];
     }
 
-    c = document.cookie.split( '; ' );
+    const parts = document.cookie.split( '; ' );
     cookies = {};
 
-    for ( i = c.length - 1; i >= 0; i-- ) {
-        C = c[ i ].split( '=' );
+    for ( let i = parts.length - 1; i >= 0; i-- ) {
+        const ck = parts[ i ].split( '=' );
         // decode URI
-        C[ 1 ] = decodeURIComponent( C[ 1 ] );
+        ck[ 1 ] = decodeURIComponent( ck[ 1 ] );
         // if cookie is signed (using expressjs/cookie-parser/), extract value
-        if ( C[ 1 ].substr( 0, 2 ) === 's:' ) {
-            C[ 1 ] = C[ 1 ].slice( 2 );
-            C[ 1 ] = C[ 1 ].slice( 0, C[ 1 ].lastIndexOf( '.' ) );
+        if ( ck[ 1 ].substr( 0, 2 ) === 's:' ) {
+            ck[ 1 ] = ck[ 1 ].slice( 2 );
+            ck[ 1 ] = ck[ 1 ].slice( 0, ck[ 1 ].lastIndexOf( '.' ) );
         }
-        cookies[ C[ 0 ] ] = decodeURIComponent( C[ 1 ] );
+        cookies[ ck[ 0 ] ] = decodeURIComponent( ck[ 1 ] );
     }
 
     return cookies[ name ];
@@ -161,20 +151,15 @@ function readCookie( name ) {
  * @return {Blob} dataURI converted to a Blob
  */
 function dataUriToBlobSync( dataURI ) {
-    let byteString;
-    let mimeString;
-    let buffer;
-    let array;
-
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    byteString = atob( dataURI.split( ',' )[ 1 ] );
+    const byteString = atob( dataURI.split( ',' )[ 1 ] );
     // separate out the mime component
-    mimeString = dataURI.split( ',' )[ 0 ].split( ':' )[ 1 ].split( ';' )[ 0 ];
+    const mimeString = dataURI.split( ',' )[ 0 ].split( ':' )[ 1 ].split( ';' )[ 0 ];
 
     // write the bytes of the string to an ArrayBuffer
-    buffer = new ArrayBuffer( byteString.length );
-    array = new Uint8Array( buffer );
+    const buffer = new ArrayBuffer( byteString.length );
+    const array = new Uint8Array( buffer );
 
     for ( let i = 0; i < byteString.length; i++ ) {
         array[ i ] = byteString.charCodeAt( i );
@@ -198,22 +183,6 @@ function getPasteData( event ) {
 }
 
 /**
- * Update a HTML anchor to serve as a download or reset it if an empty objectUrl is provided.
- *
- * @static
- * @param {HTMLElement} anchor - The anchor element
- * @param {string} objectUrl - The objectUrl to download
- * @param {string} fileName - The filename of the file
- */
-function updateDownloadLink( anchor, objectUrl, fileName ) {
-    if ( window.updateDownloadLinkIe11 ) {
-        return window.updateDownloadLinkIe11( ...arguments );
-    }
-    anchor.setAttribute( 'href', objectUrl || '' );
-    anchor.setAttribute( 'download', fileName || '' );
-}
-
-/**
  * @static
  * @param {File} file - Image file to be resized
  * @param {number} maxPixels - Maximum pixels of resized image
@@ -221,11 +190,11 @@ function updateDownloadLink( anchor, objectUrl, fileName ) {
  */
 function resizeImage( file, maxPixels ) {
     return new Promise( ( resolve, reject ) => {
-        let image = new Image();
+        const image = new Image();
         image.src = URL.createObjectURL( file );
         image.onload = () => {
-            let width = image.width;
-            let height = image.height;
+            const width = image.width;
+            const height = image.height;
 
             if ( width <= maxPixels && height <= maxPixels ) {
                 resolve( file );
@@ -242,11 +211,11 @@ function resizeImage( file, maxPixels ) {
                 newHeight = maxPixels;
             }
 
-            let canvas = document.createElement( 'canvas' );
+            const canvas = document.createElement( 'canvas' );
             canvas.width = newWidth;
             canvas.height = newHeight;
 
-            let context = canvas.getContext( '2d' );
+            const context = canvas.getContext( '2d' );
 
             context.drawImage( image, 0, 0, newWidth, newHeight );
 
@@ -265,6 +234,5 @@ export {
     readCookie,
     dataUriToBlobSync,
     getPasteData,
-    updateDownloadLink,
     resizeImage
 };

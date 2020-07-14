@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import fileManager from 'enketo/file-manager';
-import { getFilename, updateDownloadLink, resizeImage, isNumber } from '../../js/utils';
+import { getFilename, resizeImage, isNumber } from '../../js/utils';
+import downloadUtils from '../../js/download-utils';
 import events from '../../js/event';
 import { t } from 'enketo/translator';
 import TranslatedError from '../../js/translated-error';
@@ -320,7 +321,7 @@ class Filepicker extends Widget {
      * @param {string} fileName - filename
      */
     _updateDownloadLink( objectUrl, fileName ) {
-        updateDownloadLink( this.downloadLink, objectUrl, fileName );
+        downloadUtils.updateDownloadLink( this.downloadLink, objectUrl, fileName );
     }
 
     /**
