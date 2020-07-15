@@ -18,11 +18,13 @@ describe( 'Output functionality ', () => {
     form.init();
 
     it( 'tested upon initialization: node random__', () => {
-        expect( form.view.$.find( '[data-value="/random/random__"]' ).text().length ).toEqual( 17 );
+        const val = form.view.html.querySelector( '[data-value="/random/random__"]' ).textContent;
+        expect( val.length >= 16 && val.length <= 17  ).toEqual( true );
     } );
 
     it( 'tested upon initialization: node uuid__', () => {
-        expect( form.view.$.find( '[data-value="/random/uuid__"]' ).text().length ).toEqual( 36 );
+        const val =  form.view.html.querySelector( '[data-value="/random/uuid__"]' ).textContent;
+        expect( val.length ).toEqual( 36 );
     } );
 } );
 
