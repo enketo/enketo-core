@@ -665,14 +665,15 @@ describe( 'converting indexed-repeat() ', () => {
 
 describe( 'converting pulldata() ', () => {
     [
-        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', 2)', 'instance(\'hhplotdata\')/root/item[hhid_key = 2]/plot1size' ],
-        [ 'pulldata( \'hhplotdata\', \'plot1size\', \'hhid_key\' , 2 )', 'instance(\'hhplotdata\')/root/item[hhid_key = 2]/plot1size' ],
+        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', 2)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'2\']/plot1size' ],
+        [ 'pulldata( \'hhplotdata\', \'plot1size\', \'hhid_key\' , 2 )', 'instance(\'hhplotdata\')/root/item[hhid_key = \'2\']/plot1size' ],
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', \'two\')', 'instance(\'hhplotdata\')/root/item[hhid_key = \'two\']/plot1size' ],
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/a)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'aa\']/plot1size' ],
-        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/b)', 'instance(\'hhplotdata\')/root/item[hhid_key = 22]/plot1size' ],
+        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/b)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'22\']/plot1size' ],
+        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/c)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'12E345\']/plot1size' ],
     ].forEach( test => {
         it( 'works', () => {
-            const model = new Model( '<model><instance><data><a>aa</a><b>22</b></data></instance></model>' );
+            const model = new Model( '<model><instance><data><a>aa</a><b>22</b><c>12E345</c></data></instance></model>' );
             const fn = test[ 0 ];
             const expected = test[ 1 ];
             model.init();

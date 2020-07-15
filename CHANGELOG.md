@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- Pulldata fails to work when the search value looks like a number in scientific notation.
+
 [5.16.3] - 2020-07-09
 ----------------------
 ##### Changed

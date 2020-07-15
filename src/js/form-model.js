@@ -1190,8 +1190,7 @@ FormModel.prototype.convertPullDataFn = function( expr, selector, index ) {
             // The 4th argument will become an XPath predicate. The context for an XPath predicate, is not the same
             // as the context for the complete expression, so we have to evaluate the position separately. Otherwise
             // relative paths would break.
-            searchValue = that.evaluate( params[ 3 ], 'string', selector, index, true );
-            searchValue = searchValue === '' || isNaN( searchValue ) ? `'${searchValue}'` : searchValue;
+            searchValue = `'${that.evaluate( params[ 3 ], 'string', selector, index, true )}'`;
             searchXPath = `instance(${params[ 0 ]})/root/item[${params[ 2 ]} = ${searchValue}]/${params[ 1 ]}`;
 
             replacements[ pullData[ 0 ] ] = searchXPath;
