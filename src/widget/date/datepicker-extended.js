@@ -69,7 +69,7 @@ class DatepickerExtended extends Widget {
             .append( this.resetButtonHtml );
         const $fakeDateI = $fakeDate.find( 'input' );
 
-        $dateI.hide().after( $fakeDate );
+        $dateI.hide().before( $fakeDate );
 
         return $fakeDateI;
     }
