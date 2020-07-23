@@ -5,9 +5,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Changed
+- Markdown lists no longer require preceding newline (enketo-transformer).
+- Markdown ordered lists detect non-1 numbering start (enketo-transformer).
+- Add rel="noopener" to markdown links (enketo-transformer).
+
 ##### Fixed
 - Pulldata fails to work when the search value looks like a number in scientific notation.
 - Readonly text fields with overflowing text have invisible overflow on printouts.
+- Textarea contains unnecessary space character (enketo-transformer).
 
 [5.16.3] - 2020-07-09
 ----------------------
