@@ -34,7 +34,7 @@ class TimepickerExtended extends Widget {
         );
         fragment.querySelector( '.widget' ).append( this.resetButtonHtml );
         this.element.classList.add( 'hide' );
-        this.element.after( fragment );
+        this.element.before( fragment );
 
         const resetBtn = this.question.querySelector( '.widget > .btn-reset' );
         this.fakeTimeI = this.question.querySelector( '.widget > input' );
@@ -81,11 +81,8 @@ class TimepickerExtended extends Widget {
      * Updates widget
      */
     update() {
-        if ( this.element.value !== this.value ) {
-            $( this.element )
-                .next( '.widget' )
-                .find( 'input' )
-                .timepicker( 'setTime', this.element.value );
+        if ( this.element.value !== this.value && this.fakeTimeI ) {
+            $( this.fakeTimeI ).timepicker( 'setTime', this.element.value );
         }
     }
 

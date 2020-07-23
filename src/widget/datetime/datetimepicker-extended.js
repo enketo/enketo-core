@@ -31,7 +31,7 @@ class DatetimepickerExtended extends Widget {
         this.$fakeTimeI = this._createFakeTimeInput();
 
         this.element.classList.add( 'hide' );
-        this.element.after( document.createRange().createContextualFragment( '<div class="datetimepicker widget" />' ) );
+        this.element.before( document.createRange().createContextualFragment( '<div class="datetimepicker widget" />' ) );
         const widget = this.question.querySelector( '.widget' );
         widget.append( this.$fakeDateI[ 0 ].closest( '.date' ) );
         widget.append( this.$fakeTimeI[ 0 ].closest( '.timepicker' ) );
