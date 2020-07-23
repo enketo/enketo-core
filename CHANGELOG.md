@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.16.4] - 2020-07-23
 ----------------------
 ##### Changed
 - Markdown lists no longer require preceding newline (enketo-transformer).
