@@ -133,7 +133,7 @@ class Comment extends Widget {
     _showCommentModal() {
         const comment = this.question.cloneNode( true );
         const updateText = t( 'widget.comment.update' ) || 'Update';
-        const input = comment.querySelector( 'input, textarea' );
+        const input = comment.querySelector( 'input:not(.ignore), textarea:not(.ignore)' );
 
         comment.classList.remove( 'hide' );
         input.classList.add( 'ignore' );
@@ -182,7 +182,7 @@ class Comment extends Widget {
              *
              * Note that with setting "validateContinously" set to "true" this means it will be validated twice.
              */
-            this.options.helpers.input.validate( $( this.linkedQuestion.querySelector( 'input, select, textarea' ) ) );
+            this.options.helpers.input.validate( $( this.linkedQuestion.querySelector( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ) ) );
             ev.preventDefault();
             ev.stopPropagation();
         } );
