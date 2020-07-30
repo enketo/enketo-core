@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Changed
 - Let cookie access attempt fail silently in context where document.cookie is not accessible and throws an exception.
 
+##### Fixed
+- Xforms-version check relies on specific namespace prefix.
+
 [5.16.4] - 2020-07-23
 ----------------------
 ##### Changed

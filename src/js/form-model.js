@@ -161,7 +161,7 @@ FormModel.prototype.init = function() {
             // In the future, if there are more use cases for odk:xforms-version, we'll probably have to use a semver-parser
             // to do a comparison. In this case, the presence of the attribute is sufficient, as we know no older versions
             // than odk:xforms-version="1.0.0" exist. Previous versions had no number.
-            this.noRepeatRefErrorExpected = this.evaluate( '/model/@odk:xforms-version', 'boolean', null, null, true );
+            this.noRepeatRefErrorExpected = this.evaluate( `/model/@${this.getNamespacePrefix( ODK_XFORMS_NS )}:xforms-version`, 'boolean', null, null, true );
 
             // Check if instanceID is present
             if ( !this.getMetaNode( 'instanceID' ).getElement() ) {
