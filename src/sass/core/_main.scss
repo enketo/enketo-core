@@ -293,7 +293,9 @@ $media-margin: 10px;
 
     input[readonly].empty,
     select[readonly].empty,
-    textarea[readonly].empty,
+    textarea[readonly].empty{
+        display: none;
+    }
 
     strong {
         font-size: inherit;

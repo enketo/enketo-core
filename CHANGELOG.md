@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[5.16.6] - 2020-08-03
+----------------------
+##### Fixed
+- Readonly empty fields are displayed but should be invisible (recent regression).
+
 [5.16.5] - 2020-08-03
 ----------------------
 ##### Changed
