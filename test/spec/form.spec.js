@@ -1138,7 +1138,7 @@ describe( 'jr:choice-name', () => {
         form.init();
 
         expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[Default Value] Area' );
-        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[0].textContent ).toEqual( '[Default Value] Area' );
 
         // when
         form.view.$.find( '[name="/choice-regex/input"]' ).val( 'abc' ).trigger( 'change' );
@@ -1149,13 +1149,21 @@ describe( 'jr:choice-name', () => {
         // and
         // We don't expect the value change to cascade to a label until the choice value itself is changed.
         // See: https://github.com/enketo/enketo-core/issues/412
-        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[0].textContent ).toEqual( '[Default Value] Area' );
 
         // when
         form.view.$.find( '[name="/choice-regex/translator"][value=health_center]' ).click().trigger( 'change' );
 
         // then
-        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[abc] Health Center' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[0].textContent ).toEqual( '[abc] Health Center' );
+    } );
+
+    it( 'should match when there the path parameters are relative', () => {
+        const form = loadForm( 'jr-choice-name.xml' );
+        form.init();
+
+        expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[1].textContent ).toEqual( '[Default Value] Area' );
     } );
 
     /** @see https://github.com/enketo/enketo-core/issues/490 */
@@ -1181,6 +1189,8 @@ describe( 'jr:choice-name', () => {
 
         expect( form.view.$.find( '.or-output' ).text() ).toEqual( 'The Third Choice' );
     } );
+
+
 } );
 
 describe( 'autocomplete questions', () => {
@@ -1239,13 +1249,16 @@ describe( 'Form.prototype', () => {
 
     describe( '#replaceChoiceNameFn()', () => {
 
-        $.each( {
+        const tests = {
             'jr:choice-name( /choice-regex/translator, " /choice-regex/translator ")': '"__MOCK_VIEW_VALUE__"',
             '     jr:choice-name(       /choice-regex/translator     ,  " /choice-regex/translator "   )    ': '     "__MOCK_VIEW_VALUE__"    ',
             'if(string-length( /embedded-choice/translator ) !=0, jr:choice-name( /embedded-choice/translator ,\' /embedded-choice/translator \'),\'unspecified\')': 'if(string-length( /embedded-choice/translator ) !=0, "__MOCK_VIEW_VALUE__",\'unspecified\')',
             'jr:choice-name( selected-at( /energy_1/light/light_equip , 1), " /energy_1/light/light_equip " )': '"__MOCK_VIEW_VALUE__"',
             'if( /data/C1 =01, jr:choice-name( /data/C2 ," /data/C2 "), jr:choice-name( /data/C3 ," /data/C3 " ) )': 'if( /data/C1 =01, "__MOCK_VIEW_VALUE__", "__MOCK_VIEW_VALUE__" )',
-        }, ( initial, expected ) => {
+        };
+
+        for ( const initial in tests ) {
+            const expected = tests[initial];
             it( `should replace ${initial} with ${expected}`, () => {
                 // given
                 const form = mockChoiceNameForm();
@@ -1256,33 +1269,27 @@ describe( 'Form.prototype', () => {
                 // then
                 expect( actual ).toEqual( expected );
             } );
-        } );
+        }
     } );
 } );
 
 function mockChoiceNameForm() {
+    const val = '__MOCK_MODEL_VALUE__';
+
     return {
         model: {
             evaluate() {
-                return '__MOCK_MODEL_VALUE__';
+                return val;
             },
         },
         view: {
-            '$': {
-                find() {
-                    return {
-                        length: 1,
-                        prop() {
-                            return 'select';
-                        },
-                        find() {
-                            return {
-                                text() {
-                                    return '__MOCK_VIEW_VALUE__';
-                                },
-                            };
-                        },
-                    };
+            html: {
+                querySelectorAll() {
+                    return document.createRange().createContextualFragment( `
+                        <select>
+                            <option value="${val}">__MOCK_VIEW_VALUE__</option>
+                        </select>
+                    ` ).querySelectorAll( 'select' );
                 },
             },
         },

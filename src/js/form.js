@@ -1,7 +1,7 @@
 import { FormModel } from './form-model';
 import $ from 'jquery';
-import { toArray, parseFunctionFromExpression, stripQuotes, getFilename } from './utils';
-import { getXPath, closestAncestorUntil } from './dom-utils';
+import { toArray, parseFunctionFromExpression, stripQuotes, getFilename, joinPath } from './utils';
+import { getXPath, closestAncestorUntil, getSiblingElements } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
@@ -385,8 +385,7 @@ Form.prototype.resetView = function() {
  * @param {boolean} tryNative - whether to try the native evaluator, i.e. if there is no risk it would create an incorrect result such as with date comparisons
  * @return {string} updated expression
  */
-Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index, tryNative ) {
-    const that = this;
+Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index, tryNative ){
     const choiceNames = parseFunctionFromExpression( expr, 'jr:choice-name' );
 
     choiceNames.forEach( choiceName => {
@@ -394,23 +393,32 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
 
         if ( params.length === 2 ) {
             let label = '';
-            const value = that.model.evaluate( params[ 0 ], resTypeStr, context, index, tryNative );
+            const value = this.model.evaluate( params[ 0 ], resTypeStr, context, index, tryNative );
             const name = stripQuotes( params[ 1 ] ).trim();
-            const $input = that.view.$.find( `[name="${name}"]` );
+            const inputs = [ ...this.view.html.querySelectorAll( `[name="${name.startsWith( '/' ) ? name : joinPath( context, name )}"]` ) ];
+            const nodeName = inputs.length ? inputs[0].nodeName.toLowerCase() : null;
 
-            if ( !value ) {
+            if ( !value || !inputs.length ) {
                 label = '';
-            } else if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'select' ) {
-                label = $input.find( `[value="${value}"]` ).text();
-            } else if ( $input.length > 0 && $input.prop( 'nodeName' ).toLowerCase() === 'input' ) {
-                if ( !$input.attr( 'list' ) ) {
-                    label = $input.filter( function() {
-                        return $( this ).attr( 'value' ) === value;
-                    } ).siblings( '.option-label.active' ).text();
+            } else if (  nodeName === 'select' ) {
+                const found = inputs.filter( input => input.querySelector( `[value="${value}"]` ) );
+                label =  found ? found[0].querySelector( `[value="${value}"]` ).textContent : '';
+            } else if (  nodeName === 'input' ) {
+                const list = inputs[0].getAttribute( 'list' );
+
+                if ( !list ){
+                    const found = inputs.filter( input => input.getAttribute( 'value' ) === value );
+                    const siblingLabelEls = getSiblingElements( found[0], '.option-label.active' );
+                    label = siblingLabelEls.length ? siblingLabelEls[0].textContent : '';
                 } else {
-                    label = $input.siblings( `datalist#${$input.attr( 'list' )}` ).find( `[data-value="${value}"]` ).attr( 'value' );
+                    const siblingListEls = getSiblingElements( inputs[0], `datalist#${list}` );
+                    if ( siblingListEls.length ){
+                        const optionEl = siblingListEls[0].querySelector( `[data-value="${value}"]` );
+                        label = optionEl ? optionEl.getAttribute( 'value' ) : '';
+                    }
                 }
             }
+
             expr = expr.replace( choiceName[ 0 ], `"${label}"` );
         } else {
             throw new FormLogicError( `jr:choice-name function has incorrect number of parameters: ${choiceName[ 0 ]}` );
