@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- When a `setvalue` element has no `value` attribute and no textContent, it does not work for resetting values(enketo-transformer fix).
+
 [5.16.6] - 2020-08-03
 ----------------------
 ##### Fixed
