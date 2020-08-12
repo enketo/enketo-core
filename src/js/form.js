@@ -260,11 +260,14 @@ Form.prototype.init = function() {
 
         // after radio button data-name setting (now done in XLST)
         // Set temporary event handler to ensure calculations in newly added repeats are run for the first time
-        const tempHandler = event => this.calc.update( event.detail );
-        this.view.html.addEventListener( events.AddRepeat().type, tempHandler );
+        const tempHandlerAddRepeat = event => this.calc.update( event.detail );
+        const tempHandlerRemoveRepeat = () => this.all = {};
+        this.view.html.addEventListener( events.AddRepeat().type, tempHandlerAddRepeat );
+        this.view.html.addEventListener( events.RemoveRepeat().type, tempHandlerRemoveRepeat );
         this.repeatsInitialized = true;
         this.repeats.init();
-        this.view.html.removeEventListener( events.AddRepeat().type, tempHandler );
+        this.view.html.removeEventListener( events.AddRepeat().type, tempHandlerAddRepeat );
+        this.view.html.removeEventListener( events.RemoveRepeat().type, tempHandlerRemoveRepeat );
 
         // after repeats.init, but before itemset.update
         this.output.update();

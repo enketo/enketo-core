@@ -279,6 +279,31 @@ describe( 'repeat functionality', () => {
             expect( form.view.html.querySelectorAll( a )[ 1 ].querySelectorAll( b ).length ).toEqual( 2 );
         } );
 
+        // https://github.com/enketo/enketo-core/issues/734 => cache contains non-existing nodes
+        it( 'and correctly deals with nested repeats that have empty repeat counts', () => {
+            const form = loadForm( 'repeat-count-nested-3.xml' );
+            form.init();
+
+            // First test the actual cause of the above-mentioned bug
+            const infos = form.getRelatedNodes( 'data-repeat-count', '.or-repeat-info' ).get();
+            const orphans = infos.filter( info => !info.closest( 'form.or' ) );
+            expect( orphans.length ).toEqual( 0 );
+
+            // Then test the actually user-visible behavior
+            const a = '.or-repeat[name="/data/repeat_A"]';
+            const b = '.or-repeat[name="/data/repeat_A/repeat_B"]';
+
+            const members = form.view.html.querySelector( '[name="/data/number"]' );
+            members.value = '1';
+            members.dispatchEvent( event.Change() );
+            expect( form.view.html.querySelectorAll( a ).length ).toEqual( 1 );
+
+            const school = form.view.html.querySelector( '[name="/data/repeat_A/schools"]' );
+            school.value = '1';
+            school.dispatchEvent( event.Change() );
+            expect( form.view.html.querySelectorAll( b ).length ).toEqual( 1 );
+        } );
+
         it( 'and is able to use a relative repeat count path for top-level repeats', () => {
             const f = loadForm( 'repeat-count-relative.xml' );
             f.init();
