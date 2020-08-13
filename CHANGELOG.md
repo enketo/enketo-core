@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.16.7] - 2020-08-13
 ----------------------
 ##### Changed
 - Removed animation when removing a repeat.
