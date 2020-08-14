@@ -13,11 +13,11 @@
     }
 
     .file-feedback.error {
-        @extend .or-constraint-msg.active;
+        @include question-error-message;
     }
 
     .file-feedback.warning {
-        @extend .or-required-msg.active;
+        @include question-error-message;
 
         color: $state-warning-text;
     }

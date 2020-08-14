@@ -67,6 +67,6 @@
     }
 
     &__error {
-        @extend .or-constraint-msg.active;
+        @include question-error-message;;
     }
 }
