@@ -140,7 +140,6 @@ class AnalogScaleWidget extends RangeWidget {
         props.vertical = !props.appearances.includes( 'horizontal' );
         props.ticks = !props.appearances.includes( 'no-ticks' );
         props.maxTicks = 10;
-        props.distress = props.showScale;
 
         return props;
     }

@@ -118,7 +118,7 @@ class RangeWidget extends Widget {
      */
     _stepsBetweenHtmlStr( props ) {
         let html = '';
-        if ( props.distress ) {
+        if ( props.showScale ) {
             const stepsCount = ( props.max - props.min ) / props.step;
             if ( stepsCount <= 10 && ( props.max - props.min ) % props.step === 0 ) {
                 for ( let i = props.min + props.step; i < props.max; i += props.step ) {
@@ -185,7 +185,7 @@ class RangeWidget extends Widget {
         props.step = Number( step );
         props.vertical = props.appearances.includes( 'vertical' ) || distress;
         props.ticks = !props.appearances.includes( 'no-ticks' );
-        props.distress = distress;
+        props.showScale = distress;
         props.maxTicks = 50;
 
         return props;
