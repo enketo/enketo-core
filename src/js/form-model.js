@@ -756,7 +756,7 @@ FormModel.prototype.determineIndex = function( element ) {
 };
 
 /**
- * Extracts all templates from the model and stores them in a Javascript object poperties as Jquery collections.
+ * Extracts all templates from the model and stores them in a Javascript object.
  */
 FormModel.prototype.extractTemplates = function() {
     const that = this;
@@ -766,7 +766,7 @@ FormModel.prototype.extractTemplates = function() {
         const xPath = getXPath( templateEl, 'instance' );
         that.addTemplate( xPath, templateEl );
         /*
-         * Nested repeats that have a template attribute are correctly add to that.templates.
+         * Nested repeats that have a template attribute are correctly added to the templates object.
          * The template of the repeat ancestor of the nested repeat contains the correct comment.
          * However, since the ancestor repeat (template)
          */
@@ -1651,9 +1651,12 @@ Nodeset.prototype.validateConstraintAndType = function( expr, xmlDataType ) {
     return Promise.resolve()
         .then( () => types[ xmlDataType.toLowerCase() ].validate( value ) )
         .then( typeValid => {
-            const exprValid = ( typeof expr !== 'undefined' && expr !== null && expr.length > 0 ) ? that.model.evaluate( expr, 'boolean', that.originalSelector, that.index ) : true;
+            if ( !typeValid ){
+                return false;
+            }
+            const exprValid = expr ? that.model.evaluate( expr, 'boolean', that.originalSelector, that.index ) : true;
 
-            return ( typeValid && exprValid );
+            return exprValid;
         } );
 };
 

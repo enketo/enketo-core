@@ -246,6 +246,31 @@
     // just a placeholder
 }
 
+// Moving this styles to a mixin facilitates custom functionality added in OpenClinica with multiple constraints.
+@mixin question-invalid {
+    @include transition-fast;
+
+    background-color: $state-danger-bg;
+    border-color: $state-danger-border;
+    border-radius: $border-radius-small;
+
+    $pad: 10px;
+
+    margin-right: -$pad;
+    margin-left: -$pad;
+    padding-left: $pad;
+    padding-right: $pad;
+    padding-bottom: $pad;
+}
+
+// Moving this styles to a mixin facilitates custom functionality added in OpenClinica with multiple constraints.
+@mixin question-error-message {
+    font-weight: bold;
+    padding-top: 5px;
+    font-size: 0.85em;
+    color: $state-danger-text;
+}
+
 // from https://gist.github.com/JacobDB/0ffffaf8e772c12acf7102edb8a302be
 // Replace letters
 @function str-replace($string, $search, $replace: '') {

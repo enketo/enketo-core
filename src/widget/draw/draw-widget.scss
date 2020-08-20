@@ -103,7 +103,7 @@ $picker-border: 2px solid grey;
     }
 
     &__feedback {
-        @extend .or-constraint-msg.active;
+        @include question-error-message;
     }
 
     &__undo {

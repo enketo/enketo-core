@@ -597,19 +597,7 @@ legend .required {
 .invalid-constraint,
 .invalid-required,
 .invalid-relevant {
-    @include transition-fast;
-
-    background-color: $state-danger-bg;
-    border-color: $state-danger-border;
-    border-radius: $border-radius-small;
-
-    $pad: 10px;
-
-    margin-right: -$pad;
-    margin-left: -$pad;
-    padding-left: $pad;
-    padding-right: $pad;
-    padding-bottom: $pad;
+    @include question-invalid;
 }
 
 .invalid-constraint .or-constraint-msg.active,
@@ -621,10 +609,7 @@ legend .required {
 .or-required-msg.active,
 .or-constraint-msg.active,
 .or-relevant-msg.active {
-    font-weight: bold;
-    padding-top: 5px;
-    font-size: 0.85em;
-    color: $state-danger-text;
+    @include question-error-message;
 }
 
 // this may have a very significant positive impact on performance
