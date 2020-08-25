@@ -87,14 +87,14 @@ export default {
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {string} element constraint
+     * @return {string} constraint expression
      */
     getConstraint( control ) {
         return control.dataset.constraint;
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {string|undefined} element required
+     * @return {string|undefined} required expression
      */
     getRequired( control ) {
         // only return value if input is not a table heading input
@@ -104,7 +104,7 @@ export default {
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {string} element relevant
+     * @return {string} relevant expression
      */
     getRelevant( control ) {
         return control.dataset.relevant;
@@ -118,21 +118,21 @@ export default {
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {string} element calculate
+     * @return {string} calculate expression
      */
     getCalculation( control ) {
         return control.dataset.calculate;
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {string} element XML type
+     * @return {string} XML type
      */
     getXmlType( control ) {
         return ( control.dataset.typeXml || 'string' ).toLowerCase();
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {string} element name
+     * @return {string} name
      */
     getName( control ) {
         const name = control.dataset.name || control.getAttribute( 'name' );
