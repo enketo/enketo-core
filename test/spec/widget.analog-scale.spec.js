@@ -68,8 +68,7 @@ describe( 'Analog-scale widget with show scale', () => {
         let scalesNotMinMax = widgetScalesContainer.querySelectorAll( '.range-widget__scale__between' );
         let scalesNotMinMaxValues = [];
 
-        Array.from( scalesNotMinMax ).forEach( ( scale ) => scalesNotMinMaxValues.push( parseInt( scale.textContent, 10 ) ) );
-        scalesNotMinMaxValues.sort();
+        scalesNotMinMaxValues = Array.from( scalesNotMinMax ).map( ( scale ) => parseInt( scale.textContent, 10 ) );
 
         let expectedNotMinMaxValues = [ 10, 20, 30, 40, 50, 60, 70, 80, 90 ];
         expect( JSON.stringify( expectedNotMinMaxValues ) ).toEqual( JSON.stringify( scalesNotMinMaxValues ) );
