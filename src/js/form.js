@@ -163,6 +163,18 @@ Form.prototype = {
     /**
      * @type {Array<string>}
      */
+    get constraintClassesInvalid() {
+        return Form.constraintNames.map( n => `.invalid-${n}` );
+    },
+    /**
+     * @type {Array<string>}
+     */
+    get constraintAttributes() {
+        return Form.constraintNames.map( n => `data-${n}` );
+    },
+    /**
+     * @type {Array<string>}
+     */
     get languages() {
         return this.langs.languagesUsed;
     }
@@ -576,7 +588,7 @@ Form.prototype.filterRadioCheckSiblings = controls => {
         const wrapper = control.type === 'radio' || control.type === 'checkbox' ? closestAncestorUntil( control, '.option-wrapper', '.question' ) : null;
         // Filter out duplicate radiobuttons and checkboxes
         if ( wrapper ) {
-            if ( wrappers.indexOf( wrapper ) !== -1 ) {
+            if ( wrappers.includes( wrapper ) ) {
                 return false;
             }
             wrappers.push( wrapper );
@@ -689,13 +701,9 @@ Form.prototype.grosslyViolateStandardComplianceByIgnoringCertainCalcs = function
  *
  * @param {UpdatedDataNodes} updated - object that contains information on updated nodes
  */
-Form.prototype.validationUpdate = function( updated ) {
-    let $nodes;
-    const that = this;
-    let upd;
-
+Form.prototype.validationUpdate = function( updated = {} ) {
     if ( config.validateContinuously === true ) {
-        upd = updated || {};
+        let upd = { ...updated };
         if ( updated.cloned ) {
             /*
              * We don't want requireds and constraints of questions in a newly created
@@ -710,13 +718,11 @@ Form.prototype.validationUpdate = function( updated ) {
             };
         }
 
-        // Find all inputs that have a dependency on the changed node.
-        $nodes = this.getRelatedNodes( 'data-constraint', '', upd )
-            .add( this.getRelatedNodes( 'data-required', '', upd ) );
+        // Find all inputs that have a dependency on the changed node. Avoid duplicates with Set.
+        const nodes = new Set( this.getRelatedNodes( 'data-required', '', upd ).get() );
+        this.constraintAttributes.forEach( attr => this.getRelatedNodes( attr, '', upd ).get().forEach( nodes.add, nodes ) );
 
-        $nodes.each( function() {
-            that.validateInput( this );
-        } );
+        nodes.forEach( this.validateInput, this );
     }
 };
 
@@ -820,26 +826,55 @@ Form.prototype.setEventHandlers = function() {
 };
 
 /**
- * @param {Element} node - form control HTML element
+ * Removes an invalid mark on a question in the form UI.
+ *
+ * @param {Element} control - form control HTML element
  * @param {string} [type] - One of "constraint", "required" and "relevant".
  */
-Form.prototype.setValid = function( node, type ) {
-    const classes =  type ? [ `invalid-${type}` ] : [ 'invalid-constraint', 'invalid-required', 'invalid-relevant' ];
-    this.input.getWrapNode( node ).classList.remove( ...classes );
+Form.prototype.setValid = function( control, type ) {
+    const wrap = this.input.getWrapNode( control );
+    const classes = type ? [ `invalid-${type}` ] : [ ...wrap.classList ].filter( cl => cl.indexOf( 'invalid-' ) === 0 );
+    wrap.classList.remove( ...classes );
 };
 
 /**
- * @param {Element} node - form control HTML element
+ * Marks a question as invalid in the form UI.
+ *
+ * @param {Element} control - form control HTML element
  * @param {string} [type] - One of "constraint", "required" and "relevant".
  */
-Form.prototype.setInvalid = function( node, type ) {
-    type = type || 'constraint';
-
-    if ( config.validatePage === false && this.isValid( node ) ) {
+Form.prototype.setInvalid = function( control, type = 'constraint' ) {
+    if ( config.validatePage === false && this.isValid( control ) ) {
         this.blockPageNavigation();
     }
 
-    this.input.getWrapNode( node ).classList.add( `invalid-${type}` );
+    this.input.getWrapNode( control ).classList.add( `invalid-${type}` );
+};
+
+/**
+ *
+ * @param {*} control - form control HTML element
+ * @param {*} result - result object obtained from Nodeset.validate
+ */
+Form.prototype.updateValidityInUi = function( control, result ){
+
+    const passed = result.requiredValid !== false && result.constraintValid !== false;
+
+    // Update UI
+    if ( result.requiredValid === false ) {
+        this.setValid( control, 'constraint' );
+        this.setInvalid( control, 'required' );
+    } else if ( result.constraintValid === false ) {
+        this.setValid( control, 'required' );
+        this.setInvalid( control, 'constraint' );
+    } else {
+        this.setValid( control, 'constraint' );
+        this.setValid( control, 'required' );
+    }
+
+    if ( !passed ){
+        control.dispatchEvent( events.Invalidated() );
+    }
 };
 
 /**
@@ -862,14 +897,15 @@ Form.prototype.blockPageNavigation = function() {
  * @return {!boolean} Whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function( node ) {
+    const invalidSelectors = [ '.invalid-required', '.invalid-relevant' ].concat( this.constraintClassesInvalid );
     if ( node ) {
         const question = this.input.getWrapNode( node );
         const cls = question.classList;
 
-        return !cls.contains( 'invalid-required' ) && !cls.contains( 'invalid-constraint' ) && !cls.contains( 'invalid-relevant' );
+        return !invalidSelectors.some( selector => cls.contains( selector ) );
     }
 
-    return this.view.html.querySelector( '.invalid-required, .invalid-constraint, .invalid-relevant' ) === null;
+    return !this.view.html.querySelector( invalidSelectors.join( ', ' ) );
 };
 
 /**
@@ -912,8 +948,8 @@ Form.prototype.validate = Form.prototype.validateAll;
  * @return {Promise} wrapping {boolean} whether the container contains any errors
  */
 Form.prototype.validateContent = function( $container ) {
-    let $firstError;
     const that = this;
+    const invalidSelector = [ '.invalid-required', '.invalid-relevant' ].concat( this.constraintClassesInvalid ).join( ', ' );
 
     //can't fire custom events on disabled elements therefore we set them all as valid
     $container.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +
@@ -934,16 +970,14 @@ Form.prototype.validateContent = function( $container ) {
 
     return Promise.all( validations )
         .then( () => {
-            $firstError = $container
-                .find( '.invalid-required, .invalid-constraint, .invalid-relevant' )
-                .addBack( '.invalid-required, .invalid-constraint, .invalid-relevant' )
-                .eq( 0 );
+            const container = $container[ 0 ];
+            const firstError = container.matches( invalidSelector ) ? container : container.querySelector( invalidSelector );
 
-            if ( $firstError.length > 0 ) {
-                that.goToTarget( $firstError[ 0 ] );
+            if ( firstError ) {
+                that.goToTarget( firstError );
             }
 
-            return $firstError.length === 0;
+            return !firstError;
         } )
         .catch( () => // fail whole-form validation if any of the question
             // validations threw.
@@ -986,7 +1020,7 @@ Form.prototype.validateInput = function( control ) {
     }
     const that = this;
     let getValidationResult;
-    // All relevant properties, except for the **very expensive** index property
+    // All properties, except for the **very expensive** index property
     // There is some scope for performance improvement by determining other properties when they
     // are needed, but that may not be so significant.
     const n = {
@@ -1020,33 +1054,11 @@ Form.prototype.validateInput = function( control ) {
 
     return getValidationResult
         .then( result => {
-            let previouslyInvalid = false;
-            const passed = result.requiredValid !== false && result.constraintValid !== false;
-
             if ( n.inputType !== 'hidden' ) {
-
-                // Check current UI state
-                n.q = that.input.getWrapNode( control );
-                previouslyInvalid = n.q.classList.contains( 'invalid-required' ) || n.q.classList.contains( 'invalid-constraint' );
-
-                // Update UI
-                if ( result.requiredValid === false ) {
-                    that.setValid( control, 'constraint' );
-                    that.setInvalid( control, 'required' );
-                } else if ( result.constraintValid === false ) {
-                    that.setValid( control, 'required' );
-                    that.setInvalid( control, 'constraint' );
-                } else {
-                    that.setValid( control, 'constraint' );
-                    that.setValid( control, 'required' );
-                }
-            }
-            // Send invalidated event
-            if ( !passed && !previouslyInvalid ) {
-                control.dispatchEvent( events.Invalidated() );
+                this.updateValidityInUi( control, result );
             }
 
-            return passed;
+            return result;
         } )
         .catch( e => {
             console.error( 'validation error', e );
@@ -1138,11 +1150,19 @@ Form.prototype.goToTarget = function( target ) {
 };
 
 /**
- * Static method to obtain required enketo-transform version direct from class.
+ * Static property with required enketo-transformer version.
  *
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '1.40.3';
+Form.requiredTransformerVersion = '1.41.0';
+
+/**
+ * Static property with supported constraint names (for custom solutions that allow multiple constraints).
+ *
+ * @type {string}
+ * @default
+ */
+Form.constraintNames = [ 'constraint' ];
 
 export { Form, FormModel };
