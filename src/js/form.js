@@ -1155,7 +1155,7 @@ Form.prototype.goToTarget = function( target ) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '1.41.0';
+Form.requiredTransformerVersion = '1.41.1';
 
 /**
  * Static property with supported constraint names (for custom solutions that allow multiple constraints).
