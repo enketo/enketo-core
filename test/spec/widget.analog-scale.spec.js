@@ -1,5 +1,5 @@
 import AnalogScaleWidget from '../../src/widget/analog-scale/analog-scalepicker';
-import { runAllCommonWidgetTests, testStaticProperties, testBasicInstantiation } from '../helpers/test-widget';
+import { runAllCommonWidgetTests, testBasicInstantiation } from '../helpers/test-widget';
 
 const FORM1 =
     `<label class="question non-select or-appearance-analog-scale">
@@ -17,24 +17,15 @@ const FORM_SHOW_SCALE =
         <input type="number" name="/widgets/analog_scale/widget1" data-type-xml="int">
     </label>`;
 
-testStaticProperties( AnalogScaleWidget );
 testBasicInstantiation( AnalogScaleWidget, FORM_SHOW_SCALE );
 
 describe( 'Analog-scale widget with show scale', () => {
-    let fragment;
-    let widget;
-    let widgetInput;
-    let widgetScalesContainer;
 
-    beforeEach( () => {
-        fragment = document.createRange().createContextualFragment( FORM_SHOW_SCALE );
-
-        new AnalogScaleWidget( fragment.querySelector( 'input' ) );
-
-        widget = fragment.querySelector( '.range-widget' );
-        widgetInput = widget.querySelector( 'input' );
-        widgetScalesContainer = widget.querySelector( '.range-widget__scale' );
-    } );
+    const fragment = document.createRange().createContextualFragment( FORM_SHOW_SCALE );
+    new AnalogScaleWidget( fragment.querySelector( 'input' ) );
+    const widget = fragment.querySelector( '.range-widget' );
+    const widgetInput = widget.querySelector( 'input' );
+    const widgetScalesContainer = widget.querySelector( '.range-widget__scale' );
 
     it( 'adds widget that contain input with type range', () => {
         expect( widgetInput.type ).toEqual( 'range' );
@@ -65,12 +56,10 @@ describe( 'Analog-scale widget with show scale', () => {
     } );
 
     it( 'adds widget that contain 9 visible scales that not max and min with the right values', () => {
-        let scalesNotMinMax = widgetScalesContainer.querySelectorAll( '.range-widget__scale__between' );
-        let scalesNotMinMaxValues = [];
+        const scalesNotMinMax = widgetScalesContainer.querySelectorAll( '.range-widget__scale__between' );
+        const scalesNotMinMaxValues = Array.from( scalesNotMinMax ).map( ( scale ) => parseInt( scale.textContent, 10 ) );
+        const expectedNotMinMaxValues = [ 10, 20, 30, 40, 50, 60, 70, 80, 90 ];
 
-        scalesNotMinMaxValues = Array.from( scalesNotMinMax ).map( ( scale ) => parseInt( scale.textContent, 10 ) );
-
-        let expectedNotMinMaxValues = [ 10, 20, 30, 40, 50, 60, 70, 80, 90 ];
         expect( JSON.stringify( expectedNotMinMaxValues ) ).toEqual( JSON.stringify( scalesNotMinMaxValues ) );
     } );
 } );
