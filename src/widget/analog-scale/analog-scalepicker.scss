@@ -193,7 +193,7 @@ $q-pad-right: 0px !default;
         }
     }
 
-    &.or-appearance-show-scale {
+    &.or-appearance-show-scale:not(.or-appearance-horizontal) {
         .range-widget {
             &__wrap {
                 flex-direction: row-reverse;
