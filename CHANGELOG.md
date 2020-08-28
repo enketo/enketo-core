@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ----------------------
+##### Added
+- In custom (OC) analog-scale widget support for `show-scale` appearance for vertical widgets using int/decimal.
+
 ##### Changed
 - Ordered markdown lists should always be preceded by a newline character because it's very common to number labels in forms(enketo-transformer).
 
