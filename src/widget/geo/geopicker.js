@@ -6,6 +6,7 @@ import { t } from 'enketo/translator';
 import support from '../../js/support';
 import types from '../../js/types';
 import dialog from 'enketo/dialog';
+import { getScript } from '../../js/utils';
 import { elementDataStore as data } from '../../js/dom-utils';
 let googleMapsScriptRequest;
 
@@ -848,7 +849,7 @@ class Geopicker extends Widget {
                 // make the request for the Google Maps script asynchronously
                 apiKeyQueryParam = ( googleApiKey ) ? `&key=${googleApiKey}` : '';
                 loadUrl = `https://maps.google.com/maps/api/js?v=3.exp${apiKeyQueryParam}&libraries=places&callback=gmapsLoaded`;
-                $.getScript( loadUrl );
+                getScript( loadUrl );
             } );
         }
 

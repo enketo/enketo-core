@@ -265,6 +265,14 @@ function joinPath( /* path segments */ ) {
     return newParts.join( '/' ) || ( newParts.length ? '/' : '.' );
 }
 
+
+function getScript( url ) {
+    const scriptTag = document.createElement( 'script' );
+    const firstScriptTag = document.getElementsByTagName( 'script' )[0];
+    scriptTag.src = url;
+    firstScriptTag.parentNode.insertBefore( scriptTag, firstScriptTag );
+}
+
 export {
     parseFunctionFromExpression,
     stripQuotes,
@@ -276,4 +284,5 @@ export {
     getPasteData,
     resizeImage,
     joinPath,
+    getScript
 };

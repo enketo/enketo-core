@@ -60,7 +60,7 @@
       <bind nodeset="/nested_repeats/kids/kids_details/immunization_info/date" type="date"/>
       <bind nodeset="/nested_repeats/kids/nested_group/nested_name" type="string"/>
       <bind nodeset="/nested_repeats/kids/nested_group/nested_age" type="int"/>
-      <bind nodeset="/nested_repeats/gps" type="geopoint"/>
+      <bind nodeset="/nested_repeats/gps" type="string"/>
       <bind nodeset="/nested_repeats/web_browsers" type="select"/>
     </model>
   </h:head>

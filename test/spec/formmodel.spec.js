@@ -1323,6 +1323,16 @@ describe( 'merging an instance into the model', () => {
     } );
 
     describe( 'returns load errors upon initialization', () => {
+        const originalErrorLog = console.error;
+
+        beforeAll( ()=> {
+            console.error = () => {};
+        } );
+
+        afterAll( ()=> {
+            console.error = originalErrorLog;
+        } );
+
         it( 'when the instance-to-edit contains nodes that are not present in the default instance', () => {
             const model = new Model( {
                 modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
@@ -1442,7 +1452,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
 
 describe( 'odk-instance-first-load event', () => {
 
-    const modelStr = '<data><a><meta><instanceID/></meta></a></data>';
+    const modelStr = '<model><instance><data><a><meta><instanceID/></meta></a></data></instance></model>';
     const instanceStr = '<data><a>1</a></data>';
 
     it( 'fires once when starting a new record', () => {

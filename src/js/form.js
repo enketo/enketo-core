@@ -833,6 +833,12 @@ Form.prototype.setEventHandlers = function() {
  */
 Form.prototype.setValid = function( control, type ) {
     const wrap = this.input.getWrapNode( control );
+
+    if ( !wrap ){
+        // TODO: this condition occurs, at least in tests for itemsets, but we need find out how.
+        return;
+    }
+
     const classes = type ? [ `invalid-${type}` ] : [ ...wrap.classList ].filter( cl => cl.indexOf( 'invalid-' ) === 0 );
     wrap.classList.remove( ...classes );
 };
@@ -844,11 +850,18 @@ Form.prototype.setValid = function( control, type ) {
  * @param {string} [type] - One of "constraint", "required" and "relevant".
  */
 Form.prototype.setInvalid = function( control, type = 'constraint' ) {
+    const wrap = this.input.getWrapNode( control );
+
+    if ( !wrap ){
+        // TODO: this condition occurs, at least in tests for itemsets, but we need find out how.
+        return;
+    }
+
     if ( config.validatePage === false && this.isValid( control ) ) {
         this.blockPageNavigation();
     }
 
-    this.input.getWrapNode( control ).classList.add( `invalid-${type}` );
+    wrap.classList.add( `invalid-${type}` );
 };
 
 /**
@@ -857,7 +870,6 @@ Form.prototype.setInvalid = function( control, type = 'constraint' ) {
  * @param {*} result - result object obtained from Nodeset.validate
  */
 Form.prototype.updateValidityInUi = function( control, result ){
-
     const passed = result.requiredValid !== false && result.constraintValid !== false;
 
     // Update UI
