@@ -841,8 +841,6 @@ class Geopicker extends Widget {
 
                 // create a global callback to be called by the Google Maps script once this has loaded
                 window.gmapsLoaded = () => {
-                    // clean up the global function
-                    delete window.gmapsLoaded;
                     // resolve the deferred object
                     resolve();
                 };
