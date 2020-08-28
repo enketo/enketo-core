@@ -651,7 +651,8 @@ class Geopicker extends Widget {
             this.loadMap
                 .then( () => {
                     that._updateDynamicMapView( latLng, zoom );
-                } );
+                } )
+                .catch( () => {} );
 
         }
     }
