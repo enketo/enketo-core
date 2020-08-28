@@ -210,3 +210,7 @@ $q-pad-right: 0px !default;
         @include display-flex;
     }
 }
+
+.pages.or [role="page"]:not(.current) {
+    display: none;
+}
