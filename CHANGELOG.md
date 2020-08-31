@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+-----------------------
+##### Fixed
+- In custom (OC) analog-scale widget, if the widget itself is a page (not its parent group), it is not hidden when it should be when the page is not current.
+
 [5.16.8] - 2020-08-28
 ----------------------
 ##### Added
