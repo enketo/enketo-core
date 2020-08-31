@@ -237,8 +237,14 @@ $q-pad-right: 0px !default;
 }
 
 // corrections for pages mode
-.pages.or [role="page"].current {
-    &.or-analog-scale-initialized:not(.or-appearance-horizontal) {
-        @include display-flex;
+.pages.or [role="page"] {
+    &.or-analog-scale-initialized {
+        &.current:not(.or-appearance-horizontal) {
+                @include display-flex;
+        }
+
+        &:not(.current) {
+            display: none;
+        }
     }
 }
