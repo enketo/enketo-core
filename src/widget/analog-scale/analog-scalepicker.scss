@@ -35,6 +35,8 @@ $q-pad-right: 0px !default;
 
     // Using a dirty trick, knowing that only original question-labels have a lang attribute
     .label-content {
+        display: flex;
+        flex-direction: column;
         .question-label.active {
             display: inline;
 
@@ -225,14 +227,9 @@ $q-pad-right: 0px !default;
         }
     }
 
-    &.invalid-constraint,
-    &.invalid-required {
-
-        .or-constraint-msg.active,
-        .or-required-msg.active {
-            position: absolute;
-            bottom: 10px;
-        }
+    [class*="or-constraint"],
+    .or-required-msg {
+        order: 5;
     }
 }
 
