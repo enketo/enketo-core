@@ -92,23 +92,6 @@ function getFilename( file, postfix ) {
 }
 
 /**
- * Converts NodeLists or DOMtokenLists to an array.
- *
- * @static
- * @param {NodeList|DOMTokenList} list - a Nodelist or DOMTokenList
- * @return {Array} list converted to array
- */
-function toArray( list ) {
-    const array = [];
-    // iterate backwards ensuring that length is an UInt32
-    for ( let i = list.length >>> 0; i--; ) {
-        array[ i ] = list[ i ];
-    }
-
-    return array;
-}
-
-/**
  * @static
  * @param {*} n - value
  * @return {boolean} whether it is a number value
@@ -277,7 +260,6 @@ export {
     parseFunctionFromExpression,
     stripQuotes,
     getFilename,
-    toArray,
     isNumber,
     readCookie,
     dataUriToBlobSync,

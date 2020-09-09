@@ -45,8 +45,7 @@ class AnalogScaleWidget extends RangeWidget {
         const fragment = document.createRange().createContextualFragment( '<div class="label-content widget"></div>' );
         const wrapper = fragment.querySelector( '.label-content' );
 
-        this.question.querySelectorAll( `.question-label, .or-hint, .or-required-msg, .or-constraint-msg,
-            ${Array.from( Array( 20 ).keys() ).map( index => '.or-constraint' + ( index + 1 ) + '-msg' ).join( ', ' )}` )
+        this.question.querySelectorAll( '.question-label, .or-hint, .or-required-msg, [class*="or-constraint"]' )
             .forEach( el => wrapper.append( el ) );
 
         this.question.prepend( fragment );

@@ -1,6 +1,6 @@
 import { FormModel } from './form-model';
 import $ from 'jquery';
-import { toArray, parseFunctionFromExpression, stripQuotes, getFilename, joinPath } from './utils';
+import { parseFunctionFromExpression, stripQuotes, getFilename, joinPath } from './utils';
 import { getXPath, closestAncestorUntil, getSiblingElements } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
@@ -161,16 +161,20 @@ Form.prototype = {
         return this.view.html.id;
     },
     /**
+     * To facilitate forks that support multiple constraints per question
+     *
      * @type {Array<string>}
      */
     get constraintClassesInvalid() {
-        return Form.constraintNames.map( n => `.invalid-${n}` );
+        return [ 'invalid-constraint' ];
     },
     /**
+     * To facilitate forks that support multiple constraints per question
+     *
      * @type {Array<string>}
      */
     get constraintAttributes() {
-        return Form.constraintNames.map( n => `data-${n}` );
+        return [ 'data-constraint' ];
     },
     /**
      * @type {Array<string>}
@@ -297,7 +301,6 @@ Form.prototype.init = function() {
         this.options.input = this.input;
         this.options.pathToAbsolute = this.pathToAbsolute.bind( this );
         this.options.evaluate = this.model.evaluate.bind( this.model );
-        this.options.formClasses = toArray( this.view.html.classList );
         this.options.getModelValue = this.getModelValue.bind( this );
         this.widgetsInitialized = this.widgets.init( null, this.options );
 
@@ -909,7 +912,7 @@ Form.prototype.blockPageNavigation = function() {
  * @return {!boolean} Whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function( node ) {
-    const invalidSelectors = [ '.invalid-required', '.invalid-relevant' ].concat( this.constraintClassesInvalid );
+    const invalidSelectors = [ '.invalid-required', '.invalid-relevant' ].concat(  this.constraintClassesInvalid.map( cls => `.${cls}` ) );
     if ( node ) {
         const question = this.input.getWrapNode( node );
         const cls = question.classList;
@@ -961,7 +964,7 @@ Form.prototype.validate = Form.prototype.validateAll;
  */
 Form.prototype.validateContent = function( $container ) {
     const that = this;
-    const invalidSelector = [ '.invalid-required', '.invalid-relevant' ].concat( this.constraintClassesInvalid ).join( ', ' );
+    const invalidSelector = [ '.invalid-required', '.invalid-relevant' ].concat( this.constraintClassesInvalid.map( cls => `.${cls}` ) ).join( ', ' );
 
     //can't fire custom events on disabled elements therefore we set them all as valid
     $container.find( 'fieldset:disabled input, fieldset:disabled select, fieldset:disabled textarea, ' +
@@ -1168,13 +1171,5 @@ Form.prototype.goToTarget = function( target ) {
  * @default
  */
 Form.requiredTransformerVersion = '1.41.1';
-
-/**
- * Static property with supported constraint names (for custom solutions that allow multiple constraints).
- *
- * @type {string}
- * @default
- */
-Form.constraintNames = [ 'constraint' ];
 
 export { Form, FormModel };

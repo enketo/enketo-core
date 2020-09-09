@@ -1130,18 +1130,6 @@ describe( 'required enketo-transformer version', () => {
     } );
 } );
 
-describe( 'custom multiple constraints', () => {
-    it( 'Form class has static constraintNames property', () => {
-        expect( Form.constraintNames ).toEqual( [ 'constraint' ] );
-    } );
-
-    it( 'constraintNames can be overridden', () => {
-        const n = [ 'constraint', 'constraint1', 'constraint2' ];
-        Form.constraintNames = n;
-        expect( Form.constraintNames ).toEqual( n );
-    } );
-} );
-
 describe( 'jr:choice-name', () => {
 
     it( 'should match when there are spaces in arg strings', () => {
