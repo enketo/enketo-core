@@ -3,6 +3,7 @@
  */
 
 import { getPasteData } from './utils';
+import events from './event';
 const KEYBOARD_CUT_PASTE = 'xvc';
 
 export default {
@@ -49,7 +50,7 @@ export default {
                 }
 
                 event.target.value =  '';
-                event.target.dispatchEvent( new Event( 'change' ) );
+                event.target.dispatchEvent( events.Change() );
 
                 event.preventDefault();
                 event.stopPropagation();

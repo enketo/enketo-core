@@ -3,8 +3,8 @@ import event from '../../js/event';
 /*!
  * Timepicker
  *
- * Forked from https://github.com/jdewit/bootstrap-timepicker: 
- * 
+ * Forked from https://github.com/jdewit/bootstrap-timepicker:
+ *
  * Copyright 2013 Joris de Wit and timepicker contributors
  *
  * Contributors https://github.com/jdewit/bootstrap-timepicker/graphs/contributors
@@ -991,8 +991,6 @@ import event from '../../js/event';
 
         updateElement() {
             this.$element.val( this.getTime() );
-            // this.$element.change() method does not fire an event that can be 
-            // caught with el.addEventListener('change', () => {})
             this.$element[ 0 ].dispatchEvent( event.Change() );
         },
 
