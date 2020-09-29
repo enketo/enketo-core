@@ -94,9 +94,8 @@ function printView( on = true, grid = false ) {
         document.querySelectorAll( '.question' ).forEach( el => el.dispatchEvent( events.Printify() ) );
         styleToAll();
         if ( grid ) {
-            setTimeout( () => {
-                fixGrid( { format: 'letter' } );
-            }, 500 );
+            fixGrid( { format: 'letter' } )
+                .then( () => console.log( 'done' ) );
         }
 
     } else {

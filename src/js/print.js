@@ -5,6 +5,7 @@
  */
 
 import $ from 'jquery';
+import { MutationsTracker } from './dom-utils';
 
 let dpi, printStyleSheet;
 let printStyleSheetLink;
@@ -113,18 +114,23 @@ function isGrid() {
  *
  * @static
  * @param {PaperObj} paper - paper format
- * @param {number} [delay] - delay in milliseconds, before starting the job.
+ * @param {number} [delay] - delay in milliseconds, to wait for re-painting to finish.
  * @return {Promise} Promise that resolves with undefined
  */
-function fixGrid( paper, delay = 0 ) {
+function fixGrid( paper, delay = 500 ) {
+    const mutationsTracker = new MutationsTracker();
+
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
     const main = document.querySelector( '.main' );
+    const cls = 'print-width-adjusted';
+    const classChange = mutationsTracker.waitForClassChange( main, cls );
     main.style.width = getPaperPixelWidth( paper );
-    main.classList.add( 'print-width-adjusted' );
+    main.classList.add( cls );
 
     // wait for browser repainting after width change
-    return new Promise( resolve => {
-        setTimeout( () => {
+    // TODO: may not work, may need to add delay
+    return classChange
+        .then( () => {
             let row = [];
             let rowTop;
             const title = document.querySelector( '#form-title' );
@@ -164,11 +170,13 @@ function fixGrid( paper, delay = 0 ) {
                 }
             } );
 
-            // In case anybody is using this event.
-            window.dispatchEvent( new CustomEvent( 'printviewready' ) );
-            resolve();
-        }, delay );
-    } );
+            return mutationsTracker.waitForQuietness()
+                .then( () => {
+                    // The need for this 'dumb' delay is unfortunate, but at least the mutationTracker will smartly increase
+                    // the waiting time for larger forms (more mutations).
+                    return new Promise( resolve => setTimeout( resolve, delay ) );
+                } );
+        } );
 }
 
 /**
