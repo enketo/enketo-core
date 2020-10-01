@@ -204,8 +204,12 @@ function _resizeRowElements( row, maxWidth ) {
     } );
 
     row.forEach( el => {
-        el.classList.add( 'print-height-adjusted' );
-        el.style.height = `${maxHeight}px`;
+        // unset max height for image-map widget 
+        // (https://github.com/OpenClinica/enketo-express-oc/issues/363)
+        if ( !el.classList.contains( 'or-appearance-image-map' ) ) {
+            el.classList.add( 'print-height-adjusted' );
+            el.style.height = `${maxHeight}px`;
+        }
     } );
 }
 
