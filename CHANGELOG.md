@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 -----------------------
+##### Changed
+- Improved timings of print script for Grid Theme forms
 
 ##### Fixed
 - Geopicker on mobile devices won't show map any more after first map reveal.
