@@ -1,5 +1,6 @@
 import Widget from '../../js/widget';
 import support from '../../js/support';
+import { os } from '../../js/sniffer';
 import $ from 'jquery';
 import { time as timeFormat } from '../../js/format';
 import types from '../../js/types';
@@ -121,8 +122,17 @@ class DatetimepickerExtended extends Widget {
 
     update() {
         const $dateTimeI = $( this.element );
-        const val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
-
+        let val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
+        /**
+         * fix a bug which is only on safari (#745)
+         * If the local timezone is +08:00, for a date value of new Date('2020-10-10T13:10:10') will be:
+         * *** in chrome, the value is: Sat Oct 10 2020 13:10:10 GMT+0800 (China Standard Time)
+         * *** but in safari, the value is: Sat Oct 10 2020 21:10:10 GMT+0800 (CST)
+         * so we have to append the timezone here
+         */
+        if (os.safari) {
+            val = ( $dateTimeI.val().length > 0 ) ? ( new Date($dateTimeI.val() + timeFormat.timezoneOffsetAsTime) ).toISOLocalString() : '';
+        }
         if ( val !== this.value ) {
             const vals = val.split( 'T' );
             const dateVal = vals[ 0 ];
