@@ -85,8 +85,8 @@ const time = {
         let hours;
         let minutes;
         let direction;
-        let pad2 = (x) => {
-            return (x < 10) ? '0' + x : x;
+        let pad2 = ( x ) => {
+            return ( x < 10 ) ? '0' + x : x;
         };
         if ( date.toString() === 'Invalid Date' ) {
             return date.toString();
@@ -94,8 +94,9 @@ const time = {
         offsetMinutesTotal = date.getTimezoneOffset();
         direction = ( offsetMinutesTotal < 0 ) ? '+' : '-';
         let hrs = direction === '+' ? Math.ceil( offsetMinutesTotal / 60 ) : Math.floor( offsetMinutesTotal / 60 );
-        hours = pad2(Math.abs(hrs));
+        hours = pad2( Math.abs( hrs ) );
         minutes = pad2( Math.abs( Math.floor( offsetMinutesTotal % 60 ) ) );
+
         return direction + hours + ':' + minutes;
     }
 };

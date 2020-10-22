@@ -41,19 +41,19 @@ const os = {
     getBrowser() {
         let browser = null;
         // Opera
-        if ( ua.indexOf( 'Opera' ) !== -1) {
+        if ( ua.indexOf( 'Opera' ) !== -1 ) {
             browser = 'Opera';
         }
         // Opera Next
-        if ( ua.indexOf( 'OPR' ) !== -1) {
+        if ( ua.indexOf( 'OPR' ) !== -1 ) {
             browser = 'Opera';
         }
         // Edge
-        else if ( ua.indexOf( 'Edge' ) !== -1) {
+        else if ( ua.indexOf( 'Edge' ) !== -1 ) {
             browser = 'Microsoft Edge';
         }
         // MSIE
-        else if ( ua.indexOf( 'MSIE' ) !== -1) {
+        else if ( ua.indexOf( 'MSIE' ) !== -1 ) {
             browser = 'Microsoft Internet Explorer';
         }
         // Chrome
@@ -74,8 +74,9 @@ const os = {
         }
         // Other browsers
         else {
-            browser = "Other";
+            browser = 'Other';
         }
+
         return browser;
     }
 };
