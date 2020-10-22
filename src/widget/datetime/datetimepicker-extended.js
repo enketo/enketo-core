@@ -130,8 +130,8 @@ class DatetimepickerExtended extends Widget {
          * *** but in safari, the value is: Sat Oct 10 2020 21:10:10 GMT+0800 (CST)
          * so we have to append the timezone here
          */
-        if (os.safari) {
-            val = ( $dateTimeI.val().length > 0 ) ? ( new Date($dateTimeI.val() + timeFormat.timezoneOffsetAsTime) ).toISOLocalString() : '';
+        if ( os.safari ) {
+            val = ( $dateTimeI.val().length > 0 ) ? ( new Date( $dateTimeI.val() + timeFormat.timezoneOffsetAsTime ) ).toISOLocalString() : '';
         }
         if ( val !== this.value ) {
             const vals = val.split( 'T' );

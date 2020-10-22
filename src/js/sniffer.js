@@ -41,35 +41,35 @@ const os = {
     getBrowser() {
         let browser = null;
         // Opera
-        if ( ua.indexOf('Opera') !== -1) {
+        if ( ua.indexOf( 'Opera' ) !== -1) {
             browser = 'Opera';
         }
         // Opera Next
-        if ( ua.indexOf('OPR') !== -1) {
+        if ( ua.indexOf( 'OPR' ) !== -1) {
             browser = 'Opera';
         }
         // Edge
-        else if ( ua.indexOf('Edge') !== -1) {
+        else if ( ua.indexOf( 'Edge' ) !== -1) {
             browser = 'Microsoft Edge';
         }
         // MSIE
-        else if ( ua.indexOf('MSIE') !== -1) {
+        else if ( ua.indexOf( 'MSIE' ) !== -1) {
             browser = 'Microsoft Internet Explorer';
         }
         // Chrome
-        else if ( ua.indexOf('Chrome') !== -1) {
+        else if ( ua.indexOf( 'Chrome' ) !== -1 ) {
             browser = 'Chrome';
         }
         // Safari
-        else if ( ua.indexOf('Safari') !== -1) {
+        else if ( ua.indexOf( 'Safari' ) !== -1 ) {
             browser = 'Safari';
         }
         // Firefox
-        else if ( ua.indexOf('Firefox') !== -1) {
+        else if ( ua.indexOf( 'Firefox' ) !== -1 ) {
             browser = 'Firefox';
         }
         // MSIE 11+
-        else if (ua.indexOf('Trident/') !== -1) {
+        else if ( ua.indexOf( 'Trident/' ) !== -1 ) {
             browser = 'Microsoft Internet Explorer';
         }
         // Other browsers
