@@ -2,7 +2,7 @@ import XPathJS from 'enketo-xpathjs';
 
 /**
  * @function xpath-evaluator-binding
- * @param {Function} addExtensions
+ * @param {Function} addExtensions - extension function
  */
 export default function( addExtensions ) {
     const evaluator = new XPathJS.XPathEvaluator();

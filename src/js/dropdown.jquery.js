@@ -68,6 +68,7 @@ Dropdown.prototype.keydown = function( e ) {
         if ( e.which === 27 ) {
             $parent.find( toggle ).focus();
         }
+
         return $this.click();
     }
 
@@ -152,6 +153,7 @@ $.fn.dropdown.Constructor = Dropdown;
 
 $.fn.dropdown.noConflict = function() {
     $.fn.dropdown = old;
+
     return this;
 };
 

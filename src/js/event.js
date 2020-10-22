@@ -52,10 +52,31 @@ function Removed( detail ) {
 }
 
 /**
- * Add repeat event.
+ * The odk-instance-first-load event as defined in the ODK XForms spec.
  *
- * @param {*} detail - Data to be passed with event
- * @return {CustomEvent} Custom "addrepeat" event (bubbling)
+ * @see https://opendatakit.github.io/xforms-spec/#event:odk-instance-first-load
+ *@return {CustomEvent} Custom "odk-instance-first-load" event (bubbling)
+ */
+function InstanceFirstLoad() {
+    return new CustomEvent( 'odk-instance-first-load', { bubbles: true } );
+}
+
+/**
+ * The odk-new-repeat event as defined in the ODK XForms spec.
+ *
+ * @see https://opendatakit.github.io/xforms-spec/#event:odk-new-repeat
+ * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
+ * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
+ */
+function NewRepeat( detail ) {
+    return new CustomEvent( 'odk-new-repeat', { detail, bubbles: true } );
+}
+
+/**
+ * The addrepeat event is similar but fired under different circumstances.
+ *
+ * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
+ * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
  */
 function AddRepeat( detail ) {
     return new CustomEvent( 'addrepeat', { detail, bubbles: true } );
@@ -82,10 +103,21 @@ function ChangeLanguage() {
 /**
  * Change event.
  *
- * @return {Event} "change" event (bubbling)
+ * @return {Event} The regular HTML "change" event (bubbling)
  */
 function Change() {
     return new Event( 'change', { bubbles: true } );
+}
+
+/**
+ * Xforms-value-changed event as defined in the ODK XForms spec.
+ *
+ * @see https://opendatakit.github.io/xforms-spec/#event:xforms-value-changed
+ * @param {{repeatIndex: number}} detail - Data to be passed with event.
+ * @return {CustomEvent} Custom "xforms-value-changed" event (bubbling).
+ */
+function XFormsValueChanged( detail ) {
+    return new CustomEvent( 'xforms-value-changed', { detail, bubbles: true } );
 }
 
 /**
@@ -115,13 +147,23 @@ function Edited() {
     return new CustomEvent( 'edited', { bubbles: true } );
 }
 
+
+/**
+ * Before save event.
+ *
+ * @return {CustomEvent} Custom "edited" event (bubbling)
+ */
+function BeforeSave() {
+    return new CustomEvent( 'before-save', { bubbles: true } );
+}
+
 /**
  * Validation complete event.
  *
  * @return {CustomEvent} Custom "validationcomplete" event (bubbling)
  */
 function ValidationComplete() {
-    return new CustomEvent( 'validationcomplete', { bubbles: true } );
+    return new CustomEvent( 'validation-complete', { bubbles: true } );
 }
 
 /**
@@ -140,16 +182,52 @@ function Invalidated() {
  * @return {CustomEvent} Custom "progressupdate" event (bubbling)
  */
 function ProgressUpdate( detail ) {
-    return new CustomEvent( 'progressupdate', { detail, bubbles: true } );
+    return new CustomEvent( 'progress-update', { detail, bubbles: true } );
 }
 
 /**
- * Go to hidden event.
+ * Go to hidden event fired when the goto target is not relevant.
  *
- * @return {CustomEvent} Custom "gotohidden" event (bubbling)
+ * @return {CustomEvent} Custom "gotoirrelevant" event (bubbling)
  */
-function GoToHidden() {
-    return new CustomEvent( 'gotohidden', { bubbles: true } );
+function GoToIrrelevant() {
+    return new CustomEvent( 'goto-irrelevant', { bubbles: true } );
+}
+
+/**
+ * Go to invisible event fired when the target has no form control.
+ * This is event has prevalence of the "go to hidden" event.
+ *
+ * @return {CustomEvent} Custom "gotoinvisible" event (bubbling)
+ */
+function GoToInvisible() {
+    return new CustomEvent( 'goto-invisible', { bubbles: true } );
+}
+
+function ChangeOption() {
+    return new CustomEvent( 'change-option', { bubbles: true } );
+}
+
+/**
+ * Go to printify text event.
+ *
+ * @return {CustomEvent} Custom "printify" event (bubbling)
+ */
+function Printify() {
+    return new CustomEvent( 'printify', { bubbles: true } );
+}
+
+/**
+ * Go to deprintify text event.
+ *
+ * @return {CustomEvent} Custom "deprintify" event (bubbling)
+ */
+function DePrintify() {
+    return new CustomEvent( 'deprintify', { bubbles: true } );
+}
+
+function UpdateMaxSize() {
+    return new CustomEvent( 'update-max-size', { bubbles: true } );
 }
 
 export default {
@@ -158,6 +236,8 @@ export default {
     ApplyFocus,
     PageFlip,
     Removed,
+    InstanceFirstLoad,
+    NewRepeat,
     AddRepeat,
     RemoveRepeat,
     ChangeLanguage,
@@ -165,8 +245,15 @@ export default {
     Input,
     InputUpdate,
     Edited,
+    BeforeSave,
     ValidationComplete,
     Invalidated,
     ProgressUpdate,
-    GoToHidden
+    GoToIrrelevant,
+    GoToInvisible,
+    XFormsValueChanged,
+    ChangeOption,
+    Printify,
+    DePrintify,
+    UpdateMaxSize
 };

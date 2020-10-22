@@ -279,6 +279,31 @@ describe( 'repeat functionality', () => {
             expect( form.view.html.querySelectorAll( a )[ 1 ].querySelectorAll( b ).length ).toEqual( 2 );
         } );
 
+        // https://github.com/enketo/enketo-core/issues/734 => cache contains non-existing nodes
+        it( 'and correctly deals with nested repeats that have empty repeat counts', () => {
+            const form = loadForm( 'repeat-count-nested-3.xml' );
+            form.init();
+
+            // First test the actual cause of the above-mentioned bug
+            const infos = form.getRelatedNodes( 'data-repeat-count', '.or-repeat-info' ).get();
+            const orphans = infos.filter( info => !info.closest( 'form.or' ) );
+            expect( orphans.length ).toEqual( 0 );
+
+            // Then test the actually user-visible behavior
+            const a = '.or-repeat[name="/data/repeat_A"]';
+            const b = '.or-repeat[name="/data/repeat_A/repeat_B"]';
+
+            const members = form.view.html.querySelector( '[name="/data/number"]' );
+            members.value = '1';
+            members.dispatchEvent( event.Change() );
+            expect( form.view.html.querySelectorAll( a ).length ).toEqual( 1 );
+
+            const school = form.view.html.querySelector( '[name="/data/repeat_A/schools"]' );
+            school.value = '1';
+            school.dispatchEvent( event.Change() );
+            expect( form.view.html.querySelectorAll( b ).length ).toEqual( 1 );
+        } );
+
         it( 'and is able to use a relative repeat count path for top-level repeats', () => {
             const f = loadForm( 'repeat-count-relative.xml' );
             f.init();
@@ -352,6 +377,7 @@ describe( 'repeat functionality', () => {
     } );
 
     describe( 'initializes date widgets', () => {
+
         it( 'in a new repeat instance if the date widget is not relevant by default', () => {
             const form = loadForm( 'repeat-irrelevant-date.xml' );
             form.init();
@@ -362,6 +388,7 @@ describe( 'repeat functionality', () => {
             el.dispatchEvent( event.Change() );
             expect( form.view.html.querySelectorAll( '[name="/repeat/rep/b"]' )[ 1 ].closest( '.question' ).querySelectorAll( '.widget' ).length ).toEqual( 1 );
         } );
+
     } );
 
     describe( 'getIndex() function', () => {
@@ -375,13 +402,57 @@ describe( 'repeat functionality', () => {
                 expect( form.repeats.getIndex( repeats[ index ] ) ).toEqual( index );
             } );
         } );
+
     } );
 
     describe( 'repeats with repeat-count and only calculations', () => {
+
         const form = loadForm( 'repeat-count-calc-only.xml' );
         const errors = form.init();
         it( 'loads without errors', () => {
             expect( errors ).toEqual( [] );
+        } );
+
+    } );
+
+    describe( 'radiobuttons', () => {
+
+        it( 'inside each repeat instance have different name attributes', () => {
+            const form = loadForm( 'repeat-radio.xml' );
+            const rep = '.or-repeat[name="/data/rep"]';
+            const radio = '[data-name="/data/rep/num"]';
+
+            form.init();
+            form.view.html.querySelector( '.add-repeat-btn' ).click();
+
+            const repeats = form.view.html.querySelectorAll( rep );
+            expect( repeats.length ).toEqual( 2 );
+
+            const names1 = [ ...repeats[ 0 ].querySelectorAll( radio ) ].map( el => el.name );
+            const names2 = [ ...repeats[ 1 ].querySelectorAll( radio ) ].map( el => el.name );
+
+            expect( names1.length ).toEqual( 2 );
+            expect( names1[ 0 ] ).not.toEqual( undefined );
+            expect( names1[ 0 ] ).toEqual( names1[ 1 ] );
+
+            expect( names2.length ).toEqual( 2 );
+            expect( names2[ 0 ] ).not.toEqual( undefined );
+            expect( names2[ 0 ] ).toEqual( names2[ 1 ] );
+
+            expect( names1[ 0 ] ).not.toEqual( names2[ 0 ] );
+
+        } );
+
+    } );
+
+    describe( 'calculated items inside repeats', () => {
+
+        it( 'are cached correctly', () => {
+            const form = loadForm( 'repeat-relevant-calculate-single.xml' );
+            form.init();
+            // Issue where a calculation inside a repeat is cached before the repeats are initialized (which removes the first repeat, before adding it)
+            // This results in two cached calculations (for the same node) of which one no longer exists.
+            expect( form.getRelatedNodes( 'data-calculate' ).length ).toEqual( 1 );
         } );
     } );
 

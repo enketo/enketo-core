@@ -12,15 +12,15 @@ import events from './event';
  */
 export default {
     /**
-     * @type number
+     * @type {number}
      */
     status: 0,
     /**
-     * @type Element
+     * @type {Element}
      */
     lastChanged: null,
     /**
-     * @type Array<Element>
+     * @type {Array<Element>}
      */
     all: null,
     /**
@@ -33,7 +33,7 @@ export default {
     /**
      * Updates rounded % value of progress and triggers event if changed.
      *
-     * @param {Element} el
+     * @param {Element} el - the element that represent the current state of progress
      */
     update( el ) {
         let status;

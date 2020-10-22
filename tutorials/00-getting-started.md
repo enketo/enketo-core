@@ -15,8 +15,8 @@ import { Form } from 'enketo-core';
 // In this example we assume the HTML was injected at the server and modelStr
 // was injected as a global variable inside a <script> tag.
 
-// required string of the selector of the HTML Form DOM element
-const formSelector = 'form.or';
+// required HTML Form DOM element
+const formEl = document.querySelector('form.or');
 
 // required object containing data for the form
  const data = {
@@ -35,12 +35,10 @@ const formSelector = 'form.or';
 };
 
 // Form-specific configuration
-const options = {
-  clearIrrelevantImmediately: true  // this is the default, it can be omitted
-}
+const options = {}
 
 // Instantiate a form, with 2 parameters
-const form = new Form( formSelector, data, options);
+const form = new Form( formEl, data, options);
 
 // Initialize the form and capture any load errors
 let loadErrors = form.init();
@@ -51,7 +49,7 @@ loadErrors = loadErrors.concat( form.goTo( '//repeat[3]/node' ) );
 
 // submit button handler for validate button
 $( '#submit' ).on( 'click', function() {
-  // clear irrelevant questions and validate
+  // clear non-relevant questions and validate
   form.validate()
     .then(function (valid){
       if ( !valid ) {

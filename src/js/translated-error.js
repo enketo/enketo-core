@@ -1,11 +1,11 @@
 /**
  * Error to be translated
- * 
+ *
  * @class
- * @extends Error
- * @param {string} message
- * @param {string} translationKey
- * @param {*} translationOptions
+ * @augments Error
+ * @param {string} message - error message
+ * @param {string} translationKey - translation key
+ * @param {*} translationOptions - translation options
  */
 function TranslatedError( message, translationKey, translationOptions ) {
     this.message = message;

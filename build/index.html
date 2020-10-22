@@ -26,10 +26,6 @@
         //{{globalModelStr}}
 
     </script>
-
-    <!-- IE11 polyfills (ignored by other browsers, and not downloaded) -->
-    <script nomodule src="https://cdn.polyfill.io/v2/polyfill.js?ua=ie%2F11.0.0&features=es2015%2Ces2016%2Ces2017%2Ces2018%2Cdefault-3.6%2CNodeList.prototype.forEach"></script>
-    <script nomodule src="./js/obscure-ie11-polyfills.js" charset="utf-8"></script>
 </head>
 
 <body>
@@ -91,15 +87,7 @@
 
     <!-- all the scripts -->
     <script id="main-script" defer module type="text/javascript" src="./js/enketo-bundle.js" charset="utf-8"></script>
-    <script nomodule>
-        document.querySelector( '#main-script' ).remove();
-        c = "./js/enketo-ie11-bundle.js";
-        var script = document.createElement( 'script' );
-        script.type = 'text/javascript';
-        script.src = './js/enketo-ie11-bundle.js';
-        document.body.appendChild( script );
 
-    </script>
 </body>
 
 </html>

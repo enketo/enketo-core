@@ -10,17 +10,17 @@ import '../time/timepicker';
 import '../../js/dropdown.jquery';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class DatetimepickerExtended extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input[type="datetime-local"]:not([readonly])';
     }
     /**
-     * @return {boolean}
+     * @return {boolean} to instantiate or not to instantiate, that is the question
      */
     static condition() {
         return !support.touch || !support.inputTypes[ 'datetime-local' ];
@@ -31,7 +31,7 @@ class DatetimepickerExtended extends Widget {
         this.$fakeTimeI = this._createFakeTimeInput();
 
         this.element.classList.add( 'hide' );
-        this.element.after( document.createRange().createContextualFragment( '<div class="datetimepicker widget" />' ) );
+        this.element.before( document.createRange().createContextualFragment( '<div class="datetimepicker widget" />' ) );
         const widget = this.question.querySelector( '.widget' );
         widget.append( this.$fakeDateI[ 0 ].closest( '.date' ) );
         widget.append( this.$fakeTimeI[ 0 ].closest( '.timepicker' ) );
@@ -63,12 +63,14 @@ class DatetimepickerExtended extends Widget {
                     this.$fakeDateI.val( '' ).datepicker( 'update' );
                 }
                 this.originalInputValue = this.value;
+
                 return false;
             } );
 
         this.$fakeTimeI
             .on( 'change', () => {
                 this.originalInputValue = this.value;
+
                 return false;
             } );
 
@@ -99,7 +101,7 @@ class DatetimepickerExtended extends Widget {
      */
     _createFakeTimeInput() {
         const $fakeTime = $(
-                `<div class="timepicker">
+            `<div class="timepicker">
                     <input class="ignore timepicker-default" type="text" placeholder="hh:mm"/>
                 </div>` )
             .append( this.resetButtonHtml );
@@ -108,7 +110,7 @@ class DatetimepickerExtended extends Widget {
     }
 
     /**
-     * @param {jQuery} $els
+     * @param {jQuery} $els - a set of elements wrapped in jQuery
      */
     _setFocusHandler( $els ) {
         // Handle focus on original input (goTo functionality)
@@ -132,13 +134,14 @@ class DatetimepickerExtended extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         if ( this.$fakeDateI.val().length > 0 && this.$fakeTimeI.val().length > 3 ) {
             const d = this.$fakeDateI.val().split( '-' );
             const timeModified = timeFormat.hour12 ? types.time.convertMeridian( this.$fakeTimeI.val() ) : this.$fakeTimeI.val();
             const t = timeModified.split( ':' );
+
             return new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString();
         } else {
             return '';
@@ -156,7 +159,7 @@ class DatetimepickerExtended extends Widget {
         const vals = val.split( 'T' );
         const dateVal = vals[ 0 ];
         /**
-         * seems the source of issue #649 is in the toISOLocalString function 
+         * seems the source of issue #649 is in the toISOLocalString function
          * refer: https://github.com/enketo/enketo-xpathjs/blob/master/src/date-extensions.js#L16
          */
         const timeVal = ( vals[ 1 ] && vals[ 1 ].length > 4 ) ? vals[ 1 ].substring( 0, 5 ) : ( dateVal && !vals[ 1 ] ) ? '00:00' : '';

@@ -15,6 +15,7 @@
                         children.push( node );
                     }
                 }
+
                 return children;
             }
         } );
@@ -23,6 +24,7 @@
 
 /**
  * A spec-compliant polyfill for 'parentElement'.
+ *
  * @author Frederik Wessberg <https://github.com/wessberg>
  * @version 1.0.0
  */

@@ -1,5 +1,6 @@
 import SuperWidget from '../../src/js/widget';
 import input from '../../src/js/input';
+import events from '../../src/js/event';
 
 const FORM_CONTROL_TEMPLATE = `
     <label class="question">
@@ -189,7 +190,7 @@ function testExcessiveChangeEventAvoidance( Widget, template, value ) {
 
                     // Actual test
                     let changeEventCounter = 0;
-                    control.addEventListener( 'change', () => changeEventCounter++ );
+                    control.addEventListener( events.Change().type, () => changeEventCounter++ );
                     // Calling update without changing the value.
                     widget.update();
                     expect( changeEventCounter ).toEqual( 0 );

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import events from '../../js/event';
+import { getSiblingElements } from '../../js/dom-utils';
 
 const sadExcuseForABrowser = !( 'list' in document.createElement( 'input' ) &&
     'options' in document.createElement( 'datalist' ) &&
@@ -11,18 +12,18 @@ import './jquery.relevant-dropdown';
 /**
  * Autocomplete select1 picker for modern browsers.
  *
- * @extends Widget
+ * @augments Widget
  */
 class AutocompleteSelectpicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input[list]';
     }
 
     /**
-     * @type boolean
+     * @type {boolean}
      */
     static get list() {
         return true;
@@ -31,7 +32,12 @@ class AutocompleteSelectpicker extends Widget {
     _init() {
         const listId = this.element.getAttribute( 'list' );
 
-        this.options = [ ...this.question.querySelectorAll( `datalist#${listId} > option` ) ];
+        if ( getSiblingElements( this.element, 'datalist' ).length === 0 ) {
+            const infos = getSiblingElements( this.element.closest( '.or-repeat' ), '.or-repeat-info' );
+            this.options = infos.length ? [ ...infos[ 0 ].querySelectorAll( `datalist#${listId} > option` ) ] : [];
+        } else {
+            this.options = [ ...this.question.querySelectorAll( `datalist#${listId} > option` ) ];
+        }
 
         // This value -> data-value change is not slow, so no need to move to enketo-xslt as that would
         // increase itemset complexity even further.
@@ -67,7 +73,7 @@ class AutocompleteSelectpicker extends Widget {
         }
 
         if ( sadExcuseForABrowser ) {
-            console.debug( 'Polyfill required' );
+            //console.debug( 'Polyfill required' );
             // don't bother de-jqueryfying this I think, since it's only for IE11 now I think (and we'll remove IE11 support).
             $( this.fakeInput ).relevantDropdown();
         }
@@ -109,7 +115,7 @@ class AutocompleteSelectpicker extends Widget {
     }
 
     /**
-     * @param {string} label
+     * @param {string} label - label value
      * @return {string} value
      */
     _findValue( label ) {
@@ -122,6 +128,7 @@ class AutocompleteSelectpicker extends Widget {
         this.options.forEach( option => {
             if ( option.value === label ) {
                 value = option.getAttribute( 'data-value' );
+
                 return false;
             }
         } );
@@ -130,7 +137,7 @@ class AutocompleteSelectpicker extends Widget {
     }
 
     /**
-     * @param {string} value
+     * @param {string} value - option value
      * @return {string} label
      */
     _findLabel( value ) {
@@ -143,9 +150,11 @@ class AutocompleteSelectpicker extends Widget {
         this.options.forEach( option => {
             if ( option.dataset.value === value ) {
                 label = option.value;
+
                 return false;
             }
         } );
+
         return label;
     }
 

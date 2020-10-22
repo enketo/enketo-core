@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setvalue</h:title>
+        <model>
+            <instance>
+                <data id="setvalue">
+                    <a/>
+                    <b/>
+                    <c>default</c>
+                    <my_age>3</my_age>
+                    <my_age_changed/>
+                    <person>
+                        <age/>
+                        <age_changed/>
+                        <d/>
+                    </person>
+                    <person>
+                        <age>100</age>
+                        <age_changed/>
+                        <d>bb</d>
+                    </person>
+                    <count>6</count>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/a" type="string"/>
+            <bind nodeset="/data/c" type="string"/>
+            <bind nodeset="/data/my_age_changed" type="int"/>
+            <bind nodeset="/data/person/age" type="decimal"/>
+            <setvalue event="some-unsupported-event odk-instance-first-load" ref="/data/a">initialized</setvalue>
+            <setvalue event="odk-new-repeat" ref="/data/person/d" value="'a'"></setvalue>
+        </model>
+    </h:head>
+    <h:body>
+        <setvalue event="odk-instance-first-load" ref="/data/b" value="string-length(/data/c)"/>
+        <input ref="/data/c">
+            <label>Enter</label>
+        </input>
+        <select1 ref="/data/my_age" appearance="minimal">
+            <label>Your age</label>
+            <setvalue event="xforms-value-changed" ref="/data/my_age_changed" value="../my_age+100"/>
+            <item>
+                <label>10</label>
+                <value>10</value>
+            </item>
+            <item>
+                <label>11</label>
+                <value>11</value>
+            </item>
+        </select1>
+        <repeat nodeset="/data/person">
+            <setvalue event="odk-new-repeat" ref="/data/person/age" value="../../my_age + 2" />
+            <input ref="/data/person/age">
+                <label>Person's age</label>
+                <setvalue event="xforms-value-changed" ref="/data/person/age_changed">Age changed!</setvalue>
+            </input>
+        </repeat>
+    </h:body>
+</h:html>

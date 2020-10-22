@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>autocomplete-cascade with lang</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation default="true()" lang="English (en)">
+                    <text id="static_instance-list2-8">
+                        <value>CC</value>
+                    </text>
+                    <text id="static_instance-list2-0">
+                        <value>AA</value>
+                    </text>
+                    <text id="static_instance-list1-0">
+                        <value>A</value>
+                    </text>
+                    <text id="/data/list1/a:label">
+                        <value>A</value>
+                    </text>
+                    <text id="static_instance-list2-1">
+                        <value>AB</value>
+                    </text>
+                    <text id="/data/list2/ba:label">
+                        <value>BA</value>
+                    </text>
+                    <text id="static_instance-list1-1">
+                        <value>B</value>
+                    </text>
+                    <text id="/data/list2/ab:label">
+                        <value>AB</value>
+                    </text>
+                    <text id="/data/list2:label">
+                        <value>List2</value>
+                    </text>
+                    <text id="static_instance-list2-5">
+                        <value>BC</value>
+                    </text>
+                    <text id="/data/list1/b:label">
+                        <value>B</value>
+                    </text>
+                    <text id="static_instance-list1-2">
+                        <value>C</value>
+                    </text>
+                    <text id="/data/list2/ca:label">
+                        <value>CA</value>
+                    </text>
+                    <text id="/data/list2/bb:label">
+                        <value>BB</value>
+                    </text>
+                    <text id="/data/list1/c:label">
+                        <value>C</value>
+                    </text>
+                    <text id="/data/list2/bc:label">
+                        <value>BC</value>
+                    </text>
+                    <text id="/data/list2/ac:label">
+                        <value>AC</value>
+                    </text>
+                    <text id="/data/list2/cc:label">
+                        <value>CC</value>
+                    </text>
+                    <text id="static_instance-list2-2">
+                        <value>AC</value>
+                    </text>
+                    <text id="static_instance-list2-4">
+                        <value>BB</value>
+                    </text>
+                    <text id="/data/list2/cb:label">
+                        <value>CB</value>
+                    </text>
+                    <text id="static_instance-list2-6">
+                        <value>CA</value>
+                    </text>
+                    <text id="/data/list2/aa:label">
+                        <value>AA</value>
+                    </text>
+                    <text id="static_instance-list2-7">
+                        <value>CB</value>
+                    </text>
+                    <text id="/data/list1:label">
+                        <value>List1</value>
+                    </text>
+                    <text id="static_instance-list2-3">
+                        <value>BA</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="autocomplete-cascade">
+                    <list1/>
+                    <list2/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="list2">
+                <root>
+                    <item>
+                        <itextId>static_instance-list2-0</itextId>
+                        <list1>a</list1>
+                        <name>aa</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-1</itextId>
+                        <list1>a</list1>
+                        <name>ab</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-2</itextId>
+                        <list1>a</list1>
+                        <name>ac</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-3</itextId>
+                        <list1>b</list1>
+                        <name>ba</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-4</itextId>
+                        <list1>b</list1>
+                        <name>bb</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-5</itextId>
+                        <list1>b</list1>
+                        <name>bc</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-6</itextId>
+                        <list1>c</list1>
+                        <name>ca</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-7</itextId>
+                        <list1>c</list1>
+                        <name>cb</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list2-8</itextId>
+                        <list1>c</list1>
+                        <name>cc</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="list1">
+                <root>
+                    <item>
+                        <itextId>static_instance-list1-0</itextId>
+                        <name>a</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list1-1</itextId>
+                        <name>b</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-list1-2</itextId>
+                        <name>c</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/list1" type="string"/>
+            <bind nodeset="/data/list2" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body class="theme-grid">
+        <select1 appearance="w2 autocomplete" ref="/data/list1">
+            <label ref="jr:itext('/data/list1:label')"/>
+            <item>
+                <label ref="jr:itext('/data/list1/a:label')"/>
+                <value>a</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/list1/b:label')"/>
+                <value>b</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/list1/c:label')"/>
+                <value>c</value>
+            </item>
+        </select1>
+        <select1 appearance="w2 autocomplete" ref="/data/list2">
+            <label ref="jr:itext('/data/list2:label')"/>
+            <itemset nodeset="instance('list2')/root/item[list1 =  /data/list1 ]">
+                <value ref="name"/>
+                <label ref="jr:itext(itextId)"/>
+            </itemset>
+        </select1>
+    </h:body>
+</h:html>

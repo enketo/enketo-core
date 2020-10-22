@@ -5,19 +5,19 @@ import { elementDataStore as data } from '../../js/dom-utils';
 /**
  * The whole purpose of this widget is to workaround iOS browser bugs. See bug descriptions inline below.
  *
- * @extends Widget
+ * @augments Widget
  */
 class DatepickerNativeIos extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return ' .question input[type="date"], .question input[type="datetime-local"], .question input[type="time"]';
     }
 
     /**
-     * @param {Element} element
-     * @return {boolean}
+     * @param {Element} element - the element to instantiate the widget on
+     * @return {boolean} to instantiate or not to instantiate, that is the question
      */
     static condition( element ) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if non-iOS browser is used.
@@ -39,7 +39,7 @@ class DatepickerNativeIos extends Widget {
          * This is a very ugly solution, but the bug is fairly obscure, and the workaround is hopefully
          * just temporary.
          */
-        console.log( 'Adding iOS readonly date/time/datetime picker workaround.' );
+        //console.log( 'Adding iOS readonly date/time/datetime picker workaround.' );
         this.element.addEventListener( 'focus', () => {
             // prepare for future where readonly state is dynamic
             if ( this.element.readOnly ) {

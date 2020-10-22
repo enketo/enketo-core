@@ -11,11 +11,12 @@ import $ from 'jquery';
  * @function external:jQuery#clearInputs
  * @param {string} [ev1] - Event to be triggered when a value is cleared
  * @param {string} [ev2] - Event to be triggered when a value is cleared
- * @return {jQuery}
+ * @return {jQuery} original jQuery-wrapped elements
  */
 $.fn.clearInputs = function( ev1, ev2 ) {
     ev1 = ev1 || 'edit';
     ev2 = ev2 || '';
+
     return this.each( function() {
         //remove media previews
         $( this ).find( '.file-preview' ).remove();

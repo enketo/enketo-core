@@ -6,6 +6,7 @@ import { t } from 'enketo/translator';
 import support from '../../js/support';
 import types from '../../js/types';
 import dialog from 'enketo/dialog';
+import { getScript } from '../../js/utils';
 import { elementDataStore as data } from '../../js/dom-utils';
 let googleMapsScriptRequest;
 
@@ -54,19 +55,19 @@ import 'leaflet.gridlayer.googlemutant';
  */
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class Geopicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question input[data-type-xml="geopoint"], .question input[data-type-xml="geotrace"], .question input[data-type-xml="geoshape"]';
     }
 
     /**
-     * @param {Element} element
-     * @return {boolean}
+     * @param {Element} element - The element to instantiate the widget on
+     * @return {boolean} To instantiate or not to instantiate, that is the question.
      */
     static condition( element ) {
         // Allow geopicker and ArcGIS geopicker to be used in same form
@@ -147,6 +148,7 @@ class Geopicker extends Widget {
         this.$widget.find( '.toggle-input-type-btn' ).on( 'click', () => {
             const type = that.$inputGroup.hasClass( 'kml-input-mode' ) ? 'points' : 'kml';
             that._switchInputType( type );
+
             return false;
         } );
 
@@ -163,18 +165,21 @@ class Geopicker extends Widget {
         this.$points.on( 'click', '.point', function() {
             that._setCurrent( that.$points.find( '.point' ).index( $( this ) ) );
             that._switchInputType( 'points' );
+
             return false;
         } );
 
         // handle addpoint button click
         this.$points.find( '.addpoint' ).on( 'click', () => {
             that._addPoint();
+
             return false;
         } );
 
         // handle polygon close button click
         this.$widget.find( '.close-chain-btn' ).on( 'click', () => {
             that._closePolygon();
+
             return false;
         } );
 
@@ -198,6 +203,7 @@ class Geopicker extends Widget {
             that.$widget.find( '.search-bar' ).removeClass( 'hide-search' );
             that.$widget.addClass( 'full-screen' );
             that._updateMap();
+
             return false;
         } );
 
@@ -234,10 +240,12 @@ class Geopicker extends Widget {
                 .find( '.leaflet-google-layer' ).remove();
             if ( that.map ) {
                 that.map.remove();
-                that.map = null;
-                that.polygon = null;
-                that.polyline = null;
+                that.map = undefined;
+                this.loadMap = undefined;
+                that.polygon = undefined;
+                that.polyline = undefined;
             }
+
             return false;
         } );
 
@@ -282,7 +290,7 @@ class Geopicker extends Widget {
     }
 
     /**
-     * @param {string} type
+     * @param {string} type - Type of input to switch to
      */
     _switchInputType( type ) {
         if ( type === 'kml' ) {
@@ -423,6 +431,7 @@ class Geopicker extends Widget {
 
         if ( oldValue !== newValue ) {
             this.originalInputValue = newValue;
+
             return true;
         } else {
             return false;
@@ -434,8 +443,8 @@ class Geopicker extends Widget {
      * error feedback than provided by the form controller. This can be used to pinpoint the exact
      * invalid geopoints in a list of geopoints (the form controller only validates the total list).
      *
-     * @param {string} geopoint
-     * @return {boolean}
+     * @param {string} geopoint - Geopoint to check
+     * @return {boolean} Whether geopoint is valid.
      */
     _isValidGeopoint( geopoint ) {
         return geopoint ? types.geopoint.validate( geopoint ) : false;
@@ -454,12 +463,13 @@ class Geopicker extends Widget {
     }
 
     /**
-     * @type LatLngArray|LatLngObj
+     * @param {LatLngArray|LatLngObj} latLng - Geo array or object to clean
      */
     _cleanLatLng( latLng ) {
         if ( Array.isArray( latLng ) ) {
             return [ latLng[ 0 ], latLng[ 1 ] ];
         }
+
         return latLng;
     }
 
@@ -496,7 +506,7 @@ class Geopicker extends Widget {
     /**
      * Changes the current point in the list of points
      *
-     * @param {number} index
+     * @param {number} index - The index to set to current
      */
     _setCurrent( index ) {
         this.currentIndex = index;
@@ -540,6 +550,7 @@ class Geopicker extends Widget {
             }, () => {
                 console.error( 'error occurred trying to obtain position' );
             }, options );
+
             return false;
         } );
     }
@@ -575,13 +586,13 @@ class Geopicker extends Widget {
                             } else {
                                 //TODO: add error message
                                 that.$search.closest( '.input-group' ).addClass( 'has-error' );
-                                console.log( `Location "${address}" not found` );
+                                console.warn( `Location "${address}" not found` );
                             }
                         }, 'json' )
                         .fail( () => {
                             //TODO: add error message
                             that.$search.closest( '.input-group' ).addClass( 'has-error' );
-                            console.log( 'Error. Geocoding service may not be available or app is offline' );
+                            console.error( 'Error. Geocoding service may not be available or app is offline' );
                         } )
                         .always( () => {
 
@@ -641,13 +652,14 @@ class Geopicker extends Widget {
             this.loadMap
                 .then( () => {
                     that._updateDynamicMapView( latLng, zoom );
-                } );
+                } )
+                .catch( () => {} );
 
         }
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise} A Promise that resolves with undefined.
      */
     _addDynamicMap() {
         const that = this;
@@ -735,13 +747,13 @@ class Geopicker extends Widget {
      * Displays intersect error
      */
     _showIntersectError() {
-        dialog.alert( 'Borders cannot intersect!' );
+        dialog.alert( t( 'geopicker.bordersintersectwarning' ) );
     }
 
     /**
      * Obtains the tile layers according to the definition in the app configuration.
      *
-     * @return {Promise}
+     * @return {Promise} A promise that resolves with the map layers.
      */
     _getLayers() {
         const that = this;
@@ -766,7 +778,7 @@ class Geopicker extends Widget {
      *
      * @param {object} map - Map layer as defined in the apps configuration.
      * @param {number} index - The index of the layer.
-     * @return {Promise}
+     * @return {Promise} A promise that resolves with a Leaflet tile layer.
      */
     _getLeafletTileLayer( map, index ) {
         let url;
@@ -776,6 +788,7 @@ class Geopicker extends Widget {
         // so it will be re-used when the form is reset or multiple geo widgets are created
         map.tileIndex = ( map.tileIndex === undefined ) ? Math.round( Math.random() * 100 ) % map.tiles.length : map.tileIndex;
         url = map.tiles[ map.tileIndex ];
+
         return Promise.resolve( L.tileLayer( url, options ) );
     }
 
@@ -784,7 +797,7 @@ class Geopicker extends Widget {
      *
      * @param {object} map - Map layer as defined in the apps configuration.
      * @param {number} index - The index of the layer.
-     * @return {Promise}
+     * @return {Promise} A promise that resolves with a Google Maps layer.
      */
     _getGoogleTileLayer( map, index ) {
         const options = this._getTileOptions( map, index );
@@ -818,7 +831,7 @@ class Geopicker extends Widget {
      * Loader for the Google Maps script that can be called multiple times, but will ensure the
      * script is only requested once.
      *
-     * @return {Promise}
+     * @return {Promise} A promise that resolves with undefined.
      */
     _loadGoogleMapsScript() {
         // request Google maps script only once, using a variable outside of the scope of the current widget
@@ -830,15 +843,13 @@ class Geopicker extends Widget {
 
                 // create a global callback to be called by the Google Maps script once this has loaded
                 window.gmapsLoaded = () => {
-                    // clean up the global function
-                    delete window.gmapsLoaded;
                     // resolve the deferred object
                     resolve();
                 };
                 // make the request for the Google Maps script asynchronously
                 apiKeyQueryParam = ( googleApiKey ) ? `&key=${googleApiKey}` : '';
-                loadUrl = `https://maps.google.com/maps/api/js?v=3.exp${apiKeyQueryParam}&libraries=places&callback=gmapsLoaded`;
-                $.getScript( loadUrl );
+                loadUrl = `https://maps.google.com/maps/api/js?v=weekly${apiKeyQueryParam}&libraries=places&callback=gmapsLoaded`;
+                getScript( loadUrl );
             } );
         }
 
@@ -847,7 +858,7 @@ class Geopicker extends Widget {
     }
 
     /**
-     * @param {Array<object>} layers
+     * @param {Array<object>} layers - Map layers
      * @return {object} Default layer
      */
     _getDefaultLayer( layers ) {
@@ -856,6 +867,7 @@ class Geopicker extends Widget {
 
         layers.reverse().some( layer => {
             defaultLayer = layer;
+
             return that.props.appearances.some( appearance => appearance === layer.options.name );
         } );
 
@@ -863,7 +875,7 @@ class Geopicker extends Widget {
     }
 
     /**
-     * @param {Array<object>} layers
+     * @param {Array<object>} layers - Map layers
      * @return {Array<object>} Base layers
      */
     _getBaseLayers( layers ) {
@@ -929,7 +941,7 @@ class Geopicker extends Widget {
                     }
                 } ) );
             } else {
-                console.debug( 'this latLng was not considered valid', latLng );
+                console.warn( 'this latLng was not considered valid', latLng );
             }
         } );
 
@@ -970,6 +982,7 @@ class Geopicker extends Widget {
             }
             this.polyline = null;
             this.polygon = null;
+
             // console.log( 'list of points invalid' );
             return;
         }
@@ -1106,8 +1119,6 @@ class Geopicker extends Widget {
 
     /**
      * Closes polygon
-     *
-     * @return {Error|undefined}
      */
     _closePolygon() {
         const lastPoint = this.points[ this.points.length - 1 ];
@@ -1122,10 +1133,10 @@ class Geopicker extends Widget {
         // if the last point is not a valid point, assume the user wants to use this to close
         // otherwise create a new point.
         if ( !this._isValidLatLng( lastPoint ) ) {
-            console.log( 'current last point is not a valid point, so will use this as closing point' );
+            //console.log( 'current last point is not a valid point, so will use this as closing point' );
             this.currentIndex = this.points.length - 1;
         } else {
-            console.log( 'current last point is valid, so will create a new one to use to close' );
+            //console.log( 'current last point is valid, so will create a new one to use to close' );
             this._addPoint();
         }
 
@@ -1141,7 +1152,7 @@ class Geopicker extends Widget {
      * Updates the (fake) input element for latitude, longitude, altitude and accuracy.
      *
      * @param {LatLngArray|LatLngObj} coords - Latitude, longitude, altitude and accuracy.
-     * @param {string} [ev]
+     * @param {string} [ev] - Event to dispatch.
      */
     _updateInputs( coords, ev ) {
         const lat = coords[ 0 ] || coords.lat || '';
@@ -1163,7 +1174,7 @@ class Geopicker extends Widget {
      * only between. Separator between KML tuples can be newline, space or a combination.
      * It only extracts the value of the first <coordinates> element or, if <coordinates> are not included from the whole string.
      *
-     * @param {string} kmlCoordinates
+     * @param {string} kmlCoordinates - KML coordinates XML element or its content
      * @return {Array<Array<number>>} Array of geopoint coordinates
      */
     _convertKmlCoordinatesToLeafletCoordinates( kmlCoordinates ) {
@@ -1197,7 +1208,7 @@ class Geopicker extends Widget {
      * where one point is added or edited would have intersections.
      *
      * @param {LatLngArray|LatLngObj} latLng - An object or array notation of point.
-     * @param {number} index
+     * @param {number} index - Index of point to test.
      * @return {boolean} Whether polyline would have intersections.
      */
     updatedPolylineWouldIntersect( latLng, index ) {
@@ -1250,9 +1261,9 @@ class Geopicker extends Widget {
     /**
      * Checks whether the array of points contains empty ones.
      *
-     * @param {Array<LatLngArray>} points
+     * @param {Array<LatLngArray>} points - Array of geopoints
      * @param {number} [allowedIndex] - The index in which an empty value is allowed.
-     * @return {boolean}
+     * @return {boolean} Whether the array contains empty points.
      */
     containsEmptyPoints( points, allowedIndex ) {
         return points.some( ( point, index ) => index !== allowedIndex && ( !point[ 0 ] || !point[ 1 ] ) );
@@ -1276,7 +1287,7 @@ class Geopicker extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         let newValue = '';
@@ -1306,6 +1317,7 @@ class Geopicker extends Widget {
                 newValue = newValue.substring( 0, newValue.lastIndexOf( ';' ) );
             }
         } );
+
         return newValue;
     }
 
@@ -1360,6 +1372,7 @@ class Geopicker extends Widget {
         const widget = this.element.parentElement.querySelector( '.widget' );
         if ( widget ) {
             widget.remove();
+            this.loadMap = undefined;
             this.map = undefined;
             this.polyline = undefined;
             this.polygon = undefined;

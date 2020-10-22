@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import fileManager from 'enketo/file-manager';
-import { getFilename, updateDownloadLink, resizeImage, isNumber } from '../../js/utils';
+import { getFilename, resizeImage, isNumber } from '../../js/utils';
+import downloadUtils from '../../js/download-utils';
 import events from '../../js/event';
 import { t } from 'enketo/translator';
 import TranslatedError from '../../js/translated-error';
@@ -15,11 +16,11 @@ import { empty } from '../../js/dom-utils';
  * FilePicker that works both offline and online. It abstracts the file storage/cache away
  * with the injected fileManager.
  *
- * @extends Widget
+ * @augments Widget
  */
 class Filepicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"]';
@@ -67,7 +68,7 @@ class Filepicker extends Widget {
         // Monitor maxSize changes to update placeholder text. This facilitates asynchronous
         // obtaining of max size from server without slowing down form loading.
         this._updatePlaceholder();
-        $( this.element.closest( 'form.or' ) ).on( 'updateMaxSize', this._updatePlaceholder.bind( this ) );
+        this.element.closest( 'form.or' ).addEventListener( events.UpdateMaxSize().type, this._updatePlaceholder.bind( this ) );
 
         fileManager.init()
             .then( () => {
@@ -104,7 +105,7 @@ class Filepicker extends Widget {
     /**
      * Click action of reset button
      *
-     * @param {Element} resetButton
+     * @param {Element} resetButton - reset button HTML element
      */
     _setResetButtonListener( resetButton ) {
         if ( resetButton ) {
@@ -135,6 +136,7 @@ class Filepicker extends Widget {
                 if ( that.props.readonly || event.namespace !== 'propagate' ) {
                     that.fakeInput.focus();
                     event.stopImmediatePropagation();
+
                     return false;
                 }
             } )
@@ -148,6 +150,7 @@ class Filepicker extends Widget {
                 if ( event.namespace === 'propagate' ) {
                     // Trigger eventhandler to update instance value
                     $( this.element ).trigger( 'change.file' );
+
                     return false;
                 } else {
                     event.stopImmediatePropagation();
@@ -208,6 +211,7 @@ class Filepicker extends Widget {
             if ( this.props.readonly || this.originalInputValue || this.value ) {
                 this.fakeInput.focus();
                 event.stopImmediatePropagation();
+
                 return;
             }
             $( that.element ).trigger( 'click.propagate' );
@@ -233,7 +237,7 @@ class Filepicker extends Widget {
     /**
      * Sets file name as value
      *
-     * @param {string} fileName
+     * @param {string} fileName - filename
      */
     _showFileName( fileName ) {
         this.value = fileName;
@@ -241,13 +245,13 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {TranslatedError|Error} fb
-     * @param {string} [status]
+     * @param {TranslatedError|Error} fb - Error instance
+     * @param {string} [status] - status
      */
     _showFeedback( fb, status ) {
         const message = fb instanceof TranslatedError ? t( fb.translationKey, fb.translationOptions ) :
             fb instanceof Error ? fb.message :
-            fb || '';
+                fb || '';
         status = status || '';
         // replace text and replace all existing classes with the new status class
         this.feedback.textContent = message;
@@ -255,8 +259,8 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {string} url
-     * @param {string} mediaType
+     * @param {string} url - URL
+     * @param {string} mediaType - media type
      */
     _showPreview( url, mediaType ) {
         let htmlStr;
@@ -283,9 +287,9 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {File} file - Image file to be resized
-     * @param {string} mediaType
-     * @return {Promise<Blob|File>} Resolves with blob, rejects with input file
+     * @param {File} file - image file to be resized
+     * @param {string} mediaType - media type
+     * @return {Promise<Blob|File>} resolves with blob, rejects with input file
      */
     _resizeFile( file, mediaType ) {
         return new Promise( ( resolve, reject ) => {
@@ -313,11 +317,11 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @param {string} objectUrl
-     * @param {string} fileName
+     * @param {string} objectUrl - ObjectURL
+     * @param {string} fileName - filename
      */
     _updateDownloadLink( objectUrl, fileName ) {
-        updateDownloadLink( this.downloadLink, objectUrl, fileName );
+        downloadUtils.updateDownloadLink( this.downloadLink, objectUrl, fileName );
     }
 
     /**
@@ -337,7 +341,7 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @type object
+     * @type {object}
      */
     get props() {
         const props = this._props;
@@ -351,7 +355,7 @@ class Filepicker extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.fakeInput.value;

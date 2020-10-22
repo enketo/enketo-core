@@ -35,6 +35,8 @@ $q-pad-right: 0px !default;
 
     // Using a dirty trick, knowing that only original question-labels have a lang attribute
     .label-content {
+        display: flex;
+        flex-direction: column;
         .question-label.active {
             display: inline;
 
@@ -51,7 +53,7 @@ $q-pad-right: 0px !default;
 
     >.widget:not(.or-comment-widget) {
         // override main.scss style
-        // The margin-bottom is maintained to 
+        // The margin-bottom is maintained to
         // have space for the constraint message in the horizontal
         // analog scale widget.
         margin: 0 0 9px 0;
@@ -145,7 +147,7 @@ $q-pad-right: 0px !default;
         .range-widget {
             flex: 100%;
 
-            // adjust default range widget 
+            // adjust default range widget
             &__wrap {
                 height: 117px
             }
@@ -193,20 +195,53 @@ $q-pad-right: 0px !default;
         }
     }
 
-    &.invalid-constraint,
-    &.invalid-required {
+    &.or-appearance-show-scale:not(.or-appearance-horizontal) {
+        .range-widget {
+            &__wrap {
+                flex-direction: row-reverse;
+                flex-wrap: wrap;
+            }
 
-        .or-constraint-msg.active,
-        .or-required-msg.active {
-            position: absolute;
-            bottom: 10px;
+            &__scale {
+                position: relative;
+                text-align: end;
+                align-items: flex-end;
+                padding: 0 13px;
+
+                &__start,
+                &__end,
+                &__between {
+                    width: 24px;
+                }
+            }
+
+            &__current {
+                padding: 0 13px;
+            }
+
+            .btn-reset {
+                position: absolute;
+                top: 140px;
+                left: 100px;
+            }
         }
+    }
+
+    [class*="or-constraint"],
+    .or-required-msg {
+        order: 5;
     }
 }
 
 // corrections for pages mode
-.pages.or [role="page"].current {
-    &.or-analog-scale-initialized:not(.or-appearance-horizontal) {
-        @include display-flex;
+.pages.or [role="page"] {
+    &.or-analog-scale-initialized {
+        &.current:not(.or-appearance-horizontal) {
+                @include display-flex;
+        }
+
+        &:not(.current) {
+            display: none;
+        }
     }
 }

@@ -34,28 +34,21 @@ module.exports = grunt => {
                 }
             }
         },
-        jsbeautifier: {
-            test: {
-                src: [ '*.js', 'src/js/*.js', 'src/widget/*/*.js' ],
-                options: {
-                    config: './.jsbeautifyrc',
-                    mode: 'VERIFY_ONLY'
-                }
+        eslint: {
+            check: {
+                src: [ '*.js', 'src/**/*.js' ]
             },
             fix: {
-                src: [ '*.js', 'src/js/*.js', 'src/widget/*/*.js' ],
                 options: {
-                    config: './.jsbeautifyrc'
-                }
+                    fix: true,
+                },
+                src: [ '*.js', 'src/**/*.js' ]
             }
-        },
-        eslint: {
-            all: [ '*.js', 'src/**/*.js' ]
         },
         watch: {
             sass: {
                 files: [ 'grid/sass/**/*.scss', 'src/sass/**/*.scss', 'src/widget/**/*.scss' ],
-                tasks: [ 'style' ],
+                tasks: [ 'css' ],
                 options: {
                     spawn: true,
                     livereload: true,
@@ -118,12 +111,6 @@ module.exports = grunt => {
             },
             rollup: {
                 command: 'npx rollup --config'
-            },
-            babel: {
-                command: 'npx babel build/js/enketo-bundle.js --out-file build/js/enketo-ie11-temp-bundle.js'
-            },
-            browserify: {
-                command: 'npx browserify src/js/workarounds-ie11.js build/js/enketo-ie11-temp-bundle.js -o build/js/enketo-ie11-bundle.js'
             }
         }
     } );
@@ -137,14 +124,15 @@ module.exports = grunt => {
         const formsJsPath = 'test/mock/forms.js';
         const xformsPaths = grunt.file.expand( {}, 'test/forms/*.xml' );
         const transformer = require( 'enketo-transformer' );
-
+        grunt.log.write( 'Transforming XForms ' );
         xformsPaths
             .reduce( ( prevPromise, filePath ) => prevPromise.then( () => {
                 const xformStr = grunt.file.read( filePath );
-                grunt.log.writeln( `Transforming ${filePath}...` );
+                grunt.log.write( '.' );
+
                 return transformer.transform( { xform: xformStr } )
                     .then( result => {
-                        forms[ filePath.substring( filePath.lastIndexOf( '/' ) + 1 ) ] = {
+                        forms[filePath.substring( filePath.lastIndexOf( '/' ) + 1 )] = {
                             html_form: result.form,
                             xml_model: result.model
                         };
@@ -157,10 +145,9 @@ module.exports = grunt => {
     } );
 
     grunt.registerTask( 'compile', [ 'shell:rollup' ] );
-    grunt.registerTask( 'compile-ie11', [ 'shell:rollup', 'shell:babel', 'shell:browserify' ] );
-    grunt.registerTask( 'test', [ 'jsbeautifier:test', 'eslint', 'compile', 'transforms', 'karma:headless', 'style' ] );
-    grunt.registerTask( 'style', [ 'sass' ] );
+    grunt.registerTask( 'test', [ 'eslint:check', 'compile', 'transforms', 'karma:headless', 'css' ] );
+    grunt.registerTask( 'css', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
-    grunt.registerTask( 'develop', [ 'style', 'compile', 'concurrent:develop' ] );
-    grunt.registerTask( 'default', [ 'style', 'compile' ] );
+    grunt.registerTask( 'develop', [ 'css', 'compile', 'concurrent:develop' ] );
+    grunt.registerTask( 'default', [ 'css', 'compile' ] );
 };

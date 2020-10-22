@@ -22,7 +22,7 @@ The `maps` configuration can include an array of Mapbox TileJSON objects (or a s
 For GMaps layers you have the four options as tiles values: `"GOOGLE_SATELLITE"`, `"GOOGLE_ROADMAP"`, `"GOOGLE_HYBRID"`, `"GOOGLE_TERRAIN"`. You can also add other TileJSON properties, such as minZoom, maxZoom, id to all layers.
 
 #### googleApiKey
-The Google API key that is used for geolocation (in the geo widgets' search box). Can be obtained [here](https://console.developers.google.com/project). Make sure to enable the _GeoCoding API_ service. If you are using Google Maps layers, the same API key is used. Make sure to enable the _Google Maps JavaScript API v3_ service as well in that case (see next item).
+The Google API key that is used for geocoding (in the geo widgets' search box). Can be obtained [here](https://console.developers.google.com/project). Make sure to enable the _GeoCoding API_ service. If you are using Google Maps layers, the same API key is used. Make sure to enable the _Google Maps JavaScript API v3_ service as well in that case (see next item).
 
 #### validateContinuously
 This setting with the default `false` value determines whether Enketo should validate questions immediately if a related value changes. E.g. if question A has a constraint that depends on question B, this mode would re-validate question A if the value for question B changes. **This mode will slow down form traversal.** When set to `false` that type of validation is only done at the end when the Submit button is clicked or in Pages mode when the user clicks Next.
@@ -36,18 +36,6 @@ This setting with default `true` value determines whether to enable support for 
 ### Form Configuration
 
 Per-form configuration is done by adding an (optional) options object as 3rd parameter when instantiating a form.
-
-#### Behaviour of skip logic
-
-```
-new Form(formselector, data, {
-  clearIrrelevantImmediately: false
-});
-```
-
-If `clearIrrelevantImmediately` is set to `true` or not set at all, Enketo will clear the value of a question as soon as it becomes irrelevant, after loading (so while the user traverses the form). If it is set to `false` Enketo will leave the values intact (and just hide the question).
-
-In the second case the irrelevant values will not be cleared until `form.validate()` is called (usually when the user marks a record as complete).
 
 #### Print only the "relevant" parts of the form
 

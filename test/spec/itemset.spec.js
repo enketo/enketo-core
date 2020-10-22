@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import loadForm from '../helpers/load-form';
 import events from '../../src/js/event';
+import { isStaticItemsetFromSecondaryInstance } from '../../src/js/itemset';
 
 describe( 'Itemset functionality', () => {
     let form;
@@ -332,7 +333,49 @@ describe( 'Itemset functionality', () => {
         } );
     } );
 
-    describe( 'in a group that becomes relevant, irrelevant relevant', () => {
+    describe( 'in another group that becomes relevant (different from previous)', () => {
+        it( 'are re-evaluated', () => {
+            const form = loadForm( 'itemset-relevant-2.xml' );
+            form.init();
+            const input1 = form.view.html.querySelector( '[name="/data/start"]' );
+            input1.value = 'A';
+            input1.dispatchEvent( events.Change() );
+            const input2 = form.view.html.querySelector( '[name="/data/proceed"]' );
+            input2.checked = true;
+            input2.dispatchEvent( events.Change() );
+            const EXPECTED = [ 'AK', 'AL', 'AR', 'AZ' ];
+
+            // group with relevant
+            expect( [ ...form.view.html.querySelectorAll( '.option-wrapper label:not(.itemset-template) input[data-name="/data/grp1/one"]' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( '.option-wrapper label:not(.itemset-template) input[name="/data/grp1/two"]' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( 'select[name="/data/grp1/three"] option:not(.itemset-template)' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( 'select[name="/data/grp1/four"] option:not(.itemset-template)' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( 'input[name="/data/grp1/five"] ~ datalist option:not(.itemset-template)' ) ]
+                .map( input => input.dataset.value ) ).toEqual( EXPECTED );
+
+            // shared static autocomplete datalist in repeat
+            expect( [ ...form.view.html.querySelectorAll( '.or-repeat-info datalist option:not(.itemset-template)' ) ]
+                .map( input => input.dataset.value ) ).toEqual( [ 'AL' ] );
+
+            // individual itemset question with relevants
+            expect( [ ...form.view.html.querySelectorAll( '.option-wrapper label:not(.itemset-template) input[data-name="/data/grp2/seven"]' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( '.option-wrapper label:not(.itemset-template) input[name="/data/grp2/eight"]' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( 'select[name="/data/grp2/nine"] option:not(.itemset-template)' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( 'select[name="/data/grp2/ten"] option:not(.itemset-template)' ) ]
+                .map( input => input.value ) ).toEqual( EXPECTED );
+            expect( [ ...form.view.html.querySelectorAll( 'input[name="/data/grp2/eleven"] ~ datalist option:not(.itemset-template)' ) ]
+                .map( input => input.dataset.value ) ).toEqual( EXPECTED );
+        } );
+    } );
+
+    describe( 'in a group that becomes relevant, non-relevant, relevant', () => {
         it( 'are re-evaluated', () => {
             const form = loadForm( 'itemset-relevant.xml' );
             form.init();
@@ -351,7 +394,7 @@ describe( 'Itemset functionality', () => {
             auto.value = '1';
             auto.dispatchEvent( events.Change() );
 
-            // make irrelevant again
+            // make non-relevant again
             const option3 = form.view.html.querySelector( '[name="/broken_repeat_example/m_gate"][value="no"]' );
             option3.checked = true;
             option3.dispatchEvent( events.Change() );
@@ -403,7 +446,7 @@ describe( 'Itemset functionality', () => {
                         <item>
                             <label>11</label>
                             <group>a</group>
-                            <name>1 1</name>                        
+                            <name>1 1</name>
                         </item>
                         <item>
                             <label>22</label>
@@ -450,4 +493,22 @@ describe( 'Itemset functionality', () => {
         } );
 
     } );
+
+    describe( 'analyzes whether XPath itemset expression is static external instance nodeset', () => {
+        [
+            [ '/path/to/node', false ],
+            [ '/path/to/node[name=/path/to/another/node]', false ],
+            [ ' instance( "something")/path/to/node[name=/path/to/another/node]', false ],
+            [ ' instance( "something")/path/to/node ', true ],
+            [ 'instance("countries")/root/item', true ],
+            [ 'instance("countries")/root/item[43]', true ],
+            [ 'instance("countries")/root/item[label=current()/../answer]', false ]
+        ].forEach( test => {
+            it( `correctly determines that ${test[0]} is ${test[1] === true ? '' : 'not '}dynamic`, () => {
+                expect( isStaticItemsetFromSecondaryInstance( test[ 0 ] ) ).toEqual( test[ 1 ] );
+            } );
+        } );
+
+    } );
+
 } );

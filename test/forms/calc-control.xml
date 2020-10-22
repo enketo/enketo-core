@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+  xmlns:ev="http://www.w3.org/2001/xml-events"
+  xmlns:h="http://www.w3.org/1999/xhtml"
+  xmlns:jr="http://openrosa.org/javarosa"
+  xmlns:orx="http://openrosa.org/xforms/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>data</h:title>
+    <model>
+      <instance>
+        <data id="calc-control" version="version1">
+          <calc1/>
+          <calc11/>
+          <!-- this nodeName deliberately starts with "calc1" -->
+          <cond1/>
+          <version/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <bind calculate="concat('1', '2')" nodeset="/data/calc" readonly="true()" type="string"/>
+      <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/calc">
+      <label>enter 'yes' to make calc1 relevant</label>
+    </input>
+  </h:body>
+</h:html>

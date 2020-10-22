@@ -1,0 +1,355 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>itemset-relevant</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="itemset-relevant">
+                    <start/>
+                    <proceed/>
+                    <grp1>
+                        <one/>
+                        <two/>
+                        <three/>
+                        <four/>
+                        <five/>
+                    </grp1>
+                    <rep jr:template="">
+                        <six/>
+                    </rep>
+                    <rep>
+                        <six/>
+                    </rep>
+                    <grp2>
+                        <seven/>
+                        <eight/>
+                        <nine/>
+                        <ten/>
+                        <eleven/>
+                    </grp2>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="state">
+                <root>
+                    <item>
+                        <label>Alaska</label>
+                        <name>AK</name>
+                    </item>
+                    <item>
+                        <label>Hawaii</label>
+                        <name>HI</name>
+                    </item>
+                    <item>
+                        <label>Alabama</label>
+                        <name>AL</name>
+                    </item>
+                    <item>
+                        <label>Arkansas</label>
+                        <name>AR</name>
+                    </item>
+                    <item>
+                        <label>Arizona</label>
+                        <name>AZ</name>
+                    </item>
+                    <item>
+                        <label>California</label>
+                        <name>CA</name>
+                    </item>
+                    <item>
+                        <label>Colorado</label>
+                        <name>CO</name>
+                    </item>
+                    <item>
+                        <label>Connecticut</label>
+                        <name>CT</name>
+                    </item>
+                    <item>
+                        <label>Delaware</label>
+                        <name>DE</name>
+                    </item>
+                    <item>
+                        <label>Florida</label>
+                        <name>FL</name>
+                    </item>
+                    <item>
+                        <label>Georgia</label>
+                        <name>GA</name>
+                    </item>
+                    <item>
+                        <label>Iowa</label>
+                        <name>IA</name>
+                    </item>
+                    <item>
+                        <label>Idaho</label>
+                        <name>ID</name>
+                    </item>
+                    <item>
+                        <label>Ilinois</label>
+                        <name>IL</name>
+                    </item>
+                    <item>
+                        <label>Indiana</label>
+                        <name>IN</name>
+                    </item>
+                    <item>
+                        <label>Kansas</label>
+                        <name>KS</name>
+                    </item>
+                    <item>
+                        <label>Louisiana</label>
+                        <name>LA</name>
+                    </item>
+                    <item>
+                        <label>Massachusetts</label>
+                        <name>MA</name>
+                    </item>
+                    <item>
+                        <label>Maryland</label>
+                        <name>MD</name>
+                    </item>
+                    <item>
+                        <label>Maine</label>
+                        <name>ME</name>
+                    </item>
+                    <item>
+                        <label>Michigan</label>
+                        <name>MI</name>
+                    </item>
+                    <item>
+                        <label>Minnesota</label>
+                        <name>MN</name>
+                    </item>
+                    <item>
+                        <label>Missouri</label>
+                        <name>MO</name>
+                    </item>
+                    <item>
+                        <label>Mississippi</label>
+                        <name>MS</name>
+                    </item>
+                    <item>
+                        <label>Montana</label>
+                        <name>MT</name>
+                    </item>
+                    <item>
+                        <label>North Carolina</label>
+                        <name>NC</name>
+                    </item>
+                    <item>
+                        <label>North Dakota</label>
+                        <name>ND</name>
+                    </item>
+                    <item>
+                        <label>Nebraska</label>
+                        <name>NE</name>
+                    </item>
+                    <item>
+                        <label>New Hampshire</label>
+                        <name>NH</name>
+                    </item>
+                    <item>
+                        <label>New Jersey</label>
+                        <name>NJ</name>
+                    </item>
+                    <item>
+                        <label>New Mexico</label>
+                        <name>NM</name>
+                    </item>
+                    <item>
+                        <label>Nevada</label>
+                        <name>NV</name>
+                    </item>
+                    <item>
+                        <label>New York</label>
+                        <name>NY</name>
+                    </item>
+                    <item>
+                        <label>Ohio</label>
+                        <name>OH</name>
+                    </item>
+                    <item>
+                        <label>Oklahoma</label>
+                        <name>OK</name>
+                    </item>
+                    <item>
+                        <label>Oregon</label>
+                        <name>OR</name>
+                    </item>
+                    <item>
+                        <label>Pennsylvania</label>
+                        <name>PA</name>
+                    </item>
+                    <item>
+                        <label>South Carolina</label>
+                        <name>SC</name>
+                    </item>
+                    <item>
+                        <label>South Dakota</label>
+                        <name>SD</name>
+                    </item>
+                    <item>
+                        <label>Tenessee</label>
+                        <name>TN</name>
+                    </item>
+                    <item>
+                        <label>Texas</label>
+                        <name>TX</name>
+                    </item>
+                    <item>
+                        <label>Utah</label>
+                        <name>UT</name>
+                    </item>
+                    <item>
+                        <label>Virginia</label>
+                        <name>VA</name>
+                    </item>
+                    <item>
+                        <label>Vermont</label>
+                        <name>VT</name>
+                    </item>
+                    <item>
+                        <label>Washington</label>
+                        <name>WA</name>
+                    </item>
+                    <item>
+                        <label>Wisconsin</label>
+                        <name>WI</name>
+                    </item>
+                    <item>
+                        <label>West Virgina</label>
+                        <name>WV</name>
+                    </item>
+                    <item>
+                        <label>Wyoming</label>
+                        <name>WY</name>
+                    </item>
+                    <item>
+                        <label>District Capital</label>
+                        <name>DC</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/start" type="string"/>
+            <bind nodeset="/data/proceed" type="string"/>
+            <bind nodeset="/data/grp1" relevant=" /data/proceed  = 'OK'"/>
+            <bind nodeset="/data/grp1/one" type="string"/>
+            <bind nodeset="/data/grp1/two" type="string"/>
+            <bind nodeset="/data/grp1/three" type="string"/>
+            <bind nodeset="/data/grp1/four" type="string"/>
+            <bind nodeset="/data/grp1/five" type="string"/>
+            <bind nodeset="/data/rep" relevant=" /data/proceed  = 'OK'"/>
+            <bind nodeset="/data/rep/six" type="string"/>
+            <bind nodeset="/data/grp2/seven" relevant=" /data/proceed  = 'OK'" type="string"/>
+            <bind nodeset="/data/grp2/eight" relevant=" /data/proceed  = 'OK'" type="string"/>
+            <bind nodeset="/data/grp2/nine" relevant=" /data/proceed  = 'OK'" type="string"/>
+            <bind nodeset="/data/grp2/ten" relevant=" /data/proceed  = 'OK'" type="string"/>
+            <bind nodeset="/data/grp2/eleven" relevant=" /data/proceed  = 'OK'" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/start">
+            <label>Capitalized start character, e.g. A</label>
+        </input>
+        <trigger ref="/data/proceed">
+            <label>Go ahead?</label>
+        </trigger>
+        <group ref="/data/grp1">
+            <label>itemset cases with group relevant</label>
+            <select1 ref="/data/grp1/one">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select1>
+            <select ref="/data/grp1/two">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select>
+            <select1 appearance="minimal" ref="/data/grp1/three">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select1>
+            <select appearance="minimal" ref="/data/grp1/four">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select>
+            <select1 appearance="autocomplete" ref="/data/grp1/five">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select1>
+        </group>
+        <group ref="/data/rep">
+            <label>itemset cases with static options in repeat</label>
+            <repeat nodeset="/data/rep">
+                <select1 appearance="autocomplete" ref="/data/rep/six">
+                    <label>select</label>
+                    <itemset nodeset="instance('state')/root/item[3]">
+                        <value ref="name"/>
+                        <label ref="label"/>
+                    </itemset>
+                </select1>
+            </repeat>
+        </group>
+        <group ref="/data/grp2">
+            <label>itemset cases with individual relevant</label>
+            <select1 ref="/data/grp2/seven">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select1>
+            <select ref="/data/grp2/eight">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select>
+            <select1 appearance="minimal" ref="/data/grp2/nine">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select1>
+            <select appearance="minimal" ref="/data/grp2/ten">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select>
+            <select1 appearance="autocomplete" ref="/data/grp2/eleven">
+                <label>select</label>
+                <itemset nodeset="instance('state')/root/item[starts-with(label,  /data/start )]">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select1>
+        </group>
+    </h:body>
+</h:html>

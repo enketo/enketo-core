@@ -8,18 +8,19 @@ import './timepicker';
 import '../../js/dropdown.jquery';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class TimepickerExtended extends Widget {
     /**
-     * @type string
+     * @type {string}
+     * @return {string} The selector the widget should activated on.
      */
     static get selector() {
         return '.question input[type="time"]:not([readonly])';
     }
 
     /**
-     * @return {boolean}
+     * @return {boolean} Whether additional condition to instantiate the widget is met.
      */
     static condition() {
         return !support.touch || !support.inputTypes.time;
@@ -33,7 +34,7 @@ class TimepickerExtended extends Widget {
         );
         fragment.querySelector( '.widget' ).append( this.resetButtonHtml );
         this.element.classList.add( 'hide' );
-        this.element.after( fragment );
+        this.element.before( fragment );
 
         const resetBtn = this.question.querySelector( '.widget > .btn-reset' );
         this.fakeTimeI = this.question.querySelector( '.widget > input' );
@@ -80,16 +81,13 @@ class TimepickerExtended extends Widget {
      * Updates widget
      */
     update() {
-        if ( this.element.value !== this.value ) {
-            $( this.element )
-                .next( '.widget' )
-                .find( 'input' )
-                .timepicker( 'setTime', this.element.value );
+        if ( this.element.value !== this.value && this.fakeTimeI ) {
+            $( this.fakeTimeI ).timepicker( 'setTime', this.element.value );
         }
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.fakeTimeI.value;

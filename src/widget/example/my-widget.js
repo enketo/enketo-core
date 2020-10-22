@@ -29,7 +29,7 @@ class MyWidget extends Widget {
         const fragment = document.createRange().createContextualFragment(
             `<div class="widget">
                 <input class="ignore" type="range" min="0" max="100" step="1"/>
-            <div>`
+            </div>`
         );
         fragment.querySelector( '.widget' ).appendChild( this.resetButtonHtml );
 
@@ -86,7 +86,7 @@ class MyWidget extends Widget {
     /**
      * Obtain the current value from the widget. Usually required.
      *
-     * @type *
+     * @type {*}
      */
     get value() {
         return this.element.classList.contains( 'empty' ) ? '' : this.range.value;
@@ -95,7 +95,7 @@ class MyWidget extends Widget {
     /**
      * Set a value in the widget. Usually required.
      *
-     * @param {*} value
+     * @param {*} value - value to set
      */
     set value( value ) {
         this.range.value = value;

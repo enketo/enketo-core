@@ -16,6 +16,7 @@ class Widget {
         this.options = options || {};
         this.question = element.closest( '.question' );
         this._props = this._getProps();
+
         // Some widgets (e.g. ImageMap) initialize asynchronously and init returns a promise.
         return this._init() || this;
     }
@@ -37,8 +38,9 @@ class Widget {
      */
     _getProps() {
         const that = this;
+
         return {
-            get readonly() { return that.element.nodeName.toLowerCase() === 'select' ? !!that.element.getAttribute( 'readonly' ) : !!that.element.readOnly; },
+            get readonly() { return that.element.nodeName.toLowerCase() === 'select' ? that.element.hasAttribute( 'readonly' ) : !!that.element.readOnly; },
             appearances: [ ...this.element.closest( '.question, form.or' ).classList ]
                 .filter( cls => cls.indexOf( 'or-appearance-' ) === 0 )
                 .map( cls => cls.substring( 14 ) ),
@@ -72,7 +74,7 @@ class Widget {
      * Returns widget properties. May need to be extended.
      *
      * @readonly
-     * @type object
+     * @type {object}
      */
     get props() {
         return this._props;
@@ -82,7 +84,7 @@ class Widget {
      * Returns a HTML document fragment for a reset button.
      *
      * @readonly
-     * @type Element
+     * @type {Element}
      */
     get resetButtonHtml() {
         return range.createContextualFragment(
@@ -99,7 +101,7 @@ class Widget {
      * Returns a HTML document fragment for a download button.
      *
      * @readonly
-     * @type Element
+     * @type {Element}
      */
     get downloadButtonHtml() {
         return range.createContextualFragment(
@@ -115,7 +117,7 @@ class Widget {
      * Obtains the value from the current widget state. Should be overridden.
      *
      * @readonly
-     * @type *
+     * @type {*}
      */
     get value() {
         return undefined;
@@ -124,8 +126,8 @@ class Widget {
     /**
      * Sets a value in the widget. Should be overridden.
      *
-     * @param {*} value
-     * @type *
+     * @param {*} value - value to set
+     * @type {*}
      */
     set value( value ) {}
 
@@ -134,7 +136,7 @@ class Widget {
      * This form control is often hidden by the widget.
      *
      * @readonly
-     * @type *
+     * @type {*}
      */
     get originalInputValue() {
         return input.getVal( this.element );
@@ -144,13 +146,13 @@ class Widget {
      * Updates the value in the original form control the widget is instantiated on.
      * This form control is often hidden by the widget.
      *
-     * @param {*} value
-     * @type *
+     * @param {*} value - value to set
+     * @type {*}
      */
     set originalInputValue( value ) {
         // Avoid unnecessary change events as they could have significant negative consequences!
         // However, to add a check for this.originalInputValue !== value here would affect performance too much,
-        // so we rely on widget code to only this setter when the value changes.
+        // so we rely on widget code to only use this setter when the value changes.
         input.setVal( this.element, value, null );
         this.element.dispatchEvent( event.Change() );
     }
@@ -160,7 +162,7 @@ class Widget {
      *
      * @static
      * @readonly
-     * @type string
+     * @type {string}
      */
     static get name() {
         return this.constructor.name;
@@ -171,7 +173,7 @@ class Widget {
      *
      * @readonly
      * @static
-     * @type boolean
+     * @type {boolean}
      */
     static get list() {
         return false;
@@ -182,7 +184,7 @@ class Widget {
      * Note that the Element (used in the constructor) will be provided as parameter.
      *
      * @static
-     * @return {boolean}
+     * @return {boolean} to instantiate or not to instantiate, that is the question
      */
     static condition() {
         return true;

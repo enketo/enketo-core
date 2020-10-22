@@ -7,7 +7,7 @@
  *
  * @static
  * @param {Node} element - Target element.
- * @param {string} selector - A CSS selector.
+ * @param {string} [selector] - A CSS selector.
  * @return {Array<Node>} Array of sibling nodes plus target element.
  */
 function getSiblingElementsAndSelf( element, selector ) {
@@ -19,7 +19,7 @@ function getSiblingElementsAndSelf( element, selector ) {
  *
  * @static
  * @param {Node} element - Target element.
- * @param {string} selector - A CSS selector.
+ * @param {string} [selector] - A CSS selector.
  * @return {Array<Node>} Array of sibling nodes.
  */
 function getSiblingElements( element, selector ) {
@@ -52,6 +52,7 @@ function _getSiblingElements( element, selector = '*', startArray = [] ) {
         }
         next = next.nextElementSibling;
     }
+
     return siblings;
 }
 
@@ -60,19 +61,20 @@ function _getSiblingElements( element, selector = '*', startArray = [] ) {
  *
  * @static
  * @param {Node} element - Target element.
- * @param {string} [selector] - A CSS selector.
+ * @param {string} [filterSelector] - A CSS selector.
+ * @param {string} [endSelector] - A CSS selector indicating where to stop. It will include this element if matched by the filter.
  * @return {Array<Node>} Array of ancestors.
  */
-function getAncestors( element, selector = '*' ) {
+function getAncestors( element, filterSelector = '*', endSelector ) {
     const ancestors = [];
     let parent = element.parentElement;
 
     while ( parent ) {
-        if ( parent.matches( selector ) ) {
+        if ( parent.matches( filterSelector ) ) {
             // document order
             ancestors.unshift( parent );
         }
-        parent = parent.parentElement;
+        parent = endSelector && parent.matches( endSelector ) ? null : parent.parentElement;
     }
 
     return ancestors;
@@ -84,10 +86,10 @@ function getAncestors( element, selector = '*' ) {
  * @static
  * @param {Node} element - Target element.
  * @param {string} filterSelector - A CSS selector.
- * @param {string} endSelector - A CSS selector.
+ * @param {string} [endSelector] - A CSS selector indicating where to stop. It will include this element if matched by the filter.
  * @return {Node} Closest ancestor.
  */
-function closestAncestorUntil( element, filterSelector, endSelector ) {
+function closestAncestorUntil( element, filterSelector = '*', endSelector ) {
     let parent = element.parentElement;
     let found = null;
 
@@ -99,6 +101,11 @@ function closestAncestorUntil( element, filterSelector, endSelector ) {
     }
 
     return found;
+}
+
+function getChildren( element, selector = '*' ) {
+    return [ ...element.children ]
+        .filter( el => el.matches( selector ) );
 }
 
 /**
@@ -114,7 +121,7 @@ function empty( element ) {
 
 /**
  * @param {Element} el - Target node
- * @return {boolean} Whether previous sibling has same name
+ * @return {boolean} Whether previous sibling has same node name
  */
 function hasPreviousSiblingElementSameName( el ) {
     let found = false;
@@ -130,6 +137,7 @@ function hasPreviousSiblingElementSameName( el ) {
         }
         el = el.previousSibling;
     }
+
     return found;
 }
 
@@ -149,6 +157,7 @@ function hasPreviousCommentSiblingWithContent( node, content ) {
         }
         node = node.previousSibling;
     }
+
     return found;
 }
 
@@ -227,15 +236,15 @@ function getRepeatIndex( node ) {
  */
 const elementDataStore = {
     /**
-     * @type WeakMap
+     * @type {WeakMap}
      */
     _storage: new WeakMap(),
     /**
      * Adds object to element storage. Ensures that element storage exist.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @param {object} obj - Stored data.
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @param {object} obj - stored data
      */
     put: function( element, key, obj ) {
         if ( !this._storage.has( element ) ) {
@@ -246,40 +255,119 @@ const elementDataStore = {
     /**
      * Return object from element storage.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @return {object} Stored data object.
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @return {object} stored data object
      */
     get: function( element, key ) {
         const item = this._storage.get( element );
+
         return item ? item.get( key ) : item;
     },
     /**
      * Checkes whether element has given storage item.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @return {boolean}
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @return {boolean} whether data is present
      */
     has: function( element, key ) {
         const item = this._storage.get( element );
+
         return item && item.has( key );
     },
     /**
      * Removes item from element storage. Removes element storage if empty.
      *
-     * @param {Node} element - Target element.
-     * @param {string} key - Name of the stored data.
-     * @return {object} Removed data object.
+     * @param {Node} element - target element
+     * @param {string} key - name of the stored data
+     * @return {object} removed data object
      */
     remove: function( element, key ) {
         var ret = this._storage.get( element ).delete( key );
         if ( !this._storage.get( key ).size === 0 ) {
             this._storage.delete( element );
         }
+
         return ret;
     }
 };
+
+class MutationsTracker{
+
+    constructor( el = document.documentElement ){
+        let mutations = 0;
+        let previousMutations = mutations;
+        this.classChanges = new WeakMap();
+        this.quiet = true;
+
+        const mutationObserver = new MutationObserver(  mutations => {
+            mutations.forEach(  mutation => {
+                mutations++;
+                if ( mutation.type === 'attributes' && mutation.attributeName === 'class' ){
+                    const trackedClasses = this.classChanges.get( mutation.target ) || [];
+                    trackedClasses.forEach( obj => {
+                        if( mutation.target.classList.contains( obj.className ) ){
+                            obj.completed = true;
+                            this.classChanges.set( mutation.target, trackedClasses );
+                        }
+                    } );
+                }
+            } );
+        } );
+
+        mutationObserver.observe( el, {
+            attributes: true,
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributeOldValue: true,
+            characterDataOldValue: true
+        } );
+
+        const checkInterval = setInterval( () => {
+            if ( previousMutations === mutations ){
+                this.quiet = true;
+                mutationObserver.disconnect();
+                clearInterval( checkInterval );
+            } else {
+                this.quiet = false;
+                previousMutations = mutations;
+            }
+        }, 100 );
+    }
+
+    _resolveWhenTrue( fn ){
+        if ( typeof fn !== 'function' ){
+            return Promise.reject();
+        }
+
+        return new Promise( resolve => {
+            const checkInterval = setInterval( () => {
+                if ( fn.call( this ) ){
+                    clearInterval( checkInterval );
+                    resolve();
+                }
+            }, 10 );
+        } );
+    }
+
+    waitForClassChange( element, className ){
+        const trackedClasses = this.classChanges.get( element ) || [];
+
+        if ( !trackedClasses.some( obj => obj.className === className ) ){
+            trackedClasses.push( { className } );
+            this.classChanges.set( element, trackedClasses );
+        }
+
+        return this._resolveWhenTrue( () => this.classChanges.get( element ).find( obj => obj.className === className ).completed );
+    }
+
+    waitForQuietness(){
+        return this._resolveWhenTrue( () => this.quiet );
+    }
+
+}
 
 export {
     /**
@@ -290,10 +378,12 @@ export {
     getSiblingElementsAndSelf,
     getSiblingElements,
     getAncestors,
+    getChildren,
     getRepeatIndex,
     getXPath,
     hasPreviousCommentSiblingWithContent,
     hasPreviousSiblingElementSameName,
     closestAncestorUntil,
     empty,
+    MutationsTracker
 };

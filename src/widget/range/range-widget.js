@@ -3,11 +3,11 @@ import { isNumber } from '../../js/utils';
 import events from '../../js/event';
 
 /**
- * @extends Widget
+ * @augments Widget
  */
 class RangeWidget extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale):not(.or-appearance-rating) > input[type="number"][min][max][step]';
@@ -104,7 +104,7 @@ class RangeWidget extends Widget {
     }
 
     /**
-     * @param {number} completeness
+     * @param {number} completeness - level of mercury
      */
     _updateMercury( completeness ) {
         const trackHeight = this.widget.querySelector( '.range-widget__ticks' ).clientHeight;
@@ -113,12 +113,12 @@ class RangeWidget extends Widget {
     }
 
     /**
-     * @param {object} props
+     * @param {object} props - The range properties.
      * @return {string} HTML string
      */
     _stepsBetweenHtmlStr( props ) {
         let html = '';
-        if ( props.distress ) {
+        if ( props.showScale ) {
             const stepsCount = ( props.max - props.min ) / props.step;
             if ( stepsCount <= 10 && ( props.max - props.min ) % props.step === 0 ) {
                 for ( let i = props.min + props.step; i < props.max; i += props.step ) {
@@ -126,6 +126,7 @@ class RangeWidget extends Widget {
                 }
             }
         }
+
         return html;
     }
 
@@ -170,7 +171,7 @@ class RangeWidget extends Widget {
     }
 
     /**
-     * @type object
+     * @type {object}
      */
     get props() {
         const props = this._props;
@@ -184,14 +185,14 @@ class RangeWidget extends Widget {
         props.step = Number( step );
         props.vertical = props.appearances.includes( 'vertical' ) || distress;
         props.ticks = !props.appearances.includes( 'no-ticks' );
-        props.distress = distress;
+        props.showScale = distress;
         props.maxTicks = 50;
 
         return props;
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this.range.classList.contains( 'empty' ) ? '' : this.range.value;

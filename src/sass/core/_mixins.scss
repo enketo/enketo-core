@@ -127,10 +127,14 @@
 }
 
 @mixin appearance-none {
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -ms-appearance: none;
+    @include appearance(none)
+}
+
+@mixin appearance($appearance) {
+    appearance: $appearance;
+    -moz-appearance: $appearance;
+    -webkit-appearance: $appearance;
+    -ms-appearance: $appearance;
 }
 
 @mixin display-flex {
@@ -242,6 +246,31 @@
     // just a placeholder
 }
 
+// Moving this styles to a mixin facilitates custom functionality added in OpenClinica with multiple constraints.
+@mixin question-invalid {
+    @include transition-fast;
+
+    background-color: $state-danger-bg;
+    border-color: $state-danger-border;
+    border-radius: $border-radius-small;
+
+    $pad: 10px;
+
+    margin-right: -$pad;
+    margin-left: -$pad;
+    padding-left: $pad;
+    padding-right: $pad;
+    padding-bottom: $pad;
+}
+
+// Moving this styles to a mixin facilitates custom functionality added in OpenClinica with multiple constraints.
+@mixin question-error-message {
+    font-weight: bold;
+    padding-top: 5px;
+    font-size: 0.85em;
+    color: $state-danger-text;
+}
+
 // from https://gist.github.com/JacobDB/0ffffaf8e772c12acf7102edb8a302be
 // Replace letters
 @function str-replace($string, $search, $replace: '') {
@@ -258,28 +287,28 @@
 // Encode symbols
 @function url-encode($string) {
     $map: ("%": "%25",
-        "<": "%3C",
-        ">": "%3E",
-        " ": "%20",
-        "!": "%21",
-        "*": "%2A",
-        "'": "%27",
-        '"': "%22",
-        "(": "%28",
-        ")": "%29",
-        ";": "%3B",
-        ":": "%3A",
-        "@": "%40",
-        "&": "%26",
-        "=": "%3D",
-        "+": "%2B",
-        "$": "%24",
-        ",": "%2C",
-        "/": "%2F",
-        "?": "%3F",
-        "#": "%23",
-        "[": "%5B",
-        "]": "%5D"
+            "<": "%3C",
+            ">": "%3E",
+            " ": "%20",
+            "!": "%21",
+            "*": "%2A",
+            "'": "%27",
+            '"': "%22",
+            "(": "%28",
+            ")": "%29",
+            ";": "%3B",
+            ":": "%3A",
+            "@": "%40",
+            "&": "%26",
+            "=": "%3D",
+            "+": "%2B",
+            "$": "%24",
+            ",": "%2C",
+            "/": "%2F",
+            "?": "%3F",
+            "#": "%23",
+            "[": "%5B",
+            "]": "%5D"
         );
 
     $new: $string;

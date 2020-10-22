@@ -5,18 +5,19 @@ import events from '../../js/event';
 
 /**
  * Visually transforms a question into a comment modal that can be shown on its linked question.
- * @extends Widget
+ *
+ * @augments Widget
  */
 class Comment extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.or-appearance-comment input[type="text"][data-for], .or-appearance-comment textarea[data-for]';
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     static get helpersRequired() {
         return [ 'input', 'pathToAbsolute' ];
@@ -46,8 +47,8 @@ class Comment extends Widget {
     }
 
     /**
-     * @param {Element} input
-     * @return {Element}
+     * @param {Element} input - form control HTML element
+     * @return {Element} the HTML question the widget is linked with
      */
     _getLinkedQuestion( input ) {
         const contextPath = this.options.helpers.input.getName( input );
@@ -63,15 +64,15 @@ class Comment extends Widget {
     }
 
     /**
-     * @return {boolean}
+     * @return {boolean} whether comment has error
      */
     _commentHasError() {
         return this.commentQuestion.classList.contains( 'invalid-required' ) || this.commentQuestion.classList.contains( 'invalid-constraint' );
     }
 
     /**
-     * @param {*} value
-     * @param {Error} error
+     * @param {*} value - comment value
+     * @param {Error} error - error instance
      */
     _setCommentButtonState( value, error ) {
         value = typeof value === 'string' ? value.trim() : value;
@@ -113,14 +114,14 @@ class Comment extends Widget {
             if ( this.commentButton.matches( ':visible' ) ) {
                 this.commentButton.click();
             } else {
-                console.log( `The linked question is not visible. Cannot apply focus to ${this.element.getAttribute( 'name' )}` );
+                console.warn( `The linked question is not visible. Cannot apply focus to ${this.element.getAttribute( 'name' )}` );
             }
         } );
     }
 
     /**
-     * @param {Element} linkedQuestion
-     * @return {boolean}
+     * @param {Element} linkedQuestion - the HTML question the widget is linked with
+     * @return {boolean} whether comment modal is currently shown
      */
     _isCommentModalShown( linkedQuestion ) {
         return !!linkedQuestion.querySelector( '.or-comment-widget' );
@@ -132,7 +133,7 @@ class Comment extends Widget {
     _showCommentModal() {
         const comment = this.question.cloneNode( true );
         const updateText = t( 'widget.comment.update' ) || 'Update';
-        const input = comment.querySelector( 'input, textarea' );
+        const input = comment.querySelector( 'input:not(.ignore), textarea:not(.ignore)' );
 
         comment.classList.remove( 'hide' );
         input.classList.add( 'ignore' );
@@ -181,7 +182,7 @@ class Comment extends Widget {
              *
              * Note that with setting "validateContinously" set to "true" this means it will be validated twice.
              */
-            this.options.helpers.input.validate( $( this.linkedQuestion.querySelector( 'input, select, textarea' ) ) );
+            this.options.helpers.input.validate( $( this.linkedQuestion.querySelector( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ) ) );
             ev.preventDefault();
             ev.stopPropagation();
         } );
@@ -202,7 +203,7 @@ class Comment extends Widget {
     /**
      * Hides comment modal
      *
-     * @param {Element} linkedQuestion
+     * @param {Element} linkedQuestion - the HTML question the widget is linked with
      */
     _hideCommentModal( linkedQuestion ) {
         linkedQuestion.querySelector( '.or-comment-widget' ).remove();

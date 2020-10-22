@@ -5,11 +5,11 @@ import $ from 'jquery';
 /**
  * Enhances radio buttons
  *
- * @extends Widget
+ * @augments Widget
  */
 class Radiopicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return 'form';
@@ -37,6 +37,7 @@ class Radiopicker extends Widget {
             // Readonly buttons/checkboxes will not respond to clicks.
             .on( 'click', 'input[type="checkbox"][readonly],input[type="radio"][readonly]', event => {
                 event.stopImmediatePropagation();
+
                 return false;
             } )
             /*
@@ -66,6 +67,7 @@ class Radiopicker extends Widget {
                         this.checked = false;
                     }
                 }
+
                 return byProgram;
             } )
             // Add unselect radio button functionality.
@@ -81,7 +83,7 @@ class Radiopicker extends Widget {
     }
 
     /**
-     * @param {Element} el
+     * @param {Element} el - Element to update
      */
     _updateDataChecked( el ) {
         if ( el.checked ) {

@@ -5,22 +5,24 @@
  */
 
 import $ from 'jquery';
+import { MutationsTracker } from './dom-utils';
 
 let dpi, printStyleSheet;
 let printStyleSheetLink;
 import dialog from 'enketo/dialog';
 
-// make sure setDpi is not called until DOM is ready
-$( document ).ready( () => {
-    setDpi();
-} );
-
 /**
  * @typedef PaperObj
- * @property {string} format
- * @property {string} margin
- * @property {string} orientation
+ * @property {object} [external] - Array of external data objects, required for each external data instance in the XForm
+ * @property {string} [format] - Paper format name, defaults as "A4". Other valid values are " Letter", "Legal",
+        "Tabloid", "Ledger", "A0", "A1", "A2", "A3", "A5", and "A6"
+ * @property {string} [landscape] - whether the paper is in landscape orientation, defaults to true
+ * @property {number} [margin] - paper margin in any valid CSS value
  */
+
+// make sure setDpi is not called until DOM is ready
+document.addEventListener( 'DOMContentLoaded', () => setDpi() );
+
 
 /**
  * Calculates the dots per inch and sets the dpi property
@@ -38,7 +40,7 @@ function setDpi() {
 /**
  * Gets a single print stylesheet
  *
- * @return {Element|null}
+ * @return {object|null} stylesheet
  */
 function getPrintStyleSheet() {
     // document.styleSheets is an Object not an Array!
@@ -50,13 +52,14 @@ function getPrintStyleSheet() {
             }
         }
     }
+
     return null;
 }
 
 /**
  * Obtains a link element with a reference to the print stylesheet.
  *
- * @return {Element}
+ * @return {Element} stylesheet link HTML element
  */
 function getPrintStyleSheetLink() {
     return document.querySelector( 'link[media="print"]' );
@@ -66,7 +69,7 @@ function getPrintStyleSheetLink() {
  * Applies the print stylesheet to the current view by changing stylesheets media property to 'all'
  *
  * @static
- * @return {boolean}
+ * @return {boolean} whether there was a print stylesheet to change
  */
 function styleToAll() {
     // sometimes, setStylesheet fails upon loading
@@ -76,6 +79,7 @@ function styleToAll() {
     printStyleSheet.media.mediaText = 'all';
     // Firefox:
     printStyleSheetLink.setAttribute( 'media', 'all' );
+
     return !!printStyleSheet;
 }
 
@@ -87,9 +91,11 @@ function styleToAll() {
 function styleReset() {
     printStyleSheet.media.mediaText = 'print';
     printStyleSheetLink.setAttribute( 'media', 'print' );
-    $( '.print-height-adjusted, .print-width-adjusted, .main' )
-        .removeAttr( 'style' )
-        .removeClass( 'print-height-adjusted print-width-adjusted' );
+    document.querySelectorAll( '.print-height-adjusted, .print-width-adjusted, .main' )
+        .forEach( el => {
+            el.removeAttribute( 'style' );
+            el.classList.remove( 'print-height-adjusted', 'print-width-adjusted' );
+        } );
     $( '.back-to-screen-view' ).off( 'click' ).remove();
 }
 
@@ -97,7 +103,7 @@ function styleReset() {
  * Tests if the form element is set to use the Grid Theme.
  *
  * @static
- * @return {boolean}
+ * @return {boolean} whether the form definition was defined to use the Grid theme
  */
 function isGrid() {
     return /theme-.*grid.*/.test( document.querySelector( 'form.or' ).getAttribute( 'class' ) );
@@ -107,84 +113,115 @@ function isGrid() {
  * Fixes a Grid Theme layout programmatically by imitating CSS multi-line flexbox in JavaScript.
  *
  * @static
- * @param {PaperObj} paper
- * @return {Promise}
+ * @param {PaperObj} paper - paper format
+ * @param {number} [delay] - delay in milliseconds, to wait for re-painting to finish.
+ * @return {Promise} Promise that resolves with undefined
  */
-function fixGrid( paper ) {
+function fixGrid( paper, delay = 500 ) {
+    const mutationsTracker = new MutationsTracker();
+
     // to ensure cells grow correctly with text-wrapping before fixing heights and widths.
     const main = document.querySelector( '.main' );
+    const cls = 'print-width-adjusted';
+    const classChange = mutationsTracker.waitForClassChange( main, cls );
     main.style.width = getPaperPixelWidth( paper );
-    main.classList.add( 'print-width-adjusted' );
+    main.classList.add( cls );
+
     // wait for browser repainting after width change
-    return new Promise( resolve => {
-        setTimeout( () => {
-            let $row;
+    // TODO: may not work, may need to add delay
+    return classChange
+        .then( () => {
+            let row = [];
             let rowTop;
+            const title = document.querySelector( '#form-title' );
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
-            const maxWidth = $( '#form-title' ).outerWidth() - 1;
+            const maxWidth = title ? title.offsetWidth - 1 : null;
             const els = document.querySelectorAll( '.question:not(.draft), .trigger:not(.draft)' );
 
             els.forEach( ( el, index ) => {
                 const lastElement = index === els.length - 1;
-                const $el = $( el );
-                const top = $el.offset().top;
+                const top = $( el ).offset().top;
                 rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
-                $row = $row || $el;
 
                 if ( top === rowTop ) {
-                    $row = $row.add( $el );
+                    row = row.concat( el );
                 }
 
-                if ( top > rowTop || lastElement ) {
-                    const widths = [];
-                    let cumulativeWidth = 0;
-                    let maxHeight = 0;
+                // If an element is hidden, top = 0. We still need to trigger a resize on the very last row
+                // if the last element is hidden, so this is placed outside of the previous if statement
+                if ( lastElement ) {
+                    _resizeRowElements( row, maxWidth );
+                }
 
-                    $row.each( function() {
-                        const width = Number( $( this ).css( 'width' ).replace( 'px', '' ) );
-                        widths.push( width );
-                        cumulativeWidth += width;
-                    } );
+                // process row, and start a new row
+                if ( top > rowTop ) {
+                    _resizeRowElements( row, maxWidth );
 
-                    // adjusts widths if w-values don't add up to 100%
-                    if ( cumulativeWidth < maxWidth ) {
-                        const diff = maxWidth - cumulativeWidth;
-                        $row.each( function( index ) {
-                            const width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
-                            // round down to 2 decimals to avoid 100.001% totals
-                            $( this )
-                                .css( 'width', `${Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100}%` )
-                                .addClass( 'print-width-adjusted' );
-                        } );
+                    if ( lastElement && !row.includes( el ) ) {
+                        _resizeRowElements( [ el ], maxWidth );
+                    } else {
+                        // start a new row
+                        row = [ el ];
+                        rowTop = $( el ).offset().top;
                     }
 
-                    $row.each( function() {
-                        const height = $( this ).outerHeight();
-                        maxHeight = ( height > maxHeight ) ? height : maxHeight;
-                    } );
-
-                    $row.addClass( 'print-height-adjusted' ).css( 'height', `${maxHeight}px` );
-
-                    // start a new row
-                    $row = $el;
-                    rowTop = $el.offset().top;
                 } else if ( rowTop < top ) {
-                    console.error( 'unexpected question top position: ', top, 'for element:', $el, 'expected >=', rowTop );
+                    console.error( 'unexpected question top position: ', top, 'for element:', el, 'expected >=', rowTop );
                 }
             } );
 
-            // In case anybody is using this event.
-            $( window ).trigger( 'printviewready' );
-            resolve();
-        }, 800 );
+            return mutationsTracker.waitForQuietness()
+                .then( () => {
+                    // The need for this 'dumb' delay is unfortunate, but at least the mutationTracker will smartly increase
+                    // the waiting time for larger forms (more mutations).
+                    return new Promise( resolve => setTimeout( resolve, delay ) );
+                } );
+        } );
+}
+
+/**
+ *
+ * @param {Element} row - row elements
+ * @param {number} maxWidth - maximum width of row
+ */
+function _resizeRowElements( row, maxWidth ) {
+    const widths = [];
+    let cumulativeWidth = 0;
+    let maxHeight = 0;
+
+    row.forEach( el => {
+        const width = Number( $( el ).css( 'width' ).replace( 'px', '' ) );
+        widths.push( width );
+        cumulativeWidth += width;
+    } );
+
+    // adjusts widths if w-values don't add up to 100%
+    if ( cumulativeWidth < maxWidth ) {
+        const diff = maxWidth - cumulativeWidth;
+        row.forEach( ( el, index ) => {
+            const width = widths[ index ] + ( widths[ index ] / cumulativeWidth ) * diff;
+            // round down to 2 decimals to avoid 100.001% totals
+            el.style.width = `${Math.floor( ( width * 100 / maxWidth ) * 100 ) / 100}%`;
+            el.classList.add( 'print-width-adjusted' );
+        } );
+    }
+
+    row.forEach( el => {
+        const height = el.offsetHeight;
+        maxHeight = ( height > maxHeight ) ? height : maxHeight;
+    } );
+
+    row.forEach( el => {
+        el.classList.add( 'print-height-adjusted' );
+        el.style.height = `${maxHeight}px`;
     } );
 }
 
 /**
  * Returns a CSS width value in px (e.g. `"100px"`) for a provided paper format, orientation (`"portrait"` or `"landscape"`) and margin (as any valid CSS value).
  *
- * @param {PaperObj} paper
- * @return {string}
+ * @param {PaperObj} paper - paper format
+ * @return {string} pixel width string
  */
 function getPaperPixelWidth( paper ) {
     let printWidth;
@@ -255,7 +292,7 @@ function closeAllDetails() {
  * in your app with a dialog that collects a complete paper format (size, margin, orientation);
  *
  * @static
- * @param {string} theme
+ * @param {string} theme - theme name
  */
 function print( theme ) {
     if ( theme === 'grid' || ( !theme && isGrid() ) ) {
@@ -266,6 +303,7 @@ function print( theme ) {
                     throw new Error( 'Print cancelled by user.' );
                 }
                 swapped = styleToAll();
+
                 return fixGrid( {
                     format
                 } );

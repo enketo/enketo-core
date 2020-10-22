@@ -10,9 +10,9 @@ import events from './event';
 export default {
     /**
      * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
-     * @param {boolean} forceClearIrrelevant
+     * @param {boolean} forceClearNonRelevant -  whether to empty the values of non-relevant nodes
      */
-    update( updated, forceClearIrrelevant ) {
+    update( updated, forceClearNonRelevant ) {
         let $nodes;
 
         if ( !this.form ) {
@@ -21,13 +21,13 @@ export default {
 
         $nodes = this.form.getRelatedNodes( 'data-relevant', '', updated );
 
-        this.updateNodes( $nodes, forceClearIrrelevant );
+        this.updateNodes( $nodes, forceClearNonRelevant );
     },
     /**
-     * @param {jQuery} $nodes
-     * @param {boolean} forceClearIrrelevant
+     * @param {jQuery} $nodes - Nodes to update
+     * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    updateNodes( $nodes, forceClearIrrelevant ) {
+    updateNodes( $nodes, forceClearNonRelevant ) {
         let p;
         let $branchNode;
         let result;
@@ -66,6 +66,7 @@ export default {
                 if ( $node.parentsUntil( '.or', '#or-calculated-items' ).length === 0 ) {
                     console.error( 'could not find branch node for ', this );
                 }
+
                 return;
             }
 
@@ -79,6 +80,7 @@ export default {
                     // now remove the groups that have a repeat-info child without repeat instance siblings
                     .filter( function() {
                         const $g = $( this );
+
                         return $g.children( '.or-repeat' ).length > 0 || $g.children( '.or-repeat-info' ).length === 0;
                     } ); //.eq( index )
                 // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
@@ -139,7 +141,7 @@ export default {
                 alreadyCovered.push( this.getAttribute( 'name' ) );
             }
 
-            if ( that.process( $branchNode, p.path, result, forceClearIrrelevant ) === true ) {
+            if ( that.process( $branchNode, p.path, result, forceClearNonRelevant ) === true ) {
                 branchChange = true;
             }
         } );
@@ -151,36 +153,37 @@ export default {
     /**
      * Evaluates a relevant expression (for future fancy stuff this is placed in a separate function)
      *
-     * @param {string} expr
-     * @param {string} contextPath
-     * @param {number} index
-     * @return {boolean}
+     * @param {string} expr - relevant XPath expression to evaluate
+     * @param {string} contextPath - Path of the context node
+     * @param {number} index - index of context node
+     * @return {boolean} result of evaluation
      */
     evaluate( expr, contextPath, index ) {
         const result = this.form.model.evaluate( expr, 'boolean', contextPath, index );
+
         return result;
     },
     /**
      * Processes the evaluation result for a branch
      *
-     * @param {jQuery} $branchNode
-     * @param {string} path - Path of branch node
+     * @param {jQuery} $branchNode - branch node
+     * @param {string} path - path of branch node
      * @param {boolean} result - result of relevant evaluation
-     * @param {boolean} forceClearIrrelevant - Whether to force clearing of irrelevant nodes and descendants
+     * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    process( $branchNode, path, result, forceClearIrrelevant ) {
+    process( $branchNode, path, result, forceClearNonRelevant ) {
         if ( result === true ) {
             return this.enable( $branchNode, path );
         } else {
-            return this.disable( $branchNode, path, forceClearIrrelevant );
+            return this.disable( $branchNode, path, forceClearNonRelevant );
         }
     },
 
     /**
      * Checks whether branch currently has 'relevant' state
      *
-     * @param {jQuery} $branchNode
-     * @return {boolean}
+     * @param {jQuery} $branchNode - branch node
+     * @return {boolean} whether branch is currently relevant
      */
     selfRelevant( $branchNode ) {
         return !$branchNode.hasClass( 'disabled' ) && !$branchNode.hasClass( 'pre-init' );
@@ -190,8 +193,8 @@ export default {
      * Enables and reveals a branch node/group
      *
      * @param {jQuery} $branchNode - The jQuery object to reveal and enable
-     * @param {string} path
-     * @return {boolean}
+     * @param {string} path - path of branch node
+     * @return {boolean} whether the relevant changed as a result of this action
      */
     enable( $branchNode, path ) {
         let change = false;
@@ -212,6 +215,7 @@ export default {
             this.form.widgets.enable( $branchNode[ 0 ] );
             this.activate( $branchNode );
         }
+
         return change;
     },
 
@@ -219,19 +223,19 @@ export default {
      * Disables and hides a branch node/group
      *
      * @param {jQuery} $branchNode - The jQuery object to hide and disable
-     * @param {string} path
-     * @param {boolean} forceClearIrrelevant
-     * @return {boolean}
+     * @param {string} path - path of branch node
+     * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
+     * @return {boolean} whether the relevant changed as a result of this action
      */
-    disable( $branchNode, path, forceClearIrrelevant ) {
+    disable( $branchNode, path, forceClearNonRelevant ) {
         const virgin = $branchNode.hasClass( 'pre-init' );
         let change = false;
 
-        if ( virgin || this.selfRelevant( $branchNode ) || forceClearIrrelevant ) {
+        if ( virgin || this.selfRelevant( $branchNode ) || forceClearNonRelevant ) {
             change = true;
             // if the branch was previously enabled, keep any default values
             if ( !virgin ) {
-                if ( this.form.options.clearIrrelevantImmediately || forceClearIrrelevant ) {
+                if ( forceClearNonRelevant ) {
                     this.clear( $branchNode, path );
                 }
             } else {
@@ -240,14 +244,15 @@ export default {
 
             this.deactivate( $branchNode );
         }
+
         return change;
     },
     /**
      * Clears values from branchnode.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {jQuery} $branchNode
-     * @param {string} path
+     * @param {jQuery} $branchNode - branch node
+     * @param {string} path - path of branch node
      */
     clear( $branchNode, path ) {
         // A change event ensures the model is updated
@@ -262,8 +267,8 @@ export default {
         }
     },
     /**
-     * @param {jQuery} $branchNode
-     * @param {boolean} bool
+     * @param {jQuery} $branchNode - branch node
+     * @param {boolean} bool - value to set disabled property to
      */
     setDisabledProperty( $branchNode, bool ) {
         const type = $branchNode.prop( 'nodeName' ).toLowerCase();
@@ -281,7 +286,7 @@ export default {
      * Activates form controls.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {jQuery} $branchNode
+     * @param {jQuery} $branchNode - branch node
      */
     activate( $branchNode ) {
         this.setDisabledProperty( $branchNode, false );
@@ -290,7 +295,7 @@ export default {
      * Deactivates form controls.
      * This function is separated so it can be overridden in custom apps.
      *
-     * @param {jQuery} $branchNode
+     * @param {jQuery} $branchNode - branch node
      */
     deactivate( $branchNode ) {
         $branchNode.addClass( 'disabled' );

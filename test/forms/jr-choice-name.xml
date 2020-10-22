@@ -12,8 +12,12 @@
       <instance>
         <choice-regex delimiter="#" id="issue_3281" prefix="J1!issue_3281!" version="2017-03-24">
           <input>Default Value</input>
-          <translator>clinic</translator><output/><debug/>
+          <translator>clinic</translator>
+          <output/>
+          <output-relative/>
+          <debug/>
           <note/>
+          <note-relative/>
           <meta>
             <instanceID/>
           </meta>
@@ -22,8 +26,10 @@
       <bind nodeset="/choice-regex/input" type="string"/>
       <bind nodeset="/choice-regex/translator" type="select1"/>
       <bind calculate='     jr:choice-name(       /choice-regex/translator     ,  " /choice-regex/translator "   )    ' nodeset='/choice-regex/output' type='string'/>
+      <bind calculate='jr:choice-name( ../translator     ,  " ../translator "   )    ' nodeset='/choice-regex/output-relative' type='string'/>
       <bind nodeset="/choice-regex/debug" readonly="true()" type="string"/>
       <bind nodeset="/choice-regex/note" readonly="true()" type="string"/>
+      <bind nodeset="/choice-regex/note-relative" readonly="true()" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/choice-regex/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -52,5 +58,8 @@
     <input ref="/choice-regex/note">
       <label>The value above is stale if _Input_ is changed and you leave the textbox since it modifies the choice label for _Translator_ but not the value. The choice-name function gets updated if the choice value is modified, but should also update if the choice label changes.</label>
     </input>
+    <input ref="/choice-regex/note-relative">
+        <label>output when using relative paths = **<output value=" /choice-regex/output-relative "/>**</label>
+      </input>
   </h:body>
 </h:html>

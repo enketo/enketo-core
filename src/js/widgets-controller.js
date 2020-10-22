@@ -44,12 +44,12 @@ function init( $group, opts = {} ) {
  * done during create().
  *
  * @static
- * @param {Element} group
+ * @param {Element} group - HTML element
  */
 function enable( group ) {
     widgets.forEach( Widget => {
         const els = _getElements( group, Widget.selector )
-            .filter( el => el.nodeName.toLowerCase() === 'select' ? !el.getAttribute( 'readonly' ) : !el.readOnly );
+            .filter( el => el.nodeName.toLowerCase() === 'select' ? !el.hasAttribute( 'readonly' ) : !el.readOnly );
         new Collection( els ).enable( Widget );
     } );
 }
@@ -57,7 +57,7 @@ function enable( group ) {
 /**
  * Disables  widgets, if they aren't disabled already when the branch was disabled by the controller.
  * In most widgets, this function will do nothing because all fieldsets, inputs, textareas and selects will get
- * the disabled attribute automatically when the branch element provided as parameter becomes irrelevant.
+ * the disabled attribute automatically when the branch element provided as parameter becomes non-relevant.
  *
  * @static
  * @param {Element} group - The element inside which all widgets need to be disabled.
@@ -86,6 +86,7 @@ function _getElements( group, selector ) {
             return [ ...group.querySelectorAll( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ) ]
                 .filter( el => el.matches( selector ) );
         }
+
         return [ ...group.querySelectorAll( selector ) ];
     }
 
@@ -153,7 +154,7 @@ function _setLangChangeListener( Widget, els ) {
  */
 function _setOptionChangeListener( Widget, els ) {
     if ( els.length > 0 && Widget.list ) {
-        $( els ).on( 'changeoption', function() {
+        $( els ).on( events.ChangeOption().type, function() {
             // update (itemselect) picker on which event was triggered because the options changed
             new Collection( this ).update( Widget );
         } );
@@ -179,7 +180,7 @@ function _setValChangeListener( Widget, els ) {
 class Collection {
     /**
      * @class
-     * @param {Array<Element>} elements
+     * @param {Array<Element>} elements - HTML elements
      */
     constructor( elements ) {
         if ( !Array.isArray( elements ) ) {
@@ -188,9 +189,9 @@ class Collection {
         this.elements = elements;
     }
     /**
-     * @param {Element} element
-     * @param {object} Widget
-     * @param {object} [options]
+     * @param {Element} element - HTML element
+     * @param {object} Widget - widget to instantiate
+     * @param {object} [options] - widget options
      */
     _instantiateSingleWidget( element, Widget, options = {} ) {
         if ( !Widget.condition( element ) ) {
@@ -207,8 +208,8 @@ class Collection {
         }
     }
     /**
-     * @param {object} Widget
-     * @param {Function} method
+     * @param {object} Widget - widget to instantiate
+     * @param {Function} method - widget function to call
      */
     _methodCall( Widget, method ) {
         this.elements.forEach( element => {
@@ -219,26 +220,26 @@ class Collection {
         } );
     }
     /**
-     * @param {object} Widget
-     * @param {object} [options]
+     * @param {object} Widget - widget to instantiate
+     * @param {object} [options] - widget options
      */
     instantiate( Widget, options ) {
         this.elements.forEach( el => this._instantiateSingleWidget( el, Widget, options ) );
     }
     /**
-     * @param {object} Widget
+     * @param {object} Widget - widget to instantiate
      */
     update( Widget ) {
         this._methodCall( Widget, 'update' );
     }
     /**
-     * @param {object} Widget
+     * @param {object} Widget - widget to instantiate
      */
     disable( Widget ) {
         this._methodCall( Widget, 'disable' );
     }
     /**
-     * @param {object} Widget
+     * @param {object} Widget - The widget to instantiate
      */
     enable( Widget ) {
         this._methodCall( Widget, 'enable' );

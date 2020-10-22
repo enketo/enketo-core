@@ -9,18 +9,19 @@ import '../../js/dropdown.jquery';
 /**
  * Extends eternicode's bootstrap-datepicker without changing the original.
  * https://github.com/eternicode/bootstrap-datepicker
- * @extends Widget
+ *
+ * @augments Widget
  */
 class DatepickerExtended extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
-        return '.question input[type="date"]:not([readonly])';
+        return '.question input[type="date"]';
     }
 
     /**
-     * @type boolean
+     * @type {boolean}
      */
     static condition() {
         return !support.touch || !support.inputTypes.date;
@@ -47,16 +48,13 @@ class DatepickerExtended extends Widget {
         this._setFocusHandler( this.$fakeDateI );
         this._setResetHandler( this.$fakeDateI );
 
-        this.$fakeDateI.datepicker( {
-            format: this.settings.format,
-            autoclose: true,
-            todayHighlight: true,
-            startView: this.settings.startView,
-            minViewMode: this.settings.minViewMode,
-            forceParse: false
-        } );
-
+        this.enable();
         this.value = this.element.value;
+
+        // It is much easier to first enable and disable, and not as bad it seems, since readonly will become dynamic eventually.
+        if ( this.props.readonly ) {
+            this.disable();
+        }
     }
 
     /**
@@ -71,7 +69,7 @@ class DatepickerExtended extends Widget {
             .append( this.resetButtonHtml );
         const $fakeDateI = $fakeDate.find( 'input' );
 
-        $dateI.hide().after( $fakeDate );
+        $dateI.hide().before( $fakeDate );
 
         return $fakeDateI;
     }
@@ -145,21 +143,42 @@ class DatepickerExtended extends Widget {
     }
 
     /**
-     * @param {string} [date]
-     * @return string
+     * @param {string} [date] - date
+     * @return {string} the actual date
      */
     _toActualDate( date = '' ) {
         date = date.trim();
+
         return date && this.settings.format === 'yyyy' && date.length < 5 ? `${date}-01-01` : ( date && this.settings.format === 'yyyy-mm' && date.length < 8 ? `${date}-01` : date );
     }
 
     /**
-     * @param {string} [date]
-     * @return string
+     * @param {string} [date] - date
+     * @return {string} the display date
      */
     _toDisplayDate( date = '' ) {
         date = date.trim();
+
         return date && this.settings.format === 'yyyy' ? date.substring( 0, 4 ) : ( this.settings.format === 'yyyy-mm' ? date.substring( 0, 7 ) : date );
+    }
+
+    disable() {
+        this.$fakeDateI.datepicker( 'destroy' );
+        this.$fakeDateI.prop( 'disabled', true );
+        this.$fakeDateI.next( '.btn-reset' ).prop( 'disabled', true );
+    }
+
+    enable() {
+        this.$fakeDateI.datepicker( {
+            format: this.settings.format,
+            autoclose: true,
+            todayHighlight: true,
+            startView: this.settings.startView,
+            minViewMode: this.settings.minViewMode,
+            forceParse: false
+        } );
+        this.$fakeDateI.prop( 'disabled', false );
+        this.$fakeDateI.next( '.btn-reset' ).prop( 'disabled', false );
     }
 
     update() {
@@ -167,21 +186,25 @@ class DatepickerExtended extends Widget {
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get displayedValue() {
         return this.question.querySelector( '.widget input' ).value;
     }
 
     /**
-     * @type string
+     * @type {string}
      */
     get value() {
         return this._toActualDate( this.displayedValue );
     }
 
     set value( date ) {
-        this.$fakeDateI.datepicker( 'setDate', this._toDisplayDate( date ) );
+        if ( this.$fakeDateI[ 0 ].disabled ) {
+            this.$fakeDateI[ 0 ].value = this._toDisplayDate( date );
+        } else {
+            this.$fakeDateI.datepicker( 'setDate', this._toDisplayDate( date ) );
+        }
     }
 
 }

@@ -5,6 +5,7 @@ $printBaseFontSize: 10px;
 .or {
 
     input:not([type="radio"]):not([type="checkbox"]),
+    .print-input-text,
     select,
     textarea {
         border-bottom: none;
@@ -38,9 +39,18 @@ $printBaseFontSize: 10px;
     }
 }
 
+.or:not(.print-relevant-only) {
+
+    // targeting is getting a little weird here
+    .question.or-branch.disabled,
+    .or-branch.disabled {
+        display: inline-flex;
+    }
+}
+
 .question {
 
-    &.non-select::after,
+    &.non-select:not(.or-analog-scale-initialized)::after,
     &.or-appearance-search:after,
     &.or-appearance-autocomplete:after {
         content: ' ';
@@ -52,19 +62,12 @@ $printBaseFontSize: 10px;
         border-bottom: 1px dotted black;
     }
 
-    &.widget.date,
-    &.widget.bootstrap-timepicker {
-        display: none;
-    }
-
-    input {
-
-        &[type=date],
-        &[type=time],
-        &[type=datetime-local] {
-            opacity: 0.7;
-            display: block !important;
-            visibility: hidden;
+    .widget {
+        // not sure if this could apply to all widgets, or just the ones below
+        &.date,
+        &.timepicker,
+        &.datetimepicker{
+            flex: 1;
         }
     }
 

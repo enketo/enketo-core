@@ -8,12 +8,12 @@ import { getAncestors, getSiblingElements } from './dom-utils';
 
 export default {
     /**
-     * @type Array
+     * @type {Array}
      * @default
      */
     tocItems: [],
     /**
-     * @type Number
+     * @type {number}
      * @default
      */
     _maxTocLevel: [],
@@ -56,7 +56,7 @@ export default {
     /**
      * Generate ToC Html Fragment
      *
-     * @return DocumentFragment
+     * @return {DocumentFragment} HTML list element containing Table of Contents
      */
     getHtmlFragment() {
         this.generateTocItems();
@@ -91,7 +91,7 @@ export default {
     /**
      * Get Title of Current ToC Element
      *
-     * @param {Element} el
+     * @param {Element} el - HTML element that serves as page
      */
     _getTitle( el ) {
         let tocItemText;
@@ -104,14 +104,15 @@ export default {
                 tocItemText = hintEl.textContent;
             }
         }
-        tocItemText = tocItemText && tocItemText.length > 20 ? `${tocItemText.substring(0,20)}...` : tocItemText;
+        tocItemText = tocItemText && tocItemText.length > 20 ? `${tocItemText.substring( 0,20 )}...` : tocItemText;
+
         return tocItemText;
     },
     /**
      * Builds List of ToC Items
      *
-     * @param {Array<Object>} items
-     * @param {Element} appendTo
+     * @param {Array<object>} items - ToC list of items
+     * @param {Element} appendTo - HTML Element to append ToC list to
      */
     _buildTocHtmlList( items, appendTo ) {
         if ( items.length > 0 ) {

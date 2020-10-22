@@ -1,11 +1,26 @@
 import { FormModel as Model } from '../../src/js/form-model';
+import events from '../../src/js/event';
 import forms from '../mock/forms';
 import config from '../../config';
 
 const getModel = filename => {
     const model = new Model( forms[ filename ].xml_model );
     model.init();
+
     return model;
+};
+
+// suppress particular console.warn messages
+console.__warn = console.warn;
+console.warn = ( msg ) => {
+    const surpressedMessages = [
+        'Model has no instanceID element'
+    ];
+    if ( surpressedMessages.includes( msg ) ){
+        return;
+    } else {
+        console.__warn( msg );
+    }
 };
 
 // I don't remember why this functionality exists
@@ -46,12 +61,13 @@ describe( 'Instantiating a model', () => {
     } );
 
     it( 'without an instanceID node, returns an error', () => {
-        const result = new Model( modelStr ).init();
+        const result = new Model( '<data></data>' ).init();
 
         expect( result.length ).toEqual( 1 );
         expect( /Missing\sinstanceID/.test( result[ 0 ] ) ).toEqual( true );
     } );
 } );
+
 
 describe( 'Data node getter', () => {
     let i;
@@ -82,8 +98,8 @@ describe( 'Data node getter', () => {
         [ '/thedata/repeatGroup/nodeC', null, { onlyleaf: true }, 3 ]
     ];
 
-    const model = new Model( '<model><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
-        '<repeatGroup template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
+    const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
+        '<repeatGroup jr:template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
         '<repeatGroup><nodeC>c2</nodeC></repeatGroup>' +
         '<repeatGroup><nodeC>c3</nodeC></repeatGroup>' +
         '<somenodes><A>one</A><B>one</B><C>one</C></somenodes><someweights><w1>1</w1><w2>3</w2><w.3>5</w.3></someweights><nodeF/>' +
@@ -350,14 +366,14 @@ describe( 'Data node remover', () => {
             node = data.node( '/thedata/nodeA' );
 
         expect( node.getElements().length ).toEqual( 1 );
-        /*data.node( '/thedata/nodeA' )*/
+
         node.remove();
         expect( node.getElements().length ).toEqual( 0 );
         expect( data.node( '/thedata/nodeA' ).getElements().length ).toEqual( 0 );
     } );
 
     it( 'can remove nodes with a . in the nodeName', () => {
-        const model = new Model( '<model><instance><data><F27./></data></instance></model>' );
+        const model = new Model( '<model><instance><data><F27./><meta><instanceID/></meta></data></instance></model>' );
         const path = '/data/F27.';
         let node;
 
@@ -372,12 +388,12 @@ describe( 'Data node remover', () => {
 
 describe( 'DeprecatedID value getter', () => {
     it( 'returns "" if deprecatedID node does not exist', () => {
-        const model = new Model( '<model><instance><data></data></instance></model>' );
+        const model = new Model( '<model><instance><data><meta><instanceID/></meta></data></instance></model>' );
         model.init();
         expect( model.deprecatedID ).toEqual( '' );
     } );
     it( 'returns value of deprecatedID node', () => {
-        const model = new Model( '<model><instance><data><meta><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
+        const model = new Model( '<model><instance><data><meta><instanceID/><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
         model.init();
         expect( model.deprecatedID ).toEqual( 'a' );
     } );
@@ -385,7 +401,27 @@ describe( 'DeprecatedID value getter', () => {
 
 describe( 'getRepeatSeries', () => {
     // Note the strategic placements of whitespace '\n'
-    const model = new Model( '<model><instance><a>\n<r><b/><nR/>\n<nR/></r>\n<r><b/><nR/><nR/>\n<nR/></r></a></instance></model>' );
+    const model = new Model( `
+        <model>
+            <instance>
+                <a>
+                    <r>
+                        <b/>
+                        <nR/>
+                        <nR/>
+                    </r>
+                    <r>
+                        <b/>
+                        <nR/>
+                        <nR/>
+                        <nR/>
+                    </r>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </a>
+            </instance>
+        </model>` );
     model.init();
     model.extractFakeTemplates( [ '/a/r', '/a/r/nR' ] );
     it( 'returns the elements in one series of repeats', () => {
@@ -441,7 +477,7 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
 
 // This test makes sure that whatever date strings are returned by the XPath evaluator can be dealt with by the form engine
 describe( 'dates returned by the XPath evaluator ', () => {
-    const model = new Model( '<model><instance><data></data></instance></model>' );
+    const model = new Model( '<model><instance><data><meta><instanceID/></meta></data></instance></model>' );
     model.init();
     [
         [ 'date("2018-01-01")', '2018-01-01', 'date' ],
@@ -469,7 +505,7 @@ describe( 'functionality to obtain string of the primary XML instance for storag
     } );
 
     it( 'returns primary instance without templates - B', () => {
-        const model = new Model( '<model><instance><data><group    template=""><a/></group></data></instance></model>' );
+        const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group    jr:template=""><a/></group></data></instance></model>' );
         model.init();
         expect( model.getStr() ).toEqual( '<data></data>' );
     } );
@@ -521,13 +557,13 @@ describe( 'converting absolute paths', () => {
 
     ].forEach( test => {
         it( 'converts correctly when the model and instance node are included in the model', () => {
-            const model = new Model( '<model><instance><root/></instance></model>' );
+            const model = new Model( '<model><instance><root><meta><instanceID/></meta></root></instance></model>' );
             const expected = test[ 1 ] || test[ 0 ];
             model.init();
             expect( model.shiftRoot( test[ 0 ] ) ).toEqual( expected );
         } );
         it( 'does nothing if model and instance node are absent in the model', () => {
-            const model = new Model( '<data><nodeA/></data>' );
+            const model = new Model( '<data><nodeA/><meta><instanceID/></meta></data>' );
             expect( model.shiftRoot( test[ 0 ] ) ).toEqual( test[ 0 ] );
         } );
     } );
@@ -629,14 +665,15 @@ describe( 'converting indexed-repeat() ', () => {
 
 describe( 'converting pulldata() ', () => {
     [
-        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', 2)', 'instance(\'hhplotdata\')/root/item[hhid_key = 2]/plot1size' ],
-        [ 'pulldata( \'hhplotdata\', \'plot1size\', \'hhid_key\' , 2 )', 'instance(\'hhplotdata\')/root/item[hhid_key = 2]/plot1size' ],
+        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', 2)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'2\']/plot1size' ],
+        [ 'pulldata( \'hhplotdata\', \'plot1size\', \'hhid_key\' , 2 )', 'instance(\'hhplotdata\')/root/item[hhid_key = \'2\']/plot1size' ],
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', \'two\')', 'instance(\'hhplotdata\')/root/item[hhid_key = \'two\']/plot1size' ],
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/a)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'aa\']/plot1size' ],
-        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/b)', 'instance(\'hhplotdata\')/root/item[hhid_key = 22]/plot1size' ],
+        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/b)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'22\']/plot1size' ],
+        [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', /data/c)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'12E345\']/plot1size' ],
     ].forEach( test => {
         it( 'works', () => {
-            const model = new Model( '<model><instance><data><a>aa</a><b>22</b></data></instance></model>' );
+            const model = new Model( '<model><instance><data><a>aa</a><b>22</b><c>12E345</c></data></instance></model>' );
             const fn = test[ 0 ];
             const expected = test[ 1 ];
             model.init();
@@ -681,7 +718,7 @@ describe( 'external instances functionality', () => {
         expect( loadErrors.length ).toEqual( 0 );
         expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).toEqual( 'nl' );
 
-        // Now check that the orginal external XML docs are stil the same. Very important for e.g. 
+        // Now check that the orginal external XML docs are stil the same. Very important for e.g.
         // form reset functionality in apps.
         // https://github.com/kobotoolbox/enketo-express/issues/1086
         expect( external[ 0 ].xml.querySelector( 'country' ).textContent ).toEqual( 'nl' );
@@ -1122,7 +1159,7 @@ describe( 'merging an instance into the model', () => {
                 '<model><instance><a><c>record</c></a></instance></model>'
             ],
             // rogue record contains a node with a template or jr:template attribute
-            [ '<a><r template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><meta/></a></instance></model>' ],
+            //[ '<a xmlns:jr="http://openrosa.org/javarosa"><r jr:template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>', '<model><instance><a><r><b/></r><meta/></a></instance></model>' ],
             [ '<a xmlns:jr="http://someth.ing"><r jr:template=""><b>ignore</b></r></a>', '<model><instance><a><r><b/></r><meta/></a></instance></model>',
                 '<model><instance><a xmlns:jr="http://someth.ing"><r><b/></r><meta/></a></instance></model>'
             ],
@@ -1233,8 +1270,6 @@ describe( 'merging an instance into the model', () => {
 
     describe( 'when the model contains templates', () => {
         [
-            // with improper template=""
-            [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model><instance><a><r template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<a><r><b>5</b></r><r><b>6</b></r>' ],
             // with proper jr:template="" and namespace definition
             [ '<a><r><b>5</b></r><r><b>6</b></r><meta/></a>', '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>0</b></r><meta><instanceID/></meta></a></instance></model>', '<instance><a><r><b>5</b></r><r><b>6</b></r>' ],
         ].forEach( test => {
@@ -1288,6 +1323,16 @@ describe( 'merging an instance into the model', () => {
     } );
 
     describe( 'returns load errors upon initialization', () => {
+        const originalErrorLog = console.error;
+
+        beforeAll( ()=> {
+            console.error = () => {};
+        } );
+
+        afterAll( ()=> {
+            console.error = originalErrorLog;
+        } );
+
         it( 'when the instance-to-edit contains nodes that are not present in the default instance', () => {
             const model = new Model( {
                 modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
@@ -1340,8 +1385,8 @@ describe( 'merging an instance into the model', () => {
         } );
 
     } );
-} );
 
+} );
 
 // Runs fine headlessly locally, but not on Travis for some reason.
 describe( 'instanceID and deprecatedID are populated upon model initilization', () => {
@@ -1402,4 +1447,31 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         expect( eventObjects[ 1 ].nodes ).toEqual( [ 'deprecatedID' ] );
 
     } );
+
 } );
+
+describe( 'odk-instance-first-load event', () => {
+
+    const modelStr = '<model><instance><data><a><meta><instanceID/></meta></a></data></instance></model>';
+    const instanceStr = '<data><a>1</a></data>';
+
+    it( 'fires once when starting a new record', () => {
+        const model = new Model( { modelStr } );
+        let eventsOccurred = 0;
+
+        model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
+        model.init();
+        expect( eventsOccurred ).toEqual( 1 );
+    } );
+
+    it( 'does not fire when loading an existing record', () => {
+        const model = new Model( { modelStr, instanceStr } );
+        let eventsOccurred = 0;
+
+        model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
+        model.init();
+        expect( eventsOccurred ).toEqual( 0 );
+    } );
+
+} );
+

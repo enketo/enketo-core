@@ -3,8 +3,8 @@ import event from '../../js/event';
 /*!
  * Timepicker
  *
- * Forked from https://github.com/jdewit/bootstrap-timepicker: 
- * 
+ * Forked from https://github.com/jdewit/bootstrap-timepicker:
+ *
  * Copyright 2013 Joris de Wit and timepicker contributors
  *
  * Contributors https://github.com/jdewit/bootstrap-timepicker/graphs/contributors
@@ -291,6 +291,7 @@ import event from '../../js/event';
             el.textContent = this.meridianNotation.pm;
             const pmLength = el.scrollWidth;
             el.remove();
+
             return amLength > pmLength ? amLength : pmLength;
         },
 
@@ -311,12 +312,12 @@ import event from '../../js/event';
             }
 
             templateContent = `<table><tr><td><a href="#" data-action="incrementHour"><span class="${this.icons.up}"></span></a></td><td class="separator">&nbsp;</td><td><a href="#" data-action="incrementMinute"><span class="${this.icons.up}"></span></a></td>${this.showSeconds ?
-        `<td class="separator">&nbsp;</td><td><a href="#" data-action="incrementSecond"><span class="${this.icons.up}"></span></a></td>` : ''}${this.showMeridian ?
-        `<td class="separator">&nbsp;</td><td class="meridian-column"><a href="#" data-action="toggleMeridian"><span class="${this.icons.up}"></span></a></td>` : ''}</tr><tr><td>${hourTemplate}</td> <td class="separator">:</td><td>${minuteTemplate}</td> ${this.showSeconds ?
-        `<td class="separator">:</td><td>${secondTemplate}</td>` : ''}${this.showMeridian ?
-        `<td class="separator">&nbsp;</td><td>${meridianTemplate}</td>` : ''}</tr><tr><td><a href="#" data-action="decrementHour"><span class="${this.icons.down}"></span></a></td><td class="separator"></td><td><a href="#" data-action="decrementMinute"><span class="${this.icons.down}"></span></a></td>${this.showSeconds ?
-        `<td class="separator">&nbsp;</td><td><a href="#" data-action="decrementSecond"><span class="${this.icons.down}"></span></a></td>` : ''}${this.showMeridian ?
-        `<td class="separator">&nbsp;</td><td><a href="#" data-action="toggleMeridian"><span class="${this.icons.down}"></span></a></td>` : ''}</tr></table>`;
+                `<td class="separator">&nbsp;</td><td><a href="#" data-action="incrementSecond"><span class="${this.icons.up}"></span></a></td>` : ''}${this.showMeridian ?
+                `<td class="separator">&nbsp;</td><td class="meridian-column"><a href="#" data-action="toggleMeridian"><span class="${this.icons.up}"></span></a></td>` : ''}</tr><tr><td>${hourTemplate}</td> <td class="separator">:</td><td>${minuteTemplate}</td> ${this.showSeconds ?
+                `<td class="separator">:</td><td>${secondTemplate}</td>` : ''}${this.showMeridian ?
+                `<td class="separator">&nbsp;</td><td>${meridianTemplate}</td>` : ''}</tr><tr><td><a href="#" data-action="decrementHour"><span class="${this.icons.down}"></span></a></td><td class="separator"></td><td><a href="#" data-action="decrementMinute"><span class="${this.icons.down}"></span></a></td>${this.showSeconds ?
+                `<td class="separator">&nbsp;</td><td><a href="#" data-action="decrementSecond"><span class="${this.icons.down}"></span></a></td>` : ''}${this.showMeridian ?
+                `<td class="separator">&nbsp;</td><td><a href="#" data-action="toggleMeridian"><span class="${this.icons.down}"></span></a></td>` : ''}</tr></table>`;
 
             switch ( this.template ) {
                 case 'dropdown':
@@ -331,6 +332,7 @@ import event from '../../js/event';
             if ( this.hour === '' ) {
                 return '';
             }
+
             //return this.hour +                                                           ':' + ( this.minute.toString().length === 1 ? '0' + this.minute : this.minute ) + ( this.showSeconds ? ':' + ( this.second.toString().length === 1 ? '0' + this.second : this.second ) : '' ) + ( this.showMeridian ? ' ' + this.meridian : '' );
             return `${this.hour.toString().length === 1 ? `0${this.hour}` : this.hour}:${this.minute.toString().length === 1 ? `0${this.minute}` : this.minute}${this.showSeconds ? `:${this.second.toString().length === 1 ? `0${this.second}` : this.second}` : ''}${this.showMeridian ? ` ${this.meridian}` : ''}`;
         },
@@ -511,6 +513,7 @@ import event from '../../js/event';
 
         getCurrentHour() {
             const h24 = new Date().getHours();
+
             return ( this.showMeridian ) ? h24 % 12 : h24;
         },
 
@@ -529,6 +532,7 @@ import event from '../../js/event';
             if ( this.showMeridian ) {
                 if ( this.hour === 11 ) {
                     this.hour++;
+
                     return this.toggleMeridian();
                 } else if ( this.hour === 12 ) {
                     this.hour = 0;
@@ -637,6 +641,9 @@ import event from '../../js/event';
          * to the nearest "step", like 45 if step is 15. Segment will
          * "overflow" to 0 if it's larger than 59 or would otherwise
          * round up to 60.
+         *
+         * @param {number} segment - The segment value
+         * @param {number} step - The step
          */
         changeToNearestStep( segment, step ) {
             if ( segment % step === 0 ) {
@@ -782,6 +789,7 @@ import event from '../../js/event';
         setTime( time, ignoreWidget ) {
             if ( !time ) {
                 this.clear();
+
                 return;
             }
 
@@ -810,6 +818,7 @@ import event from '../../js/event';
                 timeMode = ( ( new RegExp( am, 'i' ) ).test( time ) ? 1 : 0 ) + ( ( new RegExp( pm, 'i' ) ).test( time ) ? 2 : 0 ); // 0 = none, 1 = AM, 2 = PM, 3 = BOTH.
                 if ( timeMode > 2 ) { // If both are present, fail.
                     this.clear();
+
                     return;
                 }
 
@@ -819,6 +828,7 @@ import event from '../../js/event';
 
                 if ( this.explicitMode && hour.length > 2 && ( hour.length % 2 ) !== 0 ) {
                     this.clear();
+
                     return;
                 }
 
@@ -981,8 +991,6 @@ import event from '../../js/event';
 
         updateElement() {
             this.$element.val( this.getTime() );
-            // this.$element.change() method does not fire an event that can be 
-            // caught with el.addEventListener('change', () => {})
             this.$element[ 0 ].dispatchEvent( event.Change() );
         },
 
@@ -1118,6 +1126,7 @@ import event from '../../js/event';
     $.fn.timepicker = function( option ) {
         const args = Array( ...arguments );
         args.shift();
+
         return this.each( function() {
             const $this = $( this );
             let data = $this.data( 'timepicker' );

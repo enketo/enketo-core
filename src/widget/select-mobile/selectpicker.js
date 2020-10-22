@@ -5,18 +5,18 @@ import support from '../../js/support';
  * An enhancement for the native multi-selectpicker found on most mobile devices,
  * to show the selected values next to the select box
  *
- * @extends Widget
+ * @augments Widget
  */
 class MobileSelectPicker extends Widget {
     /**
-     * @type string
+     * @type {string}
      */
     static get selector() {
         return '.question select[multiple]';
     }
 
     /**
-     * @return {boolean}
+     * @return {boolean} Whether additional condition to instantiate the widget is met.
      */
     static condition() {
         return support.touch;

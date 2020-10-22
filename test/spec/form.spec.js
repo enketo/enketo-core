@@ -6,6 +6,7 @@ import config from '../../config';
 import pkg from '../../package';
 import events from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
+const range = document.createRange();
 
 describe( 'Output functionality ', () => {
     // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
@@ -17,15 +18,17 @@ describe( 'Output functionality ', () => {
     form.init();
 
     it( 'tested upon initialization: node random__', () => {
-        expect( form.view.$.find( '[data-value="/random/random__"]' ).text().length ).toEqual( 17 );
+        const val = form.view.html.querySelector( '[data-value="/random/random__"]' ).textContent;
+        expect( val.length >= 16 && val.length <= 17  ).toEqual( true );
     } );
 
     it( 'tested upon initialization: node uuid__', () => {
-        expect( form.view.$.find( '[data-value="/random/uuid__"]' ).text().length ).toEqual( 36 );
+        const val =  form.view.html.querySelector( '[data-value="/random/uuid__"]' ).textContent;
+        expect( val.length ).toEqual( 36 );
     } );
 } );
 
-describe( 'Output functionality inside branches that irrelevan upon load', () => {
+describe( 'Output functionality inside branches that irrelevant upon load', () => {
     const form = loadForm( 'output-irrelevant.xml' );
     form.init();
 
@@ -61,25 +64,24 @@ describe( 'Output functionality within repeats', () => {
 } );
 
 describe( 'Preload and MetaData functionality', () => {
-    let form, t;
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on /[ROOT]/meta/instanceID', () => {
-        form = loadForm( 'random.xml' );
+        const form = loadForm( 'random.xml' );
         form.init();
         expect( form.model.node( '/random/meta/instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on [ROOT]/orx:meta/orx:instanceID', () => {
-        form = loadForm( 'meta-namespace.xml' );
+        const form = loadForm( 'meta-namespace.xml' );
         form.init();
         expect( form.model.node( '/data/orx:meta/orx:instanceID' ).getVal().length ).toEqual( 41 );
     } );
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'generates an instanceID on /[ROOT]/meta/instanceID WITHOUT preload binding', () => {
-        form = loadForm( 'random.xml' );
+        const form = loadForm( 'random.xml' );
         form.init();
         form.view.$.find( 'fieldset#or-preload-items' ).remove();
         expect( form.view.$.find( 'fieldset#or-preload-items' ).length ).toEqual( 0 );
@@ -88,7 +90,7 @@ describe( 'Preload and MetaData functionality', () => {
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'generates an instanceID WITH a preload binding', () => {
-        form = loadForm( 'preload.xml' );
+        const form = loadForm( 'preload.xml' );
         form.init();
         const sel = 'fieldset#or-preload-items input[name="/preload/meta/instanceID"][data-preload="uid"]';
         expect( form.view.$.find( sel ).length ).toEqual( 1 );
@@ -97,7 +99,7 @@ describe( 'Preload and MetaData functionality', () => {
 
     // Form.js no longer has anything to do with instanceID population. Test should still pass though.
     it( 'does not generate a new instanceID if one is already present', () => {
-        form = new Form( forms[ 'random.xml' ].html_form, {
+        const form = new Form( document.createRange().createContextualFragment( `<div>${forms[ 'random.xml' ].html_form}</div>` ).querySelector( 'form' ), {
             modelStr: forms[ 'random.xml' ].xml_model.replace( '<instanceID/>', '<instanceID>existing</instanceID>' )
         } );
         form.init();
@@ -105,7 +107,7 @@ describe( 'Preload and MetaData functionality', () => {
     } );
 
     it( 'generates a timeStart on /[ROOT]/meta/timeStart WITH a preload binding', () => {
-        form = loadForm( 'preload.xml' );
+        const form = loadForm( 'preload.xml' );
         form.init();
         expect( form.model.node( '/preload/start' ).getVal().length > 10 ).toBe( true );
     } );
@@ -114,7 +116,7 @@ describe( 'Preload and MetaData functionality', () => {
         let timeEnd;
         let timeEndNew;
 
-        form = loadForm( 'preload.xml' );
+        const form = loadForm( 'preload.xml' );
         form.init();
         timeEnd = form.model.node( '/preload/end' ).getVal();
 
@@ -122,7 +124,7 @@ describe( 'Preload and MetaData functionality', () => {
         expect( timeEnd.length > 10 ).toBe( true );
 
         setTimeout( () => {
-            form.view.$.trigger( 'beforesave' );
+            form.view.html.dispatchEvent( events.BeforeSave() );
             timeEndNew = form.model.node( '/preload/end' ).getVal();
             expect( new Date( timeEndNew ) - new Date( timeEnd ) ).toBeGreaterThan( 1000 );
             expect( new Date( timeEndNew ) - new Date( timeEnd ) ).toBeLessThan( 1050 );
@@ -132,7 +134,7 @@ describe( 'Preload and MetaData functionality', () => {
     } );
 
     it( 'also works with nodes that have a corresponding form control element', () => {
-        form = loadForm( 'preload-input.xml' );
+        const form = loadForm( 'preload-input.xml' );
         form.init();
 
         [ '/dynamic-default/two', '/dynamic-default/four', '/dynamic-default/six' ].forEach( path => {
@@ -150,7 +152,7 @@ describe( 'Preload and MetaData functionality', () => {
             simserial: 'e',
             subscriberid: 'f'
         };
-        form = loadForm( 'preload.xml', undefined, undefined, session );
+        const form = loadForm( 'preload.xml', undefined, undefined, session );
         form.init();
 
         [ 'deviceid', 'username', 'email', 'phonenumber', 'simserial', 'subscriberid' ].forEach( prop => {
@@ -160,26 +162,31 @@ describe( 'Preload and MetaData functionality', () => {
 
     function testPreloadExistingValue( node ) {
         it( `obtains unchanged preload value of item (WITH preload binding): ${node.selector}`, () => {
-            form = new Form( forms[ 'preload.xml' ].html_form, {
-                modelStr: '<preload>' +
-                    '<start>2012-10-30T08:44:57.000-06</start>' +
-                    '<end>2012-10-30T08:44:57.000-06:00</end>' +
-                    '<today>2012-10-30</today>' +
-                    '<deviceid>some value</deviceid>' +
-                    '<subscriberid>some value</subscriberid>' +
-                    '<imei>2332</imei>' +
-                    '<phonenumber>234234324</phonenumber>' +
-                    '<application>some context</application>' +
-                    '<patient>this one</patient>' +
-                    '<username>John Doe</username>' +
-                    '<browser_name>fake</browser_name>' +
-                    '<browser_version>xx</browser_version>' +
-                    '<os_name>fake</os_name>' +
-                    '<os_version>xx</os_version>' +
-                    '<unknown>some value</unknown>' +
-                    '<meta><instanceID>uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8</instanceID></meta>' +
-                    '</preload>'
-            } );
+            const form =  loadForm( 'preload.xml',
+                `<preload>
+                    <start>2012-10-30T08:44:57.000-06</start>
+                    <end>2012-10-30T08:44:57.000-06:00</end>
+                    <today>2012-10-30</today>
+                    <deviceid>some value</deviceid>
+                    <subscriberid>some value</subscriberid>
+                    <imei>2332</imei>
+                    <email/>
+                    <simserial></simserial>
+                    <phonenumber>234234324</phonenumber>
+                    <username>John Doe</username>
+                    <start_note></start_note>
+                    <end_note/>
+                    <today_note/>
+                    <deviceid_note/>
+                    <subscriberid_note/>
+                    <imei_note/>
+                    <phonenumber_note/>
+                    <username_note/>
+                    <meta>
+                        <instanceID>uuid:56c19c6c-08e6-490f-a783-e7f3db788ba8</instanceID>
+                    </meta>
+                </preload>`
+            );
             form.init();
             expect( form.model.node( node.selector ).getVal() ).toEqual( node.result );
         } );
@@ -187,13 +194,13 @@ describe( 'Preload and MetaData functionality', () => {
 
     function testPreloadNonExistingValue( node ) {
         it( `populates previously empty preload item (WITH preload binding): ${node.selector}`, () => {
-            form = loadForm( 'preload.xml' );
+            const form = loadForm( 'preload.xml' );
             form.init();
             expect( form.model.node( node.selector ).getVal().length > 0 ).toBe( true );
         } );
     }
 
-    t = [
+    const t = [
         [ '/preload/start', '2012-10-30T08:44:57.000-06:00' ],
         [ '/preload/today', '2012-10-30' ],
         [ '/preload/deviceid', 'some value' ],
@@ -215,6 +222,7 @@ describe( 'Preload and MetaData functionality', () => {
             selector: t[ i ][ 0 ],
             result: t[ i ][ 1 ]
         } );
+
         testPreloadNonExistingValue( {
             selector: t[ i ][ 0 ]
         } );
@@ -222,6 +230,7 @@ describe( 'Preload and MetaData functionality', () => {
     testPreloadNonExistingValue( {
         selector: '/preload/end'
     } );
+
 } );
 
 describe( 'Loading instance values into html input fields functionality', () => {
@@ -306,7 +315,7 @@ describe( 'calculations', () => {
 
 describe( 'branching functionality', () => {
 
-    it( 'hides irrelevant branches upon initialization', () => {
+    it( 'hides non-relevant branches upon initialization', () => {
         const form = loadForm( 'group_branch.xml' );
         form.init();
         expect( form.view.$.find( '[name="/data/group"]' ).hasClass( 'disabled' ) ).toBe( true );
@@ -382,25 +391,25 @@ describe( 'branching functionality', () => {
         it( 'evaluates a calculated item only when it becomes relevant', () => {
             // node without relevant attribute:
             expect( dataO.node( '/calcs/calc11' ).getVal() ).toEqual( '12' );
-            // node that is irrelevant
+            // node that is non-relevant
             expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
             $node.val( 'yes' ).trigger( 'change' );
             // node that has become relevant
             expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
-            // make irrelevant again (was a bug)
+            // make non-relevant again (was a bug)
             $node.val( 'no' ).trigger( 'change' );
             // double-check that calc11 is unaffected (was a bug)
             expect( dataO.node( '/calcs/calc11' ).getVal() ).toEqual( '12' );
-            // node that is irrelevant
-            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
+            // node that is non-relevant, value will stay (until record is finalized)
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
 
         } );
 
-        it( 'empties an already calculated item once it becomes irrelevant', () => {
+        it( 'does not empty an already calculated item once it becomes non-relevant', () => {
             $node.val( 'yes' ).trigger( 'change' );
             expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
             $node.val( 'no' ).trigger( 'change' );
-            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '' );
+            expect( dataO.node( '/calcs/calc1' ).getVal() ).toEqual( '3' );
         } );
     } );
 
@@ -460,7 +469,7 @@ describe( 'branching functionality', () => {
     // https://github.com/enketo/enketo-core/issues/444
     describe( 'in nested repeats with a <select> that has a relevant', () => {
         // instanceStr is in this case just used to conveniently create 2 parent repeats with each 1 child repeat (<select> with relevant).
-        // The second child repeat in each parent repeat with name 'type_other' is irrelevant.
+        // The second child repeat in each parent repeat with name 'type_other' is non-relevant.
         const instanceStr = '<data><region><livestock><type>d</type><type_other/></livestock></region><region><livestock><type>d</type></livestock></region><meta><instanceID>a</instanceID></meta></data>';
         const form = loadForm( 'nested-repeat-v5.xml', instanceStr );
         form.init();
@@ -470,7 +479,7 @@ describe( 'branching functionality', () => {
         } );
     } );
 
-    describe( 'handles clearing of form control values in irrelevant branches', () => {
+    describe( 'handles clearing of form control values in non-relevant branches', () => {
         const name = 'relevant-default.xml';
         const one = '/relevant-default/one';
         const two = '/relevant-default/two';
@@ -486,10 +495,8 @@ describe( 'branching functionality', () => {
             expect( form.model.node( three ).getVal() ).toEqual( 'three' );
         } );
 
-        it( 'by not clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantsImmediately is set to false', () => {
-            const form = loadForm( name, null, {
-                clearIrrelevantImmediately: false
-            } );
+        it( 'by not clearing values of non-relevant questions during FORM TRAVERSAL', () => {
+            const form = loadForm( name );
             form.init();
             const $one = form.view.$.find( `[name="${one}"]` );
             // enable
@@ -502,42 +509,12 @@ describe( 'branching functionality', () => {
             expect( form.model.node( three ).getVal() ).toEqual( 'three' );
         } );
 
-        it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is set to true', () => {
-            const form = loadForm( name, null, {
-                clearIrrelevantImmediately: true
-            } );
-            form.init();
-            const $one = form.view.$.find( `[name="${one}"]` );
-            // enable
-            $one.val( 'text' ).trigger( 'change' );
-            expect( form.view.$.find( `[name="${two}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            expect( form.view.$.find( `[name="${three}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            // disable
-            $one.val( '' ).trigger( 'change' );
-            expect( form.model.node( two ).getVal() ).toEqual( '' );
-            expect( form.model.node( three ).getVal() ).toEqual( '' );
-        } );
-
-        it( 'by clearing values of irrelevant questions during FORM TRAVERSAL if clearIrrelevantImmediately is not set', () => {
-            const form = loadForm( name );
-            form.init();
-            const $one = form.view.$.find( `[name="${one}"]` );
-            // enable
-            $one.val( 'text' ).trigger( 'change' );
-            expect( form.view.$.find( `[name="${two}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            expect( form.view.$.find( `[name="${three}"]` ).closest( '.disabled' ).length ).toEqual( 0 );
-            // disable
-            $one.val( '' ).trigger( 'change' );
-            expect( form.model.node( two ).getVal() ).toEqual( '' );
-            expect( form.model.node( three ).getVal() ).toEqual( '' );
-        } );
-
-        it( 'by clearing values of irrelevant questions when form.clearIrrelevant() is called', () => {
+        it( 'by clearing values of non-relevant questions when form.clearNonRelevant() is called', () => {
             const form = loadForm( name );
             form.init();
             expect( form.model.node( two ).getVal() ).toEqual( 'two' );
             expect( form.model.node( three ).getVal() ).toEqual( 'three' );
-            form.clearIrrelevant();
+            form.clearNonRelevant();
             expect( form.model.node( two ).getVal() ).toEqual( '' );
             expect( form.model.node( three ).getVal() ).toEqual( '' );
         } );
@@ -551,7 +528,7 @@ describe( 'branching functionality', () => {
     } );
 
 
-    describe( 'handles calculated values in irrelevant/relevant branches with default settings', () => {
+    describe( 'handles calculated values in non-relevant/relevant branches with default settings', () => {
         const name = 'calc-in-group-with-relevant.xml';
         const cond = '/calc-in-group-with-relevant/cond';
         const groupCalc = '/calc-in-group-with-relevant/grp/groupCalc';
@@ -568,22 +545,22 @@ describe( 'branching functionality', () => {
             expect( form.model.node( calc ).getVal() ).toEqual( '34' );
         } );
 
-        it( 'by clearing calculations when parent group of calculation itself becomes irrelevant', () => {
+        it( 'by not clearing calculations when parent group of calculation itself becomes non-relevant', () => {
             const form = loadForm( name );
             form.init();
             form.view.$.find( `[name="${cond}"]` ).val( 'hide' ).trigger( 'change' );
-            expect( form.model.node( groupCalc ).getVal() ).toEqual( '' );
-            expect( form.model.node( groupReadonlyCalc ).getVal() ).toEqual( '' );
+            expect( form.model.node( groupCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( groupReadonlyCalc ).getVal() ).toEqual( '34' );
 
-            // bonus, questions outside group but also irrelevant
-            expect( form.model.node( readonlyCalc ).getVal() ).toEqual( '' );
-            expect( form.model.node( calc ).getVal() ).toEqual( '' );
+            // bonus, questions outside group but also non-relevant
+            expect( form.model.node( readonlyCalc ).getVal() ).toEqual( '34' );
+            expect( form.model.node( calc ).getVal() ).toEqual( '34' );
         } );
 
         it( 'by re-populating calculations when parent group of calculation itself becomes relevant', () => {
             const form = loadForm( name );
             form.init();
-            // make irrelevant -> clear (see previous test)
+            // make non-relevant -> clear (see previous test)
             form.view.$.find( `[name="${cond}"]` ).val( 'hide' ).trigger( 'change' );
             // make relevant again
             form.view.$.find( `[name="${cond}"]` ).val( '' ).trigger( 'change' );
@@ -641,7 +618,7 @@ describe( 'branching functionality', () => {
 } );
 
 describe( 'obtaining XML string from form without irrelevant nodes', () => {
-    it( 'works for calcs that are irrelevant upon load', () => {
+    it( 'works for calcs that are non-relevant upon load', () => {
         const form = loadForm( 'calcs.xml' );
         const match = '<calc1/>';
         form.init();
@@ -652,7 +629,7 @@ describe( 'obtaining XML string from form without irrelevant nodes', () => {
         } ) ).not.toMatch( match );
     } );
 
-    it( 'works for calcs that become irrelevant after load', () => {
+    it( 'works for calcs that become non-relevant after load', () => {
         let $node;
         const form = loadForm( 'calcs.xml' );
         form.init();
@@ -782,7 +759,7 @@ describe( 'validation', () => {
             //.trigger( 'validate' );
             expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( false );
             numberInput.value = 1;
-            numberInput.dispatchEvent( events.Change() )
+            numberInput.dispatchEvent( events.Change() );
             //.trigger( 'validate' );
             expect( numberLabel.classList.contains( 'invalid-required' ) ).toBe( false );
         } );
@@ -790,7 +767,7 @@ describe( 'validation', () => {
         // failing
         it( 'invalidates an enabled and required number field without a value', done => {
             // first make branch relevant
-            const a = form.view.html.querySelector( '[name="/data/nodeA"]' )
+            const a = form.view.html.querySelector( '[name="/data/nodeA"]' );
             a.value = 'yes';
             a.dispatchEvent( events.Change() );
             // now set value to empty
@@ -813,6 +790,7 @@ describe( 'validation', () => {
                     expect( $textarea.length ).toEqual( 1 );
                     expect( $textarea.parent( 'label' ).hasClass( 'invalid-required' ) ).toBe( true );
                     $textarea.val( '  \n  \n\r \t ' ).trigger( 'change' );
+
                     return form.validateInput( $textarea[ 0 ] );
                 } )
                 .then( () => {
@@ -850,6 +828,7 @@ describe( 'validation', () => {
                     expect( result ).toEqual( true );
                     // now make make sure a constraint fails
                     form.model.xml.querySelector( 'nodeB' ).textContent = 'c';
+
                     return form.validate();
                 } )
                 .then( result => {
@@ -887,16 +866,19 @@ describe( 'validation', () => {
             setValue( C, '12' )
                 .then( () => {
                     config.validateContinuously = false;
+
                     // violate
                     return setValue( B, 'a' );
                 } )
                 .then( () => {
                     expect( form.view.$.find( C ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toEqual( false );
+
                     // pass
                     return setValue( B, 'b' );
                 } )
                 .then( () => {
                     config.validateContinuously = true;
+
                     //violate
                     return setValue( B, 'a' );
                 } )
@@ -945,6 +927,7 @@ describe( 'validation', () => {
                 .then( () => {
                     expect( form.view.$.find( one ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( true );
                     expect( form.view.$.find( two ).closest( '.question' ).hasClass( 'invalid-constraint' ) ).toBe( true );
+
                     return setValue( src, 'valid' );
                 } )
                 .then( () => {
@@ -1069,12 +1052,12 @@ describe( 'clearing inputs', () => {
 
 describe( 'white-space-only input', () => {
     // This is e.g. important for automatic value-change log creation in OpenClinica.
-    it( 'does not fire a valuechange event', done => {
+    it( 'does not fire an xforms-value-changed event', done => {
         const form = loadForm( 'thedata.xml' );
         form.init();
         const $input = form.view.$.find( '[name="/thedata/nodeF"]' );
         let counter = 0;
-        $input.on( 'valuechange.enketo', () => counter++ );
+        $input[ 0 ].addEventListener( new events.XFormsValueChanged().type, () => counter++ );
 
         function inputVal( val ) {
             return new Promise( resolve => {
@@ -1085,18 +1068,22 @@ describe( 'white-space-only input', () => {
         inputVal( '  ' )
             .then( () => {
                 expect( counter ).toEqual( 0 );
+
                 return inputVal( ' a' );
             } )
             .then( () => {
                 expect( counter ).toEqual( 1 );
+
                 return inputVal( '   ' );
             } )
             .then( () => {
                 expect( counter ).toEqual( 2 );
+
                 return inputVal( ' ' );
             } )
             .then( () => {
                 expect( counter ).toEqual( 2 );
+
                 return inputVal( '' );
             } )
             .then( () => {
@@ -1151,7 +1138,7 @@ describe( 'jr:choice-name', () => {
         form.init();
 
         expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[Default Value] Area' );
-        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[0].textContent ).toEqual( '[Default Value] Area' );
 
         // when
         form.view.$.find( '[name="/choice-regex/input"]' ).val( 'abc' ).trigger( 'change' );
@@ -1162,13 +1149,21 @@ describe( 'jr:choice-name', () => {
         // and
         // We don't expect the value change to cascade to a label until the choice value itself is changed.
         // See: https://github.com/enketo/enketo-core/issues/412
-        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[0].textContent ).toEqual( '[Default Value] Area' );
 
         // when
         form.view.$.find( '[name="/choice-regex/translator"][value=health_center]' ).click().trigger( 'change' );
 
         // then
-        expect( form.view.$.find( '.readonly .or-output' ).text() ).toEqual( '[abc] Health Center' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[0].textContent ).toEqual( '[abc] Health Center' );
+    } );
+
+    it( 'should match when there the path parameters are relative', () => {
+        const form = loadForm( 'jr-choice-name.xml' );
+        form.init();
+
+        expect( form.view.$.find( '[name="/choice-regex/translator"]:checked' ).next().text() ).toEqual( '[Default Value] Area' );
+        expect( form.view.html.querySelectorAll( '.readonly .or-output' )[1].textContent ).toEqual( '[Default Value] Area' );
     } );
 
     /** @see https://github.com/enketo/enketo-core/issues/490 */
@@ -1194,19 +1189,76 @@ describe( 'jr:choice-name', () => {
 
         expect( form.view.$.find( '.or-output' ).text() ).toEqual( 'The Third Choice' );
     } );
+
+
+} );
+
+describe( 'autocomplete questions', () => {
+    it( 'populate correctly if a single language is defined in the form, and the Form instance is instantiated using that language explicitly', () => {
+        const form = loadForm( 'autocomplete-cascade.xml', null, { language: 'en' } );
+        form.init();
+        const datalists = form.view.html.querySelectorAll( 'datalist' );
+        const firstDatalistContent = [ ...datalists[ 0 ].querySelectorAll( 'option' ) ].map( el => `${el.value}:${el.dataset.value}` );
+        expect( firstDatalistContent ).toEqual( [ '...:', 'A:a', 'B:b', 'C:c' ] );
+
+        // select value in first datalist, to populate the second one
+        form.view.html.querySelector( 'input[list]' ).value = 'b';
+        form.view.html.querySelector( 'input[list]' ).dispatchEvent( events.Change() );
+
+        const secondDatalistContent = [ ...datalists[ 1 ].querySelectorAll( 'option' ) ].map( el => `${el.value}:${el.dataset.value}` );
+        expect( secondDatalistContent ).toEqual( [ ':undefined', 'BA:ba', 'BB:bb', 'BC:bc' ] );
+    } );
+} );
+
+
+describe( 'goTo functionality', () => {
+    const form = loadForm( 'relevant-default.xml' );
+    form.init();
+
+    it( 'returns an error if the goto field does not exist', () => {
+        const result = form.goTo( '//notdey' );
+        expect( result.length ).toEqual( 1 );
+        expect( result[ 0 ] ).toContain( 'Failed to find question \'notdey\'' );
+    } );
+
+    it( 'returns empty array (of errors) if field exists', () => {
+        expect( form.goTo( '//one' ) ).toEqual( [] );
+        expect( form.goTo( '/relevant-default/one' ) ).toEqual( [] );
+        expect( form.goTo( '//three' ) ).toEqual( [] );
+        expect( form.goTo( '/relevant-default/grp/three' ) ).toEqual( [] );
+        expect( form.goTo( '//four' ) ).toEqual( [] );
+        expect( form.goTo( '/relevant-default/grp/four' ) ).toEqual( [] );
+    } );
+
+    it( 'triggers a goto-irrelevant event if the goto field is irrelevant', () => {
+        let counter = 0;
+        form.view.html.addEventListener( events.GoToIrrelevant().type, () => counter++ );
+        form.goTo( '//three' );
+        expect( counter ).toEqual( 1 );
+    } );
+
+    it( 'triggers a goto-invisible event if the goto field does not have a form control', () => {
+        let counter = 0;
+        form.view.html.addEventListener( events.GoToInvisible().type, () => counter++ );
+        form.goTo( '//four' );
+        expect( counter ).toEqual( 1 );
+    } );
 } );
 
 describe( 'Form.prototype', () => {
 
     describe( '#replaceChoiceNameFn()', () => {
 
-        $.each( {
+        const tests = {
             'jr:choice-name( /choice-regex/translator, " /choice-regex/translator ")': '"__MOCK_VIEW_VALUE__"',
             '     jr:choice-name(       /choice-regex/translator     ,  " /choice-regex/translator "   )    ': '     "__MOCK_VIEW_VALUE__"    ',
             'if(string-length( /embedded-choice/translator ) !=0, jr:choice-name( /embedded-choice/translator ,\' /embedded-choice/translator \'),\'unspecified\')': 'if(string-length( /embedded-choice/translator ) !=0, "__MOCK_VIEW_VALUE__",\'unspecified\')',
             'jr:choice-name( selected-at( /energy_1/light/light_equip , 1), " /energy_1/light/light_equip " )': '"__MOCK_VIEW_VALUE__"',
             'if( /data/C1 =01, jr:choice-name( /data/C2 ," /data/C2 "), jr:choice-name( /data/C3 ," /data/C3 " ) )': 'if( /data/C1 =01, "__MOCK_VIEW_VALUE__", "__MOCK_VIEW_VALUE__" )',
-        }, ( initial, expected ) => {
+        };
+
+        for ( const initial in tests ) {
+            const expected = tests[initial];
             it( `should replace ${initial} with ${expected}`, () => {
                 // given
                 const form = mockChoiceNameForm();
@@ -1217,33 +1269,27 @@ describe( 'Form.prototype', () => {
                 // then
                 expect( actual ).toEqual( expected );
             } );
-        } );
+        }
     } );
 } );
 
 function mockChoiceNameForm() {
+    const val = '__MOCK_MODEL_VALUE__';
+
     return {
         model: {
             evaluate() {
-                return '__MOCK_MODEL_VALUE__';
+                return val;
             },
         },
         view: {
-            '$': {
-                find() {
-                    return {
-                        length: 1,
-                        prop() {
-                            return 'select';
-                        },
-                        find() {
-                            return {
-                                text() {
-                                    return '__MOCK_VIEW_VALUE__';
-                                },
-                            };
-                        },
-                    };
+            html: {
+                querySelectorAll() {
+                    return document.createRange().createContextualFragment( `
+                        <select>
+                            <option value="${val}">__MOCK_VIEW_VALUE__</option>
+                        </select>
+                    ` ).querySelectorAll( 'select' );
                 },
             },
         },

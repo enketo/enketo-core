@@ -12,7 +12,7 @@ import Widget from '../../js/widget';
 class MyWidget extends Widget {
 
     /*
-     * The selector that determines on which form control the widget is instantiated. 
+     * The selector that determines on which form control the widget is instantiated.
      * Make sure that any other widgets that target the same from control are not interfering with this widget by disabling
      * the other widget or making them complementary.
      * This function is always required.
@@ -114,7 +114,7 @@ Some of the tests are common to all widgets, and can be run with a few lines:
 import ExampleWidget from '../../src/widget/example/my-widget';
 import { runAllCommonWidgetTests } from '../helpers/testWidget';
 
-const FORM = 
+const FORM =
     `<label class="question or-appearance-my-widget">
         <input type="number" name="/data/node">
     </label>`;
@@ -134,7 +134,7 @@ runAllCommonWidgetTests( ExampleWidget, FORM, VALUE );
 * if hiding the original input element, it needs to load the default value `this.originalInputValue` into the widget
 * if hiding the original input element, keep its value  syncronized using `this.originalInputValue = ...`
 * if hiding the original input element, it needs to listen for the `applyfocus` event on the original input and focus the widget
-* if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming irrelevant (update)
+* if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming non-relevant (update)
 * apply the `widget` css class to the top level elements it adds to the DOM (but not to their children)
 * new input/select/textarea elements inside widgets should have the `ignore` class to isolate them from the Enketo form engine
 * include `enable()`, `disable()` and `update()` method overrides. See the Widget class.

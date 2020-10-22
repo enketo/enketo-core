@@ -1,4 +1,4 @@
-![coverage-shield-badge-1](https://img.shields.io/badge/coverage-75.49%25-yellow.svg)
+![coverage-shield-badge-1](https://img.shields.io/badge/coverage-75.08%25-yellow.svg)
 [![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) [![Build Status](https://travis-ci.org/enketo/enketo-core.svg?branch=master)](https://travis-ci.org/enketo/enketo-core) [![Dependency Status](https://david-dm.org/enketo/enketo-core/status.svg)](https://david-dm.org/enketo/enketo-core) [![devDependency Status](https://david-dm.org/enketo/enketo-core/dev-status.svg)](https://david-dm.org/enketo/enketo-core?type=dev) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc1c5aaa9267d75cbd2d6714d2b4fa32)](https://www.codacy.com/app/martijnr/enketo-core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=enketo/enketo-core&amp;utm_campaign=Badge_Grade)
 
 Enketo Core
@@ -20,14 +20,14 @@ Follow the [Enketo blog](https://blog.enketo.org) or [Enketo on twitter](https:/
 The following browsers are officially supported:
 * latest Android webview on latest Android OS
 * latest WKWebView on latest iOS
-* latest version of Chrome/Chromium on OS X, Linux, Windows, Android and iOS
-* latest version of Firefox on OS X, Windows, Linux, Android and iOS
-* latest version of Safari on OS X, Windows, and on the latest version of iOS
+* latest version of Chrome/Chromium on Mac OS, Linux, Windows, Android and iOS
+* latest version of Firefox on Mac OS, Windows, Linux, Android and iOS
+* latest version of Safari on Mac OS, Windows, and on the latest version of iOS
 * latest version of Microsoft Edge
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
-[Here is some guidance](https://enketo.github.io/enketo-core/docs/tutorial-90-ie11.html) that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.
+[Here is some guidance](https://enketo.github.io/enketo-core/tutorial-90-ie11.html) that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.
 
 ### Sponsors
 
@@ -42,7 +42,7 @@ The development of this library was sponsored by:
 * [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
 * [Ona](https://ona.io)
 * [Medic Mobile](http://medicmobile.org/)
-* [Enketo LLC](https://enketo.org)
+* [Esri](https://esri.com)
 
 ### Performance (live)
 
@@ -66,4 +66,3 @@ Specifications:
 Example:
 
 Powered by <a href="https://enketo.org"><img height="16" style="height: 16px;" src="https://enketo.org/media/images/logos/enketo_bare_150x56.png" /></a>
-a>
