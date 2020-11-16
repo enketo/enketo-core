@@ -413,7 +413,10 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
             let label = '';
             const value = this.model.evaluate( params[ 0 ], resTypeStr, context, index, tryNative );
             const name = stripQuotes( params[ 1 ] ).trim();
-            const inputs = [ ...this.view.html.querySelectorAll( `[name="${name.startsWith( '/' ) ? name : joinPath( context, name )}"]` ) ];
+            var inputs = [ ...this.view.html.querySelectorAll( `[name="${name.startsWith( '/' ) ? name : joinPath( context, name )}"]` ) ];
+            inputs = inputs.length ?
+                    inputs :
+                    [ ...this.view.html.querySelectorAll( `[data-name="${name.startsWith( '/' ) ? name : joinPath( context, name )}"]` ) ];
             const nodeName = inputs.length ? inputs[0].nodeName.toLowerCase() : null;
 
             if ( !value || !inputs.length ) {
