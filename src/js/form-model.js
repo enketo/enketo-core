@@ -115,7 +115,7 @@ FormModel.prototype.init = function() {
 
         // Add external data to model
         this.data.external.forEach( instance => {
-            id = `instance "${instance.id}"` || 'instance unknown';
+            id = instance.id ? `instance "${instance.id}"` : 'instance "unknown"';
             instanceDoc = that.getSecondaryInstance( instance.id );
             // remove any existing content that is just an XLSForm hack to pass ODK Validate
             secondaryInstanceChildren = instanceDoc.children;
