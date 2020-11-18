@@ -412,7 +412,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
         if ( params.length === 2 ) {
             let label = '';
             const value = this.model.evaluate( params[ 0 ], resTypeStr, context, index, tryNative );
-            var name = stripQuotes( params[ 1 ] ).trim();
+            let name = stripQuotes( params[ 1 ] ).trim();
             name = name.startsWith( '/' ) ? name : joinPath( context, name );
             const inputs = [ ...this.view.html.querySelectorAll( `[name="${name}"], [data-name="${name}"]` ) ];
             const nodeName = inputs.length ? inputs[0].nodeName.toLowerCase() : null;

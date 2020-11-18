@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Fixed
 - Geopicker on mobile devices won't show map any more after first map reveal.
+- jr:choice-name not working for questions with radiobuttons.
 
 [5.16.9] - 2020-09-28
 -----------------------
