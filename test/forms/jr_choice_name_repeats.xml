@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>jr_choice_name in repeats groups</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="jr_choice_name_repeats">
+                    <r1 jr:template="">
+                        <province_name/>
+                        <province_label/>
+                        <county_name/>
+                    </r1>
+                    <r1>
+                        <province_name/>
+                        <province_label/>
+                        <county_name/>
+                    </r1>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="province">
+                <root>
+                    <item>
+                        <label>Central</label>
+                        <name>Central</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="county">
+                <root>
+                    <item>
+                        <cf>Central</cf>
+                        <label>Nyandarua</label>
+                        <name>Nyandarua</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/r1/province_name" type="string"/>
+            <bind calculate="jr:choice-name( ../province_name ,' ../province_name ')" nodeset="/data/r1/province_label" type="string"/>
+            <bind nodeset="/data/r1/county_name" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/r1">
+            <label></label>
+            <repeat nodeset="/data/r1">
+                <select1 ref="/data/r1/province_name">
+                    <label>Province</label>
+                    <item>
+                        <label>Central</label>
+                        <value>Central</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/r1/county_name">
+                    <label>Counties in <output value=" ../province_label "/>
+                    </label>
+                    <itemset nodeset="instance('county')/root/item[cf= current()/../province_name ]">
+                        <value ref="name"/>
+                        <label ref="label"/>
+                    </itemset>
+                </select1>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
