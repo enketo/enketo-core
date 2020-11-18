@@ -15,17 +15,11 @@
                         <province_name/>
                         <province_label/>
                         <county_name/>
-                        <fruits/>
-                        <fruit_label/>
-                        <fruits_delivered/>
                     </r1>
                     <r1>
                         <province_name/>
                         <province_label/>
                         <county_name/>
-                        <fruits/>
-                        <fruit_label/>
-                        <fruits_delivered/>
                     </r1>
                     <meta>
                         <instanceID/>
@@ -38,14 +32,6 @@
                         <label>Central</label>
                         <name>Central</name>
                     </item>
-                    <item>
-                        <label>Coast</label>
-                        <name>Coast</name>
-                    </item>
-                    <item>
-                        <label>Eastern</label>
-                        <name>Eastern</name>
-                    </item>
                 </root>
             </instance>
             <instance id="county">
@@ -55,116 +41,23 @@
                         <label>Nyandarua</label>
                         <name>Nyandarua</name>
                     </item>
-                    <item>
-                        <cf>Central</cf>
-                        <label>Nyeri</label>
-                        <name>Nyeri</name>
-                    </item>
-                    <item>
-                        <cf>Central</cf>
-                        <label>Kiambu</label>
-                        <name>Kiambu</name>
-                    </item>
-                    <item>
-                        <cf>Coast</cf>
-                        <label>Mombasa</label>
-                        <name>Mombasa</name>
-                    </item>
-                    <item>
-                        <cf>Coast</cf>
-                        <label>Kilifi</label>
-                        <name>Kilifi</name>
-                    </item>
-                    <item>
-                        <cf>Eastern</cf>
-                        <label>Embu</label>
-                        <name>Embu</name>
-                    </item>
-                    <item>
-                        <cf>Eastern</cf>
-                        <label>Kitui</label>
-                        <name>Kitui</name>
-                    </item>
-                </root>
-            </instance>
-            <instance id="yes_no">
-                <root>
-                    <item>
-                        <label>Yes</label>
-                        <name>1</name>
-                    </item>
-                    <item>
-                        <label>No</label>
-                        <name>2</name>
-                    </item>
-                </root>
-            </instance>
-            <instance id="fruits">
-                <root>
-                    <item>
-                        <label>Mangoes</label>
-                        <name>1</name>
-                    </item>
-                    <item>
-                        <label>Bananas</label>
-                        <name>2</name>
-                    </item>
-                    <item>
-                        <label>Papaya</label>
-                        <name>3</name>
-                    </item>
-                    <item>
-                        <label>Pineapples</label>
-                        <name>4</name>
-                    </item>
-                    <item>
-                        <label>Guava</label>
-                        <name>5</name>
-                    </item>
-                    <item>
-                        <label>Apples</label>
-                        <name>6</name>
-                    </item>
-                    <item>
-                        <label>Watermelon</label>
-                        <name>7</name>
-                    </item>
-                    <item>
-                        <label>Other, specify</label>
-                        <name>99</name>
-                    </item>
-                    <item>
-                        <label>None</label>
-                        <name>98</name>
-                    </item>
                 </root>
             </instance>
             <bind nodeset="/data/r1/province_name" type="string"/>
             <bind calculate="jr:choice-name( ../province_name ,' ../province_name ')" nodeset="/data/r1/province_label" type="string"/>
             <bind nodeset="/data/r1/county_name" type="string"/>
-            <bind nodeset="/data/r1/fruits" type="string"/>
-            <bind calculate="jr:choice-name( ../fruits , ' ../fruits ')" nodeset="/data/r1/fruit_label" type="string"/>
-            <bind nodeset="/data/r1/fruits_delivered" relevant="not(selected( ../fruits ,&quot;98&quot;))" type="string"/>
             <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
         </model>
     </h:head>
     <h:body>
         <group ref="/data/r1">
-            <label>test label</label>
+            <label></label>
             <repeat nodeset="/data/r1">
                 <select1 ref="/data/r1/province_name">
                     <label>Province</label>
                     <item>
                         <label>Central</label>
                         <value>Central</value>
-                    </item>
-                    <item>
-                        <label>Coast</label>
-                        <value>Coast</value>
-                    </item>
-                    <item>
-                        <label>Eastern</label>
-                        <value>Eastern</value>
                     </item>
                 </select1>
                 <select1 ref="/data/r1/county_name">
@@ -174,57 +67,6 @@
                         <value ref="name"/>
                         <label ref="label"/>
                     </itemset>
-                </select1>
-                <select1 ref="/data/r1/fruits">
-                    <label>What fruits did you buy from the market?</label>
-                    <item>
-                        <label>Mangoes</label>
-                        <value>1</value>
-                    </item>
-                    <item>
-                        <label>Bananas</label>
-                        <value>2</value>
-                    </item>
-                    <item>
-                        <label>Papaya</label>
-                        <value>3</value>
-                    </item>
-                    <item>
-                        <label>Pineapples</label>
-                        <value>4</value>
-                    </item>
-                    <item>
-                        <label>Guava</label>
-                        <value>5</value>
-                    </item>
-                    <item>
-                        <label>Apples</label>
-                        <value>6</value>
-                    </item>
-                    <item>
-                        <label>Watermelon</label>
-                        <value>7</value>
-                    </item>
-                    <item>
-                        <label>Other, specify</label>
-                        <value>99</value>
-                    </item>
-                    <item>
-                        <label>None</label>
-                        <value>98</value>
-                    </item>
-                </select1>
-                <select1 ref="/data/r1/fruits_delivered">
-                    <label>Were the <output value=" ../fruit_label "/>
- delivered?</label>
-                    <item>
-                        <label>Yes</label>
-                        <value>1</value>
-                    </item>
-                    <item>
-                        <label>No</label>
-                        <value>2</value>
-                    </item>
                 </select1>
             </repeat>
         </group>
