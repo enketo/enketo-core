@@ -289,9 +289,10 @@ class Geopicker extends Widget {
                 .find( '.leaflet-google-layer' ).remove();
             if ( that.map ) {
                 that.map.remove();
-                that.map = null;
-                that.polygon = null;
-                that.polyline = null;
+                that.map = undefined;
+                this.loadMap = undefined;
+                that.polygon = undefined;
+                that.polyline = undefined;
             }
 
             return false;
