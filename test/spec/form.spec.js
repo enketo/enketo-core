@@ -1190,6 +1190,18 @@ describe( 'jr:choice-name', () => {
         expect( form.view.$.find( '.or-output' ).text() ).toEqual( 'The Third Choice' );
     } );
 
+    it( 'should work with radio buttons', () => {
+        const form = loadForm( 'jr_choice_name_repeats.xml' );
+        form.init();
+
+        expect( form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).checked).toEqual(false);
+
+        form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).checked = true
+        form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).dispatchEvent( events.Change() );
+
+        expect( form.view.html.querySelector( '[data-value=" ../province_label "]' ).innerText ).toEqual( 'Central' );
+    })
+
 
 } );
 
