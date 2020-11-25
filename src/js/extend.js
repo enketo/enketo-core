@@ -1,9 +1,5 @@
 // Extend native objects, aka monkey patching ..... really I see no harm!
 
-// This import is just there so Alex and other XPath-evaluator-replacers get an automatic notification to extend the date object.
-// It is not required for those that use enketo-xpathjs
-import 'enketo-xpathjs/src/date-extensions';
-
 /**
  * The built in string object.
  *
@@ -13,6 +9,8 @@ import 'enketo-xpathjs/src/date-extensions';
 
 /**
  * Pads a string with prefixed zeros until the requested string length is achieved.
+ *
+ * TODO:// replace with native padStart
  *
  * @function external:String#pad
  * @param  {number} digits - The desired string length.

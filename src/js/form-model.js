@@ -6,6 +6,8 @@ import config from 'enketo/config';
 import types from './types';
 import event from './event';
 import { Nodeset } from './nodeset';
+import bindJsEvaluator from 'enketo/xpath-evaluator-binding';
+
 const REPEAT_COMMENT_PREFIX = 'repeat:/';
 const INSTANCE = /instance\(\s*(["'])((?:(?!\1)[A-z0-9.\-_]+))\1\s*\)/g;
 const OPENROSA = /(decimal-date-time\(|pow\(|indexed-repeat\(|format-date\(|coalesce\(|join\(|max\(|min\(|random\(|substr\(|int\(|uuid\(|regex\(|now\(|today\(|date\(|if\(|boolean-from-string\(|checklist\(|selected\(|selected-at\(|round\(|area\(|position\([^)])/;
@@ -550,7 +552,6 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
     }
 };
 
-import bindJsEvaluator from './xpath-evaluator-binding';
 /**
  * Creates a custom XPath Evaluator to be used for XPath Expresssions that contain custom
  * OpenRosa functions or for browsers that do not have a native evaluator.
