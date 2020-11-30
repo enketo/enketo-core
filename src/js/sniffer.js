@@ -32,7 +32,7 @@ const os = {
      * @type {string}
      **/
     get safari() {
-        return /^((?!chrome|android).)*safari/i.test(ua);;
+        return /^((?!chrome|android).)*safari/i.test( ua );
     }
 };
 

@@ -75,29 +75,6 @@ const time = {
      */
     hasMeridian( time ) {
         return HAS_MERIDIAN.test( _cleanSpecialChars( time ) );
-    },
-    /**
-     * getTimezoneOffsetAsTime
-     */
-    getTimezoneOffsetAsTime() {
-        let date = new Date();
-        let offsetMinutesTotal;
-        let hours;
-        let minutes;
-        let direction;
-        let pad2 = ( x ) => {
-            return ( x < 10 ) ? '0' + x : x;
-        };
-        if ( date.toString() === 'Invalid Date' ) {
-            return date.toString();
-        }
-        offsetMinutesTotal = date.getTimezoneOffset();
-        direction = ( offsetMinutesTotal < 0 ) ? '+' : '-';
-        let hrs = direction === '+' ? Math.ceil( offsetMinutesTotal / 60 ) : Math.floor( offsetMinutesTotal / 60 );
-        hours = pad2( Math.abs( hrs ) );
-        minutes = pad2( Math.abs( Math.floor( offsetMinutesTotal % 60 ) ) );
-
-        return direction + hours + ':' + minutes;
     }
 };
 

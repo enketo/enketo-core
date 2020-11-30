@@ -131,7 +131,7 @@ class DatetimepickerExtended extends Widget {
          * so we have to append the timezone here
          */
         if ( os.safari ) {
-            val = ( $dateTimeI.val().length > 0 ) ? ( new Date( $dateTimeI.val() + timeFormat.timezoneOffsetAsTime ) ).toISOLocalString() : '';
+            val = ( $dateTimeI.val().length > 0 ) ? ( new Date( $dateTimeI.val() + new Date( dt ).timezoneOffsetAsTime ) ).toISOLocalString() : '';
         }
         if ( val !== this.value ) {
             const vals = val.split( 'T' );
