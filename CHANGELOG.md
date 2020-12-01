@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 -----------------------
 ##### Fixed
 - Print/pdf view creates image-map that overlaps in cell below with Grid theme (#744).
+- In Safari on MacOS, dates are offset incorrectly by the UTC offset.
 
 [5.16.10] - 2020-11-18
 -----------------------
