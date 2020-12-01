@@ -1065,7 +1065,7 @@ FormModel.prototype.replaceInstanceFn = function( expr ) {
  * Doing this here instead of adding a current() function to the XPath evaluator, means we can keep using
  * the much faster native evaluator in most cases!
  *
- * Root will be shifted, and repeat positions injected, **later on**, so it's not included here.
+ * Root will be shifted later, and repeat positions are already injected into context selector.
  *
  * @param {string} expr - Original expression
  * @param {string} contextSelector - Context selector
