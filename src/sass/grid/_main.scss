@@ -138,10 +138,10 @@ h4+.or-repeat {
 
 /*
  * display: flex messes up img size so apply it sparingly only to questions
- * and not to notes. We loose the ability to display image labels nicely in 
- * questions (though fine in tables). It also unfortunately prevents us from 
+ * and not to notes. We loose the ability to display image labels nicely in
+ * questions (though fine in tables). It also unfortunately prevents us from
  * displaying comment icons inline with labels.
- * 
+ *
  * display: flex is used to:
  * - display error messages at the bottom of cells
  * - ... (other things probably)
@@ -392,7 +392,7 @@ h4+.or-repeat {
     margin-bottom: 0;
 }
 
-// the awesome grid
+// the gorgeous grid
 @media print,
 screen and (min-width: 600px) {
     @for $total from 1 through $max-columns {

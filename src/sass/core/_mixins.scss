@@ -178,17 +178,16 @@
         $flex: percentage($value / $total);
     }
 
-    -webkit-flex-grow: 1;
     flex-grow: 1;
-    -webkit-flex-shrink: 1;
-    flex-shrink: 1; // Internet Explorer 10 and 11 have a box-sizing issue with multiline flexboxes
+    flex-shrink: 1;
+    // Internet Explorer 11 has a box-sizing issue with multiline flexboxes
     // box-sizing: border-box is ignored
     // 2 x 6px padding + 1 border = 13px adjustment
-    -webkit-flex-basis: calc(#{$flex} - 13px); // IE10:
     -ms-flex-preferred-size: calc(#{$flex} - 13px);
     -ms-flex-positive: 1;
-    -ms-flex-negative: 1; // unprefixed
-    flex-basis: calc(#{$flex} - 13px);
+    -ms-flex-negative: 1;
+    // unprefixed
+    flex-basis: calc(#{$flex});
 }
 
 @mixin flex-wrap($wrap: wrap) {
