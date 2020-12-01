@@ -76,7 +76,7 @@
         "node-sass": "^4.14.1",
         "publish-please": "^5.5.2",
         "rimraf": "^3.0.2",
-        "rollup": "^2.33.3",
+        "rollup": "^2.34.0",
         "rollup-plugin-commonjs": "10.1.x",
         "rollup-plugin-istanbul": "^2.0.1",
         "rollup-plugin-json": "4.0.x",
