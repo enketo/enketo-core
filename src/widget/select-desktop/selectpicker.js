@@ -24,6 +24,7 @@ import support from '../../js/support';
 import events from '../../js/event';
 import { getSiblingElementsAndSelf } from '../../js/dom-utils';
 import event from '../../js/event';
+import { encodeHtmlEntities } from '../../js/utils';
 import { t } from 'enketo/translator';
 import '../../js/dropdown.jquery';
 
@@ -115,8 +116,8 @@ class DesktopSelectpicker extends Widget {
                         <li ${checkedLiAttr}>
                             <a class="option-wrapper" tabindex="-1" href="#">
                                 <label>
-                                    <input class="ignore" ${inputAttr}${checkedInputAttr} value="${value}" />
-                                    <span class="option-label">${label}</span>
+                                    <input class="ignore" ${inputAttr}${checkedInputAttr} value="${encodeHtmlEntities( value )}" />
+                                    <span class="option-label">${encodeHtmlEntities( label )}</span>
                                 </label>
                             </a>
                         </li>`;

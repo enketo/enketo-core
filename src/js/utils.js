@@ -256,6 +256,14 @@ function getScript( url ) {
     firstScriptTag.parentNode.insertBefore( scriptTag, firstScriptTag );
 }
 
+function encodeHtmlEntities( text ){
+    return text
+        .replace( /&/g, '&amp;' )
+        .replace( /</g, '&lt;' )
+        .replace( />/g, '&gt;' )
+        .replace( /"/g, '&quot;' );
+}
+
 export {
     parseFunctionFromExpression,
     stripQuotes,
@@ -266,5 +274,6 @@ export {
     getPasteData,
     resizeImage,
     joinPath,
-    getScript
+    getScript,
+    encodeHtmlEntities
 };

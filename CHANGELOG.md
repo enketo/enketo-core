@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Print/pdf view creates image-map that overlaps in cell below with Grid theme (#744).
 - In Safari on MacOS, dates are offset incorrectly by the UTC offset.
 - Grid Theme designed for rows with 9 or 10 cells display 1 cell too many.
+- Inconsistent and unsafe HTML rendering of select minimal labels and values.
 
 [5.16.10] - 2020-11-18
 -----------------------
