@@ -34,9 +34,9 @@ class AutocompleteSelectpicker extends Widget {
 
         if ( getSiblingElements( this.element, 'datalist' ).length === 0 ) {
             const infos = getSiblingElements( this.element.closest( '.or-repeat' ), '.or-repeat-info' );
-            this.options = infos.length ? [ ...infos[ 0 ].querySelectorAll( `datalist#${listId} > option` ) ] : [];
+            this.options = infos.length ? [ ...infos[ 0 ].querySelectorAll( `datalist#${CSS.escape( listId )} > option` ) ] : [];
         } else {
-            this.options = [ ...this.question.querySelectorAll( `datalist#${listId} > option` ) ];
+            this.options = [ ...this.question.querySelectorAll( `datalist#${CSS.escape( listId )} > option` ) ];
         }
 
         // This value -> data-value change is not slow, so no need to move to enketo-xslt as that would

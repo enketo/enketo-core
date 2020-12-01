@@ -169,7 +169,7 @@ class ImageMap extends Widget {
      * @return {Element} input element with matching ID
      */
     _getInput( id ) {
-        return this.question.querySelector( `input[value="${id}"]` );
+        return this.question.querySelector( `input[value="${CSS.escape( id )}"]` );
     }
 
     /**
@@ -249,7 +249,7 @@ class ImageMap extends Widget {
         values.forEach( value => {
             if ( value ) {
                 // if multiple values have the same id, change all of them (e.g. a province that is not contiguous)
-                this.svg.querySelectorAll( `path#${value},g#${value},circle#${value}` ).forEach( el => el.setAttribute( 'or-selected', '' ) );
+                this.svg.querySelectorAll( `path#${CSS.escape( value )},g#${CSS.escape( value )},circle#${CSS.escape( value )}` ).forEach( el => el.setAttribute( 'or-selected', '' ) );
             }
         } );
     }

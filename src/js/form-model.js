@@ -224,7 +224,7 @@ FormModel.prototype.createSession = function( id, sessObj ) {
     }
 
     sessObj = ( typeof sessObj === 'object' ) ? sessObj : {};
-    instance = model.querySelector( `instance[id="${id}"]` );
+    instance = model.querySelector( `instance#${CSS.escape( id )}` );
 
     if ( !instance ) {
         instance = parser.parseFromString( `<instance id="${id}"/>`, 'text/xml' ).documentElement;
@@ -1047,7 +1047,7 @@ FormModel.prototype.replaceInstanceFn = function( expr ) {
     let prefix;
     const that = this;
 
-    // TODO: would be more consistent to use utls.parseFunctionFromExpression() and utils.stripQuotes
+    // TODO: would be more consistent to use utils.parseFunctionFromExpression() and utils.stripQuotes
     return expr.replace( INSTANCE, ( match, quote, id ) => {
         prefix = `/model/instance[@id="${id}"]`;
         // check if referred instance exists in model
