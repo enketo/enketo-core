@@ -430,7 +430,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
                     const siblingLabelEls = getSiblingElements( found[0], '.option-label.active' );
                     label = siblingLabelEls.length ? siblingLabelEls[0].textContent : '';
                 } else {
-                    const siblingListEls = getSiblingElements( inputs[0], `datalist#${list}` );
+                    const siblingListEls = getSiblingElements( inputs[0], `datalist#${CSS.escape( list )}` );
                     if ( siblingListEls.length ){
                         const optionEl = siblingListEls[0].querySelector( `[data-value="${value}"]` );
                         label = optionEl ? optionEl.getAttribute( 'value' ) : '';
