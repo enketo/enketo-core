@@ -3,13 +3,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.16.11] - 2020-12-02
 -----------------------
 ##### Fixed
 - Print/pdf view creates image-map that overlaps in cell below with Grid theme (#744).
 - In Safari on MacOS, dates are offset incorrectly by the UTC offset.
 - Grid Theme designed for rows with 9 or 10 cells display 1 cell too many.
 - Inconsistent and unsafe HTML rendering of select minimal labels and values.
+- Primary instance node names starting with underscore followed by number, break autocomplete widget.
 
 [5.16.10] - 2020-11-18
 -----------------------
