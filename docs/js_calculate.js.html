@@ -161,7 +161,12 @@ export default {
             ignoreRelevance = true;
             // Do not use getRelatedNodes here, because the obtaining (and caching) of nodes inside repeats is (and should be) disabled at the
             // time this event fires.
-            nodes = this.form.filterRadioCheckSiblings( [ ...this.form.view.html.querySelectorAll( `[data-setvalue][data-event*="${event.type}"]` ) ] );
+            //
+            // We change the order by first evaluating the non-formcontrol setvalue directives (in document order), and then
+            // the ones with form controls.
+            // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
+            nodes = [ ...this.form.view.html.querySelectorAll( `.setvalue [data-setvalue][data-event*="${event.type}"]` ) ].concat(
+                this.form.filterRadioCheckSiblings( [ ...this.form.view.html.querySelectorAll( `.question [data-setvalue][data-event*="${event.type}"]` ) ] ) );
         } else if ( event.type === new events.NewRepeat().type ) {
             // Only this event requires specific index targeting through the "updated" object
             nodes = this.form.getRelatedNodes( 'data-setvalue', `[data-event*="${event.type}"]`, event.detail ).get();
