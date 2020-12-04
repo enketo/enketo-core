@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+-----------------------
+##### Changed
+- setvalue/odk-instance-first-load actions without form controls are evaluated (in form order) before setvalue/odk-instance-first-load actions with form controls (in form order)
+
 [5.16.11] - 2020-12-02
 -----------------------
 ##### Fixed

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setvalue-order</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="setvalue-order">
+                    <one />
+                    <two />
+                    <three />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/one" type="string" />
+            <setvalue event="odk-instance-first-load" ref="/data/one" value="1+1" />
+            <bind nodeset="/data/two" type="string" />
+            <setvalue event="odk-instance-first-load" ref="/data/two" value=" /data/one " />
+            <bind nodeset="/data/three" type="string" />
+            <setvalue event="odk-instance-first-load" ref="/data/three" value="concat( /data/one , '#')" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/two">
+            <label>Enter text</label>
+        </input>
+        <input ref="/data/three">
+            <label>Enter text</label>
+        </input>
+    </h:body>
+</h:html>

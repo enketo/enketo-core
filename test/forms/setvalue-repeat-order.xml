@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setvalue-repeat-order</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="setvalue-repeat-order">
+                    <rep>
+                        <one />
+                        <two />
+                        <three />
+                    </rep>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/rep/one" type="string" />
+            <setvalue event="odk-new-repeat" ref="/data/rep/one" value="1+1" />
+            <bind nodeset="/data/rep/two" type="string" />
+            <setvalue event="odk-new-repeat" ref="/data/rep/two" value="../one " />
+            <bind nodeset="/data/rep/three" type="string" />
+            <setvalue event="odk-new-repeat" ref="/data/rep/three" value="concat( ../one , '#')" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/rep">
+            <repeat nodeset="/data/rep">
+                <input ref="/data/rep/two">
+                    <label>Enter text</label>
+                </input>
+                <input ref="/data/rep/three">
+                    <label>Enter text</label>
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

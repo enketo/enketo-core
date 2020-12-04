@@ -353,6 +353,24 @@ describe( 'setvalue action to populate defaults', () => {
 
     } );
 
+
+    it( 'relying on non-form-control setvalue/odk-instance-first-load items to be evaluated before form-control setvalue items', () => {
+        const form1 = loadForm( 'setvalue-order.xml' );
+        form1.init();
+        expect( form1.model.xml.querySelector( 'one' ).textContent ).toEqual( '2' );
+        expect( form1.model.xml.querySelector( 'two' ).textContent ).toEqual( '2' );
+        expect( form1.model.xml.querySelector( 'three' ).textContent ).toEqual( '2#' );
+    } );
+
+    it( 'relying on non-form-control setvalue/odk-new-repeat items inside repeats to be evaluated before form-control setvalue items', () => {
+        const form1 = loadForm( 'setvalue-repeat-order.xml' );
+        form1.init();
+        form1.view.html.querySelector( '.add-repeat-btn' ).click();
+        expect( form1.model.xml.querySelectorAll( 'one' )[1].textContent ).toEqual( '2' );
+        expect( form1.model.xml.querySelectorAll( 'two' )[1].textContent ).toEqual( '2' );
+        expect( form1.model.xml.querySelectorAll( 'three' )[1].textContent ).toEqual( '2#' );
+    } );
+
 } );
 
 
