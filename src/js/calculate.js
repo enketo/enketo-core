@@ -50,7 +50,7 @@ export default {
 
             if ( dataNodes.length > 1 ) {
 
-                if ( updated.repeatPath && name.indexOf( updated.repeatPath + '/' ) !== -1 ) {
+                if ( updated.repeatPath && name.indexOf( updated.repeatPath + '/' ) !== -1 && dataNodes[updated.repeatIndex] ) {
                     /*
                      * If the update was triggered by a datanode inside a repeat
                      * and the dependent node is inside the same repeat, we can prevent the expensive index determination

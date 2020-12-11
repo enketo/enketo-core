@@ -8,6 +8,8 @@ import events from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
 const range = document.createRange();
 
+dialog.confirm = () => Promise.resolve( true );
+
 describe( 'Output functionality ', () => {
     // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
     // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
@@ -311,6 +313,17 @@ describe( 'calculations', () => {
         expect( form.view.$.find( '.or-output[data-value="/RepeatGroupTest/P/pos"]' ).eq( 2 ).text() ).toEqual( '3' );
     } );
 
+    // https://github.com/enketo/enketo-core/issues/755
+    it( 'do not cause an exception when a repeat is removed', () => {
+        const form = loadForm( 'calcs_in_repeats.xml' );
+        form.init();
+        const addButton =  form.view.html.querySelector( '.add-repeat-btn' );
+        addButton.click();
+        addButton.click();
+        const deleteAction = () => { [ ...form.view.html.querySelectorAll( '.remove' ) ].pop().click();};
+        expect( deleteAction ).not.toThrow();
+    } );
+
 } );
 
 describe( 'branching functionality', () => {
@@ -600,7 +613,6 @@ describe( 'branching functionality', () => {
 
     describe( 'on a question inside a REMOVED repeat', () => {
         it( 'does not try to evaluate it', ( done ) => {
-            dialog.confirm = () => Promise.resolve( true );
             const form = loadForm( 'repeat-irrelevant-date.xml' );
             form.init();
             form.view.$.find( '[name="/repeat/rep"] button.remove' ).click();
@@ -1194,13 +1206,13 @@ describe( 'jr:choice-name', () => {
         const form = loadForm( 'jr_choice_name_repeats.xml' );
         form.init();
 
-        expect( form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).checked).toEqual(false);
+        expect( form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).checked ).toEqual( false );
 
-        form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).checked = true
+        form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).checked = true;
         form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).dispatchEvent( events.Change() );
 
         expect( form.view.html.querySelector( '[data-value=" ../province_label "]' ).innerText ).toEqual( 'Central' );
-    })
+    } );
 
 
 } );
