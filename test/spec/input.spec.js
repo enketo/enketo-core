@@ -14,4 +14,19 @@ describe( 'input helper', () => {
             } );
         } );
     } );
+
+    describe( 'clears form controls', () => {
+        const form = loadForm( 'repeat-default.xml' );
+        form.init();
+        const num = form.view.html.querySelector( '[name="/repdef/rep/num"]' );
+        const grp = form.view.html.querySelector( '[name="/repdef/rep"]' );
+
+        it( 'works for groups of control', () => {
+            expect( num.value ).toEqual( '5' );
+
+            form.input.clear( grp );
+
+            expect( num.value ).toEqual( '' );
+        } );
+    } );
 } );

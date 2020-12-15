@@ -349,6 +349,23 @@ export default {
         return inputs[ 0 ];
     },
     /**
+     * Clears form input fields and triggers events when doing this.
+     *
+     * @param grp - Element whose DESCENDANT form controls to clear
+     * @param event1 - first event to trigger
+     * @param event2 - second event to trigger
+     */
+    clear( grp, event1, event2 ){
+        // See original pre-December 2020 plugin.js for some additional stuff with file-preview, loadedFileName and selectedIndex
+        // which I think was no longer necessary, or should be moved to the widgets instead
+        grp.querySelectorAll( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ).forEach( control => {
+            this.setVal( control, '', event1 );
+            if ( event2 ){
+                control.dispatchEvent( event2 );
+            }
+        } );
+    },
+    /**
      * @param {Element} control - form control HTML element
      * @return {Promise<undefined|ValidateInputResolution>} Promise that resolves
      */

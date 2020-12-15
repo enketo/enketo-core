@@ -1043,23 +1043,6 @@ describe( 'getting related nodes', () => {
     } );
 } );
 
-describe( 'clearing inputs', () => {
-    const $fieldset = $( '<fieldset><input type="number" value="23" /><input type="text" value="abc" /><textarea>abcdef</textarea></fieldset>"' );
-
-    it( 'works!', () => {
-        expect( $fieldset.find( '[type="number"]' ).val() ).toEqual( '23' );
-        expect( $fieldset.find( '[type="text"]' ).val() ).toEqual( 'abc' );
-        expect( $fieldset.find( 'textarea' ).val() ).toEqual( 'abcdef' );
-
-        $fieldset.clearInputs();
-
-        expect( $fieldset.find( '[type="number"]' ).val() ).toEqual( '' );
-        expect( $fieldset.find( '[type="text"]' ).val() ).toEqual( '' );
-        expect( $fieldset.find( 'textarea' ).val() ).toEqual( '' );
-
-    } );
-} );
-
 describe( 'white-space-only input', () => {
     // This is e.g. important for automatic value-change log creation in OpenClinica.
     it( 'does not fire an xforms-value-changed event', done => {

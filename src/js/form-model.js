@@ -14,7 +14,6 @@ const JAVAROSA_XFORMS_NS = 'http://openrosa.org/javarosa';
 const ENKETO_XFORMS_NS = 'http://enketo.org/xforms';
 const ODK_XFORMS_NS = 'http://www.opendatakit.org/xforms';
 
-//require( './plugins' );
 import './extend';
 
 const parser = new DOMParser();
