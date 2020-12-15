@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>relevant-calcs</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="relevant-calcs">
+                    <a />
+                    <grp>
+                        <one />
+                        <two />
+                        <three />
+                        <four />
+                    </grp>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/a" type="string" />
+            <bind nodeset="/data/grp" relevant="string-length( /data/a ) &gt; 0" />
+            <bind calculate="concat('o', 'ne')" nodeset="/data/grp/one" readonly="true()" type="string" />
+            <bind calculate="concat('tw', 'o')" nodeset="/data/grp/two" type="string" />
+            <bind calculate="if( /data/a  != 'ignore', concat('th', 'ree'), 'ignore')" nodeset="/data/grp/three" readonly="true()" type="string" />
+            <bind calculate="if( /data/a  != 'ignore', concat('fo', 'ur'), 'ignore')" nodeset="/data/grp/four" type="string" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/a">
+            <label>Enter text to make next group relevant</label>
+        </input>
+        <group ref="/data/grp">
+            <label>Group</label>
+            <input ref="/data/grp/one">
+                <label>Calculated:</label>
+            </input>
+            <input ref="/data/grp/three">
+                <label>Calculated:</label>
+            </input>
+        </group>
+    </h:body>
+</h:html>

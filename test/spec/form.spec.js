@@ -6,7 +6,6 @@ import config from '../../config';
 import pkg from '../../package';
 import events from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
-const range = document.createRange();
 
 dialog.confirm = () => Promise.resolve( true );
 
@@ -488,7 +487,6 @@ describe( 'branching functionality', () => {
         form.init();
         it( 'initializes all nested repeat questions', () => {
             expect( form.view.$.find( '.or-branch' ).length ).toEqual( 4 );
-            expect( form.view.$.find( '.or-branch.pre-init' ).length ).toEqual( 0 );
         } );
     } );
 

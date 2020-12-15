@@ -363,8 +363,7 @@ Form.prototype.goTo = function( xpath ) {
  * @param {{include: boolean}} [include] - Optional object items to exclude if false
  * @return {string} XML string of primary instance
  */
-Form.prototype.getDataStr = function( include ) {
-    include = ( typeof include !== 'object' || include === null ) ? {} : include;
+Form.prototype.getDataStr = function( include = {} ) {
     // By default everything is included
     if ( include.irrelevant === false ) {
         return this.getDataStrWithoutIrrelevantNodes();
@@ -939,7 +938,7 @@ Form.prototype.clearNonRelevant = function() {
  */
 Form.prototype.validateAll = function() {
     const that = this;
-    // to not delay validation unneccessarily we only clear irrelevants if necessary
+    // to not delay validation unnecessarily we only clear non-relevants if necessary
     this.clearNonRelevant();
 
     return this.validateContent( this.view.$ )

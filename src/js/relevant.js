@@ -7,12 +7,14 @@
 import $ from 'jquery';
 import events from './event';
 
+// TODO: remove jquery
+
 export default {
     /**
      * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      * @param {boolean} forceClearNonRelevant -  whether to empty the values of non-relevant nodes
      */
-    update( updated, forceClearNonRelevant ) {
+    update( updated, forceClearNonRelevant = false ) {
         let $nodes;
 
         if ( !this.form ) {
@@ -27,7 +29,7 @@ export default {
      * @param {jQuery} $nodes - Nodes to update
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    updateNodes( $nodes, forceClearNonRelevant ) {
+    updateNodes( $nodes, forceClearNonRelevant = false ) {
         let p;
         let $branchNode;
         let result;
@@ -171,7 +173,7 @@ export default {
      * @param {boolean} result - result of relevant evaluation
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    process( $branchNode, path, result, forceClearNonRelevant ) {
+    process( $branchNode, path, result, forceClearNonRelevant = false ) {
         if ( result === true ) {
             return this.enable( $branchNode, path );
         } else {
@@ -225,27 +227,22 @@ export default {
      * @param {jQuery} $branchNode - The jQuery object to hide and disable
      * @param {string} path - path of branch node
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
-     * @return {boolean} whether the relevant changed as a result of this action
+     * @return {boolean} whether the relevancy changed as a result of this action
      */
     disable( $branchNode, path, forceClearNonRelevant ) {
-        const virgin = $branchNode.hasClass( 'pre-init' );
-        let change = false;
+        const neverEnabled = $branchNode.hasClass( 'pre-init' );
+        let changed = false;
 
-        if ( virgin || this.selfRelevant( $branchNode ) || forceClearNonRelevant ) {
-            change = true;
-            // if the branch was previously enabled, keep any default values
-            if ( !virgin ) {
-                if ( forceClearNonRelevant ) {
-                    this.clear( $branchNode, path );
-                }
-            } else {
-                $branchNode.removeClass( 'pre-init' );
+        if ( neverEnabled || this.selfRelevant( $branchNode ) || forceClearNonRelevant ) {
+            changed = true;
+            if ( forceClearNonRelevant ) {
+                this.clear( $branchNode, path );
             }
 
             this.deactivate( $branchNode );
         }
 
-        return change;
+        return changed;
     },
     /**
      * Clears values from branchnode.
@@ -263,7 +260,7 @@ export default {
         if ( $branchNode.is( '.or-group, .or-group-data' ) ) {
             this.form.calc.update( {
                 relevantPath: path
-            } );
+            }, '', false );
         }
     },
     /**

@@ -12,8 +12,9 @@ export default {
      *
      * @param {UpdatedDataNodes} updated - the object containing info on updated data nodes
      * @param {string} [filter] - CSS selector filter.
+     * @param ignoreRelevance
      */
-    update( updated = {}, filter = '' ) {
+    update( updated = {}, filter = '', ignoreRelevance = true ) {
         let nodes;
 
         if ( !this.form ) {
@@ -58,7 +59,7 @@ export default {
                     const dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
                     const dataNode = this.form.model.node( updated.repeatPath, updated.repeatIndex ).getElement().querySelector( dataNodeName );
                     props.index = dataNodes.indexOf( dataNode );
-                    this._updateCalc( control, props );
+                    this._updateCalc( control, props, ignoreRelevance );
                 } else if ( control.type === 'hidden' ) {
                     /*
                      * This case is the consequence of the  decision to place calculated items without a visible form control,
@@ -68,7 +69,7 @@ export default {
                     dataNodes.forEach( ( el, index ) => {
                         const obj = Object.create( props );
                         obj.index = index;
-                        this._updateCalc( control, obj );
+                        this._updateCalc( control, obj, ignoreRelevance );
                     } );
                 } else {
                     /*
@@ -78,11 +79,11 @@ export default {
                     const repeatSiblings = getSiblingElementsAndSelf( control.closest( '.or-repeat' ), '.or-repeat' );
                     if ( repeatSiblings.length === dataNodes.length ) {
                         props.index = repeatSiblings.indexOf( control.closest( '.or-repeat' ) );
-                        this._updateCalc( control, props );
+                        this._updateCalc( control, props, ignoreRelevance );
                     }
                 }
             } else if ( dataNodes.length === 1 ) {
-                this._updateCalc( control, props );
+                this._updateCalc( control, props, ignoreRelevance );
             }
 
         } );
@@ -94,7 +95,6 @@ export default {
      * @param {CustomEvent} [event] - the event type that triggered the setvalue action.
      */
     setValue( event ) {
-        let ignoreRelevance = false;
         let index = 0;
 
         if ( !event ) {
@@ -109,7 +109,6 @@ export default {
 
         if ( event.type === new events.InstanceFirstLoad().type ) {
             // We ignore relevance for the data-instance-first-load, as that will likely never be what users want for a default value.
-            ignoreRelevance = true;
             // Do not use getRelatedNodes here, because the obtaining (and caching) of nodes inside repeats is (and should be) disabled at the
             // time this event fires.
             //
@@ -151,35 +150,31 @@ export default {
                     const obj = Object.create( props );
                     const control = setvalueControl;
                     obj.index = index;
-                    this._updateCalc( control, obj, ignoreRelevance );
+                    this._updateCalc( control, obj );
                 } );
 
             } else if ( event.type === new events.XFormsValueChanged().type ) {
                 // control for xforms-value-changed is located elsewhere, or does not exist.
                 const control = this.form.input.find( props.name, props.index );
-                this._updateCalc( control, props, ignoreRelevance );
+                this._updateCalc( control, props );
             } else if ( dataNodes[ index ] ) {
                 const control = setvalueControl;
-                this._updateCalc( control, props, ignoreRelevance );
+                this._updateCalc( control, props );
             } else {
                 console.error( 'SetValue called for node that does not exist in model.' );
             }
         } );
     },
 
-    _updateCalc( control, props, ignoreRelevance = false ) {
-        let relevant = true;
-
-        if ( !ignoreRelevance ) {
-            relevant = this._isRelevant( props );
-        }
+    _updateCalc( control, props, ignoreRelevance = true ) {
+        const skip =  ignoreRelevance ? this._hasNeverBeenRelevant( control, props ) : !this._isRelevant( props ) ;
 
         // Not sure if using 'string' is always correct
         const newExpr = this.form.replaceChoiceNameFn( props.expr, 'string', props.name, props.index );
 
         // It is possible that the fixed expr is '' which causes an error in XPath
         // const xpathType = this.form.input.getInputType( control ) === 'number' ? 'number' : 'string';
-        const result = relevant && newExpr ? this.form.model.evaluate( newExpr, 'string', props.name, props.index ) : '';
+        const result = !skip && newExpr ? this.form.model.evaluate( newExpr, 'string', props.name, props.index ) : '';
 
         // Filter the result set to only include the target node
         props.dataNodesObj.setIndex( props.index );
@@ -206,7 +201,7 @@ export default {
             }
         } else {
             // This is okay for a setvalue/xforms-value-changed directive (may be no form control)
-            //console.log( 'no form control found' );
+            // console.log( 'no form control found' );
         }
     },
 
@@ -264,6 +259,36 @@ export default {
         }
 
         return relevant;
+    },
+
+    _hasNeverBeenRelevant( control, props ){
+        if ( control && control.closest( '.pre-init' ) ){
+            return true;
+        }
+        // Check parents including when the calculation has no form control.
+        const pathParts = props.name.split( '/' );
+        /*
+             * First determine immediate group parent of node, which will always be in correct location in DOM. This is where
+             * we can use the index to be guaranteed to get the correct node.
+             * (also for nodes in #calculated-items).
+             *
+             * Then get all the group parents of that node.
+             *
+             * TODO: determine index at every level to properly support repeats and nested repeats
+             *
+             * Note: getting the parents of control wouldn't work for nodes inside #calculated-items!
+             */
+        const parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
+        let startElement;
+
+        if ( props.index === 0 ) {
+            startElement = this.form.view.html.querySelector( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` );
+        } else {
+            startElement = this.form.view.html.querySelectorAll( `.or-repeat[name="${parentPath}"]` )[ props.index ] ||
+                    this.form.view.html.querySelectorAll( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` )[ props.index ];
+        }
+
+        return startElement ? !!startElement.closest( '.pre-init' ) : false;
     }
 
 };

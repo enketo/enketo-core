@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 -----------------------
 ##### Fixed
 - An exception occurs when a repeat is deleted.
+- When a calculation becomes non-relevant, values are sometimes cleared (they should stay).
 
 [5.16.12] - 2020-12-04
 -----------------------

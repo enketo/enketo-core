@@ -76,4 +76,25 @@ describe( 'calculate functionality', () => {
         expect( counter ).toEqual( 0 );
     } );
 
+    // https://github.com/OpenClinica/enketo-express-oc/issues/404#issuecomment-744743172
+    // Checks whether different types of calculations are handled consistently when they become non-relevant
+    it( 'consistently leaves calculated values if they become non-relevant', () => {
+        const form = loadForm( 'relevant-calcs.xml' );
+        form.init();
+        const grp = form.model.xml.querySelector( 'grp' );
+
+        expect( grp.textContent.replace( /\s/g, '' ) ).toEqual( '' );
+
+        const a = form.view.html.querySelector( 'input[name="/data/a"]' );
+        a.value = 'a';
+        a.dispatchEvent( events.Change() );
+
+        expect( grp.textContent.replace( /\s/g, '' ) ).toEqual( 'onetwothreefour' );
+
+        a.value = 'a';
+        a.dispatchEvent( events.Change() );
+
+        expect( grp.textContent.replace( /\s/g, '' ) ).toEqual( 'onetwothreefour' );
+    } );
+
 } );
