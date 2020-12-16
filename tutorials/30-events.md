@@ -13,10 +13,10 @@ Fired on a form control when it has failed constraint, datatype, or required val
 Fired on model.$events, when a single model value has changed its value, a repeat is added, or a node is removed. It passes an "update object". This event is propagated for external use by firing it on the form.or element as well.
 
 ##### odk-instance-first-load
-Fired on model.events when a new record (instance) is loaded for the first time. It's described here: [odk-instance-first-load](https://opendatakit.github.io/xforms-spec/#event:odk-instance-first-load).
+Fired on model.events when a new record (instance) is loaded for the first time. It's described here: [odk-instance-first-load](https://getodk.github.io/xforms-spec/#event:odk-instance-first-load).
 
 ##### odk-new-repeat
-Fired on a newly added repeat. It's described here: [odk-instance-first-load](https://opendatakit.github.io/xforms-spec/#event:odk-new-repeat).
+Fired on a newly added repeat. It's described here: [odk-instance-first-load](https://getodk.github.io/xforms-spec/#event:odk-new-repeat).
 
 ##### removerepeat
 Fired on the repeat or repeat element immediately following a removed repeat.

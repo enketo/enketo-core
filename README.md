@@ -6,7 +6,7 @@ Enketo Core
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [this selection](https://enketo.org/about/adoption/).
 
-Enketo's form engine is compatible with tools in the ODK ecosystem and complies with its [XForms specification](https://opendatakit.github.io/xforms-spec/) though not all features in that specification have been implemented yet.
+Enketo's form engine is compatible with tools in the ODK ecosystem and complies with its [XForms specification](https://getodk.github.io/xforms-spec/) though not all features in that specification have been implemented yet.
 
 This repo is meant to be used as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of a real-life full-fledged data collection application and how Enketo Core fits into this.
 

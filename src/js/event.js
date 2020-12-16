@@ -54,7 +54,7 @@ function Removed( detail ) {
 /**
  * The odk-instance-first-load event as defined in the ODK XForms spec.
  *
- * @see https://opendatakit.github.io/xforms-spec/#event:odk-instance-first-load
+ * @see https://getodk.github.io/xforms-spec/#event:odk-instance-first-load
  *@return {CustomEvent} Custom "odk-instance-first-load" event (bubbling)
  */
 function InstanceFirstLoad() {
@@ -64,7 +64,7 @@ function InstanceFirstLoad() {
 /**
  * The odk-new-repeat event as defined in the ODK XForms spec.
  *
- * @see https://opendatakit.github.io/xforms-spec/#event:odk-new-repeat
+ * @see https://getodk.github.io/xforms-spec/#event:odk-new-repeat
  * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
  * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
  */
@@ -112,7 +112,7 @@ function Change() {
 /**
  * Xforms-value-changed event as defined in the ODK XForms spec.
  *
- * @see https://opendatakit.github.io/xforms-spec/#event:xforms-value-changed
+ * @see https://getodk.github.io/xforms-spec/#event:xforms-value-changed
  * @param {{repeatIndex: number}} detail - Data to be passed with event.
  * @return {CustomEvent} Custom "xforms-value-changed" event (bubbling).
  */
@@ -130,7 +130,7 @@ function Input() {
 }
 
 /**
- * Input update event.
+ * Input update event which fires when a form control value is updated programmatically.
  *
  * @return {CustomEvent} Custom "inputupdate" event (bubbling)
  */
