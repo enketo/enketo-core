@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - An exception occurs when a repeat is deleted.
 - When a calculation becomes non-relevant, values are sometimes cleared (they should stay).
 - The input field of a readonly question without a calculation but with a triggered setvalue/xforms-value-changed action remains hidden.
+- Calculation updates do not trigger setvalue/xforms-value-changed actions.
 
 [5.16.12] - 2020-12-04
 -----------------------

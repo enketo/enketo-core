@@ -342,6 +342,11 @@ export default {
                 // don't trigger on all radiobuttons/checkboxes
                 if ( event ) {
                     inputs[ 0 ].dispatchEvent( event );
+                    // Ensure that any calculations with form controls that serve as setvalue triggers
+                    // the action.
+                    if ( event.type === events.InputUpdate().type ){
+                        inputs[0].dispatchEvent( events.XFormsValueChanged() );
+                    }
                 }
             }
         }
