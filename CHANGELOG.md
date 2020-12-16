@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.16.13] - 2020-12-16
 -----------------------
 ##### Fixed
 - An exception occurs when a repeat is deleted.

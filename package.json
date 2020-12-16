@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.16.12",
+    "version": "5.16.13",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -48,7 +48,7 @@
         "prepublishOnly": "publish-please guard"
     },
     "devDependencies": {
-        "cross-env": "^7.0.2",
+        "cross-env": "^7.0.3",
         "docdash": "^1.2.0",
         "enketo-transformer": "1.41.2",
         "eslint-plugin-jsdoc": "^27.1.2",
@@ -76,7 +76,7 @@
         "node-sass": "^4.14.1",
         "publish-please": "^5.5.2",
         "rimraf": "^3.0.2",
-        "rollup": "^2.34.0",
+        "rollup": "^2.35.1",
         "rollup-plugin-commonjs": "10.1.x",
         "rollup-plugin-istanbul": "^2.0.1",
         "rollup-plugin-json": "4.0.x",
