@@ -124,6 +124,9 @@ export default {
             const xPath = templateEl.getAttribute( 'name' );
             this.remove();
             $( templateEl ).removeClass( 'contains-current current' ).find( '.current' ).removeClass( 'current' );
+            // Clear all values (this is required for setvalue/odk-instance-first-load populated values)
+            // The default values will be added anyway in the repeats.add function.
+            that.form.input.clear( templateEl );
             that.templates[ xPath ] = templateEl;
         } );
 
