@@ -358,6 +358,23 @@ describe( 'setvalue action to populate defaults', () => {
                 expect( form.view.html.querySelector( '[name="/data/grp/rep/pos"]' ).value ).toEqual( 'Standing' );
             } );
 
+            it( 'works if the default value is an empty string', () => {
+                const form = loadForm( 'setvalue-repeat.xml' );
+                form.init();
+                const yn = form.view.html.querySelector( '[name="/data/grp/yn"]' );
+                form.input.setVal( yn, '1', events.Change() );
+
+                // Create 5 additional repeat instances (total 6)
+                const btn = form.view.html.querySelector( '.add-repeat-btn' );
+                for ( let i = 0;  i < 5; i++ ){
+                    btn.click();
+                }
+
+                // Test that especially the last 3 are empty (and not 'Standing' due a view template extraction issue)
+                // https://github.com/OpenClinica/enketo-express-oc/issues/406#issuecomment-748325668
+                expect( [ ...form.view.html.querySelectorAll( '[name="/data/grp/rep/pos"]' ) ].map( el => el.value ) ).toEqual( [ 'Standing', 'Sitting', 'Lying', '', '', '' ] );
+            } );
+
         } );
 
     } );

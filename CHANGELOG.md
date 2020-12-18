@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 -----------------------
 ##### Fixed
 - The setvalue/odk-instance-first-load default in the first repeat instance is not populated if that repeat or question is non-relevant upon load.
+- If the result of a non-first setvalue/odk-new-repeat calculation is an empty string but the first repeat instance has a non-empty default for that question, the view will show the non-empty default (model is correct).
 
 [5.16.13] - 2020-12-16
 -----------------------
