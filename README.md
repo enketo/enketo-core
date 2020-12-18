@@ -43,6 +43,7 @@ The development of this library was sponsored by:
 * [Ona](https://ona.io)
 * [Medic Mobile](http://medicmobile.org/)
 * [Esri](https://esri.com)
+* [DIAL Open Source Center](https://www.osc.dial.community/)
 
 ### Performance (live)
 
