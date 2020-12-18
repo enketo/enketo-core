@@ -136,7 +136,8 @@ export default {
                 dataType: this.form.input.getXmlType( setvalueControl ),
                 relevantExpr: this.form.input.getRelevant( setvalueControl ),
                 index: event.detail && typeof event.detail.repeatIndex !== 'undefined' ? event.detail.repeatIndex : 0,
-                dataNodesObj
+                dataNodesObj,
+                type: 'setvalue'
             };
 
             if ( dataNodes.length > 1 && event.type !== new events.NewRepeat().type && event.type !== new events.XFormsValueChanged().type ) {
@@ -167,8 +168,10 @@ export default {
     },
 
     _updateCalc( control, props, ignoreRelevance = true ) {
-        const skip =  ignoreRelevance ? this._hasNeverBeenRelevant( control, props ) : !this._isRelevant( props ) ;
-
+        let skip = false;
+        if ( props.type !== 'setvalue' ){
+            skip =  ignoreRelevance ? this._hasNeverBeenRelevant( control, props ) : !this._isRelevant( props ) ;
+        }
         // Not sure if using 'string' is always correct
         const newExpr = this.form.replaceChoiceNameFn( props.expr, 'string', props.name, props.index );
 

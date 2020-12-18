@@ -349,6 +349,15 @@ describe( 'setvalue action to populate defaults', () => {
                 expect( ds[ 2 ].textContent ).toEqual( 'a' );
             } );
 
+            it( 'works for the first repeat if that repeat is non-relevant upon load', () => {
+                const form = loadForm( 'setvalue-repeat.xml' );
+                form.init();
+                const yn = form.view.html.querySelector( '[name="/data/grp/yn"]' );
+                form.input.setVal( yn, '1', events.Change() );
+
+                expect( form.view.html.querySelector( '[name="/data/grp/rep/pos"]' ).value ).toEqual( 'Standing' );
+            } );
+
         } );
 
     } );

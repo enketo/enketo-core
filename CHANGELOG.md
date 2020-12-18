@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+-----------------------
+##### Fixed
+- The setvalue/odk-instance-first-load default in the first repeat instance is not populated if that repeat or question is non-relevant upon load.
+
 [5.16.13] - 2020-12-16
 -----------------------
 ##### Fixed
