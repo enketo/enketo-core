@@ -75,9 +75,9 @@ export default {
 
         if ( o.curVal.length === 0 ) {
             today = new Date( this.form.model.evaluate( 'today()', 'string' ) );
-            year = today.getFullYear().toString().pad( 4 );
-            month = ( today.getMonth() + 1 ).toString().pad( 2 );
-            day = today.getDate().toString().pad( 2 );
+            year = today.getFullYear().toString().padStart( 4, '0' );
+            month = ( today.getMonth() + 1 ).toString().padStart( 2, '0' );
+            day = today.getDate().toString().padStart( 2, '0' );
 
             return `${year}-${month}-${day}`;
         }

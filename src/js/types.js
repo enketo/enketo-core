@@ -139,7 +139,7 @@ const types = {
                 const date = new Date( x * 24 * 60 * 60 * 1000 );
 
                 return date.toString() === 'Invalid Date' ?
-                    '' : `${date.getFullYear().toString().pad( 4 )}-${( date.getMonth() + 1 ).toString().pad( 2 )}-${date.getDate().toString().pad( 2 )}`;
+                    '' : `${date.getFullYear().toString().padStart( 4, '0' )}-${( date.getMonth() + 1 ).toString().padStart( 2, '0' )}-${date.getDate().toString().padStart( 2, '0' )}`;
             } else {
                 // For both dates and datetimes
                 // If it's a datetime, we can quite safely assume it's in the local timezone, and therefore we can simply chop off
@@ -264,8 +264,8 @@ const types = {
             time = parts[ 0 ].split( ':' );
             tz = parts[ 2 ] ? [ parts[ 1 ] ].concat( parts[ 2 ].split( ':' ) ) : ( parts[ 1 ] === 'Z' ? [ '+', '00', '00' ] : [] );
 
-            o.hours = time[ 0 ].pad( 2 );
-            o.minutes = time[ 1 ].pad( 2 );
+            o.hours = time[ 0 ].padStart( 2, '0' );
+            o.minutes = time[ 1 ].padStart( 2, '0' );
 
             secs = time[ 2 ] ? time[ 2 ].split( '.' ) : [ '00' ];
 
@@ -275,7 +275,7 @@ const types = {
             if ( tz.length === 0 ) {
                 offset = new Date().getTimezoneOffsetAsTime();
             } else {
-                offset = `${tz[0] + tz[1].pad( 2 )}:${tz[2] ? tz[2].pad( 2 ) : '00'}`;
+                offset = `${tz[0] + tz[1].padStart( 2, '0' )}:${tz[2] ? tz[2].padStart( 2, '0' ) : '00'}`;
             }
 
             x = `${o.hours}:${o.minutes}:${o.seconds}${o.milliseconds ? `.${o.milliseconds}` : ''}${offset}`;
@@ -297,9 +297,9 @@ const types = {
                 if ( parts.length > 0 ) {
                     // This will only work for latin numbers but that should be fine because that's what the widget supports.
                     if ( parts[ 1 ] === time.pmNotation ) {
-                        timeParts[ 0 ] = ( ( Number( timeParts[ 0 ] ) % 12 ) + 12 ).toString().pad( 2 );
+                        timeParts[ 0 ] = ( ( Number( timeParts[ 0 ] ) % 12 ) + 12 ).toString().padStart( 2, '0' );
                     } else if ( parts[ 1 ] === time.amNotation ) {
-                        timeParts[ 0 ] = ( Number( timeParts[ 0 ] ) % 12 ).toString().pad( 2 );
+                        timeParts[ 0 ] = ( Number( timeParts[ 0 ] ) % 12 ).toString().padStart( 2, '0' );
                     }
                     x = timeParts.join( ':' );
                 }

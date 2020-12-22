@@ -290,7 +290,7 @@ export default {
                     } ).replace( /\u200E/g, '' )} ${value.replace( /(\d\d:\d\d:\d\d)(\.\d{1,3})(\s?((\+|-)\d\d))(:)?(\d\d)?/, '$1 GMT$3$7' )}`;
                     const d = new Date( ds );
                     if ( d.toString() !== 'Invalid Date' ) {
-                        value = `${d.getHours().toString().pad( 2 )}:${d.getMinutes().toString().pad( 2 )}`;
+                        value = `${d.getHours().toString().padStart( 2, '0' )}:${d.getMinutes().toString().padStart( 2, '0' )}`;
                     } else {
                         console.error( 'could not parse time:', value );
                     }
