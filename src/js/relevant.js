@@ -241,7 +241,7 @@ export default {
         if ( branchNode.matches( '.or-group, .or-group-data' ) ) {
             this.form.calc.update( {
                 relevantPath: path
-            }, '', false );
+            }, '', true );
         }
     },
     /**

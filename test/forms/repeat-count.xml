@@ -19,7 +19,7 @@
         </dynamic-repeat-count>
       </instance>
       <bind nodeset="/dynamic-repeat-count/count" type="int"/>
-      <bind calculate=" /dynamic-repeat-count/count " nodeset="/dynamic-repeat-count/rep_count" readonly="true()" type="string"/>
+      <bind calculate=" /dynamic-repeat-count/count " nodeset="/dynamic-repeat-count/rep_count" readonly="true()" type="string" relevant="true()"/>
       <bind nodeset="/dynamic-repeat-count/rep/txt" type="string"/>
       <bind nodeset="/dynamic-repeat-count/rep/num" type="int"/>
       <bind calculate="count( /dynamic-repeat-count/rep )" nodeset="/dynamic-repeat-count/sum_note" readonly="true()" type="string"/>

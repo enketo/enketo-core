@@ -11,10 +11,10 @@ export default {
      * Updates calculated items.
      *
      * @param {UpdatedDataNodes} updated - the object containing info on updated data nodes
-     * @param {string} [filter] - CSS selector filter.
-     * @param ignoreRelevance
+     * @param {string} [filter] - CSS selector filter
+     * @param {boolean} [emptyNonRelevant] - Whether to empty non-relevant calculation nodes
      */
-    update( updated = {}, filter = '', ignoreRelevance = true ) {
+    update( updated = {}, filter = '', emptyNonRelevant = false ) {
         let nodes;
 
         if ( !this.form ) {
@@ -59,7 +59,7 @@ export default {
                     const dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
                     const dataNode = this.form.model.node( updated.repeatPath, updated.repeatIndex ).getElement().querySelector( dataNodeName );
                     props.index = dataNodes.indexOf( dataNode );
-                    this._updateCalc( control, props, ignoreRelevance );
+                    this._updateCalc( control, props, emptyNonRelevant );
                 } else if ( control.type === 'hidden' ) {
                     /*
                      * This case is the consequence of the  decision to place calculated items without a visible form control,
@@ -69,7 +69,7 @@ export default {
                     dataNodes.forEach( ( el, index ) => {
                         const obj = Object.create( props );
                         obj.index = index;
-                        this._updateCalc( control, obj, ignoreRelevance );
+                        this._updateCalc( control, obj, emptyNonRelevant );
                     } );
                 } else {
                     /*
@@ -79,11 +79,11 @@ export default {
                     const repeatSiblings = getSiblingElementsAndSelf( control.closest( '.or-repeat' ), '.or-repeat' );
                     if ( repeatSiblings.length === dataNodes.length ) {
                         props.index = repeatSiblings.indexOf( control.closest( '.or-repeat' ) );
-                        this._updateCalc( control, props, ignoreRelevance );
+                        this._updateCalc( control, props, emptyNonRelevant );
                     }
                 }
             } else if ( dataNodes.length === 1 ) {
-                this._updateCalc( control, props, ignoreRelevance );
+                this._updateCalc( control, props, emptyNonRelevant );
             }
 
         } );
@@ -166,18 +166,26 @@ export default {
             }
         } );
     },
-
-    _updateCalc( control, props, ignoreRelevance = true ) {
-        let skip = false;
-        if ( props.type !== 'setvalue' ){
-            skip =  ignoreRelevance ? this._hasNeverBeenRelevant( control, props ) : !this._isRelevant( props ) ;
+    /**
+     * Updates a calculation.
+     *
+     * @param {Element} control - view element containing calculation
+     * @param {*} props - properties of a calculation element
+     * @param {boolean} [emptyNonRelevant] - Whether to set the calculation result to empty if non-relevant
+     */
+    _updateCalc( control, props, emptyNonRelevant ) {
+        if ( !emptyNonRelevant && props.type !== 'setvalue' && this._hasNeverBeenRelevant( control, props ) && !this._isRelevant( props ) ){
+            return;
         }
+
+        const empty = emptyNonRelevant ? !this._isRelevant( props ) : false;
+
         // Not sure if using 'string' is always correct
         const newExpr = this.form.replaceChoiceNameFn( props.expr, 'string', props.name, props.index );
 
         // It is possible that the fixed expr is '' which causes an error in XPath
         // const xpathType = this.form.input.getInputType( control ) === 'number' ? 'number' : 'string';
-        const result = !skip && newExpr ? this.form.model.evaluate( newExpr, 'string', props.name, props.index ) : '';
+        const result =  !empty && newExpr ? this.form.model.evaluate( newExpr, 'string', props.name, props.index ) : '';
 
         // Filter the result set to only include the target node
         props.dataNodesObj.setIndex( props.index );
