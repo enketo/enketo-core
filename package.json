@@ -88,11 +88,11 @@
         "enketo/widgets": "./src/js/widgets.js",
         "enketo/translator": "./src/js/fake-translator",
         "enketo/dialog": "./src/js/fake-dialog",
-        "enketo/file-manager": "./src/js/file-manager",
-        "enketo/xpath-evaluator-binding": "./src/js/xpath-evaluator-binding"
+        "enketo/file-manager": "./src/js/file-manager"
     },
     "dependencies": {
         "bootstrap-datepicker": "1.9.x",
+        "enketo-xpathjs": "1.9.4",
         "html5sortable": "0.9.17",
         "jquery": "^3.5.1",
         "jquery-touchswipe": "^1.6.19",
@@ -100,8 +100,6 @@
         "leaflet-draw": "github:enketo/Leaflet.draw#ff73078",
         "leaflet.gridlayer.googlemutant": "0.9.x",
         "mergexml": "1.2.1",
-        "node-forge": "^0.10.0",
-        "openrosa-xpath-evaluator": "2.0.0",
         "signature_pad": "2.3.x"
     }
 }
