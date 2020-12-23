@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.16.16] - 2020-12-23
 -----------------------
 ##### Fixed
 - A form with a repeat count that has a relevant, will not create the required amount of repeats when loading an existing record.
