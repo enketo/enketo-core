@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[5.17.0] - 2020-12-28
+----------------------
+##### Changed
+- Vastly improved performance for most slow forms by replacing the XPath evaluator. See [blog post to follow]().
+
 [5.16.16] - 2020-12-23
 -----------------------
 ##### Fixed
