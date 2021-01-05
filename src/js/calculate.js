@@ -95,7 +95,6 @@ export default {
      * @param {CustomEvent} [event] - the event type that triggered the setvalue action.
      */
     setValue( event ) {
-        let index = 0;
 
         if ( !event ) {
             return;
@@ -158,7 +157,7 @@ export default {
                 // control for xforms-value-changed is located elsewhere, or does not exist.
                 const control = this.form.input.find( props.name, props.index );
                 this._updateCalc( control, props );
-            } else if ( dataNodes[ index ] ) {
+            } else if ( dataNodes[ props.index ] ) {
                 const control = setvalueControl;
                 this._updateCalc( control, props );
             } else {
