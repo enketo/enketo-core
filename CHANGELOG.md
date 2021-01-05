@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+----------------------
+##### Fixed
+- setvalue/odk-instance-first-load and setvalue/odk-new-repeat actions are not properly added for radiobutton and checkbox questions (in enketo-transformer).
+
 [5.17.0] - 2020-12-28
 ----------------------
 ##### Changed
