@@ -15,12 +15,6 @@
                     </meta>
                 </data>
             </instance>
-            <bind nodeset="/data/rep/one" type="string" />
-            <setvalue event="odk-new-repeat" ref="/data/rep/one" value="1+1" />
-            <bind nodeset="/data/rep/two" type="string" />
-            <setvalue event="odk-new-repeat" ref="/data/rep/two" value="../one " />
-            <bind nodeset="/data/rep/three" type="string" />
-            <setvalue event="odk-new-repeat" ref="/data/rep/three" value="concat( ../one , '#')" />
             <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
         </model>
     </h:head>
@@ -33,6 +27,9 @@
                 <input ref="/data/rep/three">
                     <label>Enter text</label>
                 </input>
+                <setvalue event="odk-new-repeat" ref="/data/rep/one" value="1+1" />
+                <setvalue event="odk-new-repeat" ref="/data/rep/two" value="../one " />
+                <setvalue event="odk-new-repeat" ref="/data/rep/three" value="concat( ../one , '#')" />
             </repeat>
         </group>
     </h:body>
