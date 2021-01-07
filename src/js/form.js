@@ -509,12 +509,8 @@ Form.prototype.getModelValue = function( $control ) {
  * @return {jQuery} - A jQuery collection of elements
  */
 Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
-    let collection;
     let repeatControls = null;
     let controls;
-    let selector = [];
-    const that = this;
-
     updated = updated || {};
     filter = filter || '';
 
@@ -553,6 +549,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
      * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node, /path/to/repeat, 3).
      * We accept that for now.
      **/
+    let collection;
     if ( repeatControls ) {
         // The non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
         collection = this.nonRepeats[ attr ].concat( repeatControls );
@@ -560,15 +557,16 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
         collection = this.all[ attr ];
     }
 
+    let selector = [];
     // Add selectors based on specific changed nodes
     if ( !updated.nodes || updated.nodes.length === 0 ) {
-        selector = selector.concat( [ filter ] );
+        selector = [ `${filter}[${attr}]` ];
     } else {
         updated.nodes.forEach( node => {
-            selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, node ) );
+            selector = selector.concat( this.getQuerySelectorsForLogic( filter, attr, node ) );
         } );
         // add all the paths that use the /* selector at end of path
-        selector = selector.concat( that.getQuerySelectorsForLogic( filter, attr, '*' ) );
+        selector = selector.concat( this.getQuerySelectorsForLogic( filter, attr, '*' ) );
     }
 
     const selectorStr = selector.join( ', ' );
