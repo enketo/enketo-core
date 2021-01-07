@@ -119,7 +119,13 @@ export default {
                 this.form.filterRadioCheckSiblings( [ ...this.form.view.html.querySelectorAll( `.question [data-setvalue][data-event*="${event.type}"]` ) ] ) );
         } else if ( event.type === new events.NewRepeat().type ) {
             // Only this event requires specific index targeting through the "updated" object
-            nodes = this.form.getRelatedNodes( 'data-setvalue', `[data-event*="${event.type}"]`, event.detail ).get();
+            // We change the order by first evaluating the non-formcontrol setvalue directives (in document order), and then
+            // the ones with form controls.
+            // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
+            // https://github.com/OpenClinica/enketo-express-oc/issues/419
+            nodes = this.form.getRelatedNodes( 'data-setvalue', `.setvalue [data-event*="${event.type}"]`, event.detail ).get().concat(
+                this.form.getRelatedNodes( 'data-setvalue', `.question [data-event*="${event.type}"]`, event.detail ).get() );
+
         } else if ( event.type === new events.XFormsValueChanged().type ) {
             const question = event.target.closest( '.question' );
             nodes = question ? [ ...question.querySelectorAll( `[data-setvalue][data-event*="${event.type}"]` ) ] : nodes;
