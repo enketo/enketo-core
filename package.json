@@ -101,7 +101,7 @@
         "leaflet.gridlayer.googlemutant": "0.9.x",
         "mergexml": "1.2.1",
         "node-forge": "^0.10.0",
-        "openrosa-xpath-evaluator": "2.0.0",
+        "openrosa-xpath-evaluator": "2.0.1",
         "signature_pad": "2.3.x"
     }
 }
