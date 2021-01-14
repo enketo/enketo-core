@@ -120,13 +120,6 @@ export default {
 
             const valueRef = labelsContainer.dataset.valueRef;
 
-            /**
-             * CommCare/ODK change the context to the *itemset* value (in the secondary instance), hence they need to use the current()
-             * function to make sure that relative paths in the nodeset predicate refer to the correct primary instance node
-             * Enketo does *not* change the context. It uses the context of the question, not the itemset. Hence it has no need for current().
-             * I am not sure what is correct, but for now for XLSForm-style secondary instances with only one level underneath the <item>s that
-             * the nodeset retrieves, Enketo's aproach works well.
-             */
             // Shared datalists are under .or-repeat-info. Context is not relevant as these are static lists (without relative nodes).
             const context = that.form.input.getName( input );
             /*
@@ -239,7 +232,8 @@ export default {
                     }
 
                 } );
-                if ( isStaticItemsetFromSecondaryInstance( itemsXpath ) ) {
+                // Do not cache radio button questions inside a repeat because each set (in each repeat) should maintain unique name attribute
+                if ( isStaticItemsetFromSecondaryInstance( itemsXpath ) && !( input.type === 'radio' && input.closest( '.or-repeat' ) ) ) {
                     fragmentsCache[ cacheKey ] = {
                         optionsFragment: optionsFragment.cloneNode( true ),
                         optionsTranslationsFragment: optionsTranslationsFragment.cloneNode( true )

@@ -511,4 +511,31 @@ describe( 'Itemset functionality', () => {
 
     } );
 
+    // Radiobutton itemset set cache problem: https://github.com/OpenClinica/enketo-express-oc/issues/423
+    describe( 'in a repeat with a simple nodeset query, and defaults for multiple repeats', () => {
+        const form = loadForm( 'repeat-radio-itemset.xml',  `
+        <data>
+            <rep>
+                <sel>fair</sel>
+            </rep>
+            <rep>
+                <sel>bad</sel>
+            </rep>
+            <rep>
+                <sel>good</sel>
+            </rep>
+            <meta>
+                <instanceID>uuid:1234</instanceID>
+            </meta>
+        </data>
+        ` );
+        form.init();
+
+        it( 'sets all radiobuttons correctly', () => {
+            const checkeds = [ ...form.view.html.querySelectorAll( '.option-wrapper input:checked:not(.itemset-template)' ) ];
+            expect( checkeds.map( checked => checked.value ) ).toEqual( [ 'fair', 'bad', 'good' ] );
+        } );
+
+    } );
+
 } );

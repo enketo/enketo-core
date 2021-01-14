@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:OpenClinica="http://openclinica.com/odm" xmlns:enk="http://enketo.org/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>OC-14174 Form</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="repeat with itemset that has no predicate" version="v1">
+                    <rep jr:template="">
+                        <sel/>
+                    </rep>
+                    <rep>
+                        <sel/>
+                    </rep>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <instance id="elist">
+                <root>
+                    <item>
+                        <name>fair</name>
+                        <label>Fair</label>
+                    </item>
+                    <item>
+                        <name>bad</name>
+                        <label>Bad</label>
+                    </item>
+                    <item>
+                        <name>good</name>
+                        <label>Good</label>
+                    </item>
+                    <item>
+                        <name>maybe</name>
+                        <label>Maybe</label>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/rep/sel" type="string" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body class="theme-grid no-text-transform">
+        <group appearance="no-collapse" ref="/data/rep">
+            <label>Repeat As Needed</label>
+            <repeat nodeset="/data/rep">
+                <select1 ref="/data/rep/sel">
+                    <label>Select</label>
+                    <itemset nodeset="instance('elist')/root/item">
+                        <value ref="name" />
+                        <label ref="label" />
+                    </itemset>
+                </select1>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
