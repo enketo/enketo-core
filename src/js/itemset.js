@@ -239,7 +239,7 @@ export default {
                     }
 
                 } );
-                if ( isStaticItemsetFromSecondaryInstance( itemsXpath ) ) {
+                if ( isStaticItemsetFromSecondaryInstance( itemsXpath ) && !( input.type === 'radio' && input.closest( '.or-repeat' ) ) ) {
                     fragmentsCache[ cacheKey ] = {
                         optionsFragment: optionsFragment.cloneNode( true ),
                         optionsTranslationsFragment: optionsTranslationsFragment.cloneNode( true )
