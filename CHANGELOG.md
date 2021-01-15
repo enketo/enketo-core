@@ -10,6 +10,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Lazy and/or evaluation within function arguments (in openrosa-xpath-evaluator).
 - Action setvalue/odk-new-repeat does not run non-form-control actions before form controls.
 - Static itemsets with radio buttons inside multiple repeat instances do not load correctly.
+- Draw widget changes file name whenever browser window resizes.
+- Draw widget updates file name when canvas loses focus if drawing hasn't changed.
 
 [5.17.0] - 2020-12-28
 ----------------------

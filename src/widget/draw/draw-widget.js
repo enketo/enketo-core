@@ -352,19 +352,22 @@ class DrawWidget extends Widget {
      * @param {boolean} [changed] - whether the value has changed
      */
     _updateValue( changed = true ) {
-        const now = new Date();
-        const postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
-        this.element.dataset.filenamePostfix = postfix;
-        // Note that this.element has become a text input.
-        // When a default file is loaded this function is called by the canvasreload handler, but the user hasn't changed anything.
-        // We want to make sure the model remains unchanged in that case.
-        if ( changed ) {
-            this.originalInputValue = this.props.filename;
+        const newValue = this.pad.toDataURL();
+        if ( this.value !== newValue ){
+            const now = new Date();
+            const postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
+            this.element.dataset.filenamePostfix = postfix;
+            // Note that this.element has become a text input.
+            // When a default file is loaded this function is called by the canvasreload handler, but the user hasn't changed anything.
+            // We want to make sure the model remains unchanged in that case.
+            if ( changed ) {
+                this.originalInputValue = this.props.filename;
+            }
+            // pad.toData() doesn't seem to work when redrawing on a smaller canvas. Doesn't scale.
+            // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
+            this.value = newValue;
+            this._updateDownloadLink( this.value );
         }
-        // pad.toData() doesn't seem to work when redrawing on a smaller canvas. Doesn't scale.
-        // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
-        this.value = this.pad.toDataURL();
-        this._updateDownloadLink( this.value );
     }
 
     /**
@@ -453,7 +456,7 @@ class DrawWidget extends Widget {
     _handleResize( canvas ) {
         const that = this;
         $( window ).on( 'resize', () => {
-            that._forceUpdate();
+            //that._forceUpdate();
             that._resizeCanvas( canvas );
         } );
     }
