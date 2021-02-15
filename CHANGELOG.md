@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------
 ##### Fixed
 - Setvalue/xforms-value-changed inside a select multiple question is not working (enketo-transformer).
+- Setvalue/xforms-value-changed with trigger inside a repeat and target outside the repeat does not work.
 
 [5.17.1] - 2020-01-18
 ----------------------

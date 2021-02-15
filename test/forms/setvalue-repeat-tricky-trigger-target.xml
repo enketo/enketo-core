@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:OpenClinica="http://openclinica.com/odm" xmlns:enk="http://enketo.org/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>RGSV1</h:title>
+		<model odk:xforms-version="1.0.0">
+			<instance>
+				<data id="setvalue/xforms-value changed with trigger inside repeat and target outside repeat" version="1">
+					<itemx>initial default</itemx>
+                    <hid></hid>
+					<rg1 jr:template="">
+						<item3/>
+					</rg1>
+					<rg1>
+						<item3/>
+					</rg1>
+					<meta>
+						<instanceID/>
+					</meta>
+				</data>
+			</instance>
+			<bind nodeset="/data/itemx" type="string"/>
+			<bind nodeset="/data/rg1/item3" type="string"/>
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body class="theme-grid no-text-transform">
+		<input ref="/data/itemx">
+			<label>itemx</label>
+		</input>
+		<group appearance="no-collapse" ref="/data/rg1">
+			<label/>
+			<repeat nodeset="/data/rg1">
+				<input ref="/data/rg1/item3">
+					<label>item3</label>
+					<setvalue event="xforms-value-changed" ref="/data/itemx" value="random()"/>
+                    <setvalue event="xforms-value-changed" ref="/data/hid" value="random()"/><!-- no form control for hid -->
+				</input>
+			</repeat>
+		</group>
+	</h:body>
+</h:html>

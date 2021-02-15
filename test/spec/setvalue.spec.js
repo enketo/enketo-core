@@ -377,8 +377,33 @@ describe( 'setvalue action to populate defaults', () => {
 
         } );
 
-    } );
+        describe( 'with xforms-value-changed events', () => {
 
+            it( 'when the trigger is inside a repeat but the target is not', done => {
+                const form = loadForm( 'setvalue-repeat-tricky-trigger-target.xml' );
+                form.init();
+                const sel = '[name="/data/rg1/item3"]';
+                const itemX = form.model.xml.querySelector( 'itemx' );
+                const hid = form.model.xml.querySelector( 'hid' );
+
+                expect( itemX.textContent ).toEqual( 'initial default' );
+                expect( hid.textContent ).toEqual( '' );
+
+                form.view.html.querySelector( '.add-repeat-btn' ).click();
+
+                const item3Second = form.view.html.querySelectorAll( sel )[1];
+                form.input.setVal( item3Second, 'd', events.Change() );
+
+                setTimeout( () => {
+                    expect( itemX.textContent ).not.toEqual( 'initial default' );
+                    expect( hid.textContent ).not.toEqual( '' );
+                    done();
+                }, 100 );
+            } );
+
+        } );
+
+    } );
 
     it( 'relying on non-form-control setvalue/odk-instance-first-load items to be evaluated before form-control setvalue items', () => {
         const form1 = loadForm( 'setvalue-order.xml' );
