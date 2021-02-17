@@ -95,7 +95,7 @@ class ImageMap extends Widget {
 
                     // remove images in all languages
                     that.question.querySelectorAll( 'img' ).forEach( el => el.remove() );
-                    that.question.querySelector( 'div[class=option-wrapper]' ).before( fragment );
+                    that.question.querySelector( 'fieldset > .option-wrapper' ).before( fragment );
                     const widget = that.question.querySelector( '.image-map' );
                     const svg = widget.querySelector( 'svg' );
 
