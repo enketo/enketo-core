@@ -426,7 +426,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
 
                 if ( !list ){
                     const found = inputs.filter( input => input.getAttribute( 'value' ) === value );
-                    const siblingLabelEls = getSiblingElements( found[0], '.option-label.active' );
+                    const siblingLabelEls = found.length ? getSiblingElements( found[0], '.option-label.active' ) : [];
                     label = siblingLabelEls.length ? siblingLabelEls[0].textContent : '';
                 } else {
                     const siblingListEls = getSiblingElements( inputs[0], `datalist#${CSS.escape( list )}` );
