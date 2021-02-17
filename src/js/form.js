@@ -1,7 +1,7 @@
 import { FormModel } from './form-model';
 import $ from 'jquery';
 import { parseFunctionFromExpression, stripQuotes, getFilename, joinPath } from './utils';
-import { getXPath, closestAncestorUntil, getSiblingElements } from './dom-utils';
+import { getXPath, getChildren, closestAncestorUntil, getSiblingElements } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
@@ -641,12 +641,11 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
     // Since we are removing nodes, we need to go in reverse order to make sure
     // the indices are still correct!
     this.getRelatedNodes( 'data-relevant' ).reverse().each( function() {
-        const $node = $( this );
         const node = this;
         const relevant = that.input.getRelevant( node );
         const index = that.input.getIndex( node );
         const path = that.input.getName( node );
-        let context;
+        let target;
 
         /*
          * Copied from relevant.js:
@@ -654,10 +653,15 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
          * If the relevant is placed on a group and that group contains repeats with the same name,
          * but currently has 0 repeats, the context will not be available.
          */
-        if ( $node.children( `.or-repeat-info[data-name="${path}"]` ).length && !$node.children( `.or-repeat[name="${path}"]` ).length ) {
-            context = null;
+        if ( getChildren( node, `.or-repeat-info[data-name="${path}"]` ).length && !getChildren( node,  `.or-repeat[name="${path}"]` ).length ) {
+            target = null;
         } else {
-            context = path;
+            // If a calculation without a form control (i.e. in .calculated-items) inside a repeat
+            // has a relevant, and there 0 instances of that repeat,
+            // there is nothing to remove (and target is undefined)
+            // https://github.com/enketo/enketo-core/issues/761
+            // TODO: It would be so much nicer if form-control-less calculations were placed inside the repeat instead.
+            target = modelClone.node( path, index ).getElement();
         }
 
         /*
@@ -666,8 +670,8 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
          * - use cache of relevant.update
          * - check for repeatClones to avoid calculating index (as in relevant.update)
          */
-        if ( context && !that.model.evaluate( relevant, 'boolean', context, index ) ) {
-            modelClone.node( context, index ).remove();
+        if ( target && !that.model.evaluate( relevant, 'boolean',path, index ) ) {
+            target.remove();
         }
     } );
 
