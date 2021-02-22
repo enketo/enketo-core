@@ -161,8 +161,14 @@ export default {
                 } );
 
             } else if ( event.type === new events.XFormsValueChanged().type ) {
-                // control for xforms-value-changed is located elsewhere, or does not exist.
-                const control = this.form.input.find( props.name, props.index );
+                // Control for xforms-value-changed is located elsewhere, or does not exist.
+                // First we test if the control can be found by looking for the same index as the trigger
+                let control = this.form.input.find( props.name, props.index );
+                if ( !control ){
+                    // In case the trigger was inside a repeat, but the target is not.
+                    props.index = 0;
+                    control = this.form.input.find( props.name, 0 );
+                }
                 this._updateCalc( control, props );
             } else if ( dataNodes[ index ] ) {
                 const control = setvalueControl;
