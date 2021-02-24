@@ -1184,7 +1184,7 @@ describe( 'jr:choice-name', () => {
     } );
 
     it( 'should work with radio buttons', () => {
-        const form = loadForm( 'jr_choice_name_repeats.xml' );
+        const form = loadForm( 'jr-choice-name-repeats.xml' );
         form.init();
 
         expect( form.view.html.querySelector( '[data-name="/data/r1/province_name"]' ).checked ).toEqual( false );
@@ -1195,6 +1195,15 @@ describe( 'jr:choice-name', () => {
         expect( form.view.html.querySelector( '[data-value=" ../province_label "]' ).innerText ).toEqual( 'Central' );
     } );
 
+    it( 'should work with **empty** lists in pulldown selects', () => {
+        const form = loadForm( 'jr-choice-name-external.xml' );
+        const loadErrors = form.init();
+        // Check that form loads without error (due to empty list when choice is evaluated the first time during initialization)
+        // https://github.com/enketo/enketo-core/issues/738
+        expect( loadErrors.length ).toEqual( 0 );
+        // Check that it actually works (with a default value)
+        expect( form.model.xml.querySelector( 'questionname' ).textContent ).toEqual( 'A' );
+    } );
 
 } );
 

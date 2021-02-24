@@ -10,7 +10,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Setvalue/xforms-value-changed with trigger inside a repeat and target outside the repeat does not work.
 - A calculation without form control inside a non-relevant repeat with 0 instances, fails to prune non-relevant nodes.
 - Misplaced image-map when used in conjunction with complex custom comment widgets (OC).
-- The function jr:choice-name causes an exception if the choices list is empty.
+- The function jr:choice-name causes an exception if the choices list of radiobuttons or checkboxes is empty.
+- The function jr:choice-name causes an exception if the choices list of pulldown selects is empty.
 
 [5.17.1] - 2020-01-18
 ----------------------
