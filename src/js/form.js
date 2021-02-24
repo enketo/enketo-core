@@ -420,7 +420,7 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
                 label = '';
             } else if (  nodeName === 'select' ) {
                 const found = inputs.filter( input => input.querySelector( `[value="${value}"]` ) );
-                label =  found ? found[0].querySelector( `[value="${value}"]` ).textContent : '';
+                label =  found.length ? found[0].querySelector( `[value="${value}"]` ).textContent : '';
             } else if (  nodeName === 'input' ) {
                 const list = inputs[0].getAttribute( 'list' );
 
