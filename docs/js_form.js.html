@@ -50,7 +50,7 @@
             <pre class="prettyprint source linenums"><code>import { FormModel } from './form-model';
 import $ from 'jquery';
 import { parseFunctionFromExpression, stripQuotes, getFilename, joinPath } from './utils';
-import { getXPath, closestAncestorUntil, getSiblingElements } from './dom-utils';
+import { getXPath, getChildren, closestAncestorUntil, getSiblingElements } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
@@ -469,13 +469,13 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
                 label = '';
             } else if (  nodeName === 'select' ) {
                 const found = inputs.filter( input => input.querySelector( `[value="${value}"]` ) );
-                label =  found ? found[0].querySelector( `[value="${value}"]` ).textContent : '';
+                label =  found.length ? found[0].querySelector( `[value="${value}"]` ).textContent : '';
             } else if (  nodeName === 'input' ) {
                 const list = inputs[0].getAttribute( 'list' );
 
                 if ( !list ){
                     const found = inputs.filter( input => input.getAttribute( 'value' ) === value );
-                    const siblingLabelEls = getSiblingElements( found[0], '.option-label.active' );
+                    const siblingLabelEls = found.length ? getSiblingElements( found[0], '.option-label.active' ) : [];
                     label = siblingLabelEls.length ? siblingLabelEls[0].textContent : '';
                 } else {
                     const siblingListEls = getSiblingElements( inputs[0], `datalist#${CSS.escape( list )}` );
@@ -690,12 +690,11 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
     // Since we are removing nodes, we need to go in reverse order to make sure
     // the indices are still correct!
     this.getRelatedNodes( 'data-relevant' ).reverse().each( function() {
-        const $node = $( this );
         const node = this;
         const relevant = that.input.getRelevant( node );
         const index = that.input.getIndex( node );
         const path = that.input.getName( node );
-        let context;
+        let target;
 
         /*
          * Copied from relevant.js:
@@ -703,10 +702,15 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
          * If the relevant is placed on a group and that group contains repeats with the same name,
          * but currently has 0 repeats, the context will not be available.
          */
-        if ( $node.children( `.or-repeat-info[data-name="${path}"]` ).length &amp;&amp; !$node.children( `.or-repeat[name="${path}"]` ).length ) {
-            context = null;
+        if ( getChildren( node, `.or-repeat-info[data-name="${path}"]` ).length &amp;&amp; !getChildren( node,  `.or-repeat[name="${path}"]` ).length ) {
+            target = null;
         } else {
-            context = path;
+            // If a calculation without a form control (i.e. in .calculated-items) inside a repeat
+            // has a relevant, and there 0 instances of that repeat,
+            // there is nothing to remove (and target is undefined)
+            // https://github.com/enketo/enketo-core/issues/761
+            // TODO: It would be so much nicer if form-control-less calculations were placed inside the repeat instead.
+            target = modelClone.node( path, index ).getElement();
         }
 
         /*
@@ -715,8 +719,8 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
          * - use cache of relevant.update
          * - check for repeatClones to avoid calculating index (as in relevant.update)
          */
-        if ( context &amp;&amp; !that.model.evaluate( relevant, 'boolean', context, index ) ) {
-            modelClone.node( context, index ).remove();
+        if ( target &amp;&amp; !that.model.evaluate( relevant, 'boolean',path, index ) ) {
+            target.remove();
         }
     } );
 
@@ -1217,7 +1221,7 @@ Form.prototype.goToTarget = function( target ) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '1.41.4';
+Form.requiredTransformerVersion = '1.41.6';
 
 export { Form, FormModel };
 </code></pre>

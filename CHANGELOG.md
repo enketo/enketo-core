@@ -3,8 +3,8 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
----------------
+[5.17.2] - 2020-03-02
+--------------------
 ##### Fixed
 - Setvalue/xforms-value-changed inside a select multiple question is not working (enketo-transformer).
 - Setvalue/xforms-value-changed with trigger inside a repeat and target outside the repeat does not work.
