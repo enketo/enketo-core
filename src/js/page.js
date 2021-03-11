@@ -52,6 +52,7 @@ export default {
                 this.$btnFirst = this.$formFooter.find( '.first-page' );
                 this.$btnPrev = this.$formFooter.find( '.previous-page' );
                 this.$btnNext = this.$formFooter.find( '.next-page' );
+                this.$btnNext.attr( 'tabindex', 2 );
                 this.$btnLast = this.$formFooter.find( '.last-page' );
                 this.$toc = $( formWrapper.querySelector( '.pages-toc__list' ) );
                 this._updateAllActive( allPages );
@@ -367,6 +368,7 @@ export default {
             this._focusOnFirstQuestion( pageEl );
             this._toggleButtons( newIndex );
             pageEl.dispatchEvent( events.PageFlip() );
+            pageEl.setAttribute( 'tabindex', 1 );
         }
     },
     /**
@@ -398,6 +400,9 @@ export default {
             .find( 'input, select, textarea' )
             .eq( 0 )
             .trigger( 'fakefocus' );
+
+        // focus on element
+        pageEl.focus();
 
         pageEl.scrollIntoView();
     },
