@@ -18,8 +18,7 @@ const maps = ( config && config.maps && config.maps.length > 0 ) ? config.maps :
     'tiles': [ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' ],
     'attribution': '© <a href="http://openstreetmap.org">OpenStreetMap</a> | <a href="www.openstreetmap.org/copyright">Terms</a>'
 } ];
-let searchSource = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
-const googleApiKey = config.googleApiKey || config.google_api_key;
+let searchSource = config.geocoderUrl || '/api/v2/geocoder';
 const iconSingle = L.divIcon( {
     iconSize: 24,
     className: 'enketo-geopoint-marker'
@@ -562,12 +561,6 @@ class Geopicker extends Widget {
     _enableSearch() {
         const that = this;
 
-        if ( googleApiKey ) {
-            searchSource = searchSource.replace( '{api_key}', googleApiKey );
-        } else {
-            searchSource = searchSource.replace( '&key={api_key}', '' );
-        }
-
         this.$search
             .prop( 'disabled', false )
             .on( 'change', function( event ) {
@@ -576,12 +569,22 @@ class Geopicker extends Widget {
 
                 if ( address ) {
                     address = address.split( /\s+/ ).join( '+' );
+                    let center, bbox;
+                    if( that._dynamicMapAvailable() ){
+                        bbox = that.map.getBounds();
+                        center = bbox.getCenter();
+                    }
                     $
-                        .get( searchSource.replace( '{address}', address ), response => {
+                        .get( searchSource + '?' + $.param( {
+                            address: address,
+                            $center: center ? [ center.lng, center.lat ].join( ',' ) : undefined,
+                            // $bbox: bbox.toBBoxString(),
+                            $limit: 1,
+                        } ), response => {
                             let latLng;
-                            if ( response.results && response.results.length > 0 && response.results[ 0 ].geometry && response.results[ 0 ].geometry.location ) {
-                                latLng = response.results[ 0 ].geometry.location;
-                                that._updateMap( [ latLng.lat, latLng.lng ], defaultZoom );
+                            if ( response && response.length > 0 && response[ 0 ].geometry ) {
+                                latLng = response[ 0 ].geometry.coordinates;
+                                that._updateMap( [ latLng[1], latLng[0] ], defaultZoom );
                                 that.$search.closest( '.input-group' ).removeClass( 'has-error' );
                             } else {
                                 //TODO: add error message
@@ -760,9 +763,6 @@ class Geopicker extends Widget {
         const tasks = [];
 
         maps.forEach( ( map, index ) => {
-            if ( typeof map.tiles === 'string' && /^GOOGLE_(SATELLITE|ROADMAP|HYBRID|TERRAIN)/.test( map.tiles ) ) {
-                tasks.push( that._getGoogleTileLayer( map, index ) );
-            } else
             if ( map.tiles ) {
                 tasks.push( that._getLeafletTileLayer( map, index ) );
             } else {
