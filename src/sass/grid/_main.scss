@@ -398,8 +398,8 @@ screen and (min-width: 600px) {
     @for $total from 1 through $max-columns {
         .or-appearance-w#{$total} {
             //default total of 4 if not provided
-            @include flex_IEhack($total, $default-grid-width); //the actual proper grid
-
+            @include flex_IEhack($total, $default-grid-width);
+            //the actual proper grid
             @for $width from 1 through $total {
                 .or-appearance-w#{$width} {
                     @include flex_IEhack($width, $total);
