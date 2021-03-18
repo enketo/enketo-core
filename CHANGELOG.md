@@ -3,7 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[5.17.2] - 2020-03-02
+[Unreleased]
+----------------------
+##### Fixed
+- Exception occurs with lazy evaluation of and-or statements.
+
+[5.17.2] - 2021-03-02
 --------------------
 ##### Fixed
 - Setvalue/xforms-value-changed inside a select multiple question is not working (enketo-transformer).
@@ -13,7 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The function jr:choice-name causes an exception if the choices list of radiobuttons or checkboxes is empty.
 - The function jr:choice-name causes an exception if the choices list of pulldown selects is empty.
 
-[5.17.1] - 2020-01-18
+[5.17.1] - 2021-01-18
 ----------------------
 ##### Changed
 - The uuid() function implementation has improved with a reduced chance of collisions.
