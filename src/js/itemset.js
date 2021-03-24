@@ -196,7 +196,7 @@ export default {
                                 translations = labels.map( label => {
                                     const lang = label.getAttribute( 'lang' );
                                     // Two falsy values should set active to true.
-                                    const active = ( !lang && !that.form.langs.currentLang ) || ( lang === that.form.langs.currentLang );
+                                    const active = ( !lang && !that.form.langs.currentLanguage ) || ( lang === that.form.langs.currentLanguage );
 
                                     return { language: lang, type: 'span', text: label.textContent, active };
                                 } );

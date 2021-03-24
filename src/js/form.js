@@ -181,6 +181,12 @@ Form.prototype = {
      */
     get languages() {
         return this.langs.languagesUsed;
+    },
+    /**
+     * @type {string}
+     */
+    get currentLanguage() {
+        return this.langs.currentLanguage;
     }
 };
 
@@ -1172,6 +1178,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '1.41.6';
+Form.requiredTransformerVersion = '1.42.0';
 
 export { Form, FormModel };

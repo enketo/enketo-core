@@ -35,12 +35,13 @@ export default {
             }
         }
         this.formLanguages = root.querySelector( '#form-languages' );
+        this.defaultLanguage = this.formLanguages.dataset.defaultLang || undefined;
 
         if ( overrideLang && this.languages.includes( overrideLang ) && this.languages.length > 1 ) {
             this._currentLang = overrideLang;
             this.setFormUi( this._currentLang );
         } else {
-            this._currentLang = this.formLanguages.dataset.defaultLang || this.languages[ 0 ] || '';
+            this._currentLang = this.defaultLanguage || this.languages[ 0 ] || '';
         }
 
         const langOption = this.formLanguages.querySelector( `[value="${this._currentLang}"]` );
@@ -65,7 +66,7 @@ export default {
     /**
      * @type {string}
      */
-    get currentLang() {
+    get currentLanguage() {
         return this._currentLang;
     },
     /**
