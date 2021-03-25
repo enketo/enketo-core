@@ -363,10 +363,15 @@ export default {
     clear( grp, event1, event2 ){
         // See original pre-December 2020 plugin.js for some additional stuff with file-preview, loadedFileName and selectedIndex
         // which I think was no longer necessary, or should be moved to the widgets instead
-        grp.querySelectorAll( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ).forEach( control => {
-            this.setVal( control, '', event1 );
-            if ( event2 ){
-                control.dispatchEvent( event2 );
+        // Note, issue https://github.com/enketo/enketo-core/issues/773, wrt to querySelectorAll use here.
+        const questions = grp.matches( '.question' ) ? [ grp ] : grp.querySelectorAll( '.question' );
+        questions.forEach( question => {
+            const control = question.querySelector( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' );
+            if ( control ){
+                this.setVal( control, '', event1 );
+                if ( event2 ){
+                    control.dispatchEvent( event2 );
+                }
             }
         } );
     },
