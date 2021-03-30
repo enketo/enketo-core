@@ -225,3 +225,15 @@ screen and (min-width: 700px) {
 }
 
 // End of adjustment to get page breaks to work in multi-line flexbox
+
+// Another workaround to get page breaks to works
+// https://github.com/OpenClinica/enketo-express-oc/issues/463
+.or {
+    &:not(.print-relevant-only) section.question.or-branch.disabled, 
+    &:not(.print-relevant-only) section.or-branch.disabled,
+    &:not(.print-relevant-only) section.question.or-branch:not(.disabled):not(.pre-init), 
+    &:not(.print-relevant-only) section.or-branch:not(.disabled):not(.pre-init) {
+        display: table;
+        break-inside: avoid;
+    }
+}
