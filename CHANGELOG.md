@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.17.4] - 2021-04-02
 ----------------------
 ##### Fixed
 - Forms containing select questions with very large lists of options become unbearably slow to validate.
