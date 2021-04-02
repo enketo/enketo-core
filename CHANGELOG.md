@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Forms containing select questions with very large lists of options become unbearably slow to validate.
 - Some relevant groups will no longer ignore page break rules.
+- Native XPath functions do not handle node-set arguments.
 
 [5.17.3] - 2021-03-18
 ----------------------
