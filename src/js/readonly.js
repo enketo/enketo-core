@@ -20,6 +20,12 @@ export default {
             const empty = !node.value && !node.dataset.calculate && !setValue && !node.classList.contains( 'readonly-forced' );
 
             node.classList.toggle( 'empty', empty );
+
+            if( empty ){
+                node.setAttribute( 'aria-hidden', 'true' );
+            }else{
+                node.removeAttribute( 'aria-hidden' );
+            }
         } );
     }
 };

@@ -796,6 +796,7 @@ Form.prototype.setEventHandlers = function() {
         // update the form progress status
         this.progress.update( event.target );
     } );
+
     this.view.html.addEventListener( events.FakeFocus().type, event => {
         // update the form progress status
         this.progress.update( event.target );
