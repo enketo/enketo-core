@@ -108,6 +108,11 @@ function getChildren( element, selector = '*' ) {
         .filter( el => el.matches( selector ) );
 }
 
+function getChild( element, selector = '*' ) {
+    return [ ...element.children ]
+        .find( el => el.matches( selector ) );
+}
+
 /**
  * Removes all children elements.
  *
@@ -379,6 +384,7 @@ export {
     getSiblingElements,
     getAncestors,
     getChildren,
+    getChild,
     getRepeatIndex,
     getXPath,
     hasPreviousCommentSiblingWithContent,

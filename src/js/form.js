@@ -1,7 +1,7 @@
 import { FormModel } from './form-model';
 import $ from 'jquery';
 import { parseFunctionFromExpression, stripQuotes, getFilename, joinPath } from './utils';
-import { getXPath, getChildren, closestAncestorUntil, getSiblingElements } from './dom-utils';
+import { getXPath, getChild, closestAncestorUntil, getSiblingElements } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
@@ -659,7 +659,7 @@ Form.prototype.getDataStrWithoutIrrelevantNodes = function() {
          * If the relevant is placed on a group and that group contains repeats with the same name,
          * but currently has 0 repeats, the context will not be available.
          */
-        if ( getChildren( node, `.or-repeat-info[data-name="${path}"]` ).length && !getChildren( node,  `.or-repeat[name="${path}"]` ).length ) {
+        if ( getChild( node, `.or-repeat-info[data-name="${path}"]` ) && !getChild( node,  `.or-repeat[name="${path}"]` ) ) {
             target = null;
         } else {
             // If a calculation without a form control (i.e. in .calculated-items) inside a repeat

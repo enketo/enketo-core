@@ -6,7 +6,7 @@
 
 import { parseFunctionFromExpression } from './utils';
 import dialog from 'enketo/dialog';
-import { closestAncestorUntil, getChildren, getSiblingElements, elementDataStore as data } from './dom-utils';
+import { closestAncestorUntil, getChild, getSiblingElements, elementDataStore as data } from './dom-utils';
 import events from './event';
 import { t } from 'enketo/translator';
 
@@ -89,7 +89,7 @@ export default {
 
             let input;
             if ( templateNodeName === 'label' ) {
-                const optionInput = getChildren( template, 'input' )[ 0 ];
+                const optionInput = getChild( template, 'input' );
                 [].slice.call( optionInput.attributes ).forEach( attr => {
                     inputAttributes[ attr.name ] = attr.value;
                 } );

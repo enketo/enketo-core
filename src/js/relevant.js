@@ -5,7 +5,7 @@
  */
 
 import events from './event';
-import { closestAncestorUntil, getChildren } from './dom-utils';
+import { closestAncestorUntil, getChild, getChildren } from './dom-utils';
 
 export default {
     /**
@@ -64,7 +64,7 @@ export default {
                 const parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
                 const parentGroups = [ ...this.form.view.html.querySelectorAll( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` ) ]
                     // now remove the groups that have a repeat-info child without repeat instance siblings
-                    .filter( group => getChildren( group, '.or-repeat' ).length > 0 || getChildren( group, '.or-repeat-info' ).length === 0 );
+                    .filter( group => getChild( group, '.or-repeat' ) || !getChild( group, '.or-repeat-info' ) );
                 // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
                 // Hence that relevant does not need to be evaluated (and would fail otherwise because the context doesn't exist).
                 if ( parentGroups.length === 0 ) {
@@ -87,7 +87,7 @@ export default {
              * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
              */
             let context = p.path;
-            if ( getChildren( node, `.or-repeat-info[data-name="${p.path}"]` ).length && !getChildren( node,  `.or-repeat[name="${p.path}"]` ).length ) {
+            if ( getChild( node, `.or-repeat-info[data-name="${p.path}"]` ) && !getChild( node,  `.or-repeat[name="${p.path}"]` ) ) {
                 context = null;
             }
 

@@ -1,4 +1,4 @@
-import { getSiblingElements, getSiblingElementsAndSelf, getAncestors, closestAncestorUntil, getChildren, getXPath } from '../../src/js/dom-utils';
+import { getSiblingElements, getSiblingElementsAndSelf, getAncestors, closestAncestorUntil, getChildren, getChild, getXPath } from '../../src/js/dom-utils';
 
 function getFragment( htmlStr ) {
     return document.createRange().createContextualFragment( htmlStr );
@@ -99,6 +99,37 @@ describe( 'DOM utils', () => {
         } );
     } );
 
+    describe( 'getChild', () => {
+        const fragment = getFragment( `
+            <root>
+                <div id="e">
+                    <div id="d" class="or b"></div>
+                    <div id="c" class="a something disabled"></div>
+                    <div id="b" class="a"></div>
+                    <div id="a" class="b"></div>
+                </div>
+            </root>
+        ` );
+
+        const root = fragment.querySelector( 'root' );
+        const e = fragment.querySelector( '#e' );
+        const d = fragment.querySelector( '#d' );
+        const c = fragment.querySelector( '#c' );
+        const a = fragment.querySelector( '#a' );
+
+        [
+            [ getChild( e ), d ],
+            [ getChild( e, '.a' ), c ],
+            [ getChild( root ), e ],
+            [ getChild( a ), undefined ]
+        ].forEach( t => {
+            it( 'works', () => {
+                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+            } );
+        } );
+    } );
+
+
     describe( 'getAncestors', () => {
         const fragment = getFragment( `
             <root>
@@ -109,7 +140,7 @@ describe( 'DOM utils', () => {
                                 <div id="a" class="b"></div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </root>
         ` );
@@ -151,7 +182,7 @@ describe( 'DOM utils', () => {
                             <div id="a" class="b"></div>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         ` );
 
