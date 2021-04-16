@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Widget from '../../js/widget';
 import events from '../../js/event';
-import { getSiblingElements } from '../../js/dom-utils';
+import { getSiblingElement } from '../../js/dom-utils';
 
 const sadExcuseForABrowser = !( 'list' in document.createElement( 'input' ) &&
     'options' in document.createElement( 'datalist' ) &&
@@ -32,9 +32,9 @@ class AutocompleteSelectpicker extends Widget {
     _init() {
         const listId = this.element.getAttribute( 'list' );
 
-        if ( getSiblingElements( this.element, 'datalist' ).length === 0 ) {
-            const infos = getSiblingElements( this.element.closest( '.or-repeat' ), '.or-repeat-info' );
-            this.options = infos.length ? [ ...infos[ 0 ].querySelectorAll( `datalist#${CSS.escape( listId )} > option` ) ] : [];
+        if ( !getSiblingElement( this.element, 'datalist' ) ) {
+            const info = getSiblingElement( this.element.closest( '.or-repeat' ), '.or-repeat-info' );
+            this.options = info ? [ ...info.querySelectorAll( `datalist#${CSS.escape( listId )} > option` ) ] : [];
         } else {
             this.options = [ ...this.question.querySelectorAll( `datalist#${CSS.escape( listId )} > option` ) ];
         }

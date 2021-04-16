@@ -1,4 +1,4 @@
-import { getSiblingElements, getSiblingElementsAndSelf, getAncestors, closestAncestorUntil, getChildren, getChild, getXPath } from '../../src/js/dom-utils';
+import { getSiblingElements, getSiblingElementsAndSelf, getSiblingElement, getAncestors, closestAncestorUntil, getChildren, getChild, getXPath } from '../../src/js/dom-utils';
 
 function getFragment( htmlStr ) {
     return document.createRange().createContextualFragment( htmlStr );
@@ -61,6 +61,40 @@ describe( 'DOM utils', () => {
             [ getSiblingElementsAndSelf( a, '.b' ), [ d, a ] ],
             [ getSiblingElementsAndSelf( e ), [ e ] ],
             [ getSiblingElementsAndSelf( e, '.b' ), [ e ] ]
+        ].forEach( t => {
+            it( 'works', () => {
+                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+            } );
+        } );
+    } );
+
+    describe( 'hasSiblingElement', () => {
+        const fragment = getFragment( `
+            <root>
+                <div id="e">
+                    <div id="d" class="or b"></div>
+                    <div id="c" class="a something disabled"></div>
+                    <div id="b" class="a"></div>
+                    <div id="a" class="b"></div>
+                </div>
+            </root>
+        ` );
+
+        const e = fragment.querySelector( '#e' );
+        const d = fragment.querySelector( '#d' );
+        const c = fragment.querySelector( '#c' );
+        const b = fragment.querySelector( '#b' );
+        const a = fragment.querySelector( '#a' );
+
+        [
+            [ getSiblingElement( a ), d ],
+            [ getSiblingElement( a, '.a' ), c ],
+            [ getSiblingElement( a, '#a' ), undefined ],
+            [ getSiblingElement( a, '.b' ), d ],
+            [ getSiblingElement( d ), c ],
+            [ getSiblingElement( d, '#b' ), b ],
+            [ getSiblingElement( e ),  undefined ],
+            [ getSiblingElement( e, '.b' ), undefined ],
         ].forEach( t => {
             it( 'works', () => {
                 expect( t[ 0 ] ).toEqual( t[ 1 ] );

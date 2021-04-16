@@ -1,7 +1,7 @@
 import { FormModel } from './form-model';
 import $ from 'jquery';
 import { parseFunctionFromExpression, stripQuotes, getFilename, joinPath } from './utils';
-import { getXPath, getChild, closestAncestorUntil, getSiblingElements } from './dom-utils';
+import { getXPath, getChild, closestAncestorUntil, getSiblingElement } from './dom-utils';
 import { t } from 'enketo/translator';
 import config from 'enketo/config';
 import inputHelper from './input';
@@ -425,19 +425,19 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
             if ( !value || !inputs.length ) {
                 label = '';
             } else if (  nodeName === 'select' ) {
-                const found = inputs.filter( input => input.querySelector( `[value="${value}"]` ) );
-                label =  found.length ? found[0].querySelector( `[value="${value}"]` ).textContent : '';
+                const found = inputs.find( input => input.querySelector( `[value="${value}"]` ) );
+                label =  found ? found.querySelector( `[value="${value}"]` ).textContent : '';
             } else if (  nodeName === 'input' ) {
                 const list = inputs[0].getAttribute( 'list' );
 
                 if ( !list ){
-                    const found = inputs.filter( input => input.getAttribute( 'value' ) === value );
-                    const siblingLabelEls = found.length ? getSiblingElements( found[0], '.option-label.active' ) : [];
-                    label = siblingLabelEls.length ? siblingLabelEls[0].textContent : '';
+                    const found = inputs.find( input => input.getAttribute( 'value' ) === value );
+                    const firstSiblingLabelEl = found ? getSiblingElement( found, '.option-label.active' ) : [];
+                    label = firstSiblingLabelEl ? firstSiblingLabelEl.textContent : '';
                 } else {
-                    const siblingListEls = getSiblingElements( inputs[0], `datalist#${CSS.escape( list )}` );
-                    if ( siblingListEls.length ){
-                        const optionEl = siblingListEls[0].querySelector( `[data-value="${value}"]` );
+                    const firstSiblingListEl = getSiblingElement( inputs[0], `datalist#${CSS.escape( list )}` );
+                    if ( firstSiblingListEl ){
+                        const optionEl = firstSiblingListEl.querySelector( `[data-value="${value}"]` );
                         label = optionEl ? optionEl.getAttribute( 'value' ) : '';
                     }
                 }

@@ -7,7 +7,7 @@
 import $ from 'jquery';
 import events from './event';
 import config from 'enketo/config';
-import { getSiblingElements, getAncestors } from './dom-utils';
+import { getSiblingElement, getAncestors } from './dom-utils';
 import 'jquery-touchswipe';
 
 export default {
@@ -264,7 +264,7 @@ export default {
                     // or-repeat-info is only considered a page by itself if it has no sibling repeats
                     // When there are siblings repeats, we use CSS trickery to show the + button underneath the last
                     // repeat.
-                    ( el.matches( '.or-repeat-info' ) && getSiblingElements( el, '.or-repeat' ).length === 0 ) );
+                    ( el.matches( '.or-repeat-info' ) && !getSiblingElement( el, '.or-repeat' ) ) );
         } );
         this._updateToc();
     },

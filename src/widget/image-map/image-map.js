@@ -1,7 +1,7 @@
 import Widget from '../../js/widget';
 import { t } from 'enketo/translator';
 import events from '../../js/event';
-import { getSiblingElements } from '../../js/dom-utils';
+import { getSiblingElement } from '../../js/dom-utils';
 const SELECTORS = 'path[id], g[id], circle[id]';
 
 /**
@@ -203,8 +203,8 @@ class ImageMap extends Widget {
         this.svg.querySelectorAll( SELECTORS ).forEach( el => {
             el.addEventListener( 'mouseenter', ev => {
                 const id = ev.target.id || ev.target.closest( 'g[id]' ).id;
-                const labels = getSiblingElements( this._getInput( id ), '.option-label.active' );
-                const optionLabel = labels && labels.length ? labels[0].textContent : '';
+                const label = getSiblingElement( this._getInput( id ), '.option-label.active' );
+                const optionLabel = label ? label.textContent : '';
                 this.tooltip.textContent = optionLabel;
             } );
             el.addEventListener( 'mouseleave', ev => {

@@ -15,7 +15,7 @@ import $ from 'jquery';
 import events from './event';
 import { t } from 'enketo/translator';
 import dialog from 'enketo/dialog';
-import { getSiblingElements, getChildren, getSiblingElementsAndSelf } from './dom-utils';
+import { getSiblingElements, getSiblingElement, getChildren, getSiblingElementsAndSelf } from './dom-utils';
 import { isStaticItemsetFromSecondaryInstance } from './itemset';
 import config from 'enketo/config';
 const disableFirstRepeatRemoval = config.repeatOrdinals === true;
@@ -390,8 +390,7 @@ export default {
                 this.fixDatalistId( datalist );
             } else {
                 const id = datalist.id;
-                const inputs = getSiblingElements( datalist, 'input[list]' );
-                const input = inputs.length ? inputs[ 0 ] : null;
+                const input = getSiblingElement( datalist, 'input[list]' );
 
                 if ( input ) {
                     // For very long static datalists, a huge performance improvement can be achieved, by using the

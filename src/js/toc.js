@@ -4,7 +4,7 @@
  * @module toc
  */
 
-import { getAncestors, getSiblingElements } from './dom-utils';
+import { getAncestors, getSiblingElement } from './dom-utils';
 
 export default {
     /**
@@ -29,7 +29,7 @@ export default {
                         // or-repeat-info is only considered a page by itself if it has no sibling repeats
                         // When there are siblings repeats, we use CSS trickery to show the + button underneath the last
                         // repeat.
-                        ( tocEl.matches( '.or-repeat-info' ) && getSiblingElements( tocEl, '.or-repeat' ).length === 0 ) );
+                        ( tocEl.matches( '.or-repeat-info' ) && !getSiblingElement( tocEl, '.or-repeat' ) ) );
             } )
             .filter( tocEl => !tocEl.classList.contains( 'or-repeat-info' ) );
         tocElements.forEach( ( element, index ) => {

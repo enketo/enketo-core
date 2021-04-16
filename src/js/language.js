@@ -4,7 +4,7 @@
  * @module language
  */
 
-import { getSiblingElements } from './dom-utils';
+import { getSiblingElement } from './dom-utils';
 import events from './event';
 
 export default {
@@ -91,7 +91,7 @@ export default {
         translations.forEach( el => el.classList.remove( 'active' ) );
         translations
             .filter( el => el.matches( `[lang="${lang}"], [lang=""]` ) &&
-                ( !el.classList.contains( 'or-form-short' ) || ( el.classList.contains( 'or-form-short' ) && getSiblingElements( el, '.or-form-long' ).length === 0 ) ) )
+                ( !el.classList.contains( 'or-form-short' ) || ( el.classList.contains( 'or-form-short' ) && !getSiblingElement( el, '.or-form-long' ) ) ) )
             .forEach( el => el.classList.add(
                 'active'
             ) );
