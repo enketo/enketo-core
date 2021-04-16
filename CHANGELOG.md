@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Improved accessibility for screen readers.
+- Improved performance.
+
 [5.17.5] - 2021-04-12
 ---------------------
 ##### Fixed
