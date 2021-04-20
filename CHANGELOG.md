@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.17.6] - 2021-04-20
 ---------------------
 ##### Removed
 - `decimal-date()` function (as it was an accident and is not in the spec).
