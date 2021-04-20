@@ -5,9 +5,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+##### Removed
+- `decimal-date()` function (as it was an accident and is not in the spec).
+
 ##### Changed
 - Improved accessibility for screen readers.
 - Improved performance.
+
+##### Fixed
+- Using `decimal-time()` with a node-set parameter fails.
+- The not-equals operator fails when preceded by a node-set without a trailing space.
+- Using `uuid()` with a node-set parameter fails.
 
 [5.17.5] - 2021-04-12
 ---------------------
