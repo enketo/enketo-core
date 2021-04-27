@@ -84,7 +84,7 @@ class RangeWidget extends Widget {
         const html =
             `<div class="widget range-widget">
                 <div class="range-widget__wrap">
-                    <div class="range-widget__current"></div>
+                    <div class="range-widget__current">${this.props.value}</div>
                     <div class="range-widget__bg"></div>
                     <div class="range-widget__ticks"></div>
                     <div class="range-widget__scale">
@@ -183,6 +183,7 @@ class RangeWidget extends Widget {
         props.min = Number( min );
         props.max = Number( max );
         props.step = Number( step );
+        props.value = this.element.value;
         props.vertical = props.appearances.includes( 'vertical' ) || distress;
         props.ticks = !props.appearances.includes( 'no-ticks' );
         props.showScale = distress;
