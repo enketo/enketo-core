@@ -36,10 +36,11 @@ class RangeWidget extends Widget {
         }
 
         this.range.addEventListener( 'change', () => {
+            this.current.textContent = this.value;
+
             // Avoid unnecessary change events on original input as these can have big negative consequences
             // https://github.com/OpenClinica/enketo-express-oc/issues/209
             if ( this.originalInputValue !== this.value ) {
-                this.current.textContent = this.value;
                 this.originalInputValue = this.value;
                 this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
             }
@@ -84,7 +85,7 @@ class RangeWidget extends Widget {
         const html =
             `<div class="widget range-widget">
                 <div class="range-widget__wrap">
-                    <div class="range-widget__current">${this.props.value}</div>
+                    <div class="range-widget__current"></div>
                     <div class="range-widget__bg"></div>
                     <div class="range-widget__ticks"></div>
                     <div class="range-widget__scale">
@@ -183,7 +184,6 @@ class RangeWidget extends Widget {
         props.min = Number( min );
         props.max = Number( max );
         props.step = Number( step );
-        props.value = this.element.value;
         props.vertical = props.appearances.includes( 'vertical' ) || distress;
         props.ticks = !props.appearances.includes( 'no-ticks' );
         props.showScale = distress;
