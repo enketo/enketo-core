@@ -11,7 +11,7 @@
  * @return {Array<Node>} Array of sibling nodes plus target element.
  */
 function getSiblingElementsAndSelf( element, selector ) {
-    return _getSiblingElements( element, selector, [ element ] );
+    return _getSiblingElements( element, selector, true );
 }
 
 /**
@@ -52,29 +52,21 @@ function getSiblingElement( element, selector = '*' ){
  *
  * @param {Node} element - Target element.
  * @param {string} [selector] - A CSS selector.
- * @param {Array<Node>} [startArray] - Array of nodes to start with.
+ * @param {boolean} [includeSelf] - Whether to include self.
  * @return {Array<Node>} Array of sibling nodes.
  */
-function _getSiblingElements( element, selector = '*', startArray = [] ) {
-    const siblings = startArray;
-    let prev = element.previousElementSibling;
-    let next = element.nextElementSibling;
-    // TODO: check if iteration approach used by getSiblingElement is faster. It would be more elegant.
-    while ( prev ) {
-        if ( prev.matches( selector ) ) {
-            siblings.unshift( prev );
+function _getSiblingElements( element, selector = '*', includeSelf = false ) {
+    const results = [];
+    let current = element.parentElement.firstElementChild;
+
+    while ( current ) {
+        if ( ( current === element && includeSelf ) || ( current !== element && current.matches( selector ) ) ){
+            results.push( current );
         }
-        prev = prev.previousElementSibling;
+        current = current.nextElementSibling;
     }
 
-    while ( next ) {
-        if ( next.matches( selector ) ) {
-            siblings.push( next );
-        }
-        next = next.nextElementSibling;
-    }
-
-    return siblings;
+    return results;
 }
 
 /**
