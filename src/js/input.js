@@ -310,9 +310,13 @@ export default {
             if ( curVal === undefined || curVal.toString() !== value.toString() ) {
                 switch ( type ) {
                     case 'radio': {
-                        const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
-                        if ( input ) {
-                            input.checked = true;
+                        if ( value.toString() === '' ){
+                            inputs.forEach( input => input.checked = false );
+                        } else {
+                            const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
+                            if ( input ) {
+                                input.checked = true;
+                            }
                         }
                         break;
                     }

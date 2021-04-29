@@ -3,6 +3,78 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+#### Fixed
+- Range default or loaded value (number) not shown.
+- Distresspicker default or loaded mercury level not shown.
+- Radiobuttons value still shown in view after programmatic clearing (e.g. by a calculation).
+
+[5.17.6] - 2021-04-20
+---------------------
+##### Removed
+- `decimal-date()` function (as it was an accident and is not in the spec).
+
+##### Changed
+- Improved accessibility for screen readers.
+- Improved performance.
+
+##### Fixed
+- Using `decimal-time()` with a node-set parameter fails.
+- The not-equals operator fails when preceded by a node-set without a trailing space.
+- Using `uuid()` with a node-set parameter fails.
+
+[5.17.5] - 2021-04-12
+---------------------
+##### Fixed
+- Using `node()` mid-axis, causes an exception.
+- Using `ends-with()` with a node parameter causes an exception.
+- Using `not()` with an empty node-set parameter returns `false`.
+- Using `uuid()` with a node parameter fails.
+- Using `exp()`, `exp10()`, `log()`, `log10()`, `sqrt()` with node-set parameters returns incorrect results.
+- Using `randomize()` with a non-nodeset parameter does not throw an error.
+
+[5.17.4] - 2021-04-02
+----------------------
+##### Fixed
+- Forms containing select questions with very large lists of options become unbearably slow to validate.
+- Some relevant groups will no longer ignore page break rules.
+- Native XPath functions do not handle node-set arguments.
+
+[5.17.3] - 2021-03-18
+----------------------
+##### Fixed
+- Exception occurs with lazy evaluation of and-or statements.
+
+[5.17.2] - 2021-03-02
+--------------------
+##### Fixed
+- Setvalue/xforms-value-changed inside a select multiple question is not working (enketo-transformer).
+- Setvalue/xforms-value-changed with trigger inside a repeat and target outside the repeat does not work.
+- A calculation without form control inside a non-relevant repeat with 0 instances, fails to prune non-relevant nodes.
+- Misplaced image-map when used in conjunction with complex custom comment widgets (OC).
+- The function jr:choice-name causes an exception if the choices list of radiobuttons or checkboxes is empty.
+- The function jr:choice-name causes an exception if the choices list of pulldown selects is empty.
+
+[5.17.1] - 2021-01-18
+----------------------
+##### Changed
+- The uuid() function implementation has improved with a reduced chance of collisions.
+
+##### Fixed
+- Action setvalue/odk-instance-first-load and setvalue/odk-new-repeat actions are not properly added for radiobutton and checkbox questions (in enketo-transformer).
+- Lazy and/or evaluation within function arguments (in openrosa-xpath-evaluator).
+- Action setvalue/odk-new-repeat does not run non-form-control actions before form controls (since 5.17.0).
+- Static itemsets with radio buttons inside multiple repeat instances do not load correctly.
+- Draw widget changes file name whenever browser window resizes.
+- Draw widget updates file name when canvas loses focus if drawing hasn't changed.
+- Nested XPath expressions with dead branches cause an exception (since 5.17.0).
+
+[5.17.0] - 2020-12-28
+----------------------
+##### Changed
+- Vastly improved performance for most slow forms by replacing the XPath evaluator. See [blog post to follow]().
+
 [5.16.16] - 2020-12-23
 -----------------------
 ##### Fixed
