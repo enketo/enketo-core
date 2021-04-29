@@ -11,6 +11,7 @@
           <range4/>
           <range5/>
           <range6>3</range6>
+          <range7>4</range7>
           <distress/>
           <meta>
             <instanceID/>
@@ -51,6 +52,10 @@
     <range appearance="rating" end="10" ref="/range/range6" start="1" step="1">
       <label>Rating with default value</label>
       <hint>A horizontal range widget without ticks (type=range, appearance=rating)</hint>
+    </range>
+    <range end="10" ref="/range/range7" start="1" step="1">
+      <label>Range with default value</label>
+      <hint>A horizontal range widget without ticks (type=range)</hint>
     </range>
     <range appearance="distress" end="10" ref="/range/distress" start="1" step="1">
       <label>Distress widget</label>
