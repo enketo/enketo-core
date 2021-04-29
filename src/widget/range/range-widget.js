@@ -37,12 +37,12 @@ class RangeWidget extends Widget {
 
         this.range.addEventListener( 'change', () => {
             this.current.textContent = this.value;
+            this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
 
             // Avoid unnecessary change events on original input as these can have big negative consequences
             // https://github.com/OpenClinica/enketo-express-oc/issues/209
             if ( this.originalInputValue !== this.value ) {
                 this.originalInputValue = this.value;
-                this._updateMercury( ( this.value - this.props.min ) / ( that.props.max - that.props.min ) );
             }
         } );
 
@@ -59,19 +59,19 @@ class RangeWidget extends Widget {
 
         this.widget.querySelector( '.btn-reset' ).addEventListener( 'click', this._reset.bind( this ) );
 
-        // loads the default value if exists, else resets
+        // Loads the default value if exists, else resets
         this.update();
 
         let ticks = this.props.ticks ? Math.ceil( Math.abs( ( this.props.max - this.props.min ) / this.props.step ) ) : 1;
-        // Now reduce to a number < 50 to avoid showing a sold black tick line.
+        // Now reduce to a number < 50 to avoid showing a solid black tick line.
         let divisor = Math.ceil( ticks / this.props.maxTicks );
         while ( ticks % divisor && divisor < ticks ) {
             divisor++;
         }
         ticks = ticks / divisor;
 
-        // Various attemps to use more elegant CSS background on the _ticks div, have failed due to little
-        // issues seemingly related to rounding or browser sloppiness. This far is less elegant but nice and robust:
+        // Various attempts to use more elegant CSS background on the __ticks div, have failed due to little
+        // issues seemingly related to rounding or browser sloppiness. This is far less elegant but robust:
         this.widget.querySelector( '.range-widget__ticks' )
             .append( document.createRange().createContextualFragment( new Array( ticks ).fill( '<span></span>' ).join( '' ) ) );
     }

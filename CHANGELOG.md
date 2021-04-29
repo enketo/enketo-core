@@ -3,6 +3,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+#### Fixed
+- Range default or loaded value (number) not shown.
+- Distresspicker default or loaded mercury level not shown.
+
 [5.17.6] - 2021-04-20
 ---------------------
 ##### Removed
