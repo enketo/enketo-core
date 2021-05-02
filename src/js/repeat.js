@@ -132,6 +132,17 @@ export default {
         if ( !el || !this.form.repeatsPresent ) {
             return 0;
         }
+
+        // get repeatSeriesIndex using parent repeat element
+        // this fixes a nested repeats error https://github.com/enketo/enketo-core/issues/720
+        const repeatPath = el.dataset.name;
+        if( repeatPath && repeatPath.split( '/' ).length - 1 > 3 && el ){
+            let parentRepeatElement = el.closest( `.or-repeat[name='${repeatPath.slice( 0, repeatPath.lastIndexOf( '/' ) )}']` );
+            if( parentRepeatElement && parentRepeatElement.parentElement ){
+                el = parentRepeatElement;
+            }
+        }
+
         let checkEl = el.parentElement.closest( '.or-repeat' );
         const info = el.classList.contains( 'or-repeat-info' );
         let count = info ? 1 : Number( el.querySelector( '.repeat-number' ).textContent );

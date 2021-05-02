@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>test_school_form</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation default="true()" lang="default">
+                    <text id="/data/group1/repeat1/numb_buid99:label">
+                        <value>Number of Buildings =</value>
+                    </text>
+                    <text id="/data/group1/repeat1/repeat11/repeat111/school_roomtype:label">
+                        <value>121. Room Type</value>
+                    </text>
+                    <text id="/data/group1/repeat1/repeat11/repeat111/school_roomtype:hint">
+                        <value>-</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="test_school_form">
+                    <group1>
+                        <repeat1 jr:template="">
+                            <position_repeat1/>
+                            <numb_buid99/>
+                            <repeat11 jr:template="">
+                                <repeat111 jr:template="">
+                                    <room_open_stat/>
+                                    <school_roomtype/>
+                                </repeat111>
+                            </repeat11>
+                        </repeat1>
+                        <repeat1>
+                            <position_repeat1/>
+                            <numb_buid99/>
+                            <repeat11>
+                                <repeat111>
+                                    <room_open_stat/>
+                                    <school_roomtype/>
+                                </repeat111>
+                            </repeat11>
+                        </repeat1>
+                    </group1>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind calculate="position(..)" nodeset="/data/group1/repeat1/position_repeat1" type="string"/>
+            <bind calculate="1" nodeset="/data/group1/repeat1/numb_buid99" type="string"/>
+            <bind nodeset="/data/group1/repeat1/repeat11/repeat111/room_open_stat" type="string"/>
+            <bind nodeset="/data/group1/repeat1/repeat11/repeat111/school_roomtype" relevant="selected( ../room_open_stat ,'yes')" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/group1">
+            <label>Group 1</label>
+            <group ref="/data/group1/repeat1">
+                <label>Repeat 1 - Building</label>
+                <repeat nodeset="/data/group1/repeat1">
+                    <group ref="/data/group1/repeat1/repeat11">
+                        <label>Repeat 11 - Corridor</label>
+                        <repeat nodeset="/data/group1/repeat1/repeat11">
+                            <group ref="/data/group1/repeat1/repeat11/repeat111">
+                                <label>Repeat 111 - Rooms</label>
+                                <repeat nodeset="/data/group1/repeat1/repeat11/repeat111">
+                                    <select1 ref="/data/group1/repeat1/repeat11/repeat111/room_open_stat">
+                                        <label>Is the room open or able to open it?</label>
+                                        <item>
+                                            <label>Yes</label>
+                                            <value>yes</value>
+                                        </item>
+                                        <item>
+                                            <label>No</label>
+                                            <value>no</value>
+                                        </item>
+                                    </select1>
+                                    <select1 ref="/data/group1/repeat1/repeat11/repeat111/school_roomtype">
+                                        <label ref="jr:itext('/data/group1/repeat1/repeat11/repeat111/school_roomtype:label')"/>
+                                        <hint ref="jr:itext('/data/group1/repeat1/repeat11/repeat111/school_roomtype:hint')"/>
+                                        <item>
+                                            <label>Other</label>
+                                            <value>roomtype_list8</value>
+                                        </item>
+                                    </select1>
+                                </repeat>
+                            </group>
+                        </repeat>
+                    </group>
+                </repeat>
+            </group>
+        </group>
+    </h:body>
+</h:html>
