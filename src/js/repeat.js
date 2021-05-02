@@ -199,9 +199,10 @@ export default {
     updateDefaultFirstRepeatInstance( repeatInfo ) {
         const repeatPath = repeatInfo.dataset.name;
         if ( !this.form.model.data.instanceStr && !this.templates[ repeatPath ].classList.contains( 'or-appearance-minimal' ) ) {
-            const repeatSeriesIndex = this.getIndex( repeatInfo );
-            const repeatSeriesInModel = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex );
-            if ( repeatSeriesInModel.length === 0 ) {
+            const prevSibling = repeatInfo.previousElementSibling;
+            let repeatIndexInSeries = prevSibling && prevSibling.classList.contains( 'or-repeat' ) ?
+                Number( prevSibling.querySelector( '.repeat-number' ).textContent ) : 0;
+            if ( repeatIndexInSeries === 0 ) {
                 this.add( repeatInfo, 1, 'magic' );
             }
 
@@ -282,6 +283,15 @@ export default {
 
         // Determine the index of the repeat series.
         let repeatSeriesIndex = this.getIndex( repeatInfo );
+
+        // get repeatSeriesIndex using parent repeat element
+        // this fixes an nested repeats error
+        if( repeatPath && repeatPath.split( '/' ).length - 1 > 3 && repeatInfo ){
+            let parentRepeatElement = repeatInfo.closest( `[name='${repeatPath.slice( 0, repeatPath.lastIndexOf( '/' ) )}']` );
+            if( parentRepeatElement.parentElement ){
+                repeatSeriesIndex = this.getIndex( parentRepeatElement );
+            }
+        }
         let modelRepeatSeriesLength = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex ).length;
         // Determine the index of the repeat inside its series
         const prevSibling = repeatInfo.previousElementSibling;
