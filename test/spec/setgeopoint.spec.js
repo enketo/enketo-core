@@ -1,5 +1,6 @@
 import { createGeolocationLookupError, createTestCoordinates, mockGetCurrentPosition } from '../helpers/geolocation';
 import loadForm from '../helpers/load-form';
+import events from '../../src/js/event';
 
 /*
  * These tests are for setgeopoint actions. Even though this functionality is part of calculate.js they are separated since they
@@ -85,6 +86,78 @@ describe( 'setgeopoint action', () => {
                 expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).toEqual( geopoint );
                 expect( geopoint ).toMatch( '' );
             } ).catch( fail ).finally( done );
+        } );
+    } );
+
+} );
+
+
+describe( 'setgeopoint actions to populate a value if another value changes', () => {
+    const mock = mockGetCurrentPosition( createTestCoordinates( {
+        latitude: 48.66,
+        longitude: -120.5,
+        accuracy: 2500.12,
+        altitude: 123,
+    } ), { expectLookup: true } );
+
+    it( 'works outside a repeat in conjunction with a select_minimal', done => {
+        const form = loadForm( 'setgeopoint.xml' );
+        form.init();
+
+        const changeTarget = form.view.html.querySelector( '[name="/data/changes"]' );
+        const locationChangedView = form.view.html.querySelector( '[name="/data/location_changed"]:not([data-setgeopoint])' );
+        const locationChangedModel = form.model.xml.querySelector( 'data > location_changed' );
+
+        expect( form.input.getVal( locationChangedView ) ).toEqual( '' );
+        expect( locationChangedModel.textContent ).toEqual( '' );
+
+        mock.lookup.then( () => {
+            form.input.setVal( changeTarget, '11', events.Change()  );
+
+            requestAnimationFrame( () => {
+                mock.lookup.then( ( { geopoint } ) => {
+                    expect( form.input.getVal( locationChangedView ) ).toEqual( geopoint );
+                    expect( locationChangedModel.textContent ).toEqual( geopoint );
+                } ).catch( fail ).finally( done );
+            } );
+        } ).catch( fail );
+    } );
+
+    it( 'works for multiple setgeopoint actions triggered by same question', done => {
+        const form = loadForm( 'setgeopoint-multiple-under-one.xml' );
+        form.init();
+        const aView = form.input.find( '/data/a', 0 );
+        const cView = form.input.find( '/data/c', 0 );
+        const dView = form.input.find( '/data/d', 0 );
+        const bModel = form.model.xml.querySelector( 'b' );
+        const cModel = form.model.xml.querySelector( 'c' );
+        const dModel = form.model.xml.querySelector( 'd' );
+        const eModel = form.model.xml.querySelector( 'e' );
+
+        form.input.setVal( aView, '3030', events.Change() );
+
+        requestAnimationFrame( () => {
+            mock.lookup.then( ( { geopoint } ) => {
+                expect( bModel.textContent ).toEqual( geopoint );
+                expect( cModel.textContent ).toEqual( geopoint );
+                expect( dModel.textContent ).toEqual( geopoint );
+                expect( eModel.textContent ).toEqual( geopoint );
+                expect( cView.value ).toEqual( geopoint );
+                expect( dView.value ).toEqual( geopoint );
+
+                form.input.setVal( aView, '11', events.Change() );
+
+                requestAnimationFrame( () => {
+                    mock.lookup.then( ( { geopoint } ) => {
+                        expect( bModel.textContent ).toEqual( geopoint );
+                        expect( cModel.textContent ).toEqual( geopoint );
+                        expect( dModel.textContent ).toEqual( geopoint );
+                        expect( eModel.textContent ).toEqual( geopoint );
+                        expect( cView.value ).toEqual( geopoint );
+                        expect( dView.value ).toEqual( geopoint );
+                    } ).catch ( fail ).finally( done );
+                } );
+            } ).catch( fail );
         } );
     } );
 
