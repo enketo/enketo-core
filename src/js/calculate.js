@@ -5,6 +5,7 @@
 import config from 'enketo/config';
 import { getAncestors, getSiblingElementsAndSelf } from './dom-utils';
 import events from './event';
+import { getCurrentPosition } from './geolocation';
 
 export default {
     /**
@@ -90,12 +91,43 @@ export default {
     },
 
     /**
+     * @param {CustomEvent} [event] - the event type that triggered the setvalue action.
+     * @param {'setvalue' | 'setgeopoint'} action - the action which should be performed
+     */
+    _getNodesForAction( event, action ) {
+        if ( event.type === new events.InstanceFirstLoad().type ) {
+            // We ignore relevance for the data-instance-first-load, as that will likely never be what users want for a default value.
+            // Do not use getRelatedNodes here, because the obtaining (and caching) of nodes inside repeats is (and should be) disabled at the
+            // time this event fires.
+            //
+            // We change the order by first evaluating the non-formcontrol setvalue/setgeopoint directives (in document order), and then
+            // the ones with form controls.
+            // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
+            return [ ...this.form.view.html.querySelectorAll( `.${action} [data-${action}][data-event*="${event.type}"]` ) ].concat(
+                this.form.filterRadioCheckSiblings( [ ...this.form.view.html.querySelectorAll( `.question [data-${action}][data-event*="${event.type}"]` ) ] ) );
+        } else if ( event.type === new events.NewRepeat().type ) {
+            // Only this event requires specific index targeting through the "updated" object
+            // We change the order by first evaluating the non-formcontrol setvalue directives (in document order), and then
+            // the ones with form controls.
+            // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
+            // https://github.com/OpenClinica/enketo-express-oc/issues/419
+            return this.form.getRelatedNodes( `data-${action}`, `.${action} [data-event*="${event.type}"]`, event.detail ).get().concat(
+                this.form.getRelatedNodes( `data-${action}`, `.question [data-event*="${event.type}"]`, event.detail ).get() );
+
+        } else if ( event.type === new events.XFormsValueChanged().type ) {
+            const question = event.target.closest( '.question' );
+
+            return question ? [ ...question.querySelectorAll( `[data-${action}][data-event*="${event.type}"]` ) ] : [];
+        }
+    },
+
+    /**
      * Runs <setvalue> actions.
      *
+     * @param {'setvalue' | 'setgeopoint'} type - the nodes relevant to the action.
      * @param {CustomEvent} [event] - the event type that triggered the setvalue action.
      */
-    setValue( event ) {
-
+    performAction( type, event ) {
         if ( !event ) {
             return;
         }
@@ -104,31 +136,7 @@ export default {
             throw new Error( 'Setvalue module not correctly instantiated with form property.' );
         }
 
-        let nodes = [];
-
-        if ( event.type === new events.InstanceFirstLoad().type ) {
-            // We ignore relevance for the data-instance-first-load, as that will likely never be what users want for a default value.
-            // Do not use getRelatedNodes here, because the obtaining (and caching) of nodes inside repeats is (and should be) disabled at the
-            // time this event fires.
-            //
-            // We change the order by first evaluating the non-formcontrol setvalue directives (in document order), and then
-            // the ones with form controls.
-            // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
-            nodes = [ ...this.form.view.html.querySelectorAll( `.setvalue [data-setvalue][data-event*="${event.type}"]` ) ].concat(
-                this.form.filterRadioCheckSiblings( [ ...this.form.view.html.querySelectorAll( `.question [data-setvalue][data-event*="${event.type}"]` ) ] ) );
-        } else if ( event.type === new events.NewRepeat().type ) {
-            // Only this event requires specific index targeting through the "updated" object
-            // We change the order by first evaluating the non-formcontrol setvalue directives (in document order), and then
-            // the ones with form controls.
-            // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
-            // https://github.com/OpenClinica/enketo-express-oc/issues/419
-            nodes = this.form.getRelatedNodes( 'data-setvalue', `.setvalue [data-event*="${event.type}"]`, event.detail ).get().concat(
-                this.form.getRelatedNodes( 'data-setvalue', `.question [data-event*="${event.type}"]`, event.detail ).get() );
-
-        } else if ( event.type === new events.XFormsValueChanged().type ) {
-            const question = event.target.closest( '.question' );
-            nodes = question ? [ ...question.querySelectorAll( `[data-setvalue][data-event*="${event.type}"]` ) ] : nodes;
-        }
+        const nodes = this._getNodesForAction( event, type );
 
         nodes.forEach( setvalueControl => {
             const name = this.form.input.getName( setvalueControl );
@@ -142,7 +150,7 @@ export default {
                 relevantExpr: this.form.input.getRelevant( setvalueControl ),
                 index: event.detail && typeof event.detail.repeatIndex !== 'undefined' ? event.detail.repeatIndex : 0,
                 dataNodesObj,
-                type: 'setvalue'
+                type,
             };
 
             if ( dataNodes.length > 1 && event.type !== new events.NewRepeat().type && event.type !== new events.XFormsValueChanged().type ) {
@@ -173,7 +181,7 @@ export default {
                 const control = setvalueControl;
                 this._updateCalc( control, props );
             } else {
-                console.error( 'SetValue called for node that does not exist in model.' );
+                console.error( 'performAction called for node that does not exist in model.' );
             }
         } );
     },
@@ -185,7 +193,22 @@ export default {
      * @param {boolean} [emptyNonRelevant] - Whether to set the calculation result to empty if non-relevant
      */
     _updateCalc( control, props, emptyNonRelevant ) {
-        if ( !emptyNonRelevant && props.type !== 'setvalue' && this._hasNeverBeenRelevant( control, props ) && !this._isRelevant( props ) ){
+        if ( !emptyNonRelevant && props.type !== 'setvalue' && props.type !== 'setgeopoint' && this._hasNeverBeenRelevant( control, props ) && !this._isRelevant( props ) ){
+            return;
+        }
+
+        if ( props.type === 'setgeopoint' ) {
+            const options = {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+            };
+
+            getCurrentPosition( options ).then( ( { geopoint } ) => {
+                this._updateValue( control, props, geopoint );
+            } ).catch( () => {
+                this._updateValue( control, props, '' );
+            } );
+
             return;
         }
 
@@ -199,6 +222,18 @@ export default {
         const result =  !empty && newExpr ? this.form.model.evaluate( newExpr, 'string', props.name, props.index ) : '';
 
         // Filter the result set to only include the target node
+        this._updateValue( control, props, result );
+    },
+
+    /**
+     * Updates a control's value after a calculation.
+     *
+     * @param {Element} control - view element containing calculation
+     * @param {*} props - properties of a calculation element
+     * @param {*} result - result of a calculation
+     */
+    _updateValue( control, props, result ) {
+        // Filter the result set to only include the target node
         props.dataNodesObj.setIndex( props.index );
 
         const existingModelValue = props.dataNodesObj.getVal();
@@ -208,10 +243,18 @@ export default {
 
         const newModelValue = props.dataNodesObj.getVal();
 
+        // It's possible there's a better way to do this, but this works around
+        // an error where `odk:setgeopoint` inside a model can't find an associated
+        // `.question` in the DOM.
+        if ( !control || this.form.input.getWrapNode( control ) == null ) {
+            return;
+        }
+
         // Not the most efficient to use input.setVal here as it will do another lookup
         // of the node, that we already have...
         // We should not use value "result" here because node.setVal() may have done a data type conversion
-        if ( control && existingModelValue !== newModelValue ) {
+
+        if ( existingModelValue !== newModelValue ) {
             this.form.input.setVal( control, newModelValue );
 
             /*

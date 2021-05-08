@@ -36,6 +36,7 @@ const iconMultiActive = L.divIcon( {
 // Leaflet extensions.
 import 'leaflet-draw';
 import 'leaflet.gridlayer.googlemutant';
+import { getCurrentPosition } from '../../js/geolocation';
 
 /**
  * @typedef LatLngArray
@@ -62,7 +63,7 @@ class Geopicker extends Widget {
      * @type {string}
      */
     static get selector() {
-        return '.question input[data-type-xml="geopoint"], .question input[data-type-xml="geotrace"], .question input[data-type-xml="geoshape"]';
+        return '.question input[data-type-xml="geopoint"]:not([data-setgeopoint]), .question input[data-type-xml="geotrace"], .question input[data-type-xml="geoshape"]';
     }
 
     /**
@@ -277,9 +278,9 @@ class Geopicker extends Widget {
             // set worldview in case permissions take too long (e.g. in FF);
             this._updateMap( [ 0, 0 ], 1 );
             if ( this.props.detect ) {
-                navigator.geolocation.getCurrentPosition( position => {
+                getCurrentPosition().then( position => {
                     that._updateMap( [ position.coords.latitude, position.coords.longitude ], defaultZoom );
-                } );
+                } ).catch( () => {} );
             }
         } else {
             // center map around first loaded geopoint value
@@ -530,26 +531,23 @@ class Geopicker extends Widget {
         };
         this.$detect.click( event => {
             event.preventDefault();
-            navigator.geolocation.getCurrentPosition( position => {
-                const latLng = {
-                    lat: Math.round( position.coords.latitude * 1000000 ) / 1000000,
-                    lng: Math.round( position.coords.longitude * 1000000 ) / 1000000
-                };
 
-                if ( that.polyline && that.props.type === 'geoshape' && that.updatedPolylineWouldIntersect( latLng, that.currentIndex ) ) {
+            getCurrentPosition( options ).then( ( result ) => {
+                if ( that.polyline && that.props.type === 'geoshape' && that.updatedPolylineWouldIntersect( result, that.currentIndex ) ) {
                     that._showIntersectError();
                 } else {
+                    const { lat, lng, position } = result;
                     //that.points[that.currentIndex] = [ position.coords.latitude, position.coords.longitude ];
                     //that._updateMap( );
-                    that._updateInputs( [ latLng.lat, latLng.lng, position.coords.altitude, position.coords.accuracy ] );
+                    that._updateInputs( [ lat, lng, position.coords.altitude, position.coords.accuracy ] );
                     // if current index is last of points, automatically create next point
                     if ( that.currentIndex === that.points.length - 1 && that.props.type !== 'geopoint' ) {
                         that._addPoint();
                     }
                 }
-            }, () => {
+            } ).catch( () => {
                 console.error( 'error occurred trying to obtain position' );
-            }, options );
+            } );
 
             return false;
         } );

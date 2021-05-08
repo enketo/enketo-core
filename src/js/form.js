@@ -232,13 +232,22 @@ Form.prototype.init = function() {
     this.readonly = this.addModule( readonlyModule );
 
     // Handle odk-instance-first-load event
-    this.model.events.addEventListener( events.InstanceFirstLoad().type, event => this.calc.setValue( event ) );
+    this.model.events.addEventListener( events.InstanceFirstLoad().type, event => {
+        this.calc.performAction( 'setvalue', event );
+        this.calc.performAction( 'setgeopoint', event );
+    } );
 
     // Handle odk-new-repeat event before initializing repeats
-    this.view.html.addEventListener( events.NewRepeat().type, event => this.calc.setValue( event ) );
+    this.view.html.addEventListener( events.NewRepeat().type, event => {
+        this.calc.performAction( 'setvalue', event );
+        this.calc.performAction( 'setgeopoint', event );
+    } );
 
     // Handle xforms-value-changed
-    this.view.html.addEventListener( events.XFormsValueChanged().type, event => this.calc.setValue( event ) );
+    this.view.html.addEventListener( events.XFormsValueChanged().type, event => {
+        this.calc.performAction( 'setvalue', event );
+        this.calc.performAction( 'setgeopoint', event );
+    } );
 
     // Before initializing form view and model, passthrough some model events externally
     // Because of setvalue/instance-first-load, this should be done before the model is initialized. This is important for custom
@@ -1151,7 +1160,7 @@ Form.prototype.goToTarget = function( target ) {
             this.pages.flipToPageContaining( $( target ) );
         }
         // check if the target has a form control
-        if ( target.closest( '.calculation, .setvalue' ) ) {
+        if ( target.closest( '.calculation, .setvalue, .setgeopoint' ) ) {
             // It is up to the apps to decide what to do with this event.
             target.dispatchEvent( events.GoToInvisible() );
         }
@@ -1179,6 +1188,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '1.42.0';
+Form.requiredTransformerVersion = 'https://github.com/eyelidlessness/enketo-transformer.git#1617062';
 
 export { Form, FormModel };

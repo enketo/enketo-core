@@ -1,4 +1,5 @@
 import Geopicker from '../../src/widget/geo/geopicker';
+import { createTestCoordinates, mockGetCurrentPosition } from '../helpers/geolocation';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM =
@@ -19,6 +20,14 @@ describe( 'geoshape widget', () => {
         const control = fragment.querySelector( 'input' );
         geoshapePicker = new Geopicker( control );
     } );
+
+    mockGetCurrentPosition( createTestCoordinates( {
+        latitude: 48.66,
+        longitude: -120.5,
+        accuracy: 2500.12,
+        altitude: 123,
+    } ) );
+
 
     describe( 'KML to Leaflet conversion', () => {
         const kmlCoordinates = '81.601884,44.160723 83.529902,43.665148 82.947737,44.248831 81.509322,44.321015',
