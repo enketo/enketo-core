@@ -285,7 +285,7 @@ export default {
         let repeatSeriesIndex = this.getIndex( repeatInfo );
 
         // get repeatSeriesIndex using parent repeat element
-        // this fixes a nested repeats error
+        // this fixes a nested repeats error https://github.com/enketo/enketo-core/issues/720
         if( repeatPath && repeatPath.split( '/' ).length - 1 > 3 && repeatInfo ){
             let parentRepeatElement = repeatInfo.closest( `.or-repeat[name='${repeatPath.slice( 0, repeatPath.lastIndexOf( '/' ) )}']` );
             if( parentRepeatElement && parentRepeatElement.parentElement ){
