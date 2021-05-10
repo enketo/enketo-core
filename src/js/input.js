@@ -14,7 +14,7 @@ export default {
      * @return {Element} Wrap node
      */
     getWrapNode( control ) {
-        return control.closest( '.question, .calculation, .setvalue' );
+        return control.closest( '.question, .calculation, .setvalue, .setgeopoint' );
     },
     /**
      * @param {Array<Element>} controls - form controls HTML elements
@@ -209,7 +209,7 @@ export default {
         return value || '';
     },
     /**
-     * Finds a form control that is not a nested setvalue/xforms-value-changed directive
+     * Finds a form control that is not a nested xforms-value-changed action
      *
      * @param {string} name - name attribute value
      * @param {number} index - repeat index
@@ -342,7 +342,7 @@ export default {
                 // don't trigger on all radiobuttons/checkboxes
                 if ( event ) {
                     inputs[ 0 ].dispatchEvent( event );
-                    // Ensure that any calculations with form controls that serve as setvalue triggers
+                    // Ensure that any calculations with form controls that serve as action triggers
                     // the action.
                     if ( event.type === events.InputUpdate().type ){
                         inputs[0].dispatchEvent( events.XFormsValueChanged() );

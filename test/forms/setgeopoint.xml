@@ -22,7 +22,7 @@
             <bind nodeset="/data/hidden_first_load" type="string"/>
             <bind nodeset="/data/visible_first_load" type="string"/>
 
-            <odk:setgeopoint event="odk-instance-first-load" ref="/data/hidden_first_load"/>
+            <odk:setgeopoint event="some-unsupported-event odk-instance-first-load" ref="/data/hidden_first_load"/>
         </model>
     </h:head>
     <h:body>
