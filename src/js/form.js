@@ -250,7 +250,7 @@ Form.prototype.init = function() {
     } );
 
     // Before initializing form view and model, passthrough some model events externally
-    // Because of setvalue/instance-first-load, this should be done before the model is initialized. This is important for custom
+    // Because of instance-first-load actions, this should be done before the model is initialized. This is important for custom
     // applications that submit each individual value separately (opposed to a full XML model at the end).
     this.model.events.addEventListener( events.DataUpdate().type, event => {
         that.view.html.dispatchEvent( events.DataUpdate( event.detail ) );
