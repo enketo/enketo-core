@@ -246,6 +246,7 @@ export default {
 
         const newModelValue = props.dataNodesObj.getVal();
 
+        // This is okay for an xforms-value-changed action (may be no form control)
         if ( !control ) {
             return;
         }
@@ -264,9 +265,6 @@ export default {
             if ( control.type !== 'hidden' && config.validateContinuously === true ) {
                 this.form.validateInput( control );
             }
-        } else {
-            // This is okay for an xforms-value-changed action (may be no form control)
-            // console.log( 'no form control found' );
         }
     },
 
