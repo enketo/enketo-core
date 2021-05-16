@@ -293,7 +293,6 @@ export default {
 
         // Determine the index of the repeat series.
         let repeatSeriesIndex = this.getIndex( repeatInfo );
-
         let modelRepeatSeriesLength = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex ).length;
         // Determine the index of the repeat inside its series
         const prevSibling = repeatInfo.previousElementSibling;
