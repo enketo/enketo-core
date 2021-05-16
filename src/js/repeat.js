@@ -132,6 +132,17 @@ export default {
         if ( !el || !this.form.repeatsPresent ) {
             return 0;
         }
+
+        // get repeatSeriesIndex using parent repeat element
+        // this fixes a nested repeats error https://github.com/enketo/enketo-core/issues/720
+        const repeatPath = el.dataset.name;
+        if( repeatPath && repeatPath.split( '/' ).length - 1 > 3 && el ){
+            let parentRepeatElement = el.closest( `.or-repeat[name='${repeatPath.slice( 0, repeatPath.lastIndexOf( '/' ) )}']` );
+            if( parentRepeatElement && parentRepeatElement.parentElement ){
+                el = parentRepeatElement;
+            }
+        }
+
         let checkEl = el.parentElement.closest( '.or-repeat' );
         const info = el.classList.contains( 'or-repeat-info' );
         let count = info ? 1 : Number( el.querySelector( '.repeat-number' ).textContent );
@@ -199,10 +210,9 @@ export default {
     updateDefaultFirstRepeatInstance( repeatInfo ) {
         const repeatPath = repeatInfo.dataset.name;
         if ( !this.form.model.data.instanceStr && !this.templates[ repeatPath ].classList.contains( 'or-appearance-minimal' ) ) {
-            const prevSibling = repeatInfo.previousElementSibling;
-            let repeatIndexInSeries = prevSibling && prevSibling.classList.contains( 'or-repeat' ) ?
-                Number( prevSibling.querySelector( '.repeat-number' ).textContent ) : 0;
-            if ( repeatIndexInSeries === 0 ) {
+            const repeatSeriesIndex = this.getIndex( repeatInfo );
+            const repeatSeriesInModel = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex );
+            if ( repeatSeriesInModel.length === 0 ) {
                 this.add( repeatInfo, 1, 'magic' );
             }
 
@@ -284,14 +294,6 @@ export default {
         // Determine the index of the repeat series.
         let repeatSeriesIndex = this.getIndex( repeatInfo );
 
-        // get repeatSeriesIndex using parent repeat element
-        // this fixes a nested repeats error https://github.com/enketo/enketo-core/issues/720
-        if( repeatPath && repeatPath.split( '/' ).length - 1 > 3 && repeatInfo ){
-            let parentRepeatElement = repeatInfo.closest( `.or-repeat[name='${repeatPath.slice( 0, repeatPath.lastIndexOf( '/' ) )}']` );
-            if( parentRepeatElement && parentRepeatElement.parentElement ){
-                repeatSeriesIndex = this.getIndex( parentRepeatElement );
-            }
-        }
         let modelRepeatSeriesLength = this.form.model.getRepeatSeries( repeatPath, repeatSeriesIndex ).length;
         // Determine the index of the repeat inside its series
         const prevSibling = repeatInfo.previousElementSibling;
