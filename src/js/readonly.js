@@ -14,10 +14,10 @@ export default {
             node.closest( '.question' ).classList.add( 'readonly' );
 
             const path = this.form.input.getName( node );
-            const setValue = this.form.view.html.querySelector( `[data-setvalue][data-event="xforms-value-changed"][name="${path}"]` );
+            const action = this.form.view.html.querySelector( `[data-setvalue][data-event="xforms-value-changed"][name="${path}"], [data-setgeopoint][data-event="xforms-value-changed"][name="${path}"]` );
 
             // Note: the readonly-forced class is added for special readonly views of a form.
-            const empty = !node.value && !node.dataset.calculate && !setValue && !node.classList.contains( 'readonly-forced' );
+            const empty = !node.value && !node.dataset.calculate && !action && !node.classList.contains( 'readonly-forced' );
 
             node.classList.toggle( 'empty', empty );
 
