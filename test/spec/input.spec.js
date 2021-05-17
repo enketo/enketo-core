@@ -15,7 +15,23 @@ describe( 'input helper', () => {
         } );
     } );
 
-    describe( 'clears form controls', () => {
+    describe( 'setVal() function', () => {
+        it( 'is able to clear a value from a group of radiobuttons', () => {
+            const form = loadForm( 'radio2.xml' );
+            form.init();
+            const radioEl = form.view.html.querySelector( 'input[type="radio"]' );
+
+            // setup
+            form.input.setVal( radioEl, '1' );
+            expect( form.input.getVal( radioEl ) ).toEqual( '1' );
+
+            // bug: https://github.com/OpenClinica/enketo-express-oc/issues/481#issuecomment-829429174
+            form.input.setVal( radioEl, '' );
+            expect( form.input.getVal( radioEl ) ).toEqual( '' );
+        } );
+    } );
+
+    describe( 'clear() function', () => {
         const form = loadForm( 'repeat-default.xml' );
         form.init();
         const num = form.view.html.querySelector( '[name="/repdef/rep/num"]' );
