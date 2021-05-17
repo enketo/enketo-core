@@ -73,7 +73,7 @@ describe( 'repeat functionality', () => {
 
         // https://github.com/enketo/enketo-core/issues/720
         it( 'nested repeats are added correctly', () => {
-            const form = loadForm( 'nested-repeats.xml');
+            const form = loadForm( 'nested-repeats.xml' );
             form.init();
 
             // add repeats by clicking the add buttons
@@ -88,8 +88,8 @@ describe( 'repeat functionality', () => {
             // check that we have the correct html
             expect(
                 form.view.html.querySelectorAll( '[data-itext-id="/data/group1/repeat1/repeat11/repeat111/school_roomtype:label"]' ).length
-            ).toEqual(4)
-        })
+            ).toEqual( 4 );
+        } );
     } );
 
     describe( 'fixes unique ids in cloned repeats', () => {
