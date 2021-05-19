@@ -5,10 +5,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
 ---------------------
+#### Added
+- Support for odk:setgeopoint for odk-instance-first-load events.
+
 #### Fixed
 - Range default or loaded value (number) not shown.
 - Distresspicker default or loaded mercury level not shown.
 - Radiobuttons value still shown in view after programmatic clearing (e.g. by a calculation).
+- Triple-nested repeats and higher are not created properly.
 
 [5.17.6] - 2021-04-20
 ---------------------
