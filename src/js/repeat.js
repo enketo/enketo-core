@@ -133,19 +133,16 @@ export default {
             return 0;
         }
 
-        let checkEl = el.parentElement.closest( '.or-repeat' );
-        const info = el.classList.contains( 'or-repeat-info' );
-        let count = info ? 1 : Number( el.querySelector( '.repeat-number' ).textContent );
-        const name = el.dataset.name || el.getAttribute( 'name' );
+        const isInfoElement = el.classList.contains( 'or-repeat-info' );
 
+        const toCount = isInfoElement ? `.or-repeat-info[data-name="${el.dataset.name}"]` : `.or-repeat[name="${el.getAttribute( 'name' )}"]`;
+        let count = isInfoElement ? 1 : Number( el.querySelector( '.repeat-number' ).textContent );
+
+        let checkEl = el;
         while ( checkEl ) {
             while ( checkEl.previousElementSibling && checkEl.previousElementSibling.matches( '.or-repeat' ) ) {
                 checkEl = checkEl.previousElementSibling;
-                if ( info ) {
-                    count += checkEl.querySelectorAll( `.or-repeat-info[data-name="${name}"]` ).length;
-                } else {
-                    count += checkEl.querySelectorAll( `.or-repeat[name="${name}"]` ).length;
-                }
+                count += checkEl.querySelectorAll( toCount ).length;
             }
             const parent = checkEl.parentElement;
             checkEl = parent ? parent.closest( '.or-repeat' ) : null;
