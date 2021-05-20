@@ -150,20 +150,6 @@ export default {
 
         return count - 1;
     },
-    /*
-     * Obtains the absolute index of the provided repeat-info element
-     */
-    getInfoIndex( repeatInfo ) {
-        if ( !this.form.repeatsPresent ) {
-            return 0;
-        }
-        if ( !repeatInfo || !repeatInfo.classList.contains( 'or-repeat-info' ) ) {
-            return null;
-        }
-        const name = repeatInfo.dataset.name;
-
-        return [ ...repeatInfo.closest( 'form.or' ).querySelectorAll( `.or-repeat-info[data-name="${name}"]` ) ].indexOf( repeatInfo );
-    },
     /**
      * [updateViewInstancesFromModel description]
      *
@@ -226,7 +212,7 @@ export default {
          * is determined in a node inside the parent repeat. To do so we use the repeat comment in model as context.
          */
         const repPath = repeatInfo.dataset.name;
-        let numRepsInCount = this.form.model.evaluate( repCountPath, 'number', this.form.model.getRepeatCommentSelector( repPath ), this.getInfoIndex( repeatInfo ), true );
+        let numRepsInCount = this.form.model.evaluate( repCountPath, 'number', this.form.model.getRepeatCommentSelector( repPath ), this.getIndex( repeatInfo ), true );
         numRepsInCount = isNaN( numRepsInCount ) ? 0 : numRepsInCount;
         const numRepsInView = getSiblingElements( repeatInfo, `.or-repeat[name="${repPath}"]` ).length;
         let toCreate = numRepsInCount - numRepsInView;
