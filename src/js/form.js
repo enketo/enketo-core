@@ -158,7 +158,7 @@ Form.prototype = {
      * @type {string}
      */
     get id() {
-        return this.view.html.id;
+        return this.view.html.dataset.formId;
     },
     /**
      * To facilitate forks that support multiple constraints per question
