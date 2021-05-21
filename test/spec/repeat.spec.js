@@ -163,7 +163,7 @@ describe( 'repeat functionality', () => {
     } );
 
     // https://github.com/enketo/enketo-core/issues/720
-    it( 'adds nested repeats up to three deep correctly', () => {
+    it( 'adds nested repeats up to three deep', () => {
         const form = loadForm( 'nested_repeats_triple.xml' );
         form.init();
 

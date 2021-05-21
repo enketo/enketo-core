@@ -125,8 +125,16 @@ export default {
             .catch( console.error );
     },
     /*
-     * Obtains the absolute index of the provided repeat or repeat-info element
+     * Obtains the 0-based absolute index of the provided repeat or repeat-info element
      * The goal of this function is to make non-nested repeat index determination as fast as possible.
+     *
+     * In nested cases, the "absolute index" for a repeat instance refers to the index across all repeat
+     * instances with that name regardless of nesting (the repeat structure is conceptually flattened).
+     * There is one repeat-info element for each sequences of repeats of the given name. The "absolute index"
+     * of a repeat-info in nested cases refers to the index across all sequences of repeat instances with that name.
+     *
+     * The repeat-info concept was added in the context of supporting zero instances of a repeat. It would be good
+     * to expand on its documentation.
      */
     getIndex( el ) {
         if ( !el || !this.form.repeatsPresent ) {
@@ -135,20 +143,20 @@ export default {
 
         const isInfoElement = el.classList.contains( 'or-repeat-info' );
 
-        const toCount = isInfoElement ? `.or-repeat-info[data-name="${el.dataset.name}"]` : `.or-repeat[name="${el.getAttribute( 'name' )}"]`;
-        let count = isInfoElement ? 1 : Number( el.querySelector( '.repeat-number' ).textContent );
+        const toCountSelector = isInfoElement ? `.or-repeat-info[data-name="${el.dataset.name}"]` : `.or-repeat[name="${el.getAttribute( 'name' )}"]`;
+        let predecessorCount = isInfoElement ? 0 : Number( el.querySelector( '.repeat-number' ).textContent ) - 1;
 
         let checkEl = el;
         while ( checkEl ) {
             while ( checkEl.previousElementSibling && checkEl.previousElementSibling.matches( '.or-repeat' ) ) {
                 checkEl = checkEl.previousElementSibling;
-                count += checkEl.querySelectorAll( toCount ).length;
+                predecessorCount += checkEl.querySelectorAll( toCountSelector ).length;
             }
             const parent = checkEl.parentElement;
             checkEl = parent ? parent.closest( '.or-repeat' ) : null;
         }
 
-        return count - 1;
+        return predecessorCount;
     },
     /**
      * [updateViewInstancesFromModel description]
