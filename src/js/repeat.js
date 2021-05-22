@@ -132,17 +132,18 @@ export default {
         if ( !el || !this.form.repeatsPresent ) {
             return 0;
         }
+
         let checkEl = el.parentElement.closest( '.or-repeat' );
         const info = el.classList.contains( 'or-repeat-info' );
         let count = info ? 1 : Number( el.querySelector( '.repeat-number' ).textContent );
-        let name;
+        const name = el.dataset.name || el.getAttribute( 'name' );
+
         while ( checkEl ) {
             while ( checkEl.previousElementSibling && checkEl.previousElementSibling.matches( '.or-repeat' ) ) {
                 checkEl = checkEl.previousElementSibling;
                 if ( info ) {
-                    count++;
+                    count += checkEl.querySelectorAll( `.or-repeat-info[data-name="${name}"]` ).length;
                 } else {
-                    name = name || el.getAttribute( 'name' );
                     count += checkEl.querySelectorAll( `.or-repeat[name="${name}"]` ).length;
                 }
             }
