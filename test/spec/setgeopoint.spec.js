@@ -1,9 +1,6 @@
 import { createGeolocationLookupError, createTestCoordinates, mockGetCurrentPosition } from '../helpers/geolocation';
 import loadForm from '../helpers/load-form';
-<<<<<<< HEAD
 import events from '../../src/js/event';
-=======
->>>>>>> master
 
 /*
  * These tests are for setgeopoint actions. Even though this functionality is part of calculate.js they are separated since they
