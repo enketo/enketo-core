@@ -13,6 +13,8 @@
                 <data id="setgeopoint">
                     <hidden_first_load/>
                     <visible_first_load/>
+                    <changes/>
+                    <location_changed/>
                     <meta>
                         <instanceID/>
                     </meta>
@@ -22,6 +24,9 @@
             <bind nodeset="/data/hidden_first_load" type="string"/>
             <bind nodeset="/data/visible_first_load" type="string"/>
 
+            <bind nodeset="/data/changes" type="int"/>
+            <bind nodeset="/data/location_changed" type="string"/>
+
             <odk:setgeopoint event="some-unsupported-event odk-instance-first-load" ref="/data/hidden_first_load"/>
         </model>
     </h:head>
@@ -30,5 +35,19 @@
         <input ref="/data/visible_first_load">
             <label>odk-instance-first-load</label>
         </input>
+
+        <select1 ref="/data/changes" appearance="minimal">
+            <label>xforms-value-changed</label>
+            <odk:setgeopoint event="xforms-value-changed" ref="/data/location_changed"/>
+            <item>
+                <label>10</label>
+                <value>10</value>
+            </item>
+            <item>
+                <label>11</label>
+                <value>11</value>
+            </item>
+        </select1>
+        <input ref="/data/location_changed"/>
     </h:body>
 </h:html>
