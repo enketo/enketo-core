@@ -1,0 +1,48 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>Triple nested repeats</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="nested_repeats_triple">
+                    <outer jr:template="">
+                        <inner jr:template="">
+                            <third jr:template="">
+                                <value/>
+                            </third>
+                        </inner>
+                    </outer>
+
+                    <outer>
+                        <inner>
+                            <third>
+                                <value/>
+                            </third>
+                        </inner>
+                    </outer>
+                </data>
+            </instance>
+            <bind nodeset="/data/outer/inner/third/value" type="string"/>
+        </model>
+    </h:head>
+
+    <h:body>
+        <group ref="/data/outer">
+            <label>Outer</label>
+            <repeat nodeset="/data/outer">
+                <group ref="/data/outer/inner">
+                    <label>Inner</label>
+                    <repeat nodeset="/data/outer/inner">
+                        <group ref="/data/outer/inner/third">
+                            <label>Third</label>
+                            <repeat nodeset="/data/outer/inner/third">
+                                <input ref="/data/outer/inner/third/value">
+                                    <label>Question</label>
+                                </input>
+                            </repeat>
+                        </group>
+                    </repeat>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

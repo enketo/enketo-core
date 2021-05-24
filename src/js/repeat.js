@@ -125,47 +125,38 @@ export default {
             .catch( console.error );
     },
     /*
-     * Obtains the absolute index of the provided repeat or repeat-info element
+     * Obtains the 0-based absolute index of the provided repeat or repeat-info element
      * The goal of this function is to make non-nested repeat index determination as fast as possible.
+     *
+     * In nested cases, the "absolute index" for a repeat instance refers to the index across all repeat
+     * instances with that name regardless of nesting (the repeat structure is conceptually flattened).
+     * There is one repeat-info element for each sequences of repeats of the given name. The "absolute index"
+     * of a repeat-info in nested cases refers to the index across all sequences of repeat instances with that name.
+     *
+     * The repeat-info concept was added in the context of supporting zero instances of a repeat. It would be good
+     * to expand on its documentation.
      */
     getIndex( el ) {
         if ( !el || !this.form.repeatsPresent ) {
             return 0;
         }
 
-        let checkEl = el.parentElement.closest( '.or-repeat' );
-        const info = el.classList.contains( 'or-repeat-info' );
-        let count = info ? 1 : Number( el.querySelector( '.repeat-number' ).textContent );
-        const name = el.dataset.name || el.getAttribute( 'name' );
+        const isInfoElement = el.classList.contains( 'or-repeat-info' );
 
+        const toCountSelector = isInfoElement ? `.or-repeat-info[data-name="${el.dataset.name}"]` : `.or-repeat[name="${el.getAttribute( 'name' )}"]`;
+        let predecessorCount = isInfoElement ? 0 : Number( el.querySelector( '.repeat-number' ).textContent ) - 1;
+
+        let checkEl = el;
         while ( checkEl ) {
             while ( checkEl.previousElementSibling && checkEl.previousElementSibling.matches( '.or-repeat' ) ) {
                 checkEl = checkEl.previousElementSibling;
-                if ( info ) {
-                    count += checkEl.querySelectorAll( `.or-repeat-info[data-name="${name}"]` ).length;
-                } else {
-                    count += checkEl.querySelectorAll( `.or-repeat[name="${name}"]` ).length;
-                }
+                predecessorCount += checkEl.querySelectorAll( toCountSelector ).length;
             }
             const parent = checkEl.parentElement;
             checkEl = parent ? parent.closest( '.or-repeat' ) : null;
         }
 
-        return count - 1;
-    },
-    /*
-     * Obtains the absolute index of the provided repeat-info element
-     */
-    getInfoIndex( repeatInfo ) {
-        if ( !this.form.repeatsPresent ) {
-            return 0;
-        }
-        if ( !repeatInfo || !repeatInfo.classList.contains( 'or-repeat-info' ) ) {
-            return null;
-        }
-        const name = repeatInfo.dataset.name;
-
-        return [ ...repeatInfo.closest( 'form.or' ).querySelectorAll( `.or-repeat-info[data-name="${name}"]` ) ].indexOf( repeatInfo );
+        return predecessorCount;
     },
     /**
      * [updateViewInstancesFromModel description]
@@ -229,7 +220,7 @@ export default {
          * is determined in a node inside the parent repeat. To do so we use the repeat comment in model as context.
          */
         const repPath = repeatInfo.dataset.name;
-        let numRepsInCount = this.form.model.evaluate( repCountPath, 'number', this.form.model.getRepeatCommentSelector( repPath ), this.getInfoIndex( repeatInfo ), true );
+        let numRepsInCount = this.form.model.evaluate( repCountPath, 'number', this.form.model.getRepeatCommentSelector( repPath ), this.getIndex( repeatInfo ), true );
         numRepsInCount = isNaN( numRepsInCount ) ? 0 : numRepsInCount;
         const numRepsInView = getSiblingElements( repeatInfo, `.or-repeat[name="${repPath}"]` ).length;
         let toCreate = numRepsInCount - numRepsInView;

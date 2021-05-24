@@ -70,26 +70,6 @@ describe( 'repeat functionality', () => {
             repeatButton.click();
             expect( [ ...form.view.html.querySelectorAll( '[name="/repdef/rep/num"]' ) ].map( i => i.value ) ).toEqual( [ '5', '5', '5' ] );
         } );
-
-        // https://github.com/enketo/enketo-core/issues/720
-        it( 'nested repeats are added correctly', () => {
-            const form = loadForm( 'nested-repeats.xml' );
-            form.init();
-
-            // add repeats by clicking the add buttons
-            form.view.html.querySelector( '.or-repeat-info[data-name="/data/group1/repeat1/repeat11/repeat111"] .add-repeat-btn' ).click();
-            form.view.html.querySelector( '.or-repeat-info[data-name="/data/group1/repeat1/repeat11"] .add-repeat-btn' ).click();
-            form.view.html.querySelector( '.or-repeat-info[data-name="/data/group1/repeat1"] .add-repeat-btn' ).click();
-
-            expect(
-                form.getDataStr().replace( />\s+</g, '><' )
-            ).toContain( '<group1><repeat1><position_repeat1>1</position_repeat1><numb_buid99>1</numb_buid99><repeat11><repeat111><room_open_stat/><school_roomtype/></repeat111><repeat111><room_open_stat/><school_roomtype/></repeat111></repeat11><repeat11><repeat111><room_open_stat/><school_roomtype/></repeat111></repeat11></repeat1><repeat1><position_repeat1>2</position_repeat1><numb_buid99>1</numb_buid99><repeat11><repeat111><room_open_stat/><school_roomtype/></repeat111></repeat11></repeat1></group1>' );
-
-            // check that we have the correct html
-            expect(
-                form.view.html.querySelectorAll( '[data-itext-id="/data/group1/repeat1/repeat11/repeat111/school_roomtype:label"]' ).length
-            ).toEqual( 4 );
-        } );
     } );
 
     describe( 'fixes unique ids in cloned repeats', () => {
@@ -180,6 +160,22 @@ describe( 'repeat functionality', () => {
         expect( form.view.html.querySelectorAll( a ).length ).toEqual( 1 );
         expect( form.view.html.querySelector( a ).classList.contains( 'or-appearance-minimal' ) ).toEqual( false );
         expect( form.view.html.querySelectorAll( a )[ 0 ].querySelectorAll( b ).length ).toEqual( 1 );
+    } );
+
+    // https://github.com/enketo/enketo-core/issues/720
+    it( 'adds nested repeats up to three deep', () => {
+        const form = loadForm( 'nested_repeats_triple.xml' );
+        form.init();
+
+        // add repeats by clicking the add buttons
+        form.view.html.querySelector( '.or-repeat-info[data-name="/data/outer/inner/third"] .add-repeat-btn' ).click();
+        form.view.html.querySelector( '.or-repeat-info[data-name="/data/outer/inner"] .add-repeat-btn' ).click();
+        // Prior to the fix, adding an instance of the outermost repeat would not add instances of any of the inner repeats
+        form.view.html.querySelector( '.or-repeat-info[data-name="/data/outer"] .add-repeat-btn' ).click();
+
+        expect(
+            form.getDataStr().replace( />\s+</g, '><' )
+        ).toContain( '<outer><inner><third><value/></third><third><value/></third></inner><inner><third><value/></third></inner></outer><outer><inner><third><value/></third></inner></outer>' );
     } );
 
     it( 'doesn\'t duplicate date widgets in a cloned repeat', () => {
