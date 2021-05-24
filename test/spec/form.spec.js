@@ -9,6 +9,15 @@ import dialog from '../../src/js/fake-dialog';
 
 dialog.confirm = () => Promise.resolve( true );
 
+describe( 'Getters ', () => {
+    const form = loadForm( 'thedata.xml' );
+    form.init();
+
+    it( 'id() returns the formID', () => {
+        expect( form.id ).toEqual( 'thedata' );
+    } );
+} );
+
 describe( 'Output functionality ', () => {
     // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
     // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
