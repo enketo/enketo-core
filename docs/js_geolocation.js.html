@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>FormLogicError - Enketo Core</title>
+    <title>js/geolocation.js - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -37,201 +37,50 @@
 
 <div id="main">
     
-    <h1 class="page-title">FormLogicError</h1>
+    <h1 class="page-title">js/geolocation.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        FormLogicError
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-    
-
-    <h4 class="name" id="FormLogicError"><span class="type-signature"></span>new FormLogicError<span class="signature">(message)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_form-logic-error.js.html">js/form-logic-error.js</a>, <a href="js_form-logic-error.js.html#line8">line 8</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>A custom error type for form logic</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Optional message.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        </div>
-    
-
-    
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li>Error</li>
-    </ul>
-
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef GeolocationPosition
+ * @property {string} geopoint
+ * @property {number} lat
+ * @property {number} lng
+ * @property {window.GeolocationPosition} position
+ */
+
+/**
+ * @param {window.PositionOptions} [options] - lookup options
+ * @return {Promise&lt;GeolocationPosition>} - coordinates
+ */
+export const getCurrentPosition = ( options ) => {
+    return new Promise( ( resolve, reject ) => {
+        navigator.geolocation.getCurrentPosition( ( position ) => {
+            const { latitude, longitude, altitude, accuracy } = position.coords;
+
+            const lat = Math.round( latitude * 1000000 ) / 1000000;
+            const lng = Math.round( longitude * 1000000 ) / 1000000;
+
+            const geopoint = `${lat} ${lng} ${altitude || '0.0'} ${accuracy || '0.0'}`;
+
+            resolve( {
+                geopoint,
+                lat,
+                lng,
+                position,
+            } );
+        }, reject, options );
+    } );
+};
+</code></pre>
+        </article>
+    </section>
 
 
 
