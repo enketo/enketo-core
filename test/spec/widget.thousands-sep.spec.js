@@ -31,8 +31,8 @@ describe( 'thousands-separator widget', () => {
             // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
             widget.update();
 
-            expect( widget.value ).toEqual( test[ 1 ] );
-            expect( widget.originalInputValue ).toEqual( test[ 0 ].toString() );
+            expect( widget.value ).to.equal( test[ 1 ] );
+            expect( widget.originalInputValue ).to.equal( test[ 0 ].toString() );
         } );
 
 

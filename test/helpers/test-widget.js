@@ -21,13 +21,13 @@ function testStaticProperties( Widget ) {
     describe( `static properties for ${Widget.name}:`, () => {
 
         it( '"name" is exported', () => {
-            expect( typeof Widget.name === 'string' ).toBe( true );
-            expect( Widget.name.length > 0 ).toBe( true );
+            expect( typeof Widget.name === 'string' ).to.equal( true );
+            expect( Widget.name.length > 0 ).to.equal( true );
         } );
 
         it( '"selector" is exported', () => {
-            expect( typeof Widget.selector === 'string' ).toBe( true );
-            expect( Widget.selector.length > 0 ).toBe( true );
+            expect( typeof Widget.selector === 'string' ).to.equal( true );
+            expect( Widget.selector.length > 0 ).to.equal( true );
         } );
 
     } );
@@ -39,11 +39,11 @@ function testRequiredMethods( Widget ) {
         const superProtoValue = Object.getOwnPropertyDescriptor( SuperWidget.prototype, 'value' );
 
         it( 'value getter is present', () => {
-            expect( widgetProtoValue.get ).not.toEqual( superProtoValue.get );
+            expect( widgetProtoValue.get ).not.to.equal( superProtoValue.get );
         } );
 
         it( 'value setter is present', () => {
-            expect( widgetProtoValue.set ).not.toEqual( superProtoValue.set );
+            expect( widgetProtoValue.set ).not.to.equal( superProtoValue.set );
         } );
 
     } );
@@ -62,12 +62,12 @@ function testBasicInstantiation( Widget, template, options = { a: 'b' } ) {
             Promise.resolve()
                 .then( () => new Widget( control, options ) )
                 .then( widget => {
-                    expect( widget.element ).toEqual( control );
-                    expect( widget.props.appearances.includes( 'one' ) ).toBe( true );
-                    expect( widget.props.appearances.includes( 'two' ) ).toBe( true );
-                    expect( widget.options ).toEqual( options );
+                    expect( widget.element ).to.equal( control );
+                    expect( widget.props.appearances.includes( 'one' ) ).to.equal( true );
+                    expect( widget.props.appearances.includes( 'two' ) ).to.equal( true );
+                    expect( widget.options ).to.equal( options );
                 } )
-                .then( done, fail );
+                .then( done, done );
         } );
 
         it( 'adds an "ignore" class to all form controls inside the widget', done => {
@@ -81,11 +81,11 @@ function testBasicInstantiation( Widget, template, options = { a: 'b' } ) {
                         if ( widgetEl ) {
                             let widgetControls = widgetEl.matches( 'input, select, textarea' ) ? [ widgetEl ] : [];
                             widgetControls = widgetControls.concat( [ ...widgetEl.querySelectorAll( 'input, select, textarea' ) ] );
-                            expect( widgetControls.every( el => el.classList.contains( 'ignore' ) ) ).toBe( true );
+                            expect( widgetControls.every( el => el.classList.contains( 'ignore' ) ) ).to.equal( true );
                         }
                     }
                 } )
-                .then( done, fail );
+                .then( done, done );
         } );
 
     } );
@@ -103,10 +103,10 @@ function testComplexInstantiation( Widget, template, value, options ) {
             Promise.resolve()
                 .then( () => new Widget( control, options ) )
                 .then( widget => {
-                    expect( widget.originalInputValue ).toEqual( value );
-                    expect( widget.value ).toEqual( value );
+                    expect( widget.originalInputValue ).to.equal( value );
+                    expect( widget.value ).to.equal( value );
                 } )
-                .then( done, fail );
+                .then( done, done );
         } );
 
     } );
@@ -125,17 +125,17 @@ function testReset( Widget, template, value ) {
             Promise.resolve()
                 .then( () => new Widget( control ) )
                 .then( widget => {
-                    expect( widget.originalInputValue ).toEqual( value );
+                    expect( widget.originalInputValue ).to.equal( value );
 
                     const question = control.closest( '.question' );
                     const resetButton = question ? question.querySelector( '.btn-reset' ) : null;
                     if ( resetButton ) {
                         resetButton.click();
-                        expect( widget.value ).toEqual( '' );
-                        expect( widget.originalInputValue ).toEqual( '' );
+                        expect( widget.value ).to.equal( '' );
+                        expect( widget.originalInputValue ).to.equal( '' );
                     }
                 } )
-                .then( done, fail );
+                .then( done, done );
         } );
 
     } );
@@ -151,17 +151,17 @@ function testUpdate( Widget, template, value ) {
             Promise.resolve()
                 .then( () => new Widget( control ) )
                 .then( widget => {
-                    expect( widget.originalInputValue ).toEqual( '' );
+                    expect( widget.originalInputValue ).to.equal( '' );
 
                     // Also needs to work for radiobuttons, checkboxes, selects.
                     input.setVal( control, value, null );
                     // Here we call widget.update() explicitly because we provided a null event parameter in input.setVal
                     widget.update();
 
-                    expect( widget.value ).toEqual( value );
-                    expect( widget.originalInputValue ).toEqual( value );
+                    expect( widget.value ).to.equal( value );
+                    expect( widget.originalInputValue ).to.equal( value );
                 } )
-                .then( done, fail );
+                .then( done, done );
         } );
 
     } );
@@ -185,17 +185,17 @@ function testExcessiveChangeEventAvoidance( Widget, template, value ) {
                     widget.update();
 
                     // Check setup
-                    expect( widget.value ).toEqual( value );
-                    expect( widget.originalInputValue ).toEqual( value );
+                    expect( widget.value ).to.equal( value );
+                    expect( widget.originalInputValue ).to.equal( value );
 
                     // Actual test
                     let changeEventCounter = 0;
                     control.addEventListener( events.Change().type, () => changeEventCounter++ );
                     // Calling update without changing the value.
                     widget.update();
-                    expect( changeEventCounter ).toEqual( 0 );
+                    expect( changeEventCounter ).to.equal( 0 );
                 } )
-                .then( done, fail );
+                .then( done, done );
         } );
 
     } );

@@ -14,7 +14,7 @@ describe( 'ToC for pages mode', () => {
             form.init();
             const $toc = form.pages.$toc;
 
-            expect( $toc.length ).toEqual( 0 );
+            expect( $toc.length ).to.equal( 0 );
         } );
 
         it( 'builds a ToC that contains labels of question', () => {
@@ -25,10 +25,10 @@ describe( 'ToC for pages mode', () => {
             form.init();
             const toc = form.pages.$toc[ 0 ];
 
-            expect( toc ).not.toEqual( null );
-            expect( toc.querySelectorAll( 'li[role="pageLink"]' ).length ).toEqual( 14 );
+            expect( toc ).not.to.equal( null );
+            expect( toc.querySelectorAll( 'li[role="pageLink"]' ).length ).to.equal( 14 );
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
-                .toEqual( ALL_EN );
+                .to.deep.equal( ALL_EN );
         } );
 
         it( 'updates a ToC when page relevancy changes', () => {
@@ -40,12 +40,12 @@ describe( 'ToC for pages mode', () => {
             const toc = form.pages.$toc[ 0 ];
 
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
-                .toEqual( ALL_EN );
+                .to.deep.equal( ALL_EN );
 
             // Now make a bunch of pages non-relevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
-                .toEqual( SUB_EN );
+                .to.deep.equal( SUB_EN );
         } );
 
         it( 'updates a ToC when the language changes', () => {
@@ -58,7 +58,7 @@ describe( 'ToC for pages mode', () => {
             const toc = form.pages.$toc[ 0 ];
 
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
-                .toEqual( ALL_EN );
+                .to.deep.equal( ALL_EN );
 
             // Switch language
             const langSelector = form.view.html.parentNode.querySelector( '#form-languages' );
@@ -66,12 +66,12 @@ describe( 'ToC for pages mode', () => {
             langSelector.dispatchEvent( events.Change() );
 
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
-                .toEqual( ALL_NL );
+                .to.deep.equal( ALL_NL );
 
             // Now make a bunch of pages non-relevant
             form.view.$.find( '[name="/pages/tr"]' ).prop( 'checked', true ).trigger( 'change' );
             expect( [ ...toc.querySelectorAll( 'li[role="pageLink"]' ) ].map( li => li.textContent ) )
-                .toEqual( SUB_NL );
+                .to.deep.equal( SUB_NL );
         } );
 
         it( 'uses an abbreviated hint or default [number] if page has no label', () => {
@@ -81,7 +81,7 @@ describe( 'ToC for pages mode', () => {
             const toc = form.pages.$toc[ 0 ];
 
             expect( [ ...toc.querySelectorAll( 'li' ) ].map( li => li.textContent ) )
-                .toEqual( [ 'hint5678901234567890...', '[2]' ] );
+                .to.deep.equal( [ 'hint5678901234567890...', '[2]' ] );
 
         } );
 
@@ -93,8 +93,8 @@ describe( 'ToC for pages mode', () => {
             form.init();
             const toc = form.pages.$toc[ 0 ];
 
-            expect( toc ).not.toEqual( null );
-            expect( toc.textContent ).toEqual( 'agroup onebcdegroup threefgthree-twohi' );
+            expect( toc ).not.to.equal( null );
+            expect( toc.textContent ).to.equal( 'agroup onebcdegroup threefgthree-twohi' );
 
         } );
 

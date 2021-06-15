@@ -3,10 +3,12 @@
         "es6": true,
         "browser": true,
         "node": false,
-        "jasmine": true
+        "mocha": true
     },
     "globals": {
-        "spyOn": true
+        "Promise": true,
+        "expect": true,
+        "sinon": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {

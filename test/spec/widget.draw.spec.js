@@ -33,7 +33,7 @@ describe( 'draw widget', () => {
         const form = FORM1.replace( 'accept="image/*"', 'accept="something/else"' );
         const fragment = document.createRange().createContextualFragment( form );
         const control = fragment.querySelector( DrawWidget.selector );
-        expect( control ).toEqual( null );
+        expect( control ).to.equal( null );
     } );
 
 } );

@@ -20,7 +20,7 @@ describe( 'Types', () => {
                 [ '01:03', '01:03' ]
             ].forEach( t => {
                 it( `converts ${t[0]} to: ${t[1]}`, () => {
-                    expect( types.time.convertMeridian( t[ 0 ] ) ).toEqual( t[ 1 ] );
+                    expect( types.time.convertMeridian( t[ 0 ] ) ).to.equal( t[ 1 ] );
                 } );
             } );
 

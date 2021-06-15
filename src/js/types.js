@@ -6,6 +6,7 @@
 
 import { isNumber } from './utils';
 import { time } from './format';
+import { getTimezoneOffsetAsTime, toISOLocalString } from './date';
 
 /**
  * @namespace types
@@ -188,11 +189,11 @@ const types = {
             } else {
                 const convertedDate = types.date.convert( parts[ 0 ] );
                 if ( convertedDate ) {
-                    return `${convertedDate}T00:00:00.000${( new Date() ).getTimezoneOffsetAsTime()}`;
+                    return `${convertedDate}T00:00:00.000${( getTimezoneOffsetAsTime( new Date() ) )}`;
                 }
             }
 
-            return date.toString() !== 'Invalid Date' ? date.toISOLocalString() : '';
+            return date.toString() !== 'Invalid Date' ? toISOLocalString( date ) : '';
         }
     },
     /**
@@ -249,7 +250,7 @@ const types = {
                 // We can test this by trying to convert to a date.
                 date = new Date( x );
                 if ( date.toString() !== 'Invalid Date' ) {
-                    x = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}${date.getTimezoneOffsetAsTime()}`;
+                    x = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}${getTimezoneOffsetAsTime( date )}`;
                 } else {
                     return '';
                 }
@@ -273,7 +274,7 @@ const types = {
             o.milliseconds = secs[ 1 ] || ( requireMillis ? '000' : undefined );
 
             if ( tz.length === 0 ) {
-                offset = new Date().getTimezoneOffsetAsTime();
+                offset = getTimezoneOffsetAsTime( new Date() );
             } else {
                 offset = `${tz[0] + tz[1].padStart( 2, '0' )}:${tz[2] ? tz[2].padStart( 2, '0' ) : '00'}`;
             }

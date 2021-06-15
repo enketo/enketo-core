@@ -15,7 +15,7 @@ describe( 'Date-native widget', () => {
         const control = fragment.querySelector( 'input' );
         new DateNative( control );
 
-        expect( control.classList.contains( 'mask-date' ) ).toEqual( true );
-        expect( control.type ).toEqual( 'text' );
+        expect( control.classList.contains( 'mask-date' ) ).to.equal( true );
+        expect( control.type ).to.equal( 'text' );
     } );
 } );

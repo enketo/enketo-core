@@ -4,7 +4,7 @@ import events from '../../src/js/event';
 
 describe( 'calculate functionality', () => {
 
-    beforeAll( () => {
+    before( () => {
         dialog.confirm = () => Promise.resolve( true );
     } );
 
@@ -15,10 +15,10 @@ describe( 'calculate functionality', () => {
         // This triggers a form.calc.update with this object: { relevantPath: '/data/rg' };
         form.view.$.find( '[name="/data/yn"]' ).prop( 'checked', true ).trigger( 'change' );
 
-        expect( form.model.node( '/data/rg/row' ).getElements().map( node => node.textContent ).join( ',' ) ).toEqual( '1,2,3' );
-        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 0 ].value ).toEqual( '1' );
-        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 1 ].value ).toEqual( '2' );
-        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 2 ].value ).toEqual( '3' );
+        expect( form.model.node( '/data/rg/row' ).getElements().map( node => node.textContent ).join( ',' ) ).to.equal( '1,2,3' );
+        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 0 ].value ).to.equal( '1' );
+        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 1 ].value ).to.equal( '2' );
+        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 2 ].value ).to.equal( '3' );
     } );
 
     it( 'updates inside multiple repeats a repeat is removed and position(..) changes', ( done ) => {
@@ -31,9 +31,9 @@ describe( 'calculate functionality', () => {
         form.view.html.querySelector( '.btn.remove' ).click();
 
         setTimeout( () => {
-            expect( form.model.node( '/data/rg/row' ).getElements().map( node => node.textContent ).join( ',' ) ).toEqual( '1,2' );
-            expect( form.view.$.find( '[name="/data/rg/row"]' )[ 0 ].value ).toEqual( '1' );
-            expect( form.view.$.find( '[name="/data/rg/row"]' )[ 1 ].value ).toEqual( '2' );
+            expect( form.model.node( '/data/rg/row' ).getElements().map( node => node.textContent ).join( ',' ) ).to.equal( '1,2' );
+            expect( form.view.$.find( '[name="/data/rg/row"]' )[ 0 ].value ).to.equal( '1' );
+            expect( form.view.$.find( '[name="/data/rg/row"]' )[ 1 ].value ).to.equal( '2' );
             done();
         }, 650 );
 
@@ -48,7 +48,7 @@ describe( 'calculate functionality', () => {
         text1.value = ' yes ';
         text1.dispatchEvent( events.Change() );
 
-        expect( form.view.html.querySelector( 'input[name="/repeat-group-comparison/count2"]' ).value ).toEqual( '1' );
+        expect( form.view.html.querySelector( 'input[name="/repeat-group-comparison/count2"]' ).value ).to.equal( '1' );
 
     } );
 
@@ -58,10 +58,10 @@ describe( 'calculate functionality', () => {
 
         const calcs = form.model.xml.querySelectorAll( 'SHD_NO' );
 
-        expect( calcs.length ).toEqual( 3 );
-        expect( calcs[ 0 ].textContent ).toEqual( '' );
-        expect( calcs[ 1 ].textContent ).toEqual( '' );
-        expect( calcs[ 2 ].textContent ).toEqual( '' );
+        expect( calcs.length ).to.equal( 3 );
+        expect( calcs[ 0 ].textContent ).to.equal( '' );
+        expect( calcs[ 1 ].textContent ).to.equal( '' );
+        expect( calcs[ 2 ].textContent ).to.equal( '' );
     } );
 
     // This is important for OpenClinica, but also reduces unnecessary work. A calculation that runs upon form load and
@@ -73,7 +73,7 @@ describe( 'calculate functionality', () => {
         form.view.html.querySelector( '[name="/data/calc"]' ).addEventListener( new events.InputUpdate().type, () => counter++ );
         form.init();
 
-        expect( counter ).toEqual( 0 );
+        expect( counter ).to.equal( 0 );
     } );
 
     // https://github.com/OpenClinica/enketo-express-oc/issues/404#issuecomment-744743172
@@ -83,18 +83,18 @@ describe( 'calculate functionality', () => {
         form.init();
         const grp = form.model.xml.querySelector( 'grp' );
 
-        expect( grp.textContent.replace( /\s/g, '' ) ).toEqual( '' );
+        expect( grp.textContent.replace( /\s/g, '' ) ).to.equal( '' );
 
         const a = form.view.html.querySelector( 'input[name="/data/a"]' );
         a.value = 'a';
         a.dispatchEvent( events.Change() );
 
-        expect( grp.textContent.replace( /\s/g, '' ) ).toEqual( 'onetwothreefour' );
+        expect( grp.textContent.replace( /\s/g, '' ) ).to.equal( 'onetwothreefour' );
 
         a.value = 'a';
         a.dispatchEvent( events.Change() );
 
-        expect( grp.textContent.replace( /\s/g, '' ) ).toEqual( 'onetwothreefour' );
+        expect( grp.textContent.replace( /\s/g, '' ) ).to.equal( 'onetwothreefour' );
     } );
 
 } );

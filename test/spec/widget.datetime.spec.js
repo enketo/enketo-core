@@ -12,6 +12,17 @@ const FORM =
 runAllCommonWidgetTests( Datetimepicker, FORM, '2012-01-01T13:00:00.000-07:00' );
 
 describe( 'datetimepicker widget', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    beforeEach( () => {
+        sandbox = sinon.createSandbox();
+    } );
+
+    afterEach( () => {
+        sandbox.restore();
+    } );
+
 
     function initForm( form ) {
         const fragment = document.createRange().createContextualFragment( form );
@@ -27,8 +38,7 @@ describe( 'datetimepicker widget', () => {
             const fakeDateInput = datepicker.element.closest( '.question' ).querySelector( '.widget .date input' );
             const fakeTimeInput = datepicker.element.closest( '.question' ).querySelector( '.widget .timepicker input' );
 
-            input.onchange = () => {};
-            spyOn( input, 'onchange' );
+            input.onchange = sinon.stub();
 
             // add manual value to fake input
             fakeDateInput.value = '2012-01-01';
@@ -36,15 +46,15 @@ describe( 'datetimepicker widget', () => {
             fakeDateInput.dispatchEvent( new Event( 'change' ) );
 
             // timezone info will be added by engine
-            expect( input.value ).toEqual( '2012-01-01T01:01:00.000' );
-            expect( input.onchange.calls.count() ).toEqual( 1 );
+            expect( input.value ).to.equal( '2012-01-01T01:01:00.000' );
+            expect( input.onchange.callCount ).to.equal( 1 );
 
             // reset value in fake input manually
             fakeDateInput.value = '';
             fakeDateInput.dispatchEvent( new Event( 'change' ) );
 
-            expect( input.value ).toEqual( '' );
-            expect( input.onchange.calls.count() ).toEqual( 2 );
+            expect( input.value ).to.equal( '' );
+            expect( input.onchange.callCount ).to.equal( 2 );
         } );
 
     } );

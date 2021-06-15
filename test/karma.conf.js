@@ -24,14 +24,7 @@ module.exports = config => {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: [ 'jasmine' ],
-
-
-        client: {
-            jasmine: {
-                random: false
-            }
-        },
+        frameworks: [ 'mocha', 'sinon-chai' ],
 
 
         // list of files / patterns to load in the browser
@@ -89,6 +82,11 @@ module.exports = config => {
             ]
         },
 
+        browserify: {
+            debug: true,
+            transform: [ 'aliasify' ],
+        },
+
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
@@ -131,7 +129,7 @@ module.exports = config => {
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_ERROR,
+        logLevel: config.LOG_WARN,
 
 
         // enable / disable watching file and executing tests whenever any file changes
@@ -146,7 +144,5 @@ module.exports = config => {
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: false,
-
-        browserify: {},
     } );
 };
