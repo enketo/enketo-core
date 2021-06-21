@@ -4,10 +4,10 @@
  * @module input
  */
 
+import 'openrosa-xpath-evaluator/src/date-extensions';
 import types from './types';
 import events from './event';
 import { closestAncestorUntil } from './dom-utils';
-import { getTimezoneOffsetAsTime, toISOLocalString } from './date';
 
 export default {
     /**
@@ -196,9 +196,9 @@ export default {
                 if ( control.value ) {
                     const dt = control.value.split( 'T' )[ 1 ].length === 5 ? control.value + ':00' : control.value;
                     // Add local timezone offset
-                    // do not use toISOLocalString() because new Date("2019-10-17T16:34:23.048") works differently in iOS/Safari
+                    // do not use .toISOLocalString() because new Date("2019-10-17T16:34:23.048") works differently in iOS/Safari
                     // Take care to get DST offsets right for the date value.
-                    value = dt + getTimezoneOffsetAsTime( new Date( dt ) );
+                    value = dt + new Date( dt ).getTimezoneOffsetAsTime();
                 }
                 break;
             }
@@ -267,7 +267,7 @@ export default {
 
                     if ( xmlType === 'datetime' ) {
                         // convert to local time zone
-                        value = toISOLocalString( new Date( value ) );
+                        value = new Date( value ).toISOLocalString();
                         // chop off local timezone offset to display properly in (native datetime-local) widget
                         const parts = value.split( 'T' );
                         const date = parts[ 0 ];

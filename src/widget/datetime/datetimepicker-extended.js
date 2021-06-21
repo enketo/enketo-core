@@ -1,3 +1,4 @@
+import 'openrosa-xpath-evaluator/src/date-extensions';
 import Widget from '../../js/widget';
 import support from '../../js/support';
 import { os, browser } from '../../js/sniffer';
@@ -9,7 +10,6 @@ import '../../js/extend';
 import 'bootstrap-datepicker';
 import '../time/timepicker';
 import '../../js/dropdown.jquery';
-import { getTimezoneOffsetAsTime, toISOLocalString } from '../../js/date';
 
 /**
  * @augments Widget
@@ -123,7 +123,7 @@ class DatetimepickerExtended extends Widget {
 
     update() {
         const $dateTimeI = $( this.element );
-        let val = ( $dateTimeI.val().length > 0 ) ? toISOLocalString( new Date( $dateTimeI.val() ) ) : '';
+        let val = ( $dateTimeI.val().length > 0 ) ? new Date( $dateTimeI.val() ).toISOLocalString() : '';
         /**
          * fix a bug which is only on safari (#745)
          * If the local timezone is +08:00, for a date value of new Date('2020-10-10T13:10:10') will be:
@@ -132,7 +132,7 @@ class DatetimepickerExtended extends Widget {
          * so we have to append the timezone here
          */
         if ( os.macos && browser.safari ) {
-            val = ( $dateTimeI.val().length > 0 ) ? toISOLocalString( new Date( $dateTimeI.val() + getTimezoneOffsetAsTime( new Date() ) ) ) : '';
+            val = ( $dateTimeI.val().length > 0 ) ? ( new Date( $dateTimeI.val() + new Date().timezoneOffsetAsTime() ) ).toISOLocalString() : '';
         }
         if ( val !== this.value ) {
             const vals = val.split( 'T' );
@@ -153,7 +153,7 @@ class DatetimepickerExtended extends Widget {
             const timeModified = timeFormat.hour12 ? types.time.convertMeridian( this.$fakeTimeI.val() ) : this.$fakeTimeI.val();
             const t = timeModified.split( ':' );
 
-            return toISOLocalString( new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ) );
+            return new Date( d[ 0 ], d[ 1 ] - 1, d[ 2 ], t[ 0 ], t[ 1 ] ).toISOLocalString();
         } else {
             return '';
         }
@@ -166,7 +166,7 @@ class DatetimepickerExtended extends Widget {
           original entry may have been done in a different time zone than the edit). However,
           values shown in the widget should reflect the local time representation of that value.
          */
-        const val = value ? toISOLocalString( new Date( value ) ) : '';
+        const val = value ? new Date( value ).toISOLocalString() : '';
         const vals = val.split( 'T' );
         const dateVal = vals[ 0 ];
         /**
