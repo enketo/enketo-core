@@ -81,14 +81,22 @@ export default {
      * @param {jQuery} $e - Element on page to flip to
      */
     flipToPageContaining( $e ) {
+        const e = $e[ 0 ];
         let $closest;
+        $closest = e.closest( '[role="page"]' );
 
-        $closest = $e.closest( '[role="page"]' );
-        $closest = ( $closest.length === 0 ) ? $e.find( '[role="page"]' ) : $closest;
-
-        // If $e is a comment question, and it is not inside a group, there may be no $closest.
-        if ( $closest.length ) {
-            this._flipTo( $closest[ 0 ] );
+        if ( $closest ) {
+            this._flipTo( $closest );
+        } else {
+            // If $e is a comment question, and it is not inside a group, there will be no $closest.
+            const referer = e.querySelector( 'input[data-for]' );
+            const ancestor = e.closest( '.or-repeat, form.or' );
+            if ( referer && ancestor ) {
+                const linkedQuestion = ancestor.querySelector( `[name="${referer.dataset.for}"]` );
+                if ( linkedQuestion ) {
+                    this._flipTo( linkedQuestion.closest( '[role="page"]' ) );
+                }
+            }
         }
         this.$toc.parent().find( '.pages-toc__overlay' ).click();
     },
