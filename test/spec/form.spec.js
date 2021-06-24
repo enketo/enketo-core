@@ -7,9 +7,24 @@ import pkg from '../../package';
 import events from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
 
-dialog.confirm = () => Promise.resolve( true );
+const stubDialogConfirm = () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    beforeEach( () => {
+        sandbox = sinon.createSandbox();
+
+        sandbox.stub( dialog, 'confirm' ).resolves( true );
+    } );
+
+    afterEach( () => {
+        sandbox.restore();
+    } );
+};
 
 describe( 'Getters ', () => {
+    stubDialogConfirm();
+
     const form = loadForm( 'thedata.xml' );
     form.init();
 
@@ -19,6 +34,8 @@ describe( 'Getters ', () => {
 } );
 
 describe( 'Output functionality ', () => {
+    stubDialogConfirm();
+
     // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
     // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
     // since the issue was resolved by updating outputs with a one millisecond delay (!).
@@ -39,6 +56,8 @@ describe( 'Output functionality ', () => {
 } );
 
 describe( 'Output functionality inside branches that irrelevant upon load', () => {
+    stubDialogConfirm();
+
     const form = loadForm( 'output-irrelevant.xml' );
     form.init();
 
@@ -49,6 +68,8 @@ describe( 'Output functionality inside branches that irrelevant upon load', () =
 } );
 
 describe( 'Output functionality within repeats', () => {
+    stubDialogConfirm();
+
     let $o = [];
     const form = loadForm( 'outputs_in_repeats.xml' );
     form.init();
@@ -74,6 +95,7 @@ describe( 'Output functionality within repeats', () => {
 } );
 
 describe( 'Preload and MetaData functionality', () => {
+    stubDialogConfirm();
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it( 'ignores a calculate binding on /[ROOT]/meta/instanceID', () => {
@@ -244,6 +266,8 @@ describe( 'Preload and MetaData functionality', () => {
 } );
 
 describe( 'Loading instance values into html input fields functionality', () => {
+    stubDialogConfirm();
+
     let form;
 
     it( 'correctly populates input fields of non-repeat node names in the instance', () => {
@@ -272,6 +296,7 @@ describe( 'Loading instance values into html input fields functionality', () => 
 } );
 
 describe( 'calculations', () => {
+    stubDialogConfirm();
 
     it( 'also work inside repeats', () => {
         const form = loadForm( 'calcs_in_repeats.xml' );
@@ -335,6 +360,7 @@ describe( 'calculations', () => {
 } );
 
 describe( 'branching functionality', () => {
+    stubDialogConfirm();
 
     it( 'hides non-relevant branches upon initialization', () => {
         const form = loadForm( 'group_branch.xml' );
@@ -637,6 +663,8 @@ describe( 'branching functionality', () => {
 } );
 
 describe( 'obtaining XML string from form without irrelevant nodes', () => {
+    stubDialogConfirm();
+
     it( 'works for calcs that are non-relevant upon load', () => {
         const form = loadForm( 'calcs.xml' );
         const match = '<calc1/>';
@@ -745,6 +773,7 @@ describe( 'obtaining XML string from form without irrelevant nodes', () => {
 } );
 
 describe( 'validation', () => {
+    stubDialogConfirm();
 
     describe( 'feedback to user after equired field validation', () => {
         let form, numberInput, numberLabel;
@@ -981,6 +1010,8 @@ describe( 'validation', () => {
 } );
 
 describe( 'Readonly questions', () => {
+    stubDialogConfirm();
+
     it( 'show their calculated value', () => {
         const form = loadForm( 'readonly.xml' );
         form.init();
@@ -999,6 +1030,8 @@ describe( 'Readonly questions', () => {
 } );
 
 describe( 'Required questions', () => {
+    stubDialogConfirm();
+
     it( 'dynamically update the asterisk visibility in real-time', () => {
         const form = loadForm( 'required.xml' );
         form.init();
@@ -1027,6 +1060,8 @@ describe( 'Required questions', () => {
 } );
 
 describe( 're-validating inputs and updating user feedback', () => {
+    stubDialogConfirm();
+
     const form = loadForm( 'comment.xml' );
     let $one;
     let $oneComment;
@@ -1052,6 +1087,7 @@ describe( 're-validating inputs and updating user feedback', () => {
 } );
 
 describe( 'getting related nodes', () => {
+    stubDialogConfirm();
 
     it( 'excludes radiobuttons that are part of the same group', () => {
         const form = loadForm( 'radio.xml' );
@@ -1061,6 +1097,8 @@ describe( 'getting related nodes', () => {
 } );
 
 describe( 'white-space-only input', () => {
+    stubDialogConfirm();
+
     // This is e.g. important for automatic value-change log creation in OpenClinica.
     it( 'does not fire an xforms-value-changed event', done => {
         const form = loadForm( 'thedata.xml' );
@@ -1107,6 +1145,8 @@ describe( 'white-space-only input', () => {
 
 
 describe( 'form status', () => {
+    stubDialogConfirm();
+
     const form = loadForm( 'thedata.xml' );
     form.init();
 
@@ -1118,6 +1158,8 @@ describe( 'form status', () => {
 } );
 
 describe( 'Form.prototype.getModelValue', () => {
+    stubDialogConfirm();
+
     const form = loadForm( 'nested_repeats.xml' );
     form.init();
     it( 'returns the value of the corresponding model node for a given form control', () => {
@@ -1131,6 +1173,7 @@ describe( 'Form.prototype.getModelValue', () => {
 } );
 
 describe( 'required enketo-transformer version', () => {
+    stubDialogConfirm();
 
     it( 'can be obtained', () => {
         const expected = pkg.devDependencies[ 'enketo-transformer' ];
@@ -1142,6 +1185,7 @@ describe( 'required enketo-transformer version', () => {
 } );
 
 describe( 'jr:choice-name', () => {
+    stubDialogConfirm();
 
     it( 'should match when there are spaces in arg strings', () => {
         // given
@@ -1226,6 +1270,8 @@ describe( 'jr:choice-name', () => {
 } );
 
 describe( 'autocomplete questions', () => {
+    stubDialogConfirm();
+
     it( 'populate correctly if a single language is defined in the form, and the Form instance is instantiated using that language explicitly', () => {
         const form = loadForm( 'autocomplete-cascade.xml', null, { language: 'en' } );
         form.init();
@@ -1244,6 +1290,8 @@ describe( 'autocomplete questions', () => {
 
 
 describe( 'goTo functionality', () => {
+    stubDialogConfirm();
+
     const form = loadForm( 'relevant-default.xml' );
     form.init();
 
@@ -1278,6 +1326,7 @@ describe( 'goTo functionality', () => {
 } );
 
 describe( 'Form.prototype', () => {
+    stubDialogConfirm();
 
     describe( '#replaceChoiceNameFn()', () => {
 

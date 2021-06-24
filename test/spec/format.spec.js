@@ -1,6 +1,21 @@
 import { format, time } from '../../src/js/format';
 
 describe( 'Format', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {string} */
+    let localeOverride;
+
+    beforeEach( () => {
+        sandbox = sinon.createSandbox();
+
+        sandbox.stub( format, 'locale' ).get( () => localeOverride );
+    } );
+
+    afterEach( () => {
+        sandbox.restore();
+    } );
 
     describe( 'for time determination', () => {
         let i;
@@ -15,7 +30,7 @@ describe( 'Format', () => {
 
         function testMeridian( locale, expected ) {
             it( `correctly identifies ${locale} time meridian notation as ${expected}`, () => {
-                format.locale = locale;
+                localeOverride = locale;
                 expect( format.locale ).to.equal( locale );
                 expect( time.hour12 ).to.equal( expected );
             } );
@@ -27,7 +42,7 @@ describe( 'Format', () => {
 
         function testPm( locale, am, pm ) {
             it( `correctly extracts the AM and PM notation for ${locale} as: ${am},${pm}`, () => {
-                format.locale = locale;
+                localeOverride = locale;
                 expect( time.amNotation ).to.equal( am );
                 expect( time.pmNotation ).to.equal( pm );
             } );

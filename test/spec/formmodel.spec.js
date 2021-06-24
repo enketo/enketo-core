@@ -3,6 +3,30 @@ import events from '../../src/js/event';
 import forms from '../mock/forms';
 import config from '../../config';
 
+const stubConsoleWarn = () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    beforeEach( () => {
+        sandbox = sinon.createSandbox();
+
+        const warn = console.warn.bind( console );
+
+        // suppress particular console.warn messages
+        sandbox.stub( console, 'warn' ).callsFake( msg => {
+            if ( msg === 'Model has no instanceID element' ) {
+                return;
+            } else {
+                warn( msg );
+            }
+        } );
+    } );
+
+    afterEach( () => {
+        sandbox.restore();
+    } );
+};
+
 const getModel = filename => {
     const model = new Model( forms[ filename ].xml_model );
     model.init();
@@ -10,21 +34,10 @@ const getModel = filename => {
     return model;
 };
 
-// suppress particular console.warn messages
-console.__warn = console.warn;
-console.warn = ( msg ) => {
-    const surpressedMessages = [
-        'Model has no instanceID element'
-    ];
-    if ( surpressedMessages.includes( msg ) ){
-        return;
-    } else {
-        console.__warn( msg );
-    }
-};
-
 // I don't remember why this functionality exists
 describe( 'Primary instance node values', () => {
+    stubConsoleWarn();
+
     const model = new Model( '<model><instance><data><nodeA> 2  </nodeA><meta><instanceID/></meta></data></instance></model>' );
     model.init();
     it( 'are trimmed during initialization', () => {
@@ -33,6 +46,8 @@ describe( 'Primary instance node values', () => {
 } );
 
 describe( 'Instantiating a model', () => {
+    stubConsoleWarn();
+
     const modelStr = '<model><instance><data id="data"><nodeA>2</nodeA></data></instance>' +
         '<instance id="countries"><root><item><country>NL</country></item></root></instance></model>';
 
@@ -70,6 +85,8 @@ describe( 'Instantiating a model', () => {
 
 
 describe( 'Data node getter', () => {
+    stubConsoleWarn();
+
     let i;
 
     const t = [
@@ -123,6 +140,8 @@ describe( 'Data node getter', () => {
 } );
 
 describe( 'Data node (&) value getter', () => {
+    stubConsoleWarn();
+
     const data = getModel( 'thedata.xml' ); //dataStr1);
 
     it( 'returns an array of one node value', () => {
@@ -143,6 +162,8 @@ describe( 'Data node (&) value getter', () => {
 } );
 
 describe( 'Data node XML data type', () => {
+    stubConsoleWarn();
+
     let i;
     const t = [
         [ 'val1', null, true ],
@@ -342,6 +363,8 @@ describe( 'Data node XML data type', () => {
 } );
 
 describe( 'dataupdate event, is fired on model.$events and includes', () => {
+    stubConsoleWarn();
+
     it( 'object with repeatPath and repeatIndex for a node inside a repeatSeries of more than 1 instance', () => {
         const model = new Model( {
             modelStr: '<model><instance><a><b><c/></b><b><c/></b><meta><instanceID/></meta></a></instance></model>'
@@ -361,6 +384,8 @@ describe( 'dataupdate event, is fired on model.$events and includes', () => {
 } );
 
 describe( 'Data node remover', () => {
+    stubConsoleWarn();
+
     it( 'has removed a data node', () => {
         const data = getModel( 'thedata.xml' ),
             node = data.node( '/thedata/nodeA' );
@@ -387,6 +412,8 @@ describe( 'Data node remover', () => {
 } );
 
 describe( 'DeprecatedID value getter', () => {
+    stubConsoleWarn();
+
     it( 'returns "" if deprecatedID node does not exist', () => {
         const model = new Model( '<model><instance><data><meta><instanceID/></meta></data></instance></model>' );
         model.init();
@@ -400,6 +427,8 @@ describe( 'DeprecatedID value getter', () => {
 } );
 
 describe( 'getRepeatSeries', () => {
+    stubConsoleWarn();
+
     // Note the strategic placements of whitespace '\n'
     const model = new Model( `
         <model>
@@ -432,6 +461,8 @@ describe( 'getRepeatSeries', () => {
 } );
 
 describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensive tests!)', () => {
+    stubConsoleWarn();
+
     let i;
 
     const t = [
@@ -477,6 +508,8 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
 
 // This test makes sure that whatever date strings are returned by the XPath evaluator can be dealt with by the form engine
 describe( 'dates returned by the XPath evaluator ', () => {
+    stubConsoleWarn();
+
     const model = new Model( '<model><instance><data><meta><instanceID/></meta></data></instance></model>' );
     model.init();
     [
@@ -499,6 +532,8 @@ describe( 'dates returned by the XPath evaluator ', () => {
 } );
 
 describe( 'functionality to obtain string of the primary XML instance for storage or uploads)', () => {
+    stubConsoleWarn();
+
     it( 'returns primary instance without templates - A', () => {
         const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' );
         model.init();
@@ -519,6 +554,8 @@ describe( 'functionality to obtain string of the primary XML instance for storag
 } );
 
 describe( 'converting absolute paths', () => {
+    stubConsoleWarn();
+
     [
         // to be converted
         [ '/path/to/node', '/model/instance[1]/path/to/node' ],
@@ -571,6 +608,8 @@ describe( 'converting absolute paths', () => {
 } );
 
 describe( 'converting instance("id") to absolute paths', () => {
+    stubConsoleWarn();
+
     [
         [ 'instance("a")/path/to/node', '/model/instance[@id="a"]/path/to/node' ],
         [ 'instance("a.-_")/path/to/node', '/model/instance[@id="a.-_"]/path/to/node' ],
@@ -590,6 +629,8 @@ describe( 'converting instance("id") to absolute paths', () => {
 } );
 
 describe( 'converting expressions with current() for context /data/node', () => {
+    stubConsoleWarn();
+
     const context = '/data/node';
 
     // Note: these test include current()/node paths that may not have a use case in ODK XForms
@@ -620,6 +661,8 @@ describe( 'converting expressions with current() for context /data/node', () => 
 } );
 
 describe( 'replacing version() calls', () => {
+    stubConsoleWarn();
+
     [
         [ 'version()', '"123"' ],
         [ 'version(  )', '"123"' ],
@@ -635,6 +678,8 @@ describe( 'replacing version() calls', () => {
 } );
 
 describe( 'converting indexed-repeat() ', () => {
+    stubConsoleWarn();
+
     [
         [ 'indexed-repeat(/path/to/repeat/node, /path/to/repeat, 2)', '/path/to/repeat[position() = 2]/node' ],
         [ ' indexed-repeat( /path/to/repeat/node , /path/to/repeat , 2 )', ' /path/to/repeat[position() = 2]/node' ],
@@ -665,6 +710,8 @@ describe( 'converting indexed-repeat() ', () => {
 
 
 describe( 'converting pulldata() ', () => {
+    stubConsoleWarn();
+
     [
         [ 'pulldata(\'hhplotdata\', \'plot1size\', \'hhid_key\', 2)', 'instance(\'hhplotdata\')/root/item[hhid_key = \'2\']/plot1size' ],
         [ 'pulldata( \'hhplotdata\', \'plot1size\', \'hhid_key\' , 2 )', 'instance(\'hhplotdata\')/root/item[hhid_key = \'2\']/plot1size' ],
@@ -684,6 +731,8 @@ describe( 'converting pulldata() ', () => {
 } );
 
 describe( 'external instances functionality', () => {
+    stubConsoleWarn();
+
     const parser = new DOMParser();
     let loadErrors;
     let model;
@@ -748,6 +797,8 @@ describe( 'external instances functionality', () => {
 } );
 
 describe( 'cloning repeats in empty model', () => {
+    stubConsoleWarn();
+
     config.repeatOrdinals = false;
     const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
         '<rep3 jr:template=""><three/></rep3></rep2></rep1></data></instance></model>' );
@@ -762,6 +813,7 @@ describe( 'cloning repeats in empty model', () => {
 } );
 
 describe( 'Using XPath with default namespace', () => {
+    stubConsoleWarn();
 
     describe( 'on the primary instance child', () => {
         const model = new Model( '<model><instance><data xmlns="http://unknown.namespace.com/34324sdagd"><nodeA>5</nodeA></data></instance></model>' );
@@ -800,6 +852,7 @@ describe( 'Using XPath with default namespace', () => {
 } );
 
 describe( 'Using XPath with non-default namespaces', () => {
+    stubConsoleWarn();
 
     describe( 'on secondary instances', () => {
         const SEC_INSTANCE_CONTENT = '<sec xmlns:this="a"><this:b this:at="that">3</this:b></sec>';
@@ -827,6 +880,8 @@ describe( 'Using XPath with non-default namespaces', () => {
 } );
 
 describe( 'Repeat without ordinals', () => {
+    stubConsoleWarn();
+
     const modelStr = '<model><instance><a><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
     const modelStrWithTemplate = '<model xmlns:jr="http://openrosa.org/javarosa">' +
         '<instance><a><rep.dot jr:template=""><b/></rep.dot><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
@@ -869,6 +924,8 @@ describe( 'Repeat without ordinals', () => {
 } );
 
 describe( 'Ordinals in repeats', () => {
+    stubConsoleWarn();
+
     const dflt = config[ 'repeat ordinals' ];
     const wr = '<root xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
     const wrt = '<root xmlns:jr="http://openrosa.org/javarosa" xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
@@ -1070,6 +1127,8 @@ describe( 'Ordinals in repeats', () => {
 } );
 
 describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct incorrect XPath expressions', () => {
+    stubConsoleWarn();
+
     const modelStr = '<model><instance><abcabce id="abcabce"><n/><ab><ynab/></ab><a><ynaa>1</ynaa><c/></a><a><ynaa>2</ynaa><c/></a><meta><instanceID/></meta></abcabce></instance></model>';
 
     it( 'as designed', () => {
@@ -1091,6 +1150,7 @@ describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct i
 } );
 
 describe( 'merging an instance into the model', () => {
+    stubConsoleWarn();
 
     config.repeatOrdinals = false;
 
@@ -1391,6 +1451,8 @@ describe( 'merging an instance into the model', () => {
 
 // Runs fine headlessly locally, but not on Travis for some reason.
 describe( 'instanceID and deprecatedID are populated upon model initilization', () => {
+    stubConsoleWarn();
+
     it( 'for a new record', () => {
         const model = new Model( {
             modelStr: '<model><instance><a><meta><instanceID/></meta></a></instance></model>'
@@ -1452,6 +1514,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
 } );
 
 describe( 'odk-instance-first-load event', () => {
+    stubConsoleWarn();
 
     const modelStr = '<model><instance><data><a><meta><instanceID/></meta></a></data></instance></model>';
     const instanceStr = '<data><a>1</a></data>';
@@ -1475,4 +1538,3 @@ describe( 'odk-instance-first-load event', () => {
     } );
 
 } );
-

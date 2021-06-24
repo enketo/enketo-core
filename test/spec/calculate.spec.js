@@ -3,9 +3,17 @@ import dialog from '../../src/js/fake-dialog';
 import events from '../../src/js/event';
 
 describe( 'calculate functionality', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
 
-    before( () => {
-        dialog.confirm = () => Promise.resolve( true );
+    beforeEach( () => {
+        sandbox = sinon.createSandbox();
+
+        sandbox.stub( dialog, 'confirm' ).resolves( true );
+    } );
+
+    afterEach( () => {
+        sandbox.restore();
     } );
 
     it( 'updates inside multiple repeats when repeats become relevant', () => {

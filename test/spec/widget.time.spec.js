@@ -9,21 +9,16 @@ const FORM = `
         </label>
     </form>`;
 
-// Note: time zone information is added outside of the widget (in the model)
-// We need to explicitly set locale to avoid time format issues
-const originalLocale = format.locale;
-
 describe( 'timepicker widget', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
     beforeEach( () => {
-        format.locale = 'nl';
         sandbox = sinon.createSandbox();
+        sandbox.stub( format, 'locale' ).get( () => 'nl' );
     } );
 
     afterEach( () => {
-        format.locale = originalLocale;
         sandbox.restore();
     } );
 
