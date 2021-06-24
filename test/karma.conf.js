@@ -1,10 +1,6 @@
 // Karma configuration
 // Generated on Mon Mar 16 2015 13:42:33 GMT-0600 (MDT)
-const resolve = require( 'rollup-plugin-node-resolve' );
-const commonjs = require( 'rollup-plugin-commonjs' );
-const json = require( 'rollup-plugin-json' );
 const path = require( 'path' );
-const rollupIstanbul = require( 'rollup-plugin-istanbul' );
 const istanbul = require( 'istanbul' );
 const shieldBadgeReporter = require( 'istanbul-reporter-shield-badge' );
 
@@ -50,36 +46,9 @@ module.exports = config => {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'test/**/*.js': [ 'rollup' ],
-        },
-
-        rollupPreprocessor: {
-            output: {
-                format: 'iife',
-                name: 'test'
-            },
-            plugins: [
-                resolve( {
-                    browser: true, // Default: false
-                } ),
-                commonjs( {
-                    include: 'node_modules/**', // Default: undefined
-                    sourceMap: false, // Default: true
-                } ),
-                json(), // still used for importing package.json
-                rollupIstanbul( {
-                    include: [
-                        'src/js/*.js',
-                        'src/widget/*/*.js'
-                    ],
-                    exclude: [
-                        // exclude copied external libraries
-                        'src/widget/time/timepicker.js',
-                        'src/widget/select-autocomplete/jquery.relevant-dropdown.js',
-                        'src/js/dropdown.jquery.js',
-                    ]
-                } )
-            ]
+            'config.js': [ 'esbuild' ],
+            'src/**/*.js': [ 'esbuild' ],
+            'test/**/*.js': [ 'esbuild' ],
         },
 
         browserify: {
