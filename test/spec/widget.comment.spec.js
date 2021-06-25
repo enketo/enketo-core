@@ -36,16 +36,16 @@ describe( 'CommentWidget', () => {
     } );
 
     it( 'hides comment question', () => {
-        expect( widget.question.matches( '.hide' ) ).toEqual( true );
+        expect( widget.question.matches( '.hide' ) ).to.equal( true );
     } );
 
     it( 'adds comment button to linkedQuestion', () => {
-        expect( widget.linkedQuestion.querySelector( '.btn-comment' ) ).not.toEqual( null );
+        expect( widget.linkedQuestion.querySelector( '.btn-comment' ) ).not.to.equal( null );
     } );
 
     it( 'shows a comment dialog when comment button is clicked', () => {
         widget.linkedQuestion.querySelector( '.btn-comment' ).click();
-        expect( widget.linkedQuestion.querySelector( '.or-comment-widget textarea' ) ).not.toEqual( null );
+        expect( widget.linkedQuestion.querySelector( '.or-comment-widget textarea' ) ).not.to.equal( null );
     } );
 
     it( 'closes a comment dialog when update button is clicked', () => {
@@ -53,7 +53,7 @@ describe( 'CommentWidget', () => {
         const w = widget.linkedQuestion.querySelector( '.or-comment-widget' );
         w.querySelector( 'textarea' ).textContent = 'a comment';
         w.querySelector( '.or-comment-widget__content__btn-update' ).click();
-        expect( widget.linkedQuestion.querySelector( '.or-comment-widget' ) ).toEqual( null );
+        expect( widget.linkedQuestion.querySelector( '.or-comment-widget' ) ).to.equal( null );
     } );
 
 } );

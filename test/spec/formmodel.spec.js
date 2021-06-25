@@ -28,7 +28,7 @@ describe( 'Primary instance node values', () => {
     const model = new Model( '<model><instance><data><nodeA> 2  </nodeA><meta><instanceID/></meta></data></instance></model>' );
     model.init();
     it( 'are trimmed during initialization', () => {
-        expect( model.getStr() ).toContain( '<nodeA>2</nodeA>' );
+        expect( model.getStr() ).to.contain( '<nodeA>2</nodeA>' );
     } );
 } );
 
@@ -39,8 +39,8 @@ describe( 'Instantiating a model', () => {
     it( 'without options, it includes all instances', () => {
         const model = new Model( modelStr );
         model.init();
-        expect( model.xml.querySelector( 'model > instance#countries' ) ).not.toBeNull();
-        expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).toEqual( 'NL' );
+        expect( model.xml.querySelector( 'model > instance#countries' ) ).not.to.be.null;
+        expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).to.equal( 'NL' );
     } );
 
     it( 'with option.full = true, it includes all instances', () => {
@@ -48,8 +48,8 @@ describe( 'Instantiating a model', () => {
             full: true
         } );
         model.init();
-        expect( model.xml.querySelector( 'model > instance#countries' ) ).not.toBeNull();
-        expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).toEqual( 'NL' );
+        expect( model.xml.querySelector( 'model > instance#countries' ) ).not.to.be.null;
+        expect( model.xml.querySelector( 'model > instance#countries > root > item > country' ).textContent ).to.equal( 'NL' );
     } );
 
     it( 'with options.full = false, strips the secondary instances', () => {
@@ -57,14 +57,14 @@ describe( 'Instantiating a model', () => {
             full: false
         } );
         model.init();
-        expect( model.xml.querySelector( 'model > instance#countries' ) ).toBeNull();
+        expect( model.xml.querySelector( 'model > instance#countries' ) ).to.be.null;
     } );
 
     it( 'without an instanceID node, returns an error', () => {
         const result = new Model( '<data></data>' ).init();
 
-        expect( result.length ).toEqual( 1 );
-        expect( /Missing\sinstanceID/.test( result[ 0 ] ) ).toEqual( true );
+        expect( result.length ).to.equal( 1 );
+        expect( /Missing\sinstanceID/.test( result[ 0 ] ) ).to.equal( true );
     } );
 } );
 
@@ -109,7 +109,7 @@ describe( 'Data node getter', () => {
 
     function test( node ) {
         it( `obtains nodes (selector: ${node.selector}, index: ${node.index}, filter: ${JSON.stringify( node.filter )})`, () => {
-            expect( model.node( node.selector, node.index, node.filter ).getElements().length ).toEqual( node.result );
+            expect( model.node( node.selector, node.index, node.filter ).getElements().length ).to.equal( node.result );
         } );
     }
     for ( i = 0; i < t.length; i++ ) {
@@ -126,19 +126,19 @@ describe( 'Data node (&) value getter', () => {
     const data = getModel( 'thedata.xml' ); //dataStr1);
 
     it( 'returns an array of one node value', () => {
-        expect( data.node( '/thedata/nodeB' ).getVal() ).toEqual( 'b' );
+        expect( data.node( '/thedata/nodeB' ).getVal() ).to.equal( 'b' );
     } );
 
     it( 'returns the first node value of multiple nodes', () => {
-        expect( data.node( '/thedata/repeatGroup/nodeC' ).getVal() ).toEqual( '' );
+        expect( data.node( '/thedata/repeatGroup/nodeC' ).getVal() ).to.equal( '' );
     } );
 
     it( 'returns null', () => {
-        expect( data.node( '/thedata/nodeX' ).getVal() ).toEqual( undefined );
+        expect( data.node( '/thedata/nodeX' ).getVal() ).to.equal( undefined );
     } );
 
     it( 'obtains a node value of a node with a . in the name', () => {
-        expect( data.node( '/thedata/someweights/w.3' ).getVal() ).toEqual( '5' );
+        expect( data.node( '/thedata/someweights/w.3' ).getVal() ).to.equal( '5' );
     } );
 } );
 
@@ -241,7 +241,7 @@ describe( 'Data node XML data type', () => {
             const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', 0, n.filter );
             const expected = typeof n.converted !== 'undefined' ? n.converted : n.value;
             node.setVal( n.value, n.type );
-            expect( node.getVal() ).toEqual( expected );
+            expect( node.getVal() ).to.equal( expected );
         } );
     }
 
@@ -252,7 +252,7 @@ describe( 'Data node XML data type', () => {
             node.setVal( n.value );
             node.validateConstraintAndType( null, n.type )
                 .then( result => {
-                    expect( result ).toEqual( n.valid );
+                    expect( result ).to.equal( n.valid );
                 } )
                 .then( done )
                 .catch( done );
@@ -276,12 +276,12 @@ describe( 'Data node XML data type', () => {
 
     it( 'returns a null result for a non-existing node', () => {
         const data = getModel( 'thedata.xml' );
-        expect( data.node( '/thedata/nodeA', 1, null ).setVal( 'val13', 'string' ) ).toEqual( null );
+        expect( data.node( '/thedata/nodeA', 1, null ).setVal( 'val13', 'string' ) ).to.equal( null );
     } );
 
     it( 'returns a null result when attempting to set the value of multiple nodes', () => {
         const data = getModel( 'thedata.xml' );
-        expect( data.node( '/thedata/repeatGroup/nodeC', null, null ).setVal( 'val' ) ).toEqual( null );
+        expect( data.node( '/thedata/repeatGroup/nodeC', null, null ).setVal( 'val' ) ).to.equal( null );
     } );
 
     it( 'sets a non-empty value to empty', done => {
@@ -290,7 +290,7 @@ describe( 'Data node XML data type', () => {
         node.setVal( '' );
         node.validateConstraintAndType( null, 'string' )
             .then( passed => {
-                expect( passed ).toBe( true );
+                expect( passed ).to.equal( true );
             } )
             .then( done )
             .catch( done );
@@ -298,24 +298,24 @@ describe( 'Data node XML data type', () => {
 
     it( 'adds a file attribute to data nodes with a value and with xml-type: binary', () => {
         const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
-        expect( node.getElement().getAttribute( 'type' ) ).toBe( null );
+        expect( node.getElement().getAttribute( 'type' ) ).to.equal( null );
         node.setVal( 'this.jpg', 'binary' );
-        expect( node.getElement().getAttribute( 'type' ) ).toBe( 'file' );
+        expect( node.getElement().getAttribute( 'type' ) ).to.equal( 'file' );
     } );
 
     it( 'removes a file attribute from EMPTY data nodes with xml-type: binary', () => {
         const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         node.setVal( 'this.jpg', 'binary' );
-        expect( node.getElement().getAttribute( 'type' ) ).toBe( 'file' );
+        expect( node.getElement().getAttribute( 'type' ) ).to.equal( 'file' );
         node.setVal( '', 'binary' );
-        expect( node.getElement().getAttribute( 'type' ) ).toBe( null );
+        expect( node.getElement().getAttribute( 'type' ) ).to.equal( null );
     } );
 
     it( 'does not trim a string value', () => {
         const node = getModel( 'thedata.xml' ).node( '/thedata/nodeA', null, null );
         const value = ' a  ';
         node.setVal( value, 'string' );
-        expect( node.getVal() ).toEqual( value );
+        expect( node.getVal() ).to.equal( value );
     } );
 
     describe( 'does convert whitespace-only values', () => {
@@ -325,9 +325,9 @@ describe( 'Data node XML data type', () => {
             it( 'to ""', () => {
                 // first prime node a with some non-whitespace value
                 node.setVal( 'aa', 'string' );
-                expect( node.getVal() ).toEqual( 'aa' );
+                expect( node.getVal() ).to.equal( 'aa' );
                 node.setVal( whiteSpaceValue, 'string' );
-                expect( node.getVal() ).toEqual( '' );
+                expect( node.getVal() ).to.equal( '' );
             } );
         }
 
@@ -353,10 +353,10 @@ describe( 'dataupdate event, is fired on model.$events and includes', () => {
         model.init();
         model.node( '/a/b/c', 1 ).setVal( 'boo' );
         // the first event is for /meta/instanceID
-        expect( eventObjects.length ).toEqual( 2 );
-        expect( eventObjects[ 1 ].repeatPath ).toEqual( '/a/b' );
-        expect( eventObjects[ 1 ].repeatIndex ).toEqual( 1 );
-        expect( eventObjects[ 1 ].nodes ).toEqual( [ 'c' ] );
+        expect( eventObjects.length ).to.equal( 2 );
+        expect( eventObjects[ 1 ].repeatPath ).to.equal( '/a/b' );
+        expect( eventObjects[ 1 ].repeatIndex ).to.equal( 1 );
+        expect( eventObjects[ 1 ].nodes ).to.deep.equal( [ 'c' ] );
     } );
 } );
 
@@ -365,11 +365,11 @@ describe( 'Data node remover', () => {
         const data = getModel( 'thedata.xml' ),
             node = data.node( '/thedata/nodeA' );
 
-        expect( node.getElements().length ).toEqual( 1 );
+        expect( node.getElements().length ).to.equal( 1 );
 
         node.remove();
-        expect( node.getElements().length ).toEqual( 0 );
-        expect( data.node( '/thedata/nodeA' ).getElements().length ).toEqual( 0 );
+        expect( node.getElements().length ).to.equal( 0 );
+        expect( data.node( '/thedata/nodeA' ).getElements().length ).to.equal( 0 );
     } );
 
     it( 'can remove nodes with a . in the nodeName', () => {
@@ -380,9 +380,9 @@ describe( 'Data node remover', () => {
         model.init();
         node = model.node( path );
 
-        expect( node.getElements().length ).toEqual( 1 );
+        expect( node.getElements().length ).to.equal( 1 );
         node.remove();
-        expect( model.node( path ).getElements().length ).toEqual( 0 );
+        expect( model.node( path ).getElements().length ).to.equal( 0 );
     } );
 } );
 
@@ -390,12 +390,12 @@ describe( 'DeprecatedID value getter', () => {
     it( 'returns "" if deprecatedID node does not exist', () => {
         const model = new Model( '<model><instance><data><meta><instanceID/></meta></data></instance></model>' );
         model.init();
-        expect( model.deprecatedID ).toEqual( '' );
+        expect( model.deprecatedID ).to.equal( '' );
     } );
     it( 'returns value of deprecatedID node', () => {
         const model = new Model( '<model><instance><data><meta><instanceID/><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
         model.init();
-        expect( model.deprecatedID ).toEqual( 'a' );
+        expect( model.deprecatedID ).to.equal( 'a' );
     } );
 } );
 
@@ -425,9 +425,9 @@ describe( 'getRepeatSeries', () => {
     model.init();
     model.extractFakeTemplates( [ '/a/r', '/a/r/nR' ] );
     it( 'returns the elements in one series of repeats', () => {
-        expect( model.getRepeatSeries( '/a/r', 0 ).length ).toEqual( 2 );
-        expect( model.getRepeatSeries( '/a/r/nR', 0 ).length ).toEqual( 2 );
-        expect( model.getRepeatSeries( '/a/r/nR', 1 ).length ).toEqual( 3 );
+        expect( model.getRepeatSeries( '/a/r', 0 ).length ).to.equal( 2 );
+        expect( model.getRepeatSeries( '/a/r/nR', 0 ).length ).to.equal( 2 );
+        expect( model.getRepeatSeries( '/a/r/nR', 1 ).length ).to.equal( 3 );
     } );
 } );
 
@@ -452,7 +452,7 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
 
     function test( expr, resultType, contextSelector, index, result ) {
         it( `evaluates XPath: ${expr}`, () => {
-            expect( data.evaluate( expr, resultType, contextSelector, index ) ).toEqual( result );
+            expect( data.evaluate( expr, resultType, contextSelector, index ) ).to.equal( result );
         } );
     }
 
@@ -463,15 +463,15 @@ describe( 'XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensi
     // this tests the makeBugCompliant() workaround that injects a position into an absolute path
     // for the issue described here: https://bitbucket.org/javarosa/javarosa/wiki/XFormDeviations
     it( 'evaluates a repaired absolute XPath inside a repeat (makeBugCompliant())', () => {
-        expect( data.evaluate( '/thedata/repeatGroup/nodeC', 'string', '/thedata/repeatGroup/nodeC', 2 ) ).toEqual( 'c3' );
+        expect( data.evaluate( '/thedata/repeatGroup/nodeC', 'string', '/thedata/repeatGroup/nodeC', 2 ) ).to.equal( 'c3' );
     } );
 
     it( 'is able to address a secondary instance by id with the instance(id)/path/to/node syntax', () => {
         const dataO = getModel( 'new_cascading_selections.xml' );
-        expect( dataO.evaluate( 'instance("cities")/root/item/name', 'string' ) ).toEqual( 'ams' );
-        expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4]/name', 'string' ) ).toEqual( 'den' );
-        expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and 1<2]', 'nodes' ).length ).toEqual( 3 );
-        expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and name=/new_cascading_selections/group4/city4]', 'nodes' ).length ).toEqual( 1 );
+        expect( dataO.evaluate( 'instance("cities")/root/item/name', 'string' ) ).to.equal( 'ams' );
+        expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4]/name', 'string' ) ).to.equal( 'den' );
+        expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and 1<2]', 'nodes' ).length ).to.equal( 3 );
+        expect( dataO.evaluate( 'instance("cities")/root/item[country=/new_cascading_selections/group4/country4 and name=/new_cascading_selections/group4/city4]', 'nodes' ).length ).to.equal( 1 );
     } );
 } );
 
@@ -492,7 +492,7 @@ describe( 'dates returned by the XPath evaluator ', () => {
         [ 'date("2018-10-35")', '', 'date' ]
     ].forEach( test => {
         it( `are recognized and converted, if necessary by the type convertor: ${test[ 0 ]}`, () => {
-            expect( model.types[ test[ 2 ] ].convert( model.evaluate( test[ 0 ], 'string' ) ) ).toEqual( test[ 1 ] );
+            expect( model.types[ test[ 2 ] ].convert( model.evaluate( test[ 0 ], 'string' ) ) ).to.equal( test[ 1 ] );
         } );
     } );
 
@@ -502,19 +502,19 @@ describe( 'functionality to obtain string of the primary XML instance for storag
     it( 'returns primary instance without templates - A', () => {
         const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group jr:template=""><a/></group></data></instance></model>' );
         model.init();
-        expect( model.getStr() ).toEqual( '<data></data>' );
+        expect( model.getStr() ).to.equal( '<data></data>' );
     } );
 
     it( 'returns primary instance without templates - B', () => {
         const model = new Model( '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><group    jr:template=""><a/></group></data></instance></model>' );
         model.init();
-        expect( model.getStr() ).toEqual( '<data></data>' );
+        expect( model.getStr() ).to.equal( '<data></data>' );
     } );
 
     it( 'returns primary instance and leaves namespaces intact', () => {
         const model = new Model( '<model><instance><data xmlns="https://some.namespace.com/"><a/></data></instance></model>' );
         model.init();
-        expect( model.getStr() ).toEqual( '<data xmlns="https://some.namespace.com/"><a/></data>' );
+        expect( model.getStr() ).to.equal( '<data xmlns="https://some.namespace.com/"><a/></data>' );
     } );
 } );
 
@@ -561,11 +561,11 @@ describe( 'converting absolute paths', () => {
             const model = new Model( '<model><instance><root><meta><instanceID/></meta></root></instance></model>' );
             const expected = test[ 1 ] || test[ 0 ];
             model.init();
-            expect( model.shiftRoot( test[ 0 ] ) ).toEqual( expected );
+            expect( model.shiftRoot( test[ 0 ] ) ).to.equal( expected );
         } );
         it( 'does nothing if model and instance node are absent in the model', () => {
             const model = new Model( '<data><nodeA/><meta><instanceID/></meta></data>' );
-            expect( model.shiftRoot( test[ 0 ] ) ).toEqual( test[ 0 ] );
+            expect( model.shiftRoot( test[ 0 ] ) ).to.equal( test[ 0 ] );
         } );
     } );
 } );
@@ -584,7 +584,7 @@ describe( 'converting instance("id") to absolute paths', () => {
             const model = new Model( '<model><instance><root/></instance><instance id="a"/><instance id="a.-_"/></model>' );
             const expected = test[ 1 ];
             model.init();
-            expect( model.replaceInstanceFn( test[ 0 ] ) ).toEqual( expected );
+            expect( model.replaceInstanceFn( test[ 0 ] ) ).to.equal( expected );
         } );
     } );
 } );
@@ -614,7 +614,7 @@ describe( 'converting expressions with current() for context /data/node', () => 
             const model = new Model( '<model><instance><root/></instance></model>' );
             const expected = test[ 1 ];
             model.init();
-            expect( model.replaceCurrentFn( test[ 0 ], context ) ).toEqual( expected );
+            expect( model.replaceCurrentFn( test[ 0 ], context ) ).to.equal( expected );
         } );
     } );
 } );
@@ -629,7 +629,7 @@ describe( 'replacing version() calls', () => {
             const model = new Model( '<model><instance><root version="123"><a/></root></instance></model>' );
             const expected = test[ 1 ];
             model.init();
-            expect( model.replaceVersionFn( test[ 0 ] ) ).toEqual( expected );
+            expect( model.replaceVersionFn( test[ 0 ] ) ).to.equal( expected );
         } );
     } );
 } );
@@ -646,7 +646,7 @@ describe( 'converting indexed-repeat() ', () => {
             const model = new Model( '<model><instance><root/></instance></model>' );
             const expected = test[ 1 ];
             model.init();
-            expect( model.replaceIndexedRepeatFn( test[ 0 ] ) ).toEqual( expected );
+            expect( model.replaceIndexedRepeatFn( test[ 0 ] ) ).to.equal( expected );
         } );
     } );
 
@@ -658,7 +658,7 @@ describe( 'converting indexed-repeat() ', () => {
             const model = new Model( '<model><instance><p><t><r><node/></r><r><node/></r><r><node/></r></t></p></instance></model>' );
             const expected = test[ 1 ];
             model.init();
-            expect( model.replaceIndexedRepeatFn( test[ 0 ], '/p/t/r/node', 2 ) ).toEqual( expected );
+            expect( model.replaceIndexedRepeatFn( test[ 0 ], '/p/t/r/node', 2 ) ).to.equal( expected );
         } );
     } );
 } );
@@ -678,7 +678,7 @@ describe( 'converting pulldata() ', () => {
             const fn = test[ 0 ];
             const expected = test[ 1 ];
             model.init();
-            expect( model.convertPullDataFn( fn )[ fn ] ).toEqual( expected );
+            expect( model.convertPullDataFn( fn )[ fn ] ).to.equal( expected );
         } );
     } );
 } );
@@ -693,10 +693,10 @@ describe( 'external instances functionality', () => {
     it( 'outputs errors if external instances in the model are not provided upon instantiation', () => {
         model = new Model( modelStr );
         loadErrors = model.init();
-        expect( loadErrors.length ).toEqual( 3 );
-        expect( loadErrors[ 0 ] ).toEqual( 'External instance "cities" is empty.' );
-        expect( loadErrors[ 1 ] ).toEqual( 'External instance "neighborhoods" is empty.' );
-        expect( loadErrors[ 2 ] ).toEqual( 'External instance "countries" is empty.' );
+        expect( loadErrors.length ).to.equal( 3 );
+        expect( loadErrors[ 0 ] ).to.equal( 'External instance "cities" is empty.' );
+        expect( loadErrors[ 1 ] ).to.equal( 'External instance "neighborhoods" is empty.' );
+        expect( loadErrors[ 2 ] ).to.equal( 'External instance "countries" is empty.' );
     } );
 
     it( 'populates matching external instances provided as XML Document, and leaves original XML doc intact', () => {
@@ -716,13 +716,13 @@ describe( 'external instances functionality', () => {
             external
         } );
         loadErrors = model.init();
-        expect( loadErrors.length ).toEqual( 0 );
-        expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).toEqual( 'nl' );
+        expect( loadErrors.length ).to.equal( 0 );
+        expect( model.xml.querySelector( 'instance#cities > root > item > country' ).textContent ).to.equal( 'nl' );
 
         // Now check that the orginal external XML docs are stil the same. Very important for e.g.
         // form reset functionality in apps.
         // https://github.com/kobotoolbox/enketo-express/issues/1086
-        expect( external[ 0 ].xml.querySelector( 'country' ).textContent ).toEqual( 'nl' );
+        expect( external[ 0 ].xml.querySelector( 'country' ).textContent ).to.equal( 'nl' );
     } );
 
     it( 'removes existing (internal) content before adding external instances', () => {
@@ -741,9 +741,9 @@ describe( 'external instances functionality', () => {
             } ]
         } );
         loadErrors = model.init();
-        expect( loadErrors.length ).toEqual( 0 );
-        expect( model.xml.querySelectorAll( 'instance#cities > existing' ).length ).toEqual( 0 );
-        expect( model.xml.querySelectorAll( 'instance#cities > another' ).length ).toEqual( 0 );
+        expect( loadErrors.length ).to.equal( 0 );
+        expect( model.xml.querySelectorAll( 'instance#cities > existing' ).length ).to.equal( 0 );
+        expect( model.xml.querySelectorAll( 'instance#cities > another' ).length ).to.equal( 0 );
     } );
 } );
 
@@ -756,7 +756,7 @@ describe( 'cloning repeats in empty model', () => {
     model.addRepeat( '/data/rep1/rep2', 0 );
     model.addRepeat( '/data/rep1/rep2/rep3', 0 );
     it( 'works for nested repeats', () => {
-        expect( model.getStr() ).toEqual( '<data><rep1><one/><rep2><two/><rep3><three/></rep3></rep2></rep1></data>' );
+        expect( model.getStr() ).to.equal( '<data><rep1><one/><rep2><two/><rep3><three/></rep3></rep2></rep1></data>' );
     } );
 
 } );
@@ -769,13 +769,13 @@ describe( 'Using XPath with default namespace', () => {
         model.init();
 
         it( 'works for Nodeset().getElements()', () => {
-            expect( model.node( '/data/nodeA' ).getElements().length ).toEqual( 1 );
-            expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
+            expect( model.node( '/data/nodeA' ).getElements().length ).to.equal( 1 );
+            expect( model.node( '/data/nodeA' ).getVal() ).to.equal( '5' );
         } );
 
         it( 'works for evaluate()', () => {
-            expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
-            expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( '5' );
+            expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).to.equal( 1 );
+            expect( model.evaluate( '/data/nodeA', 'string' ) ).to.equal( '5' );
         } );
 
     } );
@@ -786,13 +786,13 @@ describe( 'Using XPath with default namespace', () => {
         model.init();
 
         it( 'works for Nodeset().getElements()', () => {
-            expect( model.node( '/data/nodeA' ).getElements().length ).toEqual( 1 );
-            expect( model.node( '/data/nodeA' ).getVal() ).toEqual( '5' );
+            expect( model.node( '/data/nodeA' ).getElements().length ).to.equal( 1 );
+            expect( model.node( '/data/nodeA' ).getVal() ).to.equal( '5' );
         } );
 
         it( 'works for evaluate()', () => {
-            expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).toEqual( 1 );
-            expect( model.evaluate( '/data/nodeA', 'string' ) ).toEqual( '5' );
+            expect( model.evaluate( '/data/nodeA', 'nodes' ).length ).to.equal( 1 );
+            expect( model.evaluate( '/data/nodeA', 'string' ) ).to.equal( '5' );
         } );
 
     } );
@@ -814,11 +814,11 @@ describe( 'Using XPath with non-default namespaces', () => {
             const type = testObj.external ? 'external' : 'internal';
             model.init();
             it( `works for simple namespaced node retrieval on ${type} instances`, () => {
-                expect( model.evaluate( 'instance("s")/sec/this:b', 'string' ) ).toEqual( '3' );
+                expect( model.evaluate( 'instance("s")/sec/this:b', 'string' ) ).to.equal( '3' );
             } );
 
             it( `works for simple namespaced attribute retrieval on ${type} instances`, () => {
-                expect( model.evaluate( 'instance("s")/sec/this:b/@this:at', 'string' ) ).toEqual( 'that' );
+                expect( model.evaluate( 'instance("s")/sec/this:b/@this:at', 'string' ) ).to.equal( 'that' );
             } );
         } );
 
@@ -836,34 +836,34 @@ describe( 'Repeat without ordinals', () => {
         model.init();
         //model.extractFakeTemplates( [ '/a/rep.dot' ] );
 
-        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).to.equal( 2 );
         model.addRepeat( '/a/rep.dot', 0, false );
-        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 3 );
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).to.equal( 3 );
     } );
 
     it( 'are cloned when necessary when repeat has dot in nodeName with template', () => {
         const model = new Model( modelStrWithTemplate );
         model.init();
 
-        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 2 );
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).to.equal( 2 );
         model.addRepeat( '/a/rep.dot', 0, false );
-        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).toEqual( 3 );
+        expect( model.evaluate( '/a/rep.dot', 'nodes' ).length ).to.equal( 3 );
     } );
 
     it( 'will use the first repeat instance as template and empty the leaf nodes', () => {
         const model = new Model( '<model><instance><data><repeat><n>1</n></repeat></data></instance></model>' );
         model.init();
         model.addRepeat( '/data/repeat', 0, false );
-        expect( model.getStr() ).toEqual( '<data><repeat><n>1</n></repeat><repeat><n/></repeat></data>' );
+        expect( model.getStr() ).to.equal( '<data><repeat><n>1</n></repeat><repeat><n/></repeat></data>' );
     } );
 
     it( 'adds the template also when node.remove is called, and removes a repeat even if it is the only instance', () => {
         const model = new Model( '<model><instance><data><repeat><n>1</n></repeat></data></instance></model>' );
         model.init();
         model.node( '/data/repeat', 0 ).remove();
-        expect( model.getStr() ).toEqual( '<data></data>' ); // not self-closing because comment was removed with regex replace
+        expect( model.getStr() ).to.equal( '<data></data>' ); // not self-closing because comment was removed with regex replace
         model.addRepeat( '/data/repeat', 0, false );
-        expect( model.getStr() ).toEqual( '<data><repeat><n/></repeat></data>' );
+        expect( model.getStr() ).to.equal( '<data><repeat><n/></repeat></data>' );
     } );
 
 } );
@@ -879,11 +879,11 @@ describe( 'Ordinals in repeats', () => {
     const end = '</root></instance></model>';
 
 
-    beforeAll( () => {
+    before( () => {
         config.repeatOrdinals = true;
     } );
 
-    afterAll( () => {
+    after( () => {
         config.repeatOrdinals = dflt;
     } );
 
@@ -899,7 +899,7 @@ describe( 'Ordinals in repeats', () => {
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
-            expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>' ) );
         } );
 
@@ -908,7 +908,7 @@ describe( 'Ordinals in repeats', () => {
             model.init();
             //model.extractFakeTemplates( paths );
             model.addRepeat( '/root/repeat', 0 );
-            expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>' +
                 '<repeat enk:ordinal="3"><node/></repeat>' ) );
         } );
@@ -920,7 +920,7 @@ describe( 'Ordinals in repeats', () => {
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat/nr', 0 );
             model.addRepeat( '/root/repeat/nr', 0 );
-            expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
                 '</repeat><repeat enk:ordinal="2"><nr><node/></nr></repeat>' ) );
@@ -934,7 +934,7 @@ describe( 'Ordinals in repeats', () => {
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat/nr', 0 );
-            expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
                 '</repeat><repeat enk:ordinal="2"><nr enk:last-used-ordinal="2" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr></repeat>' ) );
@@ -950,7 +950,7 @@ describe( 'Ordinals in repeats', () => {
             model.addRepeat( '/root/repeat/nr', 0 );
             model.node( '/root/repeat', 1 ).remove();
             model.node( '/root/repeat/nr', 1 ).remove();
-            expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
                 '</repeat><repeat enk:ordinal="3"><nr><node/></nr></repeat>' ) );
@@ -966,7 +966,7 @@ describe( 'Ordinals in repeats', () => {
             model.node( '/root/repeat/nr', 1 ).remove();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat/nr', 0 );
-            expect( model.getStr() ).toEqual( wr.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wr.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
                 '</repeat><repeat enk:ordinal="3"><nr><node/></nr></repeat>' ) );
@@ -985,7 +985,7 @@ describe( 'Ordinals in repeats', () => {
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
-            expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>'
             ) );
         } );
@@ -995,7 +995,7 @@ describe( 'Ordinals in repeats', () => {
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat', 0 );
-            expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1"><node/></repeat><repeat enk:ordinal="2"><node/></repeat>' +
                 '<repeat enk:ordinal="3"><node/></repeat>' ) );
         } );
@@ -1009,7 +1009,7 @@ describe( 'Ordinals in repeats', () => {
             model.addRepeat( '/root/repeat/nr', 0 );
             model.addRepeat( '/root/repeat/nr', 0 );
             model.addRepeat( '/root/repeat/nr', 1 );
-            expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
                 '</repeat><repeat enk:ordinal="2"><nr enk:last-used-ordinal="1" enk:ordinal="1"><node/></nr></repeat>' ) );
@@ -1021,7 +1021,7 @@ describe( 'Ordinals in repeats', () => {
             model.init();
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat/nr', 1 );
-            expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="2" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="2" enk:ordinal="1"><node/></nr><nr enk:ordinal="2"><node/></nr>' +
                 '</repeat>' +
@@ -1040,7 +1040,7 @@ describe( 'Ordinals in repeats', () => {
             model.addRepeat( '/root/repeat/nr', 2 );
             model.node( '/root/repeat', 1 ).remove();
             model.node( '/root/repeat/nr', 1 ).remove();
-            expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
                 '</repeat><repeat enk:ordinal="3"><nr enk:last-used-ordinal="1" enk:ordinal="1"><node/></nr></repeat>' ) );
@@ -1059,7 +1059,7 @@ describe( 'Ordinals in repeats', () => {
             model.addRepeat( '/root/repeat', 0 );
             model.addRepeat( '/root/repeat/nr', 0 );
             model.addRepeat( '/root/repeat/nr', 1 );
-            expect( model.getStr() ).toEqual( wrt.replace( '{{c}}',
+            expect( model.getStr() ).to.equal( wrt.replace( '{{c}}',
                 '<repeat enk:last-used-ordinal="3" enk:ordinal="1">' +
                 '<nr enk:last-used-ordinal="3" enk:ordinal="1"><node/></nr><nr enk:ordinal="3"><node/></nr>' +
                 '</repeat><repeat enk:ordinal="3"><nr enk:last-used-ordinal="1" enk:ordinal="1"><node/></nr></repeat>' ) );
@@ -1075,8 +1075,8 @@ describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct i
     it( 'as designed', () => {
         const model = new Model( modelStr );
         model.init();
-        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 0 ) ).toEqual( '/model/instance[1]/abcabce/a[1]/c = 1' );
-        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 1 ) ).toEqual( '/model/instance[1]/abcabce/a[2]/c = 1' );
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 0 ) ).to.equal( '/model/instance[1]/abcabce/a[1]/c = 1' );
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/a/c = 1', '/abcabce/a/ynaa', 1 ) ).to.equal( '/model/instance[1]/abcabce/a[2]/c = 1' );
     } );
 
     // https://github.com/kobotoolbox/enketo-express/issues/594
@@ -1084,8 +1084,8 @@ describe( 'makes Enketo repeat-bug-compliant by injecting positions to correct i
         const model = new Model( modelStr );
         model.init();
 
-        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/ab/ynab = 1', '/abcabce/a/ynaa', 0 ) ).toEqual( '/model/instance[1]/abcabce/ab/ynab = 1' );
-        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/ab/ynab = 1', '/abcabce/a/ynaa', 1 ) ).toEqual( '/model/instance[1]/abcabce/ab/ynab = 1' );
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/ab/ynab = 1', '/abcabce/a/ynaa', 0 ) ).to.equal( '/model/instance[1]/abcabce/ab/ynab = 1' );
+        expect( model.makeBugCompliant( '/model/instance[1]/abcabce/ab/ynab = 1', '/abcabce/a/ynaa', 1 ) ).to.equal( '/model/instance[1]/abcabce/ab/ynab = 1' );
     } );
 
 } );
@@ -1185,7 +1185,7 @@ describe( 'merging an instance into the model', () => {
             expected = test[ 2 ];
 
             it( `produces the expected result for instance: ${test[ 0 ]}`, () => {
-                expect( result ).toEqual( expected );
+                expect( result ).to.equal( expected );
             } );
         } );
     } );
@@ -1208,7 +1208,7 @@ describe( 'merging an instance into the model', () => {
             // which includes the creation of special repeat comments.
             model.extractFakeTemplates( [ '/a/r' ] );
             result = ( new XMLSerializer() ).serializeToString( model.xml, 'text/xml' ).replace( /\n/g, '' );
-            expect( result ).toEqual( `<model><instance>${instanceStr}</instance></model>` );
+            expect( result ).to.equal( `<model><instance>${instanceStr}</instance></model>` );
         } );
     } );
 
@@ -1221,25 +1221,25 @@ describe( 'merging an instance into the model', () => {
         const loadErrors = model.init();
 
         it( 'outputs no load errors', () => {
-            expect( loadErrors.length ).toEqual( 0 );
+            expect( loadErrors.length ).to.equal( 0 );
         } );
 
         it( 'adds a deprecatedID node', () => {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).toEqual( 1 );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).to.equal( 1 );
         } );
 
         //this is an important test even though it may not seem to be...
         it( 'includes the deprecatedID in the string to be submitted', () => {
-            expect( model.getStr().indexOf( '<deprecatedID>' ) ).not.toEqual( -1 );
+            expect( model.getStr().indexOf( '<deprecatedID>' ) ).not.to.equal( -1 );
         } );
 
         it( 'gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit', () => {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
         } );
 
         it( 'generates a new instanceID', () => {
-            expect( model.node( '/thedata/meta/instanceID' ).getVal() ).not.toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
-            expect( model.node( '/thedata/meta/instanceID' ).getVal().length ).toEqual( 41 );
+            expect( model.node( '/thedata/meta/instanceID' ).getVal() ).not.to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            expect( model.node( '/thedata/meta/instanceID' ).getVal().length ).to.equal( 41 );
         } );
     } );
 
@@ -1252,19 +1252,19 @@ describe( 'merging an instance into the model', () => {
         const loadErrors = model.init();
 
         it( 'outputs no load errors', () => {
-            expect( loadErrors.length ).toEqual( 0 );
+            expect( loadErrors.length ).to.equal( 0 );
         } );
 
         it( 'does not NOT add another instanceID node', () => {
-            expect( model.node( '/thedata/meta/instanceID' ).getElements().length ).toEqual( 1 );
+            expect( model.node( '/thedata/meta/instanceID' ).getElements().length ).to.equal( 1 );
         } );
 
         it( 'does not NOT add another deprecatedID node', () => {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).toEqual( 1 );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).to.equal( 1 );
         } );
 
         it( 'gives the deprecatedID node the old value of the instanceID node of the instance-to-edit', () => {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).toEqual( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
         } );
     } );
 
@@ -1288,8 +1288,8 @@ describe( 'merging an instance into the model', () => {
             expected = test[ 2 ];
 
             it( 'the initialization will merge the repeat values correctly and remove the templates', () => {
-                expect( model.xml.querySelectorAll( 'a > r' ).length ).toEqual( 2 );
-                expect( result ).toContain( expected );
+                expect( model.xml.querySelectorAll( 'a > r' ).length ).to.equal( 2 );
+                expect( result ).to.contain( expected );
             } );
         } );
     } );
@@ -1315,10 +1315,10 @@ describe( 'merging an instance into the model', () => {
 
             it( 'namespaces are added correctly', () => {
                 // these tests assume a fix attribute order which is a bit fragile
-                expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'last-used-ordinal' ) ).toEqual( '2' );
-                expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'ordinal' ) ).toEqual( '1' );
-                //expect( model.xml.querySelector( 'r' ).attributes[ 1 ].localName ).toEqual( 'ordinal' ); // without prefix!
-                //expect( model.xml.querySelector( 'r' ).attributes[ 1 ].namespaceURI ).toEqual( ns );
+                expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'last-used-ordinal' ) ).to.equal( '2' );
+                expect( model.xml.querySelector( 'r' ).getAttributeNS( ns, 'ordinal' ) ).to.equal( '1' );
+                //expect( model.xml.querySelector( 'r' ).attributes[ 1 ].localName ).to.equal( 'ordinal' ); // without prefix!
+                //expect( model.xml.querySelector( 'r' ).attributes[ 1 ].namespaceURI ).to.equal( ns );
             } );
         } );
     } );
@@ -1326,11 +1326,11 @@ describe( 'merging an instance into the model', () => {
     describe( 'returns load errors upon initialization', () => {
         const originalErrorLog = console.error;
 
-        beforeAll( ()=> {
+        before( ()=> {
             console.error = () => {};
         } );
 
-        afterAll( ()=> {
+        after( ()=> {
             console.error = originalErrorLog;
         } );
 
@@ -1341,8 +1341,8 @@ describe( 'merging an instance into the model', () => {
             } );
             const loadErrors = model.init();
 
-            expect( loadErrors.length ).toEqual( 1 );
-            expect( loadErrors[ 0 ] ).toEqual( 'Error trying to parse XML record. Different root nodes' );
+            expect( loadErrors.length ).to.equal( 1 );
+            expect( loadErrors[ 0 ] ).to.equal( 'Error trying to parse XML record. Different root nodes' );
         } );
 
         it( 'when an instance-to-edit is provided with to a model that does not contain an instanceID node', () => {
@@ -1352,8 +1352,8 @@ describe( 'merging an instance into the model', () => {
             } );
             const loadErrors = model.init();
 
-            expect( loadErrors.length ).toEqual( 1 );
-            expect( loadErrors[ 0 ] ).toEqual( 'Invalid primary instance. Missing instanceID node.' );
+            expect( loadErrors.length ).to.equal( 1 );
+            expect( loadErrors[ 0 ] ).to.equal( 'Invalid primary instance. Missing instanceID node.' );
         } );
     } );
 
@@ -1367,7 +1367,7 @@ describe( 'merging an instance into the model', () => {
             } );
             model.init();
             const instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
-            expect( instanceContent ).toEqual( INSTANCE_A_CONTENT );
+            expect( instanceContent ).to.equal( INSTANCE_A_CONTENT );
         } );
 
         it( 'leaves those secondary instances intact if empty group node in record with childnodes with default value in XForm', () => {
@@ -1377,12 +1377,12 @@ describe( 'merging an instance into the model', () => {
             } );
             model.init();
             const instanceContent = model.xml.querySelector( 'instance#A' ).textContent.replace( /\s/g, '' );
-            expect( instanceContent ).toEqual( INSTANCE_A_CONTENT );
+            expect( instanceContent ).to.equal( INSTANCE_A_CONTENT );
 
             // double-check primary instance too:
             const ca = model.xml.querySelectorAll( 'CA' );
-            expect( ca.length ).toEqual( 1 );
-            expect( ca[ 0 ].textContent ).toEqual( '' );
+            expect( ca.length ).to.equal( 1 );
+            expect( ca[ 0 ].textContent ).to.equal( '' );
         } );
 
     } );
@@ -1397,7 +1397,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         } );
         model.init();
 
-        expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><\/meta><\/a>/ );
+        expect( model.getStr() ).to.match( /<a><meta><instanceID>[^\s]{41}<\/instanceID><\/meta><\/a>/ );
     } );
 
     it( 'for an existing unsubmitted record', () => {
@@ -1408,7 +1408,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         } );
         model.init();
 
-        expect( model.getStr() ).toEqual( '<a><meta><instanceID>abc</instanceID></meta></a>' );
+        expect( model.getStr() ).to.equal( '<a><meta><instanceID>abc</instanceID></meta></a>' );
     } );
 
     it( 'for an existing previously-submitted record(1)', () => {
@@ -1418,7 +1418,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         } );
         model.init();
 
-        expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
+        expect( model.getStr() ).to.match( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
     } );
 
     it( 'for an existing previously-submitted record (2)', () => {
@@ -1429,7 +1429,7 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
         } );
         model.init();
 
-        expect( model.getStr() ).toMatch( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
+        expect( model.getStr() ).to.match( /<a><meta><instanceID>[^\s]{41}<\/instanceID><deprecatedID>abc<\/deprecatedID><\/meta><\/a>/ );
     } );
 
     it( 'and fires dataupdate events for instanceID and deprecatedID on model.$events', () => {
@@ -1443,9 +1443,9 @@ describe( 'instanceID and deprecatedID are populated upon model initilization', 
             eventObjects.push( event.detail );
         } );
         model.init();
-        expect( eventObjects.length ).toEqual( 2 );
-        expect( eventObjects[ 0 ].nodes ).toEqual( [ 'instanceID' ] );
-        expect( eventObjects[ 1 ].nodes ).toEqual( [ 'deprecatedID' ] );
+        expect( eventObjects.length ).to.equal( 2 );
+        expect( eventObjects[ 0 ].nodes ).to.deep.equal( [ 'instanceID' ] );
+        expect( eventObjects[ 1 ].nodes ).to.deep.equal( [ 'deprecatedID' ] );
 
     } );
 
@@ -1462,7 +1462,7 @@ describe( 'odk-instance-first-load event', () => {
 
         model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
         model.init();
-        expect( eventsOccurred ).toEqual( 1 );
+        expect( eventsOccurred ).to.equal( 1 );
     } );
 
     it( 'does not fire when loading an existing record', () => {
@@ -1471,7 +1471,7 @@ describe( 'odk-instance-first-load event', () => {
 
         model.events.addEventListener( events.InstanceFirstLoad().type, () => eventsOccurred++ );
         model.init();
-        expect( eventsOccurred ).toEqual( 0 );
+        expect( eventsOccurred ).to.equal( 0 );
     } );
 
 } );

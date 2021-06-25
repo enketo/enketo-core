@@ -25,9 +25,9 @@ describe( 'RankWidget instantiation', () => {
         const options = { a: 'b' };
         const widget = new RankWidget( control, options );
 
-        expect( widget.element ).toEqual( control );
-        expect( widget.props.appearances ).toEqual( [ 'one', 'two' ] );
-        expect( widget.options ).toEqual( options );
+        expect( widget.element ).to.equal( control );
+        expect( widget.props.appearances ).to.deep.equal( [ 'one', 'two' ] );
+        expect( widget.options ).to.equal( options );
     } );
 
     it( 'loads default value', () => {
@@ -36,7 +36,7 @@ describe( 'RankWidget instantiation', () => {
         control.value = 'two one';
         const widget = new RankWidget( control );
 
-        expect( widget.originalInputValue ).toEqual( 'two one' );
-        expect( widget.value ).toEqual( 'two one' );
+        expect( widget.originalInputValue ).to.deep.equal( 'two one' );
+        expect( widget.value ).to.equal( 'two one' );
     } );
 } );

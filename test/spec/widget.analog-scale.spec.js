@@ -28,31 +28,31 @@ describe( 'Analog-scale widget with show scale', () => {
     const widgetScalesContainer = widget.querySelector( '.range-widget__scale' );
 
     it( 'adds widget that contain input with type range', () => {
-        expect( widgetInput.type ).toEqual( 'range' );
+        expect( widgetInput.type ).to.equal( 'range' );
     } );
 
     it( 'adds widget that contain input range with attribute min equals 0', () => {
-        expect( widgetInput.getAttribute( 'min' ) ).toEqual( '0' );
+        expect( widgetInput.getAttribute( 'min' ) ).to.equal( '0' );
     } );
 
     it( 'adds widget that contain input range with attribute max equals 100', () => {
-        expect( widgetInput.getAttribute( 'max' ) ).toEqual( '100' );
+        expect( widgetInput.getAttribute( 'max' ) ).to.equal( '100' );
     } );
 
     it( 'adds widget that contain input range with attribute step equals 10', () => {
-        expect( widgetInput.getAttribute( 'step' ) ).toEqual( '10' );
+        expect( widgetInput.getAttribute( 'step' ) ).to.equal( '10' );
     } );
 
     it( 'adds widget that contain visible min scale equals 0', () => {
-        expect( widgetScalesContainer.querySelector( '.range-widget__scale__start' ).textContent ).toEqual( '0' );
+        expect( widgetScalesContainer.querySelector( '.range-widget__scale__start' ).textContent ).to.equal( '0' );
     } );
 
     it( 'adds widget that contain visible max scale equals 100', () => {
-        expect( widgetScalesContainer.querySelector( '.range-widget__scale__end' ).textContent ).toEqual( '100' );
+        expect( widgetScalesContainer.querySelector( '.range-widget__scale__end' ).textContent ).to.equal( '100' );
     } );
 
     it( 'adds widget that contain 9 visible scales that not max and min', () => {
-        expect( widgetScalesContainer.querySelectorAll( '.range-widget__scale__between' ).length ).toEqual( 9 );
+        expect( widgetScalesContainer.querySelectorAll( '.range-widget__scale__between' ).length ).to.equal( 9 );
     } );
 
     it( 'adds widget that contain 9 visible scales that not max and min with the right values', () => {
@@ -60,6 +60,6 @@ describe( 'Analog-scale widget with show scale', () => {
         const scalesNotMinMaxValues = Array.from( scalesNotMinMax ).map( ( scale ) => parseInt( scale.textContent, 10 ) );
         const expectedNotMinMaxValues = [ 10, 20, 30, 40, 50, 60, 70, 80, 90 ];
 
-        expect( JSON.stringify( expectedNotMinMaxValues ) ).toEqual( JSON.stringify( scalesNotMinMaxValues ) );
+        expect( JSON.stringify( expectedNotMinMaxValues ) ).to.equal( JSON.stringify( scalesNotMinMaxValues ) );
     } );
 } );

@@ -40,9 +40,9 @@ describe( 'ColumnsWidget', () => {
         Promise.resolve()
             .then( () => new ColumnsWidget( el ) )
             .then( () => {
-                expect( el.querySelectorAll( '.option-wrapper > .filler' ).length ).toEqual( 2 );
+                expect( el.querySelectorAll( '.option-wrapper > .filler' ).length ).to.equal( 2 );
             } )
-            .then( done, fail );
+            .then( done, done );
     } );
 
 } );

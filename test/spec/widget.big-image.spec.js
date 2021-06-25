@@ -24,11 +24,11 @@ describe( 'ImageViewer', () => {
             .then( () => new ImageViewer( control ) )
             .then( () => {
                 const img = control.querySelector( 'img' );
-                expect( img.src ).toEqual( SMALLSOURCE );
+                expect( img.src ).to.equal( SMALLSOURCE );
                 control.click();
-                expect( img.src ).toEqual( BIGSOURCE );
+                expect( img.src ).to.equal( BIGSOURCE );
             } )
-            .then( done, fail );
+            .then( done, done );
     } );
 
 } );

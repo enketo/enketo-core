@@ -49,7 +49,7 @@ describe( 'Parsing expressions', () => {
     function test( expr, func, expected ) {
         it( `extracts the calls to ${func} and their parameters as a string from ${expr}`, () => {
             const result = utils.parseFunctionFromExpression( expr, func );
-            expect( result ).toEqual( expected );
+            expect( result ).to.deep.equal( expected );
         } );
     }
 
@@ -81,7 +81,7 @@ describe( 'return postfixed filenames', () => {
         const expected = test[ 2 ];
 
         it( `returns the filename ${expected} from ${file.name} and ${postfix}`, () => {
-            expect( utils.getFilename( file, postfix ) ).toEqual( expected );
+            expect( utils.getFilename( file, postfix ) ).to.deep.equal( expected );
         } );
     } );
 } );

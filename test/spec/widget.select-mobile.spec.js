@@ -26,6 +26,6 @@ describe( 'Mobile multi-select picker', () => {
         control.querySelector( 'option[value="b"]' ).selected = true;
         control.querySelector( 'option[value="d"]' ).selected = true;
         control.dispatchEvent( new Event( 'change' ) );
-        expect( widget.question.querySelector( '.mobileselect' ).textContent ).toEqual( 'b, d' );
+        expect( widget.question.querySelector( '.mobileselect' ).textContent ).to.equal( 'b, d' );
     } );
 } );
