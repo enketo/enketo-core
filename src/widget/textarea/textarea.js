@@ -1,5 +1,7 @@
 import Widget from '../../js/widget';
 import events from '../../js/event';
+import { MutationsTracker } from '../../js/dom-utils';
+
 
 /**
  * Auto-resizes textarea elements.
@@ -23,7 +25,11 @@ class TextareaWidget extends Widget {
                 this._resize( el );
             }
         } );
-        textareas.forEach( this._resize.bind( this ) );
+        // workaround for resize issue on first time load textarea with existing value on enketo-express
+        new MutationsTracker( this.element ).waitForQuietness()
+        .then( () => { 
+            textareas.forEach( this._resize.bind( this ) );
+        } );
         this.element.addEventListener( events.PageFlip().type, event => {
             const els = event.target.querySelectorAll( 'textarea' );
             els.forEach( this._resize.bind( this ) );
