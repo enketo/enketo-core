@@ -296,14 +296,14 @@ const elementDataStore = {
 class MutationsTracker{
 
     constructor( el = document.documentElement ){
-        let mutations = 0;
-        let previousMutations = mutations;
+        let currentMutations = 0;
+        let previousMutations = currentMutations;
         this.classChanges = new WeakMap();
         this.quiet = true;
 
         const mutationObserver = new MutationObserver(  mutations => {
             mutations.forEach(  mutation => {
-                mutations++;
+                currentMutations++;
                 if ( mutation.type === 'attributes' && mutation.attributeName === 'class' ){
                     const trackedClasses = this.classChanges.get( mutation.target ) || [];
                     trackedClasses.forEach( obj => {
@@ -326,13 +326,13 @@ class MutationsTracker{
         } );
 
         const checkInterval = setInterval( () => {
-            if ( previousMutations === mutations ){
+            if ( previousMutations === currentMutations ){
                 this.quiet = true;
                 mutationObserver.disconnect();
                 clearInterval( checkInterval );
             } else {
                 this.quiet = false;
-                previousMutations = mutations;
+                previousMutations = currentMutations;
             }
         }, 100 );
     }
