@@ -31,4 +31,23 @@ describe( 'Pages mode', () => {
 
     } );
 
+    describe( 'Flip to page on multipages form', () => {
+
+        it( 'flip to second page', () => {
+            const form = loadForm( 'pages-comment.xml' );
+            form.init();
+
+            const currentPage = form.pages.current;
+            const pageTwoTextAreaHiddenComment = form.view.html.querySelector( '[data-for="/data/item2"]' );
+            const pageComment = form.view.html.querySelector( 'input[name="/data/item2"]' ).closest( '[role="page"]' );
+            const pageTwoTextAreaCommentAncestor = pageTwoTextAreaHiddenComment.closest( '[role="comment"]' );
+    
+            form.pages.flipToPageContaining( [ pageTwoTextAreaCommentAncestor ] );
+            expect( currentPage ).not.toEqual( form.pages.current );
+            expect( pageComment ).toEqual( form.pages.current );
+
+        } );
+
+    } );
+
 } );

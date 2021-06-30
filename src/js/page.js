@@ -84,12 +84,12 @@ export default {
         const e = $e[ 0 ];
         let $closest;
         $closest = e.closest( '[role="page"]' );
-
+        
         if ( $closest ) {
             this._flipTo( $closest );
         } else {
             // If $e is a comment question, and it is not inside a group, there will be no $closest.
-            const referer = e.querySelector( 'input[data-for]' );
+            const referer = e.querySelector( '[data-for]' );
             const ancestor = e.closest( '.or-repeat, form.or' );
             if ( referer && ancestor ) {
                 const linkedQuestion = ancestor.querySelector( `[name="${referer.dataset.for}"]` );
