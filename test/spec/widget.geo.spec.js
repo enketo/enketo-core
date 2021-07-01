@@ -50,26 +50,26 @@ describe( 'geoshape widget', () => {
             gobbledigook = '<something< notquite </right>';
 
         it( 'works for space-separated KML <coordinates>', () => {
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml ) ).toEqual( a.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml ) ).to.deep.equal( a.result );
         } );
 
         it( 'works for newline-separated KML <coordinates>', () => {
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml.replace( ' ', '\n' ) ) ).toEqual( a.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml.replace( ' ', '\n' ) ) ).to.deep.equal( a.result );
         } );
 
         it( 'ignores gobbledigook outside of <coordinates>', () => {
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml + gobbledigook ) ).toEqual( a.result );
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( gobbledigook + a.kml ) ).toEqual( a.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml + gobbledigook ) ).to.deep.equal( a.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( gobbledigook + a.kml ) ).to.deep.equal( a.result );
         } );
 
         it( 'only extracts the values of the first <coordinates> if multiple are present', () => {
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml + b.kml ) ).toEqual( a.result );
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( b.kml + a.kml ) ).toEqual( b.result );
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( gobbledigook + b.kml + gobbledigook + a.kml + gobbledigook ) ).toEqual( b.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( a.kml + b.kml ) ).to.deep.equal( a.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( b.kml + a.kml ) ).to.deep.equal( b.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( gobbledigook + b.kml + gobbledigook + a.kml + gobbledigook ) ).to.deep.equal( b.result );
         } );
 
         it( 'works for the content of a single <coordinates> without the tags', () => {
-            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( kmlCoordinates ) ).toEqual( a.result );
+            expect( geoshapePicker._convertKmlCoordinatesToLeafletCoordinates( kmlCoordinates ) ).to.deep.equal( a.result );
         } );
 
     } );

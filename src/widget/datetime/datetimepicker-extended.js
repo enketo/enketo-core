@@ -1,3 +1,4 @@
+import 'openrosa-xpath-evaluator/src/date-extensions';
 import Widget from '../../js/widget';
 import support from '../../js/support';
 import { os, browser } from '../../js/sniffer';

@@ -13,13 +13,13 @@ describe( 'setvalue action to populate defaults', () => {
     it( 'works for questions with odk-instance-first-load outside of the XForms body', () => {
         const form1 = loadForm( 'setvalue.xml' );
         form1.init();
-        expect( form1.model.xml.querySelector( 'a' ).textContent ).toEqual( 'initialized' );
+        expect( form1.model.xml.querySelector( 'a' ).textContent ).to.equal( 'initialized' );
     } );
 
     it( 'works for questions with odk-instance-first-load inside of the XForms body', () => {
         const form1 = loadForm( 'setvalue.xml' );
         form1.init();
-        expect( form1.model.xml.querySelector( 'b' ).textContent ).toEqual( '7' );
+        expect( form1.model.xml.querySelector( 'b' ).textContent ).to.equal( '7' );
     } );
 
     describe( 'inside repeats', () => {
@@ -31,9 +31,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.init();
                 const ages = form1.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 2 );
-                expect( ages[ 0 ].textContent ).toEqual( '' );
-                expect( ages[ 1 ].textContent ).toEqual( '100' );
+                expect( ages.length ).to.equal( 2 );
+                expect( ages[ 0 ].textContent ).to.equal( '' );
+                expect( ages[ 1 ].textContent ).to.equal( '100' );
             } );
 
             it( 'does not work for repeat questions inside default instances (form with jr:template)', () => {
@@ -41,9 +41,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.init();
                 const ages = form1.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 2 );
-                expect( ages[ 0 ].textContent ).toEqual( '' );
-                expect( ages[ 1 ].textContent ).toEqual( '100' );
+                expect( ages.length ).to.equal( 2 );
+                expect( ages[ 0 ].textContent ).to.equal( '' );
+                expect( ages[ 1 ].textContent ).to.equal( '100' );
             } );
 
             it( 'does not work for hidden repeat nodes inside default instances', () => {
@@ -51,9 +51,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.init();
                 const ds = form1.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 2 );
-                expect( ds[ 0 ].textContent ).toEqual( '' );
-                expect( ds[ 1 ].textContent ).toEqual( 'bb' );
+                expect( ds.length ).to.equal( 2 );
+                expect( ds[ 0 ].textContent ).to.equal( '' );
+                expect( ds[ 1 ].textContent ).to.equal( 'bb' );
             } );
 
             it( 'does not work for hidden repeat nodes inside default instances (form with jr:template)', () => {
@@ -61,9 +61,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.init();
                 const ds = form1.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 2 );
-                expect( ds[ 0 ].textContent ).toEqual( '' );
-                expect( ds[ 1 ].textContent ).toEqual( 'bb' );
+                expect( ds.length ).to.equal( 2 );
+                expect( ds[ 0 ].textContent ).to.equal( '' );
+                expect( ds[ 1 ].textContent ).to.equal( 'bb' );
             } );
 
             it( 'works for newly created repeat questions', () => {
@@ -72,10 +72,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ages = form1.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 3 );
-                expect( ages[ 0 ].textContent ).toEqual( '' );
-                expect( ages[ 1 ].textContent ).toEqual( '100' );
-                expect( ages[ 2 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 3 );
+                expect( ages[ 0 ].textContent ).to.equal( '' );
+                expect( ages[ 1 ].textContent ).to.equal( '100' );
+                expect( ages[ 2 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for newly created repeat questions (form with jr:template)', () => {
@@ -84,10 +84,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ages = form1.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 3 );
-                expect( ages[ 0 ].textContent ).toEqual( '' );
-                expect( ages[ 1 ].textContent ).toEqual( '100' );
-                expect( ages[ 2 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 3 );
+                expect( ages[ 0 ].textContent ).to.equal( '' );
+                expect( ages[ 1 ].textContent ).to.equal( '100' );
+                expect( ages[ 2 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for newly created hidden repeat nodes', () => {
@@ -96,10 +96,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ds = form1.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 3 );
-                expect( ds[ 0 ].textContent ).toEqual( '' );
-                expect( ds[ 1 ].textContent ).toEqual( 'bb' );
-                expect( ds[ 2 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 3 );
+                expect( ds[ 0 ].textContent ).to.equal( '' );
+                expect( ds[ 1 ].textContent ).to.equal( 'bb' );
+                expect( ds[ 2 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'works for newly created hidden repeat nodes (form with jr:template)', () => {
@@ -108,10 +108,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ds = form1.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 3 );
-                expect( ds[ 0 ].textContent ).toEqual( '' );
-                expect( ds[ 1 ].textContent ).toEqual( 'bb' );
-                expect( ds[ 2 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 3 );
+                expect( ds[ 0 ].textContent ).to.equal( '' );
+                expect( ds[ 1 ].textContent ).to.equal( 'bb' );
+                expect( ds[ 2 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'works when jr:repeat-count is used', () => {
@@ -124,9 +124,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.init();
                 const ages = form1.model.xml.querySelectorAll( 'age' );
                 const ds = form1.model.xml.querySelectorAll( 'd' );
-                expect( ages.length ).toEqual( 6 );
-                expect( [ ...ages ].map( el => el.textContent ) ).toEqual( [ '', '100', '5', '5', '5', '5' ] );
-                expect( [ ...ds ].map( el => el.textContent ) ).toEqual( [ '', 'bb', 'a', 'a', 'a', 'a' ] );
+                expect( ages.length ).to.equal( 6 );
+                expect( [ ...ages ].map( el => el.textContent ) ).to.deep.equal( [ '', '100', '5', '5', '5', '5' ] );
+                expect( [ ...ds ].map( el => el.textContent ) ).to.deep.equal( [ '', 'bb', 'a', 'a', 'a', 'a' ] );
             } );
 
             it( 'works when jr:repeat-count is used (form with jr:template)', () => {
@@ -138,9 +138,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form1.init();
                 const ages = form1.model.xml.querySelectorAll( 'age' );
                 const ds = form1.model.xml.querySelectorAll( 'd' );
-                expect( ages.length ).toEqual( 6 );
-                expect( [ ...ages ].map( el => el.textContent ) ).toEqual( [ '', '100', '5', '5', '5', '5' ] );
-                expect( [ ...ds ].map( el => el.textContent ) ).toEqual( [ '', 'bb', 'a', 'a', 'a', 'a' ] );
+                expect( ages.length ).to.equal( 6 );
+                expect( [ ...ages ].map( el => el.textContent ) ).to.deep.equal( [ '', '100', '5', '5', '5', '5' ] );
+                expect( [ ...ds ].map( el => el.textContent ) ).to.deep.equal( [ '', 'bb', 'a', 'a', 'a', 'a' ] );
             } );
 
         } );
@@ -153,10 +153,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.init();
                 const ages = form2.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 2 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 2 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
                 // Overwrites static default
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for repeat questions inside default instances (form with jr:template)', () => {
@@ -165,10 +165,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.init();
                 const ages = form2.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 2 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 2 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
                 // Overwrites static default
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for hidden repeat nodes inside default instances', () => {
@@ -177,10 +177,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.init();
                 const ds = form2.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 2 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 2 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
                 // Overwrites static default
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'works for hidden repeat nodes inside default instances (form with jr:template)', () => {
@@ -189,10 +189,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.init();
                 const ds = form2.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 2 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 2 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
                 // Overwrites static default
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'does not work for newly created repeat questions', () => {
@@ -202,11 +202,11 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ages = form2.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 3 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 3 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
                 // Overwrites static default
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
-                expect( ages[ 2 ].textContent ).toEqual( '' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
+                expect( ages[ 2 ].textContent ).to.equal( '' );
             } );
 
             it( 'does not work for newly created repeat questions (form with jr:template)', () => {
@@ -216,11 +216,11 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ages = form2.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 3 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 3 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
                 // Overwrites static default
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
-                expect( ages[ 2 ].textContent ).toEqual( '1000' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
+                expect( ages[ 2 ].textContent ).to.equal( '1000' );
             } );
 
             it( 'does not work for hidden newly created repeat nodes', () => {
@@ -230,10 +230,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ds = form2.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 3 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
-                expect( ds[ 1 ].textContent ).toEqual( 'a' );
-                expect( ds[ 2 ].textContent ).toEqual( '' );
+                expect( ds.length ).to.equal( 3 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
+                expect( ds[ 1 ].textContent ).to.equal( 'a' );
+                expect( ds[ 2 ].textContent ).to.equal( '' );
             } );
 
             it( 'does not work for hidden newly created repeat nodes (form with jr:template)', () => {
@@ -243,10 +243,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form2.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ds = form2.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 3 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
-                expect( ds[ 1 ].textContent ).toEqual( 'a' );
-                expect( ds[ 2 ].textContent ).toEqual( 'templated' );
+                expect( ds.length ).to.equal( 3 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
+                expect( ds[ 1 ].textContent ).to.equal( 'a' );
+                expect( ds[ 2 ].textContent ).to.equal( 'templated' );
             } );
 
         } );
@@ -259,9 +259,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.init();
                 const ages = form3.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 2 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 2 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for repeat questions inside default instances (form with jr:template)', () => {
@@ -270,9 +270,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.init();
                 const ages = form3.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 2 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 2 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for hidden repeat nodes inside default instances', () => {
@@ -281,9 +281,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.init();
                 const ds = form3.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 2 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
-                expect( ds[ 1 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 2 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
+                expect( ds[ 1 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'works for hidden repeat nodes inside default instances (form with jr:template)', () => {
@@ -292,9 +292,9 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.init();
                 const ds = form3.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 2 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
-                expect( ds[ 1 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 2 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
+                expect( ds[ 1 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'works for newly created repeat questions', () => {
@@ -304,10 +304,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ages = form3.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 3 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
-                expect( ages[ 2 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 3 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
+                expect( ages[ 2 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for newly created repeat questions (form with jr:template)', () => {
@@ -317,10 +317,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ages = form3.model.xml.querySelectorAll( 'age' );
 
-                expect( ages.length ).toEqual( 3 );
-                expect( ages[ 0 ].textContent ).toEqual( '5' );
-                expect( ages[ 1 ].textContent ).toEqual( '5' );
-                expect( ages[ 2 ].textContent ).toEqual( '5' );
+                expect( ages.length ).to.equal( 3 );
+                expect( ages[ 0 ].textContent ).to.equal( '5' );
+                expect( ages[ 1 ].textContent ).to.equal( '5' );
+                expect( ages[ 2 ].textContent ).to.equal( '5' );
             } );
 
             it( 'works for hidden newly created hidden repeat nodes', () => {
@@ -330,10 +330,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ds = form3.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 3 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
-                expect( ds[ 1 ].textContent ).toEqual( 'a' );
-                expect( ds[ 2 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 3 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
+                expect( ds[ 1 ].textContent ).to.equal( 'a' );
+                expect( ds[ 2 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'works for hidden newly created hidden repeat nodes (form with jr:template)', () => {
@@ -343,10 +343,10 @@ describe( 'setvalue action to populate defaults', () => {
                 form3.view.html.querySelector( '.add-repeat-btn' ).click();
                 const ds = form3.model.xml.querySelectorAll( 'd' );
 
-                expect( ds.length ).toEqual( 3 );
-                expect( ds[ 0 ].textContent ).toEqual( 'a' );
-                expect( ds[ 1 ].textContent ).toEqual( 'a' );
-                expect( ds[ 2 ].textContent ).toEqual( 'a' );
+                expect( ds.length ).to.equal( 3 );
+                expect( ds[ 0 ].textContent ).to.equal( 'a' );
+                expect( ds[ 1 ].textContent ).to.equal( 'a' );
+                expect( ds[ 2 ].textContent ).to.equal( 'a' );
             } );
 
             it( 'works for the first repeat if that repeat is non-relevant upon load', () => {
@@ -355,7 +355,7 @@ describe( 'setvalue action to populate defaults', () => {
                 const yn = form.view.html.querySelector( '[name="/data/grp/yn"]' );
                 form.input.setVal( yn, '1', events.Change() );
 
-                expect( form.view.html.querySelector( '[name="/data/grp/rep/pos"]' ).value ).toEqual( 'Standing' );
+                expect( form.view.html.querySelector( '[name="/data/grp/rep/pos"]' ).value ).to.equal( 'Standing' );
             } );
 
             it( 'works if the default value is an empty string', () => {
@@ -372,7 +372,7 @@ describe( 'setvalue action to populate defaults', () => {
 
                 // Test that especially the last 3 are empty (and not 'Standing' due a view template extraction issue)
                 // https://github.com/OpenClinica/enketo-express-oc/issues/406#issuecomment-748325668
-                expect( [ ...form.view.html.querySelectorAll( '[name="/data/grp/rep/pos"]' ) ].map( el => el.value ) ).toEqual( [ 'Standing', 'Sitting', 'Lying', '', '', '' ] );
+                expect( [ ...form.view.html.querySelectorAll( '[name="/data/grp/rep/pos"]' ) ].map( el => el.value ) ).to.deep.equal( [ 'Standing', 'Sitting', 'Lying', '', '', '' ] );
             } );
 
         } );
@@ -386,8 +386,8 @@ describe( 'setvalue action to populate defaults', () => {
                 const itemX = form.model.xml.querySelector( 'itemx' );
                 const hid = form.model.xml.querySelector( 'hid' );
 
-                expect( itemX.textContent ).toEqual( 'initial default' );
-                expect( hid.textContent ).toEqual( '' );
+                expect( itemX.textContent ).to.equal( 'initial default' );
+                expect( hid.textContent ).to.equal( '' );
 
                 form.view.html.querySelector( '.add-repeat-btn' ).click();
 
@@ -395,8 +395,8 @@ describe( 'setvalue action to populate defaults', () => {
                 form.input.setVal( item3Second, 'd', events.Change() );
 
                 setTimeout( () => {
-                    expect( itemX.textContent ).not.toEqual( 'initial default' );
-                    expect( hid.textContent ).not.toEqual( '' );
+                    expect( itemX.textContent ).not.to.equal( 'initial default' );
+                    expect( hid.textContent ).not.to.equal( '' );
                     done();
                 }, 100 );
             } );
@@ -408,18 +408,18 @@ describe( 'setvalue action to populate defaults', () => {
     it( 'relying on non-form-control setvalue/odk-instance-first-load items to be evaluated before form-control setvalue items', () => {
         const form1 = loadForm( 'setvalue-order.xml' );
         form1.init();
-        expect( form1.model.xml.querySelector( 'one' ).textContent ).toEqual( '2' );
-        expect( form1.model.xml.querySelector( 'two' ).textContent ).toEqual( '2' );
-        expect( form1.model.xml.querySelector( 'three' ).textContent ).toEqual( '2#' );
+        expect( form1.model.xml.querySelector( 'one' ).textContent ).to.equal( '2' );
+        expect( form1.model.xml.querySelector( 'two' ).textContent ).to.equal( '2' );
+        expect( form1.model.xml.querySelector( 'three' ).textContent ).to.equal( '2#' );
     } );
 
     it( 'relying on non-form-control setvalue/odk-new-repeat items inside repeats to be evaluated before form-control setvalue items', () => {
         const form1 = loadForm( 'setvalue-repeat-order.xml' );
         form1.init();
         form1.view.html.querySelector( '.add-repeat-btn' ).click();
-        expect( form1.model.xml.querySelectorAll( 'one' )[1].textContent ).toEqual( '2' );
-        expect( form1.model.xml.querySelectorAll( 'two' )[1].textContent ).toEqual( '2' );
-        expect( form1.model.xml.querySelectorAll( 'three' )[1].textContent ).toEqual( '2#' );
+        expect( form1.model.xml.querySelectorAll( 'one' )[1].textContent ).to.equal( '2' );
+        expect( form1.model.xml.querySelectorAll( 'two' )[1].textContent ).to.equal( '2' );
+        expect( form1.model.xml.querySelectorAll( 'three' )[1].textContent ).to.equal( '2#' );
     } );
 
 } );
@@ -434,14 +434,14 @@ describe( 'setvalue actions to populate a value if another value changes', () =>
         const myAgeChangedView = form.view.html.querySelector( '[name="/data/my_age_changed"]' );
         const myAgeChangedModel = form.model.xml.querySelector( 'my_age_changed' );
 
-        expect( myAgeChangedView.textContent ).toEqual( '' );
-        expect( myAgeChangedModel.textContent ).toEqual( '' );
+        expect( myAgeChangedView.textContent ).to.equal( '' );
+        expect( myAgeChangedModel.textContent ).to.equal( '' );
 
         form.input.setVal( myAgeView, '11', events.Change()  );
 
         setTimeout( () => {
-            //expect( myAgeChangedView.textContent ).toEqual( '6' );
-            expect( myAgeChangedModel.textContent ).toEqual( '111' );
+            //expect( myAgeChangedView.textContent ).to.equal( '6' );
+            expect( myAgeChangedModel.textContent ).to.equal( '111' );
             done();
         }, 100 );
     } );
@@ -453,14 +453,14 @@ describe( 'setvalue actions to populate a value if another value changes', () =>
         const ageChangedsView = [ ...form.view.html.querySelectorAll( '[name="/data/person/age_changed"]' ) ];
         const ageChangedsModel = [ ...form.model.xml.querySelectorAll( 'age_changed' ) ];
 
-        expect( ageChangedsView.map( el => el.textContent ) ).toEqual( [ '', '' ] );
-        expect( ageChangedsModel.map( el => el.textContent ) ).toEqual( [ '', '' ] );
+        expect( ageChangedsView.map( el => el.textContent ) ).to.deep.equal( [ '', '' ] );
+        expect( ageChangedsModel.map( el => el.textContent ) ).to.deep.equal( [ '', '' ] );
 
         form.input.setVal( agesView[ 0 ], '22', events.Change()  );
 
         setTimeout( () => {
-            //expect( ageChangedsView.map( el => el.textContent )).toEqual( [ 'Age changed!', '' ] );
-            expect( ageChangedsModel.map( el => el.textContent ) ).toEqual( [ 'Age changed!', '' ] );
+            //expect( ageChangedsView.map( el => el.textContent )).to.deep.equal( [ 'Age changed!', '' ] );
+            expect( ageChangedsModel.map( el => el.textContent ) ).to.deep.equal( [ 'Age changed!', '' ] );
             done();
         }, 100 );
     } );
@@ -479,22 +479,22 @@ describe( 'setvalue actions to populate a value if another value changes', () =>
 
         form.input.setVal( dView, '3030', events.Change() );
 
-        expect( aView.textContent ).toEqual( '' );
-        expect( bModel.textContent ).toEqual( '' );
-        expect( cModel.textContent ).toEqual( '' );
-        expect( dView.value ).toEqual( '3030' );
-        expect( dModel.textContent ).toEqual( '3030' );
-        expect( eModel.textContent ).toEqual( 'default' );
+        expect( aView.textContent ).to.equal( '' );
+        expect( bModel.textContent ).to.equal( '' );
+        expect( cModel.textContent ).to.equal( '' );
+        expect( dView.value ).to.equal( '3030' );
+        expect( dModel.textContent ).to.equal( '3030' );
+        expect( eModel.textContent ).to.equal( 'default' );
 
         form.input.setVal( aView, '11', events.Change() );
 
         setTimeout( () => {
-            expect( bModel.textContent ).toEqual( '2' );
-            expect( cView.value ).toEqual( '11.11' );
-            expect( cModel.textContent ).toEqual( '11.11' );
-            expect( dView.value ).toEqual( '' );
-            expect( dModel.textContent ).toEqual( '' );
-            expect( eModel.textContent ).toEqual( '' );
+            expect( bModel.textContent ).to.equal( '2' );
+            expect( cView.value ).to.equal( '11.11' );
+            expect( cModel.textContent ).to.equal( '11.11' );
+            expect( dView.value ).to.equal( '' );
+            expect( dModel.textContent ).to.equal( '' );
+            expect( eModel.textContent ).to.equal( '' );
             done();
         }, 100 );
     } );
@@ -507,9 +507,9 @@ describe( 'setvalue actions to populate a value if another value changes', () =>
         form.input.setVal( a, '1', events.Change() );
 
         // check calculated value
-        expect( form.model.xml.querySelector( 'a_copy' ).textContent ).toEqual( '1' );
+        expect( form.model.xml.querySelector( 'a_copy' ).textContent ).to.equal( '1' );
         // check setvalue-changed value
-        expect( form.model.xml.querySelector( 'triggered' ).textContent ).toEqual( '11' );
+        expect( form.model.xml.querySelector( 'triggered' ).textContent ).to.equal( '11' );
     } );
 
 } );

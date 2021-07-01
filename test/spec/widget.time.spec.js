@@ -14,13 +14,17 @@ const FORM = `
 const originalLocale = format.locale;
 
 describe( 'timepicker widget', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
 
     beforeEach( () => {
         format.locale = 'nl';
+        sandbox = sinon.createSandbox();
     } );
 
     afterEach( () => {
         format.locale = originalLocale;
+        sandbox.restore();
     } );
 
     runAllCommonWidgetTests( Timepicker, FORM, '13:23' );
@@ -36,22 +40,20 @@ describe( 'timepicker widget', () => {
         const input = timepicker.element.closest( '.question' ).querySelector( 'input[type="time"]' );
 
         it( `is propagated correctly`, () => {
-
-            input.onchange = () => {};
-            spyOn( input, 'onchange' );
+            input.onchange = sinon.stub().callsFake( () => {} );
 
             // add manual value to fake input
             fakeInput.value = newVal;
             fakeInput.dispatchEvent( new Event( 'change' ) );
 
-            expect( input.value ).toEqual( newVal );
-            expect( input.onchange.calls.count() ).toEqual( 1 );
+            expect( input.value ).to.equal( newVal );
+            expect( input.onchange.callCount ).to.equal( 1 );
 
             // reset value in fake input manually
             fakeInput.value = '';
             fakeInput.dispatchEvent( new Event( 'change' ) );
 
-            expect( input.value ).toEqual( '' );
+            expect( input.value ).to.equal( '' );
         } );
 
     } );

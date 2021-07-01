@@ -13,8 +13,8 @@ describe( 'Pages mode', () => {
                 const firstQuestion = form.view.html.querySelector( '.question' );
                 const currentInModule = form.pages.current;
                 const currentInView = form.view.html.querySelector( '.current' );
-                expect( currentInModule ).toEqual( firstQuestion );
-                expect( currentInView ).toEqual( firstQuestion );
+                expect( currentInModule ).to.equal( firstQuestion );
+                expect( currentInView ).to.equal( firstQuestion );
                 done();
             }, 500 );
 
@@ -24,9 +24,9 @@ describe( 'Pages mode', () => {
             const form = loadForm( 'repeat-only-pages.xml' );
             form.init();
 
-            expect( form.pages.current ).not.toEqual( null );
-            expect( form.pages.current.classList.contains( 'current' ) ).toBe( true );
-            expect( form.pages.current ).toEqual( form.view.html.querySelector( '.or-repeat' ) );
+            expect( form.pages.current ).not.to.equal( null );
+            expect( form.pages.current.classList.contains( 'current' ) ).to.equal( true );
+            expect( form.pages.current ).to.equal( form.view.html.querySelector( '.or-repeat' ) );
         } );
 
     } );

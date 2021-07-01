@@ -16,7 +16,7 @@ describe( 'select-desktop widget', () => {
         const control = fragment.querySelector( 'select' );
         const widget = new DesktopSelectWidget( control );
 
-        expect( widget.props.readonly ).toEqual( true );
+        expect( widget.props.readonly ).to.equal( true );
     } );
 
     it( 'for single-select is not identified as readonly', () => {
@@ -24,7 +24,7 @@ describe( 'select-desktop widget', () => {
         const control = fragment.querySelector( 'select' );
         const widget = new DesktopSelectWidget( control );
 
-        expect( widget.props.readonly ).toEqual( false );
+        expect( widget.props.readonly ).to.equal( false );
     } );
 
     it( 'for multi-select is identified as readonly', () => {
@@ -32,7 +32,7 @@ describe( 'select-desktop widget', () => {
         const control = fragment.querySelector( 'select' );
         const widget = new DesktopSelectWidget( control );
 
-        expect( widget.props.readonly ).toEqual( true );
+        expect( widget.props.readonly ).to.equal( true );
     } );
 
     it( 'for multi-select is not identified as readonly', () => {
@@ -40,7 +40,7 @@ describe( 'select-desktop widget', () => {
         const control = fragment.querySelector( 'select' );
         const widget = new DesktopSelectWidget( control );
 
-        expect( widget.props.readonly ).toEqual( false );
+        expect( widget.props.readonly ).to.equal( false );
     } );
 } );
 

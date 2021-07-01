@@ -4,6 +4,7 @@
  * @module types
  */
 
+import 'openrosa-xpath-evaluator/src/date-extensions';
 import { isNumber } from './utils';
 import { time } from './format';
 

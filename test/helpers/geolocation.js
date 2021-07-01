@@ -76,10 +76,18 @@ export const mockGetCurrentPosition = ( result, options = {} ) => {
      */
     let mock = { lookup: null };
 
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {import('sinon').SinonStub} */
+    let getCurrentPositionStub;
+
     beforeEach( () => {
         mock.lookup = null;
 
-        spyOn( navigator.geolocation, 'getCurrentPosition' ).and.callFake(
+        sandbox = sinon.createSandbox();
+
+        getCurrentPositionStub = sandbox.stub( navigator.geolocation, 'getCurrentPosition' ).callsFake(
             /**
              * @param {window.PositionCallback} successCallback - called on success
              * @param {window.PositionErrorCallback} [errorCallback] - called on failure
@@ -113,13 +121,15 @@ export const mockGetCurrentPosition = ( result, options = {} ) => {
         );
     } );
 
-    if ( options.expectLookup ) {
-        afterEach( () => {
-            if ( mock.lookup == null ) {
-                fail( 'Geolocation lookup was not performed' );
-            }
-        } );
-    }
+    afterEach( () => {
+        const { callCount = 0 } = getCurrentPositionStub || {};
+
+        sandbox.restore();
+
+        if ( options.expectLookup ) {
+            expect( callCount ).to.be.greaterThan( 0 );
+        }
+    } );
 
     return mock;
 };

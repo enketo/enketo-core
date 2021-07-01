@@ -3,12 +3,20 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[Unreleased]
+---------------------
+##### Changed
+- Increased maximum number of columns in Grid Theme from 10 to 13.
+
+##### Fixed
+- When loading a long text default value into a multiline text widget, it doesn't expand automatically.
+
 [5.18.0] - 2021-05-24
 ---------------------
-#### Added
+##### Added
 - Support for odk:setgeopoint for odk-instance-first-load and xforms-value-changed events.
 
-#### Fixed
+##### Fixed
 - Range default or loaded value (number) not shown.
 - Distresspicker default or loaded mercury level not shown.
 - Radiobuttons value still shown in view after programmatic clearing (e.g. by a calculation).

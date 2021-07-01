@@ -21,10 +21,8 @@ describe( 'setgeopoint action', () => {
             form1.init();
 
             mock.lookup.then( ( { geopoint } ) => {
-                expect( form1.model.xml.querySelector( 'hidden_first_load' ).textContent ).toEqual( geopoint );
-
-                done();
-            } ).catch( fail );
+                expect( form1.model.xml.querySelector( 'hidden_first_load' ).textContent ).to.equal( geopoint );
+            } ).then( done, done );
         } );
 
         it( 'works for questions with odk-instance-first-load inside of the XForms body', done => {
@@ -32,10 +30,8 @@ describe( 'setgeopoint action', () => {
             form1.init();
 
             mock.lookup.then( ( { geopoint } ) => {
-                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).toEqual( geopoint );
-
-                done();
-            } ).catch( fail );
+                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).to.equal( geopoint );
+            } ).then( done, done );
         } );
     } );
 
@@ -51,9 +47,9 @@ describe( 'setgeopoint action', () => {
             form1.init();
 
             mock.lookup.then( ( { geopoint } ) => {
-                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).toEqual( geopoint );
-                expect( geopoint ).toEqual( '48.66 -120.5 123 0.0' );
-            } ).catch( fail ).finally( done );
+                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).to.equal( geopoint );
+                expect( geopoint ).to.equal( '48.66 -120.5 123 0.0' );
+            } ).then( done, done );
         } );
     } );
 
@@ -69,9 +65,9 @@ describe( 'setgeopoint action', () => {
             form1.init();
 
             mock.lookup.then( ( { geopoint } ) => {
-                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).toEqual( geopoint );
-                expect( geopoint ).toMatch( '48.66 -120.5 0.0 2500.12' );
-            } ).catch( fail ).finally( done );
+                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).to.equal( geopoint );
+                expect( geopoint ).to.include( '48.66 -120.5 0.0 2500.12' );
+            } ).then( done, done );
         } );
     } );
 
@@ -83,9 +79,9 @@ describe( 'setgeopoint action', () => {
             form1.init();
 
             mock.lookup.then( ( { geopoint } ) => {
-                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).toEqual( geopoint );
-                expect( geopoint ).toMatch( '' );
-            } ).catch( fail ).finally( done );
+                expect( form1.model.xml.querySelector( 'visible_first_load' ).textContent ).to.equal( geopoint );
+                expect( geopoint ).to.include( '' );
+            } ).then( done, done );
         } );
     } );
 
@@ -108,19 +104,19 @@ describe( 'setgeopoint actions to populate a value if another value changes', ()
         const locationChangedView = form.view.html.querySelector( '[name="/data/location_changed"]:not([data-setgeopoint])' );
         const locationChangedModel = form.model.xml.querySelector( 'data > location_changed' );
 
-        expect( form.input.getVal( locationChangedView ) ).toEqual( '' );
-        expect( locationChangedModel.textContent ).toEqual( '' );
+        expect( form.input.getVal( locationChangedView ) ).to.equal( '' );
+        expect( locationChangedModel.textContent ).to.equal( '' );
 
         mock.lookup.then( () => {
             form.input.setVal( changeTarget, '11', events.Change()  );
 
             requestAnimationFrame( () => {
                 mock.lookup.then( ( { geopoint } ) => {
-                    expect( form.input.getVal( locationChangedView ) ).toEqual( geopoint );
-                    expect( locationChangedModel.textContent ).toEqual( geopoint );
-                } ).catch( fail ).finally( done );
+                    expect( form.input.getVal( locationChangedView ) ).to.equal( geopoint );
+                    expect( locationChangedModel.textContent ).to.equal( geopoint );
+                } ).then( done, done );
             } );
-        } ).catch( fail );
+        } ).catch( done );
     } );
 
     it( 'works for multiple setgeopoint actions triggered by same question', done => {
@@ -138,26 +134,26 @@ describe( 'setgeopoint actions to populate a value if another value changes', ()
 
         requestAnimationFrame( () => {
             mock.lookup.then( ( { geopoint } ) => {
-                expect( bModel.textContent ).toEqual( geopoint );
-                expect( cModel.textContent ).toEqual( geopoint );
-                expect( dModel.textContent ).toEqual( geopoint );
-                expect( eModel.textContent ).toEqual( geopoint );
-                expect( cView.value ).toEqual( geopoint );
-                expect( dView.value ).toEqual( geopoint );
+                expect( bModel.textContent ).to.equal( geopoint );
+                expect( cModel.textContent ).to.equal( geopoint );
+                expect( dModel.textContent ).to.equal( geopoint );
+                expect( eModel.textContent ).to.equal( geopoint );
+                expect( cView.value ).to.equal( geopoint );
+                expect( dView.value ).to.equal( geopoint );
 
                 form.input.setVal( aView, '11', events.Change() );
 
                 requestAnimationFrame( () => {
                     mock.lookup.then( ( { geopoint } ) => {
-                        expect( bModel.textContent ).toEqual( geopoint );
-                        expect( cModel.textContent ).toEqual( geopoint );
-                        expect( dModel.textContent ).toEqual( geopoint );
-                        expect( eModel.textContent ).toEqual( geopoint );
-                        expect( cView.value ).toEqual( geopoint );
-                        expect( dView.value ).toEqual( geopoint );
-                    } ).catch ( fail ).finally( done );
+                        expect( bModel.textContent ).to.equal( geopoint );
+                        expect( cModel.textContent ).to.equal( geopoint );
+                        expect( dModel.textContent ).to.equal( geopoint );
+                        expect( eModel.textContent ).to.equal( geopoint );
+                        expect( cView.value ).to.equal( geopoint );
+                        expect( dView.value ).to.equal( geopoint );
+                    } ).then( done, done );
                 } );
-            } ).catch( fail );
+            } ).catch( done );
         } );
     } );
 

@@ -30,7 +30,7 @@ describe( 'custom tests for media picker re.', () => {
         new Mediapicker( question );
 
         const textLabels = question.querySelectorAll( 'span.option-label' );
-        expect( textLabels[ 0 ].style.display ).toEqual( 'none' );
-        expect( textLabels[ 1 ].style.display ).toEqual( 'none' );
+        expect( textLabels[ 0 ].style.display ).to.equal( 'none' );
+        expect( textLabels[ 1 ].style.display ).to.equal( 'none' );
     } );
 } );

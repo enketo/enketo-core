@@ -4,6 +4,7 @@
  * @module input
  */
 
+import 'openrosa-xpath-evaluator/src/date-extensions';
 import types from './types';
 import events from './event';
 import { closestAncestorUntil } from './dom-utils';

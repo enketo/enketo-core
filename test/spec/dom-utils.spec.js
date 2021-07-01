@@ -32,7 +32,7 @@ describe( 'DOM utils', () => {
             [ getSiblingElements( e, '.b' ), [] ]
         ].forEach( t => {
             it( 'works', () => {
-                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+                expect( t[ 0 ] ).to.deep.equal( t[ 1 ] );
             } );
         } );
     } );
@@ -63,7 +63,7 @@ describe( 'DOM utils', () => {
             [ getSiblingElementsAndSelf( e, '.b' ), [ e ] ]
         ].forEach( t => {
             it( 'works', () => {
-                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+                expect( t[ 0 ] ).to.deep.equal( t[ 1 ] );
             } );
         } );
     } );
@@ -97,7 +97,7 @@ describe( 'DOM utils', () => {
             [ getSiblingElement( e, '.b' ), undefined ],
         ].forEach( t => {
             it( 'works', () => {
-                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+                expect( t[ 0 ] ).to.equal( t[ 1 ] );
             } );
         } );
     } );
@@ -128,7 +128,7 @@ describe( 'DOM utils', () => {
             [ getChildren( a ), [] ]
         ].forEach( t => {
             it( 'works', () => {
-                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+                expect( t[ 0 ] ).to.deep.equal( t[ 1 ] );
             } );
         } );
     } );
@@ -158,7 +158,7 @@ describe( 'DOM utils', () => {
             [ getChild( a ), undefined ]
         ].forEach( t => {
             it( 'works', () => {
-                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+                expect( t[ 0 ] ).to.equal( t[ 1 ] );
             } );
         } );
     } );
@@ -200,7 +200,7 @@ describe( 'DOM utils', () => {
 
         ].forEach( t => {
             it( 'works', () => {
-                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+                expect( t[ 0 ] ).to.deep.equal( t[ 1 ] );
             } );
         } );
 
@@ -235,7 +235,7 @@ describe( 'DOM utils', () => {
             [ closestAncestorUntil( c, '.disabled', '.or' ), null ],
         ].forEach( t => {
             it( 'works', () => {
-                expect( t[ 0 ] ).toEqual( t[ 1 ] );
+                expect( t[ 0 ] ).to.equal( t[ 1 ] );
             } );
         } );
 
@@ -261,29 +261,29 @@ describe( 'DOM utils', () => {
 
         it( 'returns /root/path/to/node without parameters', () => {
             const node = xml.querySelector( 'node' );
-            expect( getXPath( node ) ).toEqual( '/root/path/to/node' );
+            expect( getXPath( node ) ).to.equal( '/root/path/to/node' );
         } );
 
         it( 'returns same /root/path/to/node if first parameter is null', () => {
             const node = xml.querySelector( 'node' );
-            expect( getXPath( node, null ) ).toEqual( '/root/path/to/node' );
+            expect( getXPath( node, null ) ).to.equal( '/root/path/to/node' );
         } );
 
         it( 'returns path from context first node provided as parameter', () => {
             const node = xml.querySelector( 'node' );
-            expect( getXPath( node, 'root' ) ).toEqual( '/path/to/node' );
+            expect( getXPath( node, 'root' ) ).to.equal( '/path/to/node' );
         } );
         it( 'returned path includes no positions if there are no siblings with the same name along the path', () => {
             const node = xml.querySelector( 'node' );
-            expect( getXPath( node, 'root', true ) ).toEqual( '/path/to/node' );
+            expect( getXPath( node, 'root', true ) ).to.equal( '/path/to/node' );
         } );
         it( 'returned path includes positions when asked', () => {
             const node = xml.querySelectorAll( 'number' )[ 1 ];
-            expect( getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number' );
+            expect( getXPath( node, 'root', true ) ).to.equal( '/path/to/repeat[2]/number' );
         } );
         it( 'returned path includes positions when asked (multiple levels)', () => {
             const node = xml.querySelectorAll( 'number' )[ 2 ];
-            expect( getXPath( node, 'root', true ) ).toEqual( '/path/to/repeat[2]/number[2]' );
+            expect( getXPath( node, 'root', true ) ).to.equal( '/path/to/repeat[2]/number[2]' );
         } );
     } );
 

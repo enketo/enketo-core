@@ -32,15 +32,15 @@ describe( 'RangeWidget', () => {
             .then( () => new RangeWidget( control ) )
             .then( widget => {
                 // Check setup
-                expect( widget.originalInputValue ).toEqual( value );
-                expect( widget.range.value ).toEqual( value );
+                expect( widget.originalInputValue ).to.equal( value );
+                expect( widget.range.value ).to.equal( value );
                 // Actual test
                 let changeEventCounter = 0;
                 control.addEventListener( 'change', () => changeEventCounter++ );
                 widget.range.dispatchEvent( events.Change() );
-                expect( changeEventCounter ).toEqual( 0 );
+                expect( changeEventCounter ).to.equal( 0 );
             } )
-            .then( done, fail );
+            .then( done, done );
     } );
 
     it( 'displays an initial range value', done => {
@@ -55,9 +55,9 @@ describe( 'RangeWidget', () => {
             .then( widget => {
                 const currentDisplayValue = widget.current.textContent;
 
-                expect( currentDisplayValue ).toBe( value );
+                expect( currentDisplayValue ).to.equal( value );
             } )
-            .then( done, fail );
+            .then( done, done );
     } );
 
 } );

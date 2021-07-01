@@ -18,6 +18,16 @@ describe( 'datepicker widget', () => {
     }
 
     describe( 'manual input without Enter', () => {
+        /** @type {import('sinon').SinonSandbox} */
+        let sandbox;
+
+        beforeEach( () => {
+            sandbox = sinon.createSandbox();
+        } );
+
+        afterEach( () => {
+            sandbox.restore();
+        } );
 
         [
             [ 'full date', FORM1, '2012-01-01' ],
@@ -31,22 +41,20 @@ describe( 'datepicker widget', () => {
             const fakeInput = datepicker.element.closest( '.question' ).querySelector( '.widget input' );
 
             it( `is propagated correctly for ${desc} fields`, () => {
-
-                input.onchange = () => {};
-                spyOn( input, 'onchange' );
+                input.onchange = sinon.stub().callsFake( () => {} );
 
                 // add manual value to fake input
                 fakeInput.value = newVal;
                 fakeInput.dispatchEvent( new Event( 'change' ) );
 
-                expect( input.value ).toEqual( '2012-01-01' );
-                expect( input.onchange.calls.count() ).toEqual( 1 );
+                expect( input.value ).to.equal( '2012-01-01' );
+                expect( input.onchange.callCount ).to.equal( 1 );
 
                 // reset value in fake input manually
                 fakeInput.value = '';
                 fakeInput.dispatchEvent( new Event( 'change' ) );
 
-                expect( input.value ).toEqual( '' );
+                expect( input.value ).to.equal( '' );
             } );
         } );
 

@@ -10,7 +10,7 @@ describe( 'input helper', () => {
 
         [ 0, 1, 2, 3, 4 ].forEach( index => {
             it( 'works with nested repeats to get the index of a question in respect to the whole form', () => {
-                expect( form.input.getIndex( inputEls[ index ] ) ).toEqual( index );
+                expect( form.input.getIndex( inputEls[ index ] ) ).to.equal( index );
             } );
         } );
     } );
@@ -23,11 +23,11 @@ describe( 'input helper', () => {
 
             // setup
             form.input.setVal( radioEl, '1' );
-            expect( form.input.getVal( radioEl ) ).toEqual( '1' );
+            expect( form.input.getVal( radioEl ) ).to.equal( '1' );
 
             // bug: https://github.com/OpenClinica/enketo-express-oc/issues/481#issuecomment-829429174
             form.input.setVal( radioEl, '' );
-            expect( form.input.getVal( radioEl ) ).toEqual( '' );
+            expect( form.input.getVal( radioEl ) ).to.equal( '' );
         } );
     } );
 
@@ -38,11 +38,11 @@ describe( 'input helper', () => {
         const grp = form.view.html.querySelector( '[name="/repdef/rep"]' );
 
         it( 'works for groups of control', () => {
-            expect( num.value ).toEqual( '5' );
+            expect( num.value ).to.equal( '5' );
 
             form.input.clear( grp );
 
-            expect( num.value ).toEqual( '' );
+            expect( num.value ).to.equal( '' );
         } );
     } );
 } );
