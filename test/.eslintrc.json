@@ -10,7 +10,7 @@
         "expect": true,
         "sinon": true
     },
-    "extends": "eslint:recommended",
+    "extends": "../.eslintrc.json",
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": 6

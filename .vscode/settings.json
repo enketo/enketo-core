@@ -1,0 +1,7 @@
+{
+    "eslint.options": {
+        "rules": {
+            "no-debugger": 1 // Warn rather than error in-editor
+        }
+    }
+}

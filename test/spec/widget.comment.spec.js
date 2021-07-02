@@ -15,7 +15,6 @@ const FORM =
     </form>
     `;
 
-input.validate = () => {};
 const options = {
     helpers: {
         input: input,
@@ -27,12 +26,23 @@ testStaticProperties( CommentWidget );
 //testBasicInstantiation( CommentWidget, FORM, options );
 
 describe( 'CommentWidget', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
     let widget;
 
     beforeEach( () => {
         const fragment = document.createRange().createContextualFragment( FORM );
         const el = fragment.querySelector( CommentWidget.selector );
+
+        sandbox = sinon.createSandbox();
         widget = new CommentWidget( el, options );
+
+        sandbox.stub( input, 'validate' ).callsFake( () => Promise.resolve( true ) );
+    } );
+
+    afterEach( () => {
+        sandbox.restore();
     } );
 
     it( 'hides comment question', () => {

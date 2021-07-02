@@ -5,7 +5,8 @@
         "commonjs": true
     },
     "globals": {
-        "Promise": true
+        "Promise": true,
+        "sinon": true
     },
     "extends": "eslint:recommended",
     "plugins": [

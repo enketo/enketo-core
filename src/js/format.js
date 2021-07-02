@@ -2,7 +2,6 @@
  * @module format
  */
 
-let _locale = navigator.language;
 const NUMBER = '0-9\u0660-\u0669';
 const TIME_PART = `[:${NUMBER}]+`;
 const MERIDIAN_PART = `[^: ${NUMBER}]+`;
@@ -17,7 +16,7 @@ const HAS_MERIDIAN = new RegExp( `^(${TIME_PART} ?(${MERIDIAN_PART}))|((${MERIDI
 function _getCleanLocalTime( dt ) {
     dt = typeof dt == 'undefined' ? new Date() : dt;
 
-    return _cleanSpecialChars( dt.toLocaleTimeString( _locale ) );
+    return _cleanSpecialChars( dt.toLocaleTimeString( format.locale ) );
 }
 
 /**
@@ -82,15 +81,7 @@ const time = {
  * @namespace format
  */
 const format = {
-    /**
-     * @type {string}
-     */
-    set locale( loc ) {
-        _locale = loc;
-    },
-    get locale() {
-        return _locale;
-    }
+    locale: navigator.language,
 };
 
 export { format, time };

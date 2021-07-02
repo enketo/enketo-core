@@ -1,0 +1,8 @@
+{
+    "include": [
+        "./*.js",
+        "src",
+        "test",
+        "typings"
+    ]
+}

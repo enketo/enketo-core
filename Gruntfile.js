@@ -19,7 +19,13 @@ module.exports = grunt => {
                 options: {
                     logConcurrentOutput: true
                 }
-            }
+            },
+            test: {
+                tasks: [ 'karma:watch', 'watch:transforms' ],
+                options: {
+                    logConcurrentOutput: true,
+                },
+            },
         },
         connect: {
             server: {
@@ -61,7 +67,15 @@ module.exports = grunt => {
                     spawn: false,
                     livereload: true
                 }
-            }
+            },
+            transforms: {
+                files: 'test/forms/*.xml',
+                tasks: [ 'transforms' ],
+                options: {
+                    spawn: true,
+                    livereload: false,
+                },
+            },
         },
         karma: {
             options: {
@@ -71,15 +85,32 @@ module.exports = grunt => {
                     ChromeHeadlessNoSandbox: {
                         base: 'ChromeHeadless',
                         flags: [ '--no-sandbox' ]
-                    }
-                }
+                    },
+                    ChromeHeadlessDebug: {
+                        base: 'ChromeHeadless',
+                        flags: [ '--no-sandbox', '--remote-debugging-port=9333' ],
+                    },
+                },
             },
             headless: {
                 browsers: [ 'ChromeHeadlessNoSandbox' ]
             },
             browsers: {
                 browsers: [ 'Chrome', 'Firefox', 'Safari' ]
-            }
+            },
+            watch: {
+                browsers: [ 'ChromeHeadlessDebug' ],
+                options: {
+                    autoWatch: true,
+                    client: {
+                        mocha: {
+                            timeout: Number.MAX_SAFE_INTEGER,
+                        },
+                    },
+                    reporters: [ 'dots' ],
+                    singleRun: false,
+                }
+            },
         },
         sass: {
             options: {
@@ -146,6 +177,7 @@ module.exports = grunt => {
 
     grunt.registerTask( 'compile', [ 'shell:rollup' ] );
     grunt.registerTask( 'test', [ 'eslint:check', 'compile', 'transforms', 'karma:headless', 'css' ] );
+    grunt.registerTask( 'test:watch', [ 'transforms', 'concurrent:test' ] );
     grunt.registerTask( 'css', [ 'sass' ] );
     grunt.registerTask( 'server', [ 'connect:server:keepalive' ] );
     grunt.registerTask( 'develop', [ 'css', 'compile', 'concurrent:develop' ] );
