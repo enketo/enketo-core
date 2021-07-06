@@ -43,8 +43,8 @@ describe( 'Pages mode', () => {
             const pageTwoTextAreaCommentAncestor = pageTwoTextAreaHiddenComment.closest( '[role="comment"]' );
     
             form.pages.flipToPageContaining( [ pageTwoTextAreaCommentAncestor ] );
-            expect( currentPage ).not.to.equal( form.pages.current );
-            expect( pageComment ).to.equal( form.pages.current );
+            expect( currentPage ).not.toEqual( form.pages.current );
+            expect( pageComment ).toEqual( form.pages.current );
 
         } );
 
