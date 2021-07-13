@@ -12,6 +12,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - When loading a long text default value into a multiline text widget, it doesn't expand automatically.
 - When using "goto" on a comment question with a form divided into pages, it doesn't open the comment dialog.
+- XPath inconsistencies with date-as-string result formats.
+- XPath Result of if() is no longer cast to a string (recently updated ODK XForms spec).
 
 [5.18.0] - 2021-05-24
 ---------------------
