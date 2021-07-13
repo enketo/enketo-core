@@ -7,9 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 ##### Changed
 - Increased maximum number of columns in Grid Theme from 10 to 13.
+- Various big developer tooling improvements (e.g. faster testing, debugging, test watching).
 
 ##### Fixed
 - When loading a long text default value into a multiline text widget, it doesn't expand automatically.
+- When using "goto" on a comment question with a form divided into pages, it doesn't open the comment dialog.
 
 [5.18.0] - 2021-05-24
 ---------------------
