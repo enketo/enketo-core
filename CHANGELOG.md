@@ -3,7 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
+[5.18.1] - 2021-07-13
 ---------------------
 ##### Changed
 - Increased maximum number of columns in Grid Theme from 10 to 13.

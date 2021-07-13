@@ -27,9 +27,9 @@ class TextareaWidget extends Widget {
         } );
         // workaround for resize issue on first time load textarea with existing value on enketo-express
         new MutationsTracker( this.element ).waitForQuietness()
-        .then( () => { 
-            textareas.forEach( this._resize.bind( this ) );
-        } );
+            .then( () => { 
+                textareas.forEach( this._resize.bind( this ) );
+            } );
         this.element.addEventListener( events.PageFlip().type, event => {
             const els = event.target.querySelectorAll( 'textarea' );
             els.forEach( this._resize.bind( this ) );
