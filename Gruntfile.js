@@ -42,13 +42,13 @@ module.exports = grunt => {
         },
         eslint: {
             check: {
-                src: [ '*.js', 'src/**/*.js' ]
+                src: [ 'src/**/*.js' ]
             },
             fix: {
                 options: {
                     fix: true,
                 },
-                src: [ '*.js', 'src/**/*.js' ]
+                src: [ 'src/**/*.js' ]
             }
         },
         watch: {
@@ -61,7 +61,7 @@ module.exports = grunt => {
                 }
             },
             js: {
-                files: [ 'config.json', '*.js', 'src/**/*.js' ],
+                files: [ 'config.json', 'src/**/*.js' ],
                 tasks: [ 'shell:rollup' ],
                 options: {
                     spawn: false,
@@ -138,7 +138,7 @@ module.exports = grunt => {
         },
         shell: {
             transformer: {
-                command: 'node node_modules/enketo-transformer/app.js'
+                command: 'node node_modules/enketo-transformer/src/js/app.js'
             },
             rollup: {
                 command: 'npx rollup --config'

@@ -7,11 +7,11 @@
  * Place a replacement for this controller elsewhere in your app.
  */
 
-import support from './src/js/support';
-import { Form } from './src/js/form';
-import fileManager from './src/js/file-manager';
-import events from './src/js/event';
-import { fixGrid, styleToAll, styleReset } from './src/js/print';
+import support from './support';
+import { Form } from './form';
+import fileManager from './file-manager';
+import events from './event';
+import { fixGrid, styleToAll, styleReset } from './print';
 var form;
 var formStr;
 var modelStr;

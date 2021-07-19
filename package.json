@@ -93,7 +93,7 @@
         "time-grunt": "^2.0.0"
     },
     "browser": {
-        "enketo/config": "./config.js",
+        "enketo/config": "./src/js/config.js",
         "enketo/widgets": "./src/js/widgets.js",
         "enketo/translator": "./src/js/fake-translator",
         "enketo/dialog": "./src/js/fake-dialog",

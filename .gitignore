@@ -1,7 +1,6 @@
 node_modules/
 npm-debug.log
-build/css/
-build/js/
+build
 test/mock/forms.js
 test-coverage/
 temp
