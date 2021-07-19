@@ -62,7 +62,7 @@ module.exports = grunt => {
             },
             js: {
                 files: [ 'config.json', 'src/**/*.js' ],
-                tasks: [ 'shell:rollup' ],
+                tasks: [ 'shell:build' ],
                 options: {
                     spawn: false,
                     livereload: true
@@ -140,8 +140,8 @@ module.exports = grunt => {
             transformer: {
                 command: 'node node_modules/enketo-transformer/src/js/app.js'
             },
-            rollup: {
-                command: 'npx rollup --config'
+            build: {
+                command: 'node ./scripts/build.js'
             }
         }
     } );
@@ -175,7 +175,7 @@ module.exports = grunt => {
             } );
     } );
 
-    grunt.registerTask( 'compile', [ 'shell:rollup' ] );
+    grunt.registerTask( 'compile', [ 'shell:build' ] );
     grunt.registerTask( 'test', [ 'eslint:check', 'compile', 'transforms', 'karma:headless', 'css' ] );
     grunt.registerTask( 'test:watch', [ 'transforms', 'concurrent:test' ] );
     grunt.registerTask( 'css', [ 'sass' ] );
