@@ -42,13 +42,13 @@ module.exports = grunt => {
         },
         eslint: {
             check: {
-                src: [ '*.js', 'src/**/*.js' ]
+                src: [ 'src/**/*.js' ]
             },
             fix: {
                 options: {
                     fix: true,
                 },
-                src: [ '*.js', 'src/**/*.js' ]
+                src: [ 'src/**/*.js' ]
             }
         },
         watch: {
@@ -61,8 +61,8 @@ module.exports = grunt => {
                 }
             },
             js: {
-                files: [ 'config.json', '*.js', 'src/**/*.js' ],
-                tasks: [ 'shell:rollup' ],
+                files: [ 'config.json', 'src/**/*.js' ],
+                tasks: [ 'shell:build' ],
                 options: {
                     spawn: false,
                     livereload: true
@@ -138,10 +138,10 @@ module.exports = grunt => {
         },
         shell: {
             transformer: {
-                command: 'node node_modules/enketo-transformer/app.js'
+                command: 'node node_modules/enketo-transformer/src/js/app.js'
             },
-            rollup: {
-                command: 'npx rollup --config'
+            build: {
+                command: 'node ./scripts/build.js'
             }
         }
     } );
@@ -175,7 +175,7 @@ module.exports = grunt => {
             } );
     } );
 
-    grunt.registerTask( 'compile', [ 'shell:rollup' ] );
+    grunt.registerTask( 'compile', [ 'shell:build' ] );
     grunt.registerTask( 'test', [ 'eslint:check', 'compile', 'transforms', 'karma:headless', 'css' ] );
     grunt.registerTask( 'test:watch', [ 'transforms', 'concurrent:test' ] );
     grunt.registerTask( 'css', [ 'sass' ] );
