@@ -1,11 +1,3 @@
-// Karma configuration
-// Generated on Mon Mar 16 2015 13:42:33 GMT-0600 (MDT)
-const path = require( 'path' );
-const istanbul = require( 'istanbul' );
-const shieldBadgeReporter = require( 'istanbul-reporter-shield-badge' );
-
-istanbul.Report.register( shieldBadgeReporter );
-
 module.exports = config => {
 
     // Force timezone for tests, so that datetime conversion results are predictable
@@ -68,15 +60,6 @@ module.exports = config => {
                 // for in-depth analysis in your browser
                 {
                     type: 'html',
-                    includeAllSources: true
-                },
-                // for generating coverage badge in README.md
-                {
-                    type: 'shield-badge',
-                    range: [ 60, 80 ],
-                    subject: 'coverage',
-                    readmeFilename: 'README.md',
-                    readmeDir: path.resolve( __dirname, '..' ),
                     includeAllSources: true
                 },
                 // for displaying percentages summary in command line
