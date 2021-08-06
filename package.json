@@ -41,7 +41,7 @@
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/form.js",
     "scripts": {
-        "preinstall": "./scripts/preinstall",
+        "preinstall": "test -f ./node_modules && ./scripts/preinstall || true",
         "start": "grunt develop",
         "test": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt test",
         "test-browsers": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt karma:browsers",
