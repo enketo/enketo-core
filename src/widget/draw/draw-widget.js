@@ -182,7 +182,9 @@ class DrawWidget extends Widget {
                         that.$widget.removeClass( 'full-screen' );
                         that.pad.off();
                         that._forceUpdate();
-                        that._resizeCanvas( canvas );
+                        // To fix if the user make an annotate and click on hide-canvas-btn within DELAY :
+						// To avoid any confilct between the updatevalue trigger by forceupdate and the futur updatevalue on canvas reload and potential another async event
+						setTimeout( that._resizeCanvas.bind(that, canvas ), DELAY);
 
                         return false;
                     } ).click();
