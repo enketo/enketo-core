@@ -87,8 +87,15 @@ export default {
              * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
              */
             let context = p.path;
-            if ( getChild( node, `.or-repeat-info[data-name="${p.path}"]` ) && !getChild( node,  `.or-repeat[name="${p.path}"]` ) ) {
-                context = null;
+
+            const repeatInfo = getChild( node, `.or-repeat-info[data-name="${p.path}"]` );
+
+            if ( repeatInfo != null && !getChild( node, `.or-repeat[name="${p.path}"]` ) ) {
+                const count = this.form.repeats.updateViewInstancesFromModel( repeatInfo );
+
+                if ( count === 0 ) {
+                    context = null;
+                }
             }
 
             /*

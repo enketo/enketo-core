@@ -4,10 +4,31 @@ import forms from '../mock/forms';
 import event from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
 
-describe( 'repeat functionality', () => {
+/**
+ * @typedef {import('sinon').SinonSandbox} Sandbox
+ */
 
-    //turn jQuery animations off
-    $.fx.off = true;
+/**
+ * @typedef {import('../../src/js/form').Form} Form
+ */
+
+describe( 'repeat functionality', () => {
+    /** @type {Sandbox} */
+    let sandbox;
+
+    beforeEach( () => {
+        sandbox = sinon.createSandbox();
+
+        if ( !( 'off' in $.fx ) ) {
+            $.fx.off = undefined;
+        }
+
+        sandbox.stub( $.fx, 'off' ).get( () => true );
+    } );
+
+    afterEach( () => {
+        sandbox.restore();
+    } );
 
     describe( 'cloning', () => {
         beforeEach( () => {
@@ -508,4 +529,143 @@ describe( 'repeat functionality', () => {
         } );
     } );
 
+    describe( 'relevance, nesting, groups', () => {
+        const hiddenClassName = 'disabled';
+
+        /** @type {Form} */
+        let form;
+
+        beforeEach( () => {
+            form = loadForm( 'core-804-nested-repeat-relevant.xml' );
+            form.init();
+        } );
+
+        it( 'includes a relevant nested repeat\'s first group when hidden', () => {
+            const parent = form.view.html.querySelector( 'section.or-branch.or-group[name="/data/field_asset_rpt"]' );
+            const groupXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt';
+            const groupSection = parent.querySelector( `section[name="${groupXpath}"].or-group.or-branch` );
+            const repeatXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt';
+            const repeat = groupSection.querySelector( `section.or-repeat[name="${repeatXpath}"]` );
+
+            expect( repeat ).not.to.be.null;
+        } );
+
+        it( 'shows a nested repeat when its group is relevant', () => {
+            const parent = form.view.html.querySelector( 'section.or-branch.or-group[name="/data/field_asset_rpt"]' );
+            const checkboxXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_exists';
+            const checkboxes = Array.from( parent.querySelectorAll( `input[data-name="${checkboxXpath}"]` ) );
+            const yes = checkboxes.find( checkbox => checkbox.value === 'yes' );
+            const groupXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt';
+            const groupSection = parent.querySelector( `section.or-group.or-branch[name="${groupXpath}"]` );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( true );
+
+            yes.click();
+            yes.dispatchEvent( event.Change() );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( false );
+        } );
+
+        it( 'includes a relevant nested repeat\'s first group when visible', () => {
+            const parent = form.view.html.querySelector( 'section.or-branch.or-group[name="/data/field_asset_rpt"]' );
+            const groupXpath = '/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt';
+            const groupSection = parent.querySelector( `section[name="${groupXpath}"].or-group.or-branch` );
+            const repeatXpath = '/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt';
+            const repeat = groupSection.querySelector( `section.or-repeat[name="${repeatXpath}"]` );
+
+            expect( repeat ).not.to.be.null;
+        } );
+
+        it( 'hides a nested repeat when its group is not relevant', () => {
+            const parent = form.view.html.querySelector( 'section.or-branch.or-group[name="/data/field_asset_rpt"]' );
+            const checkboxXpath = '/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_exists';
+            const checkboxes = Array.from( parent.querySelectorAll( `input[data-name="${checkboxXpath}"]` ) );
+            const yes = checkboxes.find( checkbox => checkbox.value === 'yes' );
+            const no = checkboxes.find( checkbox => checkbox.value === 'no' );
+            const groupXpath = '/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt';
+            const groupSection = parent.querySelector( `section.or-group.or-branch[name="${groupXpath}"]` );
+
+            yes.click();
+            yes.dispatchEvent( event.Change() );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( false );
+
+            no.click();
+            no.dispatchEvent( event.Change() );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( true );
+        } );
+
+        it( 'includes a relevant nested hidden repeat\'s first group when adding a new parent repeat', () => {
+            const parentRepeatXpath = '/data/field_asset_rpt';
+            const parent = form.view.html.querySelector( `section.or-branch.or-group[name="${parentRepeatXpath}"]` );
+            const addButton = parent.querySelector( `.or-repeat-info[data-name="${parentRepeatXpath}"] > button` );
+
+            addButton.click();
+
+            const newParent = form.view.html.querySelector( `section.or-repeat.clone[name="${parentRepeatXpath}"]` );
+            const repeatXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt';
+            const newChild = newParent.querySelector( `section.or-repeat[name="${repeatXpath}"]` );
+
+            expect( newChild ).not.to.be.null;
+        } );
+
+        it( 'shows a nested repeat when its group is relevant in a new repeat', () => {
+            const parentRepeatXpath = '/data/field_asset_rpt';
+            const parent = form.view.html.querySelector( `section.or-branch.or-group[name="${parentRepeatXpath}"]` );
+            const addButton = parent.querySelector( `.or-repeat-info[data-name="${parentRepeatXpath}"] > button` );
+
+            addButton.click();
+
+            const newParent = form.view.html.querySelector( 'section.or-repeat.clone[name="/data/field_asset_rpt"]' );
+            const checkboxXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_exists';
+            const checkboxes = Array.from( newParent.querySelectorAll( `input[data-name="${checkboxXpath}"]` ) );
+            const yes = checkboxes.find( checkbox => checkbox.value === 'yes' );
+            const groupXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt';
+            const groupSection = newParent.querySelector( `section.or-group.or-branch[name="${groupXpath}"]` );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( true );
+
+            yes.click();
+            yes.dispatchEvent( event.Change() );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( false );
+        } );
+
+        it( 'includes a relevant nested visible repeat\'s first group when adding a new parent repeat', () => {
+            const parentRepeatXpath = '/data/field_asset_rpt';
+            const parent = form.view.html.querySelector( `section.or-branch.or-group[name="${parentRepeatXpath}"]` );
+            const addButton = parent.querySelector( `.or-repeat-info[data-name="${parentRepeatXpath}"] > button` );
+
+            addButton.click();
+
+            const newParent = form.view.html.querySelector( `section.or-repeat.clone[name="${parentRepeatXpath}"]` );
+            const repeatXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt';
+            const newChild = newParent.querySelector( `section.or-repeat[name="${repeatXpath}"]` );
+
+            expect( newChild ).not.to.be.null;
+        } );
+
+        it( 'hides a nested repeat when its group is not relevant in a new repeat', () => {
+            const parentRepeatXpath = '/data/field_asset_rpt';
+            const parent = form.view.html.querySelector( `section.or-branch.or-group[name="${parentRepeatXpath}"]` );
+            const addButton = parent.querySelector( `.or-repeat-info[data-name="${parentRepeatXpath}"] > button` );
+
+            addButton.click();
+
+            const newParent = form.view.html.querySelector( 'section.or-repeat.clone[name="/data/field_asset_rpt"]' );
+            const checkboxXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_exists';
+            const checkboxes = Array.from( newParent.querySelectorAll( `input[data-name="${checkboxXpath}"]` ) );
+            const no = checkboxes.find( checkbox => checkbox.value === 'no' );
+            const groupXpath = '/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt';
+            const groupSection = newParent.querySelector( `section.or-group.or-branch[name="${groupXpath}"]` );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( true );
+
+            no.click();
+            no.dispatchEvent( event.Change() );
+
+            expect( groupSection.classList.contains( hiddenClassName ) ).to.equal( true );
+        } );
+    } );
 } );
