@@ -1188,6 +1188,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = 'github:eyelidlessness/enketo-transformer#node-16-dependency-upgrades';
+Form.requiredTransformerVersion = '1.44.0';
 
 export { Form, FormModel };

@@ -58,7 +58,7 @@
         "chai-as-promised": "^7.1.1",
         "cross-env": "^7.0.3",
         "docdash": "^1.2.0",
-        "enketo-transformer": "github:eyelidlessness/enketo-transformer#node-16-dependency-upgrades",
+        "enketo-transformer": "1.44.0",
         "esbuild": "^0.12.25",
         "esbuild-plugin-alias": "^0.1.2",
         "eslint-plugin-jsdoc": "^35.5.1",
