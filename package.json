@@ -61,7 +61,7 @@
         "enketo-transformer": "1.44.0",
         "esbuild": "^0.12.25",
         "esbuild-plugin-alias": "^0.1.2",
-        "eslint-plugin-jsdoc": "^35.5.1",
+        "eslint-plugin-jsdoc": "^36.0.8",
         "grunt": "^1.4.1",
         "grunt-concurrent": "^3.0.0",
         "grunt-contrib-connect": "^3.0.0",
