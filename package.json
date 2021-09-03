@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "5.18.1",
+    "version": "6.0.0",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -48,20 +48,17 @@
         "test-watch": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt test:watch",
         "beautify": "grunt eslint:fix",
         "build-docs": "rimraf docs && ./node_modules/.bin/jsdoc -c jsdoc.config.js",
-        "remove-docs": "rm -R ./docs/*.html",
-        "publish-please-pre-script": "npm run test && npm run beautify && npm run build-docs",
-        "publish-please": "publish-please",
-        "prepublishOnly": "publish-please guard"
+        "remove-docs": "rm -R ./docs/*.html"
     },
     "devDependencies": {
         "chai": "^4.3.4",
         "chai-as-promised": "^7.1.1",
         "cross-env": "^7.0.3",
         "docdash": "^1.2.0",
-        "enketo-transformer": "1.44.0",
-        "esbuild": "^0.12.25",
+        "enketo-transformer": "2.0.0",
+        "esbuild": "^0.12.28",
         "esbuild-plugin-alias": "^0.1.2",
-        "eslint-plugin-jsdoc": "^36.0.8",
+        "eslint-plugin-jsdoc": "^36.1.0",
         "grunt": "^1.4.1",
         "grunt-concurrent": "^3.0.0",
         "grunt-contrib-connect": "^3.0.0",
@@ -86,7 +83,6 @@
         "load-grunt-tasks": "^5.1.0",
         "mocha": "^9.1.1",
         "node-sass": "^6.0.1",
-        "publish-please": "github:eyelidlessness/publish-please#fix/dependencies-semver-compat",
         "rimraf": "^3.0.2",
         "sinon": "^11.1.2",
         "sinon-chai": "^3.7.0",
@@ -110,7 +106,7 @@
         "leaflet.gridlayer.googlemutant": "^0.13.4",
         "mergexml": "github:eyelidlessness/js-merge-xml#upgrade/xmldom",
         "node-forge": "^0.10.0",
-        "openrosa-xpath-evaluator": "^2.0.7",
+        "openrosa-xpath-evaluator": "^2.0.8",
         "signature_pad": "2.3.x"
     },
     "volta": {

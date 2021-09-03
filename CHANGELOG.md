@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[6.0.0] - 2021-09-17
+---------------------
+##### Changed
+- Upgraded node, npm, and other dependencies
+
 [5.18.1] - 2021-07-13
 ---------------------
 ##### Changed
