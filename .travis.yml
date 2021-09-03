@@ -2,8 +2,10 @@ sudo: false
 dist: xenial
 language: node_js
 node_js:
-  - "12"
+  - "14"
+  - "16"
 addons:
   chrome: stable
-before_script:
+before_install:
+  - npm install -g npm@^6
   - npm install -g grunt-cli
