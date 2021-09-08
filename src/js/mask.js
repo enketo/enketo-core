@@ -57,23 +57,22 @@ export default {
             }
 
         } );
+
         /*
-     * Workaround for most browsers keeping invalid numbers visible in the input without a means to access the invalid value.
-     * E.g. see https://bugs.chromium.org/p/chromium/issues/detail?id=178437&can=2&q=178437&colspec=ID%20Pri%20M%20Stars%20ReleaseBlock%20Component%20Status%20Owner%20Summary%20OS%20Modified
-     *
-     * A much more intelligent way to solve the problem would be to add a feedback loop from the Model to the input that would
-     * correct (a converted number) or empty (an invalid number). https://github.com/enketo/enketo-core/issues/407
-     */
-        form.addEventListener( 'blur', event => {
-            if ( event.target.matches( selector ) ){
+         * Workaround for most browsers keeping invalid numbers visible in the input without a means to access the invalid value.
+         * E.g. see https://bugs.chromium.org/p/chromium/issues/detail?id=178437&can=2&q=178437&colspec=ID%20Pri%20M%20Stars%20ReleaseBlock%20Component%20Status%20Owner%20Summary%20OS%20Modified
+         *
+         * A much more intelligent way to solve the problem would be to add a feedback loop from the Model to the input that would
+         * correct (a converted number) or empty (an invalid number). https://github.com/enketo/enketo-core/issues/407
+         */
+        this.form.view.$.on( 'blur', `input${selector}:not(.ignore)`, event => {
             // proper browsers:
-                if ( typeof event.target.validity !== 'undefined' && typeof event.target.validity.badInput !== 'undefined' && event.target.validity.badInput ) {
-                    event.target.value = '';
-                }
-                // IE11 (no validity.badInput support, but does give access to invalid number with event.target.value)
-                else if ( typeof event.target.validity.badInput === 'undefined' && event.target.value && !validRegex.test( event.target.value.trim() ) ) {
-                    event.target.value = '';
-                }
+            if ( typeof event.target.validity !== 'undefined' && typeof event.target.validity.badInput !== 'undefined' && event.target.validity.badInput ) {
+                event.target.value = '';
+            }
+            // IE11 (no validity.badInput support, but does give access to invalid number with event.target.value)
+            else if ( typeof event.target.validity.badInput === 'undefined' && event.target.value && !validRegex.test( event.target.value.trim() ) ) {
+                event.target.value = '';
             }
         } );
 
