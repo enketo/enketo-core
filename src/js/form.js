@@ -930,7 +930,7 @@ Form.prototype.blockPageNavigation = function() {
  * @return {!boolean} Whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function( node ) {
-    const invalidSelectors = [ '.invalid-required', '.invalid-relevant' ].concat(  this.constraintClassesInvalid.map( cls => `.${cls}` ) );
+    const invalidSelectors = [ 'invalid-required', 'invalid-relevant' ].concat(  this.constraintClassesInvalid.map( cls => `${cls}` ) );
     if ( node ) {
         const question = this.input.getWrapNode( node );
         const cls = question.classList;
