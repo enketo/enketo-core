@@ -878,6 +878,10 @@ Form.prototype.setInvalid = function( control, type = 'constraint' ) {
         return;
     }
 
+    // When page validation is disabled, and the user enters an invalid value in a form control,
+    // and clicks the Next or Previous button without having left that form control (no blur event)
+    // we temporarily block the navigation action to ensure the user sees the validation error message.
+    // The user will have to click again to navigate.
     if ( config.validatePage === false && this.isValid( control ) ) {
         this.blockPageNavigation();
     }
