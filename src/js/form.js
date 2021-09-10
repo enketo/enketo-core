@@ -882,7 +882,7 @@ Form.prototype.setInvalid = function( control, type = 'constraint' ) {
     // and clicks the Next or Previous button without having left that form control (no blur event)
     // we temporarily block the navigation action to ensure the user sees the validation error message.
     // The user will have to click again to navigate.
-    if ( config.validatePage === false && this.isValid( control ) ) {
+    if ( config.validatePage === false ) {
         this.blockPageNavigation();
     }
 
@@ -925,24 +925,6 @@ Form.prototype.blockPageNavigation = function() {
     this.blockPageNavigationTimeout = window.setTimeout( () => {
         that.pageNavigationBlocked = false;
     }, 600 );
-};
-
-/**
- * Checks whether the question is not currently marked as invalid. If no argument is provided, it checks the whole form.
- *
- * @param {Element} node - form control HTML element
- * @return {!boolean} Whether the question/form is not marked as invalid.
- */
-Form.prototype.isValid = function( node ) {
-    const invalidSelectors = [ 'invalid-required', 'invalid-relevant' ].concat(  this.constraintClassesInvalid.map( cls => `${cls}` ) );
-    if ( node ) {
-        const question = this.input.getWrapNode( node );
-        const cls = question.classList;
-
-        return !invalidSelectors.some( selector => cls.contains( selector ) );
-    }
-
-    return !this.view.html.querySelector( invalidSelectors.join( ', ' ) );
 };
 
 /**

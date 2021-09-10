@@ -887,30 +887,6 @@ describe( 'validation', () => {
 
     } );
 
-    describe( 'isValid method', () => {
-
-        it( 'returns false if a question is marked as invalid constraint', () => {
-            const form = loadForm( 'comment.xml' );
-            form.init();
-            const input = form.view.html.querySelector( 'input[name="/comment/one"]' );
-
-            expect( form.isValid( input ) ).to.equal( true );
-            form.setInvalid( input, 'constraint' );
-            expect( form.isValid( input ) ).to.equal( false );
-        } );
-
-        it( 'returns false if a question is marked as invalid required', () => {
-            const form = loadForm( 'comment.xml' );
-            form.init();
-            const input = form.view.html.querySelector( 'input[name="/comment/one"]' );
-
-            expect( form.isValid( input ) ).to.equal( true );
-            form.setInvalid( input, 'required' );
-            expect( form.isValid( input ) ).to.equal( false );
-        } );
-
-    } );
-
     // These tests were a real pain to write because of the need to change a global config property.
     describe( 'with validateContinuously', () => {
         let form;
