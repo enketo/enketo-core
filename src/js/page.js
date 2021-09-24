@@ -368,12 +368,14 @@ export default {
                 this._setToCurrent( pageEl );
                 this._focusOnFirstQuestion( pageEl );
                 this._toggleButtons( newIndex );
+                this._pauseMultimedia( pageEl );
                 pageEl.dispatchEvent( events.PageFlip() );
             }
         } else if ( pageEl ) {
             this._setToCurrent( pageEl );
             this._focusOnFirstQuestion( pageEl );
             this._toggleButtons( newIndex );
+            this._pauseMultimedia( pageEl );
             pageEl.dispatchEvent( events.PageFlip() );
             pageEl.setAttribute( 'tabindex', 1 );
         }
@@ -424,6 +426,15 @@ export default {
         this.$btnNext.add( this.$btnLast ).toggleClass( 'disabled', !next );
         this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
         this.$formFooter.toggleClass( 'end', !next );
+    },
+    /**
+     * Pauses video and audio from playing when switching to a page.
+     * @param {Element} pageEl - page element
+     */
+    _pauseMultimedia( pageEl ) {
+        $( pageEl )
+            .find('audio, video')
+            .each((idx, element) => element.pause());
     },
     /**
      * Updates Table of Contents
