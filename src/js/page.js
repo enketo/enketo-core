@@ -365,17 +365,16 @@ export default {
                 this.current.classList.remove( 'current', 'fade-out' );
                 getAncestors( this.current, '.or-group, .or-group-data, .or-repeat', '.or' )
                     .forEach( el => el.classList.remove( 'contains-current' ) );
+                this._pauseMultimedia( this.current );
                 this._setToCurrent( pageEl );
                 this._focusOnFirstQuestion( pageEl );
                 this._toggleButtons( newIndex );
-                this._pauseMultimedia( pageEl );
                 pageEl.dispatchEvent( events.PageFlip() );
             }
         } else if ( pageEl ) {
             this._setToCurrent( pageEl );
             this._focusOnFirstQuestion( pageEl );
             this._toggleButtons( newIndex );
-            this._pauseMultimedia( pageEl );
             pageEl.dispatchEvent( events.PageFlip() );
             pageEl.setAttribute( 'tabindex', 1 );
         }
@@ -429,12 +428,13 @@ export default {
     },
     /**
      * Pauses video and audio from playing when switching to a page.
+     *
      * @param {Element} pageEl - page element
      */
     _pauseMultimedia( pageEl ) {
         $( pageEl )
-            .find('audio, video')
-            .each((idx, element) => element.pause());
+            .find( 'audio, video' )
+            .each( ( idx, element ) => element.pause() );
     },
     /**
      * Updates Table of Contents
