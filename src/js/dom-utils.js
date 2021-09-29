@@ -199,7 +199,7 @@ function hasNextSiblingElementSameName( el ) {
  * @param {Element} el - Target node
  * @return {boolean} Whether a sibling has the same node name
  */
-function hasSiblingSameName( el ) {
+function hasSiblingElementSameName( el ) {
     return hasNextSiblingElementSameName( el ) || hasPreviousSiblingElementSameName( el );
 }
 
@@ -255,7 +255,7 @@ function getXPath( node, rootNodeName = '#document', includePosition = false ) {
     while ( parent && parentName !== rootNodeName && parentName !== '#document' ) {
         if ( includePosition ) {
             index = getRepeatIndex( parent );
-            position = hasSiblingSameName( parent ) ? `[${index + 1}]` : '';
+            position = hasSiblingElementSameName( parent ) ? `[${index + 1}]` : '';
         }
         steps.push( parentName + position );
         parent = parent.parentElement;
@@ -448,7 +448,7 @@ export {
     hasPreviousCommentSiblingWithContent,
     hasPreviousSiblingElementSameName,
     hasNextSiblingElementSameName,
-    hasSiblingSameName,
+    hasSiblingElementSameName,
     closestAncestorUntil,
     empty,
     MutationsTracker

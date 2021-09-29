@@ -1,4 +1,4 @@
-import { getSiblingElements, getSiblingElementsAndSelf, getSiblingElement, getAncestors, closestAncestorUntil, getChildren, getChild, getXPath } from '../../src/js/dom-utils';
+import { getSiblingElements, getSiblingElementsAndSelf, getSiblingElement, getAncestors, closestAncestorUntil, getChildren, getChild, getXPath, hasNextSiblingElementSameName, hasSiblingElementSameName, hasPreviousSiblingElementSameName } from '../../src/js/dom-utils';
 
 function getFragment( htmlStr ) {
     return document.createRange().createContextualFragment( htmlStr );
@@ -269,24 +269,97 @@ describe( 'DOM utils', () => {
             expect( getXPath( node, null ) ).to.equal( '/root/path/to/node' );
         } );
 
+        it( 'returns same /root/path/to/node if first parameter is null and second parameter is true', () => {
+            const node = xml.querySelector( 'node' );
+            expect( getXPath( node, null ) ).to.equal( '/root/path/to/node' );
+        } );
+
         it( 'returns path from context first node provided as parameter', () => {
             const node = xml.querySelector( 'node' );
             expect( getXPath( node, 'root' ) ).to.equal( '/path/to/node' );
         } );
+
         it( 'returned path includes no positions if there are no siblings with the same name along the path', () => {
             const node = xml.querySelector( 'node' );
             expect( getXPath( node, 'root', true ) ).to.equal( '/path/to/node' );
         } );
+
         it( 'returned path includes positions when asked', () => {
             const node = xml.querySelectorAll( 'number' )[ 1 ];
             expect( getXPath( node, 'root', true ) ).to.equal( '/path/to/repeat[2]/number' );
         } );
+
+        it( 'returned path includes position of first repeat if sibling repeat exists', () => {
+            const node = xml.querySelector( 'number' );
+            expect( getXPath( node, 'root', true ) ).to.equal( '/path/to/repeat[1]/number' );
+        } );
+
         it( 'returned path includes positions when asked (multiple levels)', () => {
             const node = xml.querySelectorAll( 'number' )[ 2 ];
             expect( getXPath( node, 'root', true ) ).to.equal( '/path/to/repeat[2]/number[2]' );
         } );
     } );
 
+    describe( 'siblingElement functions', () => {
+        const xmlStr = `
+            <root>
+                <path>
+                    <to>
+                        <node/>
+                        <!-- some comment -->
+                        <repeat>
+                            <number />
+                        </repeat>
+                        <rogue/>
+                        <!-- some comment -->
+                        <repeat>
+                            <number />
+                        </repeat>
+                        <!-- some comment -->
+                        <rogue/>
+                    </to>
+                </path>
+            </root>`;
+        const xml = new DOMParser().parseFromString( xmlStr, 'text/xml' );
+        const repeats = xml.querySelectorAll( 'repeat' );
+        const node = xml.querySelector( 'node' );
 
+        describe( 'hasPreviousSiblingElementSameName', () => {
+            [
+                [ repeats[0], false ],
+                [ repeats[1], true ],
+                [ node, false ]
+            ].forEach( ( [ el, expected ] ) => {
+                it( 'evaluates correctly', () => {
+                    expect( hasPreviousSiblingElementSameName( el ) ).to.equal( expected );
+                } );
+            } );
+        } );
+
+        describe( 'hasNextSiblingElementSameName', () => {
+            [
+                [ repeats[0], true ],
+                [ repeats[1], false ],
+                [ node, false ]
+            ].forEach( ( [ el, expected ] ) => {
+                it( 'evaluates correctly', () => {
+                    expect( hasNextSiblingElementSameName( el ) ).to.equal( expected );
+                } );
+            } );
+        } );
+
+        describe( 'hasSiblingElementSameName', () => {
+            [
+                [ repeats[0], true ],
+                [ repeats[1], true ],
+                [ node, false ]
+            ].forEach( ( [ el, expected ] ) => {
+                it( 'evaluates correctly', () => {
+                    expect( hasSiblingElementSameName( el ) ).to.equal( expected );
+                } );
+            } );
+        } );
+
+    } );
 
 } );
