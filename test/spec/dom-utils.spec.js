@@ -247,12 +247,15 @@ describe( 'DOM utils', () => {
                 <path>
                     <to>
                         <node/>
+                        <!-- some comment -->
                         <repeat>
                             <number/>
                         </repeat>
                         <repeat>
+                            <!-- some comment -->
                             <number/>
                             <number/>
+                            <!-- some comment -->
                         </repeat>
                     </to>
                 </path>
