@@ -58,7 +58,8 @@ export default {
                      * and the dependent node is inside the same repeat, we can prevent the expensive index determination
                      */
                     const dataNodeName = ( name.lastIndexOf( '/' ) !== -1 ) ? name.substring( name.lastIndexOf( '/' ) + 1 ) : name;
-                    const dataNode = this.form.model.node( updated.repeatPath, updated.repeatIndex ).getElement().querySelector( dataNodeName );
+                    const childNodeList = this.form.model.node( updated.repeatPath, updated.repeatIndex ).getElement().querySelectorAll( dataNodeName );
+                    const dataNode = Array.from(childNodeList).filter( node => dataNodes.includes( node ) )[0];
                     props.index = dataNodes.indexOf( dataNode );
                     this._updateCalc( control, props, emptyNonRelevant );
                 } else if ( control.type === 'hidden' ) {

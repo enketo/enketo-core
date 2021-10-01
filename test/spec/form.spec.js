@@ -304,8 +304,8 @@ describe( 'calculations', () => {
         form.view.$.find( '.add-repeat-btn' ).click();
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(0)' ).val( '10' ).trigger( 'change' );
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '20' ).trigger( 'change' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal() ).to.equal( '200' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal() ).to.equal( '400' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/num1', 0 ).getVal() ).to.equal( '200' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/num1', 1 ).getVal() ).to.equal( '400' );
     } );
 
     it( 'are not performed if the calculation is not relevant', () => {
@@ -317,9 +317,9 @@ describe( 'calculations', () => {
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(1)' ).val( '5' ).trigger( 'change' );
         form.view.$.find( '[name="/calcs_in_repeats/rep1/num1"]:eq(2)' ).val( '40' ).trigger( 'change' );
 
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 0 ).getVal() ).to.equal( '400' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 1 ).getVal() ).to.equal( '' );
-        expect( form.model.node( '/calcs_in_repeats/rep1/grp/calc3', 2 ).getVal() ).to.equal( '800' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/num1', 0 ).getVal() ).to.equal( '400' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/num1', 1 ).getVal() ).to.equal( '' );
+        expect( form.model.node( '/calcs_in_repeats/rep1/grp/num1', 2 ).getVal() ).to.equal( '800' );
     } );
 
     it( 'outside a repeat are updated if they are dependent on a repeat node', () => {
