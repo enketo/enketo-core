@@ -290,11 +290,11 @@ describe( 'Itemset functionality', () => {
         } );
     } );
 
-    describe( ' in a cloned repeat with a predicate including current()/../', () => {
-        it( 'works', () => {
+    describe( 'with repeats and a predicate referring to current()/../', () => {
+        it( 'works in a cloned repeat in an old form that does not contain odk:xforms-version="1.0.0"', () => {
             // This test is added to show that once the makeBugCompliant function has been removed
             // itemsets with relative predicates still work.
-            const form = loadForm( 'reprelcur1.xml' );
+            const form = loadForm( 'itemset-repeat-relevant-current-old.xml' );
             form.init();
             form.view.$.find( '[data-name="/repeat-relative-current/rep/crop"][value="banana"]' ).prop( 'checked', true ).trigger( 'change' );
             form.view.$.find( '.add-repeat-btn' ).click();
@@ -305,6 +305,30 @@ describe( 'Itemset functionality', () => {
             expect( form.view.$.find( sel2 ).eq( 0 ).val() ).to.equal( 'banana' );
             expect( form.view.$.find( sel1 ).eq( 1 ).val() ).to.equal( 'beans' );
             expect( form.view.$.find( sel2 ).eq( 1 ).val() ).to.equal( 'beans' );
+        } );
+
+        describe( 'works in a first repeat if a second repeat exists and an itemset update is triggered', () => {
+
+            [
+                [ 'in an old form that does not contain odk:xforms-version="1.0.0"', 'itemset-repeat-relevant-current-old.xml' ],
+                [ 'in a form that contains odk:xforms-version="1.0.0"','itemset-repeat-relevant-current-new.xml' ]
+            ].forEach( ( [ itText, filename ] ) => {
+                it( itText, ()=> {
+                    const form = loadForm( filename );
+                    form.init();
+                    form.view.html.querySelector( '.add-repeat-btn' ).click();
+                    const repeats = form.view.html.querySelectorAll( '.or-repeat' );
+                    const crop1 = repeats[0].querySelector( '[data-name="/repeat-relative-current/rep/crop"][value="banana"]' );
+                    crop1.checked = true;
+                    crop1.dispatchEvent( events.Change() );
+                    const crop2 = repeats[1].querySelector( '[data-name="/repeat-relative-current/rep/crop"][value="beans"]' );
+                    crop2.checked = true;
+                    crop2.dispatchEvent( events.Change() );
+                    const selectorA = 'label:not(.itemset-template) > input[data-name="/repeat-relative-current/rep/sel_a"]';
+                    expect( [ ...repeats[0].querySelectorAll( selectorA ) ].map( el => el.value ) ).to.eql( [ 'banana' ] );
+                } );
+            } );
+
         } );
     } );
 
