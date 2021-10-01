@@ -581,4 +581,18 @@ describe( 'Itemset functionality', () => {
 
     } );
 
+    describe( 'forms using randomize() for itemsets', () => {
+        it( 'displays randomized select-minimal options ', () => {
+            const form = loadForm( 'randomize.xml' );
+            form.init();
+
+            const options = [ ...form.view.html.querySelectorAll( 'select > option' ) ]
+                .map( option => option.value )
+                .filter( val => val ); // just in case future lists don't contain an empty option
+
+            // This test has a 1/270 chance of failing, I believe.
+            expect( options ).to.not.eql( [  'banana',  'beans', 'cacao', 'coffee', 'foddergrass', 'foddertree' ] );
+        } );
+    } );
+
 } );
