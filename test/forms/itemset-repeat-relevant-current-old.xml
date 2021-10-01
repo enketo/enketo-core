@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<h:html 
-  xmlns="http://www.w3.org/2002/xforms" 
-  xmlns:ev="http://www.w3.org/2001/xml-events" 
-  xmlns:h="http://www.w3.org/1999/xhtml" 
-  xmlns:jr="http://openrosa.org/javarosa" 
-  xmlns:odk="http://www.opendatakit.org/xforms" 
-  xmlns:orx="http://openrosa.org/xforms" 
+<h:html
+  xmlns="http://www.w3.org/2002/xforms"
+  xmlns:ev="http://www.w3.org/2001/xml-events"
+  xmlns:h="http://www.w3.org/1999/xhtml"
+  xmlns:jr="http://openrosa.org/javarosa"
+  xmlns:odk="http://www.opendatakit.org/xforms"
+  xmlns:orx="http://openrosa.org/xforms"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <h:head>
     <h:title>repeat-relative-current</h:title>
@@ -73,7 +73,7 @@
         </root>
       </instance>
       <bind nodeset="/repeat-relative-current/rep/crop" type="select1"/>
-      <bind nodeset="/repeat-relative-current/rep/sel_a" type="select1"/>
+      <bind nodeset="/repeat-relative-current/rep/sel_a" relevant=" ../crop != ''" type="select1"/>
       <bind nodeset="/repeat-relative-current/rep/group/sel_b" type="select1"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/repeat-relative-current/meta/instanceID" readonly="true()" type="string"/>
     </model>

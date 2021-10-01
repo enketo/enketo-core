@@ -153,7 +153,7 @@ function empty( element ) {
 
 /**
  * @param {Element} el - Target node
- * @return {boolean} Whether previous sibling has same node name
+ * @return {boolean} Whether previous sibling has the same node name
  */
 function hasPreviousSiblingElementSameName( el ) {
     let found = false;
@@ -171,6 +171,36 @@ function hasPreviousSiblingElementSameName( el ) {
     }
 
     return found;
+}
+
+/**
+ * @param {Element} el - Target node
+ * @return {boolean} Whether next sibling has the same node name
+ */
+function hasNextSiblingElementSameName( el ) {
+    let found = false;
+    const nodeName = el.nodeName;
+    el = el.nextSibling;
+
+    while ( el ) {
+        // Ignore any sibling text and comment nodes (e.g. whitespace with a newline character)
+        // also deal with repeats that have non-repeat siblings in between them, event though that would be a bug.
+        if ( el.nodeName && el.nodeName === nodeName ) {
+            found = true;
+            break;
+        }
+        el = el.nextSibling;
+    }
+
+    return found;
+}
+
+/**
+ * @param {Element} el - Target node
+ * @return {boolean} Whether a sibling has the same node name
+ */
+function hasSiblingElementSameName( el ) {
+    return hasNextSiblingElementSameName( el ) || hasPreviousSiblingElementSameName( el );
 }
 
 /**
@@ -225,7 +255,7 @@ function getXPath( node, rootNodeName = '#document', includePosition = false ) {
     while ( parent && parentName !== rootNodeName && parentName !== '#document' ) {
         if ( includePosition ) {
             index = getRepeatIndex( parent );
-            position = ( index > 0 ) ? `[${index + 1}]` : '';
+            position = hasSiblingElementSameName( parent ) ? `[${index + 1}]` : '';
         }
         steps.push( parentName + position );
         parent = parent.parentElement;
@@ -417,6 +447,8 @@ export {
     getXPath,
     hasPreviousCommentSiblingWithContent,
     hasPreviousSiblingElementSameName,
+    hasNextSiblingElementSameName,
+    hasSiblingElementSameName,
     closestAncestorUntil,
     empty,
     MutationsTracker
