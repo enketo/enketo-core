@@ -47,7 +47,7 @@ Nodeset.prototype.getElements = function() {
 
     // cache evaluation result
     if ( !this._nodes ) {
-        this._nodes = this.model.evaluate( this.selector, 'nodes', null, null, true );
+        this._nodes = this.model.evaluate( this.selector, 'nodes-ordered', null, null, true );
         // noEmpty automatically excludes non-leaf nodes
         if ( this.filter.noEmpty === true ) {
             this._nodes = this._nodes

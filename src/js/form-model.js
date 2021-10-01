@@ -431,15 +431,15 @@ FormModel.prototype.mergeXml = function( recordStr ) {
             const instanceNode = that.node( path, 0 ).getElement();
             if ( instanceNode ) {
                 // TODO: after dropping support for IE11, we can also use instanceNode.children.length
-                if ( that.evaluate( './*', 'nodes', path, 0, true ).length === 0 ) {
+                if ( that.evaluate( './*', 'nodes-ordered', path, 0, true ).length === 0 ) {
                     // Select all text nodes (excluding repeat COMMENT nodes!)
-                    that.evaluate( './text()', 'nodes', path, 0, true ).forEach( node => {
+                    that.evaluate( './text()', 'nodes-ordered', path, 0, true ).forEach( node => {
                         node.textContent = '';
                     } );
                 } else {
                     // If the node in the default instance is a group (empty in record, so appears to be a leaf node
                     // but isn't), empty all true leaf node descendants.
-                    that.evaluate( './/*[not(*)]', 'nodes', path, 0, true ).forEach( node => {
+                    that.evaluate( './/*[not(*)]', 'nodes-ordered', path, 0, true ).forEach( node => {
                         node.textContent = '';
                     } );
                 }
@@ -796,7 +796,7 @@ FormModel.prototype.addRepeatComments = function( repeatPath ) {
     const comment = this.getRepeatCommentText( repeatPath );
 
     // Find all repeat series.
-    this.evaluate( repeatPath, 'nodes', null, null, true ).forEach( repeat => {
+    this.evaluate( repeatPath, 'nodes-ordered', null, null, true ).forEach( repeat => {
         if ( !hasPreviousSiblingElementSameName( repeat ) && !hasPreviousCommentSiblingWithContent( repeat, comment ) ) {
             // Add a comment to the primary instance that serves as an insertion point for each repeat series,
             repeat.before( document.createComment( comment ) );
@@ -834,7 +834,7 @@ FormModel.prototype.addTemplate = function( repeatPath, repeat, empty ) {
 FormModel.prototype.getTemplateNodes = function() {
     const jrPrefix = this.getNamespacePrefix( JAVAROSA_XFORMS_NS );
 
-    return this.evaluate( `/model/instance[1]/*//*[@${jrPrefix}:template]`, 'nodes', null, null, true );
+    return this.evaluate( `/model/instance[1]/*//*[@${jrPrefix}:template]`, 'nodes-ordered', null, null, true );
 };
 
 /**
@@ -946,7 +946,7 @@ FormModel.prototype.setNamespaces = function() {
      * We can always expand that later.
      */
     const start = this.hasInstance ? '/model/instance' : '';
-    const nodes = this.evaluate( `${start}/*`, 'nodes', null, null, true );
+    const nodes = this.evaluate( `${start}/*`, 'nodes-ordered', null, null, true );
     const that = this;
     let prefix;
 
@@ -1051,7 +1051,7 @@ FormModel.prototype.replaceInstanceFn = function( expr ) {
     return expr.replace( INSTANCE, ( match, quote, id ) => {
         prefix = `/model/instance[@id="${id}"]`;
         // check if referred instance exists in model
-        if ( that.evaluate( prefix, 'nodes', null, null, true ).length ) {
+        if ( that.evaluate( prefix, 'nodes-ordered', null, null, true ).length ) {
             return prefix;
         } else {
             throw new FormLogicError( `instance "${id}" does not exist in model` );
@@ -1279,7 +1279,8 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
         1: [ 'number', 'NUMBER_TYPE', 'numberValue' ],
         2: [ 'string', 'STRING_TYPE', 'stringValue' ],
         3: [ 'boolean', 'BOOLEAN_TYPE', 'booleanValue' ],
-        7: [ 'nodes', 'ORDERED_NODE_SNAPSHOT_TYPE' ],
+        6: [ 'nodes', 'UNORDERED_NODE_SNAPSHOT_TYPE' ],
+        7: [ 'nodes-ordered', 'ORDERED_NODE_SNAPSHOT_TYPE' ],
         9: [ 'node', 'FIRST_ORDERED_NODE_TYPE', 'singleNodeValue' ]
     };
 
@@ -1335,7 +1336,7 @@ FormModel.prototype.evaluate = function( expr, resTypeStr, selector, index, tryN
             if ( !response ) {
                 console.error( `Expression: ${expr} did not return any boolean, string or number value as expected` );
             }
-        } else if ( resTypeNum === 7 ) {
+        } else if ( resTypeNum === 6 || resTypeNum === 7  ) {
             // response is an array of Elements
             response = [];
             for ( j = 0; j < result.snapshotLength; j++ ) {
