@@ -599,7 +599,7 @@ FormModel.prototype.getRepeatCommentSelector = function( repeatPath ) {
  * @return {Element} node
  */
 FormModel.prototype.getRepeatCommentEl = function( repeatPath, repeatSeriesIndex ) {
-    return this.evaluate( this.getRepeatCommentSelector( repeatPath ), 'nodes', null, null, true )[ repeatSeriesIndex ];
+    return this.evaluate( this.getRepeatCommentSelector( repeatPath ), 'nodes-ordered', null, null, true )[ repeatSeriesIndex ];
 };
 
 /**
