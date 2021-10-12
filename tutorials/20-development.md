@@ -53,14 +53,15 @@ For custom themes that go beyond just changing colors and fonts, keep in mind al
 
 Documentation is auto-generated and is re-built for each new release. Do not commit updated documentation in non-release commits. The process to follow for each release that includes various helpful checks is:
 
-1. Check [Dependabot alerts](https://github.com/enketo/enketo-transformer/security/dependabot) for vulnerabilities
+1. Check [Dependabot alerts](https://github.com/enketo/enketo-core/security/dependabot) for vulnerabilities
 2. Update dependencies: `npm update`. If enketo-transformer is updated, bump the version in `src/js/form.js`
 3. `npm audit fix`
 4. Make sure tests pass: `npm run test` and `npm run test-browsers`
 5. Beautiful code: `npm run beautify`
 6. Build documentation: `npm run build-docs`
 7. Bump the version tag in `package.json` file (we follow [semantic versioning](https://semver.org/)). Bump to major version if downstream has to make changes.
-8. Merge all your changes to `master` (through PR)
-9. Add git tag of new version
-10. Publish module to NPM: `npm publish`
+8. Update CHANGELOG.md
+9. Merge all your changes to `master` (through PR)
+10. Add git tag of new version
+11. Publish module to NPM: `npm publish`
 
