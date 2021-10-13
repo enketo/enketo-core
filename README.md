@@ -40,7 +40,7 @@ The development of this library was sponsored by:
 * [iMMAP](http://immap.org)
 * [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
 * [Ona](https://ona.io)
-* [Medic Mobile](http://medicmobile.org/)
+* [Medic](https://medic.org/)
 * [Esri](https://esri.com)
 * [DIAL Open Source Center](https://www.osc.dial.community/)
 
