@@ -1364,7 +1364,7 @@ describe( 'merging an instance into the model', () => {
             ],
             // with repeat template
             [ `<a xmlns:enk="${ns}"><r enk:last-used-ordinal="2" enk:ordinal="1"><b>6</b></r></a>`,
-                '<model><instance><a><r jr:template=""><b>5</b></r><meta/></a></instance></model>'
+                '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>5</b></r><meta/></a></instance></model>'
             ]
         ].forEach( test => {
             const model = new Model( {
