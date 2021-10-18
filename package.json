@@ -110,7 +110,7 @@
         "leaflet.gridlayer.googlemutant": "^0.13.4",
         "mergexml": "1.2.1",
         "node-forge": "^0.10.0",
-        "openrosa-xpath-evaluator": "^2.0.7",
+        "openrosa-xpath-evaluator": "^2.0.9",
         "signature_pad": "2.3.x"
     },
     "volta": {
