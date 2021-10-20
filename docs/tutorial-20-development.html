@@ -104,17 +104,36 @@ We would be happy to discuss whether your contribution should be a part of the c
 <h3 id="release-a-new-version">Release a new version</h3>
 <p>Documentation is auto-generated and is re-built for each new release. Do not commit updated documentation in non-release commits. The process to follow for each release that includes various helpful checks is:</p>
 <ol>
-<li>Check <a href="https://github.com/enketo/enketo-core/security/dependabot">Dependabot alerts</a> for vulnerabilities</li>
-<li>Update dependencies: <code>npm update</code>. If enketo-transformer is updated, bump the version in <code>src/js/form.js</code></li>
-<li><code>npm audit fix</code></li>
-<li>Make sure tests pass: <code>npm run test</code> and <code>npm run test-browsers</code></li>
-<li>Beautiful code: <code>npm run beautify</code></li>
-<li>Build documentation: <code>npm run build-docs</code></li>
-<li>Bump the version tag in <code>package.json</code> file (we follow <a href="https://semver.org/">semantic versioning</a>). Bump to major version if downstream has to make changes.</li>
-<li>Update CHANGELOG.md</li>
-<li>Merge all your changes to <code>master</code> (through PR)</li>
-<li>Add git tag of new version</li>
-<li>Publish module to NPM: <code>npm publish</code></li>
+<li>Create release PR</li>
+<li>Check <a href="https://github.com/enketo/enketo-core/security/dependabot">Dependabot</a> for alerts</li>
+<li>Run <code>npm update</code>
+<ul>
+<li>If enketo-transformer is updated, bump the version in <code>src/js/form.js</code></li>
+</ul>
+</li>
+<li>Run <code>npm audit</code>
+<ul>
+<li>Run <code>npm audit fix --production</code> to apply most important fixes</li>
+</ul>
+</li>
+<li>Run <code>npm ci</code></li>
+<li>Run <code>npm test</code></li>
+<li>Run <code>npm run test-browsers</code></li>
+<li>Run <code>npm run beautify</code></li>
+<li>Run <code>npm run build-docs</code></li>
+<li>Update <code>CHANGELOG.md</code></li>
+<li>Update version in <code>package.json</code>
+<ul>
+<li>Bump to major version if downstream has to make changes.</li>
+</ul>
+</li>
+<li>Merge PR with all changes</li>
+<li>Create GitHub release</li>
+<li>Tag and publish the release
+<ul>
+<li>GitHub Action will publish it to npm</li>
+</ul>
+</li>
 </ol>
 </article>
 
