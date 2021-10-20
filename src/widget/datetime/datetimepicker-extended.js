@@ -144,6 +144,20 @@ class DatetimepickerExtended extends Widget {
         }
     }
 
+    get originalInputValue() {
+        const originalInputValue = super.originalInputValue;
+
+        if ( originalInputValue === '' ) {
+            return '';
+        }
+
+        return toISOLocalString( new Date( originalInputValue ) );
+    }
+
+    set originalInputValue( value ) {
+        super.originalInputValue = value;
+    }
+
     /**
      * @type {string}
      */
