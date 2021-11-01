@@ -1,8 +1,8 @@
 ### Widgets in Enketo Core
 
-Widgets extend the [Widget class](../src/js/widget.js). This is an example:
+Widgets extend the [Widget class](https://github.com/enketo/enketo-core/blob/master/src/js/widget.js). This is an example:
 
-(see full functioning example at [/src/widget/example/my-widget.js](../src/widget/example/my-widget.js)
+(see full functioning example at [/src/widget/example/my-widget.js](https://github.com/enketo/enketo-core/blob/master/src/widget/example/my-widget.js)
 ```js
 import Widget from '../../js/widget';
 
@@ -109,7 +109,7 @@ export default MyWidget;
 
 Some of the tests are common to all widgets, and can be run with a few lines:
 
-(see full functioning example at [/test/spec/widget.example.spec.js](../test/spec/widget.example.spec.js))
+(see full functioning example at [/test/spec/widget.example.spec.js](https://github.com/enketo/enketo-core/blob/master/test/spec/widget.example.spec.js))
 ```js
 import ExampleWidget from '../../src/widget/example/my-widget';
 import { runAllCommonWidgetTests } from '../helpers/testWidget';
