@@ -419,8 +419,13 @@ describe( 'DeprecatedID value getter', () => {
         model.init();
         expect( model.deprecatedID ).to.equal( '' );
     } );
-    it( 'returns value of deprecatedID node', () => {
+    it( 'returns value of deprecatedID node if the meta block does not have the "http://openrosa.org/xforms" namespace', () => {
         const model = new Model( '<model><instance><data><meta><instanceID/><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
+        model.init();
+        expect( model.deprecatedID ).to.equal( 'a' );
+    } );
+    it( 'returns value of deprecatedID node if the meta block has the "http://openrosa.org/xforms" namespace', () => {
+        const model = new Model( '<model xmlns:orx="http://openrosa.org/xforms"><instance><data><orx:meta><orx:instanceID/><orx:deprecatedID>a</orx:deprecatedID></orx:meta></data></instance></model>' );
         model.init();
         expect( model.deprecatedID ).to.equal( 'a' );
     } );
@@ -1201,9 +1206,9 @@ describe( 'merging an instance into the model', () => {
                 '<model xmlns:cc="http://cc.com"><instance><a><c>record</c><cc:meta xmlns:cc="http://cc.com"><cc:instanceID/></cc:meta></a></instance></model>'
             ],
             // namespaces used in both record and model (though now with triple equal namespace declarations..:
-            [ '<a xmlns:cc="http://cc.com"><c>record</c><cc:meta><cc:instanceID>a</cc:instanceID></cc:meta></a>',
-                '<model xmlns:cc="http://cc.com"><instance><a><c/><cc:meta><cc:instanceID/></cc:meta></a></instance></model>',
-                '<model xmlns:cc="http://cc.com"><instance><a xmlns:cc="http://cc.com"><c>record</c><cc:meta xmlns:cc="http://cc.com"><cc:instanceID>a</cc:instanceID></cc:meta></a></instance></model>'
+            [ '<a xmlns:orx="http://openrosa.org/xforms"><c>record</c><orx:meta><orx:instanceID>a</orx:instanceID></orx:meta></a>',
+                '<model xmlns:orx="http://openrosa.org/xforms"><instance><a><c/><orx:meta><orx:instanceID/></orx:meta></a></instance></model>',
+                '<model xmlns:orx="http://openrosa.org/xforms"><instance><a xmlns:orx="http://openrosa.org/xforms"><c>record</c><orx:meta xmlns:orx="http://openrosa.org/xforms"><orx:instanceID>a</orx:instanceID></orx:meta></a></instance></model>'
             ],
             // record and model contain same node but in different namespace creates 2nd meta groups and 2 instanceID nodes!
             [ '<a><c/><meta><instanceID>a</instanceID></meta></a>',
