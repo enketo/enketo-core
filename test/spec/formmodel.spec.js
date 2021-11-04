@@ -1278,38 +1278,38 @@ describe( 'merging an instance into the model', () => {
     } );
 
     describe( 'when a deprecatedID node is not present in the form format', () => {
-        const model1 = new Model( {
+        [ {
             modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
-            instanceStr: '<thedata id="thedata"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>'
-        } );
-
-        // same as model1 except for the namespace of the meta block and its childnodes
-        const model2 = new Model( {
+            instanceStr: '<thedata id="thedata"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>',
+            text: 'with meta block in default namespace, '
+        },
+        // same as previous except for the namespace of the meta block and its childnodes
+        {
             modelStr: '<model xmlns:orx="http://openrosa.org/xforms"><instance><thedata id="thedata"><nodeA/><orx:meta><orx:instanceID/></orx:meta></thedata></instance></model>',
-            instanceStr: '<thedata id="thedata" xmlns:orx="http://openrosa.org/xforms"><orx:meta><orx:instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</orx:instanceID></orx:meta><nodeA>2012</nodeA></thedata>'
-        } );
-
-        [ model1, model2 ].forEach( model => {
+            instanceStr: '<thedata id="thedata" xmlns:orx="http://openrosa.org/xforms"><orx:meta><orx:instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</orx:instanceID></orx:meta><nodeA>2012</nodeA></thedata>',
+            text: 'with meta block in the openrosa namespace, '
+        } ].forEach( ( { modelStr, instanceStr, text } ) => {
+            const model = new Model( { modelStr, instanceStr } );
             const loadErrors = model.init();
 
-            it( 'outputs no load errors', () => {
+            it( `${text} outputs no load errors`, () => {
                 expect( loadErrors.length ).to.equal( 0 );
             } );
 
-            it( 'adds a deprecatedID node', () => {
+            it( `${text} adds a deprecatedID node`, () => {
                 expect( model.getMetaNode( 'deprecatedID' ).getElements().length ).to.equal( 1 );
             } );
 
             //this is an important test even though it may not seem to be...
-            it( 'includes the deprecatedID in the string to be submitted', () => {
+            it( `${text} includes the deprecatedID in the string to be submitted`, () => {
                 expect( model.getStr().indexOf( 'deprecatedID>' ) ).not.to.equal( -1 );
             } );
 
-            it( 'gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit', () => {
+            it( `${text} gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit`, () => {
                 expect( model.deprecatedID ).to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
             } );
 
-            it( 'generates a new instanceID', () => {
+            it( `${text} generates a new instanceID`, () => {
                 expect( model.instanceID ).not.to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
                 expect( model.instanceID.length ).to.equal( 41 );
             } );
