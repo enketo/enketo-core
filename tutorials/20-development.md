@@ -53,15 +53,22 @@ For custom themes that go beyond just changing colors and fonts, keep in mind al
 
 Documentation is auto-generated and is re-built for each new release. Do not commit updated documentation in non-release commits. The process to follow for each release that includes various helpful checks is:
 
-1. Check [Dependabot alerts](https://github.com/enketo/enketo-core/security/dependabot) for vulnerabilities
-2. Update dependencies: `npm update`. If enketo-transformer is updated, bump the version in `src/js/form.js`
-3. `npm audit fix`
-4. Make sure tests pass: `npm run test` and `npm run test-browsers`
-5. Beautiful code: `npm run beautify`
-6. Build documentation: `npm run build-docs`
-7. Bump the version tag in `package.json` file (we follow [semantic versioning](https://semver.org/)). Bump to major version if downstream has to make changes.
-8. Update CHANGELOG.md
-9. Merge all your changes to `master` (through PR)
-10. Add git tag of new version
-11. Publish module to NPM: `npm publish`
 
+1. Create release PR
+1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
+1. Run `npm update`
+    -  If enketo-transformer is updated, bump the version in `src/js/form.js`
+1. Run `npm audit`
+    - Run `npm audit fix --production` to apply most important fixes
+1. Run `npm ci`
+1. Run `npm test`
+1. Run `npm run test-browsers`
+1. Run `npm run beautify`
+1. Run `npm run build-docs`
+1. Update `CHANGELOG.md`
+1. Update version in `package.json`
+    - Bump to major version if downstream has to make changes.
+1. Merge PR with all changes
+1. Create GitHub release
+1. Tag and publish the release
+    - GitHub Action will publish it to npm
