@@ -57,7 +57,7 @@ Documentation is auto-generated and is re-built for each new release. Do not com
 1. Create release PR
 1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
 1. Run `npm update`
-    -  If enketo-transformer is updated, bump the version in `src/js/form.js`
+    -  If enketo-transformer is updated, bump the version in `src/js/form.js` and `package.json`
 1. Run `npm audit`
     - Run `npm audit fix --production` to apply most important fixes
 1. Run `npm ci`
