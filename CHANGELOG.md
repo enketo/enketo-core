@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[6.0.2] - 2021-11-04
+---------------------
+##### Changed
+- Upgraded enketo-transformer to fix regressions
+
 [6.0.1] - 2021-10-13
 ---------------------
 ##### Changed
