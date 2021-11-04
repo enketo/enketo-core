@@ -96,7 +96,7 @@ module.exports = grunt => {
                 browsers: [ 'ChromeHeadlessNoSandbox' ]
             },
             browsers: {
-                browsers: [ 'Chrome', 'Firefox', 'Safari' ]
+                browsers: process.env.CI === 'true' ? [ 'Chrome', 'Firefox' ] : [ 'Chrome', 'Firefox', 'Safari' ]
             },
             watch: {
                 browsers: [ 'ChromeHeadlessDebug' ],
