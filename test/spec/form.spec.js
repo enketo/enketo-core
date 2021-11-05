@@ -45,8 +45,8 @@ describe( 'Output functionality ', () => {
     form.init();
 
     it( 'tested upon initialization: node random__', () => {
-        const val = form.view.html.querySelector( '[data-value="/random/random__"]' ).textContent;
-        expect( val.length >= 16 && val.length <= 17  ).to.equal( true );
+        const val = Number( form.view.html.querySelector( '[data-value="/random/random__"]' ).textContent );
+        expect( val ).to.be.a( 'number' ).and.to.be.greaterThanOrEqual( 0 ).and.to.be.lessThanOrEqual( 1 );
     } );
 
     it( 'tested upon initialization: node uuid__', () => {
