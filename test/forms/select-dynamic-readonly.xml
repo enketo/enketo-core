@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:OpenClinica="http://openclinica.com/odm" xmlns:enk="http://enketo.org/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>Filter Test</h:title>
+		<model odk:xforms-version="1.0.0">
+			<instance>
+				<data id="Repeat.Choice.Filter.simple" version="2">
+					<list jr:template="">
+						<a/>
+                        <b/>
+					</list>
+					<list>
+						<a/>
+                        <b/>
+					</list>
+                    <list>
+						<a>0.018</a>
+                        <b>2</b>
+					</list>
+					<meta>
+						<instanceID/>
+					</meta>
+				</data>
+			</instance>
+			<instance id="MEASUNIT">
+				<root>
+					<item>
+						<filter1>2</filter1>
+						<label>mg/dL</label>
+						<name>18</name>
+					</item>
+                    <item>
+                        <filter1>2</filter1>
+						<label>g/dl</label>
+						<name>0.018</name>
+                    </item>
+				</root>
+			</instance>
+			<bind nodeset="/data/list/a" readonly="true()" type="string"/>
+            <bind nodeset="/data/list/b" readonly="true()" type="string"/>
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<group appearance="no-collapse" ref="/data/list">
+			<label/>
+			<repeat nodeset="/data/list">
+				<select1 appearance="minimal" ref="/data/list/a">
+					<label>Units</label>
+					<itemset nodeset="instance('MEASUNIT')/root/item[filter1 = 2]">
+						<value ref="name"/>
+						<label ref="label"/>
+					</itemset>
+				</select1>
+                <select1 appearance="minimal" ref="/data/list/b">
+					<label>Units</label>
+					<item>
+                        <value>1</value>
+                        <label>one</label>
+                    </item>
+                    <item>
+                        <value>2</value>
+                        <label>two</label>
+                    </item>
+				</select1>
+			</repeat>
+		</group>
+	</h:body>
+</h:html>
