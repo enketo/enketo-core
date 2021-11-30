@@ -1188,6 +1188,6 @@ Form.prototype.goToTarget = function( target ) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '1.43.0';
+Form.requiredTransformerVersion = 'github:enketo/enketo-transformer#0400f5e';
 
 export { Form, FormModel };

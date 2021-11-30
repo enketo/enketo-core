@@ -97,6 +97,9 @@ export default {
                 input = optionInput.classList.contains( 'ignore' ) ? getSiblingElement( optionInput.closest( '.option-wrapper' ), 'input.rank' ) : optionInput;
             } else if ( list && list.nodeName.toLowerCase() === 'select' ) {
                 input = list;
+                if( input.matches( '[readonly]' ) ){
+                    inputAttributes[ 'disabled' ] = 'disabled';
+                }
             } else if ( list && list.nodeName.toLowerCase() === 'datalist' ) {
                 if ( shared ) {
                     // only the first input, is that okay?
@@ -228,7 +231,7 @@ export default {
                         } else {
                             activeLabel = translations[ 0 ].text;
                         }
-                        optionsFragment.appendChild( that.createOption( activeLabel, value ) );
+                        optionsFragment.appendChild( that.createOption( inputAttributes, activeLabel, value ) );
                     }
 
                 } );
@@ -317,12 +320,16 @@ export default {
     /**
      * Creates a HTML option element
      *
+     *  @param {object} attributes - attributes to add to option
      * @param {string} label - option label
      * @param {string} value - option value
      * @return {Element} created option
      */
-    createOption( label, value ) {
+    createOption( attributes, label, value ) {
         const option = document.createElement( 'option' );
+        Object.getOwnPropertyNames( attributes ).forEach( attr => {
+            option.setAttribute( attr, attributes[ attr ] );
+        } );
         option.textContent = label;
         option.value = value;
 
@@ -360,7 +367,7 @@ export default {
     /**
      * Creates an input HTML element
      *
-     * @param {Array<object>} attributes - attributes to add to input
+     * @param {object} attributes - attributes to add to input
      * @param {Array<object>} translations - translation to add
      * @param {string} value - option value
      * @return {Element} label element (wrapper)
