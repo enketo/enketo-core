@@ -245,6 +245,17 @@ describe( 'Itemset functionality', () => {
         } );
     } );
 
+    describe( 'in a readonly question', () => {
+
+        it( 'with appearance "minimal" options are disabled', () => {
+            const form = loadForm( 'select-dynamic-readonly.xml' );
+            form.init();
+            const options = [ ...form.view.html.querySelectorAll( 'select[name="/data/a"] > option' ) ];
+            expect( options.every( option => option.disabled === true ) ).to.equal( true );
+        } );
+
+    } );
+
     describe( 'in a cloned repeat with dependencies inside repeat, ', () => {
         const countrySelector = '[data-name="/new_cascading_selections_inside_repeats/group1/country"]';
         const citySelector = 'label:not(.itemset-template) [data-name="/new_cascading_selections_inside_repeats/group1/city"]';
