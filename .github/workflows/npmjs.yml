@@ -1,6 +1,11 @@
 name: npmjs
 
-on: [push, pull_request, release]
+on:
+  push:
+  pull_request:
+  release:
+    types:
+      - published
 
 jobs:
   build:
@@ -10,20 +15,25 @@ jobs:
         node: [ '14', '16' ]
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
           registry-url: https://registry.npmjs.org/
       - run: npm install -g npm@^6
       - run: npm install -g grunt-cli
-      - run: npm ci
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
       - run: npm test
       - run: sudo apt-get install xvfb
       - run: xvfb-run --auto-servernum npm run test-browsers
       - run: npm run beautify
       - run: npm run build-docs
-      - name: Run npm publish
-        if: github.event_name == 'release' && github.event.action == 'created' && matrix.node == '16'
+      - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '16'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
