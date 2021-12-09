@@ -530,7 +530,8 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     filter = filter || '';
 
     // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
-    if ( !this.nonRepeats[ attr ] ) {
+    // We essentially exclude outputs from the cache, because outputs can be added via itemsets (in labels)
+    if ( !this.nonRepeats[ attr ] || filter === '.or-output' ) {
         controls = [ ...this.view.html.querySelectorAll( `:not(.or-repeat-info)[${attr}]` ) ]
             .filter( el => !el.closest( '.or-repeat' ) );
         this.nonRepeats[ attr ] = this.filterRadioCheckSiblings( controls );
@@ -544,8 +545,9 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     }
 
     // If a new repeat was created, update the cached collection of all form controls with that attribute
-    // If a repeat was deleted ( update.repeatPath && !updated.cloned), rebuild cache
-    if ( !this.all[ attr ] || ( updated.repeatPath && !updated.cloned ) ) {
+    // If a repeat was deleted ( update.repeatPath && !updated.cloned), rebuild cache.
+    // Exclude outputs from the cache, because outputs can be added via itemsets (in labels).
+    if ( !this.all[ attr ] || ( updated.repeatPath && !updated.cloned ) || filter === '.or-output' ) {
         // (re)build the cache
         // However, if repeats have not been initialized exclude nodes inside a repeat until the first repeat has been added during repeat initialization.
         // The default view repeat will be removed during initialization (and stored as template), before it is re-added, if necessary.
