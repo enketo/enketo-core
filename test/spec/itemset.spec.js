@@ -353,6 +353,26 @@ describe( 'Itemset functionality', () => {
         } );
     } );
 
+    describe( 'with radiobuttons/checkboxes that include outputs in the labels', () => {
+        it( 'copies the outputs to the generated option labels', () => {
+            const form = loadForm( 'output-dynamic-itemset.xml' );
+            form.init();
+            // first option
+            const input1 = form.view.html.querySelector( '[name="/data/repeat1/specimen_id"]' );
+            input1.value = 'aa';
+            input1.dispatchEvent( events.Change() );
+            const option1 = form.view.html.querySelector( '[name="/data/specimen_select"]+.option-label.active' );
+            expect( option1.textContent.trim() ).to.equal( '#aa' );
+            // second option
+            form.view.html.querySelector( '.add-repeat-btn' ).click();
+            const input2 = form.view.html.querySelector( '.clone [name="/data/repeat1/specimen_id"]' );
+            input2.value = 'bb';
+            input2.dispatchEvent( events.Change() );
+            const option2 = form.view.html.querySelectorAll( '[name="/data/specimen_select"]+.option-label.active' )[1];
+            expect( option2.textContent.trim() ).to.equal( '#bb' );
+        } );
+    } );
+
     describe( 'in a group that becomes relevant', () => {
         it( 'are re-evaluated', () => {
             const form = loadForm( 'itemset-relevant.xml' );
