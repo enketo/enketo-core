@@ -320,8 +320,6 @@ export default {
     /**
      * Creates a HTML option element
      *
-     *  @param {object} attributes - attributes to add to option
-     * @param {string} label - option label
      * @param {Array<Element>} labelContentNodes - label content nodes
      * @param {string} value - option value
      * @return {Element} created option

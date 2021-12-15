@@ -530,8 +530,7 @@ Form.prototype.getRelatedNodes = function( attr, filter, updated ) {
     filter = filter || '';
 
     // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
-    // We essentially exclude outputs from the cache, because outputs can be added via itemsets (in labels)
-    if ( !this.nonRepeats[ attr ] || filter === '.or-output' ) {
+    if ( !this.nonRepeats[ attr ] ) {
         controls = [ ...this.view.html.querySelectorAll( `:not(.or-repeat-info)[${attr}]` ) ]
             .filter( el => !el.closest( '.or-repeat' ) );
         this.nonRepeats[ attr ] = this.filterRadioCheckSiblings( controls );
