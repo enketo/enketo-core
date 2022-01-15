@@ -105,7 +105,7 @@
         "leaflet-draw": "github:enketo/Leaflet.draw#ff73078",
         "leaflet.gridlayer.googlemutant": "^0.13.4",
         "mergexml": "github:eyelidlessness/js-merge-xml#upgrade/xmldom",
-        "node-forge": "^0.10.0",
+        "node-forge": "^1.0.0",
         "openrosa-xpath-evaluator": "^2.0.9",
         "signature_pad": "2.3.x"
     },
