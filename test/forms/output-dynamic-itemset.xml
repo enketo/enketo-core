@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:OpenClinica="http://openclinica.com/odm" xmlns:enk="http://enketo.org/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>Choices From Repeat Items</h:title>
+		<model odk:xforms-version="1.0.0">
+			<itext>
+				<translation default="true()" lang="default">
+					<text id="specimens-0">
+						<value>#<output value=" /data/specimen_1 "/>
+						</value>
+					</text>
+					<text id="specimens-1">
+						<value>#<output value=" /data/specimen_2 "/>
+						</value>
+					</text>
+				</translation>
+			</itext>
+			<instance>
+				<data id="output-dynamic-itemset" version="1b">
+					<repeat1 jr:template="">
+						<specimen_id/>
+					</repeat1>
+					<repeat1>
+						<specimen_id/>
+					</repeat1>
+					<specimen_count/>
+					<specimen_1/>
+					<specimen_2/>
+					<specimen_select/>
+					<meta>
+						<instanceID/>
+					</meta>
+				</data>
+			</instance>
+			<instance id="specimens">
+				<root>
+					<item>
+						<itextId>specimens-0</itextId>
+						<filter1>1</filter1>
+						<name>specimen1</name>
+					</item>
+					<item>
+						<itextId>specimens-1</itextId>
+						<filter1>2</filter1>
+						<name>specimen2</name>
+					</item>
+				</root>
+			</instance>
+			<bind nodeset="/data/repeat1/specimen_id" oc:itemgroup="rg1" type="string"/>
+			<bind calculate="count( /data/repeat1/specimen_id )" nodeset="/data/specimen_count" oc:itemgroup="g2" type="string"/>
+			<bind calculate="indexed-repeat( /data/repeat1/specimen_id ,  /data/repeat1 , 1)" nodeset="/data/specimen_1" oc:itemgroup="g2" type="string"/>
+			<bind calculate="indexed-repeat( /data/repeat1/specimen_id ,  /data/repeat1 , 2)" nodeset="/data/specimen_2" oc:itemgroup="g2" type="string"/>
+			<bind nodeset="/data/specimen_select" oc:itemgroup="g2" type="string"/>
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body class="theme-grid no-text-transform">
+		<group appearance="no-collapse" ref="/data/repeat1">
+			<label/>
+			<repeat nodeset="/data/repeat1">
+				<input ref="/data/repeat1/specimen_id">
+					<label>Enter a specimen ID</label>
+				</input>
+			</repeat>
+		</group>
+		<select1 ref="/data/specimen_select">
+			<label>Select a specimen from the list above</label>
+			<itemset nodeset="instance('specimens')/root/item[ /data/specimen_count  &gt;= filter1]">
+				<value ref="name"/>
+				<label ref="jr:itext(itextId)"/>
+			</itemset>
+		</select1>
+	</h:body>
+</h:html>

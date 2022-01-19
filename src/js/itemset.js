@@ -185,11 +185,11 @@ export default {
                                     const language = label.getAttribute( 'lang' );
                                     const type = label.nodeName;
                                     const src = label.src;
-                                    const text = label.textContent;
+                                    const contentNodes = [ ...label.childNodes ];
                                     const active = label.classList.contains( 'active' );
                                     const alt = label.alt;
 
-                                    return { language, type, text, active, src, alt };
+                                    return { language, type, contentNodes, active, src, alt };
                                 } );
                                 break;
                             case 'langs':
@@ -198,11 +198,11 @@ export default {
                                     // Two falsy values should set active to true.
                                     const active = ( !lang && !that.form.langs.currentLanguage ) || ( lang === that.form.langs.currentLanguage );
 
-                                    return { language: lang, type: 'span', text: label.textContent, active };
+                                    return { language: lang, type: 'span', contentNodes: [ ...label.childNodes ], active };
                                 } );
                                 break;
                             default:
-                                translations = [ { language: '', type: 'span', text: labels && labels.length ? labels[ 0 ].textContent : 'error', active: true } ];
+                                translations = [ { language: '', type: 'span', contentNodes: labels && labels.length ? [ ...labels[ 0 ].childNodes ] : [], active: true } ];
                         }
                     }
                     // Obtain the value of the secondary instance item found.
@@ -217,18 +217,18 @@ export default {
                     if ( templateNodeName === 'label' ) {
                         optionsFragment.appendChild( that.createInput( inputAttributes, translations, value ) );
                     } else if ( templateNodeName === 'option' ) {
-                        let activeLabel = '';
+                        let activeLabelContentNodes = [];
                         if ( translations.length > 1 ) {
                             translations.forEach( translation => {
                                 if ( translation.active ) {
-                                    activeLabel = translation.text;
+                                    activeLabelContentNodes = translation.contentNodes;
                                 }
                                 optionsTranslationsFragment.appendChild( that.createOptionTranslation( translation, value ) );
                             } );
                         } else {
-                            activeLabel = translations[ 0 ].text;
+                            activeLabelContentNodes = translations[ 0 ].contentNodes;
                         }
-                        optionsFragment.appendChild( that.createOption( activeLabel, value ) );
+                        optionsFragment.appendChild( that.createOption( activeLabelContentNodes, value ) );
                     }
 
                 } );
@@ -317,13 +317,13 @@ export default {
     /**
      * Creates a HTML option element
      *
-     * @param {string} label - option label
+     * @param {Array<Element>} labelContentNodes - label content nodes
      * @param {string} value - option value
      * @return {Element} created option
      */
-    createOption( label, value ) {
+    createOption( labelContentNodes, value ) {
         const option = document.createElement( 'option' );
-        option.textContent = label;
+        option.textContent = labelContentNodes.map( node => node.textContent ).join( '' );
         option.value = value;
 
         return option;
@@ -334,15 +334,15 @@ export default {
      *
      * @param {object} translation - translation object
      * @param {string} [translation.type] - type of element to create, defaults to span
-     * @param {string} [translation.text] - translation text
+     * @param {Array<Node>} [translation.content] - array of translation content nodes
      * @param {string} value - option value
      * @return {Element} created element
      */
     createOptionTranslation( translation, value ) {
         const el = document.createElement( translation.type || 'span' );
-        if ( translation.text ) {
-            el.textContent = translation.text;
+        if ( translation.contentNodes ) {
             el.classList.add( 'option-label' );
+            translation.contentNodes.forEach( node => el.appendChild( node.cloneNode( true ) ) );
         }
         el.classList.toggle( 'active', translation.active );
         if ( translation.language ) {
