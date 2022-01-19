@@ -532,9 +532,13 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function() {
         // set the instanceID value to empty
         instanceIdEl.textContent = '';
 
+        const namespace = instanceIdEl.namespaceURI;
+
         // add deprecatedID node if necessary
         if ( !deprecatedIdEl ) {
-            deprecatedIdEl = parser.parseFromString( '<deprecatedID/>', 'text/xml' ).documentElement;
+            const nsPrefix = namespace ? this.getNamespacePrefix( namespace ) : '';
+            const nsDeclaration = namespace ? `xmlns:${nsPrefix}="${namespace}"` : '';
+            deprecatedIdEl = parser.parseFromString( `<${nsPrefix ? nsPrefix + ':' : ''}deprecatedID ${nsDeclaration}/>`, 'text/xml' ).documentElement;
             this.xml.adoptNode( deprecatedIdEl );
             metaEl = this.xml.querySelector( '* > meta' );
             metaEl.appendChild( deprecatedIdEl );

@@ -419,8 +419,13 @@ describe( 'DeprecatedID value getter', () => {
         model.init();
         expect( model.deprecatedID ).to.equal( '' );
     } );
-    it( 'returns value of deprecatedID node', () => {
+    it( 'returns value of deprecatedID node if the meta block does not have the "http://openrosa.org/xforms" namespace', () => {
         const model = new Model( '<model><instance><data><meta><instanceID/><deprecatedID>a</deprecatedID></meta></data></instance></model>' );
+        model.init();
+        expect( model.deprecatedID ).to.equal( 'a' );
+    } );
+    it( 'returns value of deprecatedID node if the meta block has the "http://openrosa.org/xforms" namespace', () => {
+        const model = new Model( '<model xmlns:orx="http://openrosa.org/xforms"><instance><data><orx:meta><orx:instanceID/><orx:deprecatedID>a</orx:deprecatedID></orx:meta></data></instance></model>' );
         model.init();
         expect( model.deprecatedID ).to.equal( 'a' );
     } );
@@ -1201,9 +1206,9 @@ describe( 'merging an instance into the model', () => {
                 '<model xmlns:cc="http://cc.com"><instance><a><c>record</c><cc:meta xmlns:cc="http://cc.com"><cc:instanceID/></cc:meta></a></instance></model>'
             ],
             // namespaces used in both record and model (though now with triple equal namespace declarations..:
-            [ '<a xmlns:cc="http://cc.com"><c>record</c><cc:meta><cc:instanceID>a</cc:instanceID></cc:meta></a>',
-                '<model xmlns:cc="http://cc.com"><instance><a><c/><cc:meta><cc:instanceID/></cc:meta></a></instance></model>',
-                '<model xmlns:cc="http://cc.com"><instance><a xmlns:cc="http://cc.com"><c>record</c><cc:meta xmlns:cc="http://cc.com"><cc:instanceID>a</cc:instanceID></cc:meta></a></instance></model>'
+            [ '<a xmlns:orx="http://openrosa.org/xforms"><c>record</c><orx:meta><orx:instanceID>a</orx:instanceID></orx:meta></a>',
+                '<model xmlns:orx="http://openrosa.org/xforms"><instance><a><c/><orx:meta><orx:instanceID/></orx:meta></a></instance></model>',
+                '<model xmlns:orx="http://openrosa.org/xforms"><instance><a xmlns:orx="http://openrosa.org/xforms"><c>record</c><orx:meta xmlns:orx="http://openrosa.org/xforms"><orx:instanceID>a</orx:instanceID></orx:meta></a></instance></model>'
             ],
             // record and model contain same node but in different namespace creates 2nd meta groups and 2 instanceID nodes!
             [ '<a><c/><meta><instanceID>a</instanceID></meta></a>',
@@ -1273,33 +1278,41 @@ describe( 'merging an instance into the model', () => {
     } );
 
     describe( 'when a deprecatedID node is not present in the form format', () => {
-        const model = new Model( {
+        [ {
             modelStr: '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
-            instanceStr: '<thedata id="thedata"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>'
-        } );
+            instanceStr: '<thedata id="thedata"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>',
+            text: 'with meta block in default namespace, '
+        },
+        // same as previous except for the namespace of the meta block and its childnodes
+        {
+            modelStr: '<model xmlns:orx="http://openrosa.org/xforms"><instance><thedata id="thedata"><nodeA/><orx:meta><orx:instanceID/></orx:meta></thedata></instance></model>',
+            instanceStr: '<thedata id="thedata" xmlns:orx="http://openrosa.org/xforms"><orx:meta><orx:instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</orx:instanceID></orx:meta><nodeA>2012</nodeA></thedata>',
+            text: 'with meta block in the openrosa namespace, '
+        } ].forEach( ( { modelStr, instanceStr, text } ) => {
+            const model = new Model( { modelStr, instanceStr } );
+            const loadErrors = model.init();
 
-        const loadErrors = model.init();
+            it( `${text} outputs no load errors`, () => {
+                expect( loadErrors.length ).to.equal( 0 );
+            } );
 
-        it( 'outputs no load errors', () => {
-            expect( loadErrors.length ).to.equal( 0 );
-        } );
+            it( `${text} adds a deprecatedID node`, () => {
+                expect( model.getMetaNode( 'deprecatedID' ).getElements().length ).to.equal( 1 );
+            } );
 
-        it( 'adds a deprecatedID node', () => {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getElements().length ).to.equal( 1 );
-        } );
+            //this is an important test even though it may not seem to be...
+            it( `${text} includes the deprecatedID in the string to be submitted`, () => {
+                expect( model.getStr().indexOf( 'deprecatedID>' ) ).not.to.equal( -1 );
+            } );
 
-        //this is an important test even though it may not seem to be...
-        it( 'includes the deprecatedID in the string to be submitted', () => {
-            expect( model.getStr().indexOf( '<deprecatedID>' ) ).not.to.equal( -1 );
-        } );
+            it( `${text} gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit`, () => {
+                expect( model.deprecatedID ).to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+            } );
 
-        it( 'gives the new deprecatedID node the old value of the instanceID node of the instance-to-edit', () => {
-            expect( model.node( '/thedata/meta/deprecatedID' ).getVal() ).to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
-        } );
-
-        it( 'generates a new instanceID', () => {
-            expect( model.node( '/thedata/meta/instanceID' ).getVal() ).not.to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
-            expect( model.node( '/thedata/meta/instanceID' ).getVal().length ).to.equal( 41 );
+            it( `${text} generates a new instanceID`, () => {
+                expect( model.instanceID ).not.to.equal( '7c990ed9-8aab-42ba-84f5-bf23277154ad' );
+                expect( model.instanceID.length ).to.equal( 41 );
+            } );
         } );
     } );
 
