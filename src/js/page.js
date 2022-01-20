@@ -365,6 +365,7 @@ export default {
                 this.current.classList.remove( 'current', 'fade-out' );
                 getAncestors( this.current, '.or-group, .or-group-data, .or-repeat', '.or' )
                     .forEach( el => el.classList.remove( 'contains-current' ) );
+                this._pauseMultimedia( this.current );
                 this._setToCurrent( pageEl );
                 this._focusOnFirstQuestion( pageEl );
                 this._toggleButtons( newIndex );
@@ -424,6 +425,16 @@ export default {
         this.$btnNext.add( this.$btnLast ).toggleClass( 'disabled', !next );
         this.$btnPrev.add( this.$btnFirst ).toggleClass( 'disabled', !prev );
         this.$formFooter.toggleClass( 'end', !next );
+    },
+    /**
+     * Pauses video and audio from playing when switching to a page.
+     *
+     * @param {Element} pageEl - page element
+     */
+    _pauseMultimedia( pageEl ) {
+        $( pageEl )
+            .find( 'audio, video' )
+            .each( ( idx, element ) => element.pause() );
     },
     /**
      * Updates Table of Contents
