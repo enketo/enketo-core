@@ -21,7 +21,15 @@ describe( 'Format', () => {
         let i;
         const t = [
             [ 'en-US', true, 'AM', 'PM' ],
-            [ 'zh', true, '上午', '下午' ],
+
+            /**
+             * Note (2022-01-31) — This fixture previously used the `zh` locale.
+             * Tests for this fixture pass in Chrome 97 (current) and Firefox 95
+             * (current - 1), but fail in Firefox 96 producing English-language
+             * 24-hour time. The expected behavior is produced for `zh-hk`.
+             */
+            [ 'zh-hk', true, '上午', '下午' ],
+
             [ 'ar-EG', true, 'ص', 'م' ],
             [ 'ko-KR', true, '오전', '오후' ],
             [ 'nl', false, null, null ],
