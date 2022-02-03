@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "6.0.2",
+    "version": "6.0.3",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -55,7 +55,7 @@
         "chai-as-promised": "^7.1.1",
         "cross-env": "^7.0.3",
         "docdash": "^1.2.0",
-        "enketo-transformer": "2.1.1",
+        "enketo-transformer": "2.1.2",
         "esbuild": "^0.12.29",
         "esbuild-plugin-alias": "^0.1.2",
         "eslint-plugin-jsdoc": "^36.1.1",
@@ -106,7 +106,7 @@
         "leaflet.gridlayer.googlemutant": "^0.13.4",
         "mergexml": "github:eyelidlessness/js-merge-xml#upgrade/xmldom",
         "node-forge": "^1.2.1",
-        "openrosa-xpath-evaluator": "^2.0.9",
+        "openrosa-xpath-evaluator": "^2.0.10",
         "signature_pad": "2.3.x"
     },
     "volta": {
