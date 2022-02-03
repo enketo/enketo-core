@@ -1,4 +1,4 @@
-name: npmjs
+name: build
 
 on:
   push:
