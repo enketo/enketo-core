@@ -3,6 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[6.0.3] - 2022-02-03
+---------------------
+
+##### Changed
+
+- Fix outputs in labels of radiobutton/checkbox itemsets within grouped repeats (#846)
+
 [6.0.2] - 2021-11-04
 ---------------------
 ##### Changed
