@@ -7,8 +7,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ---------------------
 
 ##### Changed
-
+- Improve build speed (#838)
+- Fix deprecatedID not added and populated properly if meta block is name-spaced with http://openrosa.org/xforms (#836)
 - Fix outputs in labels of radiobutton/checkbox itemsets within grouped repeats (#846)
+- Pause multimedia when switching pages (#817)
 - Upgraded to [openrosa-xpath-evaluator 2.0.10](https://github.com/enketo/openrosa-xpath-evaluator/blob/master/CHANGELOG.md#2010---2022-02-01)
 - Upgraded to [enketo-transformer 2.1.2](https://github.com/enketo/enketo-transformer/blob/master/CHANGELOG.md#212---2022-02-01)
 
