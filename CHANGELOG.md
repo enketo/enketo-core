@@ -3,15 +3,25 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[6.0.3] - 2022-02-03
+---------------------
+
+##### Changed
+
+- Fix outputs in labels of radiobutton/checkbox itemsets within grouped repeats (#846)
+- Upgraded to [openrosa-xpath-evaluator 2.0.10](https://github.com/enketo/openrosa-xpath-evaluator/blob/master/CHANGELOG.md#2010---2022-02-01)
+- Upgraded to [enketo-transformer 2.1.2](https://github.com/enketo/enketo-transformer/blob/master/CHANGELOG.md#212---2022-02-01)
+
 [6.0.2] - 2021-11-04
 ---------------------
 ##### Changed
-- Upgraded enketo-transformer to fix regressions
+- Upgraded to [enketo-transformer 2.1.1](https://github.com/enketo/enketo-transformer/blob/master/CHANGELOG.md#211---2021-11-04)
 
 [6.0.1] - 2021-10-13
 ---------------------
 ##### Changed
-- Upgraded enketo-transformer, openrosa-xpath-evaluator to fix regressions
+- Upgraded to [openrosa-xpath-evaluator 2.0.9](https://github.com/enketo/openrosa-xpath-evaluator/blob/master/CHANGELOG.md#209---2021-10-11)
+- Upgraded to [enketo-transformer 2.1.0](https://github.com/enketo/enketo-transformer/blob/master/CHANGELOG.md#210---2021-10-11)
 
 [6.0.0] - 2021-09-17
 ---------------------
