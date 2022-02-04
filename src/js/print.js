@@ -137,37 +137,41 @@ function fixGrid( paper, delay = 500 ) {
             // the -1px adjustment is necessary because the h3 element width is calc(100% + 1px)
             const maxWidth = title ? title.offsetWidth - 1 : null;
             const els = document.querySelectorAll( '.question:not(.draft), .trigger:not(.draft)' );
-
+            let delay = 0;
             els.forEach( ( el, index ) => {
-                const lastElement = index === els.length - 1;
-                const top = $( el ).offset().top;
-                rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
+                // add some delay to allow the resize working first
+                delay = delay + 100
+                setTimeout(function() {
+                    const lastElement = index === els.length - 1;
+                    const top = $( el ).offset().top;
+                    rowTop = ( rowTop || rowTop === 0 ) ? rowTop : top;
 
-                if ( top === rowTop ) {
-                    row = row.concat( el );
-                }
-
-                // If an element is hidden, top = 0. We still need to trigger a resize on the very last row
-                // if the last element is hidden, so this is placed outside of the previous if statement
-                if ( lastElement ) {
-                    _resizeRowElements( row, maxWidth );
-                }
-
-                // process row, and start a new row
-                if ( top > rowTop ) {
-                    _resizeRowElements( row, maxWidth );
-
-                    if ( lastElement && !row.includes( el ) ) {
-                        _resizeRowElements( [ el ], maxWidth );
-                    } else {
-                        // start a new row
-                        row = [ el ];
-                        rowTop = $( el ).offset().top;
+                    if ( top === rowTop ) {
+                        row = row.concat( el );
                     }
 
-                } else if ( rowTop < top ) {
-                    console.error( 'unexpected question top position: ', top, 'for element:', el, 'expected >=', rowTop );
-                }
+                    // If an element is hidden, top = 0. We still need to trigger a resize on the very last row
+                    // if the last element is hidden, so this is placed outside of the previous if statement
+                    if ( lastElement ) {
+                        _resizeRowElements( row, maxWidth );
+                    }
+
+                    // process row, and start a new row
+                    if ( top > rowTop ) {
+                        _resizeRowElements( row, maxWidth );
+
+                        if ( lastElement && !row.includes( el ) ) {
+                            _resizeRowElements( [ el ], maxWidth );
+                        } else {
+                            // start a new row
+                            row = [ el ];
+                            rowTop = $( el ).offset().top;
+                        }
+
+                    } else if ( rowTop < top ) {
+                        console.error( 'unexpected question top position: ', top, 'for element:', el, 'expected >=', rowTop );
+                    }
+                }, delay);
             } );
 
             return mutationsTracker.waitForQuietness()
