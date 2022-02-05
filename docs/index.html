@@ -81,6 +81,37 @@
 </ul>
 <p>We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.</p>
 <p><a href="https://enketo.github.io/enketo-core/tutorial-90-ie11.html">Here is some guidance</a> that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.</p>
+<h3 id="releases">Releases</h3>
+<ol>
+<li>Create release PR</li>
+<li>Check <a href="https://github.com/enketo/enketo-core/security/dependabot">Dependabot</a> for alerts</li>
+<li>Run <code>npm update</code>
+<ul>
+<li>Check if <code>node-forge</code> has been updated and if so, verify encrypted submissions end-to-end</li>
+</ul>
+</li>
+<li>Run <code>npm audit</code>
+<ul>
+<li>Run <code>npm audit fix --production</code> to apply most important fixes</li>
+</ul>
+</li>
+<li>Run <code>npm ci</code></li>
+<li>Run <code>npm test</code></li>
+<li>Run <code>npm run build-docs</code></li>
+<li>Update <code>CHANGELOG.md</code></li>
+<li>Update version in <code>package.json</code>
+<ul>
+<li>Bump to major version if consumers have to make changes.</li>
+</ul>
+</li>
+<li>Merge PR with all changes</li>
+<li>Create GitHub release</li>
+<li>Tag and publish the release
+<ul>
+<li>GitHub Action will publish it to npm</li>
+</ul>
+</li>
+</ol>
 <h3 id="sponsors">Sponsors</h3>
 <p>The development of this library was sponsored by:</p>
 <ul>
