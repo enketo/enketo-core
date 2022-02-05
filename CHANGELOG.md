@@ -3,6 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[6.0.4] - 2022-02-04
+---------------------
+
+##### Changed
+
+- Fix: Disable <option>s for readonly <select>s with itemsets (#843)
+
 [6.0.3] - 2022-02-03
 ---------------------
 
