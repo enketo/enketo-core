@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>enketo-repeat-bug</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance><data id="enketo-repeat-bug" version="2021081700">
+                    <field_asset_exists />
+                    <field_asset_rpt jr:template="">
+                        <field_asset_rpt_grp>
+                            <asset_name />
+                            <documentation_exists />
+                            <documentation_rpt jr:template="">
+                                <documentation_rpt_grp>
+                                    <documentation_type />
+                                    <documentation_file />
+                                    <documentation_photo />
+                                </documentation_rpt_grp>
+                            </documentation_rpt>
+                            <documentation_rpt>
+                                <documentation_rpt_grp>
+                                    <documentation_type />
+                                    <documentation_file />
+                                    <documentation_photo />
+                                </documentation_rpt_grp>
+                            </documentation_rpt>
+                            <instrumentation_exists />
+                            <instrumentation_rpt jr:template="">
+                                <instrumentation_rpt_grp>
+                                    <instrumentation_tag />
+                                    <instrumentation_measurement />
+                                    <instrumentation_measurement_other />
+                                </instrumentation_rpt_grp>
+                            </instrumentation_rpt>
+                            <instrumentation_rpt>
+                                <instrumentation_rpt_grp>
+                                    <instrumentation_tag />
+                                    <instrumentation_measurement />
+                                    <instrumentation_measurement_other />
+                                </instrumentation_rpt_grp>
+                            </instrumentation_rpt>
+                        </field_asset_rpt_grp>
+                    </field_asset_rpt>
+                    <field_asset_rpt>
+                        <field_asset_rpt_grp>
+                            <asset_name />
+                            <documentation_exists />
+                            <documentation_rpt>
+                                <documentation_rpt_grp>
+                                    <documentation_type />
+                                    <documentation_file />
+                                    <documentation_photo />
+                                </documentation_rpt_grp>
+                            </documentation_rpt>
+                            <instrumentation_exists />
+                            <instrumentation_rpt>
+                                <instrumentation_rpt_grp>
+                                    <instrumentation_tag />
+                                    <instrumentation_measurement />
+                                    <instrumentation_measurement_other />
+                                </instrumentation_rpt_grp>
+                            </instrumentation_rpt>
+                        </field_asset_rpt_grp>
+                    </field_asset_rpt>
+                    <meta>
+                    <instanceID />
+                    </meta>
+                </data></instance>
+            <bind nodeset="/data/field_asset_exists" required="true()" type="string" />
+            <bind nodeset="/data/field_asset_rpt" relevant="selected( /data/field_asset_exists , 'yes')" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/asset_name" type="string" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/documentation_exists" required="true()" type="string" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt" relevant="selected( ../documentation_exists , 'yes')" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt/documentation_rpt_grp/documentation_type" required="true()" type="string" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt/documentation_rpt_grp/documentation_file" type="binary" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt/documentation_rpt_grp/documentation_photo" orx:max-pixels="1000" relevant=" ../documentation_file  = ''" type="binary" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_exists" required="true()" type="string" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt" relevant="selected( ../instrumentation_exists , 'yes')" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt/instrumentation_rpt_grp/instrumentation_tag" type="string" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt/instrumentation_rpt_grp/instrumentation_measurement" required="true()" type="string" />
+            <bind nodeset="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt/instrumentation_rpt_grp/instrumentation_measurement_other" relevant="selected( ../instrumentation_measurement , 'other')" required="true()" type="string" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/field_asset_exists"><label>Is there at least 1 field asset?</label>
+            <item><label>Yes</label>
+                <value>yes</value>
+            </item>
+            <item><label>No</label>
+                <value>no</value>
+            </item>
+        </select1>
+        <group ref="/data/field_asset_rpt"><label>Field asset</label>
+            <repeat nodeset="/data/field_asset_rpt">
+                <group ref="/data/field_asset_rpt/field_asset_rpt_grp"><label><output value=" ../field_asset_rpt_grp/asset_name " /></label><input ref="/data/field_asset_rpt/field_asset_rpt_grp/asset_name"><label>Asset name</label></input>
+                    <select1 ref="/data/field_asset_rpt/field_asset_rpt_grp/documentation_exists"><label>Is there at least 1 piece of documentation?</label>
+                        <item><label>Yes</label>
+                            <value>yes</value>
+                        </item>
+                        <item><label>No</label>
+                            <value>no</value>
+                        </item>
+                    </select1>
+                    <group ref="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt"><label>Documentation</label>
+                        <repeat nodeset="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt">
+                            <group ref="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt/documentation_rpt_grp"><label><output value=" ../documentation_rpt_grp/documentation_type " /></label>
+                                <select1 ref="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt/documentation_rpt_grp/documentation_type"><label>Documentation type</label>
+                                    <item><label>Drawing set</label>
+                                        <value>drawing_set</value>
+                                    </item>
+                                    <item><label>Maintenance schedule</label>
+                                        <value>maintenance_schedule</value>
+                                    </item>
+                                    <item><label>Other</label>
+                                        <value>other</value>
+                                    </item>
+                                </select1>
+                                <upload mediatype="application/*" ref="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt/documentation_rpt_grp/documentation_file"><label>Documentation file</label>
+                                    <hint>If no file available, go to next question to take a photo</hint>
+                                </upload>
+                                <upload mediatype="image/*" ref="/data/field_asset_rpt/field_asset_rpt_grp/documentation_rpt/documentation_rpt_grp/documentation_photo"><label>Documentation photo</label></upload>
+                            </group>
+                        </repeat>
+                    </group>
+                    <select1 ref="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_exists"><label>Is there at least 1 piece of instrumentation?</label>
+                        <item><label>Yes</label>
+                            <value>yes</value>
+                        </item>
+                        <item><label>No</label>
+                            <value>no</value>
+                        </item>
+                    </select1>
+                    <group ref="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt"><label>Instrumentation</label>
+                        <repeat nodeset="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt">
+                            <group ref="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt/instrumentation_rpt_grp"><label><output value=" ../instrumentation_rpt_grp/instrumentation_tag " /></label><input ref="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt/instrumentation_rpt_grp/instrumentation_tag"><label>Instrumentation tag</label>
+                                <hint>If available</hint></input>
+                                <select1 ref="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt/instrumentation_rpt_grp/instrumentation_measurement"><label>Instrumentation measurement</label>
+                                    <item><label>Conductivity</label>
+                                        <value>conductivity</value>
+                                    </item>
+                                    <item><label>Flow</label>
+                                        <value>flow</value>
+                                    </item>
+                                    <item><label>Other</label>
+                                        <value>other</value>
+                                    </item>
+                                </select1><input ref="/data/field_asset_rpt/field_asset_rpt_grp/instrumentation_rpt/instrumentation_rpt_grp/instrumentation_measurement_other"><label>Specify other instrumentation measurement</label></input>
+                            </group>
+                        </repeat>
+                    </group>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
