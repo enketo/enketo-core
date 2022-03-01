@@ -5,7 +5,7 @@ import OpenRosaXPath from 'openrosa-xpath-evaluator';
 /**
  * @function xpath-evaluator-binding
  */
-export default function( ) {
+export default function () {
     const evaluator = OpenRosaXPath();
     this.xml.jsEvaluate = evaluator.evaluate;
 }

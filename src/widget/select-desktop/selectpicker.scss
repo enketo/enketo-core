@@ -48,7 +48,7 @@
     opacity: 0.7;
 }
 
-.or[dir="rtl"] .bootstrap-select {
+.or[dir='rtl'] .bootstrap-select {
     .dropdown-toggle {
         text-align: right;
         .caret {
@@ -83,7 +83,6 @@
         &:focus {
             // Remove focus outline when dropdown JS adds it after closing the menu
             //outline: none;
-       
         }
     }
 }

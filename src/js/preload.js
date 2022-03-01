@@ -4,61 +4,84 @@
  * @module preloader
  */
 
-import events from '../../src/js/event';
+import events from './event';
+
 export default {
     /**
      * Initializes preloader
      */
     init() {
-        if ( !this.form ) {
-            throw new Error( 'Preload module not correctly instantiated with form property.' );
+        if (!this.form) {
+            throw new Error(
+                'Preload module not correctly instantiated with form property.'
+            );
         }
 
-        //these initialize actual preload items
-        this.form.view.html.querySelectorAll( 'input[data-preload], select[data-preload], textarea[data-preload]' ).forEach( preloadEl => {
-            const props = this.form.input.getProps( preloadEl );
-            const item = preloadEl.dataset && preloadEl.dataset.preload ? preloadEl.dataset.preload.toLowerCase() : undefined;
-            const param = preloadEl.dataset && preloadEl.dataset.preloadParams ? preloadEl.dataset.preloadParams.toLowerCase() : undefined;
+        // these initialize actual preload items
+        this.form.view.html
+            .querySelectorAll(
+                'input[data-preload], select[data-preload], textarea[data-preload]'
+            )
+            .forEach((preloadEl) => {
+                const props = this.form.input.getProps(preloadEl);
+                const item =
+                    preloadEl.dataset && preloadEl.dataset.preload
+                        ? preloadEl.dataset.preload.toLowerCase()
+                        : undefined;
+                const param =
+                    preloadEl.dataset && preloadEl.dataset.preloadParams
+                        ? preloadEl.dataset.preloadParams.toLowerCase()
+                        : undefined;
 
-            if ( typeof this[ item ] !== 'undefined' ) {
-                const dataNode = this.form.model.node( props.path, props.index );
-                // If a preload item is placed inside a repeat with repeat-count 0, the node
-                // doesn't exist and will never get a value (which is correct behavior)
-                if ( dataNode.getElements().length ) {
-                    const curVal = dataNode.getVal();
-                    const newVal = this[ item ]( {
-                        param,
-                        curVal,
-                        dataNode
-                    } );
+                if (typeof this[item] !== 'undefined') {
+                    const dataNode = this.form.model.node(
+                        props.path,
+                        props.index
+                    );
+                    // If a preload item is placed inside a repeat with repeat-count 0, the node
+                    // doesn't exist and will never get a value (which is correct behavior)
+                    if (dataNode.getElements().length) {
+                        const curVal = dataNode.getVal();
+                        const newVal = this[item]({
+                            param,
+                            curVal,
+                            dataNode,
+                        });
 
-                    dataNode.setVal( newVal, props.xmlType );
+                        dataNode.setVal(newVal, props.xmlType);
+                    }
+                } else {
+                    console.warn(
+                        `Preload "${item}" not supported. May or may not be a big deal.`
+                    );
                 }
-            } else {
-                console.warn( `Preload "${item}" not supported. May or may not be a big deal.` );
-            }
-        } );
+            });
     },
     /**
      * @param {object} o - parameter object
      * @return {string} evaluated value or error message
      */
-    'timestamp': function( o ) {
+    timestamp(o) {
         let value;
         const that = this;
         // when is 'start' or 'end'
-        if ( o.param === 'start' ) {
-            return ( o.curVal.length > 0 ) ? o.curVal : this.form.model.evaluate( 'now()', 'string' );
+        if (o.param === 'start') {
+            return o.curVal.length > 0
+                ? o.curVal
+                : this.form.model.evaluate('now()', 'string');
         }
-        if ( o.param === 'end' ) {
-            //set event handler for each save event (needs to be triggered!)
-            this.form.view.html.addEventListener( events.BeforeSave().type, () => {
-                value = that.form.model.evaluate( 'now()', 'string' );
-                o.dataNode.setVal( value, 'datetime' );
-            } );
+        if (o.param === 'end') {
+            // set event handler for each save event (needs to be triggered!)
+            this.form.view.html.addEventListener(
+                events.BeforeSave().type,
+                () => {
+                    value = that.form.model.evaluate('now()', 'string');
+                    o.dataNode.setVal(value, 'datetime');
+                }
+            );
 
-            //TODO: why populate this upon load?
-            return this.form.model.evaluate( 'now()', 'string' );
+            // TODO: why populate this upon load?
+            return this.form.model.evaluate('now()', 'string');
         }
 
         return 'error - unknown timestamp parameter';
@@ -67,17 +90,17 @@ export default {
      * @param {object} o - parameter object
      * @return {string} current value or evaluated value
      */
-    'date': function( o ) {
+    date(o) {
         let today;
         let year;
         let month;
         let day;
 
-        if ( o.curVal.length === 0 ) {
-            today = new Date( this.form.model.evaluate( 'today()', 'string' ) );
-            year = today.getFullYear().toString().padStart( 4, '0' );
-            month = ( today.getMonth() + 1 ).toString().padStart( 2, '0' );
-            day = today.getDate().toString().padStart( 2, '0' );
+        if (o.curVal.length === 0) {
+            today = new Date(this.form.model.evaluate('today()', 'string'));
+            year = today.getFullYear().toString().padStart(4, '0');
+            month = (today.getMonth() + 1).toString().padStart(2, '0');
+            day = today.getDate().toString().padStart(2, '0');
 
             return `${year}-${month}-${day}`;
         }
@@ -88,17 +111,18 @@ export default {
      * @param {object} o - parameter object
      * @return {string} current value or evaluated value
      */
-    'property': function( o ) {
+    property(o) {
         let node;
 
         // 'deviceid', 'subscriberid', 'simserial', 'phonenumber'
-        if ( o.curVal.length === 0 ) {
-            node = this.form.model.node( `instance("__session")/session/context/${o.param}` );
-            if ( node.getElements().length ) {
+        if (o.curVal.length === 0) {
+            node = this.form.model.node(
+                `instance("__session")/session/context/${o.param}`
+            );
+            if (node.getElements().length) {
                 return node.getVal();
-            } else {
-                return `no ${o.param} property in enketo`;
             }
+            return `no ${o.param} property in enketo`;
         }
 
         return o.curVal;
@@ -107,10 +131,12 @@ export default {
      * @param {object} o - parameter object
      * @return {string} current value or evaluated value
      */
-    'context': function( o ) {
+    context(o) {
         // 'application', 'user'??
-        if ( o.curVal.length === 0 ) {
-            return ( o.param === 'application' ) ? 'enketo' : `${o.param} not supported in enketo`;
+        if (o.curVal.length === 0) {
+            return o.param === 'application'
+                ? 'enketo'
+                : `${o.param} not supported in enketo`;
         }
 
         return o.curVal;
@@ -119,8 +145,8 @@ export default {
      * @param {object} o - parameter object
      * @return {string} current value or error message
      */
-    'patient': function( o ) {
-        if ( o.curVal.length === 0 ) {
+    patient(o) {
+        if (o.curVal.length === 0) {
             return 'patient preload item not supported in enketo';
         }
 
@@ -130,8 +156,8 @@ export default {
      * @param {object} o - parameter object
      * @return {string} current value or error message
      */
-    'user': function( o ) {
-        if ( o.curVal.length === 0 ) {
+    user(o) {
+        if (o.curVal.length === 0) {
             return 'user preload item not supported in enketo yet';
         }
 
@@ -141,11 +167,14 @@ export default {
      * @param {object} o - parameter object
      * @return {string} current value or evaluated value
      */
-    'uid': function( o ) {
-        if ( o.curVal.length === 0 ) {
-            return this.form.model.evaluate( 'concat("uuid:", uuid())', 'string' );
+    uid(o) {
+        if (o.curVal.length === 0) {
+            return this.form.model.evaluate(
+                'concat("uuid:", uuid())',
+                'string'
+            );
         }
 
         return o.curVal;
-    }
+    },
 };

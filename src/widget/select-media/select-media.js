@@ -15,13 +15,14 @@ class MediaPicker extends Widget {
     }
 
     _init() {
-        this.element.querySelectorAll( '.option-label' ).forEach( function( optionLabel ) {
-            if ( getSiblingElement( optionLabel, 'img, video, audio' ) ) {
-                optionLabel.style.display = 'none';
-            }
-        } );
+        this.element
+            .querySelectorAll('.option-label')
+            .forEach((optionLabel) => {
+                if (getSiblingElement(optionLabel, 'img, video, audio')) {
+                    optionLabel.style.display = 'none';
+                }
+            });
     }
-
 }
 
 export default MediaPicker;

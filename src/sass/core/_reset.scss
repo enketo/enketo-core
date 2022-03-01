@@ -86,10 +86,14 @@ h6 {
     font-size: $font-size-base * 0.85;
 }
 
-h2, h3, h4 {
+h2,
+h3,
+h4 {
     font-weight: bold;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     font-weight: normal;
 }

@@ -3,7 +3,6 @@
  */
 import $ from 'jquery';
 
-
 /**
  * Reverses a jQuery collection
  *

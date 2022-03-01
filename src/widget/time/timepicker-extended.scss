@@ -1,7 +1,7 @@
-@import "timepicker";
+@import 'timepicker';
 
 .timepicker {
-    input[type="text"] {
+    input[type='text'] {
         display: inline-block;
         width: $input-min-width;
     }

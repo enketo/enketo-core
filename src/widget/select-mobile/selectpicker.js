@@ -23,14 +23,18 @@ class MobileSelectPicker extends Widget {
     }
 
     _init() {
-        const fragment = document.createRange().createContextualFragment( '<span class="widget mobileselect"></span>' );
-        this.element.after( fragment );
-        this.widget = this.element.parentElement.querySelector( '.widget' );
+        const fragment = document
+            .createRange()
+            .createContextualFragment(
+                '<span class="widget mobileselect"></span>'
+            );
+        this.element.after(fragment);
+        this.widget = this.element.parentElement.querySelector('.widget');
 
         // Show values on change
-        this.element.addEventListener( 'change', () => {
+        this.element.addEventListener('change', () => {
             this._showSelectedValues();
-        } );
+        });
 
         // Show defaults
         this._showSelectedValues();
@@ -40,7 +44,7 @@ class MobileSelectPicker extends Widget {
      * Display the selected values
      */
     _showSelectedValues() {
-        this.widget.textContent = this.originalInputValue.join( ', ' );
+        this.widget.textContent = this.originalInputValue.join(', ');
     }
 
     /**

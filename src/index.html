@@ -1,93 +1,173 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
+    <head>
+        <title>Enketo-Core Developer template</title>
+        <link
+            href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,600&amp;subset=latin,cyrillic-ext,cyrillic,greek-ext,greek,vietnamese,latin-ext"
+            rel="stylesheet"
+            type="text/css"
+        />
 
-<head>
-    <title>Enketo-Core Developer template</title>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600&amp;subset=latin,cyrillic-ext,cyrillic,greek-ext,greek,vietnamese,latin-ext' rel='stylesheet' type='text/css'>
+        <!--<link type="text/css" href="./css/plain.css" media="all" rel="stylesheet" />-->
+        <link
+            type="text/css"
+            href="./css/formhub.css"
+            media="all"
+            rel="stylesheet"
+        />
+        <!--<link type="text/css" href="./css/grid.css" media="all" rel="stylesheet" />-->
 
-    <!--<link type="text/css" href="./css/plain.css" media="all" rel="stylesheet" />-->
-    <link type="text/css" href="./css/formhub.css" media="all" rel="stylesheet" />
-    <!--<link type="text/css" href="./css/grid.css" media="all" rel="stylesheet" />-->
+        <!--<link type="text/css" href="./css/plain-print.css" media="print" rel="stylesheet" />-->
+        <link
+            type="text/css"
+            href="./css/formhub-print.css"
+            media="print"
+            rel="stylesheet"
+        />
+        <!--<link type="text/css" href="./css/grid-print.css" media="print" rel="stylesheet" />-->
 
-    <!--<link type="text/css" href="./css/plain-print.css" media="print" rel="stylesheet" />-->
-    <link type="text/css" href="./css/formhub-print.css" media="print" rel="stylesheet" />
-    <!--<link type="text/css" href="./css/grid-print.css" media="print" rel="stylesheet" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            .form-footer .disabled {
+                display: none;
+            }
+        </style>
+        <script>
+            // The comment below is used in enketo-core-performance-monitor, so leave it (in the Enketo Core repo).
+            //{{globalModelStr}}
+        </script>
+    </head>
 
-    <style type="text/css">
-        .form-footer .disabled {
-            display: none;
-        }
-
-    </style>
-    <script>
-        // The comment below is used in enketo-core-performance-monitor, so leave it (in the Enketo Core repo).
-        //{{globalModelStr}}
-
-    </script>
-</head>
-
-<body>
-    <div class="main">
-        <article class="paper">
-            <!--
+    <body>
+        <div class="main">
+            <article class="paper">
+                <!--
 				This section is to be removed in application
 			-->
-            <section class="guidance">
-                <p>Add querystring to source of XForm (URL or local file relative to /test/forms), eg:</p>
-                <ul>
-                    <li><a href="?xform=https://api.ona.io/enketo/forms/68781/form.xml">?xform=https://api.ona.io/enketo/forms/68781/form.xml</a></li>
-                    <li><a href="?xform=https://api.ona.io/enketo/forms/66458/form.xml">?xform=https://api.ona.io/enketo/forms/66458/form.xml</a></li>
-                    <li><a href="?xform=https://opendatakit.appspot.com/formXml?formId=all-widgets">?xform=https://opendatakit.appspot.com/formXml?formId=all-widgets</a></li>
-                    <li><a href="?xform=nested_repeats.xml">?xform=nested_repeats.xml</a></li>
-                </ul>
-            </section>
-            <!--
+                <section class="guidance">
+                    <p>
+                        Add querystring to source of XForm (URL or local file
+                        relative to /test/forms), eg:
+                    </p>
+                    <ul>
+                        <li>
+                            <a
+                                href="?xform=https://api.ona.io/enketo/forms/68781/form.xml"
+                                >?xform=https://api.ona.io/enketo/forms/68781/form.xml</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="?xform=https://api.ona.io/enketo/forms/66458/form.xml"
+                                >?xform=https://api.ona.io/enketo/forms/66458/form.xml</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="?xform=https://opendatakit.appspot.com/formXml?formId=all-widgets"
+                                >?xform=https://opendatakit.appspot.com/formXml?formId=all-widgets</a
+                            >
+                        </li>
+                        <li>
+                            <a href="?xform=nested_repeats.xml"
+                                >?xform=nested_repeats.xml</a
+                            >
+                        </li>
+                    </ul>
+                </section>
+                <!--
 				This form header (markup/css) can be changed in the application.
 				Just make sure to keep a .form-language-selector element into which the form language selector (<select>)
 				will be appended by Enketo Core.
 			-->
-            <header class="form-header clearfix">
-                <span class="form-language-selector hide"><span>Choose Language</span></span>
-                <nav class="pages-toc hide" role="navigation">
-                    <label for="toc-toggle"></label>
-                    <input type="checkbox" id="toc-toggle" class="ignore" value="show">
-                    <!-- this element can be placed anywhere, leaving it out will prevent running ToC-generating code -->
-                    <ul class="pages-toc__list"></ul>
-                    <div class="pages-toc__overlay"></div>
-                </nav>
-            </header>
+                <header class="form-header clearfix">
+                    <span class="form-language-selector hide"
+                        ><span>Choose Language</span></span
+                    >
+                    <nav class="pages-toc hide" role="navigation">
+                        <label for="toc-toggle"></label>
+                        <input
+                            type="checkbox"
+                            id="toc-toggle"
+                            class="ignore"
+                            value="show"
+                        />
+                        <!-- this element can be placed anywhere, leaving it out will prevent running ToC-generating code -->
+                        <ul class="pages-toc__list"></ul>
+                        <div class="pages-toc__overlay"></div>
+                    </nav>
+                </header>
 
-            <!-- The comment below is used in enketo-core-performance-monitor. -->
-            <!-- {{<form>}} -->
+                <!-- The comment below is used in enketo-core-performance-monitor. -->
+                <!-- {{<form>}} -->
 
-            <section class="form-footer">
-                <!--
+                <section class="form-footer">
+                    <!--
 					Used some quick-and-dirty inline CSS styles here because the form-footer should be styled in the
 					mother application. The HTML markup can be changed as well.
 				-->
-                <a href="#" class="previous-page disabled" style="position:absolute; left: 10px; bottom: 40px;">Back</a>
-                <button id="validate-form" class="btn btn-primary" style="width:200px; margin-left: calc(50% - 100px);">Validate</button>
-                <a href="#" class="btn btn-primary next-page disabled" style="width: 200px; margin-left: calc(50% - 100px)">Next</a>
+                    <a
+                        href="#"
+                        class="previous-page disabled"
+                        style="position: absolute; left: 10px; bottom: 40px"
+                        >Back</a
+                    >
+                    <button
+                        id="validate-form"
+                        class="btn btn-primary"
+                        style="width: 200px; margin-left: calc(50% - 100px)"
+                    >
+                        Validate
+                    </button>
+                    <a
+                        href="#"
+                        class="btn btn-primary next-page disabled"
+                        style="width: 200px; margin-left: calc(50% - 100px)"
+                        >Next</a
+                    >
 
-                <div class="enketo-power" style="margin-bottom: 30px;">Powered by <a href="http://enketo.org" title="enketo.org website"><img src="https://enketo.org/media/images/logos/enketo_bare_150x56.png" alt="enketo logo" /></a> </div>
-                <div class="form-footer__jump-nav" style="display: flex; flex-direction: row;">
-                    <a href="#" class="btn btn-default disabled first-page" style="flex: 1; border-radius: 0;">Return to Beginning</a>
-                    <a href="#" class="btn btn-default disabled last-page" style="flex: 1; border-radius: 0;">Go to End</a>
-                </div>
-                <!--<ol class="page-toc"></ol>-->
-            </section>
+                    <div class="enketo-power" style="margin-bottom: 30px">
+                        Powered by
+                        <a href="http://enketo.org" title="enketo.org website"
+                            ><img
+                                src="https://enketo.org/media/images/logos/enketo_bare_150x56.png"
+                                alt="enketo logo"
+                        /></a>
+                    </div>
+                    <div
+                        class="form-footer__jump-nav"
+                        style="display: flex; flex-direction: row"
+                    >
+                        <a
+                            href="#"
+                            class="btn btn-default disabled first-page"
+                            style="flex: 1; border-radius: 0"
+                            >Return to Beginning</a
+                        >
+                        <a
+                            href="#"
+                            class="btn btn-default disabled last-page"
+                            style="flex: 1; border-radius: 0"
+                            >Go to End</a
+                        >
+                    </div>
+                    <!--<ol class="page-toc"></ol>-->
+                </section>
+            </article>
+        </div>
 
-        </article>
-    </div>
+        <!-- for development only -->
+        <!-- <script src="//localhost:35729/livereload.js"></script> -->
 
-    <!-- for development only -->
-    <!-- <script src="//localhost:35729/livereload.js"></script> -->
-
-    <!-- all the scripts -->
-    <script id="main-script" defer module type="text/javascript" src="./app.js" charset="utf-8"></script>
-
-</body>
-
+        <!-- all the scripts -->
+        <script
+            id="main-script"
+            defer
+            module
+            type="text/javascript"
+            src="./app.js"
+            charset="utf-8"
+        ></script>
+    </body>
 </html>

@@ -1,6 +1,8 @@
 import TextMaxWidget from '../../src/widget/text-max/text-max';
-import { testStaticProperties, testBasicInstantiation } from '../helpers/test-widget';
-
+import {
+    testStaticProperties,
+    testBasicInstantiation,
+} from '../helpers/test-widget';
 
 const FORM1 = `
     <form class="or">
@@ -15,6 +17,6 @@ const FORM2 = `
         </label>
     </form>`;
 
-testStaticProperties( TextMaxWidget );
-testBasicInstantiation( TextMaxWidget, FORM1 );
-testBasicInstantiation( TextMaxWidget, FORM2 );
+testStaticProperties(TextMaxWidget);
+testBasicInstantiation(TextMaxWidget, FORM1);
+testBasicInstantiation(TextMaxWidget, FORM2);

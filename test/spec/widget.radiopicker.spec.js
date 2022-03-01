@@ -1,8 +1,10 @@
 import Radiopicker from '../../src/widget/radio/radiopicker';
-import { testStaticProperties, testBasicInstantiation } from '../helpers/test-widget';
+import {
+    testStaticProperties,
+    testBasicInstantiation,
+} from '../helpers/test-widget';
 
-const FORM =
-    `<form class="or">
+const FORM = `<form class="or">
         <fieldset class="question">
             <div class="option-wrapper">
                 <label>
@@ -15,5 +17,5 @@ const FORM =
         </fieldset>
     <form>`;
 
-testStaticProperties( Radiopicker );
-testBasicInstantiation( Radiopicker, FORM );
+testStaticProperties(Radiopicker);
+testBasicInstantiation(Radiopicker, FORM);

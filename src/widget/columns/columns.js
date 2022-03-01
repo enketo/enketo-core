@@ -15,18 +15,25 @@ class Columns extends Widget {
     }
 
     _init() {
-        this.element.querySelectorAll( '.option-wrapper' ).forEach( wrapper => {
+        this.element.querySelectorAll('.option-wrapper').forEach((wrapper) => {
             const COLUMNS = 3;
 
-            let fillers = COLUMNS - wrapper.querySelectorAll( 'label' ).length % COLUMNS;
+            let fillers =
+                COLUMNS - (wrapper.querySelectorAll('label').length % COLUMNS);
 
-            while ( fillers < COLUMNS && fillers > 0 ) {
-                wrapper.append( document.createRange().createContextualFragment( '<label class="filler"></label>' ) );
+            while (fillers < COLUMNS && fillers > 0) {
+                wrapper.append(
+                    document
+                        .createRange()
+                        .createContextualFragment(
+                            '<label class="filler"></label>'
+                        )
+                );
                 fillers--;
             }
             // if added to correct question type, add initialized class
-            this.question.classList.add( 'or-columns-initialized' );
-        } );
+            this.question.classList.add('or-columns-initialized');
+        });
     }
 }
 

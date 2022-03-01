@@ -1,8 +1,10 @@
 import MobileSelectWidget from '../../src/widget/select-mobile/selectpicker';
-import { testStaticProperties, testBasicInstantiation } from '../helpers/test-widget';
+import {
+    testStaticProperties,
+    testBasicInstantiation,
+} from '../helpers/test-widget';
 
-const FORM =
-    `<label class="question or-appearance-minimal ">
+const FORM = `<label class="question or-appearance-minimal ">
         <span lang="" class="question-label active">Select multiple: pulldown</span>
         <select multiple="multiple" name="/widgets/select_widgets/select_spinner" data-type-xml="select" >
             <option value="">...</option>
@@ -14,18 +16,20 @@ const FORM =
         <span class="or-option-translations" style="display:none;"></span>
     </label>`;
 
-testStaticProperties( MobileSelectWidget );
-testBasicInstantiation( MobileSelectWidget, FORM );
+testStaticProperties(MobileSelectWidget);
+testBasicInstantiation(MobileSelectWidget, FORM);
 
-describe( 'Mobile multi-select picker', () => {
-    it( 'shows selected values next to select element', () => {
-        const fragment = document.createRange().createContextualFragment( FORM );
-        const control = fragment.querySelector( 'select' );
-        const widget = new MobileSelectWidget( control );
+describe('Mobile multi-select picker', () => {
+    it('shows selected values next to select element', () => {
+        const fragment = document.createRange().createContextualFragment(FORM);
+        const control = fragment.querySelector('select');
+        const widget = new MobileSelectWidget(control);
 
-        control.querySelector( 'option[value="b"]' ).selected = true;
-        control.querySelector( 'option[value="d"]' ).selected = true;
-        control.dispatchEvent( new Event( 'change' ) );
-        expect( widget.question.querySelector( '.mobileselect' ).textContent ).to.equal( 'b, d' );
-    } );
-} );
+        control.querySelector('option[value="b"]').selected = true;
+        control.querySelector('option[value="d"]').selected = true;
+        control.dispatchEvent(new Event('change'));
+        expect(
+            widget.question.querySelector('.mobileselect').textContent
+        ).to.equal('b, d');
+    });
+});

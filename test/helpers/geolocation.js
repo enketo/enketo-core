@@ -17,13 +17,13 @@
  *
  * @return {window.GeolocationCoordinates} - returns a TestCoordinates object
  */
-export const createTestCoordinates = ( {
+export const createTestCoordinates = ({
     latitude,
     longitude,
     altitude = null,
     accuracy = null,
-} ) => (
-    Object.create( window.GeolocationCoordinates.prototype, {
+}) =>
+    Object.create(window.GeolocationCoordinates.prototype, {
         latitude: { value: latitude },
         longitude: { value: longitude },
         altitude: { value: altitude },
@@ -31,20 +31,18 @@ export const createTestCoordinates = ( {
         altitudeAccuracy: { value: null },
         heading: { value: null },
         speed: { value: null },
-    } )
-);
+    });
 
 /**
  * @param {'PERMISSION_DENIED'|'POSITION_UNAVAILABLE'|'TIMEOUT'} reason - the reason a geolocation lookup failed
  *
  * @return {window.GeolocationPositionError} - a lookup error instance
  */
-export const createGeolocationLookupError = ( reason ) => (
-    Object.create( window.GeolocationPositionError.prototype, {
+export const createGeolocationLookupError = (reason) =>
+    Object.create(window.GeolocationPositionError.prototype, {
         code: { value: window.GeolocationPositionError[reason] },
         message: { value: reason },
-    } )
-);
+    });
 
 /**
  * @typedef MockGeolocationLookupOptions
@@ -70,11 +68,11 @@ export const createGeolocationLookupError = ( reason ) => (
  * if a geolocation lookup is performed, will be a promise that resolves with the
  * expected geopoint value when the lookup is complete.
  */
-export const mockGetCurrentPosition = ( result, options = {} ) => {
+export const mockGetCurrentPosition = (result, options = {}) => {
     /**
      * @type {{ lookup: Promise<{ geopoint: string }> | null}}
      */
-    let mock = { lookup: null };
+    const mock = { lookup: null };
 
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
@@ -82,54 +80,53 @@ export const mockGetCurrentPosition = ( result, options = {} ) => {
     /** @type {import('sinon').SinonStub} */
     let getCurrentPositionStub;
 
-    beforeEach( () => {
+    beforeEach(() => {
         mock.lookup = null;
 
         sandbox = sinon.createSandbox();
 
-        getCurrentPositionStub = sandbox.stub( navigator.geolocation, 'getCurrentPosition' ).callsFake(
-            /**
-             * @param {window.PositionCallback} successCallback - called on success
-             * @param {window.PositionErrorCallback} [errorCallback] - called on failure
-             */
-            ( successCallback, errorCallback ) => {
-                mock.lookup = new Promise( ( resolve ) => {
-                    if ( result instanceof window.GeolocationPositionError ) {
-                        errorCallback( result );
-                        resolve( { geopoint: '' } );
-                    } else {
-                        const position = {
-                            coords: result,
-                            timestamp: Date.now(),
-                        };
-                        successCallback( position );
+        getCurrentPositionStub = sandbox
+            .stub(navigator.geolocation, 'getCurrentPosition')
+            .callsFake(
+                /**
+                 * @param {window.PositionCallback} successCallback - called on success
+                 * @param {window.PositionErrorCallback} [errorCallback] - called on failure
+                 */
+                (successCallback, errorCallback) => {
+                    mock.lookup = new Promise((resolve) => {
+                        if (result instanceof window.GeolocationPositionError) {
+                            errorCallback(result);
+                            resolve({ geopoint: '' });
+                        } else {
+                            const position = {
+                                coords: result,
+                                timestamp: Date.now(),
+                            };
+                            successCallback(position);
 
-                        const {
-                            latitude,
-                            longitude,
-                            altitude,
-                            accuracy,
-                        } = result;
+                            const { latitude, longitude, altitude, accuracy } =
+                                result;
 
-                        const geopoint = `${latitude} ${longitude} ${altitude || '0.0'} ${accuracy || '0.0'}`;
+                            const geopoint = `${latitude} ${longitude} ${
+                                altitude || '0.0'
+                            } ${accuracy || '0.0'}`;
 
-                        resolve( { geopoint } );
-                    }
+                            resolve({ geopoint });
+                        }
+                    });
+                }
+            );
+    });
 
-                } );
-            }
-        );
-    } );
-
-    afterEach( () => {
+    afterEach(() => {
         const { callCount = 0 } = getCurrentPositionStub || {};
 
         sandbox.restore();
 
-        if ( options.expectLookup ) {
-            expect( callCount ).to.be.greaterThan( 0 );
+        if (options.expectLookup) {
+            expect(callCount).to.be.greaterThan(0);
         }
-    } );
+    });
 
     return mock;
 };

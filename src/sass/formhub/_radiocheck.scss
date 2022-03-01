@@ -1,5 +1,6 @@
 @mixin disabled {
-    &:disabled, &[readonly] {
+    &:disabled,
+    &[readonly] {
         @include disabled-radiocheck-style;
     }
 }
@@ -24,7 +25,7 @@
 }
 
 .question {
-    input[type=radio] {
+    input[type='radio'] {
         @include radiocheck-setup;
 
         @include radio-unchecked-style;
@@ -42,7 +43,7 @@
         }
     }
 
-    input[type=checkbox] {
+    input[type='checkbox'] {
         @include radiocheck-setup;
 
         @include checkbox-unchecked-style;
@@ -70,10 +71,11 @@
 }
 
 // tweaks for rtl display
-.or[dir="rtl"],
-[dir="rtl"] .form-footer {
+.or[dir='rtl'],
+[dir='rtl'] .form-footer {
     .question {
-        input[type=checkbox], input[type=radio] {
+        input[type='checkbox'],
+        input[type='radio'] {
             margin-right: 0;
             margin-left: 10px;
         }

@@ -7,22 +7,27 @@ $analog-picker-max-height: 800px !default;
 $q-pad-left: 0px !default;
 $q-pad-right: 0px !default;
 
-
-@mixin ticks($orientation: "vertical") {
-    @if $orientation=="horizontal" {
+@mixin ticks($orientation: 'vertical') {
+    @if $orientation== 'horizontal' {
         span {
             padding: 4px 0;
-            background-image: linear-gradient(270deg, $analog-picker-tick-color 1px, transparent 0px);
+            background-image: linear-gradient(
+                270deg,
+                $analog-picker-tick-color 1px,
+                transparent 0px
+            );
             background-repeat: repeat-x;
             background-origin: content-box;
             background-size: 10% 100%;
         }
-    }
-
-    @else {
+    } @else {
         span {
             padding: 0 25%;
-            background-image: linear-gradient(0deg, $analog-picker-tick-color 1px, transparent 0px);
+            background-image: linear-gradient(
+                0deg,
+                $analog-picker-tick-color 1px,
+                transparent 0px
+            );
             background-repeat: repeat-y;
             background-origin: content-box;
             background-size: 100% 10%;
@@ -51,7 +56,7 @@ $q-pad-right: 0px !default;
         visibility: hidden;
     }
 
-    >.widget:not(.or-comment-widget) {
+    > .widget:not(.or-comment-widget) {
         // override main.scss style
         // The margin-bottom is maintained to
         // have space for the constraint message in the horizontal
@@ -100,15 +105,12 @@ $q-pad-right: 0px !default;
         order: 5;
     }
 
-
     &:not(.or-appearance-no-ticks) {
-
         .range-widget {
             &__ticks {
                 @include ticks('vertical');
 
                 &__scale {
-
                     &__start,
                     &__end {
                         display: none;
@@ -129,7 +131,6 @@ $q-pad-right: 0px !default;
     &.or-appearance-no-ticks {
         .range-widget {
             &__scale {
-
                 &__start,
                 &__end {
                     display: none;
@@ -139,7 +140,6 @@ $q-pad-right: 0px !default;
     }
 
     &.or-appearance-horizontal {
-
         .analog-scale-widget {
             display: flex;
         }
@@ -149,7 +149,7 @@ $q-pad-right: 0px !default;
 
             // adjust default range widget
             &__wrap {
-                height: 117px
+                height: 117px;
             }
 
             // adjust default range widget
@@ -159,7 +159,7 @@ $q-pad-right: 0px !default;
             }
 
             // adjust default range widget
-            [type=range] {
+            [type='range'] {
                 top: 33.5px;
             }
 
@@ -175,7 +175,6 @@ $q-pad-right: 0px !default;
             width: 80px;
             align-self: center;
         }
-
     }
 
     &.or-appearance-vertical:not(.disabled) {
@@ -227,17 +226,17 @@ $q-pad-right: 0px !default;
         }
     }
 
-    [class*="or-constraint"],
+    [class*='or-constraint'],
     .or-required-msg {
         order: 5;
     }
 }
 
 // corrections for pages mode
-.pages.or [role="page"] {
+.pages.or [role='page'] {
     &.or-analog-scale-initialized {
         &.current:not(.or-appearance-horizontal) {
-                @include display-flex;
+            @include display-flex;
         }
 
         &:not(.current) {

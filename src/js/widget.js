@@ -1,5 +1,6 @@
 import input from './input';
 import event from './event';
+
 const range = document.createRange();
 
 /**
@@ -11,10 +12,10 @@ class Widget {
      * @param {Element} element - The DOM element the widget is applied on
      * @param {(boolean|{touch: boolean})} [options] - Options passed to the widget during instantiation
      */
-    constructor( element, options ) {
+    constructor(element, options) {
         this.element = element;
         this.options = options || {};
-        this.question = element.closest( '.question' );
+        this.question = element.closest('.question');
         this._props = this._getProps();
 
         // Some widgets (e.g. ImageMap) initialize asynchronously and init returns a promise.
@@ -40,13 +41,19 @@ class Widget {
         const that = this;
 
         return {
-            get readonly() { return that.element.nodeName.toLowerCase() === 'select' ? that.element.hasAttribute( 'readonly' ) : !!that.element.readOnly; },
-            appearances: [ ...this.element.closest( '.question, form.or' ).classList ]
-                .filter( cls => cls.indexOf( 'or-appearance-' ) === 0 )
-                .map( cls => cls.substring( 14 ) ),
+            get readonly() {
+                return that.element.nodeName.toLowerCase() === 'select'
+                    ? that.element.hasAttribute('readonly')
+                    : !!that.element.readOnly;
+            },
+            appearances: [
+                ...this.element.closest('.question, form.or').classList,
+            ]
+                .filter((cls) => cls.indexOf('or-appearance-') === 0)
+                .map((cls) => cls.substring(14)),
             multiple: !!this.element.multiple,
             disabled: !!this.element.disabled,
-            type: this.element.getAttribute( 'data-type-xml' ),
+            type: this.element.getAttribute('data-type-xml'),
         };
     }
 
@@ -129,7 +136,7 @@ class Widget {
      * @param {*} value - value to set
      * @type {*}
      */
-    set value( value ) {}
+    set value(value) {} // eslint-disable-line no-empty-function -- this is defining the API
 
     /**
      * Obtains the value from the original form control the widget is instantiated on.
@@ -139,7 +146,7 @@ class Widget {
      * @type {*}
      */
     get originalInputValue() {
-        return input.getVal( this.element );
+        return input.getVal(this.element);
     }
 
     /**
@@ -149,12 +156,12 @@ class Widget {
      * @param {*} value - value to set
      * @type {*}
      */
-    set originalInputValue( value ) {
+    set originalInputValue(value) {
         // Avoid unnecessary change events as they could have significant negative consequences!
         // However, to add a check for this.originalInputValue !== value here would affect performance too much,
         // so we rely on widget code to only use this setter when the value changes.
-        input.setVal( this.element, value, null );
-        this.element.dispatchEvent( event.Change() );
+        input.setVal(this.element, value, null);
+        this.element.dispatchEvent(event.Change());
     }
 
     /**

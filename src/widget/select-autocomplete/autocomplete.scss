@@ -1,6 +1,6 @@
-@import "./jquery.relevant-dropdown";
+@import './jquery.relevant-dropdown';
 
-input[type=text].autocomplete {
+input[type='text'].autocomplete {
     // width of input same as width of regular select
     width: $input-min-width * $golden-ratio - 14px;
 
@@ -10,7 +10,7 @@ input[type=text].autocomplete {
 }
 
 .touch {
-    input[type=text].autocomplete {
+    input[type='text'].autocomplete {
         width: 100%;
     }
 }

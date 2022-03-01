@@ -32,37 +32,38 @@ class TimepickerExtended extends Widget {
                 <input class="ignore timepicker-default" type="text" placeholder="hh:mm" />
             </div>`
         );
-        fragment.querySelector( '.widget' ).append( this.resetButtonHtml );
-        this.element.classList.add( 'hide' );
-        this.element.before( fragment );
+        fragment.querySelector('.widget').append(this.resetButtonHtml);
+        this.element.classList.add('hide');
+        this.element.before(fragment);
 
-        const resetBtn = this.question.querySelector( '.widget > .btn-reset' );
-        this.fakeTimeI = this.question.querySelector( '.widget > input' );
+        const resetBtn = this.question.querySelector('.widget > .btn-reset');
+        this.fakeTimeI = this.question.querySelector('.widget > input');
 
-        $( this.fakeTimeI )
-            .timepicker( {
-                showMeridian: timeFormat.hour12,
-                meridianNotation: {
-                    am: timeFormat.amNotation,
-                    pm: timeFormat.pmNotation
-                }
-            } );
+        $(this.fakeTimeI).timepicker({
+            showMeridian: timeFormat.hour12,
+            meridianNotation: {
+                am: timeFormat.amNotation,
+                pm: timeFormat.pmNotation,
+            },
+        });
 
         // using setTime ensures that the fakeInput shows the meridan when needed
         this.value = this.originalInputValue;
 
-        this.fakeTimeI.addEventListener( 'change', () => {
-            const modified = timeFormat.hour12 ? types.time.convertMeridian( this.value ) : this.value;
+        this.fakeTimeI.addEventListener('change', () => {
+            const modified = timeFormat.hour12
+                ? types.time.convertMeridian(this.value)
+                : this.value;
             this.originalInputValue = modified;
-        } );
+        });
 
         // reset button
-        resetBtn.addEventListener( 'click', this._reset.bind( this ) );
+        resetBtn.addEventListener('click', this._reset.bind(this));
 
         // handle original input focus
-        this.element.addEventListener( events.ApplyFocus().type, () => {
+        this.element.addEventListener(events.ApplyFocus().type, () => {
             this.fakeTimeI.focus();
-        } );
+        });
     }
 
     /**
@@ -70,10 +71,10 @@ class TimepickerExtended extends Widget {
      */
     _reset() {
         const ev = this.originalInputValue ? events.Change() : null;
-        if ( ev || this.value ) {
+        if (ev || this.value) {
             this.value = '';
-            //this.originalInputValue = '';
-            this.fakeTimeI.dispatchEvent( ev );
+            // this.originalInputValue = '';
+            this.fakeTimeI.dispatchEvent(ev);
         }
     }
 
@@ -81,8 +82,8 @@ class TimepickerExtended extends Widget {
      * Updates widget
      */
     update() {
-        if ( this.element.value !== this.value && this.fakeTimeI ) {
-            $( this.fakeTimeI ).timepicker( 'setTime', this.element.value );
+        if (this.element.value !== this.value && this.fakeTimeI) {
+            $(this.fakeTimeI).timepicker('setTime', this.element.value);
         }
     }
 
@@ -93,8 +94,8 @@ class TimepickerExtended extends Widget {
         return this.fakeTimeI.value;
     }
 
-    set value( value ) {
-        $( this.fakeTimeI ).timepicker( 'setTime', value );
+    set value(value) {
+        $(this.fakeTimeI).timepicker('setTime', value);
     }
 }
 

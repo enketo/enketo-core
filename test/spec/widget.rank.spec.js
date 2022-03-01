@@ -1,9 +1,9 @@
 import RankWidget from '../../src/widget/rank/rank-widget';
 import { testStaticProperties } from '../helpers/test-widget';
 
-testStaticProperties( RankWidget );
+testStaticProperties(RankWidget);
 
-describe( 'RankWidget instantiation', () => {
+describe('RankWidget instantiation', () => {
     const HTML1 = `
         <fieldset class="question or-appearance-one or-appearance-two">
             <input type="text" name="/data/node" data-type-xml="rank">
@@ -19,24 +19,24 @@ describe( 'RankWidget instantiation', () => {
             </div>
         </fieldset>`;
 
-    it( 'passes options and populates widget props', () => {
-        const fragment = document.createRange().createContextualFragment( HTML1 );
-        const control = fragment.querySelector( 'input' );
+    it('passes options and populates widget props', () => {
+        const fragment = document.createRange().createContextualFragment(HTML1);
+        const control = fragment.querySelector('input');
         const options = { a: 'b' };
-        const widget = new RankWidget( control, options );
+        const widget = new RankWidget(control, options);
 
-        expect( widget.element ).to.equal( control );
-        expect( widget.props.appearances ).to.deep.equal( [ 'one', 'two' ] );
-        expect( widget.options ).to.equal( options );
-    } );
+        expect(widget.element).to.equal(control);
+        expect(widget.props.appearances).to.deep.equal(['one', 'two']);
+        expect(widget.options).to.equal(options);
+    });
 
-    it( 'loads default value', () => {
-        const fragment = document.createRange().createContextualFragment( HTML1 );
-        const control = fragment.querySelector( 'input' );
+    it('loads default value', () => {
+        const fragment = document.createRange().createContextualFragment(HTML1);
+        const control = fragment.querySelector('input');
         control.value = 'two one';
-        const widget = new RankWidget( control );
+        const widget = new RankWidget(control);
 
-        expect( widget.originalInputValue ).to.deep.equal( 'two one' );
-        expect( widget.value ).to.equal( 'two one' );
-    } );
-} );
+        expect(widget.originalInputValue).to.deep.equal('two one');
+        expect(widget.value).to.equal('two one');
+    });
+});

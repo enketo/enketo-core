@@ -6,7 +6,6 @@ import { isNumber } from '../../js/utils';
  * Deviates from ODK XForms spec by not supporting text fields.
  */
 class ThousandsSeparatorWidget extends Widget {
-
     static get selector() {
         return '.or-appearance-thousands-sep input[type="number"]';
     }
@@ -15,15 +14,17 @@ class ThousandsSeparatorWidget extends Widget {
      * Initialize
      */
     _init() {
-        const fragment = document.createRange().createContextualFragment( '<div class="widget "></div>' );
+        const fragment = document
+            .createRange()
+            .createContextualFragment('<div class="widget "></div>');
 
-        this.element.after( fragment );
-        this.widget = this.element.parentElement.querySelector( '.widget' );
+        this.element.after(fragment);
+        this.widget = this.element.parentElement.querySelector('.widget');
 
         // Set the current loaded value into the widget
         this.update();
 
-        this.element.addEventListener( 'change', this.update.bind( this ) );
+        this.element.addEventListener('change', this.update.bind(this));
     }
 
     /**
@@ -47,16 +48,17 @@ class ThousandsSeparatorWidget extends Widget {
      *
      * @param {number} [value] - The number value to update with.
      */
-    set value( value ) {
+    set value(value) {
         let displayValue = '';
 
-        if ( isNumber( value ) ) {
-            displayValue = Number( value ).toLocaleString( undefined, { maximumFractionDigits: 20 } );
+        if (isNumber(value)) {
+            displayValue = Number(value).toLocaleString(undefined, {
+                maximumFractionDigits: 20,
+            });
         }
 
         this.widget.textContent = displayValue;
     }
-
 }
 
 export default ThousandsSeparatorWidget;

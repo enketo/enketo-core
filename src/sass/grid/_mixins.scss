@@ -5,9 +5,10 @@
 }
 
 // override form-control-focus from core
-@mixin form-control-focus {}
+@mixin form-control-focus {
+}
 
-@mixin paper-border($radius: 0, $color:#888) {
+@mixin paper-border($radius: 0, $color: #888) {
     border-width: 1px;
     box-shadow: 0 0 5px #888;
 }

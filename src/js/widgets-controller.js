@@ -6,7 +6,8 @@ import $ from 'jquery';
 import _widgets from 'enketo/widgets';
 import { elementDataStore as data } from './dom-utils';
 import events from './event';
-const widgets = _widgets.filter( widget => widget.selector );
+
+const widgets = _widgets.filter((widget) => widget.selector);
 let options;
 let formHtml;
 
@@ -18,19 +19,21 @@ let formHtml;
  * @param {*} [opts] - Options (e.g. helper function of Form.js passed)
  * @return {boolean} `true` when initialized successfuly
  */
-function init( $group, opts = {} ) {
-    if ( !this.form ) {
-        throw new Error( 'Widgets module not correctly instantiated with form property.' );
+function init($group, opts = {}) {
+    if (!this.form) {
+        throw new Error(
+            'Widgets module not correctly instantiated with form property.'
+        );
     }
 
     options = opts;
     formHtml = this.form.view.html; // not sure why this is only available in init
 
-    const group = $group && $group.length ? $group[ 0 ] : formHtml;
+    const group = $group && $group.length ? $group[0] : formHtml;
 
-    widgets.forEach( Widget => {
-        _instantiate( Widget, group );
-    } );
+    widgets.forEach((Widget) => {
+        _instantiate(Widget, group);
+    });
 
     return true;
 }
@@ -46,12 +49,15 @@ function init( $group, opts = {} ) {
  * @static
  * @param {Element} group - HTML element
  */
-function enable( group ) {
-    widgets.forEach( Widget => {
-        const els = _getElements( group, Widget.selector )
-            .filter( el => el.nodeName.toLowerCase() === 'select' ? !el.hasAttribute( 'readonly' ) : !el.readOnly );
-        new Collection( els ).enable( Widget );
-    } );
+function enable(group) {
+    widgets.forEach((Widget) => {
+        const els = _getElements(group, Widget.selector).filter((el) =>
+            el.nodeName.toLowerCase() === 'select'
+                ? !el.hasAttribute('readonly')
+                : !el.readOnly
+        );
+        new Collection(els).enable(Widget);
+    });
 }
 
 /**
@@ -62,11 +68,11 @@ function enable( group ) {
  * @static
  * @param {Element} group - The element inside which all widgets need to be disabled.
  */
-function disable( group ) {
-    widgets.forEach( Widget => {
-        const els = _getElements( group, Widget.selector );
-        new Collection( els ).disable( Widget );
-    } );
+function disable(group) {
+    widgets.forEach((Widget) => {
+        const els = _getElements(group, Widget.selector);
+        new Collection(els).disable(Widget);
+    });
 }
 
 /**
@@ -76,18 +82,21 @@ function disable( group ) {
  * @param {string|null} selector - If the selector is `null`, the form element will be returned
  * @return {jQuery} A jQuery collection
  */
-function _getElements( group, selector ) {
-    if ( selector ) {
-        if ( selector === 'form' ) {
-            return [ formHtml ];
+function _getElements(group, selector) {
+    if (selector) {
+        if (selector === 'form') {
+            return [formHtml];
         }
         // e.g. if the widget selector starts at .question level (e.g. ".or-appearance-draw input")
-        if ( group.classList.contains( 'question' ) ) {
-            return [ ...group.querySelectorAll( 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)' ) ]
-                .filter( el => el.matches( selector ) );
+        if (group.classList.contains('question')) {
+            return [
+                ...group.querySelectorAll(
+                    'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)'
+                ),
+            ].filter((el) => el.matches(selector));
         }
 
-        return [ ...group.querySelectorAll( selector ) ];
+        return [...group.querySelectorAll(selector)];
     }
 
     return [];
@@ -99,33 +108,32 @@ function _getElements( group, selector ) {
  * @param {object} Widget - The widget to instantiate
  * @param {Element} group - The element inside which widgets need to be created.
  */
-function _instantiate( Widget, group ) {
-    let opts = {};
+function _instantiate(Widget, group) {
+    const opts = {};
 
-    if ( !Widget.name ) {
-        return console.error( 'widget doesn\'t have a name' );
+    if (!Widget.name) {
+        return console.error("widget doesn't have a name");
     }
 
-    if ( Widget.helpersRequired && Widget.helpersRequired.length > 0 ) {
+    if (Widget.helpersRequired && Widget.helpersRequired.length > 0) {
         opts.helpers = {};
-        Widget.helpersRequired.forEach( helper => {
-            opts.helpers[ helper ] = options[ helper ];
-        } );
+        Widget.helpersRequired.forEach((helper) => {
+            opts.helpers[helper] = options[helper];
+        });
     }
 
-    const elements = _getElements( group, Widget.selector );
+    const elements = _getElements(group, Widget.selector);
 
-    if ( !elements.length ) {
+    if (!elements.length) {
         return;
     }
 
-    new Collection( elements ).instantiate( Widget, opts );
+    new Collection(elements).instantiate(Widget, opts);
 
-    _setLangChangeListener( Widget, elements );
-    _setOptionChangeListener( Widget, elements );
-    _setValChangeListener( Widget, elements );
+    _setLangChangeListener(Widget, elements);
+    _setOptionChangeListener(Widget, elements);
+    _setValChangeListener(Widget, elements);
 }
-
 
 /**
  * Calls widget('update') when the language changes. This function is called upon initialization,
@@ -135,12 +143,12 @@ function _instantiate( Widget, group ) {
  * @param {{name: string}} Widget - The widget configuration object
  * @param {Array<Element>} els - Array of elements that the widget has been instantiated on.
  */
-function _setLangChangeListener( Widget, els ) {
+function _setLangChangeListener(Widget, els) {
     // call update for all widgets when language changes
-    if ( els.length > 0 ) {
-        formHtml.addEventListener( events.ChangeLanguage().type, () => {
-            new Collection( els ).update( Widget );
-        } );
+    if (els.length > 0) {
+        formHtml.addEventListener(events.ChangeLanguage().type, () => {
+            new Collection(els).update(Widget);
+        });
     }
 }
 
@@ -152,12 +160,12 @@ function _setLangChangeListener( Widget, els ) {
  * @param {{name: string}} Widget - The widget configuration object
  * @param {Array<Element>} els - The array of elements that the widget has been instantiated on.
  */
-function _setOptionChangeListener( Widget, els ) {
-    if ( els.length > 0 && Widget.list ) {
-        $( els ).on( events.ChangeOption().type, function() {
+function _setOptionChangeListener(Widget, els) {
+    if (els.length > 0 && Widget.list) {
+        $(els).on(events.ChangeOption().type, function () {
             // update (itemselect) picker on which event was triggered because the options changed
-            new Collection( this ).update( Widget );
-        } );
+            new Collection(this).update(Widget);
+        });
     }
 }
 
@@ -168,12 +176,14 @@ function _setOptionChangeListener( Widget, els ) {
  * @param {{name: string}} Widget - The widget configuration object.
  * @param {Array<Element>} els - The array of elements that the widget has been instantiated on.
  */
-function _setValChangeListener( Widget, els ) {
+function _setValChangeListener(Widget, els) {
     // avoid adding eventhandlers on widgets that apply to the <form> or <label> element
-    if ( els.length > 0 && els[ 0 ].matches( 'input, select, textarea' ) ) {
-        els.forEach( el => el.addEventListener( events.InputUpdate().type, event => {
-            new Collection( event.target ).update( Widget );
-        } ) );
+    if (els.length > 0 && els[0].matches('input, select, textarea')) {
+        els.forEach((el) =>
+            el.addEventListener(events.InputUpdate().type, (event) => {
+                new Collection(event.target).update(Widget);
+            })
+        );
     }
 }
 
@@ -182,72 +192,80 @@ class Collection {
      * @class
      * @param {Array<Element>} elements - HTML elements
      */
-    constructor( elements ) {
-        if ( !Array.isArray( elements ) ) {
-            elements = [ elements ];
+    constructor(elements) {
+        if (!Array.isArray(elements)) {
+            elements = [elements];
         }
         this.elements = elements;
     }
+
     /**
      * @param {Element} element - HTML element
      * @param {object} Widget - widget to instantiate
      * @param {object} [options] - widget options
      */
-    _instantiateSingleWidget( element, Widget, options = {} ) {
-        if ( !Widget.condition( element ) ) {
+    _instantiateSingleWidget(element, Widget, options = {}) {
+        if (!Widget.condition(element)) {
             return;
         }
-        if ( data.has( element, Widget ) ) {
+        if (data.has(element, Widget)) {
             return;
         }
-        const w = new Widget( element, options );
-        if ( w instanceof Promise ) {
-            w.then( wr => data.put( element, Widget.name, wr ) );
+        const w = new Widget(element, options);
+        if (w instanceof Promise) {
+            w.then((wr) => data.put(element, Widget.name, wr));
         } else {
-            data.put( element, Widget.name, w );
+            data.put(element, Widget.name, w);
         }
     }
+
     /**
      * @param {object} Widget - widget to instantiate
      * @param {Function} method - widget function to call
      */
-    _methodCall( Widget, method ) {
-        this.elements.forEach( element => {
-            const w = data.get( element, Widget.name );
-            if ( w ) {
-                w[ method ]();
+    _methodCall(Widget, method) {
+        this.elements.forEach((element) => {
+            const w = data.get(element, Widget.name);
+            if (w) {
+                w[method]();
             }
-        } );
+        });
     }
+
     /**
      * @param {object} Widget - widget to instantiate
      * @param {object} [options] - widget options
      */
-    instantiate( Widget, options ) {
-        this.elements.forEach( el => this._instantiateSingleWidget( el, Widget, options ) );
+    instantiate(Widget, options) {
+        this.elements.forEach((el) =>
+            this._instantiateSingleWidget(el, Widget, options)
+        );
     }
+
     /**
      * @param {object} Widget - widget to instantiate
      */
-    update( Widget ) {
-        this._methodCall( Widget, 'update' );
+    update(Widget) {
+        this._methodCall(Widget, 'update');
     }
+
     /**
      * @param {object} Widget - widget to instantiate
      */
-    disable( Widget ) {
-        this._methodCall( Widget, 'disable' );
+    disable(Widget) {
+        this._methodCall(Widget, 'disable');
     }
+
     /**
      * @param {object} Widget - The widget to instantiate
      */
-    enable( Widget ) {
-        this._methodCall( Widget, 'enable' );
+    enable(Widget) {
+        this._methodCall(Widget, 'enable');
     }
 }
 
 export default {
     init,
     enable,
-    disable
+    disable,
 };
