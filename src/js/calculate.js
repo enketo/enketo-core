@@ -6,6 +6,7 @@ import config from 'enketo/config';
 import { getAncestors, getSiblingElementsAndSelf } from './dom-utils';
 import events from './event';
 import { getCurrentPosition } from './geolocation';
+import { callOnIdle } from './timers';
 
 export default {
     /**
@@ -89,7 +90,7 @@ export default {
                         dataNodes.includes(node)
                     )[0];
                     props.index = dataNodes.indexOf(dataNode);
-                    this._updateCalc(control, props, emptyNonRelevant);
+                    this.updateCalc(control, props, emptyNonRelevant);
                 } else if (control.type === 'hidden') {
                     /*
                      * This case is the consequence of the  decision to place calculated items without a visible form control,
@@ -99,7 +100,7 @@ export default {
                     dataNodes.forEach((el, index) => {
                         const obj = Object.create(props);
                         obj.index = index;
-                        this._updateCalc(control, obj, emptyNonRelevant);
+                        this.updateCalc(control, obj, emptyNonRelevant);
                     });
                 } else {
                     /*
@@ -114,11 +115,11 @@ export default {
                         props.index = repeatSiblings.indexOf(
                             control.closest('.or-repeat')
                         );
-                        this._updateCalc(control, props, emptyNonRelevant);
+                        this.updateCalc(control, props, emptyNonRelevant);
                     }
                 }
             } else if (dataNodes.length === 1) {
-                this._updateCalc(control, props, emptyNonRelevant);
+                this.updateCalc(control, props, emptyNonRelevant);
             }
         });
     },
@@ -190,7 +191,7 @@ export default {
      * @param {'setvalue' | 'setgeopoint'} action - the action to perform.
      * @param {CustomEvent} [event] - the event type that triggered the action.
      */
-    performAction(action, event) {
+    performAction(action, event, depth = 0) {
         if (!event) {
             return;
         }
@@ -201,7 +202,7 @@ export default {
             );
         }
 
-        const nodes = this._getNodesForAction(action, event);
+        const nodes = this._getNodesForAction(action, event) ?? [];
 
         nodes.forEach((actionControl) => {
             const name = this.form.input.getName(actionControl);
@@ -240,7 +241,7 @@ export default {
                     const obj = Object.create(props);
                     const control = actionControl;
                     obj.index = index;
-                    this._updateCalc(control, obj);
+                    this.updateCalc(control, obj);
                 });
             } else if (event.type === new events.XFormsValueChanged().type) {
                 // Control for xforms-value-changed is located elsewhere, or does not exist.
@@ -251,13 +252,27 @@ export default {
                     props.index = 0;
                     control = this.form.input.find(props.name, 0);
                 }
-                this._updateCalc(control, props);
+                this.updateCalc(control, props);
             } else if (dataNodes[props.index]) {
                 const control = actionControl;
-                this._updateCalc(control, props);
-            } else {
+                this.updateCalc(control, props);
+            } else if (this.form.initialized) {
                 console.error(
                     'performAction called for node that does not exist in model.'
+                );
+            } else if (depth === 0) {
+                // Events lose references to these values when passed to an async context
+                const eventData = {
+                    ...event,
+                    type: event.type,
+                };
+
+                // In some circumstances, there will be nodes available on first load
+                // which are not present until the form's initialized. This slight
+                // delay allows form initialization to complete so those nodes may
+                // be resolved.
+                return callOnIdle(() =>
+                    this.performAction(action, eventData, depth + 1)
                 );
             }
         });
@@ -265,11 +280,12 @@ export default {
     /**
      * Updates a calculation.
      *
+     * @private
      * @param {Element} control - view element containing calculation
      * @param {*} props - properties of a calculation element
      * @param {boolean} [emptyNonRelevant] - Whether to set the calculation result to empty if non-relevant
      */
-    _updateCalc(control, props, emptyNonRelevant) {
+    updateCalc(control, props, emptyNonRelevant) {
         if (
             !emptyNonRelevant &&
             props.type !== 'setvalue' &&

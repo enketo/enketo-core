@@ -450,6 +450,7 @@ export default {
         const questions = grp.matches('.question')
             ? [grp]
             : grp.querySelectorAll('.question');
+
         questions.forEach((question) => {
             const control = question.querySelector(
                 'input:not(.ignore), select:not(.ignore), textarea:not(.ignore)'

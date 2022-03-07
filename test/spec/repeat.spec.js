@@ -1,3 +1,4 @@
+import config from 'enketo/config';
 import $ from 'jquery';
 import loadForm from '../helpers/load-form';
 import forms from '../mock/forms';
@@ -8,6 +9,9 @@ describe('repeat functionality', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
+    /** @type {boolean} */
+    let excludeNonRelevant;
+
     let timers;
 
     // turn jQuery animations off
@@ -16,6 +20,11 @@ describe('repeat functionality', () => {
     beforeEach(() => {
         sandbox = sinon.createSandbox();
         timers = sandbox.useFakeTimers();
+        excludeNonRelevant = false;
+
+        sandbox
+            .stub(config, 'excludeNonRelevant')
+            .get(() => excludeNonRelevant);
 
         sandbox.stub(dialog, 'confirm').resolves(true);
     });
@@ -401,19 +410,24 @@ describe('repeat functionality', () => {
                 <rep>
                     <txt/>
                     <num>5</num>
+                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
                 <rep>
                     <txt/>
                     <num>5</num>
+                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
                 <rep>
                     <txt/>
                     <num>5</num>
+                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
                 <rep>
                     <txt/>
                     <num>5</num>
+                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
+                <is-repeat-relevant>yes</is-repeat-relevant>
                 <sum_note>4</sum_note>
                 <txtsum_note>4</txtsum_note>
                 <meta>
@@ -424,6 +438,7 @@ describe('repeat functionality', () => {
             );
             const rep = '.or-repeat[name="/dynamic-repeat-count/rep"]';
             form.init();
+
             expect(form.view.html.querySelectorAll(rep).length).to.equal(4);
             expect(form.model.xml.querySelectorAll('rep').length).to.equal(4);
         });
@@ -710,7 +725,647 @@ describe('repeat functionality', () => {
             form.init();
             // Issue where a calculation inside a repeat is cached before the repeats are initialized (which removes the first repeat, before adding it)
             // This results in two cached calculations (for the same node) of which one no longer exists.
-            expect(form.getRelatedNodes('data-calculate').length).to.equal(1);
+            expect(
+                form.getRelatedNodes('data-calculate', '[name="/data/rg/row"]')
+                    .length
+            ).to.equal(1);
+        });
+
+        it('', () => {
+            const form = loadForm('repeat-relevant-calculate-single.xml');
+
+            form.init();
+
+            const repeatButton =
+                form.view.html.querySelector('.add-repeat-btn');
+
+            repeatButton.click();
+
+            const isFirstRowNodes = Array.from(
+                form.model.xml.querySelectorAll('data rg is-first-row')
+            );
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['', '']);
+
+            const toggleRelevant =
+                form.view.html.querySelector('[name="/data/yn"]');
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2']);
+
+            toggleRelevant.checked = false;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2']);
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2']);
+        });
+    });
+
+    describe.only('excluding non-relevant values', () => {
+        /** @type {import('sinon').SinonFakeTimers} */
+        let timers;
+
+        beforeEach(() => {
+            timers = sinon.useFakeTimers();
+            excludeNonRelevant = true;
+        });
+
+        afterEach(() => {
+            timers.runAll();
+            timers.clearTimeout();
+            timers.clearInterval();
+            timers.restore();
+        });
+
+        it('excludes non-relevant values in a repeat instance', () => {
+            const form = loadForm('exclude-non-relevant-repeat-count.xml');
+
+            form.init();
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            const setRepeatNumNonRelevant = form.view.html.querySelector(
+                '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="no"]'
+            );
+
+            setRepeatNumNonRelevant.checked = true;
+            setRepeatNumNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '',
+            ]);
+        });
+
+        it('restores values in a repeat instance when they become relevant again', () => {
+            const form = loadForm('exclude-non-relevant-repeat-count.xml');
+
+            form.init();
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            const setRepeatNumNonRelevant = form.view.html.querySelector(
+                '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="no"]'
+            );
+
+            setRepeatNumNonRelevant.checked = true;
+            setRepeatNumNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const setRepeatNumRelevant = form.view.html.querySelector(
+                '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="yes"]'
+            );
+
+            setRepeatNumRelevant.checked = true;
+            setRepeatNumRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '5',
+            ]);
+        });
+
+        it('excludes values in all non-relevant repeat instances', () => {
+            const form = loadForm('exclude-non-relevant-repeat-count.xml');
+
+            form.init();
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            const setRepeatNumNonRelevant = form.view.html.querySelector(
+                '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="no"]'
+            );
+
+            setRepeatNumNonRelevant.checked = true;
+            setRepeatNumNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const setRepeatNumRelevant = form.view.html.querySelector(
+                '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="yes"]'
+            );
+
+            setRepeatNumRelevant.checked = true;
+            setRepeatNumRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const setRepeatNonRelevant = form.view.html.querySelector(
+                '[data-name="/data/is-repeat-relevant"][value="no"]'
+            );
+
+            setRepeatNonRelevant.checked = true;
+            setRepeatNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '',
+                '',
+            ]);
+        });
+
+        it('restores values in all repeat instances when they become relevant again', () => {
+            const form = loadForm('exclude-non-relevant-repeat-count.xml');
+
+            form.init();
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            const setRepeatNumNonRelevant = form.view.html.querySelector(
+                '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="no"]'
+            );
+
+            setRepeatNumNonRelevant.checked = true;
+            setRepeatNumNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const setRepeatNumRelevant = form.view.html.querySelector(
+                '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="yes"]'
+            );
+
+            setRepeatNumRelevant.checked = true;
+            setRepeatNumRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '5',
+            ]);
+
+            const setRepeatNonRelevant = form.view.html.querySelector(
+                '[data-name="/data/is-repeat-relevant"][value="no"]'
+            );
+
+            setRepeatNonRelevant.checked = true;
+            setRepeatNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const setRepeatRelevant = form.view.html.querySelector(
+                '[data-name="/data/is-repeat-relevant"][value="yes"]'
+            );
+
+            setRepeatRelevant.checked = true;
+            setRepeatRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '5',
+            ]);
+        });
+
+        it('loads instance data in a relevant repeat', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-count.xml',
+                `
+                    <data xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:orx="http://openrosa.org/xforms" id="dynamic-repeat-count">
+                        <count>4</count>
+                        <rep_count>4</rep_count>
+                        <rep>
+                            <num>5</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>6</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>7</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>8</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <is-repeat-relevant>yes</is-repeat-relevant>
+                        <meta>
+                            <instanceID>uuid:0afd146a-cdc4-4000-b5f4-3ec0705e85d8</instanceID>
+                        </meta>
+                    </data>
+                `
+            );
+
+            form.init();
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '6',
+                '7',
+                '8',
+            ]);
+        });
+
+        it('loads instance data as blank in a non-relevant repeat', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-count.xml',
+                `
+                    <data xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:orx="http://openrosa.org/xforms" id="dynamic-repeat-count">
+                        <count>4</count>
+                        <rep_count>4</rep_count>
+                        <rep>
+                            <num>5</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>6</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>7</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>8</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <is-repeat-relevant>no</is-repeat-relevant>
+                        <meta>
+                            <instanceID>uuid:0afd146a-cdc4-4000-b5f4-3ec0705e85d8</instanceID>
+                        </meta>
+                    </data>
+                `
+            );
+
+            form.init();
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '',
+                '',
+                '',
+                '',
+            ]);
+        });
+
+        it('restores instance data when a non-relevant repeat becomes relevant again', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-count.xml',
+                `
+                    <data xmlns:jr="http://openrosa.org/javarosa" xmlns:oc="http://openclinica.org/xforms" xmlns:orx="http://openrosa.org/xforms" id="dynamic-repeat-count">
+                        <count>4</count>
+                        <rep_count>4</rep_count>
+                        <rep>
+                            <num>5</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>6</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>7</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <rep>
+                            <num>8</num>
+                            <is-num-relevant>yes</is-num-relevant>
+                        </rep>
+                        <is-repeat-relevant>no</is-repeat-relevant>
+                        <meta>
+                            <instanceID>uuid:0afd146a-cdc4-4000-b5f4-3ec0705e85d8</instanceID>
+                        </meta>
+                    </data>
+                `
+            );
+
+            form.init();
+            timers.runAll();
+
+            const setRepeatRelevant = form.view.html.querySelector(
+                '[data-name="/data/is-repeat-relevant"][value="yes"]'
+            );
+
+            setRepeatRelevant.checked = true;
+            setRepeatRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '6',
+                '7',
+                '8',
+            ]);
+        });
+
+        it('does not restore non-relevant nodes when a parent repeat becomes relevant again', () => {
+            const form = loadForm('exclude-non-relevant-repeat-count.xml');
+
+            form.init();
+            timers.runAll();
+
+            const setRepeatRelevant = form.view.html.querySelector(
+                '[data-name="/data/is-repeat-relevant"][value="yes"]'
+            );
+
+            setRepeatRelevant.checked = true;
+            setRepeatRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const setSecondNumberNonRelevant = form.view.html.querySelector(
+                '.or-repeat.clone [data-name="/data/rep/is-num-relevant"][value="no"]'
+            );
+
+            setSecondNumberNonRelevant.checked = true;
+            setSecondNumberNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            const repeatNums = Array.from(
+                form.model.xml.querySelectorAll('num')
+            );
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '',
+            ]);
+
+            const setRepeatNonRelevant = form.view.html.querySelector(
+                '[data-name="/data/is-repeat-relevant"][value="no"]'
+            );
+
+            setRepeatNonRelevant.checked = true;
+            setRepeatNonRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '',
+                '',
+            ]);
+
+            setRepeatRelevant.checked = true;
+            setRepeatRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
+                '5',
+                '',
+            ]);
+        });
+
+        it('excludes a non-relevant value in a repeat initialized with odk-instance-first-load', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-irrelevant-date.xml'
+            );
+
+            form.init();
+            timers.runAll();
+
+            const repeatBNodes = Array.from(
+                form.model.xml.querySelectorAll('repeat rep b')
+            );
+
+            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
+                '',
+            ]);
+        });
+
+        it('restores a value in a repeat initialized with odk-instance-first-load when it becomes relevant', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-irrelevant-date.xml'
+            );
+
+            form.init();
+            timers.runAll();
+
+            const repeatBNodes = Array.from(
+                form.model.xml.querySelectorAll('repeat rep b')
+            );
+
+            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
+                '',
+            ]);
+
+            const el = form.view.html.querySelector('[name="/repeat/rep/a"]');
+
+            el.value = 'a';
+            el.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
+                '1',
+            ]);
+        });
+
+        it('excludes a non-relevant value initialized with odk-new-repeat', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-irrelevant-date.xml'
+            );
+
+            form.init();
+            timers.runAll();
+
+            form.view.html.querySelector('.add-repeat-btn').click();
+
+            timers.runAll();
+
+            const repeatBNodes = Array.from(
+                form.model.xml.querySelectorAll('repeat rep b')
+            );
+
+            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
+                '',
+                '',
+            ]);
+        });
+
+        it('restores a value initialized with odk-new-repeat when it becomes relevant', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-irrelevant-date.xml'
+            );
+
+            form.init();
+            timers.runAll();
+
+            form.view.html.querySelector('.add-repeat-btn').click();
+
+            timers.runAll();
+
+            const repeatBNodes = Array.from(
+                form.model.xml.querySelectorAll('repeat rep b')
+            );
+
+            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
+                '',
+                '',
+            ]);
+
+            const el = form.view.html.querySelectorAll(
+                '[name="/repeat/rep/a"]'
+            )[1];
+
+            el.value = 'a';
+            el.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
+                '',
+                '1',
+            ]);
+        });
+
+        it('excludes non-relevant values from calculations in repeats when the model node has no associated view input', () => {
+            const form = loadForm(
+                'exclude-non-relevant-repeat-calculate-single.xml'
+            );
+
+            form.init();
+
+            const repeatButton =
+                form.view.html.querySelector('.add-repeat-btn');
+
+            let isFirstRowNodes = Array.from(
+                form.model.xml.querySelectorAll('data rg is-first-row')
+            );
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['']);
+
+            const toggleRelevant =
+                form.view.html.querySelector('[name="/data/yn"]');
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            repeatButton.click();
+
+            timers.runAll();
+
+            isFirstRowNodes = Array.from(
+                form.model.xml.querySelectorAll('data rg is-first-row')
+            );
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '']);
+
+            toggleRelevant.checked = false;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['', '']);
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            timers.runAll();
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '']);
+        });
+
+        // These tests don't check behavior around excluding non-relevant values
+        // in repeats, they only check that the behavior is consistent, out of
+        // an abundance of caution.
+        describe('behavior consistency with zero-count repeats', () => {
+            it('sets zero-count repeats to non-relevant', () => {
+                const form = loadForm('repeat-count-relevant.xml');
+                const errors = form.init();
+
+                timers.runAll();
+
+                expect(errors.length).to.equal(0);
+                expect(
+                    form.view.html.querySelectorAll(
+                        '.or-repeat[name="/data/rep"]'
+                    ).length
+                ).to.equal(0);
+                expect(
+                    form.view.html
+                        .querySelector('.or-group.or-branch[name="/data/rep"]')
+                        .classList.contains('disabled')
+                ).to.equal(true);
+            });
+
+            it('and works nicely with relevant even if repeat count is 0 (with output in group label)', () => {
+                // When repeat count is zero there is no context node to pass to evaluator.
+                const f = loadForm('repeat-count-relevant.xml');
+                const errors = f.init();
+
+                expect(errors.length).to.equal(0);
+                expect(
+                    f.view.html.querySelectorAll('.or-repeat[name="/data/rep"]')
+                        .length
+                ).to.equal(0);
+
+                f.view.html.querySelector('input[name="/data/q1"]').value = 2;
+                f.view.html
+                    .querySelector('input[name="/data/q1"]')
+                    .dispatchEvent(event.Change());
+
+                timers.runAll();
+
+                expect(
+                    [
+                        ...f.view.html.querySelectorAll(
+                            '.or-group.or-branch[name="/data/rep"]>h4 .or-output'
+                        ),
+                    ]
+                        .map((i) => i.textContent)
+                        .join('')
+                ).to.equal('2');
+            });
         });
     });
 

@@ -36,15 +36,22 @@ import './extend';
 import { callOnIdle } from './timers';
 
 /**
+ * @typedef FormOptions
+ * @property {string} [language] Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
+ * @property {boolean} [printRelevantOnly] If `printRelevantOnly` is set to `true`
+ *   or not set at all, printing the form only includes what is visible, ie. all the
+ *   groups and questions that do not have a `relevant` expression or for which the
+ *   expression evaluates to `true`.
+ */
+
+/**
  * Class: Form
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
  * @param {Element} formEl - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
  * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
- * @param {object} [options] - form options
- * @param {boolean} [options.printRelevantOnly] - If `printRelevantOnly` is set to `true` or not set at all, printing the form only includes what is visible, ie. all the groups and questions that do not have a `relevant` expression or for which the expression evaluates to `true`.
- * @param {string} [options.language] - Overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
+ * @param {FormOptions} [options]
  * @class
  */
 function Form(formEl, data, options) {

@@ -8,7 +8,7 @@ describe('Evaluation Cascade', () => {
     let sandbox;
 
     /** @type {boolean} */
-    let forceClearNonRelevant;
+    let excludeNonRelevant;
 
     /** @type {boolean} */
     let computeAsync;
@@ -18,11 +18,11 @@ describe('Evaluation Cascade', () => {
 
         sandbox.stub(dialog, 'confirm').resolves(true);
 
-        forceClearNonRelevant = false;
+        excludeNonRelevant = false;
 
         sandbox
-            .stub(config, 'forceClearNonRelevant')
-            .get(() => forceClearNonRelevant);
+            .stub(config, 'excludeNonRelevant')
+            .get(() => excludeNonRelevant);
 
         computeAsync = false;
 
@@ -41,7 +41,7 @@ describe('Evaluation Cascade', () => {
 
         beforeEach(() => {
             computeAsync = true;
-            forceClearNonRelevant = true;
+            excludeNonRelevant = true;
 
             timers = sandbox.useFakeTimers();
         });

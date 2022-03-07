@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>calcs-cascade</h:title>
+        <model>
+            <instance>
+                <calcs-cascade id="calcs-cascade" version="version1">
+                    <first/>
+                    <second/>
+                    <third/>
+                    <version/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </calcs-cascade>
+            </instance>
+            <bind nodeset="/calcs-cascade/first" type="int" />
+            <bind nodeset="/calcs-cascade/second" calculate="/calcs-cascade/first + 2" type="int" readonly="true()" />
+            <bind nodeset="/calcs-cascade/third" calculate="/calcs-cascade/second + 3" type="int" readonly="true()" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/calcs-cascade/first">
+            <label>Enter the first number</label>
+        </input>
+
+        <input ref="/calcs-cascade/second">
+            <label>Should be the first number + 2</label>
+        </input>
+
+        <input ref="/calcs-cascade/third">
+            <label>Should be the second number + 3</label>
+        </input>
+    </h:body>
+</h:html>

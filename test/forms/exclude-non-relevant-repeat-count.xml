@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:oc="http://openclinica.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>exclude-non-relevant-repeat-count</h:title>
+        <model>
+            <instance>
+                <data id="exclude-non-relevant-repeat-count">
+                    <count>2</count>
+                    <rep_count/>
+                    <rep jr:template="">
+                        <num>5</num>
+                        <is-num-relevant>yes</is-num-relevant>
+                    </rep>
+                    <is-repeat-relevant>yes</is-repeat-relevant>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/rep" relevant="/data/is-repeat-relevant = 'yes'"/>
+            <bind nodeset="/data/count" type="int"/>
+            <bind calculate="/data/rep/is-num-relevant" type="string"/>
+            <bind calculate=" /data/count " nodeset="/data/rep_count" readonly="true()" type="string"/>
+            <bind nodeset="/data/is-repeat-relevant" type="string"/>
+            <bind nodeset="/data/rep/num" type="int" relevant="/data/rep/is-num-relevant = 'yes'"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/count">
+            <label>How many repeats?</label>
+        </input>
+        <group ref="/data/rep">
+            <label>Repeat with count</label>
+            <repeat jr:count=" /data/rep_count " nodeset="/data/rep">
+                <input ref="/data/rep/num">
+                    <label>Enter number</label>
+                </input>
+                <select1 ref="/data/rep/is-num-relevant">
+                    <label>Is number relevant?</label>
+                    <item>
+                        <value>yes</value>
+                        <label>Yes</label>
+                    </item>
+                    <item>
+                        <value>no</value>
+                        <label>No</label>
+                    </item>
+                </select1>
+            </repeat>
+        </group>
+        <select1 ref="/data/is-repeat-relevant">
+            <label>Is repeat relevant?</label>
+            <item>
+                <value>yes</value>
+                <label>Yes</label>
+            </item>
+            <item>
+                <value>no</value>
+                <label>No</label>
+            </item>
+        </select1>
+    </h:body>
+</h:html>
