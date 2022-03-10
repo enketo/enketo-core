@@ -17,28 +17,36 @@ class TextPrintWidget extends Widget {
     }
 
     _init() {
-        this.question.addEventListener( events.Printify().type, this._addWidget.bind( this ) );
-        this.question.addEventListener( events.DePrintify().type, this._removeWidget.bind( this ) );
+        this.question.addEventListener(
+            events.Printify().type,
+            this._addWidget.bind(this)
+        );
+        this.question.addEventListener(
+            events.DePrintify().type,
+            this._removeWidget.bind(this)
+        );
     }
 
     _addWidget() {
-        if ( !this.widget ) {
+        if (!this.widget) {
             const className = 'print-input-text';
-            const printElement = document.createElement( 'div' );
-            printElement.classList.add( className, 'widget' );
+            const printElement = document.createElement('div');
+            printElement.classList.add(className, 'widget');
 
-            this.element.after( printElement );
-            this.element.classList.add( 'print-hide' );
+            this.element.after(printElement);
+            this.element.classList.add('print-hide');
 
-            this.widget = this.element.parentElement.querySelector( `.${className}` );
-            this.widget.innerHTML = this.element.value.replace( /\n/g, '<br>' );
+            this.widget = this.element.parentElement.querySelector(
+                `.${className}`
+            );
+            this.widget.innerHTML = this.element.value.replace(/\n/g, '<br>');
         }
     }
 
     _removeWidget() {
-        if ( this.widget ) {
-            this.element.classList.remove( 'print-hide' );
-            this.element.parentElement.removeChild( this.widget );
+        if (this.widget) {
+            this.element.classList.remove('print-hide');
+            this.element.parentElement.removeChild(this.widget);
             this.widget = null;
         }
     }

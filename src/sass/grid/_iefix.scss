@@ -1,6 +1,6 @@
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    input[type=radio], 
-    input[type=checkbox]{
+    input[type='radio'],
+    input[type='checkbox'] {
         + .option-label::before {
             border-width: 1px;
         }
@@ -8,7 +8,7 @@
             background-position: -1px;
         }
     }
-    input[type=radio]{
+    input[type='radio'] {
         &:checked + .option-label::before {
             background-position: 0;
         }

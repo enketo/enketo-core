@@ -1,5 +1,5 @@
-@import "widgets";
-@import "../formhub/form-controls";
+@import 'widgets';
+@import '../formhub/form-controls';
 
 /** core/layout **/
 
@@ -23,13 +23,12 @@ body {
 }
 
 .question {
-
-    input[type=radio],
-    input[type=checkbox] {
+    input[type='radio'],
+    input[type='checkbox'] {
         border-width: 1px;
     }
 
-    input[type=checkbox]:checked {
+    input[type='checkbox']:checked {
         @include checkbox-checked-style($radiocheck-checked-color, transparent);
 
         background-position: -1px;
@@ -47,12 +46,12 @@ body {
     }
 }
 
-h4+.or-repeat {
+h4 + .or-repeat {
     border-top: none;
 }
 
 // trick to hide group border on screen view
-.or-group>h4 {
+.or-group > h4 {
     background: #ffffff;
     margin: 0 -1px 0 0;
     padding: 12px $q-pad-side $q-pad-side $q-pad-side; // collapse icon positioning;
@@ -75,7 +74,7 @@ h4+.or-repeat {
 }
 
 // override to flexboxes in pages mode, except when question = page
-.pages.or [role="page"].current:not(.question) {
+.pages.or [role='page'].current:not(.question) {
     @include display-flex;
     @include flex-wrap(wrap);
     @include flex-direction(row);
@@ -92,25 +91,25 @@ h4+.or-repeat {
 }
 
 // top-level groups border
-.or>.or-group,
-.or>.or-group-data {
+.or > .or-group,
+.or > .or-group-data {
     border-right: $grid-border;
 }
 
 // top-level data-group (without title) that is the first element after the form title
-.or>#form-title+.or-group-data,
-.or>.disabled:first-of-type+.or-group-data,
-.or>.disabled:first-of-type~.disabled+.or-group-data {
+.or > #form-title + .or-group-data,
+.or > .disabled:first-of-type + .or-group-data,
+.or > .disabled:first-of-type ~ .disabled + .or-group-data {
     border-top: $grid-border;
 }
 
 // anything that is a page
-.or [role="page"] {
+.or [role='page'] {
     border-top: $grid-border;
 }
 
 // top-level questions border
-.or>.question {
+.or > .question {
     border: $grid-border; // This is cheating for top-level questions to avoid thick double borders.
     // Normally, recommend to group everything.
     margin-left: -1px;
@@ -197,17 +196,17 @@ h4+.or-repeat {
         order: 3;
     }
 
-    input[type=text],
+    input[type='text'],
     .print-input-text,
-    input[type=tel],
-    input[type=password],
-    input[type=url],
-    input[type=email],
-    input[type=file],
-    input[type=date],
-    input[type=time],
-    input[type=datetime-local],
-    input[type=number],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='file'],
+    input[type='date'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='number'],
     textarea {
         width: 100%;
     }
@@ -248,7 +247,7 @@ h4+.or-repeat {
     font-size: 14px;
 }
 
-.or[dir="rtl"] .question {
+.or[dir='rtl'] .question {
     .required {
         right: auto;
         left: 0;
@@ -263,17 +262,16 @@ h4+.or-repeat {
 }
 
 .touch {
-
-    input[type=text],
-    input[type=tel],
-    input[type=password],
-    input[type=url],
-    input[type=email],
-    input[type=file],
-    input[type=date],
-    input[type=time],
-    input[type=datetime-local],
-    input[type=number],
+    input[type='text'],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='file'],
+    input[type='date'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='number'],
     textarea,
     select {
         border: none;
@@ -285,7 +283,7 @@ h4+.or-repeat {
     line-height: 12px;
 }
 
-.option-wrapper>label {
+.option-wrapper > label {
     margin-left: 0;
 }
 
@@ -321,7 +319,7 @@ h4+.or-repeat {
     }
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .or-repeat {
         .repeat-number {
             right: 100%;
@@ -382,8 +380,8 @@ h4+.or-repeat {
     text-align: inherit;
 }
 
-.or-group>h4,
-.or-repeat>h4 {
+.or-group > h4,
+.or-repeat > h4 {
     width: calc(100% + 1px);
     border-right: $grid-border;
     border-right-color: transparent;
@@ -393,8 +391,7 @@ h4+.or-repeat {
 }
 
 // the gorgeous grid
-@media print,
-screen and (min-width: 600px) {
+@media print, screen and (min-width: 600px) {
     @for $total from 1 through $max-columns {
         .or-appearance-w#{$total} {
             //default total of 4 if not provided
@@ -409,9 +406,7 @@ screen and (min-width: 600px) {
     }
 }
 
-@media print,
-screen and (min-width: 1100px) and (max-width: 1200px) {
-
+@media print, screen and (min-width: 1100px) and (max-width: 1200px) {
     // correction
     .paper .or .form-logo {
         margin-top: 0;

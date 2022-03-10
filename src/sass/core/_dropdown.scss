@@ -1,5 +1,5 @@
 // extracted from bootstrap dropdown.scss
-// 
+//
 //
 // Dropdown menus
 // --------------------------------------------------
@@ -88,11 +88,10 @@ $dropdown-link-disabled-color: $gray-light !default;
         color: $dropdown-link-color;
         white-space: nowrap;
         // prevent links from randomly breaking onto new lines
-   
     }
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .dropdown-menu {
         right: 0;
     }

@@ -7,7 +7,7 @@
         border: none;
     }
 
-    .option-wrapper>label {
+    .option-wrapper > label {
         display: inline-block;
         margin: 0;
 
@@ -42,25 +42,24 @@
             left: 15px;
             z-index: -1;
 
-            &:not([disabled]):not([readonly])~.active:hover {
+            &:not([disabled]):not([readonly]) ~ .active:hover {
                 border-color: lighten($brand-primary-color, 30%);
             }
 
             &[disabled],
             &[readonly] {
-
-                &:checked~.active,
-                &:checked~.active:hover {
+                &:checked ~ .active,
+                &:checked ~ .active:hover {
                     border-color: $gray;
                 }
             }
 
-            &:checked~.active,
-            &:checked~.active:hover {
+            &:checked ~ .active,
+            &:checked ~ .active:hover {
                 border-color: $brand-primary-color;
             }
 
-            &:focus~.active {
+            &:focus ~ .active {
                 @include focus-shadow;
             }
         }
@@ -90,7 +89,6 @@
 }
 
 .or-appearance-columns-pack {
-
     // the flexiness is only for appearance=random
     .option-wrapper {
         @include display-flex;
@@ -124,7 +122,7 @@
 
                 img.active {
                     // Use natural image size, but reduce to fit cell if necessary
-                    // Deliberately deviated from ODK Collect scaling-up behavior 
+                    // Deliberately deviated from ODK Collect scaling-up behavior
                     // because scaling up images never provides satisfactory results.
                     max-width: 100%;
                     max-height: 100%;
@@ -133,7 +131,6 @@
         }
 
         .option-wrapper {
-
             // this flexiness is required for appearance=random
             @include flex-direction(row);
 
@@ -145,37 +142,30 @@
 
             img.active {
                 // Use natural image size, but reduce to fit cell if necessary
-                // Deliberately deviated from ODK Collect scaling-up behavior 
+                // Deliberately deviated from ODK Collect scaling-up behavior
                 // because scaling up images never provides satisfactory results.
                 max-width: 100%;
                 max-height: 100%;
             }
         }
-
     }
 }
 
-
-
 .touch {
-
     // this ridiculous not:() specificity is required to combat an aggressive rule in _main.scss
     .question:not(.or-appearance-no-buttons):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
-
         &.or-columns-initialized {
-            .option-wrapper>label {
+            .option-wrapper > label {
                 @include margin(right);
             }
         }
     }
 
-    .or[dir=rtl] {
-
+    .or[dir='rtl'] {
         // this ridiculous not:() specificity is required to combat an aggressive rule in _main.scss
         .question:not(.or-appearance-no-buttons):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
-
             &.or-columns-initialized {
-                .option-wrapper>label {
+                .option-wrapper > label {
                     @include margin(left);
 
                     margin-right: inherit;

@@ -53,11 +53,11 @@
         line-height: 1.05 * $line-height-base;
     }
 
-    .or-group:not(.or-appearance-no-collapse)>h4 {
+    .or-group:not(.or-appearance-no-collapse) > h4 {
         margin-left: 8px;
     }
 
-    .touch .question.simple-select .option-wrapper>label {
+    .touch .question.simple-select .option-wrapper > label {
         padding: 10px 5px;
     }
 
@@ -84,15 +84,15 @@
     }
 
     input {
-        &[type="text"],
-        &[type="password"],
-        &[type="url"],
-        &[type="email"],
-        &[type="date"],
-        &[type="number"],
-        &[type="time"],
-        &[type="datetime-local"],
-        &[type="file"] {
+        &[type='text'],
+        &[type='password'],
+        &[type='url'],
+        &[type='email'],
+        &[type='date'],
+        &[type='number'],
+        &[type='time'],
+        &[type='datetime-local'],
+        &[type='file'] {
             width: 100%;
         }
     }
@@ -102,7 +102,7 @@
         width: 100%;
     }
 
-    .or-group:not(.or-appearance-no-collapse)>h4 {
+    .or-group:not(.or-appearance-no-collapse) > h4 {
         margin-left: 15px;
     }
 

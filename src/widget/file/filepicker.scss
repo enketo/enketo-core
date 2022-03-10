@@ -1,5 +1,4 @@
 .file-picker {
-
     .fake-file-input {
         @include form-control;
         display: inline-block;
@@ -28,9 +27,8 @@
 
     .btn-download {
         margin-right: 0;
-        &[href=""] {
+        &[href=''] {
             display: none;
         }
     }
-
 }

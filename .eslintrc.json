@@ -2,19 +2,17 @@
     "env": {
         "es6": true,
         "browser": true,
-        "commonjs": true
+        "commonjs": false
     },
     "globals": {
         "Promise": true,
         "sinon": true
     },
-    "extends": "eslint:recommended",
-    "plugins": [
-        "jsdoc"
-    ],
+    "extends": ["airbnb", "prettier"],
+    "plugins": ["chai-friendly", "jsdoc", "prettier", "unicorn"],
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 9
+        "ecmaVersion": 2020
     },
     "settings": {
         "jsdoc": {
@@ -24,47 +22,105 @@
         }
     },
     "rules": {
-        "indent": ["warn", 4, { "SwitchCase": 1 }],
-        "linebreak-style": ["error", "unix"],
-        "quotes": ["error", "single"],
-        "semi": ["error", "always"],
-        "no-console": ["warn", { "allow": ["error", "deprecate", "warn"] }],
-        "eol-last": ["error", "always"],
-        "padding-line-between-statements": ["warn", { "blankLine": "always", "prev": "*", "next": "return" }],
-        "space-before-function-paren": ["error", "never"],
-        "space-in-parens": ["error", "always"],
-        "space-infix-ops": "error",
-        "array-bracket-spacing": ["error", "always"],
-        "no-implied-eval": "error",
-        "object-curly-spacing": ["error", "always"],
-        "jsdoc/check-examples": 1,
-        "jsdoc/check-param-names": 1,
-        "jsdoc/check-tag-names": 1,
-        "jsdoc/check-types": 1,
-        "jsdoc/newline-after-description": ["warn", "always"],
-        "jsdoc/no-undefined-types": 1,
-        "jsdoc/require-description": 0,
-        "jsdoc/require-description-complete-sentence": 0,
-        "jsdoc/require-example": 0,
-        "jsdoc/require-hyphen-before-param-description": 1,
-        "jsdoc/require-param": 1,
-        "jsdoc/require-param-description": 1,
-        "jsdoc/require-param-name": 1,
-        "jsdoc/require-param-type": 1,
-        "jsdoc/require-returns-check": 1,
-        "jsdoc/require-returns-description": 1,
-        "jsdoc/require-returns-type": 1,
-        "jsdoc/valid-types": 1
+        "prettier/prettier": "error",
+        "import/no-unresolved": [
+            "error",
+            {
+                "ignore": [
+                    "enketo/config",
+                    "enketo/widgets",
+                    "enketo/translator",
+                    "enketo/dialog",
+                    "enketo/file-manager",
+                    "enketo/xpath-evaluator-binding"
+                ]
+            }
+        ],
+
+        "import/prefer-default-export": "off",
+
+        "class-methods-use-this": "warn",
+        "consistent-return": "warn",
+        "default-case": "warn",
+        "global-require": "warn",
+        "guard-for-in": "warn",
+        "import/extensions": "warn",
+        "no-cond-assign": "warn",
+        "no-constructor-return": "warn",
+        "no-continue": "warn",
+        "no-loop-func": "warn",
+        "no-nested-ternary": "warn",
+        "no-new": "warn",
+        "no-param-reassign": "warn",
+        "no-plusplus": "warn",
+        "no-restricted-globals": ["warn", "isFinite", "isNaN"],
+        "no-restricted-syntax": [
+            "warn",
+            "ForInStatement",
+            "LabeledStatement",
+            "WithStatement"
+        ],
+        "no-return-assign": "warn",
+        "no-shadow": "warn",
+        "no-throw-literal": "warn",
+        "no-underscore-dangle": "warn",
+        "no-unused-expressions": "warn",
+        "no-use-before-define": [
+            "warn",
+            {
+                "functions": false
+            }
+        ],
+        "no-useless-concat": "warn",
+        "prefer-const": "warn",
+        "prefer-destructuring": "warn",
+        "prefer-promise-reject-errors": "warn"
     },
     "overrides": [
-    {
-        "files": [
-            "./Gruntfile.js"
-        ],
-        "env": {
-            "browser": false,
-            "node": true
+        {
+            "files": [
+                "./.github/**/*.md",
+                "./*.md",
+                "./src/**/*.md",
+                "./tutorials/**/*.md"
+            ],
+            "parser": "markdown-eslint-parser",
+            "rules": {
+                "prettier/prettier": ["error", { "parser": "markdown" }]
+            }
+        },
+
+        {
+            "files": [
+                "./Gruntfile.js",
+                "./scripts/**/*.js",
+                "./test/karma.conf.js"
+            ],
+            "env": {
+                "browser": false,
+                "node": true
+            },
+            "rules": {
+                "import/no-extraneous-dependencies": [
+                    "error",
+                    { "devDependencies": true }
+                ]
+            }
+        },
+
+        {
+            "files": ["./test/**/*.js"],
+            "excludedFiles": ["./test/karma.conf.js"],
+            "env": {
+                "mocha": true
+            },
+            "globals": {
+                "expect": true,
+                "sinon": true
+            },
+            "rules": {
+                "no-console": "off"
+            }
         }
-    }
     ]
 }

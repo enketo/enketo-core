@@ -1,6 +1,7 @@
 //assuming the datepicker and timepickers are used this can remain largely empty.
 .datetimepicker {
-    .date, .timepicker {
+    .date,
+    .timepicker {
         margin-right: 10px;
         display: inline-block;
     }
@@ -9,7 +10,7 @@
     }
 }
 
-.or[dir="rtl"] .datetimepicker {
+.or[dir='rtl'] .datetimepicker {
     .date {
         margin-right: 0;
     }

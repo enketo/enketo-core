@@ -1,11 +1,9 @@
 //widget scss overrides
 .question .geopoint.widget {
-
-    input[type=number],
-    input[type=text] {
-
-        &[name=alt],
-        &[name=acc] {
+    input[type='number'],
+    input[type='text'] {
+        &[name='alt'],
+        &[name='acc'] {
             width: 40%;
         }
     }
@@ -22,7 +20,6 @@
 }
 
 .question .widget.datetimepicker {
-
     .date,
     .timepicker {
         @include display-flex;
@@ -35,16 +32,13 @@
     }
 }
 
-
 .or-appearance-likert .option-wrapper {
-
     margin-top: 10px;
 
-    >label {
+    > label {
         @include flex-direction(column-reverse);
         justify-content: flex-end;
     }
-
 }
 
 // tables
@@ -63,9 +57,8 @@
 
 .touch {
     .question:not(.or-appearance-compact):not(.or-appearance-quickcompact):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
-
         // touch radio buttons and checkboxes
-        .option-wrapper>label {
+        .option-wrapper > label {
             border: none;
 
             border-radius: 0;
@@ -75,9 +68,8 @@
 
 // geopoint widget
 .question .geopicker.widget {
-
-    input[type=text],
-    input[type=number],
+    input[type='text'],
+    input[type='number'],
     textarea {
         border-radius: 0;
         box-shadow: none;
@@ -86,7 +78,7 @@
         background-color: transparent;
     }
 
-    input[type=text][name=search] {
+    input[type='text'][name='search'] {
         width: 80%;
     }
 
@@ -139,7 +131,7 @@ html:not(.touch) .question .geopoint.widget {
             }
         }
 
-        [name=search]~.input-group-btn .btn {
+        [name='search'] ~ .input-group-btn .btn {
             border-bottom: 1px dotted #cccccc;
         }
     }
@@ -151,7 +143,7 @@ html:not(.touch) .question .geopoint.widget {
         padding-top: 60px;
     }
 
-    &__overlay+.question {
+    &__overlay + .question {
         margin-left: 0;
         margin-right: 0;
     }
@@ -182,7 +174,7 @@ legend .btn-comment {
     }
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .btn-comment {
         left: 0;
         right: auto;
@@ -195,7 +187,6 @@ legend .btn-comment {
 
 // select picker
 .bootstrap-select {
-
     .dropdown-toggle,
     .dropdown-menu {
         width: 100%;
@@ -224,7 +215,6 @@ legend .btn-comment {
             margin-top: 1px;
         }
     }
-
 }
 
 // range/distress/analog-scale pickers vertical

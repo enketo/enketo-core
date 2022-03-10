@@ -1,8 +1,10 @@
 import ColumnsWidget from '../../src/widget/columns/columns';
-import { testBasicInstantiation, testStaticProperties } from '../helpers/test-widget';
+import {
+    testBasicInstantiation,
+    testStaticProperties,
+} from '../helpers/test-widget';
 
-const FORM =
-    `<fieldset class="question simple-select or-appearance-columns">
+const FORM = `<fieldset class="question simple-select or-appearance-columns">
         <fieldset>
             <legend>
                 <span lang="" class="question-label active">Select</span>
@@ -28,21 +30,21 @@ const FORM =
         </fieldset>
     </fieldset>`;
 
-testStaticProperties( ColumnsWidget );
-testBasicInstantiation( ColumnsWidget, FORM );
+testStaticProperties(ColumnsWidget);
+testBasicInstantiation(ColumnsWidget, FORM);
 
-describe( 'ColumnsWidget', () => {
-
-    it( 'adds fillers', done => {
-        const fragment = document.createRange().createContextualFragment( FORM );
-        const el = fragment.querySelector( ColumnsWidget.selector );
+describe('ColumnsWidget', () => {
+    it('adds fillers', (done) => {
+        const fragment = document.createRange().createContextualFragment(FORM);
+        const el = fragment.querySelector(ColumnsWidget.selector);
 
         Promise.resolve()
-            .then( () => new ColumnsWidget( el ) )
-            .then( () => {
-                expect( el.querySelectorAll( '.option-wrapper > .filler' ).length ).to.equal( 2 );
-            } )
-            .then( done, done );
-    } );
-
-} );
+            .then(() => new ColumnsWidget(el))
+            .then(() => {
+                expect(
+                    el.querySelectorAll('.option-wrapper > .filler').length
+                ).to.equal(2);
+            })
+            .then(done, done);
+    });
+});

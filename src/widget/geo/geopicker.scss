@@ -143,7 +143,7 @@ $input-button-border: 2px solid #aaaaaa;
             order: 2;
         }
 
-        [name="search"] {
+        [name='search'] {
             margin: 0 !important;
             width: calc(100% - 40px);
             border-top-right-radius: 0;
@@ -165,7 +165,7 @@ $input-button-border: 2px solid #aaaaaa;
         height: 34px; //padding-bottom: 4px;
     }
 
-    .btn[name="geodetect"] {
+    .btn[name='geodetect'] {
         font-size: 16px;
         margin: 0 0 0 $separator-width;
         order: 3;
@@ -217,7 +217,7 @@ $input-button-border: 2px solid #aaaaaa;
 
         &.has-error:not(.active) {
             border: 1px solid #a94442;
-            background: #F2DEDE;
+            background: #f2dede;
             opacity: 1;
         }
     }
@@ -239,8 +239,8 @@ $input-button-border: 2px solid #aaaaaa;
 
     .btn-remove,
     .close-chain-btn,
-    button[name=geodetect],
-    input[name=search],
+    button[name='geodetect'],
+    input[name='search'],
     .search-btn {
         &[disabled] {
             display: none;
@@ -256,7 +256,7 @@ $input-button-border: 2px solid #aaaaaa;
             display: none;
         }
 
-        .btn[name="geodetect"] {
+        .btn[name='geodetect'] {
             margin: 15px auto 15px auto;
             width: 50%;
         }
@@ -302,9 +302,9 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
-    input[name="lat"],
-    input[name="long"],
-    textarea[name="kml"] {
+    input[name='lat'],
+    input[name='long'],
+    textarea[name='kml'] {
         float: none;
 
         @include border-box;
@@ -325,8 +325,8 @@ $input-button-border: 2px solid #aaaaaa;
         }*/
     }
 
-    input[name="alt"],
-    input[name="acc"] {
+    input[name='alt'],
+    input[name='acc'] {
         @include border-box;
 
         display: block;
@@ -338,11 +338,11 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
-    textarea[name="kml"] {
+    textarea[name='kml'] {
         min-height: 260px;
         overflow: auto;
 
-        &:disabled+.disabled-msg {
+        &:disabled + .disabled-msg {
             display: block;
         }
     }
@@ -470,7 +470,9 @@ $input-button-border: 2px solid #aaaaaa;
 
             @include flex-direction(column);
 
-            @include flex-wrap(nowrap); // have to use flex again to get map canvas to stretch to 100% height
+            @include flex-wrap(
+                nowrap
+            ); // have to use flex again to get map canvas to stretch to 100% height
 
             .map-canvas {
                 height: 100%;
@@ -498,12 +500,13 @@ $input-button-border: 2px solid #aaaaaa;
                 order: 1;
             }
 
-            [name="geodetect"] {
+            [name='geodetect'] {
                 width: 70px;
                 margin-left: 15px;
             }
 
-            [name="search"] {}
+            [name='search'] {
+            }
 
             .input-group {
                 width: auto;
@@ -544,7 +547,6 @@ $input-button-border: 2px solid #aaaaaa;
                 display: block;
                 line-height: 20px;
             }
-
         }
     }
 
@@ -573,12 +575,10 @@ $input-button-border: 2px solid #aaaaaa;
             border-left: none;
             padding-left: 0;
         }
-
     }
 }
 
-.or[dir="rtl"] .geopicker {
-
+.or[dir='rtl'] .geopicker {
     .geo-inputs {
         margin: 0 0 0 $separator-width;
     }
@@ -600,8 +600,6 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
-
-
     .toggle-input-visibility-btn {
         right: -16px;
         border-right: 3px solid #aaaaaa;
@@ -616,12 +614,12 @@ $input-button-border: 2px solid #aaaaaa;
         }
     }
 
-    input[name="alt"],
-    input[name="acc"] {
+    input[name='alt'],
+    input[name='acc'] {
         float: left;
     }
 
-    .btn[name="geodetect"] {
+    .btn[name='geodetect'] {
         font-size: 16px;
         margin: 0 $separator-width 0 0;
     }
@@ -631,7 +629,7 @@ $input-button-border: 2px solid #aaaaaa;
     }
 
     .hide-search {
-        .btn[name="geodetect"] {
+        .btn[name='geodetect'] {
             margin: 15px auto;
             width: 50%;
         }
@@ -648,29 +646,26 @@ $input-button-border: 2px solid #aaaaaa;
     }
 
     &:not(.full-screen).hide-input {
-
         .map-canvas-wrapper,
         .search-bar {
             border-right: none;
             padding-right: $separator-width;
             padding-left: 0;
-
         }
     }
 }
 
 @media screen and (max-width: 500px) {
     .full-screen.geopicker .search-bar {
-
         .search-btn {
             display: none;
         }
 
-        [name="search"] {
+        [name='search'] {
             width: 100%;
         }
 
-        [name=search] {
+        [name='search'] {
             border-top-right-radius: $border-radius-base;
             border-bottom-right-radius: $border-radius-base;
         }
@@ -678,11 +673,13 @@ $input-button-border: 2px solid #aaaaaa;
 }
 
 // apply Enketo style to radio buttons in Leaflet layer control
-.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) .geopicker label {
+.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact)
+    .geopicker
+    label {
     line-height: 16px;
     font-weight: normal;
 
-    input[type=radio]~.option-label::before {
+    input[type='radio'] ~ .option-label::before {
         font-size: 16px;
         height: 16px;
         margin-right: 2px;
@@ -696,8 +693,8 @@ $input-button-border: 2px solid #aaaaaa;
 .leaflet-marker-icon,
 .leaflet-marker-shadow,
 .leaflet-tile-container,
-.leaflet-pane>svg,
-.leaflet-pane>canvas,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
 .leaflet-zoom-box,
 .leaflet-image-layer,
 .leaflet-layer {
@@ -846,7 +843,6 @@ $input-button-border: 2px solid #aaaaaa;
     position: absolute;
 }
 
-
 /* control positioning */
 
 .leaflet-control {
@@ -905,7 +901,6 @@ $input-button-border: 2px solid #aaaaaa;
     margin-right: 10px;
 }
 
-
 /* zoom and fade animations */
 
 .leaflet-fade-anim .leaflet-tile {
@@ -953,7 +948,6 @@ $input-button-border: 2px solid #aaaaaa;
     visibility: hidden;
 }
 
-
 /* cursors */
 
 .leaflet-interactive {
@@ -988,14 +982,14 @@ $input-button-border: 2px solid #aaaaaa;
 .leaflet-marker-icon,
 .leaflet-marker-shadow,
 .leaflet-image-layer,
-.leaflet-pane>svg path,
+.leaflet-pane > svg path,
 .leaflet-tile-container {
     pointer-events: none;
 }
 
 .leaflet-marker-icon.leaflet-interactive,
 .leaflet-image-layer.leaflet-interactive,
-.leaflet-pane>svg path.leaflet-interactive {
+.leaflet-pane > svg path.leaflet-interactive {
     pointer-events: visiblePainted;
     /* IE 9-10 doesn't have auto */
     pointer-events: auto;
@@ -1009,7 +1003,7 @@ $input-button-border: 2px solid #aaaaaa;
 }
 
 .leaflet-container a {
-    color: #0078A8;
+    color: #0078a8;
 }
 
 .leaflet-container a.leaflet-active {
@@ -1021,13 +1015,11 @@ $input-button-border: 2px solid #aaaaaa;
     background: rgba(255, 255, 255, 0.5);
 }
 
-
 /* general typography */
 
 .leaflet-container {
-    font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
-
 
 /* general toolbar styles */
 
@@ -1106,7 +1098,6 @@ $input-button-border: 2px solid #aaaaaa;
     font-size: 22px;
 }
 
-
 /* layers control */
 
 .leaflet-control-layers {
@@ -1174,7 +1165,6 @@ $input-button-border: 2px solid #aaaaaa;
 .leaflet-default-icon-path {
     // background-image: url(images/marker-icon.png);
 }
-
 
 /* attribution and scale controls */
 
@@ -1247,7 +1237,6 @@ $input-button-border: 2px solid #aaaaaa;
     border: 2px solid rgba(0, 0, 0, 0.2);
     background-clip: padding-box;
 }
-
 
 /* popup */
 
@@ -1337,7 +1326,7 @@ $input-button-border: 2px solid #aaaaaa;
     width: 24px;
     margin: 0 auto;
 
-    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)';
     filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
 }
 
@@ -1352,14 +1341,12 @@ $input-button-border: 2px solid #aaaaaa;
     border: 1px solid #999;
 }
 
-
 /* div icon */
 
 .leaflet-div-icon {
     background: #fff;
     border: 1px solid #666;
 }
-
 
 /* Tooltip */
 
@@ -1394,7 +1381,7 @@ $input-button-border: 2px solid #aaaaaa;
     pointer-events: none;
     border: 6px solid transparent;
     background: transparent;
-    content: "";
+    content: '';
 }
 
 /* Directions */

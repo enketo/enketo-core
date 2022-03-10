@@ -1,6 +1,7 @@
 .question {
     input {
-        &[type=radio], &[type=checkbox] {
+        &[type='radio'],
+        &[type='checkbox'] {
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
             border-color: black;
@@ -11,13 +12,13 @@
             }
         }
 
-        &[type=checkbox]:checked {
+        &[type='checkbox']:checked {
             @include checkbox-checked-style(black, transparent);
 
             background-position: -1px;
         }
 
-        &[type=radio]:checked {
+        &[type='radio']:checked {
             @include radio-checked-style(black);
         }
     }
@@ -29,7 +30,7 @@
     }
 }
 
-[dir="rtl"] {
+[dir='rtl'] {
     .bootstrap-select {
         .option-wrapper > label {
             padding-right: 35px !important;

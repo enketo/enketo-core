@@ -23,7 +23,7 @@ class MyWidget extends Widget {
      */
     _init() {
         // Hide the original input
-        this.element.classList.add( 'hide' );
+        this.element.classList.add('hide');
 
         // Create the widget's DOM fragment.
         const fragment = document.createRange().createContextualFragment(
@@ -31,20 +31,22 @@ class MyWidget extends Widget {
                 <input class="ignore" type="range" min="0" max="100" step="1"/>
             </div>`
         );
-        fragment.querySelector( '.widget' ).appendChild( this.resetButtonHtml );
+        fragment.querySelector('.widget').appendChild(this.resetButtonHtml);
 
         // Only when the new DOM has been fully created as a HTML fragment, we append it.
-        this.element.after( fragment );
+        this.element.after(fragment);
 
-        const widget = this.element.parentElement.querySelector( '.widget' );
-        this.range = widget.querySelector( 'input' );
+        const widget = this.element.parentElement.querySelector('.widget');
+        this.range = widget.querySelector('input');
 
         // Set the current loaded value into the widget
         this.value = this.originalInputValue;
 
         // Set event handlers for the widget
-        this.range.addEventListener( 'change', this._change.bind( this ) );
-        widget.querySelector( '.btn-reset' ).addEventListener( 'click', this._reset.bind( this ) );
+        this.range.addEventListener('change', this._change.bind(this));
+        widget
+            .querySelector('.btn-reset')
+            .addEventListener('click', this._reset.bind(this));
 
         // This widget initializes synchronously so we don't return anything.
         // If the widget initializes asynchronously return a promise that resolves to `this`.
@@ -53,13 +55,13 @@ class MyWidget extends Widget {
     _reset() {
         this.value = '';
         this.originalInputValue = '';
-        this.element.classList.add( 'empty' );
+        this.element.classList.add('empty');
     }
 
-    _change( ev ) {
+    _change(ev) {
         // propagate value changes to original input and make sure a change event is fired
         this.originalInputValue = ev.target.value;
-        this.element.classList.remove( 'empty' );
+        this.element.classList.remove('empty');
     }
 
     /**
@@ -89,7 +91,7 @@ class MyWidget extends Widget {
      * @type {*}
      */
     get value() {
-        return this.element.classList.contains( 'empty' ) ? '' : this.range.value;
+        return this.element.classList.contains('empty') ? '' : this.range.value;
     }
 
     /**
@@ -97,10 +99,9 @@ class MyWidget extends Widget {
      *
      * @param {*} value - value to set
      */
-    set value( value ) {
+    set value(value) {
         this.range.value = value;
     }
-
 }
 
 export default MyWidget;

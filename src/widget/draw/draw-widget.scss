@@ -12,7 +12,7 @@ $picker-border: 2px solid grey;
 .or-drawing-initialized,
 .or-signature-initialized,
 .or-annotation-initialized {
-    input[type="text"] {
+    input[type='text'] {
         display: none;
     }
 }
@@ -24,7 +24,6 @@ $picker-border: 2px solid grey;
 }
 
 .or-annotation-initialized {
-
     // make space for absolutely positioned fake-file-input
     .draw-widget {
         margin-top: 50px;
@@ -58,8 +57,8 @@ $picker-border: 2px solid grey;
             &.disabled {
                 cursor: not-allowed;
 
-                ~.draw-widget__colorpicker,
-                ~.draw-widget__undo {
+                ~ .draw-widget__colorpicker,
+                ~ .draw-widget__undo {
                     display: none;
                 }
 
@@ -69,7 +68,7 @@ $picker-border: 2px solid grey;
             }
         }
 
-        input[type=file] {
+        input[type='file'] {
             display: none;
         }
 
@@ -167,10 +166,12 @@ $picker-border: 2px solid grey;
 
         .draw-widget__body {
             width: calc(100% - 2 * #{$fullscreen-margin-h});
-            padding-top: calc(#{$ratio1} * (100% - 2 * #{$fullscreen-margin-h}));
+            padding-top: calc(
+                #{$ratio1} * (100% - 2 * #{$fullscreen-margin-h})
+            );
             margin: $fullscreen-margin-v auto;
 
-            input[type=file] {
+            input[type='file'] {
                 left: 90px; // TODO: RTL
             }
 
@@ -202,7 +203,7 @@ $picker-border: 2px solid grey;
     .btn-download {
         margin-right: 0;
 
-        &[href=""] {
+        &[href=''] {
             display: none;
         }
     }
@@ -212,11 +213,15 @@ $picker-border: 2px solid grey;
     .draw-widget.full-screen {
         .draw-widget__body {
             width: calc(100% - 2 * #{$fullscreen-margin-h});
-            padding-top: calc(#{$ratio2} * (100% - 2 * #{$fullscreen-margin-h}));
+            padding-top: calc(
+                #{$ratio2} * (100% - 2 * #{$fullscreen-margin-h})
+            );
         }
 
         .draw-widget__footer {
-            width: calc(100% - 2 * #{$fullscreen-margin-h}); //margin: -($fullscreen-margin-v - 10px) auto 0 auto;
+            width: calc(
+                100% - 2 * #{$fullscreen-margin-h}
+            ); //margin: -($fullscreen-margin-v - 10px) auto 0 auto;
         }
     }
 }

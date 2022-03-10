@@ -12,7 +12,6 @@
 
     .image-map {
         svg:not([or-readonly]) {
-
             path[id],
             circle[id],
             g[id] {
@@ -67,6 +66,6 @@
     }
 
     &__error {
-        @include question-error-message;;
+        @include question-error-message;
     }
 }

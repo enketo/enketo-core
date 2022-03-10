@@ -2,107 +2,141 @@ import loadForm from '../helpers/load-form';
 import dialog from '../../src/js/fake-dialog';
 import events from '../../src/js/event';
 
-describe( 'calculate functionality', () => {
+describe('calculate functionality', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
-    beforeEach( () => {
+    beforeEach(() => {
         sandbox = sinon.createSandbox();
 
-        sandbox.stub( dialog, 'confirm' ).resolves( true );
-    } );
+        sandbox.stub(dialog, 'confirm').resolves(true);
+    });
 
-    afterEach( () => {
+    afterEach(() => {
         sandbox.restore();
-    } );
+    });
 
-    it( 'updates inside multiple repeats when repeats become relevant', () => {
-        const form = loadForm( 'repeat-relevant-calculate.xml' );
+    it('updates inside multiple repeats when repeats become relevant', () => {
+        const form = loadForm('repeat-relevant-calculate.xml');
         form.init();
 
         // This triggers a form.calc.update with this object: { relevantPath: '/data/rg' };
-        form.view.$.find( '[name="/data/yn"]' ).prop( 'checked', true ).trigger( 'change' );
+        form.view.$.find('[name="/data/yn"]')
+            .prop('checked', true)
+            .trigger('change');
 
-        expect( form.model.node( '/data/rg/row' ).getElements().map( node => node.textContent ).join( ',' ) ).to.equal( '1,2,3' );
-        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 0 ].value ).to.equal( '1' );
-        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 1 ].value ).to.equal( '2' );
-        expect( form.view.$.find( '[name="/data/rg/row"]' )[ 2 ].value ).to.equal( '3' );
-    } );
+        expect(
+            form.model
+                .node('/data/rg/row')
+                .getElements()
+                .map((node) => node.textContent)
+                .join(',')
+        ).to.equal('1,2,3');
+        expect(form.view.$.find('[name="/data/rg/row"]')[0].value).to.equal(
+            '1'
+        );
+        expect(form.view.$.find('[name="/data/rg/row"]')[1].value).to.equal(
+            '2'
+        );
+        expect(form.view.$.find('[name="/data/rg/row"]')[2].value).to.equal(
+            '3'
+        );
+    });
 
-    it( 'updates inside multiple repeats a repeat is removed and position(..) changes', ( done ) => {
-        const form = loadForm( 'repeat-relevant-calculate.xml' );
+    it('updates inside multiple repeats a repeat is removed and position(..) changes', (done) => {
+        const form = loadForm('repeat-relevant-calculate.xml');
         form.init();
 
-        form.view.$.find( '[name="/data/yn"]' ).prop( 'checked', true ).trigger( 'change' );
+        form.view.$.find('[name="/data/yn"]')
+            .prop('checked', true)
+            .trigger('change');
 
         // remove first repeat to the calculation in both remaining repeats needs to be updated.
-        form.view.html.querySelector( '.btn.remove' ).click();
+        form.view.html.querySelector('.btn.remove').click();
 
-        setTimeout( () => {
-            expect( form.model.node( '/data/rg/row' ).getElements().map( node => node.textContent ).join( ',' ) ).to.equal( '1,2' );
-            expect( form.view.$.find( '[name="/data/rg/row"]' )[ 0 ].value ).to.equal( '1' );
-            expect( form.view.$.find( '[name="/data/rg/row"]' )[ 1 ].value ).to.equal( '2' );
+        setTimeout(() => {
+            expect(
+                form.model
+                    .node('/data/rg/row')
+                    .getElements()
+                    .map((node) => node.textContent)
+                    .join(',')
+            ).to.equal('1,2');
+            expect(form.view.$.find('[name="/data/rg/row"]')[0].value).to.equal(
+                '1'
+            );
+            expect(form.view.$.find('[name="/data/rg/row"]')[1].value).to.equal(
+                '2'
+            );
             done();
-        }, 650 );
+        }, 650);
+    });
 
-    } );
-
-    it( 'updates a calculation for node if calc refers to node filtered with predicate', () => {
-        const form = loadForm( 'count-repeated-nodes.xml' );
+    it('updates a calculation for node if calc refers to node filtered with predicate', () => {
+        const form = loadForm('count-repeated-nodes.xml');
         form.init();
 
-        const text1 = form.view.html.querySelector( 'textarea[name="/repeat-group-comparison/REP/text1"]' );
+        const text1 = form.view.html.querySelector(
+            'textarea[name="/repeat-group-comparison/REP/text1"]'
+        );
 
         text1.value = ' yes ';
-        text1.dispatchEvent( events.Change() );
+        text1.dispatchEvent(events.Change());
 
-        expect( form.view.html.querySelector( 'input[name="/repeat-group-comparison/count2"]' ).value ).to.equal( '1' );
+        expect(
+            form.view.html.querySelector(
+                'input[name="/repeat-group-comparison/count2"]'
+            ).value
+        ).to.equal('1');
+    });
 
-    } );
-
-    it( 'does not calculate questions inside repeat instances created with repeat-count, if the repeat is not relevant', () => {
-        const form = loadForm( 'repeat-count-calculate-irrelevant.xml' );
+    it('does not calculate questions inside repeat instances created with repeat-count, if the repeat is not relevant', () => {
+        const form = loadForm('repeat-count-calculate-irrelevant.xml');
         form.init();
 
-        const calcs = form.model.xml.querySelectorAll( 'SHD_NO' );
+        const calcs = form.model.xml.querySelectorAll('SHD_NO');
 
-        expect( calcs.length ).to.equal( 3 );
-        expect( calcs[ 0 ].textContent ).to.equal( '' );
-        expect( calcs[ 1 ].textContent ).to.equal( '' );
-        expect( calcs[ 2 ].textContent ).to.equal( '' );
-    } );
+        expect(calcs.length).to.equal(3);
+        expect(calcs[0].textContent).to.equal('');
+        expect(calcs[1].textContent).to.equal('');
+        expect(calcs[2].textContent).to.equal('');
+    });
 
     // This is important for OpenClinica, but also reduces unnecessary work. A calculation that runs upon form load and
     // doesn't change a default, or loaded, value doesn't have to populate the form control, as this will be done by setAllVals
-    it( 'does not set the form control value if the calculation result does not change the value in the model', () => {
-        const form = loadForm( 'calc-control.xml', '<data><calc>12</calc></data>' );
+    it('does not set the form control value if the calculation result does not change the value in the model', () => {
+        const form = loadForm(
+            'calc-control.xml',
+            '<data><calc>12</calc></data>'
+        );
 
         let counter = 0;
-        form.view.html.querySelector( '[name="/data/calc"]' ).addEventListener( new events.InputUpdate().type, () => counter++ );
+        form.view.html
+            .querySelector('[name="/data/calc"]')
+            .addEventListener(new events.InputUpdate().type, () => counter++);
         form.init();
 
-        expect( counter ).to.equal( 0 );
-    } );
+        expect(counter).to.equal(0);
+    });
 
     // https://github.com/OpenClinica/enketo-express-oc/issues/404#issuecomment-744743172
     // Checks whether different types of calculations are handled consistently when they become non-relevant
-    it( 'consistently leaves calculated values if they become non-relevant', () => {
-        const form = loadForm( 'relevant-calcs.xml' );
+    it('consistently leaves calculated values if they become non-relevant', () => {
+        const form = loadForm('relevant-calcs.xml');
         form.init();
-        const grp = form.model.xml.querySelector( 'grp' );
+        const grp = form.model.xml.querySelector('grp');
 
-        expect( grp.textContent.replace( /\s/g, '' ) ).to.equal( '' );
+        expect(grp.textContent.replace(/\s/g, '')).to.equal('');
 
-        const a = form.view.html.querySelector( 'input[name="/data/a"]' );
+        const a = form.view.html.querySelector('input[name="/data/a"]');
         a.value = 'a';
-        a.dispatchEvent( events.Change() );
+        a.dispatchEvent(events.Change());
 
-        expect( grp.textContent.replace( /\s/g, '' ) ).to.equal( 'onetwothreefour' );
+        expect(grp.textContent.replace(/\s/g, '')).to.equal('onetwothreefour');
 
         a.value = 'a';
-        a.dispatchEvent( events.Change() );
+        a.dispatchEvent(events.Change());
 
-        expect( grp.textContent.replace( /\s/g, '' ) ).to.equal( 'onetwothreefour' );
-    } );
-
-} );
+        expect(grp.textContent.replace(/\s/g, '')).to.equal('onetwothreefour');
+    });
+});

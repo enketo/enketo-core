@@ -12,45 +12,53 @@ export default {
      * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      * @param {boolean} forceClearNonRelevant -  whether to empty the values of non-relevant nodes
      */
-    update( updated, forceClearNonRelevant = false ) {
-
-        if ( !this.form ) {
-            throw new Error( 'Branch module not correctly instantiated with form property.' );
+    update(updated, forceClearNonRelevant = false) {
+        if (!this.form) {
+            throw new Error(
+                'Branch module not correctly instantiated with form property.'
+            );
         }
 
-        const nodes = this.form.getRelatedNodes( 'data-relevant', '', updated ).get();
+        const nodes = this.form
+            .getRelatedNodes('data-relevant', '', updated)
+            .get();
 
-        this.updateNodes( nodes, forceClearNonRelevant );
+        this.updateNodes(nodes, forceClearNonRelevant);
     },
     /**
      * @param {Array<Element>} nodes - Nodes to update
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    updateNodes( nodes, forceClearNonRelevant = false ) {
+    updateNodes(nodes, forceClearNonRelevant = false) {
         let branchChange = false;
         const relevantCache = {};
         const alreadyCovered = [];
-        const clonedRepeatsPresent = this.form.repeatsPresent && this.form.view.html.querySelector( '.or-repeat.clone' );
+        const clonedRepeatsPresent =
+            this.form.repeatsPresent &&
+            this.form.view.html.querySelector('.or-repeat.clone');
 
-        nodes.forEach( node => {
-
+        nodes.forEach((node) => {
             // Note that node.getAttribute('name') is not the same as p.path for repeated radiobuttons!
-            if ( alreadyCovered.indexOf( node.getAttribute( 'name' ) ) !== -1 ) {
+            if (alreadyCovered.indexOf(node.getAttribute('name')) !== -1) {
                 return;
             }
 
             // Since this result is almost certainly not empty, closest() is the most efficient
-            const branchNode = node.closest( '.or-branch' );
+            const branchNode = node.closest('.or-branch');
 
             const p = {};
             let cacheIndex = null;
 
-            p.relevant = this.form.input.getRelevant( node );
-            p.path = this.form.input.getName( node );
+            p.relevant = this.form.input.getRelevant(node);
+            p.path = this.form.input.getName(node);
 
-            if ( !branchNode ) {
-                if ( !closestAncestorUntil( node.parentsUntil( node, '#or-calculated-items', '.or' ) ) ) {
-                    console.error( 'could not find branch node for ', node );
+            if (!branchNode) {
+                if (
+                    !closestAncestorUntil(
+                        node.parentsUntil(node, '#or-calculated-items', '.or')
+                    )
+                ) {
+                    console.error('could not find branch node for ', node);
                 }
 
                 return;
@@ -59,15 +67,25 @@ export default {
             /*
              * Check if the (calculate without form control) node is part of a repeat that has no instances
              */
-            const pathParts = p.path.split( '/' );
-            if ( pathParts.length > 3 ) {
-                const parentPath = pathParts.splice( 0, pathParts.length - 1 ).join( '/' );
-                const parentGroups = [ ...this.form.view.html.querySelectorAll( `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]` ) ]
+            const pathParts = p.path.split('/');
+            if (pathParts.length > 3) {
+                const parentPath = pathParts
+                    .splice(0, pathParts.length - 1)
+                    .join('/');
+                const parentGroups = [
+                    ...this.form.view.html.querySelectorAll(
+                        `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
+                    ),
+                ]
                     // now remove the groups that have a repeat-info child without repeat instance siblings
-                    .filter( group => getChild( group, '.or-repeat' ) || !getChild( group, '.or-repeat-info' ) );
+                    .filter(
+                        (group) =>
+                            getChild(group, '.or-repeat') ||
+                            !getChild(group, '.or-repeat-info')
+                    );
                 // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
                 // Hence that relevant does not need to be evaluated (and would fail otherwise because the context doesn't exist).
-                if ( parentGroups.length === 0 ) {
+                if (parentGroups.length === 0) {
                     return;
                 }
             }
@@ -79,15 +97,22 @@ export default {
              * (6-7 seconds of loading time on the bench6 form)
              */
             // TODO: these checks fail miserably for calculated items that do not have a form control
-            const insideRepeat = clonedRepeatsPresent && closestAncestorUntil( branchNode, '.or-repeat', '.or',  );
-            const insideRepeatClone = clonedRepeatsPresent && closestAncestorUntil( branchNode, '.or-repeat.clone', '.or' );
+            const insideRepeat =
+                clonedRepeatsPresent &&
+                closestAncestorUntil(branchNode, '.or-repeat', '.or');
+            const insideRepeatClone =
+                clonedRepeatsPresent &&
+                closestAncestorUntil(branchNode, '.or-repeat.clone', '.or');
 
             /*
              * If the relevant is placed on a group and that group contains repeats with the same name,
              * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
              */
             let context = p.path;
-            if ( getChild( node, `.or-repeat-info[data-name="${p.path}"]` ) && !getChild( node,  `.or-repeat[name="${p.path}"]` ) ) {
+            if (
+                getChild(node, `.or-repeat-info[data-name="${p.path}"]`) &&
+                !getChild(node, `.or-repeat[name="${p.path}"]`)
+            ) {
                 context = null;
             }
 
@@ -95,42 +120,58 @@ export default {
              * Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
              * It can be safely set to 0 for other branches.
              */
-            p.ind = ( context && insideRepeatClone ) ? this.form.input.getIndex( node ) : 0;
+            p.ind =
+                context && insideRepeatClone
+                    ? this.form.input.getIndex(node)
+                    : 0;
             /*
              * Caching is only possible for expressions that do not contain relative paths to nodes.
              * So, first do a *very* aggresive check to see if the expression contains a relative path.
              * This check assumes that child nodes (e.g. "mychild = 'bob'") are NEVER used in a relevant
              * expression, which may prove to be incorrect.
              */
-            if ( p.relevant.indexOf( '..' ) === -1 ) {
-                if ( !insideRepeat ) {
+            if (p.relevant.indexOf('..') === -1) {
+                if (!insideRepeat) {
                     cacheIndex = p.relevant;
                 } else {
                     // The path is stripped of the last nodeName to record the context.
                     // This might be dangerous, but until we find a bug, it helps in those forms where one group contains
                     // many sibling questions that each have the same relevant.
-                    cacheIndex = `${p.relevant}__${p.path.substring( 0, p.path.lastIndexOf( '/' ) )}__${p.ind}`;
+                    cacheIndex = `${p.relevant}__${p.path.substring(
+                        0,
+                        p.path.lastIndexOf('/')
+                    )}__${p.ind}`;
                 }
             }
             let result;
-            if ( cacheIndex && typeof relevantCache[ cacheIndex ] !== 'undefined' ) {
-                result = relevantCache[ cacheIndex ];
+            if (
+                cacheIndex &&
+                typeof relevantCache[cacheIndex] !== 'undefined'
+            ) {
+                result = relevantCache[cacheIndex];
             } else {
-                result = this.evaluate( p.relevant, context, p.ind );
-                relevantCache[ cacheIndex ] = result;
+                result = this.evaluate(p.relevant, context, p.ind);
+                relevantCache[cacheIndex] = result;
             }
 
-            if ( !insideRepeat ) {
-                alreadyCovered.push( node.getAttribute( 'name' ) );
+            if (!insideRepeat) {
+                alreadyCovered.push(node.getAttribute('name'));
             }
 
-            if ( this.process( branchNode, p.path, result, forceClearNonRelevant ) === true ) {
+            if (
+                this.process(
+                    branchNode,
+                    p.path,
+                    result,
+                    forceClearNonRelevant
+                ) === true
+            ) {
                 branchChange = true;
             }
-        } );
+        });
 
-        if ( branchChange ) {
-            this.form.view.$.trigger( 'changebranch' );
+        if (branchChange) {
+            this.form.view.$.trigger('changebranch');
         }
     },
     /**
@@ -141,8 +182,13 @@ export default {
      * @param {number} index - index of context node
      * @return {boolean} result of evaluation
      */
-    evaluate( expr, contextPath, index ) {
-        const result = this.form.model.evaluate( expr, 'boolean', contextPath, index );
+    evaluate(expr, contextPath, index) {
+        const result = this.form.model.evaluate(
+            expr,
+            'boolean',
+            contextPath,
+            index
+        );
 
         return result;
     },
@@ -154,12 +200,11 @@ export default {
      * @param {boolean} result - result of relevant evaluation
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    process( branchNode, path, result, forceClearNonRelevant = false ) {
-        if ( result === true ) {
-            return this.enable( branchNode, path );
-        } else {
-            return this.disable( branchNode, path, forceClearNonRelevant );
+    process(branchNode, path, result, forceClearNonRelevant = false) {
+        if (result === true) {
+            return this.enable(branchNode, path);
         }
+        return this.disable(branchNode, path, forceClearNonRelevant);
     },
 
     /**
@@ -168,8 +213,11 @@ export default {
      * @param {Element} branchNode - branch node
      * @return {boolean} whether branch is currently relevant
      */
-    selfRelevant( branchNode ) {
-        return !branchNode.classList.contains( 'disabled' ) && !branchNode.classList.contains( 'pre-init' );
+    selfRelevant(branchNode) {
+        return (
+            !branchNode.classList.contains('disabled') &&
+            !branchNode.classList.contains('pre-init')
+        );
     },
 
     /**
@@ -179,24 +227,24 @@ export default {
      * @param {string} path - path of branch node
      * @return {boolean} whether the relevant changed as a result of this action
      */
-    enable( branchNode, path ) {
+    enable(branchNode, path) {
         let change = false;
 
-        if ( !this.selfRelevant( branchNode ) ) {
+        if (!this.selfRelevant(branchNode)) {
             change = true;
-            branchNode.classList.remove( 'disabled', 'pre-init' );
+            branchNode.classList.remove('disabled', 'pre-init');
             // Update calculated items, both individual question or descendants of group
-            this.form.calc.update( {
-                relevantPath: path
-            } );
-            this.form.itemset.update( {
-                relevantPath: path
-            } );
+            this.form.calc.update({
+                relevantPath: path,
+            });
+            this.form.itemset.update({
+                relevantPath: path,
+            });
             // Update outputs that are children of branch
             // TODO this re-evaluates all outputs in the form which is not efficient!
             this.form.output.update();
-            this.form.widgets.enable( branchNode );
-            this.activate( branchNode );
+            this.form.widgets.enable(branchNode);
+            this.activate(branchNode);
         }
 
         return change;
@@ -210,17 +258,21 @@ export default {
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      * @return {boolean} whether the relevancy changed as a result of this action
      */
-    disable( branchNode, path, forceClearNonRelevant ) {
-        const neverEnabled = branchNode.classList.contains( 'pre-init' );
+    disable(branchNode, path, forceClearNonRelevant) {
+        const neverEnabled = branchNode.classList.contains('pre-init');
         let changed = false;
 
-        if ( neverEnabled || this.selfRelevant( branchNode ) || forceClearNonRelevant ) {
+        if (
+            neverEnabled ||
+            this.selfRelevant(branchNode) ||
+            forceClearNonRelevant
+        ) {
             changed = true;
-            if ( forceClearNonRelevant ) {
-                this.clear( branchNode, path );
+            if (forceClearNonRelevant) {
+                this.clear(branchNode, path);
             }
 
-            this.deactivate( branchNode );
+            this.deactivate(branchNode);
         }
 
         return changed;
@@ -232,32 +284,44 @@ export default {
      * @param {Element} branchNode - branch node
      * @param {string} path - path of branch node
      */
-    clear( branchNode, path ) {
+    clear(branchNode, path) {
         // A change event ensures the model is updated
         // An inputupdate event is required to update widgets
-        this.form.input.clear( branchNode, events.Change(), events.InputUpdate() );
+        this.form.input.clear(
+            branchNode,
+            events.Change(),
+            events.InputUpdate()
+        );
         // Update calculated items if branch is a group
         // We exclude question branches here because those will have been cleared already in the previous line.
-        if ( branchNode.matches( '.or-group, .or-group-data' ) ) {
-            this.form.calc.update( {
-                relevantPath: path
-            }, '', true );
+        if (branchNode.matches('.or-group, .or-group-data')) {
+            this.form.calc.update(
+                {
+                    relevantPath: path,
+                },
+                '',
+                true
+            );
         }
     },
     /**
      * @param {Element} branchNode - branch node
      * @param {boolean} bool - value to set disabled property to
      */
-    setDisabledProperty( branchNode, bool ) {
+    setDisabledProperty(branchNode, bool) {
         const type = branchNode.nodeName.toLowerCase();
 
-        if ( type === 'label' ) {
-            getChildren( branchNode,  'input, select, textarea' ).forEach( el => el.disabled = bool );
-        } else if ( type === 'fieldset' || type === 'section' ) {
+        if (type === 'label') {
+            getChildren(branchNode, 'input, select, textarea').forEach(
+                (el) => (el.disabled = bool)
+            );
+        } else if (type === 'fieldset' || type === 'section') {
             // TODO: a <section> cannot be disabled like this
             branchNode.disabled = bool;
         } else {
-            branchNode.querySelectorAll( 'fieldset, input, select, textarea' ).forEach( el => el.disabled = bool );
+            branchNode
+                .querySelectorAll('fieldset, input, select, textarea')
+                .forEach((el) => (el.disabled = bool));
         }
     },
     /**
@@ -266,8 +330,8 @@ export default {
      *
      * @param {Element} branchNode - branch node
      */
-    activate( branchNode ) {
-        this.setDisabledProperty( branchNode, false );
+    activate(branchNode) {
+        this.setDisabledProperty(branchNode, false);
     },
     /**
      * Deactivates form controls.
@@ -275,9 +339,9 @@ export default {
      *
      * @param {Element} branchNode - branch node
      */
-    deactivate( branchNode ) {
-        branchNode.classList.add( 'disabled' );
-        this.form.widgets.disable( branchNode );
-        this.setDisabledProperty( branchNode, true );
-    }
+    deactivate(branchNode) {
+        branchNode.classList.add('disabled');
+        this.form.widgets.disable(branchNode);
+        this.setDisabledProperty(branchNode, true);
+    },
 };

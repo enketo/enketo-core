@@ -34,6 +34,37 @@ import ab from '../widget/date-native-ios/datepicker-native-ios';
 import ac from '../widget/rating/rating';
 import ad from '../widget/text-print/text-print';
 import ae from '../widget/thousands-sep/thousands-sep';
-//import zz from '../widget/example/my-widget';
+// import zz from '../widget/example/my-widget';
 
-export default [ a, b, c, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, ab, ac, ad, ae ];
+export default [
+    a,
+    b,
+    c,
+    e,
+    f,
+    g,
+    h,
+    i,
+    j,
+    k,
+    l,
+    m,
+    n,
+    o,
+    p,
+    q,
+    r,
+    s,
+    t,
+    u,
+    v,
+    w,
+    x,
+    y,
+    z,
+    aa,
+    ab,
+    ac,
+    ad,
+    ae,
+];

@@ -50,7 +50,6 @@ h4::before {
 }
 
 .or {
-
     .hint,
     .or-appearance-no-print,
     .geopoint .search-bar,
@@ -69,12 +68,12 @@ h4::before {
         display: block;
     }
 
-    input[type="file"] {
+    input[type='file'] {
         // still let it take up space
         visibility: hidden;
     }
 
-    input[type="number"] {
+    input[type='number'] {
         appearance: textfield !important;
         -moz-appearance: textfield !important;
         -webkit-appearance: textfield !important;
@@ -88,7 +87,7 @@ h3 {
 }
 
 h4,
-h4>.question-label {
+h4 > .question-label {
     font-size: 1.5 * $printBaseFontSize;
 }
 
@@ -105,22 +104,21 @@ label.geo {
     font-size: $printBaseFontSize;
 }
 
-.question input:not([type=radio]):not([type=checkbox]) {
+.question input:not([type='radio']):not([type='checkbox']) {
     font-size: $printBaseFontSize;
 }
 
 // We can not rely on cross-browser printing of CSS background images
 // so to be sure that a box is correctly shown to be "checked", we use the default appearance.
-input[type=radio] {
+input[type='radio'] {
     @include appearance(radio !important);
 }
 
-input[type=checkbox] {
+input[type='checkbox'] {
     @include appearance(checkbox !important);
 }
 
 .or {
-
     h2,
     h3,
     h4,
@@ -133,7 +131,8 @@ input[type=checkbox] {
         margin: 0;
     }
 
-    h3 {}
+    h3 {
+    }
 
     .question {
         margin-bottom: 0;
@@ -142,7 +141,7 @@ input[type=checkbox] {
     legend {
         margin-bottom: 5px;
 
-        ~label {
+        ~ label {
             padding: 0;
         }
 
@@ -167,17 +166,17 @@ input[type=checkbox] {
         background: none;
     }
 
-    input[type=text],
+    input[type='text'],
     .print-input-text,
-    input[type=tel],
-    input[type=password],
-    input[type=url],
-    input[type=email],
-    input[type=file],
-    input[type=date],
-    input[type=time],
-    input[type=datetime-local],
-    input[type=number],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='file'],
+    input[type='date'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='number'],
     select,
     textarea {
         border-radius: 0px;
@@ -190,7 +189,7 @@ input[type=checkbox] {
         border-bottom: 1px solid black;
     }
 
-    input[type="file"] {
+    input[type='file'] {
         display: none !important;
     }
 
@@ -215,7 +214,6 @@ input[type=checkbox] {
             display: none;
         }
     }
-
 }
 
 .invalid-constraint,
@@ -272,15 +270,13 @@ input[type=checkbox] {
     }
 }
 
-
-
 .bootstrap-select {
     @include clearfix;
 
     .dropdown-toggle {
         display: none;
 
-        ~.dropdown-menu {
+        ~ .dropdown-menu {
             @include display-flex;
 
             @include flex-wrap(wrap);
@@ -329,12 +325,12 @@ input[type=checkbox] {
     display: none;
 }
 
-.or-appearance-likert .option-wrapper>label .option-label {
+.or-appearance-likert .option-wrapper > label .option-label {
     border-top: 1px solid black;
 }
 
-.question.or-appearance-compact input:checked~img,
-.question.or-appearance-quickcompact input:checked~img {
+.question.or-appearance-compact input:checked ~ img,
+.question.or-appearance-quickcompact input:checked ~ img {
     border-color: black;
 }
 
@@ -357,7 +353,6 @@ input[type=checkbox] {
 }
 
 .or-appearance-analog-scale {
-
     // if analog-scale widget is a non-current page the display is set to block
     // which moves the vertical widget below the label instead of next to it.
     &:not(.or-appearance-horizontal) {
@@ -406,11 +401,11 @@ input[type=checkbox] {
 
 // pages mode
 .pages.or {
-    &.print-relevant-only .disabled[role="page"] {
+    &.print-relevant-only .disabled[role='page'] {
         display: none;
     }
 
-    [role="page"] {
+    [role='page'] {
         display: inherit;
     }
 
@@ -432,7 +427,7 @@ h3,
 h4 {
     page-break-after: avoid;
 
-    +.question {
+    + .question {
         page-break-before: avoid;
     }
 }
@@ -447,7 +442,7 @@ h4 {
     page-break-after: always !important;
 }*/
 
-[type=range] {
+[type='range'] {
     &:not(.empty) {
         &::-webkit-slider-thumb {
             border-color: black !important;

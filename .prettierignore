@@ -1,0 +1,8 @@
+# Ignore artifacts:
+
+.nyc*
+build/*
+*/node_modules/*
+docs/*
+test-coverage/*
+test/mock/forms.js

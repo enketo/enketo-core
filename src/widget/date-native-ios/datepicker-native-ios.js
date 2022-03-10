@@ -19,13 +19,17 @@ class DatepickerNativeIos extends Widget {
      * @param {Element} element - the element to instantiate the widget on
      * @return {boolean} to instantiate or not to instantiate, that is the question
      */
-    static condition( element ) {
+    static condition(element) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if non-iOS browser is used.
-        return !data.has( element, 'DatepickerExtended' ) && !data.has( element, 'DatetimepickerExtended' ) && !data.has( element, 'TimepickerExtended' ) && os.ios;
+        return (
+            !data.has(element, 'DatepickerExtended') &&
+            !data.has(element, 'DatetimepickerExtended') &&
+            !data.has(element, 'TimepickerExtended') &&
+            os.ios
+        );
     }
 
     _init() {
-
         /*
          * Bug 1.
          *
@@ -39,13 +43,13 @@ class DatepickerNativeIos extends Widget {
          * This is a very ugly solution, but the bug is fairly obscure, and the workaround is hopefully
          * just temporary.
          */
-        //console.log( 'Adding iOS readonly date/time/datetime picker workaround.' );
-        this.element.addEventListener( 'focus', () => {
+        // console.log( 'Adding iOS readonly date/time/datetime picker workaround.' );
+        this.element.addEventListener('focus', () => {
             // prepare for future where readonly state is dynamic
-            if ( this.element.readOnly ) {
+            if (this.element.readOnly) {
                 this.element.blur();
             }
-        } );
+        });
     }
 }
 

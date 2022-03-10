@@ -9,7 +9,7 @@ $thick-w: 1px;
 $pad: 10px;
 $left: -85px;
 
-@mixin track($color:$track-color, $height: $track-h) {
+@mixin track($color: $track-color, $height: $track-h) {
     box-sizing: border-box;
     border: none;
     width: $track-w;
@@ -29,7 +29,7 @@ $left: -85px;
 }
 
 @mixin thumb-focus() {
-    @include focus-shadow
+    @include focus-shadow;
 }
 
 @mixin thumb-empty() {
@@ -37,63 +37,61 @@ $left: -85px;
     border-color: transparent;
 }
 
-[type=range] {
-
+[type='range'] {
     &,
     &::-webkit-slider-thumb {
         -webkit-appearance: none;
     }
 
-    padding: 0.25*$margin;
+    padding: 0.25 * $margin;
     width: $track-w;
     background: transparent;
-    font: 1em/1 arial,
-    sans-serif;
+    font: 1em/1 arial, sans-serif;
     z-index: 10;
 
     &::-webkit-slider-runnable-track {
-        @include track
+        @include track;
     }
 
     &::-moz-range-track {
-        @include track
+        @include track;
     }
 
     &::-ms-track {
-        @include track
+        @include track;
     }
 
     &::-webkit-slider-thumb {
-        margin-top: .5*($track-h - $thumb-d);
-        @include thumb
+        margin-top: 0.5 * ($track-h - $thumb-d);
+        @include thumb;
     }
 
     &::-moz-range-thumb {
-        @include thumb
+        @include thumb;
     }
 
     &::-ms-thumb {
         margin-top: 0;
-        @include thumb
+        @include thumb;
     }
 
     &::-ms-tooltip {
-        display: none
+        display: none;
     }
 
     &:focus {
         outline: 0;
 
         &::-webkit-slider-thumb {
-            @include thumb-focus
+            @include thumb-focus;
         }
 
         &::-moz-range-thumb {
-            @include thumb-focus
+            @include thumb-focus;
         }
 
         &::-ms-thumb {
-            @include thumb-focus
+            @include thumb-focus;
         }
     }
 
@@ -113,7 +111,7 @@ $left: -85px;
 
     &[disabled] {
         &::-webkit-slider-thumb {
-            opacity: 0.7
+            opacity: 0.7;
         }
 
         &::-moz-range-thumb {
@@ -139,8 +137,8 @@ $left: -85px;
     &__current {
         padding-bottom: $pad;
         vertical-align: middle;
-        line-height: ($height - (3*$track-h)) / 2;
-        min-height: 10px + ($height - (3*$track-h)) / 2;
+        line-height: ($height - (3 * $track-h)) / 2;
+        min-height: 10px + ($height - (3 * $track-h)) / 2;
     }
 
     &__ticks {
@@ -176,7 +174,7 @@ $left: -85px;
         }
     }
 
-    [type=range] {
+    [type='range'] {
         position: absolute;
         top: 93.5px;
         left: 0;
@@ -191,7 +189,7 @@ $v-height: 350px;
 
 .or-appearance-vertical,
 .or-appearance-distress {
-    input[type=range] {
+    input[type='range'] {
         transform: rotate(-90deg);
         width: $v-height;
         margin: 0 $margin;
@@ -247,11 +245,10 @@ $v-height: 350px;
     }
 }
 
-.or[dir=rtl] {
-
+.or[dir='rtl'] {
     .or-appearance-vertical,
     .or-appearance-distress {
-        input[type=range] {
+        input[type='range'] {
             transform: rotate(90deg);
         }
     }
@@ -271,7 +268,7 @@ $green: rgb(60, 182, 67);
 .or-appearance-distress {
     $shift-top: 15px;
 
-    input[type=range] {
+    input[type='range'] {
         top: 158px + $shift-top;
         left: $left - 42.5px;
         right: $left - 42.5px;
@@ -291,22 +288,22 @@ $green: rgb(60, 182, 67);
         &:not(.empty) {
             &::-webkit-slider-thumb {
                 // The reason for the 1.5px correction in Chrome/Safari is unknown.
-                margin-top: 1.5 + .5*($track-h - $thumb-d);
-                @include thumb($ds-thumb-color)
+                margin-top: 1.5 + 0.5 * ($track-h - $thumb-d);
+                @include thumb($ds-thumb-color);
             }
 
             &::-moz-range-thumb {
-                @include thumb($ds-thumb-color)
+                @include thumb($ds-thumb-color);
             }
 
             &::-ms-thumb {
-                @include thumb($ds-thumb-color)
+                @include thumb($ds-thumb-color);
             }
         }
     }
 
     .range-widget {
-        >* {
+        > * {
             //border: 1px red solid;
         }
 
