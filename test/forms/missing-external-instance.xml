@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa">
+    <h:head>
+        <h:title>missing-external-instance</h:title>
+        <model>
+            <instance>
+                <data id="missing-external-instance">
+                    <deviceid/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="brands" src="jr://file-csv/brands.csv"/>
+            <instance id="products" src="jr://file-csv/products.csv"/>
+            <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/data/deviceid" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body/>
+</h:html>

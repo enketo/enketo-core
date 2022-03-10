@@ -129,6 +129,10 @@ FormModel.prototype.init = function () {
 
         // Add external data to model
         this.data.external.forEach((instance) => {
+            if (instance == null || !instance.xml) {
+                return;
+            }
+
             id = instance.id
                 ? `instance "${instance.id}"`
                 : 'instance "unknown"';
@@ -202,9 +206,14 @@ FormModel.prototype.init = function () {
             Array.prototype.slice
                 .call(this.xml.querySelectorAll('model > instance[src]:empty'))
                 .forEach((instance) => {
-                    that.loadErrors.push(
-                        `External instance "${instance.id}" is empty.`
-                    );
+                    const src = instance.getAttribute('src');
+
+                    const errorMessage =
+                        src == null
+                            ? `External instance "${instance.id}" is empty.`
+                            : `Can't find ${src.replace(/.*\//, '')}.`;
+
+                    that.loadErrors.push(errorMessage);
                 });
 
             this.trimValues();

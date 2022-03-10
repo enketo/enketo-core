@@ -1724,6 +1724,77 @@ describe('Form.prototype', () => {
     });
 });
 
+describe('Missing external instances', () => {
+    it('does not produce extraneous/unrelated errors', () => {
+        const options = { full: true };
+        const session = {
+            deviceid: 'a',
+            username: 'b',
+            email: 'c',
+            phonenumber: 'd',
+            simserial: 'e',
+            subscriberid: 'f',
+        };
+        const externalInstances = [undefined, null];
+        const form = loadForm(
+            'missing-external-instance.xml',
+            undefined,
+            options,
+            session,
+            externalInstances
+        );
+        const loadErrors = form.init();
+
+        loadErrors.forEach((error) => {
+            expect(error).not.to.include(
+                'FormLogicError: instance "__session" does not exist in model'
+            );
+            expect(error).not.to.include('Error trying to parse XML model');
+        });
+
+        expect(loadErrors).to.deep.equal([
+            "Can't find brands.csv.",
+            "Can't find products.csv.",
+        ]);
+    });
+
+    it('does not produce extraneous/unrelated errors', () => {
+        const options = { full: true };
+        const session = {
+            deviceid: 'a',
+            username: 'b',
+            email: 'c',
+            phonenumber: 'd',
+            simserial: 'e',
+            subscriberid: 'f',
+        };
+        const externalInstances = [
+            { src: 'jr://file-csv/brands.csv' },
+            { src: 'jr://file-csv/products.csv' },
+        ];
+        const form = loadForm(
+            'missing-external-instance.xml',
+            undefined,
+            options,
+            session,
+            externalInstances
+        );
+        const loadErrors = form.init();
+
+        loadErrors.forEach((error) => {
+            expect(error).not.to.include(
+                'FormLogicError: instance "__session" does not exist in model'
+            );
+            expect(error).not.to.include('Error trying to parse XML model');
+        });
+
+        expect(loadErrors).to.deep.equal([
+            "Can't find brands.csv.",
+            "Can't find products.csv.",
+        ]);
+    });
+});
+
 function mockChoiceNameForm() {
     const val = '__MOCK_MODEL_VALUE__';
 
