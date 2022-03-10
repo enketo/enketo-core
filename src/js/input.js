@@ -243,10 +243,10 @@ export default {
 
         if ( type === 'radio' ) {
             // data-name is always present on radiobuttons
-            inputs = question.querySelectorAll( `[data-name="${name}"]:not(.ignore)` );
+            inputs = question.querySelectorAll( `[data-name="${CSS.escape( name )}"]:not(.ignore)` );
         } else {
             // why not use this.getIndex?
-            inputs = question.querySelectorAll( `[name="${name}"]:not(.ignore)` );
+            inputs = question.querySelectorAll( `[name="${CSS.escape( name )}"]:not(.ignore)` );
 
             if ( type === 'file' ) {
                 // value of file input can be reset to empty but not to a non-empty value
@@ -315,7 +315,7 @@ export default {
                         if ( value.toString() === '' ){
                             inputs.forEach( input => input.checked = false );
                         } else {
-                            const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${name}"][value="${value}"]` );
+                            const input = this.getWrapNode( control ).querySelector( `input[type="radio"][data-name="${CSS.escape( name )}"][value="${CSS.escape( value )}"]` );
                             if ( input ) {
                                 input.checked = true;
                             }
@@ -323,7 +323,7 @@ export default {
                         break;
                     }
                     case 'checkbox': {
-                        this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${name}"]` )
+                        this.getWrapNode( control ).querySelectorAll( `input[type="checkbox"][name="${CSS.escape( name )}"]` )
                             .forEach( input => input.checked = value.includes( input.value ) );
                         break;
                     }
@@ -331,7 +331,7 @@ export default {
                         if ( this.isMultiple( control ) ) {
                             control.querySelectorAll( 'option' ).forEach( option => option.selected = value.includes( option.value ) );
                         } else {
-                            const option = control.querySelector( `option[value="${value}"]` );
+                            const option = control.querySelector( `option[value="${CSS.escape( value )}"]` );
                             if ( option ) {
                                 option.selected = true;
                             } else {
