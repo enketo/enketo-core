@@ -170,7 +170,7 @@ class DesktopSelectpicker extends Widget {
                 const li = this;
                 const input = li.querySelector( 'input' );
                 const select = _this.element;
-                const option = select.querySelector( `option[value="${input.value}"]` );
+                const option = select.querySelector( `option[value="${CSS.escape( input.value )}"]` );
                 const selectedBefore = option.matches( ':checked' );
 
                 // We need to prevent default unless click was on an input

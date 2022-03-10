@@ -122,7 +122,7 @@ export default {
                 const curLabel = type === 'datalist' ? option.value : option.textContent;
                 // Datalist will not have initialized when init function is called upon form load, so it is option.value until it has initialized. That is not great.
                 const value = type === 'datalist' ? option.dataset.value || option.value : option.value;
-                const translatedOption = translations.querySelector( `.active[data-option-value="${value}"]` );
+                const translatedOption = translations.querySelector( `.active[data-option-value="${CSS.escape( value )}"]` );
                 if ( translatedOption ) {
                     let newLabel = curLabel;
                     if ( translatedOption && translatedOption.textContent ) {

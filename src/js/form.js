@@ -434,8 +434,8 @@ Form.prototype.replaceChoiceNameFn = function( expr, resTypeStr, context, index,
             if ( !value || !inputs.length ) {
                 label = '';
             } else if (  nodeName === 'select' ) {
-                const found = inputs.find( input => input.querySelector( `[value="${value}"]` ) );
-                label =  found ? found.querySelector( `[value="${value}"]` ).textContent : '';
+                const found = inputs.find( input => input.querySelector( `[value="${CSS.escape( value )}"]` ) );
+                label =  found ? found.querySelector( `[value="${CSS.escape( value )}"]` ).textContent : '';
             } else if (  nodeName === 'input' ) {
                 const list = inputs[0].getAttribute( 'list' );
 
