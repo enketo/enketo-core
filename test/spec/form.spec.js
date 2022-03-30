@@ -1725,16 +1725,9 @@ describe('Form.prototype', () => {
 });
 
 describe('Missing external instances', () => {
-    it('does not produce extraneous/unrelated errors', () => {
+    it('does not produce extraneous/unrelated errors when external instances are not defined', () => {
         const options = { full: true };
-        const session = {
-            deviceid: 'a',
-            username: 'b',
-            email: 'c',
-            phonenumber: 'd',
-            simserial: 'e',
-            subscriberid: 'f',
-        };
+        const session = {};
         const externalInstances = [undefined, null];
         const form = loadForm(
             'missing-external-instance.xml',
@@ -1758,16 +1751,9 @@ describe('Missing external instances', () => {
         ]);
     });
 
-    it('does not produce extraneous/unrelated errors', () => {
+    it('does not produce extraneous/unrelated errors when external instances are present but missing data', () => {
         const options = { full: true };
-        const session = {
-            deviceid: 'a',
-            username: 'b',
-            email: 'c',
-            phonenumber: 'd',
-            simserial: 'e',
-            subscriberid: 'f',
-        };
+        const session = {};
         const externalInstances = [
             { src: 'jr://file-csv/brands.csv' },
             { src: 'jr://file-csv/products.csv' },
