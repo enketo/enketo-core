@@ -63,8 +63,10 @@ describe('datepicker widget', () => {
 
             it(`sets date value when pasting ${desc} fields`, () => {
                 const clipboardData = new DataTransfer();
-                clipboardData.setData('text/plain', newVal)
-                fakeInput.dispatchEvent(new ClipboardEvent('paste', { clipboardData }));
+                clipboardData.setData('text/plain', newVal);
+                fakeInput.dispatchEvent(
+                    new ClipboardEvent('paste', { clipboardData })
+                );
 
                 expect(input.value).to.equal('2012-01-01');
             });
@@ -72,7 +74,7 @@ describe('datepicker widget', () => {
 
         [
             ['full date', FORM1],
-            ['month-year', FORM2]
+            ['month-year', FORM2],
         ].forEach(([desc, form]) => {
             it(`sets empty string when pasting year and appearance is ${desc}`, () => {
                 const input = initForm(form).element;
@@ -81,8 +83,10 @@ describe('datepicker widget', () => {
                     .querySelector('.widget input');
 
                 const clipboardData = new DataTransfer();
-                clipboardData.setData('text/plain', '2012')
-                fakeInput.dispatchEvent(new ClipboardEvent('paste', { clipboardData }));
+                clipboardData.setData('text/plain', '2012');
+                fakeInput.dispatchEvent(
+                    new ClipboardEvent('paste', { clipboardData })
+                );
 
                 expect(input.value).to.equal('');
             });
