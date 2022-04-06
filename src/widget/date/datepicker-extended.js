@@ -89,7 +89,7 @@ class DatepickerExtended extends Widget {
 
         $fakeDateI.on('change paste', (e) => {
             let convertedValue = '';
-            let value = e.type === 'paste' ? getPasteData(e) : this.value;
+            let value = e.type === 'paste' ? getPasteData(e.originalEvent) : this.value;
 
             if (value.length > 0) {
                 // Note: types.date.convert considers numbers to be a number of days since the epoch

@@ -60,6 +60,32 @@ describe('datepicker widget', () => {
 
                 expect(input.value).to.equal('');
             });
+
+            it(`sets date value when pasting ${desc} fields`, () => {
+                const clipboardData = new DataTransfer();
+                clipboardData.setData('text/plain', newVal)
+                fakeInput.dispatchEvent(new ClipboardEvent('paste', { clipboardData }));
+
+                expect(input.value).to.equal('2012-01-01');
+            });
+        });
+
+        [
+            ['full date', FORM1],
+            ['month-year', FORM2]
+        ].forEach(([desc, form]) => {
+            it(`sets empty string when pasting year and appearance is ${desc}`, () => {
+                const input = initForm(form).element;
+                const fakeInput = input
+                    .closest('.question')
+                    .querySelector('.widget input');
+
+                const clipboardData = new DataTransfer();
+                clipboardData.setData('text/plain', '2012')
+                fakeInput.dispatchEvent(new ClipboardEvent('paste', { clipboardData }));
+
+                expect(input.value).to.equal('');
+            });
         });
     });
 });
