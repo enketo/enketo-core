@@ -62,11 +62,12 @@ describe('datepicker widget', () => {
             });
 
             it(`sets date value when pasting ${desc} fields`, () => {
-                const clipboardData = new DataTransfer();
-                clipboardData.setData('text/plain', newVal);
-                fakeInput.dispatchEvent(
-                    new ClipboardEvent('paste', { clipboardData })
-                );
+                const event = new ClipboardEvent('paste', {
+                    clipboardData: new DataTransfer(),
+                });
+                event.clipboardData.setData('text/plain', newVal);
+
+                fakeInput.dispatchEvent(event);
 
                 expect(input.value).to.equal('2012-01-01');
             });
@@ -81,12 +82,12 @@ describe('datepicker widget', () => {
                 const fakeInput = input
                     .closest('.question')
                     .querySelector('.widget input');
+                const event = new ClipboardEvent('paste', {
+                    clipboardData: new DataTransfer(),
+                });
+                event.clipboardData.setData('text/plain', '2012');
 
-                const clipboardData = new DataTransfer();
-                clipboardData.setData('text/plain', '2012');
-                fakeInput.dispatchEvent(
-                    new ClipboardEvent('paste', { clipboardData })
-                );
+                fakeInput.dispatchEvent(event);
 
                 expect(input.value).to.equal('');
             });
