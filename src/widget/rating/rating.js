@@ -14,36 +14,50 @@ class RatingWidget extends Widget {
     }
 
     _init() {
-        const fragment = document.createRange().createContextualFragment( this._getHtmlStr() );
-        this.element.after( fragment );
-        this.element.classList.add( 'hide' );
-        this.widget = this.question.querySelector( '.widget' );
+        const fragment = document
+            .createRange()
+            .createContextualFragment(this._getHtmlStr());
+        this.element.after(fragment);
+        this.element.classList.add('hide');
+        this.widget = this.question.querySelector('.widget');
 
-        let ratingStars = '',
-            name = Math.random().toString( 36 ).substring( 2, 15 );
-        for ( let i = this.props.min; i <= this.props.max; i += this.props.step ) {
+        let ratingStars = '';
+        const name = Math.random().toString(36).substring(2, 15);
+        for (
+            let i = this.props.min;
+            i <= this.props.max;
+            i += this.props.step
+        ) {
             ratingStars += `<input type=radio name="rating-stars__${name}" class="rating-widget__rating__star ignore" value="${i}"/>`;
         }
 
-        this.widget.querySelector( '.rating-widget__rating' )
-            .append( document.createRange().createContextualFragment( ratingStars ) );
+        this.widget
+            .querySelector('.rating-widget__rating')
+            .append(
+                document.createRange().createContextualFragment(ratingStars)
+            );
 
-        this.rating = this.widget.querySelector( '.rating-widget__rating' );
-        this.stars = this.rating.querySelectorAll( '.rating-widget__rating__star' );
-        this.stars.forEach( el => {
-            el.addEventListener( 'change', () => {
-                const selected = this.rating.querySelector( 'input:checked' );
+        this.rating = this.widget.querySelector('.rating-widget__rating');
+        this.stars = this.rating.querySelectorAll(
+            '.rating-widget__rating__star'
+        );
+        this.stars.forEach((el) => {
+            el.addEventListener('change', () => {
+                const selected = this.rating.querySelector('input:checked');
                 // contains class 'empty' means first load
-                if ( ( this.value != selected.value || this.rating.classList.contains( 'empty' ) ) ) {
+                if (
+                    this.value !== selected.value ||
+                    this.rating.classList.contains('empty')
+                ) {
                     this.value = selected.value;
                 }
-            } );
-        } );
+            });
+        });
 
         // loads the default value if exists
         this.update();
 
-        if ( this.props.readonly ) {
+        if (this.props.readonly) {
             this.disable();
         }
     }
@@ -63,28 +77,28 @@ class RatingWidget extends Widget {
      * Disables widget
      */
     disable() {
-        this.stars.forEach( el => el.disabled = true );
+        this.stars.forEach((el) => (el.disabled = true));
     }
 
     /**
      * Enables widget
      */
     enable() {
-        this.stars.forEach( el => el.disabled = false );
+        this.stars.forEach((el) => (el.disabled = false));
     }
 
     /**
      * Updates widget
      */
     update() {
-        const value = this.element.value;
-        if ( isNumber( value ) ) {
-            this.stars.forEach( ( star ) => {
-                if ( star.value === value ) {
+        const { value } = this.element;
+        if (isNumber(value)) {
+            this.stars.forEach((star) => {
+                if (star.value === value) {
                     star.checked = true;
-                    star.dispatchEvent( events.Change() );
+                    star.dispatchEvent(events.Change());
                 }
-            } );
+            });
         } else {
             this._reset();
         }
@@ -94,8 +108,8 @@ class RatingWidget extends Widget {
      * Resets widget
      */
     _reset() {
-        const selected = this.rating.querySelector( 'input:checked' );
-        if ( selected ) {
+        const selected = this.rating.querySelector('input:checked');
+        if (selected) {
             this.value = '';
             selected.checked = false;
         }
@@ -106,13 +120,19 @@ class RatingWidget extends Widget {
      */
     get props() {
         const props = this._props;
-        const min = isNumber( this.element.getAttribute( 'min' ) ) ? this.element.getAttribute( 'min' ) : 0;
-        const max = isNumber( this.element.getAttribute( 'max' ) ) ? this.element.getAttribute( 'max' ) : 10;
-        const step = isNumber( this.element.getAttribute( 'step' ) ) ? this.element.getAttribute( 'step' ) : 1;
+        const min = isNumber(this.element.getAttribute('min'))
+            ? this.element.getAttribute('min')
+            : 0;
+        const max = isNumber(this.element.getAttribute('max'))
+            ? this.element.getAttribute('max')
+            : 10;
+        const step = isNumber(this.element.getAttribute('step'))
+            ? this.element.getAttribute('step')
+            : 1;
 
-        props.min = Number( min );
-        props.max = Number( max );
-        props.step = Number( step );
+        props.min = Number(min);
+        props.max = Number(max);
+        props.step = Number(step);
 
         return props;
     }
@@ -124,11 +144,10 @@ class RatingWidget extends Widget {
         return this.originalInputValue;
     }
 
-    set value( value ) {
+    set value(value) {
         this.originalInputValue = value;
-        this.rating.classList.toggle( 'empty', value === '' );
+        this.rating.classList.toggle('empty', value === '');
     }
-
 }
 
 export default RatingWidget;

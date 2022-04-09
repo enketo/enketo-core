@@ -18,7 +18,7 @@
 
         @include flex-direction(row);
 
-        >label {
+        > label {
             @include flex(1);
 
             @include display-flex;
@@ -35,10 +35,10 @@
             padding-right: 0;
 
             // to eliminate a problem when mixing horizontal and likert appearances
-            // regular radiobuttons, 
+            // regular radiobuttons,
             // for alternative radiobutton tweaks see radiocheck.scss
-            input[type=radio],
-            input[type=checkbox] {
+            input[type='radio'],
+            input[type='checkbox'] {
                 position: relative;
                 left: 50%;
                 padding: 0;
@@ -86,8 +86,7 @@
         }
     }
 
-    &:hover .option-wrapper>label {
-
+    &:hover .option-wrapper > label {
         &:first-of-type,
         &:last-of-type {
             .option-label::after {
@@ -97,8 +96,7 @@
     }
 
     &.focus {
-        .option-wrapper>label {
-
+        .option-wrapper > label {
             &:first-of-type,
             &:last-of-type {
                 .option-label::after {
@@ -110,9 +108,9 @@
 }
 
 // corrections for rtl display
-.or[dir="rtl"] .or-appearance-likert {
+.or[dir='rtl'] .or-appearance-likert {
     .option-wrapper {
-        >label {
+        > label {
             margin-right: 0;
 
             &:first-of-type .option-label::after {
@@ -125,8 +123,8 @@
                 left: 0;
             }
 
-            input[type=radio],
-            input[type=checkbox] {
+            input[type='radio'],
+            input[type='checkbox'] {
                 right: 50%;
                 margin-right: -10px;
             }
@@ -139,12 +137,11 @@
 }
 
 // fix colors when background is not default inside repeats
-.or-repeat .or-appearance-likert .option-wrapper>label {
-
+.or-repeat .or-appearance-likert .option-wrapper > label {
     &:first-of-type .option-label::after,
     &:last-of-type .option-label::after,
-    input[type=radio],
-    input[type=checkbox] {
+    input[type='radio'],
+    input[type='checkbox'] {
         background-color: $repeat-bg;
     }
 }

@@ -1,9 +1,11 @@
 ### How to develop Enketo Core
 
 1. install prerequisites:
-  - Volta (optional, but recommended)
-  - Node.js 16 and npm 6 (Node.js 14 is also supported)
-  - [grunt-cli](https://gruntjs.com/getting-started)
+
+-   Volta (optional, but recommended)
+-   Node.js 16 and npm 6 (Node.js 14 is also supported)
+-   [grunt-cli](https://gruntjs.com/getting-started)
+
 2. install dependencies with `npm install`
 3. build with `grunt` (`npx grunt`)
 4. start built-in auto-reloading development server with `npm start`
@@ -13,11 +15,11 @@
 
 ### Notes for JavaScript Developers
 
-* When creating new functions/Classes, make sure to describe them with JSDoc comments.
-* JavaScript style see [ESLint](./eslintrc.json) config files. The check is added to the grunt `test` task. You can also manually run `grunt eslint:fix` to fix style issues.
-* Testing is done with Mocha and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
-* Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `npm run test-watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [Debugging test watch mode in VSCode](./#debugging-test-watch-mode-in-vscode) below
-* When making a pull request, please add tests where relevant
+-   When creating new functions/Classes, make sure to describe them with JSDoc comments.
+-   JavaScript style see [ESLint](./eslintrc.json) config files. The check is added to the grunt `test` task. You can also manually run `grunt eslint:fix` to fix style issues.
+-   Testing is done with Mocha and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
+-   Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `npm run test-watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [Debugging test watch mode in VSCode](./#debugging-test-watch-mode-in-vscode) below
+-   When making a pull request, please add tests where relevant
 
 #### Debugging test watch mode in VSCode
 
@@ -36,7 +38,7 @@ Optionally, you can add a keyboard shortcut to select launch tasks:
 ### Notes for CSS Developers
 
 The core can be fairly easily extended with alternative themes.
-See the *plain*, the *grid*, and the *formhub* themes already included in [/src/sass](./src/sass).
+See the _plain_, the _grid_, and the _formhub_ themes already included in [/src/sass](./src/sass).
 We would be happy to discuss whether your contribution should be a part of the core, the default theme or be turned into a new theme.
 
 For custom themes that go beyond just changing colors and fonts, keep in mind all the different contexts for a theme:
@@ -53,11 +55,10 @@ For custom themes that go beyond just changing colors and fonts, keep in mind al
 
 Documentation is auto-generated and is re-built for each new release. Do not commit updated documentation in non-release commits. The process to follow for each release that includes various helpful checks is:
 
-
 1. Create release PR
 1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
 1. Run `npm update`
-    -  If enketo-transformer is updated, bump the version in `src/js/form.js` and `package.json`
+    - If enketo-transformer is updated, bump the version in `src/js/form.js` and `package.json`
 1. Run `npm audit`
     - Run `npm audit fix --production` to apply most important fixes
 1. Run `npm ci`

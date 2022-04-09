@@ -15,14 +15,14 @@ $media-margin: 10px;
 
 .or,
 .or-group {
-    >h3 {
+    > h3 {
         padding: 5px 0 15px 0;
         word-wrap: break-word;
         color: $brand-primary-color;
         text-align: center;
     }
 
-    >h4 {
+    > h4 {
         text-align: inherit;
         margin-top: 9px;
         margin-bottom: 9px;
@@ -39,10 +39,8 @@ $media-margin: 10px;
 }
 
 .or {
-
     .question-label,
     .or-hint {
-
         h1,
         h2,
         h3,
@@ -68,8 +66,6 @@ $media-margin: 10px;
     }
 }
 
-
-
 /** hints **/
 
 .or-hint.active {
@@ -83,7 +79,7 @@ $media-margin: 10px;
     font-style: italic;
     padding-top: 5px;
 
-    ~br {
+    ~ br {
         display: none;
     }
 }
@@ -132,7 +128,7 @@ $media-margin: 10px;
         right: 10px;
         color: $brand-primary-color;
 
-        +.or-group {
+        + .or-group {
             border-top: none;
         }
     }
@@ -157,37 +153,37 @@ $media-margin: 10px;
     .or-group {
         margin: 1.5em 0 0.5em 0;
 
-        >h4 .active {
+        > h4 .active {
             &::before {
-                content: "\00BB  ";
+                content: '\00BB  ';
             }
 
             font-size: 80%;
         }
 
         .or-group {
-            >h4 .active::before {
-                content: "\00BB  \00BB  ";
+            > h4 .active::before {
+                content: '\00BB  \00BB  ';
             }
 
             .or-group {
-                >h4 .active::before {
-                    content: "\00BB  \00BB  \00BB  ";
+                > h4 .active::before {
+                    content: '\00BB  \00BB  \00BB  ';
                 }
 
                 .or-group {
-                    >h4 .active::before {
-                        content: "\00BB  \00BB  \00BB  \00BB";
+                    > h4 .active::before {
+                        content: '\00BB  \00BB  \00BB  \00BB';
                     }
 
                     .or-group {
-                        >h4 .active::before {
-                            content: "\00BB  \00BB  \00BB  \00BB  \00BB";
+                        > h4 .active::before {
+                            content: '\00BB  \00BB  \00BB  \00BB  \00BB';
                         }
 
                         .or-group {
-                            >h4 .active::before {
-                                content: "\00BB  \00BB  \00BB  \00BB  \00BB  \00BB";
+                            > h4 .active::before {
+                                content: '\00BB  \00BB  \00BB  \00BB  \00BB  \00BB';
                             }
                         }
                     }
@@ -199,7 +195,7 @@ $media-margin: 10px;
 
 // collapse icon for group labels
 .or-group:not(.or-appearance-no-collapse) {
-    >h4 {
+    > h4 {
         position: relative;
         pointer-events: none;
 
@@ -221,7 +217,7 @@ $media-margin: 10px;
     }
 
     &.or-appearance-compact {
-        >h4 {
+        > h4 {
             &::before {
                 width: 0;
                 height: 0;
@@ -234,7 +230,7 @@ $media-margin: 10px;
                 top: 0;
             }
 
-            ~* {
+            ~ * {
                 // !important is added to battle pages rules
                 display: none !important;
             }
@@ -242,17 +238,17 @@ $media-margin: 10px;
     }
 }
 
-[dir="rtl"] {
-    .or-group:not(.or-appearance-no-collapse).or-appearance-compact>h4::before {
+[dir='rtl'] {
+    .or-group:not(.or-appearance-no-collapse).or-appearance-compact
+        > h4::before {
         border-left: 0;
         border-right: 12px solid $brand-primary-color;
     }
 }
 
-
-#stats+.or-group,
-#or-preload-items+.or-group,
-#form-languages+.or-group {
+#stats + .or-group,
+#or-preload-items + .or-group,
+#form-languages + .or-group {
     border-top: none;
 }
 
@@ -267,7 +263,7 @@ $media-margin: 10px;
     border: none;
     position: relative;
 
-    >fieldset {
+    > fieldset {
         padding: 0;
         margin: 0;
         border: none;
@@ -281,19 +277,17 @@ $media-margin: 10px;
 }
 
 .question {
-
-    >img,
-    >video,
-    >audio {
+    > img,
+    > video,
+    > audio {
         margin: $media-margin auto $media-margin;
     }
 }
 
 .question.readonly {
-
     input[readonly].empty,
     select[readonly].empty,
-    textarea[readonly].empty{
+    textarea[readonly].empty {
         display: none;
     }
 
@@ -308,7 +302,6 @@ legend {
 }
 
 .or {
-
     img,
     audio,
     video {
@@ -338,7 +331,7 @@ legend {
 
     @include flex-direction(column);
 
-    >label {
+    > label {
         @include font-normal;
 
         display: block;
@@ -354,7 +347,7 @@ legend {
         // clearfix with small adjustments to not mess up radio buttons.
         &:before,
         &:after {
-            content: " ";
+            content: ' ';
             display: table;
         }
 
@@ -377,7 +370,7 @@ legend {
     }
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .option-wrapper {
         .option-label {
             margin-right: 30px;
@@ -394,9 +387,8 @@ legend {
 
 .touch {
     .question.simple-select {
-
         // touch radio buttons and checkboxes
-        .option-wrapper>label {
+        .option-wrapper > label {
             background-color: transparent;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -404,8 +396,8 @@ legend {
             margin: 0 1px 6.4px 1px;
             padding: 10px;
 
-            input[type="radio"],
-            input[type="checkbox"] {
+            input[type='radio'],
+            input[type='checkbox'] {
                 //slight variation between grid and fh theme for default radio/checkbox
                 margin-left: 5px;
             }
@@ -418,36 +410,36 @@ legend {
         }
     }
 
-    input[type=text],
+    input[type='text'],
     .print-input-text,
-    input[type=tel],
-    input[type=password],
-    input[type=url],
-    input[type=email],
-    input[type=file],
-    input[type=date],
-    input[type=month],
-    input[type=time],
-    input[type=datetime-local],
-    input[type=number],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='file'],
+    input[type='date'],
+    input[type='month'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='number'],
     textarea,
     select {
         margin: 10px 0 10px 0;
         color: #104b66;
     }
 
-    input[type=text],
+    input[type='text'],
     .print-input-text,
-    input[type=tel],
-    input[type=password],
-    input[type=url],
-    input[type=email],
-    input[type=file],
-    input[type=date],
-    input[type=month],
-    input[type=time],
-    input[type=datetime-local],
-    input[type=number],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='file'],
+    input[type='date'],
+    input[type='month'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='number'],
     textarea {
         border: 1px solid #ddd8ce;
     }
@@ -457,19 +449,19 @@ legend {
     }
 }
 
-input[type=text],
+input[type='text'],
 .print-input-text,
-input[type=tel],
-input[type=password],
-input[type=url],
-input[type=email],
-input[type=file],
-input[type=date],
-input[type=month],
-input[type=time],
-input[type=datetime-local],
-input[type=number],
-input[type=range],
+input[type='tel'],
+input[type='password'],
+input[type='url'],
+input[type='email'],
+input[type='file'],
+input[type='date'],
+input[type='month'],
+input[type='time'],
+input[type='datetime-local'],
+input[type='number'],
+input[type='range'],
 textarea,
 select,
 .widget {
@@ -477,7 +469,7 @@ select,
     margin: 8px 0 8px 0;
 }
 
-input:not([type="radio"]):not([type="checkbox"]),
+input:not([type='radio']):not([type='checkbox']),
 textarea,
 .print-input-text {
     height: $input-height;
@@ -488,27 +480,26 @@ select {
 }
 
 .question input {
-
-    &[type=text],
-    &[type=tel],
-    &[type=password],
-    &[type=url],
-    &[type=email],
-    &[type=file] {
+    &[type='text'],
+    &[type='tel'],
+    &[type='password'],
+    &[type='url'],
+    &[type='email'],
+    &[type='file'] {
         width: $input-max-width;
     }
 
-    &[type=date],
-    &[type=month],
-    &[type=datetime-local],
-    &[type=number],
-    &[type=time],
-    &[type=text].mask-date {
+    &[type='date'],
+    &[type='month'],
+    &[type='datetime-local'],
+    &[type='number'],
+    &[type='time'],
+    &[type='text'].mask-date {
         width: $input-min-width;
     }
 
-    &[type="radio"],
-    &[type=checkbox] {
+    &[type='radio'],
+    &[type='checkbox'] {
         // input is floated to deal with multi-line labels
         float: left;
         display: block;
@@ -520,11 +511,10 @@ select {
     width: $input-max-width;
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .question input {
-
-        &[type=radio],
-        &[type=checkbox] {
+        &[type='radio'],
+        &[type='checkbox'] {
             // input is floated to deal with multi-line labels
             float: right;
         }
@@ -562,7 +552,7 @@ select {
     min-width: 150px;
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .remove {
         float: left;
     }
@@ -583,7 +573,7 @@ legend .required {
     top: 0;
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .required {
         left: auto;
         right: -10px;
@@ -614,7 +604,6 @@ legend .required {
 
 // this may have a very significant positive impact on performance
 .or-branch {
-
     &.disabled,
     &.or-branch.pre-init {
         display: none;

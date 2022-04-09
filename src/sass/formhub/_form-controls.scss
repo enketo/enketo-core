@@ -1,34 +1,33 @@
-input[type=text],
+input[type='text'],
 .print-input-text,
-input[type=tel],
-input[type=password],
-input[type=url],
-input[type=email],
-input[type=file],
-input[type=date],
-input[type=month],
-input[type=time],
-input[type=datetime-local],
-input[type=number],
+input[type='tel'],
+input[type='password'],
+input[type='url'],
+input[type='email'],
+input[type='file'],
+input[type='date'],
+input[type='month'],
+input[type='time'],
+input[type='datetime-local'],
+input[type='number'],
 select,
 textarea {
     @include form-control;
 }
 
 // fix readonly inputs inside widgets that are not actually 'readonly'
-input:not([readonly])+.widget {
-
-    input[type=text],
-    input[type=tel],
-    input[type=password],
-    input[type=url],
-    input[type=email],
-    input[type=file],
-    input[type=date],
-    input[type=month],
-    input[type=time],
-    input[type=datetime-local],
-    input[type=number],
+input:not([readonly]) + .widget {
+    input[type='text'],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='file'],
+    input[type='date'],
+    input[type='month'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='number'],
     select,
     textarea {
         &[readonly] {
@@ -74,13 +73,13 @@ fieldset {
 }*/
 
 // Override content-box in Normalize (* isn't specific enough)
-input[type="search"] {
+input[type='search'] {
     @include box-sizing(border-box);
 }
 
 // Position radios and checkboxes better
-input[type="radio"],
-input[type="checkbox"] {
+input[type='radio'],
+input[type='checkbox'] {
     margin: 4px 0 0;
     margin-top: 1px \9;
 
@@ -89,12 +88,12 @@ input[type="checkbox"] {
 }
 
 // Set the height of file controls to match text inputs
-input[type="file"] {
+input[type='file'] {
     display: block;
 }
 
 // Make range inputs behave like textual form controls
-input[type="range"] {
+input[type='range'] {
     display: block;
     width: 100%;
 }
@@ -106,9 +105,9 @@ select[size] {
 }
 
 // Focus for file, radio, and checkbox
-input[type="file"]:focus,
-input[type="radio"]:focus,
-input[type="checkbox"]:focus {
+input[type='file']:focus,
+input[type='radio']:focus,
+input[type='checkbox']:focus {
     @include tab-focus;
 }
 
@@ -118,7 +117,7 @@ input[type="checkbox"]:focus {
 // `.form-control` class can properly style them. Note that this cannot simply
 // be added to `.form-control` as it's not specific enough. For details, see
 // https://github.com/twbs/bootstrap/issues/11586.
-input[type="search"] {
+input[type='search'] {
     -webkit-appearance: none;
 }
 
@@ -126,20 +125,19 @@ input[type="search"] {
 //
 // In Mobile Safari, date inputs require a pixel line-height that matches the
 // given height of the input.
-input[type="date"] {
+input[type='date'] {
     line-height: $input-height;
 }
 
 // Apply same disabled cursor tweak as for inputs
 //
 // Note: Neither radios nor checkboxes can be readonly.
-input[type="radio"],
-input[type="checkbox"] {
-
+input[type='radio'],
+input[type='checkbox'] {
     &[disabled],
     fieldset[disabled] & {
         cursor: not-allowed;
     }
 }
 
-@import "radiocheck";
+@import 'radiocheck';

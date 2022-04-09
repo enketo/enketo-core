@@ -3,61 +3,58 @@ import { runAllCommonWidgetTests } from '../helpers/test-widget';
 import input from '../../src/js/input';
 import events from '../../src/js/event';
 
-const FORM1 =
-    `<label class="question non-select or-appearance-no-ticks">
+const FORM1 = `<label class="question non-select or-appearance-no-ticks">
         <span lang="" class="question-label active">Range</span>
         <input type="number" name="/widgets/range_widgets/range3" data-type-xml="int" min="0" max="5" step="1">
     </label>`;
-const FORM2 = FORM1.replace( 'step="1"', 'step="0.1"' );
+const FORM2 = FORM1.replace('step="1"', 'step="0.1"');
 
-runAllCommonWidgetTests( RangeWidget, FORM1, '2' );
-runAllCommonWidgetTests( RangeWidget, FORM2, '2.1' );
+runAllCommonWidgetTests(RangeWidget, FORM1, '2');
+runAllCommonWidgetTests(RangeWidget, FORM2, '2.1');
 
-
-describe( 'RangeWidget', () => {
+describe('RangeWidget', () => {
     // This test looks very similar to the common testExcessiveChangeEventAvoidance test, but it is subtly different,
     // because it actually also test an issue where the widget internally fires a change event when the widget is empty,
     // and the user clicks it. This fires 2 events, whereby the first is fired before the model changes the value from empty.
     // https://github.com/OpenClinica/enketo-express-oc/issues/209
 
-    it( 'is firing a change event on the range input (the widget) without actually changing the value does not lead to an unnecessary change event firing', done => {
-        const fragment = document.createRange().createContextualFragment( FORM1 );
-        const control = fragment.querySelector( RangeWidget.selector );
+    it('is firing a change event on the range input (the widget) without actually changing the value does not lead to an unnecessary change event firing', (done) => {
+        const fragment = document.createRange().createContextualFragment(FORM1);
+        const control = fragment.querySelector(RangeWidget.selector);
         const value = '2';
 
         // Also needs to work for radiobuttons, checkboxes, selects.
-        input.setVal( control, value, null );
+        input.setVal(control, value, null);
 
         Promise.resolve()
-            .then( () => new RangeWidget( control ) )
-            .then( widget => {
+            .then(() => new RangeWidget(control))
+            .then((widget) => {
                 // Check setup
-                expect( widget.originalInputValue ).to.equal( value );
-                expect( widget.range.value ).to.equal( value );
+                expect(widget.originalInputValue).to.equal(value);
+                expect(widget.range.value).to.equal(value);
                 // Actual test
                 let changeEventCounter = 0;
-                control.addEventListener( 'change', () => changeEventCounter++ );
-                widget.range.dispatchEvent( events.Change() );
-                expect( changeEventCounter ).to.equal( 0 );
-            } )
-            .then( done, done );
-    } );
+                control.addEventListener('change', () => changeEventCounter++);
+                widget.range.dispatchEvent(events.Change());
+                expect(changeEventCounter).to.equal(0);
+            })
+            .then(done, done);
+    });
 
-    it( 'displays an initial range value', done => {
-        const fragment = document.createRange().createContextualFragment( FORM1 );
-        const control = fragment.querySelector( RangeWidget.selector );
+    it('displays an initial range value', (done) => {
+        const fragment = document.createRange().createContextualFragment(FORM1);
+        const control = fragment.querySelector(RangeWidget.selector);
         const value = '4';
 
-        input.setVal( control, value, events.Change() );
+        input.setVal(control, value, events.Change());
 
         Promise.resolve()
-            .then( () => new RangeWidget( control ) )
-            .then( widget => {
+            .then(() => new RangeWidget(control))
+            .then((widget) => {
                 const currentDisplayValue = widget.current.textContent;
 
-                expect( currentDisplayValue ).to.equal( value );
-            } )
-            .then( done, done );
-    } );
-
-} );
+                expect(currentDisplayValue).to.equal(value);
+            })
+            .then(done, done);
+    });
+});

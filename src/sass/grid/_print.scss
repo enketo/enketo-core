@@ -1,10 +1,9 @@
-@import "mixins";
+@import 'mixins';
 
 $printBaseFontSize: 10px;
 
 .or {
-
-    input:not([type="radio"]):not([type="checkbox"]),
+    input:not([type='radio']):not([type='checkbox']),
     .print-input-text,
     select,
     textarea {
@@ -31,7 +30,6 @@ $printBaseFontSize: 10px;
 }
 
 .or.print-relevant-only {
-
     // targeting is getting a little weird here
     .question.or-branch.disabled,
     .or-branch.disabled {
@@ -40,7 +38,6 @@ $printBaseFontSize: 10px;
 }
 
 .or:not(.print-relevant-only) {
-
     // targeting is getting a little weird here
     .question.or-branch.disabled,
     .or-branch.disabled {
@@ -49,7 +46,6 @@ $printBaseFontSize: 10px;
 }
 
 .question {
-
     &.non-select:not(.or-analog-scale-initialized)::after,
     &.or-appearance-search:after,
     &.or-appearance-autocomplete:after {
@@ -66,7 +62,7 @@ $printBaseFontSize: 10px;
         // not sure if this could apply to all widgets, or just the ones below
         &.date,
         &.timepicker,
-        &.datetimepicker{
+        &.datetimepicker {
             flex: 1;
         }
     }
@@ -108,7 +104,6 @@ $printBaseFontSize: 10px;
 }
 
 .geopicker.widget {
-
     .geo-inputs label.geo:nth-of-type(3),
     .geo-inputs label.geo:nth-of-type(4) {
         min-height: 0;
@@ -123,12 +118,11 @@ $printBaseFontSize: 10px;
     margin: 0;
     padding: 0;
 
-    .dropdown-toggle~.dropdown-menu .option-wrapper {
+    .dropdown-toggle ~ .dropdown-menu .option-wrapper {
         padding-left: 0;
     }
 
     ul {
-
         li,
         li.active {
             border: none;
@@ -181,12 +175,11 @@ $printBaseFontSize: 10px;
     }
 }
 
-.pages.or [role="page"].current:not(.question) {
+.pages.or [role='page'].current:not(.question) {
     display: inherit;
 }
 
-@media print,
-screen and (min-width: 700px) {
+@media print, screen and (min-width: 700px) {
     @for $total from 1 through $max-columns {
         .or-appearance-w#{$total} {
             display: block;
@@ -195,9 +188,7 @@ screen and (min-width: 700px) {
             &.question {
                 @if $total>=$default-grid-width {
                     width: 100%;
-                }
-
-                @else {
+                } @else {
                     width: $total / 4 * 100%;
                 }
             }
@@ -234,8 +225,10 @@ screen and (min-width: 700px) {
 .or {
     &:not(.print-relevant-only) section.question.or-branch.disabled,
     &:not(.print-relevant-only) section.or-branch.disabled,
-    &:not(.print-relevant-only) section.question.or-branch:not(.disabled):not(.pre-init),
-    &:not(.print-relevant-only) section.or-branch:not(.disabled):not(.pre-init) {
+    &:not(.print-relevant-only)
+        section.question.or-branch:not(.disabled):not(.pre-init),
+    &:not(.print-relevant-only)
+        section.or-branch:not(.disabled):not(.pre-init) {
         display: table;
         break-inside: avoid;
     }

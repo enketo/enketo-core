@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
     opts: {
         encoding: 'utf8',
@@ -15,14 +13,11 @@ module.exports = {
         */
         // package: 'package.json',
         readme: 'README.md',
-        template: 'node_modules/docdash'
+        template: 'node_modules/docdash',
     },
-    plugins: [ 'plugins/markdown' ],
+    plugins: ['plugins/markdown'],
     source: {
-        include: [
-            'src/',
-            './README.md'
-        ]
+        include: ['src/', './README.md'],
     },
     templates: {
         cleverLinks: true,
@@ -30,18 +25,18 @@ module.exports = {
         default: {
             outputSourceFiles: true,
             includeDate: false,
-            useLongnameInNav: true
-        }
+            useLongnameInNav: true,
+        },
     },
     markdown: {
-        idInHeadings: true
+        idInHeadings: true,
     },
     docdash: {
         static: true,
         sort: true,
         meta: {
             title: 'Enketo Core',
-            description: 'Extensible Enketo form engine'
+            description: 'Extensible Enketo form engine',
         },
         search: true,
         collapse: false,
@@ -54,14 +49,14 @@ module.exports = {
                 href: 'https://github.com/enketo/enketo-core',
                 target: '_blank',
                 class: 'menu-item',
-                id: 'repository'
+                id: 'repository',
             },
             'Change log': {
                 href: 'https://github.com/enketo/enketo-core/blob/master/CHANGELOG.md',
                 target: '_blank',
                 class: 'menu-item',
-                id: 'change-log'
-            }
+                id: 'change-log',
+            },
         },
         sectionOrder: [
             'Tutorials',
@@ -71,7 +66,7 @@ module.exports = {
             'Events',
             'Namespaces',
             'Mixins',
-            'Interfaces'
-        ]
-    }
+            'Interfaces',
+        ],
+    },
 };

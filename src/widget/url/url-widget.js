@@ -12,10 +12,14 @@ class UrlWidget extends Widget {
     }
 
     _init() {
-        const fragment = document.createRange().createContextualFragment( '<a class="widget url-widget" target="_blank" rel="noopener"/>' );
+        const fragment = document
+            .createRange()
+            .createContextualFragment(
+                '<a class="widget url-widget" target="_blank" rel="noopener"/>'
+            );
 
-        this.element.classList.add( 'hide' );
-        this.element.after( fragment );
+        this.element.classList.add('hide');
+        this.element.after(fragment);
 
         this.value = this.originalInputValue;
     }
@@ -31,12 +35,12 @@ class UrlWidget extends Widget {
      * @type {string}
      */
     get value() {
-        return this.question.querySelector( '.url-widget' ).href;
+        return this.question.querySelector('.url-widget').href;
     }
 
-    set value( value ) {
+    set value(value) {
         value = value || '';
-        const link = this.question.querySelector( '.url-widget' );
+        const link = this.question.querySelector('.url-widget');
         link.href = value;
         link.title = value;
         link.textContent = value;

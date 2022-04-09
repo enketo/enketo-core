@@ -27,14 +27,18 @@ class DatepickerNative extends Widget {
      * @param {Element} element - the element to instantiate the widget on
      * @return {boolean} to instantiate or not to instantiate, that is the question
      */
-    static condition( element ) {
+    static condition(element) {
         // Do not instantiate if DatepickerExtended was instantiated on element or if mobile device is used.
-        return !data.has( element, 'DatepickerExtended' ) && !data.has( element, 'DatetimepickerExtended' ) && !support.touch;
+        return (
+            !data.has(element, 'DatepickerExtended') &&
+            !data.has(element, 'DatetimepickerExtended') &&
+            !support.touch
+        );
     }
 
     _init() {
         this.element.type = 'text';
-        this.element.classList.add( 'mask-date' );
+        this.element.classList.add('mask-date');
     }
 }
 

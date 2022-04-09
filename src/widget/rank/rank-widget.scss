@@ -6,7 +6,7 @@
         //    border: 1px solid red;
         //}
         //opacity: 0.5;
-        >* {
+        > * {
             opacity: 0.5;
         }
         .rank-widget__overlay {
@@ -40,9 +40,9 @@
         border-radius: 5px;
         margin: 0 0 5px 0;
         position: relative;
-        &[draggable=true]::before {
+        &[draggable='true']::before {
             position: absolute;
-            content: "::";
+            content: '::';
             margin: 0 5px;
             top: calc(50% - 10px);
         }
@@ -50,7 +50,7 @@
             background: none;
         }
     } //&__item--hover {}
-    input[type=text] {
+    input[type='text'] {
         display: none;
     }
     .btn-reset {

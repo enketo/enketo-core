@@ -1,10 +1,9 @@
 import Mediapicker from '../../src/widget/select-media/select-media';
 import { testStaticProperties } from '../helpers/test-widget';
 
-testStaticProperties( Mediapicker );
+testStaticProperties(Mediapicker);
 
-const FORM =
-    `<fieldset class="question or-appearance-columns-2 or-appearance-no-buttons ">
+const FORM = `<fieldset class="question or-appearance-columns-2 or-appearance-no-buttons ">
         <fieldset>
             <legend>
                 <span lang="" class="question-label active">Label</span>
@@ -23,14 +22,14 @@ const FORM =
         </fieldset>
     </fieldset>`;
 
-describe( 'custom tests for media picker re.', () => {
-    it( 'adds mask-date class and changes input type to text', () => {
-        const fragment = document.createRange().createContextualFragment( FORM );
-        const question = fragment.querySelector( '.question' );
-        new Mediapicker( question );
+describe('custom tests for media picker re.', () => {
+    it('adds mask-date class and changes input type to text', () => {
+        const fragment = document.createRange().createContextualFragment(FORM);
+        const question = fragment.querySelector('.question');
+        new Mediapicker(question);
 
-        const textLabels = question.querySelectorAll( 'span.option-label' );
-        expect( textLabels[ 0 ].style.display ).to.equal( 'none' );
-        expect( textLabels[ 1 ].style.display ).to.equal( 'none' );
-    } );
-} );
+        const textLabels = question.querySelectorAll('span.option-label');
+        expect(textLabels[0].style.display).to.equal('none');
+        expect(textLabels[1].style.display).to.equal('none');
+    });
+});

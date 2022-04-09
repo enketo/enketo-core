@@ -1,6 +1,8 @@
 import TextareaWidget from '../../src/widget/textarea/textarea';
-import { testStaticProperties, testBasicInstantiation } from '../helpers/test-widget';
-
+import {
+    testStaticProperties,
+    testBasicInstantiation,
+} from '../helpers/test-widget';
 
 const FORM = `
     <form class="or">
@@ -9,5 +11,5 @@ const FORM = `
         </label>
     </form>`;
 
-testStaticProperties( TextareaWidget );
-testBasicInstantiation( TextareaWidget, FORM );
+testStaticProperties(TextareaWidget);
+testBasicInstantiation(TextareaWidget, FORM);

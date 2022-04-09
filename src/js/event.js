@@ -10,8 +10,8 @@
  * @param {*} detail - Data to be passed with event
  * @return {CustomEvent} Custom "dataupdate" event
  */
-function DataUpdate( detail ) {
-    return new CustomEvent( 'dataupdate', { detail } );
+function DataUpdate(detail) {
+    return new CustomEvent('dataupdate', { detail });
 }
 
 /**
@@ -20,7 +20,7 @@ function DataUpdate( detail ) {
  * @return {CustomEvent} Custom "fakefocus" event (bubbling)
  */
 function FakeFocus() {
-    return new CustomEvent( 'fakefocus', { bubbles: true } );
+    return new CustomEvent('fakefocus', { bubbles: true });
 }
 
 /**
@@ -29,7 +29,7 @@ function FakeFocus() {
  * @return {CustomEvent} Custom "applyfocus" event
  */
 function ApplyFocus() {
-    return new CustomEvent( 'applyfocus' );
+    return new CustomEvent('applyfocus');
 }
 
 /**
@@ -38,7 +38,7 @@ function ApplyFocus() {
  * @return {CustomEvent} Custom "pageflip" event (bubbling)
  */
 function PageFlip() {
-    return new CustomEvent( 'pageflip', { bubbles: true } );
+    return new CustomEvent('pageflip', { bubbles: true });
 }
 
 /**
@@ -47,8 +47,8 @@ function PageFlip() {
  * @param {*} detail - Data to be passed with event
  * @return {CustomEvent} Custom "removed" event (bubbling)
  */
-function Removed( detail ) {
-    return new CustomEvent( 'removed', { detail, bubbles: true } );
+function Removed(detail) {
+    return new CustomEvent('removed', { detail, bubbles: true });
 }
 
 /**
@@ -58,7 +58,7 @@ function Removed( detail ) {
  *@return {CustomEvent} Custom "odk-instance-first-load" event (bubbling)
  */
 function InstanceFirstLoad() {
-    return new CustomEvent( 'odk-instance-first-load', { bubbles: true } );
+    return new CustomEvent('odk-instance-first-load', { bubbles: true });
 }
 
 /**
@@ -68,8 +68,8 @@ function InstanceFirstLoad() {
  * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
  * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
  */
-function NewRepeat( detail ) {
-    return new CustomEvent( 'odk-new-repeat', { detail, bubbles: true } );
+function NewRepeat(detail) {
+    return new CustomEvent('odk-new-repeat', { detail, bubbles: true });
 }
 
 /**
@@ -78,8 +78,8 @@ function NewRepeat( detail ) {
  * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
  * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
  */
-function AddRepeat( detail ) {
-    return new CustomEvent( 'addrepeat', { detail, bubbles: true } );
+function AddRepeat(detail) {
+    return new CustomEvent('addrepeat', { detail, bubbles: true });
 }
 
 /**
@@ -88,7 +88,7 @@ function AddRepeat( detail ) {
  * @return {CustomEvent} Custom "removerepeat" event (bubbling)
  */
 function RemoveRepeat() {
-    return new CustomEvent( 'removerepeat', { bubbles: true } );
+    return new CustomEvent('removerepeat', { bubbles: true });
 }
 
 /**
@@ -97,7 +97,7 @@ function RemoveRepeat() {
  * @return {CustomEvent} Custom "changelanguage" event (bubbling)
  */
 function ChangeLanguage() {
-    return new CustomEvent( 'changelanguage', { bubbles: true } );
+    return new CustomEvent('changelanguage', { bubbles: true });
 }
 
 /**
@@ -106,7 +106,7 @@ function ChangeLanguage() {
  * @return {Event} The regular HTML "change" event (bubbling)
  */
 function Change() {
-    return new Event( 'change', { bubbles: true } );
+    return new Event('change', { bubbles: true });
 }
 
 /**
@@ -116,8 +116,8 @@ function Change() {
  * @param {{repeatIndex: number}} detail - Data to be passed with event.
  * @return {CustomEvent} Custom "xforms-value-changed" event (bubbling).
  */
-function XFormsValueChanged( detail ) {
-    return new CustomEvent( 'xforms-value-changed', { detail, bubbles: true } );
+function XFormsValueChanged(detail) {
+    return new CustomEvent('xforms-value-changed', { detail, bubbles: true });
 }
 
 /**
@@ -126,7 +126,7 @@ function XFormsValueChanged( detail ) {
  * @return {Event} "input" event (bubbling)
  */
 function Input() {
-    return new Event( 'input', { bubbles: true } );
+    return new Event('input', { bubbles: true });
 }
 
 /**
@@ -135,7 +135,7 @@ function Input() {
  * @return {CustomEvent} Custom "inputupdate" event (bubbling)
  */
 function InputUpdate() {
-    return new CustomEvent( 'inputupdate', { bubbles: true } );
+    return new CustomEvent('inputupdate', { bubbles: true });
 }
 
 /**
@@ -144,9 +144,8 @@ function InputUpdate() {
  * @return {CustomEvent} Custom "edited" event (bubbling)
  */
 function Edited() {
-    return new CustomEvent( 'edited', { bubbles: true } );
+    return new CustomEvent('edited', { bubbles: true });
 }
-
 
 /**
  * Before save event.
@@ -154,7 +153,7 @@ function Edited() {
  * @return {CustomEvent} Custom "edited" event (bubbling)
  */
 function BeforeSave() {
-    return new CustomEvent( 'before-save', { bubbles: true } );
+    return new CustomEvent('before-save', { bubbles: true });
 }
 
 /**
@@ -163,7 +162,7 @@ function BeforeSave() {
  * @return {CustomEvent} Custom "validationcomplete" event (bubbling)
  */
 function ValidationComplete() {
-    return new CustomEvent( 'validation-complete', { bubbles: true } );
+    return new CustomEvent('validation-complete', { bubbles: true });
 }
 
 /**
@@ -172,7 +171,7 @@ function ValidationComplete() {
  * @return {CustomEvent} Custom "invalidated" event (bubbling)
  */
 function Invalidated() {
-    return new CustomEvent( 'invalidated', { bubbles: true } );
+    return new CustomEvent('invalidated', { bubbles: true });
 }
 
 /**
@@ -181,8 +180,8 @@ function Invalidated() {
  * @param {*} detail - Data to be passed with event
  * @return {CustomEvent} Custom "progressupdate" event (bubbling)
  */
-function ProgressUpdate( detail ) {
-    return new CustomEvent( 'progress-update', { detail, bubbles: true } );
+function ProgressUpdate(detail) {
+    return new CustomEvent('progress-update', { detail, bubbles: true });
 }
 
 /**
@@ -191,7 +190,7 @@ function ProgressUpdate( detail ) {
  * @return {CustomEvent} Custom "gotoirrelevant" event (bubbling)
  */
 function GoToIrrelevant() {
-    return new CustomEvent( 'goto-irrelevant', { bubbles: true } );
+    return new CustomEvent('goto-irrelevant', { bubbles: true });
 }
 
 /**
@@ -201,11 +200,11 @@ function GoToIrrelevant() {
  * @return {CustomEvent} Custom "gotoinvisible" event (bubbling)
  */
 function GoToInvisible() {
-    return new CustomEvent( 'goto-invisible', { bubbles: true } );
+    return new CustomEvent('goto-invisible', { bubbles: true });
 }
 
 function ChangeOption() {
-    return new CustomEvent( 'change-option', { bubbles: true } );
+    return new CustomEvent('change-option', { bubbles: true });
 }
 
 /**
@@ -214,7 +213,7 @@ function ChangeOption() {
  * @return {CustomEvent} Custom "printify" event (bubbling)
  */
 function Printify() {
-    return new CustomEvent( 'printify', { bubbles: true } );
+    return new CustomEvent('printify', { bubbles: true });
 }
 
 /**
@@ -223,11 +222,11 @@ function Printify() {
  * @return {CustomEvent} Custom "deprintify" event (bubbling)
  */
 function DePrintify() {
-    return new CustomEvent( 'deprintify', { bubbles: true } );
+    return new CustomEvent('deprintify', { bubbles: true });
 }
 
 function UpdateMaxSize() {
-    return new CustomEvent( 'update-max-size', { bubbles: true } );
+    return new CustomEvent('update-max-size', { bubbles: true });
 }
 
 export default {
@@ -255,5 +254,5 @@ export default {
     ChangeOption,
     Printify,
     DePrintify,
-    UpdateMaxSize
+    UpdateMaxSize,
 };

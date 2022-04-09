@@ -1,7 +1,6 @@
 [![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) ![Build Status](https://github.com/enketo/enketo-core/actions/workflows/npmjs.yml/badge.svg)
 
-Enketo Core
-===========
+# Enketo Core
 
 The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [this selection](https://enketo.org/about/adoption/).
 
@@ -13,26 +12,27 @@ This repo is meant to be used as a building block for any Enketo-powered applica
 
 Follow the [Enketo blog](https://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
-
 ### Browser support
 
 The following browsers are officially supported:
-* latest Android webview on latest Android OS
-* latest WKWebView on latest iOS
-* latest version of Chrome/Chromium on Mac OS, Linux, Windows, Android and iOS
-* latest version of Firefox on Mac OS, Windows, Linux, Android and iOS
-* latest version of Safari on Mac OS, Windows, and on the latest version of iOS
-* latest version of Microsoft Edge
+
+-   latest Android webview on latest Android OS
+-   latest WKWebView on latest iOS
+-   latest version of Chrome/Chromium on Mac OS, Linux, Windows, Android and iOS
+-   latest version of Firefox on Mac OS, Windows, Linux, Android and iOS
+-   latest version of Safari on Mac OS, Windows, and on the latest version of iOS
+-   latest version of Microsoft Edge
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
 [Here is some guidance](https://enketo.github.io/enketo-core/tutorial-90-ie11.html) that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.
 
 ### Releases
+
 1. Create release PR
 1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
 1. Run `npm update`
-    -  Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
+    - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
 1. Run `npm audit`
     - Run `npm audit fix --production` to apply most important fixes
 1. Run `npm ci`
@@ -50,17 +50,17 @@ We have to admit we do not test on all of these, but are committed to fixing bro
 
 The development of this library was sponsored by:
 
-* [OpenClinica](https://www.openclinica.com/)
-* [Sustainable Engineering Lab at Columbia University](http://modi.mech.columbia.edu/)
-* [WHO - HRP project](http://www.who.int/reproductivehealth/topics/mhealth/en/index.html)
-* [Santa Fe Insitute & Slum/Shack Dwellers International](http://www.santafe.edu/)
-* [Enketo LLC](http://www.linkedin.com/company/enketo-llc)
-* [iMMAP](http://immap.org)
-* [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
-* [Ona](https://ona.io)
-* [Medic](https://medic.org/)
-* [Esri](https://esri.com)
-* [DIAL Open Source Center](https://www.osc.dial.community/)
+-   [OpenClinica](https://www.openclinica.com/)
+-   [Sustainable Engineering Lab at Columbia University](http://modi.mech.columbia.edu/)
+-   [WHO - HRP project](http://www.who.int/reproductivehealth/topics/mhealth/en/index.html)
+-   [Santa Fe Insitute & Slum/Shack Dwellers International](http://www.santafe.edu/)
+-   [Enketo LLC](http://www.linkedin.com/company/enketo-llc)
+-   [iMMAP](http://immap.org)
+-   [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
+-   [Ona](https://ona.io)
+-   [Medic](https://medic.org/)
+-   [Esri](https://esri.com)
+-   [DIAL Open Source Center](https://www.osc.dial.community/)
 
 ### Performance (live)
 

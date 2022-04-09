@@ -35,8 +35,7 @@
     }
 }
 
-.or[dir="rtl"] {
-
+.or[dir='rtl'] {
     .question.or-appearance-list-nolabel,
     .question.or-appearance-label {
         margin: -0.9em 0 -0.7em 0;
@@ -48,9 +47,8 @@
 
     // fight the general main.scss rule
     .question.or-appearance-list-nolabel {
-
-        input[type=radio],
-        input[type=checkbox] {
+        input[type='radio'],
+        input[type='checkbox'] {
             float: none;
             margin: 0;
         }
@@ -66,8 +64,8 @@
     }
 
     // center the checkboxes, radiobuttons
-    input[type=radio],
-    input[type=checkbox] {
+    input[type='radio'],
+    input[type='checkbox'] {
         float: none;
         text-align: center;
         display: inline-block;
@@ -77,7 +75,7 @@
 }
 
 .question.or-appearance-label {
-    .option-wrapper>label {
+    .option-wrapper > label {
         margin-bottom: 6px;
 
         &:hover {
@@ -85,8 +83,8 @@
         }
     }
 
-    input[type=radio],
-    input[type=checkbox] {
+    input[type='radio'],
+    input[type='checkbox'] {
         display: none;
     }
 
@@ -97,9 +95,9 @@
     }
 }
 
-.or[dir="rtl"] {
+.or[dir='rtl'] {
     .question.or-appearance-label {
-        .option-wrapper>label {
+        .option-wrapper > label {
             img {
                 float: none;
             }
