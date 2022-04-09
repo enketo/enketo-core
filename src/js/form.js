@@ -492,7 +492,8 @@ Form.prototype.replaceChoiceNameFn = function (
                     input.querySelector(`[value="${CSS.escape(value)}"]`)
                 );
                 label = found
-                    ? found.querySelector(`[value="${CSS.escape(value)}"]`).textContent
+                    ? found.querySelector(`[value="${CSS.escape(value)}"]`)
+                          .textContent
                     : '';
             } else if (nodeName === 'input') {
                 const list = inputs[0].getAttribute('list');
