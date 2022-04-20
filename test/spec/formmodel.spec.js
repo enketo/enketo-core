@@ -944,13 +944,9 @@ describe('external instances functionality', () => {
         model = new Model(modelStr);
         loadErrors = model.init();
         expect(loadErrors.length).to.equal(3);
-        expect(loadErrors[0]).to.equal('External instance "cities" is empty.');
-        expect(loadErrors[1]).to.equal(
-            'External instance "neighborhoods" is empty.'
-        );
-        expect(loadErrors[2]).to.equal(
-            'External instance "countries" is empty.'
-        );
+        expect(loadErrors[0]).to.equal("Can't find cities.xml.");
+        expect(loadErrors[1]).to.equal("Can't find neighbourhoods.xml.");
+        expect(loadErrors[2]).to.equal("Can't find countries.xml.");
     });
 
     it('populates matching external instances provided as XML Document, and leaves original XML doc intact', () => {
