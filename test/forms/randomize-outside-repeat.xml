@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:esri="https://esri.com/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Randomize outside repeat</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="randomize-outside-repeat">
+                    <select_fruits1/>
+                    <repeat1 jr:template="">
+                        <a/>
+                    </repeat1>
+                    <repeat1>
+                        <a/>
+                    </repeat1>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="fruits">
+                <root>
+                    <item>
+                        <label>apple</label>
+                        <name>apple</name>
+                    </item>
+                    <item>
+                        <label>strawberry</label>
+                        <name>strawberry</name>
+                    </item>
+                    <item>
+                        <label>banana</label>
+                        <name>banana</name>
+                    </item>
+                    <item>
+                        <label>watermelon</label>
+                        <name>watermelon</name>
+                    </item>
+                    <item>
+                        <label>kiwi</label>
+                        <name>kiwi</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/select_fruits1" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/select_fruits1">
+            <label>select fruits</label>
+            <itemset nodeset="randomize(instance('fruits')/root/item)">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select1>
+        <group ref="/data/repeat1">
+            <label>Add or remove a repeat, the randomized itemset should not change</label>
+            <repeat nodeset="/data/repeat1"/>
+        </group>
+    </h:body>
+</h:html>

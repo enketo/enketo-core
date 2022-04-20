@@ -5,14 +5,23 @@ import event from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
 
 describe('repeat functionality', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
     // turn jQuery animations off
     $.fx.off = true;
 
-    describe('cloning', () => {
-        beforeEach(() => {
-            dialog.confirm = () => Promise.resolve(true);
-        });
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
 
+        sandbox.stub(dialog, 'confirm').resolves(true);
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
+    describe('cloning', () => {
         it('removes the correct instance and HTML node when the "-" button is clicked (issue 170)', (done) => {
             const form = loadForm('thedata.xml');
             form.init();
@@ -685,6 +694,60 @@ describe('repeat functionality', () => {
             // Issue where a calculation inside a repeat is cached before the repeats are initialized (which removes the first repeat, before adding it)
             // This results in two cached calculations (for the same node) of which one no longer exists.
             expect(form.getRelatedNodes('data-calculate').length).to.equal(1);
+        });
+    });
+
+    describe('unrelated randomize', () => {
+        it('does not randomize outside the repeat when adding repeat instances', () => {
+            const form = loadForm('randomize-outside-repeat.xml');
+
+            form.init();
+
+            const randomizedFruits =
+                form.view.html.querySelector('.option-wrapper');
+            const initialText = randomizedFruits.innerText;
+
+            // Sanity check
+            expect(initialText).to.include('kiwi');
+
+            const repeatButton =
+                form.view.html.querySelector('.add-repeat-btn');
+
+            for (let i = 0; i < 10; i++) {
+                repeatButton.click();
+
+                expect(randomizedFruits.innerText).to.equal(initialText);
+            }
+        });
+
+        it('does not randomize outside the repeat when removing repeat instances', () => {
+            const form = loadForm('randomize-outside-repeat.xml');
+
+            form.init();
+
+            const randomizedFruits =
+                form.view.html.querySelector('.option-wrapper');
+            const initialText = randomizedFruits.innerText;
+
+            // Sanity check
+            expect(initialText).to.include('kiwi');
+
+            const repeatButton =
+                form.view.html.querySelector('.add-repeat-btn');
+
+            for (let i = 0; i < 10; i++) {
+                repeatButton.click();
+            }
+
+            const removeButtons = Array.from(
+                form.view.html.querySelectorAll('button.remove')
+            ).reverse();
+
+            for (const removeButton of removeButtons) {
+                removeButton.click();
+
+                expect(randomizedFruits.innerText).to.equal(initialText);
+            }
         });
     });
 });

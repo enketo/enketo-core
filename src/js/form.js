@@ -618,6 +618,8 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
     updated = updated || {};
     filter = filter || '';
 
+    const { cloned, repeatPath } = updated;
+
     // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
     if (!this.nonRepeats[attr]) {
         controls = [
@@ -629,10 +631,10 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
     }
 
     // If the updated node is inside a repeat (and there are multiple repeats present)
-    if (typeof updated.repeatPath !== 'undefined' && updated.repeatIndex >= 0) {
+    if (typeof repeatPath !== 'undefined' && updated.repeatIndex >= 0) {
         const repeatEl = [
             ...this.view.html.querySelectorAll(
-                `.or-repeat[name="${updated.repeatPath}"]`
+                `.or-repeat[name="${repeatPath}"]`
             ),
         ][updated.repeatIndex];
         controls = repeatEl ? [...repeatEl.querySelectorAll(`[${attr}]`)] : [];
@@ -640,13 +642,9 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
     }
 
     // If a new repeat was created, update the cached collection of all form controls with that attribute
-    // If a repeat was deleted ( update.repeatPath && !updated.cloned), rebuild cache.
+    // If a repeat was deleted (updated.repeatPath && !updated.cloned), rebuild cache.
     // Exclude outputs from the cache, because outputs can be added via itemsets (in labels).
-    if (
-        !this.all[attr] ||
-        (updated.repeatPath && !updated.cloned) ||
-        filter === '.or-output'
-    ) {
+    if (!this.all[attr] || (repeatPath && !cloned) || filter === '.or-output') {
         // (re)build the cache
         // However, if repeats have not been initialized exclude nodes inside a repeat until the first repeat has been added during repeat initialization.
         // The default view repeat will be removed during initialization (and stored as template), before it is re-added, if necessary.
@@ -657,7 +655,7 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
                   ...this.view.html.querySelectorAll(`[${attr}]`),
               ])
             : this.nonRepeats[attr];
-    } else if (updated.cloned && repeatControls) {
+    } else if (cloned && repeatControls) {
         // update the cache
         this.all[attr] = this.all[attr].concat(repeatControls);
     }
@@ -680,7 +678,15 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
     let selector = [];
     // Add selectors based on specific changed nodes
     if (!updated.nodes || updated.nodes.length === 0) {
-        selector = [`${filter}[${attr}]`];
+        if (
+            repeatControls != null &&
+            cloned &&
+            filter === '.itemset-template'
+        ) {
+            selector = [`.or-repeat[name="${repeatPath}"] ${filter}[${attr}]`];
+        } else {
+            selector = [`${filter}[${attr}]`];
+        }
     } else {
         updated.nodes.forEach((node) => {
             selector = selector.concat(
