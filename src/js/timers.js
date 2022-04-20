@@ -1,4 +1,11 @@
-/** @type {(callback: () => void, maxDelay: number) => void} */
+/**
+ * @callback OnIdle
+ * @param {Function} callback
+ * @param {number} maxDelay
+ * @return {void}
+ */
+
+/** @type {OnIdle} */
 const onIdle =
     typeof requestIdleCallback === 'function'
         ? (callback, timeout) => {
@@ -16,7 +23,7 @@ const onIdle =
  * - falling back to `setTimeout` with the minimum delay (varies by browser, but generally
  *   4 milliseconds
  *
- * @param {() => void} callback
+ * @param {Function} callback
  * @param {number} maxDelay
  */
 export const callOnIdle = (callback, maxDelay = 16) => {
