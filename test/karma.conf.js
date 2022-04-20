@@ -11,6 +11,12 @@ module.exports = (config) => {
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['mocha', 'sinon-chai'],
 
+        client: {
+            mocha: {
+                timeout: 10000,
+            },
+        },
+
         // list of files / patterns to load in the browser
         files: [
             'test/mock/*.js',
