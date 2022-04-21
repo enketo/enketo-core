@@ -35,14 +35,21 @@ describe('datepicker widget', () => {
             ['full date', FORM1, '2012-01-01'],
             ['month-year', FORM2, '2012-01'],
             ['year', FORM3, '2012'],
-        ].forEach((t) => {
-            const desc = t[0];
-            const newVal = t[2];
-            const datepicker = initForm(t[1]);
-            const input = datepicker.element;
-            const fakeInput = datepicker.element
-                .closest('.question')
-                .querySelector('.widget input');
+        ].forEach(([desc, form, newVal]) => {
+            /** @type {HTMLElement} */
+            let input;
+
+            /** @type {HTMLElement} */
+            let fakeInput;
+
+            beforeEach(() => {
+                const datepicker = initForm(form);
+
+                input = datepicker.element;
+                fakeInput = datepicker.element
+                    .closest('.question')
+                    .querySelector('.widget input');
+            });
 
             it(`is propagated correctly for ${desc} fields`, () => {
                 input.onchange = sinon.stub().callsFake(() => {});

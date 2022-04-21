@@ -6,13 +6,23 @@ describe('calculate functionality', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
+    /** @type {SinonFakeTimers} */
+    let timers;
+
     beforeEach(() => {
         sandbox = sinon.createSandbox();
 
         sandbox.stub(dialog, 'confirm').resolves(true);
+
+        timers = sandbox.useFakeTimers();
     });
 
     afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
         sandbox.restore();
     });
 
@@ -43,7 +53,7 @@ describe('calculate functionality', () => {
         );
     });
 
-    it('updates inside multiple repeats a repeat is removed and position(..) changes', (done) => {
+    it('updates inside multiple repeats a repeat is removed and position(..) changes', async () => {
         const form = loadForm('repeat-relevant-calculate.xml');
         form.init();
 
@@ -54,22 +64,21 @@ describe('calculate functionality', () => {
         // remove first repeat to the calculation in both remaining repeats needs to be updated.
         form.view.html.querySelector('.btn.remove').click();
 
-        setTimeout(() => {
-            expect(
-                form.model
-                    .node('/data/rg/row')
-                    .getElements()
-                    .map((node) => node.textContent)
-                    .join(',')
-            ).to.equal('1,2');
-            expect(form.view.$.find('[name="/data/rg/row"]')[0].value).to.equal(
-                '1'
-            );
-            expect(form.view.$.find('[name="/data/rg/row"]')[1].value).to.equal(
-                '2'
-            );
-            done();
-        }, 650);
+        await timers.runAllAsync();
+
+        expect(
+            form.model
+                .node('/data/rg/row')
+                .getElements()
+                .map((node) => node.textContent)
+                .join(',')
+        ).to.equal('1,2');
+        expect(form.view.$.find('[name="/data/rg/row"]')[0].value).to.equal(
+            '1'
+        );
+        expect(form.view.$.find('[name="/data/rg/row"]')[1].value).to.equal(
+            '2'
+        );
     });
 
     it('updates a calculation for node if calc refers to node filtered with predicate', () => {
@@ -111,9 +120,12 @@ describe('calculate functionality', () => {
         );
 
         let counter = 0;
+
         form.view.html
             .querySelector('[name="/data/calc"]')
-            .addEventListener(new events.InputUpdate().type, () => counter++);
+            .addEventListener(new events.InputUpdate().type, () => {
+                counter += 1;
+            });
         form.init();
 
         expect(counter).to.equal(0);

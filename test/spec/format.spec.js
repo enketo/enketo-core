@@ -18,7 +18,6 @@ describe('Format', () => {
     });
 
     describe('for time determination', () => {
-        let i;
         const t = [
             ['en-US', true, 'AM', 'PM'],
 
@@ -44,7 +43,7 @@ describe('Format', () => {
             });
         }
 
-        for (i = 0; i < t.length; i++) {
+        for (let i = 0; i < t.length; i += 1) {
             testMeridian(t[i][0], t[i][1]);
         }
 
@@ -56,7 +55,7 @@ describe('Format', () => {
             });
         }
 
-        for (i = 0; i < t.length; i++) {
+        for (let i = 0; i < t.length; i += 1) {
             testPm(t[i][0], t[i][2], t[i][3]);
         }
     });

@@ -2,19 +2,39 @@ import loadForm from '../helpers/load-form';
 
 describe('Pages mode', () => {
     describe('Initial loading if form includes repeats-as-page', () => {
-        it('loads to the proper first page', (done) => {
+        /** @type {import('sinon').SinonSandbox} */
+        let sandbox;
+
+        /** @type {SinonFakeTimers} */
+        let timers;
+
+        beforeEach(() => {
+            sandbox = sinon.createSandbox();
+            timers = sandbox.useFakeTimers();
+        });
+
+        afterEach(() => {
+            timers.runAll();
+
+            timers.clearTimeout();
+            timers.clearInterval();
+            timers.restore();
+            sandbox.restore();
+        });
+
+        it('loads to the proper first page', () => {
             const form = loadForm('pages.xml');
             form.init();
 
             // something asynchronous happening, validation probably
-            setTimeout(() => {
-                const firstQuestion = form.view.html.querySelector('.question');
-                const currentInModule = form.pages.current;
-                const currentInView = form.view.html.querySelector('.current');
-                expect(currentInModule).to.equal(firstQuestion);
-                expect(currentInView).to.equal(firstQuestion);
-                done();
-            }, 500);
+            const firstQuestion = form.view.html.querySelector('.question');
+            const currentInModule = form.pages.current;
+            const currentInView = form.view.html.querySelector('.current');
+
+            timers.runAll();
+
+            expect(currentInModule).to.equal(firstQuestion);
+            expect(currentInView).to.equal(firstQuestion);
         });
 
         it('loads to the proper first page if the form contains only a repeat and nothing outside it', () => {

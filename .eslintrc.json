@@ -119,7 +119,9 @@
                 "sinon": true
             },
             "rules": {
-                "no-console": "off"
+                "no-console": "off",
+                "no-unused-expressions": "off",
+                "chai-friendly/no-unused-expressions": "warn"
             }
         }
     ]

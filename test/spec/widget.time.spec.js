@@ -25,19 +25,21 @@ describe('timepicker widget', () => {
     runAllCommonWidgetTests(Timepicker, FORM, '13:23');
 
     describe('manual input without Enter', () => {
-        const fragment = document.createRange().createContextualFragment(FORM);
-        const control = fragment.querySelector('input');
-        // Note: time zone information is added outside of the widget (in the model)
-        const newVal = '14:01';
-        const timepicker = new Timepicker(control);
-        const fakeInput = timepicker.element
-            .closest('.question')
-            .querySelector('.widget input');
-        const input = timepicker.element
-            .closest('.question')
-            .querySelector('input[type="time"]');
-
         it(`is propagated correctly`, () => {
+            const fragment = document
+                .createRange()
+                .createContextualFragment(FORM);
+            const control = fragment.querySelector('input');
+            // Note: time zone information is added outside of the widget (in the model)
+            const newVal = '14:01';
+            const timepicker = new Timepicker(control);
+            const fakeInput = timepicker.element
+                .closest('.question')
+                .querySelector('.widget input');
+            const input = timepicker.element
+                .closest('.question')
+                .querySelector('input[type="time"]');
+
             input.onchange = sinon.stub().callsFake(() => {});
 
             // add manual value to fake input

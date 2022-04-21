@@ -3,7 +3,7 @@ import events from '../../src/js/event';
 import forms from '../mock/forms';
 import config from '../../config';
 
-const stubConsoleWarn = () => {
+const stubConsole = () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
@@ -18,6 +18,8 @@ const stubConsoleWarn = () => {
                 warn(msg);
             }
         });
+
+        sandbox.stub(console, 'error').returns(undefined);
     });
 
     afterEach(() => {
@@ -34,19 +36,19 @@ const getModel = (filename) => {
 
 // I don't remember why this functionality exists
 describe('Primary instance node values', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    const model = new Model(
-        '<model><instance><data><nodeA> 2  </nodeA><meta><instanceID/></meta></data></instance></model>'
-    );
-    model.init();
     it('are trimmed during initialization', () => {
+        const model = new Model(
+            '<model><instance><data><nodeA> 2  </nodeA><meta><instanceID/></meta></data></instance></model>'
+        );
+        model.init();
         expect(model.getStr()).to.contain('<nodeA>2</nodeA>');
     });
 });
 
 describe('Instantiating a model', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     const modelStr =
         '<model><instance><data id="data"><nodeA>2</nodeA></data></instance>' +
@@ -96,9 +98,7 @@ describe('Instantiating a model', () => {
 });
 
 describe('Data node getter', () => {
-    stubConsoleWarn();
-
-    let i;
+    stubConsole();
 
     const t = [
         ['', null, null, 20],
@@ -120,16 +120,21 @@ describe('Data node getter', () => {
         ['/thedata/repeatGroup/nodeC', null, { onlyleaf: true }, 3],
     ];
 
-    const model = new Model(
-        '<model xmlns:jr="http://openrosa.org/javarosa"><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
-            '<repeatGroup jr:template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
-            '<repeatGroup><nodeC>c2</nodeC></repeatGroup>' +
-            '<repeatGroup><nodeC>c3</nodeC></repeatGroup>' +
-            '<somenodes><A>one</A><B>one</B><C>one</C></somenodes><someweights><w1>1</w1><w2>3</w2><w.3>5</w.3></someweights><nodeF/>' +
-            '<meta><instanceID/></meta></thedata></instance></model>'
-    );
+    /** @type {Model} */
+    let model;
 
-    model.init();
+    beforeEach(() => {
+        model = new Model(
+            '<model xmlns:jr="http://openrosa.org/javarosa"><instance><thedata id="thedata"><nodeA/><nodeB>b</nodeB>' +
+                '<repeatGroup jr:template=""><nodeC>cdefault</nodeC></repeatGroup><repeatGroup><nodeC/></repeatGroup>' +
+                '<repeatGroup><nodeC>c2</nodeC></repeatGroup>' +
+                '<repeatGroup><nodeC>c3</nodeC></repeatGroup>' +
+                '<somenodes><A>one</A><B>one</B><C>one</C></somenodes><someweights><w1>1</w1><w2>3</w2><w.3>5</w.3></someweights><nodeF/>' +
+                '<meta><instanceID/></meta></thedata></instance></model>'
+        );
+
+        model.init();
+    });
 
     function test(node) {
         it(`obtains nodes (selector: ${node.selector}, index: ${
@@ -141,7 +146,7 @@ describe('Data node getter', () => {
             ).to.equal(node.result);
         });
     }
-    for (i = 0; i < t.length; i++) {
+    for (let i = 0; i < t.length; i += 1) {
         test({
             selector: t[i][0],
             index: t[i][1],
@@ -152,9 +157,14 @@ describe('Data node getter', () => {
 });
 
 describe('Data node (&) value getter', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    const data = getModel('thedata.xml'); // dataStr1);
+    /** @type {Model} */
+    let data;
+
+    beforeEach(() => {
+        data = getModel('thedata.xml');
+    });
 
     it('returns an array of one node value', () => {
         expect(data.node('/thedata/nodeB').getVal()).to.equal('b');
@@ -174,9 +184,8 @@ describe('Data node (&) value getter', () => {
 });
 
 describe('Data node XML data type', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    let i;
     const t = [
         ['val1', null, true],
         ['val3', 'somewrongtype', true], // default type is string
@@ -299,7 +308,7 @@ describe('Data node XML data type', () => {
     }
 
     function typeValidationTest(n) {
-        it(`is (in)validated for XML type: ${n.type} with value:${n.value}`, (done) => {
+        it(`is (in)validated for XML type: ${n.type} with value:${n.value}`, async () => {
             const node = getModel('thedata.xml').node(
                 '/thedata/nodeA',
                 0,
@@ -307,16 +316,14 @@ describe('Data node XML data type', () => {
             );
             // set the value without conversion (as string)
             node.setVal(n.value);
-            node.validateConstraintAndType(null, n.type)
-                .then((result) => {
-                    expect(result).to.equal(n.valid);
-                })
-                .then(done)
-                .catch(done);
+
+            const result = await node.validateConstraintAndType(null, n.type);
+
+            expect(result).to.equal(n.valid);
         });
     }
 
-    for (i = 0; i < t.length; i++) {
+    for (let i = 0; i < t.length; i += 1) {
         typeConversionTest({
             value: t[i][0],
             type: t[i][1],
@@ -345,16 +352,14 @@ describe('Data node XML data type', () => {
         ).to.equal(null);
     });
 
-    it('sets a non-empty value to empty', (done) => {
+    it('sets a non-empty value to empty', async () => {
         const node = getModel('thedata.xml').node('/thedata/nodeA', null, null);
         node.setVal('value', 'string');
         node.setVal('');
-        node.validateConstraintAndType(null, 'string')
-            .then((passed) => {
-                expect(passed).to.equal(true);
-            })
-            .then(done)
-            .catch(done);
+
+        const passed = await node.validateConstraintAndType(null, 'string');
+
+        expect(passed).to.equal(true);
     });
 
     it('adds a file attribute to data nodes with a value and with xml-type: binary', () => {
@@ -380,7 +385,12 @@ describe('Data node XML data type', () => {
     });
 
     describe('does convert whitespace-only values', () => {
-        const node = getModel('thedata.xml').node('/thedata/nodeA', null, null);
+        /** @type {import('../../src/js/nodeset').Node} */
+        let node;
+
+        beforeEach(() => {
+            node = getModel('thedata.xml').node('/thedata/nodeA', null, null);
+        });
 
         function whiteSpaceTest(whiteSpaceValue) {
             it('to ""', () => {
@@ -397,7 +407,7 @@ describe('Data node XML data type', () => {
 });
 
 describe('dataupdate event, is fired on model.$events and includes', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     it('object with repeatPath and repeatIndex for a node inside a repeatSeries of more than 1 instance', () => {
         const model = new Model({
@@ -419,7 +429,7 @@ describe('dataupdate event, is fired on model.$events and includes', () => {
 });
 
 describe('Data node remover', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     it('has removed a data node', () => {
         const data = getModel('thedata.xml');
@@ -437,10 +447,10 @@ describe('Data node remover', () => {
             '<model><instance><data><F27./><meta><instanceID/></meta></data></instance></model>'
         );
         const path = '/data/F27.';
-        let node;
 
         model.init();
-        node = model.node(path);
+
+        const node = model.node(path);
 
         expect(node.getElements().length).to.equal(1);
         node.remove();
@@ -449,7 +459,7 @@ describe('Data node remover', () => {
 });
 
 describe('DeprecatedID value getter', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     it('returns "" if deprecatedID node does not exist', () => {
         const model = new Model(
@@ -475,33 +485,34 @@ describe('DeprecatedID value getter', () => {
 });
 
 describe('getRepeatSeries', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    // Note the strategic placements of whitespace '\n'
-    const model = new Model(`
-        <model>
-            <instance>
-                <a>
-                    <r>
-                        <b/>
-                        <nR/>
-                        <nR/>
-                    </r>
-                    <r>
-                        <b/>
-                        <nR/>
-                        <nR/>
-                        <nR/>
-                    </r>
-                    <meta>
-                        <instanceID/>
-                    </meta>
-                </a>
-            </instance>
-        </model>`);
-    model.init();
-    model.extractFakeTemplates(['/a/r', '/a/r/nR']);
     it('returns the elements in one series of repeats', () => {
+        // Note the strategic placements of whitespace '\n'
+        const model = new Model(`
+            <model>
+                <instance>
+                    <a>
+                        <r>
+                            <b/>
+                            <nR/>
+                            <nR/>
+                        </r>
+                        <r>
+                            <b/>
+                            <nR/>
+                            <nR/>
+                            <nR/>
+                        </r>
+                        <meta>
+                            <instanceID/>
+                        </meta>
+                    </a>
+                </instance>
+            </model>`);
+        model.init();
+        model.extractFakeTemplates(['/a/r', '/a/r/nR']);
+
         expect(model.getRepeatSeries('/a/r', 0).length).to.equal(2);
         expect(model.getRepeatSeries('/a/r/nR', 0).length).to.equal(2);
         expect(model.getRepeatSeries('/a/r/nR', 1).length).to.equal(3);
@@ -509,9 +520,14 @@ describe('getRepeatSeries', () => {
 });
 
 describe('XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensive tests!)', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    let i;
+    /** @type {Model} */
+    let data;
+
+    beforeEach(() => {
+        data = getModel('thedata.xml');
+    });
 
     const t = [
         ['/thedata/nodeB', 'string', null, 0, 'b'],
@@ -539,8 +555,6 @@ describe('XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensiv
         ['"2012-07-24" > "2012-07-23"', 'boolean', null, 0, true],
     ];
 
-    const data = getModel('thedata.xml');
-
     function test(expr, resultType, contextSelector, index, result) {
         it(`evaluates XPath: ${expr}`, () => {
             expect(
@@ -549,7 +563,7 @@ describe('XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensiv
         });
     }
 
-    for (i = 0; i < t.length; i++) {
+    for (let i = 0; i < t.length; i += 1) {
         test(String(t[i][0]), t[i][1], t[i][2], t[i][3], t[i][4]);
     }
 
@@ -594,12 +608,18 @@ describe('XPath Evaluator (see github.com/enketo/enketo-xpathjs for comprehensiv
 
 // This test makes sure that whatever date strings are returned by the XPath evaluator can be dealt with by the form engine
 describe('dates returned by the XPath evaluator ', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    const model = new Model(
-        '<model><instance><data><meta><instanceID/></meta></data></instance></model>'
-    );
-    model.init();
+    /** @type {Model} */
+    let model;
+
+    beforeEach(() => {
+        model = new Model(
+            '<model><instance><data><meta><instanceID/></meta></data></instance></model>'
+        );
+        model.init();
+    });
+
     [
         ['date("2018-01-01")', '2018-01-01', 'date'],
         ['date("2018-01-01")', '2018-01-01T00:00:00.000-07:00', 'datetime'],
@@ -621,7 +641,7 @@ describe('dates returned by the XPath evaluator ', () => {
 });
 
 describe('functionality to obtain string of the primary XML instance for storage or uploads)', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     it('returns primary instance without templates - A', () => {
         const model = new Model(
@@ -651,7 +671,7 @@ describe('functionality to obtain string of the primary XML instance for storage
 });
 
 describe('converting absolute paths', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     [
         // to be converted
@@ -699,7 +719,7 @@ describe('converting absolute paths', () => {
         ['"path/to/node"'],
         ["'path/to/node'"],
         ['concat(path/to/node, "2")'],
-        ['../path/to/node' + '../node'],
+        ['../path/to/node' + '../node'], // eslint-disable-line -- this appears intentional
         ['/model/path/to/node'],
         ['concat("/", "path/to/node")'],
         ["concat('/path/to/node')"],
@@ -727,7 +747,7 @@ describe('converting absolute paths', () => {
 });
 
 describe('converting instance("id") to absolute paths', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     [
         ['instance("a")/path/to/node', '/model/instance[@id="a"]/path/to/node'],
@@ -765,7 +785,7 @@ describe('converting instance("id") to absolute paths', () => {
 });
 
 describe('converting expressions with current() for context /data/node', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     const context = '/data/node';
 
@@ -812,7 +832,7 @@ describe('converting expressions with current() for context /data/node', () => {
 });
 
 describe('replacing version() calls', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     [
         ['version()', '"123"'],
@@ -831,7 +851,7 @@ describe('replacing version() calls', () => {
 });
 
 describe('converting indexed-repeat() ', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     [
         [
@@ -889,7 +909,7 @@ describe('converting indexed-repeat() ', () => {
 });
 
 describe('converting pulldata() ', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     [
         [
@@ -930,19 +950,17 @@ describe('converting pulldata() ', () => {
 });
 
 describe('external instances functionality', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     const parser = new DOMParser();
-    let loadErrors;
-    let model;
     const modelStr =
         '<model><instance><cascade_external id="cascade_external" version=""><country/><city/><neighborhood/><meta><instanceID/></meta></cascade_external></instance><instance id="cities" src="jr://file/cities.xml" /><instance id="neighborhoods" src="jr://file/neighbourhoods.xml" /><instance id="countries" src="jr://file/countries.xml" /></model>';
     const citiesStr =
         '<root><item><itextId>static_instance-cities-0</itextId><country>nl</country><name>ams</name></item></root>';
 
     it('outputs errors if external instances in the model are not provided upon instantiation', () => {
-        model = new Model(modelStr);
-        loadErrors = model.init();
+        const model = new Model(modelStr);
+        const loadErrors = model.init();
         expect(loadErrors.length).to.equal(3);
         expect(loadErrors[0]).to.equal("Can't find cities.xml.");
         expect(loadErrors[1]).to.equal("Can't find neighbourhoods.xml.");
@@ -965,11 +983,11 @@ describe('external instances functionality', () => {
             },
         ];
 
-        model = new Model({
+        const model = new Model({
             modelStr,
             external,
         });
-        loadErrors = model.init();
+        const loadErrors = model.init();
         expect(loadErrors.length).to.equal(0);
         expect(
             model.xml.querySelector('instance#cities > root > item > country')
@@ -987,7 +1005,7 @@ describe('external instances functionality', () => {
     it('removes existing (internal) content before adding external instances', () => {
         const populatedInstance =
             '<instance id="cities" src="jr://file/cities.xml"><existing>existing</existing><another>something</another></instance>';
-        model = new Model({
+        const model = new Model({
             modelStr: modelStr.replace(
                 '<instance id="cities" src="jr://file/cities.xml" />',
                 populatedInstance
@@ -1007,7 +1025,7 @@ describe('external instances functionality', () => {
                 },
             ],
         });
-        loadErrors = model.init();
+        const loadErrors = model.init();
         expect(loadErrors.length).to.equal(0);
         expect(
             model.xml.querySelectorAll('instance#cities > existing').length
@@ -1019,18 +1037,30 @@ describe('external instances functionality', () => {
 });
 
 describe('cloning repeats in empty model', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    config.repeatOrdinals = false;
-    const model = new Model(
-        '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
-            '<rep3 jr:template=""><three/></rep3></rep2></rep1></data></instance></model>'
-    );
-    model.init();
-    model.addRepeat('/data/rep1', 0);
-    model.addRepeat('/data/rep1/rep2', 0);
-    model.addRepeat('/data/rep1/rep2/rep3', 0);
+    /** @type {SinonSandbox} */
+    let sandbox;
+
+    before(() => {
+        sandbox = sinon.createSandbox();
+        sandbox.stub(config, 'repeatOrdinals').get(() => false);
+    });
+
+    after(() => {
+        sandbox.restore();
+    });
+
     it('works for nested repeats', () => {
+        const model = new Model(
+            '<model xmlns:jr="http://openrosa.org/javarosa"><instance><data><rep1 jr:template=""><one/><rep2 jr:template=""><two/>' +
+                '<rep3 jr:template=""><three/></rep3></rep2></rep1></data></instance></model>'
+        );
+        model.init();
+        model.addRepeat('/data/rep1', 0);
+        model.addRepeat('/data/rep1/rep2', 0);
+        model.addRepeat('/data/rep1/rep2/rep3', 0);
+
         expect(model.getStr()).to.equal(
             '<data><rep1><one/><rep2><two/><rep3><three/></rep3></rep2></rep1></data>'
         );
@@ -1038,14 +1068,19 @@ describe('cloning repeats in empty model', () => {
 });
 
 describe('Using XPath with default namespace', () => {
-    stubConsoleWarn();
+    stubConsole();
+
+    /** @type {Model} */
+    let model;
 
     describe('on the primary instance child', () => {
-        const model = new Model(
-            '<model><instance><data xmlns="http://unknown.namespace.com/34324sdagd"><nodeA>5</nodeA></data></instance></model>'
-        );
+        beforeEach(() => {
+            model = new Model(
+                '<model><instance><data xmlns="http://unknown.namespace.com/34324sdagd"><nodeA>5</nodeA></data></instance></model>'
+            );
 
-        model.init();
+            model.init();
+        });
 
         it('works for Nodeset().getElements()', () => {
             expect(model.node('/data/nodeA').getElements().length).to.equal(1);
@@ -1059,11 +1094,13 @@ describe('Using XPath with default namespace', () => {
     });
 
     describe(' on the model', () => {
-        const model = new Model(
-            '<model xmlns="http://www.w3.org/2002/xforms"><instance><data><nodeA>5</nodeA></data></instance></model>'
-        );
+        beforeEach(() => {
+            model = new Model(
+                '<model xmlns="http://www.w3.org/2002/xforms"><instance><data><nodeA>5</nodeA></data></instance></model>'
+            );
 
-        model.init();
+            model.init();
+        });
 
         it('works for Nodeset().getElements()', () => {
             expect(model.node('/data/nodeA').getElements().length).to.equal(1);
@@ -1078,7 +1115,7 @@ describe('Using XPath with default namespace', () => {
 });
 
 describe('Using XPath with non-default namespaces', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     describe('on secondary instances', () => {
         const SEC_INSTANCE_CONTENT =
@@ -1102,16 +1139,23 @@ describe('Using XPath with non-default namespaces', () => {
                 ],
             },
         ].forEach((testObj) => {
-            const model = new Model(testObj);
             const type = testObj.external ? 'external' : 'internal';
-            model.init();
+
             it(`works for simple namespaced node retrieval on ${type} instances`, () => {
+                const model = new Model(testObj);
+
+                model.init();
+
                 expect(
                     model.evaluate('instance("s")/sec/this:b', 'string')
                 ).to.equal('3');
             });
 
             it(`works for simple namespaced attribute retrieval on ${type} instances`, () => {
+                const model = new Model(testObj);
+
+                model.init();
+
                 expect(
                     model.evaluate(
                         'instance("s")/sec/this:b/@this:at',
@@ -1124,7 +1168,7 @@ describe('Using XPath with non-default namespaces', () => {
 });
 
 describe('Repeat without ordinals', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     const modelStr =
         '<model><instance><a><rep.dot><b/></rep.dot><rep.dot><b/></rep.dot></a></instance></model>';
@@ -1175,9 +1219,8 @@ describe('Repeat without ordinals', () => {
 });
 
 describe('Ordinals in repeats', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    const dflt = config['repeat ordinals'];
     const wr = '<root xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
     const wrt =
         '<root xmlns:jr="http://openrosa.org/javarosa" xmlns:enk="http://enketo.org/xforms">{{c}}</root>';
@@ -1188,12 +1231,16 @@ describe('Ordinals in repeats', () => {
         '<model><instance><root xmlns:jr="http://openrosa.org/javarosa">';
     const end = '</root></instance></model>';
 
+    /** @type {SinonSandbox} */
+    let sandbox;
+
     before(() => {
-        config.repeatOrdinals = true;
+        sandbox = sinon.createSandbox();
+        sandbox.stub(config, 'repeatOrdinals').get(() => true);
     });
 
     after(() => {
-        config.repeatOrdinals = dflt;
+        sandbox.restore();
     });
 
     describe('that have no jr:template', () => {
@@ -1436,7 +1483,7 @@ describe('Ordinals in repeats', () => {
 });
 
 describe('makes Enketo repeat-bug-compliant by injecting positions to correct incorrect XPath expressions', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     const modelStr =
         '<model><instance><abcabce id="abcabce"><n/><ab><ynab/></ab><a><ynaa>1</ynaa><c/></a><a><ynaa>2</ynaa><c/></a><meta><instanceID/></meta></abcabce></instance></model>';
@@ -1483,9 +1530,19 @@ describe('makes Enketo repeat-bug-compliant by injecting positions to correct in
 });
 
 describe('merging an instance into the model', () => {
-    stubConsoleWarn();
+    stubConsole();
 
-    config.repeatOrdinals = false;
+    /** @type {SinonSandbox} */
+    let sandbox;
+
+    before(() => {
+        sandbox = sinon.createSandbox();
+        sandbox.stub(config, 'repeatOrdinals').get(() => false);
+    });
+
+    after(() => {
+        sandbox.restore();
+    });
 
     describe('', () => {
         [
@@ -1611,24 +1668,22 @@ describe('merging an instance into the model', () => {
                 '<model><instance><data><age>7</age><details><name/></details></data></instance></model>',
             ],
         ].forEach((test) => {
-            let result;
-            let expected;
-
-            const model = new Model({
-                modelStr: test[1],
-            });
-
-            model.init();
-            model.mergeXml(test[0]);
-
-            // remove __session instance
-            model.xml.querySelector('instance[id="__session"]').remove();
-            result = new XMLSerializer()
-                .serializeToString(model.xml, 'text/xml')
-                .replace(/\n/g, '');
-            expected = test[2];
-
             it(`produces the expected result for instance: ${test[0]}`, () => {
+                const model = new Model({
+                    modelStr: test[1],
+                });
+
+                model.init();
+                model.mergeXml(test[0]);
+
+                // remove __session instance
+                model.xml.querySelector('instance[id="__session"]').remove();
+
+                const result = new XMLSerializer()
+                    .serializeToString(model.xml, 'text/xml')
+                    .replace(/\n/g, '');
+                const expected = test[2];
+
                 expect(result).to.equal(expected);
             });
         });
@@ -1637,7 +1692,6 @@ describe('merging an instance into the model', () => {
     describe('when the record contains a repeat comment', () => {
         // This test covers a case where for some reason the record includes a repeat comment.
         it('does not create duplicate repeat comment', () => {
-            let result;
             const instanceStr =
                 '<a><!--repeat://a/r--><r><node/></r><b>2</b></a>';
             const model = new Model({
@@ -1653,9 +1707,11 @@ describe('merging an instance into the model', () => {
             // Now we specifically force Enketo to go through its repeat initialization routine for /a/r,
             // which includes the creation of special repeat comments.
             model.extractFakeTemplates(['/a/r']);
-            result = new XMLSerializer()
+
+            const result = new XMLSerializer()
                 .serializeToString(model.xml, 'text/xml')
                 .replace(/\n/g, '');
+
             expect(result).to.equal(
                 `<model><instance>${instanceStr}</instance></model>`
             );
@@ -1680,8 +1736,16 @@ describe('merging an instance into the model', () => {
                 text: 'with meta block in the openrosa namespace, ',
             },
         ].forEach(({ modelStr, instanceStr, text }) => {
-            const model = new Model({ modelStr, instanceStr });
-            const loadErrors = model.init();
+            /** @type {Model} */
+            let model;
+
+            /** @type {string[]} */
+            let loadErrors;
+
+            beforeEach(() => {
+                model = new Model({ modelStr, instanceStr });
+                loadErrors = model.init();
+            });
 
             it(`${text} outputs no load errors`, () => {
                 expect(loadErrors.length).to.equal(0);
@@ -1716,14 +1780,22 @@ describe('merging an instance into the model', () => {
     });
 
     describe('when instanceID and deprecatedID nodes are already present in the form format', () => {
-        const model = new Model({
-            modelStr:
-                '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/><deprecatedID/></meta></thedata></instance></model>',
-            instanceStr:
-                '<thedata id="something"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>',
-        });
+        /** @type {Model} */
+        let model;
 
-        const loadErrors = model.init();
+        /** @type {string[]} */
+        let loadErrors;
+
+        beforeEach(() => {
+            model = new Model({
+                modelStr:
+                    '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/><deprecatedID/></meta></thedata></instance></model>',
+                instanceStr:
+                    '<thedata id="something"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>',
+            });
+
+            loadErrors = model.init();
+        });
 
         it('outputs no load errors', () => {
             expect(loadErrors.length).to.equal(0);
@@ -1757,22 +1829,19 @@ describe('merging an instance into the model', () => {
                 '<instance><a><r><b>5</b></r><r><b>6</b></r>',
             ],
         ].forEach((test) => {
-            let result;
-            let expected;
-
-            const model = new Model({
-                modelStr: test[1],
-                instanceStr: test[0],
-            });
-
-            model.init();
-
-            result = new XMLSerializer()
-                .serializeToString(model.xml, 'text/xml')
-                .replace(/<!--[^>]*-->/g, '');
-            expected = test[2];
-
             it('the initialization will merge the repeat values correctly and remove the templates', () => {
+                const model = new Model({
+                    modelStr: test[1],
+                    instanceStr: test[0],
+                });
+
+                model.init();
+
+                const result = new XMLSerializer()
+                    .serializeToString(model.xml, 'text/xml')
+                    .replace(/<!--[^>]*-->/g, '');
+                const expected = test[2];
+
                 expect(model.xml.querySelectorAll('a > r').length).to.equal(2);
                 expect(result).to.contain(expected);
             });
@@ -1794,13 +1863,13 @@ describe('merging an instance into the model', () => {
                 '<model xmlns:jr="http://openrosa.org/javarosa"><instance><a><r jr:template=""><b>5</b></r><meta/></a></instance></model>',
             ],
         ].forEach((test) => {
-            const model = new Model({
-                modelStr: test[1],
-                instanceStr: test[0],
-            });
-            model.init();
-
             it('namespaces are added correctly', () => {
+                const model = new Model({
+                    modelStr: test[1],
+                    instanceStr: test[0],
+                });
+                model.init();
+
                 // these tests assume a fix attribute order which is a bit fragile
                 expect(
                     model.xml
@@ -1817,16 +1886,6 @@ describe('merging an instance into the model', () => {
     });
 
     describe('returns load errors upon initialization', () => {
-        const originalErrorLog = console.error;
-
-        before(() => {
-            console.error = () => {};
-        });
-
-        after(() => {
-            console.error = originalErrorLog;
-        });
-
         it('when the instance-to-edit contains nodes that are not present in the default instance', () => {
             const model = new Model({
                 modelStr:
@@ -1896,7 +1955,7 @@ describe('merging an instance into the model', () => {
 
 // Runs fine headlessly locally, but not on Travis for some reason.
 describe('instanceID and deprecatedID are populated upon model initilization', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     it('for a new record', () => {
         const model = new Model({
@@ -1970,7 +2029,7 @@ describe('instanceID and deprecatedID are populated upon model initilization', (
 });
 
 describe('odk-instance-first-load event', () => {
-    stubConsoleWarn();
+    stubConsole();
 
     const modelStr =
         '<model><instance><data><a><meta><instanceID/></meta></a></data></instance></model>';
@@ -1980,10 +2039,9 @@ describe('odk-instance-first-load event', () => {
         const model = new Model({ modelStr });
         let eventsOccurred = 0;
 
-        model.events.addEventListener(
-            events.InstanceFirstLoad().type,
-            () => eventsOccurred++
-        );
+        model.events.addEventListener(events.InstanceFirstLoad().type, () => {
+            eventsOccurred += 1;
+        });
         model.init();
         expect(eventsOccurred).to.equal(1);
     });
@@ -1992,10 +2050,9 @@ describe('odk-instance-first-load event', () => {
         const model = new Model({ modelStr, instanceStr });
         let eventsOccurred = 0;
 
-        model.events.addEventListener(
-            events.InstanceFirstLoad().type,
-            () => eventsOccurred++
-        );
+        model.events.addEventListener(events.InstanceFirstLoad().type, () => {
+            eventsOccurred += 1;
+        });
         model.init();
         expect(eventsOccurred).to.equal(0);
     });

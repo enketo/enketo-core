@@ -21,13 +21,22 @@ const FORM_SHOW_SCALE = `<label class="question non-select or-appearance-analog-
 testBasicInstantiation(AnalogScaleWidget, FORM_SHOW_SCALE);
 
 describe('Analog-scale widget with show scale', () => {
-    const fragment = document
-        .createRange()
-        .createContextualFragment(FORM_SHOW_SCALE);
-    new AnalogScaleWidget(fragment.querySelector('input'));
-    const widget = fragment.querySelector('.range-widget');
-    const widgetInput = widget.querySelector('input');
-    const widgetScalesContainer = widget.querySelector('.range-widget__scale');
+    /** @type {HTMLElement} */
+    let widgetInput;
+
+    /** @type {HTMLElement} */
+    let widgetScalesContainer;
+
+    beforeEach(() => {
+        const fragment = document
+            .createRange()
+            .createContextualFragment(FORM_SHOW_SCALE);
+        new AnalogScaleWidget(fragment.querySelector('input'));
+        const widget = fragment.querySelector('.range-widget');
+
+        widgetInput = widget.querySelector('input');
+        widgetScalesContainer = widget.querySelector('.range-widget__scale');
+    });
 
     it('adds widget that contain input with type range', () => {
         expect(widgetInput.type).to.equal('range');
