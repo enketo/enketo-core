@@ -179,7 +179,7 @@ class DesktopSelectpicker extends Widget {
                 const input = li.querySelector('input');
                 const select = _this.element;
                 const option = select.querySelector(
-                    `option[value="${input.value}"]`
+                    `option[value="${CSS.escape(input.value)}"]`
                 );
                 const selectedBefore = option.matches(':checked');
 

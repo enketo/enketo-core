@@ -159,7 +159,7 @@ export default {
                         ? option.dataset.value || option.value
                         : option.value;
                 const translatedOption = translations.querySelector(
-                    `.active[data-option-value="${value}"]`
+                    `.active[data-option-value="${CSS.escape(value)}"]`
                 );
                 if (translatedOption) {
                     let newLabel = curLabel;

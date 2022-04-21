@@ -368,7 +368,9 @@ export default {
                             const input = this.getWrapNode(
                                 control
                             ).querySelector(
-                                `input[type="radio"][data-name="${name}"][value="${value}"]`
+                                `input[type="radio"][data-name="${name}"][value="${CSS.escape(
+                                    value
+                                )}"]`
                             );
                             if (input) {
                                 input.checked = true;
@@ -401,7 +403,7 @@ export default {
                                 );
                         } else {
                             const option = control.querySelector(
-                                `option[value="${value}"]`
+                                `option[value="${CSS.escape(value)}"]`
                             );
                             if (option) {
                                 option.selected = true;

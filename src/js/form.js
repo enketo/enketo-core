@@ -489,10 +489,11 @@ Form.prototype.replaceChoiceNameFn = function (
                 label = '';
             } else if (nodeName === 'select') {
                 const found = inputs.find((input) =>
-                    input.querySelector(`[value="${value}"]`)
+                    input.querySelector(`[value="${CSS.escape(value)}"]`)
                 );
                 label = found
-                    ? found.querySelector(`[value="${value}"]`).textContent
+                    ? found.querySelector(`[value="${CSS.escape(value)}"]`)
+                          .textContent
                     : '';
             } else if (nodeName === 'input') {
                 const list = inputs[0].getAttribute('list');
