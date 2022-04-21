@@ -1375,6 +1375,6 @@ Form.prototype.goToTarget = function (target) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '2.1.2';
+Form.requiredTransformerVersion = '2.1.3';
 
 export { Form, FormModel };
