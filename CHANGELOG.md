@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.0.5] - 2022-04-21
+
+##### Changed
+
+-   Fix: escape querySelector variables to avoid error. (#871)
+-   Fix: improve error messages for missing external instances (#873)
+-   Fix: don't randomize unrelated itemsets outside repeat (#876)
+-   Update datepicker-extended widget to properly unpack data from paste event (#878)
+-   Code style/formatting: Prettier + Airbnb ESLint preset (#866)
+-   Fix: unescaped HTML in CHANGELOG (#864)
+-   Update format-date to return empty string instead of 'Invalid Date' (openrosa-xpath-evaluator#155)
+
 ## [6.0.4] - 2022-02-04
 
 ##### Changed
