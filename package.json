@@ -115,7 +115,7 @@
         "leaflet.gridlayer.googlemutant": "^0.13.5",
         "mergexml": "github:eyelidlessness/js-merge-xml#upgrade/xmldom",
         "node-forge": "^1.3.1",
-        "openrosa-xpath-evaluator": "^2.0.10",
+        "openrosa-xpath-evaluator": "^2.0.11",
         "signature_pad": "2.3.x"
     },
     "volta": {
