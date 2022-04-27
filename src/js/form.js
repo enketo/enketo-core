@@ -312,26 +312,34 @@ Form.prototype.init = function () {
         this.pages.init();
 
         // after radio button data-name setting (now done in XLST)
-        // Set temporary event handler to ensure calculations in newly added repeats are run for the first time
-        const tempHandlerAddRepeat = (event) => this.calc.update(event.detail);
-        const tempHandlerRemoveRepeat = () => (this.all = {});
+        let repeatsAdded = 0;
+
+        const tempHandlerAddRepeat = () => {
+            repeatsAdded += 1;
+        };
+
         this.view.html.addEventListener(
             events.AddRepeat().type,
             tempHandlerAddRepeat
         );
-        this.view.html.addEventListener(
-            events.RemoveRepeat().type,
-            tempHandlerRemoveRepeat
-        );
+
         this.repeatsInitialized = true;
         this.repeats.init();
+
+        // Recalculate after repeats are initialized. Previously this was performed in
+        // `tempHandlerAddRepeat`, but recalculating them all at once is significantly faster.
+        if (repeatsAdded > 0) {
+            this.calc.update({
+                allRepeats: true,
+                cloned: true,
+            });
+
+            this.all = {};
+        }
+
         this.view.html.removeEventListener(
             events.AddRepeat().type,
             tempHandlerAddRepeat
-        );
-        this.view.html.removeEventListener(
-            events.RemoveRepeat().type,
-            tempHandlerRemoveRepeat
         );
 
         // after repeats.init, but before itemset.update
@@ -619,10 +627,10 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
     updated = updated || {};
     filter = filter || '';
 
-    const { cloned, repeatPath } = updated;
+    const { allRepeats, cloned, repeatPath } = updated;
 
     // The collection of non-repeat inputs, calculations and groups is cached (unchangeable)
-    if (!this.nonRepeats[attr]) {
+    if (!allRepeats && !this.nonRepeats[attr]) {
         controls = [
             ...this.view.html.querySelectorAll(
                 `:not(.or-repeat-info)[${attr}]`
@@ -631,8 +639,13 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         this.nonRepeats[attr] = this.filterRadioCheckSiblings(controls);
     }
 
-    // If the updated node is inside a repeat (and there are multiple repeats present)
-    if (typeof repeatPath !== 'undefined' && updated.repeatIndex >= 0) {
+    if (allRepeats) {
+        const controls = [
+            ...this.view.html.querySelectorAll(`form.or .or-repeat [${attr}]`),
+        ];
+        repeatControls = this.filterRadioCheckSiblings(controls);
+    } else if (typeof repeatPath !== 'undefined' && updated.repeatIndex >= 0) {
+        // If the updated node is inside a repeat (and there are multiple repeats present)
         const repeatEl = [
             ...this.view.html.querySelectorAll(
                 `.or-repeat[name="${repeatPath}"]`
