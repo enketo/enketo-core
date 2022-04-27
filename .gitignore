@@ -2,6 +2,7 @@ node_modules/
 npm-debug.log
 build
 test/mock/forms.js
+test/mock/forms.mjs
 test-coverage/
 temp
 .DS_Store
