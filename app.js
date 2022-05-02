@@ -116,7 +116,10 @@ function initializeForm() {
     // for debugging
     window.form = form;
     // initialize form and check for load errors
-    const loadErrors = form.init();
+    const loadErrors = form
+        .init()
+        .filter((error) => error !== "Can't find last-saved.");
+
     if (loadErrors.length > 0) {
         window.alert(`loadErrors: ${loadErrors.join(', ')}`);
     }
