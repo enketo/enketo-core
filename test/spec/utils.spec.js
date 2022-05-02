@@ -81,15 +81,13 @@ describe('return postfixed filenames', () => {
         ['myname', undefined, 'myname'],
         ['myname', null, 'myname'],
         ['myname', false, 'myname'],
-    ].forEach((test) => {
-        const file = new Blob(['a'], {
-            type: 'text',
-        });
-        file.name = test[0];
-        const postfix = test[1];
-        const expected = test[2];
+    ].forEach(([name, postfix, expected]) => {
+        it(`returns the filename ${expected} from ${name} and ${postfix}`, () => {
+            const file = new Blob(['a'], {
+                type: 'text',
+            });
+            file.name = name;
 
-        it(`returns the filename ${expected} from ${file.name} and ${postfix}`, () => {
             expect(utils.getFilename(file, postfix)).to.deep.equal(expected);
         });
     });

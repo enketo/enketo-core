@@ -10,9 +10,18 @@ const VALUE = '200';
 runAllCommonWidgetTests(ThousandsSeparatorWidget, FORM, VALUE);
 
 describe('thousands-separator widget', () => {
-    const fragment = document.createRange().createContextualFragment(FORM);
-    const control = fragment.querySelector('input');
-    const widget = new ThousandsSeparatorWidget(control);
+    /** @type {HTMLElement} */
+    let control;
+
+    /** @type {ThousandsSeparatorWidget} */
+    let widget;
+
+    beforeEach(() => {
+        const fragment = document.createRange().createContextualFragment(FORM);
+
+        control = fragment.querySelector('input');
+        widget = new ThousandsSeparatorWidget(control);
+    });
 
     const tests = [
         [1000, '1,000'],

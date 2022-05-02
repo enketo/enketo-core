@@ -488,7 +488,27 @@ describe('setvalue action to populate defaults', () => {
         });
 
         describe('with xforms-value-changed events', () => {
-            it('when the trigger is inside a repeat but the target is not', (done) => {
+            /** @type {import('sinon').SinonSandbox} */
+            let sandbox;
+
+            /** @type {SinonFakeTimers} */
+            let timers;
+
+            beforeEach(() => {
+                sandbox = sinon.createSandbox();
+                timers = sandbox.useFakeTimers();
+            });
+
+            afterEach(() => {
+                timers.runAll();
+
+                timers.clearTimeout();
+                timers.clearInterval();
+                timers.restore();
+                sandbox.restore();
+            });
+
+            it('when the trigger is inside a repeat but the target is not', async () => {
                 const form = loadForm(
                     'setvalue-repeat-tricky-trigger-target.xml'
                 );
@@ -505,11 +525,10 @@ describe('setvalue action to populate defaults', () => {
                 const item3Second = form.view.html.querySelectorAll(sel)[1];
                 form.input.setVal(item3Second, 'd', events.Change());
 
-                setTimeout(() => {
-                    expect(itemX.textContent).not.to.equal('initial default');
-                    expect(hid.textContent).not.to.equal('');
-                    done();
-                }, 100);
+                await timers.runAllAsync();
+
+                expect(itemX.textContent).not.to.equal('initial default');
+                expect(hid.textContent).not.to.equal('');
             });
         });
     });
@@ -541,7 +560,27 @@ describe('setvalue action to populate defaults', () => {
 });
 
 describe('setvalue actions to populate a value if another value changes', () => {
-    it('works outside a repeat in conjunction with a select_minimal', (done) => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {SinonFakeTimers} */
+    let timers;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+        timers = sandbox.useFakeTimers();
+    });
+
+    afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
+        sandbox.restore();
+    });
+
+    it('works outside a repeat in conjunction with a select_minimal', async () => {
         const form = loadForm('setvalue.xml');
         form.init();
         const myAgeView = form.view.html.querySelector('[name="/data/my_age"]');
@@ -556,14 +595,13 @@ describe('setvalue actions to populate a value if another value changes', () => 
 
         form.input.setVal(myAgeView, '11', events.Change());
 
-        setTimeout(() => {
-            // expect( myAgeChangedView.textContent ).to.equal( '6' );
-            expect(myAgeChangedModel.textContent).to.equal('111');
-            done();
-        }, 100);
+        await timers.runAllAsync();
+
+        // expect( myAgeChangedView.textContent ).to.equal( '6' );
+        expect(myAgeChangedModel.textContent).to.equal('111');
     });
 
-    it('works inside a repeat in conjunction with a number input', (done) => {
+    it('works inside a repeat in conjunction with a number input', async () => {
         const form = loadForm('setvalue.xml');
         form.init();
         const agesView = [
@@ -589,17 +627,16 @@ describe('setvalue actions to populate a value if another value changes', () => 
 
         form.input.setVal(agesView[0], '22', events.Change());
 
-        setTimeout(() => {
-            // expect( ageChangedsView.map( el => el.textContent )).to.deep.equal( [ 'Age changed!', '' ] );
-            expect(ageChangedsModel.map((el) => el.textContent)).to.deep.equal([
-                'Age changed!',
-                '',
-            ]);
-            done();
-        }, 100);
+        await timers.runAllAsync();
+
+        // expect( ageChangedsView.map( el => el.textContent )).to.deep.equal( [ 'Age changed!', '' ] );
+        expect(ageChangedsModel.map((el) => el.textContent)).to.deep.equal([
+            'Age changed!',
+            '',
+        ]);
     });
 
-    it('works for multiple setvalue actions triggered by same question', (done) => {
+    it('works for multiple setvalue actions triggered by same question', async () => {
         const form = loadForm('setvalue-multiple-under-one.xml');
         form.init();
         const aView = form.input.find('/data/a', 0);
@@ -621,15 +658,14 @@ describe('setvalue actions to populate a value if another value changes', () => 
 
         form.input.setVal(aView, '11', events.Change());
 
-        setTimeout(() => {
-            expect(bModel.textContent).to.equal('2');
-            expect(cView.value).to.equal('11.11');
-            expect(cModel.textContent).to.equal('11.11');
-            expect(dView.value).to.equal('');
-            expect(dModel.textContent).to.equal('');
-            expect(eModel.textContent).to.equal('');
-            done();
-        }, 100);
+        await timers.runAllAsync();
+
+        expect(bModel.textContent).to.equal('2');
+        expect(cView.value).to.equal('11.11');
+        expect(cModel.textContent).to.equal('11.11');
+        expect(dView.value).to.equal('');
+        expect(dModel.textContent).to.equal('');
+        expect(eModel.textContent).to.equal('');
     });
 
     it('works if the setvalue trigger is a calculation', () => {

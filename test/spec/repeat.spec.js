@@ -8,21 +8,29 @@ describe('repeat functionality', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
+    let timers;
+
     // turn jQuery animations off
     $.fx.off = true;
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
+        timers = sandbox.useFakeTimers();
 
         sandbox.stub(dialog, 'confirm').resolves(true);
     });
 
     afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
         sandbox.restore();
     });
 
     describe('cloning', () => {
-        it('removes the correct instance and HTML node when the "-" button is clicked (issue 170)', (done) => {
+        it('removes the correct instance and HTML node when the "-" button is clicked (issue 170)', async () => {
             const form = loadForm('thedata.xml');
             form.init();
             const repeatSelector = '.or-repeat[name="/thedata/repeatGroup"]';
@@ -47,24 +55,23 @@ describe('repeat functionality', () => {
                 .querySelectorAll(repeatSelector)
                 [index].querySelector('button.remove')
                 .click();
-            setTimeout(() => {
-                expect(form.model.node(nodePath, index).getVal()).to.equal(
-                    undefined
-                );
-                // check if it removed the correct data node
-                expect(form.model.node(nodePath, index - 1).getVal()).to.equal(
-                    'c2'
-                );
-                // check if it removed the correct html node
-                expect(
-                    form.view.html.querySelectorAll(repeatSelector).length
-                ).to.equal(2);
-                expect(
-                    form.view.html.querySelectorAll(nodeSelector)[index - 1]
-                        .value
-                ).to.equal('c2');
-                done();
-            }, 10);
+
+            await timers.runAllAsync();
+
+            expect(form.model.node(nodePath, index).getVal()).to.equal(
+                undefined
+            );
+            // check if it removed the correct data node
+            expect(form.model.node(nodePath, index - 1).getVal()).to.equal(
+                'c2'
+            );
+            // check if it removed the correct html node
+            expect(
+                form.view.html.querySelectorAll(repeatSelector).length
+            ).to.equal(2);
+            expect(
+                form.view.html.querySelectorAll(nodeSelector)[index - 1].value
+            ).to.equal('c2');
         });
 
         it('marks cloned invalid fields as valid', () => {
@@ -157,20 +164,21 @@ describe('repeat functionality', () => {
         // note that this form contains multiple repeats in the instance
         const form = loadForm('nested_repeats.xml');
         form.init();
-        const _1stLevelTargetRepeat = form.view.html.querySelectorAll(
+        const firstLevelTargetRepeat = form.view.html.querySelectorAll(
             '.or-repeat[name="/nested_repeats/kids/kids_details"]'
         );
-        const _2ndLevelTargetRepeats1 =
-            _1stLevelTargetRepeat[0].querySelectorAll(
+        const secondLevelTargetRepeats1 =
+            firstLevelTargetRepeat[0].querySelectorAll(
                 '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]'
             );
-        const _2ndLevelTargetRepeats2 =
-            _1stLevelTargetRepeat[1].querySelectorAll(
+        const secondLevelTargetRepeats2 =
+            firstLevelTargetRepeat[1].querySelectorAll(
                 '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]'
             );
-        expect(_1stLevelTargetRepeat.length).to.equal(2);
-        expect(_2ndLevelTargetRepeats1.length).to.equal(2);
-        expect(_2ndLevelTargetRepeats2.length).to.equal(3);
+
+        expect(firstLevelTargetRepeat.length).to.equal(2);
+        expect(secondLevelTargetRepeats1.length).to.equal(2);
+        expect(secondLevelTargetRepeats2.length).to.equal(3);
     });
 
     // https://github.com/kobotoolbox/enketo-express/issues/754
@@ -635,13 +643,21 @@ describe('repeat functionality', () => {
     });
 
     describe('getIndex() function', () => {
-        const form = loadForm('nested_repeats.xml');
-        form.init();
-        const repeats = form.view.html.querySelectorAll(
-            '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]'
-        );
+        /** @type {Form} */
+        let form;
 
-        [0, 1, 2, 3, 4].forEach((index) => {
+        /** @type {HTMLCollection} */
+        let repeats;
+
+        beforeEach(() => {
+            form = loadForm('nested_repeats.xml');
+            form.init();
+            repeats = form.view.html.querySelectorAll(
+                '.or-repeat[name="/nested_repeats/kids/kids_details/immunization_info"]'
+            );
+        });
+
+        [(0, 1, 2, 3, 4)].forEach((index) => {
             it('works with nested repeats to get the index of a nested repeat in respect to the whole form', () => {
                 expect(form.repeats.getIndex(repeats[index])).to.equal(index);
             });
@@ -649,9 +665,10 @@ describe('repeat functionality', () => {
     });
 
     describe('repeats with repeat-count and only calculations', () => {
-        const form = loadForm('repeat-count-calc-only.xml');
-        const errors = form.init();
         it('loads without errors', () => {
+            const form = loadForm('repeat-count-calc-only.xml');
+            const errors = form.init();
+
             expect(errors).to.deep.equal([]);
         });
     });
@@ -713,7 +730,7 @@ describe('repeat functionality', () => {
             const repeatButton =
                 form.view.html.querySelector('.add-repeat-btn');
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i += 1) {
                 repeatButton.click();
 
                 expect(randomizedFruits.innerText).to.equal(initialText);
@@ -735,7 +752,7 @@ describe('repeat functionality', () => {
             const repeatButton =
                 form.view.html.querySelector('.add-repeat-btn');
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i += 1) {
                 repeatButton.click();
             }
 

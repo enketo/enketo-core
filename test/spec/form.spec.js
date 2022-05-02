@@ -3,7 +3,7 @@ import { Form } from '../../src/js/form';
 import loadForm from '../helpers/load-form';
 import forms from '../mock/forms';
 import config from '../../config';
-import pkg from '../../package';
+import pkg from '../../package.json';
 import events from '../../src/js/event';
 import dialog from '../../src/js/fake-dialog';
 
@@ -22,13 +22,16 @@ const stubDialogConfirm = () => {
     });
 };
 
+/**
+ * @typedef {import('../../src/js/form').Form} Form
+ */
+
 describe('Getters ', () => {
     stubDialogConfirm();
-
-    const form = loadForm('thedata.xml');
-    form.init();
-
     it('id() returns the formID', () => {
+        const form = loadForm('thedata.xml');
+        form.init();
+
         expect(form.id).to.equal('thedata');
     });
 });
@@ -36,13 +39,17 @@ describe('Getters ', () => {
 describe('Output functionality ', () => {
     stubDialogConfirm();
 
-    // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
-    // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
-    // since the issue was resolved by updating outputs with a one millisecond delay (!).
-    // Nevertheless, these tests can be useful.
-    const form = loadForm('random.xml');
+    /** @type {Form} */
+    let form;
 
-    form.init();
+    beforeEach(() => {
+        // These tests were orginally meant for modilabs/enketo issue #141. However, they passed when they were
+        // failing in the enketo client itself (same form). It appeared the issue was untestable (except manually)
+        // since the issue was resolved by updating outputs with a one millisecond delay (!).
+        // Nevertheless, these tests can be useful.
+        form = loadForm('random.xml');
+        form.init();
+    });
 
     it('tested upon initialization: node random__', () => {
         const val = Number(
@@ -66,10 +73,11 @@ describe('Output functionality ', () => {
 describe('Output functionality inside branches that irrelevant upon load', () => {
     stubDialogConfirm();
 
-    const form = loadForm('output-irrelevant.xml');
-    form.init();
-
     it('is evaluated after the branch becomes relevant', () => {
+        const form = loadForm('output-irrelevant.xml');
+
+        form.init();
+
         form.view.$.find('input[name="/data/consent"]')
             .val('yes')
             .trigger('change');
@@ -80,35 +88,35 @@ describe('Output functionality inside branches that irrelevant upon load', () =>
 describe('Output functionality within repeats', () => {
     stubDialogConfirm();
 
-    let $o = [];
-    const form = loadForm('outputs_in_repeats.xml');
-    form.init();
-    form.view.$.find('.add-repeat-btn').click();
-
-    $o = form.view.$.find('.or-output');
-
-    form.view.$.find('[name="/outputs_in_repeats/rep/name"]')
-        .eq(0)
-        .val('Martijn')
-        .trigger('change');
-    form.view.$.find('[name="/outputs_in_repeats/rep/name"]')
-        .eq(1)
-        .val('Beth')
-        .trigger('change');
-    form.view.$.find(
-        '[data-name="/outputs_in_repeats/rep/animal"][value="elephant"]'
-    )
-        .eq(0)
-        .prop('checked', true)
-        .trigger('change');
-    form.view.$.find(
-        '[data-name="/outputs_in_repeats/rep/animal"][value="rabbit"]'
-    )
-        .eq(1)
-        .prop('checked', true)
-        .trigger('change');
-
     it('shows correct value when referring to repeated node', () => {
+        let $o = [];
+        const form = loadForm('outputs_in_repeats.xml');
+        form.init();
+        form.view.$.find('.add-repeat-btn').click();
+
+        $o = form.view.$.find('.or-output');
+
+        form.view.$.find('[name="/outputs_in_repeats/rep/name"]')
+            .eq(0)
+            .val('Martijn')
+            .trigger('change');
+        form.view.$.find('[name="/outputs_in_repeats/rep/name"]')
+            .eq(1)
+            .val('Beth')
+            .trigger('change');
+        form.view.$.find(
+            '[data-name="/outputs_in_repeats/rep/animal"][value="elephant"]'
+        )
+            .eq(0)
+            .prop('checked', true)
+            .trigger('change');
+        form.view.$.find(
+            '[data-name="/outputs_in_repeats/rep/animal"][value="rabbit"]'
+        )
+            .eq(1)
+            .prop('checked', true)
+            .trigger('change');
+
         expect($o[0].textContent).to.equal('Martijn');
         expect($o[1].textContent).to.equal('Martijn');
         expect($o[2].textContent).to.equal('elephant');
@@ -122,6 +130,26 @@ describe('Output functionality within repeats', () => {
 
 describe('Preload and MetaData functionality', () => {
     stubDialogConfirm();
+
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {SinonFakeTimers} */
+    let timers;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+        timers = sandbox.useFakeTimers();
+    });
+
+    afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
+        sandbox.restore();
+    });
 
     // Form.js no longer has anything to do with /meta/instanceID population. Test should still pass though.
     it('ignores a calculate binding on /[ROOT]/meta/instanceID', () => {
@@ -196,24 +224,19 @@ describe('Preload and MetaData functionality', () => {
         );
     });
 
-    it('generates a timeEnd on init and updates this after a beforesave event WITH a preload binding', (done) => {
-        let timeEnd;
-        let timeEndNew;
-
+    it('generates a timeEnd on init and updates this after a beforesave event WITH a preload binding', () => {
         const form = loadForm('preload.xml');
         form.init();
-        timeEnd = form.model.node('/preload/end').getVal();
+        const timeEnd = form.model.node('/preload/end').getVal();
 
         // populating upon initalization is not really a feature, could be removed perhaps
         expect(timeEnd.length > 10).to.equal(true);
 
-        setTimeout(() => {
-            form.view.html.dispatchEvent(events.BeforeSave());
-            timeEndNew = form.model.node('/preload/end').getVal();
-            expect(new Date(timeEndNew) - new Date(timeEnd)).to.be.above(1000);
-            expect(new Date(timeEndNew) - new Date(timeEnd)).to.be.below(1050);
-            done();
-        }, 1000);
+        timers.tick(1000);
+
+        form.view.html.dispatchEvent(events.BeforeSave());
+        const timeEndNew = form.model.node('/preload/end').getVal();
+        expect(new Date(timeEndNew) - new Date(timeEnd)).to.equal(1000);
     });
 
     it('also works with nodes that have a corresponding form control element', () => {
@@ -320,7 +343,7 @@ describe('Preload and MetaData functionality', () => {
         // ['/widgets/os_version', 'xx'],
     ];
 
-    for (let i = 0; i < t.length; i++) {
+    for (let i = 0; i < t.length; i += 1) {
         testPreloadExistingValue({
             selector: t[i][0],
             result: t[i][1],
@@ -337,11 +360,8 @@ describe('Preload and MetaData functionality', () => {
 
 describe('Loading instance values into html input fields functionality', () => {
     stubDialogConfirm();
-
-    let form;
-
     it('correctly populates input fields of non-repeat node names in the instance', () => {
-        form = loadForm('thedata.xml');
+        const form = loadForm('thedata.xml');
         form.init();
         expect(form.view.$.find('[name="/thedata/nodeB"]').val()).to.equal('b');
         expect(
@@ -353,7 +373,7 @@ describe('Loading instance values into html input fields functionality', () => {
     });
 
     it('correctly populates input field even if the instance node name is not unique and occurs at multiple levels', () => {
-        form = loadForm('nodename.xml');
+        const form = loadForm('nodename.xml');
         form.init();
         expect(form.view.$.find('[name="/nodename_bug/hh/hh"]').val()).to.equal(
             'hi'
@@ -362,7 +382,7 @@ describe('Loading instance values into html input fields functionality', () => {
 
     // https://github.com/kobotoolbox/enketo-express/issues/718
     it('correctly populates if the first radiobutton or first checkbox only has a value', () => {
-        form = loadForm(
+        const form = loadForm(
             'issue208.xml',
             '<issue208><rep><nodeA>yes</nodeA></rep></issue208>'
         );
@@ -630,22 +650,23 @@ describe('branching functionality', () => {
 
     // https://github.com/kobotoolbox/enketo-express/issues/846
     describe('inside repeats for a calculation without a form control when no repeats exist', () => {
-        const form = loadForm('calcs_in_repeats_2.xml');
-        const loadErrors = form.init();
         it('does not throw an error', () => {
+            const form = loadForm('calcs_in_repeats_2.xml');
+            const loadErrors = form.init();
+
             expect(loadErrors.length).to.equal(0);
         });
     });
 
     describe('in nested branches ', () => {
-        const form = loadForm('nested-branches.xml');
-
-        form.init();
-        const $nestedBranch = form.view.$.find(
-            '[name="/nested-branches/group/c"]'
-        ).closest('.question');
-
         it('works correctly when an ancestor branch gets enabled', () => {
+            const form = loadForm('nested-branches.xml');
+
+            form.init();
+            const $nestedBranch = form.view.$.find(
+                '[name="/nested-branches/group/c"]'
+            ).closest('.question');
+
             expect($nestedBranch.closest('.disabled').length).to.equal(1);
             // enable parent branch
             form.model.node('/nested-branches/a', 0).setVal('1');
@@ -817,19 +838,37 @@ describe('branching functionality', () => {
     });
 
     describe('on a question inside a REMOVED repeat', () => {
-        it('does not try to evaluate it', (done) => {
+        /** @type {import('sinon').SinonSandbox} */
+        let sandbox;
+
+        /** @type {SinonFakeTimers} */
+        let timers;
+
+        beforeEach(() => {
+            sandbox = sinon.createSandbox();
+            timers = sandbox.useFakeTimers();
+        });
+
+        afterEach(() => {
+            timers.runAll();
+
+            timers.clearTimeout();
+            timers.clearInterval();
+            timers.restore();
+            sandbox.restore();
+        });
+
+        it('does not try to evaluate it', async () => {
             const form = loadForm('repeat-irrelevant-date.xml');
             form.init();
             form.view.$.find('[name="/repeat/rep"] button.remove').click();
             // This is testing what happens inside getDataStrWithoutIrrelevantNodes
             // It tests whether the cache is updated when a repeat is removed.s
             // https://github.com/kobotoolbox/enketo-express/issues/1014
-            setTimeout(() => {
-                expect(form.getRelatedNodes('data-relevant').length).to.equal(
-                    0
-                );
-                done();
-            }, 650);
+
+            await timers.runAllAsync();
+
+            expect(form.getRelatedNodes('data-relevant').length).to.equal(0);
         });
     });
 });
@@ -851,10 +890,11 @@ describe('obtaining XML string from form without irrelevant nodes', () => {
     });
 
     it('works for calcs that become non-relevant after load', () => {
-        let $node;
         const form = loadForm('calcs.xml');
+
         form.init();
-        $node = form.view.$.find('[name="/calcs/cond1"]');
+
+        const $node = form.view.$.find('[name="/calcs/cond1"]');
 
         $node.val('yes').trigger('change');
         expect(
@@ -991,18 +1031,19 @@ describe('validation', () => {
     stubDialogConfirm();
 
     describe('feedback to user after equired field validation', () => {
-        let form;
+        let groupBranchForm;
+
         let numberInput;
         let numberLabel;
 
         beforeEach(() => {
             $.fx.off = true; // turn jQuery animations off
-            form = loadForm('group_branch.xml');
-            form.init();
-            numberInput = form.view.html.querySelector(
+            groupBranchForm = loadForm('group_branch.xml');
+            groupBranchForm.init();
+            numberInput = groupBranchForm.view.html.querySelector(
                 '[name="/data/group/nodeB"]'
             );
-            numberLabel = form.input.getWrapNode(numberInput);
+            numberLabel = groupBranchForm.input.getWrapNode(numberInput);
         });
 
         it('validates a DISABLED and required number field without a value', () => {
@@ -1018,12 +1059,14 @@ describe('validation', () => {
 
         // see issue #144
         it('validates an enabled and required number field with value 0 and 1', () => {
-            const a = form.view.html.querySelector('[name="/data/nodeA"]');
+            const a = groupBranchForm.view.html.querySelector(
+                '[name="/data/nodeA"]'
+            );
             a.value = 'yes';
             a.dispatchEvent(events.Change());
 
             expect(numberLabel).not.to.equal(null);
-            numberInput.value === 0;
+            numberInput.value = 0;
             numberInput.dispatchEvent(events.Change());
             // .trigger( 'validate' );
             expect(numberLabel.classList.contains('invalid-required')).to.equal(
@@ -1038,235 +1081,237 @@ describe('validation', () => {
         });
 
         // failing
-        it('invalidates an enabled and required number field without a value', (done) => {
+        it('invalidates an enabled and required number field without a value', async () => {
             // first make branch relevant
-            const a = form.view.html.querySelector('[name="/data/nodeA"]');
+            const a = groupBranchForm.view.html.querySelector(
+                '[name="/data/nodeA"]'
+            );
             a.value = 'yes';
             a.dispatchEvent(events.Change());
             // now set value to empty
             numberInput.value = '';
             numberInput.dispatchEvent(events.Change());
-            form.validateInput(numberInput).then(() => {
-                expect(
-                    numberLabel.classList.contains('invalid-required')
-                ).to.equal(true);
-                done();
-            });
+
+            await groupBranchForm.validateInput(numberInput);
+
+            expect(numberLabel.classList.contains('invalid-required')).to.equal(
+                true
+            );
         });
 
-        it('invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', (done) => {
-            form = loadForm('thedata.xml');
+        it('invalidates an enabled and required textarea that contains only a newline character or other whitespace characters', async () => {
+            const form = loadForm('thedata.xml');
             form.init();
             const $textarea = form.view.$.find('[name="/thedata/nodeF"]');
             $textarea.val('\n').trigger('change');
-            form.validateInput($textarea[0])
-                .then(() => {
-                    expect($textarea.length).to.equal(1);
-                    expect(
-                        $textarea.parent('label').hasClass('invalid-required')
-                    ).to.equal(true);
-                    $textarea.val('  \n  \n\r \t ').trigger('change');
 
-                    return form.validateInput($textarea[0]);
-                })
-                .then(() => {
-                    expect(
-                        $textarea.parent('label').hasClass('invalid-required')
-                    ).to.equal(true);
-                    done();
-                });
+            await form.validateInput($textarea[0]);
+
+            expect($textarea.length).to.equal(1);
+            expect(
+                $textarea.parent('label').hasClass('invalid-required')
+            ).to.equal(true);
+            $textarea.val('  \n  \n\r \t ').trigger('change');
+
+            await form.validateInput($textarea[0]);
+
+            expect(
+                $textarea.parent('label').hasClass('invalid-required')
+            ).to.equal(true);
         });
 
-        it('hides a required "*" if the expression is dynamic and evaluates to false', (done) => {
-            form = loadForm('dynamic-required.xml');
+        it('hides a required "*" if the expression is dynamic and evaluates to false', async () => {
+            const form = loadForm('dynamic-required.xml');
             form.init();
             const $dynReq = form.view.$.find('.required');
 
             expect($dynReq.eq(0).hasClass('hide')).to.equal(false);
-            form.validateInput(
+
+            await form.validateInput(
                 form.view.html.querySelector('[name="/dynamic-required/num"]')
-            ).then(() => {
-                expect($dynReq.eq(1).hasClass('hide')).to.equal(true);
-                done();
-            });
+            );
+
+            expect($dynReq.eq(1).hasClass('hide')).to.equal(true);
         });
     });
 
     describe('public validate method', () => {
-        it('returns false if constraint is false', (done) => {
+        it('returns false if constraint is false', async () => {
             const form = loadForm('thedata.xml');
             form.init();
 
             // first make the form valid to make sure we are testing the right thing
             form.model.xml.querySelector('nodeF').textContent = 'f';
 
-            form.validate()
-                .then((result) => {
-                    // check test setup
-                    expect(result).to.equal(true);
-                    // now make make sure a constraint fails
-                    form.model.xml.querySelector('nodeB').textContent = 'c';
+            let result = await form.validate();
 
-                    return form.validate();
-                })
-                .then((result) => {
-                    expect(result).to.equal(false);
-                    done();
-                });
+            // check test setup
+            expect(result).to.equal(true);
+            // now make make sure a constraint fails
+            form.model.xml.querySelector('nodeB').textContent = 'c';
+
+            result = await form.validate();
+
+            expect(result).to.equal(false);
         });
     });
 
     // These tests were a real pain to write because of the need to change a global config property.
     describe('with validateContinuously', () => {
-        let form;
         const B = '[name="/data/b"]';
         const C = '[name="/data/c"]';
-        const dflt = config.validateContinuously;
 
-        const setValue = (selector, val) =>
-            new Promise((resolve) => {
-                // violate constraint for c
-                form.view.$.find(selector).val(val).trigger('change');
-                setTimeout(() => {
-                    resolve();
-                }, 800);
-            });
+        /** @type {import('sinon').SinonSandbox} */
+        let sandbox;
+
+        /** @type {SinonFakeTimers} */
+        let timers;
+
+        /** @type {boolean} */
+        let validateContinuously;
 
         beforeEach(() => {
-            // TODO: it's unclear whether this is equivalent to `mocha.timeout(0)`
-            // or a no-op.
-            mocha.timeout();
+            sandbox = sinon.createSandbox();
+
+            validateContinuously = false;
+
+            sandbox
+                .stub(config, 'validateContinuously')
+                .get(() => validateContinuously);
+
+            timers = sandbox.useFakeTimers();
         });
 
-        after(() => {
-            // reset to default
-            config.validateContinuously = dflt;
+        afterEach(() => {
+            timers.runAll();
+
+            timers.clearTimeout();
+            timers.clearInterval();
+            timers.restore();
+            sandbox.restore();
         });
 
-        it('=true will immediately re-evaluate a constraint if its dependent value changes', (done) => {
-            form = loadForm('constraint-dependency.xml');
+        const setValue = async (form, selector, val) => {
+            // violate constraint for c
+            form.view.$.find(selector).val(val).trigger('change');
+
+            await timers.runAllAsync();
+        };
+
+        it('=true will immediately re-evaluate a constraint if its dependent value changes', async () => {
+            const form = loadForm('constraint-dependency.xml');
             form.init();
-            setValue(C, '12')
-                .then(() => {
-                    config.validateContinuously = false;
 
-                    // violate
-                    return setValue(B, 'a');
-                })
-                .then(() => {
-                    expect(
-                        form.view.$.find(C)
-                            .closest('.question')
-                            .hasClass('invalid-constraint')
-                    ).to.equal(false);
+            await setValue(form, C, '12');
 
-                    // pass
-                    return setValue(B, 'b');
-                })
-                .then(() => {
-                    config.validateContinuously = true;
+            validateContinuously = false;
 
-                    // violate
-                    return setValue(B, 'a');
-                })
-                .then(() => {
-                    expect(
-                        form.view.$.find(C)
-                            .closest('.question')
-                            .hasClass('invalid-constraint')
-                    ).to.equal(true);
-                    done();
-                })
-                .catch(done);
-        }).timeout(5000);
+            // violate
+            await setValue(form, B, 'a');
 
-        it('=true, will not immediate validate a brand new repeat but will validate nodes that depend on that repeat', (done) => {
+            expect(
+                form.view.$.find(C)
+                    .closest('.question')
+                    .hasClass('invalid-constraint')
+            ).to.equal(false);
+
+            // pass
+            await setValue(form, B, 'b');
+
+            validateContinuously = true;
+
+            // violate
+            await setValue(form, B, 'a');
+
+            expect(
+                form.view.$.find(C)
+                    .closest('.question')
+                    .hasClass('invalid-constraint')
+            ).to.equal(true);
+        });
+
+        it('=true, will not immediate validate a brand new repeat but will validate nodes that depend on that repeat', async () => {
+            validateContinuously = true;
+
             const rep = '[name="/repeat-required/rep"]';
             const d = '[name="/repeat-required/d"]';
-            form = loadForm('repeat-required.xml');
+            const form = loadForm('repeat-required.xml');
             form.init();
             form.view.$.find('.add-repeat-btn').click();
 
-            // an ugly test, I don't care
-            setTimeout(() => {
-                // new repeat should not show errors
-                expect(
-                    form.view.$.find(rep)
-                        .eq(1)
-                        .find('.invalid-required, .invalid-constraint').length
-                ).to.equal(0);
-                // we now have two repeats so node d should not be marked as invalid
-                expect(
-                    form.view.$.find(d)
-                        .closest('.question')
-                        .is('.invalid-constraint')
-                ).to.equal(false);
+            await timers.runAllAsync();
 
-                form.view.$.find('.add-repeat-btn').click();
+            // new repeat should not show errors
+            expect(
+                form.view.$.find(rep)
+                    .eq(1)
+                    .find('.invalid-required, .invalid-constraint').length
+            ).to.equal(0);
+            // we now have two repeats so node d should not be marked as invalid
+            expect(
+                form.view.$.find(d)
+                    .closest('.question')
+                    .is('.invalid-constraint')
+            ).to.equal(false);
 
-                setTimeout(() => {
-                    // new repeat should not show errors
-                    expect(
-                        form.view.$.find(rep)
-                            .eq(2)
-                            .find('.invalid-required, .invalid-constraint')
-                            .length
-                    ).to.equal(0);
-                    // we now have three repeats so node d should be marked as invalid
-                    expect(
-                        form.view.$.find(d)
-                            .closest('.question')
-                            .is('.invalid-constraint')
-                    ).to.equal(true);
+            form.view.$.find('.add-repeat-btn').click();
 
-                    done();
-                }, 800);
-            }, 800);
+            await timers.runAllAsync();
+
+            // new repeat should not show errors
+            expect(
+                form.view.$.find(rep)
+                    .eq(2)
+                    .find('.invalid-required, .invalid-constraint').length
+            ).to.equal(0);
+            // we now have three repeats so node d should be marked as invalid
+            expect(
+                form.view.$.find(d)
+                    .closest('.question')
+                    .is('.invalid-constraint')
+            ).to.equal(true);
         });
 
-        it('immediately validates fields that get their values updated programmatically but have no constraint dependencies', (done) => {
-            form = loadForm('readonly-invalid.xml');
+        it('immediately validates fields that get their values updated programmatically but have no constraint dependencies', async () => {
+            const form = loadForm('readonly-invalid.xml');
             form.init();
-            config.validateContinuously = true;
+            validateContinuously = true;
             const src = '[name="/readonly-invalid/txt"]';
             const one = '[name="/readonly-invalid/n1"]';
             const two = '[name="/readonly-invalid/n2"]';
 
-            setValue(src, 'invalid')
-                .then(() => {
-                    expect(
-                        form.view.$.find(one)
-                            .closest('.question')
-                            .hasClass('invalid-constraint')
-                    ).to.equal(true);
-                    expect(
-                        form.view.$.find(two)
-                            .closest('.question')
-                            .hasClass('invalid-constraint')
-                    ).to.equal(true);
+            await setValue(form, src, 'invalid');
 
-                    return setValue(src, 'valid');
-                })
-                .then(() => {
-                    expect(
-                        form.view.$.find(one)
-                            .closest('.question')
-                            .hasClass('invalid-constraint')
-                    ).to.equal(false);
-                    expect(
-                        form.view.$.find(two)
-                            .closest('.question')
-                            .hasClass('invalid-constraint')
-                    ).to.equal(false);
-                    done();
-                });
+            expect(
+                form.view.$.find(one)
+                    .closest('.question')
+                    .hasClass('invalid-constraint')
+            ).to.equal(true);
+            expect(
+                form.view.$.find(two)
+                    .closest('.question')
+                    .hasClass('invalid-constraint')
+            ).to.equal(true);
+
+            await setValue(form, src, 'valid');
+
+            expect(
+                form.view.$.find(one)
+                    .closest('.question')
+                    .hasClass('invalid-constraint')
+            ).to.equal(false);
+            expect(
+                form.view.$.find(two)
+                    .closest('.question')
+                    .hasClass('invalid-constraint')
+            ).to.equal(false);
         });
 
         // Calling validation before repeats are initialized causes repeats.getIndex to fail. Since default value aren't validated upon
         // load, it makes sense to not evaluate calculations upon load either.
         // https://github.com/OpenClinica/enketo-express-oc/issues/109#issuecomment-424084781
         it('does not validate a calculation during initial load even if validateContinuously is set to true', () => {
-            config.validateContinuously = true;
+            validateContinuously = true;
             const form = loadForm(
                 'repeat-calc.xml',
                 '<repeat-calc><rep><num>1</num></rep><meta><instanceID>a</instanceID></meta></repeat-calc>'
@@ -1300,6 +1345,26 @@ describe('Readonly questions', () => {
 describe('Required questions', () => {
     stubDialogConfirm();
 
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {SinonFakeTimers} */
+    let timers;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+        timers = sandbox.useFakeTimers();
+    });
+
+    afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
+        sandbox.restore();
+    });
+
     it('dynamically update the asterisk visibility in real-time', () => {
         const form = loadForm('required.xml');
         form.init();
@@ -1312,53 +1377,73 @@ describe('Required questions', () => {
         expect($asterisk.hasClass('hide')).to.equal(false);
     });
 
-    it('fail validation if the value includes only whitespace', (done) => {
+    it('fail validation if the value includes only whitespace', async () => {
         const form = loadForm('required.xml');
         form.init();
         form.view.$.find('[name="/required/a"]').val('yes').trigger('change');
         const $input = form.view.$.find('[name="/required/b"]');
         $input.val(' a ').trigger('change');
 
-        setTimeout(() => {
-            $input.val('      ').trigger('change');
-            setTimeout(() => {
-                expect(
-                    $input.closest('.question').hasClass('invalid-required')
-                ).to.equal(true);
-                done();
-            }, 100);
-        }, 100);
+        await timers.runAllAsync();
+
+        $input.val('      ').trigger('change');
+
+        await timers.runAllAsync();
+
+        expect(
+            $input.closest('.question').hasClass('invalid-required')
+        ).to.equal(true);
     });
 });
 
 describe('re-validating inputs and updating user feedback', () => {
     stubDialogConfirm();
 
-    const form = loadForm('comment.xml');
-    let $one;
-    let $oneComment;
-    form.init();
-    $one = form.view.$.find('[name="/comment/one"]');
-    $oneComment = form.view.$.find('[name="/comment/one_comment"]');
-    it('works', (done) => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {SinonFakeTimers} */
+    let timers;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+        timers = sandbox.useFakeTimers();
+    });
+
+    afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
+        sandbox.restore();
+    });
+
+    it('works', async () => {
+        const form = loadForm('comment.xml');
+
+        form.init();
+
+        const $one = form.view.$.find('[name="/comment/one"]');
+        const $oneComment = form.view.$.find('[name="/comment/one_comment"]');
+
         // set question "one" in invalid state (automatic)
         $one.val('').trigger('change');
-        // validation is asynchronous
-        setTimeout(() => {
-            expect(
-                $one.closest('.question').hasClass('invalid-required')
-            ).to.equal(true);
-            // test relates to https://github.com/kobotoolbox/enketo-express/issues/608
-            // input.validate is called by a comment widget on the linked question when the comment value changes
-            // set question in valid state (not automatic, but by calling input.validate)
-            $oneComment.val('comment').trigger('change');
-            form.input.validate($one[0]).then(() => {
-                expect(
-                    $one.closest('.question').hasClass('invalid-required')
-                ).to.equal(false);
-                done();
-            });
-        }, 100);
+
+        await timers.runAllAsync();
+        expect($one.closest('.question').hasClass('invalid-required')).to.equal(
+            true
+        );
+        // test relates to https://github.com/kobotoolbox/enketo-express/issues/608
+        // input.validate is called by a comment widget on the linked question when the comment value changes
+        // set question in valid state (not automatic, but by calling input.validate)
+        $oneComment.val('comment').trigger('change');
+
+        await form.input.validate($one[0]);
+
+        expect($one.closest('.question').hasClass('invalid-required')).to.equal(
+            false
+        );
     });
 });
 
@@ -1375,59 +1460,71 @@ describe('getting related nodes', () => {
 describe('white-space-only input', () => {
     stubDialogConfirm();
 
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {SinonFakeTimers} */
+    let timers;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+        timers = sandbox.useFakeTimers();
+    });
+
+    afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
+        sandbox.restore();
+    });
+
     // This is e.g. important for automatic value-change log creation in OpenClinica.
-    it('does not fire an xforms-value-changed event', (done) => {
+    it('does not fire an xforms-value-changed event', async () => {
         const form = loadForm('thedata.xml');
         form.init();
         const $input = form.view.$.find('[name="/thedata/nodeF"]');
         let counter = 0;
-        $input[0].addEventListener(
-            new events.XFormsValueChanged().type,
-            () => counter++
-        );
+        $input[0].addEventListener(new events.XFormsValueChanged().type, () => {
+            counter += 1;
+        });
 
-        function inputVal(val) {
-            return new Promise((resolve) => {
-                $input.val(val).trigger('change');
-                setTimeout(resolve, 500);
-            });
+        async function inputVal(val) {
+            $input.val(val).trigger('change');
+
+            await timers.runAllAsync();
         }
-        inputVal('  ')
-            .then(() => {
-                expect(counter).to.equal(0);
 
-                return inputVal(' a');
-            })
-            .then(() => {
-                expect(counter).to.equal(1);
+        await inputVal('  ');
 
-                return inputVal('   ');
-            })
-            .then(() => {
-                expect(counter).to.equal(2);
+        expect(counter).to.equal(0);
 
-                return inputVal(' ');
-            })
-            .then(() => {
-                expect(counter).to.equal(2);
+        await inputVal(' a');
 
-                return inputVal('');
-            })
-            .then(() => {
-                expect(counter).to.equal(2);
-                done();
-            })
-            .catch(done);
-    }).timeout(5000);
+        expect(counter).to.equal(1);
+
+        await inputVal('   ');
+
+        expect(counter).to.equal(2);
+
+        await inputVal(' ');
+
+        expect(counter).to.equal(2);
+
+        await inputVal('');
+
+        expect(counter).to.equal(2);
+    });
 });
 
 describe('form status', () => {
     stubDialogConfirm();
 
-    const form = loadForm('thedata.xml');
-    form.init();
-
     it('correctly maintains edit status', () => {
+        const form = loadForm('thedata.xml');
+        form.init();
+
         expect(form.editStatus).to.equal(false);
         form.view.$.find('input[name="/thedata/nodeA"]')
             .val('2010-10-01T11:12:00')
@@ -1439,9 +1536,9 @@ describe('form status', () => {
 describe('Form.prototype.getModelValue', () => {
     stubDialogConfirm();
 
-    const form = loadForm('nested_repeats.xml');
-    form.init();
     it('returns the value of the corresponding model node for a given form control', () => {
+        const form = loadForm('nested_repeats.xml');
+        form.init();
         const results = [];
 
         for (const input of form.view.html.querySelectorAll(
@@ -1649,8 +1746,13 @@ describe('autocomplete questions', () => {
 describe('goTo functionality', () => {
     stubDialogConfirm();
 
-    const form = loadForm('relevant-default.xml');
-    form.init();
+    /** @type {Form} */
+    let form;
+
+    beforeEach(() => {
+        form = loadForm('relevant-default.xml');
+        form.init();
+    });
 
     it('returns an error if the goto field does not exist', () => {
         const result = form.goTo('//notdey');
@@ -1669,20 +1771,18 @@ describe('goTo functionality', () => {
 
     it('triggers a goto-irrelevant event if the goto field is irrelevant', () => {
         let counter = 0;
-        form.view.html.addEventListener(
-            events.GoToIrrelevant().type,
-            () => counter++
-        );
+        form.view.html.addEventListener(events.GoToIrrelevant().type, () => {
+            counter += 1;
+        });
         form.goTo('//three');
         expect(counter).to.equal(1);
     });
 
     it('triggers a goto-invisible event if the goto field does not have a form control', () => {
         let counter = 0;
-        form.view.html.addEventListener(
-            events.GoToInvisible().type,
-            () => counter++
-        );
+        form.view.html.addEventListener(events.GoToInvisible().type, () => {
+            counter += 1;
+        });
         form.goTo('//four');
         expect(counter).to.equal(1);
     });
@@ -1705,8 +1805,7 @@ describe('Form.prototype', () => {
                 'if( /data/C1 =01, "__MOCK_VIEW_VALUE__", "__MOCK_VIEW_VALUE__" )',
         };
 
-        for (const initial in tests) {
-            const expected = tests[initial];
+        for (const [initial, expected] of Object.entries(tests)) {
             it(`should replace ${initial} with ${expected}`, () => {
                 // given
                 const form = mockChoiceNameForm();
