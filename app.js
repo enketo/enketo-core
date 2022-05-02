@@ -16,7 +16,7 @@ import { fixGrid, styleToAll, styleReset } from './src/js/print';
 let form;
 let formStr;
 let modelStr;
-let xform = getURLParameter('xform');
+const xform = getURLParameter('xform');
 
 // if querystring touch=true is added, override detected touchscreen presence
 if (getURLParameter('touch') === 'true') {
@@ -27,12 +27,36 @@ if (getURLParameter('touch') === 'true') {
 // Check if HTML form is hardcoded or needs to be retrieved
 // note: when running this file in enketo-core-performance-monitor xform = 'null'
 if (xform && xform !== 'null') {
-    document.querySelector('.guidance').remove();
-    xform = /^https?:\/\//.test(xform) ? xform : `${location.origin}/${xform}`;
-    const transformerUrl = `http://${location.hostname}:8085/transform?xform=${xform}`;
-    fetch(transformerUrl)
-        .then((response) => response.json())
-        .then((survey) => {
+    (async () => {
+        const isRemote = /^https?:\/\//.test(xform);
+        const xformURL = isRemote ? xform : `${location.origin}/${xform}`;
+        const transformerUrl = `http://${location.hostname}:8085/transform?xform=${xformURL}`;
+
+        try {
+            document.querySelector('.guidance').remove();
+
+            /** @type {import('enketo-transformer').TransformedSurvey & { modifiedTime?: number } | null} */
+            let survey = null;
+
+            if (!isRemote) {
+                // This must be dynamically imported or it'll be included in the build
+                const localForms = (await import(`./${'forms'}.mjs`)).default;
+                const localForm = localForms[xform];
+
+                if (localForm != null) {
+                    survey = {
+                        form: localForm.html_form,
+                        model: localForm.xml_model,
+                    };
+                }
+            }
+
+            if (survey == null) {
+                const response = await fetch(transformerUrl);
+
+                survey = await response.json();
+            }
+
             formStr = survey.form;
             modelStr = survey.model;
             const range = document.createRange();
@@ -41,12 +65,17 @@ if (xform && xform !== 'null') {
                 .querySelector('form');
             document.querySelector('.form-header').after(formEl);
             initializeForm();
-        })
-        .catch(() => {
+        } catch (error) {
+            // eslint-disable-next-line no-alert
             window.alert(
-                `Error fetching form from enketo-transformer at:\n\n${transformerUrl}.\n\nPlease check that enketo-transformer has been started.`
+                `Error fetching form from enketo-transformer at:
+                ${transformerUrl}.\n\nPlease check that enketo-transformer has been started.
+                ${error}`
             );
-        });
+
+            throw error;
+        }
+    })();
 } else if (document.querySelector('form.or')) {
     document.querySelector('.guidance').remove();
     modelStr = window.globalModelStr;
@@ -87,7 +116,10 @@ function initializeForm() {
     // for debugging
     window.form = form;
     // initialize form and check for load errors
-    const loadErrors = form.init();
+    const loadErrors = form
+        .init()
+        .filter((error) => error !== "Can't find last-saved.");
+
     if (loadErrors.length > 0) {
         window.alert(`loadErrors: ${loadErrors.join(', ')}`);
     }

@@ -2,7 +2,10 @@
  * When using enketo-core in your own app, you'd want to replace
  * this build file with one of your own in your project root.
  */
+const fs = require('fs');
+const path = require('path');
 const nodeSass = require('node-sass');
+const transformer = require('enketo-transformer');
 
 module.exports = (grunt) => {
     // show elapsed time at the end
@@ -43,7 +46,7 @@ module.exports = (grunt) => {
             server: {
                 options: {
                     port: 8005,
-                    base: ['test/forms', 'test/temp', 'build'],
+                    base: ['test/forms', 'test/mock', 'test/temp', 'build'],
                 },
             },
             test: {
@@ -77,7 +80,12 @@ module.exports = (grunt) => {
                 },
             },
             js: {
-                files: ['config.json', '*.js', 'src/**/*.js'],
+                files: [
+                    'config.json',
+                    '*.js',
+                    'src/**/*.js',
+                    'test/mock/forms.mjs',
+                ],
                 tasks: ['shell:build'],
                 options: {
                     spawn: false,
@@ -169,44 +177,90 @@ module.exports = (grunt) => {
 
     grunt.loadNpmTasks('grunt-sass');
 
-    grunt.registerTask('transforms', 'Creating forms.js', function () {
-        const forms = {};
-        const done = this.async();
-        const jsonStringify = require('json-pretty');
-        const formsJsPath = 'test/mock/forms.js';
-        const xformsPaths = grunt.file.expand({}, 'test/forms/*.xml');
-        const transformer = require('enketo-transformer');
-        grunt.log.write('Transforming XForms ');
-        xformsPaths
-            .reduce(
-                (prevPromise, filePath) =>
-                    prevPromise.then(() => {
-                        const xformStr = grunt.file.read(filePath);
-                        grunt.log.write('.');
+    /**
+     * @param {string} path
+     */
+    const fileExists = (path) => {
+        const stat = fs.statSync(path, {
+            throwIfNoEntry: false,
+        });
 
-                        return transformer
-                            .transform({ xform: xformStr })
-                            .then((result) => {
-                                forms[
-                                    filePath.substring(
-                                        filePath.lastIndexOf('/') + 1
-                                    )
-                                ] = {
-                                    html_form: result.form,
-                                    xml_model: result.model,
-                                };
-                            });
-                    }),
-                Promise.resolve()
-            )
-            .then(() => {
-                grunt.file.write(
-                    formsJsPath,
-                    `export default ${jsonStringify(forms)};`
+        return stat != null;
+    };
+
+    grunt.registerTask(
+        'transforms',
+        'Creating forms.js',
+        async function transformsTask() {
+            const forms = {};
+            const done = this.async();
+            const formsJsPath = './test/mock/forms.js';
+            const formsESMPath = './test/mock/forms.mjs';
+            const xformsPaths = grunt.file.expand({}, 'test/forms/*.xml');
+            grunt.log.write('Transforming XForms ');
+
+            let currentForms;
+
+            const jsModuleExists = fileExists(formsJsPath);
+
+            if (!jsModuleExists) {
+                fs.mkdirSync(path.dirname(formsJsPath), {
+                    recursive: true,
+                });
+                fs.writeFileSync(formsJsPath, 'export default {}');
+            }
+
+            const esmLinkExists = fileExists(formsESMPath);
+
+            if (!esmLinkExists) {
+                fs.linkSync(formsJsPath, formsESMPath);
+            }
+
+            try {
+                // This needs to be dynamic in case forms change during watch mode.
+                // eslint-disable-next-line import/no-dynamic-require, global-require
+                currentForms = (await import(formsESMPath)).default;
+            } catch (error) {
+                currentForms = {};
+            }
+
+            for await (const filePath of xformsPaths) {
+                const formsKey = filePath.substring(
+                    filePath.lastIndexOf('/') + 1
                 );
-                done();
-            });
-    });
+                const current = currentForms[formsKey];
+                const { mtimeMs } = fs.statSync(filePath);
+                const modifiedTime = Math.floor(mtimeMs);
+
+                if (
+                    current?.modifiedTime != null &&
+                    modifiedTime <= current.modifiedTime
+                ) {
+                    forms[formsKey] = current;
+
+                    continue;
+                }
+
+                const xformStr = grunt.file.read(filePath);
+                grunt.log.write('.');
+
+                const result = await transformer.transform({ xform: xformStr });
+
+                forms[formsKey] = {
+                    modifiedTime,
+                    html_form: result.form,
+                    xml_model: result.model,
+                };
+            }
+
+            fs.writeFileSync(
+                formsJsPath,
+                `export default ${JSON.stringify(forms, null, 2)};`
+            );
+
+            done();
+        }
+    );
 
     grunt.registerTask('compile', ['shell:build']);
     grunt.registerTask('test', [
