@@ -98,19 +98,25 @@ Form.prototype = {
             this.validationUpdate,
         ];
 
-        let evaluationCascade;
+        const { evaluationCascadeAdditions } = this;
+
+        if (evaluationCascadeAdditions.length > 0) {
+            baseEvaluationCascade.push(() => {
+                for (const fn of evaluationCascadeAdditions) {
+                    fn();
+                }
+            });
+        }
 
         if (config.experimentalOptimizations.computeAsync) {
-            evaluationCascade = baseEvaluationCascade.map(
+            return baseEvaluationCascade.map(
                 (fn) =>
                     (...args) =>
                         callOnIdle(() => fn(...args))
             );
-        } else {
-            evaluationCascade = baseEvaluationCascade;
         }
 
-        return evaluationCascade.concat(this.evaluationCascadeAdditions);
+        return baseEvaluationCascade;
     },
     /**
      * @type {string}
