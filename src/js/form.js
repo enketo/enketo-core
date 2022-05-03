@@ -33,6 +33,7 @@ import FormLogicError from './form-logic-error';
 import events from './event';
 import './plugins';
 import './extend';
+import { callOnIdle } from './timers';
 
 /**
  * Class: Form
@@ -86,7 +87,7 @@ Form.prototype = {
      * @type {Array}
      */
     get evaluationCascade() {
-        return [
+        const baseEvaluationCascade = [
             this.calc.update.bind(this.calc),
             this.repeats.countUpdate.bind(this.repeats),
             this.relevant.update.bind(this.relevant),
@@ -95,7 +96,27 @@ Form.prototype = {
             this.required.update.bind(this.required),
             this.readonly.update.bind(this.readonly),
             this.validationUpdate,
-        ].concat(this.evaluationCascadeAdditions);
+        ];
+
+        const { evaluationCascadeAdditions } = this;
+
+        if (evaluationCascadeAdditions.length > 0) {
+            baseEvaluationCascade.push(() => {
+                for (const fn of evaluationCascadeAdditions) {
+                    fn();
+                }
+            });
+        }
+
+        if (config.experimentalOptimizations.computeAsync) {
+            return baseEvaluationCascade.map(
+                (fn) =>
+                    (...args) =>
+                        callOnIdle(() => fn(...args))
+            );
+        }
+
+        return baseEvaluationCascade;
     },
     /**
      * @type {string}

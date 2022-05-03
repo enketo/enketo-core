@@ -11,10 +11,16 @@ module.exports = (config) => {
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['mocha', 'sinon-chai'],
 
+        client: {
+            mocha: {
+                timeout: 10000,
+            },
+        },
+
         // list of files / patterns to load in the browser
         files: [
             'test/mock/*.js',
-            'test/spec/*.spec.js',
+            'test/spec/**/*.spec.js',
             {
                 pattern: 'src/js/*.js',
                 included: false,
@@ -38,6 +44,12 @@ module.exports = (config) => {
             'config.js': ['esbuild'],
             'src/**/*.js': ['esbuild'],
             'test/**/*.js': ['esbuild'],
+        },
+
+        esbuild: {
+            define: {
+                ENV: '"test"',
+            },
         },
 
         browserify: {

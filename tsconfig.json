@@ -21,7 +21,10 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,
-        "target": "es2018"
+        "target": "es2018",
+        "paths": {
+            "enketo/config": ["./config.js"]
+        }
     },
     "exclude": ["node_modules"],
     "include": ["src", "test", "typings"]

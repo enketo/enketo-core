@@ -4,6 +4,7 @@
  * @description Updates branches
  */
 
+import config from 'enketo/config';
 import events from './event';
 import { closestAncestorUntil, getChild, getChildren } from './dom-utils';
 
@@ -12,7 +13,7 @@ export default {
      * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      * @param {boolean} forceClearNonRelevant -  whether to empty the values of non-relevant nodes
      */
-    update(updated, forceClearNonRelevant = false) {
+    update(updated, forceClearNonRelevant = config.forceClearNonRelevant) {
         if (!this.form) {
             throw new Error(
                 'Branch module not correctly instantiated with form property.'
@@ -29,7 +30,7 @@ export default {
      * @param {Array<Element>} nodes - Nodes to update
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    updateNodes(nodes, forceClearNonRelevant = false) {
+    updateNodes(nodes, forceClearNonRelevant = config.forceClearNonRelevant) {
         let branchChange = false;
         const relevantCache = {};
         const alreadyCovered = [];
@@ -200,7 +201,12 @@ export default {
      * @param {boolean} result - result of relevant evaluation
      * @param {boolean} forceClearNonRelevant - whether to empty the values of non-relevant nodes
      */
-    process(branchNode, path, result, forceClearNonRelevant = false) {
+    process(
+        branchNode,
+        path,
+        result,
+        forceClearNonRelevant = config.forceClearNonRelevant
+    ) {
         if (result === true) {
             return this.enable(branchNode, path);
         }
