@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.1.0] - 2022-05-17
+
+##### Changed
+
+-   Optionally exclude non-relevant values in calculations and submissions (#870)
+-   Fix map with hidden geo-inputs when "hide-input" class is active (#889)
+-   Optionally recompute the evaluation cascade asynchronously (#881)
+-   Improve form initialization performance by calculating repeats only once (#887)
+-   Fixed mangling of markdown-produced HTML next to top-level text nodes when a mediamap is provided (enketo-transformer#150)
+-   Improve test isolation (#885)
+
 ## [6.0.5] - 2022-04-21
 
 ##### Changed
