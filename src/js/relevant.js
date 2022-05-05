@@ -83,7 +83,7 @@ export default {
 
         nodes.forEach((node) => {
             // Note that node.getAttribute('name') is not the same as p.path for repeated radiobuttons!
-            if (alreadyCovered.indexOf(node.getAttribute('name')) !== -1) {
+            if (alreadyCovered.includes(node.getAttribute('name'))) {
                 return;
             }
 
@@ -111,54 +111,46 @@ export default {
             const { repeatIndex } = options;
             let { repeatPath } = options;
 
-            /*
-             * Check if the (calculate without form control) node is part of a repeat that has no instances
-             */
-            const pathParts = p.path.split('/');
-            if (pathParts.length > 3) {
-                const parentPath = pathParts
-                    .splice(0, pathParts.length - 1)
-                    .join('/');
-                const groupedRepeats = [
-                    ...this.form.view.html.querySelectorAll(
-                        `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                    ),
-                ]
-                    // now remove the groups that have a repeat-info child without repeat instance siblings
-                    .map(
-                        (group) =>
-                            getChild(group, '.or-repeat') ||
-                            getChild(group, '.or-repeat-info')
-                    )
-                    .filter(
-                        (repeatOrNoRepeatInfo) => repeatOrNoRepeatInfo != null
-                    );
-
-                // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
-                // Hence that relevant does not need to be evaluated (and would fail otherwise because the context doesn't exist).
-                if (groupedRepeats.length === 0) {
-                    return;
-                }
+            if (this.form.repeatsPresent) {
                 if (repeatPath == null) {
-                    repeatPath = '';
+                    repeatPath = this.form.nodePathToRepeatPath[p.path];
+                }
 
-                    const repeatPaths = new Set(
-                        groupedRepeats
-                            .map(
-                                (repeat) =>
-                                    repeat.dataset.name ??
-                                    repeat.getAttribute('name')
-                            )
-                            .reverse()
-                    );
+                if (repeatPath == null) {
+                    for (const prefix of this.form.repeatPathPrefixes) {
+                        if (p.path.startsWith(prefix)) {
+                            repeatPath = prefix.substring(0, prefix.length - 1);
 
-                    for (const path of repeatPaths) {
-                        if (
-                            path.length > repeatPath.length &&
-                            p.path.startsWith(`${path}/`)
-                        ) {
-                            repeatPath = path;
+                            break;
                         }
+                    }
+
+                    this.form.nodePathToRepeatPath[p.path] = repeatPath ?? null;
+                }
+
+                /*
+                 * Check if the (calculate without form control) node is part of a repeat that has no instances
+                 */
+                const pathParts = p.path.split('/');
+                if (pathParts.length > 3 && repeatPath == null) {
+                    const parentPath = pathParts
+                        .splice(0, pathParts.length - 1)
+                        .join('/');
+                    const parentGroups = [
+                        ...this.form.view.html.querySelectorAll(
+                            `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
+                        ),
+                    ]
+                        // now remove the groups that have a repeat-info child without repeat instance siblings
+                        .filter(
+                            (group) =>
+                                getChild(group, '.or-repeat') ||
+                                !getChild(group, '.or-repeat-info')
+                        );
+                    // If the parent doesn't exist in the DOM it means there is a repeat ancestor and there are no instances of that repeat.
+                    // Hence that relevant does not need to be evaluated (and would fail otherwise because the context doesn't exist).
+                    if (parentGroups.length === 0) {
+                        return;
                     }
                 }
             }
@@ -169,13 +161,11 @@ export default {
              * The first condition is usually false (and is a very quick one-time check) so this presents a big performance boost
              * (6-7 seconds of loading time on the bench6 form)
              */
-            const repeatPathMatches =
+            const insideRepeat =
                 repeatPath != null && p.path.startsWith(`${repeatPath}`);
             const repeatParent = clonedRepeatsPresent
                 ? branchNode.closest('.or-repeat')
                 : null;
-
-            const insideRepeat = repeatPathMatches || repeatParent != null;
             const hiddenInputRepeatIndex =
                 repeatParent == null &&
                 typeof repeatIndex === 'number' &&
@@ -223,10 +213,10 @@ export default {
                     // The path is stripped of the last nodeName to record the context.
                     // This might be dangerous, but until we find a bug, it helps in those forms where one group contains
                     // many sibling questions that each have the same relevant.
-                    cacheIndex = `${p.relevant}__${p.path.substring(
-                        0,
-                        p.path.lastIndexOf('/')
-                    )}__${p.ind}`;
+                    cacheIndex = `${p.relevant}__${
+                        repeatPath ??
+                        p.path.substring(0, p.path.lastIndexOf('/'))
+                    }__${p.ind}`;
                 }
             }
             let result;

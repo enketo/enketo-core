@@ -86,6 +86,12 @@ function Form(formEl, data, options) {
  * Getter and setter functions
  */
 Form.prototype = {
+    /** @type {string[] | null} */
+    repeatPathPrefixes: null,
+
+    /** @type {Record<string, string | null>} */
+    nodePathToRepeatPath: {},
+
     /**
      * @type {Array}
      */
@@ -363,6 +369,12 @@ Form.prototype.init = function () {
             });
 
             this.all = {};
+
+            this.repeatPathPrefixes = Array.from(
+                this.view.html.querySelectorAll('.or-repeat-info')
+            )
+                .map((element) => `${element.dataset.name}/`)
+                .sort((a, b) => b.length - a.length);
         }
 
         this.view.html.removeEventListener(

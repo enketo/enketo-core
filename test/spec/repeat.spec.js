@@ -730,72 +730,17 @@ describe('repeat functionality', () => {
                     .length
             ).to.equal(1);
         });
-
-        it('', () => {
-            const form = loadForm('repeat-relevant-calculate-single.xml');
-
-            form.init();
-
-            const repeatButton =
-                form.view.html.querySelector('.add-repeat-btn');
-
-            repeatButton.click();
-
-            const isFirstRowNodes = Array.from(
-                form.model.xml.querySelectorAll('data rg is-first-row')
-            );
-
-            expect(
-                isFirstRowNodes.map((node) => node.textContent)
-            ).to.deep.equal(['', '']);
-
-            const toggleRelevant =
-                form.view.html.querySelector('[name="/data/yn"]');
-
-            toggleRelevant.checked = true;
-            toggleRelevant.dispatchEvent(event.Change());
-
-            expect(
-                isFirstRowNodes.map((node) => node.textContent)
-            ).to.deep.equal(['1', '2']);
-
-            toggleRelevant.checked = false;
-            toggleRelevant.dispatchEvent(event.Change());
-
-            expect(
-                isFirstRowNodes.map((node) => node.textContent)
-            ).to.deep.equal(['1', '2']);
-
-            toggleRelevant.checked = true;
-            toggleRelevant.dispatchEvent(event.Change());
-
-            expect(
-                isFirstRowNodes.map((node) => node.textContent)
-            ).to.deep.equal(['1', '2']);
-        });
     });
 
-    describe.only('excluding non-relevant values', () => {
-        /** @type {import('sinon').SinonFakeTimers} */
-        let timers;
-
+    describe('excluding non-relevant values', () => {
         beforeEach(() => {
-            timers = sinon.useFakeTimers();
             excludeNonRelevant = true;
-        });
-
-        afterEach(() => {
-            timers.runAll();
-            timers.clearTimeout();
-            timers.clearInterval();
-            timers.restore();
         });
 
         it('excludes non-relevant values in a repeat instance', () => {
             const form = loadForm('exclude-non-relevant-repeat-count.xml');
 
             form.init();
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -807,8 +752,6 @@ describe('repeat functionality', () => {
 
             setRepeatNumNonRelevant.checked = true;
             setRepeatNumNonRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
                 '5',
@@ -820,7 +763,6 @@ describe('repeat functionality', () => {
             const form = loadForm('exclude-non-relevant-repeat-count.xml');
 
             form.init();
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -833,16 +775,12 @@ describe('repeat functionality', () => {
             setRepeatNumNonRelevant.checked = true;
             setRepeatNumNonRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             const setRepeatNumRelevant = form.view.html.querySelector(
                 '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="yes"]'
             );
 
             setRepeatNumRelevant.checked = true;
             setRepeatNumRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
                 '5',
@@ -854,7 +792,6 @@ describe('repeat functionality', () => {
             const form = loadForm('exclude-non-relevant-repeat-count.xml');
 
             form.init();
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -867,8 +804,6 @@ describe('repeat functionality', () => {
             setRepeatNumNonRelevant.checked = true;
             setRepeatNumNonRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             const setRepeatNumRelevant = form.view.html.querySelector(
                 '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="yes"]'
             );
@@ -876,16 +811,12 @@ describe('repeat functionality', () => {
             setRepeatNumRelevant.checked = true;
             setRepeatNumRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             const setRepeatNonRelevant = form.view.html.querySelector(
                 '[data-name="/data/is-repeat-relevant"][value="no"]'
             );
 
             setRepeatNonRelevant.checked = true;
             setRepeatNonRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
                 '',
@@ -897,7 +828,6 @@ describe('repeat functionality', () => {
             const form = loadForm('exclude-non-relevant-repeat-count.xml');
 
             form.init();
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -910,16 +840,12 @@ describe('repeat functionality', () => {
             setRepeatNumNonRelevant.checked = true;
             setRepeatNumNonRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             const setRepeatNumRelevant = form.view.html.querySelector(
                 '.or-repeat:nth-of-type(2) [data-name="/data/rep/is-num-relevant"][value="yes"]'
             );
 
             setRepeatNumRelevant.checked = true;
             setRepeatNumRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
                 '5',
@@ -933,16 +859,12 @@ describe('repeat functionality', () => {
             setRepeatNonRelevant.checked = true;
             setRepeatNonRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             const setRepeatRelevant = form.view.html.querySelector(
                 '[data-name="/data/is-repeat-relevant"][value="yes"]'
             );
 
             setRepeatRelevant.checked = true;
             setRepeatRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
                 '5',
@@ -982,7 +904,6 @@ describe('repeat functionality', () => {
             );
 
             form.init();
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -1028,7 +949,6 @@ describe('repeat functionality', () => {
             );
 
             form.init();
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -1074,7 +994,6 @@ describe('repeat functionality', () => {
             );
 
             form.init();
-            timers.runAll();
 
             const setRepeatRelevant = form.view.html.querySelector(
                 '[data-name="/data/is-repeat-relevant"][value="yes"]'
@@ -1082,8 +1001,6 @@ describe('repeat functionality', () => {
 
             setRepeatRelevant.checked = true;
             setRepeatRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -1101,7 +1018,6 @@ describe('repeat functionality', () => {
             const form = loadForm('exclude-non-relevant-repeat-count.xml');
 
             form.init();
-            timers.runAll();
 
             const setRepeatRelevant = form.view.html.querySelector(
                 '[data-name="/data/is-repeat-relevant"][value="yes"]'
@@ -1110,16 +1026,12 @@ describe('repeat functionality', () => {
             setRepeatRelevant.checked = true;
             setRepeatRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             const setSecondNumberNonRelevant = form.view.html.querySelector(
                 '.or-repeat.clone [data-name="/data/rep/is-num-relevant"][value="no"]'
             );
 
             setSecondNumberNonRelevant.checked = true;
             setSecondNumberNonRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             const repeatNums = Array.from(
                 form.model.xml.querySelectorAll('num')
@@ -1137,8 +1049,6 @@ describe('repeat functionality', () => {
             setRepeatNonRelevant.checked = true;
             setRepeatNonRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
                 '',
                 '',
@@ -1146,8 +1056,6 @@ describe('repeat functionality', () => {
 
             setRepeatRelevant.checked = true;
             setRepeatRelevant.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             expect(repeatNums.map((node) => node.textContent)).to.deep.equal([
                 '5',
@@ -1161,7 +1069,6 @@ describe('repeat functionality', () => {
             );
 
             form.init();
-            timers.runAll();
 
             const repeatBNodes = Array.from(
                 form.model.xml.querySelectorAll('repeat rep b')
@@ -1178,6 +1085,8 @@ describe('repeat functionality', () => {
             );
 
             form.init();
+
+            // Wait for first load event
             timers.runAll();
 
             const repeatBNodes = Array.from(
@@ -1193,8 +1102,6 @@ describe('repeat functionality', () => {
             el.value = 'a';
             el.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
                 '1',
             ]);
@@ -1206,11 +1113,8 @@ describe('repeat functionality', () => {
             );
 
             form.init();
-            timers.runAll();
 
             form.view.html.querySelector('.add-repeat-btn').click();
-
-            timers.runAll();
 
             const repeatBNodes = Array.from(
                 form.model.xml.querySelectorAll('repeat rep b')
@@ -1228,11 +1132,8 @@ describe('repeat functionality', () => {
             );
 
             form.init();
-            timers.runAll();
 
             form.view.html.querySelector('.add-repeat-btn').click();
-
-            timers.runAll();
 
             const repeatBNodes = Array.from(
                 form.model.xml.querySelectorAll('repeat rep b')
@@ -1249,8 +1150,6 @@ describe('repeat functionality', () => {
 
             el.value = 'a';
             el.dispatchEvent(event.Change());
-
-            timers.runAll();
 
             expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
                 '',
@@ -1282,11 +1181,7 @@ describe('repeat functionality', () => {
             toggleRelevant.checked = true;
             toggleRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             repeatButton.click();
-
-            timers.runAll();
 
             isFirstRowNodes = Array.from(
                 form.model.xml.querySelectorAll('data rg is-first-row')
@@ -1299,8 +1194,6 @@ describe('repeat functionality', () => {
             toggleRelevant.checked = false;
             toggleRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             expect(
                 isFirstRowNodes.map((node) => node.textContent)
             ).to.deep.equal(['', '']);
@@ -1308,11 +1201,56 @@ describe('repeat functionality', () => {
             toggleRelevant.checked = true;
             toggleRelevant.dispatchEvent(event.Change());
 
-            timers.runAll();
-
             expect(
                 isFirstRowNodes.map((node) => node.textContent)
             ).to.deep.equal(['1', '']);
+        });
+
+        it('only excludes non-relevant values on initialization by default', () => {
+            excludeNonRelevant = false;
+
+            const form = loadForm(
+                'exclude-non-relevant-repeat-calculate-single.xml'
+            );
+
+            form.init();
+
+            const repeatButton =
+                form.view.html.querySelector('.add-repeat-btn');
+
+            repeatButton.click();
+
+            const isFirstRowNodes = Array.from(
+                form.model.xml.querySelectorAll('data rg is-first-row')
+            );
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['', '']);
+
+            const toggleRelevant =
+                form.view.html.querySelector('[name="/data/yn"]');
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2']);
+
+            toggleRelevant.checked = false;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2']);
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(
+                isFirstRowNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2']);
         });
 
         // These tests don't check behavior around excluding non-relevant values
@@ -1322,8 +1260,6 @@ describe('repeat functionality', () => {
             it('sets zero-count repeats to non-relevant', () => {
                 const form = loadForm('repeat-count-relevant.xml');
                 const errors = form.init();
-
-                timers.runAll();
 
                 expect(errors.length).to.equal(0);
                 expect(
@@ -1353,8 +1289,6 @@ describe('repeat functionality', () => {
                 f.view.html
                     .querySelector('input[name="/data/q1"]')
                     .dispatchEvent(event.Change());
-
-                timers.runAll();
 
                 expect(
                     [
