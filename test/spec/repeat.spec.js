@@ -1072,34 +1072,6 @@ describe('repeat functionality', () => {
             ]);
         });
 
-        it('restores a value in a repeat initialized with odk-instance-first-load when it becomes relevant', () => {
-            const form = loadForm(
-                'exclude-non-relevant-repeat-irrelevant-date.xml'
-            );
-
-            form.init();
-
-            // Wait for first load event
-            timers.runAll();
-
-            const repeatBNodes = Array.from(
-                form.model.xml.querySelectorAll('repeat rep b')
-            );
-
-            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
-                '',
-            ]);
-
-            const el = form.view.html.querySelector('[name="/repeat/rep/a"]');
-
-            el.value = 'a';
-            el.dispatchEvent(event.Change());
-
-            expect(repeatBNodes.map((node) => node.textContent)).to.deep.equal([
-                '1',
-            ]);
-        });
-
         it('excludes a non-relevant value initialized with odk-new-repeat', () => {
             const form = loadForm(
                 'exclude-non-relevant-repeat-irrelevant-date.xml'
