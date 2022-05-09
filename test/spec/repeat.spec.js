@@ -410,22 +410,18 @@ describe('repeat functionality', () => {
                 <rep>
                     <txt/>
                     <num>5</num>
-                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
                 <rep>
                     <txt/>
                     <num>5</num>
-                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
                 <rep>
                     <txt/>
                     <num>5</num>
-                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
                 <rep>
                     <txt/>
                     <num>5</num>
-                    <is-num-relevant>yes</is-num-relevant>
                 </rep>
                 <is-repeat-relevant>yes</is-repeat-relevant>
                 <sum_note>4</sum_note>
@@ -725,10 +721,7 @@ describe('repeat functionality', () => {
             form.init();
             // Issue where a calculation inside a repeat is cached before the repeats are initialized (which removes the first repeat, before adding it)
             // This results in two cached calculations (for the same node) of which one no longer exists.
-            expect(
-                form.getRelatedNodes('data-calculate', '[name="/data/rg/row"]')
-                    .length
-            ).to.equal(1);
+            expect(form.getRelatedNodes('data-calculate').length).to.equal(1);
         });
     });
 
