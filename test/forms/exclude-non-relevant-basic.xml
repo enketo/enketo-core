@@ -27,6 +27,13 @@
                     <now-grouped>
                         <now/>
                     </now-grouped>
+                    <is-outer-group-relevant>
+                        <is-inner-group-relevant>
+                            <child-without-direct-relevant-expression/>
+                        </is-inner-group-relevant>
+                    </is-outer-group-relevant>
+                    <sets-outer-group-relevance/>
+                    <sets-inner-group-relevance/>
                     <meta>
                         <instanceID />
                     </meta>
@@ -45,6 +52,11 @@
             <bind nodeset="/data/assign-any-value" relevant="/data/sets-assign-any-value-relevance = '1'"/>
             <bind nodeset="/data/calc-by-assign-any-value" calculate="/data/assign-any-value"/>
             <bind nodeset="/data/sets-assign-any-value-relevance" type="string"/>
+            <bind nodeset="/data/is-outer-group-relevant" relevant="/data/sets-outer-group-relevance = 'yes'"/>
+            <bind nodeset="/data/is-outer-group-relevant/is-inner-group-relevant" relevant="/data/sets-inner-group-relevance = 'yes'"/>
+            <bind nodeset="/data/is-outer-group-relevant/is-inner-group-relevant/child-without-direct-relevant-expression" calculate="if(/data/sets-outer-group-relevance = 'yes' and /data/sets-inner-group-relevance = 'yes', 'yes', 'no')"/>
+            <bind nodeset="/data/sets-outer-group-relevance"/>
+            <bind nodeset="/data/sets-inner-group-relevance"/>
             <setvalue event="odk-instance-first-load" ref="/data/toggle-now" value="1"/>
         </model>
     </h:head>
@@ -97,6 +109,22 @@
         </input>
         <input ref="/data/calc-by-assign-any-value">
             <label>Calculated by assign-any-value</label>
+        </input>
+
+        <group ref="/data/is-outer-group-relevant">
+            <label>Outer group</label>
+            <group ref="/data/is-outer-group-relevant/is-inner-group-relevant">
+                <label>Inner group</label>
+                <input ref="/data/is-outer-group-relevant/is-inner-group-relevant/child-without-direct-relevant-expression">
+                    <label>Child without direct relevant expression</label>
+                </input>
+            </group>
+        </group>
+        <input ref="/data/sets-outer-group-relevance">
+            <label>Enter 'yes' to make outer group relevant</label>
+        </input>
+        <input ref="/data/sets-inner-group-relevance">
+            <label>Enter 'yes' to make inner group relevant</label>
         </input>
     </h:body>
 </h:html>

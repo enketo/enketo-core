@@ -612,6 +612,109 @@ describe('calculate functionality', () => {
             expect(calculated.value).to.equal('any value');
         });
 
+        it('clears non-relevant values of children of nested groups', () => {
+            const form = loadForm('exclude-non-relevant-basic.xml', null);
+
+            form.init();
+            timers.runAll();
+
+            const outerGroup = form.model.xml.querySelector(
+                'is-outer-group-relevant'
+            );
+            const innerGroup = form.model.xml.querySelector(
+                'is-inner-group-relevant'
+            );
+            const child = form.model.xml.querySelector(
+                'child-without-direct-relevant-expression'
+            );
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('');
+            expect(innerGroup.textContent.trim()).to.equal('');
+            expect(child.textContent).to.equal('');
+
+            const setsOuterRelevance = form.view.html.querySelector(
+                'input[name="/data/sets-outer-group-relevance"]'
+            );
+
+            setsOuterRelevance.value = 'yes';
+            setsOuterRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('');
+            expect(innerGroup.textContent.trim()).to.equal('');
+            expect(child.textContent).to.equal('');
+
+            const setsInnerRelevance = form.view.html.querySelector(
+                'input[name="/data/sets-inner-group-relevance"]'
+            );
+
+            setsInnerRelevance.value = 'yes';
+            setsInnerRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('yes');
+            expect(innerGroup.textContent.trim()).to.equal('yes');
+            expect(child.textContent).to.equal('yes');
+
+            setsInnerRelevance.value = 'no';
+            setsInnerRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('');
+            expect(innerGroup.textContent.trim()).to.equal('');
+            expect(child.textContent).to.equal('');
+
+            setsInnerRelevance.value = 'yes';
+            setsInnerRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('yes');
+            expect(innerGroup.textContent.trim()).to.equal('yes');
+            expect(child.textContent).to.equal('yes');
+
+            setsOuterRelevance.value = 'no';
+            setsOuterRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('');
+            expect(innerGroup.textContent.trim()).to.equal('');
+            expect(child.textContent).to.equal('');
+
+            setsOuterRelevance.value = 'yes';
+            setsOuterRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('yes');
+            expect(innerGroup.textContent.trim()).to.equal('yes');
+            expect(child.textContent).to.equal('yes');
+
+            setsOuterRelevance.value = 'no';
+            setsOuterRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('');
+            expect(innerGroup.textContent.trim()).to.equal('');
+            expect(child.textContent).to.equal('');
+
+            setsOuterRelevance.value = 'yes';
+            setsOuterRelevance.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(outerGroup.textContent.trim()).to.equal('yes');
+            expect(innerGroup.textContent.trim()).to.equal('yes');
+            expect(child.textContent).to.equal('yes');
+        });
+
         it('does not recalculate unrelated questions when another field becomes non-relevant', () => {
             const form = loadForm('recalculations.xml');
 
