@@ -1218,6 +1218,139 @@ describe('repeat functionality', () => {
             ).to.deep.equal(['1', '2']);
         });
 
+        it('cascades clearing non-relevant values across repeats', () => {
+            const form = loadForm(
+                'exclude-non-relevant-cascade-across-repeats.xml'
+            );
+
+            form.init();
+
+            const [rgRepeatButton, adjacentRepeatButton] = Array.from(
+                form.view.html.querySelectorAll('.add-repeat-btn')
+            );
+
+            const toggleRelevant =
+                form.view.html.querySelector('[name="/data/yn"]');
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            rgRepeatButton.click();
+            adjacentRepeatButton.click();
+
+            const adjacentRepeatCalculated = Array.from(
+                form.model.xml.querySelectorAll(
+                    'data adjacent-repeat calculated'
+                )
+            );
+            const adjacentRepeatCalculatedModelOnly = Array.from(
+                form.model.xml.querySelectorAll(
+                    'data adjacent-repeat calculated-model-only'
+                )
+            );
+            const adjacentRepeatNodes = adjacentRepeatCalculated.concat(
+                adjacentRepeatCalculatedModelOnly
+            );
+
+            expect(
+                adjacentRepeatNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2', '3', '4']);
+
+            toggleRelevant.checked = false;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            const nestedCalculatedModelNode =
+                form.model.xml.querySelector('nested-calculated');
+            const nestedCalculatedViewNode = form.view.html.querySelector(
+                '[name="/data/always-relevant/nested/nested-calculated"]'
+            );
+
+            expect(nestedCalculatedModelNode.textContent).to.equal('');
+            expect(nestedCalculatedViewNode.value).to.equal('');
+
+            expect(
+                adjacentRepeatNodes.map((node) => node.textContent)
+            ).to.deep.equal(['', '', '', '']);
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(nestedCalculatedModelNode.textContent).to.equal('1');
+            expect(nestedCalculatedViewNode.value).to.equal('1');
+
+            expect(
+                adjacentRepeatNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2', '3', '4']);
+
+            toggleRelevant.checked = false;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(nestedCalculatedModelNode.textContent).to.equal('');
+            expect(nestedCalculatedViewNode.value).to.equal('');
+
+            expect(
+                adjacentRepeatNodes.map((node) => node.textContent)
+            ).to.deep.equal(['', '', '', '']);
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(nestedCalculatedModelNode.textContent).to.equal('1');
+            expect(nestedCalculatedViewNode.value).to.equal('1');
+
+            expect(
+                adjacentRepeatNodes.map((node) => node.textContent)
+            ).to.deep.equal(['1', '2', '3', '4']);
+        });
+
+        it('cascades clearing non-relevant values outside of repeats', () => {
+            // excludeNonRelevant = false;
+            const form = loadForm(
+                'exclude-non-relevant-cascade-across-repeats.xml'
+            );
+
+            form.init();
+
+            const [rgRepeatButton, adjacentRepeatButton] = Array.from(
+                form.view.html.querySelectorAll('.add-repeat-btn')
+            );
+
+            const toggleRelevant =
+                form.view.html.querySelector('[name="/data/yn"]');
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            rgRepeatButton.click();
+            adjacentRepeatButton.click();
+
+            const outsideRepeatCalculated = form.model.xml.querySelector(
+                'data outer-calculated'
+            );
+
+            expect(outsideRepeatCalculated.textContent).to.deep.equal('1');
+
+            toggleRelevant.checked = false;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(outsideRepeatCalculated.textContent).to.deep.equal('');
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(outsideRepeatCalculated.textContent).to.deep.equal('1');
+
+            toggleRelevant.checked = false;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(outsideRepeatCalculated.textContent).to.deep.equal('');
+
+            toggleRelevant.checked = true;
+            toggleRelevant.dispatchEvent(event.Change());
+
+            expect(outsideRepeatCalculated.textContent).to.deep.equal('1');
+        });
+
         // These tests don't check behavior around excluding non-relevant values
         // in repeats, they only check that the behavior is consistent, out of
         // an abundance of caution.

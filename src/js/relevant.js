@@ -396,9 +396,9 @@ export default {
                 const isLeafNode = node.children.length === 0;
                 const isReferencedNode = referencedModelNodes.has(node);
                 const currentValue = isLeafNode
-                    ? setRelevant
-                        ? relevanceState.get(node)?.nonRelevantValue
-                        : node.textContent
+                    ? node.textContent ||
+                      (relevanceState.get(node)?.currentValue ??
+                          node.textContent)
                     : null;
                 const currentRelevanceState = relevanceState.get(node);
                 const isParentNonRelevant = Boolean(
@@ -423,6 +423,7 @@ export default {
                         isSelfNonRelevant: isReferencedNode
                             ? false
                             : isSelfNonRelevant,
+                        currentValue,
                         nonRelevantValue: isReferencedNode
                             ? null
                             : currentValue,
@@ -439,6 +440,7 @@ export default {
                         isSelfNonRelevant: isReferencedNode
                             ? true
                             : isSelfNonRelevant,
+                        currentValue,
                         nonRelevantValue: currentValue,
                     });
                 }
