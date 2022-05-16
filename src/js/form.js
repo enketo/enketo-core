@@ -370,6 +370,10 @@ Form.prototype.init = function () {
 
             this.all = {};
 
+            // Builds a cache of known repeat path prefixes `repeat.init`.
+            // The cache is sorted by length, longest to shortest, to ensure
+            // that lookups using this cache find the deepest nested repeat
+            // for a given path.
             this.repeatPathPrefixes = Array.from(
                 this.view.html.querySelectorAll('.or-repeat-info')
             )

@@ -743,7 +743,7 @@ describe('calculate functionality', () => {
 
             timers.runAll();
 
-            const calculationUpdateSpy = sandbox.spy(form.calc, 'updateCalc');
+            const calculationUpdateSpy = sandbox.spy(form.calc, '_updateCalc');
 
             q3.value = '1';
             q3.dispatchEvent(events.Change());

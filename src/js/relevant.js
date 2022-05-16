@@ -19,9 +19,17 @@ import { closestAncestorUntil, getChild, getChildren } from './dom-utils';
 const relevanceState = new Map();
 
 /**
+ * Determines whether a model node is relevant, and not a descendant of any
+ * non-relevant parent. For backwards-compatibility, this always returns `true`
+ * when `config.excludeNonRelevant` is off.
+ *
  * @param {Element} node
  */
 export const isNodeRelevant = (node) => {
+    if (!config.excludeNonRelevant) {
+        return true;
+    }
+
     const state = relevanceState.get(node);
 
     return !state?.isParentNonRelevant && !state?.isSelfNonRelevant;
@@ -44,6 +52,10 @@ export const setNonRelevantValue = (element, nonRelevantValue) => {
 export const getNonRelevantValue = (element) => relevanceState.get(element);
 
 /**
+ * Used to preserve known repeat context in a chain of computations. This helps to
+ * identify repeat context for nodes with no view control, and improves performance
+ * in certain cases.
+ *
  * @typedef RelevantDataNodesOptions
  * @property {number} [repeatIndex]
  * @property {string} [repeatPath]
@@ -166,6 +178,12 @@ export default {
             const repeatParent = clonedRepeatsPresent
                 ? branchNode.closest('.or-repeat')
                 : null;
+
+            /**
+             * Determines the current repeat index position for nodes with no view control.
+             *
+             * @see {RelevantDataNodesOptions}
+             */
             const hiddenInputRepeatIndex =
                 repeatParent == null &&
                 typeof repeatIndex === 'number' &&
@@ -173,6 +191,7 @@ export default {
                 p.path.startsWith(`${repeatPath}/`)
                     ? repeatIndex
                     : null;
+
             const insideRepeatClone =
                 hiddenInputRepeatIndex > 0 ||
                 (clonedRepeatsPresent &&
@@ -213,10 +232,10 @@ export default {
                     // The path is stripped of the last nodeName to record the context.
                     // This might be dangerous, but until we find a bug, it helps in those forms where one group contains
                     // many sibling questions that each have the same relevant.
-                    cacheIndex = `${p.relevant}__${
-                        repeatPath ??
-                        p.path.substring(0, p.path.lastIndexOf('/'))
-                    }__${p.ind}`;
+                    cacheIndex = `${p.relevant}__${p.path.substring(
+                        0,
+                        p.path.lastIndexOf('/')
+                    )}__${p.ind}`;
                 }
             }
             let result;
