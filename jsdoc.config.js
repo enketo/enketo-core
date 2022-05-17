@@ -15,7 +15,7 @@ module.exports = {
         readme: 'README.md',
         template: 'node_modules/docdash',
     },
-    plugins: ['plugins/markdown'],
+    plugins: ['plugins/markdown', 'jsdoc-ts-utils'],
     source: {
         include: ['src/', './README.md'],
     },

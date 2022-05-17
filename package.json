@@ -78,6 +78,7 @@
         "grunt-sass": "^3.1.0",
         "grunt-shell": "^3.0.1",
         "jsdoc": "^3.6.10",
+        "jsdoc-ts-utils": "^2.0.1",
         "karma": "^6.3.19",
         "karma-chrome-launcher": "^3.1.1",
         "karma-coverage": "^2.2.0",

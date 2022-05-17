@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:OpenClinica="http://openclinica.com/odm"
+    xmlns:enk="http://enketo.org/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:oc="http://openclinica.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>exclude-non-relevant-cascade-across-repeats</h:title>
+        <model>
+            <instance>
+                <data id="exclude-non-relevant-cascade-across-repeats">
+                    <yn>1</yn>
+                    <rg>
+                        <is-first-row/>
+                        <position-input/>
+                        <position-output/>
+                    </rg>
+                    <adjacent-repeat>
+                        <calculated/>
+                        <calculated-model-only/>
+                        <count/>
+                    </adjacent-repeat>
+                    <outer-calculated/>
+                    <outer-manual/>
+                    <always-relevant>
+                        <always-relevant-calculated/>
+                        <calculated-model-only/>
+                        <nested>
+                            <nested-calculated/>
+                        </nested>
+                    </always-relevant>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/rg" relevant=" /data/yn  = 1"/>
+            <bind calculate="position(..)" nodeset="/data/rg/is-first-row" relevant="position(..) = /data/yn" type="int"/>
+            <bind calculate="position(..)" nodeset="/data/rg/position-input" type="int"/>
+            <bind calculate="position(..)" nodeset="/data/rg/position-output" type="int"/>
+            <bind nodeset="/data/adjacent-repeat" relevant="/data/rg/is-first-row = 1" type="int"/>
+            <bind calculate="position(..)" nodeset="/data/adjacent-repeat/calculated" type="int"/>
+            <bind calculate="/data/adjacent-repeat/calculated + 2" nodeset="/data/adjacent-repeat/calculated-model-only" type="int"/>
+            <bind calculate="/data/adjacent-repeat[last()]/calculated - 1" nodeset="/data/adjacent-repeat/count" type="int"/>
+            <bind calculate="/data/adjacent-repeat[last()]/calculated - 1" nodeset="/data/outer-calculated" type="int"/>
+            <bind calculate="position(..)" nodeset="/data/always-relevant/always-relevant-calculated" type="int"/>
+            <bind calculate="/data/always-relevant/always-relevant-calculated + 4" nodeset="/data/always-relevant/calculated-model-only" type="int"/>
+            <bind nodeset="/data/always-relevant/nested" relevant="/data/rg[position() = position(current()/..)]/is-first-row = 1"/>
+            <bind nodeset="/data/always-relevant/nested/nested-calculated" calculate="/data/rg[position() = position(current()/../..)]/is-first-row"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/yn">
+            <label>Was blood pressure measured?</label>
+            <item>
+                <label>Yes</label>
+                <value>1</value>
+            </item>
+        </select1>
+        <group ref="/data/rg">
+            <label>rg</label>
+
+            <repeat nodeset="/data/rg">
+                <input ref="/data/rg/position-input">
+                    <label>
+                        Position input
+                    </label>
+                </input>
+                <label>
+                    Is first row?
+                    <output value="concat('is-first-row: ', /data/rg/is-first-row)"/>
+                </label>
+                <label>
+                    Position output?
+                    <output value="concat(' position-output: ', /data/rg/position-output)"/>
+                </label>
+            </repeat>
+        </group>
+        <group ref="/data/adjacent-repeat">
+            <label>adjacent-repeat</label>
+
+            <repeat nodeset="/data/adjacent-repeat">
+                <input ref="/data/adjacent-repeat/calculated">
+                    <label>/data/adjacent-repeat/calculated</label>
+                </input>
+                <input ref="/data/adjacent-repeat/count">
+                    <label>/data/adjacent-repeat/count</label>
+                </input>
+            </repeat>
+        </group>
+        <input ref="/data/outer-calculated">
+            <label>/data/outer-calculated</label>
+        </input>
+        <group ref="/data/always-relevant">
+            <label>always-relevant</label>
+
+            <repeat nodeset="/data/always-relevant">
+                <input ref="/data/always-relevant/always-relevant-calculated">
+                    <label>/data/always-relevant/always-relevant-calculated</label>
+                </input>
+
+                <group ref="/data/always-relevant/nested">
+
+                    <repeat nodeset="/data/always-relevant/nested" jr:count="1">
+                        <input ref="/data/always-relevant/nested/nested-calculated">
+                            <label>/data/always-relevant/nested/nested-calculated</label>
+                        </input>
+                    </repeat>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

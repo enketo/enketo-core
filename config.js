@@ -11,7 +11,11 @@ export default /** @type {const} */ ({
         computeAsync: window.location.search.includes('&computeAsync'),
     },
 
-    forceClearNonRelevant: window.location.search.includes('&clearNonRelevant'),
+    /**
+     * When set to `true`, non-relevant values will be treated as blank. This behavior
+     * is largely consistent with JavaRosa.
+     */
+    excludeNonRelevant: window.location.search.includes('&excludeNonRelevant'),
 
     maps: [
         {

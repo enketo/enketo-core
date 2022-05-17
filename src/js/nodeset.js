@@ -2,6 +2,7 @@ import $ from 'jquery';
 import types from './types';
 import event from './event';
 import { getXPath } from './dom-utils';
+import { isNodeRelevant, setNonRelevantValue } from './relevant';
 
 /**
  * @typedef NodesetFilter
@@ -119,12 +120,19 @@ Nodeset.prototype.setVal = function (newVals, xmlDataType) {
     }
 
     newVal = this.convert(newVal, xmlDataType);
+
+    const strVal = String(newVal);
     const targets = this.getElements();
 
-    if (targets.length === 1 && newVal.toString() !== curVal.toString()) {
+    if (targets.length === 1 && strVal !== curVal.toString()) {
         const target = targets[0];
-        // first change the value so that it can be evaluated in XPath (validated)
-        target.textContent = newVal.toString();
+        // First change the value so that it can be evaluated in XPath (validated).
+        if (isNodeRelevant(target)) {
+            target.textContent = strVal;
+        } else {
+            setNonRelevantValue(target, strVal);
+        }
+
         // then return validation result
         updated = this.getClosestRepeat();
         updated.nodes = [target.nodeName];

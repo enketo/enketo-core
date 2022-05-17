@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>2016 WHO Verbal Autopsy Form 1.5.3</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="va_who_v1_5_3" version="2020070101">
+                    <consented>
+                        <illhistory>
+                            <signs_symptoms_final_illness>
+                                <did-have-fever/>
+                                <fever-duration-unit/>
+                                <fever-duration-days/>
+                            </signs_symptoms_final_illness>
+                        </illhistory>
+                    </consented>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind
+                nodeset="/data/consented/illhistory/signs_symptoms_final_illness/did-have-fever"
+                required="true()"
+                type="string"/>
+            <bind
+                nodeset="/data/consented/illhistory/signs_symptoms_final_illness/fever-duration-unit"
+                relevant="/data/consented/illhistory/signs_symptoms_final_illness/did-have-fever = 'yes'"
+                required="true()"
+                type="string"/>
+            <bind
+                nodeset="/data/consented/illhistory/signs_symptoms_final_illness/fever-duration-days"
+                relevant="/data/consented/illhistory/signs_symptoms_final_illness/fever-duration-unit ='days'"
+                required="true()"
+                type="int"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/consented">
+            <group ref="/data/consented/illhistory">
+                <group ref="/data/consented/illhistory/signs_symptoms_final_illness">
+                    <input ref="/data/consented/illhistory/signs_symptoms_final_illness/did-have-fever">
+                        <label>Did (s)he have a fever?</label>
+                    </input>
+                    <input ref="/data/consented/illhistory/signs_symptoms_final_illness/fever-duration-unit">
+                        <label>How long did the fever last?</label>
+                    </input>
+                    <input ref="/data/consented/illhistory/signs_symptoms_final_illness/fever-duration-days">
+                        <label>Enter how long the fever lasted in days:</label>
+                    </input>
+                </group>
+            </group>
+        </group>
+    </h:body>
+</h:html>

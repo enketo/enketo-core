@@ -273,6 +273,11 @@ module.exports = (grunt) => {
     grunt.registerTask('test:watch', ['transforms', 'concurrent:test']);
     grunt.registerTask('css', ['sass']);
     grunt.registerTask('server', ['connect:server:keepalive']);
-    grunt.registerTask('develop', ['css', 'compile', 'concurrent:develop']);
+    grunt.registerTask('develop', [
+        'css',
+        'compile',
+        'transforms',
+        'concurrent:develop',
+    ]);
     grunt.registerTask('default', ['css', 'compile']);
 };

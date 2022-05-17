@@ -1,61 +1,47 @@
+import config from 'enketo/config';
 import loadForm from '../../helpers/load-form';
-import config from '../../../config';
 import dialog from '../../../src/js/fake-dialog';
 import events from '../../../src/js/event';
 
-describe('Evaluation Cascade', () => {
+describe('Smoke tests on 2022 WHO Verbal Autopsy instrument form', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
-    /** @type {boolean} */
-    let excludeNonRelevant;
+    /** @type {SinonFakeTimers} */
+    let timers;
 
     /** @type {boolean} */
-    let computeAsync;
+    let excludeNonRelevant;
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
 
         sandbox.stub(dialog, 'confirm').resolves(true);
 
+        timers = sandbox.useFakeTimers(Date.now());
+
         excludeNonRelevant = false;
 
         sandbox
             .stub(config, 'excludeNonRelevant')
             .get(() => excludeNonRelevant);
-
-        computeAsync = false;
-
-        sandbox
-            .stub(config.experimentalOptimizations, 'computeAsync')
-            .get(() => computeAsync);
     });
 
     afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
         sandbox.restore();
     });
 
-    describe('Computing relevance changes asynchronously', () => {
-        /** @type {SinonFakeTimers} */
-        let timers;
-
+    describe('relevance', () => {
         beforeEach(() => {
-            computeAsync = true;
             excludeNonRelevant = true;
-
-            timers = sandbox.useFakeTimers();
         });
 
-        afterEach(() => {
-            timers.runAll();
-
-            timers.clearTimeout();
-            timers.clearInterval();
-            timers.restore();
-            sandbox.restore();
-        });
-
-        it('clears non-relevant values asynchronously', () => {
+        it('updates relevancy of related nodes when recalculated (large WHO form)', () => {
             const form = loadForm('va_who_v1_5_3.xml');
 
             form.init();
@@ -64,24 +50,10 @@ describe('Evaluation Cascade', () => {
             const didConsent = form.view.html.querySelector(
                 '[name="/data/respondent_backgr/Id10013"][value="yes"]'
             );
+            const consentedGroup =
+                form.model.xml.querySelector('data consented');
 
-            const consentedGroup = form.view.html.querySelector(
-                '.or-group[name="/data/consented"]'
-            );
-
-            // Per `Form#grosslyViolateStandardComplianceByIgnoringCertainCalcs`, calculations
-            // are removed from preload nodes.
-            const consentedQuestions = consentedGroup.querySelectorAll(
-                '.question input:not(.ignore, [data-preload])'
-            );
-
-            for (const node of consentedQuestions) {
-                if (node.type === 'checkbox' || node.type === 'radio') {
-                    expect(node.checked).to.equal(false);
-                } else {
-                    expect(node.value).to.equal('');
-                }
-            }
+            expect(consentedGroup.textContent.trim()).to.equal('');
 
             didConsent.checked = true;
             didConsent.dispatchEvent(events.Change());
@@ -210,13 +182,82 @@ describe('Evaluation Cascade', () => {
             didHaveFever.checked = false;
             didHaveFever.dispatchEvent(events.Change());
 
+            timers.runAll();
+
+            expect(feverDurationDayUnitModelNode.textContent).to.equal('');
+            expect(feverDurationDaysModelNode.textContent).to.equal('');
+
+            didHaveFever.checked = true;
+            didHaveFever.dispatchEvent(events.Change());
+
+            timers.runAll();
+
             expect(feverDurationDayUnitModelNode.textContent).to.equal('days');
             expect(feverDurationDaysModelNode.textContent).to.equal('36');
+        }, 1000000);
+
+        it('updates relevancy of related nodes when recalculated (minimal repro)', () => {
+            const form = loadForm('va-who-minimal.xml');
+
+            form.init();
+            timers.runAll();
+
+            const didHaveFever = form.view.html.querySelector(
+                '[name="/data/consented/illhistory/signs_symptoms_final_illness/did-have-fever"]'
+            );
+
+            didHaveFever.value = 'yes';
+            didHaveFever.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            const feverDurationDayUnit = form.view.html.querySelector(
+                '[name="/data/consented/illhistory/signs_symptoms_final_illness/fever-duration-unit"]'
+            );
+
+            feverDurationDayUnit.value = 'days';
+            feverDurationDayUnit.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            const feverDurationDays = form.view.html.querySelector(
+                '[name="/data/consented/illhistory/signs_symptoms_final_illness/fever-duration-days"]'
+            );
+
+            feverDurationDays.value = '36';
+            feverDurationDays.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            const didHaveFeverModelNode = form.model
+                .node(didHaveFever.name)
+                .getElement();
+            const feverDurationDayUnitModelNode = form.model
+                .node(feverDurationDayUnit.name)
+                .getElement();
+            const feverDurationDaysModelNode = form.model
+                .node(feverDurationDays.name)
+                .getElement();
+
+            expect(didHaveFeverModelNode.textContent).to.equal('yes');
+            expect(feverDurationDayUnitModelNode.textContent).to.equal('days');
+            expect(feverDurationDaysModelNode.textContent).to.equal('36');
+
+            didHaveFever.value = 'no';
+            didHaveFever.dispatchEvent(events.Change());
 
             timers.runAll();
 
             expect(feverDurationDayUnitModelNode.textContent).to.equal('');
             expect(feverDurationDaysModelNode.textContent).to.equal('');
-        }, 1000000);
+
+            didHaveFever.value = 'yes';
+            didHaveFever.dispatchEvent(events.Change());
+
+            timers.runAll();
+
+            expect(feverDurationDayUnitModelNode.textContent).to.equal('days');
+            expect(feverDurationDaysModelNode.textContent).to.equal('36');
+        });
     });
 });
