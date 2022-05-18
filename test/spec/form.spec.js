@@ -1880,6 +1880,37 @@ describe('Missing external instances', () => {
     });
 });
 
+describe('Adding tasks to the default evaluation cascade', () => {
+    const defaultEvaluationCascadeAdditions =
+        Form.prototype.evaluationCascadeAdditions;
+
+    let context;
+
+    beforeEach(() => {
+        const customFn = function () {
+            context = this;
+        };
+
+        Form.prototype.evaluationCascadeAdditions = [customFn];
+    });
+
+    afterEach(() => {
+        Form.prototype.evaluationCascadeAdditions =
+            defaultEvaluationCascadeAdditions;
+    });
+
+    it('binds those tasks to the Form instance', () => {
+        const form = loadForm('thedata.xml');
+        form.init();
+        // trigger cascade
+        const b = form.view.html.querySelector('[name="/thedata/nodeB"]');
+        b.value = 'changed';
+        b.dispatchEvent(events.Change());
+
+        expect(context instanceof Form).to.equal(true);
+    });
+});
+
 function mockChoiceNameForm() {
     const val = '__MOCK_MODEL_VALUE__';
 
