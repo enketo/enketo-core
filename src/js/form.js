@@ -114,11 +114,9 @@ Form.prototype = {
         const { evaluationCascadeAdditions } = this;
 
         if (evaluationCascadeAdditions.length > 0) {
-            baseEvaluationCascade.push(() => {
-                for (const fn of evaluationCascadeAdditions) {
-                    fn();
-                }
-            });
+            for (const fn of evaluationCascadeAdditions) {
+                baseEvaluationCascade.push(fn);
+            }
         }
 
         if (config.experimentalOptimizations.computeAsync) {
