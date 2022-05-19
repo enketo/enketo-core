@@ -100,7 +100,7 @@ Form.prototype = {
      * @type {Array}
      */
     get evaluationCascade() {
-        const baseEvaluationCascade = [
+        const evaluationCascade = [
             this.calc.update.bind(this.calc),
             this.repeats.countUpdate.bind(this.repeats),
             this.relevant.update.bind(this.relevant),
@@ -109,27 +109,17 @@ Form.prototype = {
             this.required.update.bind(this.required),
             this.readonly.update.bind(this.readonly),
             this.validationUpdate,
-        ];
-
-        const { evaluationCascadeAdditions } = this;
-
-        if (evaluationCascadeAdditions.length > 0) {
-            baseEvaluationCascade.push(() => {
-                for (const fn of evaluationCascadeAdditions) {
-                    fn();
-                }
-            });
-        }
+        ].concat(this.evaluationCascadeAdditions);
 
         if (config.experimentalOptimizations.computeAsync) {
-            return baseEvaluationCascade.map(
+            return evaluationCascade.map(
                 (fn) =>
                     (...args) =>
                         callOnIdle(() => fn(...args))
             );
         }
 
-        return baseEvaluationCascade;
+        return evaluationCascade;
     },
     /**
      * @type {string}
