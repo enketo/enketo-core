@@ -114,9 +114,9 @@ Form.prototype = {
         const { evaluationCascadeAdditions } = this;
 
         if (evaluationCascadeAdditions.length > 0) {
-            baseEvaluationCascade.push(() => {
+            baseEvaluationCascade.push(function (...args) {
                 for (const fn of evaluationCascadeAdditions) {
-                    fn();
+                    fn.apply(this, args);
                 }
             });
         }
@@ -124,8 +124,9 @@ Form.prototype = {
         if (config.experimentalOptimizations.computeAsync) {
             return baseEvaluationCascade.map(
                 (fn) =>
-                    (...args) =>
-                        callOnIdle(() => fn(...args))
+                    function (...args) {
+                        callOnIdle(() => fn.apply(this, args));
+                    }
             );
         }
 

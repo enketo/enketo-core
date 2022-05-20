@@ -1880,6 +1880,125 @@ describe('Missing external instances', () => {
     });
 });
 
+describe('Adding tasks to the default evaluation cascade', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    /** @type {SinonFakeTimers} */
+    let timers;
+
+    /** @type {boolean} */
+    let computeAsync;
+
+    /** @type {Form} */
+    let form;
+
+    /** @type {Function[]} */
+    let builtIns;
+
+    /** @type {import('sinon').SinonStub} */
+    let lastBuiltInStub;
+
+    /** @type {import('sinon').SinonStub} */
+    let additionStub;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+
+        timers = sandbox.useFakeTimers();
+
+        computeAsync = false;
+
+        sandbox
+            .stub(config.experimentalOptimizations, 'computeAsync')
+            .get(() => computeAsync);
+
+        form = loadForm('thedata.xml');
+        form.init();
+
+        builtIns = form.evaluationCascade;
+
+        const { validationUpdate } = form;
+
+        // This unfortunately requires knowledge of the dynamic generation of the
+        // built-in cascade array. Adding an assertion here ensures that if the
+        // implementation changes, this setup should be updated.
+        expect(builtIns[builtIns.length - 1]).to.equal(validationUpdate);
+
+        lastBuiltInStub = sandbox.stub(form, 'validationUpdate');
+
+        additionStub = sandbox.spy();
+
+        sandbox
+            .stub(Form.prototype, 'evaluationCascadeAdditions')
+            .get(() => [additionStub, additionStub]);
+    });
+
+    afterEach(() => {
+        timers.runAll();
+
+        timers.clearTimeout();
+        timers.clearInterval();
+        timers.restore();
+        sandbox.restore();
+    });
+
+    it('binds those tasks to the Form instance', () => {
+        const b = form.view.html.querySelector('[name="/thedata/nodeB"]');
+
+        // trigger cascade
+        b.value = 'changed';
+        b.dispatchEvent(events.Change());
+
+        expect(lastBuiltInStub).to.have.been.calledOnceWith({
+            nodes: ['nodeB'],
+        });
+        expect(lastBuiltInStub).to.have.been.calledOn(form);
+
+        expect(additionStub).to.have.been.calledTwice;
+        expect(additionStub).to.have.always.been.calledWith({
+            nodes: ['nodeB'],
+        });
+        expect(additionStub).to.have.always.been.calledOn(form);
+    });
+
+    it('calls additions synchronously after the built-in cascade', async () => {
+        computeAsync = true;
+
+        const b = form.view.html.querySelector('[name="/thedata/nodeB"]');
+
+        // trigger cascade
+        b.value = 'changed';
+        b.dispatchEvent(events.Change());
+
+        // Advance through each built in except the last
+        for (let i = 0; i < builtIns.length; i++) {
+            timers.next();
+        }
+
+        expect(lastBuiltInStub).not.to.have.been.called;
+
+        timers.next();
+
+        expect(lastBuiltInStub).to.have.been.calledOnceWith({
+            nodes: ['nodeB'],
+        });
+        expect(lastBuiltInStub).to.have.been.calledOn(form);
+
+        // Validate that the addition is performed after the last built-in
+        expect(additionStub).not.to.have.been.called;
+
+        timers.next();
+
+        // Validate that all additions are performed synchronously once they're reached
+        expect(additionStub).to.have.been.calledTwice;
+        expect(additionStub).to.have.always.been.calledWith({
+            nodes: ['nodeB'],
+        });
+        expect(additionStub).to.have.always.been.calledOn(form);
+    });
+});
+
 function mockChoiceNameForm() {
     const val = '__MOCK_MODEL_VALUE__';
 
