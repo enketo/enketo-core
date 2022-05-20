@@ -53,6 +53,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Changed
 
+-   Fix: randomizing options is not working (#821)
+-   Fix: question name collision when the same name is used in the same repeat but in a different group (#815)
+-   Fix: itemset inside first repeat is not evaluated correctly (#818)
 -   Upgraded to [openrosa-xpath-evaluator 2.0.9](https://github.com/enketo/openrosa-xpath-evaluator/blob/master/CHANGELOG.md#209---2021-10-11)
 -   Upgraded to [enketo-transformer 2.1.0](https://github.com/enketo/enketo-transformer/blob/master/CHANGELOG.md#210---2021-10-11)
 
