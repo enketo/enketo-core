@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Duplicate Geopoint</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="duplicate_geopoint" version="1">
+                    <rpt>
+                        <foo/>
+                        <bar/>
+                    </rpt>
+                    <geopoint1/>
+                    <geopoint2/>
+                    <geopoint3/>
+                    <geopoint4/>
+                    <geotrace1/>
+                    <geotrace2/>
+                    <geotrace3/>
+                    <geotrace4/>
+                    <geoshape1/>
+                    <geoshape2/>
+                    <geoshape3/>
+                    <geoshape4/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/rpt/foo" type="string"/>
+            <bind nodeset="/data/rpt/bar" type="string"/>
+            <bind nodeset="/data/geopoint1" type="geopoint"/>
+            <bind nodeset="/data/geopoint2" type="geopoint"/>
+            <bind nodeset="/data/geopoint3" type="geopoint"/>
+            <bind nodeset="/data/geopoint4" type="geopoint"/>
+            <bind nodeset="/data/geotrace1" type="geotrace"/>
+            <bind nodeset="/data/geotrace2" type="geotrace"/>
+            <bind nodeset="/data/geotrace3" type="geotrace"/>
+            <bind nodeset="/data/geotrace4" type="geotrace"/>
+            <bind nodeset="/data/geoshape1" type="geoshape"/>
+            <bind nodeset="/data/geoshape2" type="geoshape"/>
+            <bind nodeset="/data/geoshape3" type="geoshape"/>
+            <bind nodeset="/data/geoshape4" type="geoshape"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+
+        <group ref="/data/rpt">
+            <repeat nodeset="/data/rpt">
+                <input ref="/data/rpt/foo">
+                    <label>Foo</label>
+                    <setvalue event="odk-instance-first-load" ref="/data/geopoint1" value="''"/>
+                    <setvalue event="xforms-value-changed" ref="/data/geopoint2" value="''"/>
+                    <setvalue event="odk-instance-first-load xforms-value-changed odk-new-repeat" ref="/data/geopoint4" value="''"/>
+                    <setvalue event="odk-instance-first-load" ref="/data/geotrace1" value="''"/>
+                    <setvalue event="xforms-value-changed" ref="/data/geotrace2" value="''"/>
+                    <setvalue event="odk-instance-first-load xforms-value-changed odk-new-repeat" ref="/data/geotrace4" value="''"/>
+                    <setvalue event="odk-instance-first-load" ref="/data/geoshape1" value="''"/>
+                    <setvalue event="xforms-value-changed" ref="/data/geoshape2" value="''"/>
+                    <setvalue event="odk-instance-first-load xforms-value-changed odk-new-repeat" ref="/data/geoshape4" value="''"/>
+                </input>
+                <setvalue event="odk-new-repeat" ref="/data/geopoint3" value="''"/>
+                <setvalue event="odk-new-repeat" ref="/data/geotrace3" value="''"/>
+                <setvalue event="odk-new-repeat" ref="/data/geoshape3" value="''"/>
+
+                <input ref="/data/rpt/bar">
+                    <label>Bar</label>
+                    <odk:setgeopoint event="odk-instance-first-load" ref="/data/geopoint1"/>
+                    <odk:setgeopoint event="xforms-value-changed" ref="/data/geopoint2"/>
+                    <odk:setgeopoint event="odk-instance-first-load xforms-value-changed odk-new-repeat" ref="/data/geopoint4"/>
+                    <odk:setgeopoint event="odk-instance-first-load" ref="/data/geotrace1"/>
+                    <odk:setgeopoint event="xforms-value-changed" ref="/data/geotrace2"/>
+                    <odk:setgeopoint event="odk-instance-first-load xforms-value-changed odk-new-repeat" ref="/data/geotrace4"/>
+                    <odk:setgeopoint event="odk-instance-first-load" ref="/data/geoshape1"/>
+                    <odk:setgeopoint event="xforms-value-changed" ref="/data/geoshape2"/>
+                    <odk:setgeopoint event="odk-instance-first-load xforms-value-changed odk-new-repeat" ref="/data/geoshape4"/>
+                </input>
+                <odk:setgeopoint event="odk-new-repeat" ref="/data/geopoint3"/>
+                <odk:setgeopoint event="odk-new-repeat" ref="/data/geotrace3"/>
+                <odk:setgeopoint event="odk-new-repeat" ref="/data/geoshape3"/>
+            </repeat>
+        </group>
+        <input ref="/data/geopoint1">
+            <label>Geopoint 1</label>
+        </input>
+        <input ref="/data/geopoint2">
+            <label>Geopoint 2</label>
+        </input>
+        <input ref="/data/geopoint3">
+            <label>Geopoint 3</label>
+        </input>
+        <input ref="/data/geopoint3">
+            <label>Geopoint 3</label>
+        </input>
+        <input ref="/data/geotrace1">
+            <label>Geotrace 1</label>
+        </input>
+        <input ref="/data/geotrace2">
+            <label>Geotrace 2</label>
+        </input>
+        <input ref="/data/geotrace3">
+            <label>Geotrace 3</label>
+        </input>
+        <input ref="/data/geotrace3">
+            <label>Geotrace 3</label>
+        </input>
+        <input ref="/data/geoshape1">
+            <label>Geoshape 1</label>
+        </input>
+        <input ref="/data/geoshape2">
+            <label>Geoshape 2</label>
+        </input>
+        <input ref="/data/geoshape3">
+            <label>Geoshape 3</label>
+        </input>
+        <input ref="/data/geoshape3">
+            <label>Geoshape 3</label>
+        </input>
+    </h:body>
+</h:html>

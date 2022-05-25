@@ -3,6 +3,7 @@ import {
     createTestCoordinates,
     mockGetCurrentPosition,
 } from '../helpers/geolocation';
+import loadForm from '../helpers/load-form';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
 const FORM = `<form class="or">
@@ -106,5 +107,29 @@ describe('geoshape widget', () => {
                 )
             ).to.deep.equal(a.result);
         });
+    });
+
+    it('does not load a geopicker widget for setvalue references within an input', () => {
+        const form = loadForm('setvalue-setgeopoint-geopoint.xml');
+
+        form.init();
+
+        const geopickers = form.view.html.querySelectorAll(
+            '[name="/data/rpt/foo"] ~ .geopicker'
+        );
+
+        expect(geopickers.length).to.equal(0);
+    });
+
+    it('does not load a geopicker widget for setgeopoint references within an input', () => {
+        const form = loadForm('setvalue-setgeopoint-geopoint.xml');
+
+        form.init();
+
+        const geopickers = form.view.html.querySelectorAll(
+            '[name="/data/rpt/bar"] ~ .geopicker'
+        );
+
+        expect(geopickers.length).to.equal(0);
     });
 });
