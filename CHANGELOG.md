@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.1.1] - 2022-06-01
+
+-   Fix: rendering unexpected geopoint widget for setvalue actions within an input (#896)
+-   Fix: ensure evaluation cascade additions receive form context and update arguments (#895)
+
 ## [6.1.0] - 2022-05-17
 
 ##### Changed
