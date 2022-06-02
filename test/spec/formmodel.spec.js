@@ -1721,10 +1721,11 @@ describe('merging an instance into the model', () => {
     describe('when a deprecatedID node is not present in the form format', () => {
         [
             {
+                // #890 Including second nested `meta` to validate selection logic when setting deprecatedID
                 modelStr:
-                    '<model><instance><thedata id="thedata"><nodeA/><meta><instanceID/></meta></thedata></instance></model>',
+                    '<model><instance><thedata id="thedata"><nodeA/><mygroup><meta/></mygroup><meta><instanceID/></meta></thedata></instance></model>',
                 instanceStr:
-                    '<thedata id="thedata"><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>',
+                    '<thedata id="thedata"><mygroup><meta/></mygroup><meta><instanceID>7c990ed9-8aab-42ba-84f5-bf23277154ad</instanceID></meta><nodeA>2012</nodeA></thedata>',
                 text: 'with meta block in default namespace, ',
             },
             // same as previous except for the namespace of the meta block and its childnodes

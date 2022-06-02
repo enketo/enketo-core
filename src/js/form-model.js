@@ -660,7 +660,7 @@ FormModel.prototype.setInstanceIdAndDeprecatedId = function () {
                 'text/xml'
             ).documentElement;
             this.xml.adoptNode(deprecatedIdEl);
-            metaEl = this.xml.querySelector('* > meta');
+            metaEl = this.xml.querySelector('instance > * > meta');
             metaEl.appendChild(deprecatedIdEl);
         }
     }
