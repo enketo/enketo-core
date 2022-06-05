@@ -880,7 +880,10 @@ class Geopicker extends Widget {
             this._updatePolyline();
             this._updateMarkers();
             if (this.points.length === 1) {
-                this.map.setView( [this.points[0][0], this.points[0][1]], zoom || this.lastZoom || defaultZoom );
+                this.map.setView(
+                    [this.points[0][0], this.points[0][1]],
+                    zoom || this.lastZoom || defaultZoom
+                );
             }
         } else {
             this.map.setView(latLng, zoom || defaultZoom);
