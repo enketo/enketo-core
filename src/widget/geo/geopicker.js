@@ -875,18 +875,12 @@ class Geopicker extends Widget {
      * @param {number} [zoom] - zoom level
      */
     _updateDynamicMapView(latLng, zoom) {
+        this.lastZoom = zoom || this.lastZoom || defaultZoom;
         if (!latLng) {
             this._updatePolyline();
             this._updateMarkers();
-            if (this.points.length === 1 && this.points[0].toString() === '') {
-                if (this.lastLatLng) {
-                    this.map.setView(
-                        this.lastLatLng,
-                        this.lastZoom || defaultZoom
-                    );
-                } else {
-                    this.map.setView(L.latLng(0, 0), zoom || defaultZoom);
-                }
+            if (this.points.length === 1) {
+                this.map.setView( [this.points[0][0], this.points[0][1]], zoom || this.lastZoom || defaultZoom );
             }
         } else {
             this.map.setView(latLng, zoom || defaultZoom);
