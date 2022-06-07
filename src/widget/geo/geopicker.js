@@ -40,15 +40,15 @@ let searchSource =
     'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
 const googleApiKey = config.googleApiKey || config.google_api_key;
 const iconSingle = L.divIcon({
-    iconSize: 24,
+    iconSize: [16, 24],
     className: 'enketo-geopoint-marker',
 });
 const iconMulti = L.divIcon({
-    iconSize: 16,
+    iconSize: [16, 16],
     className: 'enketo-geopoint-circle-marker',
 });
 const iconMultiActive = L.divIcon({
-    iconSize: 16,
+    iconSize: [16, 16],
     className: 'enketo-geopoint-circle-marker-active',
 });
 
