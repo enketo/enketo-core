@@ -773,7 +773,6 @@ class Geopicker extends Widget {
         // update last requested map coordinates to be used to initialize map in mobile fullscreen view
         if (latLng) {
             this.lastLatLng = latLng;
-            this.lastZoom = zoom;
         }
 
         // update the map if it is visible
@@ -839,6 +838,16 @@ class Geopicker extends Widget {
                     // do nothing if the field has a current marker
                     // instead the user will have to drag to change it by map
                 }
+            });
+
+            this.map.on('load', () => {
+                this.map.on('zoomend', (event) => {
+                    const zoom = event.target.getZoom();
+
+                    if (zoom != null) {
+                        this.lastZoom = zoom;
+                    }
+                });
             });
 
             // watch out, default "Leaflet" link clicks away from page, loosing all data
