@@ -325,7 +325,7 @@ class Geopicker extends Widget {
             this._updateMap([0, 0], 1);
             if (this.props.detect) {
                 getCurrentPosition()
-                    .then((position) => {
+                    .then(({ position }) => {
                         that._updateMap(
                             [
                                 position.coords.latitude,
