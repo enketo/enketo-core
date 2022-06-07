@@ -132,4 +132,28 @@ describe('geoshape widget', () => {
 
         expect(geopickers.length).to.equal(0);
     });
+
+    it('loads the widget when a setgeopoint odk-instance-first-load action is defined adjacent to the input', () => {
+        const form = loadForm('setgeopoint.xml');
+
+        form.init();
+
+        const widget = form.view.html.querySelector(
+            '[name="/data/visible_first_load_adjacent_action"] ~ .geopicker'
+        );
+
+        expect(widget).not.to.be.null;
+    });
+
+    it('loads the widget when a setgeopoint odk-instance-first-load action is defined in the model', () => {
+        const form = loadForm('setgeopoint.xml');
+
+        form.init();
+
+        const widget = form.view.html.querySelector(
+            '[name="/data/visible_first_load_model_action"] ~ .geopicker'
+        );
+
+        expect(widget).not.to.be.null;
+    });
 });
