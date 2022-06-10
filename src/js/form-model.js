@@ -1563,16 +1563,30 @@ FormModel.prototype.evaluate = function (
     // try native to see if that works... (will not work if the expr contains custom OpenRosa functions)
     try {
         // console.log( 'trying the blazing fast native XPath Evaluator for', expr, index );
-        result = doc.evaluate( expr, context, this.getNsResolver(), resTypeNum, null );
+        result = doc.evaluate(
+            expr,
+            context,
+            this.getNsResolver(),
+            resTypeNum,
+            null
+        );
     } catch {
         try {
             if ( typeof doc.jsEvaluate === 'undefined' ) {
                 this.bindJsEvaluator();
             }
             // console.log( 'trying the slow enketo-xpathjs "openrosa" evaluator for', expr, index );
-            result = doc.jsEvaluate( expr, context, this.getNsResolver(), resTypeNum, null );
+            result = doc.jsEvaluate(
+                expr,
+                context,
+                this.getNsResolver(),
+                resTypeNum,
+                null
+            );
         } catch ( e ) {
-            throw new FormLogicError( `Could not evaluate: ${expr}, message: ${e.message}` );
+            throw new FormLogicError(
+                `Could not evaluate: ${expr}, message: ${e.message}`
+            );
         }
     }
 
