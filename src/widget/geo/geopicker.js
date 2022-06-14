@@ -40,15 +40,15 @@ let searchSource =
     'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
 const googleApiKey = config.googleApiKey || config.google_api_key;
 const iconSingle = L.divIcon({
-    iconSize: 24,
+    iconSize: [16, 24],
     className: 'enketo-geopoint-marker',
 });
 const iconMulti = L.divIcon({
-    iconSize: 16,
+    iconSize: [16, 16],
     className: 'enketo-geopoint-circle-marker',
 });
 const iconMultiActive = L.divIcon({
-    iconSize: 16,
+    iconSize: [16, 16],
     className: 'enketo-geopoint-circle-marker-active',
 });
 
@@ -325,7 +325,7 @@ class Geopicker extends Widget {
             this._updateMap([0, 0], 1);
             if (this.props.detect) {
                 getCurrentPosition()
-                    .then((position) => {
+                    .then(({ position }) => {
                         that._updateMap(
                             [
                                 position.coords.latitude,
@@ -773,7 +773,6 @@ class Geopicker extends Widget {
         // update last requested map coordinates to be used to initialize map in mobile fullscreen view
         if (latLng) {
             this.lastLatLng = latLng;
-            this.lastZoom = zoom;
         }
 
         // update the map if it is visible
@@ -839,6 +838,16 @@ class Geopicker extends Widget {
                     // do nothing if the field has a current marker
                     // instead the user will have to drag to change it by map
                 }
+            });
+
+            this.map.on('load', () => {
+                this.map.on('zoomend', (event) => {
+                    const zoom = event.target.getZoom();
+
+                    if (zoom != null) {
+                        this.lastZoom = zoom;
+                    }
+                });
             });
 
             // watch out, default "Leaflet" link clicks away from page, loosing all data
