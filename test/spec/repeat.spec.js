@@ -1454,4 +1454,49 @@ describe('repeat functionality', () => {
             }
         });
     });
+
+    const optionStubs = [
+        { excludeNonRelevant: true },
+        { excludeNonRelevant: false },
+    ];
+
+    optionStubs.forEach(({ excludeNonRelevant }) => {
+        describe(`relevant expressions within removed repeats (excludeNonRelevant: ${excludeNonRelevant})`, () => {
+            it('loads successfully when a repeat contains a model node with no visible form control references a relative path outside of that repeat with zero instances on load', () => {
+                const form = loadForm('repeat-count-zero-no-view-control.xml');
+                const errors = form.init();
+
+                expect(errors.length).to.equal(0);
+            });
+
+            it('does not produce an error when removing a repeat instance containing a model node with no visible form control referencing a relative path outside of that repeat ', () => {
+                const form = loadForm('repeat-count-zero-no-view-control.xml');
+                const errors = form.init();
+
+                const boundRepeatCountElement = form.view.html.querySelector(
+                    'input[name="/data/mehrlingetotal"]'
+                );
+
+                boundRepeatCountElement.value = '2';
+                boundRepeatCountElement.dispatchEvent(event.Change());
+
+                const addedRepeatInstances = form.view.html.querySelectorAll(
+                    '.or-repeat[name="/data/bebe"]'
+                );
+
+                expect(addedRepeatInstances.length).to.equal(2);
+
+                boundRepeatCountElement.value = '1';
+                boundRepeatCountElement.dispatchEvent(event.Change());
+
+                const repeatInstances = form.view.html.querySelectorAll(
+                    '.or-repeat[name="/data/bebe"]'
+                );
+
+                expect(repeatInstances.length).to.equal(1);
+
+                expect(errors.length).to.equal(0);
+            });
+        });
+    });
 });

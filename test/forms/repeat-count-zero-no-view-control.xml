@@ -1,0 +1,1529 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Monitoring BFHI - Morges</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation lang="french (fr)">
+                    <text id="/data/mnation/CH:label">
+                        <value>Suisse</value>
+                    </text>
+                    <text id="/data/mnation/DE:label">
+                        <value>Allemagne</value>
+                    </text>
+                    <text id="/data/mnation/IT:label">
+                        <value>Italie</value>
+                    </text>
+                    <text id="/data/mnation/XK:label">
+                        <value>Kosovo</value>
+                    </text>
+                    <text id="/data/mnation/PT:label">
+                        <value>Portugal</value>
+                    </text>
+                    <text id="/data/mnation/MK:label">
+                        <value>Macédoine</value>
+                    </text>
+                    <text id="/data/mnation/TR:label">
+                        <value>Turquie</value>
+                    </text>
+                    <text id="/data/mnation/ER:label">
+                        <value>Érythrée</value>
+                    </text>
+                    <text id="/data/mnation/FR:label">
+                        <value>France</value>
+                    </text>
+                    <text id="/data/mnation/CS:label">
+                        <value>Serbie</value>
+                    </text>
+                    <text id="/data/mnation/AL:label">
+                        <value>Albanie</value>
+                    </text>
+                    <text id="/data/mnation/98:label">
+                        <value>non-renseigné</value>
+                    </text>
+                    <text id="/data/mnation/99:label">
+                        <value>Autre</value>
+                    </text>
+                    <text id="/data/sprachlverst/1:label">
+                        <value>oui</value>
+                    </text>
+                    <text id="/data/sprachlverst/2:label">
+                        <value>non ou avec difficulté</value>
+                    </text>
+                    <text id="/data/dolmetscher/1:label">
+                        <value>interprète professionnel utilisé</value>
+                    </text>
+                    <text id="/data/dolmetscher/2:label">
+                        <value>interprète ad hoc (famille, ami) utilisé</value>
+                    </text>
+                    <text id="/data/dolmetscher/3:label">
+                        <value>aucun interprète utilisé</value>
+                    </text>
+                    <text id="/data/versicherung/1:label">
+                        <value>de base</value>
+                    </text>
+                    <text id="/data/versicherung/2:label">
+                        <value>demi-privée/privée</value>
+                    </text>
+                    <text id="/data/mgesund/A:label">
+                        <value>diabète (préexistant ou gestationnel)</value>
+                    </text>
+                    <text id="/data/mgesund/B:label">
+                        <value>dépendance (alcool, drogue)</value>
+                    </text>
+                    <text id="/data/mgesund/C:label">
+                        <value>tabagisme</value>
+                    </text>
+                    <text id="/data/mgesund/D:label">
+                        <value>épilepsie</value>
+                    </text>
+                    <text id="/data/mgesund/E:label">
+                        <value>dépression (préexistante ou post-partum)</value>
+                    </text>
+                    <text id="/data/mgesund/F:label">
+                        <value>autre maladie psychique</value>
+                    </text>
+                    <text id="/data/mgesund/G:label">
+                        <value>état après opération mammaire majeure</value>
+                    </text>
+                    <text id="/data/mgesund/H:label">
+                        <value>mamelons plats/ombiliqués</value>
+                    </text>
+                    <text id="/data/mgesund/I:label">
+                        <value>HELLP/Eclampsie</value>
+                    </text>
+                    <text id="/data/mgesund/J:label">
+                        <value>atonie utérine post-partum/révision de la cavité</value>
+                    </text>
+                    <text id="/data/mgesund/K:label">
+                        <value>grosse opération post-partum/Hystérectomie</value>
+                    </text>
+                    <text id="/data/mgesund/L:label">
+                        <value>anémie (HB&lt;9g/l et/ou pertes de sang &gt; 1 litre)</value>
+                    </text>
+                    <text id="/data/mgesund/M:label">
+                        <value>hypothyréose</value>
+                    </text>
+                    <text id="/data/mgesund/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/mauswirkstillen/1:label">
+                        <value>aucun effet</value>
+                    </text>
+                    <text id="/data/mauswirkstillen/2:label">
+                        <value>sevrage primaire</value>
+                    </text>
+                    <text id="/data/mauswirkstillen/3:label">
+                        <value>sevrage secondaire</value>
+                    </text>
+                    <text id="/data/mauswirkstillen/4:label">
+                        <value>poursuite de l'allaitement avec apports complémentaires</value>
+                    </text>
+                    <text id="/data/zugabe/1:label">
+                        <value>lait artificiel</value>
+                    </text>
+                    <text id="/data/zugabe/2:label">
+                        <value>supplément hydrique (eau, MD)</value>
+                    </text>
+                    <text id="/data/mkontradiktion/1:label">
+                        <value>VIH</value>
+                    </text>
+                    <text id="/data/mkontradiktion/2:label">
+                        <value>désir de la mère</value>
+                    </text>
+                    <text id="/data/mkontradiktion/3:label">
+                        <value>médicaments contre-indiqués pendant l'allaitement</value>
+                    </text>
+                    <text id="/data/bebe/totgeburt/1:label">
+                        <value>oui</value>
+                    </text>
+                    <text id="/data/bebe/totgeburt/0:label">
+                        <value>non</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg/1:label">
+                        <value>par voie basse</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg/2:label">
+                        <value>césarienne</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_1/1:label">
+                        <value>spontané</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_1/2:label">
+                        <value>avec forceps</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_1/3:label">
+                        <value>avec ventouse</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_1/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_2/1:label">
+                        <value>primaire</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_2/2:label">
+                        <value>secondaire</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_2/3:label">
+                        <value>césarienne d'urgence</value>
+                    </text>
+                    <text id="/data/bebe/geburtsweg_2/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_vaginal/1:label">
+                        <value>aucune</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_vaginal/2:label">
+                        <value>péridurale (PDA)</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_vaginal/3:label">
+                        <value>PCA</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_vaginal/4:label">
+                        <value>rachis</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_vaginal/5:label">
+                        <value>anesthésie générale</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_vaginal/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_sectio/2:label">
+                        <value>péridurale (PDA)</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_sectio/3:label">
+                        <value>PCA</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_sectio/4:label">
+                        <value>rachis</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_sectio/5:label">
+                        <value>anesthésie générale</value>
+                    </text>
+                    <text id="/data/bebe/analgesie_sectio/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/ambulant/1:label">
+                        <value>oui</value>
+                    </text>
+                    <text id="/data/bebe/ambulant/0:label">
+                        <value>non</value>
+                    </text>
+                    <text id="/data/bebe/verlegung/0:label">
+                        <value>non</value>
+                    </text>
+                    <text id="/data/bebe/verlegung/1:label">
+                        <value>enfant uniquement</value>
+                    </text>
+                    <text id="/data/bebe/verlegung/2:label">
+                        <value>enfant et mère</value>
+                    </text>
+                    <text id="/data/bebe/geschlecht/1:label">
+                        <value>féminin</value>
+                    </text>
+                    <text id="/data/bebe/geschlecht/2:label">
+                        <value>masculin</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/A:label">
+                        <value>foetopathie diabétique</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/B:label">
+                        <value>syndrome de détresse respiratoire du nouveau né</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/C:label">
+                        <value>asphyxie</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/D:label">
+                        <value>acidose (ph&lt;7.15)</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/E:label">
+                        <value>septicémie</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/F:label">
+                        <value>hémolyse</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/G:label">
+                        <value>hypothermie</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/H:label">
+                        <value>hyperbilirubinémie nécessitant une photothérapie</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/I:label">
+                        <value>hypoglycémie</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/J:label">
+                        <value>perte de poids &gt; 10%</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/K:label">
+                        <value>trisomie 21</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/L:label">
+                        <value>fente labio-maxillo-palatine</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/M:label">
+                        <value>isolette dans le service mère-enfant</value>
+                    </text>
+                    <text id="/data/bebe/kgesund/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/kauswirkstillen/1:label">
+                        <value>aucun effet</value>
+                    </text>
+                    <text id="/data/bebe/kauswirkstillen/2:label">
+                        <value>nécessaire de donner une préparation pour nourrissons</value>
+                    </text>
+                    <text id="/data/bebe/kauswirkstillen/3:label">
+                        <value>nécessaire de donne un supplément hydrique</value>
+                    </text>
+                    <text id="/data/bebe/kkontra/1:label">
+                        <value>maladies métaboliques (galactosémie classique, maladie du sirop d'érable, phénylcétonurie</value>
+                    </text>
+                    <text id="/data/bebe/kkontra/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/hautkontakt/1:label">
+                        <value>dès l'accouchement</value>
+                    </text>
+                    <text id="/data/bebe/hautkontakt/2:label">
+                        <value>au cours de la première heure</value>
+                    </text>
+                    <text id="/data/bebe/hautkontakt/3:label">
+                        <value>plus tard</value>
+                    </text>
+                    <text id="/data/bebe/erstesanlegen/1:label">
+                        <value>dans le cadre du contact peau à peau, au cours des deux premières heures</value>
+                    </text>
+                    <text id="/data/bebe/erstesanlegen/2:label">
+                        <value>plus tard</value>
+                    </text>
+                    <text id="/data/bebe/erstesanlegen/3:label">
+                        <value>pas de mise au sein (sevrage primaire)</value>
+                    </text>
+                    <text id="/data/bebe/verlegung2/0:label">
+                        <value>non</value>
+                    </text>
+                    <text id="/data/bebe/verlegung2/1:label">
+                        <value>enfant uniquement</value>
+                    </text>
+                    <text id="/data/bebe/verlegung2/2:label">
+                        <value>enfant et mère</value>
+                    </text>
+                    <text id="/data/bebe/roomingin/1:label">
+                        <value>enfant dans la chambre avec la mère chaque jour et nuit pendant tout le séjour</value>
+                    </text>
+                    <text id="/data/bebe/roomingin/2:label">
+                        <value>enfant auprès de sa mère jour et nuit sauf 1 ou 2 exceptions</value>
+                    </text>
+                    <text id="/data/bebe/roomingin/3:label">
+                        <value>enfant au moins une fois 24 heures dans la chambre avec la mère</value>
+                    </text>
+                    <text id="/data/bebe/roomingin/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/muttermilch/1:label">
+                        <value>lait maternel</value>
+                    </text>
+                    <text id="/data/bebe/muttermilch/2:label">
+                        <value>sevrage primaire</value>
+                    </text>
+                    <text id="/data/bebe/stillen/1:label">
+                        <value>allaitement exclusif durant tout le séjour hospitalier</value>
+                    </text>
+                    <text id="/data/bebe/stillen/2:label">
+                        <value>allaitement prédominant: allaitement au sein avec supplément hydrique (sans préparation pour nourrissons) durant une certaine période lors du séjour à l'hôpital</value>
+                    </text>
+                    <text id="/data/bebe/stillen/3:label">
+                        <value>allaitement au sein partiel: lait maternel et lait artificiel durant une certaine période lors du séjour à l'hôpital</value>
+                    </text>
+                    <text id="/data/bebe/stillen/4:label">
+                        <value>sevrage secondaire</value>
+                    </text>
+                    <text id="/data/bebe/stillenvoll/1:label">
+                        <value>eau sans sucre</value>
+                    </text>
+                    <text id="/data/bebe/stillenvoll/2:label">
+                        <value>MD</value>
+                    </text>
+                    <text id="/data/bebe/stillenteilwsgl/1:label">
+                        <value>oui</value>
+                    </text>
+                    <text id="/data/bebe/stillenteilwsgl/0:label">
+                        <value>non</value>
+                    </text>
+                    <text id="/data/bebe/stillensekab/1:label">
+                        <value>sur préscription médicale, à cause des dispositions médicales concernant la mère</value>
+                    </text>
+                    <text id="/data/bebe/stillensekab/2:label">
+                        <value>sur préscription médicale, à cause des dispositions médicales concernant l'enfant</value>
+                    </text>
+                    <text id="/data/bebe/stillensekab/3:label">
+                        <value>selon le désir de la mère</value>
+                    </text>
+                    <text id="/data/bebe/stillensekab/99:label">
+                        <value>autre</value>
+                    </text>
+                    <text id="/data/bebe/hilfsmittel/1:label">
+                        <value>téterelle</value>
+                    </text>
+                    <text id="/data/bebe/hilfsmittel/2:label">
+                        <value>biberon</value>
+                    </text>
+                    <text id="/data/bebe/hilfsmittel/3:label">
+                        <value>sucette (lolette)</value>
+                    </text>
+                    <text id="/data/zimmer/1:label">
+                        <value>à un lit</value>
+                    </text>
+                    <text id="/data/zimmer/2:label">
+                        <value>à plusieurs lits</value>
+                    </text>
+                    <text id="/data/nachbetreuung/1:label">
+                        <value>par une sage-femme</value>
+                    </text>
+                    <text id="/data/nachbetreuung/2:label">
+                        <value>par une autre spécialiste</value>
+                    </text>
+                    <text id="/data/nachbetreuung/3:label">
+                        <value>pas de suivi souhaité</value>
+                    </text>
+                    <text id="/data/nachbetreuung/4:label">
+                        <value>le suivi n'a pas pu être organisé</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="BFHI_ODK_2022_Morges" version="2022061501">
+                    <start_survey/>
+                    <today/>
+                    <deviceid/>
+                    <title/>
+                    <jahrgang/>
+                    <id_journal/>
+                    <mutter/>
+                    <mjahrgang/>
+                    <alter/>
+                    <note_alter/>
+                    <note_alter_2/>
+                    <mparitat/>
+                    <note_mparitat/>
+                    <mnation/>
+                    <mnationt/>
+                    <sprachlverst/>
+                    <dolmetscher/>
+                    <versicherung/>
+                    <section2/>
+                    <mgesund/>
+                    <mdiabetes/>
+                    <msucht/>
+                    <mraucherin/>
+                    <mepilepsie/>
+                    <mdepression/>
+                    <mandpsych/>
+                    <mbrustop/>
+                    <mwarzen/>
+                    <mhellp/>
+                    <matonie/>
+                    <mhysterekto/>
+                    <manaemie/>
+                    <mypothyreose/>
+                    <mgesundand/>
+                    <mgesundandt/>
+                    <mauswirkstillen/>
+                    <zugabe/>
+                    <auswzusatzsgl/>
+                    <auswzusatfl/>
+                    <mkontradiktion/>
+                    <mhiv/>
+                    <mwunsch/>
+                    <mmedikamente/>
+                    <mkrank/>
+                    <!-- <mehrlingetotal>2</mehrlingetotal> -->
+                    <mehrlingetotal></mehrlingetotal>
+                    <mehrlinge/>
+                    <bebe_count/>
+                    <bebe jr:template="">
+                        <kind/>
+                        <totgeburt/>
+                        <journal/>
+                        <geburt/>
+                        <geburtsweg/>
+                        <geburtsweg_1/>
+                        <geburtsweg_2/>
+                        <geburtswegt/>
+                        <analgesie_vaginal/>
+                        <analgesie_sectio/>
+                        <analgesie_vaginalandt/>
+                        <analgesie_sectioandt/>
+                        <kgeburtsdat/>
+                        <gestwoch/>
+                        <gesttag/>
+                        <gesttage/>
+                        <note_gesttage/>
+                        <note_gesttage_2/>
+                        <ausschluss1/>
+                        <ambulant/>
+                        <verlegung/>
+                        <ambulant_aus/>
+                        <geschlecht/>
+                        <geburtsgewicht/>
+                        <note_geburtsgewicht_1/>
+                        <note_geburtsgewicht_2/>
+                        <ausschluss2/>
+                        <kgesund_note/>
+                        <kgesund/>
+                        <kdiabetisch/>
+                        <katemnot/>
+                        <kasphyxie/>
+                        <kacidose/>
+                        <ksepsis/>
+                        <khaemolyse/>
+                        <khypothermie/>
+                        <khyperbili/>
+                        <khypoglykaemie/>
+                        <kgewichtsverl/>
+                        <ktrisomie21/>
+                        <klkgspalte/>
+                        <kisolette/>
+                        <kgesundand/>
+                        <kgesundandt/>
+                        <kauswirkstillen/>
+                        <kkontra/>
+                        <kstoffwechsel/>
+                        <kkontraand/>
+                        <kkontraandt/>
+                        <kkrank/>
+                        <stilleneinleitung/>
+                        <hautkontakt/>
+                        <hautdaumin/>
+                        <erstesanlegen/>
+                        <verlegung2/>
+                        <mverlegung/>
+                        <verlegung_aus/>
+                        <roomingin/>
+                        <roominginandt/>
+                        <ernahrung/>
+                        <muttermilch/>
+                        <stillen/>
+                        <stillenvoll/>
+                        <stillenteilwsgl/>
+                        <stillensekab/>
+                        <abstillenandt/>
+                        <hilfsmittel/>
+                        <saughuetchen/>
+                        <schoppen/>
+                        <nuggi/>
+                        <hilfsmittel_grund/>
+                        <zusatzbem/>
+                        <ausschluss_grund/>
+                        <tgesund/>
+                        <monthofyear/>
+                        <viertel1/>
+                        <viertel2/>
+                        <viertel3/>
+                        <viertel4/>
+                    </bebe>
+                    <bebe>
+                        <kind/>
+                        <totgeburt/>
+                        <journal/>
+                        <geburt/>
+                        <geburtsweg/>
+                        <geburtsweg_1/>
+                        <geburtsweg_2/>
+                        <geburtswegt/>
+                        <analgesie_vaginal/>
+                        <analgesie_sectio/>
+                        <analgesie_vaginalandt/>
+                        <analgesie_sectioandt/>
+                        <kgeburtsdat/>
+                        <gestwoch/>
+                        <gesttag/>
+                        <gesttage/>
+                        <note_gesttage/>
+                        <note_gesttage_2/>
+                        <ausschluss1/>
+                        <ambulant/>
+                        <verlegung/>
+                        <ambulant_aus/>
+                        <geschlecht/>
+                        <geburtsgewicht/>
+                        <note_geburtsgewicht_1/>
+                        <note_geburtsgewicht_2/>
+                        <ausschluss2/>
+                        <kgesund_note/>
+                        <kgesund/>
+                        <kdiabetisch/>
+                        <katemnot/>
+                        <kasphyxie/>
+                        <kacidose/>
+                        <ksepsis/>
+                        <khaemolyse/>
+                        <khypothermie/>
+                        <khyperbili/>
+                        <khypoglykaemie/>
+                        <kgewichtsverl/>
+                        <ktrisomie21/>
+                        <klkgspalte/>
+                        <kisolette/>
+                        <kgesundand/>
+                        <kgesundandt/>
+                        <kauswirkstillen/>
+                        <kkontra/>
+                        <kstoffwechsel/>
+                        <kkontraand/>
+                        <kkontraandt/>
+                        <kkrank/>
+                        <stilleneinleitung/>
+                        <hautkontakt/>
+                        <hautdaumin/>
+                        <erstesanlegen/>
+                        <verlegung2/>
+                        <mverlegung/>
+                        <verlegung_aus/>
+                        <roomingin/>
+                        <roominginandt/>
+                        <ernahrung/>
+                        <muttermilch/>
+                        <stillen/>
+                        <stillenvoll/>
+                        <stillenteilwsgl/>
+                        <stillensekab/>
+                        <abstillenandt/>
+                        <hilfsmittel/>
+                        <saughuetchen/>
+                        <schoppen/>
+                        <nuggi/>
+                        <hilfsmittel_grund/>
+                        <zusatzbem/>
+                        <ausschluss_grund/>
+                        <tgesund/>
+                        <monthofyear/>
+                        <viertel1/>
+                        <viertel2/>
+                        <viertel3/>
+                        <viertel4/>
+                    </bebe>
+                    <mverlegung2/>
+                    <totgeburt_tot/>
+                    <zimmer/>
+                    <kgeburtsdat2/>
+                    <maustritt/>
+                    <aufdauer/>
+                    <note_aufdauer_1/>
+                    <note_aufdauer_2/>
+                    <nachbetreuung/>
+                    <nachbetrgrund/>
+                    <tgesund2/>
+                    <meta>
+                        <instanceID/>
+                        <instanceName/>
+                    </meta>
+                </data>
+            </instance>
+            <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/data/start_survey" type="dateTime"/>
+            <bind jr:preload="date" jr:preloadParams="today" nodeset="/data/today" type="date"/>
+            <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/data/deviceid" type="string"/>
+            <bind nodeset="/data/title" readonly="true()" type="string"/>
+            <bind calculate="2022" nodeset="/data/jahrgang" readonly="true()" required="true()" type="string"/>
+            <bind nodeset="/data/id_journal" type="int"/>
+            <bind nodeset="/data/mutter" readonly="true()" type="string"/>
+            <bind constraint=".&gt;1950 and .&lt;2010" jr:constraintMsg="Valeur non autorisée" nodeset="/data/mjahrgang" required="true()" type="int"/>
+            <bind calculate=" /data/jahrgang - /data/mjahrgang " nodeset="/data/alter" type="string"/>
+            <bind nodeset="/data/note_alter" readonly="true()" relevant=" /data/alter &gt;15 and  /data/alter &lt;50" type="string"/>
+            <bind nodeset="/data/note_alter_2" readonly="true()" relevant=" /data/alter &lt;15 or  /data/alter &gt;50" type="string"/>
+            <bind nodeset="/data/mparitat" required="true()" type="int"/>
+            <bind nodeset="/data/note_mparitat" readonly="true()" relevant="if( /data/alter &gt;19,  /data/mparitat &gt; /data/alter -18,  /data/mparitat &gt;2)" type="string"/>
+            <bind nodeset="/data/mnation" required="true()" type="string"/>
+            <bind nodeset="/data/mnationt" relevant="selected( /data/mnation , '99')" type="string"/>
+            <bind nodeset="/data/sprachlverst" required="true()" type="string"/>
+            <bind nodeset="/data/dolmetscher" relevant="selected( /data/sprachlverst , '2')" type="string"/>
+            <bind nodeset="/data/versicherung" required="true()" type="string"/>
+            <bind nodeset="/data/section2" readonly="true()" type="string"/>
+            <bind nodeset="/data/mgesund" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'A'), 1,0)" nodeset="/data/mdiabetes" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'B'), 1,0)" nodeset="/data/msucht" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'C'), 1,0)" nodeset="/data/mraucherin" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'D'), 1,0)" nodeset="/data/mepilepsie" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'E'), 1,0)" nodeset="/data/mdepression" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'F'), 1,0)" nodeset="/data/mandpsych" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'G'), 1,0)" nodeset="/data/mbrustop" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'H'), 1,0)" nodeset="/data/mwarzen" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'I'), 1,0)" nodeset="/data/mhellp" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'J'), 1,0)" nodeset="/data/matonie" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'K'), 1,0)" nodeset="/data/mhysterekto" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'L'), 1,0)" nodeset="/data/manaemie" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'M'), 1,0)" nodeset="/data/mypothyreose" type="string"/>
+            <bind calculate="if(contains( /data/mgesund ,'99'), 1,0)" nodeset="/data/mgesundand" type="string"/>
+            <bind nodeset="/data/mgesundandt" relevant="contains( /data/mgesund , '99')" required="true()" type="string"/>
+            <bind nodeset="/data/mauswirkstillen" relevant="count-selected( /data/mgesund )&gt;0" required="true()" type="string"/>
+            <bind nodeset="/data/zugabe" relevant="selected( /data/mauswirkstillen , '4')" required="true()" type="string"/>
+            <bind calculate="if(contains( /data/zugabe ,'1'), 1,0)" nodeset="/data/auswzusatzsgl" type="string"/>
+            <bind calculate="if(contains( /data/zugabe ,'2'), 1,0)" nodeset="/data/auswzusatfl" type="string"/>
+            <bind nodeset="/data/mkontradiktion" type="string"/>
+            <bind calculate="if(contains( /data/mkontradiktion ,'1'), 1,0)" nodeset="/data/mhiv" type="string"/>
+            <bind calculate="if(contains( /data/mkontradiktion ,'2'), 1,0)" nodeset="/data/mwunsch" type="string"/>
+            <bind calculate="if(contains( /data/mkontradiktion ,'3'), 1,0)" nodeset="/data/mmedikamente" type="string"/>
+            <bind calculate="if(( /data/mgesund !='' and  /data/mauswirkstillen !='1'), 1, 0)" nodeset="/data/mkrank" type="string"/>
+            <bind nodeset="/data/mehrlingetotal" required="true()" type="int"/>
+            <bind calculate="if( /data/mehrlingetotal &gt;'1', 1,0)" nodeset="/data/mehrlinge" type="string"/>
+            <bind calculate=" /data/mehrlingetotal " nodeset="/data/bebe_count" readonly="true()" type="string"/>
+            <bind nodeset="/data/bebe" required="true()"/>
+            <bind nodeset="/data/bebe/kind" readonly="true()" type="string"/>
+            <bind nodeset="/data/bebe/totgeburt" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/journal" required="true()" type="int"/>
+            <bind nodeset="/data/bebe/geburt" readonly="true()" relevant="selected( ../totgeburt ,'0')" type="string"/>
+            <bind nodeset="/data/bebe/geburtsweg" relevant="selected( ../totgeburt ,'0')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/geburtsweg_1" relevant="selected( ../geburtsweg ,'1')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/geburtsweg_2" relevant="selected( ../geburtsweg ,'2')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/geburtswegt" relevant="selected( ../geburtsweg_1 , '99') or selected( ../geburtsweg_2 , '99')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/analgesie_vaginal" relevant="selected( ../geburtsweg , '1')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/analgesie_sectio" relevant="selected( ../geburtsweg , '2')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/analgesie_vaginalandt" relevant="selected( ../analgesie_vaginal , '99')" type="string"/>
+            <bind nodeset="/data/bebe/analgesie_sectioandt" relevant="selected( ../analgesie_sectio , '99')" type="string"/>
+            <bind constraint=".&lt;=today()" jr:constraintMsg="Valeur non autorisée" nodeset="/data/bebe/kgeburtsdat" relevant="selected( ../totgeburt ,'0')" required="true()" type="date"/>
+            <bind constraint=".&lt;50 and .&gt;21" jr:constraintMsg="Valeur non autorisée" nodeset="/data/bebe/gestwoch" relevant="selected( ../totgeburt ,'0')" required="true()" type="int"/>
+            <bind constraint=".&lt;7" jr:constraintMsg="Valeur non autorisée" nodeset="/data/bebe/gesttag" relevant="selected( ../totgeburt ,'0')" required="true()" type="int"/>
+            <bind calculate=" ../gestwoch *7+ ../gesttag " nodeset="/data/bebe/gesttage" relevant="selected( ../totgeburt ,'0')" type="string"/>
+            <bind nodeset="/data/bebe/note_gesttage" readonly="true()" relevant="selected( ../totgeburt ,'0')" type="string"/>
+            <bind nodeset="/data/bebe/note_gesttage_2" readonly="true()" relevant=" ../gesttage &lt;231 or  ../gesttage &gt;294" type="string"/>
+            <bind calculate="if(( ../gesttage &lt;'259' or  ../gesttage &gt;'294'), 1,0)" nodeset="/data/bebe/ausschluss1" type="string"/>
+            <bind nodeset="/data/bebe/ambulant" relevant="selected( ../totgeburt ,'0')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/verlegung" relevant="selected( ../ambulant , '0')" required="true()" type="string"/>
+            <bind calculate="if( ../ambulant &gt;=0,  ../ambulant , 0)" nodeset="/data/bebe/ambulant_aus" type="string"/>
+            <bind nodeset="/data/bebe/geschlecht" relevant="selected( ../totgeburt ,'0')" required="true()" type="string"/>
+            <bind constraint=".&gt;500 and .&lt;10000" jr:constraintMsg="Valeur non autorisée" nodeset="/data/bebe/geburtsgewicht" relevant="selected( ../totgeburt ,'0')" required="selected( ../verlegung , '0')" type="int"/>
+            <bind nodeset="/data/bebe/note_geburtsgewicht_1" readonly="true()" relevant=" ../geburtsgewicht &lt;2500 and  ../gestwoch &gt;36" type="string"/>
+            <bind nodeset="/data/bebe/note_geburtsgewicht_2" readonly="true()" relevant=" ../geburtsgewicht &gt;4000" type="string"/>
+            <bind calculate="if(( ../geburtsgewicht &lt;'2500' or  ../geburtsgewicht &gt;'4500'), 1,0)" nodeset="/data/bebe/ausschluss2" type="string"/>
+            <bind nodeset="/data/bebe/kgesund_note" readonly="true()" relevant="selected( ../totgeburt ,'0')" type="string"/>
+            <bind nodeset="/data/bebe/kgesund" relevant="selected( ../totgeburt ,'0')" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'A'), 1,0)" nodeset="/data/bebe/kdiabetisch" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'B'), 1,0)" nodeset="/data/bebe/katemnot" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'C'), 1,0)" nodeset="/data/bebe/kasphyxie" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'D'), 1,0)" nodeset="/data/bebe/kacidose" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'E'), 1,0)" nodeset="/data/bebe/ksepsis" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'F'), 1,0)" nodeset="/data/bebe/khaemolyse" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'G'), 1,0)" nodeset="/data/bebe/khypothermie" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'H'), 1,0)" nodeset="/data/bebe/khyperbili" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'I'), 1,0)" nodeset="/data/bebe/khypoglykaemie" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'J'), 1,0)" nodeset="/data/bebe/kgewichtsverl" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'K'), 1,0)" nodeset="/data/bebe/ktrisomie21" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'L'), 1,0)" nodeset="/data/bebe/klkgspalte" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'M'), 1,0)" nodeset="/data/bebe/kisolette" type="string"/>
+            <bind calculate="if(contains( ../kgesund ,'99'), 1,0)" nodeset="/data/bebe/kgesundand" type="string"/>
+            <bind nodeset="/data/bebe/kgesundandt" relevant="contains( ../kgesund , '99')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/kauswirkstillen" relevant="selected( ../verlegung , '0') and (count-selected( ../kgesund )&gt;0 or  ../gesttage &lt;259 or  ../ausschluss2 =1)" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/kkontra" relevant="selected( ../verlegung , '0')" type="string"/>
+            <bind calculate="if(contains( ../kkontra ,'1'), 1,0)" nodeset="/data/bebe/kstoffwechsel" type="string"/>
+            <bind calculate="if(contains( ../kkontra ,' 99'), 1,0)" nodeset="/data/bebe/kkontraand" type="string"/>
+            <bind nodeset="/data/bebe/kkontraandt" relevant="selected( ../kkontra , '99')" required="true()" type="string"/>
+            <bind calculate="if((( ../kgesund !='' and  ../kauswirkstillen !='1') or  ../kkontra !=''), 1,0)" nodeset="/data/bebe/kkrank" type="string"/>
+            <bind nodeset="/data/bebe/stilleneinleitung" readonly="true()" relevant="selected( ../totgeburt ,'0')" type="string"/>
+            <bind nodeset="/data/bebe/hautkontakt" relevant="selected( ../totgeburt ,'0')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/hautdaumin" relevant="selected( ../totgeburt ,'0')" required="selected( ../hautkontakt , '1') or selected( ../hautkontakt , '2')" type="int"/>
+            <bind nodeset="/data/bebe/erstesanlegen" relevant="selected( ../totgeburt ,'0')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/verlegung2" relevant="selected( ../verlegung , '0')" required="true()" type="string"/>
+            <bind calculate="if( ../verlegung =2 or  ../verlegung2 =2, 1, 0)" nodeset="/data/bebe/mverlegung" type="string"/>
+            <bind calculate="if( ../verlegung &gt;0 or  ../verlegung2 &gt;0, 1, 0)" nodeset="/data/bebe/verlegung_aus" type="string"/>
+            <bind nodeset="/data/bebe/roomingin" relevant=" ../verlegung_aus =0 and  ../ambulant =0" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/roominginandt" relevant="selected( ../roomingin , '99')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/ernahrung" readonly="true()" relevant=" ../verlegung_aus =0 and selected( ../totgeburt ,'0')" type="string"/>
+            <bind nodeset="/data/bebe/muttermilch" relevant=" ../verlegung_aus =0 and selected( ../totgeburt ,'0')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/stillen" relevant="selected( ../muttermilch , '1')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/stillenvoll" relevant="selected( ../stillen , '2')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/stillenteilwsgl" relevant="selected( ../stillen , '3')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/stillensekab" relevant="selected( ../stillen , '2') or selected( ../stillen , '3') or selected( ../stillen , '4')" required="true()" type="string"/>
+            <bind nodeset="/data/bebe/abstillenandt" relevant="selected( ../stillensekab , '99')" type="string"/>
+            <bind nodeset="/data/bebe/hilfsmittel" relevant="selected( ../muttermilch , '1')" type="string"/>
+            <bind calculate="if(contains( ../hilfsmittel ,'1'), 1,0)" nodeset="/data/bebe/saughuetchen" type="string"/>
+            <bind calculate="if(contains( ../hilfsmittel ,'2'), 1,0)" nodeset="/data/bebe/schoppen" type="string"/>
+            <bind calculate="if(contains( ../hilfsmittel ,'3'), 1,0)" nodeset="/data/bebe/nuggi" type="string"/>
+            <bind nodeset="/data/bebe/hilfsmittel_grund" relevant="count-selected( ../hilfsmittel )&gt;0" type="string"/>
+            <bind nodeset="/data/bebe/zusatzbem" type="string"/>
+            <bind calculate=" /data/mwunsch + /data/mmedikamente + /data/mhiv + /data/mkrank + ../kkrank + ../ausschluss1 + ../ausschluss2 + ../ambulant_aus + ../verlegung_aus +number( ../totgeburt )" nodeset="/data/bebe/ausschluss_grund" type="string"/>
+            <bind calculate="if( ../ausschluss_grund =0, 1,0)" nodeset="/data/bebe/tgesund" type="string"/>
+            <bind calculate="format-date-time( ../kgeburtsdat , '%m')" nodeset="/data/bebe/monthofyear" type="string"/>
+            <bind calculate="if(( ../monthofyear &lt;=3), 1,0)" nodeset="/data/bebe/viertel1" type="string"/>
+            <bind calculate="if(( ../monthofyear &lt;=6 and  ../monthofyear &gt;3), 1,0)" nodeset="/data/bebe/viertel2" type="string"/>
+            <bind calculate="if(( ../monthofyear &lt;=9 and  ../monthofyear &gt;6), 1,0)" nodeset="/data/bebe/viertel3" type="string"/>
+            <bind calculate="if(( ../monthofyear &lt;=12 and  ../monthofyear &gt;9),1,0)" nodeset="/data/bebe/viertel4" type="string"/>
+            <bind calculate="sum( /data/bebe/mverlegung )" nodeset="/data/mverlegung2" type="string"/>
+            <bind calculate="sum( /data/bebe/totgeburt )" nodeset="/data/totgeburt_tot" type="string"/>
+            <bind nodeset="/data/zimmer" required="true()" type="string"/>
+            <bind calculate="indexed-repeat( /data/bebe/kgeburtsdat ,  /data/bebe , 1)" nodeset="/data/kgeburtsdat2" type="string"/>
+            <bind constraint=".&gt;= /data/kgeburtsdat2 " jr:constraintMsg="Veuillez vérifier la date de naissance de l'enfant et la date de sortie de la mère: la date de sortie de la mère est antérieure à la date de naissance de l'enfant" nodeset="/data/maustritt" required=" /data/bebe/verlegung &lt;2 and  /data/mverlegung2 &lt;1" type="date"/>
+            <bind calculate="int( /data/maustritt - /data/kgeburtsdat2 )" nodeset="/data/aufdauer" type="string"/>
+            <bind nodeset="/data/note_aufdauer_1" readonly="true()" relevant=" /data/aufdauer &gt;14" type="string"/>
+            <bind nodeset="/data/note_aufdauer_2" readonly="true()" relevant=" /data/aufdauer &lt;2 and  /data/aufdauer &gt;-1 and  /data/bebe/ambulant =0" type="string"/>
+            <bind nodeset="/data/nachbetreuung" required=" /data/bebe/verlegung &lt;2 and  /data/mverlegung2 &lt;1 and  /data/totgeburt_tot &lt;1" type="string"/>
+            <bind nodeset="/data/nachbetrgrund" relevant="selected( /data/nachbetreuung , '4')" required="true()" type="string"/>
+            <bind calculate="sum( /data/bebe/tgesund )" nodeset="/data/tgesund2" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+            <bind calculate=" /data/id_journal " nodeset="/data/meta/instanceName" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/title">
+            <label>##&lt;span style="color:blue"&gt;Feuille de statistique&lt;/span&gt;</label>
+        </input>
+        <input ref="/data/id_journal">
+            <label>Numéro de l'accouchement</label>
+            <hint>En cas de naissances multiples, numéro du premier enfant né</hint>
+        </input>
+        <input ref="/data/mutter">
+            <label>###&lt;span style="color:blue"&gt;Informations générales concernant la mère&lt;/span&gt;</label>
+        </input>
+        <input appearance="year" ref="/data/mjahrgang">
+            <label>Année de naissance de la mère</label>
+        </input>
+        <input ref="/data/note_alter">
+            <label>Âge de la mère: <output value=" /data/alter "/>
+            </label>
+        </input>
+        <input ref="/data/note_alter_2">
+            <label>**&lt;span style="color:red"&gt;Veuillez vérifiez l'année de naissance de la mère&lt;/span&gt;**</label>
+        </input>
+        <input ref="/data/mparitat">
+            <label>Parité</label>
+        </input>
+        <input ref="/data/note_mparitat">
+            <label>**&lt;span style="color:red"&gt;Veuillez vérifiez la parité&lt;/span&gt;**</label>
+        </input>
+        <select1 ref="/data/mnation">
+            <label>Nationalité</label>
+            <item>
+                <label ref="jr:itext('/data/mnation/CH:label')"/>
+                <value>CH</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/DE:label')"/>
+                <value>DE</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/IT:label')"/>
+                <value>IT</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/XK:label')"/>
+                <value>XK</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/PT:label')"/>
+                <value>PT</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/MK:label')"/>
+                <value>MK</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/TR:label')"/>
+                <value>TR</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/ER:label')"/>
+                <value>ER</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/FR:label')"/>
+                <value>FR</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/CS:label')"/>
+                <value>CS</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/AL:label')"/>
+                <value>AL</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/98:label')"/>
+                <value>98</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mnation/99:label')"/>
+                <value>99</value>
+            </item>
+        </select1>
+        <input ref="/data/mnationt">
+            <label>Laquelle?</label>
+        </input>
+        <select1 ref="/data/sprachlverst">
+            <label>Comprehension orale possible</label>
+            <item>
+                <label ref="jr:itext('/data/sprachlverst/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/sprachlverst/2:label')"/>
+                <value>2</value>
+            </item>
+        </select1>
+        <select1 ref="/data/dolmetscher">
+            <label>Interprète utilisé?</label>
+            <item>
+                <label ref="jr:itext('/data/dolmetscher/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/dolmetscher/2:label')"/>
+                <value>2</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/dolmetscher/3:label')"/>
+                <value>3</value>
+            </item>
+        </select1>
+        <select1 ref="/data/versicherung">
+            <label>Assurance</label>
+            <item>
+                <label ref="jr:itext('/data/versicherung/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/versicherung/2:label')"/>
+                <value>2</value>
+            </item>
+        </select1>
+        <input ref="/data/section2">
+            <label>####&lt;span style="color:blue"&gt;Santé de la mère&lt;/span&gt;</label>
+        </input>
+        <select ref="/data/mgesund">
+            <label>Dispositions médicales de la mére qui pourraient entraver l'allaitement</label>
+            <hint>plusieurs réponses possibles</hint>
+            <item>
+                <label ref="jr:itext('/data/mgesund/A:label')"/>
+                <value>A</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/B:label')"/>
+                <value>B</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/C:label')"/>
+                <value>C</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/D:label')"/>
+                <value>D</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/E:label')"/>
+                <value>E</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/F:label')"/>
+                <value>F</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/G:label')"/>
+                <value>G</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/H:label')"/>
+                <value>H</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/I:label')"/>
+                <value>I</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/J:label')"/>
+                <value>J</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/K:label')"/>
+                <value>K</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/L:label')"/>
+                <value>L</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/M:label')"/>
+                <value>M</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mgesund/99:label')"/>
+                <value>99</value>
+            </item>
+        </select>
+        <input ref="/data/mgesundandt">
+            <label>Veuillez décrire</label>
+        </input>
+        <select1 ref="/data/mauswirkstillen">
+            <label>Si une ou plusieurs des dispositions ci-dessus sont présentes: effet sur l'allaitement</label>
+            <item>
+                <label ref="jr:itext('/data/mauswirkstillen/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mauswirkstillen/2:label')"/>
+                <value>2</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mauswirkstillen/3:label')"/>
+                <value>3</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mauswirkstillen/4:label')"/>
+                <value>4</value>
+            </item>
+        </select1>
+        <select ref="/data/zugabe">
+            <label>Quels apports?</label>
+            <item>
+                <label ref="jr:itext('/data/zugabe/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/zugabe/2:label')"/>
+                <value>2</value>
+            </item>
+        </select>
+        <select ref="/data/mkontradiktion">
+            <label>Contre-indication à l'allaitement chez la mère</label>
+            <hint>plusieurs réponses possibles</hint>
+            <item>
+                <label ref="jr:itext('/data/mkontradiktion/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mkontradiktion/2:label')"/>
+                <value>2</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/mkontradiktion/3:label')"/>
+                <value>3</value>
+            </item>
+        </select>
+        <input ref="/data/mehrlingetotal">
+            <label>Combien d'enfants nés?</label>
+            <hint>1 pour une naissance simple, plus pour une naissance multiple</hint>
+        </input>
+        <group ref="/data/bebe">
+            <label>bebe</label>
+            <repeat jr:count=" /data/bebe_count " nodeset="/data/bebe">
+                <input ref="/data/bebe/kind">
+                    <label>###&lt;span style="color:blue"&gt;Informations générales concernant le nouveau-né&lt;/span&gt;</label>
+                </input>
+                <select1 ref="/data/bebe/totgeburt">
+                    <label>Décès périnatal</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/totgeburt/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/totgeburt/0:label')"/>
+                        <value>0</value>
+                    </item>
+                </select1>
+                <input ref="/data/bebe/journal">
+                    <label>Numéro de l'accouchement</label>
+                </input>
+                <input ref="/data/bebe/geburt">
+                    <label>Accouchement</label>
+                </input>
+                <select1 ref="/data/bebe/geburtsweg">
+                    <label>Type d'accouchement</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg/2:label')"/>
+                        <value>2</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/geburtsweg_1">
+                    <label></label>
+                    <hint>Veuillez précisez</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_1/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_1/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_1/3:label')"/>
+                        <value>3</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_1/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/geburtsweg_2">
+                    <label></label>
+                    <hint>Veuillez précisez</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_2/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_2/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_2/3:label')"/>
+                        <value>3</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geburtsweg_2/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select1>
+                <input ref="/data/bebe/geburtswegt">
+                    <label>Veuillez décrire</label>
+                </input>
+                <select1 ref="/data/bebe/analgesie_vaginal">
+                    <label>Analgésie/Anesthésie</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_vaginal/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_vaginal/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_vaginal/3:label')"/>
+                        <value>3</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_vaginal/4:label')"/>
+                        <value>4</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_vaginal/5:label')"/>
+                        <value>5</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_vaginal/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/analgesie_sectio">
+                    <label>Analgésie/Anesthésie</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_sectio/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_sectio/3:label')"/>
+                        <value>3</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_sectio/4:label')"/>
+                        <value>4</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_sectio/5:label')"/>
+                        <value>5</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/analgesie_sectio/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select1>
+                <input ref="/data/bebe/analgesie_vaginalandt">
+                    <label>Veuillez décrire</label>
+                </input>
+                <input ref="/data/bebe/analgesie_sectioandt">
+                    <label>Veuillez décrire</label>
+                </input>
+                <input appearance="no-calendar" ref="/data/bebe/kgeburtsdat">
+                    <label>Date de naissance</label>
+                </input>
+                <input ref="/data/bebe/gestwoch">
+                    <label>Semaines de gestation</label>
+                    <hint>Semaines</hint>
+                </input>
+                <input ref="/data/bebe/gesttag">
+                    <label></label>
+                    <hint>Jours</hint>
+                </input>
+                <input ref="/data/bebe/note_gesttage">
+                    <label>Jours de gestation: <output value=" ../gesttage "/>
+                    </label>
+                </input>
+                <input ref="/data/bebe/note_gesttage_2">
+                    <label>**&lt;span style="color:red"&gt;Veuillez vérifiez les semaines de gestation&lt;/span&gt;**</label>
+                </input>
+                <select1 ref="/data/bebe/ambulant">
+                    <label>Naissance ambulatoire</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/ambulant/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/ambulant/0:label')"/>
+                        <value>0</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/verlegung">
+                    <label>Transfert dans le postpartum immédiate</label>
+                    <hint>c'est à dire séjour de l'enfant hors du service ordinaire mère-enfant</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/verlegung/0:label')"/>
+                        <value>0</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/verlegung/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/verlegung/2:label')"/>
+                        <value>2</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/geschlecht">
+                    <label>Sexe</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geschlecht/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/geschlecht/2:label')"/>
+                        <value>2</value>
+                    </item>
+                </select1>
+                <input ref="/data/bebe/geburtsgewicht">
+                    <label>Poids à la naissance</label>
+                    <hint>en gram</hint>
+                </input>
+                <input ref="/data/bebe/note_geburtsgewicht_1">
+                    <label>**&lt;span style="color:red"&gt;Veuillez vérifier le poids à la naissance: très petit poids à la naissance &lt;/span&gt;**</label>
+                </input>
+                <input ref="/data/bebe/note_geburtsgewicht_2">
+                    <label>**&lt;span style="color:red"&gt;Veuillez vérifier le poids à la naissance: poids à la naissance élèvé &lt;/span&gt;**</label>
+                </input>
+                <input ref="/data/bebe/kgesund_note">
+                    <label>####&lt;span style="color:blue"&gt;Santé de l'enfant&lt;/span&gt;</label>
+                </input>
+                <select ref="/data/bebe/kgesund">
+                    <label>Dispositions médicales de l'enfant nécessitant éventuellement le recours à une préparation pour nourrissons/un apport de supplément hydrique</label>
+                    <hint>plusieurs réponses possibles</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/A:label')"/>
+                        <value>A</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/B:label')"/>
+                        <value>B</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/C:label')"/>
+                        <value>C</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/D:label')"/>
+                        <value>D</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/E:label')"/>
+                        <value>E</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/F:label')"/>
+                        <value>F</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/G:label')"/>
+                        <value>G</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/H:label')"/>
+                        <value>H</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/I:label')"/>
+                        <value>I</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/J:label')"/>
+                        <value>J</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/K:label')"/>
+                        <value>K</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/L:label')"/>
+                        <value>L</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/M:label')"/>
+                        <value>M</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kgesund/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select>
+                <input ref="/data/bebe/kgesundandt">
+                    <label>Veuillez décrire</label>
+                </input>
+                <select1 ref="/data/bebe/kauswirkstillen">
+                    <label>Vous avez indiqué que l'enfant a une disposition médicale, qu'il est né prématurément ou qu'il a un poids faible ou élevé à la naissance : Comment cela affecte-t-il l'allaitement ?</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kauswirkstillen/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kauswirkstillen/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kauswirkstillen/3:label')"/>
+                        <value>3</value>
+                    </item>
+                </select1>
+                <select ref="/data/bebe/kkontra">
+                    <label>Contre-indication de l'enfant à l'allaitement</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kkontra/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/kkontra/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select>
+                <input ref="/data/bebe/kkontraandt">
+                    <label>Veuillez décrire</label>
+                </input>
+                <input ref="/data/bebe/stilleneinleitung">
+                    <label>####&lt;span style="color:blue"&gt;Début de l'allaitement maternel&lt;/span&gt;</label>
+                </input>
+                <select1 ref="/data/bebe/hautkontakt">
+                    <label>Contact peau à peau</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/hautkontakt/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/hautkontakt/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/hautkontakt/3:label')"/>
+                        <value>3</value>
+                    </item>
+                </select1>
+                <input ref="/data/bebe/hautdaumin">
+                    <label>Durée du contact peau à peau</label>
+                    <hint>en minutes</hint>
+                </input>
+                <select1 ref="/data/bebe/erstesanlegen">
+                    <label>Première mise au sein</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/erstesanlegen/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/erstesanlegen/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/erstesanlegen/3:label')"/>
+                        <value>3</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/verlegung2">
+                    <label>Transfert durant le séjour</label>
+                    <hint>c'est à dire séjour de l'enfant hors du service ordinaire mère-enfant</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/verlegung2/0:label')"/>
+                        <value>0</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/verlegung2/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/verlegung2/2:label')"/>
+                        <value>2</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/roomingin">
+                    <label>Rooming in/cohabitation</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/roomingin/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/roomingin/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/roomingin/3:label')"/>
+                        <value>3</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/roomingin/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select1>
+                <input ref="/data/bebe/roominginandt">
+                    <label>Veuillez décrire</label>
+                </input>
+                <input ref="/data/bebe/ernahrung">
+                    <label>Alimentation</label>
+                </input>
+                <select1 ref="/data/bebe/muttermilch">
+                    <label>Allaitement au sein</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/muttermilch/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/muttermilch/2:label')"/>
+                        <value>2</value>
+                    </item>
+                </select1>
+                <select1 ref="/data/bebe/stillen">
+                    <label>Allaitement au sein exclusif, prédominant et partiel, sevrage secondaire</label>
+                    <hint>Les indications suivantes concernent les duos mère-enfant qui ont commencé l'allaitement au sein</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillen/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillen/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillen/3:label')"/>
+                        <value>3</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillen/4:label')"/>
+                        <value>4</value>
+                    </item>
+                </select1>
+                <select ref="/data/bebe/stillenvoll">
+                    <label>Quel est le supplément hydrique que le bébé a reçu?</label>
+                    <hint>plusieurs réponses possibles</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillenvoll/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillenvoll/2:label')"/>
+                        <value>2</value>
+                    </item>
+                </select>
+                <select1 ref="/data/bebe/stillenteilwsgl">
+                    <label>Le bébé a-t-il reçu du lait artificiel au cours des dernières 24 heures avant la sortie?</label>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillenteilwsgl/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillenteilwsgl/0:label')"/>
+                        <value>0</value>
+                    </item>
+                </select1>
+                <select ref="/data/bebe/stillensekab">
+                    <label>Raison principale conduisant à donner à l'enfant un supplément hydrique ou du lait artificiel; raisons du sevrage secondaire</label>
+                    <hint>plusieurs réponses possibles</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillensekab/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillensekab/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillensekab/3:label')"/>
+                        <value>3</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/stillensekab/99:label')"/>
+                        <value>99</value>
+                    </item>
+                </select>
+                <input ref="/data/bebe/abstillenandt">
+                    <label>Veuillez décrire</label>
+                </input>
+                <select ref="/data/bebe/hilfsmittel">
+                    <label>L'enfant, a-t-il reçu un des moyens auxiliaires suivant?</label>
+                    <hint>plusieurs réponses possibles</hint>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/hilfsmittel/1:label')"/>
+                        <value>1</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/hilfsmittel/2:label')"/>
+                        <value>2</value>
+                    </item>
+                    <item>
+                        <label ref="jr:itext('/data/bebe/hilfsmittel/3:label')"/>
+                        <value>3</value>
+                    </item>
+                </select>
+                <input ref="/data/bebe/hilfsmittel_grund">
+                    <label>Pour quelle raison?</label>
+                </input>
+                <input ref="/data/bebe/zusatzbem">
+                    <label>Remarques supplémentaires</label>
+                </input>
+                <setvalue event="odk-instance-first-load odk-new-repeat" ref="/data/bebe/journal" value="if(position(..)=1,  /data/id_journal , '')"/>
+                <setvalue event="odk-instance-first-load odk-new-repeat" ref="/data/bebe/kgeburtsdat" value=" /data/bebe [position() = position(current()/..) - 1]/kgeburtsdat"/>
+                <setvalue event="odk-instance-first-load odk-new-repeat" ref="/data/bebe/gestwoch" value=" /data/bebe [position() = position(current()/..) - 1]/gestwoch"/>
+                <setvalue event="odk-instance-first-load odk-new-repeat" ref="/data/bebe/gesttag" value=" /data/bebe [position() = position(current()/..) - 1]/gesttag"/>
+            </repeat>
+        </group>
+        <select1 ref="/data/zimmer">
+            <label>Chambre</label>
+            <item>
+                <label ref="jr:itext('/data/zimmer/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/zimmer/2:label')"/>
+                <value>2</value>
+            </item>
+        </select1>
+        <input ref="/data/maustritt">
+            <label>Sortie de la mère</label>
+        </input>
+        <input ref="/data/note_aufdauer_1">
+            <label>**&lt;span style="color:red"&gt;Veuillez vérifier la date de naissance de l'enfant et la date de sortie de la mère: la durée du séjour est très longue &lt;/span&gt;**</label>
+        </input>
+        <input ref="/data/note_aufdauer_2">
+            <label>**&lt;span style="color:red"&gt;Veuillez vérifier la date de naissance de l'enfant, la date de sortie de la mère, et si la naissance est une naissance ambulatoire: la durée du séjour est très courte pour une naissance non-ambulatoire &lt;/span&gt;**</label>
+        </input>
+        <select1 ref="/data/nachbetreuung">
+            <label>Suivi durant le postpartum immédiat après sortie de l'hôpital</label>
+            <item>
+                <label ref="jr:itext('/data/nachbetreuung/1:label')"/>
+                <value>1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/nachbetreuung/2:label')"/>
+                <value>2</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/nachbetreuung/3:label')"/>
+                <value>3</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/nachbetreuung/4:label')"/>
+                <value>4</value>
+            </item>
+        </select1>
+        <input ref="/data/nachbetrgrund">
+            <label>Si non, pourquoi?</label>
+        </input>
+    </h:body>
+</h:html>

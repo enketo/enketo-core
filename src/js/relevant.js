@@ -203,8 +203,16 @@ export default {
              */
             let context = p.path;
             if (
-                getChild(node, `.or-repeat-info[data-name="${p.path}"]`) &&
-                !getChild(node, `.or-repeat[name="${p.path}"]`)
+                (getChild(node, `.or-repeat-info[data-name="${p.path}"]`) &&
+                    !getChild(node, `.or-repeat[name="${p.path}"]`)) ||
+                // Repeat instance removed for model node with no visible form control
+                (insideRepeat && repeatParent == null && options.removed) ||
+                // All repeat instances removed for model node with no visible form control, i.e. during load with `jr:count="0"`
+                (repeatPath != null &&
+                    repeatParent == null &&
+                    this.form.view.html.querySelector(
+                        `.or-repeat[name="${CSS.escape(repeatPath)}"]`
+                    ) == null)
             ) {
                 context = null;
             }
