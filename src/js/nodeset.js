@@ -246,6 +246,7 @@ Nodeset.prototype.remove = function () {
                 nodes: null,
                 repeatPath,
                 repeatIndex,
+                removed: true, // Introduced to handle relevance on model nodes with no form controls (calculates)
             })
         );
 

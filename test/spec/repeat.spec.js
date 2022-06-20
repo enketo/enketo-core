@@ -132,6 +132,43 @@ describe('repeat functionality', () => {
         });
     });
 
+    describe('instance removal', () => {
+        it('removes an instance that contains a field without a form control', async () => {
+            const form = loadForm('repeat-relevant-on-calculate.xml');
+            const errors = form.init();
+
+            expect(
+                form.view.html.querySelectorAll(
+                    '.or-repeat[name="/data/repeat"]'
+                ).length
+            ).to.equal(1);
+
+            const q1 = form.view.html.querySelector(
+                'input[name="/data/repeat/q1"]'
+            );
+            q1.value = 2;
+            q1.dispatchEvent(event.Change());
+
+            expect(form.model.xml.querySelector('q1_x2').textContent).to.equal(
+                '4'
+            );
+
+            form.view.html
+                .querySelector('.or-repeat[name="/data/repeat"]')
+                .querySelector('button.remove')
+                .click();
+
+            await timers.runAllAsync();
+
+            expect(
+                form.view.html.querySelectorAll(
+                    '.or-repeat[name="/data/repeat"]'
+                ).length
+            ).to.equal(0);
+            expect(errors.length).to.equal(0);
+        });
+    });
+
     describe('fixes unique ids in cloned repeats', () => {
         // Avoiding problems in the autocomplete widget, https://github.com/enketo/enketo-core/issues/521
         it('ensures uniqueness of datalist ids, so cascading selects inside repeats work', () => {
@@ -477,6 +514,28 @@ describe('repeat functionality', () => {
                     .map((i) => i.textContent)
                     .join('')
             ).to.equal('2');
+        });
+
+        it('and works with relevance on a field without a form control when repeat count is 0', () => {
+            const form = loadForm('repeat-count-relevant-on-calculate.xml');
+            const errors = form.init();
+            expect(errors.length).to.equal(0);
+
+            const count = form.view.html.querySelector(
+                'input[name="/data/count'
+            );
+            count.value = 1;
+            count.dispatchEvent(event.Change());
+
+            const q1 = form.view.html.querySelector(
+                'input[name="/data/repeat/q1"]'
+            );
+            q1.value = 2;
+            q1.dispatchEvent(event.Change());
+
+            expect(form.model.xml.querySelector('q1_x2').textContent).to.equal(
+                '4'
+            );
         });
 
         it('and correctly deals with nested repeats that have a repeat count', () => {
