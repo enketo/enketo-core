@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms">
+	<h:head>
+		<h:title>Relevant on calculate in repeat</h:title>
+		<model odk:xforms-version="1.0.0">
+			<instance>
+				<data id="relevance_on_calc">
+					<repeat>
+						<q1/>
+						<q1_x2/>
+					</repeat>
+					<meta>
+						<instanceID/>
+					</meta>
+				</data>
+			</instance>
+			<bind nodeset="/data/repeat/q1" type="int"/>
+			<bind calculate=" ../q1  * 2" nodeset="/data/repeat/q1_x2" relevant=" ../q1  &gt; 0" type="string"/>
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<group ref="/data/repeat">
+			<label>Repeat</label>
+			<repeat nodeset="/data/repeat">
+				<input ref="/data/repeat/q1">
+					<label>Q1</label>
+				</input>
+			</repeat>
+		</group>
+	</h:body>
+</h:html>
