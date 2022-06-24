@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.1.2] - 2022-06-24
+
+-   Update meta selector used when setting deprecatedID (#900)
+-   Preserve geopicker zoom, center map on user location on load, no error clicking pin (#905)
+-   Don't use removed repeat instance as context for relevance (#909)
+
 ## [6.1.1] - 2022-06-01
 
 -   Fix: rendering unexpected geopoint widget for setvalue actions within an input (#896)
