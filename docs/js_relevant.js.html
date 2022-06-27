@@ -252,8 +252,16 @@ export default {
              */
             let context = p.path;
             if (
-                getChild(node, `.or-repeat-info[data-name="${p.path}"]`) &amp;&amp;
-                !getChild(node, `.or-repeat[name="${p.path}"]`)
+                (getChild(node, `.or-repeat-info[data-name="${p.path}"]`) &amp;&amp;
+                    !getChild(node, `.or-repeat[name="${p.path}"]`)) ||
+                // Special cases below for model nodes with no visible form control: if repeat instance removed or if
+                // no instances at all (e.g. during load with `jr:count="0"`)
+                (insideRepeat &amp;&amp;
+                    repeatParent == null &amp;&amp;
+                    (options.removed ||
+                        this.form.view.html.querySelector(
+                            `.or-repeat[name="${CSS.escape(repeatPath)}"]`
+                        ) == null))
             ) {
                 context = null;
             }
