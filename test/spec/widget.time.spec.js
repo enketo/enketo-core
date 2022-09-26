@@ -1,6 +1,5 @@
 import Timepicker from '../../src/widget/time/timepicker-extended';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
-import { format } from '../../src/js/format';
 
 const FORM = `
     <form class="or">
@@ -15,11 +14,13 @@ describe('timepicker widget', () => {
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
-        sandbox.stub(format, 'locale').get(() => 'nl');
+        sandbox.stub(navigator, 'languages').get(() => ['nl']);
+        dispatchEvent(new Event('languagechange'));
     });
 
     afterEach(() => {
         sandbox.restore();
+        dispatchEvent(new Event('languagechange'));
     });
 
     runAllCommonWidgetTests(Timepicker, FORM, '13:23');

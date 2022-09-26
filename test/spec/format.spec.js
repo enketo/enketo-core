@@ -1,62 +1,76 @@
-import { format, time } from '../../src/js/format';
+import { time } from '../../src/js/format';
 
 describe('Format', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
-    /** @type {string} */
-    let localeOverride;
+    [
+        {
+            locale: 'en-US',
+            hour12: true,
+            am: 'AM',
+            pm: 'PM',
+        },
 
-    beforeEach(() => {
-        sandbox = sinon.createSandbox();
+        /**
+         * Note (2022-01-31) — This fixture previously used the `zh` locale.
+         * Tests for this fixture pass in Chrome 97 (current) and Firefox 95
+         * (current - 1), but fail in Firefox 96 producing English-language
+         * 24-hour time. The expected behavior is produced for `zh-hk`.
+         */
+        {
+            locale: 'zh-HK',
+            hour12: true,
+            am: '上午',
+            pm: '下午',
+        },
 
-        sandbox.stub(format, 'locale').get(() => localeOverride);
-    });
+        {
+            locale: 'ar-EG',
+            hour12: true,
+            am: 'ص',
+            pm: 'م',
+        },
+        {
+            locale: 'ko-KR',
+            hour12: true,
+            am: '오전',
+            pm: '오후',
+        },
+        {
+            locale: 'nl',
+            hour12: false,
+            am: null,
+            pm: null,
+        },
+        {
+            locale: 'he',
+            hour12: false,
+            am: null,
+            pm: null,
+        },
+    ].forEach(({ locale, hour12, am, pm }) => {
+        describe(`time determination for ${locale}`, () => {
+            beforeEach(() => {
+                sandbox = sinon.createSandbox();
 
-    afterEach(() => {
-        sandbox.restore();
-    });
-
-    describe('for time determination', () => {
-        const t = [
-            ['en-US', true, 'AM', 'PM'],
-
-            /**
-             * Note (2022-01-31) — This fixture previously used the `zh` locale.
-             * Tests for this fixture pass in Chrome 97 (current) and Firefox 95
-             * (current - 1), but fail in Firefox 96 producing English-language
-             * 24-hour time. The expected behavior is produced for `zh-hk`.
-             */
-            ['zh-hk', true, '上午', '下午'],
-
-            ['ar-EG', true, 'ص', 'م'],
-            ['ko-KR', true, '오전', '오후'],
-            ['nl', false, null, null],
-            ['he', false, null, null],
-        ];
-
-        function testMeridian(locale, expected) {
-            it(`correctly identifies ${locale} time meridian notation as ${expected}`, () => {
-                localeOverride = locale;
-                expect(format.locale).to.equal(locale);
-                expect(time.hour12).to.equal(expected);
+                sandbox.stub(navigator, 'languages').get(() => [locale]);
+                dispatchEvent(new Event('languagechange'));
             });
-        }
 
-        for (let i = 0; i < t.length; i += 1) {
-            testMeridian(t[i][0], t[i][1]);
-        }
+            afterEach(() => {
+                sandbox.restore();
+                dispatchEvent(new Event('languagechange'));
+            });
 
-        function testPm(locale, am, pm) {
-            it(`correctly extracts the AM and PM notation for ${locale} as: ${am},${pm}`, () => {
-                localeOverride = locale;
+            it(`identifies ${locale} time meridian notation as ${hour12}`, () => {
+                expect(time.hour12).to.equal(hour12);
+            });
+
+            it(`extracts the AM and PM notation for as: ${am}, ${pm}`, () => {
                 expect(time.amNotation).to.equal(am);
                 expect(time.pmNotation).to.equal(pm);
             });
-        }
-
-        for (let i = 0; i < t.length; i += 1) {
-            testPm(t[i][0], t[i][2], t[i][3]);
-        }
+        });
     });
 });
