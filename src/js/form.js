@@ -14,6 +14,7 @@ import {
     closestAncestorUntil,
     getSiblingElement,
 } from './dom-utils';
+import { initTimeLocalization } from './format';
 import inputHelper from './input';
 import repeatModule from './repeat';
 import tocModule from './toc';
@@ -262,6 +263,8 @@ Form.prototype.addModule = function (module) {
 Form.prototype.init = function () {
     let loadErrors = [];
     const that = this;
+
+    initTimeLocalization(this.view.html);
 
     this.toc = this.addModule(tocModule);
     this.pages = this.addModule(pageModule);

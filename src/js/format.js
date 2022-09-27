@@ -2,6 +2,8 @@
  * @module format
  */
 
+import events from './event';
+
 /**
  * @typedef LocaleState
  * @property {string[]} locales
@@ -10,8 +12,8 @@
  * @property {string[]} timeFormatter
  */
 
-/** @type {LocaleState} */
-let localeState;
+/** @type {LocaleState | null} */
+let localeState = null;
 
 const setLocalizedTimeFormatter = () => {
     const locales = Intl.getCanonicalLocales(navigator.languages);
@@ -28,17 +30,28 @@ const setLocalizedTimeFormatter = () => {
         timeString,
         timeFormatter,
     };
-
-    const updateTimeFormatter = () => {
-        removeEventListener('languagechange', updateTimeFormatter);
-
-        setLocalizedTimeFormatter();
-    };
-
-    addEventListener('languagechange', updateTimeFormatter);
 };
 
-setLocalizedTimeFormatter();
+/**
+ * @param {HTMLFormElement} [rootElement]
+ */
+const initTimeLocalization = (rootElement) => {
+    const languageChangeListener = () => {
+        setLocalizedTimeFormatter();
+
+        rootElement?.dispatchEvent(events.ChangeLanguage());
+    };
+
+    addEventListener('languagechange', languageChangeListener);
+
+    setLocalizedTimeFormatter();
+
+    return removeEventListener.bind(
+        window,
+        'languagechange',
+        languageChangeListener
+    );
+};
 
 /**
  * @namespace time
@@ -101,4 +114,4 @@ const time = {
     },
 };
 
-export { time };
+export { initTimeLocalization, time };

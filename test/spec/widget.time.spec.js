@@ -1,3 +1,4 @@
+import { initTimeLocalization } from '../../src/js/format';
 import Timepicker from '../../src/widget/time/timepicker-extended';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
@@ -12,15 +13,21 @@ describe('timepicker widget', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
+    /** @type {Function} */
+    let teeardownTimeLocalization;
+
     beforeEach(() => {
         sandbox = sinon.createSandbox();
-        sandbox.stub(navigator, 'languages').get(() => ['nl']);
-        dispatchEvent(new Event('languagechange'));
+
+        const languages = ['nl'];
+
+        sandbox.stub(navigator, 'languages').get(() => languages);
+        teeardownTimeLocalization = initTimeLocalization();
     });
 
     afterEach(() => {
+        teeardownTimeLocalization();
         sandbox.restore();
-        dispatchEvent(new Event('languagechange'));
     });
 
     runAllCommonWidgetTests(Timepicker, FORM, '13:23');

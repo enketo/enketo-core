@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import event from '../../js/event';
+import { time } from '../../js/format';
+
 /*!
  * Timepicker
  *
@@ -16,6 +18,7 @@ import event from '../../js/event';
 (($, window, document) => {
     // TIMEPICKER PUBLIC CLASS DEFINITION
     const Timepicker = function (element, options) {
+        this.languages = navigator.languages;
         this.widget = '';
         this.$element = $(element);
         this.defaultTime = options.defaultTime;
@@ -27,8 +30,6 @@ import event from '../../js/event';
         this.secondStep = options.secondStep;
         this.snapToStep = options.snapToStep;
         this.showInputs = options.showInputs;
-        this.showMeridian = options.showMeridian;
-        this.meridianNotation = options.meridianNotation;
         this.showSeconds = options.showSeconds;
         this.template = options.template;
         this.appendWidgetTo = options.appendWidgetTo;
@@ -56,6 +57,17 @@ import event from '../../js/event';
     };
 
     Timepicker.prototype = {
+        get showMeridian() {
+            return time.hour12;
+        },
+
+        get meridianNotation() {
+            return {
+                am: time.amNotation,
+                pm: time.pmNotation,
+            };
+        },
+
         constructor: Timepicker,
         _init() {
             const self = this;
@@ -109,6 +121,9 @@ import event from '../../js/event';
                     'click',
                     $.proxy(this.widgetClick, this)
                 );
+
+                this.meridianColumns =
+                    this.$widget[0].querySelectorAll('.meridian-column');
             } else {
                 this.$widget = false;
             }
@@ -356,19 +371,13 @@ import event from '../../js/event';
                 this.showSeconds
                     ? `<td class="separator">&nbsp;</td><td><a href="#" data-action="incrementSecond"><span class="${this.icons.up}"></span></a></td>`
                     : ''
-            }${
-                this.showMeridian
-                    ? `<td class="separator">&nbsp;</td><td class="meridian-column"><a href="#" data-action="toggleMeridian"><span class="${this.icons.up}"></span></a></td>`
-                    : ''
-            }</tr><tr><td>${hourTemplate}</td> <td class="separator">:</td><td>${minuteTemplate}</td> ${
+            }<td class="separator meridian-column">&nbsp;</td><td class="meridian-column"><a href="#" data-action="toggleMeridian"><span class="${
+                this.icons.up
+            }"></span></a></td></tr><tr><td>${hourTemplate}</td> <td class="separator">:</td><td>${minuteTemplate}</td> ${
                 this.showSeconds
                     ? `<td class="separator">:</td><td>${secondTemplate}</td>`
                     : ''
-            }${
-                this.showMeridian
-                    ? `<td class="separator">&nbsp;</td><td>${meridianTemplate}</td>`
-                    : ''
-            }</tr><tr><td><a href="#" data-action="decrementHour"><span class="${
+            }<td class="separator meridian-column">&nbsp;</td><td class="meridian-column">${meridianTemplate}</td></tr><tr><td><a href="#" data-action="decrementHour"><span class="${
                 this.icons.down
             }"></span></a></td><td class="separator"></td><td><a href="#" data-action="decrementMinute"><span class="${
                 this.icons.down
@@ -376,11 +385,9 @@ import event from '../../js/event';
                 this.showSeconds
                     ? `<td class="separator">&nbsp;</td><td><a href="#" data-action="decrementSecond"><span class="${this.icons.down}"></span></a></td>`
                     : ''
-            }${
-                this.showMeridian
-                    ? `<td class="separator">&nbsp;</td><td><a href="#" data-action="toggleMeridian"><span class="${this.icons.down}"></span></a></td>`
-                    : ''
-            }</tr></table>`;
+            }<td class="separator meridian-column">&nbsp;</td><td class="meridian-column"><a href="#" data-action="toggleMeridian"><span class="${
+                this.icons.down
+            }"></span></a></td></tr></table>`;
 
             switch (this.template) {
                 case 'dropdown':
@@ -1170,6 +1177,21 @@ import event from '../../js/event';
                         .find('span.timepicker-meridian')
                         .text(this.meridian);
                 }
+            }
+
+            const { showMeridian } = this;
+            const meridianDisplay = showMeridian ? 'table-cell' : 'none';
+
+            this.meridianColumns.forEach((column) => {
+                column.style.display = meridianDisplay;
+            });
+        },
+
+        updateLocalization() {
+            if (this.languages !== navigator.languages) {
+                this.languages = navigator.languages;
+                this.updateFromElementVal();
+                this.updateWidget();
             }
         },
 

@@ -1,4 +1,4 @@
-import { time } from '../../src/js/format';
+import { initTimeLocalization, time } from '../../src/js/format';
 
 describe('Format', () => {
     /** @type {import('sinon').SinonSandbox} */
@@ -51,16 +51,20 @@ describe('Format', () => {
         },
     ].forEach(({ locale, hour12, am, pm }) => {
         describe(`time determination for ${locale}`, () => {
+            /** @type {Function} */
+            let teeardownTimeLocalization;
+
             beforeEach(() => {
                 sandbox = sinon.createSandbox();
 
                 sandbox.stub(navigator, 'languages').get(() => [locale]);
-                dispatchEvent(new Event('languagechange'));
+
+                teeardownTimeLocalization = initTimeLocalization();
             });
 
             afterEach(() => {
                 sandbox.restore();
-                dispatchEvent(new Event('languagechange'));
+                teeardownTimeLocalization();
             });
 
             it(`identifies ${locale} time meridian notation as ${hour12}`, () => {

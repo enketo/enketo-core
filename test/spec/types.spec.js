@@ -1,3 +1,4 @@
+import { initTimeLocalization } from '../../src/js/format';
 import types from '../../src/js/types';
 
 /*
@@ -7,6 +8,17 @@ import types from '../../src/js/types';
 describe('Types', () => {
     describe('time', () => {
         describe('meridian convertor', () => {
+            /** @type {Function} */
+            let teeardownTimeLocalization;
+
+            beforeEach(() => {
+                teeardownTimeLocalization = initTimeLocalization();
+            });
+
+            afterEach(() => {
+                teeardownTimeLocalization();
+            });
+
             [
                 ['12:03 PM', '12:03'],
                 ['01:03 PM', '13:03'],
