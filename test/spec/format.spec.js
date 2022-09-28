@@ -49,31 +49,48 @@ describe('Format', () => {
             am: null,
             pm: null,
         },
+        {
+            locale: 'fi',
+            hour12: false,
+            am: null,
+            pm: null,
+        },
     ].forEach(({ locale, hour12, am, pm }) => {
         describe(`time determination for ${locale}`, () => {
             /** @type {Function} */
-            let teeardownTimeLocalization;
+            let teardownTimeLocalization;
 
             beforeEach(() => {
                 sandbox = sinon.createSandbox();
 
                 sandbox.stub(navigator, 'languages').get(() => [locale]);
 
-                teeardownTimeLocalization = initTimeLocalization();
+                teardownTimeLocalization = initTimeLocalization();
             });
 
             afterEach(() => {
                 sandbox.restore();
-                teeardownTimeLocalization();
+                teardownTimeLocalization();
             });
 
             it(`identifies ${locale} time meridian notation as ${hour12}`, () => {
-                expect(time.hour12).to.equal(hour12);
+                expect(time.hour12).to.equal(hour12, locale);
             });
 
             it(`extracts the AM and PM notation for as: ${am}, ${pm}`, () => {
-                expect(time.amNotation).to.equal(am);
+                expect(time.amNotation).to.equal(am, locale);
                 expect(time.pmNotation).to.equal(pm);
+            });
+
+            it('determines whether a localized time string has a meridian', () => {
+                const date = new Date(2022, 8, 27, 1, 2, 3, 4);
+                const timeStr = date.toLocaleTimeString([locale]);
+                const expected = am != null;
+
+                expect(time.hasMeridian(timeStr)).to.equal(
+                    expected,
+                    `${locale}, ${timeStr}, ${date.toLocaleString([locale])}`
+                );
             });
         });
     });

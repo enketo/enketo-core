@@ -9,14 +9,14 @@ describe('Types', () => {
     describe('time', () => {
         describe('meridian convertor', () => {
             /** @type {Function} */
-            let teeardownTimeLocalization;
+            let teardownTimeLocalization;
 
             beforeEach(() => {
-                teeardownTimeLocalization = initTimeLocalization();
+                teardownTimeLocalization = initTimeLocalization();
             });
 
             afterEach(() => {
-                teeardownTimeLocalization();
+                teardownTimeLocalization();
             });
 
             [

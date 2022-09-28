@@ -9,7 +9,7 @@ import events from './event';
  * @property {string[]} locales
  * @property {string} dateString
  * @property {string} timeString
- * @property {string[]} timeFormatter
+ * @property {Intl.DateTimeFormat} timeFormatter
  */
 
 /** @type {LocaleState | null} */
@@ -57,7 +57,6 @@ const initTimeLocalization = (rootElement) => {
  * @namespace time
  */
 const time = {
-    // For now we just look at a subset of numbers in Arabic and Latin. There are actually over 20 number scripts and :digit: doesn't work in browsers
     /**
      * @type {boolean}
      */
@@ -102,15 +101,7 @@ const time = {
      * @param {string} time - Time string
      */
     hasMeridian(time) {
-        try {
-            const date = new Date(
-                localeState.dateString.replace(localeState.timeString, time)
-            );
-
-            return this.meridianNotation(date) != null;
-        } catch (error) {
-            return false;
-        }
+        return time.includes(this.amNotation) || time.includes(this.pmNotation);
     },
 };
 

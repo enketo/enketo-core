@@ -14,7 +14,7 @@ describe('timepicker widget', () => {
     let sandbox;
 
     /** @type {Function} */
-    let teeardownTimeLocalization;
+    let teardownTimeLocalization;
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
@@ -22,11 +22,11 @@ describe('timepicker widget', () => {
         const languages = ['nl'];
 
         sandbox.stub(navigator, 'languages').get(() => languages);
-        teeardownTimeLocalization = initTimeLocalization();
+        teardownTimeLocalization = initTimeLocalization();
     });
 
     afterEach(() => {
-        teeardownTimeLocalization();
+        teardownTimeLocalization();
         sandbox.restore();
     });
 

@@ -16,16 +16,16 @@ describe('datetimepicker widget', () => {
     let sandbox;
 
     /** @type {Function} */
-    let teeardownTimeLocalization;
+    let teardownTimeLocalization;
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
-        teeardownTimeLocalization = initTimeLocalization();
+        teardownTimeLocalization = initTimeLocalization();
     });
 
     afterEach(() => {
         sandbox.restore();
-        teeardownTimeLocalization();
+        teardownTimeLocalization();
     });
 
     function initForm(form) {
