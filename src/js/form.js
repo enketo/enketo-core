@@ -519,63 +519,72 @@ Form.prototype.replaceChoiceNameFn = function (
         const params = choiceName[1];
 
         if (params.length === 2) {
-            let label = '';
-            const value = this.model.evaluate(
+            const labelArray = [];
+            const values = this.model.evaluate(
                 params[0],
                 resTypeStr,
                 context,
                 index,
                 tryNative
             );
-            let name = stripQuotes(params[1]).trim();
-            name = name.startsWith('/') ? name : joinPath(context, name);
-            const inputs = [
-                ...this.view.html.querySelectorAll(
-                    `[name="${name}"], [data-name="${name}"]`
-                ),
-            ];
-            const nodeName = inputs.length
-                ? inputs[0].nodeName.toLowerCase()
-                : null;
+            values.split(' ').forEach((value) => {
+                let name = stripQuotes(params[1]).trim();
+                name = name.startsWith('/') ? name : joinPath(context, name);
+                const inputs = [
+                    ...this.view.html.querySelectorAll(
+                        `[name="${name}"], [data-name="${name}"]`
+                    ),
+                ];
+                const nodeName = inputs.length
+                    ? inputs[0].nodeName.toLowerCase()
+                    : null;
 
-            if (!value || !inputs.length) {
-                label = '';
-            } else if (nodeName === 'select') {
-                const found = inputs.find((input) =>
-                    input.querySelector(`[value="${CSS.escape(value)}"]`)
-                );
-                label = found
-                    ? found.querySelector(`[value="${CSS.escape(value)}"]`)
-                          .textContent
-                    : '';
-            } else if (nodeName === 'input') {
-                const list = inputs[0].getAttribute('list');
+                if (!value || !inputs.length) {
+                    labelArray.push('');
+                } else if (nodeName === 'select') {
+                    const found = inputs.find((input) =>
+                        input.querySelector(`[value="${CSS.escape(value)}"]`)
+                    );
+                    labelArray.push(
+                        found
+                            ? found.querySelector(
+                                  `[value="${CSS.escape(value)}"]`
+                              ).textContent
+                            : ''
+                    );
+                } else if (nodeName === 'input') {
+                    const list = inputs[0].getAttribute('list');
 
-                if (!list) {
-                    const found = inputs.find(
-                        (input) => input.getAttribute('value') === value
-                    );
-                    const firstSiblingLabelEl = found
-                        ? getSiblingElement(found, '.option-label.active')
-                        : [];
-                    label = firstSiblingLabelEl
-                        ? firstSiblingLabelEl.textContent
-                        : '';
-                } else {
-                    const firstSiblingListEl = getSiblingElement(
-                        inputs[0],
-                        `datalist#${CSS.escape(list)}`
-                    );
-                    if (firstSiblingListEl) {
-                        const optionEl = firstSiblingListEl.querySelector(
-                            `[data-value="${value}"]`
+                    if (!list) {
+                        const found = inputs.find(
+                            (input) => input.getAttribute('value') === value
                         );
-                        label = optionEl ? optionEl.getAttribute('value') : '';
+                        const firstSiblingLabelEl = found
+                            ? getSiblingElement(found, '.option-label.active')
+                            : [];
+                        labelArray.push(
+                            firstSiblingLabelEl
+                                ? firstSiblingLabelEl.textContent
+                                : ''
+                        );
+                    } else {
+                        const firstSiblingListEl = getSiblingElement(
+                            inputs[0],
+                            `datalist#${CSS.escape(list)}`
+                        );
+                        if (firstSiblingListEl) {
+                            const optionEl = firstSiblingListEl.querySelector(
+                                `[data-value="${value}"]`
+                            );
+                            labelArray.push(
+                                optionEl ? optionEl.getAttribute('value') : ''
+                            );
+                        }
                     }
                 }
-            }
+            });
 
-            expr = expr.replace(choiceName[0], `"${label}"`);
+            expr = expr.replace(choiceName[0], `"${labelArray.join(' ')}"`);
         } else {
             throw new FormLogicError(
                 `jr:choice-name function has incorrect number of parameters: ${choiceName[0]}`
