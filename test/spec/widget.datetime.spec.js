@@ -1,3 +1,4 @@
+import { initTimeLocalization } from '../../src/js/format';
 import Datetimepicker from '../../src/widget/datetime/datetimepicker-extended';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
@@ -14,12 +15,17 @@ describe('datetimepicker widget', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
+    /** @type {Function} */
+    let teardownTimeLocalization;
+
     beforeEach(() => {
         sandbox = sinon.createSandbox();
+        teardownTimeLocalization = initTimeLocalization();
     });
 
     afterEach(() => {
         sandbox.restore();
+        teardownTimeLocalization();
     });
 
     function initForm(form) {

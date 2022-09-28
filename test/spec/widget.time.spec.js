@@ -1,6 +1,6 @@
+import { initTimeLocalization } from '../../src/js/format';
 import Timepicker from '../../src/widget/time/timepicker-extended';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
-import { format } from '../../src/js/format';
 
 const FORM = `
     <form class="or">
@@ -13,12 +13,20 @@ describe('timepicker widget', () => {
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
+    /** @type {Function} */
+    let teardownTimeLocalization;
+
     beforeEach(() => {
         sandbox = sinon.createSandbox();
-        sandbox.stub(format, 'locale').get(() => 'nl');
+
+        const languages = ['nl'];
+
+        sandbox.stub(navigator, 'languages').get(() => languages);
+        teardownTimeLocalization = initTimeLocalization();
     });
 
     afterEach(() => {
+        teardownTimeLocalization();
         sandbox.restore();
     });
 

@@ -2,72 +2,98 @@
  * @module format
  */
 
-const NUMBER = '0-9\u0660-\u0669';
-const TIME_PART = `[:${NUMBER}]+`;
-const MERIDIAN_PART = `[^: ${NUMBER}]+`;
-const HAS_MERIDIAN = new RegExp(
-    `^(${TIME_PART} ?(${MERIDIAN_PART}))|((${MERIDIAN_PART}) ?${TIME_PART})$`
-);
+import events from './event';
 
 /**
- * Transforms time to a cleaned-up localized time.
- *
- * @param {Date} dt - date object
- * @return {string} cleaned-up localized time
+ * @typedef LocaleState
+ * @property {string[]} locales
+ * @property {string} dateString
+ * @property {string} timeString
+ * @property {Intl.DateTimeFormat} timeFormatter
  */
-function _getCleanLocalTime(dt) {
-    dt = typeof dt === 'undefined' ? new Date() : dt;
 
-    return _cleanSpecialChars(dt.toLocaleTimeString(format.locale));
-}
+/** @type {LocaleState | null} */
+let localeState = null;
+
+const setLocalizedTimeFormatter = () => {
+    const locales = Intl.getCanonicalLocales(navigator.languages);
+    const date = new Date(2000, 1, 1, 1, 23, 45);
+    const dateString = date.toLocaleString();
+    const timeString = date.toLocaleTimeString();
+    const timeFormatter = Intl.DateTimeFormat(locales, {
+        timeStyle: 'short',
+    });
+
+    localeState = {
+        locales,
+        dateString,
+        timeString,
+        timeFormatter,
+    };
+};
 
 /**
- * Remove unneeded and problematic special characters in (date)time string.
- *
- * @param {string} timeStr - (date)time string to clean up
- * @return {string} transformed (date)time string with removed unneeded special characters that cause issues
+ * @param {HTMLFormElement} [rootElement]
  */
-function _cleanSpecialChars(timeStr) {
-    return timeStr.replace(/[\u200E\u200F]/g, '');
-}
+const initTimeLocalization = (rootElement) => {
+    const languageChangeListener = () => {
+        setLocalizedTimeFormatter();
+
+        rootElement?.dispatchEvent(events.ChangeLanguage());
+    };
+
+    addEventListener('languagechange', languageChangeListener);
+
+    setLocalizedTimeFormatter();
+
+    return removeEventListener.bind(
+        window,
+        'languagechange',
+        languageChangeListener
+    );
+};
 
 /**
  * @namespace time
  */
 const time = {
-    // For now we just look at a subset of numbers in Arabic and Latin. There are actually over 20 number scripts and :digit: doesn't work in browsers
     /**
-     * @type {string}
+     * @type {boolean}
      */
     get hour12() {
-        return this.hasMeridian(_getCleanLocalTime());
+        const { hour12 } = localeState.timeFormatter.resolvedOptions();
+
+        return Boolean(hour12);
     },
+
     /**
      * @type {string}
      */
     get pmNotation() {
         return this.meridianNotation(new Date(2000, 1, 1, 23, 0, 0));
     },
+
     /**
      * @type {string}
      */
     get amNotation() {
         return this.meridianNotation(new Date(2000, 1, 1, 1, 0, 0));
     },
-    /**
-     * @type {Function}
-     * @param {Date} dt - datetime string
-     */
-    meridianNotation(dt) {
-        let matches = _getCleanLocalTime(dt).match(HAS_MERIDIAN);
-        if (matches && matches.length) {
-            matches = matches.filter((item) => !!item);
 
-            return matches[matches.length - 1].trim();
+    /**
+     * @param {Date} date - datetime string
+     */
+    meridianNotation(date) {
+        const formatted = localeState.timeFormatter.formatToParts(date);
+        const meridianPart = formatted.find(({ type }) => type === 'dayPeriod');
+
+        if (meridianPart != null) {
+            return meridianPart.value;
         }
 
         return null;
     },
+
     /**
      * Whether time string has meridian parts
      *
@@ -75,15 +101,8 @@ const time = {
      * @param {string} time - Time string
      */
     hasMeridian(time) {
-        return HAS_MERIDIAN.test(_cleanSpecialChars(time));
+        return time.includes(this.amNotation) || time.includes(this.pmNotation);
     },
 };
 
-/**
- * @namespace format
- */
-const format = {
-    locale: navigator.language,
-};
-
-export { format, time };
+export { initTimeLocalization, time };

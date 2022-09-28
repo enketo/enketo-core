@@ -82,8 +82,14 @@ class TimepickerExtended extends Widget {
      * Updates widget
      */
     update() {
-        if (this.element.value !== this.value && this.fakeTimeI) {
-            $(this.fakeTimeI).timepicker('setTime', this.element.value);
+        if (this.fakeTimeI) {
+            const $fakeTimeInput = $(this.fakeTimeI);
+
+            if (this.element.value !== this.value) {
+                $fakeTimeInput.timepicker('setTime', this.element.value);
+            }
+
+            $fakeTimeInput.timepicker('updateLocalization');
         }
     }
 

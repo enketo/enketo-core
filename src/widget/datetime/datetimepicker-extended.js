@@ -154,6 +154,7 @@ class DatetimepickerExtended extends Widget {
                       )
                     : '';
         }
+
         if (val !== this.value) {
             const vals = val.split('T');
             const dateVal = vals[0];
@@ -163,6 +164,8 @@ class DatetimepickerExtended extends Widget {
             this.$fakeDateI.datepicker('setDate', dateVal);
             this.$fakeTimeI.timepicker('setTime', timeVal);
         }
+
+        this.$fakeTimeI.timepicker('updateLocalization');
     }
 
     get originalInputValue() {
