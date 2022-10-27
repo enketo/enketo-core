@@ -41,6 +41,7 @@ We have to admit we do not test on all of these, but are committed to fixing bro
 1. Update `CHANGELOG.md`
 1. Update version in `package.json`
     - Bump to major version if consumers have to make changes.
+1. If `enketo-transformer` has been updated, change `Form.requiredTransformerVersion`
 1. Merge PR with all changes
 1. Create GitHub release
 1. Tag and publish the release
