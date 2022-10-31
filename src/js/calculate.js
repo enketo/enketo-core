@@ -204,14 +204,38 @@ export default {
         const nodes = this._getNodesForAction(action, event);
 
         nodes.forEach((actionControl) => {
-            const name = this.form.input.getName(actionControl);
-            const dataNodesObj = this.form.model.node(name);
+            let name = this.form.input.getName(actionControl);
+
+            let affectedControl;
+
+            if (
+                name == null ||
+                name === '' ||
+                actionControl.matches(
+                    `[name="${CSS.escape(name)}"] ~ [name="${CSS.escape(
+                        name
+                    )}"]`
+                )
+            ) {
+                affectedControl = actionControl
+                    .closest('.question')
+                    ?.querySelector(
+                        ':is([data-name], [name]):not([data-name=""], [data-event], [name=""])'
+                    );
+
+                name = this.form.input.getName(affectedControl);
+            } else {
+                affectedControl = actionControl;
+            }
+
+            // TODO: should this pass `{ onlyLeaf: true }` option?
+            const dataNodesObj = this.form.model.node(name, null);
             const dataNodes = dataNodesObj.getElements();
 
             const props = {
                 name,
-                dataType: this.form.input.getXmlType(actionControl),
-                relevantExpr: this.form.input.getRelevant(actionControl),
+                dataType: this.form.input.getXmlType(affectedControl),
+                relevantExpr: this.form.input.getRelevant(affectedControl),
                 index:
                     event.detail &&
                     typeof event.detail.repeatIndex !== 'undefined'
@@ -222,7 +246,7 @@ export default {
             };
 
             if (action === 'setvalue') {
-                props.expr = actionControl.dataset.setvalue;
+                props.expr = affectedControl.dataset.setvalue;
             }
 
             if (
@@ -238,7 +262,7 @@ export default {
                  */
                 dataNodes.forEach((el, index) => {
                     const obj = Object.create(props);
-                    const control = actionControl;
+                    const control = affectedControl;
                     obj.index = index;
                     this._updateCalc(control, obj);
                 });
@@ -253,7 +277,7 @@ export default {
                 }
                 this._updateCalc(control, props);
             } else if (dataNodes[props.index]) {
-                const control = actionControl;
+                const control = affectedControl;
                 this._updateCalc(control, props);
             } else {
                 console.error(

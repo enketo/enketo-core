@@ -12,6 +12,18 @@ import events from '../../src/js/event';
  */
 
 describe('setgeopoint action', () => {
+    const actionInBodyNodes = {
+        visible_first_load_adjacent_action: 'action defined adjacent to input',
+        visible_first_load_nested_explicit_ref:
+            'action nested in input with explicit ref',
+        visible_first_load_nested_implied_ref:
+            'action nested in input with ref determined by parent',
+    };
+    const firstLoadeNodes = {
+        ...actionInBodyNodes,
+        visible_first_load_model_action: 'action defined in model',
+    };
+
     describe('first load', () => {
         const mock = mockGetCurrentPosition(
             createTestCoordinates({
@@ -37,94 +49,96 @@ describe('setgeopoint action', () => {
                 .then(done, done);
         });
 
-        it('works for questions with odk-instance-first-load inside of the XForms body', (done) => {
-            const form1 = loadForm('setgeopoint.xml');
-            form1.init();
+        for (const [nodeName, description] of Object.entries(
+            actionInBodyNodes
+        )) {
+            it(`works for questions with odk-instance-first-load inside of the XForms body (${description})`, (done) => {
+                const form1 = loadForm('setgeopoint.xml');
+                form1.init();
 
-            mock.lookup
-                .then(({ geopoint }) => {
-                    expect(
-                        form1.model.xml.querySelector('visible_first_load')
-                            .textContent
-                    ).to.equal(geopoint);
-                })
-                .then(done, done);
-        });
+                mock.lookup
+                    .then(({ geopoint }) => {
+                        expect(
+                            form1.model.xml.querySelector(nodeName).textContent
+                        ).to.equal(geopoint);
+                    })
+                    .then(done, done);
+            });
+        }
     });
 
-    describe('null `accuracy`', () => {
-        const mock = mockGetCurrentPosition(
-            createTestCoordinates({
-                latitude: 48.66,
-                longitude: -120.5,
-                altitude: 123,
-            }),
-            { expectLookup: true }
-        );
+    for (const [nodeName, description] of Object.entries(firstLoadeNodes)) {
+        describe(`null 'accuracy' (${description})`, () => {
+            const mock = mockGetCurrentPosition(
+                createTestCoordinates({
+                    latitude: 48.66,
+                    longitude: -120.5,
+                    altitude: 123,
+                }),
+                { expectLookup: true }
+            );
 
-        it('substitutes a null `accuracy` value with 0.0', (done) => {
-            const form1 = loadForm('setgeopoint.xml');
-            form1.init();
+            it('substitutes a null `accuracy` value with 0.0', (done) => {
+                const form1 = loadForm('setgeopoint.xml');
+                form1.init();
 
-            mock.lookup
-                .then(({ geopoint }) => {
-                    expect(
-                        form1.model.xml.querySelector('visible_first_load')
-                            .textContent
-                    ).to.equal(geopoint);
-                    expect(geopoint).to.equal('48.66 -120.5 123 0.0');
-                })
-                .then(done, done);
+                mock.lookup
+                    .then(({ geopoint }) => {
+                        expect(
+                            form1.model.xml.querySelector(nodeName).textContent
+                        ).to.equal(geopoint);
+                        expect(geopoint).to.equal('48.66 -120.5 123 0.0');
+                    })
+                    .then(done, done);
+            });
         });
-    });
 
-    describe('null `altitude`', () => {
-        const mock = mockGetCurrentPosition(
-            createTestCoordinates({
-                latitude: 48.66,
-                longitude: -120.5,
-                accuracy: 2500.12,
-            }),
-            { expectLookup: true }
-        );
+        describe(`null 'altitude' (${description})`, () => {
+            const mock = mockGetCurrentPosition(
+                createTestCoordinates({
+                    latitude: 48.66,
+                    longitude: -120.5,
+                    accuracy: 2500.12,
+                }),
+                { expectLookup: true }
+            );
 
-        it('substitutes a null `altitude` value with 0.0', (done) => {
-            const form1 = loadForm('setgeopoint.xml');
-            form1.init();
+            it('substitutes a null `altitude` value with 0.0', (done) => {
+                const form1 = loadForm('setgeopoint.xml');
+                form1.init();
 
-            mock.lookup
-                .then(({ geopoint }) => {
-                    expect(
-                        form1.model.xml.querySelector('visible_first_load')
-                            .textContent
-                    ).to.equal(geopoint);
-                    expect(geopoint).to.include('48.66 -120.5 0.0 2500.12');
-                })
-                .then(done, done);
+                mock.lookup
+                    .then(({ geopoint }) => {
+                        expect(
+                            form1.model.xml.querySelector(nodeName).textContent
+                        ).to.equal(geopoint);
+                        expect(geopoint).to.include('48.66 -120.5 0.0 2500.12');
+                    })
+                    .then(done, done);
+            });
         });
-    });
 
-    describe('lookup failure', () => {
-        const mock = mockGetCurrentPosition(
-            createGeolocationLookupError('PERMISSION_DENIED'),
-            { expectLookup: true }
-        );
+        describe(`lookup failure (${description})`, () => {
+            const mock = mockGetCurrentPosition(
+                createGeolocationLookupError('PERMISSION_DENIED'),
+                { expectLookup: true }
+            );
 
-        it('sets an empty string when lookup fails', (done) => {
-            const form1 = loadForm('setgeopoint.xml');
-            form1.init();
+            it('sets an empty string when lookup fails', (done) => {
+                const form1 = loadForm('setgeopoint.xml');
+                form1.init();
 
-            mock.lookup
-                .then(({ geopoint }) => {
-                    expect(
-                        form1.model.xml.querySelector('visible_first_load')
-                            .textContent
-                    ).to.equal(geopoint);
-                    expect(geopoint).to.include('');
-                })
-                .then(done, done);
+                mock.lookup
+                    .then(({ geopoint }) => {
+                        expect(
+                            form1.model.xml.querySelector(nodeName).textContent
+                        ).to.equal(geopoint);
+                        expect(geopoint).to.include('');
+                    })
+                    .then(done, done);
+            });
         });
-    });
+    }
 });
 
 describe('setgeopoint actions to populate a value if another value changes', () => {

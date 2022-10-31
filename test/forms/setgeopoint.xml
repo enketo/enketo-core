@@ -12,7 +12,10 @@
             <instance>
                 <data id="setgeopoint">
                     <hidden_first_load/>
-                    <visible_first_load/>
+                    <visible_first_load_adjacent_action/>
+                    <visible_first_load_nested_explicit_ref/>
+                    <visible_first_load_nested_implied_ref/>
+                    <visible_first_load_model_action/>
                     <changes/>
                     <location_changed/>
                     <meta>
@@ -22,18 +25,36 @@
             </instance>
 
             <bind nodeset="/data/hidden_first_load" type="string"/>
-            <bind nodeset="/data/visible_first_load" type="string"/>
+            <bind nodeset="/data/visible_first_load_adjacent_action" type="geopoint"/>
+            <bind nodeset="/data/visible_first_load_nested_explicit_ref" type="geopoint"/>
+            <bind nodeset="/data/visible_first_load_nested_implied_ref" type="geopoint"/>
+            <bind nodeset="/data/visible_first_load_model_action" type="geopoint"/>
 
             <bind nodeset="/data/changes" type="int"/>
-            <bind nodeset="/data/location_changed" type="string"/>
+            <bind nodeset="/data/location_changed" type="geopoint"/>
 
             <odk:setgeopoint event="some-unsupported-event odk-instance-first-load" ref="/data/hidden_first_load"/>
+            <odk:setgeopoint event="odk-instance-first-load" ref="/data/visible_first_load_model_action"/>
         </model>
     </h:head>
     <h:body>
-        <odk:setgeopoint event="odk-instance-first-load" ref="/data/visible_first_load"/>
-        <input ref="/data/visible_first_load">
-            <label>odk-instance-first-load</label>
+        <odk:setgeopoint event="odk-instance-first-load" ref="/data/visible_first_load_adjacent_action"/>
+        <input ref="/data/visible_first_load_adjacent_action">
+            <label>visible_first_load_adjacent_action</label>
+        </input>
+
+        <input ref="/data/visible_first_load_nested_explicit_ref">
+            <label>visible_first_load_nested_explicit_ref</label>
+            <odk:setgeopoint event="odk-instance-first-load" ref="/data/visible_first_load_nested_explicit_ref"/>
+        </input>
+
+        <input ref="/data/visible_first_load_nested_implied_ref">
+            <odk:setgeopoint event="odk-instance-first-load"/>
+            <label>visible_first_load_nested_implied_ref</label>
+        </input>
+
+        <input ref="/data/visible_first_load_model_action">
+            <label>visible_first_load_model_action</label>
         </input>
 
         <select1 ref="/data/changes" appearance="minimal">
