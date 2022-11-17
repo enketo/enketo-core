@@ -1053,7 +1053,7 @@ Form.prototype.setEventHandlers = function () {
         this.output.update();
     });
 
-    this.view.$.find('.or-group > h4').on('click', function () {
+    this.view.$.on('click', '.or-group > h4', function () {
         // The resize trigger is to make sure canvas widgets start working.
         $(this)
             .closest('.or-group')
