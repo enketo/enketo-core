@@ -4,6 +4,7 @@ import event from './event';
 const range = document.createRange();
 
 /**
+ * @template {HTMLElement} [Element=HTMLElement]
  * A Widget class that can be extended to provide some of the basic widget functionality out of the box.
  */
 class Widget {

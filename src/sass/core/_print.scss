@@ -54,13 +54,15 @@ h4::before {
     .or-appearance-no-print,
     .geopoint .search-bar,
     .or-constraint-msg,
+    .invalid-value-msg,
     .add-on,
     .file-feedback,
     video,
     audio,
     button,
     .invalid-required .or-required-msg.active,
-    .invalid-constraint .or-constraint-msg.active {
+    .invalid-constraint .or-constraint-msg.active,
+    .invalid-value .invalid-value-msg.active {
         display: none;
     }
 
