@@ -3,11 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.1.4] - 2022-11-28
+
+-   Fix: use simpler selector for geopicker widgets (#922)
+-   fix toggle or-appearance-compact with dynamic nested repeat group (#914)
+-   Fix: validate number input values (#926)
+
 ## [6.1.3] - 2022-10-27
 
-- Fix timepicker in Finnish locales (#916)
-- Fix special string.replace sequences in Markdown (enketo-transformer/153)
-- Fix evaluating absolute nodeset expressions with an attribute context node (openrosa-xpath-evaluator/166)
+-   Fix timepicker in Finnish locales (#916)
+-   Fix special string.replace sequences in Markdown (enketo-transformer/153)
+-   Fix evaluating absolute nodeset expressions with an attribute context node (openrosa-xpath-evaluator/166)
 
 ## [6.1.2] - 2022-06-24
 
