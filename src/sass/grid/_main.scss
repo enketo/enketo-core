@@ -231,7 +231,8 @@ h4 + .or-repeat {
 
     .or-constraint-msg,
     .or-required-msg,
-    .or-relevant-msg {
+    .or-relevant-msg,
+    .invalid-value-msg {
         order: 5;
     }
 

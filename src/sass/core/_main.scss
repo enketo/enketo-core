@@ -8,6 +8,7 @@ $media-margin: 10px;
 .or-constraint-msg,
 .or-required-msg,
 .or-relevant-msg,
+.invalid-value-msg,
 .option-wrapper .itemset-template,
 .itemset-labels {
     display: none;
@@ -585,11 +586,13 @@ legend .required {
 }
 
 .invalid-constraint,
+.invalid-value,
 .invalid-required,
 .invalid-relevant {
     @include question-invalid;
 }
 
+.invalid-value .invalid-value-msg.active,
 .invalid-constraint .or-constraint-msg.active,
 .invalid-required .or-required-msg.active,
 .question.invalid-relevant .or-relevant-msg.active {
@@ -598,7 +601,8 @@ legend .required {
 
 .or-required-msg.active,
 .or-constraint-msg.active,
-.or-relevant-msg.active {
+.or-relevant-msg.active,
+.invalid-value-msg.active {
     @include question-error-message;
 }
 

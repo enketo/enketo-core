@@ -62,11 +62,13 @@ $padding: 30px;
     // If linked question is invalid, but the widget is not, the message
     // should stay hidden.
     .or-required-msg.active,
-    .or-constraint-msg.active {
+    .or-constraint-msg.active,
+    .invalid-value-msg.active {
         display: none;
     }
     .invalid-required > .or-required-msg,
-    .invalid-constraint > .or-constraint-msg {
+    .invalid-constraint > .or-constraint-msg,
+    .invalid-value > .invalid-value-msg {
         display: block;
     }
 }

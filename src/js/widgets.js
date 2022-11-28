@@ -34,6 +34,8 @@ import ab from '../widget/date-native-ios/datepicker-native-ios';
 import ac from '../widget/rating/rating';
 import ad from '../widget/text-print/text-print';
 import ae from '../widget/thousands-sep/thousands-sep';
+import af from '../widget/number-input/decimal-input';
+import ag from '../widget/number-input/integer-input';
 // import zz from '../widget/example/my-widget';
 
 export default [
@@ -67,4 +69,6 @@ export default [
     ac,
     ad,
     ae,
+    af,
+    ag,
 ];

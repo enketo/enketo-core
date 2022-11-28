@@ -28,7 +28,6 @@ import preloadModule from './preload';
 import outputModule from './output';
 import calculationModule from './calculate';
 import requiredModule from './required';
-import maskModule from './mask';
 import readonlyModule from './readonly';
 import FormLogicError from './form-logic-error';
 import events from './event';
@@ -279,7 +278,6 @@ Form.prototype.init = function () {
     this.itemset = this.addModule(itemsetModule);
     this.calc = this.addModule(calculationModule);
     this.required = this.addModule(requiredModule);
-    this.mask = this.addModule(maskModule);
     this.readonly = this.addModule(readonlyModule);
 
     // Handle odk-instance-first-load event
@@ -421,8 +419,6 @@ Form.prototype.init = function () {
         this.calc.update();
 
         this.required.update();
-
-        this.mask.init();
 
         this.editStatus = false;
 
@@ -1149,9 +1145,11 @@ Form.prototype.blockPageNavigation = function () {
  * @return {!boolean} Whether the question/form is not marked as invalid.
  */
 Form.prototype.isValid = function (node) {
-    const invalidSelectors = ['.invalid-required', '.invalid-relevant'].concat(
-        this.constraintClassesInvalid.map((cls) => `.${cls}`)
-    );
+    const invalidSelectors = [
+        '.invalid-value,',
+        '.invalid-required',
+        '.invalid-relevant',
+    ].concat(this.constraintClassesInvalid.map((cls) => `.${cls}`));
     if (node) {
         const question = this.input.getWrapNode(node);
         const cls = question.classList;
@@ -1202,7 +1200,11 @@ Form.prototype.validate = Form.prototype.validateAll;
  */
 Form.prototype.validateContent = function ($container) {
     const that = this;
-    const invalidSelector = ['.invalid-required', '.invalid-relevant']
+    const invalidSelector = [
+        '.invalid-value',
+        '.invalid-required',
+        '.invalid-relevant',
+    ]
         .concat(this.constraintClassesInvalid.map((cls) => `.${cls}`))
         .join(', ');
 
