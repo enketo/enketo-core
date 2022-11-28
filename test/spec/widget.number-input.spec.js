@@ -229,7 +229,7 @@ describe('Number inputs', () => {
                 .createRange()
                 .createContextualFragment(decimalForm);
             const control = fragment.querySelector(DecimalInput.selector);
-            const value = '-4';
+            const value = '-4.1';
             const widget = new DecimalInput(control);
 
             input.setVal(control, value, events.Input());
