@@ -138,7 +138,12 @@ class DrawWidget extends Widget {
         // We built a delay in saving on stroke "end", to avoid excessive updating
         // This event does not fire on touchscreens for which we use the .hide-canvas-btn click
         // to do the same thing.
-        canvas.addEventListener('blur', this._forceUpdate.bind(this));
+        canvas.addEventListener('blur', () => {
+            // If the canvas is empty, calling blur would result in an empty image file being created.
+            if (this.pad && !this.pad.isEmpty()) {
+                this._forceUpdate();
+            }
+        });
 
         this.initialize = fileManager.init().then(() => {
             that.pad = new SignaturePad(canvas, {
@@ -463,7 +468,7 @@ class DrawWidget extends Widget {
         const that = this;
 
         if (this.element.value) {
-            // This discombulated line is to help the i18next parser pick up all 3 keys.
+            // This discombobulated line is to help the i18next parser pick up all 3 keys.
             const item =
                 this.props.type === 'signature'
                     ? t('drawwidget.signature')
