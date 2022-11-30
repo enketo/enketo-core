@@ -135,14 +135,10 @@ class DrawWidget extends Widget {
             this._handleFiles(existingFilename);
         }
 
-        // This listener (I think) serves to capture a drawing when the submit button is clicked within [DELAY]
+        // This listener serves to capture a drawing when the submit button is clicked within [DELAY]
         // milliseconds after the last stroke ended. Note that this could be the entire drawing/signature.
         canvas.addEventListener('blur', () => {
-            // If the canvas is empty, calling blur would result in an empty image file being created.
-            // Validation logic and traversing the form by keyboard could trigger those blur events on empty canvases.
-            if (this.pad && !this.pad.isEmpty()) {
-                this._forceUpdate();
-            }
+            this._forceUpdate();
         });
 
         // We built a delay in saving on stroke "end", to avoid excessive updating
@@ -493,6 +489,11 @@ class DrawWidget extends Widget {
                     delete that.element.dataset.loadedUrl;
                     that.element.dataset.filenamePostfix = '';
                     $(that.element).val('').trigger('change');
+                    if (that._updateWithDelay) {
+                        // This ensures that an emptied canvas will not be considered a drawing to be captured
+                        // in _forceUpdate, e.g. after the blur even fires on an empty canvas see issue #924
+                        that._updateWithDelay = null;
+                    }
                     // Annotate file input
                     that.$widget
                         .find('input[type=file]')
