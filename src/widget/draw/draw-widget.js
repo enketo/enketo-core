@@ -137,9 +137,7 @@ class DrawWidget extends Widget {
 
         // This listener serves to capture a drawing when the submit button is clicked within [DELAY]
         // milliseconds after the last stroke ended. Note that this could be the entire drawing/signature.
-        canvas.addEventListener('blur', () => {
-            this._forceUpdate();
-        });
+        canvas.addEventListener('blur', this._forceUpdate.bind(this));
 
         // We built a delay in saving on stroke "end", to avoid excessive updating
         // This event does not fire on touchscreens for which we use the .hide-canvas-btn click
