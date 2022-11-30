@@ -489,7 +489,7 @@ class DrawWidget extends Widget {
                     $(that.element).val('').trigger('change');
                     if (that._updateWithDelay) {
                         // This ensures that an emptied canvas will not be considered a drawing to be captured
-                        // in _forceUpdate, e.g. after the blur even fires on an empty canvas see issue #924
+                        // in _forceUpdate, e.g. after the blur event fires on an empty canvas see issue #924
                         that._updateWithDelay = null;
                     }
                     // Annotate file input
