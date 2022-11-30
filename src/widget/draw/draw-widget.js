@@ -135,15 +135,19 @@ class DrawWidget extends Widget {
             this._handleFiles(existingFilename);
         }
 
-        // We built a delay in saving on stroke "end", to avoid excessive updating
-        // This event does not fire on touchscreens for which we use the .hide-canvas-btn click
-        // to do the same thing.
+        // This listener (I think) serves to capture a drawing when the submit button is clicked within [DELAY]
+        // milliseconds after the last stroke ended. Note that this could be the entire drawing/signature.
         canvas.addEventListener('blur', () => {
             // If the canvas is empty, calling blur would result in an empty image file being created.
+            // Validation logic and traversing the form by keyboard could trigger those blur events on empty canvases.
             if (this.pad && !this.pad.isEmpty()) {
                 this._forceUpdate();
             }
         });
+
+        // We built a delay in saving on stroke "end", to avoid excessive updating
+        // This event does not fire on touchscreens for which we use the .hide-canvas-btn click
+        // to do the same thing.
 
         this.initialize = fileManager.init().then(() => {
             that.pad = new SignaturePad(canvas, {
