@@ -23,7 +23,7 @@
         <input ref="/data/int">
             <label>Integer</label>
         </input>
-        <input ref="/data/decimal" step="0.1">
+        <input ref="/data/decimal">
             <label>Decimal</label>
         </input>
     </h:body>
