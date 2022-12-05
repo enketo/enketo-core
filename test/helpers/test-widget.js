@@ -63,13 +63,13 @@ function testBasicInstantiation(Widget, template, options = { a: 'b' }) {
             const fragment = document
                 .createRange()
                 .createContextualFragment(template);
+            const control = fragment.querySelector(Widget.selector);
             const question =
                 Widget.selector === 'form'
-                    ? fragment.querySelector('form.or')
-                    : fragment.querySelector('.question');
+                    ? control.closest('form.or')
+                    : control.closest('.question');
             question.classList.add('or-appearance-one');
             question.classList.add('or-appearance-two');
-            const control = fragment.querySelector(Widget.selector);
 
             Promise.resolve()
                 .then(() => new Widget(control, options))
