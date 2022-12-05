@@ -10,7 +10,18 @@ import { runAllCommonWidgetTests } from '../helpers/test-widget';
  */
 
 describe('Number inputs', () => {
-    const form = loadForm('number-input-widgets.xml').view.html;
+    let form = loadForm('number-input-widgets.xml').view.html;
+
+    /** @type {HTMLFormElement} */
+    let clone;
+
+    beforeEach(() => {
+        clone = form.cloneNode(true);
+    });
+
+    afterEach(() => {
+        form = clone;
+    });
 
     [
         { type: 'int', excludedType: 'decimal', Widget: IntegerInput },
