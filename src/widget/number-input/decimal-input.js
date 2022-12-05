@@ -20,14 +20,4 @@ export default class DecimalInput extends NumberInput {
     set value(value) {
         super.value = value;
     }
-
-    /**
-     * @param {HTMLInputElement} input
-     * @param {any} options
-     */
-    constructor(input, options) {
-        super(input, options);
-
-        input.step = 0.1;
-    }
 }

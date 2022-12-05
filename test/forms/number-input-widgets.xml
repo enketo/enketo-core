@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Number input widgets</h:title>
+        <model>
+            <instance>
+                <data>
+                    <int/>
+                    <decimal/>
+                </data>
+            </instance>
+            <bind nodeset="/data/int" type="int"/>
+            <bind nodeset="/data/decimal" type="decimal"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/int">
+            <label>Integer</label>
+        </input>
+        <input ref="/data/decimal">
+            <label>Decimal</label>
+        </input>
+    </h:body>
+</h:html>

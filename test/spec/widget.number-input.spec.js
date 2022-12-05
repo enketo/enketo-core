@@ -2,18 +2,27 @@ import input from '../../src/js/input';
 import events from '../../src/js/event';
 import DecimalInput from '../../src/widget/number-input/decimal-input';
 import IntegerInput from '../../src/widget/number-input/integer-input';
+import loadForm from '../helpers/load-form';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
 
-const integerForm = `<label class="question non-select" lang="en">
-        <span lang="" class="question-label active">Number</span>
-        <input type="number" name="/widgets/integer" data-type-xml="int">
-    </label>`;
-const decimalForm = integerForm.replace(
-    'data-type-xml="int"',
-    'data-type-xml="decimal"'
-);
+/**
+ * @typedef {import('../../src/js/form').Form} Form
+ */
 
 describe('Number inputs', () => {
+    let form = loadForm('number-input-widgets.xml').view.html;
+
+    /** @type {HTMLFormElement} */
+    let clone;
+
+    beforeEach(() => {
+        clone = form.cloneNode(true);
+    });
+
+    afterEach(() => {
+        form = clone;
+    });
+
     [
         { type: 'int', excludedType: 'decimal', Widget: IntegerInput },
         { type: 'decimal', excludedType: 'int', Widget: DecimalInput },
@@ -66,13 +75,10 @@ describe('Number inputs', () => {
     });
 
     describe('integer', () => {
-        runAllCommonWidgetTests(IntegerInput, integerForm, '2');
+        runAllCommonWidgetTests(IntegerInput, form.outerHTML, '2');
 
         it('is valid with an integer value', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(integerForm);
-            const control = fragment.querySelector(IntegerInput.selector);
+            const control = form.querySelector(IntegerInput.selector);
             const value = '4';
             const widget = new IntegerInput(control);
 
@@ -88,10 +94,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a negative integer value', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(integerForm);
-            const control = fragment.querySelector(IntegerInput.selector);
+            const control = form.querySelector(IntegerInput.selector);
             const value = '-4';
             const widget = new IntegerInput(control);
 
@@ -107,10 +110,7 @@ describe('Number inputs', () => {
         });
 
         it('is invalid with a decimal value', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(integerForm);
-            const control = fragment.querySelector(IntegerInput.selector);
+            const control = form.querySelector(IntegerInput.selector);
             const value = '4.1';
             const widget = new IntegerInput(control);
 
@@ -123,11 +123,24 @@ describe('Number inputs', () => {
             expect(question.classList.contains('invalid-value')).to.equal(true);
         });
 
+        it('is valid with a decimal value with multiple decimal digits', async () => {
+            const control = form.querySelector(DecimalInput.selector);
+            const value = '4.11';
+            const widget = new DecimalInput(control);
+
+            input.setVal(control, value, events.Input());
+
+            await Promise.resolve();
+
+            const { question } = widget;
+
+            expect(question.classList.contains('invalid-value')).to.equal(
+                false
+            );
+        });
+
         it('clears a programmatically assigned value with a misplaced negation character', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(integerForm);
-            const control = fragment.querySelector(IntegerInput.selector);
+            const control = form.querySelector(IntegerInput.selector);
             const initialValue = '4';
             const assignedValue = '4-';
             const widget = new IntegerInput(control);
@@ -141,10 +154,7 @@ describe('Number inputs', () => {
         });
 
         it('is invalid with a user-entered misplaced negation character', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(integerForm);
-            const control = fragment.querySelector(IntegerInput.selector);
+            const control = form.querySelector(IntegerInput.selector);
             const initialValue = '4';
             const enteredValue = '4-';
             const widget = new IntegerInput(control);
@@ -164,14 +174,11 @@ describe('Number inputs', () => {
     });
 
     describe('decimal', () => {
-        runAllCommonWidgetTests(DecimalInput, decimalForm, '2');
-        runAllCommonWidgetTests(DecimalInput, decimalForm, '2.1');
+        runAllCommonWidgetTests(DecimalInput, form.outerHTML, '2');
+        runAllCommonWidgetTests(DecimalInput, form.outerHTML, '2.1');
 
         it('is valid with an integer value', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(decimalForm);
-            const control = fragment.querySelector(DecimalInput.selector);
+            const control = form.querySelector(DecimalInput.selector);
             const value = '4';
             const widget = new DecimalInput(control);
 
@@ -187,10 +194,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a decimal value', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(decimalForm);
-            const control = fragment.querySelector(DecimalInput.selector);
+            const control = form.querySelector(DecimalInput.selector);
             const value = '4.1';
             const widget = new DecimalInput(control);
 
@@ -206,10 +210,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a negative integer value', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(decimalForm);
-            const control = fragment.querySelector(DecimalInput.selector);
+            const control = form.querySelector(DecimalInput.selector);
             const value = '-4';
             const widget = new DecimalInput(control);
 
@@ -225,10 +226,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a negative decimal value', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(decimalForm);
-            const control = fragment.querySelector(DecimalInput.selector);
+            const control = form.querySelector(DecimalInput.selector);
             const value = '-4.1';
             const widget = new DecimalInput(control);
 
@@ -254,10 +252,7 @@ describe('Number inputs', () => {
 
         if (supportsTrailingDecimal()) {
             it('is valid with a trailing decimal character', async () => {
-                const fragment = document
-                    .createRange()
-                    .createContextualFragment(decimalForm);
-                const control = fragment.querySelector(DecimalInput.selector);
+                const control = form.querySelector(DecimalInput.selector);
                 const value = '4.';
                 const widget = new DecimalInput(control);
 
@@ -275,10 +270,7 @@ describe('Number inputs', () => {
             });
 
             it('clears a programmatically assigned value with multiple decimals', async () => {
-                const fragment = document
-                    .createRange()
-                    .createContextualFragment(decimalForm);
-                const control = fragment.querySelector(DecimalInput.selector);
+                const control = form.querySelector(DecimalInput.selector);
                 const initialValue = '4';
                 const assignedValue = '4.0.1';
                 const widget = new DecimalInput(control);
@@ -292,10 +284,7 @@ describe('Number inputs', () => {
             });
 
             it('is invalid with a user-entered value with multiple decimals', async () => {
-                const fragment = document
-                    .createRange()
-                    .createContextualFragment(decimalForm);
-                const control = fragment.querySelector(DecimalInput.selector);
+                const control = form.querySelector(DecimalInput.selector);
                 const initialValue = '4';
                 const enteredValue = '4.0.1';
                 const widget = new DecimalInput(control);
@@ -317,10 +306,7 @@ describe('Number inputs', () => {
         }
 
         it('clears a programmatically assigned value with a misplaced negation character', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(decimalForm);
-            const control = fragment.querySelector(DecimalInput.selector);
+            const control = form.querySelector(DecimalInput.selector);
             const initialValue = '4';
             const assignedValue = '4-.0';
             const widget = new DecimalInput(control);
@@ -334,10 +320,7 @@ describe('Number inputs', () => {
         });
 
         it('is invalid with a user-entered misplaced negation character', async () => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(decimalForm);
-            const control = fragment.querySelector(DecimalInput.selector);
+            const control = form.querySelector(DecimalInput.selector);
             const initialValue = '4';
             const enteredValue = '4-';
             const widget = new DecimalInput(control);
@@ -384,12 +367,7 @@ describe('Number inputs', () => {
                 });
 
                 it('allows entry of localized decimal characters', async () => {
-                    const fragment = document
-                        .createRange()
-                        .createContextualFragment(decimalForm);
-                    const control = fragment.querySelector(
-                        DecimalInput.selector
-                    );
+                    const control = form.querySelector(DecimalInput.selector);
                     const value = '3,4';
                     const widget = new DecimalInput(control);
 
