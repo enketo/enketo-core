@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.1.5] - 2022-12-06
+
+-   Fix: allow arbitrary precision decimal values (#932)
+
 ## [6.1.4] - 2022-11-28
 
 -   Fix: use simpler selector for geopicker widgets (#922)
