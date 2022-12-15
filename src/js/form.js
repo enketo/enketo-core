@@ -347,26 +347,27 @@ Form.prototype.init = function () {
         // before repeats.init so that template contains role="page" when applicable
         this.pages.init();
 
+        const repeatPaths = Array.from(
+            this.view.html.querySelectorAll('.or-repeat-info')
+        ).map((element) => element.dataset.name);
+
         // Builds a cache of known repeat path prefixes `repeat.init`.
         // The cache is sorted by length, longest to shortest, to ensure
         // that lookups using this cache find the deepest nested repeat
         // for a given path.
-        this.repeatPathPrefixes = Array.from(
-            this.view.html.querySelectorAll('.or-repeat-info')
-        )
-            .map((element) => `${element.dataset.name}/`)
+        this.repeatPathPrefixes = repeatPaths
+            .map((path) => `${path}/`)
             .sort((a, b) => b.length - a.length);
 
-        if (this.repeatPathPrefixes.length > 0) {
+        if (repeatPaths.length > 0) {
             const nestedRepeats = Array.from(
                 this.view.html.querySelectorAll('.or-repeat .or-repeat')
             );
             const nestedRepeatPaths = nestedRepeats.map((repeat) =>
                 repeat.getAttribute('name')
             );
-            const nestedRepeatParents = this.repeatPathPrefixes.filter(
-                (prefix) =>
-                    nestedRepeatPaths.some((path) => path.startsWith(prefix))
+            const nestedRepeatParents = repeatPaths.filter((prefix) =>
+                nestedRepeatPaths.some((path) => path.startsWith(prefix))
             );
             const recalculationPaths = [
                 ...nestedRepeatParents,
@@ -428,13 +429,10 @@ Form.prototype.init = function () {
                 );
             }
 
-            if (!didRecalculate) {
-                this.calc.update({
-                    allRepeats: true,
-                    cloned: true,
-                });
-            }
-
+            this.calc.update({
+                allRepeats: true,
+                cloned: true,
+            });
             this.all = {};
         }
 
