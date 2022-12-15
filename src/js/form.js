@@ -347,46 +347,96 @@ Form.prototype.init = function () {
         // before repeats.init so that template contains role="page" when applicable
         this.pages.init();
 
-        // after radio button data-name setting (now done in XLST)
-        let repeatsAdded = 0;
+        // Builds a cache of known repeat path prefixes `repeat.init`.
+        // The cache is sorted by length, longest to shortest, to ensure
+        // that lookups using this cache find the deepest nested repeat
+        // for a given path.
+        this.repeatPathPrefixes = Array.from(
+            this.view.html.querySelectorAll('.or-repeat-info')
+        )
+            .map((element) => `${element.dataset.name}/`)
+            .sort((a, b) => b.length - a.length);
 
-        const tempHandlerAddRepeat = () => {
-            repeatsAdded += 1;
-        };
+        if (this.repeatPathPrefixes.length > 0) {
+            const nestedRepeats = Array.from(
+                this.view.html.querySelectorAll('.or-repeat .or-repeat')
+            );
+            const nestedRepeatPaths = nestedRepeats.map((repeat) =>
+                repeat.getAttribute('name')
+            );
+            const nestedRepeatParents = this.repeatPathPrefixes.filter(
+                (prefix) =>
+                    nestedRepeatPaths.some((path) => path.startsWith(prefix))
+            );
+            const recalculationPaths = [
+                ...nestedRepeatParents,
+                ...nestedRepeatPaths,
+            ];
 
-        this.view.html.addEventListener(
-            events.AddRepeat().type,
-            tempHandlerAddRepeat
-        );
+            let didRecalculate = false;
 
-        this.repeatsInitialized = true;
-        this.repeats.init();
+            const addRepeatType = events.AddRepeat().type;
+            const removeRepeatType = events.RemoveRepeat().type;
 
-        // Recalculate after repeats are initialized. Previously this was performed in
-        // `tempHandlerAddRepeat`, but recalculating them all at once is significantly faster.
-        if (repeatsAdded > 0) {
-            this.calc.update({
-                allRepeats: true,
-                cloned: true,
-            });
+            // after radio button data-name setting (now done in XLST)
+            // Set temporary event handler to ensure calculations in newly added repeats are run for the first time
+            const tempHandlerAddRepeat = ({ detail }) => {
+                const recalculate = recalculationPaths.includes(
+                    detail.repeatPath
+                );
+
+                if (recalculate) {
+                    this.calc.update(detail);
+                    didRecalculate = true;
+                }
+            };
+            const tempHandlerRemoveRepeat = (event) => {
+                const recalculate =
+                    didRecalculate ||
+                    recalculationPaths.includes(
+                        event.detail.initRepeatInfo.repeatPath
+                    );
+
+                if (recalculate) {
+                    this.all = {};
+                    didRecalculate = false;
+                }
+            };
+
+            if (recalculationPaths.length > 0) {
+                this.view.html.addEventListener(
+                    addRepeatType,
+                    tempHandlerAddRepeat
+                );
+                this.view.html.addEventListener(
+                    removeRepeatType,
+                    tempHandlerRemoveRepeat
+                );
+            }
+
+            this.repeatsInitialized = true;
+            this.repeats.init();
+
+            if (recalculationPaths.length > 0) {
+                this.view.html.removeEventListener(
+                    addRepeatType,
+                    tempHandlerAddRepeat
+                );
+                this.view.html.removeEventListener(
+                    removeRepeatType,
+                    tempHandlerRemoveRepeat
+                );
+            }
+
+            if (!didRecalculate) {
+                this.calc.update({
+                    allRepeats: true,
+                    cloned: true,
+                });
+            }
 
             this.all = {};
-
-            // Builds a cache of known repeat path prefixes `repeat.init`.
-            // The cache is sorted by length, longest to shortest, to ensure
-            // that lookups using this cache find the deepest nested repeat
-            // for a given path.
-            this.repeatPathPrefixes = Array.from(
-                this.view.html.querySelectorAll('.or-repeat-info')
-            )
-                .map((element) => `${element.dataset.name}/`)
-                .sort((a, b) => b.length - a.length);
         }
-
-        this.view.html.removeEventListener(
-            events.AddRepeat().type,
-            tempHandlerAddRepeat
-        );
 
         // after repeats.init, but before itemset.update
         this.output.update();

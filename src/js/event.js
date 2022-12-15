@@ -83,12 +83,20 @@ function AddRepeat(detail) {
 }
 
 /**
+ * @typedef RemoveRepeatDetail
+ * @property {object} [initRepeatInfo]
+ * @property {string} [initRepeatInfo.repeatPath]
+ * @property {number} [initRepeatInfo.repeatIndex]
+ */
+
+/**
  * Remove repeat event.
  *
+ * @param {RemoveRepeatDetail} [detail]
  * @return {CustomEvent} Custom "removerepeat" event (bubbling)
  */
-function RemoveRepeat() {
-    return new CustomEvent('removerepeat', { bubbles: true });
+function RemoveRepeat(detail) {
+    return new CustomEvent('removerepeat', { detail, bubbles: true });
 }
 
 /**

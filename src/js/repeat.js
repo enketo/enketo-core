@@ -470,9 +470,13 @@ export default {
         $repeat.remove();
         that.numberRepeats(repeatInfo);
         that.toggleButtons(repeatInfo);
+
+        const detail = this.form.initialized
+            ? {}
+            : { initRepeatInfo: { repeatPath, repeatIndex } };
         // Trigger the removerepeat on the next repeat or repeat-info(always present)
         // so that removerepeat handlers know where the repeat was removed
-        $next[0].dispatchEvent(events.RemoveRepeat());
+        $next[0].dispatchEvent(events.RemoveRepeat(detail));
         // Now remove the data node
         that.form.model.node(repeatPath, repeatIndex).remove();
     },
