@@ -627,6 +627,34 @@ describe('repeat functionality', () => {
                 ).length
             ).to.equal(7); // 6+1
         });
+
+        it('calculates counts for nested repeats in multiple outer repeat instances', () => {
+            const form = loadForm('nested-repeat-count.xml');
+
+            form.init();
+
+            const topLevelRepeats = form.view.html.querySelectorAll(
+                '.or-repeat[name="/data/top-level"]'
+            );
+
+            expect(topLevelRepeats.length).to.equal(2);
+
+            for (const topLevel of topLevelRepeats) {
+                const nestedRepeats = topLevel.querySelectorAll(
+                    '.or-repeat[name="/data/top-level/nested"]'
+                );
+
+                expect(nestedRepeats.length).to.equal(3);
+
+                for (const nested of nestedRepeats) {
+                    const deepNestedRepeats = nested.querySelectorAll(
+                        '.or-repeat[name="/data/top-level/nested/deep-nested"]'
+                    );
+
+                    expect(deepNestedRepeats.length).to.equal(5);
+                }
+            }
+        });
     });
 
     describe('creates 0 repeats', () => {

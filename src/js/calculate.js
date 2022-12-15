@@ -89,7 +89,10 @@ export default {
                         dataNodes.includes(node)
                     )[0];
                     props.index = dataNodes.indexOf(dataNode);
-                    this._updateCalc(control, props, emptyNonRelevant);
+
+                    if (props.index > -1) {
+                        this._updateCalc(control, props, emptyNonRelevant);
+                    }
                 } else if (control.type === 'hidden') {
                     /*
                      * This case is the consequence of the  decision to place calculated items without a visible form control,

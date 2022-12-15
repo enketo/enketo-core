@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>nested-repeat-count</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="nested-repeat-count">
+                    <top-level-count/>
+                    <top-level jr:template="">
+                        <top-level-position/>
+                        <top-level-question/>
+
+                        <nested-count/>
+                        <nested jr:template="">
+                            <nested-position/>
+                            <nested-question/>
+
+                            <deep-nested-count/>
+                            <deep-nested jr:template="">
+                                <deep-nested-position/>
+                                <deep-nested-question/>
+                            </deep-nested>
+                        </nested>
+                    </top-level>
+                    <top-level>
+                        <top-level-position/>
+                        <top-level-question/>
+
+                        <nested-count/>
+                        <nested>
+                            <nested-position/>
+                            <nested-question/>
+
+                            <deep-nested-count/>
+                            <deep-nested>
+                                <deep-nested-position/>
+                                <deep-nested-question/>
+                            </deep-nested>
+                        </nested>
+                    </top-level>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind calculate="2" nodeset="/data/top-level-count" readonly="true()" type="string"/>
+            <bind calculate="concat(local-name(..), ': ', position(..))" nodeset="/data/top-level/top-level-position" type="string"/>
+            <bind nodeset="/data/top-level/top-level-question" type="string"/>
+            <bind calculate="../../top-level-count + 1" nodeset="/data/top-level/nested-count" readonly="true()" type="string"/>
+            <bind calculate="concat(../../top-level-position, ' › ', local-name(..), ': ', position(..))" nodeset="/data/top-level/nested/nested-position" type="string"/>
+            <bind nodeset="/data/top-level/nested/nested-question" type="int"/>
+            <bind calculate="../../nested-count + 2" nodeset="/data/top-level/nested/deep-nested-count" readonly="true()" type="string"/>
+            <bind calculate="concat(../../nested-position, ' › ', local-name(..), ': ', position(..))" nodeset="/data/top-level/nested/deep-nested/deep-nested-position" type="string"/>
+            <bind nodeset="/data/top-level/nested/deep-nested/deep-nested-question" type="int"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/top-level">
+            <label>Top level <output value=" ./top-level-position" />
+            </label>
+            <repeat jr:count=" /data/top-level-count " nodeset="/data/top-level">
+                <input ref="/data/top-level/top-level-question">
+                    <label>Top level question › <output value=" ../top-level-position "/>
+                    </label>
+                </input>
+                <group ref="/data/top-level/nested">
+                    <label>Nested</label>
+                    <repeat jr:count=" ../nested-count " nodeset="/data/top-level/nested">
+                        <input ref="/data/top-level/nested/nested-question">
+                            <label>Nested <output value=" ../nested-position "/>
+                            </label>
+                        </input>
+                        <group ref="/data/top-level/nested/deep-nested">
+                            <label>Deep nested</label>
+                            <repeat jr:count=" ../deep-nested-count" nodeset="/data/top-level/nested/deep-nested">
+                                <input ref="/data/top-level/nested/deep-nested/deep-nested-question">
+                                    <label>Deep nested <output value=" ../deep-nested-position "/>
+                                    </label>
+                                </input>
+                            </repeat>
+                        </group>
+                    </repeat>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
