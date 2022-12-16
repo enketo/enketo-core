@@ -30,18 +30,18 @@ We have to admit we do not test on all of these, but are committed to fixing bro
 ### Releases
 
 1. Create release PR
-1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
-1. Run `npm update`
-    - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
-1. Run `npm audit`
-    - Run `npm audit fix --production` to apply most important fixes
-1. Run `npm ci`
-1. Run `npm test`
-1. Run `npm run build-docs`
 1. Update `CHANGELOG.md`
 1. Update version in `package.json`
     - Bump to major version if consumers have to make changes.
-1. If `enketo-transformer` has been updated, change `Form.requiredTransformerVersion`
+1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
+1. Run `npm update`
+    - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
+    - If `enketo-transformer` has been updated, change `Form.requiredTransformerVersion`
+1. Run `npm audit`
+    - Run `npm audit fix --production` to apply most important fixes
+1. Run `npm i`
+1. Run `npm test`
+1. Run `npm run build-docs`
 1. Merge PR with all changes
 1. Create GitHub release
 1. Tag and publish the release

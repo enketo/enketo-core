@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.1.6] - 2022-12-15
+
+-   Do not update image file on blur if canvas is empty (#931)
+-   Fix calculation of nested repeat counts in >1 outer repeat instances (#935)
+
+
 ## [6.1.5] - 2022-12-06
 
 -   Fix: allow arbitrary precision decimal values (#932)
