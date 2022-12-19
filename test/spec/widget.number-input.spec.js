@@ -10,17 +10,22 @@ import { runAllCommonWidgetTests } from '../helpers/test-widget';
  */
 
 describe('Number inputs', () => {
-    let form = loadForm('number-input-widgets.xml').view.html;
+    let formElement = loadForm('number-input-widgets.xml').view.html;
+
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
 
     /** @type {HTMLFormElement} */
     let clone;
 
     beforeEach(() => {
-        clone = form.cloneNode(true);
+        sandbox = sinon.createSandbox();
+        clone = formElement.cloneNode(true);
     });
 
     afterEach(() => {
-        form = clone;
+        sandbox.restore();
+        formElement = clone;
     });
 
     [
@@ -75,10 +80,10 @@ describe('Number inputs', () => {
     });
 
     describe('integer', () => {
-        runAllCommonWidgetTests(IntegerInput, form.outerHTML, '2');
+        runAllCommonWidgetTests(IntegerInput, formElement.outerHTML, '2');
 
         it('is valid with an integer value', async () => {
-            const control = form.querySelector(IntegerInput.selector);
+            const control = formElement.querySelector(IntegerInput.selector);
             const value = '4';
             const widget = new IntegerInput(control);
 
@@ -94,7 +99,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a negative integer value', async () => {
-            const control = form.querySelector(IntegerInput.selector);
+            const control = formElement.querySelector(IntegerInput.selector);
             const value = '-4';
             const widget = new IntegerInput(control);
 
@@ -110,7 +115,7 @@ describe('Number inputs', () => {
         });
 
         it('is invalid with a decimal value', async () => {
-            const control = form.querySelector(IntegerInput.selector);
+            const control = formElement.querySelector(IntegerInput.selector);
             const value = '4.1';
             const widget = new IntegerInput(control);
 
@@ -124,7 +129,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a decimal value with multiple decimal digits', async () => {
-            const control = form.querySelector(DecimalInput.selector);
+            const control = formElement.querySelector(DecimalInput.selector);
             const value = '4.11';
             const widget = new DecimalInput(control);
 
@@ -140,7 +145,7 @@ describe('Number inputs', () => {
         });
 
         it('clears a programmatically assigned value with a misplaced negation character', async () => {
-            const control = form.querySelector(IntegerInput.selector);
+            const control = formElement.querySelector(IntegerInput.selector);
             const initialValue = '4';
             const assignedValue = '4-';
             const widget = new IntegerInput(control);
@@ -154,7 +159,7 @@ describe('Number inputs', () => {
         });
 
         it('is invalid with a user-entered misplaced negation character', async () => {
-            const control = form.querySelector(IntegerInput.selector);
+            const control = formElement.querySelector(IntegerInput.selector);
             const initialValue = '4';
             const enteredValue = '4-';
             const widget = new IntegerInput(control);
@@ -174,11 +179,11 @@ describe('Number inputs', () => {
     });
 
     describe('decimal', () => {
-        runAllCommonWidgetTests(DecimalInput, form.outerHTML, '2');
-        runAllCommonWidgetTests(DecimalInput, form.outerHTML, '2.1');
+        runAllCommonWidgetTests(DecimalInput, formElement.outerHTML, '2');
+        runAllCommonWidgetTests(DecimalInput, formElement.outerHTML, '2.1');
 
         it('is valid with an integer value', async () => {
-            const control = form.querySelector(DecimalInput.selector);
+            const control = formElement.querySelector(DecimalInput.selector);
             const value = '4';
             const widget = new DecimalInput(control);
 
@@ -194,7 +199,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a decimal value', async () => {
-            const control = form.querySelector(DecimalInput.selector);
+            const control = formElement.querySelector(DecimalInput.selector);
             const value = '4.1';
             const widget = new DecimalInput(control);
 
@@ -210,7 +215,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a negative integer value', async () => {
-            const control = form.querySelector(DecimalInput.selector);
+            const control = formElement.querySelector(DecimalInput.selector);
             const value = '-4';
             const widget = new DecimalInput(control);
 
@@ -226,7 +231,7 @@ describe('Number inputs', () => {
         });
 
         it('is valid with a negative decimal value', async () => {
-            const control = form.querySelector(DecimalInput.selector);
+            const control = formElement.querySelector(DecimalInput.selector);
             const value = '-4.1';
             const widget = new DecimalInput(control);
 
@@ -252,7 +257,9 @@ describe('Number inputs', () => {
 
         if (supportsTrailingDecimal()) {
             it('is valid with a trailing decimal character', async () => {
-                const control = form.querySelector(DecimalInput.selector);
+                const control = formElement.querySelector(
+                    DecimalInput.selector
+                );
                 const value = '4.';
                 const widget = new DecimalInput(control);
 
@@ -270,7 +277,9 @@ describe('Number inputs', () => {
             });
 
             it('clears a programmatically assigned value with multiple decimals', async () => {
-                const control = form.querySelector(DecimalInput.selector);
+                const control = formElement.querySelector(
+                    DecimalInput.selector
+                );
                 const initialValue = '4';
                 const assignedValue = '4.0.1';
                 const widget = new DecimalInput(control);
@@ -284,7 +293,9 @@ describe('Number inputs', () => {
             });
 
             it('is invalid with a user-entered value with multiple decimals', async () => {
-                const control = form.querySelector(DecimalInput.selector);
+                const control = formElement.querySelector(
+                    DecimalInput.selector
+                );
                 const initialValue = '4';
                 const enteredValue = '4.0.1';
                 const widget = new DecimalInput(control);
@@ -306,7 +317,7 @@ describe('Number inputs', () => {
         }
 
         it('clears a programmatically assigned value with a misplaced negation character', async () => {
-            const control = form.querySelector(DecimalInput.selector);
+            const control = formElement.querySelector(DecimalInput.selector);
             const initialValue = '4';
             const assignedValue = '4-.0';
             const widget = new DecimalInput(control);
@@ -320,7 +331,7 @@ describe('Number inputs', () => {
         });
 
         it('is invalid with a user-entered misplaced negation character', async () => {
-            const control = form.querySelector(DecimalInput.selector);
+            const control = formElement.querySelector(DecimalInput.selector);
             const initialValue = '4';
             const enteredValue = '4-';
             const widget = new DecimalInput(control);
@@ -354,20 +365,15 @@ describe('Number inputs', () => {
 
         if (isLocalizedDecimalInputSupported()) {
             describe('localized decimal input', () => {
-                let sandbox;
-
                 beforeEach(() => {
-                    sandbox = sinon.createSandbox();
                     sandbox.stub(navigator, 'language').get(() => 'fr');
                     sandbox.stub(navigator, 'languages').get(() => ['fr']);
                 });
 
-                afterEach(() => {
-                    sandbox.restore();
-                });
-
                 it('allows entry of localized decimal characters', async () => {
-                    const control = form.querySelector(DecimalInput.selector);
+                    const control = formElement.querySelector(
+                        DecimalInput.selector
+                    );
                     const value = '3,4';
                     const widget = new DecimalInput(control);
 
@@ -387,5 +393,78 @@ describe('Number inputs', () => {
                 });
             });
         }
+    });
+
+    describe('question visibility', () => {
+        /** @type {HTMLElement[]} */
+        let appendedElements;
+
+        /** @type {HTMLElement[]} */
+        let questions;
+
+        beforeEach(() => {
+            const form = loadForm('numbers-missing-after-language-switch.xml');
+
+            formElement = form.view.html;
+
+            const style = document.createElement('style');
+
+            /**
+             * @see ../../src/sass/core/_main.scss
+             */
+            const pertinentDefaultThemeStyles = `
+                .or [lang]:not(.active) {
+                    display: none;
+                }
+
+                .question {
+                    display: block;
+                }
+            `;
+
+            style.innerHTML = pertinentDefaultThemeStyles;
+
+            document.head.append(style);
+            document.body.append(formElement);
+
+            appendedElements = [formElement, style];
+
+            const loadErrors = form.init();
+
+            expect(loadErrors).to.deep.equal([]);
+
+            questions = Array.from(formElement.querySelectorAll('.question'));
+        });
+
+        afterEach(() => {
+            appendedElements.forEach((element) => {
+                element.remove();
+            });
+        });
+
+        it('has visible number inputs on load', () => {
+            const displayStyles = questions.map((question) => {
+                const styles = getComputedStyle(question);
+
+                return styles.display;
+            });
+
+            expect(displayStyles).to.deep.equal(['block', 'block', 'block']);
+        });
+
+        it('has visible number inputs when the form language changes', () => {
+            const languageSelect = formElement.querySelector('#form-languages');
+
+            languageSelect.value = 'NG';
+            languageSelect.dispatchEvent(new Event('change'));
+
+            const displayStyles = questions.map((question) => {
+                const styles = getComputedStyle(question);
+
+                return styles.display;
+            });
+
+            expect(displayStyles).to.deep.equal(['block', 'block', 'block']);
+        });
     });
 });

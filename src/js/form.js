@@ -67,7 +67,7 @@ function Form(formEl, data, options) {
 
     this.nonRepeats = {};
     this.all = {};
-    this.options = typeof options !== 'object' ? {} : options;
+    this.options = options ?? {};
 
     this.view = {
         $: $form,

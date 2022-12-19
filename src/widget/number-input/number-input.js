@@ -1,4 +1,5 @@
 import { t } from '../../js/fake-translator';
+import events from '../../js/event';
 import inputModule from '../../js/input';
 import Widget from '../../js/widget';
 
@@ -92,9 +93,24 @@ export default class NumberInput extends Widget {
         const message = document.createElement('div');
 
         message.classList.add('invalid-value-msg', 'active');
+
+        /*
+         * TODO (2022-12-19): Currently the default theme's styles hide any
+         * element with a `lang` attribute unless it also has an `active` class.
+         * This is because transformer and core both overload the `lang`
+         * attribute to store translated strings in the HTML DOM, which are not
+         * meant to be displayed unless they're for the chosen language. This
+         * may change in the (possibly near) future, in which case we should
+         * also stop adding these `active` classes.
+         */
+
         question.setAttribute('lang', navigator.language);
         question.classList.add('active');
         question.append(message);
+
+        document.addEventListener(events.ChangeLanguage().type, () => {
+            question.classList.add('active');
+        });
 
         this.question = question;
         this.message = message;
