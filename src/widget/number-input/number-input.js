@@ -42,8 +42,33 @@ export default class NumberInput extends Widget {
         ].every((className) => !question.classList.contains(className));
     }
 
+    get languages() {
+        const formLanguage = this.element
+            .closest('form.or')
+            ?.parentElement?.querySelector('#form-languages')?.value;
+
+        let validFormLanguage;
+
+        try {
+            Intl.getCanonicalLocales(formLanguage);
+
+            validFormLanguage = formLanguage;
+        } catch {
+            // If this fails, the form's selected language is likely not a valid
+            // code and will cause all other `Intl` usage to fail.
+        }
+
+        return [validFormLanguage, ...navigator.languages].filter(
+            (language) => language != null
+        );
+    }
+
+    get language() {
+        return this.languages[0] ?? navigator.language;
+    }
+
     get formatter() {
-        const locales = Intl.getCanonicalLocales(navigator.languages);
+        const locales = Intl.getCanonicalLocales(this.languages);
 
         return Intl.NumberFormat(locales);
     }
@@ -94,36 +119,32 @@ export default class NumberInput extends Widget {
 
         message.classList.add('invalid-value-msg', 'active');
 
-        /*
-         * TODO (2022-12-19): Currently the default theme's styles hide any
-         * element with a `lang` attribute unless it also has an `active` class.
-         * This is because transformer and core both overload the `lang`
-         * attribute to store translated strings in the HTML DOM, which are not
-         * meant to be displayed unless they're for the chosen language. This
-         * may change in the (possibly near) future, in which case we should
-         * also stop adding these `active` classes.
-         */
-
-        question.setAttribute('lang', navigator.language);
-        question.classList.add('active');
+        question.setAttribute('lang', this.language);
         question.append(message);
-
-        document.addEventListener(events.ChangeLanguage().type, () => {
-            question.classList.add('active');
-        });
 
         this.question = question;
         this.message = message;
 
-        this.format();
+        this.setFormattedValue(input.valueAsNumber);
         this.setValidity();
 
-        window.addEventListener('languagechange', () => {
-            characterPattern = this.validCharacter;
-            question.setAttribute('lang', navigator.language);
-            this.format();
+        const languageChanged = () => {
+            // Important: get the value *before* changing the
+            // `lang` attribute, else it may become invalid and
+            // be treated as NaN/blank before formatting.
+            const { valueAsNumber } = input;
+
+            characterPattern = this.characterPattern;
+            question.setAttribute('lang', this.language);
+            this.setFormattedValue(valueAsNumber);
             this.setValidity();
-        });
+        };
+
+        document.addEventListener(
+            events.ChangeLanguage().type,
+            languageChanged
+        );
+        window.addEventListener('languagechange', languageChanged);
 
         input.addEventListener('keydown', (event) => {
             const { ctrlKey, isComposing, key, metaKey } = event;
@@ -146,19 +167,23 @@ export default class NumberInput extends Widget {
         });
     }
 
-    format() {
+    /**
+     * @param {number} value
+     */
+    setFormattedValue(value) {
         const { formatter, element, pattern } = this;
-        const { valueAsNumber } = element;
 
         element.setAttribute('pattern', pattern.source);
 
-        if (valueAsNumber !== '') {
-            const formatted = formatter.format(valueAsNumber);
+        if (Number.isNaN(value)) {
+            element.value = '';
+        } else if (value !== '') {
+            const formatted = formatter.format(value);
 
             element.value = formatted;
 
             if (element.value !== formatted) {
-                element.value = valueAsNumber;
+                element.value = value;
             }
         }
     }

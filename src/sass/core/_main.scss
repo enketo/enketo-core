@@ -2,7 +2,7 @@ $media-margin: 10px;
 
 /** hide stuff **/
 
-.or [lang]:not(.active),
+.or [lang]:not(.active, .question),
 .or-option-translations,
 .or-appearance-page-break,
 .or-constraint-msg,
