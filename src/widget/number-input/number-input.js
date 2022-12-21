@@ -65,12 +65,6 @@ export default class NumberInput extends Widget {
         return this.languages[0] ?? navigator.language;
     }
 
-    get formatter() {
-        const locales = Intl.getCanonicalLocales(this.languages);
-
-        return Intl.NumberFormat(locales);
-    }
-
     /** @type {Set<string>} */
     get decimalCharacters() {
         return new Set();
@@ -129,20 +123,13 @@ export default class NumberInput extends Widget {
         this.question = question;
         this.message = message;
 
-        input.pattern = this.pattern.source;
-        this.setFormattedValue(input.valueAsNumber);
+        this.reformatValue();
         this.setValidity();
 
         const languageChanged = () => {
-            // Important: get the value *before* changing the
-            // `lang` attribute, else it may become invalid and
-            // be treated as NaN/blank before formatting.
-            const { valueAsNumber } = input;
-
             characterPattern = this.characterPattern;
             question.setAttribute('lang', this.language);
-            input.pattern = this.pattern.source;
-            this.setFormattedValue(valueAsNumber);
+            this.reformatValue();
             this.setValidity();
         };
 
@@ -173,22 +160,15 @@ export default class NumberInput extends Widget {
         });
     }
 
-    /**
-     * @param {number} value
-     */
-    setFormattedValue(value) {
-        const { formatter, element } = this;
+    reformatValue() {
+        const { element, pattern } = this;
+        const { valueAsNumber } = element;
 
-        if (Number.isNaN(value) || value === '') {
-            element.value = '';
-        } else {
-            const formatted = formatter.format(value);
+        element.pattern = pattern.source;
+        element.value = '';
 
-            element.value = formatted;
-
-            if (element.value !== formatted && element.value !== value) {
-                element.value = value;
-            }
+        if (!Number.isNaN(valueAsNumber)) {
+            element.value = valueAsNumber;
         }
     }
 

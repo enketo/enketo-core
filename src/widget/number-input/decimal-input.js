@@ -6,7 +6,9 @@ export default class DecimalInput extends NumberInput {
     }
 
     get decimalCharacters() {
-        const decimal = this.formatter
+        const locales = Intl.getCanonicalLocales(this.languages);
+        const formatter = Intl.NumberFormat(locales);
+        const decimal = formatter
             .formatToParts(0.1)
             .find(({ type }) => type === 'decimal').value;
 
