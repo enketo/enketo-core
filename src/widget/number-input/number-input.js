@@ -7,7 +7,7 @@ import Widget from '../../js/widget';
  * @abstract
  * @extends {Widget<HTMLInputElement>}
  */
-export default class NumberInput extends Widget {
+class NumberInput extends Widget {
     /**
      * @abstract
      */
@@ -123,13 +123,22 @@ export default class NumberInput extends Widget {
         this.question = question;
         this.message = message;
 
-        this.reformatValue();
+        this.setReformattedValue(input.valueAsNumber);
         this.setValidity();
 
         const languageChanged = () => {
+            // Important: this value may become invalid if it isn't accessed
+            // before setting `lang`. This repros in Firefox if:
+            //
+            // 1. Your default language is English
+            // 2. Set a decimal value
+            // 3. Switch to French
+            // 4. Switch back to English
+            const { valueAsNumber } = input;
+
             characterPattern = this.characterPattern;
             question.setAttribute('lang', this.language);
-            this.reformatValue();
+            this.setReformattedValue(valueAsNumber);
             this.setValidity();
         };
 
@@ -160,16 +169,20 @@ export default class NumberInput extends Widget {
         });
     }
 
-    reformatValue() {
+    /**
+     * @param {number} value
+     */
+    setReformattedValue(value) {
         const { element, pattern } = this;
-        const { valueAsNumber } = element;
 
-        element.pattern = pattern.source;
+        element.removeAttribute('pattern');
         element.value = '';
 
-        if (!Number.isNaN(valueAsNumber)) {
-            element.value = valueAsNumber;
+        if (!Number.isNaN(value)) {
+            element.value = value;
         }
+
+        element.setAttribute('pattern', pattern);
     }
 
     setValidity() {
@@ -182,3 +195,5 @@ export default class NumberInput extends Widget {
         this.isValid = isValid;
     }
 }
+
+export default NumberInput;
