@@ -392,6 +392,214 @@ describe('Number inputs', () => {
                     expect(widget.value).to.equal('3.4');
                 });
             });
+
+            describe('language selection', () => {
+                const unsupportedLanguage = 'nopenotreal';
+
+                /**
+                 * All of the language codes currently under test in
+                 * format.spec.js, plus a few short code variants.
+                 */
+                const supportedLanguages = [
+                    'ar-EG',
+                    'en',
+                    'en-US',
+                    'en-us',
+                    'fr',
+                    'fr-FR',
+                    'fi',
+                    'he',
+                    'ko-KR',
+                    'nl',
+                    'zh',
+                    'zh-HK',
+                ];
+
+                /** @type {Form} */
+                let form;
+
+                /** @type {HTMLSelectElement} */
+                let languageSelect;
+
+                beforeEach(() => {
+                    form = loadForm('number-input-widgets.xml');
+                    formElement = form.view.html;
+
+                    const languageOptions = [
+                        unsupportedLanguage,
+                        ...supportedLanguages,
+                    ].map((language) => {
+                        const option = document.createElement('option');
+
+                        option.value = language;
+
+                        return option;
+                    });
+
+                    const body = document.createElement('body');
+
+                    formElement.insertAdjacentElement('beforebegin', body);
+                    body.append(formElement);
+
+                    const formHeader = document.createElement('header');
+
+                    formHeader.classList.add('form-header');
+
+                    const languageSelectContainer =
+                        document.createElement('span');
+
+                    languageSelectContainer.classList.add(
+                        'form-language-selector'
+                    );
+                    formHeader.append(languageSelectContainer);
+                    body.append(formHeader);
+
+                    languageSelect = document.createElement('select');
+                    languageSelect.id = 'form-languages';
+                    languageSelectContainer.append(languageSelect);
+                    languageSelect.append(...languageOptions);
+                    formElement.append(languageSelect);
+                });
+
+                supportedLanguages.forEach((language) => {
+                    it(`uses the form language ${language} on load`, async () => {
+                        languageSelect.dataset.defaultLang = language;
+                        form.init();
+
+                        const control = formElement.querySelector(
+                            DecimalInput.selector
+                        );
+                        const question = control.closest('.question');
+
+                        expect(question.lang).to.equal(language);
+                    });
+
+                    it(`uses the form language ${language} on change`, async () => {
+                        form.init();
+                        languageSelect.querySelector(
+                            `[value="${language}"]`
+                        ).selected = true;
+                        languageSelect.dispatchEvent(events.Change());
+
+                        const control = formElement.querySelector(
+                            DecimalInput.selector
+                        );
+                        const question = control.closest('.question');
+
+                        expect(question.lang).to.equal(language);
+                    });
+
+                    it(`falls back to the browser language ${language} on load when the selected form language is unsupported by the browser`, () => {
+                        languageSelect.dataset.defaultLang =
+                            unsupportedLanguage;
+                        sandbox
+                            .stub(navigator, 'languages')
+                            .get(() => [language, ...supportedLanguages]);
+                        form.init();
+
+                        const control = formElement.querySelector(
+                            DecimalInput.selector
+                        );
+                        const question = control.closest('.question');
+
+                        expect(question.lang).to.equal(language);
+                    });
+
+                    it(`falls back to the browser language ${language} on change when the selected form language is unsupported by the browser`, () => {
+                        const languagesStub = sandbox.stub(
+                            navigator,
+                            'languages'
+                        );
+
+                        languageSelect.dataset.defaultLang =
+                            unsupportedLanguage;
+
+                        languagesStub.get(() => [
+                            'en-GB',
+                            ...supportedLanguages,
+                        ]);
+
+                        form.init();
+
+                        const control = formElement.querySelector(
+                            DecimalInput.selector
+                        );
+                        const question = control.closest('.question');
+
+                        expect(question.lang).to.equal('en-GB');
+
+                        languagesStub.get(() => [language, 'en-GB']);
+
+                        window.dispatchEvent(new Event('languagechange'));
+
+                        expect(question.lang).to.equal(language);
+                    });
+
+                    it(`uses the form language ${language} on change after previously falling back to the browser language`, () => {
+                        const languagesStub = sandbox.stub(
+                            navigator,
+                            'languages'
+                        );
+
+                        languageSelect.dataset.defaultLang =
+                            unsupportedLanguage;
+
+                        languagesStub.get(() => ['en-GB']);
+
+                        form.init();
+
+                        const control = formElement.querySelector(
+                            DecimalInput.selector
+                        );
+                        const question = control.closest('.question');
+
+                        expect(question.lang).to.equal('en-GB');
+
+                        languageSelect.querySelector(
+                            `[value="${language}"]`
+                        ).selected = true;
+                        languageSelect.dispatchEvent(events.Change());
+
+                        expect(question.lang).to.equal(language);
+                    });
+
+                    it(`falls back to the browser language ${language} on change after an unsupported form language is chosen`, () => {
+                        const languagesStub = sandbox.stub(
+                            navigator,
+                            'languages'
+                        );
+
+                        languageSelect.dataset.defaultLang = language;
+
+                        languagesStub.get(() => ['en-GB']);
+
+                        form.init();
+
+                        const control = formElement.querySelector(
+                            DecimalInput.selector
+                        );
+                        const question = control.closest('.question');
+
+                        expect(question.lang).to.equal(language);
+
+                        languageSelect.querySelector(
+                            `[value="${unsupportedLanguage}"]`
+                        ).selected = true;
+                        languageSelect.dispatchEvent(events.Change());
+
+                        expect(question.lang).to.equal('en-GB');
+                    });
+                });
+
+                it.skip('reformats to a localized decimal character when the form language changes', () => {
+                    // This is evidently untestable. The assignment
+                    // `input.value = input.valueAsNumber`
+                    // does cause the browser to reformat the
+                    // number to the specified `lang`, but its
+                    // runtime `value` always uses a period for the
+                    // decimal character.
+                });
+            });
         }
     });
 });

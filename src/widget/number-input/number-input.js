@@ -43,9 +43,7 @@ export default class NumberInput extends Widget {
     }
 
     get languages() {
-        const formLanguage = this.element
-            .closest('form.or')
-            ?.parentElement?.querySelector('#form-languages')?.value;
+        const formLanguage = this.languageSelect?.value;
 
         let validFormLanguage;
 
@@ -112,6 +110,12 @@ export default class NumberInput extends Widget {
     constructor(input, options) {
         super(input, options);
 
+        const formElement = input.closest('form.or');
+
+        /** @type {HTMLSelectElement | null} */
+        this.languageSelect =
+            formElement.parentElement?.querySelector('#form-languages');
+
         let { characterPattern } = this;
 
         const question = inputModule.getWrapNode(input);
@@ -125,6 +129,7 @@ export default class NumberInput extends Widget {
         this.question = question;
         this.message = message;
 
+        input.pattern = this.pattern.source;
         this.setFormattedValue(input.valueAsNumber);
         this.setValidity();
 
@@ -136,11 +141,12 @@ export default class NumberInput extends Widget {
 
             characterPattern = this.characterPattern;
             question.setAttribute('lang', this.language);
+            input.pattern = this.pattern.source;
             this.setFormattedValue(valueAsNumber);
             this.setValidity();
         };
 
-        document.addEventListener(
+        formElement.addEventListener(
             events.ChangeLanguage().type,
             languageChanged
         );
@@ -171,18 +177,16 @@ export default class NumberInput extends Widget {
      * @param {number} value
      */
     setFormattedValue(value) {
-        const { formatter, element, pattern } = this;
+        const { formatter, element } = this;
 
-        element.setAttribute('pattern', pattern.source);
-
-        if (Number.isNaN(value)) {
+        if (Number.isNaN(value) || value === '') {
             element.value = '';
-        } else if (value !== '') {
+        } else {
             const formatted = formatter.format(value);
 
             element.value = formatted;
 
-            if (element.value !== formatted) {
+            if (element.value !== formatted && element.value !== value) {
                 element.value = value;
             }
         }
