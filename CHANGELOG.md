@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [6.1.7] - 2022-12-21
+
+-  Fix: integer and decimal widgets remain visible when form language changes (#937)
+-  Fix: don't clear decimals when switching French -> English (#941)
+
 ## [6.1.6] - 2022-12-15
 
 -   Do not update image file on blur if canvas is empty (#931)
