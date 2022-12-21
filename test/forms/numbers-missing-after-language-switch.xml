@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>numbers-missing-after-language-switch</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation lang="language1">
+                    <text id="/data/int_q:label">
+                        <value>.</value>
+                    </text>
+                    <text id="/data/dec_q:label">
+                        <value>.</value>
+                    </text>
+                    <text id="/data/txt_q:label">
+                        <value>.</value>
+                    </text>
+                </translation>
+                <translation lang="Finnish">
+                    <text id="/data/int_q:label">
+                        <value>kokonaislukusyöttö</value>
+                    </text>
+                    <text id="/data/dec_q:label">
+                        <value>desimaalisyöttö</value>
+                    </text>
+                    <text id="/data/txt_q:label">
+                        <value>tekstinsyöttö</value>
+                    </text>
+                </translation>
+                <translation lang="French">
+                    <text id="/data/int_q:label">
+                        <value>entrée entière</value>
+                    </text>
+                    <text id="/data/dec_q:label">
+                        <value>entrée décimale</value>
+                    </text>
+                    <text id="/data/txt_q:label">
+                        <value>entrée texte</value>
+                    </text>
+                </translation>
+                <translation lang="English">
+                    <text id="/data/int_q:label">
+                        <value>integer input</value>
+                    </text>
+                    <text id="/data/dec_q:label">
+                        <value>decimal input</value>
+                    </text>
+                    <text id="/data/txt_q:label">
+                        <value>text input</value>
+                    </text>
+                </translation>
+                <translation lang=".">
+                    <text id="/data/int_q:label">
+                        <value>.</value>
+                    </text>
+                    <text id="/data/dec_q:label">
+                        <value>.</value>
+                    </text>
+                    <text id="/data/txt_q:label">
+                        <value>.</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="numbers-missing-after-language-switch">
+                    <int_q/>
+                    <dec_q/>
+                    <txt_q/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/int_q" type="int"/>
+            <bind nodeset="/data/dec_q" type="decimal"/>
+            <bind nodeset="/data/txt_q" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/int_q">
+            <label ref="jr:itext('/data/int_q:label')"/>
+        </input>
+        <input ref="/data/dec_q">
+            <label ref="jr:itext('/data/dec_q:label')"/>
+        </input>
+        <input ref="/data/txt_q">
+            <label ref="jr:itext('/data/txt_q:label')"/>
+        </input>
+    </h:body>
+</h:html>

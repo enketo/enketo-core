@@ -1,4 +1,5 @@
 import { t } from '../../js/fake-translator';
+import events from '../../js/event';
 import inputModule from '../../js/input';
 import Widget from '../../js/widget';
 
@@ -41,10 +42,27 @@ export default class NumberInput extends Widget {
         ].every((className) => !question.classList.contains(className));
     }
 
-    get formatter() {
-        const locales = Intl.getCanonicalLocales(navigator.languages);
+    get languages() {
+        const formLanguage = this.languageSelect?.value;
 
-        return Intl.NumberFormat(locales);
+        let validFormLanguage;
+
+        try {
+            Intl.getCanonicalLocales(formLanguage);
+
+            validFormLanguage = formLanguage;
+        } catch {
+            // If this fails, the form's selected language is likely not a valid
+            // code and will cause all other `Intl` usage to fail.
+        }
+
+        return [validFormLanguage, ...navigator.languages].filter(
+            (language) => language != null
+        );
+    }
+
+    get language() {
+        return this.languages[0] ?? navigator.language;
     }
 
     /** @type {Set<string>} */
@@ -86,28 +104,40 @@ export default class NumberInput extends Widget {
     constructor(input, options) {
         super(input, options);
 
+        const formElement = input.closest('form.or');
+
+        /** @type {HTMLSelectElement | null} */
+        this.languageSelect =
+            formElement.parentElement?.querySelector('#form-languages');
+
         let { characterPattern } = this;
 
         const question = inputModule.getWrapNode(input);
         const message = document.createElement('div');
 
         message.classList.add('invalid-value-msg', 'active');
-        question.setAttribute('lang', navigator.language);
-        question.classList.add('active');
+
+        question.setAttribute('lang', this.language);
         question.append(message);
 
         this.question = question;
         this.message = message;
 
-        this.format();
+        this.reformatValue();
         this.setValidity();
 
-        window.addEventListener('languagechange', () => {
-            characterPattern = this.validCharacter;
-            question.setAttribute('lang', navigator.language);
-            this.format();
+        const languageChanged = () => {
+            characterPattern = this.characterPattern;
+            question.setAttribute('lang', this.language);
+            this.reformatValue();
             this.setValidity();
-        });
+        };
+
+        formElement.addEventListener(
+            events.ChangeLanguage().type,
+            languageChanged
+        );
+        window.addEventListener('languagechange', languageChanged);
 
         input.addEventListener('keydown', (event) => {
             const { ctrlKey, isComposing, key, metaKey } = event;
@@ -130,20 +160,15 @@ export default class NumberInput extends Widget {
         });
     }
 
-    format() {
-        const { formatter, element, pattern } = this;
+    reformatValue() {
+        const { element, pattern } = this;
         const { valueAsNumber } = element;
 
-        element.setAttribute('pattern', pattern.source);
+        element.pattern = pattern.source;
+        element.value = '';
 
-        if (valueAsNumber !== '') {
-            const formatted = formatter.format(valueAsNumber);
-
-            element.value = formatted;
-
-            if (element.value !== formatted) {
-                element.value = valueAsNumber;
-            }
+        if (!Number.isNaN(valueAsNumber)) {
+            element.value = valueAsNumber;
         }
     }
 
