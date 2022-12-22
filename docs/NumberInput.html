@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>RankWidget - Enketo Core</title>
+    <title>NumberInput - Enketo Core</title>
     
     <meta name="description" content="Extensible Enketo form engine" />
     
@@ -37,7 +37,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">RankWidget</h1>
+    <h1 class="page-title">NumberInput</h1>
     
 
     
@@ -50,7 +50,7 @@
 <header>
     
         <h2>
-        RankWidget
+        NumberInput
         </h2>
         
     
@@ -64,7 +64,7 @@
 
     
 
-    <h4 class="name" id="RankWidget"><span class="type-signature"></span>new RankWidget<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="NumberInput"><span class="type-signature">(abstract) </span>new NumberInput<span class="signature">(input, options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -76,7 +76,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line11">line 11</a>
+        <a href="widget_number-input_number-input.js.html">widget/number-input/number-input.js</a>, <a href="widget_number-input_number-input.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -123,6 +123,78 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLInputElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -153,7 +225,7 @@
 
 
     <ul>
-        <li><a href="Widget.html">Widget</a></li>
+        <li><a href="Widget.html">Widget</a>.&lt;HTMLInputElement></li>
     </ul>
 
 
@@ -174,7 +246,7 @@
 
         
             
-<h4 class="name" id=".list"><span class="type-signature">(static) </span>list<span class="type-signature"> :boolean</span></h4>
+<h4 class="name" id=".numberType"><span class="type-signature">(abstract, static) </span>numberType<span class="type-signature"></span></h4>
 
 
 
@@ -185,7 +257,66 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line22">line 22</a>
+        <a href="widget_number-input_number-input.js.html">widget/number-input/number-input.js</a>, <a href="widget_number-input_number-input.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="decimalCharacters"><span class="type-signature"></span>decimalCharacters<span class="type-signature"> :Set.&lt;<a href="module-types-types.string.html">string</a>></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="widget_number-input_number-input.js.html">widget/number-input/number-input.js</a>, <a href="widget_number-input_number-input.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -230,7 +361,7 @@
     <ul>
         <li>
             
-<span class="param-type">boolean</span>
+<span class="param-type">Set.&lt;<a href="module-types-types.string.html">string</a>></span>
 
 
         </li>
@@ -243,7 +374,7 @@
 
         
             
-<h4 class="name" id=".selector"><span class="type-signature">(static) </span>selector<span class="type-signature"> :<a href="module-types-types.string.html">string</a></span></h4>
+<h4 class="name" id="languageSelect"><span class="type-signature"></span>languageSelect<span class="type-signature"> :HTMLSelectElement|null</span></h4>
 
 
 
@@ -254,7 +385,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line15">line 15</a>
+        <a href="widget_number-input_number-input.js.html">widget/number-input/number-input.js</a>, <a href="widget_number-input_number-input.js.html#line110">line 110</a>
     </li></ul></dd>
     
 
@@ -299,467 +430,10 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="module-types-types.string.html">string</a></span>
+<span class="param-type">HTMLSelectElement</span>
+|
 
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="downloadButtonHtml"><span class="type-signature">(readonly) </span>downloadButtonHtml<span class="type-signature"> :Element</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line114">line 114</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#downloadButtonHtml">Widget#downloadButtonHtml</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Returns a HTML document fragment for a download button.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Element</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="originalInputValue"><span class="type-signature"></span>originalInputValue<span class="type-signature"> :<a href="module-types-types.string.html">string</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line194">line 194</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#originalInputValue">Widget#originalInputValue</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-types-types.string.html">string</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="originalInputValue"><span class="type-signature"></span>originalInputValue<span class="type-signature"> :<a href="module-types-types.string.html">string</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line203">line 203</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#originalInputValue">Widget#originalInputValue</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>This is the input that Enketo's engine listens on.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-types-types.string.html">string</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="props"><span class="type-signature">(readonly) </span>props<span class="type-signature"> :object</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line87">line 87</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#props">Widget#props</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Returns widget properties. May need to be extended.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="resetButtonHtml"><span class="type-signature">(readonly) </span>resetButtonHtml<span class="type-signature"> :Element</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line97">line 97</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#resetButtonHtml">Widget#resetButtonHtml</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Returns a HTML document fragment for a reset button.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Element</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="value"><span class="type-signature"></span>value<span class="type-signature"> :<a href="module-types-types.string.html">string</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line103">line 103</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#value">Widget#value</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-types-types.string.html">string</a></span>
+<span class="param-type">null</span>
 
 
         </li>
@@ -781,7 +455,7 @@
 
     
 
-    <h4 class="name" id="_getProps"><span class="type-signature"></span>_getProps<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id=".condition"><span class="type-signature">(static) </span>condition<span class="signature">(input)</span><span class="type-signature"></span></h4>
 
     
 
@@ -793,7 +467,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line41">line 41</a>
+        <a href="widget_number-input_number-input.js.html">widget/number-input/number-input.js</a>, <a href="widget_number-input_number-input.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -801,11 +475,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Widget.html#_getProps">Widget#_getProps</a>
-    </li></ul></dd>
     
 
     
@@ -837,9 +506,6 @@
 
 
 
-<div class="description usertext">
-    <p>Not meant to be overridden, but could be. Recommend to extend <code>get props()</code> instead.</p>
-</div>
 
 
 
@@ -850,119 +516,53 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>props object</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
+    <h5>Parameters:</h5>
     
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
             
 
-    
-
-    <h4 class="name" id="_init"><span class="type-signature"></span>_init<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
+            <td class="type">
+            
+                
+<span class="param-type">HTMLInputElemnt</span>
 
 
+            
+            </td>
 
-<dl class="details">
+            
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="js_widget.js.html">js/widget.js</a>, <a href="js_widget.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
+            
+
+            <td class="description last"></td>
+        </tr>
 
     
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#_init">Widget#_init</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Meant to be overridden, but automatically called.</p>
-</div>
-
-
-
-
-
-
-
-
-
+    </tbody>
+</table>
 
 
 
@@ -987,7 +587,7 @@
 
     
 
-    <h4 class="name" id="_reset"><span class="type-signature"></span>_reset<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setReformattedValue"><span class="type-signature"></span>setReformattedValue<span class="signature">(value)</span><span class="type-signature"></span></h4>
 
     
 
@@ -999,7 +599,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line96">line 96</a>
+        <a href="widget_number-input_number-input.js.html">widget/number-input/number-input.js</a>, <a href="widget_number-input_number-input.js.html#line175">line 175</a>
     </li></ul></dd>
     
 
@@ -1038,9 +638,6 @@
 
 
 
-<div class="description usertext">
-    <p>Resets widget</p>
-</div>
 
 
 
@@ -1051,281 +648,53 @@
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <th>Type</th>
 
         
-            
-
-    
-
-    <h4 class="name" id="disable"><span class="type-signature"></span>disable<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line150">line 150</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#disable">Widget#disable</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Disables widget</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
             
 
-    
-
-    <h4 class="name" id="enable"><span class="type-signature"></span>enable<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
 
 
+            
+            </td>
 
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line163">line 163</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#enable">Widget#enable</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Enables widget</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
             
 
-    
+            
 
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
+            <td class="description last"></td>
+        </tr>
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="widget_rank_rank-widget.js.html">widget/rank/rank-widget.js</a>, <a href="widget_rank_rank-widget.js.html#line176">line 176</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Widget.html#update">Widget#update</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Updates widget</p>
-</div>
-
-
-
-
-
-
-
-
-
+    </tbody>
+</table>
 
 
 
