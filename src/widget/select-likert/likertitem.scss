@@ -57,8 +57,6 @@
 
             .option-label {
                 position: relative;
-
-                // flex: 1; Not sure why this is here, it prevents label from growing with content in IE11
                 text-align: center;
                 margin-top: -8.5px;
                 padding-top: 15px;

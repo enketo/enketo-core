@@ -323,17 +323,11 @@ export default {
                     // Use today's date to incorporate daylight savings changes,
                     // Strip the thousands of a second, because most browsers fail to parse such a time.
                     // Add a space before the timezone offset to satisfy some browsers.
-                    // For IE11, we also need to strip the Left-to-Right marks \u200E...
-                    const ds = `${new Date()
-                        .toLocaleDateString('en', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                        })
-                        .replace(/\u200E/g, '')} ${value.replace(
-                        /(\d\d:\d\d:\d\d)(\.\d{1,3})(\s?((\+|-)\d\d))(:)?(\d\d)?/,
-                        '$1 GMT$3$7'
-                    )}`;
+                    const ds = `${new Date().toLocaleDateString('en', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    })}`;
                     const d = new Date(ds);
                     if (d.toString() !== 'Invalid Date') {
                         value = `${d.getHours().toString().padStart(2, '0')}:${d
