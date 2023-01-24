@@ -50,7 +50,7 @@ module.exports = (config) => {
             define: {
                 ENV: '"test"',
             },
-            target: ['chrome89', 'edge89', 'firefox90', 'safari13'],
+            target: ['chrome109', 'edge109', 'firefox109', 'safari16'],
         },
 
         browserify: {
