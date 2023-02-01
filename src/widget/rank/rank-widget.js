@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'drag-drop-touch';
 import sortable from 'html5sortable/dist/html5sortable.cjs';
 import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
@@ -64,9 +65,19 @@ class RankWidget extends Widget {
 
         this.value = loadedValue;
 
+        this.list.querySelectorAll(this.itemSelector).forEach((item) => {
+            const handle = document.createElement('span');
+
+            handle.textContent = '::';
+            handle.className = 'handle';
+
+            item.append(handle);
+        });
+
         // Create the sortable drag-and-drop functionality
         sortable(this.list, {
             items: this.itemSelector,
+            handle: '.handle',
             // hoverClass: 'rank-widget__item--hover',
             containerSerializer(container) {
                 return {
