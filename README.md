@@ -25,8 +25,6 @@ The following browsers are officially supported:
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
-[Here is some guidance](https://enketo.github.io/enketo-core/tutorial-90-ie11.html) that may be helpful when trying to create a build that possibly runs on Internet Explorer 11.
-
 ### Releases
 
 1. Create release PR

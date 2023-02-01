@@ -1,15 +1,8 @@
-import $ from 'jquery';
 import Widget from '../../js/widget';
 import events from '../../js/event';
 import { getSiblingElement } from '../../js/dom-utils';
 
 import './jquery.relevant-dropdown';
-
-const sadExcuseForABrowser = !(
-    'list' in document.createElement('input') &&
-    'options' in document.createElement('datalist') &&
-    typeof window.HTMLDataListElement !== 'undefined'
-);
 
 /**
  * Autocomplete select1 picker for modern browsers.
@@ -93,12 +86,6 @@ class AutocompleteSelectpicker extends Widget {
         }
         if (this.props.disabled) {
             this.fakeInput.setAttribute('disabled', 'disabled');
-        }
-
-        if (sadExcuseForABrowser) {
-            // console.debug( 'Polyfill required' );
-            // don't bother de-jqueryfying this I think, since it's only for IE11 now I think (and we'll remove IE11 support).
-            $(this.fakeInput).relevantDropdown();
         }
 
         this._setFakeInputListener();
