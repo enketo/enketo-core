@@ -107,6 +107,7 @@
     },
     "dependencies": {
         "bootstrap-datepicker": "1.9.x",
+        "drag-drop-touch": "^1.3.1",
         "html5sortable": "^0.13.3",
         "jquery": "^3.6.2",
         "jquery-touchswipe": "^1.6.19",

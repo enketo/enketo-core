@@ -40,14 +40,27 @@
         border-radius: 5px;
         margin: 0 0 5px 0;
         position: relative;
-        &[draggable='true']::before {
-            position: absolute;
-            content: '::';
-            margin: 0 5px;
-            top: calc(50% - 10px);
+
+        .handle {
+            display: none;
+
+            &[draggable='true'] {
+                display: block;
+                position: absolute;
+                box-sizing: border-box;
+                padding: inherit;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 2em;
+                text-indent: 5px;
+            }
         }
-        &:hover:not(.filler) {
-            background: none;
+
+        @media (pointer: fine) and (hover: 'hover') {
+            .handle[draggable='true'] {
+                width: 100%;
+            }
         }
     } //&__item--hover {}
     input[type='text'] {
@@ -56,5 +69,9 @@
     .btn-reset {
         margin-top: 5px;
         order: 10;
+    }
+
+    .question.simple-select &.option-wrapper > label:hover:not(.filler) {
+        background: none;
     }
 }
