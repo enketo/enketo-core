@@ -92,12 +92,12 @@ class DatepickerExtended extends Widget {
             let value =
                 e.type === 'paste'
                     ? getPasteData(e.originalEvent ?? e)
-                    : this.value;
+                    : this.displayedValue;
 
             if (value.length > 0) {
                 // Note: types.date.convert considers numbers to be a number of days since the epoch
                 // as this is what the XPath evaluator may return.
-                // For user-entered input, we want to consider a Number value to be incorrect, expect for year input.
+                // For user-entered input, we want to consider a Number value to be incorrect, except for year input.
                 if (isNumber(value) && settings.format !== 'yyyy') {
                     convertedValue = '';
                 } else {

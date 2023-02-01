@@ -98,6 +98,17 @@ describe('datepicker widget', () => {
 
                 expect(input.value).to.equal('');
             });
+            it(`sets empty string when user enters year and appearance is ${desc}`, () => {
+                const input = initForm(form).element;
+                const fakeInput = input
+                    .closest('.question')
+                    .querySelector('.widget input');
+
+                fakeInput.value = '2012';
+                fakeInput.dispatchEvent(new Event('change'));
+
+                expect(input.value).to.equal('');
+            });
         });
     });
 });
