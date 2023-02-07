@@ -55,7 +55,7 @@
         "chai-as-promised": "^7.1.1",
         "cross-env": "^7.0.3",
         "docdash": "^1.2.0",
-        "enketo-transformer": "2.1.7",
+        "enketo-transformer": "2.2.1",
         "esbuild": "^0.12.29",
         "esbuild-plugin-alias": "^0.1.2",
         "eslint-config-airbnb": "^19.0.4",
