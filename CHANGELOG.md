@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [7.0.0] - 2023-02-08
+
+-  **BREAKING CHANGE**: Removed IE11 support (#946)
+-  Fix: rank widget on touch devices (#947)
+-  Fix: undesired autocompletion of manually entered incomplete month-year (#944)
+-  Optimize expensive XPath expressions in HTML transform (enketo-transformer#165)
+
 ## [6.1.7] - 2022-12-21
 
 -  Fix: integer and decimal widgets remain visible when form language changes (#937)
@@ -12,7 +19,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 -   Do not update image file on blur if canvas is empty (#931)
 -   Fix calculation of nested repeat counts in >1 outer repeat instances (#935)
-
 
 ## [6.1.5] - 2022-12-06
 
