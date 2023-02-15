@@ -354,45 +354,6 @@ input[type='checkbox'] {
     }
 }
 
-.or-appearance-analog-scale {
-    // if analog-scale widget is a non-current page the display is set to block
-    // which moves the vertical widget below the label instead of next to it.
-    &:not(.or-appearance-horizontal) {
-        display: flex !important;
-        flex-wrap: nowrap;
-    }
-
-    .scale__ticks {
-        display: none;
-    }
-
-    .slider-vertical .slider-track {
-        border-right: 1px solid black;
-        margin-left: -8.5px;
-    }
-
-    .slider-horizontal .slider-track {
-        border-bottom: 1px solid black;
-        margin-top: -10px;
-    }
-
-    .slider-handle {
-        border: 1px solid black;
-    }
-
-    .slider-vertical .slider-handle {
-        margin-left: -1px;
-    }
-
-    .slider-horizontal .slider-handle {
-        margin-top: -1px;
-    }
-
-    .slider-vertical .min-label {
-        margin-top: 10px;
-    }
-}
-
 .draw-widget__colorpicker {
     display: none;
 }

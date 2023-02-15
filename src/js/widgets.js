@@ -22,7 +22,6 @@ import p from '../widget/file/filepicker';
 import q from '../widget/draw/draw-widget';
 import r from '../widget/select-likert/likertitem';
 import s from '../widget/columns/columns';
-import t from '../widget/analog-scale/analog-scalepicker';
 import u from '../widget/big-image/image-viewer';
 import v from '../widget/comment/commentwidget';
 import w from '../widget/image-map/image-map';
@@ -57,7 +56,6 @@ export default [
     q,
     r,
     s,
-    t,
     u,
     v,
     w,

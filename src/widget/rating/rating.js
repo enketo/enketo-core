@@ -63,8 +63,6 @@ class RatingWidget extends Widget {
     }
 
     /**
-     * This is separated so it can be extended (in the analog-scale widget)
-     *
      * @return {string} HTML string
      */
     _getHtmlStr() {
