@@ -34,6 +34,7 @@ class NumberInput extends Widget {
 
         const question = input.closest('.question');
 
+        // analog-scale is included as a courtesy to OpenClinica
         return [
             'or-appearance-analog-scale',
             'or-appearance-my-widget',

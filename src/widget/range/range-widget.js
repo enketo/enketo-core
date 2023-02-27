@@ -10,6 +10,7 @@ class RangeWidget extends Widget {
      * @type {string}
      */
     static get selector() {
+        // analog-scale selector is included as courtesy to OpenClinica
         return '.or-appearance-distress input[type="number"], .question:not(.or-appearance-analog-scale):not(.or-appearance-rating) > input[type="number"][min][max][step]';
     }
 

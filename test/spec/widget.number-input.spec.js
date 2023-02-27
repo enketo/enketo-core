@@ -55,7 +55,7 @@ describe('Number inputs', () => {
             });
 
             const otherWidgets = [
-                'analog-scale',
+                'analog-scale', // included as courtesy to OpenClinica
                 'my-widget',
                 'distress',
                 'rating',
