@@ -77,7 +77,7 @@ class Geopicker extends Widget {
      * @type {string}
      */
     static get selector() {
-        return '.question input[data-type-xml="geopoint"]:not([data-setvalue], [data-setgeopoint]), .question input[data-type-xml="geotrace"]:not([data-setvalue], [data-setgeopoint]), .question input[data-type-xml="geoshape"]:not([data-setvalue], [data-setgeopoint])';
+        return '.question input[data-type-xml="geopoint"]:not([data-setvalue]):not([data-setgeopoint]), .question input[data-type-xml="geotrace"]:not([data-setvalue]):not([data-setgeopoint]), .question input[data-type-xml="geoshape"]:not([data-setvalue]):not([data-setgeopoint])';
     }
 
     /**
