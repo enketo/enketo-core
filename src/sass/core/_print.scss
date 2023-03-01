@@ -147,7 +147,7 @@ input[type='checkbox'] {
             padding: 0;
         }
 
-        span:not(.or-output) {
+        > span:not(.or-output) {
             display: block;
         }
     }
