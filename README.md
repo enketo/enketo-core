@@ -39,7 +39,6 @@ We have to admit we do not test on all of these, but are committed to fixing bro
     - Run `npm audit fix --production` to apply most important fixes
 1. Run `npm i`
 1. Run `npm test`
-1. Run `npm run build-docs`
 1. Merge PR with all changes
 1. Create GitHub release
 1. Tag and publish the release
