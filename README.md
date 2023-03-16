@@ -8,7 +8,7 @@ Enketo's form engine is compatible with tools in the ODK ecosystem and complies 
 
 This repo is meant to be used as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of a real-life full-fledged data collection application and how Enketo Core fits into this.
 
-**To get started visit our [technical documentation](https://enketo.github.io/enketo-core).**
+**To get started visit our [technical documentation](https://github.com/enketo/enketo-core/tree/master/tutorials).**
 
 Follow the [Enketo blog](https://blog.enketo.org) or [Enketo on twitter](https://twitter.com/enketo) to stay up to date.
 
