@@ -9,10 +9,17 @@
         "sinon": true
     },
     "extends": ["airbnb", "prettier"],
-    "plugins": ["chai-friendly", "prettier", "unicorn"],
+    "plugins": ["chai-friendly", "jsdoc", "prettier", "unicorn"],
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": 2020
+    },
+    "settings": {
+        "jsdoc": {
+            "tagNamePreference": {
+                "returns": "return"
+            }
+        }
     },
     "rules": {
         "prettier/prettier": "error",
