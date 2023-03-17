@@ -21,6 +21,17 @@ module.exports = (grunt) => {
         '!test/mock/forms.js',
     ];
 
+    const karmaWatchOptions = {
+        autoWatch: true,
+        client: {
+            mocha: {
+                timeout: Number.MAX_SAFE_INTEGER,
+            },
+        },
+        reporters: ['dots'],
+        singleRun: false,
+    };
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -127,16 +138,11 @@ module.exports = (grunt) => {
             },
             watch: {
                 browsers: ['ChromeHeadlessDebug'],
-                options: {
-                    autoWatch: true,
-                    client: {
-                        mocha: {
-                            timeout: Number.MAX_SAFE_INTEGER,
-                        },
-                    },
-                    reporters: ['dots'],
-                    singleRun: false,
-                },
+                options: karmaWatchOptions,
+            },
+            watchBrowsers: {
+                browsers: ['Chrome', 'Firefox', 'Safari'],
+                options: karmaWatchOptions,
             },
         },
         sass: {

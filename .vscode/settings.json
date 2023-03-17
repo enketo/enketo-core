@@ -1,9 +1,6 @@
 {
     // Formatting
     "eslint.enable": true,
-    "eslint.options": {
-        "extends": ["../.eslintrc.json"]
-    },
     "eslint.nodePath": "../node_modules/.bin",
     "eslint.validate": ["markdown", "md"],
     "prettier.configPath": ".prettierrc.json",
