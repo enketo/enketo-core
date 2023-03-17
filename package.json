@@ -46,15 +46,12 @@
         "test": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt test",
         "test-browsers": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt karma:browsers",
         "test-watch": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt test:watch",
-        "beautify": "npx prettier --write . && grunt eslint:fix",
-        "build-docs": "rimraf docs && ./node_modules/.bin/jsdoc -c jsdoc.config.js",
-        "remove-docs": "rm -R ./docs/*.html"
+        "beautify": "npx prettier --write . && grunt eslint:fix"
     },
     "devDependencies": {
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
         "cross-env": "^7.0.3",
-        "docdash": "^1.2.0",
         "enketo-transformer": "2.2.1",
         "esbuild": "^0.12.29",
         "esbuild-plugin-alias": "^0.1.2",
@@ -62,7 +59,7 @@
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-chai-friendly": "^0.7.2",
         "eslint-plugin-import": "^2.27.5",
-        "eslint-plugin-jsdoc": "^36.1.1",
+        "eslint-plugin-jsdoc": "^40.0.3",
         "eslint-plugin-jsx-a11y": "^6.7.1",
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.32.2",
@@ -77,8 +74,6 @@
         "grunt-mocha-test": "^0.13.3",
         "grunt-sass": "^3.1.0",
         "grunt-shell": "^3.0.1",
-        "jsdoc": "^3.6.11",
-        "jsdoc-ts-utils": "^2.0.1",
         "karma": "^6.4.1",
         "karma-chrome-launcher": "^3.1.1",
         "karma-coverage": "^2.2.0",
@@ -92,7 +87,6 @@
         "mocha": "^9.2.2",
         "node-sass": "^7.0.3",
         "prettier": "^2.8.3",
-        "rimraf": "^3.0.2",
         "sinon": "^11.1.2",
         "sinon-chai": "^3.7.0",
         "time-grunt": "^2.0.0"
