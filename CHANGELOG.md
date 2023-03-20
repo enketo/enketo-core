@@ -3,10 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [7.2.0] - 2023-03-20
+
+-   Reimplement draw/signature/annotate widget to preserve original image size when annotating and improve resize performance (#960)
+
 ## [7.1.0] - 2023-03-16
 
 -   Remove: analog-scale widget (#952)
-    *Note: now maintained by OpenClinica (https://github.com/OpenClinica/enketo-express-oc/tree/master/widget/analog-scale). Not considered a breaking change because usage outside of OpenClinica is not known *
+    *Note: now maintained by OpenClinica (https://github.com/OpenClinica/enketo-express-oc/tree/master/widget/analog-scale). Not considered a breaking change because usage outside of OpenClinica is not known*
 -   Fix: further simplify geopicker (#954)
 -   Fix: undesired newlines in print view in select/select1 labels (#957)
 -   Add Transformer web compatibility (enketo/enketo-transformer#171)
