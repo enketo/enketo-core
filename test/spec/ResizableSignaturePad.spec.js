@@ -87,12 +87,12 @@ describe('Resizable extensions to the signature_pad library', () => {
     const waitForIdleDOM = async () => {
         await waitForNextAnimationFrame();
 
-        while (mutationObserver.takeRecords().length > 0) {
+        do {
             // This could probably be accomplished with an async generator, but
             // the intent would be much less obvious
             // eslint-disable-next-line no-await-in-loop
             await waitForNextAnimationFrame();
-        }
+        } while (mutationObserver.takeRecords().length > 0);
     };
 
     /**
