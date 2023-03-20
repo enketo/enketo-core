@@ -12,7 +12,7 @@
     "plugins": ["chai-friendly", "jsdoc", "prettier", "unicorn"],
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2020
+        "ecmaVersion": 2022
     },
     "settings": {
         "jsdoc": {

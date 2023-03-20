@@ -1,9 +1,5 @@
 import $ from 'jquery';
 import fileManager from 'enketo/file-manager';
-/**
- * @external SignaturePad
- */
-import SignaturePad from 'signature_pad';
 import { t } from 'enketo/translator';
 import dialog from 'enketo/dialog';
 import support from '../../js/support';
@@ -11,92 +7,7 @@ import events from '../../js/event';
 import Widget from '../../js/widget';
 import { dataUriToBlobSync, getFilename } from '../../js/utils';
 import downloadUtils from '../../js/download-utils';
-
-const DELAY = 1500;
-
-/**
- * SignaturePad.prototype.fromDataURL is asynchronous and does not return
- * a Promise. This is a rewrite returning a promise and the objectUrl.
- * In addition it also fixes a bug where a loaded image is stretched to fit
- * the canvas.
- *
- * @function external:SignaturePad#fromObjectURL
- * @param {*} objectUrl - ObjectURL
- * @param {object} options - options
- * @param {number} [options.ratio] - ratio
- * @param {number} [options.width] - width
- * @param {number} [options.height] - height
- * @return {Promise} a promise that resolves with an objectURL
- */
-SignaturePad.prototype.fromObjectURL = function (objectUrl, options) {
-    const image = new Image();
-    options = options || {};
-    const deviceRatio = options.ratio || window.devicePixelRatio || 1;
-    const width = options.width || this._canvas.width / deviceRatio;
-    const height = options.height || this._canvas.height / deviceRatio;
-    const that = this;
-
-    this._reset();
-
-    return new Promise((resolve) => {
-        image.src = objectUrl;
-        image.onload = () => {
-            const imgWidth = image.width;
-            const imgHeight = image.height;
-            const hRatio = width / imgWidth;
-            const vRatio = height / imgHeight;
-            let left;
-            let top;
-
-            if (hRatio < 1 || vRatio < 1) {
-                // if image is bigger than canvas then fit within the canvas
-                const ratio = Math.min(hRatio, vRatio);
-                left = (width - imgWidth * ratio) / 2;
-                top = (height - imgHeight * ratio) / 2;
-                that._ctx.drawImage(
-                    image,
-                    0,
-                    0,
-                    imgWidth,
-                    imgHeight,
-                    left,
-                    top,
-                    imgWidth * ratio,
-                    imgHeight * ratio
-                );
-            } else {
-                // if image is smaller than canvas then show it in the center and don't stretch it
-                left = (width - imgWidth) / 2;
-                top = (height - imgHeight) / 2;
-                that._ctx.drawImage(image, left, top, imgWidth, imgHeight);
-            }
-            resolve(objectUrl);
-        };
-        that._isEmpty = false;
-    });
-};
-
-/**
- * Similar to SignaturePad.prototype.fromData except that it doesn't clear the canvas.
- * This is to facilitate undoing a drawing stroke over a background (bitmap) image.
- *
- * @function external:SignaturePad#updateData
- * @param {*} pointGroups - pointGroups
- */
-SignaturePad.prototype.updateData = function (pointGroups) {
-    const that = this;
-    this._fromData(
-        pointGroups,
-        (curve, widths) => {
-            that._drawCurve(curve, widths.start, widths.end);
-        },
-        (rawPoint) => {
-            that._drawDot(rawPoint);
-        }
-    );
-
-    this._data = pointGroups;
-};
+import { ResizableSignaturePad } from './ResizableSignaturePad';
 
 /**
  * Widget to obtain user-provided drawings or signature.
@@ -128,35 +39,22 @@ class DrawWidget extends Widget {
         this.$widget = $(question.querySelector('.widget'));
 
         canvas = this.$widget[0].querySelector('.draw-widget__body__canvas');
-        this._handleResize(canvas);
-        this._resizeCanvas(canvas);
 
         if (this.props.load) {
             this._handleFiles(existingFilename);
         }
 
-        // This listener serves to capture a drawing when the submit button is clicked within [DELAY]
-        // milliseconds after the last stroke ended. Note that this could be the entire drawing/signature.
-        canvas.addEventListener('blur', this._forceUpdate.bind(this));
-
-        // We built a delay in saving on stroke "end", to avoid excessive updating
-        // This event does not fire on touchscreens for which we use the .hide-canvas-btn click
-        // to do the same thing.
-
         this.initialize = fileManager.init().then(() => {
-            that.pad = new SignaturePad(canvas, {
-                onEnd: () => {
-                    // keep replacing this timer so continuous drawing
-                    // doesn't update the value after every stroke.
-                    clearTimeout(that._updateWithDelay);
-                    that._updateWithDelay = setTimeout(
-                        that._updateValue.bind(that),
-                        DELAY
-                    );
-                },
+            this.pad = new ResizableSignaturePad(canvas, {
                 penColor: that.props.colors[0] || 'black',
             });
-            that.pad.off();
+
+            this.pad.addEventListener('change', () => {
+                this._updateValue();
+            });
+
+            this.pad.off();
+
             if (existingFilename) {
                 that.element.value = existingFilename;
 
@@ -167,6 +65,7 @@ class DrawWidget extends Widget {
 
             return true;
         });
+
         this.disable();
         this.initialize
             .then(() => {
@@ -191,28 +90,12 @@ class DrawWidget extends Widget {
                     .end()
                     .find('.draw-widget__undo')
                     .on('click', () => {
-                        const data = that.pad.toData();
-                        that.pad.clear();
-                        const fileInput =
-                            that.$widget[0].querySelector('input[type=file]');
-                        // that.element.dataset.loadedFileName will have been removed only after resetting
-                        const fileToLoad =
-                            fileInput && fileInput.files[0]
-                                ? fileInput.files[0]
-                                : that.element.dataset.loadedFileName;
-                        that._loadFileIntoPad(fileToLoad).then(() => {
-                            that.pad.updateData(data.slice(0, -1));
-                            that._updateValue();
-                            that.pad.penColor = that.$widget.find(
-                                '.draw-widget__colorpicker .current'
-                            )[0].dataset.color;
-                        });
+                        this.pad.undoStroke();
                     })
                     .end()
                     .find('.show-canvas-btn')
                     .on('click', () => {
                         that.$widget.addClass('full-screen');
-                        that._resizeCanvas(canvas);
                         that.enable();
 
                         return false;
@@ -222,47 +105,21 @@ class DrawWidget extends Widget {
                     .on('click', () => {
                         that.$widget.removeClass('full-screen');
                         that.pad.off();
-                        that._forceUpdate();
-                        that._resizeCanvas(canvas);
+                        that._updateValue();
 
                         return false;
                     })
                     .click();
 
-                $(canvas).on('canvasreload', () => {
-                    if (that.cache) {
-                        that.pad
-                            .fromObjectURL(that.cache)
-                            .then(that._updateValue.bind(that, false));
-                    }
-                });
                 that.enable();
             })
             .catch((error) => {
                 that._showFeedback(error.message);
             });
 
-        $(this.element)
-            .on('applyfocus', () => {
-                canvas.focus();
-            })
-            .closest('[role="page"]')
-            .on(events.PageFlip().type, () => {
-                // When an existing value is loaded into the canvas and is not
-                // the first page, it won't become visible until the canvas is clicked
-                // or the window is resized:
-                // https://github.com/kobotoolbox/enketo-express/issues/895
-                // This also fixes a similar issue with an empty canvas:
-                // https://github.com/kobotoolbox/enketo-express/issues/844
-                that._resizeCanvas(canvas);
-            });
-    }
-
-    _forceUpdate() {
-        if (this._updateWithDelay) {
-            clearTimeout(this._updateWithDelay);
-            this._updateValue();
-        }
+        $(this.element).on('applyfocus', () => {
+            canvas.focus();
+        });
     }
 
     // All this is copied from the file-picker widget
@@ -307,7 +164,7 @@ class DrawWidget extends Widget {
                     // Process the file
                     if (!fileManager.isTooLarge(file)) {
                         // Update UI
-                        that.pad.clear();
+                        that.pad.reset();
                         that._loadFileIntoPad(this.files[0]).then(() => {
                             that._updateValue.call(that);
                             that._showFileName(file.name);
@@ -435,25 +292,14 @@ class DrawWidget extends Widget {
         return fragment;
     }
 
-    /**
-     * Updates value
-     *
-     * @param {boolean} [changed] - whether the value has changed
-     */
-    _updateValue(changed = true) {
-        const newValue = this.pad.toDataURL();
+    async _updateValue() {
+        const newValue = await this.pad.toObjectURL();
+
         if (this.value !== newValue) {
             const now = new Date();
             const postfix = `-${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
             this.element.dataset.filenamePostfix = postfix;
-            // Note that this.element has become a text input.
-            // When a default file is loaded this function is called by the canvasreload handler, but the user hasn't changed anything.
-            // We want to make sure the model remains unchanged in that case.
-            if (changed) {
-                this.originalInputValue = this.props.filename;
-            }
-            // pad.toData() doesn't seem to work when redrawing on a smaller canvas. Doesn't scale.
-            // pad.toDataURL() is crude and memory-heavy but the advantage is that it will also work for appearance=annotate
+            this.originalInputValue = this.props.filename;
             this.value = newValue;
             this._updateDownloadLink(this.value);
         }
@@ -479,7 +325,7 @@ class DrawWidget extends Widget {
                     if (!confirmed) {
                         return;
                     }
-                    that.pad.clear();
+                    that.pad.reset();
                     that.cache = null;
                     // Only upon reset is loadedFileName removed, so that "undo" will work
                     // for drawings loaded from storage.
@@ -487,11 +333,7 @@ class DrawWidget extends Widget {
                     delete that.element.dataset.loadedUrl;
                     that.element.dataset.filenamePostfix = '';
                     $(that.element).val('').trigger('change');
-                    if (that._updateWithDelay) {
-                        // This ensures that an emptied canvas will not be considered a drawing to be captured
-                        // in _forceUpdate, e.g. after the blur event fires on an empty canvas see issue #924
-                        that._updateWithDelay = null;
-                    }
+
                     // Annotate file input
                     that.$widget
                         .find('input[type=file]')
@@ -505,36 +347,36 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @param {string|File} file - Either a filename or a file.
-     * @return {Promise} promise resolving with a string
+     * @param {string | File} file - Either a filename or a file.
+     * @return {Promise<string>} promise resolving with a string
      */
-    _loadFileIntoPad(file) {
-        const that = this;
+    async _loadFileIntoPad(file) {
         if (!file) {
-            return Promise.resolve('');
-        }
-        if (
-            typeof file === 'string' &&
-            file.startsWith('jr://') &&
-            this.element.dataset.loadedUrl
-        ) {
-            file = this.element.dataset.loadedUrl;
+            this.pad.clearBaseImage();
+
+            return '';
         }
 
-        return fileManager
-            .getObjectUrl(file)
-            .then(that.pad.fromObjectURL.bind(that.pad))
-            .then((objectUrl) => {
-                that.cache = objectUrl;
+        try {
+            if (
+                typeof file === 'string' &&
+                file.startsWith('jr://') &&
+                this.element.dataset.loadedUrl
+            ) {
+                file = this.element.dataset.loadedUrl;
+            }
 
-                return objectUrl;
-            })
-            .catch(() => {
-                that._showFeedback(
-                    'File could not be loaded (leave unchanged if already submitted and you want to preserve it).',
-                    'error'
-                );
-            });
+            this.pad.reset();
+
+            await this.pad.setBaseImage(file);
+
+            return this.pad.toObjectURL();
+        } catch {
+            this._showFeedback(
+                'File could not be loaded (leave unchanged if already submitted and you want to preserve it).',
+                'error'
+            );
+        }
     }
 
     /**
@@ -568,41 +410,6 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * Forces update and resizes canvas on window resize
-     *
-     * @param {Element} canvas - Canvas element
-     */
-    _handleResize(canvas) {
-        const that = this;
-        $(window).on('resize', () => {
-            // that._forceUpdate();
-            that._resizeCanvas(canvas);
-        });
-    }
-
-    /**
-     * Adjust canvas coordinate space taking into account pixel ratio,
-     * to make it look crisp on mobile devices.
-     * This also causes canvas to be cleared.
-     *
-     * @param {Element} canvas - Canvas element
-     */
-    _resizeCanvas(canvas) {
-        // Use a little trick to avoid resizing currently-hidden canvases
-        // https://github.com/enketo/enketo-core/issues/605
-        if (canvas.offsetWidth > 0) {
-            // When zoomed out to less than 100%, for some very strange reason,
-            // some browsers report devicePixelRatio as less than 1
-            // and only part of the canvas is cleared then.
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext('2d').scale(ratio, ratio);
-            $(canvas).trigger('canvasreload');
-        }
-    }
-
-    /**
      * Disables widget
      */
     disable() {
@@ -632,13 +439,6 @@ class DrawWidget extends Widget {
                 canvas.classList.remove('disabled');
                 that.$widget.find('.btn-reset').prop('disabled', false);
             }
-            // https://github.com/enketo/enketo-core/issues/450
-            // When loading a question with a relevant, it is invisible
-            // until branch.js removes the "pre-init" class. The rendering of the
-            // canvas may therefore still be ongoing when this widget is instantiated.
-            // For that reason we call _resizeCanvas when enable is called to make
-            // sure the canvas is rendered properly.
-            that._resizeCanvas(canvas);
         });
     }
 

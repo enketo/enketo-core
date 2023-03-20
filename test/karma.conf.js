@@ -30,6 +30,10 @@ module.exports = (config) => {
                 included: false,
             },
             {
+                pattern: 'test/fixtures/**/*.*',
+                included: false,
+            },
+            {
                 pattern: 'config.js',
                 included: false,
             },
