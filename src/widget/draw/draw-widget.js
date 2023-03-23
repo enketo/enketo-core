@@ -357,18 +357,28 @@ class DrawWidget extends Widget {
             return '';
         }
 
+        let fileOrURL = file;
+
+        if (typeof file === 'string') {
+            try {
+                fileOrURL = await fileManager.getFileUrl(file);
+            } catch {
+                // Ignore error, attempt to load
+            }
+        }
+
         try {
             if (
-                typeof file === 'string' &&
-                file.startsWith('jr://') &&
+                typeof fileOrURL === 'string' &&
+                fileOrURL.startsWith('jr://') &&
                 this.element.dataset.loadedUrl
             ) {
-                file = this.element.dataset.loadedUrl;
+                fileOrURL = this.element.dataset.loadedUrl;
             }
 
             this.pad.reset();
 
-            await this.pad.setBaseImage(file);
+            await this.pad.setBaseImage(fileOrURL);
 
             return this.pad.toObjectURL();
         } catch {
