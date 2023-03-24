@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [7.2.2] - 2023-03-23
+
+-   Fix: ensure instance attachments are loaded in draw widget (#967)
+
 ## [7.2.1] - 2023-03-21
 
 -   Fix: revert jQuery upgrade to address regressions accessing jQuery extensions in Enketo Express (#964)
