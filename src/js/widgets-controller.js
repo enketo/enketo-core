@@ -9,7 +9,12 @@ import events from './event';
 
 const widgets = _widgets.filter((widget) => widget.selector);
 let options;
-let formHtml;
+
+/** @type {import('./form').Form} */
+let form;
+
+/** @type {HTMLFormElement} */
+let formElement;
 
 /**
  * Initializes widgets
@@ -27,9 +32,10 @@ function init($group, opts = {}) {
     }
 
     options = opts;
-    formHtml = this.form.view.html; // not sure why this is only available in init
+    form = this.form;
+    formElement = this.form.view.html; // not sure why this is only available in init
 
-    const group = $group && $group.length ? $group[0] : formHtml;
+    const group = $group && $group.length ? $group[0] : formElement;
 
     widgets.forEach((Widget) => {
         _instantiate(Widget, group);
@@ -85,7 +91,7 @@ function disable(group) {
 function _getElements(group, selector) {
     if (selector) {
         if (selector === 'form') {
-            return [formHtml];
+            return [formElement];
         }
         // e.g. if the widget selector starts at .question level (e.g. ".or-appearance-draw input")
         if (group.classList.contains('question')) {
@@ -105,7 +111,7 @@ function _getElements(group, selector) {
 /**
  * Instantiate a widget on a group (whole form or newly cloned repeat)
  *
- * @param {object} Widget - The widget to instantiate
+ * @param {typeof import('./widget').default} Widget
  * @param {Element} group - The element inside which widgets need to be created.
  */
 function _instantiate(Widget, group) {
@@ -128,6 +134,8 @@ function _instantiate(Widget, group) {
         return;
     }
 
+    Widget.globalInit(form, formElement);
+
     new Collection(elements).instantiate(Widget, opts);
 
     _setLangChangeListener(Widget, elements);
@@ -146,7 +154,7 @@ function _instantiate(Widget, group) {
 function _setLangChangeListener(Widget, els) {
     // call update for all widgets when language changes
     if (els.length > 0) {
-        formHtml.addEventListener(events.ChangeLanguage().type, () => {
+        formElement.addEventListener(events.ChangeLanguage().type, () => {
             new Collection(els).update(Widget);
         });
     }

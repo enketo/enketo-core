@@ -9,6 +9,15 @@ const range = document.createRange();
  */
 class Widget {
     /**
+     * @param {import('./form').Form} form
+     * @param {HTMLFormElement} rootElement
+     */
+    static globalInit(form, rootElement) {
+        this.form = form;
+        this.rootElement = rootElement;
+    }
+
+    /**
      * @class
      * @param {Element} element - The DOM element the widget is applied on
      * @param {(boolean|{touch: boolean})} [options] - Options passed to the widget during instantiation
