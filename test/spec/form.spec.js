@@ -1999,6 +1999,170 @@ describe('Adding tasks to the default evaluation cascade', () => {
     });
 });
 
+describe('Focus', () => {
+    /** @type {Form)} */
+    let form;
+
+    /** @type {HTMLFormElement} */
+    let formElement;
+
+    /** @type {HTMLElement} */
+    let nextPageButton;
+
+    /**
+     * @param {string} fieldName
+     * @param {number} index
+     */
+    const getSelectButton = (fieldName, index = 0) => {
+        const input = formElement.querySelectorAll(`*[name="${fieldName}"]`)[
+            index
+        ];
+
+        return input.closest('.question').querySelector('.btn.dropdown-toggle');
+    };
+
+    beforeEach(() => {
+        const formFooter = document.createElement('section');
+
+        form = loadForm('focus.xml');
+        formElement = form.view.html;
+        formFooter.classList.add('form-footer');
+        document.body.append(formElement, formFooter);
+        nextPageButton = document.createElement('a');
+        nextPageButton.href = '#';
+        nextPageButton.type = 'button';
+        nextPageButton.classList.add(
+            'btn',
+            'btn-primary',
+            'next-page',
+            'disabled'
+        );
+        formFooter.append(nextPageButton);
+
+        const loadErrors = form.init();
+
+        expect(loadErrors).to.deep.equal(
+            [],
+            JSON.stringify(loadErrors, null, 2)
+        );
+    });
+
+    afterEach(() => {
+        form.resetView();
+        formElement?.remove();
+    });
+
+    it('focuses the first field on load', () => {
+        const input = formElement.querySelector(
+            'input[name="/data/field-page"]'
+        );
+
+        expect(document.activeElement).to.equal(input);
+    });
+
+    const navigations = [
+        {
+            navigationMethod: 'pages.flipToPageContaining',
+            callback:
+                /** @param {HTMLElement} element */
+                (element) => form.pages.flipToPageContaining($(element)),
+        },
+        {
+            navigationMethod: 'form.goToTarget',
+            callback:
+                /** @param {HTMLElement} element */
+                (element) =>
+                    form.goToTarget(
+                        element.closest('.repeat') ??
+                            element.closest('.group') ??
+                            element.closest('.question')
+                    ),
+        },
+    ];
+
+    navigations.forEach(({ navigationMethod, callback }) => {
+        describe(`with navigation method ${navigationMethod}`, () => {
+            it('focuses a select field toggle button when advancing to its page', () => {
+                const selectButton = getSelectButton('/data/select-page');
+                const selectQuestion = selectButton.closest('.question');
+
+                callback(selectQuestion);
+
+                expect(document.activeElement).to.equal(selectButton);
+            });
+
+            it('focuses a select field toggle button within a group after readonly fields', () => {
+                const selectButton = getSelectButton(
+                    '/data/group-page/group-field'
+                );
+                const selectQuestion = selectButton.closest('.question');
+
+                callback(selectQuestion);
+
+                expect(document.activeElement).to.equal(selectButton);
+            });
+
+            it("focuses a select field toggle button within a grouped field-list's repeat after readonly fields", () => {
+                const selectButton = getSelectButton(
+                    '/data/repeats-page/repeats-field'
+                );
+                const selectQuestion = selectButton.closest('.question');
+
+                callback(selectQuestion);
+
+                expect(document.activeElement).to.equal(selectButton);
+            });
+
+            it("focuses a select field toggle button within a grouped field-list's repeat clone after readonly fields", () => {
+                const addRepeatButton = formElement.querySelector(
+                    '.or-repeat-info[data-name="/data/repeats-page"] .add-repeat-btn'
+                );
+
+                addRepeatButton.click();
+
+                const selectButton = getSelectButton(
+                    '/data/repeats-page/repeats-field',
+                    1
+                );
+                const selectQuestion = selectButton.closest('.question');
+
+                callback(selectQuestion);
+
+                expect(document.activeElement).to.equal(selectButton);
+            });
+
+            it('focuses a select field toggle button within a repeat instance field-list after readonly fields', () => {
+                const selectButton = getSelectButton(
+                    '/data/repeat-page/repeat-field'
+                );
+                const selectQuestion = selectButton.closest('.question');
+
+                callback(selectQuestion);
+
+                expect(document.activeElement).to.equal(selectButton);
+            });
+
+            it('focuses a select field toggle button within a repeat instance field-list clone after readonly fields', () => {
+                const addRepeatButton = formElement.querySelector(
+                    '.or-repeat-info[data-name="/data/repeat-page"] .add-repeat-btn'
+                );
+
+                addRepeatButton.click();
+
+                const selectButton = getSelectButton(
+                    '/data/repeat-page/repeat-field',
+                    1
+                );
+                const selectQuestion = selectButton.closest('.question');
+
+                callback(selectQuestion);
+
+                expect(document.activeElement).to.equal(selectButton);
+            });
+        });
+    });
+});
+
 function mockChoiceNameForm() {
     const val = '__MOCK_MODEL_VALUE__';
 
