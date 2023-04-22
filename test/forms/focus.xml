@@ -13,6 +13,7 @@
             <instance>
                 <data>
                     <field-page />
+                    <relevant-page />
                     <select-page />
                     <group-page>
                         <group-readonly-empty-field />
@@ -39,6 +40,7 @@
             </instance>
 
             <bind nodeset="/data/field-page" />
+            <bind nodeset="/data/relevant-page" relevant="/data/field-page = '1'" />
             <bind nodeset="/data/select-page" />
 
             <bind nodeset="/data/group-page/group-readonly-empty-field" readonly="true()" />
@@ -62,6 +64,10 @@
     <h:body class="pages">
         <input ref="/data/field-page">
             <label>Field page</label>
+        </input>
+
+        <input ref="/data/relevant-page">
+            <label>Relevant page</label>
         </input>
 
         <select ref="/data/select-page" appearance="w6 minimal">

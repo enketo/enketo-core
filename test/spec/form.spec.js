@@ -2091,6 +2091,23 @@ describe('Focus', () => {
                 expect(document.activeElement).to.equal(selectButton);
             });
 
+            it('focuses a newly relevant field when advancing to its page', () => {
+                const firstInput = formElement.querySelector(
+                    'input[name="/data/field-page"]'
+                );
+
+                firstInput.value = '1';
+                $(firstInput).trigger('change');
+
+                const relevantInput = formElement.querySelector(
+                    'input[name="/data/relevant-page"]'
+                );
+
+                callback(relevantInput);
+
+                expect(document.activeElement).to.equal(relevantInput);
+            });
+
             it('focuses a select field toggle button within a group after readonly fields', () => {
                 const selectButton = getSelectButton(
                     '/data/group-page/group-field'

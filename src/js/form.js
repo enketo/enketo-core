@@ -1475,14 +1475,18 @@ Form.prototype.goToTarget = function (target, options = {}) {
         }
         // Scroll to element
         target.scrollIntoView();
-        // Focus on the first non .ignore form control
+
+        // Focus on the first non .ignore form control which is not currently readonly.
         // If the element is hidden (e.g. because it's been replaced by a widget),
         // the focus event will not fire, so we also trigger an applyfocus event that widgets can listen for.
         const input = target.querySelector(
             'input:not(.ignore):not([readonly]), textarea:not(.ignore):not([readonly]), select:not(.ignore):not([readonly])'
         );
-        input.focus();
-        input.dispatchEvent(events.ApplyFocus());
+
+        if (input != null) {
+            input.focus();
+            input.dispatchEvent(events.ApplyFocus());
+        }
     }
 
     return !!target;

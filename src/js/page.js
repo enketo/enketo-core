@@ -219,7 +219,7 @@ export default {
                         );
                         if (destItem && destItem.element) {
                             const destEl = destItem.element;
-                            that.form.goToTarget(destEl);
+                            that.form.goToTarget(destEl, { isPageFlip: true });
                         }
                     }
                 }
@@ -407,7 +407,7 @@ export default {
             '.or'
         ).forEach((el) => el.classList.add('contains-current'));
         this.current = pageEl;
-        this.form.goToTarget(pageEl);
+        this.form.goToTarget(pageEl, { isPageFlip: true });
     },
     /**
      * Switches to a page
