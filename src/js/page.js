@@ -219,7 +219,7 @@ export default {
                         );
                         if (destItem && destItem.element) {
                             const destEl = destItem.element;
-                            that.form.goToTarget(destEl);
+                            that.form.goToTarget(destEl, { isPageFlip: true });
                         }
                     }
                 }
@@ -407,6 +407,7 @@ export default {
             '.or'
         ).forEach((el) => el.classList.add('contains-current'));
         this.current = pageEl;
+        this.form.goToTarget(pageEl, { isPageFlip: true });
     },
     /**
      * Switches to a page
@@ -430,12 +431,14 @@ export default {
                 this._focusOnFirstQuestion(pageEl);
                 this._toggleButtons(newIndex);
                 pageEl.dispatchEvent(events.PageFlip());
+                this.form.goToTarget(pageEl, { isPageFlip: true });
             }
         } else if (pageEl) {
             this._setToCurrent(pageEl);
             this._focusOnFirstQuestion(pageEl);
             this._toggleButtons(newIndex);
             pageEl.dispatchEvent(events.PageFlip());
+            this.form.goToTarget(pageEl, { isPageFlip: true });
             pageEl.setAttribute('tabindex', 1);
         }
     },

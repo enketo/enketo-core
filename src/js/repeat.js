@@ -443,6 +443,10 @@ export default {
             // Initialize widgets in clone after default values have been set
             if (this.form.widgetsInitialized) {
                 this.form.widgets.init($(clone), this.form.options);
+
+                if (trigger === 'user' && i === 0) {
+                    this.form.goToTarget(clone);
+                }
             }
             // now create the first instance of any nested repeats if necessary
             clone

@@ -13,6 +13,7 @@ import {
     getChild,
     closestAncestorUntil,
     getSiblingElement,
+    scrollIntoViewIfNeeded,
 } from './dom-utils';
 import { initTimeLocalization } from './format';
 import inputHelper from './input';
@@ -474,6 +475,8 @@ Form.prototype.init = function () {
             this.view.$.addClass('print-relevant-only');
         }
 
+        this.goToTarget(this.view.html);
+
         setTimeout(() => {
             that.progress.update();
         }, 0);
@@ -486,7 +489,7 @@ Form.prototype.init = function () {
         loadErrors.push(`${e.name}: ${e.message}`);
     }
 
-    document.querySelector('body').scrollIntoView();
+    document.body.scrollIntoView();
 
     return loadErrors;
 };
@@ -1444,14 +1447,20 @@ Form.prototype.getGoToTarget = function (path) {
 };
 
 /**
+ * @typedef GoToTargetOptions
+ * @property {boolean} [isPageFlip]
+ */
+
+/**
  * Scrolls to an HTML question or group element, flips to the page it is on and focuses on the nearest form control.
  *
  * @param {HTMLElement} target - An HTML question or group element to scroll to
+ * @param {GoToTargetOptions} [options]
  * @return {boolean} whether target found
  */
-Form.prototype.goToTarget = function (target) {
+Form.prototype.goToTarget = function (target, options = {}) {
     if (target) {
-        if (this.pages.active) {
+        if (this.pages.active && !options.isPageFlip) {
             // Flip to page
             this.pages.flipToPageContaining($(target));
         }
@@ -1465,16 +1474,22 @@ Form.prototype.goToTarget = function (target) {
             // It is up to the apps to decide what to do with this event.
             target.dispatchEvent(events.GoToIrrelevant());
         }
-        // Scroll to element
-        target.scrollIntoView();
-        // Focus on the first non .ignore form control
+
+        // Focus on the first non .ignore form control which is not currently readonly.
         // If the element is hidden (e.g. because it's been replaced by a widget),
         // the focus event will not fire, so we also trigger an applyfocus event that widgets can listen for.
         const input = target.querySelector(
-            'input:not(.ignore), textarea:not(.ignore), select:not(.ignore)'
+            'input:not(.ignore):not([readonly]), textarea:not(.ignore):not([readonly]), select:not(.ignore):not([readonly])'
         );
-        input.focus();
-        input.dispatchEvent(events.ApplyFocus());
+
+        if (input != null) {
+            input.focus();
+            input.dispatchEvent(events.ApplyFocus());
+        }
+
+        // Scroll to element if needed. This will generally be a noop unless no
+        // focusable control was found (e.g. readonly question in pages mode).
+        scrollIntoViewIfNeeded(target);
     }
 
     return !!target;

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:enk="http://enketo.org/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:oc="http://openclinica.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Focus</h:title>
+        <model>
+            <instance>
+                <data>
+                    <field-page />
+                    <relevant-page />
+                    <select-page />
+                    <group-page>
+                        <group-readonly-empty-field />
+                        <group-readonly-calc-field />
+                        <group-field />
+                        <group-field2 />
+                    </group-page>
+                    <repeats-page>
+                        <repeats-readonly-empty-field />
+                        <repeats-readonly-calc-field />
+                        <repeats-field />
+                        <repeats-field2 />
+                    </repeats-page>
+                    <repeat-page>
+                        <repeat-readonly-empty-field />
+                        <repeat-readonly-calc-field />
+                        <repeat-field />
+                        <repeat-field2 />
+                    </repeat-page>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+
+            <bind nodeset="/data/field-page" />
+            <bind nodeset="/data/relevant-page" relevant="/data/field-page = '1'" />
+            <bind nodeset="/data/select-page" />
+
+            <bind nodeset="/data/group-page/group-readonly-empty-field" readonly="true()" />
+            <bind nodeset="/data/group-page/group-readonly-calc-field" readonly="true()" calculate="'calculated'" />
+            <bind nodeset="/data/group-page/group-field" />
+            <bind nodeset="/data/group-page/group-field2" />
+
+            <bind nodeset="/data/repeats-page/repeats-readonly-empty-field" readonly="true()" />
+            <bind nodeset="/data/repeats-page/repeats-readonly-calc-field" readonly="true()" calculate="'calculated'" />
+            <bind nodeset="/data/repeats-page/repeats-field" />
+            <bind nodeset="/data/repeats-page/repeats-field2" />
+
+            <bind nodeset="/data/repeat-page/repeat-readonly-empty-field" readonly="true()" />
+            <bind nodeset="/data/repeat-page/repeat-readonly-calc-field" readonly="true()" calculate="'calculated'" />
+            <bind nodeset="/data/repeat-page/repeat-field" />
+            <bind nodeset="/data/repeat-page/repeat-field2" />
+
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body class="pages">
+        <input ref="/data/field-page">
+            <label>Field page</label>
+        </input>
+
+        <input ref="/data/relevant-page">
+            <label>Relevant page</label>
+        </input>
+
+        <select ref="/data/select-page" appearance="w6 minimal">
+            <label>Select page</label>
+            <item>
+                <value>1</value>
+                <label>One</label>
+            </item>
+        </select>
+
+        <group ref="/data/group-page" appearance="field-list">
+            <label>Group page</label>
+
+            <input ref="/data/group-page/group-readonly-empty-field">
+                <label>Readonly (empty = hidden) field</label>
+            </input>
+            <input ref="/data/group-page/group-readonly-calc-field">
+                <label>Readonly (calculated) field</label>
+            </input>
+
+            <select ref="/data/group-page/group-field" appearance="w6 minimal">
+                <label>Group field</label>
+                <item>
+                    <value>1</value>
+                    <label>One</label>
+                </item>
+            </select>
+
+            <select ref="/data/group-page/group-field2" appearance="w6 minimal">
+                <label>Group field 2</label>
+                <item>
+                    <value>1</value>
+                    <label>One</label>
+                </item>
+            </select>
+        </group>
+
+        <group ref="/data/repeats-page" appearance="field-list">
+            <label>Repeats (grouped in field-list) page</label>
+
+            <repeat nodeset="/data/repeats-page">
+                <input ref="/data/repeats-page/repeats-readonly-empty-field">
+                    <label>Readonly (empty = hidden) field</label>
+                </input>
+                <input ref="/data/repeats-page/repeats-readonly-calc-field">
+                    <label>Readonly (calculated) field</label>
+                </input>
+
+                <select ref="/data/repeats-page/repeats-field" appearance="w6 minimal">
+                    <label>Repeats field</label>
+                    <item>
+                        <value>1</value>
+                        <label>One</label>
+                    </item>
+                </select>
+
+                <select ref="/data/repeats-page/repeats-field2" appearance="w6 minimal">
+                    <label>Repeats field 2</label>
+                    <item>
+                        <value>1</value>
+                        <label>One</label>
+                    </item>
+                </select>
+            </repeat>
+        </group>
+
+        <group ref="/data/repeat-page">
+            <label>Repeat (self field-list) page</label>
+
+            <repeat nodeset="/data/repeat-page" appearance="field-list">
+                <input ref="/data/repeat-page/repeat-readonly-empty-field">
+                    <label>Readonly (empty = hidden) field</label>
+                </input>
+                <input ref="/data/repeat-page/repeat-readonly-calc-field">
+                    <label>Readonly (calculated) field</label>
+                </input>
+
+                <select ref="/data/repeat-page/repeat-field" appearance="w6 minimal">
+                    <label>Repeat field</label>
+                    <item>
+                        <value>1</value>
+                        <label>One</label>
+                    </item>
+                </select>
+
+                <select ref="/data/repeat-page/repeat-field2" appearance="w6 minimal">
+                    <label>Repeat field 2</label>
+                    <item>
+                        <value>1</value>
+                        <label>One</label>
+                    </item>
+                </select>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
