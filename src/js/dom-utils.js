@@ -463,6 +463,34 @@ class MutationsTracker {
     }
 }
 
+/** @type {HTMLElement | null} */
+let scrollIntoViewTarget = null;
+
+const intersectionObserver = new IntersectionObserver((records) => {
+    for (const { target, isIntersecting } of records) {
+        if (target === scrollIntoViewTarget && !isIntersecting) {
+            target.scrollIntoView({
+                block: 'nearest',
+                inline: 'nearest',
+            });
+        }
+
+        intersectionObserver.unobserve(target);
+    }
+});
+
+/**
+ * Roughly equivalent to the non-standard
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded | Element.scrollIntoViewIfNeeded},
+ * but scrolls to the nearest edges of the viewport.
+ *
+ * @param {HTMLElement} element
+ */
+const scrollIntoViewIfNeeded = (element) => {
+    scrollIntoViewTarget = element;
+    intersectionObserver.observe(element);
+};
+
 export {
     /**
      * @static
@@ -484,4 +512,5 @@ export {
     closestAncestorUntil,
     empty,
     MutationsTracker,
+    scrollIntoViewIfNeeded,
 };

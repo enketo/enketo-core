@@ -13,6 +13,7 @@ import {
     getChild,
     closestAncestorUntil,
     getSiblingElement,
+    scrollIntoViewIfNeeded,
 } from './dom-utils';
 import { initTimeLocalization } from './format';
 import inputHelper from './input';
@@ -488,7 +489,7 @@ Form.prototype.init = function () {
         loadErrors.push(`${e.name}: ${e.message}`);
     }
 
-    document.querySelector('body').scrollIntoView();
+    document.body.scrollIntoView();
 
     return loadErrors;
 };
@@ -1473,8 +1474,6 @@ Form.prototype.goToTarget = function (target, options = {}) {
             // It is up to the apps to decide what to do with this event.
             target.dispatchEvent(events.GoToIrrelevant());
         }
-        // Scroll to element
-        target.scrollIntoView();
 
         // Focus on the first non .ignore form control which is not currently readonly.
         // If the element is hidden (e.g. because it's been replaced by a widget),
@@ -1487,6 +1486,10 @@ Form.prototype.goToTarget = function (target, options = {}) {
             input.focus();
             input.dispatchEvent(events.ApplyFocus());
         }
+
+        // Scroll to element if needed. This will generally be a noop unless no
+        // focusable control was found (e.g. readonly question in pages mode).
+        scrollIntoViewIfNeeded(target);
     }
 
     return !!target;
