@@ -17,6 +17,15 @@ class Widget {
         this.rootElement = rootElement;
     }
 
+    static globalReset() {
+        const { form, rootElement } = this;
+
+        delete this.form;
+        delete this.rootElement;
+
+        return { form, rootElement };
+    }
+
     /**
      * @class
      * @param {Element} element - The DOM element the widget is applied on

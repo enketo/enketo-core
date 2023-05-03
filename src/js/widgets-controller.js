@@ -134,7 +134,9 @@ function _instantiate(Widget, group) {
         return;
     }
 
-    Widget.globalInit(form, formElement);
+    if (group === formElement) {
+        Widget.globalInit(form, formElement);
+    }
 
     new Collection(elements).instantiate(Widget, opts);
 
@@ -142,6 +144,12 @@ function _instantiate(Widget, group) {
     _setOptionChangeListener(Widget, elements);
     _setValChangeListener(Widget, elements);
 }
+
+const reset = () => {
+    widgets.forEach((Widget) => {
+        Widget.globalReset();
+    });
+};
 
 /**
  * Calls widget('update') when the language changes. This function is called upon initialization,
@@ -276,4 +284,5 @@ export default {
     init,
     enable,
     disable,
+    reset,
 };

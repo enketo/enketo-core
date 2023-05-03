@@ -95,6 +95,29 @@ export default class DecimalInput extends NumberInput {
         return getValidityPattern(this.languages);
     }
 
+    static languageChanged = () => {
+        this._languages = null;
+
+        const patternStr = this.pattern.source;
+
+        Array.from(decimalInputs.values()).forEach((decimalInput) => {
+            // Important: this value may become invalid if it isn't accessed
+            // before setting `lang`. This repros in Firefox if:
+            //
+            // 1. Your default language is English
+            // 2. Set a decimal value
+            // 3. Switch to French
+            // 4. Switch back to English
+            const { element, question } = decimalInput;
+            const { valueAsNumber } = element;
+
+            question.setAttribute('lang', this.language);
+            element.setAttribute('pattern', patternStr);
+            decimalInput.setFormattedValue(valueAsNumber);
+            decimalInput.setValidity();
+        });
+    };
+
     /**
      * @param {import('./form').Form} form
      * @param {HTMLFormElement} rootElement
@@ -102,32 +125,25 @@ export default class DecimalInput extends NumberInput {
     static globalInit(form, rootElement) {
         super.globalInit(form, rootElement);
 
-        const languageChanged = () => {
-            const patternStr = this.pattern.source;
-
-            Array.from(decimalInputs.values()).forEach((decimalInput) => {
-                // Important: this value may become invalid if it isn't accessed
-                // before setting `lang`. This repros in Firefox if:
-                //
-                // 1. Your default language is English
-                // 2. Set a decimal value
-                // 3. Switch to French
-                // 4. Switch back to English
-                const { element, question } = decimalInput;
-                const { valueAsNumber } = element;
-
-                question.setAttribute('lang', this.language);
-                element.setAttribute('pattern', patternStr);
-                decimalInput.setFormattedValue(valueAsNumber);
-                decimalInput.setValidity();
-            });
-        };
-
         rootElement.addEventListener(
             events.ChangeLanguage().type,
-            languageChanged
+            this.languageChanged
         );
-        window.addEventListener('languagechange', languageChanged);
+        window.addEventListener('languagechange', this.languageChanged);
+    }
+
+    static globalReset() {
+        const { rootElement } = super.globalReset();
+
+        if (rootElement) {
+            rootElement.removeEventListener(
+                events.ChangeLanguage().type,
+                this.languageChanged
+            );
+            window.removeEventListener('languagechange', this.languageChanged);
+        }
+
+        this._languages = null;
     }
 
     /**
