@@ -1,6 +1,19 @@
 import NumberInput from './number-input';
 
 export default class IntegerInput extends NumberInput {
+    static languageChanged() {
+        return super.languageChanged.call(this);
+    }
+
+    /**
+     * @param {import('./form').Form} form
+     * @param {HTMLFormElement} rootElement
+     */
+    static globalInit(form, rootElement) {
+        this.languageChanged = this.languageChanged.bind(this);
+        super.globalInit(form, rootElement);
+    }
+
     static selector = '.question input[type="number"][data-type-xml="int"]';
 
     static characterPattern = /[-0-9]/;
@@ -13,11 +26,5 @@ export default class IntegerInput extends NumberInput {
 
     set value(value) {
         super.value = value;
-    }
-
-    constructor(input, options) {
-        super(input, options);
-
-        input.setAttribute('pattern', this.constructor.pattern.source);
     }
 }

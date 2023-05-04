@@ -1,5 +1,9 @@
+import events from '../../js/event';
 import { t } from '../../js/fake-translator';
 import Widget from '../../js/widget';
+
+/** @type {Set<NumberInput>} */
+const numberInputInstances = new Set();
 
 /** @type {WeakMap<HTMLInputElement, HTMLElement>} */
 const questionsByInput = new WeakMap();
@@ -26,6 +30,58 @@ const getQuestion = (input) => {
  * @extends {Widget<HTMLInputElement>}
  */
 class NumberInput extends Widget {
+    static languageChanged() {
+        this._languages = null;
+
+        const { language, pattern } = this;
+        const patternStr = pattern.source;
+
+        Array.from(numberInputInstances.values()).forEach((instance) => {
+            // Important: this value may become invalid if it isn't accessed
+            // before setting `lang`. This repros in Firefox if:
+            //
+            // 1. Your default language is English
+            // 2. Set a decimal value
+            // 3. Switch to French
+            // 4. Switch back to English
+            const { element, question } = instance;
+            const { valueAsNumber } = element;
+
+            question.setAttribute('lang', language);
+            element.setAttribute('pattern', patternStr);
+            instance.setFormattedValue(valueAsNumber);
+            instance.setValidity();
+        });
+    }
+
+    /**
+     * @param {import('./form').Form} form
+     * @param {HTMLFormElement} rootElement
+     */
+    static globalInit(form, rootElement) {
+        super.globalInit(form, rootElement);
+
+        rootElement.addEventListener(
+            events.ChangeLanguage().type,
+            this.languageChanged
+        );
+        window.addEventListener('languagechange', this.languageChanged);
+    }
+
+    static globalReset() {
+        const { rootElement } = super.globalReset();
+
+        if (rootElement) {
+            rootElement.removeEventListener(
+                events.ChangeLanguage().type,
+                this.languageChanged
+            );
+            window.removeEventListener('languagechange', this.languageChanged);
+        }
+
+        this._languages = null;
+    }
+
     /**
      * @abstract
      */
@@ -61,11 +117,42 @@ class NumberInput extends Widget {
         ].some((className) => question.classList.contains(className));
     }
 
+    /**
+     * @private
+     * @type {string[] | null}
+     */
+    _languages = null;
+
     static get languages() {
-        throw new Error('Not implemented');
+        let result = this._languages;
+
+        if (result != null) {
+            return result;
+        }
+
+        const { currentLanguage } = this.form;
+
+        let validFormLanguage;
+
+        try {
+            Intl.getCanonicalLocales(currentLanguage);
+
+            validFormLanguage = currentLanguage;
+        } catch {
+            // If this fails, the form's selected language is likely not a valid
+            // code and will cause all other `Intl` usage to fail.
+        }
+
+        result = [validFormLanguage, ...navigator.languages].filter(
+            (language) => language != null
+        );
+
+        this._languages = result;
+
+        return result;
     }
 
-    get language() {
+    static get language() {
         return this.languages[0] ?? navigator.language;
     }
 
@@ -96,9 +183,12 @@ class NumberInput extends Widget {
     constructor(input, options) {
         super(input, options);
 
+        numberInputInstances.add(this);
+
         const question = getQuestion(input);
         const message = document.createElement('div');
 
+        question.setAttribute('lang', this.constructor.language);
         message.classList.add('invalid-value-msg', 'active');
 
         question.append(message);

@@ -1,4 +1,3 @@
-import events from '../../js/event';
 import NumberInput from './number-input';
 
 /** @type {Map<string, Set<string>>} */
@@ -77,10 +76,20 @@ const getValidityPattern = (languages) => {
     return validityPattern;
 };
 
-/** @type {Set<DecimalInput>} */
-const decimalInputs = new Set();
-
 export default class DecimalInput extends NumberInput {
+    static languageChanged() {
+        return super.languageChanged.call(this);
+    }
+
+    /**
+     * @param {import('./form').Form} form
+     * @param {HTMLFormElement} rootElement
+     */
+    static globalInit(form, rootElement) {
+        this.languageChanged = this.languageChanged.bind(this);
+        super.globalInit(form, rootElement);
+    }
+
     static selector = '.question input[type="number"][data-type-xml="decimal"]';
 
     static get decimalCharacters() {
@@ -95,109 +104,11 @@ export default class DecimalInput extends NumberInput {
         return getValidityPattern(this.languages);
     }
 
-    static languageChanged = () => {
-        this._languages = null;
-
-        const patternStr = this.pattern.source;
-
-        Array.from(decimalInputs.values()).forEach((decimalInput) => {
-            // Important: this value may become invalid if it isn't accessed
-            // before setting `lang`. This repros in Firefox if:
-            //
-            // 1. Your default language is English
-            // 2. Set a decimal value
-            // 3. Switch to French
-            // 4. Switch back to English
-            const { element, question } = decimalInput;
-            const { valueAsNumber } = element;
-
-            question.setAttribute('lang', this.language);
-            element.setAttribute('pattern', patternStr);
-            decimalInput.setFormattedValue(valueAsNumber);
-            decimalInput.setValidity();
-        });
-    };
-
-    /**
-     * @param {import('./form').Form} form
-     * @param {HTMLFormElement} rootElement
-     */
-    static globalInit(form, rootElement) {
-        super.globalInit(form, rootElement);
-
-        rootElement.addEventListener(
-            events.ChangeLanguage().type,
-            this.languageChanged
-        );
-        window.addEventListener('languagechange', this.languageChanged);
-    }
-
-    static globalReset() {
-        const { rootElement } = super.globalReset();
-
-        if (rootElement) {
-            rootElement.removeEventListener(
-                events.ChangeLanguage().type,
-                this.languageChanged
-            );
-            window.removeEventListener('languagechange', this.languageChanged);
-        }
-
-        this._languages = null;
-    }
-
-    /**
-     * @private
-     * @type {string[] | null}
-     */
-    _languages = null;
-
-    static get languages() {
-        let result = this._languages;
-
-        if (result != null) {
-            return result;
-        }
-
-        const { currentLanguage } = this.form;
-
-        let validFormLanguage;
-
-        try {
-            Intl.getCanonicalLocales(currentLanguage);
-
-            validFormLanguage = currentLanguage;
-        } catch {
-            // If this fails, the form's selected language is likely not a valid
-            // code and will cause all other `Intl` usage to fail.
-        }
-
-        result = [validFormLanguage, ...navigator.languages].filter(
-            (language) => language != null
-        );
-
-        this._languages = result;
-
-        return result;
-    }
-
-    static get language() {
-        return this.languages[0] ?? navigator.language;
-    }
-
     get value() {
         return super.value;
     }
 
     set value(value) {
         super.value = value;
-    }
-
-    constructor(input, options) {
-        super(input, options);
-
-        decimalInputs.add(this);
-
-        this.question.setAttribute('lang', this.constructor.language);
     }
 }
