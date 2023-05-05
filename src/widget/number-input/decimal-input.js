@@ -27,28 +27,28 @@ const getDecimalCharacters = (languages) => {
     return characters;
 };
 
-/** @type {Map<string, RegExp>} */
-let characterPatternsByLanguage = new Map();
+/** @type {Map<string, Set<string>>} */
+let validCharactersByLanguage = new Map();
 
 /**
  * @param {string[]} languages
  */
-const getCharacterPattern = (languages) => {
+const getValidCharacters = (languages) => {
     const [language] = languages;
-    let characterPattern = characterPatternsByLanguage.get(language);
+    let validCharacters = validCharactersByLanguage.get(language);
 
-    if (characterPattern != null) {
-        return characterPattern;
+    if (validCharacters != null) {
+        return validCharacters;
     }
 
-    const decimalCharacters = getDecimalCharacters(language);
+    const locales = Intl.getCanonicalLocales(languages);
+    const formatter = Intl.NumberFormat(locales);
+    const number = 9.012345678;
 
-    characterPattern = new RegExp(
-        `[-0-9${Array.from(decimalCharacters).join('')}]`
-    );
-    characterPatternsByLanguage.set(language, characterPattern);
+    validCharacters = new Set(`${number}${formatter.format(number)}`.split(''));
+    validCharactersByLanguage.set(language, validCharacters);
 
-    return characterPattern;
+    return validCharacters;
 };
 
 /** @type {Map<string, RegExp>} */
@@ -92,7 +92,7 @@ export default class DecimalInput extends NumberInput {
      */
     static globalReset(form, rootElement) {
         decimalCharactersByLanguage = new Map();
-        characterPatternsByLanguage = new Map();
+        validCharactersByLanguage = new Map();
         validityPatternsByLanguage = new Map();
         super.globalReset(form, rootElement);
     }
@@ -103,8 +103,8 @@ export default class DecimalInput extends NumberInput {
         return getDecimalCharacters(this.languages);
     }
 
-    static get characterPattern() {
-        return getCharacterPattern(this.languages);
+    static get validCharacters() {
+        return getValidCharacters(this.languages);
     }
 
     static get pattern() {
