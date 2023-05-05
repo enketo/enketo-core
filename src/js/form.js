@@ -535,6 +535,8 @@ Form.prototype.getDataStr = function (include = {}) {
  * @return {Element} the new form element
  */
 Form.prototype.resetView = function () {
+    this.widgets.reset();
+
     // form language selector was moved outside of <form> so has to be separately removed
     if (this.langs.formLanguages) {
         this.langs.formLanguages.remove();

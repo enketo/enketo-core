@@ -1,93 +1,173 @@
-import { t } from '../../js/fake-translator';
 import events from '../../js/event';
-import inputModule from '../../js/input';
+import { t } from '../../js/fake-translator';
 import Widget from '../../js/widget';
+
+/** @type {Set<NumberInput>} */
+let numberInputInstances = new Set();
+
+/** @type {WeakMap<HTMLInputElement, HTMLElement>} */
+let questionsByInput = new WeakMap();
+
+/**
+ * @param {HTMLInputElement} input
+ */
+const getQuestion = (input) => {
+    let question = questionsByInput.get(input);
+
+    if (question == null) {
+        question = input.closest('.question');
+
+        if (question != null) {
+            questionsByInput.set(input, question);
+        }
+    }
+
+    return question;
+};
 
 /**
  * @abstract
  * @extends {Widget<HTMLInputElement>}
  */
 class NumberInput extends Widget {
+    static languageChanged() {
+        this._languages = null;
+
+        const { language, pattern } = this;
+        const patternStr = pattern.source;
+
+        Array.from(numberInputInstances.values()).forEach((instance) => {
+            // Important: this value may become invalid if it isn't accessed
+            // before setting `lang`. This repros in Firefox if:
+            //
+            // 1. Your default language is English
+            // 2. Set a decimal value
+            // 3. Switch to French
+            // 4. Switch back to English
+            const { element, question } = instance;
+            const { valueAsNumber } = element;
+
+            question.setAttribute('lang', language);
+            element.setAttribute('pattern', patternStr);
+            instance.setFormattedValue(valueAsNumber);
+            instance.setValidity();
+        });
+    }
+
+    /**
+     * @param {import('./form').Form} form
+     * @param {HTMLFormElement} rootElement
+     */
+    static globalInit(form, rootElement) {
+        super.globalInit(form, rootElement);
+
+        rootElement.addEventListener(
+            events.ChangeLanguage().type,
+            this.languageChanged
+        );
+        window.addEventListener('languagechange', this.languageChanged);
+    }
+
+    static globalReset() {
+        const { rootElement } = super.globalReset();
+
+        if (rootElement) {
+            rootElement.removeEventListener(
+                events.ChangeLanguage().type,
+                this.languageChanged
+            );
+            window.removeEventListener('languagechange', this.languageChanged);
+        }
+
+        this._languages = null;
+        numberInputInstances = new Set();
+        questionsByInput = new WeakMap();
+    }
+
     /**
      * @abstract
      */
-    static get numberType() {
-        throw new Error('Not implemented');
-    }
-
     static get selector() {
-        return `.question input[type="number"][data-type-xml="${this.numberType}"]`;
+        throw new Error('Not implemented');
     }
 
     /**
      * @param {HTMLInputElemnt} input
      */
     static condition(input) {
+        if (input.classList.contains('ignore')) {
+            return false;
+        }
+
         const isRange =
             input.hasAttribute('min') &&
             input.hasAttribute('max') &&
             input.hasAttribute('step');
 
-        if (isRange || input.classList.contains('ignore')) {
+        if (isRange) {
             return false;
         }
 
-        const question = input.closest('.question');
+        const question = getQuestion(input);
 
         // analog-scale is included as a courtesy to OpenClinica
-        return [
+        return ![
             'or-appearance-analog-scale',
             'or-appearance-my-widget',
             'or-appearance-distress',
             'or-appearance-rating',
-        ].every((className) => !question.classList.contains(className));
+        ].some((className) => question.classList.contains(className));
     }
 
-    get languages() {
-        const formLanguage = this.languageSelect?.value;
+    /**
+     * @private
+     * @type {string[] | null}
+     */
+    _languages = null;
+
+    static get languages() {
+        let result = this._languages;
+
+        if (result != null) {
+            return result;
+        }
+
+        const { currentLanguage } = this.form;
 
         let validFormLanguage;
 
         try {
-            Intl.getCanonicalLocales(formLanguage);
+            Intl.getCanonicalLocales(currentLanguage);
 
-            validFormLanguage = formLanguage;
+            validFormLanguage = currentLanguage;
         } catch {
             // If this fails, the form's selected language is likely not a valid
             // code and will cause all other `Intl` usage to fail.
         }
 
-        return [validFormLanguage, ...navigator.languages].filter(
+        result = [validFormLanguage, ...navigator.languages].filter(
             (language) => language != null
         );
+
+        this._languages = result;
+
+        return result;
     }
 
-    get language() {
+    static get language() {
         return this.languages[0] ?? navigator.language;
     }
 
-    /** @type {Set<string>} */
-    get decimalCharacters() {
-        return new Set();
+    static get pattern() {
+        throw new Error('Not implemented');
     }
 
-    get pattern() {
-        const { decimalCharacters } = this;
-        const decimalPattern =
-            decimalCharacters.size === 0
-                ? ''
-                : `([${Array.from(decimalCharacters).join('')}]\\d+)?`;
-        const pattern = `^-?\\d+${decimalPattern}$`;
-
-        this.element.setAttribute('pattern', pattern);
-
-        return new RegExp(pattern);
-    }
-
-    get characterPattern() {
-        const { decimalCharacters } = this;
-
-        return new RegExp(`[-0-9${Array.from(decimalCharacters).join('')}]`);
+    /**
+     * @abstract
+     * @type {RegExp}
+     */
+    static get characterPattern() {
+        throw new Error('Not implemented');
     }
 
     get value() {
@@ -105,50 +185,23 @@ class NumberInput extends Widget {
     constructor(input, options) {
         super(input, options);
 
-        const formElement = input.closest('form.or');
+        numberInputInstances.add(this);
 
-        /** @type {HTMLSelectElement | null} */
-        this.languageSelect =
-            formElement.parentElement?.querySelector('#form-languages');
-
-        let { characterPattern } = this;
-
-        const question = inputModule.getWrapNode(input);
+        const question = getQuestion(input);
         const message = document.createElement('div');
 
+        question.setAttribute('lang', this.constructor.language);
         message.classList.add('invalid-value-msg', 'active');
 
-        question.setAttribute('lang', this.language);
         question.append(message);
 
         this.question = question;
         this.message = message;
 
-        this.setReformattedValue(input.valueAsNumber);
+        this.setFormattedValue(input.valueAsNumber);
         this.setValidity();
 
-        const languageChanged = () => {
-            // Important: this value may become invalid if it isn't accessed
-            // before setting `lang`. This repros in Firefox if:
-            //
-            // 1. Your default language is English
-            // 2. Set a decimal value
-            // 3. Switch to French
-            // 4. Switch back to English
-            const { valueAsNumber } = input;
-
-            characterPattern = this.characterPattern;
-            question.setAttribute('lang', this.language);
-            this.setReformattedValue(valueAsNumber);
-            this.setValidity();
-        };
-
-        formElement.addEventListener(
-            events.ChangeLanguage().type,
-            languageChanged
-        );
-        window.addEventListener('languagechange', languageChanged);
-
+        // TODO event delegation?
         input.addEventListener('keydown', (event) => {
             const { ctrlKey, isComposing, key, metaKey } = event;
 
@@ -156,7 +209,8 @@ class NumberInput extends Widget {
                 ctrlKey ||
                 metaKey ||
                 (key.length > 1 && key !== 'Spacebar') ||
-                (!isComposing && characterPattern.test(event.key))
+                (!isComposing &&
+                    this.constructor.characterPattern.test(event.key))
             ) {
                 return true;
             }
@@ -173,8 +227,9 @@ class NumberInput extends Widget {
     /**
      * @param {number} value
      */
-    setReformattedValue(value) {
-        const { element, pattern } = this;
+    setFormattedValue(value) {
+        const { pattern } = this.constructor;
+        const { element } = this;
 
         element.removeAttribute('pattern');
         element.value = '';
@@ -183,7 +238,7 @@ class NumberInput extends Widget {
             element.value = value;
         }
 
-        element.setAttribute('pattern', pattern);
+        element.setAttribute('pattern', pattern.source);
     }
 
     setValidity() {

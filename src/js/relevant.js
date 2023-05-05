@@ -422,11 +422,14 @@ export default {
             for (const node of modelNodes) {
                 const isLeafNode = node.children.length === 0;
                 const isReferencedNode = referencedModelNodes.has(node);
+                const { textContent } = node;
                 const currentValue = isLeafNode
-                    ? node.textContent ||
-                      (relevanceState.get(node)?.currentValue ??
-                          node.textContent)
+                    ? textContent ||
+                      (relevanceState.get(node)?.currentValue ?? textContent)
                     : null;
+                const isChanged = setRelevant
+                    ? textContent !== currentValue
+                    : textContent !== '';
                 const currentRelevanceState = relevanceState.get(node);
                 const isParentNonRelevant = Boolean(
                     currentRelevanceState?.isParentNonRelevant
@@ -438,6 +441,7 @@ export default {
                 if (setRelevant) {
                     if (
                         isLeafNode &&
+                        textContent !== currentValue &&
                         (isReferencedNode || !isSelfNonRelevant)
                     ) {
                         node.textContent = currentValue;
@@ -456,7 +460,7 @@ export default {
                             : currentValue,
                     });
                 } else {
-                    if (isLeafNode) {
+                    if (isLeafNode && textContent !== '') {
                         node.textContent = '';
                     }
 
@@ -472,7 +476,7 @@ export default {
                     });
                 }
 
-                if (isLeafNode) {
+                if (isLeafNode && isChanged) {
                     updatedElements.unshift(node);
                 }
             }
@@ -485,6 +489,8 @@ export default {
                     })
                 );
             }
+        } else {
+            this.toggleNonRelevantModelNodes = () => {};
         }
     },
 

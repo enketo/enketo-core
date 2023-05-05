@@ -4,28 +4,70 @@ import DecimalInput from '../../src/widget/number-input/decimal-input';
 import IntegerInput from '../../src/widget/number-input/integer-input';
 import loadForm from '../helpers/load-form';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
+import forms from '../mock/forms';
 
 /**
  * @typedef {import('../../src/js/form').Form} Form
  */
 
 describe('Number inputs', () => {
-    let formElement = loadForm('number-input-widgets.xml').view.html;
+    const formHTML = forms['number-input-widgets.xml'].html_form;
+    const decimalInit = DecimalInput.prototype._init;
+    const integerInit = DecimalInput.prototype._init;
+
+    /** @type {Form} */
+    let form;
+
+    /** @type {HTMLFormElement} */
+    let formElement;
 
     /** @type {import('sinon').SinonSandbox} */
     let sandbox;
 
-    /** @type {HTMLFormElement} */
-    let clone;
+    /** @type {boolean} */
+    let preInit;
+
+    /** @type {DecimalInput | null} */
+    let decimalInput;
+
+    /** @type {IntegerInput | null} */
+    let integerInput;
+
+    before(() => {
+        preInit = true;
+    });
 
     beforeEach(() => {
+        decimalInput = null;
+        integerInput = null;
+
         sandbox = sinon.createSandbox();
-        clone = formElement.cloneNode(true);
+
+        sandbox.stub(DecimalInput.prototype, '_init').callsFake(function () {
+            decimalInput = this;
+
+            return decimalInit.call(this);
+        });
+
+        sandbox.stub(IntegerInput.prototype, '_init').callsFake(function () {
+            integerInput = this;
+
+            return integerInit.call(this);
+        });
+
+        form = loadForm('number-input-widgets.xml');
+        formElement = form.view.html;
+        document.body.append(formElement);
+
+        if (preInit) {
+            form.init();
+        }
     });
 
     afterEach(() => {
+        formElement.remove();
         sandbox.restore();
-        formElement = clone;
+        form.resetView();
     });
 
     [
@@ -80,18 +122,17 @@ describe('Number inputs', () => {
     });
 
     describe('integer', () => {
-        runAllCommonWidgetTests(IntegerInput, formElement.outerHTML, '2');
+        runAllCommonWidgetTests(IntegerInput, formHTML, '2');
 
         it('is valid with an integer value', async () => {
             const control = formElement.querySelector(IntegerInput.selector);
             const value = '4';
-            const widget = new IntegerInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = integerInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(
                 false
@@ -101,13 +142,12 @@ describe('Number inputs', () => {
         it('is valid with a negative integer value', async () => {
             const control = formElement.querySelector(IntegerInput.selector);
             const value = '-4';
-            const widget = new IntegerInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = integerInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(
                 false
@@ -117,13 +157,12 @@ describe('Number inputs', () => {
         it('is invalid with a decimal value', async () => {
             const control = formElement.querySelector(IntegerInput.selector);
             const value = '4.1';
-            const widget = new IntegerInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = integerInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(true);
         });
@@ -131,13 +170,12 @@ describe('Number inputs', () => {
         it('is valid with a decimal value with multiple decimal digits', async () => {
             const control = formElement.querySelector(DecimalInput.selector);
             const value = '4.11';
-            const widget = new DecimalInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = decimalInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(
                 false
@@ -145,24 +183,21 @@ describe('Number inputs', () => {
         });
 
         it('clears a programmatically assigned value with a misplaced negation character', async () => {
-            const control = formElement.querySelector(IntegerInput.selector);
             const initialValue = '4';
             const assignedValue = '4-';
-            const widget = new IntegerInput(control);
 
-            widget.value = initialValue;
-            widget.value = assignedValue;
+            integerInput.value = initialValue;
+            integerInput.value = assignedValue;
 
             await Promise.resolve();
 
-            expect(widget.value).to.equal('');
+            expect(integerInput.value).to.equal('');
         });
 
         it('is invalid with a user-entered misplaced negation character', async () => {
             const control = formElement.querySelector(IntegerInput.selector);
             const initialValue = '4';
             const enteredValue = '4-';
-            const widget = new IntegerInput(control);
 
             // This allows invalid values to be assigned, similar to the behavior
             // of Firefox and Safari
@@ -172,26 +207,25 @@ describe('Number inputs', () => {
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = integerInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(true);
         });
     });
 
     describe('decimal', () => {
-        runAllCommonWidgetTests(DecimalInput, formElement.outerHTML, '2');
-        runAllCommonWidgetTests(DecimalInput, formElement.outerHTML, '2.1');
+        runAllCommonWidgetTests(DecimalInput, formHTML, '2');
+        runAllCommonWidgetTests(DecimalInput, formHTML, '2.1');
 
         it('is valid with an integer value', async () => {
             const control = formElement.querySelector(DecimalInput.selector);
             const value = '4';
-            const widget = new DecimalInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = decimalInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(
                 false
@@ -201,13 +235,12 @@ describe('Number inputs', () => {
         it('is valid with a decimal value', async () => {
             const control = formElement.querySelector(DecimalInput.selector);
             const value = '4.1';
-            const widget = new DecimalInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = decimalInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(
                 false
@@ -217,13 +250,12 @@ describe('Number inputs', () => {
         it('is valid with a negative integer value', async () => {
             const control = formElement.querySelector(DecimalInput.selector);
             const value = '-4';
-            const widget = new DecimalInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = decimalInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(
                 false
@@ -233,13 +265,12 @@ describe('Number inputs', () => {
         it('is valid with a negative decimal value', async () => {
             const control = formElement.querySelector(DecimalInput.selector);
             const value = '-4.1';
-            const widget = new DecimalInput(control);
 
             input.setVal(control, value, events.Input());
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = decimalInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(
                 false
@@ -261,35 +292,30 @@ describe('Number inputs', () => {
                     DecimalInput.selector
                 );
                 const value = '4.';
-                const widget = new DecimalInput(control);
 
                 input.setVal(control, value, events.Input());
                 control.dispatchEvent(events.Change());
 
                 await Promise.resolve();
 
-                const { question } = widget;
+                const { question } = decimalInput;
 
                 expect(question.classList.contains('invalid-value')).to.equal(
                     false
                 );
-                expect(widget.value).to.equal('4');
+                expect(decimalInput.value).to.equal('4');
             });
 
             it('clears a programmatically assigned value with multiple decimals', async () => {
-                const control = formElement.querySelector(
-                    DecimalInput.selector
-                );
                 const initialValue = '4';
                 const assignedValue = '4.0.1';
-                const widget = new DecimalInput(control);
 
-                widget.value = initialValue;
-                widget.value = assignedValue;
+                decimalInput.value = initialValue;
+                decimalInput.value = assignedValue;
 
                 await Promise.resolve();
 
-                expect(widget.value).to.equal('');
+                expect(decimalInput.value).to.equal('');
             });
 
             it('is invalid with a user-entered value with multiple decimals', async () => {
@@ -298,7 +324,6 @@ describe('Number inputs', () => {
                 );
                 const initialValue = '4';
                 const enteredValue = '4.0.1';
-                const widget = new DecimalInput(control);
 
                 // This allows invalid values to be assigned, similar to the behavior
                 // of Firefox and Safari
@@ -308,7 +333,7 @@ describe('Number inputs', () => {
 
                 await Promise.resolve();
 
-                const { question } = widget;
+                const { question } = decimalInput;
 
                 expect(question.classList.contains('invalid-value')).to.equal(
                     true
@@ -317,24 +342,21 @@ describe('Number inputs', () => {
         }
 
         it('clears a programmatically assigned value with a misplaced negation character', async () => {
-            const control = formElement.querySelector(DecimalInput.selector);
             const initialValue = '4';
             const assignedValue = '4-.0';
-            const widget = new DecimalInput(control);
 
-            widget.value = initialValue;
-            widget.value = assignedValue;
+            decimalInput.value = initialValue;
+            decimalInput.value = assignedValue;
 
             await Promise.resolve();
 
-            expect(widget.value).to.equal('');
+            expect(decimalInput.value).to.equal('');
         });
 
         it('is invalid with a user-entered misplaced negation character', async () => {
             const control = formElement.querySelector(DecimalInput.selector);
             const initialValue = '4';
             const enteredValue = '4-';
-            const widget = new DecimalInput(control);
 
             // This allows invalid values to be assigned, similar to the behavior
             // of Firefox and Safari
@@ -344,7 +366,7 @@ describe('Number inputs', () => {
 
             await Promise.resolve();
 
-            const { question } = widget;
+            const { question } = decimalInput;
 
             expect(question.classList.contains('invalid-value')).to.equal(true);
         });
@@ -365,9 +387,14 @@ describe('Number inputs', () => {
 
         if (isLocalizedDecimalInputSupported()) {
             describe('localized decimal input', () => {
+                before(() => {
+                    preInit = false;
+                });
+
                 beforeEach(() => {
                     sandbox.stub(navigator, 'language').get(() => 'fr');
                     sandbox.stub(navigator, 'languages').get(() => ['fr']);
+                    form.init();
                 });
 
                 it('allows entry of localized decimal characters', async () => {
@@ -375,7 +402,6 @@ describe('Number inputs', () => {
                         DecimalInput.selector
                     );
                     const value = '3,4';
-                    const widget = new DecimalInput(control);
 
                     // This allows invalid values to be assigned, similar to the behavior
                     // of Firefox and Safari
@@ -384,12 +410,12 @@ describe('Number inputs', () => {
 
                     await Promise.resolve();
 
-                    const { question } = widget;
+                    const { question } = decimalInput;
 
                     expect(
                         question.classList.contains('invalid-value')
                     ).to.equal(false);
-                    expect(widget.value).to.equal('3.4');
+                    expect(control.value).to.equal('3.4');
                 });
             });
 
@@ -415,14 +441,17 @@ describe('Number inputs', () => {
                     'zh-HK',
                 ];
 
-                /** @type {Form} */
-                let form;
+                /** @type {HTMLElement} */
+                let formHeader;
 
                 /** @type {HTMLSelectElement} */
                 let languageSelect;
 
+                before(() => {
+                    preInit = false;
+                });
+
                 beforeEach(() => {
-                    form = loadForm('number-input-widgets.xml');
                     formElement = form.view.html;
 
                     const languageOptions = [
@@ -436,12 +465,7 @@ describe('Number inputs', () => {
                         return option;
                     });
 
-                    const body = document.createElement('body');
-
-                    formElement.insertAdjacentElement('beforebegin', body);
-                    body.append(formElement);
-
-                    const formHeader = document.createElement('header');
+                    formHeader = document.createElement('header');
 
                     formHeader.classList.add('form-header');
 
@@ -452,13 +476,20 @@ describe('Number inputs', () => {
                         'form-language-selector'
                     );
                     formHeader.append(languageSelectContainer);
-                    body.append(formHeader);
+                    formElement.insertAdjacentElement(
+                        'beforebegin',
+                        formHeader
+                    );
 
                     languageSelect = document.createElement('select');
                     languageSelect.id = 'form-languages';
                     languageSelectContainer.append(languageSelect);
                     languageSelect.append(...languageOptions);
                     formElement.append(languageSelect);
+                });
+
+                afterEach(() => {
+                    formHeader.remove();
                 });
 
                 supportedLanguages.forEach((language) => {
