@@ -1,7 +1,7 @@
 import NumberInput from './number-input';
 
 /** @type {Map<string, Set<string>>} */
-const decimalCharactersByLanguage = new Map();
+let decimalCharactersByLanguage = new Map();
 
 /**
  * @param {string[]} languages
@@ -28,7 +28,7 @@ const getDecimalCharacters = (languages) => {
 };
 
 /** @type {Map<string, RegExp>} */
-const characterPatternsByLanguage = new Map();
+let characterPatternsByLanguage = new Map();
 
 /**
  * @param {string[]} languages
@@ -52,7 +52,7 @@ const getCharacterPattern = (languages) => {
 };
 
 /** @type {Map<string, RegExp>} */
-const validityPatternsByLanguage = new Map();
+let validityPatternsByLanguage = new Map();
 
 /**
  * @param {string[]} languages
@@ -77,10 +77,6 @@ const getValidityPattern = (languages) => {
 };
 
 export default class DecimalInput extends NumberInput {
-    static languageChanged() {
-        return super.languageChanged.call(this);
-    }
-
     /**
      * @param {import('./form').Form} form
      * @param {HTMLFormElement} rootElement
@@ -88,6 +84,17 @@ export default class DecimalInput extends NumberInput {
     static globalInit(form, rootElement) {
         this.languageChanged = this.languageChanged.bind(this);
         super.globalInit(form, rootElement);
+    }
+
+    /**
+     * @param {import('./form').Form} form
+     * @param {HTMLFormElement} rootElement
+     */
+    static globalReset(form, rootElement) {
+        decimalCharactersByLanguage = new Map();
+        characterPatternsByLanguage = new Map();
+        validityPatternsByLanguage = new Map();
+        super.globalReset(form, rootElement);
     }
 
     static selector = '.question input[type="number"][data-type-xml="decimal"]';

@@ -3,10 +3,10 @@ import { t } from '../../js/fake-translator';
 import Widget from '../../js/widget';
 
 /** @type {Set<NumberInput>} */
-const numberInputInstances = new Set();
+let numberInputInstances = new Set();
 
 /** @type {WeakMap<HTMLInputElement, HTMLElement>} */
-const questionsByInput = new WeakMap();
+let questionsByInput = new WeakMap();
 
 /**
  * @param {HTMLInputElement} input
@@ -80,6 +80,8 @@ class NumberInput extends Widget {
         }
 
         this._languages = null;
+        numberInputInstances = new Set();
+        questionsByInput = new WeakMap();
     }
 
     /**

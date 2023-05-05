@@ -1,10 +1,6 @@
 import NumberInput from './number-input';
 
 export default class IntegerInput extends NumberInput {
-    static languageChanged() {
-        return super.languageChanged.call(this);
-    }
-
     /**
      * @param {import('./form').Form} form
      * @param {HTMLFormElement} rootElement
