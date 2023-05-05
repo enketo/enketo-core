@@ -16,7 +16,7 @@ const getValidCharacters = (languages) => {
 
     const locales = Intl.getCanonicalLocales(languages);
     const formatter = Intl.NumberFormat(locales);
-    const number = 9012345678;
+    const number = -9012345678;
 
     validCharacters = new Set(`${number}${formatter.format(number)}`.split(''));
     validCharactersByLanguage.set(language, validCharacters);
