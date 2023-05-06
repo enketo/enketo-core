@@ -18,6 +18,12 @@ describe('Number inputs', () => {
     /** @type {Form} */
     let form;
 
+    /** @type {HTMLElement | null} */
+    let formHeader;
+
+    /** @type {HTMLSelectElement | null} */
+    let languageSelect;
+
     /** @type {HTMLFormElement} */
     let formElement;
 
@@ -38,6 +44,8 @@ describe('Number inputs', () => {
     });
 
     beforeEach(() => {
+        formHeader = null;
+        languageSelect = null;
         decimalInput = null;
         integerInput = null;
 
@@ -65,6 +73,7 @@ describe('Number inputs', () => {
     });
 
     afterEach(() => {
+        formHeader?.remove();
         formElement.remove();
         sandbox.restore();
         form.resetView();
@@ -371,6 +380,96 @@ describe('Number inputs', () => {
             expect(question.classList.contains('invalid-value')).to.equal(true);
         });
 
+        /**
+         * @param {string[]} languages
+         */
+        const setLanguageOptions = (languages) => {
+            const languageOptions = languages.map((language) => {
+                const option = document.createElement('option');
+
+                option.value = language;
+
+                return option;
+            });
+
+            formHeader = document.createElement('header');
+
+            formHeader.classList.add('form-header');
+
+            const languageSelectContainer = document.createElement('span');
+
+            languageSelectContainer.classList.add('form-language-selector');
+            formHeader.append(languageSelectContainer);
+            formElement.insertAdjacentElement('beforebegin', formHeader);
+
+            languageSelect = document.createElement('select');
+            languageSelect.id = 'form-languages';
+            languageSelectContainer.append(languageSelect);
+            languageSelect.append(...languageOptions);
+            formElement.append(languageSelect);
+        };
+
+        const isLocalizedNumeralInputSupported = () => {
+            const label = document.createElement('label');
+            const input = document.createElement('input');
+
+            label.append(input);
+
+            label.lang = 'ar-EG';
+            input.type = 'number';
+            input.value = '١';
+
+            return input.value !== '' && input.checkValidity();
+        };
+
+        if (isLocalizedNumeralInputSupported()) {
+            describe('localized integer input', () => {
+                before(() => {
+                    preInit = false;
+                });
+
+                beforeEach(() => {
+                    setLanguageOptions(['ar-EG']);
+                    form.init();
+                    formElement.dispatchEvent(events.ChangeLanguage());
+                });
+
+                it('does not prevent entering localized numerals in an integer input by keyboard', () => {
+                    const control = formElement.querySelector(
+                        IntegerInput.selector
+                    );
+                    const event = new KeyboardEvent('keydown', {
+                        key: '١',
+                    });
+                    const preventDefaultStub = sandbox.stub(
+                        event,
+                        'preventDefault'
+                    );
+
+                    control.dispatchEvent(event);
+
+                    expect(preventDefaultStub).not.to.have.been.called;
+                });
+
+                it('does not prevent entering localized numerals in a decimal input by keyboard', () => {
+                    const control = formElement.querySelector(
+                        IntegerInput.selector
+                    );
+                    const event = new KeyboardEvent('keydown', {
+                        key: '٢',
+                    });
+                    const preventDefaultStub = sandbox.stub(
+                        event,
+                        'preventDefault'
+                    );
+
+                    control.dispatchEvent(event);
+
+                    expect(preventDefaultStub).not.to.have.been.called;
+                });
+            });
+        }
+
         const isLocalizedDecimalInputSupported = () => {
             const label = document.createElement('label');
             const input = document.createElement('input');
@@ -441,12 +540,6 @@ describe('Number inputs', () => {
                     'zh-HK',
                 ];
 
-                /** @type {HTMLElement} */
-                let formHeader;
-
-                /** @type {HTMLSelectElement} */
-                let languageSelect;
-
                 before(() => {
                     preInit = false;
                 });
@@ -454,38 +547,10 @@ describe('Number inputs', () => {
                 beforeEach(() => {
                     formElement = form.view.html;
 
-                    const languageOptions = [
+                    setLanguageOptions([
                         unsupportedLanguage,
                         ...supportedLanguages,
-                    ].map((language) => {
-                        const option = document.createElement('option');
-
-                        option.value = language;
-
-                        return option;
-                    });
-
-                    formHeader = document.createElement('header');
-
-                    formHeader.classList.add('form-header');
-
-                    const languageSelectContainer =
-                        document.createElement('span');
-
-                    languageSelectContainer.classList.add(
-                        'form-language-selector'
-                    );
-                    formHeader.append(languageSelectContainer);
-                    formElement.insertAdjacentElement(
-                        'beforebegin',
-                        formHeader
-                    );
-
-                    languageSelect = document.createElement('select');
-                    languageSelect.id = 'form-languages';
-                    languageSelectContainer.append(languageSelect);
-                    languageSelect.append(...languageOptions);
-                    formElement.append(languageSelect);
+                    ]);
                 });
 
                 afterEach(() => {

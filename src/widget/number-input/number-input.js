@@ -164,9 +164,9 @@ class NumberInput extends Widget {
 
     /**
      * @abstract
-     * @type {RegExp}
+     * @type {Set<string>}
      */
-    static get characterPattern() {
+    static get validCharacters() {
         throw new Error('Not implemented');
     }
 
@@ -210,7 +210,7 @@ class NumberInput extends Widget {
                 metaKey ||
                 (key.length > 1 && key !== 'Spacebar') ||
                 (!isComposing &&
-                    this.constructor.characterPattern.test(event.key))
+                    this.constructor.validCharacters.has(event.key))
             ) {
                 return true;
             }
