@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [7.2.3] - 2023-05-09
+
+-   Fix: focus first active input/widget on load, page navigation, user-added repeat (#969)
+-   Performance improvements: NumberInput widgets, `excludeNonRelevant` (#971)
+-   Fix: localized numeral entry by keyboard in number input widgets (#973)
+
 ## [7.2.2] - 2023-03-23
 
 -   Fix: ensure instance attachments are loaded in draw widget (#967)
@@ -18,23 +24,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [7.1.0] - 2023-03-16
 
 -   Remove: analog-scale widget (#952)
-    *Note: now maintained by OpenClinica (https://github.com/OpenClinica/enketo-express-oc/tree/master/widget/analog-scale). Not considered a breaking change because usage outside of OpenClinica is not known*
+    _Note: now maintained by OpenClinica (https://github.com/OpenClinica/enketo-express-oc/tree/master/widget/analog-scale). Not considered a breaking change because usage outside of OpenClinica is not known_
 -   Fix: further simplify geopicker (#954)
 -   Fix: undesired newlines in print view in select/select1 labels (#957)
 -   Add Transformer web compatibility (enketo/enketo-transformer#171)
 
-
 ## [7.0.0] - 2023-02-08
 
--  **BREAKING CHANGE**: Removed IE11 support (#946)
--  Fix: rank widget on touch devices (#947)
--  Fix: undesired autocompletion of manually entered incomplete month-year (#944)
--  Optimize expensive XPath expressions in HTML transform (enketo-transformer#165)
+-   **BREAKING CHANGE**: Removed IE11 support (#946)
+-   Fix: rank widget on touch devices (#947)
+-   Fix: undesired autocompletion of manually entered incomplete month-year (#944)
+-   Optimize expensive XPath expressions in HTML transform (enketo-transformer#165)
 
 ## [6.1.7] - 2022-12-21
 
--  Fix: integer and decimal widgets remain visible when form language changes (#937)
--  Fix: don't clear decimals when switching French -> English (#941)
+-   Fix: integer and decimal widgets remain visible when form language changes (#937)
+-   Fix: don't clear decimals when switching French -> English (#941)
 
 ## [6.1.6] - 2022-12-15
 

@@ -2,11 +2,17 @@
 
 # Enketo Core
 
-The engine that powers [Enketo Smart Paper](https://enketo.org) and various third party tools including [this selection](https://enketo.org/about/adoption/).
+The engine that powers [Enketo Express](https://github.com/enketo/enketo-express) and various third party tools including [this selection](https://enketo.org/about/adoption/).
 
 Enketo's form engine is compatible with tools in the ODK ecosystem and complies with its [XForms specification](https://getodk.github.io/xforms-spec/) though not all features in that specification have been implemented yet.
 
 This repo is meant to be used as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of a real-life full-fledged data collection application and how Enketo Core fits into this.
+
+## Project status
+
+As of 2022, Enketo is maintained by the [ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Martijn, its original author, continues to provide advice and continuity. The ODK project sets priorities in collaboration with its [Technical Advisory Board](https://getodk.org/about/ecosystem.html).
+
+Broader context is available in [the Enketo Express repository](https://github.com/enketo/enketo-express#project-status).
 
 ## Browser support
 
@@ -433,9 +439,11 @@ Fired when the user moves to a different question in the form.
 1. Tag and publish the release
     - GitHub Action will publish it to npm
 
-### Sponsors
+## Sponsors
 
-The development of this library was sponsored by:
+The development of this library is now led by [ODK](https://getodk.org) and funded by customers of the ODK Cloud hosted service.
+
+Past sponsors include:
 
 -   [OpenClinica](https://www.openclinica.com/)
 -   [Sustainable Engineering Lab at Columbia University](http://modi.mech.columbia.edu/)
