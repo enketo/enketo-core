@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [7.2.3] - 2023-05-09
+## [7.2.3] - 2023-05-10
 
 -   Fix: focus first active input/widget on load, page navigation, user-added repeat (#969)
 -   Performance improvements: NumberInput widgets, `excludeNonRelevant` (#971)
