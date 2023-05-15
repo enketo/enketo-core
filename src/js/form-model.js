@@ -1,6 +1,7 @@
 import MergeXML from 'mergexml/mergexml';
 import config from 'enketo/config';
 import bindJsEvaluator from 'enketo/xpath-evaluator-binding';
+import { findMarkerComment } from './dom/tree-walker';
 import { readCookie, parseFunctionFromExpression, stripQuotes } from './utils';
 import {
     getSiblingElementsAndSelf,
@@ -633,19 +634,17 @@ FormModel.prototype.getRepeatCommentSelector = function (repeatPath) {
 /**
  * @param {string} repeatPath - path to repeat
  * @param {number} repeatSeriesIndex - index of repeat series
- * @return {Element} node
+ * @return {Node} node
  */
-FormModel.prototype.getRepeatCommentEl = function (
+FormModel.prototype.getRepeatCommentNode = function (
     repeatPath,
     repeatSeriesIndex
 ) {
-    return this.evaluate(
-        this.getRepeatCommentSelector(repeatPath),
-        'nodes-ordered',
-        null,
-        null,
-        true
-    )[repeatSeriesIndex];
+    return findMarkerComment(
+        this.xml.documentElement,
+        this.getRepeatCommentText(repeatPath),
+        repeatSeriesIndex
+    );
 };
 
 /**
@@ -674,7 +673,7 @@ FormModel.prototype.addRepeat = function (
     const repeatSeries = this.getRepeatSeries(repeatPath, repeatSeriesIndex);
     const insertAfterNode = repeatSeries.length
         ? repeatSeries[repeatSeries.length - 1]
-        : this.getRepeatCommentEl(repeatPath, repeatSeriesIndex);
+        : this.getRepeatCommentNode(repeatPath, repeatSeriesIndex);
 
     // if not exists and not a merge operation
     if (!merge) {
@@ -781,7 +780,7 @@ FormModel.prototype.getRepeatSeries = function (repeatPath, repeatSeriesIndex) {
     let pathSegments;
     let nodeName;
     let checkEl;
-    const repeatCommentEl = this.getRepeatCommentEl(
+    const repeatCommentEl = this.getRepeatCommentNode(
         repeatPath,
         repeatSeriesIndex
     );
