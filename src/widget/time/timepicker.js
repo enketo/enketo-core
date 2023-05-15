@@ -426,17 +426,6 @@ import { time } from '../../js/format';
                 return;
             }
 
-            this.$element.trigger({
-                type: 'hide.timepicker',
-                time: {
-                    value: this.getTime(),
-                    hours: this.hour,
-                    minutes: this.minute,
-                    seconds: this.second,
-                    meridian: this.meridian,
-                },
-            });
-
             this.$widget.removeClass('open');
 
             $(document).off(
@@ -1075,17 +1064,6 @@ import { time } from '../../js/format';
                 this.handleDocumentClick
             );
 
-            this.$element.trigger({
-                type: 'show.timepicker',
-                time: {
-                    value: this.getTime(),
-                    hours: this.hour,
-                    minutes: this.minute,
-                    seconds: this.second,
-                    meridian: this.meridian,
-                },
-            });
-
             this.place();
             if (this.disableFocus) {
                 this.$element.blur();
@@ -1116,17 +1094,6 @@ import { time } from '../../js/format';
             if (!ignoreWidget) {
                 this.updateWidget();
             }
-
-            this.$element.trigger({
-                type: 'changeTime.timepicker',
-                time: {
-                    value: this.getTime(),
-                    hours: this.hour,
-                    minutes: this.minute,
-                    seconds: this.second,
-                    meridian: this.meridian,
-                },
-            });
         },
 
         updateElement() {
