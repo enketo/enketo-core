@@ -536,6 +536,14 @@ export default {
         const repeatIndex = this.getIndex($repeat[0]);
         const repeatInfo = $repeat.siblings('.or-repeat-info')[0];
 
+        if (
+            repeatIndex === 0 ||
+            $repeat.get(0).previousElementSibling?.getAttribute('name') !==
+                repeatPath
+        ) {
+            $next.get(0).classList.remove('clone');
+        }
+
         $repeat.remove();
 
         this.form.features.repeatClone =
