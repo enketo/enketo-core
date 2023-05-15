@@ -36,6 +36,7 @@ import './plugins';
 import './extend';
 import { callOnIdle } from './timers';
 import { setRefTypeClasses } from './dom/refs';
+import { detectFeatures } from './dom/features';
 
 /**
  * @typedef FormOptions
@@ -82,8 +83,10 @@ function Form(formEl, data, options) {
             return range.createContextualFragment(formHTML).firstElementChild;
         },
     };
+
+    /** @type {ReturnType<typeof detectFeatures>} */
+    this.features = {};
     this.model = new FormModel(data);
-    this.repeatsPresent = !!this.view.html.querySelector('.or-repeat');
     this.widgetsInitialized = false;
     this.repeatsInitialized = false;
     this.pageNavigationBlocked = false;
@@ -288,30 +291,43 @@ Form.prototype.init = function () {
     this.required = this.addModule(requiredModule);
     this.readonly = this.addModule(readonlyModule);
 
-    // Handle odk-instance-first-load event
-    this.model.events.addEventListener(
-        events.InstanceFirstLoad().type,
-        (event) => {
-            this.calc.performAction('setvalue', event);
-            this.calc.performAction('setgeopoint', event);
-        }
-    );
+    const formEl = this.view.html;
 
-    // Handle odk-new-repeat event before initializing repeats
-    this.view.html.addEventListener(events.NewRepeat().type, (event) => {
-        this.calc.performAction('setvalue', event);
-        this.calc.performAction('setgeopoint', event);
-    });
     setRefTypeClasses(this);
+    this.features = detectFeatures(formEl);
 
-    // Handle xforms-value-changed
-    this.view.html.addEventListener(
-        events.XFormsValueChanged().type,
-        (event) => {
+    const { instanceFirstLoadAction, newRepeatAction, valueChangedAction } =
+        this.features;
+
+    // Handle odk-instance-first-load event
+    if (instanceFirstLoadAction) {
+        this.model.events.addEventListener(
+            events.InstanceFirstLoad().type,
+            (event) => {
+                this.calc.performAction('setvalue', event);
+                this.calc.performAction('setgeopoint', event);
+            }
+        );
+    }
+
+    if (newRepeatAction) {
+        // Handle odk-new-repeat event before initializing repeats
+        this.view.html.addEventListener(events.NewRepeat().type, (event) => {
             this.calc.performAction('setvalue', event);
             this.calc.performAction('setgeopoint', event);
-        }
-    );
+        });
+    }
+
+    if (valueChangedAction) {
+        // Handle xforms-value-changed
+        this.view.html.addEventListener(
+            events.XFormsValueChanged().type,
+            (event) => {
+                this.calc.performAction('setvalue', event);
+                this.calc.performAction('setgeopoint', event);
+            }
+        );
+    }
 
     // Before initializing form view and model, passthrough some model events externally
     // Because of instance-first-load actions, this should be done before the model is initialized. This is important for custom
@@ -345,10 +361,10 @@ Form.prototype.init = function () {
             instanceID: this.model.instanceID,
         });
 
-        // before calc.update!
+        // before calc.init!
         this.grosslyViolateStandardComplianceByIgnoringCertainCalcs();
         // before repeats.init to make sure the jr:repeat-count calculation has been evaluated
-        this.calc.update();
+        this.calc.init();
 
         // before itemset.update
         this.langs.init(this.options.language);
@@ -445,11 +461,11 @@ Form.prototype.init = function () {
             this.all = {};
         }
 
-        // after repeats.init, but before itemset.update
-        this.output.update();
+        // after repeats.init, but before itemset.init
+        this.output.init();
 
         // after repeats.init
-        this.itemset.update();
+        this.itemset.init();
 
         // after repeats.init
         this.setAllVals();
@@ -462,10 +478,11 @@ Form.prototype.init = function () {
         this.options.pathToAbsolute = this.pathToAbsolute.bind(this);
         this.options.evaluate = this.model.evaluate.bind(this.model);
         this.options.getModelValue = this.getModelValue.bind(this);
+
         this.widgetsInitialized = this.widgets.init(null, this.options);
 
         // after widgets.init(), and after repeats.init(), and after pages.init()
-        this.relevant.update();
+        this.relevant.init();
 
         // after widgets init to make sure widget handlers are called before
         // after loading existing instance to not trigger an 'edit' event
@@ -475,7 +492,7 @@ Form.prototype.init = function () {
         // field values are calculated
         this.calc.update();
 
-        this.required.update();
+        this.required.init();
 
         this.editStatus = false;
 
@@ -990,7 +1007,9 @@ Form.prototype.validationUpdate = function (updated = {}) {
 
         // Find all inputs that have a dependency on the changed node. Avoid duplicates with Set.
         const nodes = new Set(
-            this.getRelatedNodes('data-required', '', upd).get()
+            this.features.required
+                ? this.getRelatedNodes('data-required', '', upd).get()
+                : []
         );
         this.constraintAttributes.forEach((attr) =>
             this.getRelatedNodes(attr, '', upd).get().forEach(nodes.add, nodes)

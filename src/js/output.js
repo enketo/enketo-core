@@ -4,7 +4,34 @@
 
 import $ from 'jquery';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    init() {
+        if (!this.form) {
+            throw new Error(
+                'Output module not correctly instantiated with form property.'
+            );
+        }
+
+        if (!this.form.features.output) {
+            this.update = () => {};
+
+            return;
+        }
+
+        this.update();
+    },
+
     /**
      * Updates output values, optionally filtered by those values that contain a changed node name
      *
@@ -15,21 +42,13 @@ export default {
         let val = '';
         const that = this;
 
-        if (!this.form) {
-            throw new Error(
-                'Output module not correctly instantiated with form property.'
-            );
-        }
-
         const $nodes = this.form.getRelatedNodes(
             'data-value',
             '.or-output',
             updated
         );
 
-        const clonedRepeatsPresent =
-            this.form.repeatsPresent &&
-            this.form.view.html.querySelector('.or-repeat.clone');
+        const clonedRepeatsPresent = this.form.features.repeatClone;
 
         $nodes.each(function () {
             const $output = $(this);

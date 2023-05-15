@@ -16,6 +16,10 @@ import {
 import events from './event';
 
 /**
+ * @typedef {import('./form').Form} Form
+ */
+
+/**
  * This function tries to determine whether an XPath expression for a nodeset from an external instance is static.
  * Hopefully in the future it can do this properly, but for now it considers any expression
  * with a non-numeric (position) predicate to be dynamic.
@@ -43,18 +47,35 @@ export { isStaticItemsetFromSecondaryInstance };
 
 export default {
     /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    init() {
+        if (!this.form) {
+            throw new Error(
+                'Itemset module not correctly instantiated with form property.'
+            );
+        }
+
+        if (!this.form.features.itemset) {
+            this.update = () => {};
+
+            return;
+        }
+
+        this.update();
+    },
+
+    /**
      * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update(updated = {}) {
         const that = this;
         const fragmentsCache = {};
         let nodes;
-
-        if (!this.form) {
-            throw new Error(
-                'Output module not correctly instantiated with form property.'
-            );
-        }
 
         if (updated.relevantPath) {
             // Questions that are descendants of a group:
@@ -100,9 +121,11 @@ export default {
                 .get();
         }
 
-        const clonedRepeatsPresent =
-            this.form.repeatsPresent &&
-            this.form.view.html.querySelector('.or-repeat.clone');
+        if (nodes.length === 0) {
+            return;
+        }
+
+        const clonedRepeatsPresent = this.form.features.repeatClone;
         const alerts = [];
 
         nodes.forEach((template) => {

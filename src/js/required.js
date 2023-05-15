@@ -6,7 +6,32 @@
 
 import $ from 'jquery';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    init() {
+        if (!this.form) {
+            throw new Error(
+                'Required module not correctly instantiated with form property.'
+            );
+        }
+
+        if (!this.form.features.required) {
+            this.update = () => {};
+        }
+
+        this.update();
+    },
+
     /**
      * Updates readonly
      *
@@ -17,16 +42,8 @@ export default {
         // A "required" update will never result in a node value change so the expression evaluation result can be cached fairly aggressively.
         const requiredCache = {};
 
-        if (!this.form) {
-            throw new Error(
-                'Required module not correctly instantiated with form property.'
-            );
-        }
-
         const $nodes = this.form.getRelatedNodes('data-required', '', updated);
-        const repeatClonesPresent =
-            this.form.repeatsPresent &&
-            this.form.view.html.querySelector('.or-repeat.clone');
+        const repeatClonesPresent = this.form.features.repeatClone;
 
         $nodes.each(function () {
             const $input = $(this);

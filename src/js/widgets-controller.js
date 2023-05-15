@@ -7,7 +7,19 @@ import _widgets from 'enketo/widgets';
 import { elementDataStore as data } from './dom-utils';
 import events from './event';
 
-const widgets = _widgets.filter((widget) => widget.selector);
+/**
+ * @typedef {import('./widget').WidgetClass} WidgetClass
+ */
+
+/** @type {WidgetClass[]} */
+let widgets = _widgets.filter((widget) => widget.selector);
+
+/** @type {Set<WidgetClass>} */
+let widgetsImplementingDisable = new Set();
+
+/** @type {Set<WidgetClass>} */
+let widgetsImplementingEnable = new Set();
+
 let options;
 
 /** @type {import('./form').Form} */
@@ -15,6 +27,32 @@ let form;
 
 /** @type {HTMLFormElement} */
 let formElement;
+
+/**
+ * @param {HTMLFormElement} formElement
+ */
+const initForm = (formElement) => {
+    widgets = _widgets.filter(
+        (widget) =>
+            widget.selector &&
+            formElement.querySelector(widget.selector) != null
+    );
+
+    widgetsImplementingDisable = new Set();
+    widgetsImplementingEnable = new Set();
+
+    widgets.forEach((Widget) => {
+        const { implementsDisable, implementsEnable } = Widget;
+
+        if (implementsDisable) {
+            widgetsImplementingDisable.add(Widget);
+        }
+
+        if (implementsEnable) {
+            widgetsImplementingEnable.add(Widget);
+        }
+    });
+};
 
 /**
  * Initializes widgets
@@ -53,10 +91,16 @@ function init($group, opts = {}) {
  * done during create().
  *
  * @static
- * @param {Element} group - HTML element
+ * @param {HTMLElement} group - HTML element
  */
 function enable(group) {
-    widgets.forEach((Widget) => {
+    if (group.closest('.widgets-disabled') == null) {
+        return;
+    }
+
+    group.classList.remove('widgets-disbled');
+
+    widgetsImplementingEnable.forEach((Widget) => {
         const els = _getElements(group, Widget.selector).filter((el) =>
             el.nodeName.toLowerCase() === 'select'
                 ? !el.hasAttribute('readonly')
@@ -72,11 +116,18 @@ function enable(group) {
  * the disabled attribute automatically when the branch element provided as parameter becomes non-relevant.
  *
  * @static
- * @param {Element} group - The element inside which all widgets need to be disabled.
+ * @param {HTMLElement} group - The element inside which all widgets need to be disabled.
  */
 function disable(group) {
-    widgets.forEach((Widget) => {
+    if (group.closest('.widgets-disabled') != null) {
+        return;
+    }
+
+    group.classList.add('widgets-disbled');
+
+    widgetsImplementingDisable.forEach((Widget) => {
         const els = _getElements(group, Widget.selector);
+
         new Collection(els).disable(Widget);
     });
 }
@@ -84,9 +135,9 @@ function disable(group) {
 /**
  * Returns the elements on which to apply the widget
  *
- * @param {Element} group - A jQuery-wrapped element
+ * @param {HTMLElement} group - A jQuery-wrapped element
  * @param {string|null} selector - If the selector is `null`, the form element will be returned
- * @return {jQuery} A jQuery collection
+ * @return {HTMLElement[]} A jQuery collection
  */
 function _getElements(group, selector) {
     if (selector) {
@@ -147,8 +198,12 @@ function _instantiate(Widget, group) {
 
 const reset = () => {
     widgets.forEach((Widget) => {
-        Widget.globalReset();
+        Widget.globalReset?.();
     });
+
+    widgets = [..._widgets];
+    widgetsImplementingDisable = new Set();
+    widgetsImplementingEnable = new Set();
 };
 
 /**
@@ -281,6 +336,7 @@ class Collection {
 }
 
 export default {
+    initForm,
     init,
     enable,
     disable,

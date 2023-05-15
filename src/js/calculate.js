@@ -7,7 +7,38 @@ import { getAncestors, getSiblingElementsAndSelf } from './dom-utils';
 import events from './event';
 import { getCurrentPosition } from './geolocation';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    init() {
+        if (!this.form) {
+            throw new Error(
+                'Calculation module not correctly instantiated with form property.'
+            );
+        }
+
+        if (!this.form.features.calculate) {
+            this.update = () => {};
+            this.performAction = () => {};
+
+            return;
+        }
+
+        this.initialized = false;
+        this.preInitRelevance = new WeakMap();
+        this.update();
+        this.initialized = true;
+    },
+
     /**
      * Updates calculated items.
      *
@@ -17,12 +48,6 @@ export default {
      */
     update(updated = {}, filter = '', emptyNonRelevant = false) {
         let nodes;
-
-        if (!this.form) {
-            throw new Error(
-                'Calculation module not correctly instantiated with form property.'
-            );
-        }
 
         // Filter is used in custom applications that make a distinction between types of calculations.
         if (updated.relevantPath) {
@@ -196,12 +221,6 @@ export default {
     performAction(action, event) {
         if (!event) {
             return;
-        }
-
-        if (!this.form) {
-            throw new Error(
-                `${action} action not correctly instantiated with form property.`
-            );
         }
 
         const nodes = this._getNodesForAction(action, event);
@@ -383,6 +402,10 @@ export default {
                   props.name,
                   props.index
               )
+        if (!this.form.features.relevant) {
+            return true;
+        }
+
             : true;
 
         // Only look at ancestors if self is relevant.
@@ -465,6 +488,10 @@ export default {
     },
 
     _hasNeverBeenRelevant(control, props) {
+        if (!this.form.features.relevant) {
+            return false;
+        }
+
         if (control && control.closest('.pre-init')) {
             return true;
         }

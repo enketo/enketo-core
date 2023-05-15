@@ -24,9 +24,20 @@ import {
 } from './dom-utils';
 import { isStaticItemsetFromSecondaryInstance } from './itemset';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 const disableFirstRepeatRemoval = config.repeatOrdinals === true;
 
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
     /**
      * Initializes all Repeat Groups in form (only called once).
      */
@@ -40,6 +51,18 @@ export default {
             throw new Error(
                 'Repeat module not correctly instantiated with form property.'
             );
+        }
+
+        if (!this.form.features.repeat) {
+            this.getIndex = () => 0;
+            this.form.input.getIndex = () => 0;
+
+            return;
+        }
+
+        if (!this.form.features.repeatCount) {
+            this.countUpdate = () => {};
+            this.updateRepeatInstancesFromCount = () => {};
         }
 
         $repeatInfos = this.form.view.$.find('.or-repeat-info');
@@ -158,7 +181,8 @@ export default {
             })
             .catch(console.error);
     },
-    /*
+
+    /**
      * Obtains the 0-based absolute index of the provided repeat or repeat-info element
      * The goal of this function is to make non-nested repeat index determination as fast as possible.
      *
@@ -169,9 +193,11 @@ export default {
      *
      * The repeat-info concept was added in the context of supporting zero instances of a repeat. It would be good
      * to expand on its documentation.
+     *
+     * @param {HTMLElement} el
      */
     getIndex(el) {
-        if (!el || !this.form.repeatsPresent) {
+        if (!el || !this.form.features.repeatClone) {
             return 0;
         }
 
@@ -348,10 +374,17 @@ export default {
      * @param {UpdatedDataNodes} updated - The object containing info on updated data nodes.
      */
     countUpdate(updated = {}) {
-        const repeatInfos = this.form
-            .getRelatedNodes('data-repeat-count', '.or-repeat-info', updated)
-            .get();
-        repeatInfos.forEach(this.updateRepeatInstancesFromCount.bind(this));
+        if (this.form.features.repeatCount) {
+            const repeatInfos = this.form
+                .getRelatedNodes(
+                    'data-repeat-count',
+                    '.or-repeat-info',
+                    updated
+                )
+                .get();
+
+            repeatInfos.forEach(this.updateRepeatInstancesFromCount.bind(this));
+        }
     },
     /**
      * Clone a repeat group/node.
@@ -368,11 +401,14 @@ export default {
             return false;
         }
 
-        let repeatIndex;
-        const repeatPath = repeatInfo.dataset.name;
+        this.form.features.repeatClone = true;
 
+        const repeatPath = repeatInfo.dataset.name;
         const repeats = getSiblingElements(repeatInfo, '.or-repeat');
         let clone = this.templates[repeatPath].cloneNode(true);
+
+        /** @type {number} */
+        let repeatIndex;
 
         // Determine the index of the repeat series.
         const repeatSeriesIndex = this.getIndex(repeatInfo);
@@ -395,10 +431,13 @@ export default {
             clone
                 .querySelectorAll('.option-wrapper')
                 .forEach(this.fixRadioName);
-            this.processDatalists(
-                clone.querySelectorAll('datalist'),
-                repeatInfo
-            );
+
+            if (this.form.features.itemset) {
+                this.processDatalists(
+                    clone.querySelectorAll('datalist'),
+                    repeatInfo
+                );
+            }
 
             // Insert the clone
             repeatInfo.parentElement.insertBefore(clone, repeatInfo);
@@ -472,6 +511,10 @@ export default {
         const repeatInfo = $repeat.siblings('.or-repeat-info')[0];
 
         $repeat.remove();
+
+        this.form.features.repeatClone =
+            this.form.view.html.querySelector('.or-repeat.clone') != null;
+
         that.numberRepeats(repeatInfo);
         that.toggleButtons(repeatInfo);
 

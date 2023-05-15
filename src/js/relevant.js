@@ -9,6 +9,10 @@ import events from './event';
 import { closestAncestorUntil, getChild, getChildren } from './dom-utils';
 
 /**
+ * @typedef {import('./form').Form} Form
+ */
+
+/**
  * @typedef RelevanceState
  * @property {boolean} isParentNonRelevant
  * @property {boolean} isSelfNonRelevant
@@ -63,16 +67,33 @@ export const getNonRelevantValue = (element) => relevanceState.get(element);
 
 export default {
     /**
-     * @param {UpdatedDataNodes | null} [updated] - The object containing info on updated data nodes.
-     * @param {boolean} [forceClearNonRelevant] -  whether to empty the values of non-relevant nodes
+     * @type {Form}
      */
-    update(updated, forceClearNonRelevant = config.forceClearNonRelevant) {
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    init() {
         if (!this.form) {
             throw new Error(
                 'Branch module not correctly instantiated with form property.'
             );
         }
 
+        if (!this.form.features.relevant) {
+            this.update = () => {};
+
+            return;
+        }
+
+        this.update();
+    },
+
+    /**
+     * @param {UpdatedDataNodes | null} [updated] - The object containing info on updated data nodes.
+     * @param {boolean} [forceClearNonRelevant] -  whether to empty the values of non-relevant nodes
+     */
+    update(updated, forceClearNonRelevant = config.forceClearNonRelevant) {
         const nodes = this.form
             .getRelatedNodes('data-relevant', '', updated)
             .get();
@@ -89,9 +110,9 @@ export default {
         let branchChange = false;
         const relevantCache = {};
         const alreadyCovered = [];
-        const clonedRepeatsPresent =
-            this.form.repeatsPresent &&
-            this.form.view.html.querySelector('.or-repeat.clone');
+        const repeatsPresent = this.form.features.repeat;
+        const clonedRepeatsPresent = this.form.features.repeatClone;
+        const { groups, repeats } = this.form.collections;
 
         nodes.forEach((node) => {
             // Note that node.getAttribute('name') is not the same as p.path for repeated radiobuttons!
@@ -123,10 +144,8 @@ export default {
             const { repeatIndex } = options;
             let { repeatPath } = options;
 
-            if (this.form.repeatsPresent) {
-                if (repeatPath == null) {
-                    repeatPath = this.form.nodePathToRepeatPath[p.path];
-                }
+            if (repeatsPresent && repeatPath == null) {
+                repeatPath = this.form.nodePathToRepeatPath[path];
 
                 if (repeatPath == null) {
                     for (const prefix of this.form.repeatPathPrefixes) {
@@ -139,7 +158,9 @@ export default {
 
                     this.form.nodePathToRepeatPath[p.path] = repeatPath ?? null;
                 }
+            }
 
+            if (repeatPath != null) {
                 /*
                  * Check if the (calculate without form control) node is part of a repeat that has no instances
                  */
@@ -278,7 +299,7 @@ export default {
             }
         });
 
-        if (branchChange) {
+        if (branchChange && this.form.features.pagination) {
             this.form.view.$.trigger('changebranch');
         }
     },
