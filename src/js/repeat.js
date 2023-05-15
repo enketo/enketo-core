@@ -68,6 +68,8 @@ export default {
 
         $repeatInfos = this.form.view.$.find('.or-repeat-info');
         this.templates = {};
+        this.templateStrings = {};
+        this.optionWrapperContainers = new Set();
         // Add repeat numbering elements
         $repeatInfos
             .siblings('.or-repeat')
@@ -123,6 +125,11 @@ export default {
                     templateEl
                 );
                 const xPath = templateEl.getAttribute('name');
+
+                if (templateEl.querySelector('.option-wrapper') != null) {
+                    that.optionWrapperContainers.add(xPath);
+                }
+
                 this.remove();
                 $(templateEl)
                     .removeClass('contains-current current')
@@ -132,6 +139,7 @@ export default {
                 // The default values will be added anyway in the repeats.add function.
                 that.form.input.clear(templateEl);
                 that.templates[xPath] = templateEl;
+                that.templateStrings[xPath] = templateEl.outerHTML;
             });
 
         $repeatInfos
@@ -332,7 +340,7 @@ export default {
                     ? -numRepsInView + (disableFirstRepeatRemoval ? 1 : 0)
                     : toCreate;
             for (; toCreate < 0; toCreate++) {
-                const $last = $(repeatInfo).siblings('.or-repeat').last();
+                const $last = $(repeatInfo.previousElementSibling);
                 this.remove($last);
             }
         }
@@ -396,10 +404,15 @@ export default {
 
         const repeatPath = repeatInfo.dataset.name;
         const repeats = getSiblingElements(repeatInfo, '.or-repeat');
-        let clone = this.templates[repeatPath].cloneNode(true);
 
         /** @type {number} */
         let repeatIndex;
+
+        const previousRepeat = repeats[repeats.length - 1];
+
+        if (previousRepeat != null) {
+            repeatIndex = this.getIndex(previousRepeat) + 1;
+        }
 
         // Determine the index of the repeat series.
         const repeatSeriesIndex = this.getIndex(repeatInfo);
@@ -407,6 +420,7 @@ export default {
             repeatPath,
             repeatSeriesIndex
         ).length;
+
         // Determine the index of the repeat inside its series
         const prevSibling = repeatInfo.previousElementSibling;
         let repeatIndexInSeries =
@@ -416,12 +430,24 @@ export default {
                   )
                 : 0;
 
+        const templateString = this.templateStrings[repeatPath];
+        const range = document.createRange();
+        const templates = Array(toCreate)
+            .fill(null)
+            .map(() => templateString)
+            .join('');
+        const clones = Array.from(
+            range.createContextualFragment(templates).children
+        );
+
         // Add required number of repeats
-        for (let i = 0; i < toCreate; i++) {
+        for (const [i, clone] of clones.entries()) {
             // Fix names of radio button groups
-            clone
-                .querySelectorAll('.option-wrapper')
-                .forEach(this.fixRadioName);
+            if (this.optionWrapperContainers.has(repeatPath)) {
+                clone
+                    .querySelectorAll('.option-wrapper')
+                    .forEach(this.fixRadioName);
+            }
 
             if (this.form.features.itemset) {
                 this.processDatalists(
@@ -431,7 +457,7 @@ export default {
             }
 
             // Insert the clone
-            repeatInfo.parentElement.insertBefore(clone, repeatInfo);
+            repeatInfo.before(clone);
 
             if (repeatIndexInSeries > 0) {
                 // Also add the clone class for all 2+ numbers as this is
@@ -456,7 +482,7 @@ export default {
 
             // This is the index of the new repeat in relation to all other repeats of the same name,
             // even if they are in different series.
-            repeatIndex = repeatIndex || this.getIndex(clone);
+            repeatIndex = repeatIndex ?? this.getIndex(clone);
 
             this.form.collections.repeats.setRefIndexCache(
                 clone,
@@ -466,6 +492,8 @@ export default {
 
             const updated = {
                 repeatIndex,
+                repeatInstance: clone,
+                repeatInfo,
                 repeatPath,
                 trigger,
                 cloned: true,
@@ -486,12 +514,11 @@ export default {
                     this.form.goToTarget(clone);
                 }
             }
+
             // now create the first instance of any nested repeats if necessary
             clone
                 .querySelectorAll('.or-repeat-info:not([data-repeat-count])')
                 .forEach(this.updateDefaultFirstRepeatInstance.bind(this));
-
-            clone = this.templates[repeatPath].cloneNode(true);
 
             repeatIndex++;
             repeatIndexInSeries++;
@@ -520,7 +547,7 @@ export default {
         that.toggleButtons(repeatInfo);
 
         const detail = this.form.initialized
-            ? {}
+            ? { removed: { repeatPath, repeatIndex } }
             : { initRepeatInfo: { repeatPath, repeatIndex } };
         // Trigger the removerepeat on the next repeat or repeat-info(always present)
         // so that removerepeat handlers know where the repeat was removed
