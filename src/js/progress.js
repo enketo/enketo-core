@@ -33,12 +33,34 @@ export default {
             ),
         ].filter((question) => !question.closest('.disabled'));
     },
+
+    isUpdateScheduled: false,
+
+    /** @type {HTMLElement | null} */
+    scheduledUpdateElement: null,
+
     /**
      * Updates rounded % value of progress and triggers event if changed.
      *
      * @param {Element} el - the element that represent the current state of progress
      */
-    update(el) {
+    update(el, isScheduledCall = false) {
+        this.scheduledUpdateElement = el;
+
+        if (!isScheduledCall) {
+            if (!this.isUpdateScheduled) {
+                this.isUpdateScheduled = true;
+
+                queueMicrotask(() => {
+                    this.update(this.scheduledUpdateElement, true);
+                    this.isUpdateScheduled = false;
+                    this.scheduledUpdateElement = null;
+                });
+            }
+
+            return;
+        }
+
         let status;
 
         if (!this.all || !el) {
