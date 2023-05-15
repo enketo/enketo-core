@@ -19,6 +19,9 @@ export default {
     // its type here improves intellisense.
     form: null,
 
+    /** @type {WeakMap<HTMLElement, boolean>} */
+    preInitRelevance: new WeakMap(),
+
     init() {
         if (!this.form) {
             throw new Error(
@@ -469,16 +472,31 @@ export default {
                             expr: props.relevantExpr,
                         },
                     ])
-                    .every((item) =>
-                        item.expr
+                    .every((item) => {
+                        const { element, expr, context, index } = item;
+
+                        const preInitRelevance =
+                            this.preInitRelevance.get(element);
+
+                        if (preInitRelevance != null) {
+                            return preInitRelevance;
+                        }
+
+                        const result = item.expr
                             ? this.form.model.evaluate(
-                                  item.expr,
+                                  expr,
                                   'boolean',
-                                  item.context,
-                                  item.index
+                                  context,
+                                  index
                               )
-                            : true
-                    );
+                            : true;
+
+                        if (element != null && !this.initialized) {
+                            this.preInitRelevance.set(element, result);
+                        }
+
+                        return result;
+                    });
             }
         }
 
