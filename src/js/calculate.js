@@ -395,22 +395,23 @@ export default {
      * @return {boolean} whether the node is relevant
      */
     _isRelevant(props) {
-        let relevant = props.relevantExpr
-            ? this.form.model.evaluate(
-                  props.relevantExpr,
-                  'boolean',
-                  props.name,
-                  props.index
-              )
         if (!this.form.features.relevant) {
             return true;
         }
 
+        const { groups, repeats } = this.form.collections;
+        const { relevantExpr, name, index } = props;
+
+        let relevant = relevantExpr
+            ? this.form.model.evaluate(relevantExpr, 'boolean', name, index)
             : true;
+
+        /** @type {HTMLElement | null} */
+        let startElement = null;
 
         // Only look at ancestors if self is relevant.
         if (relevant) {
-            const pathParts = props.name.split('/');
+            const pathParts = name.split('/');
             /*
              * First determine immediate group parent of node, which will always be in correct location in DOM. This is where
              * we can use the index to be guaranteed to get the correct node.
@@ -425,43 +426,40 @@ export default {
             const parentPath = pathParts
                 .splice(0, pathParts.length - 1)
                 .join('/');
-            let startElement;
 
-            if (props.index === 0) {
-                startElement = this.form.view.html.querySelector(
-                    `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                );
+            if (index === 0) {
+                startElement = groups.getElementByRef(parentPath);
             } else {
                 startElement =
-                    this.form.view.html.querySelectorAll(
-                        `.or-repeat[name="${parentPath}"]`
-                    )[props.index] ||
-                    this.form.view.html.querySelectorAll(
-                        `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                    )[props.index];
+                    repeats.getElementByRef(parentPath, index) ||
+                    groups.getElementByRef(parentPath, index);
             }
+
             const ancestorGroups = startElement
                 ? [startElement].concat(
-                      getAncestors(startElement, '.or-group, .or-group-data')
+                      getAncestors(
+                          startElement,
+                          '.or-group[data-relevant], .or-group-data[data-relevant]'
+                      )
                   )
                 : [];
 
             if (ancestorGroups.length) {
                 // Start at the highest level, and traverse down to the immediate parent group.
                 relevant = ancestorGroups
-                    .filter((el) => el.matches('[data-relevant]'))
-                    .map((group) => {
-                        const nm = this.form.input.getName(group);
+                    .map((ancestor) => {
+                        const isRepeat =
+                            ancestor.classList.contains('or-repeat');
+                        const collection = isRepeat ? repeats : groups;
+                        const path = this.form.input.getName(ancestor);
+                        const index = collection.refIndexOf(ancestor, path);
 
                         return {
-                            context: nm,
+                            element: ancestor,
+                            context: path,
                             // thankfully relevants on repeats are not possible with XLSForm-produced forms
-                            index: [
-                                ...this.form.view.html.querySelectorAll(
-                                    `.or-group[name="${nm}"], .or-group-data[name="${nm}"]`
-                                ),
-                            ].indexOf(group), // performance....
-                            expr: this.form.input.getRelevant(group),
+                            index,
+                            expr: this.form.input.getRelevant(ancestor),
                         };
                     })
                     .concat([
@@ -495,8 +493,11 @@ export default {
         if (control && control.closest('.pre-init')) {
             return true;
         }
+
+        const { name, index } = props;
+
         // Check parents including when the calculation has no form control.
-        const pathParts = props.name.split('/');
+        const pathParts = name.split('/');
         /*
          * First determine immediate group parent of node, which will always be in correct location in DOM. This is where
          * we can use the index to be guaranteed to get the correct node.
@@ -509,22 +510,20 @@ export default {
          * Note: getting the parents of control wouldn't work for nodes inside #calculated-items!
          */
         const parentPath = pathParts.splice(0, pathParts.length - 1).join('/');
-        let startElement;
 
-        if (props.index === 0) {
-            startElement = this.form.view.html.querySelector(
-                `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-            );
+        /** @type {HTMLElement | null} */
+        let startElement = null;
+
+        const { groups, repeats } = this.form.collections;
+
+        if (index === 0) {
+            startElement = groups.getElementByRef(parentPath);
         } else {
             startElement =
-                this.form.view.html.querySelectorAll(
-                    `.or-repeat[name="${parentPath}"]`
-                )[props.index] ||
-                this.form.view.html.querySelectorAll(
-                    `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                )[props.index];
+                repeats.getElementByRef(parentPath, index) ||
+                groups.getElementByRef(parentPath, index);
         }
 
-        return startElement ? !!startElement.closest('.pre-init') : false;
+        return startElement ? startElement.closest('.pre-init') != null : false;
     },
 };

@@ -169,11 +169,8 @@ export default {
                     const parentPath = pathParts
                         .splice(0, pathParts.length - 1)
                         .join('/');
-                    const parentGroups = [
-                        ...this.form.view.html.querySelectorAll(
-                            `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                        ),
-                    ]
+                    const parentGroups = groups
+                        .getElementsByRef(parentPath)
                         // now remove the groups that have a repeat-info child without repeat instance siblings
                         .filter(
                             (group) =>
@@ -231,9 +228,7 @@ export default {
                 (insideRepeat &&
                     repeatParent == null &&
                     (options.removed ||
-                        this.form.view.html.querySelector(
-                            `.or-repeat[name="${CSS.escape(repeatPath)}"]`
-                        ) == null))
+                        repeats.getElementByRef(repeatPath) == null))
             ) {
                 context = null;
             }
@@ -245,7 +240,7 @@ export default {
             p.ind =
                 hiddenInputRepeatIndex ??
                 (context && insideRepeatClone
-                    ? this.form.input.getIndex(node)
+                    ? this.form.repeats.getIndex(repeatParent)
                     : 0);
 
             /*

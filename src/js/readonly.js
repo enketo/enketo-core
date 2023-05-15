@@ -2,7 +2,18 @@
  * @module readonly
  */
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
     /**
      * Updates readonly
      *
@@ -10,13 +21,14 @@ export default {
      */
     update(updated) {
         const nodes = this.form.getRelatedNodes('readonly', '', updated).get();
+
+        const { valueChanged } = this.form.collections.actions;
+
         nodes.forEach((node) => {
             node.closest('.question').classList.add('readonly');
 
             const path = this.form.input.getName(node);
-            const action = this.form.view.html.querySelector(
-                `[data-setvalue][data-event="xforms-value-changed"][name="${path}"], [data-setgeopoint][data-event="xforms-value-changed"][name="${path}"]`
-            );
+            const action = valueChanged?.hasRef(path);
 
             // Note: the readonly-forced class is added for special readonly views of a form.
             const empty =

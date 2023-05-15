@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:OpenClinica="http://openclinica.com/odm"
+    xmlns:enk="http://enketo.org/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:oc="http://openclinica.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>collections</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="collections">
+                    <initial-default>initial default</initial-default>
+                    <first-load />
+                    <rep jr:template="">
+                        <rep-first-load />
+                        <new-rep />
+                        <rep-val />
+                        <rep-val-changed />
+
+                        <rep2 jr:template="">
+                            <rep2-input />
+                        </rep2>
+                    </rep>
+                    <rep>
+                        <rep-first-load />
+                        <new-rep />
+                        <rep-val />
+                        <rep-val-changed />
+
+                        <rep2>
+                            <rep2-input />
+                        </rep2>
+                    </rep>
+
+                    <val />
+                    <val-changed />
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/initial-default" type="string"/>
+            <bind nodeset="/data/first-load" type="string"/>
+            <bind nodeset="/data/rep/rep-first-load" type="string"/>
+            <bind nodeset="/data/rep/new-rep" type="string"/>
+            <bind nodeset="/data/rep/rep-val" type="int"/>
+            <bind nodeset="/data/rep/rep-val-changed" type="string"/>
+            <bind nodeset="/data/val" type="int"/>
+            <bind nodeset="/data/val-changed" type="string"/>
+            <bind nodeset="/data/rep/rep2/rep2-input" type="int" calculate="position(..) * position(../..)" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+            <setvalue event="odk-instance-first-load" ref="/data/first-load">1</setvalue>
+            <setvalue event="odk-instance-first-load" ref="/data/rep/rep-first-load" value="concat('first-load * position: ', ../../first-load * position(..))" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/initial-default">
+            <label>initial-default</label>
+        </input>
+
+        <group ref="/data/rep">
+            <label>rep</label>
+            <repeat nodeset="/data/rep">
+                <setvalue event="odk-new-repeat" ref="/data/rep/new-rep" value="concat('new repeat position * 2: ', position(..) * 2)" />
+
+                <input ref="/data/rep/rep-first-load">
+                    <label>rep-first-load</label>
+                </input>
+
+                <input ref="/data/rep/new-rep">
+                    <label>new-rep</label>
+                    <setvalue event="odk-instance-first-load" ref="/data/rep/new-rep" value="concat('first load position: ', position(..))" />
+                </input>
+
+                <input ref="/data/rep/rep-val">
+                    <label>rep-val</label>
+                    <setvalue event="xforms-value-changed" ref="/data/rep/rep-val-changed" value="concat('rep val changed: ', ../rep-val)" />
+                </input>
+
+                <input ref="/data/rep/rep-val-changed">
+                    <label>rep-val-changed</label>
+                </input>
+
+                <group ref="/data/rep/rep2">
+                    <label>rep</label>
+                    <repeat nodeset="/data/rep/rep2">
+                        <input ref="/data/rep/rep2/rep2-input">
+                            <label>rep/rep-2</label>
+                        </input>
+                    </repeat>
+                </group>
+            </repeat>
+        </group>
+
+        <input ref="/data/val">
+            <label>val</label>
+            <setvalue event="xforms-value-changed" ref="/data/val-changed" value="concat('val changed: ', /data/val)" />
+        </input>
+
+        <input ref="/data/val-changed">
+            <label>val-changed</label>
+        </input>
+    </h:body>
+</h:html>

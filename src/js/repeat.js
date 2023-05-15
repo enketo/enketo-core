@@ -23,6 +23,7 @@ import {
     getSiblingElementsAndSelf,
 } from './dom-utils';
 import { isStaticItemsetFromSecondaryInstance } from './itemset';
+import { invalidateRepeatCaches } from './dom/collections';
 
 /**
  * @typedef {import('./form').Form} Form
@@ -202,29 +203,15 @@ export default {
         }
 
         const isInfoElement = el.classList.contains('or-repeat-info');
+        const repeatPath = isInfoElement
+            ? el.dataset.name
+            : el.getAttribute('name');
+        const collection = isInfoElement
+            ? this.form.collections.repeatInfos
+            : this.form.collections.repeats;
+        const index = Math.max(0, collection.refIndexOf(el, repeatPath));
 
-        const toCountSelector = isInfoElement
-            ? `.or-repeat-info[data-name="${el.dataset.name}"]`
-            : `.or-repeat[name="${el.getAttribute('name')}"]`;
-        let predecessorCount = isInfoElement
-            ? 0
-            : Number(el.querySelector('.repeat-number').textContent) - 1;
-
-        let checkEl = el;
-        while (checkEl) {
-            while (
-                checkEl.previousElementSibling &&
-                checkEl.previousElementSibling.matches('.or-repeat')
-            ) {
-                checkEl = checkEl.previousElementSibling;
-                predecessorCount +=
-                    checkEl.querySelectorAll(toCountSelector).length;
-            }
-            const parent = checkEl.parentElement;
-            checkEl = parent ? parent.closest('.or-repeat') : null;
-        }
-
-        return predecessorCount;
+        return index;
     },
     /**
      * [updateViewInstancesFromModel description]
@@ -455,6 +442,8 @@ export default {
             // Update the variable containing the view repeats in the current series.
             repeats.push(clone);
 
+            invalidateRepeatCaches(repeatPath);
+
             // Create a repeat in the model if it doesn't already exist
             if (repeats.length > modelRepeatSeriesLength) {
                 this.form.model.addRepeat(repeatPath, repeatSeriesIndex);
@@ -464,6 +453,12 @@ export default {
             // This is the index of the new repeat in relation to all other repeats of the same name,
             // even if they are in different series.
             repeatIndex = repeatIndex || this.getIndex(clone);
+
+            this.form.collections.repeats.setRefIndexCache(
+                clone,
+                repeatIndex,
+                repeatPath
+            );
 
             const updated = {
                 repeatIndex,
@@ -514,6 +509,8 @@ export default {
 
         this.form.features.repeatClone =
             this.form.view.html.querySelector('.or-repeat.clone') != null;
+
+        invalidateRepeatCaches(repeatPath);
 
         that.numberRepeats(repeatInfo);
         that.toggleButtons(repeatInfo);

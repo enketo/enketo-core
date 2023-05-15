@@ -36,6 +36,7 @@ import './plugins';
 import './extend';
 import { callOnIdle } from './timers';
 import { setRefTypeClasses } from './dom/refs';
+import { initCollections, resetCollections } from './dom/collections';
 import { detectFeatures } from './dom/features';
 
 /**
@@ -86,6 +87,10 @@ function Form(formEl, data, options) {
 
     /** @type {ReturnType<typeof detectFeatures>} */
     this.features = {};
+
+    /** @type {ReturnType<typeof initCollections>} */
+    this.collections = {};
+
     this.model = new FormModel(data);
     this.widgetsInitialized = false;
     this.repeatsInitialized = false;
@@ -295,6 +300,8 @@ Form.prototype.init = function () {
 
     setRefTypeClasses(this);
     this.features = detectFeatures(formEl);
+    this.collections = initCollections(this);
+    widgetModule.initForm(formEl);
 
     const { instanceFirstLoadAction, newRepeatAction, valueChangedAction } =
         this.features;
@@ -568,6 +575,8 @@ Form.prototype.resetView = function () {
     }
     this.view.html.replaceWith(this.view.clone);
 
+    resetCollections();
+
     return document.querySelector('form.or');
 };
 
@@ -767,12 +776,11 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         ];
         repeatControls = this.filterRadioCheckSiblings(controls);
     } else if (typeof repeatPath !== 'undefined' && updated.repeatIndex >= 0) {
-        // If the updated node is inside a repeat (and there are multiple repeats present)
-        const repeatEl = [
-            ...this.view.html.querySelectorAll(
-                `.or-repeat[name="${repeatPath}"]`
-            ),
-        ][updated.repeatIndex];
+        const repeatEl = this.collections.repeats.getElementByRef(
+            repeatPath,
+            updated.repeatIndex
+        );
+
         controls = repeatEl ? [...repeatEl.querySelectorAll(`[${attr}]`)] : [];
         repeatControls = this.filterRadioCheckSiblings(controls);
     }

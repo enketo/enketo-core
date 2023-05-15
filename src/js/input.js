@@ -12,10 +12,21 @@ import types from './types';
 import events from './event';
 import { closestAncestorUntil } from './dom-utils';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
     /**
-     * @param {Element} control - form control HTML element
-     * @return {Element} Wrap node
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    /**
+     * @param {HTMLElement} control - form control HTML element
+     * @return {HTMLElement} Wrap node
      */
     getWrapNode(control) {
         return control.closest(
@@ -243,22 +254,9 @@ export default {
      * @return {Element} found element
      */
     find(name, index = 0) {
-        let attr = 'name';
-        if (
-            this.form.view.html.querySelector(
-                `input[type="radio"][data-name="${name}"]:not(.ignore)`
-            )
-        ) {
-            attr = 'data-name';
-        }
-        const selector = `[${attr}="${name}"]:not([data-event="xforms-value-changed"])`;
-        const question = this.getWrapNodes(
-            this.form.view.html.querySelectorAll(selector)
-        )[index];
-
-        return question
-            ? question.querySelector(`[${attr}="${name}"]:not(.ignore)`)
-            : null;
+        return this.form.collections.refTargetContainers
+            .getElementByRef(name, index)
+            ?.querySelector('.ref-target:not(.ignore)');
     },
     /**
      * Sets the value of a form control (or group like radiobuttons)
