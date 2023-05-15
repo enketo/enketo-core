@@ -12,7 +12,7 @@
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "inlineSourceMap": true,
-        "lib": ["dom", "ES2018"],
+        "lib": ["DOM", "DOM.Iterable", "ES2018"],
         "module": "esnext",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
@@ -26,6 +26,6 @@
             "enketo/config": ["./config.js"]
         }
     },
-    "exclude": ["node_modules"],
-    "include": ["src", "test", "typings"]
+    "exclude": ["./node_modules/*", "./test-coverage/*"],
+    "include": ["./src/*.js", "./test/*.js"]
 }
