@@ -7,7 +7,18 @@
 import { getSiblingElement } from './dom-utils';
 import events from './event';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
     /**
      * @param {string} overrideLang - override language IANA subtag
      */
@@ -101,7 +112,26 @@ export default {
     get languagesUsed() {
         return this.languages || [];
     },
+
+    /**
+     * @param {string} lang
+     * @param {HTMLElement} group
+     */
     setFormUi(lang, group = this.form.view.html) {
+        if (group.dataset.currentLang === lang) {
+            return;
+        }
+
+        group.dataset.currentLang = lang;
+
+        if (group === this.form.view.html) {
+            this.form.collections.repeats
+                .getElements()
+                .forEach((repeatInstance) => {
+                    repeatInstance.dataset.lang = lang;
+                });
+        }
+
         const dir =
             this.formLanguages.querySelector(`[value="${lang}"]`).dataset.dir ||
             'ltr';
@@ -123,9 +153,11 @@ export default {
         // Don't even check whether it's a proper subtag or not. It will revert to client locale if it is not recognized.
         window.enketoFormLocale = lang;
 
+        // TODO: can these be restricted to `group`?
         this.form.view.html
             .querySelectorAll('select, datalist')
             .forEach((el) => this.setSelect(el));
+
         this.form.view.html.dispatchEvent(events.ChangeLanguage());
     },
     /**

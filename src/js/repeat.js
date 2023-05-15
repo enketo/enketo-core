@@ -118,6 +118,10 @@ export default {
             .reverse()
             .each(function () {
                 const templateEl = this.cloneNode(true);
+                that.form.langs.setFormUi(
+                    that.form.currentLanguage,
+                    templateEl
+                );
                 const xPath = templateEl.getAttribute('name');
                 this.remove();
                 $(templateEl)
