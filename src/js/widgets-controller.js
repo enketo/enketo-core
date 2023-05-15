@@ -206,6 +206,11 @@ const reset = () => {
     widgetsImplementingEnable = new Set();
 };
 
+/** @type {Map<typeof Widget, Set<HTMLElement>>} */
+const languageChangeUpdates = new Map();
+
+let didSetLanguageChangeListener = false;
+
 /**
  * Calls widget('update') when the language changes. This function is called upon initialization,
  * and whenever a new repeat is created. In the latter case, since the widget('update') is called upon
@@ -217,9 +222,26 @@ const reset = () => {
 function _setLangChangeListener(Widget, els) {
     // call update for all widgets when language changes
     if (els.length > 0) {
-        formElement.addEventListener(events.ChangeLanguage().type, () => {
-            new Collection(els).update(Widget);
+        let all = languageChangeUpdates.get(Widget);
+
+        if (all == null) {
+            all = new Set();
+            languageChangeUpdates.set(Widget, all);
+        }
+
+        els.forEach((el) => {
+            all.add(el);
         });
+
+        if (!didSetLanguageChangeListener) {
+            formElement.addEventListener(events.ChangeLanguage().type, () => {
+                for (const [Widget, els] of languageChangeUpdates) {
+                    new Collection([...els]).update(Widget);
+                }
+            });
+
+            didSetLanguageChangeListener = true;
+        }
     }
 }
 
