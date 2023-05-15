@@ -117,13 +117,18 @@ export default {
         return control.dataset.constraint;
     },
     /**
-     * @param {Element} control - form control HTML element
+     * @param {HTMLElement} control - form control HTML element
      * @return {string|undefined} required expression
      */
     getRequired(control) {
+        const { required } = control.dataset;
+
         // only return value if input is not a table heading input
-        if (!closestAncestorUntil(control, '.or-appearance-label', '.or')) {
-            return control.dataset.required;
+        if (
+            required != null &&
+            !closestAncestorUntil(control, '.or-appearance-label', '.or')
+        ) {
+            return required;
         }
     },
     /**

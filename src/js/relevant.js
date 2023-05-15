@@ -123,12 +123,6 @@ export default {
             // Since this result is almost certainly not empty, closest() is the most efficient
             const branchNode = node.closest('.or-branch');
 
-            const p = {};
-            let cacheIndex = null;
-
-            p.relevant = this.form.input.getRelevant(node);
-            p.path = this.form.input.getName(node);
-
             if (!branchNode) {
                 if (
                     !closestAncestorUntil(
@@ -141,6 +135,10 @@ export default {
                 return;
             }
 
+            const relevant = this.form.input.getRelevant(node);
+            const path = this.form.input.getName(node);
+            let cacheIndex = null;
+
             const { repeatIndex } = options;
             let { repeatPath } = options;
 
@@ -149,14 +147,14 @@ export default {
 
                 if (repeatPath == null) {
                     for (const prefix of this.form.repeatPathPrefixes) {
-                        if (p.path.startsWith(prefix)) {
+                        if (path.startsWith(prefix)) {
                             repeatPath = prefix.substring(0, prefix.length - 1);
 
                             break;
                         }
                     }
 
-                    this.form.nodePathToRepeatPath[p.path] = repeatPath ?? null;
+                    this.form.nodePathToRepeatPath[path] = repeatPath ?? null;
                 }
             }
 
@@ -164,7 +162,7 @@ export default {
                 /*
                  * Check if the (calculate without form control) node is part of a repeat that has no instances
                  */
-                const pathParts = p.path.split('/');
+                const pathParts = path.split('/');
                 if (pathParts.length > 3 && repeatPath == null) {
                     const parentPath = pathParts
                         .splice(0, pathParts.length - 1)
@@ -192,10 +190,8 @@ export default {
              * (6-7 seconds of loading time on the bench6 form)
              */
             const insideRepeat =
-                repeatPath != null && p.path.startsWith(`${repeatPath}`);
-            const repeatParent = clonedRepeatsPresent
-                ? branchNode.closest('.or-repeat')
-                : null;
+                repeatPath != null && path.startsWith(`${repeatPath}/`);
+            const repeatParent = branchNode.closest('.or-repeat');
 
             /**
              * Determines the current repeat index position for nodes with no view control.
@@ -206,23 +202,23 @@ export default {
                 repeatParent == null &&
                 typeof repeatIndex === 'number' &&
                 repeatPath != null &&
-                p.path.startsWith(`${repeatPath}/`)
+                path.startsWith(`${repeatPath}/`)
                     ? repeatIndex
                     : null;
 
             const insideRepeatClone =
                 hiddenInputRepeatIndex > 0 ||
                 (clonedRepeatsPresent &&
-                    branchNode.closest('.or-repeat.clone'));
+                    repeatParent?.classList.contains('clone'));
 
             /*
              * If the relevant is placed on a group and that group contains repeats with the same name,
              * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
              */
-            let context = p.path;
+            let context = path;
             if (
-                (getChild(node, `.or-repeat-info[data-name="${p.path}"]`) &&
-                    !getChild(node, `.or-repeat[name="${p.path}"]`)) ||
+                (getChild(node, `.or-repeat-info[data-name="${path}"]`) &&
+                    !getChild(node, `.or-repeat[name="${path}"]`)) ||
                 // Special cases below for model nodes with no visible form control: if repeat instance removed or if
                 // no instances at all (e.g. during load with `jr:count="0"`)
                 (insideRepeat &&
@@ -237,7 +233,7 @@ export default {
              * Determining the index is expensive, so we only do this when the branch is inside a cloned repeat.
              * It can be safely set to 0 for other branches.
              */
-            p.ind =
+            const ind =
                 hiddenInputRepeatIndex ??
                 (context && insideRepeatClone
                     ? this.form.repeats.getIndex(repeatParent)
@@ -249,17 +245,17 @@ export default {
              * This check assumes that child nodes (e.g. "mychild = 'bob'") are NEVER used in a relevant
              * expression, which may prove to be incorrect.
              */
-            if (p.relevant.indexOf('..') === -1) {
+            if (relevant.indexOf('..') === -1) {
                 if (!insideRepeat) {
-                    cacheIndex = p.relevant;
+                    cacheIndex = relevant;
                 } else {
                     // The path is stripped of the last nodeName to record the context.
                     // This might be dangerous, but until we find a bug, it helps in those forms where one group contains
                     // many sibling questions that each have the same relevant.
-                    cacheIndex = `${p.relevant}__${p.path.substring(
+                    cacheIndex = `${relevant}__${path.substring(
                         0,
-                        p.path.lastIndexOf('/')
-                    )}__${p.ind}`;
+                        path.lastIndexOf('/')
+                    )}__${ind}`;
                 }
             }
             let result;
@@ -269,7 +265,7 @@ export default {
             ) {
                 result = relevantCache[cacheIndex];
             } else {
-                result = this.evaluate(p.relevant, context, p.ind);
+                result = this.evaluate(relevant, context, ind);
                 relevantCache[cacheIndex] = result;
             }
 
@@ -278,17 +274,11 @@ export default {
             }
 
             if (
-                this.process(
-                    branchNode,
-                    p.path,
-                    result,
-                    forceClearNonRelevant,
-                    {
-                        ...options,
-                        repeatIndex: p.ind,
-                        repeatPath,
-                    }
-                ) === true
+                this.process(branchNode, path, result, forceClearNonRelevant, {
+                    ...options,
+                    repeatIndex: ind,
+                    repeatPath,
+                }) === true
             ) {
                 branchChange = true;
             }

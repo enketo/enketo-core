@@ -722,14 +722,14 @@ FormModel.prototype.addOrdinalAttribute = function (
     repeat,
     firstRepeatInSeries
 ) {
-    let lastUsedOrdinal;
-    let newOrdinal;
-    const enkNs = this.getNamespacePrefix(ENKETO_XFORMS_NS);
-    firstRepeatInSeries = firstRepeatInSeries || repeat;
     if (
         config.repeatOrdinals === true &&
         !repeat.getAttributeNS(ENKETO_XFORMS_NS, 'ordinal')
     ) {
+        let lastUsedOrdinal;
+        let newOrdinal;
+        const enkNs = this.getNamespacePrefix(ENKETO_XFORMS_NS);
+        firstRepeatInSeries = firstRepeatInSeries || repeat;
         // getAttributeNs and setAttributeNs results in duplicate namespace declarations on each repeat node in IE11 when serializing the model.
         // However, the regular getAttribute and setAttribute do not work properly in IE11.
         lastUsedOrdinal =

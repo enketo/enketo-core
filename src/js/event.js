@@ -73,27 +73,49 @@ function NewRepeat(detail) {
 }
 
 /**
+ * @typedef {'magic' | 'user' | 'count' | 'model'} AddRepeatTrigger
+ */
+
+/**
+ * @typedef AddRepeatDetail
+ * @property {string} repeatPath
+ * @property {number} repeatIndex
+ * @property {AddRepeatTrigger} trigger
+ */
+
+/**
  * The addrepeat event is similar but fired under different circumstances.
  *
- * @param {{repeatPath: string, repeatIndex: number, trigger: string}} detail - Data to be passed with event.
- * @return {CustomEvent} Custom "odk-new-repeat" event (bubbling)
+ * @param {AddRepeatDetail} [detail] - Data to be passed with event.
+ * @return {CustomEvent<AddRepeatDetail> & { type: 'addrepeat' }} Custom "odk-new-repeat" event (bubbling)
  */
-function AddRepeat(detail) {
+function AddRepeat(detail = {}) {
     return new CustomEvent('addrepeat', { detail, bubbles: true });
 }
 
 /**
- * @typedef RemoveRepeatDetail
+ * @typedef InitRemoveRepeatDetail
  * @property {object} [initRepeatInfo]
  * @property {string} [initRepeatInfo.repeatPath]
  * @property {number} [initRepeatInfo.repeatIndex]
  */
 
 /**
+ * @typedef PostInitRemoveRepeatDetail
+ * @property {object} [initRepeatInfo]
+ * @property {string} [initRepeatInfo.repeatPath]
+ * @property {number} [initRepeatInfo.repeatIndex]
+ */
+
+/**
+ * @typedef {InitRemoveRepeatDetail | PostInitRemoveRepeatDetail} RemoveRepeatDetail
+ */
+
+/**
  * Remove repeat event.
  *
  * @param {RemoveRepeatDetail} [detail]
- * @return {CustomEvent} Custom "removerepeat" event (bubbling)
+ * @return {CustomEvent<RemoveRepeatDetail> & { type: 'removerepeat' }} Custom "removerepeat" event (bubbling)
  */
 function RemoveRepeat(detail) {
     return new CustomEvent('removerepeat', { detail, bubbles: true });

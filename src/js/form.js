@@ -257,8 +257,9 @@ Form.prototype = {
 /**
  * Returns a module and adds the form property to it.
  *
- * @param {object} module - Enketo Core module
- * @return {object} updated module
+ * @template T
+ * @param {T} module - Enketo Core module
+ * @return {T & { form: Form }} updated module
  */
 Form.prototype.addModule = function (module) {
     return Object.create(module, {
@@ -819,6 +820,10 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         collection = this.all[attr];
     }
 
+    if (collection.length === 0) {
+        return $(collection);
+    }
+
     let selector = [];
     // Add selectors based on specific changed nodes
     if (!updated.nodes || updated.nodes.length === 0) {
@@ -843,10 +848,13 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         );
     }
 
+    if (selector.length === 0) {
+        return $(collection);
+    }
+
     const selectorStr = selector.join(', ');
-    collection = selectorStr
-        ? collection.filter((el) => el.matches(selectorStr))
-        : collection;
+
+    collection = collection.filter((el) => el.matches(selectorStr));
 
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
     // TODO: remove jQuery wrapper, just return array of elements
@@ -1312,7 +1320,7 @@ Form.prototype.validateContent = function ($container) {
         .map(function () {
             // only trigger validate on first input and use a **pure CSS** selector (huge performance impact)
             const elem = this.querySelector(
-                'input:not(.ignore):not(:disabled), select:not(.ignore):not(:disabled), textarea:not(.ignore):not(:disabled)'
+                'input:enabled:not(.ignore), select:enabled:not(.ignore), textarea:enabled:not(.ignore)'
             );
             if (!elem) {
                 return Promise.resolve();
