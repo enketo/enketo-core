@@ -35,6 +35,7 @@ import events from './event';
 import './plugins';
 import './extend';
 import { callOnIdle } from './timers';
+import { setRefTypeClasses } from './dom/refs';
 
 /**
  * @typedef FormOptions
@@ -50,7 +51,7 @@ import { callOnIdle } from './timers';
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
- * @param {Element} formEl - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
+ * @param {HTMLFormElement} formEl - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
  * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {FormOptions} [options]
  * @class
@@ -301,6 +302,7 @@ Form.prototype.init = function () {
         this.calc.performAction('setvalue', event);
         this.calc.performAction('setgeopoint', event);
     });
+    setRefTypeClasses(this);
 
     // Handle xforms-value-changed
     this.view.html.addEventListener(

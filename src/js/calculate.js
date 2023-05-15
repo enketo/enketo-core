@@ -141,12 +141,12 @@ export default {
             // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
             return [
                 ...this.form.view.html.querySelectorAll(
-                    `.${action} [data-${action}][data-event*="${event.type}"]`
+                    `.non-form-control-action[data-${action}].odk-instance-first-load`
                 ),
             ].concat(
                 this.form.filterRadioCheckSiblings([
                     ...this.form.view.html.querySelectorAll(
-                        `.question [data-${action}][data-event*="${event.type}"]`
+                        `.form-control-action[data-${action}].odk-instance-first-load`
                     ),
                 ])
             );
@@ -160,7 +160,7 @@ export default {
             return this.form
                 .getRelatedNodes(
                     `data-${action}`,
-                    `.${action} [data-event*="${event.type}"]`,
+                    '.non-form-control-action.odk-new-repeat',
                     event.detail
                 )
                 .get()
@@ -168,7 +168,7 @@ export default {
                     this.form
                         .getRelatedNodes(
                             `data-${action}`,
-                            `.question [data-event*="${event.type}"]`,
+                            '.form-control-action.odk-new-repeat',
                             event.detail
                         )
                         .get()
@@ -179,12 +179,12 @@ export default {
 
             return question
                 ? [
-                      ...question.querySelectorAll(
-                          `[data-${action}][data-event*="${event.type}"]`
-                      ),
-                  ]
+                      ...question.querySelectorAll('.xforms-value-changed'),
+                  ].filter((el) => el.dataset[action] != null)
                 : [];
         }
+
+        return [];
     },
 
     /**
