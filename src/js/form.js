@@ -70,10 +70,16 @@ function Form(formEl, data, options) {
     this.all = {};
     this.options = options ?? {};
 
+    const formHTML = formEl.outerHTML;
+
     this.view = {
         $: $form,
         html: formEl,
-        clone: formEl.cloneNode(true),
+        get clone() {
+            const range = document.createRange();
+
+            return range.createContextualFragment(formHTML).firstElementChild;
+        },
     };
     this.model = new FormModel(data);
     this.repeatsPresent = !!this.view.html.querySelector('.or-repeat');
