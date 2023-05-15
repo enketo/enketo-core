@@ -42,11 +42,11 @@ export default {
         let val = '';
         const that = this;
 
-        const $nodes = this.form.getRelatedNodes(
-            'data-value',
-            '.or-output',
-            updated
-        );
+        const { rootNode } = updated ?? {};
+        const $nodes =
+            rootNode == null
+                ? this.form.getRelatedNodes('data-value', '.or-output', updated)
+                : $(rootNode.querySelectorAll('.or-output'));
 
         const clonedRepeatsPresent = this.form.features.repeatClone;
 
