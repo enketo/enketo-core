@@ -5,10 +5,16 @@
  */
 
 /**
- * Sets convenience classes on DOM elements with model references, to optmize:
+ * Sets convenience classes and related annotations on DOM elements with model
+ * references, to optimize:
  *
- * - identifying action references (and their event types) and distinguish them from non-action references
- * - identifying controls and their pertinent container elements by their reference
+ * - identifying action references (and their event types) and distinguish them
+ *   from non-action references
+ * - identifying controls and their pertinent container elements by their
+ *   reference
+ *
+ * These annotations allow simplification of many DOM lookups, and in many cases
+ * allow formerly dynamic queries to be static.
  *
  * @param {Form} form
  */

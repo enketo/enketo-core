@@ -5,6 +5,10 @@
  */
 
 /**
+ * Detects statically identifiable (during init) features which may used by a
+ * given form, allowing forms without certain features to skip
+ * unused-but-expensive functionality.
+ *
  * @param {HTMLFormElement} formElement
  */
 export const detectFeatures = (formElement) => {

@@ -1,7 +1,7 @@
 import MergeXML from 'mergexml/mergexml';
 import config from 'enketo/config';
 import bindJsEvaluator from 'enketo/xpath-evaluator-binding';
-import { findMarkerComment } from './dom/tree-walker';
+import { findMarkerComment } from './dom';
 import { readCookie, parseFunctionFromExpression, stripQuotes } from './utils';
 import {
     getSiblingElementsAndSelf,

@@ -23,7 +23,7 @@ import {
     getSiblingElementsAndSelf,
 } from './dom-utils';
 import { isStaticItemsetFromSecondaryInstance } from './itemset';
-import { invalidateRepeatCaches } from './dom/collections';
+import { invalidateRepeatCaches } from './dom';
 
 /**
  * @typedef {import('./form').Form} Form

@@ -15,6 +15,17 @@ export const commentTreeWalker = /** @type {CommentTreeWalker} */ (
  */
 
 /**
+ * @typedef {import('./collections').RefIndexedDOMCollection} RefIndexedDOMCollection
+ */
+
+/**
+ * @typedef {import('../form-model').FormModel} FormModel
+ */
+
+/**
+ * Finds comments which have been added to the DOM as markers to locate
+ * associated form features, e.g. view elements of a certain role/type and ref (@see {@link RefIndexedDOMCollection}) or insertion points for repeat instance model elements (@see {@link FormModel['getRepeatCommentNode']}).
+ *
  * @param {Element} parentElement
  * @param {(commentValue: string) => boolean} filter
  * @param {FindMarkerCommentsOptions} [options]

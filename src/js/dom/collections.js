@@ -27,6 +27,27 @@ let activeIds = new Set();
 let collections = new Set();
 
 /**
+ * Provides consistent, efficient access to common operations on DOM collections which:
+ *
+ * - Have an identifiable role or type
+ * - Have been transformed by Enketo Transformer to have a known attribute name
+ *   whose value is a stable model nodeset reference, where existing form logic
+ *   is concerned with:
+ *     - finding elements of a given role by a given reference
+ *     - identifying the presence of said reference in a form, or in another
+ *       element's hierarchy
+ * - Are indexed by their [containing] repeat instance on forms with repeats,
+ *   where existing form logic is concerned with:
+ *     - determining their current index position
+ *     - finding an element with a given role/reference at a specified index
+ *       position
+ *
+ * These collections are looked up, and cached, by their role/type, as well as
+ * by their model nodeset reference. For forms with repeat functionality, their
+ * repeat index positions are also cached, invalidating caches of repeats and
+ * their descendants when instances are added or removed. For forms without
+ * repet functionality, each collection is cached for the duration of form entry.
+ *
  * @package - exported only for unit tests
  * @template {string} [CollectionID=string]
  */
@@ -427,6 +448,8 @@ export class RefIndexedDOMCollection {
 }
 
 /**
+ * Initializes collections of stable or highly cacheable DOM elements. @see {@link RefIndexedDOMCollection}
+ *
  * @param {Form} form
  */
 export const initCollections = (form) => {

@@ -35,9 +35,12 @@ import events from './event';
 import './plugins';
 import './extend';
 import { callOnIdle } from './timers';
-import { setRefTypeClasses } from './dom/refs';
-import { initCollections, resetCollections } from './dom/collections';
-import { detectFeatures } from './dom/features';
+import {
+    detectFeatures,
+    initCollections,
+    resetCollections,
+    setRefTypeClasses,
+} from './dom';
 
 /**
  * @typedef FormOptions
