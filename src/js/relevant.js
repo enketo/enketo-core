@@ -111,7 +111,6 @@ export default {
         const relevantCache = {};
         const alreadyCovered = [];
         const repeatsPresent = this.form.features.repeat;
-        const clonedRepeatsPresent = this.form.features.repeatClone;
         const { groups, repeats } = this.form.collections;
 
         nodes.forEach((node) => {
@@ -206,11 +205,6 @@ export default {
                     ? repeatIndex
                     : null;
 
-            const insideRepeatClone =
-                hiddenInputRepeatIndex > 0 ||
-                (clonedRepeatsPresent &&
-                    repeatParent?.classList.contains('clone'));
-
             /*
              * If the relevant is placed on a group and that group contains repeats with the same name,
              * but currently has 0 repeats, the context will not be available. This same logic is applied in output.js.
@@ -235,9 +229,7 @@ export default {
              */
             const ind =
                 hiddenInputRepeatIndex ??
-                (context && insideRepeatClone
-                    ? this.form.repeats.getIndex(repeatParent)
-                    : 0);
+                this.form.repeats.getIndex(repeatParent);
 
             /*
              * Caching is only possible for expressions that do not contain relative paths to nodes.

@@ -20,8 +20,6 @@ export const detectFeatures = (formElement) => {
     const pagination = formElement.classList.contains('pages');
     const relevant = formElement.querySelector('[data-relevant]') != null;
     const repeat = formElement.querySelector('.or-repeat') != null;
-    const repeatClone =
-        repeat && formElement.querySelector('.or-repeat.clone') != null;
     const repeatCount =
         repeat &&
         formElement.querySelector('.or-repeat-info[data-repeat-count]') != null;
@@ -38,12 +36,6 @@ export const detectFeatures = (formElement) => {
         output,
         pagination,
         relevant,
-
-        /**
-         * This will be updated in repeat.js as repeats are added/removed.
-         */
-        repeatClone,
-
         repeatCount,
         repeat,
         required,

@@ -210,7 +210,7 @@ export default {
      * @param {HTMLElement} el
      */
     getIndex(el) {
-        if (!el || !this.form.features.repeatClone) {
+        if (!el) {
             return 0;
         }
 
@@ -400,8 +400,6 @@ export default {
             return false;
         }
 
-        this.form.features.repeatClone = true;
-
         const repeatPath = repeatInfo.dataset.name;
         const repeats = getSiblingElements(repeatInfo, '.or-repeat');
 
@@ -458,12 +456,6 @@ export default {
 
             // Insert the clone
             repeatInfo.before(clone);
-
-            if (repeatIndexInSeries > 0) {
-                // Also add the clone class for all 2+ numbers as this is
-                // used for performance optimization in several places.
-                clone.classList.add('clone');
-            }
 
             // Update the repeat number
             clone.querySelector('.repeat-number').textContent =
@@ -536,18 +528,7 @@ export default {
         const repeatIndex = this.getIndex($repeat[0]);
         const repeatInfo = $repeat.siblings('.or-repeat-info')[0];
 
-        if (
-            repeatIndex === 0 ||
-            $repeat.get(0).previousElementSibling?.getAttribute('name') !==
-                repeatPath
-        ) {
-            $next.get(0).classList.remove('clone');
-        }
-
         $repeat.remove();
-
-        this.form.features.repeatClone =
-            this.form.view.html.querySelector('.or-repeat.clone') != null;
 
         invalidateRepeatCaches(repeatPath);
 

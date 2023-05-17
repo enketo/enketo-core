@@ -124,7 +124,6 @@ export default {
             return;
         }
 
-        const clonedRepeatsPresent = this.form.features.repeatClone;
         const alerts = [];
 
         nodes.forEach((template) => {
@@ -196,12 +195,7 @@ export default {
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat and not shared.
              * It can be safely set to 0 for other branches.
              */
-            const index =
-                !shared &&
-                clonedRepeatsPresent &&
-                input.closest('.or-repeat.clone')
-                    ? that.form.input.getIndex(input)
-                    : 0;
+            const index = !shared ? that.form.input.getIndex(input) : 0;
             const safeToTryNative = true;
             // Caching has no advantage here. This is a very quick query
             // (natively).

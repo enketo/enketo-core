@@ -43,7 +43,6 @@ export default {
         const requiredCache = {};
 
         const $nodes = this.form.getRelatedNodes('data-required', '', updated);
-        const repeatClonesPresent = this.form.features.repeatClone;
 
         $nodes.each(function () {
             const $input = $(this);
@@ -51,9 +50,7 @@ export default {
             const requiredExpr = that.form.input.getRequired(input);
             const path = that.form.input.getName(input);
             // Minimize index determination because it is expensive.
-            const index = repeatClonesPresent
-                ? that.form.input.getIndex(input)
-                : 0;
+            const index = that.form.input.getIndex(input);
             // The path is stripped of the last nodeName to record the context.
             // This might be dangerous, but until we find a bug, it improves performance a lot in those forms where one group contains
             // many sibling questions that each have the same required expression.

@@ -50,7 +50,7 @@ describe('DOM tree walker functionality', () => {
                                     </section>
 
                                     <section
-                                        class="or-repeat clone"
+                                        class="or-repeat"
                                         name="/data/foo/bar"
                                         id="repeat-foo-0-bar-1">
                                         <!--repeats:/data/foo/bar-->
@@ -72,7 +72,7 @@ describe('DOM tree walker functionality', () => {
                             </section>
 
                             <section
-                                class="or-repeat clone"
+                                class="or-repeat"
                                 name="/data/foo"
                                 id="repeat-foo-1">
                                 <!--repeats:/data/foo-->
@@ -97,7 +97,7 @@ describe('DOM tree walker functionality', () => {
                                     </section>
 
                                     <section
-                                        class="or-repeat clone"
+                                        class="or-repeat"
                                         name="/data/foo/bar"
                                         id="repeat-foo-1-bar-1">
                                         <!--repeats:/data/foo/bar-->

@@ -405,7 +405,7 @@ describe('Itemset functionality', () => {
                 .trigger('change');
             // add repeat
             form.view.$.find('.add-repeat-btn').click();
-            $clonedRepeat = form.view.$.find('.or-repeat.clone');
+            $clonedRepeat = form.view.$.find('.or-repeat + .or-repeat');
         });
 
         it('the itemset of the cloned repeat is correct (and not a cloned copy of the master repeat)', () => {
@@ -569,7 +569,7 @@ describe('Itemset functionality', () => {
             // second option
             form.view.html.querySelector('.add-repeat-btn').click();
             const input2 = form.view.html.querySelector(
-                '.clone [name="/data/repeat1/specimen_id"]'
+                '.or-repeat + .or-repeat [name="/data/repeat1/specimen_id"]'
             );
             input2.value = 'bb';
             input2.dispatchEvent(events.Change());

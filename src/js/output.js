@@ -48,8 +48,6 @@ export default {
                 ? this.form.getRelatedNodes('data-value', '.or-output', updated)
                 : $(rootNode.querySelectorAll('.or-output'));
 
-        const clonedRepeatsPresent = this.form.features.repeatClone;
-
         $nodes.each(function () {
             const $output = $(this);
             const output = this;
@@ -92,16 +90,8 @@ export default {
                 contextPath = null;
             }
 
-            const insideRepeat =
-                clonedRepeatsPresent &&
-                $output.parentsUntil('.or', '.or-repeat').length > 0;
-            const insideRepeatClone =
-                insideRepeat &&
-                $output.parentsUntil('.or', '.or-repeat.clone').length > 0;
-            const index =
-                insideRepeatClone && contextPath
-                    ? that.form.input.getIndex(context)
-                    : 0;
+            const insideRepeat = output.closest('.or-repeat') != null;
+            const index = contextPath ? that.form.input.getIndex(context) : 0;
 
             if (typeof outputCache[expr] !== 'undefined') {
                 val = outputCache[expr];
