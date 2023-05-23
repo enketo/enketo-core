@@ -41,6 +41,10 @@ describe('calculate functionality', () => {
 
         form.init();
 
+        form.view.html.addEventListener(events.Change().type, () => {
+            timers.tick(1);
+        });
+
         const firstInput = form.view.html.querySelector(
             'input[name="/calcs-cascade/first"]'
         );
@@ -240,11 +244,11 @@ describe('calculate functionality', () => {
             const form = loadForm('relevant-calcs.xml', null);
 
             form.init();
-            timers.runAll();
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const grp = form.model.xml.querySelector('grp');
-
-            timers.runAll();
 
             expect(grp.textContent.replace(/\s/g, '')).to.equal('');
 
@@ -253,16 +257,12 @@ describe('calculate functionality', () => {
             a.value = 'a';
             a.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(grp.textContent.replace(/\s/g, '')).to.equal(
                 'onetwothreefour'
             );
 
             a.value = '';
             a.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(grp.textContent.replace(/\s/g, '')).to.equal('');
         });
@@ -271,11 +271,12 @@ describe('calculate functionality', () => {
             const form = loadForm('relevant-calcs.xml', null);
 
             form.init();
-            timers.runAll();
+
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const grp = form.model.xml.querySelector('grp');
-
-            timers.runAll();
 
             expect(grp.textContent.replace(/\s/g, '')).to.equal('');
 
@@ -284,8 +285,6 @@ describe('calculate functionality', () => {
             a.value = 'a';
             a.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(grp.textContent.replace(/\s/g, '')).to.equal(
                 'onetwothreefour'
             );
@@ -293,12 +292,8 @@ describe('calculate functionality', () => {
             a.value = '';
             a.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             a.value = 'a';
             a.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(grp.textContent.replace(/\s/g, '')).to.equal(
                 'onetwothreefour'
@@ -309,11 +304,12 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
+
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const child = form.model.xml.querySelector('is-child-relevant');
-
-            timers.runAll();
 
             expect(child.textContent).to.equal('');
 
@@ -327,19 +323,13 @@ describe('calculate functionality', () => {
             setsGroupRelevance.value = '1';
             setsGroupRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             setsChildRelevance.value = '2';
             setsChildRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(child.textContent).to.equal('is relevant');
 
             setsGroupRelevance.value = '';
             setsGroupRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(child.textContent).to.equal('');
         });
@@ -348,11 +338,12 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
+
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const child = form.model.xml.querySelector('is-child-relevant');
-
-            timers.runAll();
 
             expect(child.textContent).to.equal('');
 
@@ -366,24 +357,16 @@ describe('calculate functionality', () => {
             setsGroupRelevance.value = '1';
             setsGroupRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             setsChildRelevance.value = '2';
             setsChildRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(child.textContent).to.equal('is relevant');
 
             setsGroupRelevance.value = '';
             setsGroupRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             setsGroupRelevance.value = '1';
             setsGroupRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(child.textContent).to.equal('is relevant');
         });
@@ -393,11 +376,11 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
 
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
             const now = form.model.xml.querySelector('now');
-
-            timers.runAll();
 
             const initialValue = new Date(now.textContent).getTime();
 
@@ -410,12 +393,8 @@ describe('calculate functionality', () => {
             toggleNow.value = '';
             toggleNow.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             toggleNow.value = '1';
             toggleNow.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             const recalculatedValue = new Date(now.textContent).getTime();
 
@@ -426,11 +405,11 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
 
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
             const now = form.model.xml.querySelector('now-grouped now');
-
-            timers.runAll();
 
             const initialValue = new Date(now.textContent).getTime();
 
@@ -443,12 +422,8 @@ describe('calculate functionality', () => {
             toggleNow.value = '';
             toggleNow.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             toggleNow.value = '1';
             toggleNow.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             const recalculatedValue = new Date(now.textContent).getTime();
 
@@ -459,12 +434,12 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
 
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
             const computedByChild =
                 form.model.xml.querySelector('computed-by-child');
-
-            timers.runAll();
 
             const initialValue = computedByChild.textContent;
 
@@ -480,26 +455,18 @@ describe('calculate functionality', () => {
             setsGroupRelevance.value = '1';
             setsGroupRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             setsChildRelevance.value = '2';
             setsChildRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(computedByChild.textContent).to.equal('is relevant');
 
             setsChildRelevance.value = '';
             setsChildRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(computedByChild.textContent).to.equal('');
 
             setsChildRelevance.value = '2';
             setsChildRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(computedByChild.textContent).to.equal('is relevant');
         });
@@ -508,12 +475,13 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
+
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const assignAnyValue =
                 form.model.xml.querySelector('assign-any-value');
-
-            timers.runAll();
 
             const initialValue = assignAnyValue.textContent;
 
@@ -526,8 +494,6 @@ describe('calculate functionality', () => {
             setsRelevance.value = '1';
             setsRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             const assignAnyValueInput = form.view.html.querySelector(
                 'input[name="/data/assign-any-value"]'
             );
@@ -535,21 +501,15 @@ describe('calculate functionality', () => {
             assignAnyValueInput.value = 'any value';
             assignAnyValueInput.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(assignAnyValue.textContent).to.equal('any value');
 
             setsRelevance.value = '';
             setsRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(assignAnyValue.textContent).to.equal('');
 
             setsRelevance.value = '1';
             setsRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(assignAnyValue.textContent).to.equal('any value');
         });
@@ -558,12 +518,13 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
+
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const assignAnyValue =
                 form.model.xml.querySelector('assign-any-value');
-
-            timers.runAll();
 
             const initialValue = assignAnyValue.textContent;
 
@@ -577,14 +538,10 @@ describe('calculate functionality', () => {
                 'input[name="/data/calc-by-assign-any-value"]'
             );
 
-            timers.runAll();
-
             expect(calculated.value).to.equal('');
 
             setsRelevance.value = '1';
             setsRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             const assignAnyValueInput = form.view.html.querySelector(
                 'input[name="/data/assign-any-value"]'
@@ -593,21 +550,15 @@ describe('calculate functionality', () => {
             assignAnyValueInput.value = 'any value';
             assignAnyValueInput.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(calculated.value).to.equal('any value');
 
             setsRelevance.value = '';
             setsRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(calculated.value).to.equal('');
 
             setsRelevance.value = '1';
             setsRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(calculated.value).to.equal('any value');
         });
@@ -616,7 +567,10 @@ describe('calculate functionality', () => {
             const form = loadForm('exclude-non-relevant-basic.xml', null);
 
             form.init();
-            timers.runAll();
+
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const outerGroup = form.model.xml.querySelector(
                 'is-outer-group-relevant'
@@ -627,8 +581,6 @@ describe('calculate functionality', () => {
             const child = form.model.xml.querySelector(
                 'child-without-direct-relevant-expression'
             );
-
-            timers.runAll();
 
             expect(outerGroup.textContent.trim()).to.equal('');
             expect(innerGroup.textContent.trim()).to.equal('');
@@ -641,8 +593,6 @@ describe('calculate functionality', () => {
             setsOuterRelevance.value = 'yes';
             setsOuterRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(outerGroup.textContent.trim()).to.equal('');
             expect(innerGroup.textContent.trim()).to.equal('');
             expect(child.textContent).to.equal('');
@@ -654,16 +604,12 @@ describe('calculate functionality', () => {
             setsInnerRelevance.value = 'yes';
             setsInnerRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(outerGroup.textContent.trim()).to.equal('yes');
             expect(innerGroup.textContent.trim()).to.equal('yes');
             expect(child.textContent).to.equal('yes');
 
             setsInnerRelevance.value = 'no';
             setsInnerRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(outerGroup.textContent.trim()).to.equal('');
             expect(innerGroup.textContent.trim()).to.equal('');
@@ -672,16 +618,12 @@ describe('calculate functionality', () => {
             setsInnerRelevance.value = 'yes';
             setsInnerRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(outerGroup.textContent.trim()).to.equal('yes');
             expect(innerGroup.textContent.trim()).to.equal('yes');
             expect(child.textContent).to.equal('yes');
 
             setsOuterRelevance.value = 'no';
             setsOuterRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(outerGroup.textContent.trim()).to.equal('');
             expect(innerGroup.textContent.trim()).to.equal('');
@@ -690,8 +632,6 @@ describe('calculate functionality', () => {
             setsOuterRelevance.value = 'yes';
             setsOuterRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(outerGroup.textContent.trim()).to.equal('yes');
             expect(innerGroup.textContent.trim()).to.equal('yes');
             expect(child.textContent).to.equal('yes');
@@ -699,16 +639,12 @@ describe('calculate functionality', () => {
             setsOuterRelevance.value = 'no';
             setsOuterRelevance.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(outerGroup.textContent.trim()).to.equal('');
             expect(innerGroup.textContent.trim()).to.equal('');
             expect(child.textContent).to.equal('');
 
             setsOuterRelevance.value = 'yes';
             setsOuterRelevance.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(outerGroup.textContent.trim()).to.equal('yes');
             expect(innerGroup.textContent.trim()).to.equal('yes');
@@ -719,7 +655,10 @@ describe('calculate functionality', () => {
             const form = loadForm('recalculations.xml');
 
             form.init();
-            timers.runAll();
+
+            form.view.html.addEventListener(events.Change().type, () => {
+                timers.tick(1);
+            });
 
             const q1 = form.view.html.querySelector(
                 'input[name="/recalculations/q1"]'
@@ -734,21 +673,15 @@ describe('calculate functionality', () => {
             q1.value = '1';
             q1.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             expect(q2.value).to.equal('7');
 
             q2.value = '8';
             q3.dispatchEvent(events.Change());
 
-            timers.runAll();
-
             const calculationUpdateSpy = sandbox.spy(form.calc, '_updateCalc');
 
             q3.value = '1';
             q3.dispatchEvent(events.Change());
-
-            timers.runAll();
 
             expect(calculationUpdateSpy).not.to.have.been.calledWith(q2);
             expect(q2.value).to.equal('8');

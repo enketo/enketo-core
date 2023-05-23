@@ -35,6 +35,12 @@ import events from './event';
 import './plugins';
 import './extend';
 import { callOnIdle } from './timers';
+import {
+    detectFeatures,
+    initCollections,
+    resetCollections,
+    setRefTypeClasses,
+} from './dom';
 
 /**
  * @typedef FormOptions
@@ -50,7 +56,7 @@ import { callOnIdle } from './timers';
  *
  * Most methods are prototype method to facilitate customizations outside of enketo-core.
  *
- * @param {Element} formEl - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
+ * @param {HTMLFormElement} formEl - HTML form element (a product of Enketo Transformer after transforming a valid ODK XForm)
  * @param {FormDataObj} data - Data object containing XML model, (partial) XML instance-to-load, external data and flag about whether instance-to-load has already been submitted before.
  * @param {FormOptions} [options]
  * @class
@@ -70,13 +76,25 @@ function Form(formEl, data, options) {
     this.all = {};
     this.options = options ?? {};
 
+    const formHTML = formEl.outerHTML;
+
     this.view = {
         $: $form,
         html: formEl,
-        clone: formEl.cloneNode(true),
+        get clone() {
+            const range = document.createRange();
+
+            return range.createContextualFragment(formHTML).firstElementChild;
+        },
     };
+
+    /** @type {ReturnType<typeof detectFeatures>} */
+    this.features = {};
+
+    /** @type {ReturnType<typeof initCollections>} */
+    this.collections = {};
+
     this.model = new FormModel(data);
-    this.repeatsPresent = !!this.view.html.querySelector('.or-repeat');
     this.widgetsInitialized = false;
     this.repeatsInitialized = false;
     this.pageNavigationBlocked = false;
@@ -242,8 +260,9 @@ Form.prototype = {
 /**
  * Returns a module and adds the form property to it.
  *
- * @param {object} module - Enketo Core module
- * @return {object} updated module
+ * @template T
+ * @param {T} module - Enketo Core module
+ * @return {T & { form: Form }} updated module
  */
 Form.prototype.addModule = function (module) {
     return Object.create(module, {
@@ -281,29 +300,45 @@ Form.prototype.init = function () {
     this.required = this.addModule(requiredModule);
     this.readonly = this.addModule(readonlyModule);
 
+    const formEl = this.view.html;
+
+    setRefTypeClasses(this);
+    this.features = detectFeatures(formEl);
+    this.collections = initCollections(this);
+    widgetModule.initForm(formEl);
+
+    const { instanceFirstLoadAction, newRepeatAction, valueChangedAction } =
+        this.features;
+
     // Handle odk-instance-first-load event
-    this.model.events.addEventListener(
-        events.InstanceFirstLoad().type,
-        (event) => {
+    if (instanceFirstLoadAction) {
+        this.model.events.addEventListener(
+            events.InstanceFirstLoad().type,
+            (event) => {
+                this.calc.performAction('setvalue', event);
+                this.calc.performAction('setgeopoint', event);
+            }
+        );
+    }
+
+    if (newRepeatAction) {
+        // Handle odk-new-repeat event before initializing repeats
+        this.view.html.addEventListener(events.NewRepeat().type, (event) => {
             this.calc.performAction('setvalue', event);
             this.calc.performAction('setgeopoint', event);
-        }
-    );
+        });
+    }
 
-    // Handle odk-new-repeat event before initializing repeats
-    this.view.html.addEventListener(events.NewRepeat().type, (event) => {
-        this.calc.performAction('setvalue', event);
-        this.calc.performAction('setgeopoint', event);
-    });
-
-    // Handle xforms-value-changed
-    this.view.html.addEventListener(
-        events.XFormsValueChanged().type,
-        (event) => {
-            this.calc.performAction('setvalue', event);
-            this.calc.performAction('setgeopoint', event);
-        }
-    );
+    if (valueChangedAction) {
+        // Handle xforms-value-changed
+        this.view.html.addEventListener(
+            events.XFormsValueChanged().type,
+            (event) => {
+                this.calc.performAction('setvalue', event);
+                this.calc.performAction('setgeopoint', event);
+            }
+        );
+    }
 
     // Before initializing form view and model, passthrough some model events externally
     // Because of instance-first-load actions, this should be done before the model is initialized. This is important for custom
@@ -337,10 +372,10 @@ Form.prototype.init = function () {
             instanceID: this.model.instanceID,
         });
 
-        // before calc.update!
+        // before calc.init!
         this.grosslyViolateStandardComplianceByIgnoringCertainCalcs();
         // before repeats.init to make sure the jr:repeat-count calculation has been evaluated
-        this.calc.update();
+        this.calc.init();
 
         // before itemset.update
         this.langs.init(this.options.language);
@@ -437,11 +472,11 @@ Form.prototype.init = function () {
             this.all = {};
         }
 
-        // after repeats.init, but before itemset.update
-        this.output.update();
+        // after repeats.init, but before itemset.init
+        this.output.init();
 
         // after repeats.init
-        this.itemset.update();
+        this.itemset.init();
 
         // after repeats.init
         this.setAllVals();
@@ -454,10 +489,11 @@ Form.prototype.init = function () {
         this.options.pathToAbsolute = this.pathToAbsolute.bind(this);
         this.options.evaluate = this.model.evaluate.bind(this.model);
         this.options.getModelValue = this.getModelValue.bind(this);
+
         this.widgetsInitialized = this.widgets.init(null, this.options);
 
         // after widgets.init(), and after repeats.init(), and after pages.init()
-        this.relevant.update();
+        this.relevant.init();
 
         // after widgets init to make sure widget handlers are called before
         // after loading existing instance to not trigger an 'edit' event
@@ -467,7 +503,7 @@ Form.prototype.init = function () {
         // field values are calculated
         this.calc.update();
 
-        this.required.update();
+        this.required.init();
 
         this.editStatus = false;
 
@@ -542,6 +578,8 @@ Form.prototype.resetView = function () {
         this.langs.formLanguages.remove();
     }
     this.view.html.replaceWith(this.view.clone);
+
+    resetCollections();
 
     return document.querySelector('form.or');
 };
@@ -742,12 +780,11 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         ];
         repeatControls = this.filterRadioCheckSiblings(controls);
     } else if (typeof repeatPath !== 'undefined' && updated.repeatIndex >= 0) {
-        // If the updated node is inside a repeat (and there are multiple repeats present)
-        const repeatEl = [
-            ...this.view.html.querySelectorAll(
-                `.or-repeat[name="${repeatPath}"]`
-            ),
-        ][updated.repeatIndex];
+        const repeatEl = this.collections.repeats.getElementByRef(
+            repeatPath,
+            updated.repeatIndex
+        );
+
         controls = repeatEl ? [...repeatEl.querySelectorAll(`[${attr}]`)] : [];
         repeatControls = this.filterRadioCheckSiblings(controls);
     }
@@ -786,6 +823,10 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         collection = this.all[attr];
     }
 
+    if (collection.length === 0) {
+        return $(collection);
+    }
+
     let selector = [];
     // Add selectors based on specific changed nodes
     if (!updated.nodes || updated.nodes.length === 0) {
@@ -810,10 +851,13 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         );
     }
 
+    if (selector.length === 0) {
+        return $(collection);
+    }
+
     const selectorStr = selector.join(', ');
-    collection = selectorStr
-        ? collection.filter((el) => el.matches(selectorStr))
-        : collection;
+
+    collection = collection.filter((el) => el.matches(selectorStr));
 
     // TODO: exclude descendents of disabled elements? .find( ':not(:disabled) span.active' )
     // TODO: remove jQuery wrapper, just return array of elements
@@ -982,7 +1026,9 @@ Form.prototype.validationUpdate = function (updated = {}) {
 
         // Find all inputs that have a dependency on the changed node. Avoid duplicates with Set.
         const nodes = new Set(
-            this.getRelatedNodes('data-required', '', upd).get()
+            this.features.required
+                ? this.getRelatedNodes('data-required', '', upd).get()
+                : []
         );
         this.constraintAttributes.forEach((attr) =>
             this.getRelatedNodes(attr, '', upd).get().forEach(nodes.add, nodes)
@@ -1277,7 +1323,7 @@ Form.prototype.validateContent = function ($container) {
         .map(function () {
             // only trigger validate on first input and use a **pure CSS** selector (huge performance impact)
             const elem = this.querySelector(
-                'input:not(.ignore):not(:disabled), select:not(.ignore):not(:disabled), textarea:not(.ignore):not(:disabled)'
+                'input:enabled:not(.ignore), select:enabled:not(.ignore), textarea:enabled:not(.ignore)'
             );
             if (!elem) {
                 return Promise.resolve();

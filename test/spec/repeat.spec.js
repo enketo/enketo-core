@@ -1107,7 +1107,7 @@ describe('repeat functionality', () => {
             setRepeatRelevant.dispatchEvent(event.Change());
 
             const setSecondNumberNonRelevant = form.view.html.querySelector(
-                '.or-repeat.clone [data-name="/data/rep/is-num-relevant"][value="no"]'
+                '.or-repeat + .or-repeat [data-name="/data/rep/is-num-relevant"][value="no"]'
             );
 
             setSecondNumberNonRelevant.checked = true;

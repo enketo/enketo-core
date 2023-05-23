@@ -7,7 +7,41 @@ import { getAncestors, getSiblingElementsAndSelf } from './dom-utils';
 import events from './event';
 import { getCurrentPosition } from './geolocation';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    /** @type {WeakMap<HTMLElement, boolean>} */
+    preInitRelevance: new WeakMap(),
+
+    init() {
+        if (!this.form) {
+            throw new Error(
+                'Calculation module not correctly instantiated with form property.'
+            );
+        }
+
+        if (!this.form.features.calculate) {
+            this.update = () => {};
+            this.performAction = () => {};
+
+            return;
+        }
+
+        this.initialized = false;
+        this.preInitRelevance = new WeakMap();
+        this.update();
+        this.initialized = true;
+    },
+
     /**
      * Updates calculated items.
      *
@@ -17,12 +51,6 @@ export default {
      */
     update(updated = {}, filter = '', emptyNonRelevant = false) {
         let nodes;
-
-        if (!this.form) {
-            throw new Error(
-                'Calculation module not correctly instantiated with form property.'
-            );
-        }
 
         // Filter is used in custom applications that make a distinction between types of calculations.
         if (updated.relevantPath) {
@@ -141,12 +169,12 @@ export default {
             // https://github.com/OpenClinica/enketo-express-oc/issues/355#issuecomment-725640823
             return [
                 ...this.form.view.html.querySelectorAll(
-                    `.${action} [data-${action}][data-event*="${event.type}"]`
+                    `.non-form-control-action[data-${action}].odk-instance-first-load`
                 ),
             ].concat(
                 this.form.filterRadioCheckSiblings([
                     ...this.form.view.html.querySelectorAll(
-                        `.question [data-${action}][data-event*="${event.type}"]`
+                        `.form-control-action[data-${action}].odk-instance-first-load`
                     ),
                 ])
             );
@@ -160,7 +188,7 @@ export default {
             return this.form
                 .getRelatedNodes(
                     `data-${action}`,
-                    `.${action} [data-event*="${event.type}"]`,
+                    '.non-form-control-action.odk-new-repeat',
                     event.detail
                 )
                 .get()
@@ -168,7 +196,7 @@ export default {
                     this.form
                         .getRelatedNodes(
                             `data-${action}`,
-                            `.question [data-event*="${event.type}"]`,
+                            '.form-control-action.odk-new-repeat',
                             event.detail
                         )
                         .get()
@@ -179,12 +207,12 @@ export default {
 
             return question
                 ? [
-                      ...question.querySelectorAll(
-                          `[data-${action}][data-event*="${event.type}"]`
-                      ),
-                  ]
+                      ...question.querySelectorAll('.xforms-value-changed'),
+                  ].filter((el) => el.dataset[action] != null)
                 : [];
         }
+
+        return [];
     },
 
     /**
@@ -196,12 +224,6 @@ export default {
     performAction(action, event) {
         if (!event) {
             return;
-        }
-
-        if (!this.form) {
-            throw new Error(
-                `${action} action not correctly instantiated with form property.`
-            );
         }
 
         const nodes = this._getNodesForAction(action, event);
@@ -376,18 +398,23 @@ export default {
      * @return {boolean} whether the node is relevant
      */
     _isRelevant(props) {
-        let relevant = props.relevantExpr
-            ? this.form.model.evaluate(
-                  props.relevantExpr,
-                  'boolean',
-                  props.name,
-                  props.index
-              )
+        if (!this.form.features.relevant) {
+            return true;
+        }
+
+        const { groups, repeats } = this.form.collections;
+        const { relevantExpr, name, index } = props;
+
+        let relevant = relevantExpr
+            ? this.form.model.evaluate(relevantExpr, 'boolean', name, index)
             : true;
+
+        /** @type {HTMLElement | null} */
+        let startElement = null;
 
         // Only look at ancestors if self is relevant.
         if (relevant) {
-            const pathParts = props.name.split('/');
+            const pathParts = name.split('/');
             /*
              * First determine immediate group parent of node, which will always be in correct location in DOM. This is where
              * we can use the index to be guaranteed to get the correct node.
@@ -402,43 +429,40 @@ export default {
             const parentPath = pathParts
                 .splice(0, pathParts.length - 1)
                 .join('/');
-            let startElement;
 
-            if (props.index === 0) {
-                startElement = this.form.view.html.querySelector(
-                    `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                );
+            if (index === 0) {
+                startElement = groups.getElementByRef(parentPath);
             } else {
                 startElement =
-                    this.form.view.html.querySelectorAll(
-                        `.or-repeat[name="${parentPath}"]`
-                    )[props.index] ||
-                    this.form.view.html.querySelectorAll(
-                        `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                    )[props.index];
+                    repeats.getElementByRef(parentPath, index) ||
+                    groups.getElementByRef(parentPath, index);
             }
+
             const ancestorGroups = startElement
                 ? [startElement].concat(
-                      getAncestors(startElement, '.or-group, .or-group-data')
+                      getAncestors(
+                          startElement,
+                          '.or-group[data-relevant], .or-group-data[data-relevant]'
+                      )
                   )
                 : [];
 
             if (ancestorGroups.length) {
                 // Start at the highest level, and traverse down to the immediate parent group.
                 relevant = ancestorGroups
-                    .filter((el) => el.matches('[data-relevant]'))
-                    .map((group) => {
-                        const nm = this.form.input.getName(group);
+                    .map((ancestor) => {
+                        const isRepeat =
+                            ancestor.classList.contains('or-repeat');
+                        const collection = isRepeat ? repeats : groups;
+                        const path = this.form.input.getName(ancestor);
+                        const index = collection.refIndexOf(ancestor, path);
 
                         return {
-                            context: nm,
+                            element: ancestor,
+                            context: path,
                             // thankfully relevants on repeats are not possible with XLSForm-produced forms
-                            index: [
-                                ...this.form.view.html.querySelectorAll(
-                                    `.or-group[name="${nm}"], .or-group-data[name="${nm}"]`
-                                ),
-                            ].indexOf(group), // performance....
-                            expr: this.form.input.getRelevant(group),
+                            index,
+                            expr: this.form.input.getRelevant(ancestor),
                         };
                     })
                     .concat([
@@ -448,16 +472,31 @@ export default {
                             expr: props.relevantExpr,
                         },
                     ])
-                    .every((item) =>
-                        item.expr
+                    .every((item) => {
+                        const { element, expr, context, index } = item;
+
+                        const preInitRelevance =
+                            this.preInitRelevance.get(element);
+
+                        if (preInitRelevance != null) {
+                            return preInitRelevance;
+                        }
+
+                        const result = item.expr
                             ? this.form.model.evaluate(
-                                  item.expr,
+                                  expr,
                                   'boolean',
-                                  item.context,
-                                  item.index
+                                  context,
+                                  index
                               )
-                            : true
-                    );
+                            : true;
+
+                        if (element != null && !this.initialized) {
+                            this.preInitRelevance.set(element, result);
+                        }
+
+                        return result;
+                    });
             }
         }
 
@@ -465,11 +504,18 @@ export default {
     },
 
     _hasNeverBeenRelevant(control, props) {
+        if (!this.form.features.relevant) {
+            return false;
+        }
+
         if (control && control.closest('.pre-init')) {
             return true;
         }
+
+        const { name, index } = props;
+
         // Check parents including when the calculation has no form control.
-        const pathParts = props.name.split('/');
+        const pathParts = name.split('/');
         /*
          * First determine immediate group parent of node, which will always be in correct location in DOM. This is where
          * we can use the index to be guaranteed to get the correct node.
@@ -482,22 +528,20 @@ export default {
          * Note: getting the parents of control wouldn't work for nodes inside #calculated-items!
          */
         const parentPath = pathParts.splice(0, pathParts.length - 1).join('/');
-        let startElement;
 
-        if (props.index === 0) {
-            startElement = this.form.view.html.querySelector(
-                `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-            );
+        /** @type {HTMLElement | null} */
+        let startElement = null;
+
+        const { groups, repeats } = this.form.collections;
+
+        if (index === 0) {
+            startElement = groups.getElementByRef(parentPath);
         } else {
             startElement =
-                this.form.view.html.querySelectorAll(
-                    `.or-repeat[name="${parentPath}"]`
-                )[props.index] ||
-                this.form.view.html.querySelectorAll(
-                    `.or-group[name="${parentPath}"],.or-group-data[name="${parentPath}"]`
-                )[props.index];
+                repeats.getElementByRef(parentPath, index) ||
+                groups.getElementByRef(parentPath, index);
         }
 
-        return startElement ? !!startElement.closest('.pre-init') : false;
+        return startElement ? startElement.closest('.pre-init') != null : false;
     },
 };

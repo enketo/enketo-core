@@ -10,7 +10,18 @@ import events from './event';
 import { getSiblingElement, getAncestors } from './dom-utils';
 import 'jquery-touchswipe';
 
+/**
+ * @typedef {import('./form').Form} Form
+ */
+
 export default {
+    /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
     /**
      * @type {boolean}
      * @default
@@ -34,7 +45,7 @@ export default {
                 'Repeats module not correctly instantiated with form property.'
             );
         }
-        if (this.form.view.html.classList.contains('pages')) {
+        if (this.form.features.pagination) {
             const allPages = [
                 ...this.form.view.html.querySelectorAll(
                     '.question, .or-appearance-field-list'

@@ -8,12 +8,15 @@ import dialog from 'enketo/dialog';
 import { t } from 'enketo/translator';
 import { parseFunctionFromExpression } from './utils';
 import {
-    closestAncestorUntil,
     getChild,
     getSiblingElement,
     elementDataStore as data,
 } from './dom-utils';
 import events from './event';
+
+/**
+ * @typedef {import('./form').Form} Form
+ */
 
 /**
  * This function tries to determine whether an XPath expression for a nodeset from an external instance is static.
@@ -43,18 +46,35 @@ export { isStaticItemsetFromSecondaryInstance };
 
 export default {
     /**
+     * @type {Form}
+     */
+    // @ts-expect-error - this will be populated during form init, but assigning
+    // its type here improves intellisense.
+    form: null,
+
+    init() {
+        if (!this.form) {
+            throw new Error(
+                'Itemset module not correctly instantiated with form property.'
+            );
+        }
+
+        if (!this.form.features.itemset) {
+            this.update = () => {};
+
+            return;
+        }
+
+        this.update();
+    },
+
+    /**
      * @param {UpdatedDataNodes} [updated] - The object containing info on updated data nodes.
      */
     update(updated = {}) {
         const that = this;
         const fragmentsCache = {};
         let nodes;
-
-        if (!this.form) {
-            throw new Error(
-                'Output module not correctly instantiated with form property.'
-            );
-        }
 
         if (updated.relevantPath) {
             // Questions that are descendants of a group:
@@ -100,20 +120,21 @@ export default {
                 .get();
         }
 
-        const clonedRepeatsPresent =
-            this.form.repeatsPresent &&
-            this.form.view.html.querySelector('.or-repeat.clone');
+        if (nodes.length === 0) {
+            return;
+        }
+
         const alerts = [];
 
         nodes.forEach((template) => {
+            // Nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
+            if (template.closest('.disabled')) {
+                return;
+            }
+
             const shared =
                 template.parentElement.parentElement.matches('.or-repeat-info');
             const inputAttributes = {};
-
-            // Nodes are in document order, so we discard any nodes in questions/groups that have a disabled parent
-            if (closestAncestorUntil(template, '.disabled', '.or')) {
-                return;
-            }
 
             const newItems = {};
             const prevItems = data.get(template, 'items') || {};
@@ -174,14 +195,13 @@ export default {
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat and not shared.
              * It can be safely set to 0 for other branches.
              */
-            const index =
-                !shared &&
-                clonedRepeatsPresent &&
-                closestAncestorUntil(input, '.or-repeat.clone', '.or')
-                    ? that.form.input.getIndex(input)
-                    : 0;
+            const index = !shared ? that.form.input.getIndex(input) : 0;
             const safeToTryNative = true;
-            // Caching has no advantage here. This is a very quick query (natively).
+            // Caching has no advantage here. This is a very quick query
+            // (natively).
+            // TODO: ^ this is definitely not true when adding
+            // multiple count-controlled repeats where the result can be
+            // expected to be the same for each.
             const instanceItems = this.form.model.evaluate(
                 itemsXpath,
                 'nodes',
@@ -189,7 +209,6 @@ export default {
                 index,
                 safeToTryNative
             );
-
             // This property allows for more efficient 'itemschanged' detection
             newItems.length = instanceItems.length;
             // TODO: This may cause problems for large itemsets. Use md5 instead?
