@@ -326,12 +326,16 @@ export default {
                     // Use today's date to incorporate daylight savings changes,
                     // Strip the thousands of a second, because most browsers fail to parse such a time.
                     // Add a space before the timezone offset to satisfy some browsers.
-                    const ds = `${new Date().toLocaleDateString('en', {
+                    const todayDate = new Date().toLocaleDateString('en', {
                         month: 'short',
                         day: 'numeric',
                         year: 'numeric',
-                    })}`;
-                    const d = new Date(ds);
+                    });
+                    const valueTime = value.replace(
+                        /(\d\d:\d\d:\d\d)(\.\d{1,3})(\s?((\+|-)\d\d))(:)?(\d\d)?/,
+                        '$1 GMT$3$7'
+                    );
+                    const d = new Date(`${todayDate} ${valueTime}`);
                     if (d.toString() !== 'Invalid Date') {
                         value = `${d.getHours().toString().padStart(2, '0')}:${d
                             .getMinutes()
