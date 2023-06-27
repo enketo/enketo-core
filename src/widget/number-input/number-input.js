@@ -208,9 +208,8 @@ class NumberInput extends Widget {
             if (
                 ctrlKey ||
                 metaKey ||
-                (key.length > 1 && key !== 'Spacebar') ||
-                (!isComposing &&
-                    this.constructor.validCharacters.has(event.key))
+                (key && key.length > 1 && key !== 'Spacebar') ||
+                (!isComposing && this.constructor.validCharacters.has(key))
             ) {
                 return true;
             }
