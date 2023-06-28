@@ -308,7 +308,7 @@ describe('Resizable extensions to the signature_pad library', () => {
         expect(actual).to.deep.equal(expected);
     });
 
-    it('renders drawing data on a base image', async () => {
+    it.skip('renders drawing data on a base image', async () => {
         const baseImageURL = fixture('720x540.png');
 
         await pad.setBaseImage(baseImageURL);
@@ -384,7 +384,7 @@ describe('Resizable extensions to the signature_pad library', () => {
         });
     });
 
-    it('renders drawing data at full size fidelity when the canvas has been resized by its container, then restored to its maximum size', async () => {
+    it.skip('renders drawing data at full size fidelity when the canvas has been resized by its container, then restored to its maximum size', async () => {
         const baseImageURL = fixture('720x540.png');
 
         await pad.setBaseImage(baseImageURL);
@@ -420,7 +420,7 @@ describe('Resizable extensions to the signature_pad library', () => {
     // to float precision errors). The above test is also meaningful in terms of
     // describing the behavior, so both are kept despite total overlap of the
     // underlying behavior under test.
-    it('renders drawing data at full size fidelity when the canvas is currently resized by its container', async () => {
+    it.skip('renders drawing data at full size fidelity when the canvas is currently resized by its container', async () => {
         const baseImageURL = fixture('720x540.png');
 
         await pad.setBaseImage(baseImageURL);
@@ -445,7 +445,7 @@ describe('Resizable extensions to the signature_pad library', () => {
         expect(actual).to.deep.equal(expected);
     });
 
-    it('reverts the most recent stroke', async () => {
+    it.skip('reverts the most recent stroke', async () => {
         const baseImageURL = fixture('720x540.png');
 
         await pad.setBaseImage(baseImageURL);

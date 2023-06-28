@@ -230,7 +230,7 @@ export default {
                         );
                         if (destItem && destItem.element) {
                             const destEl = destItem.element;
-                            that.form.goToTarget(destEl, { isPageFlip: true });
+                            that.form.goToTarget(destEl);
                         }
                     }
                 }

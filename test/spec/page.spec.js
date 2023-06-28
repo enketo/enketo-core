@@ -71,4 +71,29 @@ describe('Pages mode', () => {
             expect(pageComment).to.equal(form.pages.current);
         });
     });
+
+    // TODO: this should be in toc.spec.js, but the functionality is not
+    // implemented there either, and it may be confusing to test functionality
+    // of one module in the test module for another.
+    describe('Table of contents page navigation', () => {
+        it('navigates to a page by table of contents', () => {
+            const form = loadForm('widgets_on_pages.xml');
+            const tocList = document.createElement('ol');
+
+            tocList.classList.add('pages-toc__list');
+
+            form.view.html.append(tocList);
+            form.init();
+
+            const question = form.view.html.querySelectorAll('.question')[2];
+
+            expect(question.classList.contains('current')).to.equal(false);
+
+            const tocLink = tocList.querySelector('li[tocid="3"] a');
+
+            tocLink.click();
+
+            expect(question.classList.contains('current')).to.equal(true);
+        });
+    });
 });
