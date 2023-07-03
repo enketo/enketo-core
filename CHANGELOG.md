@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [7.2.4] - 2023-07-03
+
+-   Performance improvements: do less redundant work, part 2 (#976)
+-   Fix: gracefully handle undefined key (#978)
+-   Fix: TOC navigation in pages theme (#983)
+-   Fix: Respect existing val of type='time' (#980)
+
 ## [7.2.3] - 2023-05-10
 
 -   Fix: focus first active input/widget on load, page navigation, user-added repeat (#969)
