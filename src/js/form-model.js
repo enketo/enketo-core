@@ -50,7 +50,7 @@ const FormModel = function (data, options) {
     options.full = typeof options.full !== 'undefined' ? options.full : true;
 
     this.events = document.createElement('div');
-    this.convertedExpressions = {};
+    this.convertedExpressions = new Map();
     this.templates = {};
     this.loadErrors = [];
 
@@ -1424,7 +1424,7 @@ FormModel.prototype.evaluate = function (
     cacheable = original === expr;
 
     // if no cached conversion exists
-    if (!this.convertedExpressions[cacheKey]) {
+    if (!this.convertedExpressions.has(cacheKey)) {
         expr = expr.trim();
         expr = this.replaceInstanceFn(expr);
         expr = this.replaceVersionFn(expr);
@@ -1440,10 +1440,10 @@ FormModel.prototype.evaluate = function (
         expr = expr.replace(/&gt;/g, '>');
         expr = expr.replace(/&quot;/g, '"');
         if (cacheable) {
-            this.convertedExpressions[cacheKey] = expr;
+            this.convertedExpressions.set(cacheKey,expr);
         }
     } else {
-        expr = this.convertedExpressions[cacheKey];
+        expr = this.convertedExpressions.get(cacheKey);
     }
 
     resultTypes = {
