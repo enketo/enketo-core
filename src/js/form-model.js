@@ -1424,7 +1424,8 @@ FormModel.prototype.evaluate = function (
     cacheable = original === expr;
 
     // if no cached conversion exists
-    if (!this.convertedExpressions.has(cacheKey)) {
+    cached_expr = this.convertedExpressions.get(cacheKey)
+    if (cached_expr === undefined) {
         expr = expr.trim();
         expr = this.replaceInstanceFn(expr);
         expr = this.replaceVersionFn(expr);
@@ -1443,7 +1444,7 @@ FormModel.prototype.evaluate = function (
             this.convertedExpressions.set(cacheKey,expr);
         }
     } else {
-        expr = this.convertedExpressions.get(cacheKey);
+        expr = cached_expr;
     }
 
     resultTypes = {
