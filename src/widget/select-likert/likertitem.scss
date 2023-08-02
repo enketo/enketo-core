@@ -1,3 +1,9 @@
+/*
+ * By default, all Likert items are styled to appear joined by applying a border
+ * to their `.option-label` children. This "filler" is then used to mask that
+ * border on the outer sides of the first and last items. This is most likely to
+ * be addressed by work in progress on the new theme.
+ */
 @mixin likert-filler {
     content: '';
     display: block;
@@ -17,6 +23,25 @@
         @include flex-wrap(nowrap);
 
         @include flex-direction(row);
+
+        /*
+         * Prevent display of "ghost option" when Likert items are defined in an
+         * itemset referencing items in a secondary instance
+         */
+        > .itemset-template {
+            display: none;
+
+            /*
+             * Treat an itemset's first option the same as an inline item. See
+             * note on `likert-filler`.
+             */
+            & + label .option-label::after,
+            & + .itemset-labels + label .option-label::after {
+                @include likert-filler;
+
+                left: 0;
+            }
+        }
 
         > label {
             @include flex(1);
