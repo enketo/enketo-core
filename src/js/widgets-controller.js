@@ -14,12 +14,6 @@ import events from './event';
 /** @type {WidgetClass[]} */
 let widgets = _widgets.filter((widget) => widget.selector);
 
-/** @type {Set<WidgetClass>} */
-let widgetsImplementingDisable = new Set();
-
-/** @type {Set<WidgetClass>} */
-let widgetsImplementingEnable = new Set();
-
 let options;
 
 /** @type {import('./form').Form} */
@@ -37,21 +31,6 @@ const initForm = (formElement) => {
             widget.selector &&
             formElement.querySelector(widget.selector) != null
     );
-
-    widgetsImplementingDisable = new Set();
-    widgetsImplementingEnable = new Set();
-
-    widgets.forEach((Widget) => {
-        const { implementsDisable, implementsEnable } = Widget;
-
-        if (implementsDisable) {
-            widgetsImplementingDisable.add(Widget);
-        }
-
-        if (implementsEnable) {
-            widgetsImplementingEnable.add(Widget);
-        }
-    });
 };
 
 /**
@@ -94,13 +73,7 @@ function init($group, opts = {}) {
  * @param {HTMLElement} group - HTML element
  */
 function enable(group) {
-    if (group.closest('.widgets-disabled') == null) {
-        return;
-    }
-
-    group.classList.remove('widgets-disbled');
-
-    widgetsImplementingEnable.forEach((Widget) => {
+    widgets.forEach((Widget) => {
         const els = _getElements(group, Widget.selector).filter((el) =>
             el.nodeName.toLowerCase() === 'select'
                 ? !el.hasAttribute('readonly')
@@ -119,13 +92,7 @@ function enable(group) {
  * @param {HTMLElement} group - The element inside which all widgets need to be disabled.
  */
 function disable(group) {
-    if (group.closest('.widgets-disabled') != null) {
-        return;
-    }
-
-    group.classList.add('widgets-disbled');
-
-    widgetsImplementingDisable.forEach((Widget) => {
+    widgets.forEach((Widget) => {
         const els = _getElements(group, Widget.selector);
 
         new Collection(els).disable(Widget);
@@ -202,8 +169,6 @@ const reset = () => {
     });
 
     widgets = [..._widgets];
-    widgetsImplementingDisable = new Set();
-    widgetsImplementingEnable = new Set();
 };
 
 /** @type {Map<typeof Widget, Set<HTMLElement>>} */

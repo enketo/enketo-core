@@ -15,13 +15,6 @@ class Widget {
     static globalInit(form, rootElement) {
         this.form = form;
         this.rootElement = rootElement;
-
-        if (form.features.relevant) {
-            this.implementsDisable =
-                this.prototype.disable !== Widget.prototype.disable;
-            this.implementsEnable =
-                this.prototype.enable !== Widget.prototype.enable;
-        }
     }
 
     static globalReset() {
@@ -29,8 +22,6 @@ class Widget {
 
         delete this.form;
         delete this.rootElement;
-        delete this.implementsDisable;
-        delete this.implementsEnable;
 
         return { form, rootElement };
     }
