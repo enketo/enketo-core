@@ -29,7 +29,8 @@ const initForm = (formElement) => {
     widgets = _widgets.filter(
         (widget) =>
             widget.selector &&
-            formElement.querySelector(widget.selector) != null
+            (widget.selector === 'form' ||
+                formElement.querySelector(widget.selector) != null)
     );
 };
 
