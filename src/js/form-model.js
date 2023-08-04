@@ -1424,8 +1424,9 @@ FormModel.prototype.evaluate = function (
     cacheable = original === expr;
 
     // if no cached conversion exists
-    cached_expr = this.convertedExpressions.get(cacheKey)
-    if (cached_expr === undefined) {
+    const cachedExpr = this.convertedExpressions.get(cacheKey);
+
+    if (cachedExpr === undefined) {
         expr = expr.trim();
         expr = this.replaceInstanceFn(expr);
         expr = this.replaceVersionFn(expr);
@@ -1440,11 +1441,12 @@ FormModel.prototype.evaluate = function (
         expr = expr.replace(/&lt;/g, '<');
         expr = expr.replace(/&gt;/g, '>');
         expr = expr.replace(/&quot;/g, '"');
+
         if (cacheable) {
-            this.convertedExpressions.set(cacheKey,expr);
+            this.convertedExpressions.set(cacheKey, expr);
         }
     } else {
-        expr = cached_expr;
+        expr = cachedExpr;
     }
 
     resultTypes = {
