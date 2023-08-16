@@ -3,12 +3,102 @@
  *
  * Two important concepts are used:
  * 1. The first XLST-added repeat view is cloned to serve as a template of that repeat.
- * 2. Each repeat series has a sibling .or-repeat-info element that stores info that is relevant to that series.
+ * 2. Each repeat series has a sibling .or-repeat-info element that stores info that is relevant to that series. (More details below)
  *
  * Note that with nested repeats you may have many more series of repeats than templates, because a nested repeat
  * may have multiple series.
  *
  * @module repeat
+ */
+
+/**
+ * "Repeat info" elements are used to convey and/or contain several sorts of
+ * metadata, optimization-focused state, and interactive behavior. The following
+ * should be regarded as non-exhaustive, but the intent is to update it as any
+ * further usage becomes known.
+ *
+ * Metadata:
+ *
+ * - The "repeat info" element itself serves as a footer for a series of zero or
+ *   more repeat instances in the view, i.e. a marker designating where a given
+ *   series of repeat instances *does or may* precede.
+ *
+ *   ```html
+ *   <section class="or-repeat" name="/root/repeat-name">...</section>
+ *   <div class="or-repeat" data-name="/root/repeat-name">...</div>
+ *   ```
+ *
+ *   This element is produced by Enketo Transformer.
+ *
+ * - Its `data-name` attribute is the nodeset referenced by its associated
+ *   repeat instances (if any).
+ *
+ *   This attribute is produced by Enketo Transformer.
+ *
+ * - Its `data-repeat-count` attribute is the repeat's `jr:count` expression, if
+ *   defined in the corresponding XForm.
+ *
+ *    ```html
+ *    <div class="or-repeat" data-repeat-count="/data/repeat-count" ...>
+ *    ```
+ *
+ *   This attribute is produced by Enketo Transformer.
+ *
+ * - Its `data-repeat-fixed` attribute, if defined in the corresponding XForm
+ *   with `jr:noAddRemove="true()"`.
+ *
+ *    ```html
+ *    <div class="or-repeat" data-repeat-fixed ...>
+ *    ```
+ *
+ *   This attribute is produced by Enketo Transformer.
+ *
+ * Optimization-focused state:
+ *
+ * - "Shared", "static" itemsets—when rendered as `datalist`s—along with their
+ *   associated translation definitions, and the current state of their
+ *   translated label elements. A minimal (seriously!) example:
+ *
+ *    ```html
+ *    <div class="repeat-shared-datalist-itemset-elements" style="display: none;">
+ *      <datalist id="datarepitem0" data-name="/data/rep/item-0" class="repeat-shared-datalist-itemset">
+ *        <option class="itemset-template" value="" data-items-path="instance('items-0')/item">...</option>
+ *        <option value="items-0-0" data-value="items 0 0"></option>
+ *      </datalist>
+ *
+ *      <span class="or-option-translations" style="display:none;" data-name="/data/rep/item-0"> </span>
+ *
+ *      <span class="itemset-labels" data-value-ref="name" data-label-type="itext" data-label-ref="itextId" data-name="/data/rep/item-0">
+ *        <span lang="en" class="option-label active" data-itext-id="items-0-0">items-0-0</span>
+ *      </span>
+ *    </div>
+ *    ```
+ *
+ *    The child elements are first produced by Enketo Transformer. They are then
+ *    identified (itemset.js), augmented and reparented (repeat.js) by Enketo
+ *    Core to the outer element created during form initialization.
+ *
+ * Interactive behavior:
+ *
+ * - The button used to add new repeat user-controlled instances (i.e. when
+ *   instances are not controlled by `jr:count` or `jr:noAddRemove`):
+ *
+ *    ```html
+ *    <button type="button" class="btn btn-default add-repeat-btn">...</button>
+ *    ```
+ *
+ *    This element is created and appended in Enketo Core, with requisite event
+ *    handler(s) for user interaction when adding repeat instances.
+ *
+ *    Each user-controlled repeat instance's corresponding removal button is
+ *    contained by its respective repeat instance, under a `.repeat-buttons`
+ *    element (also added by Enketo Core; no other buttons are added besides the
+ *    removal button).
+ * @typedef {HTMLDivElement} EnketoRepeatInfo
+ * @property {`${string}or-repeat-info${string}`} className - This isn't the
+ * best! It just ensures `EnketoRepeatInfo` is a distinct type (according to
+ * TypeScript and its language server), rather than an indistinguishable alias
+ * to `HTMLDivElement`.
  */
 
 import $ from 'jquery';
@@ -576,16 +666,17 @@ export default {
                     if (this.staticLists.includes(id)) {
                         datalist.remove();
                     } else {
-                        // Let all identical input[list] questions amongst all repeat instances use the same
-                        // datalist by moving it under repeatInfo.
-                        // It will survive removal of all repeat instances.
+                        // Let all identical input[list] questions amongst all
+                        // repeat instances use the same datalist by moving it
+                        // under repeatInfo. It will survive removal of all
+                        // repeat instances.
+
                         const parent = datalist.parentElement;
                         const { name } = input;
 
                         const dl = parent.querySelector('datalist');
                         const detachedList = parent.removeChild(dl);
                         detachedList.setAttribute('data-name', name);
-                        repeatInfo.appendChild(detachedList);
 
                         const translations = parent.querySelector(
                             '.or-option-translations'
@@ -593,12 +684,41 @@ export default {
                         const detachedTranslations =
                             parent.removeChild(translations);
                         detachedTranslations.setAttribute('data-name', name);
-                        repeatInfo.appendChild(detachedTranslations);
 
                         const labels = parent.querySelector('.itemset-labels');
                         const detachedLabels = parent.removeChild(labels);
                         detachedLabels.setAttribute('data-name', name);
-                        repeatInfo.appendChild(detachedLabels);
+
+                        // Each of these supporting elements are nested in a
+                        // containing element, so any subsequent DOM queries for
+                        // their various sibling elements don't mistakenly match
+                        // those from a previous itemset in the same repeat.
+                        const sharedItemsetContainer =
+                            document.createElement('div');
+
+                        sharedItemsetContainer.style.display = 'none';
+                        sharedItemsetContainer.append(
+                            detachedList,
+                            detachedTranslations,
+                            detachedLabels
+                        );
+                        repeatInfo.append(sharedItemsetContainer);
+
+                        // Add explicit class which can be used to determine
+                        // this condition elsewhere. See its usage and
+                        // commentary in `itemset.js`
+                        datalist.classList.add(
+                            'repeat-shared-datalist-itemset'
+                        );
+                        // This class currently serves no functional purpose
+                        // (please do not use it for new functional purposes
+                        // either). It's included specifically so that the
+                        // resulting DOM structure has some indication of why
+                        // it's the way it is, and some way to trace back to
+                        // this code producing that structure.
+                        sharedItemsetContainer.classList.add(
+                            'repeat-shared-datalist-itemset-elements'
+                        );
 
                         this.staticLists.push(id);
                         // input.classList.add( 'shared' );
