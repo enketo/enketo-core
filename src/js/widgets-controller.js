@@ -149,12 +149,12 @@ function _instantiate(Widget, group) {
 
     const elements = _getElements(group, Widget.selector);
 
-    if (!elements.length) {
-        return;
-    }
-
     if (group === formElement) {
         Widget.globalInit(form, formElement);
+    }
+
+    if (!elements.length) {
+        return;
     }
 
     new Collection(elements).instantiate(Widget, opts);

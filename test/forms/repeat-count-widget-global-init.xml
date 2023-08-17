@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Global init of widgets in repeat count (default=0)</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="repeat-count-widget-global-init">
+                    <rep-count/>
+                    <rep jr:template="">
+                        <grp_plot>
+                            <plot_id/>
+                            <plot_size/>
+                            <plot_crops/>
+                        </grp_plot>
+                    </rep>
+                    <rep>
+                        <grp_plot>
+                            <plot_id/>
+                            <plot_size/>
+                            <plot_crops/>
+                        </grp_plot>
+                    </rep>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/rep-count" type="int"/>
+            <bind nodeset="/data/rep/dec" type="decimal"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/rep-count">
+            <label>Repeat count</label>
+        </input>
+        <group ref="/data/rep">
+            <label>Rep</label>
+            <repeat jr:count="/data/rep-count" nodeset="/data/rep">
+                <input ref="/data/rep/dec">
+                    <label>Decimal input</label>
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
