@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<!--
+    This fixture is used in tests for an itemset/repeat bug. Briefly, forms with
+    the following conditions fail to load:
+
+    - The form contains a repeat
+    - The repeat contains at least two itemsets which:
+        - Have a "static" (details and commentary inline below) reference to
+          items in a secondary instance
+        - Are presented as a combination of `input[list]` and `datalist`
+          elements
+
+    Much of the inline commentary below is intended to:
+
+    - clarify implementation trivia, explaining the nature of this bug and its
+      various contributing factors
+
+    - consolidate the explanation into a single place, as the various
+      contributing factors are spread across multiple files/modules, across
+      multiple projects
+-->
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>repeat-multiple-shared-datalist-itemsets</h:title>
+        <model odk:xforms-version="1.0.0">
+            <!--
+                For the purposes of the bug  under test and its fix, this
+                translation must be present. It's unclear if there's a separate
+                bug caused by its absence, or if failure in that case is
+                expected.
+            -->
+            <itext>
+                <translation lang="en">
+                    <text id="items-0-0">
+                        <value>items-0-0</value>
+                    </text>
+                    <text id="items-1-0">
+                        <value>items-1-0</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="repeat-multiple-shared-datalist-itemsets">
+                    <rep>
+                        <item-0 />
+                        <item-1 />
+                    </rep>
+                </data>
+            </instance>
+            <instance id="items-0">
+                <item>
+                    <itextId>items-0-0</itextId>
+                    <name>items 0 0</name>
+                </item>
+            </instance>
+            <instance id="items-1">
+                <item>
+                    <itextId>items-1-0</itextId>
+                    <name>items 1 0</name>
+                </item>
+            </instance>
+            <bind nodeset="/data/rep/item-0" />
+            <bind nodeset="/data/rep/item-1" />
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/rep">
+            <label>Repeat with multiple shared itemsets which render shared `datalist` elements</label>
+
+            <repeat nodeset="/data/rep">
+                <!--
+                    At present, Enketo Transformer renders a `datalist` for:
+
+                    - `select1` controls
+                    - with an appearance of either `autocomplete` or `search`
+
+                    @see {@link https://github.com/enketo/enketo-transformer/blob/1fc23dfe3e59ee765908daea773e41e9d5d64d7b/src/xsl/openrosa2html5form.xsl#L782}
+                -->
+                <select1 appearance="autocomplete" ref="/data/rep/item-0">
+                    <!--
+                        At present, Enketo Core performs optimizations for
+                        certain itemsets, where their `nodeset`:
+
+                        - referneces a secondary instance
+                        - has only numeric predicates, if it has predicates at
+                          all
+
+                        These itemsets are treated as "static from secondary
+                        instance".
+
+                        @see {@link https://github.com/enketo/enketo-core/blob/f37eed223140f7bee2700af2b1b7277ceee71fe8/src/js/itemset.js#L31}
+
+                        Additional commentary will be added in this fix to
+                        discuss the above heuristic and its implementation in
+                        greater detail.
+
+                        While not explicit in the above heuristic, the
+                        optimizations herein are only applied for `itemset`
+                        children of repeats.
+
+                        This fixture is used to test a defect in one of those
+                        optimizations, but both are described here together for
+                        future context. Such "static from secondary instance"
+                        `itemset`s are:
+
+                        1. Conditionally moved from their containing repeat
+                           instance to its corresponding "repeat info" (more
+                           commentary on that will be added in this fix as
+                           well).
+
+                            @see {@link https://github.com/enketo/enketo-core/blob/f37eed223140f7bee2700af2b1b7277ceee71fe8/src/js/repeat.js#L579}
+
+                            Subsequently, `itemset.js` presently references such
+                            `itemset`s and their related HTML/DOM elements in as
+                            "shared", with some mention of their presence in a
+                            "repeat info" (but not much local explanation about
+                            how they got to be there).
+
+                        2. Conditionally cached when handling `itemset` updates,
+                           when their view form control:
+
+                            - **is** a child of a repeat instance—i.e. **is
+                              not** reparented as a shared template for multiple
+                              repeat instances
+
+                            - **is not** presented as a set of radio
+                              inputs–radio inputs are handled specially in a
+                              variety of places across the codebase, to either
+                              benefit from or avoid their native behavior of
+                              grouping by `name` attribute/property
+
+                            @see {@link https://github.com/enketo/enketo-core/blob/f37eed223140f7bee2700af2b1b7277ceee71fe8/src/js/itemset.js#L389-L399}
+                    -->
+                    <itemset nodeset="instance('items-0')/item">
+                        <value ref="name" />
+                        <label ref="jr:itext(itextId)" />
+                    </itemset>
+                </select1>
+                <!--
+                    All above commentary applies. This second control is
+                    necessary to reproduce the bug under test.
+                -->
+                <select1 appearance="search" ref="/data/rep/item-1">
+                    <itemset nodeset="instance('items-1')/item">
+                        <value ref="name" />
+                        <label ref="jr:itext(itextId)" />
+                    </itemset>
+                </select1>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

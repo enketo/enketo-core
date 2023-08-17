@@ -888,6 +888,15 @@ describe('Itemset functionality', () => {
                 );
             });
         });
+
+        it('loads form with multiple "shared static" itemsets presented as `datalist`s in a repeat', () => {
+            const form = loadForm(
+                'repeat-multiple-shared-datalist-itemsets.xml'
+            );
+            const loadErrors = form.init();
+
+            expect(loadErrors.length).to.equal(0, loadErrors.join('\n'));
+        });
     });
 
     // Radiobutton itemset set cache problem: https://github.com/OpenClinica/enketo-express-oc/issues/423

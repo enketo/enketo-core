@@ -21,8 +21,15 @@ import events from './event';
 /**
  * This function tries to determine whether an XPath expression for a nodeset from an external instance is static.
  * Hopefully in the future it can do this properly, but for now it considers any expression
- * with a non-numeric (position) predicate to be dynamic.
+ * it determines to have a non-numeric (position) predicate to be dynamic.
  * This function relies on external instances themselves to be static.
+ *
+ * Known issues:
+ *
+ * - Broadly, this function uses regular expressions to attempt static analysis on an XPath expression. This is prone to false positives *and* negatives, particularly concerning string sub-expressions.
+ * - The check for a reference to an instance does not handle [non-`instance`] absolute or relative path expressions.
+ * - The check for a reference to an instance does not account for expressions where that reference may *itself* appear as a sub-expression (e.g. in a predicate, or as a function parameter).
+ * - At least the numeric predicate does not account for whitespace.
  *
  * @static
  * @param {string} expr - XPath expression to analyze
@@ -132,8 +139,31 @@ export default {
                 return;
             }
 
-            const shared =
-                template.parentElement.parentElement.matches('.or-repeat-info');
+            const templateParent = template.parentElement;
+            const isShared =
+                // Shared itemset datalists and their related DOM elements were
+                // previously reparented directly under `repeat-info`. They're
+                // now reparented to a container within `repeat-info` to fix a
+                // bug when two or more such itemsets are present in the same
+                // repeat.
+                //
+                // The original check for this condition was tightly coupled to
+                // the previous structure, leading to errors even after the root
+                // cause had been fixed. This has been revised to check for a
+                // class explicitly describing the condition it's checking.
+                //
+                // TODO (2023-08-16): This continues to add to the view's role
+                // as a (the) source of truth about both form state and form
+                // definition. While expedient, it must be acknowledged as
+                // additional technical debt.
+                templateParent.classList.contains(
+                    'repeat-shared-datalist-itemset'
+                ) ||
+                // It's currently unclear whether there are other cases this
+                // would still handle. It's currently preserved in case its
+                // removal might cause unknown regressions. See
+                // https://en.wiktionary.org/wiki/Chesterton%27s_fence
+                templateParent.parentElement.matches('.or-repeat-info');
             const inputAttributes = {};
 
             const newItems = {};
@@ -162,7 +192,7 @@ export default {
                     inputAttributes.disabled = 'disabled';
                 }
             } else if (list && list.nodeName.toLowerCase() === 'datalist') {
-                if (shared) {
+                if (isShared) {
                     // only the first input, is that okay?
                     input = that.form.view.html.querySelector(
                         `input[name="${list.dataset.name}"]`
@@ -195,7 +225,7 @@ export default {
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat and not shared.
              * It can be safely set to 0 for other branches.
              */
-            const index = !shared ? that.form.input.getIndex(input) : 0;
+            const index = !isShared ? that.form.input.getIndex(input) : 0;
             const safeToTryNative = true;
             // Caching has no advantage here. This is a very quick query
             // (natively).
