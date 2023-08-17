@@ -18,13 +18,6 @@
     - consolidate the explanation into a single place, as the various
       contributing factors are spread across multiple files/modules, across
       multiple projects
-
-    Such information is probably better suited for, perhaps, a knowledge base
-    and some systematic method of linking the related implementation details in
-    code, so these details can be traced **and kept up to date** as any aspect
-    changes. In the absence of such a system, and in the interest of expediency,
-    the commentary is included here, paired with the form particulars exercising
-    the bug.
 -->
 <h:html xmlns="http://www.w3.org/2002/xforms"
     xmlns:ev="http://www.w3.org/2001/xml-events"
