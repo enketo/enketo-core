@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [7.2.5] - 2023-08-18
+
+-   Fix: multiple "static" itemset datalists in the same repeat (#995)
+-   Fix: global initialization of widgets where repeat count is zero (#994)
+-   Use map instead of object for cached conversion of XPath expression
+    (#985)
+-   Fix: include widgets with 'form' selector (#993)
+-   Fix: don't display "ghost option" for itemsets with Likert appearance (#992)
+-   Temporarily roll back buggy optimizations of enabling/disabling widget instances (#990)
+-   Fix import error for enketo-transformer/web (enketo/enketo-transformer#184)
+
 ## [7.2.4] - 2023-07-03
 
 -   Performance improvements: do less redundant work, part 2 (#976)
