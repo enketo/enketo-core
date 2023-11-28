@@ -2,6 +2,11 @@
 
 # Enketo Core
 
+> [!IMPORTANT]  
+> This repository was archived on November 28th, 2023. Enketo Core is now maintained in a monorepo: https://github.com/enketo/enketo
+>
+> All issues including closed ones have been moved to that repository.
+
 The engine that powers [Enketo Express](https://github.com/enketo/enketo-express) and various third party tools including [this selection](https://enketo.org/about/adoption/).
 
 Enketo's form engine is compatible with tools in the ODK ecosystem and complies with its [XForms specification](https://getodk.github.io/xforms-spec/) though not all features in that specification have been implemented yet.
