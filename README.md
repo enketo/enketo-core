@@ -2,6 +2,10 @@
 
 # Enketo Core
 
+### ⚠️ Enketo Core code and issues have moved to [the Enketo monorepo](https://github.com/enketo/enketo) ⚠️
+
+***
+
 The engine that powers [Enketo Express](https://github.com/enketo/enketo-express) and various third party tools including [this selection](https://enketo.org/about/adoption/).
 
 Enketo's form engine is compatible with tools in the ODK ecosystem and complies with its [XForms specification](https://getodk.github.io/xforms-spec/) though not all features in that specification have been implemented yet.
