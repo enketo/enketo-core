@@ -2,10 +2,10 @@
 
 # Enketo Core
 
-> [!IMPORTANT]  
-> This repository was archived on November 28th, 2023. Enketo Core is now maintained in a monorepo: https://github.com/enketo/enketo
->
-> All issues including closed ones have been moved to that repository.
+### ⚠️ This repository was archived on November 28th, 2023. Enketo Core is now maintained in a monorepo: https://github.com/enketo/enketo ⚠️
+All issues including closed ones have been moved to that repository.
+
+***
 
 The engine that powers [Enketo Express](https://github.com/enketo/enketo-express) and various third party tools including [this selection](https://enketo.org/about/adoption/).
 
