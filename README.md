@@ -2,8 +2,7 @@
 
 # Enketo Core
 
-### ⚠️ Enketo Core is now maintained [in the Enketo monorepo](https://github.com/enketo/enketo) ⚠️
-All issues including closed ones have been moved to that repository.
+### ⚠️ Enketo Core code and issues have moved to [the Enketo monorepo](https://github.com/enketo/enketo) ⚠️
 
 ***
 
