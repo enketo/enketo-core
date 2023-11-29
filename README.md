@@ -2,7 +2,7 @@
 
 # Enketo Core
 
-### ⚠️ This repository was archived on November 28th, 2023. Enketo Core is now maintained in a monorepo: https://github.com/enketo/enketo ⚠️
+### ⚠️ Enketo Core is now maintained [in the Enketo monorepo](https://github.com/enketo/enketo) ⚠️
 All issues including closed ones have been moved to that repository.
 
 ***
