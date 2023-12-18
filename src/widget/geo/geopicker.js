@@ -21,6 +21,7 @@ import 'leaflet.gridlayer.googlemutant';
 import { getCurrentPosition } from '../../js/geolocation';
 
 let googleMapsScriptRequest;
+const searchSource = config.geocoderUrl || '/api/geo/geocoder';
 
 const defaultZoom = 15;
 // MapBox TileJSON format
@@ -36,9 +37,6 @@ const maps =
                       '© <a href="http://openstreetmap.org">OpenStreetMap</a> | <a href="www.openstreetmap.org/copyright">Terms</a>',
               },
           ];
-let searchSource =
-    'https://maps.googleapis.com/maps/api/geocode/json?address={address}&sensor=true&key={api_key}';
-const googleApiKey = config.googleApiKey || config.google_api_key;
 const iconSingle = L.divIcon({
     iconSize: [16, 24],
     className: 'enketo-geopoint-marker',
@@ -671,17 +669,11 @@ class Geopicker extends Widget {
     }
 
     /**
-     * Enables search functionality using the Google Maps API v3
+     * Enables search functionality using the /api/geo/geocode
      * This only changes the map view. It does not record geopoints.
      */
     _enableSearch() {
         const that = this;
-
-        if (googleApiKey) {
-            searchSource = searchSource.replace('{api_key}', googleApiKey);
-        } else {
-            searchSource = searchSource.replace('&key={api_key}', '');
-        }
 
         this.$search.prop('disabled', false).on('change', function (event) {
             let address = $(this).val();
@@ -689,19 +681,32 @@ class Geopicker extends Widget {
 
             if (address) {
                 address = address.split(/\s+/).join('+');
+                let center;
+                let bbox;
+                if (that._dynamicMapAvailable()) {
+                    bbox = that.map.getBounds();
+                    center = bbox.getCenter();
+                }
                 $.get(
-                    searchSource.replace('{address}', address),
+                    `${searchSource}?${$.param({
+                        address,
+                        $center: center
+                            ? [center.lng, center.lat].join(',')
+                            : undefined,
+                        // optional bbox prop that would limit results to extent of map
+                        // $bbox: bbox.toBBoxString(),
+                        $limit: 1,
+                    })}`,
                     (response) => {
                         let latLng;
                         if (
-                            response.results &&
-                            response.results.length > 0 &&
-                            response.results[0].geometry &&
-                            response.results[0].geometry.location
+                            response &&
+                            response.length > 0 &&
+                            response[0].geometry
                         ) {
-                            latLng = response.results[0].geometry.location;
+                            latLng = response[0].geometry.coordinates;
                             that._updateMap(
-                                [latLng.lat, latLng.lng],
+                                [latLng[1], latLng[0]],
                                 defaultZoom
                             );
                             that.$search
